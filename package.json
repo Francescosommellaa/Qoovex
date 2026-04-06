@@ -11,7 +11,6 @@
     "db:push": "turbo run db:push --filter=@vittl/db",
     "db:migrate": "turbo run db:migrate --filter=@vittl/db",
     "db:studio": "turbo run db:studio --filter=@vittl/db"
-
   },
   "devDependencies": {
     "turbo": "^2.5.0"
