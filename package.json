@@ -10,8 +10,7 @@
     "db:generate": "turbo run db:generate --filter=@vittl/db",
     "db:push": "turbo run db:push --filter=@vittl/db",
     "db:migrate": "turbo run db:migrate --filter=@vittl/db",
-    "db:studio": "turbo run db:studio --filter=@vittl/db",
-    "postinstall": "pnpm --filter @vittl/db run db:generate"
+    "db:studio": "turbo run db:studio --filter=@vittl/db"
 
   },
   "devDependencies": {
