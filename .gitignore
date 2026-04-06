@@ -34,3 +34,10 @@ Thumbs.db
 # desktop future
 target/
 src-tauri/target/
+
+
+# AI
+docs/HowToUse.md
+docs/ProductContext.md
+project-brain.json
+plan-rules.json
