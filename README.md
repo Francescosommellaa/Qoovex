@@ -1,3 +1,4 @@
+<div align="center">
 
 # Qoovex
 
@@ -12,7 +13,7 @@ Piani di lavoro, menu, ricette, allergeni e spesa intelligente — tutto in un s
 
 </div>
 
-***
+---
 
 ## Overview
 
@@ -20,30 +21,30 @@ Qoovex è una SaaS italiana per cuochi e chef professionisti. Ogni utente ha un 
 
 Il prodotto si divide in due app:
 
-| App | Percorso | Scopo |
-|---|---|---|
-| **Qoovex Web** | `apps/web` | Sito vetrina, landing, pricing, SEO |
+| App               | Percorso      | Scopo                               |
+| ----------------- | ------------- | ----------------------------------- |
+| **Qoovex Web**    | `apps/web`    | Sito vetrina, landing, pricing, SEO |
 | **Qoovex Studio** | `apps/studio` | Web app principale — workspace chef |
 
-***
+---
 
 ## Stack
 
-| Layer | Tecnologia |
-|---|---|
-| Framework | Next.js 15 App Router |
-| Linguaggio | TypeScript |
-| Stile | Tailwind CSS v4 |
-| ORM | Prisma 7 |
-| Database | Vercel Postgres |
-| Storage | Vercel Blob |
-| Auth | Clerk |
-| Monorepo | Turborepo + pnpm workspaces |
-| Deploy | Vercel |
-| Icone | Lucide React |
-| Animazioni | Framer Motion |
+| Layer      | Tecnologia                  |
+| ---------- | --------------------------- |
+| Framework  | Next.js 15 App Router       |
+| Linguaggio | TypeScript                  |
+| Stile      | Tailwind CSS v4             |
+| ORM        | Prisma 7                    |
+| Database   | Vercel Postgres             |
+| Storage    | Vercel Blob                 |
+| Auth       | Clerk                       |
+| Monorepo   | Turborepo + pnpm workspaces |
+| Deploy     | Vercel                      |
+| Icone      | Lucide React                |
+| Animazioni | Framer Motion               |
 
-***
+---
 
 ## Struttura del monorepo
 
@@ -78,7 +79,7 @@ apps/studio/src/
 
 > ⚠️ Importa sempre verso il basso. Mai verso l'alto.
 
-***
+---
 
 ## Prerequisiti
 
@@ -87,7 +88,7 @@ apps/studio/src/
 - Account **Vercel** con Postgres e Blob configurati
 - Account **Clerk** per autenticazione
 
-***
+---
 
 ## Setup locale
 
@@ -118,7 +119,7 @@ Le app saranno disponibili su:
 - `apps/web` → [http://localhost:3000](http://localhost:3000)
 - `apps/studio` → [http://localhost:3001](http://localhost:3001)
 
-***
+---
 
 ## Comandi principali
 
@@ -144,7 +145,7 @@ pnpm typecheck                    # Typecheck TypeScript
 pnpm format                       # Formattazione con Prettier
 ```
 
-***
+---
 
 ## Variabili d'ambiente
 
@@ -173,19 +174,19 @@ NEXT_PUBLIC_STUDIO_URL=http://localhost:3001
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-***
+---
 
 ## Feature core
 
-| Feature | Descrizione |
-|---|---|
-| **Ricette** | Crea e gestisce ricette con ingredienti, allergeni automatici e valori nutrizionali |
-| **Menu digitali** | Componi menu dalle ricette, genera QR code, condividi o esporta |
-| **Allergeni** | Calcolo automatico degli allergeni per ricetta e per menu |
-| **Esplora** | Scopri ricette e menu della community, copia e forka con credito all'autore |
-| **Lista della spesa** | Generata dalle ricette e dai menu, scala per porzioni, acquista solo ciò che serve |
-| **Piani di lavoro** | Organizza il team con task collegabili a ricette, notifiche al completamento |
-| **Notifiche** | Aggiornamenti in tempo reale su task, piani e attività del workspace |
+| Feature               | Descrizione                                                                         |
+| --------------------- | ----------------------------------------------------------------------------------- |
+| **Ricette**           | Crea e gestisce ricette con ingredienti, allergeni automatici e valori nutrizionali |
+| **Menu digitali**     | Componi menu dalle ricette, genera QR code, condividi o esporta                     |
+| **Allergeni**         | Calcolo automatico degli allergeni per ricetta e per menu                           |
+| **Esplora**           | Scopri ricette e menu della community, copia e forka con credito all'autore         |
+| **Lista della spesa** | Generata dalle ricette e dai menu, scala per porzioni, acquista solo ciò che serve  |
+| **Piani di lavoro**   | Organizza il team con task collegabili a ricette, notifiche al completamento        |
+| **Notifiche**         | Aggiornamenti in tempo reale su task, piani e attività del workspace                |
 
 ### Regole business fondamentali
 
@@ -195,20 +196,20 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 - Solo il **creatore del piano** può creare task; i membri possono completarli
 - Il completamento di un task invia **notifica al creatore**
 
-***
+---
 
 ## Piani
 
-| Piano | Prezzo | Ricette | Menu | Piani di lavoro |
-|---|---|---|---|---|
-| **Free** | 0€ | 50 | 2 | 0 (join illimitati) |
-| **Start** | ~19€/mese | 300 | 6 | 1 attivo, 5 membri |
-| **Pro** | ~49€/mese | ∞ | ∞ | 3 attivi, 10 membri |
-| **Studio** | Custom | ∞ | ∞ | ∞ |
+| Piano      | Prezzo    | Ricette | Menu | Piani di lavoro     |
+| ---------- | --------- | ------- | ---- | ------------------- |
+| **Free**   | 0€        | 50      | 2    | 0 (join illimitati) |
+| **Start**  | ~19€/mese | 300     | 6    | 1 attivo, 5 membri  |
+| **Pro**    | ~49€/mese | ∞       | ∞    | 3 attivi, 10 membri |
+| **Studio** | Custom    | ∞       | ∞    | ∞                   |
 
 > Il file canonico dei piani è `packages/config/plan-rules.json`. Non definire limiti in altri file.
 
-***
+---
 
 ## Design system
 
@@ -221,7 +222,7 @@ Il design system è documentato in `packages/ui`. Regole chiave:
 - **Mai hover** su elementi non interattivi
 - **Mai SVG inline** — usa sempre Lucide React
 
-***
+---
 
 ## Deploy
 
@@ -234,7 +235,7 @@ vercel --prod
 
 > Assicurati che le variabili d'ambiente siano configurate nel dashboard Vercel per ogni ambiente (development, preview, production).
 
-***
+---
 
 ## Contribuire
 
@@ -246,7 +247,7 @@ Questo è un repository privato. Prima di lavorare su qualsiasi feature:
 4. Non introdurre dipendenze nuove senza verificarne la necessità
 5. Consegna sempre file completi — niente patch parziali
 
-***
+---
 
 <div align="center">
 
