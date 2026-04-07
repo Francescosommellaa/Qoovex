@@ -1,5 +1,5 @@
 {
-  "name": "vittl",
+  "name": "qoovex",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "scripts": {
@@ -7,10 +7,10 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
-    "db:generate": "turbo run db:generate --filter=@vittl/db",
-    "db:push": "turbo run db:push --filter=@vittl/db",
-    "db:migrate": "turbo run db:migrate --filter=@vittl/db",
-    "db:studio": "turbo run db:studio --filter=@vittl/db"
+    "db:generate": "turbo run db:generate --filter=@Qoovex/db",
+    "db:push": "turbo run db:push --filter=@Qoovex/db",
+    "db:migrate": "turbo run db:migrate --filter=@Qoovex/db",
+    "db:studio": "turbo run db:studio --filter=@Qoovex/db"
   },
   "devDependencies": {
     "turbo": "^2.5.0"
