@@ -18,7 +18,7 @@ Il prodotto si divide in due app:
 | App               | Percorso      | Scopo                               |
 | ----------------- | ------------- | ----------------------------------- |
 | **Qoovex Web**    | `apps/web`    | Sito vetrina, landing, pricing, SEO |
-| **Qoovex Studio** | `apps/studio` | Web app principale — workspace chef |
+| **Qoovex workspace** | `apps/workspace` | Web app principale — workspace chef |
 
 ---
 
@@ -46,7 +46,7 @@ Il prodotto si divide in due app:
 qoovex/
 ├── apps/
 │   ├── web/               # Sito vetrina
-│   └── studio/            # Web app principale (Qoovex Studio)
+│   └── workspace/            # Web app principale (Qoovex workspace)
 │
 ├── packages/
 │   ├── ui/                # Design system condiviso
@@ -60,10 +60,10 @@ qoovex/
 └── pnpm-workspace.yaml
 ```
 
-`apps/studio` segue **Feature-Sliced Design (FSD)** rigorosa:
+`apps/workspace` segue **Feature-Sliced Design (FSD)** rigorosa:
 
 ```
-apps/studio/src/
+apps/workspace/src/
 ├── shared/      # Primitive, UI base, config
 ├── entities/    # Modelli di dominio (Recipe, Menu, WorkPlan…)
 ├── features/    # Azioni utente e casi d'uso
@@ -96,7 +96,7 @@ pnpm install
 
 # 3. Configura le variabili d'ambiente
 cp apps/web/.env.example apps/web/.env.local
-cp apps/studio/.env.example apps/studio/.env.local
+cp apps/workspace/.env.example apps/workspace/.env.local
 
 # 4. Genera il client Prisma
 pnpm --filter @qoovex/db db:generate
@@ -111,7 +111,7 @@ pnpm dev
 Le app saranno disponibili su:
 
 - `apps/web` → [http://localhost:3000](http://localhost:3000)
-- `apps/studio` → [http://localhost:3001](http://localhost:3001)
+- `apps/workspace` → [http://localhost:3001](http://localhost:3001)
 
 ---
 
@@ -120,52 +120,23 @@ Le app saranno disponibili su:
 ```bash
 # Sviluppo
 pnpm dev                          # Avvia tutte le app
-pnpm --filter studio dev          # Solo Qoovex Studio
+pnpm --filter workspace dev          # Solo Qoovex workspace
 pnpm --filter web dev             # Solo sito vetrina
 
 # Build
 pnpm build                        # Build completa (Turborepo)
-pnpm --filter studio build        # Build solo Studio
+pnpm --filter workspace build        # Build solo workspace
 
 # Database
 pnpm --filter @qoovex/db db:generate   # Genera client Prisma
 pnpm --filter @qoovex/db db:migrate    # Applica migration
-pnpm --filter @qoovex/db db:studio     # Prisma Studio (GUI)
+pnpm --filter @qoovex/db db:workspace     # Prisma workspace (GUI)
 pnpm --filter @qoovex/db db:seed       # Seed dati iniziali
 
 # Qualità del codice
 pnpm lint                         # Lint di tutto il monorepo
 pnpm typecheck                    # Typecheck TypeScript
 pnpm format                       # Formattazione con Prettier
-```
-
----
-
-## Variabili d'ambiente
-
-### `apps/studio`
-
-```env
-# Clerk
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-
-# Database (Vercel Postgres)
-POSTGRES_PRISMA_URL=
-POSTGRES_URL_NON_POOLING=
-
-# Storage (Vercel Blob)
-BLOB_READ_WRITE_TOKEN=
-
-# App
-NEXT_PUBLIC_APP_URL=http://localhost:3001
-```
-
-### `apps/web`
-
-```env
-NEXT_PUBLIC_STUDIO_URL=http://localhost:3001
-NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 ---
@@ -194,12 +165,12 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 ## Piani
 
-| Piano      | Prezzo    | Ricette | Menu | Piani di lavoro     |
-| ---------- | --------- | ------- | ---- | ------------------- |
-| **Free**   | 0€        | 50      | 2    | 0 (join illimitati) |
-| **Start**  | ~19€/mese | 300     | 6    | 1 attivo, 5 membri  |
-| **Pro**    | ~49€/mese | ∞       | ∞    | 3 attivi, 10 membri |
-| **Studio** | Custom    | ∞       | ∞    | ∞                   |
+| Piano          | Prezzo    | Ricette | Menu | Piani di lavoro     |
+| -------------- | --------- | ------- | ---- | ------------------- |
+| **Free**       | 0€        | 50      | 2    | 0 (join illimitati) |
+| **Start**      | ~19€/mese | 300     | 6    | 1 attivo, 5 membri  |
+| **Pro**        | ~49€/mese | ∞       | ∞    | 3 attivi, 10 membri |
+| **Enterprise** | Custom    | ∞       | ∞    | ∞                   |
 
 > Il file canonico dei piani è `packages/config/plan-rules.json`. Non definire limiti in altri file.
 
@@ -237,7 +208,7 @@ Questo è un repository privato. Prima di lavorare su qualsiasi feature:
 
 1. Leggi `HowToUse.md` — regole operative del progetto
 2. Leggi `project_brain.json` — memoria viva e decisioni confermate
-3. Verifica l'architettura FSD in `apps/studio`
+3. Verifica l'architettura FSD in `apps/workspace`
 4. Non introdurre dipendenze nuove senza verificarne la necessità
 5. Consegna sempre file completi — niente patch parziali
 

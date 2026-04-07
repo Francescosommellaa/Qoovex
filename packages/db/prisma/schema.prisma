@@ -10,7 +10,7 @@ enum Plan {
   FREE
   START
   PRO
-  STUDIO
+  ENTERPRISE
 }
 
 model User {

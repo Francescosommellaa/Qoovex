@@ -10,7 +10,7 @@
     "db:generate": "turbo run db:generate --filter=@Qoovex/db",
     "db:push": "turbo run db:push --filter=@Qoovex/db",
     "db:migrate": "turbo run db:migrate --filter=@Qoovex/db",
-    "db:studio": "turbo run db:studio --filter=@Qoovex/db"
+    "db:workspace": "turbo run db:workspace --filter=@Qoovex/db"
   },
   "devDependencies": {
     "turbo": "^2.5.0"
