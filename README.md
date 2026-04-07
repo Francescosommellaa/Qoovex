@@ -5,12 +5,6 @@
 **Il workspace operativo per cuochi e chef professionisti.**  
 Piani di lavoro, menu, ricette, allergeni e spesa intelligente — tutto in un solo posto.
 
-[
-[
-[
-[
-[
-
 </div>
 
 ---
