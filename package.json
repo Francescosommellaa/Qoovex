@@ -7,10 +7,10 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
-    "db:generate": "turbo run db:generate --filter=@Qoovex/db",
-    "db:push": "turbo run db:push --filter=@Qoovex/db",
-    "db:migrate": "turbo run db:migrate --filter=@Qoovex/db",
-    "db:workspace": "turbo run db:workspace --filter=@Qoovex/db"
+    "db:generate": "turbo run db:generate --filter=@qoovex/db",
+    "db:push": "turbo run db:push --filter=@qoovex/db",
+    "db:migrate": "turbo run db:migrate --filter=@qoovex/db",
+    "db:workspace": "turbo run db:workspace --filter=@qoovex/db"
   },
   "devDependencies": {
     "turbo": "^2.5.0"

@@ -286,12 +286,6 @@
     },
     {
       "date": "2026-04-06",
-      "key": "desktop_app_name",
-      "decision": "Qoovex Atelier",
-      "reason": "distinct premium naming"
-    },
-    {
-      "date": "2026-04-06",
       "key": "desktop_direction",
       "decision": "prefer Tauri over Electron",
       "reason": "lighter desktop approach"
@@ -502,7 +496,7 @@
     {
       "date": "2026-04-06",
       "type": "infra",
-      "note": "Blob connected to Qoovex-workspace"
+      "note": "Blob connected to qoovex-workspace"
     },
     {
       "date": "2026-04-07",

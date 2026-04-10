@@ -15,9 +15,9 @@ Qoovex è una SaaS italiana per cuochi e chef professionisti. Ogni utente ha un 
 
 Il prodotto si divide in due app:
 
-| App               | Percorso      | Scopo                               |
-| ----------------- | ------------- | ----------------------------------- |
-| **Qoovex Web**    | `apps/web`    | Sito vetrina, landing, pricing, SEO |
+| App                  | Percorso         | Scopo                               |
+| -------------------- | ---------------- | ----------------------------------- |
+| **Qoovex Web**       | `apps/web`       | Sito vetrina, landing, pricing, SEO |
 | **Qoovex workspace** | `apps/workspace` | Web app principale — workspace chef |
 
 ---
@@ -43,7 +43,7 @@ Il prodotto si divide in due app:
 ## Struttura del monorepo
 
 ```
-qoovex/
+Qoovex/
 ├── apps/
 │   ├── web/               # Sito vetrina
 │   └── workspace/            # Web app principale (Qoovex workspace)
@@ -89,7 +89,7 @@ apps/workspace/src/
 ```bash
 # 1. Clona il repository
 git clone https://github.com/your-org/qoovex.git
-cd qoovex
+cd Qoovex
 
 # 2. Installa le dipendenze
 pnpm install
@@ -99,10 +99,10 @@ cp apps/web/.env.example apps/web/.env.local
 cp apps/workspace/.env.example apps/workspace/.env.local
 
 # 4. Genera il client Prisma
-pnpm --filter @qoovex/db db:generate
+pnpm db:generate
 
 # 5. Applica le migration al database
-pnpm --filter @qoovex/db db:migrate
+pnpm db:migrate
 
 # 6. Avvia il dev server (tutte le app in parallelo)
 pnpm dev
@@ -119,24 +119,23 @@ Le app saranno disponibili su:
 
 ```bash
 # Sviluppo
-pnpm dev                          # Avvia tutte le app
-pnpm --filter workspace dev          # Solo Qoovex workspace
-pnpm --filter web dev             # Solo sito vetrina
+pnpm dev                                # Avvia tutte le app
+pnpm --filter @qoovex/workspace dev     # Solo Qoovex workspace
+pnpm --filter @qoovex/web dev           # Solo sito vetrina
 
 # Build
-pnpm build                        # Build completa (Turborepo)
-pnpm --filter workspace build        # Build solo workspace
+pnpm build                              # Build completa (Turborepo)
+pnpm --filter @qoovex/workspace build   # Build solo workspace
 
 # Database
-pnpm --filter @qoovex/db db:generate   # Genera client Prisma
-pnpm --filter @qoovex/db db:migrate    # Applica migration
-pnpm --filter @qoovex/db db:workspace     # Prisma workspace (GUI)
-pnpm --filter @qoovex/db db:seed       # Seed dati iniziali
+pnpm db:generate                        # Genera il client Prisma
+pnpm db:push                            # Applica lo schema al database di sviluppo
+pnpm db:migrate                         # Esegue le migration in sviluppo
+pnpm db:workspace                       # Prisma workspace (GUI)
 
 # Qualità del codice
-pnpm lint                         # Lint di tutto il monorepo
-pnpm typecheck                    # Typecheck TypeScript
-pnpm format                       # Formattazione con Prettier
+pnpm lint                               # Lint di tutto il monorepo
+pnpm type-check                         # Typecheck TypeScript
 ```
 
 ---
@@ -172,7 +171,7 @@ pnpm format                       # Formattazione con Prettier
 | **Pro**        | ~49€/mese | ∞       | ∞    | 3 attivi, 10 membri |
 | **Enterprise** | Custom    | ∞       | ∞    | ∞                   |
 
-> Il file canonico dei piani è `packages/config/plan-rules.json`. Non definire limiti in altri file.
+> Il file canonico dei piani è `packages/config/plan_rules.json`. Non definire limiti in altri file.
 
 ---
 
@@ -206,7 +205,7 @@ vercel --prod
 
 Questo è un repository privato. Prima di lavorare su qualsiasi feature:
 
-1. Leggi `HowToUse.md` — regole operative del progetto
+1. Leggi `docs/HowToUse.md` — regole operative del progetto
 2. Leggi `project_brain.json` — memoria viva e decisioni confermate
 3. Verifica l'architettura FSD in `apps/workspace`
 4. Non introdurre dipendenze nuove senza verificarne la necessità
