@@ -1,0 +1,523 @@
+{
+  "project": {
+    "name": "Qoovex",
+    "type": "SaaS",
+    "audience": "professional chefs and cooks",
+    "country": "Italy"
+  },
+  "apps": {
+    "web": {
+      "path": "apps/web",
+      "name": "Qoovex",
+      "role": "marketing site",
+      "status": "active"
+    },
+    "workspace": {
+      "path": "apps/workspace",
+      "name": "Qoovex workspace",
+      "role": "main web app",
+      "status": "active"
+    }
+  },
+  "current_truth": {
+    "repo_strategy": "monorepo",
+    "package_manager": "pnpm",
+    "build_system": "turborepo",
+    "frontend": "Next.js 15 App Router + React + TypeScript",
+    "styling": "Tailwind CSS v4 with semantic tokens",
+    "database": "Prisma + Vercel Postgres",
+    "auth": "Clerk",
+    "file_storage": "Vercel Blob",
+    "hosting": "Vercel",
+    "desktop_preferred_stack": "Tauri",
+    "desktop_rejected_default": "Electron",
+    "shared_brand_assets_strategy": "shared brand assets must have a single source of truth outside app-level public folders"
+  },
+  "architecture": {
+    "fsd_usage": {
+      "apps/web": "light",
+      "apps/workspace": "strict"
+    },
+    "aliases": [
+      "@shared/*",
+      "@entities/*",
+      "@features/*",
+      "@widgets/*",
+      "@views/*",
+      "@content",
+      "@content/*"
+    ],
+    "import_rule": "always import downward, never upward",
+    "shared_code_rule": "reusable code belongs in packages, not duplicated in apps",
+    "asset_rule": "shared brand assets must live in a shared package; app public folders are only for app-specific assets",
+    "packages": {
+      "ui": "shared design system and reusable ui",
+      "db": "prisma schema, prisma config, database client",
+      "types": "shared types",
+      "utils": "shared pure utilities",
+      "config": "shared config",
+      "brand": "shared brand assets such as logo, icon, marks and other common brand files",
+      "ai": "AI providers config, scheduling engine, chat, parsing, recipe matching, vision scan — added 2026-04-10"
+    }
+  },
+  "design_system": {
+    "fonts": {
+      "body": "Satoshi",
+      "display": "Chillax"
+    },
+    "icons": {
+      "library": "Lucide React",
+      "decorative_stroke_width": 1.5,
+      "functional_stroke_width": [2, 2.5],
+      "inline_svg": false
+    },
+    "rules": [
+      "use semantic tokens only",
+      "never hardcode token equivalents",
+      "never add hover to non-interactive elements",
+      "shared brand assets must come from the shared brand source of truth, not duplicated app public folders",
+      "if ui feels generic or template-like, redesign it"
+    ]
+  },
+  "product": {
+    "core_features": [
+      "recipes",
+      "digital menus",
+      "automatic allergens",
+      "nutritional values",
+      "qr codes",
+      "explore",
+      "shopping list",
+      "work plan"
+    ],
+    "plans": {
+      "free": {
+        "price": "0€",
+        "recipes": 50,
+        "menus": 2,
+        "creatable_work_plans": 0,
+        "menu_watermark": true,
+        "prep_stock": false,
+        "ai_chat": false,
+        "ai_schedule": false,
+        "import_from_menu_vision": false
+      },
+      "start": {
+        "price": "~19€/month",
+        "recipes": 300,
+        "menus": 6,
+        "active_work_plans": 1,
+        "members_per_plan": 5,
+        "prep_stock": true,
+        "ai_chat": true,
+        "ai_chat_token_limit_per_plan": 50000,
+        "ai_schedule": true,
+        "import_from_menu_vision": false
+      },
+      "pro": {
+        "price": "~49€/month",
+        "recipes": "unlimited",
+        "menus": "unlimited",
+        "active_work_plans": 3,
+        "members_per_plan": 10,
+        "custom_qr": true,
+        "shopping_list_export": true,
+        "activity_log": true,
+        "prep_stock": true,
+        "ai_chat": true,
+        "ai_chat_token_limit_per_plan": 500000,
+        "ai_schedule": true,
+        "import_from_menu_vision": true
+      },
+      "enterprise": {
+        "price": "custom",
+        "limits": "unlimited",
+        "api_access": true,
+        "sla_support": true,
+        "prep_stock": true,
+        "ai_chat": true,
+        "ai_chat_token_limit_per_plan": "unlimited",
+        "ai_schedule": true,
+        "import_from_menu_vision": true
+      }
+    },
+    "work_plan_rules": [
+      "joining other users work plans is always free and unlimited",
+      "limits apply only to plan creation and member count per plan",
+      "only the plan creator can create tasks",
+      "members can complete tasks",
+      "task completion sends notification to the creator",
+      "tasks can be free text or linked to a recipe snapshot, including private recipes",
+      "when a member completes a PRODUCE task they declare the actual quantity — DB updates PrepItem.currentStock atomically",
+      "when a member completes a CONSUME task they confirm the quantity used — DB decrements PrepItem.currentStock atomically",
+      "PrepItem stock operations must use Prisma $transaction to prevent race conditions",
+      "PrepItem belongs to the workspace (creator), shared across all plans in that workspace",
+      "DRAFT plans are invisible to members — only ACTIVE plans are visible to the team",
+      "AI schedule generation is one-shot: chef triggers it manually, result can be accepted or ignored",
+      "AI chat token counter is per WorkPlan, not per month",
+      "if PrepItem.currentStock drops below PrepItem.parLevel, send push notification to workspace creator",
+      "recipe snapshot on task must not reference the live recipe — it must be a frozen copy at time of assignment"
+    ],
+    "work_plan_types": {
+      "PRODUCTION": "batch prep session that increases PrepItem stock",
+      "EVENT": "ceremony or special event that consumes existing PrepItem stock",
+      "SERVICE": "daily service — mix of fresh prep and stock consumption"
+    },
+    "prep_stock_rules": [
+      "PrepItem is a semi-finished product produced by the brigade and stored for future use",
+      "PrepItem has: name, unit, currentStock, parLevel, typicalBatch, storageType, shelfLifeDays, optional recipeId",
+      "each production is logged as PrepProduction with quantity, date, producedBy, linked workTaskId",
+      "each consumption is logged as PrepConsumption with quantity, date, consumedBy, linked workTaskId and workPlanId",
+      "stock history is derived from PrepProduction and PrepConsumption records",
+      "PAR level alert fires when currentStock < parLevel"
+    ],
+    "shopping_list_rules": [
+      "ingredients scale by servings",
+      "no price management"
+    ],
+    "explore_rules": [
+      "public discovery of recipes and menus",
+      "likes",
+      "fork with author credit",
+      "sharing"
+    ]
+  },
+  "ai_stack": {
+    "decided": "2026-04-10",
+    "philosophy": "three distinct problems require three distinct solutions — not everything is AI",
+    "components": {
+      "scheduling_engine": {
+        "type": "pure TypeScript algorithm",
+        "description": "topological sort + Critical Path Method + greedy parallel assignment",
+        "rationale": "deterministic, zero cost, zero latency, fully explainable — scheduling is a constraint satisfaction problem, not a language task",
+        "location": "packages/ai/src/scheduling/"
+      },
+      "operational_ai": {
+        "type": "LLM API",
+        "model": "google/gemini-2.0-flash",
+        "sdk": "@ai-sdk/google",
+        "used_for": [
+          "task text parsing → structured WorkTaskDraft",
+          "recipe matching from free text",
+          "menu scan via Vision API (PRO+)",
+          "structured JSON output"
+        ],
+        "rationale": "extremely fast, very cheap (~$0.075/1M tokens), native structured output, Vision included"
+      },
+      "conversational_ai": {
+        "type": "LLM API",
+        "model": "mistral/mistral-small-3.1-24b",
+        "sdk": "@ai-sdk/mistral",
+        "used_for": [
+          "AI chat co-pilot during plan building",
+          "proactive suggestions",
+          "forgetting checks",
+          "Italian language conversation"
+        ],
+        "rationale": "European/GDPR-friendly (French company), excellent Italian, 128k context, ~$0.10/1M tokens, conversational quality"
+      }
+    },
+    "provider_strategy": "Vercel AI SDK with @ai-sdk/google and @ai-sdk/mistral — no OpenRouter needed, direct provider SDKs for reliability",
+    "token_limits": {
+      "FREE": "no AI",
+      "START": "50000 tokens per work plan (chat)",
+      "PRO": "500000 tokens per work plan (chat)",
+      "ENTERPRISE": "unlimited"
+    },
+    "new_package": "packages/ai"
+  },
+  "domain_entities": [
+    "User",
+    "Recipe",
+    "Ingredient",
+    "RecipeIngredient",
+    "Menu",
+    "MenuItem",
+    "ShoppingList",
+    "ShoppingListItem",
+    "WorkPlan",
+    "WorkPlanMember",
+    "WorkTask",
+    "PrepItem",
+    "PrepProduction",
+    "PrepConsumption",
+    "WorkPlanAiMessage",
+    "Notification",
+    "Subscription"
+  ],
+  "database_memory": {
+    "canonical_env": "DATABASE_URL",
+    "prisma_version_flow": "Prisma 7 uses prisma.config.ts as datasource configuration source",
+    "rules": [
+      "use real database urls only",
+      "do not keep fake root .env placeholders",
+      "database-related changes go through packages/db"
+    ]
+  },
+  "vercel_memory": {
+    "projects": {
+      "workspace": "Qoovex-workspace",
+      "web": "separate Vercel project for apps/web"
+    },
+    "rules": [
+      "link the correct app directory to the correct Vercel project",
+      "Blob belongs to workspace",
+      "database env must be real before running prisma push"
+    ]
+  },
+  "confirmed_decisions": [
+    {
+      "date": "2026-04-06",
+      "key": "repo_strategy",
+      "decision": "one monorepo",
+      "reason": "shared ui, types, config and business logic across apps"
+    },
+    {
+      "date": "2026-04-06",
+      "key": "workspace_tooling",
+      "decision": "turborepo + pnpm",
+      "reason": "better workspace management and shared-package flow"
+    },
+    {
+      "date": "2026-04-06",
+      "key": "web_app_name",
+      "decision": "Qoovex workspace",
+      "reason": "clear and product-focused naming"
+    },
+    {
+      "date": "2026-04-06",
+      "key": "desktop_app_name",
+      "decision": "Qoovex Atelier",
+      "reason": "distinct premium naming"
+    },
+    {
+      "date": "2026-04-06",
+      "key": "desktop_direction",
+      "decision": "prefer Tauri over Electron",
+      "reason": "lighter desktop approach"
+    },
+    {
+      "date": "2026-04-06",
+      "key": "prisma_config",
+      "decision": "use Prisma 7 with prisma.config.ts and DATABASE_URL",
+      "reason": "current Prisma flow"
+    },
+    {
+      "date": "2026-04-07",
+      "key": "shared_brand_assets",
+      "decision": "keep logo, icon and shared brand assets in one shared package source of truth, not duplicated inside apps/web/public and apps/workspace/public",
+      "reason": "avoids drift, duplicate updates and inconsistent branding across apps"
+    },
+    {
+      "date": "2026-04-10",
+      "key": "work_plan_ai_stack",
+      "decision": "dual AI model: Gemini 2.0 Flash for operational/parsing/vision + Mistral Small 3.1 for conversational chat co-pilot. Scheduling is pure TypeScript (no AI).",
+      "reason": "cost control, GDPR compliance (Mistral EU), separation of concerns, deterministic scheduling"
+    },
+    {
+      "date": "2026-04-10",
+      "key": "work_plan_ai_package",
+      "decision": "create packages/ai with @ai-sdk/google and @ai-sdk/mistral. No OpenRouter — direct provider SDKs via Vercel AI SDK.",
+      "reason": "reliability, direct billing control, easier debugging"
+    },
+    {
+      "date": "2026-04-10",
+      "key": "work_plan_prep_stock",
+      "decision": "PrepItem is a first-class domain entity in the workspace — semi-finished products with stock tracking, PAR levels, and storage type. Available from START plan.",
+      "reason": "core kitchen workflow — chefs produce in batches and consume over time. Without stock tracking the work plan is just a todo list."
+    },
+    {
+      "date": "2026-04-10",
+      "key": "work_plan_ai_schedule_mode",
+      "decision": "AI schedule generation is one-shot only. Chef triggers manually. Result can be accepted or manually adjusted.",
+      "reason": "real-time rescheduling would be too costly in API calls and too disruptive UX"
+    },
+    {
+      "date": "2026-04-10",
+      "key": "work_plan_ai_chat_token_model",
+      "decision": "token limit is per WorkPlan (not monthly). START: 50k, PRO: 500k, ENTERPRISE: unlimited.",
+      "reason": "predictable cost control per unit of work, not per calendar period"
+    },
+    {
+      "date": "2026-04-10",
+      "key": "task_timing_model",
+      "decision": "WorkTask has activeMinutes (requires physical presence) and passiveMinutes (waiting time: blast chilling, resting, marinating) + passiveLabel. Scheduler fills passive slots with parallel tasks.",
+      "reason": "core insight of kitchen scheduling — passive time is free time that can be filled with other tasks"
+    },
+    {
+      "date": "2026-04-10",
+      "key": "recipe_snapshot_on_task",
+      "decision": "when a task is linked to a recipe, the recipe is stored as a frozen JSON snapshot on the task — not a live foreign key reference. The recipeId is kept as optional metadata only.",
+      "reason": "chef may edit or delete recipes later. The task must preserve what was shown to the member at the time of assignment."
+    }
+  ],
+  "rejected_choices": [
+    {
+      "choice": "multi-repo",
+      "reason": "duplication and drift"
+    },
+    {
+      "choice": "Electron as default desktop solution",
+      "reason": "too heavy"
+    },
+    {
+      "choice": "strict FSD for apps/web",
+      "reason": "overengineering for marketing site"
+    },
+    {
+      "choice": "OpenRouter as AI gateway",
+      "reason": "adds an unnecessary middleware layer — direct provider SDKs via Vercel AI SDK are more reliable and easier to debug"
+    },
+    {
+      "choice": "single AI model for both scheduling and chat",
+      "reason": "wrong tool for scheduling — scheduling is a deterministic algorithm problem, not a language task"
+    },
+    {
+      "choice": "real-time AI rescheduling (reactive to every task add)",
+      "reason": "too costly in API calls and UX-disruptive — one-shot on demand is the right pattern"
+    },
+    {
+      "choice": "monthly token limit for AI chat",
+      "reason": "unpredictable UX — per-plan token limit is more intuitive and aligned to actual usage unit"
+    }
+  ],
+  "known_pitfalls": [
+    {
+      "problem": "fake database env values",
+      "bad_example": "HOST USER PASSWORD placeholders inside DATABASE_URL",
+      "avoid_by": "use only real connection strings"
+    },
+    {
+      "problem": "conflicting env files",
+      "bad_example": "fake root .env and duplicated database variables",
+      "avoid_by": "keep envs only where they are actually needed"
+    },
+    {
+      "problem": "wrong Vercel linking",
+      "bad_example": "linking repo root blindly",
+      "avoid_by": "link exact app directory to exact Vercel project"
+    },
+    {
+      "problem": "bad architecture fit",
+      "bad_example": "forcing product architecture on the marketing site",
+      "avoid_by": "use architecture only where complexity justifies it"
+    },
+    {
+      "problem": "duplicated brand assets",
+      "bad_example": "keeping the same logo and icon duplicated in multiple app public folders",
+      "avoid_by": "store shared brand assets in one shared package and reserve app public folders for app-specific assets only"
+    },
+    {
+      "problem": "prisma generate postinstall blocks pnpm install on apps without DATABASE_URL",
+      "bad_example": "postinstall: pnpm --filter @Qoovex/db run db:generate inside packages/db",
+      "avoid_by": "use prisma generate || true in packages/db postinstall so it never blocks workspace install"
+    },
+    {
+      "problem": "PrepItem stock race condition",
+      "bad_example": "two concurrent task completions updating PrepItem.currentStock with separate queries",
+      "avoid_by": "always wrap PrepItem.currentStock updates in Prisma $transaction"
+    },
+    {
+      "problem": "live recipe reference on WorkTask",
+      "bad_example": "storing only recipeId on WorkTask and fetching the live recipe at display time",
+      "avoid_by": "always store a frozen JSON snapshot of the recipe on the task at assignment time"
+    },
+    {
+      "problem": "AI token cost overrun on START plan",
+      "bad_example": "unlimited streaming chat for START users",
+      "avoid_by": "check aiTokensUsed against plan limit before every AI chat call, return 402 with upgrade prompt if over limit"
+    }
+  ],
+  "approved_patterns": [
+    "decide architecture before coding",
+    "start from core product features",
+    "put reusable logic in packages",
+    "ask questions before coding when context is incomplete",
+    "keep shared brand assets in a single source of truth",
+    "use pure TypeScript algorithms for deterministic problems — do not use AI where logic suffices",
+    "frozen recipe snapshots on tasks — never live references",
+    "Prisma $transaction for all stock mutations"
+  ],
+  "do_not_break": [
+    "plan limits",
+    "work plan permissions",
+    "semantic token usage",
+    "FSD import direction",
+    "shared code placement in packages",
+    "Lucide-only icon rule",
+    "database env canonical source",
+    "single source of truth for shared brand assets",
+    "PrepItem stock atomicity (always use $transaction)",
+    "recipe snapshot immutability on tasks",
+    "AI token limit enforcement per plan"
+  ],
+  "current_state": {
+    "bootstrap": "completed",
+    "repo": "working",
+    "vercel_workspace_deploy": "working",
+    "blob_connected": true,
+    "prisma_configured": true,
+    "work_plan_spec": "completed — see work-plan-feature-spec.md",
+    "next_focus": [
+      "setup Clerk in apps/workspace",
+      "protect routes",
+      "create authenticated app shell",
+      "bootstrap user in database",
+      "build Recipes CRUD",
+      "— then: work plan (after recipes, ingredients, menus)"
+    ]
+  },
+  "implementation_order": [
+    "auth",
+    "real data schema",
+    "app shell",
+    "recipes",
+    "ingredients",
+    "allergens",
+    "nutrition",
+    "menus",
+    "shopping list",
+    "explore",
+    "work plan — phase 0: schema + types",
+    "work plan — phase 1: PrepStock CRUD",
+    "work plan — phase 2: WorkPlan base (no AI)",
+    "work plan — phase 3: Scheduling Engine (pure TS)",
+    "work plan — phase 4: AI Chat (Mistral)",
+    "work plan — phase 5: AI Parsing + Recipe Match (Gemini)",
+    "work plan — phase 6: Import from Menu Vision (PRO+)",
+    "desktop app"
+  ],
+  "open_questions": [],
+  "recent_changes": [
+    {
+      "date": "2026-04-06",
+      "type": "bootstrap",
+      "note": "initial monorepo and Vercel setup completed"
+    },
+    {
+      "date": "2026-04-06",
+      "type": "infra",
+      "note": "Prisma 7 config aligned on prisma.config.ts"
+    },
+    {
+      "date": "2026-04-06",
+      "type": "infra",
+      "note": "Blob connected to Qoovex-workspace"
+    },
+    {
+      "date": "2026-04-07",
+      "type": "architecture",
+      "note": "shared brand assets must use one shared source of truth instead of duplicated app public copies"
+    },
+    {
+      "date": "2026-04-07",
+      "type": "fix",
+      "note": "fixed packages/db postinstall causing pnpm install to fail on apps/web deploy — changed to prisma generate || true"
+    },
+    {
+      "date": "2026-04-10",
+      "type": "feature_spec",
+      "note": "Piano di Lavoro feature fully specced: PrepStock model, three plan types (PRODUCTION/EVENT/SERVICE), dual AI model strategy (Gemini 2.0 Flash + Mistral Small 3.1), pure TS scheduling engine, token limits per plan, full Prisma schema, FSD structure, 6 implementation phases. All decisions recorded in confirmed_decisions."
+    }
+  ]
+}
