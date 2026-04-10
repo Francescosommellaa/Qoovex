@@ -14,6 +14,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@qoovex/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@vercel/speed-insights':
         specifier: ^2.0.0
         version: 2.0.0(next@15.5.14(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
@@ -57,6 +60,9 @@ importers:
 
   apps/workspace:
     dependencies:
+      '@qoovex/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       next:
         specifier: 15.5.14
         version: 15.5.14(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -123,6 +129,8 @@ importers:
       typescript:
         specifier: ^6.0.2
         version: 6.0.2
+
+  packages/ui: {}
 
   packages/utils:
     devDependencies:
