@@ -1,0 +1,23 @@
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=chillax@400,500,600,700&display=swap");
+
+@theme inline {
+  --font-body: "Satoshi", sans-serif;
+  --font-display: "Chillax", sans-serif;
+
+  /* tutti i token semantici Qoovex qui */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* ... radius, spacing, ecc. */
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
