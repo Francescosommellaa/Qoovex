@@ -66,6 +66,9 @@ importers:
       '@qoovex/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.14(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       next:
         specifier: 15.5.14
         version: 15.5.14(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
