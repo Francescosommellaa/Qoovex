@@ -21,6 +21,9 @@ coverage/
 # vercel
 .vercel/
 
+# vscode
+.vscode/
+
 # logs
 npm-debug.log*
 yarn-debug.log*
