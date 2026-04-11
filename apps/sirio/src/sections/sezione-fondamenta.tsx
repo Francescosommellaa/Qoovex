@@ -1,4 +1,4 @@
-import { SECTIONS, SectionHeader } from "../app/page";
+import { SECTIONS, SectionHeader } from "../app/sirio-content";
 
 export function SezioneFondamenta() {
   return (

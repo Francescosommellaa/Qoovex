@@ -1,4 +1,4 @@
-import { SectionHeader } from "../app/page";
+import { SectionHeader } from "../app/sirio-content";
 
 const TYPE_SCALE = [
   {

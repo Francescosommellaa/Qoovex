@@ -1,4 +1,4 @@
-import { SectionHeader } from "../app/page";
+import { SectionHeader } from "../app/sirio-content";
 
 const SHADOW_TOKENS = [
   {

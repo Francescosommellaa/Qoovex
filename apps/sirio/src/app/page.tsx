@@ -1,6 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import {
+  ComingSoon,
+  SECTIONS,
+  SectionHeader,
+  type SectionId,
+} from "./sirio-content";
 import { SezioneFondamenta } from "../sections/sezione-fondamenta";
 import { SezioneColori } from "../sections/sezione-colori";
 import { SezioneTipografia } from "../sections/sezione-tipografia";
@@ -10,7 +16,7 @@ import { SezioneShadows } from "../sections/sezione-shadows";
 import { SezioneAnimazioni } from "../sections/sezione-animazioni";
 import { SezioneZindex } from "../sections/sezione-zindex";
 
-export const SECTIONS = [
+const SECTIONS_LOCAL = [
   {
     id: "fondamenta",
     label: "Fondamenta",
@@ -78,11 +84,11 @@ export const SECTIONS = [
   },
 ] as const;
 
-export type SectionId = (typeof SECTIONS)[number]["id"];
+type SectionIdLocal = (typeof SECTIONS_LOCAL)[number]["id"];
 
 // ─── Componenti condivisi Sirio ──────────────────────────────────
 
-export function SectionHeader({ label, id }: { label: string; id: string }) {
+function SectionHeaderLocal({ label, id }: { label: string; id: string }) {
   return (
     <div
       style={{
@@ -120,7 +126,7 @@ export function SectionHeader({ label, id }: { label: string; id: string }) {
   );
 }
 
-export function ComingSoon({ label }: { label: string }) {
+function ComingSoonLocal({ label }: { label: string }) {
   return (
     <div
       style={{

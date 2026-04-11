@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SectionHeader } from "../app/page";
+import { SectionHeader } from "../app/sirio-content";
 
 const TRANSITIONS = [
   {

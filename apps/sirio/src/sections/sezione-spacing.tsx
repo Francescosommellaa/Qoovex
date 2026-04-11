@@ -1,4 +1,4 @@
-import { SectionHeader } from "../app/page";
+import { SectionHeader } from "../app/sirio-content";
 
 const SPACING_TOKENS = [
   { token: "--space-1", px: 4, rem: "0.25rem" },
