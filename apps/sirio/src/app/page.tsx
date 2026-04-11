@@ -1,14 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { SezioneFondamenta } from "../sections/sezione-fondamenta";
+import { SezioneColori } from "../sections/sezione-colori";
+import { SezioneTipografia } from "../sections/sezione-tipografia";
+import { SezioneSpacing } from "../sections/sezione-spacing";
+import { SezioneRadius } from "../sections/sezione-radius";
+import { SezioneShadows } from "../sections/sezione-shadows";
+import { SezioneAnimazioni } from "../sections/sezione-animazioni";
+import { SezioneZindex } from "../sections/sezione-zindex";
 
-// ─── Struttura sezioni ───────────────────────────────────────────
-const SECTIONS = [
+export const SECTIONS = [
   {
     id: "fondamenta",
     label: "Fondamenta",
     icon: "◈",
-    description: "Il punto di partenza",
+    description: "Principi e stack",
   },
   {
     id: "colori",
@@ -22,12 +29,7 @@ const SECTIONS = [
     icon: "T",
     description: "Satoshi + Chillax, type scale",
   },
-  {
-    id: "spacing",
-    label: "Spacing",
-    icon: "⊞",
-    description: "Sistema 4px",
-  },
+  { id: "spacing", label: "Spacing", icon: "⊞", description: "Sistema 4px" },
   {
     id: "radius",
     label: "Corner Radius",
@@ -46,18 +48,9 @@ const SECTIONS = [
     icon: "◎",
     description: "Easing, durate, transizioni",
   },
-  {
-    id: "button",
-    label: "Button",
-    icon: "▷",
-    description: "Varianti e stati",
-  },
-  {
-    id: "input",
-    label: "Input",
-    icon: "▭",
-    description: "Text, label, stati",
-  },
+  { id: "zindex", label: "Z-index", icon: "⊕", description: "Layer stack" },
+  { id: "button", label: "Button", icon: "▷", description: "Varianti e stati" },
+  { id: "input", label: "Input", icon: "▭", description: "Text, label, stati" },
   {
     id: "textarea",
     label: "Textarea",
@@ -76,12 +69,7 @@ const SECTIONS = [
     icon: "▪",
     description: "Flat, elevated, interactive",
   },
-  {
-    id: "badge",
-    label: "Badge",
-    icon: "◦",
-    description: "Status e label",
-  },
+  { id: "badge", label: "Badge", icon: "◦", description: "Status e label" },
   {
     id: "form",
     label: "Form",
@@ -90,22 +78,33 @@ const SECTIONS = [
   },
 ] as const;
 
-type SectionId = (typeof SECTIONS)[number]["id"];
+export type SectionId = (typeof SECTIONS)[number]["id"];
 
-// ─── Componenti UI interni ───────────────────────────────────────
+// ─── Componenti condivisi Sirio ──────────────────────────────────
 
-function SectionHeader({ label, id }: { label: string; id: string }) {
+export function SectionHeader({ label, id }: { label: string; id: string }) {
   return (
     <div
       style={{
         display: "flex",
         alignItems: "center",
         gap: "0.625rem",
-        marginBottom: "1.5rem",
-        paddingBottom: "1rem",
+        marginBottom: "var(--space-6)",
+        paddingBottom: "var(--space-4)",
         borderBottom: "1px solid var(--color-border)",
       }}
     >
+      <span
+        style={{
+          fontFamily: "monospace",
+          fontSize: "0.65rem",
+          color: "var(--color-text-faint)",
+          letterSpacing: "0.08em",
+          userSelect: "none",
+        }}
+      >
+        #{id}
+      </span>
       <h2
         style={{
           fontFamily: "var(--font-display)",
@@ -121,7 +120,7 @@ function SectionHeader({ label, id }: { label: string; id: string }) {
   );
 }
 
-function ComingSoon({ label }: { label: string }) {
+export function ComingSoon({ label }: { label: string }) {
   return (
     <div
       style={{
@@ -136,25 +135,9 @@ function ComingSoon({ label }: { label: string }) {
         textAlign: "center",
       }}
     >
-      <div
-        style={{
-          width: "32px",
-          height: "32px",
-          borderRadius: "var(--radius-full)",
-          border: "1px solid var(--color-border)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <span style={{ fontSize: "0.75rem", opacity: 0.3 }}>◌</span>
-      </div>
+      <span style={{ fontSize: "1.25rem", opacity: 0.2 }}>◌</span>
       <p
-        style={{
-          fontSize: "var(--text-sm)",
-          color: "var(--color-text-faint)",
-          fontStyle: "italic",
-        }}
+        style={{ fontSize: "var(--text-sm)", color: "var(--color-text-faint)" }}
       >
         <strong
           style={{ fontStyle: "normal", color: "var(--color-text-muted)" }}
@@ -167,33 +150,30 @@ function ComingSoon({ label }: { label: string }) {
   );
 }
 
-// ─── Sidebar ────────────────────────────────────────────────────
+// ─── Sidebar ─────────────────────────────────────────────────────
 
-function Sidebar({ activeSection }: { activeSection: SectionId }) {
+function Sidebar({ active }: { active: SectionId }) {
   return (
     <aside
+      className="sirio-sidebar"
       style={{
-        width: "224px",
+        width: "220px",
         flexShrink: 0,
         borderRight: "1px solid var(--color-border)",
         position: "sticky",
         top: "52px",
         height: "calc(100dvh - 52px)",
         overflowY: "auto",
-        padding: "var(--space-6) 0",
+        padding: "var(--space-5) 0",
         scrollbarWidth: "none",
       }}
     >
-      {/* Label */}
       <div
-        style={{
-          padding: "0 var(--space-4)",
-          marginBottom: "var(--space-3)",
-        }}
+        style={{ padding: "0 var(--space-4)", marginBottom: "var(--space-3)" }}
       >
         <span
           style={{
-            fontSize: "0.65rem",
+            fontSize: "0.6rem",
             fontWeight: 600,
             letterSpacing: "0.1em",
             textTransform: "uppercase",
@@ -203,7 +183,6 @@ function Sidebar({ activeSection }: { activeSection: SectionId }) {
           Contenuti
         </span>
       </div>
-
       <nav aria-label="Sezioni design system">
         <ul
           style={{
@@ -215,7 +194,7 @@ function Sidebar({ activeSection }: { activeSection: SectionId }) {
           }}
         >
           {SECTIONS.map((s) => {
-            const isActive = activeSection === s.id;
+            const isActive = active === s.id;
             return (
               <li key={s.id}>
                 <a
@@ -224,7 +203,7 @@ function Sidebar({ activeSection }: { activeSection: SectionId }) {
                     display: "flex",
                     alignItems: "center",
                     gap: "var(--space-3)",
-                    padding: "var(--space-2) var(--space-3)",
+                    padding: "6px var(--space-3)",
                     borderRadius: "var(--radius-md)",
                     fontSize: "var(--text-sm)",
                     fontWeight: isActive ? 600 : 400,
@@ -236,7 +215,6 @@ function Sidebar({ activeSection }: { activeSection: SectionId }) {
                       : "transparent",
                     transition:
                       "color var(--transition-fast), background var(--transition-fast)",
-                    textDecoration: "none",
                     position: "relative",
                   }}
                 >
@@ -248,7 +226,7 @@ function Sidebar({ activeSection }: { activeSection: SectionId }) {
                         top: "50%",
                         transform: "translateY(-50%)",
                         width: "2px",
-                        height: "16px",
+                        height: "14px",
                         borderRadius: "var(--radius-full)",
                         background: "var(--color-primary)",
                       }}
@@ -256,10 +234,10 @@ function Sidebar({ activeSection }: { activeSection: SectionId }) {
                   )}
                   <span
                     style={{
-                      fontSize: "0.7rem",
-                      opacity: isActive ? 0.7 : 0.3,
+                      fontSize: "0.65rem",
                       fontFamily: "monospace",
-                      minWidth: "14px",
+                      opacity: isActive ? 0.6 : 0.25,
+                      minWidth: "12px",
                       textAlign: "center",
                     }}
                   >
@@ -272,24 +250,22 @@ function Sidebar({ activeSection }: { activeSection: SectionId }) {
           })}
         </ul>
       </nav>
-
-      {/* Footer sidebar */}
       <div
         style={{
-          padding: "var(--space-6) var(--space-4) 0",
-          marginTop: "var(--space-6)",
+          padding: "var(--space-5) var(--space-4) 0",
+          marginTop: "var(--space-5)",
           borderTop: "1px solid var(--color-border)",
         }}
       >
         <p
           style={{
-            fontSize: "0.7rem",
+            fontSize: "0.65rem",
             color: "var(--color-text-faint)",
             lineHeight: 1.6,
           }}
         >
-          Sirio cresce in parallelo al design system. Nessuna sezione appare
-          prima che il codice esista.
+          Sirio cresce in parallelo al prodotto. Ogni sezione appare quando il
+          codice esiste.
         </p>
       </div>
     </aside>
@@ -298,63 +274,64 @@ function Sidebar({ activeSection }: { activeSection: SectionId }) {
 
 // ─── Bottom Sheet Mobile ─────────────────────────────────────────
 
-function MobileNav({
-  isOpen,
+function MobileSheet({
+  open,
   onClose,
-  activeSection,
+  active,
 }: {
-  isOpen: boolean;
+  open: boolean;
   onClose: () => void;
-  activeSection: SectionId;
+  active: SectionId;
 }) {
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <>
-      {/* Backdrop */}
       <div
         onClick={onClose}
         style={{
           position: "fixed",
           inset: 0,
-          background: "rgba(0,0,0,0.6)",
-          zIndex: "var(--z-modal)" as string,
-          opacity: isOpen ? 1 : 0,
-          pointerEvents: isOpen ? "auto" : "none",
+          background: "oklch(0 0 0 / 0.65)",
+          zIndex: 300,
+          opacity: open ? 1 : 0,
+          pointerEvents: open ? "auto" : "none",
           transition: "opacity var(--transition-slow)",
-          backdropFilter: "blur(4px)",
-          WebkitBackdropFilter: "blur(4px)",
+          backdropFilter: "blur(6px)",
         }}
       />
-      {/* Sheet */}
       <div
         style={{
           position: "fixed",
           bottom: 0,
           left: 0,
           right: 0,
-          zIndex: "var(--z-modal)" as string,
+          zIndex: 301,
           background: "var(--color-surface)",
           borderTop: "1px solid var(--color-border)",
           borderRadius: "var(--radius-2xl) var(--radius-2xl) 0 0",
-          padding:
-            "var(--space-2) 0 calc(var(--space-6) + env(safe-area-inset-bottom))",
-          transform: isOpen ? "translateY(0)" : "translateY(100%)",
+          padding: `var(--space-2) 0 calc(var(--space-6) + env(safe-area-inset-bottom))`,
+          transform: open ? "translateY(0)" : "translateY(100%)",
           transition: "transform var(--transition-slow)",
           maxHeight: "75dvh",
           overflowY: "auto",
           scrollbarWidth: "none",
         }}
       >
-        {/* Handle */}
         <div
           style={{
             width: "36px",
             height: "4px",
             borderRadius: "var(--radius-full)",
             background: "var(--color-border)",
-            margin: "var(--space-2) auto var(--space-5)",
+            margin: "var(--space-2) auto var(--space-4)",
           }}
         />
-        {/* Label */}
         <div
           style={{
             padding: "0 var(--space-5)",
@@ -363,7 +340,7 @@ function MobileNav({
         >
           <span
             style={{
-              fontSize: "0.65rem",
+              fontSize: "0.6rem",
               fontWeight: 600,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
@@ -373,304 +350,128 @@ function MobileNav({
             Naviga Sirio
           </span>
         </div>
-        {/* Links */}
-        <nav>
-          <ul
-            style={{
-              listStyle: "none",
-              display: "flex",
-              flexDirection: "column",
-              gap: "1px",
-              padding: "0 var(--space-3)",
-            }}
-          >
-            {SECTIONS.map((s) => {
-              const isActive = activeSection === s.id;
-              return (
-                <li key={s.id}>
-                  <a
-                    href={`#${s.id}`}
-                    onClick={onClose}
+        <ul
+          style={{
+            listStyle: "none",
+            padding: "0 var(--space-3)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1px",
+          }}
+        >
+          {SECTIONS.map((s) => {
+            const isActive = active === s.id;
+            return (
+              <li key={s.id}>
+                <a
+                  href={`#${s.id}`}
+                  onClick={onClose}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "var(--space-3) var(--space-4)",
+                    borderRadius: "var(--radius-md)",
+                    background: isActive
+                      ? "var(--color-surface-offset)"
+                      : "transparent",
+                  }}
+                >
+                  <div
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "var(--space-3) var(--space-4)",
-                      borderRadius: "var(--radius-md)",
-                      textDecoration: "none",
-                      background: isActive
-                        ? "var(--color-surface-offset)"
-                        : "transparent",
-                      transition: "background var(--transition-fast)",
+                      gap: "var(--space-3)",
                     }}
                   >
-                    <div
+                    <span
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "var(--space-3)",
+                        fontSize: "0.65rem",
+                        fontFamily: "monospace",
+                        opacity: 0.35,
+                        minWidth: "12px",
                       }}
                     >
-                      <span
-                        style={{
-                          fontSize: "0.7rem",
-                          fontFamily: "monospace",
-                          opacity: 0.4,
-                          minWidth: "14px",
-                          textAlign: "center",
-                        }}
-                      >
-                        {s.icon}
-                      </span>
-                      <div>
-                        <div
-                          style={{
-                            fontSize: "var(--text-sm)",
-                            fontWeight: isActive ? 600 : 400,
-                            color: isActive
-                              ? "var(--color-text)"
-                              : "var(--color-text-muted)",
-                          }}
-                        >
-                          {s.label}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "0.7rem",
-                            color: "var(--color-text-faint)",
-                            marginTop: "1px",
-                          }}
-                        >
-                          {s.description}
-                        </div>
-                      </div>
-                    </div>
-                    {isActive && (
+                      {s.icon}
+                    </span>
+                    <div>
                       <div
                         style={{
-                          width: "6px",
-                          height: "6px",
-                          borderRadius: "var(--radius-full)",
-                          background: "var(--color-primary)",
-                          flexShrink: 0,
+                          fontSize: "var(--text-sm)",
+                          fontWeight: isActive ? 600 : 400,
+                          color: isActive
+                            ? "var(--color-text)"
+                            : "var(--color-text-muted)",
                         }}
-                      />
-                    )}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                      >
+                        {s.label}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.65rem",
+                          color: "var(--color-text-faint)",
+                          marginTop: "1px",
+                        }}
+                      >
+                        {s.description}
+                      </div>
+                    </div>
+                  </div>
+                  {isActive && (
+                    <div
+                      style={{
+                        width: "6px",
+                        height: "6px",
+                        borderRadius: "var(--radius-full)",
+                        background: "var(--color-primary)",
+                        flexShrink: 0,
+                      }}
+                    />
+                  )}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </>
   );
 }
 
-// ─── Sezione: Fondamenta ─────────────────────────────────────────
-
-function SezioneFondamenta() {
-  return (
-    <section id="fondamenta" style={{ marginBottom: "var(--space-16)" }}>
-      <SectionHeader label="Fondamenta" id="fondamenta" />
-
-      <p
-        style={{
-          fontSize: "var(--text-base)",
-          color: "var(--color-text-muted)",
-          lineHeight: 1.75,
-          marginBottom: "var(--space-8)",
-          maxWidth: "60ch",
-        }}
-      >
-        Sirio è il design system di Qoovex — uno strumento vivo che cresce in
-        parallelo al prodotto. Ogni token, componente e pattern appare qui solo
-        quando esiste nel codice reale. Nessuna documentazione teorica.
-      </p>
-
-      {/* Info cards */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-          gap: "var(--space-3)",
-          marginBottom: "var(--space-8)",
-        }}
-      >
-        {[
-          { label: "Dark mode", value: "Default", note: "color-scheme: dark" },
-          { label: "Font display", value: "Chillax", note: "Fontshare" },
-          { label: "Font body", value: "Satoshi", note: "Fontshare" },
-          { label: "Primario", value: "Corallo Tartare", note: "#FF6B6B" },
-          { label: "Base spacing", value: "4px", note: "Sistema 4px" },
-          { label: "Stack", value: "Next.js 15", note: "Tailwind v4" },
-        ].map((item) => (
-          <div
-            key={item.label}
-            style={{
-              padding: "var(--space-4)",
-              borderRadius: "var(--radius-lg)",
-              background: "var(--color-surface)",
-              border: "1px solid var(--color-border)",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "0.65rem",
-                fontWeight: 600,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "var(--color-text-faint)",
-                marginBottom: "var(--space-2)",
-              }}
-            >
-              {item.label}
-            </div>
-            <div
-              style={{
-                fontSize: "var(--text-sm)",
-                fontWeight: 600,
-                color: "var(--color-text)",
-                marginBottom: "2px",
-              }}
-            >
-              {item.value}
-            </div>
-            <div
-              style={{
-                fontSize: "0.7rem",
-                color: "var(--color-text-faint)",
-                fontFamily: "monospace",
-              }}
-            >
-              {item.note}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Indice sezioni */}
-      <div
-        style={{
-          padding: "var(--space-5)",
-          borderRadius: "var(--radius-lg)",
-          background: "var(--color-surface)",
-          border: "1px solid var(--color-border)",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "0.65rem",
-            fontWeight: 600,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "var(--color-text-faint)",
-            marginBottom: "var(--space-4)",
-          }}
-        >
-          In questa pagina
-        </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-            gap: "var(--space-2)",
-          }}
-        >
-          {SECTIONS.slice(1).map((s) => (
-            <a
-              key={s.id}
-              href={`#${s.id}`}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "var(--space-2)",
-                padding: "var(--space-2) var(--space-3)",
-                borderRadius: "var(--radius-md)",
-                border: "1px solid var(--color-border)",
-                fontSize: "var(--text-sm)",
-                color: "var(--color-text-muted)",
-                background: "var(--color-surface-2)",
-                transition:
-                  "color var(--transition-fast), border-color var(--transition-fast)",
-                textDecoration: "none",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "var(--color-text)";
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.16)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "var(--color-text-muted)";
-                e.currentTarget.style.borderColor = "var(--color-border)";
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "0.65rem",
-                  fontFamily: "monospace",
-                  opacity: 0.4,
-                }}
-              >
-                {s.icon}
-              </span>
-              {s.label}
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── Page principale ─────────────────────────────────────────────
+// ─── Page ────────────────────────────────────────────────────────
 
 export default function SirioPage() {
-  const [activeSection, setActiveSection] = useState<SectionId>("fondamenta");
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [active, setActive] = useState<SectionId>("fondamenta");
+  const [sheetOpen, setSheetOpen] = useState(false);
 
-  // IntersectionObserver per aggiornare la sezione attiva
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
-
     SECTIONS.forEach((s) => {
       const el = document.getElementById(s.id);
       if (!el) return;
-
       const obs = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveSection(s.id as SectionId);
-          }
+          if (entry.isIntersecting) setActive(s.id as SectionId);
         },
         { rootMargin: "-30% 0px -60% 0px", threshold: 0 },
       );
-
       obs.observe(el);
       observers.push(obs);
     });
-
-    return () => observers.forEach((obs) => obs.disconnect());
+    return () => observers.forEach((o) => o.disconnect());
   }, []);
-
-  // Blocca scroll body quando bottom-sheet è aperto
-  useEffect(() => {
-    document.body.style.overflow = mobileNavOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileNavOpen]);
 
   return (
     <>
-      {/* ── HEADER ─────────────────────────────────── */}
+      {/* HEADER */}
       <header
         style={{
           position: "sticky",
           top: 0,
-          zIndex: "var(--z-sticky)" as string,
+          zIndex: 200,
           height: "52px",
           borderBottom: "1px solid var(--color-border)",
-          background: "rgba(10, 10, 10, 0.92)",
+          background: "oklch(0.10 0 0 / 0.92)",
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
           display: "flex",
@@ -680,7 +481,6 @@ export default function SirioPage() {
           gap: "var(--space-4)",
         }}
       >
-        {/* Logo + nome */}
         <div
           style={{
             display: "flex",
@@ -688,10 +488,9 @@ export default function SirioPage() {
             gap: "var(--space-3)",
           }}
         >
-          {/* Stella Sirio */}
           <svg
-            width="18"
-            height="18"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             fill="none"
             aria-hidden="true"
@@ -711,27 +510,23 @@ export default function SirioPage() {
               fontWeight: 600,
               fontSize: "var(--text-sm)",
               letterSpacing: "-0.01em",
-              color: "var(--color-text)",
             }}
           >
             Sirio
           </span>
           <span
+            className="sirio-header-tagline"
             style={{
-              fontSize: "0.65rem",
+              display: "none",
+              fontSize: "0.6rem",
               color: "var(--color-text-faint)",
-              fontWeight: 500,
               letterSpacing: "0.06em",
               textTransform: "uppercase",
-              display: "none",
             }}
-            className="sirio-tagline"
           >
             Qoovex Design System
           </span>
         </div>
-
-        {/* Destra: versione + burger mobile */}
         <div
           style={{
             display: "flex",
@@ -741,18 +536,17 @@ export default function SirioPage() {
         >
           <span
             style={{
-              fontSize: "0.65rem",
-              color: "var(--color-text-faint)",
+              fontSize: "0.6rem",
               fontFamily: "monospace",
+              color: "var(--color-text-faint)",
               letterSpacing: "0.06em",
             }}
           >
-            v0.1
+            v0.2
           </span>
-
-          {/* Burger — solo mobile */}
           <button
-            onClick={() => setMobileNavOpen(true)}
+            className="sirio-burger"
+            onClick={() => setSheetOpen(true)}
             aria-label="Apri menu sezioni"
             style={{
               display: "flex",
@@ -761,11 +555,7 @@ export default function SirioPage() {
               padding: "var(--space-2)",
               borderRadius: "var(--radius-md)",
               border: "1px solid var(--color-border)",
-              background: "transparent",
-              cursor: "pointer",
-              transition: "background var(--transition-fast)",
             }}
-            className="sirio-burger"
           >
             <span
               style={{
@@ -789,28 +579,11 @@ export default function SirioPage() {
         </div>
       </header>
 
-      {/* ── LAYOUT ─────────────────────────────────── */}
-      <div
-        style={{
-          display: "flex",
-          minHeight: "calc(100dvh - 52px)",
-        }}
-      >
-        {/* Sidebar — solo desktop */}
-        <div className="sirio-sidebar-wrapper">
-          <Sidebar activeSection={activeSection} />
-        </div>
-
-        {/* Main */}
-        <main
-          style={{
-            flex: 1,
-            minWidth: 0,
-            padding: "var(--space-8) var(--space-5)",
-            maxWidth: "800px",
-          }}
-        >
-          {/* ── HERO ─────────────────────────── */}
+      {/* LAYOUT */}
+      <div className="sirio-layout">
+        <Sidebar active={active} />
+        <main className="sirio-main" style={{ maxWidth: "820px" }}>
+          {/* HERO */}
           <div style={{ marginBottom: "var(--space-16)" }}>
             <div
               style={{
@@ -827,8 +600,8 @@ export default function SirioPage() {
                   fontWeight: 700,
                   fontSize: "var(--text-2xl)",
                   letterSpacing: "-0.04em",
-                  color: "var(--color-text)",
                   lineHeight: 1,
+                  color: "var(--color-text)",
                 }}
               >
                 Sirio
@@ -844,22 +617,18 @@ export default function SirioPage() {
                 α Canis Majoris — la stella più luminosa del cielo notturno
               </span>
             </div>
-
             <p
               style={{
                 fontSize: "var(--text-base)",
                 color: "var(--color-text-muted)",
                 lineHeight: 1.75,
                 maxWidth: "56ch",
-                marginBottom: "var(--space-6)",
+                marginBottom: "var(--space-5)",
               }}
             >
-              Il design system ufficiale di Qoovex. Colori, tipografia,
-              componenti, token e pattern — tutto in un posto solo. Costruito
-              mentre il prodotto cresce, aggiornato ad ogni componente nuovo.
+              Il design system ufficiale di Qoovex. Token, componenti e pattern
+              — costruiti in parallelo al prodotto, aggiornati ad ogni release.
             </p>
-
-            {/* Tag */}
             <div
               style={{
                 display: "flex",
@@ -881,7 +650,7 @@ export default function SirioPage() {
                     padding: "3px 10px",
                     borderRadius: "var(--radius-full)",
                     border: "1px solid var(--color-border)",
-                    fontSize: "0.7rem",
+                    fontSize: "0.65rem",
                     fontWeight: 500,
                     color: "var(--color-text-faint)",
                     letterSpacing: "0.03em",
@@ -893,28 +662,43 @@ export default function SirioPage() {
             </div>
           </div>
 
-          {/* ── SEZIONI ──────────────────────── */}
+          {/* SEZIONI */}
           <SezioneFondamenta />
+          <SezioneColori />
+          <SezioneTipografia />
+          <SezioneSpacing />
+          <SezioneRadius />
+          <SezioneShadows />
+          <SezioneAnimazioni />
+          <SezioneZindex />
 
-          {/* Le sezioni seguenti verranno popolate fase per fase */}
-          {SECTIONS.slice(1).map((s) => (
-            <section
-              key={s.id}
-              id={s.id}
-              style={{ marginBottom: "var(--space-16)" }}
-            >
-              <SectionHeader label={s.label} id={s.id} />
-              <ComingSoon label={s.label} />
-            </section>
-          ))}
+          {/* Sezioni componenti — coming soon */}
+          {(
+            [
+              "button",
+              "input",
+              "textarea",
+              "searchbar",
+              "card",
+              "badge",
+              "form",
+            ] as const
+          ).map((id) => {
+            const s = SECTIONS.find((x) => x.id === id)!;
+            return (
+              <section key={id} id={id} className="sirio-section">
+                <SectionHeader label={s.label} id={id} />
+                <ComingSoon label={s.label} />
+              </section>
+            );
+          })}
         </main>
       </div>
 
-      {/* ── MOBILE BOTTOM SHEET ────────────────────── */}
-      <MobileNav
-        isOpen={mobileNavOpen}
-        onClose={() => setMobileNavOpen(false)}
-        activeSection={activeSection}
+      <MobileSheet
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        active={active}
       />
     </>
   );
