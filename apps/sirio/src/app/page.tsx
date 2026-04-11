@@ -1,21 +1,23 @@
-export default function SirioHome() {
-  const sections = [
-    { id: "fondamenta", label: "Fondamenta" },
-    { id: "colori", label: "Colori" },
-    { id: "tipografia", label: "Tipografia" },
-    { id: "spacing", label: "Spacing" },
-    { id: "radius", label: "Corner Radius" },
-    { id: "shadows", label: "Shadows" },
-    { id: "animazioni", label: "Animazioni" },
-    { id: "pulsanti", label: "Button" },
-    { id: "input", label: "Input" },
-    { id: "textarea", label: "Textarea" },
-    { id: "searchbar", label: "SearchBar" },
-    { id: "card", label: "Card" },
-    { id: "badge", label: "Badge" },
-    { id: "form", label: "Form" },
-  ];
+import { SiriaSidebar } from "./sirio-sidebar";
 
+const sections = [
+  { id: "fondamenta", label: "Fondamenta" },
+  { id: "colori", label: "Colori" },
+  { id: "tipografia", label: "Tipografia" },
+  { id: "spacing", label: "Spacing" },
+  { id: "radius", label: "Corner Radius" },
+  { id: "shadows", label: "Shadows" },
+  { id: "animazioni", label: "Animazioni" },
+  { id: "pulsanti", label: "Button" },
+  { id: "input", label: "Input" },
+  { id: "textarea", label: "Textarea" },
+  { id: "searchbar", label: "SearchBar" },
+  { id: "card", label: "Card" },
+  { id: "badge", label: "Badge" },
+  { id: "form", label: "Form" },
+];
+
+export default function SirioHome() {
   return (
     <div
       style={{
@@ -26,7 +28,7 @@ export default function SirioHome() {
         color: "#ededed",
       }}
     >
-      {/* TOP NAV MOBILE */}
+      {/* TOP HEADER */}
       <header
         style={{
           position: "sticky",
@@ -45,14 +47,7 @@ export default function SirioHome() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
-          {/* icona stella */}
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
               d="M12 2L13.8 8.2L20 10L13.8 11.8L12 18L10.2 11.8L4 10L10.2 8.2L12 2Z"
               fill="#ededed"
@@ -96,70 +91,9 @@ export default function SirioHome() {
         </span>
       </header>
 
-      <div
-        style={{
-          display: "flex",
-          flex: 1,
-        }}
-      >
-        {/* SIDEBAR DESKTOP */}
-        <aside
-          style={{
-            width: "220px",
-            flexShrink: 0,
-            borderRight: "1px solid rgba(255,255,255,0.08)",
-            position: "sticky",
-            top: "56px",
-            height: "calc(100dvh - 56px)",
-            overflowY: "auto",
-            padding: "1.5rem 0",
-            display: "none",
-          }}
-          className="sirio-sidebar"
-        >
-          <nav aria-label="Sezioni design system">
-            <ul
-              style={{
-                listStyle: "none",
-                display: "flex",
-                flexDirection: "column",
-                gap: "2px",
-                padding: "0 0.75rem",
-              }}
-            >
-              {sections.map((s) => (
-                <li key={s.id}>
-                  <a
-                    href={`#${s.id}`}
-                    style={{
-                      display: "block",
-                      padding: "0.4rem 0.75rem",
-                      borderRadius: "6px",
-                      fontSize: "0.85rem",
-                      fontWeight: 500,
-                      color: "rgba(237,237,237,0.6)",
-                      textDecoration: "none",
-                      transition: "color 150ms ease, background 150ms ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.color = "#ededed";
-                      (e.currentTarget as HTMLElement).style.background =
-                        "rgba(255,255,255,0.06)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.color =
-                        "rgba(237,237,237,0.6)";
-                      (e.currentTarget as HTMLElement).style.background =
-                        "transparent";
-                    }}
-                  >
-                    {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </aside>
+      <div style={{ display: "flex", flex: 1 }}>
+        {/* SIDEBAR — client component per i mouse events */}
+        <SiriaSidebar />
 
         {/* MAIN CONTENT */}
         <main
@@ -180,13 +114,7 @@ export default function SirioHome() {
                 marginBottom: "1rem",
               }}
             >
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                   d="M12 2L13.8 8.2L20 10L13.8 11.8L12 18L10.2 11.8L4 10L10.2 8.2L12 2Z"
                   fill="#ededed"
@@ -219,13 +147,7 @@ export default function SirioHome() {
               prodotto. Viene costruito in modo incrementale: ogni componente
               che creiamo finisce qui prima di entrare in produzione.
             </p>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "0.5rem",
-              }}
-            >
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
               {["Dark mode", "Mobile first", "Tailwind v4", "Next.js 15", "Satoshi + Chillax"].map(
                 (tag) => (
                   <span
@@ -247,7 +169,7 @@ export default function SirioHome() {
             </div>
           </section>
 
-          {/* FONDAMENTA — visibile su mobile come indice */}
+          {/* FONDAMENTA */}
           <section
             id="fondamenta"
             style={{ marginBottom: "3rem" }}
@@ -267,7 +189,6 @@ export default function SirioHome() {
               componente o il token corrispondente viene creato nel monorepo.
               Nessuna documentazione senza implementazione reale.
             </p>
-
             <div
               style={{
                 display: "grid",
@@ -288,7 +209,6 @@ export default function SirioHome() {
                     color: "rgba(237,237,237,0.55)",
                     textDecoration: "none",
                     background: "rgba(255,255,255,0.03)",
-                    transition: "border-color 150ms ease, color 150ms ease",
                     display: "flex",
                     alignItems: "center",
                     gap: "0.5rem",
@@ -301,13 +221,9 @@ export default function SirioHome() {
             </div>
           </section>
 
-          {/* PLACEHOLDER SEZIONI */}
+          {/* SEZIONI PLACEHOLDER */}
           {sections.slice(1).map((s) => (
-            <section
-              key={s.id}
-              id={s.id}
-              style={{ marginBottom: "3rem" }}
-            >
+            <section key={s.id} id={s.id} style={{ marginBottom: "3rem" }}>
               <SectionHeader label={s.label} />
               <ComingSoon />
             </section>
@@ -347,7 +263,6 @@ export default function SirioHome() {
               color: "rgba(237,237,237,0.5)",
               textDecoration: "none",
               whiteSpace: "nowrap",
-              transition: "color 150ms ease, background 150ms ease",
             }}
           >
             {s.label}
@@ -355,7 +270,6 @@ export default function SirioHome() {
         ))}
       </nav>
 
-      {/* Responsive */}
       <style>{`
         @media (min-width: 768px) {
           .sirio-sidebar { display: block !important; }
@@ -379,13 +293,7 @@ function SectionHeader({ label }: { label: string }) {
         borderBottom: "1px solid rgba(255,255,255,0.07)",
       }}
     >
-      <span
-        style={{
-          color: "rgba(237,237,237,0.2)",
-          fontSize: "0.8rem",
-          fontFamily: "monospace",
-        }}
-      >
+      <span style={{ color: "rgba(237,237,237,0.2)", fontSize: "0.8rem", fontFamily: "monospace" }}>
         ✦
       </span>
       <h2
@@ -417,13 +325,7 @@ function ComingSoon() {
       }}
     >
       <span style={{ opacity: 0.25, fontSize: "0.75rem" }}>○</span>
-      <span
-        style={{
-          fontSize: "0.8rem",
-          color: "rgba(237,237,237,0.25)",
-          fontStyle: "italic",
-        }}
-      >
+      <span style={{ fontSize: "0.8rem", color: "rgba(237,237,237,0.25)", fontStyle: "italic" }}>
         Questa sezione verr&agrave; popolata nella prossima fase.
       </span>
     </div>
