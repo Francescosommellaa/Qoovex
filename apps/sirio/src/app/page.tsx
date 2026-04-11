@@ -15,6 +15,7 @@ import { SezioneRadius } from "../sections/sezione-radius";
 import { SezioneShadows } from "../sections/sezione-shadows";
 import { SezioneAnimazioni } from "../sections/sezione-animazioni";
 import { SezioneZindex } from "../sections/sezione-zindex";
+import { SezioneButton } from "../sections/sezione-button";
 
 const SECTIONS_LOCAL = [
   {
@@ -677,11 +678,11 @@ export default function SirioPage() {
           <SezioneShadows />
           <SezioneAnimazioni />
           <SezioneZindex />
+          <SezioneButton />
 
           {/* Sezioni componenti — coming soon */}
           {(
             [
-              "button",
               "input",
               "textarea",
               "searchbar",

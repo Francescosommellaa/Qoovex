@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* Sirio — Qoovex Design System Hub */
+  transpilePackages: ["@qoovex/ui"],
 };
 
 export default nextConfig;
