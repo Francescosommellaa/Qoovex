@@ -102,7 +102,7 @@ export default function SirioHome() {
           flex: 1,
         }}
       >
-        {/* SIDEBAR DESKTOP — nascosta su mobile con CSS */}
+        {/* SIDEBAR DESKTOP */}
         <aside
           style={{
             width: "220px",
@@ -113,7 +113,7 @@ export default function SirioHome() {
             height: "calc(100dvh - 56px)",
             overflowY: "auto",
             padding: "1.5rem 0",
-            display: "none", /* nascosta su mobile, visibile da md in poi via JS o media query inline */
+            display: "none",
           }}
           className="sirio-sidebar"
         >
@@ -215,7 +215,7 @@ export default function SirioHome() {
               }}
             >
               Il design system ufficiale di Qoovex. Qui vivono i token, i
-              componenti e i pattern che definiscono l'identità visiva del
+              componenti e i pattern che definiscono l&apos;identit&agrave; visiva del
               prodotto. Viene costruito in modo incrementale: ogni componente
               che creiamo finisce qui prima di entrare in produzione.
             </p>
@@ -247,7 +247,7 @@ export default function SirioHome() {
             </div>
           </section>
 
-          {/* INDICE MOBILE — visibile solo su mobile */}
+          {/* FONDAMENTA — visibile su mobile come indice */}
           <section
             id="fondamenta"
             style={{ marginBottom: "3rem" }}
@@ -263,12 +263,11 @@ export default function SirioHome() {
                 marginBottom: "1.5rem",
               }}
             >
-              Sirio è un documento vivo. Ogni sezione compare quando il
+              Sirio &egrave; un documento vivo. Ogni sezione compare quando il
               componente o il token corrispondente viene creato nel monorepo.
               Nessuna documentazione senza implementazione reale.
             </p>
 
-            {/* Indice sezioni — visibile su mobile */}
             <div
               style={{
                 display: "grid",
@@ -302,7 +301,7 @@ export default function SirioHome() {
             </div>
           </section>
 
-          {/* PLACEHOLDER SEZIONI — verranno popolate fase per fase */}
+          {/* PLACEHOLDER SEZIONI */}
           {sections.slice(1).map((s) => (
             <section
               key={s.id}
@@ -356,7 +355,7 @@ export default function SirioHome() {
         ))}
       </nav>
 
-      {/* Responsive: sidebar visibile da 768px */}
+      {/* Responsive */}
       <style>{`
         @media (min-width: 768px) {
           .sirio-sidebar { display: block !important; }
@@ -425,7 +424,7 @@ function ComingSoon() {
           fontStyle: "italic",
         }}
       >
-        Questa sezione verrà popolata nella prossima fase.
+        Questa sezione verr&agrave; popolata nella prossima fase.
       </span>
     </div>
   );

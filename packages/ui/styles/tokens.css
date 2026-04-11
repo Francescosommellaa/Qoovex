@@ -1,4 +1,4 @@
-@import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=chillax@400,500,600,700&display=swap");
+/* Font import rimosso da qui — deve stare come primo @import in globals.css di ogni app */
 
 @theme inline {
   --font-body: "Satoshi", sans-serif;
