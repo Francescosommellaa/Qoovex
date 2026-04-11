@@ -506,10 +506,6 @@ export default function SirioPage() {
               d="M12 1L14.39 8.26L22 10L14.39 11.74L12 19L9.61 11.74L2 10L9.61 8.26L12 1Z"
               fill="var(--color-primary)"
             />
-            <path
-              d="M19 2L19.9 4.6L22.5 5.5L19.9 6.4L19 9L18.1 6.4L15.5 5.5L18.1 4.6L19 2Z"
-              fill="var(--color-text-faint)"
-            />
           </svg>
           <span
             style={{
@@ -682,14 +678,7 @@ export default function SirioPage() {
 
           {/* Sezioni componenti — coming soon */}
           {(
-            [
-              "input",
-              "textarea",
-              "searchbar",
-              "card",
-              "badge",
-              "form",
-            ] as const
+            ["input", "textarea", "searchbar", "card", "badge", "form"] as const
           ).map((id) => {
             const s = SECTIONS.find((x) => x.id === id)!;
             return (
