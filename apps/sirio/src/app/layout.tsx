@@ -5,13 +5,15 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Sirio — Qoovex Design System",
   description:
-    "Il design system ufficiale di Qoovex. Colori, tipografia, componenti, token e pattern per costruire prodotti coerenti e belli.",
+    "Il design system ufficiale di Qoovex. Colori, tipografia, componenti, token e pattern per costruire prodotti coerenti.",
   openGraph: {
     title: "Sirio — Qoovex Design System",
-    description: "Design system ufficiale di Qoovex.",
+    description:
+      "Il design system ufficiale di Qoovex. Colori, tipografia, componenti e token.",
     siteName: "Sirio",
   },
 };
+
 
 export default function RootLayout({
   children,
