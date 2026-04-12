@@ -1,6 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import {
+  ArrowRight,
+  ChefHat,
+  Plus,
+  Trash2,
+  Save,
+  ArrowLeft,
+  Sparkles,
+  MoveRight,
+} from "lucide-react";
 import { Button } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
 
@@ -42,24 +52,6 @@ function Row({
   );
 }
 
-function TokenTag({ token }: { token: string }) {
-  return (
-    <span
-      style={{
-        fontFamily: "monospace",
-        fontSize: "0.6rem",
-        color: "var(--color-text-faint)",
-        background: "var(--color-surface-offset)",
-        border: "1px solid var(--color-border)",
-        borderRadius: "var(--radius-sm)",
-        padding: "2px 6px",
-      }}
-    >
-      {token}
-    </span>
-  );
-}
-
 // ─── Sezione ─────────────────────────────────────────────────────
 
 export function SezioneButton() {
@@ -74,7 +66,7 @@ export function SezioneButton() {
     <section id="button" className="sirio-section">
       <SectionHeader label="Button" id="button" />
 
-      {/* Varianti */}
+      {/* Varianti base */}
       <Row label="Variants">
         <Button variant="primary">Primary</Button>
         <Button variant="secondary">Secondary</Button>
@@ -83,13 +75,18 @@ export function SezioneButton() {
       </Row>
 
       {/* Sizes */}
-      <Row label="Sizes — md (default)">
-        <Button size="sm">Small</Button>
-        <Button size="md">Medium</Button>
-        <Button size="lg">Large</Button>
+      <Row label="Sizes — primary">
+        <Button variant="primary" size="sm">
+          Small
+        </Button>
+        <Button variant="primary" size="md">
+          Medium
+        </Button>
+        <Button variant="primary" size="lg">
+          Large
+        </Button>
       </Row>
 
-      {/* Sizes per variante */}
       <Row label="Sizes — secondary">
         <Button variant="secondary" size="sm">
           Small
@@ -102,23 +99,188 @@ export function SezioneButton() {
         </Button>
       </Row>
 
-      {/* Stato disabled */}
+      {/* Icon left — icona accenna verso sinistra all'hover */}
+      <Row label="Icon left">
+        <Button
+          variant="primary"
+          size="sm"
+          iconLeft={<ChefHat size={12} strokeWidth={2} />}
+        >
+          Nuovo piano
+        </Button>
+        <Button
+          variant="primary"
+          size="md"
+          iconLeft={<Plus size={14} strokeWidth={2} />}
+        >
+          Aggiungi ricetta
+        </Button>
+        <Button
+          variant="primary"
+          size="lg"
+          iconLeft={<Save size={16} strokeWidth={2} />}
+        >
+          Salva menu
+        </Button>
+        <Button
+          variant="secondary"
+          size="md"
+          iconLeft={<ArrowLeft size={14} strokeWidth={2} />}
+        >
+          Indietro
+        </Button>
+        <Button
+          variant="ghost"
+          size="md"
+          iconLeft={<ChefHat size={14} strokeWidth={2} />}
+        >
+          Il mio profilo
+        </Button>
+        <Button
+          variant="destructive"
+          size="md"
+          iconLeft={<Trash2 size={14} strokeWidth={2} />}
+        >
+          Elimina ricetta
+        </Button>
+      </Row>
+
+      {/* Icon right — icona accenna verso destra all'hover */}
+      <Row label="Icon right">
+        <Button
+          variant="primary"
+          size="sm"
+          iconRight={<ArrowRight size={12} strokeWidth={2} />}
+        >
+          Continua
+        </Button>
+        <Button
+          variant="primary"
+          size="md"
+          iconRight={<ArrowRight size={14} strokeWidth={2} />}
+        >
+          Vai al menu
+        </Button>
+        <Button
+          variant="primary"
+          size="lg"
+          iconRight={<ArrowRight size={16} strokeWidth={2} />}
+        >
+          Prossimo step
+        </Button>
+        <Button
+          variant="secondary"
+          size="md"
+          iconRight={<ArrowRight size={14} strokeWidth={2} />}
+        >
+          Esplora ricette
+        </Button>
+        <Button
+          variant="ghost"
+          size="md"
+          iconRight={<ArrowRight size={14} strokeWidth={2} />}
+        >
+          Scopri di più
+        </Button>
+      </Row>
+
+      <Row label="Icon swap (Apple style) — hover to see">
+        <Button
+          variant="primary"
+          size="sm"
+          iconSwap={{
+            from: <Plus size={12} strokeWidth={2} />,
+            to: <ArrowRight size={12} strokeWidth={2} />,
+          }}
+        >
+          Aggiungi
+        </Button>
+
+        <Button
+          variant="primary"
+          size="md"
+          iconSwap={{
+            from: <ChefHat size={14} strokeWidth={2} />,
+            to: <ArrowRight size={14} strokeWidth={2} />,
+          }}
+        >
+          Crea ricetta
+        </Button>
+
+        <Button
+          variant="primary"
+          size="lg"
+          iconSwap={{
+            from: <Save size={16} strokeWidth={2} />,
+            to: <MoveRight size={16} strokeWidth={2} />,
+          }}
+        >
+          Salva e continua
+        </Button>
+
+        <Button
+          variant="secondary"
+          size="md"
+          iconSwap={{
+            from: <Sparkles size={14} strokeWidth={2} />,
+            to: <ArrowRight size={14} strokeWidth={2} />,
+          }}
+        >
+          Esplora menu
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="md"
+          iconSwap={{
+            from: <ChefHat size={14} strokeWidth={2} />,
+            to: <ArrowRight size={14} strokeWidth={2} />,
+          }}
+        >
+          Scopri di più
+        </Button>
+
+        <Button
+          variant="destructive"
+          size="md"
+          iconSwap={{
+            from: <Trash2 size={14} strokeWidth={2} />,
+            to: <ArrowRight size={14} strokeWidth={2} />,
+          }}
+        >
+          Elimina
+        </Button>
+      </Row>
+
+      {/* Disabled — nessun hover, nessuna animazione */}
       <Row label="State — disabled">
-        <Button variant="primary" disabled>
+        <Button
+          variant="primary"
+          disabled
+          iconLeft={<Plus size={14} strokeWidth={2} />}
+        >
           Primary
         </Button>
-        <Button variant="secondary" disabled>
+        <Button
+          variant="secondary"
+          disabled
+          iconLeft={<Plus size={14} strokeWidth={2} />}
+        >
           Secondary
         </Button>
         <Button variant="ghost" disabled>
           Ghost
         </Button>
-        <Button variant="destructive" disabled>
+        <Button
+          variant="destructive"
+          disabled
+          iconLeft={<Trash2 size={14} strokeWidth={2} />}
+        >
           Destructive
         </Button>
       </Row>
 
-      {/* Stato loading */}
+      {/* Loading — click to trigger */}
       <Row label="State — loading (click to trigger)">
         {(["primary", "secondary", "ghost", "destructive"] as const).map(
           (v) => (
@@ -134,7 +296,7 @@ export function SezioneButton() {
         )}
       </Row>
 
-      {/* Combinazione sizes × varianti */}
+      {/* Matrix completa */}
       <Row label="Matrix — all variants × all sizes">
         {(["primary", "secondary", "ghost", "destructive"] as const).map((v) =>
           (["sm", "md", "lg"] as const).map((s) => (

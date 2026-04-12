@@ -618,6 +618,11 @@
       "date": "2026-04-12",
       "type": "ui",
       "note": "redesigned Button component in packages/ui/src/components/button.tsx — inset shadow depth on primary/destructive, refined sizing (h-7/h-9/h-11), tracking on sm, spring easing."
+    },
+    {
+      "date": "2026-04-13",
+      "type": "design",
+      "note": "changed primary color from Corallo Tartare (oklch 0.68 0.18 22) to Ink Slate (oklch 0.42 0.05 240 / #4A5E72) — coral was too close to error red and misaligned with Qoovex's professional identity. Ink Slate reads as precision, control, craft."
     }
   ]
 }

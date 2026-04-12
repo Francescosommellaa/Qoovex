@@ -27,11 +27,11 @@
   --color-text-faint: oklch(0.94 0 0 / 0.25);
   --color-text-inverse: oklch(0.1 0 0);
 
-  /* ─── PRIMARY — Corallo Tartare ─────────────────────── */
-  --color-primary: oklch(0.68 0.18 22);
-  --color-primary-hover: oklch(0.62 0.2 22);
-  --color-primary-active: oklch(0.55 0.2 22);
-  --color-primary-highlight: oklch(0.68 0.18 22 / 0.12);
+  /* ─── PRIMARY — Ink Slate ────────────────────────────── */
+  --color-primary: oklch(0.42 0.05 240);
+  --color-primary-hover: oklch(0.36 0.06 240);
+  --color-primary-active: oklch(0.3 0.06 240);
+  --color-primary-highlight: oklch(0.42 0.05 240 / 0.14);
 
   /* ─── SUCCESS ────────────────────────────────────────── */
   --color-success: oklch(0.65 0.15 152);
@@ -46,10 +46,10 @@
   --color-warning-highlight: oklch(0.72 0.16 65 / 0.12);
 
   /* ─── ERROR ──────────────────────────────────────────── */
-  --color-error: oklch(0.62 0.22 22);
-  --color-error-hover: oklch(0.55 0.22 22);
-  --color-error-active: oklch(0.47 0.22 22);
-  --color-error-highlight: oklch(0.62 0.22 22 / 0.12);
+  --color-error: oklch(0.52 0.22 22);
+  --color-error-hover: oklch(0.46 0.22 22);
+  --color-error-active: oklch(0.4 0.22 22);
+  --color-error-highlight: oklch(0.62 0.22 22 / 0.14);
 
   /* ─── TYPE SCALE ─────────────────────────────────────── */
   --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
@@ -124,4 +124,18 @@
   --z-modal: 300;
   --z-toast: 400;
   --z-overlay: 500;
+
+  /* ─── BUTTON TOKENS ─────────────────────────────────────── */
+  --shadow-btn-resting: 0 1px 2px oklch(0 0 0 / 0.3);
+  --shadow-btn-hover: 0 1px 3px oklch(0 0 0 / 0.35);
+  --shadow-btn-active: 0 1px 2px oklch(0 0 0 / 0.3);
+  --color-btn-secondary-fill: oklch(0.22 0 0);
+  --shadow-btn-resting: 0 1px 2px oklch(0 0 0 / 0.3);
+  --shadow-btn-hover: 0 1px 3px oklch(0 0 0 / 0.35);
+  --shadow-btn-active: 0 1px 2px oklch(0 0 0 / 0.3);
+
+  --color-btn-fill-secondary: oklch(0.22 0 0);
+  --color-btn-fill-ghost: oklch(1 0 0 / 0.06);
+  --color-btn-fill-destructive: var(--color-error);
+  --btn-swap-gap: var(--spacing-2); /* 8px — allineato al gap del size md */
 }
