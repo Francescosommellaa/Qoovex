@@ -33,6 +33,33 @@
     "desktop_rejected_default": "Electron",
     "shared_brand_assets_strategy": "shared brand assets must have a single source of truth outside app-level public folders"
   },
+  "css_architecture": {
+    "summary": "Tailwind v4 CSS-first config. No tailwind.config.js. All design tokens in @theme inside packages/ui/styles/tokens.css. All shared base styles in packages/ui/styles/base.css. Each app globals.css is minimal — only imports + @source + app-specific rules.",
+    "import_order": [
+      "1. @import '@qoovex/ui/styles/tokens'  — @theme block, must come first",
+      "2. @import '@qoovex/ui/styles/base'    — shared reset and semantic base in @layer base",
+      "3. @import 'tailwindcss'               — generates utilities from @theme tokens",
+      "4. @source '../../../../packages/ui/src' — explicit source scan for monorepo packages"
+    ],
+    "source_rule": {
+      "description": "@source path is ALWAYS relative to the CSS file itself, not the project root, not postcss.config.mjs, not the app root.",
+      "correct_path_from_app_globals_css": "../../../../packages/ui/src",
+      "explanation": "apps/X/src/app/globals.css → 4 levels up = monorepo root → packages/ui/src"
+    },
+    "theme_rule": "Always use @theme {} WITHOUT the 'static' keyword. @theme static prevents CSS custom properties from being emitted to :root, breaking all var(--color-*) usage in raw CSS and inline styles.",
+    "layer_rule": "All rules in packages/ui/styles/base.css must be wrapped in @layer base. This ensures Tailwind utility classes always win in specificity — bg-primary beats button { background: none }.",
+    "shared_files": {
+      "tokens.css": "packages/ui/styles/tokens.css — @theme block with all design tokens. Single source of truth. Never duplicate in apps.",
+      "base.css": "packages/ui/styles/base.css — @layer base with reset, html, body, h1-h6, scrollbar, focus-visible, prefers-reduced-motion, font @import. Single source of truth. Never duplicate in apps.",
+      "app_globals_css": "Each app's src/app/globals.css contains ONLY: 3 imports + @source + app-specific rules that genuinely differ per app."
+    },
+    "transpile_rule": "Every app that imports from @qoovex/ui must have transpilePackages: ['@qoovex/ui'] in its next.config.ts. Without this, Next.js cannot compile the TypeScript in the package.",
+    "what_goes_in_app_globals": [
+      "scroll-padding-top if the app has a fixed header at a specific height",
+      "app-specific CSS classes that are not part of the shared design system",
+      "nothing else — if you find yourself writing html/body rules in an app globals.css, it belongs in base.css"
+    ]
+  },
   "architecture": {
     "fsd_usage": {
       "apps/web": "light",
@@ -51,7 +78,7 @@
     "shared_code_rule": "reusable code belongs in packages, not duplicated in apps",
     "asset_rule": "shared brand assets must live in a shared package; app public folders are only for app-specific assets",
     "packages": {
-      "ui": "shared design system and reusable ui",
+      "ui": "shared design system and reusable ui — includes styles/tokens.css (@theme), styles/base.css (@layer base reset), src/components/",
       "db": "prisma schema, prisma config, database client",
       "types": "shared types",
       "utils": "shared pure utilities",
@@ -343,6 +370,24 @@
       "key": "recipe_snapshot_on_task",
       "decision": "when a task is linked to a recipe, the recipe is stored as a frozen JSON snapshot on the task — not a live foreign key reference. The recipeId is kept as optional metadata only.",
       "reason": "chef may edit or delete recipes later. The task must preserve what was shown to the member at the time of assignment."
+    },
+    {
+      "date": "2026-04-12",
+      "key": "css_shared_base_architecture",
+      "decision": "All shared CSS rules (html, body, reset, scrollbar, focus, fonts, prefers-reduced-motion) live in packages/ui/styles/base.css in @layer base. App globals.css contains only imports + @source + app-specific rules. Never duplicate base rules in apps.",
+      "reason": "DRY principle — three apps sharing identical CSS blocks is fragile and will drift. Single source of truth in packages/ui/styles/."
+    },
+    {
+      "date": "2026-04-12",
+      "key": "tailwind_v4_theme_mode",
+      "decision": "Always use @theme {} without the 'static' keyword in tokens.css.",
+      "reason": "@theme static generates utility classes but does NOT emit CSS custom properties to :root, breaking all var(--color-*) usage in raw CSS and inline styles."
+    },
+    {
+      "date": "2026-04-12",
+      "key": "tailwind_v4_source_path",
+      "decision": "@source path in globals.css is '../../../../packages/ui/src' — relative to the CSS file location (apps/X/src/app/globals.css), 4 levels up to monorepo root, then into packages/ui/src.",
+      "reason": "Tailwind v4 does not auto-scan workspace packages. Without @source, utility classes used in packages/ui components are never generated in the CSS output."
     }
   ],
   "rejected_choices": [
@@ -373,6 +418,14 @@
     {
       "choice": "monthly token limit for AI chat",
       "reason": "unpredictable UX — per-plan token limit is more intuitive and aligned to actual usage unit"
+    },
+    {
+      "choice": "@theme static in tokens.css",
+      "reason": "static prevents CSS custom properties from being emitted to :root — breaks all var(--color-*) usage outside utility classes"
+    },
+    {
+      "choice": "duplicating html/body/reset rules in each app globals.css",
+      "reason": "three identical CSS blocks will drift over time — all shared base rules belong in packages/ui/styles/base.css"
     }
   ],
   "known_pitfalls": [
@@ -420,6 +473,31 @@
       "problem": "AI token cost overrun on START plan",
       "bad_example": "unlimited streaming chat for START users",
       "avoid_by": "check aiTokensUsed against plan limit before every AI chat call, return 402 with upgrade prompt if over limit"
+    },
+    {
+      "problem": "@theme static breaks CSS custom properties",
+      "bad_example": "@theme static { --color-primary: oklch(0.68 0.18 22); } — var(--color-primary) is undefined at runtime",
+      "avoid_by": "always use @theme {} without 'static' — static generates utilities with hardcoded values but never emits vars to :root"
+    },
+    {
+      "problem": "Tailwind v4 does not auto-scan workspace packages in monorepo",
+      "bad_example": "button.tsx in packages/ui uses bg-primary but the class is never generated because Tailwind only scans apps/X/src/",
+      "avoid_by": "add @source '../../../../packages/ui/src' in every app's globals.css — path is relative to the CSS file, 4 levels up to monorepo root"
+    },
+    {
+      "problem": "button { background: none } reset overrides utility classes when unlayered",
+      "bad_example": "button { background: none } in globals.css as an unlayered rule — beats bg-primary from @layer utilities",
+      "avoid_by": "all reset rules must live in packages/ui/styles/base.css inside @layer base so utilities always win"
+    },
+    {
+      "problem": "missing transpilePackages in next.config.ts",
+      "bad_example": "importing @qoovex/ui in an app without transpilePackages: ['@qoovex/ui'] — Next.js cannot compile the TypeScript",
+      "avoid_by": "every app that uses @qoovex/ui must have transpilePackages: ['@qoovex/ui'] in its next.config.ts"
+    },
+    {
+      "problem": "duplicating html/body/reset CSS in app globals.css",
+      "bad_example": "each app globals.css has identical body { font-family: var(--font-body); background-color: var(--color-bg) } blocks",
+      "avoid_by": "all shared base rules live in packages/ui/styles/base.css — app globals.css only has imports + @source + app-specific rules"
     }
   ],
   "approved_patterns": [
@@ -430,7 +508,10 @@
     "keep shared brand assets in a single source of truth",
     "use pure TypeScript algorithms for deterministic problems — do not use AI where logic suffices",
     "frozen recipe snapshots on tasks — never live references",
-    "Prisma $transaction for all stock mutations"
+    "Prisma $transaction for all stock mutations",
+    "CSS import order: tokens → base → tailwindcss → @source",
+    "@layer base for all reset and semantic base styles — utilities always win",
+    "single source of truth for CSS: tokens in tokens.css, base reset in base.css, app-specific only in app globals.css"
   ],
   "do_not_break": [
     "plan limits",
@@ -443,7 +524,11 @@
     "single source of truth for shared brand assets",
     "PrepItem stock atomicity (always use $transaction)",
     "recipe snapshot immutability on tasks",
-    "AI token limit enforcement per plan"
+    "AI token limit enforcement per plan",
+    "CSS architecture: tokens.css + base.css as single source of truth — never duplicate in apps",
+    "@theme without static — CSS vars must be emitted to :root",
+    "@source in every app globals.css pointing to packages/ui/src",
+    "@layer base wrapping all rules in base.css"
   ],
   "current_state": {
     "bootstrap": "completed",
@@ -452,6 +537,7 @@
     "blob_connected": true,
     "prisma_configured": true,
     "work_plan_spec": "completed — see work-plan-feature-spec.md",
+    "css_architecture": "stabilized — packages/ui/styles/tokens.css + base.css as shared foundation",
     "next_focus": [
       "setup Clerk in apps/workspace",
       "protect routes",
@@ -512,6 +598,26 @@
       "date": "2026-04-10",
       "type": "feature_spec",
       "note": "Piano di Lavoro feature fully specced: PrepStock model, three plan types (PRODUCTION/EVENT/SERVICE), dual AI model strategy (Gemini 2.0 Flash + Mistral Small 3.1), pure TS scheduling engine, token limits per plan, full Prisma schema, FSD structure, 6 implementation phases. All decisions recorded in confirmed_decisions."
+    },
+    {
+      "date": "2026-04-12",
+      "type": "fix",
+      "note": "fixed @theme static in tokens.css — removed 'static' so CSS custom properties are emitted to :root. @theme static was breaking all var(--color-*) usage in globals.css, base styles, and inline styles."
+    },
+    {
+      "date": "2026-04-12",
+      "type": "fix",
+      "note": "added @source '../../../../packages/ui/src' to all app globals.css — Tailwind v4 does not auto-scan workspace packages, causing utility classes used in packages/ui components to never be generated."
+    },
+    {
+      "date": "2026-04-12",
+      "type": "architecture",
+      "note": "extracted all shared CSS rules (html, body, reset, scrollbar, focus, fonts, prefers-reduced-motion) into packages/ui/styles/base.css wrapped in @layer base. App globals.css now contains only imports + @source + app-specific rules. This is the canonical CSS architecture going forward."
+    },
+    {
+      "date": "2026-04-12",
+      "type": "ui",
+      "note": "redesigned Button component in packages/ui/src/components/button.tsx — inset shadow depth on primary/destructive, refined sizing (h-7/h-9/h-11), tracking on sm, spring easing."
     }
   ]
 }

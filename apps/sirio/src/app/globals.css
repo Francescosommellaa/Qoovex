@@ -1,96 +1,11 @@
 @import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=chillax@400,500,600,700&display=swap");
 @import "@qoovex/ui/styles/tokens";
+@import "@qoovex/ui/styles/base";
 @import "tailwindcss";
 
-:root {
-  color-scheme: dark;
-}
+@source "../../../../packages/ui/src";
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  scroll-behavior: smooth;
-  scroll-padding-top: 52px;
-}
-
-body {
-  min-height: 100dvh;
-  line-height: 1.6;
-  font-family: var(--font-body);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-size: var(--text-base);
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-display);
-  text-wrap: balance;
-  line-height: 1.15;
-}
-
-p,
-li {
-  text-wrap: pretty;
-}
-img,
-video,
-canvas {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-button {
-  cursor: pointer;
-  background: none;
-  border: none;
-  font: inherit;
-  color: inherit;
-}
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 3px;
-  border-radius: var(--radius-sm);
-}
-
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: oklch(1 0 0 / 0.1);
-  border-radius: var(--radius-full);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+/* ── Regole specifiche di Sirio ──────────────────────────────── */
 
 .sirio-layout {
   display: flex;

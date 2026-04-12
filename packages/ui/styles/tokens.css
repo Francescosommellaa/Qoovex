@@ -4,7 +4,7 @@
    Corallo Tartare come colore primario
 ═══════════════════════════════════════════════════════════════ */
 
-@theme static {
+@theme {
   /* ─── FONT ──────────────────────────────────────────── */
   --font-body: "Satoshi", sans-serif;
   --font-display: "Chillax", sans-serif;

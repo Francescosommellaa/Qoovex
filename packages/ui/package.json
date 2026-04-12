@@ -4,6 +4,7 @@
   "private": true,
   "exports": {
     "./styles/tokens": "./styles/tokens.css",
+    "./styles/base": "./styles/base.css",
     ".": {
       "types": "./src/index.ts",
       "import": "./src/index.ts",
