@@ -185,9 +185,3 @@
   --textarea-max-height: 16rem;
   --textarea-line-height: 1.6;
 }
-
-textarea {
-  resize: none !important;
-  -webkit-appearance: none;
-  appearance: none;
-}

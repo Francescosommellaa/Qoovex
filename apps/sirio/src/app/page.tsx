@@ -18,6 +18,7 @@ import { SezioneZindex } from "../sections/sezione-zindex";
 import { SezioneButton } from "../sections/sezione-button";
 import { SezioneInput } from "../sections/sezione-input";
 import { SezioneTextarea } from "@/sections/sezione-textarea";
+import { SezioneSearchBar } from "@/sections/sezione-search-bar";
 
 const SECTIONS_LOCAL = [
   {
@@ -679,11 +680,10 @@ export default function SirioPage() {
           <SezioneButton />
           <SezioneInput />
           <SezioneTextarea />
+          <SezioneSearchBar />
 
           {/* Sezioni componenti — coming soon */}
-          {(
-            ["searchbar", "card", "badge", "form"] as const
-          ).map((id) => {
+          {(["card", "badge", "form"] as const).map((id) => {
             const s = SECTIONS.find((x) => x.id === id)!;
             return (
               <section key={id} id={id} className="sirio-section">

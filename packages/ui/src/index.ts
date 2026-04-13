@@ -12,3 +12,11 @@ export type {
   TextareaStatus,
   TextareaVariant,
 } from "./components/textarea";
+
+// Search Bar
+export { SearchBar } from "./components/search-bar";
+export type {
+  SearchBarProps,
+  SearchResult,
+  SearchResultCategory,
+} from "./components/search-bar";
