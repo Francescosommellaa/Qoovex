@@ -6,12 +6,14 @@
      1. @import "@qoovex/ui/styles/tokens"
      2. @import "@qoovex/ui/styles/base"
      3. @import "tailwindcss"
-     4. @source "../../../../packages/ui/src"  ← relative to the CSS file
+     4. @source "../../../../packages/ui/src"
 ═══════════════════════════════════════════════════════════════ */
 
 @import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=chillax@400,500,600,700&display=swap");
 
 @layer base {
+  /* ─── Reset ──────────────────────────────────────────────────────────────── */
+
   *,
   *::before,
   *::after {
@@ -75,11 +77,15 @@
     appearance: none;
   }
 
+  /* ─── Focus globale ──────────────────────────────────────────────────────── */
+
   :focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 3px;
     border-radius: var(--radius-sm);
   }
+
+  /* ─── Scrollbar ──────────────────────────────────────────────────────────── */
 
   ::-webkit-scrollbar {
     width: 4px;
@@ -95,6 +101,8 @@
     border-radius: var(--radius-full);
   }
 
+  /* ─── Reduced motion ─────────────────────────────────────────────────────── */
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -102,5 +110,452 @@
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
     }
+
+    .search-bar-spinner {
+      animation: none;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     SEARCH BAR
+  ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ─── Root ───────────────────────────────────────────────────────────────── */
+
+  .search-bar-root {
+    position: relative;
+    width: 100%;
+    /*
+      Il ring vive qui tramite pseudo-elemento ::after.
+      Il root deve essere overflow:visible (default) per non clippare il ring.
+      NON mettere overflow:hidden qui.
+    */
+  }
+
+  /*
+    Ring via ::after — abbraccia SOLO il field (top).
+    Quando il dropdown è aperto, la classe --open viene aggiunta al field
+    e il ring del root si estende anche lateralmente in basso tramite
+    il bordo del dropdown stesso (vedi .search-bar-dropdown).
+    Così il ring non ha mai bisogno di "sapere" quanto è alto il dropdown.
+  */
+  .search-bar-root:focus-within::after {
+    content: "";
+    position: absolute;
+    /* inset negativo = spessore del ring */
+    inset: -3px;
+    border-radius: calc(var(--radius-lg) + 3px);
+    border: 3px solid oklch(from var(--color-primary) l c h / 0.18);
+    pointer-events: none;
+    z-index: 51;
+    /* Quando aperto: non coprire il bottom (dropdown continua) */
+    transition: border-color var(--transition-interactive);
+  }
+
+  /* Quando il dropdown è visibile: taglia il ring in basso */
+  .search-bar-root:has(.search-bar-field--open):focus-within::after {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    /* bottom: allineato esattamente al bordo inferiore del field */
+    bottom: calc(-3px - 0px); /* si ferma a filo del field */
+    /* Nasconde il segmento bottom del ring — il dropdown ha già il suo bordo */
+    border-bottom-color: transparent;
+  }
+
+  /* AI override */
+  .search-bar-root:has(.search-bar-field--ai):focus-within::after {
+    border-color: oklch(from var(--color-gold) l c h / 0.15);
+  }
+
+  .search-bar-root:has(
+      .search-bar-field--open.search-bar-field--ai
+    ):focus-within::after {
+    border-color: oklch(from var(--color-gold) l c h / 0.15);
+    border-bottom-color: transparent;
+  }
+
+  /* ─── Field ──────────────────────────────────────────────────────────────── */
+
+  .search-bar-field {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    height: var(--search-bar-height, 2.5rem);
+    padding-inline: var(--space-3);
+    background: var(--search-bar-bg, var(--color-surface));
+    border: 1px solid oklch(from var(--color-text) l c h / 0.1);
+    border-radius: var(--radius-lg);
+    cursor: text;
+    transition:
+      border-color var(--transition-interactive),
+      background var(--transition-interactive);
+  }
+
+  .search-bar-field:focus-within {
+    border-color: oklch(from var(--color-primary) l c h / 0.5);
+    background: var(--color-surface-2);
+  }
+
+  .search-bar-field--ai:focus-within {
+    border-color: oklch(from var(--color-gold) l c h / 0.5);
+    background: var(--color-surface-2);
+  }
+
+  /* Aperto: rimuove border-radius e bordo inferiore */
+  .search-bar-field--open {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-color: transparent;
+  }
+
+  /* ─── Dropdown ───────────────────────────────────────────────────────────── */
+
+  .search-bar-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: var(--color-surface-2);
+    /*
+      I bordi laterali e inferiore del dropdown completano visivamente
+      il ring che ::after ha interrotto in basso.
+      Usiamo outline (non box-shadow) perché outline non viene clippato
+      dall'overflow dei figli e non sposta il layout.
+    */
+    border: 1px solid oklch(from var(--color-primary) l c h / 0.5);
+    border-top: none;
+    border-bottom-left-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    /*
+      overflow:hidden qui clipperebbe il ring — usiamo clip-path sul
+      contenuto interno invece (vedi .search-bar-list e .search-bar-footer).
+      Il contenitore rimane overflow:visible.
+    */
+    overflow: visible;
+    /* Ring esterno sul dropdown: lati + bottom, continua dal field */
+    outline: 3px solid oklch(from var(--color-primary) l c h / 0.18);
+    outline-offset: 0;
+    /* outline non supporta border-radius individuale per lato —
+       usiamo box-shadow solo sui lati e bottom */
+    box-shadow:
+      -3px 0 0 0 oklch(from var(--color-primary) l c h / 0.18),
+      3px 0 0 0 oklch(from var(--color-primary) l c h / 0.18),
+      0 3px 0 0 oklch(from var(--color-primary) l c h / 0.18);
+    /* outline: none — usiamo solo box-shadow per controllo chirurgico */
+    outline: none;
+  }
+
+  /* I figli del dropdown gestiscono il clip dei border-radius interni */
+  .search-bar-list,
+  .search-bar-ai-row,
+  .search-bar-empty,
+  .search-bar-footer {
+    overflow: hidden;
+  }
+
+  /* Ultimo figlio diretto: clip border-radius inferiore */
+  .search-bar-dropdown > *:last-child {
+    border-bottom-left-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .search-bar-root:has(.search-bar-field--ai) .search-bar-dropdown {
+    border-color: oklch(from var(--color-gold) l c h / 0.5);
+    box-shadow:
+      -3px 0 0 0 oklch(from var(--color-gold) l c h / 0.15),
+      3px 0 0 0 oklch(from var(--color-gold) l c h / 0.15),
+      0 3px 0 0 oklch(from var(--color-gold) l c h / 0.15);
+  }
+
+  /* ─── Icon lead ──────────────────────────────────────────────────────────── */
+
+  .search-bar-icon-lead {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    pointer-events: none;
+  }
+
+  .search-bar-icon-ai {
+    color: var(--color-gold);
+  }
+
+  .search-bar-spinner {
+    animation: sb-spin 0.8s linear infinite;
+  }
+
+  @keyframes sb-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ─── Input ──────────────────────────────────────────────────────────────── */
+
+  .search-bar-input {
+    flex: 1;
+    height: 100%;
+    min-width: 0;
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .search-bar-input::placeholder {
+    color: var(--color-text-faint);
+  }
+
+  .search-bar-input:focus {
+    outline: none;
+    box-shadow: none;
+    border: none;
+  }
+
+  /* ─── Clear ──────────────────────────────────────────────────────────────── */
+
+  .search-bar-clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    transition:
+      color var(--transition-interactive),
+      background var(--transition-interactive);
+  }
+
+  .search-bar-clear:hover {
+    color: var(--color-text);
+    background: var(--color-surface-offset);
+  }
+
+  /* ─── Hotkey ─────────────────────────────────────────────────────────────── */
+
+  .search-bar-hotkey {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    flex-shrink: 0;
+    color: var(--color-text-faint);
+  }
+
+  .search-bar-hotkey kbd {
+    font-size: var(--text-xs);
+    font-family: inherit;
+    color: var(--color-text-faint);
+    background: var(--color-surface-offset);
+    border-radius: var(--radius-sm);
+    padding: 0.1rem 0.3rem;
+    border: 1px solid oklch(from var(--color-text) l c h / 0.08);
+    line-height: 1.5;
+  }
+
+  /* ─── AI row ─────────────────────────────────────────────────────────────── */
+
+  .search-bar-ai-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    background: oklch(from var(--color-gold) l c h / 0.06);
+    border-bottom: 1px solid oklch(from var(--color-text) l c h / 0.06);
+  }
+
+  .search-bar-ai-row strong {
+    color: var(--color-text);
+  }
+
+  .search-bar-ai-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-left: auto;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-gold);
+    padding: 0.2rem var(--space-2);
+    border-radius: var(--radius-sm);
+    border: 1px solid oklch(from var(--color-gold) l c h / 0.25);
+    transition:
+      background var(--transition-interactive),
+      border-color var(--transition-interactive);
+  }
+
+  .search-bar-ai-cta:hover {
+    background: oklch(from var(--color-gold) l c h / 0.1);
+    border-color: oklch(from var(--color-gold) l c h / 0.4);
+  }
+
+  /* ─── Lista ──────────────────────────────────────────────────────────────── */
+
+  .search-bar-list {
+    padding: var(--space-1);
+    max-height: 18rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .search-bar-group {
+    margin-bottom: var(--space-1);
+  }
+
+  .search-bar-group-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .search-bar-group-icon {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-bar-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 2.25rem;
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background var(--transition-interactive);
+  }
+
+  .search-bar-item--active {
+    background: oklch(from var(--color-primary) l c h / 0.08);
+  }
+
+  .search-bar-item-icon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    width: 1rem;
+  }
+
+  .search-bar-item-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .search-bar-item-label {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .search-bar-item-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .search-bar-item-meta {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .search-bar-item-arrow {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--color-text-faint);
+    opacity: 0;
+    transition: opacity var(--transition-interactive);
+  }
+
+  .search-bar-item--active .search-bar-item-arrow {
+    opacity: 1;
+  }
+
+  .search-bar-type-pill {
+    font-size: var(--text-xs);
+    color: var(--color-text-faint);
+    background: var(--color-surface-offset);
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--radius-full);
+    border: 1px solid oklch(from var(--color-text) l c h / 0.07);
+  }
+
+  .search-bar-shortcut {
+    font-size: var(--text-xs);
+    font-family: inherit;
+    color: var(--color-text-muted);
+    background: var(--color-surface-offset);
+    border-radius: var(--radius-sm);
+    padding: 0.1rem 0.35rem;
+    border: 1px solid oklch(from var(--color-text) l c h / 0.08);
+  }
+
+  /* ─── Empty ──────────────────────────────────────────────────────────────── */
+
+  .search-bar-empty {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .search-bar-empty strong {
+    color: var(--color-text);
+  }
+
+  .search-bar-empty svg {
+    flex-shrink: 0;
+    display: block;
+  }
+
+  /* ─── Footer ─────────────────────────────────────────────────────────────── */
+
+  .search-bar-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-text-faint);
+    border-top: 1px solid oklch(from var(--color-text) l c h / 0.06);
+  }
+
+  .search-bar-footer kbd {
+    font-family: inherit;
+    color: var(--color-text-muted);
+    background: var(--color-surface-offset);
+    border-radius: var(--radius-sm);
+    padding: 0.05rem 0.3rem;
+    border: 1px solid oklch(from var(--color-text) l c h / 0.08);
+  }
+
+  .search-bar-footer-ai-hint {
+    margin-left: auto;
   }
 }

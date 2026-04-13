@@ -1,1043 +1,461 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import * as React from "react";
 import {
   Search,
   X,
-  Loader2,
-  Command,
   Sparkles,
   ArrowRight,
-  ArrowLeft,
+  Hash,
+  ChefHat,
   BookOpen,
   UtensilsCrossed,
-  ListChecks,
-  ShoppingCart,
+  ClipboardList,
+  Loader2,
   Zap,
+  Command,
 } from "lucide-react";
+import { cn } from "../lib/utils";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── Tipi ─────────────────────────────────────────────────────────────────────
 
 export type SearchResultCategory =
   | "recipe"
   | "menu"
   | "work-plan"
-  | "shopping-list"
+  | "command"
   | "action"
-  | "ai";
+  | "ai"
+  | "recent";
 
 export interface SearchResult {
   id: string;
+  category: SearchResultCategory;
   label: string;
   description?: string;
-  category: SearchResultCategory;
-  icon?: React.ReactNode;
-  onSelect: () => void;
+  shortcut?: string;
   badge?: string;
+  icon?: React.ReactNode;
+  onSelect?: () => void;
 }
 
 export interface SearchBarProps {
   placeholder?: string;
-  onSearch?: (query: string) => void;
   results?: SearchResult[];
-  isLoading?: boolean;
-  onAIQuery?: (query: string) => void;
-  shortcut?: string;
-  className?: string;
-  /** Forza il pannello sempre aperto — usato in Sirio */
-  forceOpen?: boolean;
-  /** Query preimpostata al mount — usato in Sirio */
   defaultQuery?: string;
-  /**
-   * Disabilita l'overlay full-screen su mobile.
-   * Utile in Sirio dove il componente vive dentro un container fisso.
-   */
+  value?: string;
+  onValueChange?: (value: string) => void;
+  onSearch?: (query: string) => void;
+  onAIQuery?: (query: string) => void;
+  isLoading?: boolean;
+  forceOpen?: boolean;
   disableFullscreen?: boolean;
+  shortcut?: string;
+  showHotkey?: boolean;
+  className?: string;
 }
 
-// ─── Category config ──────────────────────────────────────────────────────────
+// ─── Costanti ─────────────────────────────────────────────────────────────────
 
-const CATEGORY_CONFIG: Record<
-  SearchResultCategory,
-  { label: string; icon: React.ReactNode; color: string }
-> = {
-  recipe: {
-    label: "Ricette",
-    icon: <BookOpen size={14} strokeWidth={1.5} />,
-    color: "var(--color-primary)",
-  },
-  menu: {
-    label: "Menu",
-    icon: <UtensilsCrossed size={14} strokeWidth={1.5} />,
-    color: "var(--color-warning)",
-  },
-  "work-plan": {
-    label: "Piano di lavoro",
-    icon: <ListChecks size={14} strokeWidth={1.5} />,
-    color: "var(--color-success)",
-  },
-  "shopping-list": {
-    label: "Lista spesa",
-    icon: <ShoppingCart size={14} strokeWidth={1.5} />,
-    color: "var(--color-blue)",
-  },
-  action: {
-    label: "Azioni",
-    icon: <Zap size={14} strokeWidth={1.5} />,
-    color: "var(--color-gold)",
-  },
-  ai: {
-    label: "AI",
-    icon: <Sparkles size={14} strokeWidth={1.5} />,
-    color: "var(--color-purple)",
-  },
+const CATEGORY_ICONS: Record<SearchResultCategory, React.ReactNode> = {
+  recipe: <BookOpen size={14} strokeWidth={1.5} />,
+  menu: <UtensilsCrossed size={14} strokeWidth={1.5} />,
+  "work-plan": <ClipboardList size={14} strokeWidth={1.5} />,
+  command: <Hash size={14} strokeWidth={1.5} />,
+  action: <Zap size={14} strokeWidth={1.5} />,
+  ai: <Sparkles size={14} strokeWidth={1.5} />,
+  recent: <ArrowRight size={14} strokeWidth={1.5} />,
 };
 
-// ─── SearchBar ────────────────────────────────────────────────────────────────
+const CATEGORY_LABELS: Record<SearchResultCategory, string> = {
+  recipe: "Ricette",
+  menu: "Menu",
+  "work-plan": "Piano di lavoro",
+  command: "Comandi",
+  action: "Azioni",
+  ai: "IA",
+  recent: "Recenti",
+};
+
+const CATEGORY_ORDER: SearchResultCategory[] = [
+  "recent",
+  "recipe",
+  "menu",
+  "work-plan",
+  "action",
+  "command",
+  "ai",
+];
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function groupResults(results: SearchResult[]) {
+  const map = new Map<SearchResultCategory, SearchResult[]>();
+  for (const r of results) {
+    if (!map.has(r.category)) map.set(r.category, []);
+    map.get(r.category)!.push(r);
+  }
+  return CATEGORY_ORDER.filter((c) => map.has(c)).map((c) => ({
+    category: c,
+    label: CATEGORY_LABELS[c],
+    items: map.get(c)!,
+  }));
+}
+
+function detectAiQuery(value: string) {
+  return value.startsWith("?") || value.toLowerCase().startsWith("/ai ");
+}
+
+function detectCommandQuery(value: string) {
+  return value.startsWith("/") && !value.toLowerCase().startsWith("/ai ");
+}
+
+// ─── Componente ───────────────────────────────────────────────────────────────
 
 export function SearchBar({
-  placeholder = "Cerca ricette, menu, azioni…",
-  onSearch,
+  placeholder = "Cerca ricette, menu, piani… o premi /",
   results = [],
-  isLoading = false,
+  defaultQuery,
+  value: controlledValue,
+  onValueChange,
+  onSearch,
   onAIQuery,
-  shortcut = "K",
-  className,
+  isLoading = false,
   forceOpen = false,
-  defaultQuery = "",
-  disableFullscreen = false,
+  disableFullscreen: _disableFullscreen = false,
+  shortcut = "K",
+  showHotkey = true,
+  className,
 }: SearchBarProps) {
-  const [isOpen, setIsOpen] = useState(forceOpen);
-  const [query, setQuery] = useState(defaultQuery);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  // Rilevamento device — sempre false in SSR, risolto in useEffect
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const [modKey, setModKey] = useState<"⌘" | "Ctrl">("⌘");
+  const [internalValue, setInternalValue] = React.useState(defaultQuery ?? "");
+  const [open, setOpen] = React.useState(forceOpen);
+  const [activeIndex, setActiveIndex] = React.useState(-1);
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const value = controlledValue ?? internalValue;
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const listRef = React.useRef<HTMLDivElement>(null);
 
-  const isAIMode = query.startsWith("/ai ") || query.startsWith("?");
-  const isCommandMode = query.startsWith("/") && !isAIMode;
-  const hasQuery = query.trim().length > 0;
-  const hasResults = results.length > 0;
-  const modeLabel = isAIMode ? "AI" : isCommandMode ? "Comando" : null;
+  const aiMode = detectAiQuery(value);
+  const commandMode = detectCommandQuery(value);
+  const groups = React.useMemo(() => groupResults(results), [results]);
+  const isOpen = forceOpen || open;
+  const showDropdown = isOpen && (results.length > 0 || value.length > 0);
+  const hotkeyLabel = shortcut.toUpperCase();
 
-  // Mobile full-screen solo se touch device e non disabilitato
-  const useFullscreen = isTouchDevice && !disableFullscreen;
+  // ── Handlers ────────────────────────────────────────────────────────────────
 
-  // ── Rilevamento device ───────────────────────────────────────────────────────
-  useEffect(() => {
-    const touch = window.matchMedia("(pointer: coarse)").matches;
-    const mac = /Mac|iPhone|iPad|iPod/i.test(navigator.platform);
-    setIsTouchDevice(touch);
-    // ⌘ solo su Mac desktop; su Windows e mobile mostriamo Ctrl
-    setModKey(!touch && mac ? "⌘" : "Ctrl");
-  }, []);
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const v = e.target.value;
+    if (controlledValue === undefined) setInternalValue(v);
+    onValueChange?.(v);
+    setActiveIndex(-1);
+    if (!forceOpen) setOpen(true);
+  }
 
-  // ── Open / close ─────────────────────────────────────────────────────────────
-  const open = useCallback(() => {
-    if (forceOpen) return;
-    setIsOpen(true);
-    // Ritardo minimo per garantire il focus dopo il mount del panel
-    setTimeout(() => inputRef.current?.focus(), 50);
-  }, [forceOpen]);
-
-  const close = useCallback(() => {
-    if (forceOpen) return;
-    setIsOpen(false);
-    setQuery("");
-    setSelectedIndex(0);
-  }, [forceOpen]);
-
-  const clearQuery = useCallback(() => {
-    setQuery("");
-    setSelectedIndex(0);
-    onSearch?.("");
+  function handleClear() {
+    if (controlledValue === undefined) setInternalValue("");
+    onValueChange?.("");
     inputRef.current?.focus();
-  }, [onSearch]);
+    if (!forceOpen) setOpen(false);
+  }
 
-  // ── AI mode da bottone (mobile) ──────────────────────────────────────────────
-  const activateAIMode = useCallback(() => {
-    setQuery("/ai ");
-    onSearch?.("/ai ");
-    setTimeout(() => inputRef.current?.focus(), 50);
-  }, [onSearch]);
+  function handleSelect(item: SearchResult) {
+    item.onSelect?.();
+    if (controlledValue === undefined) setInternalValue(item.label);
+    if (!forceOpen) setOpen(false);
+  }
 
-  // ── Shortcut globale — solo su non-touch ────────────────────────────────────
-  useEffect(() => {
-    if (forceOpen || isTouchDevice) return;
-    const handler = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toUpperCase() === shortcut) {
-        e.preventDefault();
-        isOpen ? close() : open();
-      }
-      if (e.key === "Escape" && isOpen) close();
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [isOpen, open, close, shortcut, forceOpen, isTouchDevice]);
-
-  // ── Click fuori — solo desktop ───────────────────────────────────────────────
-  useEffect(() => {
-    if (forceOpen || useFullscreen) return;
-    const handler = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        close();
-      }
-    };
-    if (isOpen) document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [isOpen, close, forceOpen, useFullscreen]);
-
-  // ── Blocca scroll body quando full-screen mobile ─────────────────────────────
-  useEffect(() => {
-    if (useFullscreen && isOpen) {
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = "";
-      };
+  function handleSubmit() {
+    if (aiMode) {
+      onAIQuery?.(value);
+    } else {
+      onSearch?.(value);
     }
-  }, [useFullscreen, isOpen]);
+    if (!forceOpen) setOpen(false);
+  }
 
-  // ── Navigazione tastiera ─────────────────────────────────────────────────────
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    const flatItems = results;
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedIndex((i) => Math.min(i + 1, results.length - 1));
+      setActiveIndex((i) => Math.min(i + 1, flatItems.length - 1));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setSelectedIndex((i) => Math.max(i - 1, 0));
+      setActiveIndex((i) => Math.max(i - 1, -1));
     } else if (e.key === "Enter") {
       e.preventDefault();
-      if (isAIMode && onAIQuery) {
-        onAIQuery(query.replace(/^\/ai |\?/, "").trim());
-        if (!forceOpen) close();
-        return;
-      }
-      if (results[selectedIndex]) {
-        results[selectedIndex].onSelect();
-        if (!forceOpen) close();
+      if (activeIndex >= 0 && flatItems[activeIndex]) {
+        handleSelect(flatItems[activeIndex]);
+      } else {
+        handleSubmit();
       }
     } else if (e.key === "Escape") {
-      if (!forceOpen) close();
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setQuery(val);
-    setSelectedIndex(0);
-    onSearch?.(val);
-  };
-
-  const grouped = results.reduce<Record<string, SearchResult[]>>((acc, r) => {
-    if (!acc[r.category]) acc[r.category] = [];
-    acc[r.category].push(r);
-    return acc;
-  }, {});
-
-  // ─── Stili panel — full-screen su mobile, dropdown su desktop ──────────────
-  const panelStyle: React.CSSProperties = useFullscreen
-    ? {
-        position: "fixed",
-        inset: 0,
-        zIndex: 100,
-        background: "var(--color-surface)",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
+      if (!forceOpen) {
+        setOpen(false);
+        inputRef.current?.blur();
       }
-    : {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        background: "var(--color-surface)",
-        border: "1px solid var(--color-border)",
-        borderRadius: "var(--radius-lg)",
-        boxShadow: "var(--shadow-lg)",
-        overflow: "hidden",
-      };
+    }
+  }
 
-  // ─── Altezza touch target per i risultati ─────────────────────────────────
-  const rowMinHeight = isTouchDevice ? 52 : 40;
+  // Scroll item attivo in vista
+  React.useEffect(() => {
+    if (activeIndex < 0 || !listRef.current) return;
+    const items =
+      listRef.current.querySelectorAll<HTMLElement>("[role='option']");
+    items[activeIndex]?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex]);
 
-  // ─── Render ───────────────────────────────────────────────────────────────
+  // Click fuori → chiudi
+  React.useEffect(() => {
+    if (forceOpen) return;
+    function onPointerDown(e: PointerEvent) {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [forceOpen]);
 
-  return (
-    <div
-      ref={containerRef}
-      className={className}
-      style={{ position: "relative", width: "100%" }}
-    >
-      {/* ── Trigger collapsed ────────────────────────────────────────────── */}
-      {!isOpen && (
-        <button
-          type="button"
-          onClick={open}
-          aria-label="Apri ricerca"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "var(--space-2)",
-            width: "100%",
-            padding: "var(--space-2) var(--space-3)",
-            background: "var(--color-surface-offset)",
-            border: "1px solid var(--color-border)",
-            borderRadius: "var(--radius-md)",
-            color: "var(--color-text-muted)",
-            fontSize: "var(--text-sm)",
-            cursor: "pointer",
-            // Touch target minimo garantito dal padding, ma esplicitiamo l'altezza
-            minHeight: 40,
-            transition: `border-color var(--transition-interactive), box-shadow var(--transition-interactive)`,
-          }}
-          onMouseEnter={(e) => {
-            if (isTouchDevice) return;
-            const el = e.currentTarget as HTMLButtonElement;
-            el.style.borderColor = "var(--color-primary)";
-            el.style.boxShadow =
-              "0 0 0 2px color-mix(in oklch, var(--color-primary) 15%, transparent)";
-          }}
-          onMouseLeave={(e) => {
-            const el = e.currentTarget as HTMLButtonElement;
-            el.style.borderColor = "var(--color-border)";
-            el.style.boxShadow = "none";
-          }}
-        >
-          <Search
-            size={16}
-            strokeWidth={1.5}
-            style={{ flexShrink: 0, color: "var(--color-text-faint)" }}
-          />
-          <span style={{ flex: 1, textAlign: "left" }}>{placeholder}</span>
+  // Hotkey globale ⌘K
+  React.useEffect(() => {
+    if (forceOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (
+        (e.metaKey || e.ctrlKey) &&
+        e.key.toLowerCase() === shortcut.toLowerCase()
+      ) {
+        e.preventDefault();
+        setOpen(true);
+        setTimeout(() => inputRef.current?.focus(), 0);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [forceOpen, shortcut]);
 
-          {/* Badge shortcut — solo su desktop, con il tasto corretto per l'OS */}
-          {!isTouchDevice && (
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "var(--space-1)",
-                padding: "2px var(--space-2)",
-                background: "var(--color-surface-dynamic)",
-                borderRadius: "var(--radius-sm)",
-                fontSize: "var(--text-xs)",
-                color: "var(--color-text-faint)",
-                fontFamily: "monospace",
-                flexShrink: 0,
-              }}
-            >
-              {modKey === "⌘" ? (
-                <Command size={11} strokeWidth={1.5} />
-              ) : (
-                <span>Ctrl</span>
-              )}
-              {modKey === "⌘" ? shortcut : `+${shortcut}`}
-            </span>
-          )}
-        </button>
-      )}
-
-      {/* ── Pannello aperto ───────────────────────────────────────────────── */}
-      {isOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Ricerca"
-          style={panelStyle}
-        >
-          {/* Input row */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "var(--space-2)",
-              padding: useFullscreen
-                ? "var(--space-3) var(--space-4)"
-                : "var(--space-2) var(--space-3)",
-              borderBottom: "1px solid var(--color-divider)",
-              flexShrink: 0,
-            }}
-          >
-            {/* Back button (mobile) / Search icon (desktop) */}
-            {useFullscreen ? (
-              <button
-                type="button"
-                onClick={close}
-                aria-label="Chiudi ricerca"
-                style={{
-                  flexShrink: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: 36,
-                  height: 36,
-                  borderRadius: "var(--radius-full)",
-                  color: "var(--color-text-muted)",
-                  cursor: "pointer",
-                  marginRight: "var(--space-1)",
-                  transition: `background var(--transition-interactive)`,
-                }}
-                onTouchStart={(e) =>
-                  ((e.currentTarget as HTMLButtonElement).style.background =
-                    "var(--color-surface-dynamic)")
-                }
-                onTouchEnd={(e) =>
-                  ((e.currentTarget as HTMLButtonElement).style.background =
-                    "transparent")
-                }
-              >
-                <ArrowLeft size={20} strokeWidth={2} />
-              </button>
-            ) : (
-              <span
-                style={{
-                  flexShrink: 0,
-                  color: isAIMode
-                    ? "var(--color-purple)"
-                    : isCommandMode
-                      ? "var(--color-gold)"
-                      : "var(--color-text-faint)",
-                  display: "flex",
-                  transition: `color var(--transition-interactive)`,
-                }}
-              >
-                {isAIMode ? (
-                  <Sparkles size={16} strokeWidth={1.5} />
-                ) : (
-                  <Search size={16} strokeWidth={1.5} />
-                )}
-              </span>
-            )}
-
-            {/* Mode pill */}
-            {modeLabel && (
-              <span
-                style={{
-                  padding: "2px var(--space-2)",
-                  borderRadius: "var(--radius-full)",
-                  fontSize: "var(--text-xs)",
-                  fontWeight: 500,
-                  background: isAIMode
-                    ? "color-mix(in oklch, var(--color-purple) 12%, transparent)"
-                    : "color-mix(in oklch, var(--color-gold) 12%, transparent)",
-                  color: isAIMode ? "var(--color-purple)" : "var(--color-gold)",
-                  flexShrink: 0,
-                }}
-              >
-                {modeLabel}
-              </span>
-            )}
-
-            <input
-              ref={inputRef}
-              type="text"
-              inputMode="search"
-              value={query}
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-              placeholder={
-                isAIMode
-                  ? "Chiedi qualcosa all'AI…"
-                  : isCommandMode
-                    ? "Scrivi un comando…"
-                    : placeholder
-              }
-              autoComplete="off"
-              spellCheck={false}
-              aria-autocomplete="list"
-              aria-controls="search-results"
-              aria-activedescendant={
-                hasResults ? `search-result-${selectedIndex}` : undefined
-              }
-              style={{
-                flex: 1,
-                background: "transparent",
-                border: "none",
-                outline: "none",
-                fontSize: useFullscreen ? "var(--text-base)" : "var(--text-sm)",
-                color: "var(--color-text)",
-                lineHeight: 1.5,
-              }}
-            />
-
-            {/* Spinner loading */}
-            {isLoading && (
-              <span
-                style={{
-                  color: "var(--color-text-faint)",
-                  animation: "sq-spin 0.75s linear infinite",
-                  flexShrink: 0,
-                  display: "flex",
-                }}
-              >
-                <Loader2 size={18} strokeWidth={1.5} />
-              </span>
-            )}
-
-            {/* Clear query */}
-            {hasQuery && !isLoading && (
-              <button
-                type="button"
-                onClick={clearQuery}
-                aria-label="Cancella ricerca"
-                style={{
-                  flexShrink: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: isTouchDevice ? 36 : 24,
-                  height: isTouchDevice ? 36 : 24,
-                  borderRadius: "var(--radius-full)",
-                  color: "var(--color-text-muted)",
-                  cursor: "pointer",
-                  transition: `background var(--transition-interactive), color var(--transition-interactive)`,
-                }}
-                onMouseEnter={(e) => {
-                  if (isTouchDevice) return;
-                  const el = e.currentTarget as HTMLButtonElement;
-                  el.style.background = "var(--color-surface-dynamic)";
-                  el.style.color = "var(--color-text)";
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLButtonElement;
-                  el.style.background = "transparent";
-                  el.style.color = "var(--color-text-muted)";
-                }}
-              >
-                <X size={isTouchDevice ? 16 : 14} strokeWidth={2} />
-              </button>
-            )}
-
-            {/* Bottone AI — solo su mobile e solo quando NON siamo già in AI mode */}
-            {isTouchDevice && !isAIMode && (
-              <button
-                type="button"
-                onClick={activateAIMode}
-                aria-label="Attiva modalità AI"
-                style={{
-                  flexShrink: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: 36,
-                  height: 36,
-                  borderRadius: "var(--radius-full)",
-                  background:
-                    "color-mix(in oklch, var(--color-purple) 10%, var(--color-surface-offset))",
-                  color: "var(--color-purple)",
-                  cursor: "pointer",
-                  transition: `background var(--transition-interactive)`,
-                }}
-                onTouchStart={(e) =>
-                  ((e.currentTarget as HTMLButtonElement).style.background =
-                    "color-mix(in oklch, var(--color-purple) 20%, var(--color-surface-offset))")
-                }
-                onTouchEnd={(e) =>
-                  ((e.currentTarget as HTMLButtonElement).style.background =
-                    "color-mix(in oklch, var(--color-purple) 10%, var(--color-surface-offset))")
-                }
-              >
-                <Sparkles size={16} strokeWidth={1.5} />
-              </button>
-            )}
-
-            {/* Esc button — solo desktop */}
-            {!forceOpen && !useFullscreen && (
-              <button
-                type="button"
-                onClick={close}
-                aria-label="Chiudi ricerca"
-                style={{
-                  flexShrink: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "2px var(--space-2)",
-                  borderRadius: "var(--radius-sm)",
-                  fontSize: "var(--text-xs)",
-                  color: "var(--color-text-faint)",
-                  fontFamily: "monospace",
-                  background: "var(--color-surface-dynamic)",
-                  cursor: "pointer",
-                  transition: `background var(--transition-interactive)`,
-                }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLButtonElement).style.background =
-                    "var(--color-surface-offset-2)")
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLButtonElement).style.background =
-                    "var(--color-surface-dynamic)")
-                }
-              >
-                esc
-              </button>
-            )}
-          </div>
-
-          {/* ── Lista risultati / suggerimenti ──────────────────────────── */}
-          <ul
-            id="search-results"
-            role="listbox"
-            aria-label="Risultati ricerca"
-            style={{
-              listStyle: "none",
-              margin: 0,
-              padding: "var(--space-2) 0",
-              flex: 1,
-              overflowY: "auto",
-              // Su mobile non limitiamo l'altezza (full-screen gestisce già il layout)
-              maxHeight: useFullscreen ? "none" : 300,
-            }}
-          >
-            {!hasQuery && !hasResults && !isLoading && (
-              <DefaultSuggestions
-                isTouchDevice={isTouchDevice}
-                rowMinHeight={rowMinHeight}
-                onSelect={(s) => {
-                  setQuery(s);
-                  onSearch?.(s);
-                }}
-              />
-            )}
-
-            {hasResults &&
-              Object.entries(grouped).map(([cat, items]) => {
-                const config =
-                  CATEGORY_CONFIG[cat as SearchResultCategory] ??
-                  CATEGORY_CONFIG.action;
-                return (
-                  <li key={cat} role="none">
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "var(--space-2)",
-                        padding: "var(--space-2) var(--space-3) var(--space-1)",
-                        color: "var(--color-text-faint)",
-                        fontSize: "var(--text-xs)",
-                        fontWeight: 500,
-                        letterSpacing: "0.04em",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      <span style={{ color: config.color }}>{config.icon}</span>
-                      {config.label}
-                    </div>
-                    <ul
-                      role="group"
-                      style={{ listStyle: "none", padding: 0, margin: 0 }}
-                    >
-                      {items.map((result) => {
-                        const globalIdx = results.indexOf(result);
-                        return (
-                          <SearchResultItem
-                            key={result.id}
-                            result={result}
-                            id={`search-result-${globalIdx}`}
-                            isSelected={
-                              !isTouchDevice && globalIdx === selectedIndex
-                            }
-                            isTouchDevice={isTouchDevice}
-                            rowMinHeight={rowMinHeight}
-                            onSelect={() => {
-                              result.onSelect();
-                              if (!forceOpen) close();
-                            }}
-                            onHover={() =>
-                              !isTouchDevice && setSelectedIndex(globalIdx)
-                            }
-                          />
-                        );
-                      })}
-                    </ul>
-                  </li>
-                );
-              })}
-          </ul>
-
-          {/* ── AI mode CTA ─────────────────────────────────────────────── */}
-          {isAIMode && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: useFullscreen
-                  ? "var(--space-3) var(--space-4)"
-                  : "var(--space-2) var(--space-3)",
-                borderTop: "1px solid var(--color-divider)",
-                background:
-                  "color-mix(in oklch, var(--color-purple) 5%, var(--color-surface))",
-                flexShrink: 0,
-              }}
-            >
-              <span
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-2)",
-                  color: "var(--color-purple)",
-                  fontSize: "var(--text-xs)",
-                }}
-              >
-                <Sparkles size={13} strokeWidth={1.5} />
-                {isTouchDevice
-                  ? "Tocca Invia per chiedere all'AI"
-                  : "Modalità AI — premi Invio per inviare"}
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  onAIQuery?.(query.replace(/^\/ai |\?/, "").trim());
-                  if (!forceOpen) close();
-                }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-1)",
-                  padding: isTouchDevice
-                    ? "var(--space-2) var(--space-3)"
-                    : "var(--space-1) var(--space-2)",
-                  borderRadius: "var(--radius-sm)",
-                  background: "var(--color-purple)",
-                  color: "#fff",
-                  fontSize: "var(--text-sm)",
-                  fontWeight: 500,
-                  cursor: "pointer",
-                  border: "none",
-                  minHeight: isTouchDevice ? 40 : "auto",
-                  transition: `opacity var(--transition-interactive)`,
-                }}
-              >
-                Invia
-                <ArrowRight size={14} strokeWidth={2} />
-              </button>
-            </div>
-          )}
-
-          {/* ── Footer keyboard hints — solo su desktop ──────────────────── */}
-          {!isAIMode && !isTouchDevice && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "var(--space-4)",
-                padding: "var(--space-2) var(--space-3)",
-                borderTop: "1px solid var(--color-divider)",
-                color: "var(--color-text-faint)",
-                fontSize: "var(--text-xs)",
-                flexShrink: 0,
-              }}
-            >
-              {[
-                { kbd: "↑↓", label: "naviga" },
-                { kbd: "↵", label: "apri" },
-                { kbd: "esc", label: "chiudi" },
-              ].map(({ kbd, label }) => (
-                <span
-                  key={kbd}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "var(--space-1)",
-                  }}
-                >
-                  <kbd
-                    style={{
-                      fontFamily: "monospace",
-                      background: "var(--color-surface-dynamic)",
-                      padding: "1px var(--space-1)",
-                      borderRadius: "var(--radius-sm)",
-                      fontSize: "0.65rem",
-                    }}
-                  >
-                    {kbd}
-                  </kbd>
-                  {label}
-                </span>
-              ))}
-              <span
-                style={{
-                  marginLeft: "auto",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-1)",
-                }}
-              >
-                <kbd
-                  style={{
-                    fontFamily: "monospace",
-                    background: "var(--color-surface-dynamic)",
-                    padding: "1px var(--space-1)",
-                    borderRadius: "var(--radius-sm)",
-                    fontSize: "0.65rem",
-                  }}
-                >
-                  /ai
-                </kbd>
-                oppure
-                <kbd
-                  style={{
-                    fontFamily: "monospace",
-                    background: "var(--color-surface-dynamic)",
-                    padding: "1px var(--space-1)",
-                    borderRadius: "var(--radius-sm)",
-                    fontSize: "0.65rem",
-                  }}
-                >
-                  ?
-                </kbd>
-                per l'AI
-              </span>
-            </div>
-          )}
-        </div>
-      )}
-
-      <style>{`@keyframes sq-spin { to { transform: rotate(360deg); } }`}</style>
-    </div>
-  );
-}
-
-// ─── SearchResultItem ─────────────────────────────────────────────────────────
-
-function SearchResultItem({
-  result,
-  id,
-  isSelected,
-  isTouchDevice,
-  rowMinHeight,
-  onSelect,
-  onHover,
-}: {
-  result: SearchResult;
-  id: string;
-  isSelected: boolean;
-  isTouchDevice: boolean;
-  rowMinHeight: number;
-  onSelect: () => void;
-  onHover: () => void;
-}) {
-  const config = CATEGORY_CONFIG[result.category] ?? CATEGORY_CONFIG.action;
+  // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <li
-      id={id}
-      role="option"
-      aria-selected={isSelected}
-      onMouseEnter={onHover}
-      onClick={onSelect}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "var(--space-3)",
-        padding: isTouchDevice
-          ? "var(--space-3) var(--space-4)"
-          : "var(--space-2) var(--space-3)",
-        minHeight: rowMinHeight,
-        cursor: "pointer",
-        background: isSelected
-          ? "color-mix(in oklch, var(--color-primary) 8%, var(--color-surface))"
-          : "transparent",
-        transition: `background var(--transition-interactive)`,
-        WebkitTapHighlightColor: "transparent",
-      }}
-      onTouchStart={(e) => {
-        (e.currentTarget as HTMLLIElement).style.background =
-          "color-mix(in oklch, var(--color-primary) 8%, var(--color-surface))";
-      }}
-      onTouchEnd={(e) => {
-        (e.currentTarget as HTMLLIElement).style.background = "transparent";
-      }}
-    >
-      <span
-        style={{
-          flexShrink: 0,
-          width: isTouchDevice ? 36 : 28,
-          height: isTouchDevice ? 36 : 28,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: "var(--radius-sm)",
-          background: `color-mix(in oklch, ${config.color} 10%, var(--color-surface-offset))`,
-          color: config.color,
+    <div ref={rootRef} className={cn("search-bar-root", className)}>
+      {/* Field — sempre visibile, unico elemento trigger */}
+      <div
+        className={cn(
+          "search-bar-field",
+          isOpen && "search-bar-field--open",
+          aiMode && "search-bar-field--ai",
+          commandMode && "search-bar-field--command",
+        )}
+        role="combobox"
+        aria-expanded={showDropdown}
+        aria-haspopup="listbox"
+        aria-owns="search-bar-listbox"
+        // Click sul field apre se non è già aperto
+        onClick={() => {
+          if (!forceOpen && !open) {
+            setOpen(true);
+            setTimeout(() => inputRef.current?.focus(), 0);
+          }
         }}
       >
-        {result.icon ?? config.icon}
-      </span>
-
-      <span style={{ flex: 1, minWidth: 0 }}>
-        <span
-          style={{
-            display: "block",
-            fontSize: isTouchDevice ? "var(--text-base)" : "var(--text-sm)",
-            color: "var(--color-text)",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {result.label}
+        {/* Icona sinistra */}
+        <span className="search-bar-icon-lead" aria-hidden>
+          {isLoading ? (
+            <Loader2 size={16} strokeWidth={2} className="search-bar-spinner" />
+          ) : aiMode ? (
+            <Sparkles
+              size={16}
+              strokeWidth={1.5}
+              className="search-bar-icon-ai"
+            />
+          ) : (
+            <Search size={16} strokeWidth={1.5} />
+          )}
         </span>
-        {result.description && (
-          <span
-            style={{
-              display: "block",
-              fontSize: "var(--text-xs)",
-              color: "var(--color-text-faint)",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {result.description}
-          </span>
-        )}
-      </span>
 
-      {result.badge && (
-        <span
-          style={{
-            flexShrink: 0,
-            padding: "2px var(--space-2)",
-            borderRadius: "var(--radius-full)",
-            fontSize: "var(--text-xs)",
-            fontWeight: 500,
-            background: "var(--color-surface-dynamic)",
-            color: "var(--color-text-muted)",
+        {/* Input — sempre nel DOM, mostra placeholder quando chiuso */}
+        <input
+          ref={inputRef}
+          type="text"
+          role="searchbox"
+          aria-autocomplete="list"
+          aria-controls="search-bar-listbox"
+          aria-activedescendant={
+            activeIndex >= 0 ? `search-bar-item-${activeIndex}` : undefined
+          }
+          value={value}
+          onChange={handleChange}
+          onFocus={() => {
+            if (!forceOpen) setOpen(true);
           }}
-        >
-          {result.badge}
-        </span>
-      )}
-
-      {/* Arrow — solo su desktop su item selezionato */}
-      {isSelected && !isTouchDevice && (
-        <ArrowRight
-          size={14}
-          strokeWidth={2}
-          style={{ flexShrink: 0, color: "var(--color-primary)" }}
+          onBlur={() => {
+            // blur gestito da pointerdown fuori, non qui
+          }}
+          onKeyDown={handleKeyDown}
+          placeholder={
+            aiMode
+              ? "Chiedi all'IA…"
+              : commandMode
+                ? "Scrivi un comando…"
+                : placeholder
+          }
+          className="search-bar-input"
+          autoComplete="off"
+          spellCheck={false}
+          // Non intercettare il click quando il field è chiuso (lo gestisce il div)
+          readOnly={!isOpen && !forceOpen}
+          style={{ cursor: !isOpen && !forceOpen ? "pointer" : "text" }}
         />
-      )}
 
-      {/* Freccia decorativa sempre visibile su mobile */}
-      {isTouchDevice && (
-        <ArrowRight
-          size={16}
-          strokeWidth={1.5}
-          style={{ flexShrink: 0, color: "var(--color-text-faint)" }}
-        />
-      )}
-    </li>
-  );
-}
-
-// ─── DefaultSuggestions ───────────────────────────────────────────────────────
-
-function DefaultSuggestions({
-  onSelect,
-  isTouchDevice,
-  rowMinHeight,
-}: {
-  onSelect: (s: string) => void;
-  isTouchDevice: boolean;
-  rowMinHeight: number;
-}) {
-  const items = [
-    {
-      label: "Cerca una ricetta",
-      query: "",
-      icon: <BookOpen size={14} strokeWidth={1.5} />,
-      color: "var(--color-primary)",
-    },
-    {
-      label: "Esplora i menu",
-      query: "",
-      icon: <UtensilsCrossed size={14} strokeWidth={1.5} />,
-      color: "var(--color-warning)",
-    },
-    {
-      label: "Vai al piano di lavoro",
-      query: "",
-      icon: <ListChecks size={14} strokeWidth={1.5} />,
-      color: "var(--color-success)",
-    },
-    {
-      label: "Chiedi all'AI",
-      query: "/ai ",
-      icon: <Sparkles size={14} strokeWidth={1.5} />,
-      color: "var(--color-purple)",
-    },
-  ];
-
-  return (
-    <>
-      {items.map((item) => (
-        <li
-          key={item.label}
-          role="option"
-          aria-selected={false}
-          onClick={() => onSelect(item.query)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "var(--space-3)",
-            padding: isTouchDevice
-              ? "var(--space-3) var(--space-4)"
-              : "var(--space-2) var(--space-3)",
-            minHeight: rowMinHeight,
-            cursor: "pointer",
-            fontSize: isTouchDevice ? "var(--text-base)" : "var(--text-sm)",
-            color: "var(--color-text-muted)",
-            transition: `background var(--transition-interactive)`,
-            WebkitTapHighlightColor: "transparent",
-          }}
-          onMouseEnter={(e) => {
-            if (isTouchDevice) return;
-            (e.currentTarget as HTMLLIElement).style.background =
-              "var(--color-surface-offset)";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLLIElement).style.background = "transparent";
-          }}
-          onTouchStart={(e) => {
-            (e.currentTarget as HTMLLIElement).style.background =
-              "var(--color-surface-offset)";
-          }}
-          onTouchEnd={(e) => {
-            (e.currentTarget as HTMLLIElement).style.background = "transparent";
-          }}
-        >
-          <span
-            style={{
-              flexShrink: 0,
-              width: isTouchDevice ? 36 : 28,
-              height: isTouchDevice ? 36 : 28,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: "var(--radius-sm)",
-              background: `color-mix(in oklch, ${item.color} 10%, var(--color-surface-offset))`,
-              color: item.color,
+        {/* Destra: clear | hotkey */}
+        {value && isOpen ? (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClear();
             }}
+            className="search-bar-clear"
+            aria-label="Cancella ricerca"
           >
-            {item.icon}
+            <X size={14} strokeWidth={2} />
+          </button>
+        ) : showHotkey && !isOpen ? (
+          <span className="search-bar-hotkey" aria-hidden>
+            <Command size={11} strokeWidth={1.5} />
+            <kbd>{hotkeyLabel}</kbd>
           </span>
-          <span style={{ flex: 1 }}>{item.label}</span>
-          <ArrowRight
-            size={isTouchDevice ? 16 : 14}
-            strokeWidth={1.5}
-            style={{ color: "var(--color-text-faint)", flexShrink: 0 }}
-          />
-        </li>
-      ))}
-    </>
+        ) : null}
+      </div>
+
+      {/* Dropdown */}
+      {showDropdown && (
+        <div
+          id="search-bar-listbox"
+          className="search-bar-dropdown"
+          role="presentation"
+        >
+          {/* AI row */}
+          {aiMode && value.length > 2 && (
+            <div className="search-bar-ai-row">
+              <Sparkles
+                size={13}
+                strokeWidth={1.5}
+                className="search-bar-icon-ai"
+              />
+              <span>
+                Chiedi all'IA:{" "}
+                <strong>{value.replace(/^(\?|\/ai\s)/i, "")}</strong>
+              </span>
+              <button
+                type="button"
+                className="search-bar-ai-cta"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  onAIQuery?.(value);
+                  if (!forceOpen) setOpen(false);
+                }}
+              >
+                Chiedi
+                <ArrowRight size={12} strokeWidth={2} />
+              </button>
+            </div>
+          )}
+
+          {/* Risultati raggruppati */}
+          {groups.length > 0 ? (
+            <div ref={listRef} className="search-bar-list" role="listbox">
+              {groups.map(({ category, label, items }) => (
+                <div key={category} className="search-bar-group">
+                  <div className="search-bar-group-label" aria-hidden>
+                    <span className="search-bar-group-icon">
+                      {CATEGORY_ICONS[category]}
+                    </span>
+                    {label}
+                  </div>
+                  {items.map((item) => {
+                    const globalIdx = results.indexOf(item);
+                    return (
+                      <div
+                        key={item.id}
+                        id={`search-bar-item-${globalIdx}`}
+                        role="option"
+                        aria-selected={globalIdx === activeIndex}
+                        className={cn(
+                          "search-bar-item",
+                          globalIdx === activeIndex &&
+                            "search-bar-item--active",
+                        )}
+                        onMouseEnter={() => setActiveIndex(globalIdx)}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          handleSelect(item);
+                        }}
+                      >
+                        <span className="search-bar-item-icon">
+                          {item.icon ?? CATEGORY_ICONS[item.category]}
+                        </span>
+                        <span className="search-bar-item-body">
+                          <span className="search-bar-item-label">
+                            {item.label}
+                          </span>
+                          {item.description && (
+                            <span className="search-bar-item-desc">
+                              {item.description}
+                            </span>
+                          )}
+                        </span>
+                        {(item.shortcut || item.badge) && (
+                          <span className="search-bar-item-meta">
+                            {item.shortcut ? (
+                              <kbd className="search-bar-shortcut">
+                                {item.shortcut}
+                              </kbd>
+                            ) : (
+                              <span className="search-bar-type-pill">
+                                {item.badge}
+                              </span>
+                            )}
+                          </span>
+                        )}
+                        <span className="search-bar-item-arrow" aria-hidden>
+                          <ArrowRight size={12} strokeWidth={1.5} />
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          ) : !aiMode && value.length > 0 ? (
+            <div className="search-bar-empty">
+              <ChefHat size={16} strokeWidth={1.5} />
+              <span>
+                Nessun risultato per <strong>{value}</strong>
+              </span>
+            </div>
+          ) : null}
+
+          {/* Footer */}
+          <div className="search-bar-footer" aria-hidden>
+            <span>
+              <kbd>↑↓</kbd> naviga
+            </span>
+            <span>
+              <kbd>↵</kbd> {aiMode ? "chiedi" : "apri"}
+            </span>
+            <span>
+              <kbd>esc</kbd> chiudi
+            </span>
+            {!aiMode && (
+              <span className="search-bar-footer-ai-hint">
+                <kbd>/ai</kbd> oppure <kbd>?</kbd> per l'IA
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

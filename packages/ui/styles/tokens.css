@@ -184,4 +184,25 @@
   --textarea-min-height: 6rem;
   --textarea-max-height: 16rem;
   --textarea-line-height: 1.6;
+
+  /* ─── SearchBar ─────────────────────────────────────────────────────────── */
+  --search-bar-height: 2.5rem;
+  --search-bar-height-lg: 3rem;
+  --search-bar-radius: var(--radius-lg);
+  --search-bar-border: 1px solid oklch(from var(--color-text) l c h / 0.1);
+  --search-bar-border-focus: 1px solid
+    oklch(from var(--color-primary) l c h / 0.5);
+  --search-bar-bg: var(--color-surface);
+  --search-bar-bg-hover: var(--color-surface-2);
+  --search-bar-shadow-focus: 0 0 0 3px
+    oklch(from var(--color-primary) l c h / 0.12);
+  --search-bar-dropdown-radius: var(--radius-lg);
+  --search-bar-dropdown-shadow: var(--shadow-md);
+  --search-bar-item-height: 2.5rem;
+  --search-bar-item-radius: var(--radius-md);
+  --search-bar-item-active-bg: oklch(from var(--color-primary) l c h / 0.08);
+  --search-bar-ai-color: var(--color-gold);
+  --search-bar-hotkey-bg: var(--color-surface-offset);
+  --search-bar-hotkey-radius: var(--radius-sm);
+  --search-bar-footer-size: var(--text-xs);
 }

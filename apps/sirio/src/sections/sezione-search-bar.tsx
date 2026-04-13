@@ -1,18 +1,11 @@
 "use client";
 
-import { SearchBar, type SearchResult } from "@qoovex/ui";
-import {
-  BookOpen,
-  UtensilsCrossed,
-  ListChecks,
-  Zap,
-  Sparkles,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { Plus } from "lucide-react";
+import { Button, SearchBar, type SearchResult } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
 
-// ─── Helper locali ────────────────────────────────────────────────────────────
+// ─── Row ──────────────────────────────────────────────────────────────────────
 
 function Row({
   label,
@@ -36,25 +29,75 @@ function Row({
       >
         {label}
       </p>
-      {children}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--space-4)",
+          maxWidth: "560px",
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 }
 
-/**
- * Wrapper per gli stati "aperti" in Sirio.
- * Il pannello è position:absolute — serve un contenitore alto abbastanza
- * da non sovrapporre la row successiva.
- */
-function OpenDemo({
-  height = 320,
+// ─── SearchPreview — spazio dinamico basato sull'altezza reale del dropdown ───
+
+function SearchPreview({
   children,
+  zIndex = 10,
 }: {
-  height?: number;
   children: React.ReactNode;
+  zIndex?: number;
 }) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [extraHeight, setExtraHeight] = useState(0);
+
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    function measure() {
+      const dropdown = el!.querySelector<HTMLElement>(".search-bar-dropdown");
+      if (dropdown) {
+        // Altezza dropdown + 16px di respiro
+        setExtraHeight(dropdown.offsetHeight + 16);
+      } else {
+        setExtraHeight(0);
+      }
+    }
+
+    measure();
+
+    // Ricalcola se il dropdown cambia dimensione (es. più risultati)
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    // Osserva anche il dropdown se esiste
+    const dropdown = el.querySelector(".search-bar-dropdown");
+    if (dropdown) ro.observe(dropdown);
+
+    // MutationObserver per quando il dropdown appare/scompare dal DOM
+    const mo = new MutationObserver(measure);
+    mo.observe(el, { childList: true, subtree: true });
+
+    return () => {
+      ro.disconnect();
+      mo.disconnect();
+    };
+  }, []);
+
   return (
-    <div style={{ position: "relative", height, maxWidth: 560 }}>
+    <div
+      ref={wrapperRef}
+      style={{
+        position: "relative",
+        zIndex,
+        paddingBottom: `${extraHeight}px`,
+        transition: "padding-bottom 150ms ease",
+      }}
+    >
       {children}
     </div>
   );
@@ -62,195 +105,202 @@ function OpenDemo({
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 
-const MOCK_RECIPES: SearchResult[] = [
+const ALL_RESULTS: SearchResult[] = [
   {
-    id: "r1",
-    label: "Risotto al limone e timo",
-    description: "4 porzioni · 35 min · Piano: Servizio Sabato",
-    category: "recipe",
-    onSelect: () => {},
+    id: "rec1",
+    category: "recent",
+    label: "Risotto al limone",
+    description: "Modificata 2 ore fa",
   },
   {
-    id: "r2",
-    label: "Petto d'anatra con riduzione di Barolo",
-    description: "2 porzioni · 50 min",
-    category: "recipe",
-    onSelect: () => {},
+    id: "rec2",
+    category: "recent",
+    label: "Menu degustazione primavera",
+    description: "Modificato ieri",
   },
-];
-
-const MOCK_MENUS: SearchResult[] = [
   {
-    id: "m1",
-    label: "Menu Degustazione Estate 2026",
-    description: "6 portate · QR attivo",
+    id: "rcp1",
+    category: "recipe",
+    label: "Pasta alla Norma",
+    description: "Primo · 4 porzioni",
+    badge: "Tua",
+  },
+  {
+    id: "rcp2",
+    category: "recipe",
+    label: "Tiramisù classico",
+    description: "Dolce · 6 porzioni",
+    badge: "Tua",
+  },
+  {
+    id: "rcp3",
+    category: "recipe",
+    label: "Pesto alla genovese",
+    description: "Salsa · 30 min",
+  },
+  {
+    id: "mn1",
     category: "menu",
-    onSelect: () => {},
+    label: "Menu estivo 2025",
+    description: "12 portate · 3 allergie",
+    badge: "Attivo",
   },
-];
-
-const MOCK_ACTIONS: SearchResult[] = [
   {
-    id: "a1",
+    id: "mn2",
+    category: "menu",
+    label: "Degustazione 7 portate",
+    description: "Chef's table",
+  },
+  {
+    id: "wp1",
+    category: "work-plan",
+    label: "Servizio sabato sera",
+    description: "3 membri · 8 task",
+    badge: "In corso",
+  },
+  {
+    id: "ac1",
+    category: "action",
     label: "Nuova ricetta",
     description: "Crea una ricetta da zero",
-    category: "action",
-    badge: "Azione",
+    shortcut: "⌘N",
     icon: <Plus size={14} strokeWidth={1.5} />,
-    onSelect: () => {},
   },
   {
-    id: "a2",
-    label: "Elimina piano di lavoro",
-    description: "Rimuovi un piano esistente",
+    id: "ac2",
     category: "action",
-    badge: "Azione",
-    icon: <Trash2 size={14} strokeWidth={1.5} />,
-    onSelect: () => {},
+    label: "Genera menu con IA",
+    description: "Costruisci un menu dagli ingredienti",
+    shortcut: "⌘M",
   },
-];
-
-const MOCK_WORKPLANS: SearchResult[] = [
   {
-    id: "w1",
-    label: "Piano Servizio Sabato sera",
-    description: "3 membri · SERVICE",
-    category: "work-plan",
-    onSelect: () => {},
+    id: "ac3",
+    category: "action",
+    label: "Esporta lista della spesa",
+    description: "PDF o CSV",
   },
-];
-
-const ALL_RESULTS: SearchResult[] = [
-  ...MOCK_RECIPES,
-  ...MOCK_MENUS,
-  ...MOCK_WORKPLANS,
-  ...MOCK_ACTIONS,
+  {
+    id: "cmd1",
+    category: "command",
+    label: "/nuova-ricetta",
+    description: "Apre la creazione guidata",
+    shortcut: "/nr",
+  },
+  {
+    id: "cmd2",
+    category: "command",
+    label: "/piano",
+    description: "Vai al piano di lavoro attivo",
+    shortcut: "/p",
+  },
 ];
 
 // ─── Sezione ──────────────────────────────────────────────────────────────────
 
 export function SezioneSearchBar() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [liveQuery, setLiveQuery] = useState("");
+  const [lastAction, setLastAction] = useState<string | null>(null);
+
+  const liveResults = useMemo(() => {
+    if (!liveQuery.trim())
+      return ALL_RESULTS.filter((r) => r.category === "recent");
+    const q = liveQuery.toLowerCase();
+    return ALL_RESULTS.filter(
+      (r) =>
+        r.label.toLowerCase().includes(q) ||
+        r.description?.toLowerCase().includes(q),
+    );
+  }, [liveQuery]);
+
+  function simulateLoading() {
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), 1500);
+  }
+
   return (
-    <section id="search-bar" className="sirio-section">
-      <SectionHeader label="SearchBar" id="search-bar" />
+    <section id="searchbar" className="sirio-section">
+      <SectionHeader label="SearchBar" id="searchbar" />
 
-      {/* Trigger collapsed */}
-      <Row label="Trigger — collapsed (click per aprire)">
-        <div style={{ maxWidth: 560 }}>
+      <Row label="Dropdown — risultati raggruppati per categoria">
+        <SearchPreview zIndex={40}>
           <SearchBar
-            onSearch={(q) => console.log("search:", q)}
-            onAIQuery={(q) => console.log("ai:", q)}
+            defaultQuery="pasta"
+            results={ALL_RESULTS.filter(
+              (r) =>
+                r.label.toLowerCase().includes("pasta") ||
+                r.category === "action" ||
+                r.category === "command",
+            )}
+            forceOpen
+            showHotkey={false}
           />
+        </SearchPreview>
+      </Row>
+
+      <Row label='Modalità AI — query con "?" o "/ai"'>
+        <SearchPreview zIndex={30}>
+          <SearchBar
+            defaultQuery="? quali ricette posso fare con zucchine e gamberi"
+            results={[]}
+            forceOpen
+            showHotkey={false}
+          />
+        </SearchPreview>
+      </Row>
+
+      <Row label="State — empty">
+        <SearchPreview zIndex={20}>
+          <SearchBar
+            defaultQuery="xyzqwerty123"
+            results={[]}
+            forceOpen
+            showHotkey={false}
+          />
+        </SearchPreview>
+      </Row>
+
+      <Row label="State — loading (click per simulare)">
+        <SearchBar
+          defaultQuery="Risotto"
+          results={[]}
+          isLoading={isLoading}
+          showHotkey={false}
+        />
+        <div>
+          <Button variant="secondary" size="sm" onClick={simulateLoading}>
+            Simula loading
+          </Button>
         </div>
       </Row>
 
-      {/* Aperta — suggerimenti default */}
-      <Row label="Aperta — vuota (suggerimenti default)">
-        <OpenDemo height={260}>
-          <SearchBar
-            forceOpen
-            disableFullscreen
-            onSearch={() => {}}
-            onAIQuery={() => {}}
-          />
-        </OpenDemo>
+      <Row label="Default — collapsed con hotkey">
+        <SearchBar showHotkey />
       </Row>
 
-      {/* Aperta — con risultati multi-categoria */}
-      <Row label="Aperta — risultati multi-categoria">
-        <OpenDemo height={420}>
-          <SearchBar
-            forceOpen
-            disableFullscreen
-            defaultQuery="risotto"
-            results={ALL_RESULTS}
-            onSearch={() => {}}
-            onAIQuery={() => {}}
-          />
-        </OpenDemo>
+      <Row label='Shortcut custom — prop shortcut="P"'>
+        <SearchBar shortcut="P" showHotkey />
       </Row>
 
-      {/* Solo ricette */}
-      <Row label="Aperta — solo ricette">
-        <OpenDemo height={260}>
-          <SearchBar
-            forceOpen
-            disableFullscreen
-            defaultQuery="anatra"
-            results={MOCK_RECIPES}
-            onSearch={() => {}}
-            onAIQuery={() => {}}
-          />
-        </OpenDemo>
-      </Row>
-
-      {/* State loading */}
-      <Row label="State — loading">
-        <OpenDemo height={120}>
-          <SearchBar
-            forceOpen
-            disableFullscreen
-            defaultQuery="risotto"
-            isLoading
-            results={[]}
-            onSearch={() => {}}
-            onAIQuery={() => {}}
-          />
-        </OpenDemo>
-      </Row>
-
-      {/* Modalità AI */}
-      <Row label="Modalità AI — prefisso /ai">
-        <OpenDemo height={160}>
-          <SearchBar
-            forceOpen
-            disableFullscreen
-            defaultQuery="/ai Suggerisci un primo piatto estivo"
-            results={[]}
-            onSearch={() => {}}
-            onAIQuery={(q) => console.log("ai query:", q)}
-          />
-        </OpenDemo>
-      </Row>
-
-      {/* Modalità AI con ? */}
-      <Row label="Modalità AI — prefisso ?">
-        <OpenDemo height={160}>
-          <SearchBar
-            forceOpen
-            disableFullscreen
-            defaultQuery="?Come bilancio i macro in un menu degustazione?"
-            results={[]}
-            onSearch={() => {}}
-            onAIQuery={(q) => console.log("ai query:", q)}
-          />
-        </OpenDemo>
-      </Row>
-
-      {/* Modalità comando */}
-      <Row label="Modalità comando — prefisso /">
-        <OpenDemo height={200}>
-          <SearchBar
-            forceOpen
-            disableFullscreen
-            defaultQuery="/crea menu"
-            results={MOCK_ACTIONS}
-            onSearch={() => {}}
-            onAIQuery={() => {}}
-          />
-        </OpenDemo>
-      </Row>
-
-      {/* Shortcut custom */}
-      <Row label="Shortcut custom — ⌘P">
-        <div style={{ maxWidth: 560 }}>
-          <SearchBar
-            shortcut="P"
-            placeholder="Cerca con ⌘P…"
-            onSearch={() => {}}
-            onAIQuery={() => {}}
-          />
-        </div>
+      <Row label="Live — digita per cercare, prova /ai o ? per l'IA">
+        <SearchBar
+          results={liveResults}
+          value={liveQuery}
+          onValueChange={setLiveQuery}
+          onSearch={(q) => setLastAction(`Ricerca: "${q}"`)}
+          onAIQuery={(q) => setLastAction(`IA: "${q}"`)}
+        />
+        {lastAction && (
+          <p
+            style={{
+              fontSize: "var(--text-xs)",
+              color: "var(--color-text-muted)",
+              fontFamily: "monospace",
+            }}
+          >
+            → {lastAction}
+          </p>
+        )}
       </Row>
     </section>
   );
