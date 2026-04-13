@@ -1,6 +1,7 @@
 "use client";
 
 export const SECTIONS = [
+  // ── Fondamenta ──────────────────────────────────────────────
   {
     id: "fondamenta",
     label: "Fondamenta",
@@ -19,7 +20,12 @@ export const SECTIONS = [
     icon: "T",
     description: "Satoshi + Chillax, type scale",
   },
-  { id: "spacing", label: "Spacing", icon: "⊾", description: "Sistema 4px" },
+  {
+    id: "spacing",
+    label: "Spacing",
+    icon: "⊾",
+    description: "Sistema 4px",
+  },
   {
     id: "radius",
     label: "Corner Radius",
@@ -30,7 +36,7 @@ export const SECTIONS = [
     id: "shadows",
     label: "Shadows",
     icon: "◫",
-    description: "Elevazione e profondita",
+    description: "Elevazione e profondità",
   },
   {
     id: "animazioni",
@@ -38,20 +44,43 @@ export const SECTIONS = [
     icon: "◎",
     description: "Easing, durate, transizioni",
   },
-  { id: "zindex", label: "Z-index", icon: "⊕", description: "Layer stack" },
-  { id: "button", label: "Button", icon: "▷", description: "Varianti e stati" },
-  { id: "input", label: "Input", icon: "▭", description: "Text, label, stati" },
+  {
+    id: "zindex",
+    label: "Z-index",
+    icon: "⊕",
+    description: "Layer stack",
+  },
+
+  // ── Componenti ───────────────────────────────────────────────
+  {
+    id: "button",
+    label: "Button",
+    icon: "▷",
+    description: "Varianti e stati",
+  },
+  {
+    id: "input",
+    label: "Input",
+    icon: "▭",
+    description: "Text, label, stati",
+  },
   {
     id: "textarea",
     label: "Textarea",
     icon: "▬",
-    description: "Multiline input",
+    description: "Multiline, auto-grow, resize",
   },
   {
     id: "searchbar",
     label: "SearchBar",
     icon: "⊙",
-    description: "Ricerca globale",
+    description: "Ricerca globale con clear",
+  },
+  {
+    id: "select",
+    label: "Select",
+    icon: "⌄",
+    description: "Dropdown custom, chevron animato",
   },
   {
     id: "card",
@@ -59,16 +88,65 @@ export const SECTIONS = [
     icon: "▪",
     description: "Flat, elevated, interactive",
   },
-  { id: "badge", label: "Badge", icon: "◦", description: "Status e label" },
+  {
+    id: "badge",
+    label: "Badge",
+    icon: "◦",
+    description: "Colori semantici, outline e filled",
+  },
+  {
+    id: "avatar",
+    label: "Avatar",
+    icon: "◔",
+    description: "Immagine, iniziali, size scale",
+  },
+  {
+    id: "divider",
+    label: "Divider",
+    icon: "─",
+    description: "Orizzontale, verticale, con label",
+  },
+  {
+    id: "toggle",
+    label: "Toggle",
+    icon: "◑",
+    description: "Switch animato on/off/disabled",
+  },
+  {
+    id: "checkbox",
+    label: "Checkbox & Radio",
+    icon: "☐",
+    description: "Custom styled, animazione check",
+  },
+  {
+    id: "toast",
+    label: "Toast",
+    icon: "◳",
+    description: "Notifiche, posizioni, dismiss",
+  },
+  {
+    id: "modal",
+    label: "Modal / Sheet",
+    icon: "◱",
+    description: "Bottom sheet mobile, dialog desktop",
+  },
   {
     id: "form",
     label: "Form",
     icon: "⊟",
     description: "Composizione completa",
   },
+  {
+    id: "skeleton",
+    label: "Skeleton",
+    icon: "░",
+    description: "Shimmer loader per card, testo, avatar",
+  },
 ] as const;
 
 export type SectionId = (typeof SECTIONS)[number]["id"];
+
+// ─── Componenti UI condivisi ──────────────────────────────────────
 
 export function SectionHeader({ label, id }: { label: string; id: string }) {
   return (
@@ -125,15 +203,47 @@ export function ComingSoon({ label }: { label: string }) {
     >
       <span style={{ fontSize: "1.25rem", opacity: 0.2 }}>◌</span>
       <p
-        style={{ fontSize: "var(--text-sm)", color: "var(--color-text-faint)" }}
+        style={{
+          fontSize: "var(--text-sm)",
+          color: "var(--color-text-faint)",
+        }}
       >
         <strong
           style={{ fontStyle: "normal", color: "var(--color-text-muted)" }}
         >
           {label}
         </strong>{" "}
-        verra popolato nella prossima fase.
+        verrà popolato nella prossima fase.
       </p>
     </div>
   );
 }
+
+// ─── Tipi utili per le sezioni ────────────────────────────────────
+export type SectionStatus = "done" | "coming-soon";
+
+export const SECTION_STATUS: Record<SectionId, SectionStatus> = {
+  fondamenta: "done",
+  colori: "done",
+  tipografia: "done",
+  spacing: "done",
+  radius: "done",
+  shadows: "done",
+  animazioni: "done",
+  zindex: "done",
+  button: "done",
+  input: "done",
+  textarea: "done",
+  searchbar: "coming-soon",
+  select: "coming-soon",
+  card: "coming-soon",
+  badge: "coming-soon",
+  avatar: "coming-soon",
+  divider: "coming-soon",
+  toggle: "coming-soon",
+  checkbox: "coming-soon",
+  toast: "coming-soon",
+  modal: "coming-soon",
+  form: "coming-soon",
+  skeleton: "coming-soon",
+};

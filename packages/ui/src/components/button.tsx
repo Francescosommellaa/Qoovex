@@ -12,11 +12,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
-  /** Icona statica a sinistra del testo */
   iconLeft?: React.ReactNode;
-  /** Icona statica a destra del testo */
   iconRight?: React.ReactNode;
-  /** Apple swap: from esce a sinistra, to entra da destra. Non usare con iconLeft/iconRight. */
   iconSwap?: { from: React.ReactNode; to: React.ReactNode };
   children: React.ReactNode;
 }
@@ -132,10 +129,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           .join(" ")}
         {...props}
       >
-        {/* Fill layer */}
         <span className={FILLS[variant]} aria-hidden="true" />
 
-        {/* Spinner */}
         {loading && (
           <span className="absolute inset-0 z-20 flex items-center justify-center rounded-[inherit]">
             <Loader2
@@ -159,7 +154,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               .filter(Boolean)
               .join(" ")}
           >
-            {/* from — nel flusso, opacity out all'hover */}
             <span
               className={
                 "inline-flex items-center shrink-0 " +
@@ -173,7 +167,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
             {children}
 
-            {/* to — absolute fuori frame, opacity in all'hover */}
             <span
               className={
                 "absolute top-1/2 -translate-y-1/2 inline-flex items-center shrink-0 " +
@@ -187,7 +180,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             </span>
           </span>
         ) : (
-          // ── Modalità normale con iconLeft / iconRight opzionali ───
           <span
             className={[
               "relative z-10 inline-flex items-center justify-center gap-[inherit]",
