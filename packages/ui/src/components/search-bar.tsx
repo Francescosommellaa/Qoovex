@@ -14,6 +14,7 @@ import {
   Loader2,
   Zap,
   Command,
+  Clock,
 } from "lucide-react";
 import { cn } from "../lib/utils";
 
@@ -47,6 +48,7 @@ export interface SearchBarProps {
   onValueChange?: (value: string) => void;
   onSearch?: (query: string) => void;
   onAIQuery?: (query: string) => void;
+  onDeleteRecent?: (id: string) => void;
   isLoading?: boolean;
   forceOpen?: boolean;
   disableFullscreen?: boolean;
@@ -64,7 +66,7 @@ const CATEGORY_ICONS: Record<SearchResultCategory, React.ReactNode> = {
   command: <Hash size={14} strokeWidth={1.5} />,
   action: <Zap size={14} strokeWidth={1.5} />,
   ai: <Sparkles size={14} strokeWidth={1.5} />,
-  recent: <ArrowRight size={14} strokeWidth={1.5} />,
+  recent: <Clock size={14} strokeWidth={1.5} />,
 };
 
 const CATEGORY_LABELS: Record<SearchResultCategory, string> = {
@@ -110,16 +112,110 @@ function detectCommandQuery(value: string) {
   return value.startsWith("/") && !value.toLowerCase().startsWith("/ai ");
 }
 
-// ─── Componente ───────────────────────────────────────────────────────────────
+// ─── Hook: detect touch device ────────────────────────────────────────────────
+
+function useIsTouchDevice() {
+  const [isTouch, setIsTouch] = React.useState(false);
+  React.useEffect(() => {
+    setIsTouch(
+      window.matchMedia("(hover: none) and (pointer: coarse)").matches,
+    );
+  }, []);
+  return isTouch;
+}
+
+// ─── Chip rapidi mobile ───────────────────────────────────────────────────────
+
+interface MobileChipBarProps {
+  onChip: (value: string) => void;
+  onSearch: () => void;
+  hasQuery: boolean;
+}
+
+function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
+  return (
+    <div className="search-bar-chip-bar" aria-label="Azioni rapide">
+      <button
+        type="button"
+        className="search-bar-chip search-bar-chip--ai"
+        onMouseDown={(e) => {
+          e.preventDefault();
+          onChip("?");
+        }}
+        aria-label="Attiva modalità IA"
+      >
+        <Sparkles size={12} strokeWidth={1.5} />
+        IA
+      </button>
+
+      <button
+        type="button"
+        className="search-bar-chip"
+        onMouseDown={(e) => {
+          e.preventDefault();
+          onChip("/");
+        }}
+        aria-label="Attiva modalità comando"
+      >
+        <Hash size={12} strokeWidth={1.5} />
+        Comando
+      </button>
+
+      <button
+        type="button"
+        className="search-bar-chip"
+        onMouseDown={(e) => {
+          e.preventDefault();
+          onChip("");
+        }}
+        aria-label="Cerca ricette"
+      >
+        <BookOpen size={12} strokeWidth={1.5} />
+        Ricette
+      </button>
+
+      <button
+        type="button"
+        className="search-bar-chip"
+        onMouseDown={(e) => {
+          e.preventDefault();
+          onChip("");
+        }}
+        aria-label="Cerca menu"
+      >
+        <UtensilsCrossed size={12} strokeWidth={1.5} />
+        Menu
+      </button>
+
+      {hasQuery && (
+        <button
+          type="button"
+          className="search-bar-chip search-bar-chip--primary"
+          onMouseDown={(e) => {
+            e.preventDefault();
+            onSearch();
+          }}
+          aria-label="Esegui ricerca"
+        >
+          <ArrowRight size={12} strokeWidth={2} />
+          Cerca
+        </button>
+      )}
+    </div>
+  );
+}
+
+// ─── Componente principale ────────────────────────────────────────────────────
 
 export function SearchBar({
-  placeholder = "Cerca ricette, menu, piani… o premi /",
+  placeholder = "Cerca ricette, menu, piani…",
   results = [],
   defaultQuery,
   value: controlledValue,
   onValueChange,
   onSearch,
   onAIQuery,
+  onDeleteRecent,
   isLoading = false,
   forceOpen = false,
   disableFullscreen: _disableFullscreen = false,
@@ -135,6 +231,7 @@ export function SearchBar({
   const inputRef = React.useRef<HTMLInputElement>(null);
   const rootRef = React.useRef<HTMLDivElement>(null);
   const listRef = React.useRef<HTMLDivElement>(null);
+  const isTouch = useIsTouchDevice();
 
   const aiMode = detectAiQuery(value);
   const commandMode = detectCommandQuery(value);
@@ -175,6 +272,18 @@ export function SearchBar({
     if (!forceOpen) setOpen(false);
   }
 
+  function handleChip(prefix: string) {
+    const next = prefix;
+    if (controlledValue === undefined) setInternalValue(next);
+    onValueChange?.(next);
+    setOpen(true);
+    setTimeout(() => {
+      inputRef.current?.focus();
+      const len = next.length;
+      inputRef.current?.setSelectionRange(len, len);
+    }, 0);
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     const flatItems = results;
     if (e.key === "ArrowDown") {
@@ -198,7 +307,6 @@ export function SearchBar({
     }
   }
 
-  // Scroll item attivo in vista
   React.useEffect(() => {
     if (activeIndex < 0 || !listRef.current) return;
     const items =
@@ -206,7 +314,6 @@ export function SearchBar({
     items[activeIndex]?.scrollIntoView({ block: "nearest" });
   }, [activeIndex]);
 
-  // Click fuori → chiudi
   React.useEffect(() => {
     if (forceOpen) return;
     function onPointerDown(e: PointerEvent) {
@@ -218,9 +325,8 @@ export function SearchBar({
     return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [forceOpen]);
 
-  // Hotkey globale ⌘K
   React.useEffect(() => {
-    if (forceOpen) return;
+    if (forceOpen || isTouch) return;
     function onKey(e: KeyboardEvent) {
       if (
         (e.metaKey || e.ctrlKey) &&
@@ -233,13 +339,29 @@ export function SearchBar({
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [forceOpen, shortcut]);
+  }, [forceOpen, shortcut, isTouch]);
 
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <div ref={rootRef} className={cn("search-bar-root", className)}>
-      {/* Field — sempre visibile, unico elemento trigger */}
+    <div
+      ref={rootRef}
+      className={cn(
+        "search-bar-root",
+        isOpen && "search-bar-root--open",
+        className,
+      )}
+    >
+      {isOpen && isTouch && (
+        <div
+          className="search-bar-backdrop"
+          onPointerDown={() => {
+            if (!forceOpen) setOpen(false);
+          }}
+          aria-hidden
+        />
+      )}
+
       <div
         className={cn(
           "search-bar-field",
@@ -251,7 +373,6 @@ export function SearchBar({
         aria-expanded={showDropdown}
         aria-haspopup="listbox"
         aria-owns="search-bar-listbox"
-        // Click sul field apre se non è già aperto
         onClick={() => {
           if (!forceOpen && !open) {
             setOpen(true);
@@ -259,7 +380,6 @@ export function SearchBar({
           }
         }}
       >
-        {/* Icona sinistra */}
         <span className="search-bar-icon-lead" aria-hidden>
           {isLoading ? (
             <Loader2 size={16} strokeWidth={2} className="search-bar-spinner" />
@@ -274,7 +394,6 @@ export function SearchBar({
           )}
         </span>
 
-        {/* Input — sempre nel DOM, mostra placeholder quando chiuso */}
         <input
           ref={inputRef}
           type="text"
@@ -289,9 +408,7 @@ export function SearchBar({
           onFocus={() => {
             if (!forceOpen) setOpen(true);
           }}
-          onBlur={() => {
-            // blur gestito da pointerdown fuori, non qui
-          }}
+          onBlur={() => {}}
           onKeyDown={handleKeyDown}
           placeholder={
             aiMode
@@ -303,12 +420,10 @@ export function SearchBar({
           className="search-bar-input"
           autoComplete="off"
           spellCheck={false}
-          // Non intercettare il click quando il field è chiuso (lo gestisce il div)
           readOnly={!isOpen && !forceOpen}
           style={{ cursor: !isOpen && !forceOpen ? "pointer" : "text" }}
         />
 
-        {/* Destra: clear | hotkey */}
         {value && isOpen ? (
           <button
             type="button"
@@ -321,7 +436,7 @@ export function SearchBar({
           >
             <X size={14} strokeWidth={2} />
           </button>
-        ) : showHotkey && !isOpen ? (
+        ) : showHotkey && !isOpen && !isTouch ? (
           <span className="search-bar-hotkey" aria-hidden>
             <Command size={11} strokeWidth={1.5} />
             <kbd>{hotkeyLabel}</kbd>
@@ -333,10 +448,12 @@ export function SearchBar({
       {showDropdown && (
         <div
           id="search-bar-listbox"
-          className="search-bar-dropdown"
+          className={cn(
+            "search-bar-dropdown",
+            isTouch && "search-bar-dropdown--mobile",
+          )}
           role="presentation"
         >
-          {/* AI row */}
           {aiMode && value.length > 2 && (
             <div className="search-bar-ai-row">
               <Sparkles
@@ -363,7 +480,14 @@ export function SearchBar({
             </div>
           )}
 
-          {/* Risultati raggruppati */}
+          {isTouch && (
+            <MobileChipBar
+              onChip={handleChip}
+              onSearch={handleSubmit}
+              hasQuery={value.trim().length > 0}
+            />
+          )}
+
           {groups.length > 0 ? (
             <div ref={listRef} className="search-bar-list" role="listbox">
               {groups.map(({ category, label, items }) => (
@@ -376,6 +500,7 @@ export function SearchBar({
                   </div>
                   {items.map((item) => {
                     const globalIdx = results.indexOf(item);
+                    const isRecent = item.category === "recent";
                     return (
                       <div
                         key={item.id}
@@ -406,7 +531,8 @@ export function SearchBar({
                             </span>
                           )}
                         </span>
-                        {(item.shortcut || item.badge) && (
+
+                        {!isTouch && (item.shortcut || item.badge) && (
                           <span className="search-bar-item-meta">
                             {item.shortcut ? (
                               <kbd className="search-bar-shortcut">
@@ -419,9 +545,30 @@ export function SearchBar({
                             )}
                           </span>
                         )}
-                        <span className="search-bar-item-arrow" aria-hidden>
-                          <ArrowRight size={12} strokeWidth={1.5} />
-                        </span>
+
+                        {isRecent && onDeleteRecent && (
+                          <button
+                            type="button"
+                            className={cn(
+                              "search-bar-item-delete",
+                              isTouch && "search-bar-item-delete--touch",
+                            )}
+                            aria-label={`Rimuovi "${item.label}" dai recenti`}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              onDeleteRecent(item.id);
+                            }}
+                          >
+                            <X size={12} strokeWidth={2} />
+                          </button>
+                        )}
+
+                        {!isTouch && !isRecent && (
+                          <span className="search-bar-item-arrow" aria-hidden>
+                            <ArrowRight size={12} strokeWidth={1.5} />
+                          </span>
+                        )}
                       </div>
                     );
                   })}
@@ -437,23 +584,24 @@ export function SearchBar({
             </div>
           ) : null}
 
-          {/* Footer */}
-          <div className="search-bar-footer" aria-hidden>
-            <span>
-              <kbd>↑↓</kbd> naviga
-            </span>
-            <span>
-              <kbd>↵</kbd> {aiMode ? "chiedi" : "apri"}
-            </span>
-            <span>
-              <kbd>esc</kbd> chiudi
-            </span>
-            {!aiMode && (
-              <span className="search-bar-footer-ai-hint">
-                <kbd>/ai</kbd> oppure <kbd>?</kbd> per l'IA
+          {!isTouch && (
+            <div className="search-bar-footer" aria-hidden>
+              <span>
+                <kbd>↑↓</kbd> naviga
               </span>
-            )}
-          </div>
+              <span>
+                <kbd>↵</kbd> {aiMode ? "chiedi" : "apri"}
+              </span>
+              <span>
+                <kbd>esc</kbd> chiudi
+              </span>
+              {!aiMode && (
+                <span className="search-bar-footer-ai-hint">
+                  <kbd>/ai</kbd> oppure <kbd>?</kbd> per l'IA
+                </span>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
