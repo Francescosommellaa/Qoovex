@@ -12,6 +12,7 @@ interface ClerkUserCreatedData {
   id: string;
   first_name: string | null;
   last_name: string | null;
+  username: string | null;
   email_addresses: ClerkEmailAddress[];
 }
 
@@ -74,7 +75,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const { id, first_name, last_name, email_addresses } = event.data;
+  const { id, first_name, last_name, username, email_addresses } = event.data;
 
   const primaryEmail =
     email_addresses.find((e: ClerkEmailAddress) => e.primary)?.email_address ??
@@ -93,9 +94,14 @@ export async function POST(req: Request) {
       clerkId: id,
       name,
       email: primaryEmail,
+      username: username ?? `user_${id.slice(0, 8)}`,
       plan: "FREE",
     },
-    update: {},
+    update: {
+      name,
+      email: primaryEmail,
+      username: username ?? undefined,
+    },
   });
 
   return NextResponse.json({ ok: true });

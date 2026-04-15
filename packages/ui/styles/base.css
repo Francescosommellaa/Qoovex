@@ -1,15 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    QOOVEX DESIGN SYSTEM — BASE STYLES
-   Reset + semantic base shared across all apps.
-   Everything is in @layer base so Tailwind utilities always win.
-   Import order in every app globals.css:
-     1. @import "@qoovex/ui/styles/tokens"
-     2. @import "@qoovex/ui/styles/base"
-     3. @import "tailwindcss"
-     4. @source "../../../../packages/ui/src"
 ═══════════════════════════════════════════════════════════════ */
-
-@import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=chillax@400,500,600,700&display=swap");
 
 @layer base {
   /* ─── Reset ──────────────────────────────────────────────────────────────── */
