@@ -13,7 +13,7 @@ export default function HomePage() {
         <p>Il workspace per chef professionisti</p>
         <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
           <a
-            href="http://localhost:3003/auth/sign-in"
+            href="https://app.qoovex.com/sign-in"
             style={{
               padding: "0.75rem 1.5rem",
               background: "#000",
@@ -25,7 +25,7 @@ export default function HomePage() {
             Accedi
           </a>
           <a
-            href="http://localhost:3003/auth/sign-up"
+            href="https://app.qoovex.com/sign-up"
             style={{
               padding: "0.75rem 1.5rem",
               border: "1px solid #000",

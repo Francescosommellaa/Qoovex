@@ -26,7 +26,7 @@
     "frontend": "Next.js 15 App Router + React + TypeScript",
     "styling": "Tailwind CSS v4 with semantic tokens",
     "database": "Prisma + Vercel Postgres",
-    "auth": "Clerk",
+    "auth": "Clerk — installed ONLY in apps/workspace, never in apps/web",
     "file_storage": "Vercel Blob",
     "hosting": "Vercel",
     "desktop_preferred_stack": "Tauri",
@@ -53,12 +53,50 @@
       "base.css": "packages/ui/styles/base.css — @layer base with reset, html, body, h1-h6, scrollbar, focus-visible, prefers-reduced-motion, font @import. Single source of truth. Never duplicate in apps.",
       "app_globals_css": "Each app's src/app/globals.css contains ONLY: 3 imports + @source + app-specific rules that genuinely differ per app."
     },
-    "transpile_rule": "Every app that imports from @qoovex/ui must have transpilePackages: ['@qoovex/ui'] in its next.config.ts. Without this, Next.js cannot compile the TypeScript in the package.",
+    "transpile_rule": "Every app that imports from a @qoovex/* TypeScript package must list it in transpilePackages in its next.config.ts. Currently required: transpilePackages: ['@qoovex/ui', '@qoovex/db']. Extend the array when new packages are added.",
     "what_goes_in_app_globals": [
       "scroll-padding-top if the app has a fixed header at a specific height",
       "app-specific CSS classes that are not part of the shared design system",
       "nothing else — if you find yourself writing html/body rules in an app globals.css, it belongs in base.css"
     ]
+  },
+  "auth_architecture": {
+    "provider": "Clerk",
+    "decided": "2026-04-15",
+    "scope": "apps/workspace ONLY — Clerk must never be installed in apps/web. Adding Clerk to the marketing site adds unnecessary JS bundle, auth context and ClerkProvider overhead to a static site.",
+    "install_command": "pnpm --filter @qoovex/workspace add @clerk/nextjs",
+    "env_location": "apps/workspace/.env.local — NOT the monorepo root .env",
+    "required_env_vars": [
+      "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+      "CLERK_SECRET_KEY",
+      "NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in",
+      "NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up",
+      "NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard",
+      "NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard"
+    ],
+    "middleware": {
+      "location": "apps/workspace/src/middleware.ts",
+      "pattern": "clerkMiddleware + createRouteMatcher — protect all routes except /sign-in and /sign-up via auth.protect()",
+      "matcher": "exclude _next, static files; include all /api routes"
+    },
+    "provider_wrapper": "ClerkProvider wraps the html element in apps/workspace/src/app/layout.tsx only",
+    "vercel_project": "Qoovex-workspace — Clerk env vars must also be added in the Vercel project environment settings"
+  },
+  "packages_tsconfig_rules": {
+    "decided": "2026-04-15",
+    "problem": "packages/* that contain React hooks or browser APIs must explicitly declare lib and jsx in their tsconfig.json. Without this TypeScript cannot resolve 'react', 'fetch', or any DOM API.",
+    "required_tsconfig_for_packages_with_hooks": {
+      "lib": ["dom", "dom.iterable", "esnext"],
+      "jsx": "react-jsx",
+      "strict": true,
+      "moduleResolution": "bundler",
+      "esModuleInterop": true
+    },
+    "peer_deps_rule": "Any package that uses React hooks must declare react as peerDependency AND devDependency. It must NOT bundle React — consumers provide it.",
+    "correct_package_json_for_utils": {
+      "peerDependencies": { "react": "^18 || ^19" },
+      "devDependencies": { "@types/react": "^19", "react": "^19" }
+    }
   },
   "architecture": {
     "fsd_usage": {
@@ -81,7 +119,7 @@
       "ui": "shared design system and reusable ui — includes styles/tokens.css (@theme), styles/base.css (@layer base reset), src/components/",
       "db": "prisma schema, prisma config, database client",
       "types": "shared types",
-      "utils": "shared pure utilities",
+      "utils": "shared pure utilities — tsconfig must include lib:[dom] and jsx:react-jsx when hooks are present",
       "config": "shared config",
       "brand": "shared brand assets such as logo, icon, marks and other common brand files",
       "ai": "AI providers config, scheduling engine, chat, parsing, recipe matching, vision scan — added 2026-04-10"
@@ -289,7 +327,8 @@
     "rules": [
       "link the correct app directory to the correct Vercel project",
       "Blob belongs to workspace",
-      "database env must be real before running prisma push"
+      "database env must be real before running prisma push",
+      "Clerk env vars (NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY) must be set in Vercel project Qoovex-workspace — never in the apps/web Vercel project"
     ]
   },
   "confirmed_decisions": [
@@ -388,6 +427,48 @@
       "key": "tailwind_v4_source_path",
       "decision": "@source path in globals.css is '../../../../packages/ui/src' — relative to the CSS file location (apps/X/src/app/globals.css), 4 levels up to monorepo root, then into packages/ui/src.",
       "reason": "Tailwind v4 does not auto-scan workspace packages. Without @source, utility classes used in packages/ui components are never generated in the CSS output."
+    },
+    {
+      "date": "2026-04-15",
+      "key": "clerk_scope",
+      "decision": "Clerk (@clerk/nextjs) is installed ONLY in apps/workspace. apps/web must never have @clerk/nextjs as a dependency.",
+      "reason": "Clerk adds ClerkProvider, auth context and JS bundle overhead that is completely unnecessary on a static marketing site. It slows down page load for zero benefit."
+    },
+    {
+      "date": "2026-04-15",
+      "key": "clerk_env_location",
+      "decision": "Clerk env vars live in apps/workspace/.env.local — not in the monorepo root .env, not in apps/web.",
+      "reason": "Scoping env vars to the correct app prevents accidental exposure and keeps each app's environment self-contained."
+    },
+    {
+      "date": "2026-04-15",
+      "key": "clerk_middleware_pattern",
+      "decision": "apps/workspace/src/middleware.ts uses clerkMiddleware + createRouteMatcher. Public routes: /sign-in(.*) and /sign-up(.*). All other routes call auth.protect().",
+      "reason": "standard Clerk v6 pattern — explicit allowlist of public routes is safer than a blocklist."
+    },
+    {
+      "date": "2026-04-15",
+      "key": "packages_utils_tsconfig",
+      "decision": "packages/utils tsconfig.json must include lib:[dom, dom.iterable, esnext] and jsx:react-jsx when the package contains React hooks or uses fetch/browser APIs.",
+      "reason": "Without lib:dom TypeScript does not know about fetch, Response, or any browser global. Without jsx:react-jsx React hooks cannot be compiled. Both errors appeared as real TS errors in this session."
+    },
+    {
+      "date": "2026-04-15",
+      "key": "packages_react_peer_dep",
+      "decision": "packages/utils (and any package with hooks) must declare react as peerDependency AND devDependency. Never bundle React inside a shared package.",
+      "reason": "Without the peer dep declaration TypeScript cannot resolve 'react' and the hook file produces 'Cannot find module react' errors."
+    },
+    {
+      "date": "2026-04-15",
+      "key": "transpile_packages_rule",
+      "decision": "apps/workspace/next.config.ts must have transpilePackages: ['@qoovex/ui', '@qoovex/db']. When a new @qoovex/* package is imported by the app, add it to this array immediately.",
+      "reason": "Next.js cannot compile TypeScript in monorepo packages without explicit transpilePackages. Missing this entry produces 'Cannot find module @qoovex/db' at compile time."
+    },
+    {
+      "date": "2026-04-15",
+      "key": "explicit_types_in_callbacks",
+      "decision": "All parameters in async callbacks (.then, .filter, .map, setState updaters) must be explicitly typed. Implicit any is a compile error under strict mode.",
+      "reason": "TypeScript strict mode treats implicit any as TS7006. Always define a local type at the top of the file and annotate every callback parameter."
     }
   ],
   "rejected_choices": [
@@ -426,6 +507,22 @@
     {
       "choice": "duplicating html/body/reset rules in each app globals.css",
       "reason": "three identical CSS blocks will drift over time — all shared base rules belong in packages/ui/styles/base.css"
+    },
+    {
+      "choice": "installing @clerk/nextjs in apps/web",
+      "reason": "Clerk is useless on a marketing site and adds unnecessary JS weight and auth context overhead to a static site"
+    },
+    {
+      "choice": "Clerk env vars in the monorepo root .env",
+      "reason": "root .env leaks auth secrets to apps that do not need them — env vars must be scoped to apps/workspace/.env.local"
+    },
+    {
+      "choice": "packages/utils without lib:dom in tsconfig",
+      "reason": "TypeScript cannot resolve fetch, Response, or any browser global without lib:dom — causes 'Cannot find name fetch' errors on every fetch() call"
+    },
+    {
+      "choice": "React bundled inside a shared package instead of peerDependency",
+      "reason": "causes version conflicts and prevents TypeScript from resolving 'react' in the package — React must always be a peer dep"
     }
   ],
   "known_pitfalls": [
@@ -491,13 +588,38 @@
     },
     {
       "problem": "missing transpilePackages in next.config.ts",
-      "bad_example": "importing @qoovex/ui in an app without transpilePackages: ['@qoovex/ui'] — Next.js cannot compile the TypeScript",
-      "avoid_by": "every app that uses @qoovex/ui must have transpilePackages: ['@qoovex/ui'] in its next.config.ts"
+      "bad_example": "importing @qoovex/db in apps/workspace without adding it to transpilePackages — TS error: Cannot find module '@qoovex/db'",
+      "avoid_by": "every @qoovex/* TypeScript package imported by an app must be listed in transpilePackages in that app's next.config.ts"
     },
     {
       "problem": "duplicating html/body/reset CSS in app globals.css",
       "bad_example": "each app globals.css has identical body { font-family: var(--font-body); background-color: var(--color-bg) } blocks",
       "avoid_by": "all shared base rules live in packages/ui/styles/base.css — app globals.css only has imports + @source + app-specific rules"
+    },
+    {
+      "problem": "Clerk installed in apps/web",
+      "bad_example": "pnpm --filter @qoovex/web add @clerk/nextjs and wrapping the marketing layout in ClerkProvider",
+      "avoid_by": "Clerk must only be installed in apps/workspace via pnpm --filter @qoovex/workspace add @clerk/nextjs"
+    },
+    {
+      "problem": "Clerk env vars in the wrong location",
+      "bad_example": "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY in the monorepo root .env or in apps/web/.env.local",
+      "avoid_by": "Clerk env vars belong only in apps/workspace/.env.local and in the Vercel project Qoovex-workspace environment settings"
+    },
+    {
+      "problem": "packages/utils tsconfig missing lib:dom",
+      "bad_example": "packages/utils/tsconfig.json without lib:[dom] — causes 'Cannot find name fetch' on every fetch() call in hooks",
+      "avoid_by": "add lib:[dom, dom.iterable, esnext] and jsx:react-jsx to the tsconfig of any package that uses hooks or browser APIs"
+    },
+    {
+      "problem": "packages/utils missing React peer dependency",
+      "bad_example": "packages/utils uses useState/useEffect but react is not in peerDependencies — TypeScript: Cannot find module 'react'",
+      "avoid_by": "add react to peerDependencies and @types/react + react to devDependencies in packages/utils/package.json"
+    },
+    {
+      "problem": "implicit any in TypeScript callbacks",
+      "bad_example": ".then(r => r.json()).then(data => ...) — TS7006: Parameter 'r' implicitly has an 'any' type",
+      "avoid_by": "always annotate callback parameters explicitly: .then((r: Response) => r.json()).then((data: MyType[]) => ...). Define a local type at the top of the file."
     }
   ],
   "approved_patterns": [
@@ -511,7 +633,12 @@
     "Prisma $transaction for all stock mutations",
     "CSS import order: tokens → base → tailwindcss → @source",
     "@layer base for all reset and semantic base styles — utilities always win",
-    "single source of truth for CSS: tokens in tokens.css, base reset in base.css, app-specific only in app globals.css"
+    "single source of truth for CSS: tokens in tokens.css, base reset in base.css, app-specific only in app globals.css",
+    "Clerk only in apps/workspace — never in apps/web",
+    "env vars scoped to the app that needs them — app-specific secrets never in the monorepo root .env",
+    "packages with hooks must declare lib:[dom, dom.iterable, esnext] and jsx:react-jsx in tsconfig.json",
+    "packages with hooks must list react as peerDependency + devDependency, never bundled",
+    "always use explicit types in async callbacks — no implicit any"
   ],
   "do_not_break": [
     "plan limits",
@@ -528,7 +655,9 @@
     "CSS architecture: tokens.css + base.css as single source of truth — never duplicate in apps",
     "@theme without static — CSS vars must be emitted to :root",
     "@source in every app globals.css pointing to packages/ui/src",
-    "@layer base wrapping all rules in base.css"
+    "@layer base wrapping all rules in base.css",
+    "Clerk must never be added to apps/web",
+    "transpilePackages in apps/workspace/next.config.ts must include every @qoovex/* package the app imports"
   ],
   "current_state": {
     "bootstrap": "completed",
@@ -538,13 +667,21 @@
     "prisma_configured": true,
     "work_plan_spec": "completed — see work-plan-feature-spec.md",
     "css_architecture": "stabilized — packages/ui/styles/tokens.css + base.css as shared foundation",
+    "clerk_setup": "in progress — install command, middleware pattern, ClerkProvider placement and env vars all documented in auth_architecture. Not yet applied to repo.",
+    "packages_utils_errors": "diagnosed 2026-04-15 — three root causes: (1) @clerk/nextjs not installed → fix: Step 1 of Clerk guide. (2) @qoovex/db not found → fix: add to transpilePackages in next.config.ts. (3) implicit any + missing lib:dom → fix: tsconfig + peer dep + explicit types in use-recent-searches.ts.",
     "next_focus": [
-      "setup Clerk in apps/workspace",
-      "protect routes",
-      "create authenticated app shell",
-      "bootstrap user in database",
-      "build Recipes CRUD",
-      "— then: work plan (after recipes, ingredients, menus)"
+      "1. pnpm --filter @qoovex/workspace add @clerk/nextjs",
+      "2. create apps/workspace/.env.local with Clerk vars",
+      "3. create apps/workspace/src/middleware.ts (clerkMiddleware pattern)",
+      "4. wrap layout.tsx with ClerkProvider",
+      "5. fix packages/utils/tsconfig.json — add lib:[dom,dom.iterable,esnext] and jsx:react-jsx",
+      "6. fix packages/utils/package.json — add react peerDependency",
+      "7. add explicit types to packages/utils/src/hooks/use-recent-searches.ts",
+      "8. add @qoovex/db to transpilePackages in apps/workspace/next.config.ts",
+      "9. bootstrap User in database after Clerk is working",
+      "10. build authenticated app shell (layout, sidebar, navigation)",
+      "11. build Recipes CRUD",
+      "— then: menus, allergens, nutrition, shopping list, explore, work plan"
     ]
   },
   "implementation_order": [
@@ -623,6 +760,36 @@
       "date": "2026-04-13",
       "type": "design",
       "note": "changed primary color from Corallo Tartare (oklch 0.68 0.18 22) to Ink Slate (oklch 0.42 0.05 240 / #4A5E72) — coral was too close to error red and misaligned with Qoovex's professional identity. Ink Slate reads as precision, control, craft."
+    },
+    {
+      "date": "2026-04-15",
+      "type": "decision",
+      "note": "established Clerk scope rule: @clerk/nextjs installed ONLY in apps/workspace via 'pnpm --filter @qoovex/workspace add @clerk/nextjs'. apps/web must never have Clerk. Full auth_architecture section added to brain."
+    },
+    {
+      "date": "2026-04-15",
+      "type": "decision",
+      "note": "established Clerk middleware pattern: clerkMiddleware + createRouteMatcher in apps/workspace/src/middleware.ts. Public routes: /sign-in(.*) and /sign-up(.*). All others protected via auth.protect()."
+    },
+    {
+      "date": "2026-04-15",
+      "type": "diagnosis",
+      "note": "diagnosed TS errors in apps/workspace/src/app/api/recent-searches/route.ts: (1) Cannot find module '@clerk/nextjs/server' — Clerk not yet installed. (2) Cannot find module '@qoovex/db' — missing transpilePackages in next.config.ts. (3) implicit any params — missing explicit types in fetch callbacks."
+    },
+    {
+      "date": "2026-04-15",
+      "type": "diagnosis",
+      "note": "diagnosed TS errors in packages/utils/src/hooks/use-recent-searches.ts: (1) Cannot find module 'react' — missing peerDependency + tsconfig jsx. (2) Cannot find name 'fetch' — tsconfig missing lib:dom. (3) 12x implicit any — all callback parameters need explicit types with a local RecentSearch type."
+    },
+    {
+      "date": "2026-04-15",
+      "type": "decision",
+      "note": "established packages/* tsconfig rule: any package with React hooks or browser APIs must have lib:[dom, dom.iterable, esnext] and jsx:react-jsx. React must be peerDependency + devDependency, never bundled. Added packages_tsconfig_rules section to brain."
+    },
+    {
+      "date": "2026-04-15",
+      "type": "decision",
+      "note": "clarified transpilePackages rule: apps/workspace/next.config.ts must list all @qoovex/* TypeScript packages it imports. Currently: ['@qoovex/ui', '@qoovex/db']. Extend when new packages are added."
     }
   ]
 }
