@@ -10,11 +10,14 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.2.1",
     "@qoovex/ui": "workspace:*",
+    "@qoovex/utils": "workspace:*",
     "@vercel/analytics": "^2.0.1",
     "next": "15.5.14",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "svix": "^1.90.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

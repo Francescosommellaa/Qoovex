@@ -12,6 +12,15 @@
     "db:migrate": "turbo run db:migrate --filter=@qoovex/db",
     "db:workspace": "turbo run db:workspace --filter=@qoovex/db"
   },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [],
+      "allowedVersions": {
+        "@clerk/nextjs>react": "19",
+        "@clerk/nextjs>react-dom": "19"
+      }
+    }
+  },
   "devDependencies": {
     "turbo": "^2.5.0"
   },
