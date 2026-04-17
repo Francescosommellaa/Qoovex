@@ -80,7 +80,30 @@
       "matcher": "exclude _next, static files; include all /api routes"
     },
     "provider_wrapper": "ClerkProvider wraps the html element in apps/workspace/src/app/layout.tsx only",
-    "vercel_project": "Qoovex-workspace — Clerk env vars must also be added in the Vercel project environment settings"
+    "vercel_project": "Qoovex-workspace — Clerk env vars must also be added in the Vercel project environment settings",
+    "route_structure": {
+      "internal_organization": "Auth pages in apps/workspace are organized under the Next.js route group apps/workspace/src/app/(auth)/ so the feature stays grouped internally without exposing 'auth' in the public URL.",
+      "public_routes": ["/sign-in", "/sign-up"],
+      "note": "The route group name '(auth)' must never appear in the public URL."
+    },
+    "marketing_to_workspace_linking": {
+      "rule": "apps/web must link to workspace auth pages with absolute URLs on the workspace domain, not relative paths.",
+      "production_urls": [
+        "https://app.qoovex.com/sign-in",
+        "https://app.qoovex.com/sign-up"
+      ],
+      "reason": "apps/web and apps/workspace are separate apps and separate Vercel projects."
+    },
+    "webhook_status": {
+      "production_user_created_webhook": "not active yet",
+      "email_delivery_webhook": "not implemented",
+      "note": "Do not mix user bootstrap and email delivery until production auth is stable."
+    },
+    "production_auth_status": {
+      "local_status": "working",
+      "production_status": "partially configured but not fully stable",
+      "blocking_issue": "Clerk custom frontend domain clerk.qoovex.com failed to load Clerk JS in production due to SSL/TLS error (ERR_SSL_VERSION_OR_CIPHER_MISMATCH)."
+    }
   },
   "packages_tsconfig_rules": {
     "decided": "2026-04-15",
@@ -532,6 +555,16 @@
       "avoid_by": "use only real connection strings"
     },
     {
+      "problem": "middleware public route mismatch after moving auth routes",
+      "bad_example": "middleware still whitelists /auth(.*) after public routes were changed to /sign-in and /sign-up, causing production 500 MIDDLEWARE_INVOCATION_FAILED",
+      "avoid_by": "Whenever auth route structure changes, immediately align createRouteMatcher() with the real public URLs."
+    },
+    {
+      "problem": "Clerk custom frontend domain SSL/TLS incomplete or misconfigured",
+      "bad_example": "Clerk pages load locally but production auth renders blank/black because clerk.qoovex.com fails to load clerk.browser.js with ERR_SSL_VERSION_OR_CIPHER_MISMATCH",
+      "avoid_by": "Do not keep a custom Clerk frontend domain active unless its DNS and SSL certificate are fully healthy. If production auth is blocked, temporarily revert to the default Clerk frontend domain and re-test before continuing."
+    },
+    {
       "problem": "conflicting env files",
       "bad_example": "fake root .env and duplicated database variables",
       "avoid_by": "keep envs only where they are actually needed"
@@ -667,20 +700,20 @@
     "prisma_configured": true,
     "work_plan_spec": "completed — see work-plan-feature-spec.md",
     "css_architecture": "stabilized — packages/ui/styles/tokens.css + base.css as shared foundation",
-    "clerk_setup": "in progress — install command, middleware pattern, ClerkProvider placement and env vars all documented in auth_architecture. Not yet applied to repo.",
+    "clerk_setup": "partially applied to repo. @clerk/nextjs is installed in apps/workspace, auth routes are organized under the (auth) route group, public routes are /sign-in and /sign-up, middleware allowlist is aligned to those routes, and local Clerk auth renders correctly. Production auth is not fully closed because Clerk JS fails to load from the custom frontend domain clerk.qoovex.com due to SSL/TLS issues.",
     "packages_utils_errors": "diagnosed 2026-04-15 — three root causes: (1) @clerk/nextjs not installed → fix: Step 1 of Clerk guide. (2) @qoovex/db not found → fix: add to transpilePackages in next.config.ts. (3) implicit any + missing lib:dom → fix: tsconfig + peer dep + explicit types in use-recent-searches.ts.",
     "next_focus": [
-      "1. pnpm --filter @qoovex/workspace add @clerk/nextjs",
-      "2. create apps/workspace/.env.local with Clerk vars",
-      "3. create apps/workspace/src/middleware.ts (clerkMiddleware pattern)",
-      "4. wrap layout.tsx with ClerkProvider",
-      "5. fix packages/utils/tsconfig.json — add lib:[dom,dom.iterable,esnext] and jsx:react-jsx",
-      "6. fix packages/utils/package.json — add react peerDependency",
-      "7. add explicit types to packages/utils/src/hooks/use-recent-searches.ts",
-      "8. add @qoovex/db to transpilePackages in apps/workspace/next.config.ts",
-      "9. bootstrap User in database after Clerk is working",
-      "10. build authenticated app shell (layout, sidebar, navigation)",
-      "11. build Recipes CRUD",
+      "1. Stabilize Clerk production auth by fixing or temporarily removing the custom Clerk frontend domain clerk.qoovex.com",
+      "2. Confirm production /sign-in and /sign-up render correctly on app.qoovex.com",
+      "3. Create and test the Clerk production webhook for user.created",
+      "4. Bootstrap User in database end-to-end after production auth is stable",
+      "5. Decide email strategy: Clerk-managed delivery first or Resend custom delivery later",
+      "6. Fix packages/utils/tsconfig.json — add lib:[dom,dom.iterable,esnext] and jsx:react-jsx",
+      "7. Fix packages/utils/package.json — add react peerDependency + devDependency",
+      "8. Add explicit types to packages/utils/src/hooks/use-recent-searches.ts",
+      "9. Add @qoovex/db to transpilePackages in apps/workspace/next.config.ts if still missing",
+      "10. Build authenticated app shell (layout, sidebar, navigation)",
+      "11. Build Recipes CRUD",
       "— then: menus, allergens, nutrition, shopping list, explore, work plan"
     ]
   },
@@ -704,7 +737,11 @@
     "work plan — phase 6: Import from Menu Vision (PRO+)",
     "desktop app"
   ],
-  "open_questions": [],
+  "open_questions": [
+    "Should Qoovex keep the custom Clerk frontend domain clerk.qoovex.com now, or temporarily fall back to the default Clerk domain until production auth is stable?",
+    "When should the production Clerk webhook for user.created be activated and tested end-to-end with database bootstrap?",
+    "Should initial auth-related emails remain Clerk-managed for launch simplicity, with Resend postponed until after production auth is stable?"
+  ],
   "recent_changes": [
     {
       "date": "2026-04-06",
@@ -790,6 +827,31 @@
       "date": "2026-04-15",
       "type": "decision",
       "note": "clarified transpilePackages rule: apps/workspace/next.config.ts must list all @qoovex/* TypeScript packages it imports. Currently: ['@qoovex/ui', '@qoovex/db']. Extend when new packages are added."
+    },
+    {
+      "date": "2026-04-15",
+      "type": "auth",
+      "note": "Auth pages in apps/workspace were reorganized under the Next.js route group apps/workspace/src/app/(auth)/ so the feature stays grouped internally while public URLs remain /sign-in and /sign-up."
+    },
+    {
+      "date": "2026-04-15",
+      "type": "auth",
+      "note": "apps/web entry links were aligned to the separate workspace app and now must point to the production workspace domain (https://app.qoovex.com/sign-in and /sign-up), not to relative paths or localhost."
+    },
+    {
+      "date": "2026-04-15",
+      "type": "fix",
+      "note": "Middleware public route matcher was corrected after auth URLs changed. Public routes must match /sign-in(.*), /sign-up(.*), and webhook routes. Leaving /auth(.*) in the matcher causes auth failures."
+    },
+    {
+      "date": "2026-04-15",
+      "type": "status",
+      "note": "Clerk auth works locally on workspace routes, but production auth is still incomplete. The remaining blocker is Clerk JS failing to load from the custom frontend domain clerk.qoovex.com because of SSL/TLS issues."
+    },
+    {
+      "date": "2026-04-15",
+      "type": "status",
+      "note": "Production Clerk webhook for user.created has not been activated yet. Resend-based Clerk email delivery was discussed but intentionally postponed until production auth becomes stable."
     }
   ]
 }
