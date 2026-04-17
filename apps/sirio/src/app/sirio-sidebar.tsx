@@ -11,7 +11,8 @@ const sections = [
   { id: "pulsanti", label: "Button" },
   { id: "input", label: "Input" },
   { id: "textarea", label: "Textarea" },
-  { id: "searchbar", label: "SearchBar" },
+  { id: "smartsearchbar", label: "Smart Search Bar" },
+  { id: "searchbar", label: "Search Bar" },
   { id: "card", label: "Card" },
   { id: "badge", label: "Badge" },
   { id: "form", label: "Form" },
@@ -69,10 +70,12 @@ function SidebarLink({ id, label }: { id: string; label: string }) {
         }}
         onMouseEnter={(e) => {
           (e.currentTarget as HTMLElement).style.color = "#ededed";
-          (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)";
+          (e.currentTarget as HTMLElement).style.background =
+            "rgba(255,255,255,0.06)";
         }}
         onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.color = "rgba(237,237,237,0.6)";
+          (e.currentTarget as HTMLElement).style.color =
+            "rgba(237,237,237,0.6)";
           (e.currentTarget as HTMLElement).style.background = "transparent";
         }}
       >

@@ -71,10 +71,16 @@ export const SECTIONS = [
     description: "Multiline, auto-grow, resize",
   },
   {
-    id: "searchbar",
-    label: "SearchBar",
+    id: "smartsearchbar",
+    label: "Smart Search Bar",
     icon: "⊙",
     description: "Ricerca globale con clear",
+  },
+  {
+    id: "searchbar",
+    label: "Search Bar",
+    icon: "⌕",
+    description: "Filtro classico locale",
   },
   {
     id: "select",
@@ -234,6 +240,7 @@ export const SECTION_STATUS: Record<SectionId, SectionStatus> = {
   button: "done",
   input: "done",
   textarea: "done",
+  smartsearchbar: "done",
   searchbar: "done",
   select: "coming-soon",
   card: "coming-soon",

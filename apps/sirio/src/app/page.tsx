@@ -18,8 +18,8 @@ import { SezioneZindex } from "../sections/sezione-zindex";
 import { SezioneButton } from "../sections/sezione-button";
 import { SezioneInput } from "../sections/sezione-input";
 import { SezioneTextarea } from "@/sections/sezione-textarea";
+import { SezioneSmartSearchBar } from "@/sections/sezione-smart-search-bar";
 import { SezioneSearchBar } from "@/sections/sezione-search-bar";
-
 const SECTIONS_LOCAL = [
   {
     id: "fondamenta",
@@ -680,6 +680,7 @@ export default function SirioPage() {
           <SezioneButton />
           <SezioneInput />
           <SezioneTextarea />
+          <SezioneSmartSearchBar />
           <SezioneSearchBar />
 
           {/* Sezioni componenti — coming soon */}

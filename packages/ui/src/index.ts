@@ -13,10 +13,14 @@ export type {
   TextareaVariant,
 } from "./components/textarea";
 
-// Search Bar
-export { SearchBar } from "./components/search-bar";
+// SmartSearchBar
+export { SmartSearchBar } from "./components/smart-search-bar";
 export type {
-  SearchBarProps,
+  SmartSearchBarProps,
   SearchResult,
   SearchResultCategory,
-} from "./components/search-bar";
+} from "./components/smart-search-bar";
+
+// SearchBar
+export { SearchBar } from "./components/search-bar";
+export type { SearchBarProps } from "./components/search-bar";
