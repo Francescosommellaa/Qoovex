@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Lock, Search, Eye, User } from "lucide-react";
+import { Mail, Lock, Search, User } from "lucide-react";
 import { Input } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-// ─── Helper ──────────────────────────────────────────────────────
 
 function Row({
   label,
@@ -43,8 +41,6 @@ function Row({
   );
 }
 
-// ─── Sezione ─────────────────────────────────────────────────────
-
 export function SezioneInput() {
   const [emailValue, setEmailValue] = useState("");
 
@@ -59,20 +55,17 @@ export function SezioneInput() {
     <section id="input" className="sirio-section">
       <SectionHeader label="Input" id="input" />
 
-      {/* Default */}
       <Row label="Default">
         <Input label="Nome chef" placeholder="Mario Rossi" />
         <Input label="Senza label" placeholder="Placeholder visibile" />
       </Row>
 
-      {/* Sizes */}
       <Row label="Sizes">
         <Input size="sm" label="Small" placeholder="Piccolo" />
         <Input size="md" label="Medium" placeholder="Medio (default)" />
         <Input size="lg" label="Large" placeholder="Grande" />
       </Row>
 
-      {/* Icon leading */}
       <Row label="Icon leading">
         <Input
           label="Email"
@@ -86,34 +79,31 @@ export function SezioneInput() {
         />
         <Input
           label="Cerca"
-          placeholder="Cerca ricette…"
+          placeholder="Cerca ricette..."
           iconLeading={<Search size={16} strokeWidth={1.5} />}
         />
       </Row>
 
-      {/* Icon trailing */}
       <Row label="Icon trailing">
         <Input
           label="Password"
           type="password"
-          placeholder="••••••••"
+          placeholder="........"
           iconLeading={<Lock size={16} strokeWidth={1.5} />}
           showPasswordToggle
           showStrength
         />
       </Row>
 
-      {/* Helper text */}
       <Row label="Helper text">
         <Input
           label="Username"
           placeholder="chef_mario"
-          helperText="Sarà visibile pubblicamente nella sezione Esplora."
+          helperText="Sara visibile pubblicamente nella sezione Esplora."
         />
       </Row>
 
-      {/* Status error */}
-      <Row label="Status — error">
+      <Row label="Status - error">
         <Input
           label="Email"
           placeholder="chef@ristorante.it"
@@ -124,8 +114,7 @@ export function SezioneInput() {
         />
       </Row>
 
-      {/* Status success */}
-      <Row label="Status — success">
+      <Row label="Status - success">
         <Input
           label="Username"
           placeholder="chef_mario"
@@ -136,8 +125,7 @@ export function SezioneInput() {
         />
       </Row>
 
-      {/* Disabled */}
-      <Row label="State — disabled">
+      <Row label="State - disabled">
         <Input
           label="Piano attivo"
           value="Pro"
@@ -146,14 +134,13 @@ export function SezioneInput() {
         />
       </Row>
 
-      {/* Esempio live: validazione email */}
-      <Row label="Live — validazione email">
+      <Row label="Live - validazione email">
         <Input
           label="Email"
           placeholder="chef@ristorante.it"
           iconLeading={<Mail size={16} strokeWidth={1.5} />}
           value={emailValue}
-          onChange={(e) => setEmailValue(e.target.value)}
+          onChange={(event) => setEmailValue(event.target.value)}
           status={emailStatus}
           helperText={
             emailStatus === "error"

@@ -51,7 +51,6 @@ export function SezioneTipografia() {
     <section id="tipografia" className="sirio-section">
       <SectionHeader label="Tipografia" id="tipografia" />
 
-      {/* Font families */}
       <div
         style={{
           display: "grid",
@@ -175,7 +174,6 @@ export function SezioneTipografia() {
         </div>
       </div>
 
-      {/* Type scale */}
       <div
         style={{
           display: "flex",
@@ -199,7 +197,6 @@ export function SezioneTipografia() {
               flexWrap: "wrap",
             }}
           >
-            {/* Token info */}
             <div style={{ minWidth: "160px", flexShrink: 0 }}>
               <div
                 style={{
@@ -231,7 +228,6 @@ export function SezioneTipografia() {
                 {step.weight}
               </div>
             </div>
-            {/* Sample testo */}
             <div
               style={{
                 fontFamily:
@@ -252,7 +248,6 @@ export function SezioneTipografia() {
         ))}
       </div>
 
-      {/* Regole */}
       <div
         style={{
           marginTop: "var(--space-6)",

@@ -72,7 +72,6 @@ function AnimDemo({
           {label}
         </div>
       </div>
-      {/* Demo interattivo */}
       <button
         onMouseEnter={() => setActive(true)}
         onMouseLeave={() => setActive(false)}
@@ -165,7 +164,6 @@ export function SezioneAnimazioni() {
         ))}
       </div>
 
-      {/* Regole */}
       <div
         style={{
           padding: "var(--space-5)",

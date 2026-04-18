@@ -14,8 +14,6 @@ import {
 import { Button } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
 
-// ─── Helper locali ───────────────────────────────────────────────
-
 function Row({
   label,
   children,
@@ -52,8 +50,6 @@ function Row({
   );
 }
 
-// ─── Sezione ─────────────────────────────────────────────────────
-
 export function SezioneButton() {
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
@@ -66,7 +62,6 @@ export function SezioneButton() {
     <section id="button" className="sirio-section">
       <SectionHeader label="Button" id="button" />
 
-      {/* Varianti base */}
       <Row label="Variants">
         <Button variant="primary">Primary</Button>
         <Button variant="secondary">Secondary</Button>
@@ -74,8 +69,7 @@ export function SezioneButton() {
         <Button variant="destructive">Destructive</Button>
       </Row>
 
-      {/* Sizes */}
-      <Row label="Sizes — primary">
+      <Row label="Sizes - primary">
         <Button variant="primary" size="sm">
           Small
         </Button>
@@ -87,7 +81,7 @@ export function SezioneButton() {
         </Button>
       </Row>
 
-      <Row label="Sizes — secondary">
+      <Row label="Sizes - secondary">
         <Button variant="secondary" size="sm">
           Small
         </Button>
@@ -99,7 +93,6 @@ export function SezioneButton() {
         </Button>
       </Row>
 
-      {/* Icon left — icona accenna verso sinistra all'hover */}
       <Row label="Icon left">
         <Button
           variant="primary"
@@ -145,7 +138,6 @@ export function SezioneButton() {
         </Button>
       </Row>
 
-      {/* Icon right — icona accenna verso destra all'hover */}
       <Row label="Icon right">
         <Button
           variant="primary"
@@ -180,11 +172,11 @@ export function SezioneButton() {
           size="md"
           iconRight={<ArrowRight size={14} strokeWidth={2} />}
         >
-          Scopri di più
+          Scopri di piu
         </Button>
       </Row>
 
-      <Row label="Icon swap (Apple style) — hover to see">
+      <Row label="Icon swap">
         <Button
           variant="primary"
           size="sm"
@@ -237,7 +229,7 @@ export function SezioneButton() {
             to: <ArrowRight size={14} strokeWidth={2} />,
           }}
         >
-          Scopri di più
+          Scopri di piu
         </Button>
 
         <Button
@@ -252,8 +244,7 @@ export function SezioneButton() {
         </Button>
       </Row>
 
-      {/* Disabled — nessun hover, nessuna animazione */}
-      <Row label="State — disabled">
+      <Row label="State - disabled">
         <Button
           variant="primary"
           disabled
@@ -280,30 +271,29 @@ export function SezioneButton() {
         </Button>
       </Row>
 
-      {/* Loading — click to trigger */}
-      <Row label="State — loading (click to trigger)">
+      <Row label="State - loading">
         {(["primary", "secondary", "ghost", "destructive"] as const).map(
-          (v) => (
+          (variant) => (
             <Button
-              key={v}
-              variant={v}
-              loading={loadingId === v}
-              onClick={() => simulateLoad(v)}
+              key={variant}
+              variant={variant}
+              loading={loadingId === variant}
+              onClick={() => simulateLoad(variant)}
             >
-              {v.charAt(0).toUpperCase() + v.slice(1)}
+              {variant.charAt(0).toUpperCase() + variant.slice(1)}
             </Button>
           ),
         )}
       </Row>
 
-      {/* Matrix completa */}
-      <Row label="Matrix — all variants × all sizes">
-        {(["primary", "secondary", "ghost", "destructive"] as const).map((v) =>
-          (["sm", "md", "lg"] as const).map((s) => (
-            <Button key={`${v}-${s}`} variant={v} size={s}>
-              {v} {s}
-            </Button>
-          )),
+      <Row label="Matrix - variants x sizes">
+        {(["primary", "secondary", "ghost", "destructive"] as const).map(
+          (variant) =>
+            (["sm", "md", "lg"] as const).map((size) => (
+              <Button key={`${variant}-${size}`} variant={variant} size={size}>
+                {variant} {size}
+              </Button>
+            )),
         )}
       </Row>
     </section>

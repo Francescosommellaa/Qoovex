@@ -2,14 +2,13 @@
 
 import * as React from "react";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { cn, mergeRefs } from "../lib/utils";
 
 export type TextareaStatus = "default" | "error" | "success";
 export type TextareaVariant = "auto" | "fixed" | "static";
 
-export interface TextareaProps extends Omit<
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  "style"
-> {
+export interface TextareaProps
+  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "style"> {
   label?: string;
   helperText?: string;
   status?: TextareaStatus;
@@ -39,8 +38,6 @@ const STATUS_HELPER: Record<TextareaStatus, string> = {
   success: "text-[var(--color-input-helper-success)]",
 };
 
-// ─── ResizeHandle ─────────────────────────────────────────────────
-
 function ResizeHandle() {
   return (
     <svg
@@ -50,7 +47,7 @@ function ResizeHandle() {
       viewBox="0 0 10 10"
       fill="currentColor"
       aria-hidden="true"
-      className="cursor-ns-resize text-[var(--color-text-faint)] opacity-40 shrink-0"
+      className="cursor-ns-resize shrink-0 text-[var(--color-text-faint)] opacity-40"
     >
       <circle cx="3" cy="3" r="1" />
       <circle cx="7" cy="3" r="1" />
@@ -62,15 +59,13 @@ function ResizeHandle() {
   );
 }
 
-// ─── ErrorTooltip ─────────────────────────────────────────────────
-
 function ErrorTooltip({ text }: { text: string }) {
   return (
     <span className="group relative inline-flex items-center">
       <AlertCircle
         size={13}
         strokeWidth={2}
-        className="text-[var(--color-error)] cursor-default"
+        className="cursor-default text-[var(--color-error)]"
         aria-hidden="true"
       />
       <span
@@ -97,8 +92,6 @@ function ErrorTooltip({ text }: { text: string }) {
   );
 }
 
-// ─── useAutoGrow ──────────────────────────────────────────────────
-
 function useAutoGrow(
   ref: React.RefObject<HTMLTextAreaElement | null>,
   value: string | undefined,
@@ -106,21 +99,21 @@ function useAutoGrow(
   maxRows: number,
 ) {
   React.useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el || variant !== "auto") return;
-    el.style.height = "auto";
-    const lh = parseFloat(getComputedStyle(el).lineHeight);
-    const pt = parseFloat(getComputedStyle(el).paddingTop);
-    const pb = parseFloat(getComputedStyle(el).paddingBottom);
-    const maxH = lh * maxRows + pt + pb;
-    const next = Math.min(el.scrollHeight, maxH);
-    el.style.height = `${next}px`;
-    el.style.overflowY = el.scrollHeight > maxH ? "auto" : "hidden";
+    const element = ref.current;
+    if (!element || variant !== "auto") return;
+
+    element.style.height = "auto";
+    const lineHeight = parseFloat(getComputedStyle(element).lineHeight);
+    const paddingTop = parseFloat(getComputedStyle(element).paddingTop);
+    const paddingBottom = parseFloat(getComputedStyle(element).paddingBottom);
+    const maxHeight = lineHeight * maxRows + paddingTop + paddingBottom;
+    const nextHeight = Math.min(element.scrollHeight, maxHeight);
+
+    element.style.height = `${nextHeight}px`;
+    element.style.overflowY =
+      element.scrollHeight > maxHeight ? "auto" : "hidden";
   }, [value, variant, maxRows, ref]);
 }
-
-// ─── useManualResize ──────────────────────────────────────────────
-// Ridimensiona la <textarea> direttamente — non il wrapper
 
 function useManualResize(
   wrapperRef: React.RefObject<HTMLDivElement | null>,
@@ -129,28 +122,31 @@ function useManualResize(
 ) {
   React.useEffect(() => {
     if (variant !== "fixed") return;
+
     const wrapper = wrapperRef.current;
     const textarea = textareaRef.current;
     if (!wrapper || !textarea) return;
+    const textareaElement = textarea;
 
     const handle = wrapper.querySelector<HTMLElement>("[data-resize-handle]");
     if (!handle) return;
 
     let startY = 0;
-    let startH = 0;
+    let startHeight = 0;
 
-    function onMouseDown(e: MouseEvent) {
-      startY = e.clientY;
-      startH = textarea!.offsetHeight;
+    function onMouseDown(event: MouseEvent) {
+      // Resize the textarea itself so the wrapper layout stays stable.
+      startY = event.clientY;
+      startHeight = textareaElement.offsetHeight;
       window.addEventListener("mousemove", onMouseMove);
       window.addEventListener("mouseup", onMouseUp);
-      e.preventDefault();
+      event.preventDefault();
     }
 
-    function onMouseMove(e: MouseEvent) {
-      const next = Math.max(startH + (e.clientY - startY), 80);
-      textarea!.style.height = `${next}px`;
-      textarea!.style.overflowY = "auto";
+    function onMouseMove(event: MouseEvent) {
+      const nextHeight = Math.max(startHeight + (event.clientY - startY), 80);
+      textareaElement.style.height = `${nextHeight}px`;
+      textareaElement.style.overflowY = "auto";
     }
 
     function onMouseUp() {
@@ -162,8 +158,6 @@ function useManualResize(
     return () => handle.removeEventListener("mousedown", onMouseDown);
   }, [wrapperRef, textareaRef, variant]);
 }
-
-// ─── Textarea ────────────────────────────────────────────────────
 
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   function Textarea(
@@ -189,33 +183,24 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ) {
     const inputId = id ?? React.useId();
     const helperId = `${inputId}-helper`;
-
     const [internalValue, setInternalValue] = React.useState(
       (defaultValue as string) ?? "",
     );
     const controlled = value !== undefined;
     const currentValue = controlled ? (value as string) : internalValue;
-
     const innerRef = React.useRef<HTMLTextAreaElement>(null);
     const wrapperRef = React.useRef<HTMLDivElement>(null);
-
-    const setRef = React.useCallback(
-      (node: HTMLTextAreaElement | null) => {
-        (
-          innerRef as React.MutableRefObject<HTMLTextAreaElement | null>
-        ).current = node;
-        if (typeof forwardedRef === "function") forwardedRef(node);
-        else if (forwardedRef) forwardedRef.current = node;
-      },
-      [forwardedRef],
-    );
+    const textareaRef = mergeRefs(innerRef, forwardedRef);
 
     useAutoGrow(innerRef, currentValue, variant, maxRows);
     useManualResize(wrapperRef, innerRef, variant);
 
-    function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-      if (!controlled) setInternalValue(e.target.value);
-      onChange?.(e);
+    function handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+      if (!controlled) {
+        setInternalValue(event.target.value);
+      }
+
+      onChange?.(event);
     }
 
     const errorMessage =
@@ -235,42 +220,34 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       ) : null;
 
     return (
-      <div className="flex flex-col gap-[var(--input-gap)] w-full">
-        {/* Label */}
-        {label && (
+      <div className="flex w-full flex-col gap-[var(--input-gap)]">
+        {label ? (
           <label
             htmlFor={inputId}
-            className={[
-              "text-[length:var(--text-xs)] font-medium text-[var(--color-label)] " +
-                "tracking-[0.03em] uppercase select-none",
-              srOnlyLabel ? "sr-only" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            className={cn(
+              "text-[length:var(--text-xs)] font-medium text-[var(--color-label)] tracking-[0.03em] uppercase select-none",
+              srOnlyLabel && "sr-only",
+            )}
           >
             {label}
           </label>
-        )}
+        ) : null}
 
-        {/* Wrapper */}
         <div
           ref={wrapperRef}
-          className={[
-            "relative flex flex-col w-full overflow-hidden",
+          className={cn(
+            "relative flex w-full flex-col overflow-hidden",
             "rounded-[var(--textarea-radius)]",
             "bg-[var(--color-input-bg)] border",
             "transition-[border-color,box-shadow]",
             "duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
             STATUS_RING[status],
-            disabled ? "opacity-50 pointer-events-none" : "",
+            disabled && "opacity-50 pointer-events-none",
             className,
-          ]
-            .filter(Boolean)
-            .join(" ")}
+          )}
         >
-          {/* Textarea */}
           <textarea
-            ref={setRef}
+            ref={textareaRef}
             id={inputId}
             disabled={disabled}
             aria-describedby={helperId}
@@ -282,7 +259,6 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             className={[
               "w-full bg-transparent outline-none resize-none",
               "px-[var(--textarea-px)] pt-[var(--textarea-py)]",
-              // padding bottom = altezza footer + respiro
               "pb-[var(--spacing-2)]",
               "text-[length:var(--text-sm)] text-[var(--color-text)]",
               "placeholder:text-[var(--color-input-placeholder)]",
@@ -299,10 +275,9 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             {...props}
           />
 
-          {/* Footer — layer 1: gradiente visivo */}
           <div
             aria-hidden="true"
-            className="absolute bottom-0 left-0 right-0 h-7 pointer-events-none z-0"
+            className="pointer-events-none absolute bottom-0 left-0 right-0 z-0 h-7"
             style={{
               background:
                 "linear-gradient(to bottom, transparent 0%, var(--color-input-bg) 65%)",
@@ -311,7 +286,6 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             }}
           />
 
-          {/* Footer — layer 2: contenuto */}
           <div
             className="sticky bottom-0 z-10 flex items-center justify-between px-[var(--textarea-px)] pb-[var(--spacing-1)]"
             aria-hidden="true"
@@ -332,42 +306,42 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               {maxLength ? ` / ${maxLength}` : ""}
             </span>
 
-            <span className="inline-flex items-center gap-[var(--spacing-2)] h-4">
+            <span className="inline-flex h-4 items-center gap-[var(--spacing-2)]">
               {statusNode}
-              {variant === "fixed" && <ResizeHandle />}
+              {variant === "fixed" ? <ResizeHandle /> : null}
             </span>
           </div>
         </div>
 
-        {/* Helper errore — solo mobile/touch */}
-        {status === "error" && errorMessage && (
+        {status === "error" && errorMessage ? (
           <p
             id={helperId}
             role="alert"
             aria-live="polite"
-            className={[
+            className={cn(
               "text-[length:var(--text-xs)]",
-              STATUS_HELPER["error"],
+              STATUS_HELPER.error,
               "[@media(hover:hover)]:hidden",
-            ].join(" ")}
+            )}
           >
             {errorMessage}
           </p>
-        )}
+        ) : null}
 
-        {/* Helper neutro */}
-        {status === "default" && helperText && (
+        {status === "default" && helperText ? (
           <p
             id={helperId}
-            className={[
+            className={cn(
               "text-[length:var(--text-xs)]",
-              STATUS_HELPER["default"],
-            ].join(" ")}
+              STATUS_HELPER.default,
+            )}
           >
             {helperText}
           </p>
-        )}
+        ) : null}
       </div>
     );
   },
 );
+
+Textarea.displayName = "Textarea";

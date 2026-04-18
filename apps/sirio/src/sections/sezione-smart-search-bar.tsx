@@ -5,8 +5,6 @@ import { Plus } from "lucide-react";
 import { Button, SmartSearchBar, type SearchResult } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
 
-// ─── Row ──────────────────────────────────────────────────────────────────────
-
 function Row({
   label,
   children,
@@ -43,8 +41,6 @@ function Row({
   );
 }
 
-// ─── SearchPreview — spazio dinamico basato sull'altezza reale del dropdown ───
-
 function SearchPreview({
   children,
   zIndex = 10,
@@ -56,13 +52,14 @@ function SearchPreview({
   const [extraHeight, setExtraHeight] = useState(0);
 
   useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
+    const element = wrapperRef.current;
+    if (!element) return;
+    const rootElement = element;
 
     function measure() {
-      const dropdown = el!.querySelector<HTMLElement>(".search-bar-dropdown");
+      const dropdown =
+        rootElement.querySelector<HTMLElement>(".search-bar-dropdown");
       if (dropdown) {
-        // Altezza dropdown + 16px di respiro
         setExtraHeight(dropdown.offsetHeight + 16);
       } else {
         setExtraHeight(0);
@@ -71,20 +68,21 @@ function SearchPreview({
 
     measure();
 
-    // Ricalcola se il dropdown cambia dimensione (es. più risultati)
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    // Osserva anche il dropdown se esiste
-    const dropdown = el.querySelector(".search-bar-dropdown");
-    if (dropdown) ro.observe(dropdown);
+    // Keep enough space below the demo when the dropdown grows or remounts.
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(rootElement);
 
-    // MutationObserver per quando il dropdown appare/scompare dal DOM
-    const mo = new MutationObserver(measure);
-    mo.observe(el, { childList: true, subtree: true });
+    const dropdown = rootElement.querySelector(".search-bar-dropdown");
+    if (dropdown) {
+      resizeObserver.observe(dropdown);
+    }
+
+    const mutationObserver = new MutationObserver(measure);
+    mutationObserver.observe(rootElement, { childList: true, subtree: true });
 
     return () => {
-      ro.disconnect();
-      mo.disconnect();
+      resizeObserver.disconnect();
+      mutationObserver.disconnect();
     };
   }, []);
 
@@ -103,8 +101,6 @@ function SearchPreview({
   );
 }
 
-// ─── Mock data ────────────────────────────────────────────────────────────────
-
 const ALL_RESULTS: SearchResult[] = [
   {
     id: "rec1",
@@ -122,27 +118,27 @@ const ALL_RESULTS: SearchResult[] = [
     id: "rcp1",
     category: "recipe",
     label: "Pasta alla Norma",
-    description: "Primo · 4 porzioni",
+    description: "Primo - 4 porzioni",
     badge: "Tua",
   },
   {
     id: "rcp2",
     category: "recipe",
-    label: "Tiramisù classico",
-    description: "Dolce · 6 porzioni",
+    label: "Tiramisu classico",
+    description: "Dolce - 6 porzioni",
     badge: "Tua",
   },
   {
     id: "rcp3",
     category: "recipe",
     label: "Pesto alla genovese",
-    description: "Salsa · 30 min",
+    description: "Salsa - 30 min",
   },
   {
     id: "mn1",
     category: "menu",
     label: "Menu estivo 2025",
-    description: "12 portate · 3 allergie",
+    description: "12 portate - 3 allergie",
     badge: "Attivo",
   },
   {
@@ -155,7 +151,7 @@ const ALL_RESULTS: SearchResult[] = [
     id: "wp1",
     category: "work-plan",
     label: "Servizio sabato sera",
-    description: "3 membri · 8 task",
+    description: "3 membri - 8 task",
     badge: "In corso",
   },
   {
@@ -163,7 +159,7 @@ const ALL_RESULTS: SearchResult[] = [
     category: "action",
     label: "Nuova ricetta",
     description: "Crea una ricetta da zero",
-    shortcut: "⌘N",
+    shortcut: "Cmd+N",
     icon: <Plus size={14} strokeWidth={1.5} />,
   },
   {
@@ -171,7 +167,7 @@ const ALL_RESULTS: SearchResult[] = [
     category: "action",
     label: "Genera menu con IA",
     description: "Costruisci un menu dagli ingredienti",
-    shortcut: "⌘M",
+    shortcut: "Cmd+M",
   },
   {
     id: "ac3",
@@ -195,21 +191,21 @@ const ALL_RESULTS: SearchResult[] = [
   },
 ];
 
-// ─── Sezione ──────────────────────────────────────────────────────────────────
-
 export function SezioneSmartSearchBar() {
   const [isLoading, setIsLoading] = useState(false);
   const [liveQuery, setLiveQuery] = useState("");
   const [lastAction, setLastAction] = useState<string | null>(null);
 
   const liveResults = useMemo(() => {
-    if (!liveQuery.trim())
-      return ALL_RESULTS.filter((r) => r.category === "recent");
-    const q = liveQuery.toLowerCase();
+    if (!liveQuery.trim()) {
+      return ALL_RESULTS.filter((result) => result.category === "recent");
+    }
+
+    const query = liveQuery.toLowerCase();
     return ALL_RESULTS.filter(
-      (r) =>
-        r.label.toLowerCase().includes(q) ||
-        r.description?.toLowerCase().includes(q),
+      (result) =>
+        result.label.toLowerCase().includes(query) ||
+        result.description?.toLowerCase().includes(query),
     );
   }, [liveQuery]);
 
@@ -222,15 +218,15 @@ export function SezioneSmartSearchBar() {
     <section id="smartsearchbar" className="sirio-section">
       <SectionHeader label="Smart Search Bar" id="smartsearchbar" />
 
-      <Row label="Dropdown — risultati raggruppati per categoria">
+      <Row label="Dropdown - risultati per categoria">
         <SearchPreview zIndex={40}>
           <SmartSearchBar
             defaultQuery="pasta"
             results={ALL_RESULTS.filter(
-              (r) =>
-                r.label.toLowerCase().includes("pasta") ||
-                r.category === "action" ||
-                r.category === "command",
+              (result) =>
+                result.label.toLowerCase().includes("pasta") ||
+                result.category === "action" ||
+                result.category === "command",
             )}
             forceOpen
             showHotkey={false}
@@ -238,7 +234,7 @@ export function SezioneSmartSearchBar() {
         </SearchPreview>
       </Row>
 
-      <Row label='Modalità AI — query con "?" o "/ai"'>
+      <Row label='Modalita IA - query con "?" o "/ai"'>
         <SearchPreview zIndex={30}>
           <SmartSearchBar
             defaultQuery="? quali ricette posso fare con zucchine e gamberi"
@@ -249,7 +245,7 @@ export function SezioneSmartSearchBar() {
         </SearchPreview>
       </Row>
 
-      <Row label="State — empty">
+      <Row label="State - empty">
         <SearchPreview zIndex={20}>
           <SmartSearchBar
             defaultQuery="xyzqwerty123"
@@ -260,7 +256,7 @@ export function SezioneSmartSearchBar() {
         </SearchPreview>
       </Row>
 
-      <Row label="State — loading (click per simulare)">
+      <Row label="State - loading">
         <SmartSearchBar
           defaultQuery="Risotto"
           results={[]}
@@ -274,23 +270,23 @@ export function SezioneSmartSearchBar() {
         </div>
       </Row>
 
-      <Row label="Default — collapsed con hotkey">
+      <Row label="Default - collapsed con hotkey">
         <SmartSearchBar showHotkey />
       </Row>
 
-      <Row label='Shortcut custom — prop shortcut="P"'>
+      <Row label='Shortcut custom - prop shortcut="P"'>
         <SmartSearchBar shortcut="P" showHotkey />
       </Row>
 
-      <Row label="Live — digita per cercare, prova /ai o ? per l'IA">
+      <Row label="Live - digita per cercare, prova /ai o ? per l'IA">
         <SmartSearchBar
           results={liveResults}
           value={liveQuery}
           onValueChange={setLiveQuery}
-          onSearch={(q) => setLastAction(`Ricerca: "${q}"`)}
-          onAIQuery={(q) => setLastAction(`IA: "${q}"`)}
+          onSearch={(query) => setLastAction(`Ricerca: "${query}"`)}
+          onAIQuery={(query) => setLastAction(`IA: "${query}"`)}
         />
-        {lastAction && (
+        {lastAction ? (
           <p
             style={{
               fontSize: "var(--text-xs)",
@@ -298,9 +294,9 @@ export function SezioneSmartSearchBar() {
               fontFamily: "monospace",
             }}
           >
-            → {lastAction}
+            -&gt; {lastAction}
           </p>
-        )}
+        ) : null}
       </Row>
     </section>
   );

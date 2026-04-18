@@ -2,15 +2,12 @@
 
 import * as React from "react";
 import { AlertCircle, CheckCircle2, Check, Eye, EyeOff } from "lucide-react";
-
-// ─── Types ───────────────────────────────────────────────────────
+import { cn } from "../lib/utils";
 
 export type InputStatus = "default" | "error" | "success";
 
-export interface InputProps extends Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  "size"
-> {
+export interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   label?: string;
   helperText?: string;
   status?: InputStatus;
@@ -19,24 +16,26 @@ export interface InputProps extends Omit<
   size?: "sm" | "md" | "lg";
   srOnlyLabel?: boolean;
   showStrength?: boolean;
-  /** Mostra il toggle occhio per rivelare/nascondere la password. Solo per type="password". */
+  /** Shows the toggle that reveals or hides the password. */
   showPasswordToggle?: boolean;
 }
-
-// ─── Password strength ───────────────────────────────────────────
 
 interface StrengthCheck {
   key: string;
   label: string;
-  test: (v: string) => boolean;
+  test: (value: string) => boolean;
 }
 
 const STRENGTH_CHECKS: StrengthCheck[] = [
-  { key: "length", label: "8+ car.", test: (v) => v.length >= 8 },
-  { key: "upper", label: "A–Z", test: (v) => /[A-Z]/.test(v) },
-  { key: "lower", label: "a–z", test: (v) => /[a-z]/.test(v) },
-  { key: "digit", label: "0–9", test: (v) => /[0-9]/.test(v) },
-  { key: "special", label: "!@#$", test: (v) => /[^A-Za-z0-9]/.test(v) },
+  { key: "length", label: "8+ car.", test: (value) => value.length >= 8 },
+  { key: "upper", label: "A-Z", test: (value) => /[A-Z]/.test(value) },
+  { key: "lower", label: "a-z", test: (value) => /[a-z]/.test(value) },
+  { key: "digit", label: "0-9", test: (value) => /[0-9]/.test(value) },
+  {
+    key: "special",
+    label: "!@#$",
+    test: (value) => /[^A-Za-z0-9]/.test(value),
+  },
 ];
 
 type StrengthLevel = "empty" | "weak" | "fair" | "good" | "strong";
@@ -65,35 +64,33 @@ const STRENGTH_COLOR_VAR: Record<StrengthLevel, string> = {
   strong: "var(--color-strength-strong)",
 };
 
-// ─── StrengthMeter ───────────────────────────────────────────────
-
 function StrengthMeter({ value }: { value: string }) {
-  const checks = STRENGTH_CHECKS.map((c) => ({
-    ...c,
-    passed: c.test(value),
+  const checks = STRENGTH_CHECKS.map((check) => ({
+    ...check,
+    passed: check.test(value),
   }));
 
-  const score = checks.filter((c) => c.passed).length;
+  const score = checks.filter((check) => check.passed).length;
   const level = getLevel(value.length === 0 ? 0 : score);
   const color = STRENGTH_COLOR_VAR[level];
   const label = STRENGTH_LABEL[level];
 
   return (
     <div
-      className="flex flex-col gap-2 w-full"
+      className="flex w-full flex-col gap-2"
       style={{ minHeight: "3rem" }}
       aria-live="polite"
       aria-label="Sicurezza password"
     >
-      <div className="flex gap-[var(--spacing-1)] w-full" aria-hidden="true">
-        {Array.from({ length: 5 }).map((_, i) => (
+      <div className="flex w-full gap-[var(--spacing-1)]" aria-hidden="true">
+        {Array.from({ length: 5 }).map((_, index) => (
           <span
-            key={i}
+            key={index}
             className="flex-1 rounded-[var(--strength-bar-radius)]"
             style={{
               height: "var(--strength-bar-height)",
               backgroundColor:
-                value.length > 0 && i < score
+                value.length > 0 && index < score
                   ? color
                   : "var(--color-strength-empty)",
               transition: "background-color var(--transition-base)",
@@ -103,7 +100,7 @@ function StrengthMeter({ value }: { value: string }) {
       </div>
 
       <div
-        className="flex items-center justify-end gap-[var(--spacing-1)] w-full overflow-hidden"
+        className="flex w-full items-center justify-end gap-[var(--spacing-1)] overflow-hidden"
         style={{ flexWrap: "nowrap" }}
       >
         <span
@@ -120,16 +117,16 @@ function StrengthMeter({ value }: { value: string }) {
           {value.length > 0 ? label : ""}
         </span>
 
-        {checks.map((c) => (
+        {checks.map((check) => (
           <span
-            key={c.key}
+            key={check.key}
             className={[
               "inline-flex items-center justify-center gap-[2px]",
               "rounded-[var(--radius-full)]",
               "border shrink-0",
               "transition-[background-color,border-color,color]",
               "duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
-              c.passed
+              check.passed
                 ? "bg-[var(--color-success-highlight)] border-[var(--color-success)] text-[var(--color-success)]"
                 : "bg-transparent border-[var(--color-border)] text-[var(--color-text-faint)]",
             ].join(" ")}
@@ -138,20 +135,18 @@ function StrengthMeter({ value }: { value: string }) {
               padding: "2px 7px",
               letterSpacing: "0.03em",
             }}
-            aria-label={`${c.label}: ${c.passed ? "soddisfatto" : "mancante"}`}
+            aria-label={`${check.label}: ${check.passed ? "soddisfatto" : "mancante"}`}
           >
-            {c.passed && (
+            {check.passed ? (
               <Check size={8} strokeWidth={2.5} aria-hidden="true" />
-            )}
-            <span>{c.label}</span>
+            ) : null}
+            <span>{check.label}</span>
           </span>
         ))}
       </div>
     </div>
   );
 }
-
-// ─── ErrorTooltip ────────────────────────────────────────────────
 
 function ErrorTooltip({
   message,
@@ -219,7 +214,6 @@ function ErrorTooltip({
     </>
   );
 }
-// ─── PasswordToggle ──────────────────────────────────────────────
 
 function PasswordToggle({
   revealed,
@@ -252,8 +246,6 @@ function PasswordToggle({
     </button>
   );
 }
-
-// ─── Costanti ────────────────────────────────────────────────────
 
 const SIZE_HEIGHT: Record<NonNullable<InputProps["size"]>, string> = {
   sm: "h-[var(--input-height-sm)] text-[length:var(--text-xs)]",
@@ -294,8 +286,6 @@ const INPUT_BASE =
   "placeholder:text-[var(--color-input-placeholder)] " +
   "disabled:cursor-not-allowed disabled:opacity-50";
 
-// ─── Component ───────────────────────────────────────────────────
-
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   function Input(
     {
@@ -329,16 +319,15 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       showStrength && type === "password"
         ? ((value as string | undefined) ?? internalValue)
         : "";
-
     const [revealed, setRevealed] = React.useState(false);
-
     const resolvedType = type === "password" && revealed ? "text" : type;
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
       if (showStrength && type === "password") {
-        setInternalValue(e.target.value);
+        setInternalValue(event.target.value);
       }
-      onChange?.(e);
+
+      onChange?.(event);
     }
 
     const hasStatusIcon = status === "error" && helperText;
@@ -346,30 +335,28 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const hasToggle = showPasswordToggle && type === "password";
 
     const trailingSlot = (
-      <span className="inline-flex items-center gap-[var(--spacing-2)] shrink-0">
-        {/* iconTrailing esterno */}
-        {!hasStatusIcon && !hasSuccessIcon && iconTrailing && (
+      <span className="inline-flex shrink-0 items-center gap-[var(--spacing-2)]">
+        {!hasStatusIcon && !hasSuccessIcon && iconTrailing ? (
           <span
             className="inline-flex items-center text-[var(--color-input-icon)]"
             aria-hidden="true"
           >
             {iconTrailing}
           </span>
-        )}
+        ) : null}
 
-        {/* Toggle occhio */}
-        {hasToggle && (
+        {hasToggle ? (
           <PasswordToggle
             revealed={revealed}
-            onToggle={() => setRevealed((v) => !v)}
+            onToggle={() => setRevealed((currentValue) => !currentValue)}
           />
-        )}
+        ) : null}
 
-        {/* Status icon */}
-        {hasStatusIcon && (
+        {hasStatusIcon ? (
           <ErrorTooltip message={helperText} inputId={inputId} />
-        )}
-        {hasSuccessIcon && (
+        ) : null}
+
+        {hasSuccessIcon ? (
           <span className="inline-flex items-center" aria-hidden="true">
             <CheckCircle2
               size={14}
@@ -377,46 +364,41 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               className="text-[var(--color-success)]"
             />
           </span>
-        )}
+        ) : null}
       </span>
     );
 
     return (
-      <div className="flex flex-col gap-[var(--input-gap)] w-full">
-        {label && (
+      <div className="flex w-full flex-col gap-[var(--input-gap)]">
+        {label ? (
           <label
             htmlFor={inputId}
-            className={[
-              "text-[length:var(--text-xs)] font-medium text-[var(--color-label)] " +
-                "tracking-[0.03em] uppercase select-none",
-              srOnlyLabel ? "sr-only" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            className={cn(
+              "text-[length:var(--text-xs)] font-medium text-[var(--color-label)] tracking-[0.03em] uppercase select-none",
+              srOnlyLabel && "sr-only",
+            )}
           >
             {label}
           </label>
-        )}
+        ) : null}
 
         <div
-          className={[
+          className={cn(
             WRAPPER_BASE,
             SIZE_HEIGHT[size],
             STATUS_RING[status],
-            disabled ? "opacity-50 pointer-events-none" : "",
+            disabled && "opacity-50 pointer-events-none",
             className,
-          ]
-            .filter(Boolean)
-            .join(" ")}
+          )}
         >
-          {iconLeading && (
+          {iconLeading ? (
             <span
-              className="inline-flex items-center shrink-0 text-[var(--color-input-icon)]"
+              className="inline-flex shrink-0 items-center text-[var(--color-input-icon)]"
               aria-hidden="true"
             >
               {iconLeading}
             </span>
-          )}
+          ) : null}
 
           <input
             ref={ref}
@@ -435,25 +417,25 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {trailingSlot}
         </div>
 
-        {showStrength && type === "password" && (
+        {showStrength && type === "password" ? (
           <StrengthMeter value={passwordValue} />
-        )}
+        ) : null}
 
-        {helperText && (
+        {helperText ? (
           <p
             id={helperId}
-            className={[
+            className={cn(
               "text-[length:var(--text-xs)]",
               STATUS_HELPER[status],
-              status === "error" ? "[@media(hover:hover)]:hidden" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
+              status === "error" && "[@media(hover:hover)]:hidden",
+            )}
           >
             {helperText}
           </p>
-        )}
+        ) : null}
       </div>
     );
   },
 );
+
+Input.displayName = "Input";

@@ -1,10 +1,4 @@
-/* ═══════════════════════════════════════════════════════════════
-   QOOVEX DESIGN SYSTEM — BASE STYLES
-═══════════════════════════════════════════════════════════════ */
-
 @layer base {
-  /* ─── Reset ──────────────────────────────────────────────────────────────── */
-
   *,
   *::before,
   *::after {
@@ -62,21 +56,18 @@
     text-decoration: none;
   }
 
+  /* Textarea resize is handled by component variants. */
   textarea {
     resize: none !important;
     -webkit-appearance: none;
     appearance: none;
   }
 
-  /* ─── Focus globale ──────────────────────────────────────────────────────── */
-
   :focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 3px;
     border-radius: var(--radius-sm);
   }
-
-  /* ─── Scrollbar ──────────────────────────────────────────────────────────── */
 
   ::-webkit-scrollbar {
     width: 4px;
@@ -92,8 +83,6 @@
     border-radius: var(--radius-full);
   }
 
-  /* ─── Reduced motion ─────────────────────────────────────────────────────── */
-
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -107,53 +96,31 @@
     }
   }
 
-  /* ═══════════════════════════════════════════════════════════════════════════
-     SEARCH BAR
-  ═══════════════════════════════════════════════════════════════════════════ */
-
-  /* ─── Root ───────────────────────────────────────────────────────────────── */
-
+  /* Keep overflow visible so the focus ring can extend outside the root. */
   .search-bar-root {
     position: relative;
     width: 100%;
-    /*
-      Il ring vive qui tramite pseudo-elemento ::after.
-      Il root deve essere overflow:visible (default) per non clippare il ring.
-      NON mettere overflow:hidden qui.
-    */
   }
 
-  /*
-    Ring via ::after — abbraccia SOLO il field (top).
-    Quando il dropdown è aperto, la classe --open viene aggiunta al field
-    e il ring del root si estende anche lateralmente in basso tramite
-    il bordo del dropdown stesso (vedi .search-bar-dropdown).
-    Così il ring non ha mai bisogno di "sapere" quanto è alto il dropdown.
-  */
+  /* Split the focus ring between the field and the dropdown. */
   .search-bar-root:focus-within::after {
     content: "";
     position: absolute;
-    /* inset negativo = spessore del ring */
     inset: -3px;
     border-radius: calc(var(--radius-lg) + 3px);
     border: 3px solid oklch(from var(--color-primary) l c h / 0.18);
     pointer-events: none;
     z-index: 51;
-    /* Quando aperto: non coprire il bottom (dropdown continua) */
     transition: border-color var(--transition-interactive);
   }
 
-  /* Quando il dropdown è visibile: taglia il ring in basso */
   .search-bar-root:has(.search-bar-field--open):focus-within::after {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    /* bottom: allineato esattamente al bordo inferiore del field */
-    bottom: calc(-3px - 0px); /* si ferma a filo del field */
-    /* Nasconde il segmento bottom del ring — il dropdown ha già il suo bordo */
+    bottom: calc(-3px - 0px);
     border-bottom-color: transparent;
   }
 
-  /* AI override */
   .search-bar-root:has(.search-bar-field--ai):focus-within::after {
     border-color: oklch(from var(--color-gold) l c h / 0.15);
   }
@@ -164,8 +131,6 @@
     border-color: oklch(from var(--color-gold) l c h / 0.15);
     border-bottom-color: transparent;
   }
-
-  /* ─── Field ──────────────────────────────────────────────────────────────── */
 
   .search-bar-field {
     display: flex;
@@ -192,15 +157,13 @@
     background: var(--color-surface-2);
   }
 
-  /* Aperto: rimuove border-radius e bordo inferiore */
   .search-bar-field--open {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     border-bottom-color: transparent;
   }
 
-  /* ─── Dropdown ───────────────────────────────────────────────────────────── */
-
+  /* The dropdown completes the ring after the field removes its bottom edge. */
   .search-bar-dropdown {
     position: absolute;
     top: 100%;
@@ -208,36 +171,20 @@
     right: 0;
     z-index: 50;
     background: var(--color-surface-2);
-    /*
-      I bordi laterali e inferiore del dropdown completano visivamente
-      il ring che ::after ha interrotto in basso.
-      Usiamo outline (non box-shadow) perché outline non viene clippato
-      dall'overflow dei figli e non sposta il layout.
-    */
     border: 1px solid oklch(from var(--color-primary) l c h / 0.5);
     border-top: none;
     border-bottom-left-radius: var(--radius-lg);
     border-bottom-right-radius: var(--radius-lg);
-    /*
-      overflow:hidden qui clipperebbe il ring — usiamo clip-path sul
-      contenuto interno invece (vedi .search-bar-list e .search-bar-footer).
-      Il contenitore rimane overflow:visible.
-    */
     overflow: visible;
-    /* Ring esterno sul dropdown: lati + bottom, continua dal field */
     outline: 3px solid oklch(from var(--color-primary) l c h / 0.18);
     outline-offset: 0;
-    /* outline non supporta border-radius individuale per lato —
-       usiamo box-shadow solo sui lati e bottom */
     box-shadow:
       -3px 0 0 0 oklch(from var(--color-primary) l c h / 0.18),
       3px 0 0 0 oklch(from var(--color-primary) l c h / 0.18),
       0 3px 0 0 oklch(from var(--color-primary) l c h / 0.18);
-    /* outline: none — usiamo solo box-shadow per controllo chirurgico */
     outline: none;
   }
 
-  /* I figli del dropdown gestiscono il clip dei border-radius interni */
   .search-bar-list,
   .search-bar-ai-row,
   .search-bar-empty,
@@ -245,7 +192,6 @@
     overflow: hidden;
   }
 
-  /* Ultimo figlio diretto: clip border-radius inferiore */
   .search-bar-dropdown > *:last-child {
     border-bottom-left-radius: var(--radius-lg);
     border-bottom-right-radius: var(--radius-lg);
@@ -259,8 +205,6 @@
       3px 0 0 0 oklch(from var(--color-gold) l c h / 0.15),
       0 3px 0 0 oklch(from var(--color-gold) l c h / 0.15);
   }
-
-  /* ─── Icon lead ──────────────────────────────────────────────────────────── */
 
   .search-bar-icon-lead {
     display: flex;
@@ -283,8 +227,6 @@
       transform: rotate(360deg);
     }
   }
-
-  /* ─── Input ──────────────────────────────────────────────────────────────── */
 
   .search-bar-input {
     flex: 1;
@@ -310,8 +252,6 @@
     border: none;
   }
 
-  /* ─── Clear ──────────────────────────────────────────────────────────────── */
-
   .search-bar-clear {
     display: flex;
     align-items: center;
@@ -331,8 +271,6 @@
     background: var(--color-surface-offset);
   }
 
-  /* ─── Hotkey ─────────────────────────────────────────────────────────────── */
-
   .search-bar-hotkey {
     display: flex;
     align-items: center;
@@ -351,8 +289,6 @@
     border: 1px solid oklch(from var(--color-text) l c h / 0.08);
     line-height: 1.5;
   }
-
-  /* ─── AI row ─────────────────────────────────────────────────────────────── */
 
   .search-bar-ai-row {
     display: flex;
@@ -389,8 +325,6 @@
     background: oklch(from var(--color-gold) l c h / 0.1);
     border-color: oklch(from var(--color-gold) l c h / 0.4);
   }
-
-  /* ─── Lista ──────────────────────────────────────────────────────────────── */
 
   .search-bar-list {
     padding: var(--space-1);
@@ -505,8 +439,6 @@
     border: 1px solid oklch(from var(--color-text) l c h / 0.08);
   }
 
-  /* ─── Empty ──────────────────────────────────────────────────────────────── */
-
   .search-bar-empty {
     display: flex;
     align-items: center;
@@ -524,8 +456,6 @@
     flex-shrink: 0;
     display: block;
   }
-
-  /* ─── Footer ─────────────────────────────────────────────────────────────── */
 
   .search-bar-footer {
     display: flex;
@@ -549,8 +479,6 @@
   .search-bar-footer-ai-hint {
     margin-left: auto;
   }
-
-  /* ─── Item delete (recenti) ──────────────────────────────────────────────── */
 
   .search-bar-item-delete {
     display: flex;
@@ -584,8 +512,6 @@
     height: 2rem;
     border-radius: var(--radius-md);
   }
-
-  /* ─── Chip bar mobile ────────────────────────────────────────────────────── */
 
   .search-bar-chip-bar {
     display: flex;
@@ -628,7 +554,6 @@
     color: var(--color-text);
   }
 
-  /* Variante AI */
   .search-bar-chip--ai {
     color: var(--color-gold);
     background: oklch(from var(--color-gold) l c h / 0.08);
@@ -639,7 +564,6 @@
     background: oklch(from var(--color-gold) l c h / 0.15);
   }
 
-  /* Variante primary (Cerca) */
   .search-bar-chip--primary {
     color: var(--color-primary);
     background: oklch(from var(--color-primary) l c h / 0.08);
@@ -649,8 +573,6 @@
   .search-bar-chip--primary:active {
     background: oklch(from var(--color-primary) l c h / 0.15);
   }
-
-  /* ─── Backdrop mobile ────────────────────────────────────────────────────── */
 
   .search-bar-backdrop {
     position: fixed;
@@ -671,8 +593,7 @@
     }
   }
 
-  /* ─── Dropdown mobile (bottom sheet) ─────────────────────────────────────── */
-
+  /* Mobile uses a bottom sheet instead of an inline dropdown. */
   .search-bar-dropdown--mobile {
     position: fixed;
     top: auto;

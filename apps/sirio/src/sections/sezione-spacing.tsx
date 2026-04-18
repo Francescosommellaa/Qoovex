@@ -75,7 +75,6 @@ export function SezioneSpacing() {
                 border: "1px solid var(--color-border)",
               }}
             >
-              {/* Token name */}
               <div>
                 <div
                   style={{
@@ -96,7 +95,6 @@ export function SezioneSpacing() {
                   {s.rem} · {s.px}px
                 </div>
               </div>
-              {/* Barra visiva */}
               <div
                 style={{
                   height: "6px",
@@ -115,7 +113,6 @@ export function SezioneSpacing() {
                   }}
                 />
               </div>
-              {/* Uso */}
               <div
                 style={{
                   fontSize: "0.6rem",

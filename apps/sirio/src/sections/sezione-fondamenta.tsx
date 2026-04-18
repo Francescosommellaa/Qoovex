@@ -23,7 +23,6 @@ export function SezioneFondamenta() {
           </div>
         ))}
       </div>
-      {/* Indice sezioni */}
       <div style={{ padding: "var(--space-5)", borderRadius: "var(--radius-lg)", background: "var(--color-surface)", border: "1px solid var(--color-border)" }}>
         <div style={{ fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-text-faint)", marginBottom: "var(--space-4)" }}>In questa pagina</div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: "var(--space-2)" }}>

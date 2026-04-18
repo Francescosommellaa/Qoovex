@@ -143,7 +143,6 @@ function ColorChip({ token, value, label, textColor }: ColorToken) {
         width: "100%",
       }}
     >
-      {/* Swatch */}
       <div
         style={{
           height: "56px",
@@ -184,7 +183,6 @@ function ColorChip({ token, value, label, textColor }: ColorToken) {
           </span>
         )}
       </div>
-      {/* Info */}
       <div>
         <div
           style={{

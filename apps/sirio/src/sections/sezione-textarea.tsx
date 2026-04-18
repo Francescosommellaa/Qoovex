@@ -4,8 +4,6 @@ import { useState } from "react";
 import { Button, Textarea } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
 
-// ─── Helper ──────────────────────────────────────────────────────
-
 function Row({
   label,
   children,
@@ -42,57 +40,52 @@ function Row({
   );
 }
 
-// ─── Sezione ─────────────────────────────────────────────────────
-
 export function SezioneTextarea() {
   const [feedback, setFeedback] = useState("");
-  const MIN_CHARS = 20;
-  const canSubmit = feedback.trim().length >= MIN_CHARS;
+  const minChars = 20;
+  const canSubmit = feedback.trim().length >= minChars;
 
   return (
     <section id="textarea" className="sirio-section">
       <SectionHeader label="Textarea" id="textarea" />
 
-      {/* Varianti */}
-      <Row label="Variant — auto (cresce con il contenuto)">
+      <Row label="Variant - auto">
         <Textarea
           label="Note ricetta"
-          placeholder="Aggiungi note di preparazione…"
+          placeholder="Aggiungi note di preparazione..."
           variant="auto"
           maxRows={8}
         />
       </Row>
 
-      <Row label="Variant — fixed (resize manuale)">
+      <Row label="Variant - fixed">
         <Textarea
           label="Descrizione menu"
-          placeholder="Descrivi il menu…"
+          placeholder="Descrivi il menu..."
           variant="fixed"
         />
       </Row>
 
-      <Row label="Variant — static (altezza bloccata)">
+      <Row label="Variant - static">
         <Textarea
           label="Istruzioni brevi"
-          placeholder="Max 3 righe visibili…"
+          placeholder="Max 3 righe visibili..."
           variant="static"
           rows={3}
         />
       </Row>
 
-      {/* Contatore */}
       <Row label="Con contatore caratteri">
         <Textarea
           label="Bio chef"
-          placeholder="Racconta la tua storia…"
+          placeholder="Racconta la tua storia..."
           variant="auto"
           maxLength={300}
           showCount
         />
       </Row>
 
-      {/* Status */}
-      <Row label="Status — error">
+      <Row label="Status - error">
         <Textarea
           label="Ingredienti"
           status="error"
@@ -102,7 +95,7 @@ export function SezioneTextarea() {
         />
       </Row>
 
-      <Row label="Status — success">
+      <Row label="Status - success">
         <Textarea
           label="Procedimento"
           status="success"
@@ -110,8 +103,7 @@ export function SezioneTextarea() {
         />
       </Row>
 
-      {/* Disabled */}
-      <Row label="State — disabled">
+      <Row label="State - disabled">
         <Textarea
           label="Campo bloccato"
           defaultValue="Valore non modificabile."
@@ -119,21 +111,20 @@ export function SezioneTextarea() {
         />
       </Row>
 
-      {/* Esempio live: minChars per abilitare invio */}
-      <Row label={`Live — min ${MIN_CHARS} caratteri per inviare`}>
+      <Row label={`Live - min ${minChars} caratteri per inviare`}>
         <Textarea
           label="Feedback"
-          placeholder={`Scrivi almeno ${MIN_CHARS} caratteri…`}
+          placeholder={`Scrivi almeno ${minChars} caratteri...`}
           variant="auto"
           showCount
           value={feedback}
-          onChange={(e) => setFeedback(e.target.value)}
+          onChange={(event) => setFeedback(event.target.value)}
           status={
             feedback.length === 0 ? "default" : canSubmit ? "success" : "error"
           }
           helperText={
             feedback.length > 0 && !canSubmit
-              ? `Digita almeno ${MIN_CHARS} caratteri.`
+              ? `Digita almeno ${minChars} caratteri.`
               : undefined
           }
         />

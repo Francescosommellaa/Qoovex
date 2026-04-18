@@ -1,7 +1,6 @@
 "use client";
 
 export const SECTIONS = [
-  // ── Fondamenta ──────────────────────────────────────────────
   {
     id: "fondamenta",
     label: "Fondamenta",
@@ -41,7 +40,7 @@ export const SECTIONS = [
   {
     id: "animazioni",
     label: "Animazioni",
-    icon: "◎",
+    icon: "◮",
     description: "Easing, durate, transizioni",
   },
   {
@@ -50,8 +49,6 @@ export const SECTIONS = [
     icon: "⊕",
     description: "Layer stack",
   },
-
-  // ── Componenti ───────────────────────────────────────────────
   {
     id: "button",
     label: "Button",
@@ -61,7 +58,7 @@ export const SECTIONS = [
   {
     id: "input",
     label: "Input",
-    icon: "▭",
+    icon: "▬",
     description: "Text, label, stati",
   },
   {
@@ -127,7 +124,7 @@ export const SECTIONS = [
   {
     id: "toast",
     label: "Toast",
-    icon: "◳",
+    icon: "△",
     description: "Notifiche, posizioni, dismiss",
   },
   {
@@ -151,8 +148,6 @@ export const SECTIONS = [
 ] as const;
 
 export type SectionId = (typeof SECTIONS)[number]["id"];
-
-// ─── Componenti UI condivisi ──────────────────────────────────────
 
 export function SectionHeader({ label, id }: { label: string; id: string }) {
   return (
@@ -219,13 +214,12 @@ export function ComingSoon({ label }: { label: string }) {
         >
           {label}
         </strong>{" "}
-        verrà popolato nella prossima fase.
+        verra popolato nella prossima fase.
       </p>
     </div>
   );
 }
 
-// ─── Tipi utili per le sezioni ────────────────────────────────────
 export type SectionStatus = "done" | "coming-soon";
 
 export const SECTION_STATUS: Record<SectionId, SectionStatus> = {

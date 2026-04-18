@@ -90,8 +90,6 @@ const SECTIONS_LOCAL = [
 
 type SectionIdLocal = (typeof SECTIONS_LOCAL)[number]["id"];
 
-// ─── Componenti condivisi Sirio ──────────────────────────────────
-
 function SectionHeaderLocal({ label, id }: { label: string; id: string }) {
   return (
     <div
@@ -159,8 +157,6 @@ function ComingSoonLocal({ label }: { label: string }) {
     </div>
   );
 }
-
-// ─── Sidebar ─────────────────────────────────────────────────────
 
 function Sidebar({ active }: { active: SectionId }) {
   return (
@@ -281,8 +277,6 @@ function Sidebar({ active }: { active: SectionId }) {
     </aside>
   );
 }
-
-// ─── Bottom Sheet Mobile ─────────────────────────────────────────
 
 function MobileSheet({
   open,
@@ -448,8 +442,6 @@ function MobileSheet({
   );
 }
 
-// ─── Page ────────────────────────────────────────────────────────
-
 export default function SirioPage() {
   const [active, setActive] = useState<SectionId>("fondamenta");
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -473,7 +465,6 @@ export default function SirioPage() {
 
   return (
     <>
-      {/* HEADER */}
       <header
         style={{
           position: "sticky",
@@ -585,11 +576,9 @@ export default function SirioPage() {
         </div>
       </header>
 
-      {/* LAYOUT */}
       <div className="sirio-layout">
         <Sidebar active={active} />
         <main className="sirio-main" style={{ maxWidth: "820px" }}>
-          {/* HERO */}
           <div style={{ marginBottom: "var(--space-16)" }}>
             <div
               style={{
@@ -668,7 +657,6 @@ export default function SirioPage() {
             </div>
           </div>
 
-          {/* SEZIONI */}
           <SezioneFondamenta />
           <SezioneColori />
           <SezioneTipografia />
@@ -683,7 +671,6 @@ export default function SirioPage() {
           <SezioneSmartSearchBar />
           <SezioneSearchBar />
 
-          {/* Sezioni componenti — coming soon */}
           {(["card", "badge", "form"] as const).map((id) => {
             const s = SECTIONS.find((x) => x.id === id)!;
             return (

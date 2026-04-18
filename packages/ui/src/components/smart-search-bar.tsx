@@ -16,9 +16,7 @@ import {
   Command,
   Clock,
 } from "lucide-react";
-import { cn } from "../lib/utils";
-
-// ─── Tipi ─────────────────────────────────────────────────────────────────────
+import { cn, mergeRefs, useControllableValue } from "../lib/utils";
 
 export type SearchResultCategory =
   | "recipe"
@@ -40,8 +38,11 @@ export interface SearchResult {
   onSelect?: () => void;
 }
 
-export interface SmartSearchBarProps {
-  placeholder?: string;
+export interface SmartSearchBarProps
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "className" | "defaultValue" | "results" | "size" | "value"
+  > {
   results?: SearchResult[];
   defaultQuery?: string;
   value?: string;
@@ -55,9 +56,8 @@ export interface SmartSearchBarProps {
   shortcut?: string;
   showHotkey?: boolean;
   className?: string;
+  inputClassName?: string;
 }
-
-// ─── Costanti ─────────────────────────────────────────────────────────────────
 
 const CATEGORY_ICONS: Record<SearchResultCategory, React.ReactNode> = {
   recipe: <BookOpen size={14} strokeWidth={1.5} />,
@@ -89,19 +89,24 @@ const CATEGORY_ORDER: SearchResultCategory[] = [
   "ai",
 ];
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
 function groupResults(results: SearchResult[]) {
   const map = new Map<SearchResultCategory, SearchResult[]>();
-  for (const r of results) {
-    if (!map.has(r.category)) map.set(r.category, []);
-    map.get(r.category)!.push(r);
+
+  for (const result of results) {
+    if (!map.has(result.category)) {
+      map.set(result.category, []);
+    }
+
+    map.get(result.category)?.push(result);
   }
-  return CATEGORY_ORDER.filter((c) => map.has(c)).map((c) => ({
-    category: c,
-    label: CATEGORY_LABELS[c],
-    items: map.get(c)!,
-  }));
+
+  return CATEGORY_ORDER.filter((category) => map.has(category)).map(
+    (category) => ({
+      category,
+      label: CATEGORY_LABELS[category],
+      items: map.get(category) ?? [],
+    }),
+  );
 }
 
 function detectAiQuery(value: string) {
@@ -112,19 +117,17 @@ function detectCommandQuery(value: string) {
   return value.startsWith("/") && !value.toLowerCase().startsWith("/ai ");
 }
 
-// ─── Hook: detect touch device ────────────────────────────────────────────────
-
 function useIsTouchDevice() {
   const [isTouch, setIsTouch] = React.useState(false);
+
   React.useEffect(() => {
     setIsTouch(
       window.matchMedia("(hover: none) and (pointer: coarse)").matches,
     );
   }, []);
+
   return isTouch;
 }
-
-// ─── Chip rapidi mobile ───────────────────────────────────────────────────────
 
 interface MobileChipBarProps {
   onChip: (value: string) => void;
@@ -138,8 +141,8 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
       <button
         type="button"
         className="search-bar-chip search-bar-chip--ai"
-        onMouseDown={(e) => {
-          e.preventDefault();
+        onMouseDown={(event) => {
+          event.preventDefault();
           onChip("?");
         }}
         aria-label="Attiva modalità IA"
@@ -151,8 +154,8 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
       <button
         type="button"
         className="search-bar-chip"
-        onMouseDown={(e) => {
-          e.preventDefault();
+        onMouseDown={(event) => {
+          event.preventDefault();
           onChip("/");
         }}
         aria-label="Attiva modalità comando"
@@ -164,8 +167,8 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
       <button
         type="button"
         className="search-bar-chip"
-        onMouseDown={(e) => {
-          e.preventDefault();
+        onMouseDown={(event) => {
+          event.preventDefault();
           onChip("");
         }}
         aria-label="Cerca ricette"
@@ -177,8 +180,8 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
       <button
         type="button"
         className="search-bar-chip"
-        onMouseDown={(e) => {
-          e.preventDefault();
+        onMouseDown={(event) => {
+          event.preventDefault();
           onChip("");
         }}
         aria-label="Cerca menu"
@@ -187,12 +190,12 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
         Menu
       </button>
 
-      {hasQuery && (
+      {hasQuery ? (
         <button
           type="button"
           className="search-bar-chip search-bar-chip--primary"
-          onMouseDown={(e) => {
-            e.preventDefault();
+          onMouseDown={(event) => {
+            event.preventDefault();
             onSearch();
           }}
           aria-label="Esegui ricerca"
@@ -200,148 +203,182 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
           <ArrowRight size={12} strokeWidth={2} />
           Cerca
         </button>
-      )}
+      ) : null}
     </div>
   );
 }
 
-// ─── Componente principale ────────────────────────────────────────────────────
-
-export function SmartSearchBar({
-  placeholder = "Cerca ricette, menu, piani…",
-  results = [],
-  defaultQuery,
-  value: controlledValue,
-  onValueChange,
-  onSearch,
-  onAIQuery,
-  onDeleteRecent,
-  isLoading = false,
-  forceOpen = false,
-  disableFullscreen: _disableFullscreen = false,
-  shortcut = "K",
-  showHotkey = true,
-  className,
-}: SmartSearchBarProps) {
-  const [internalValue, setInternalValue] = React.useState(defaultQuery ?? "");
+export const SmartSearchBar = React.forwardRef<
+  HTMLInputElement,
+  SmartSearchBarProps
+>(function SmartSearchBar(
+  {
+    placeholder = "Cerca ricette, menu, piani...",
+    results = [],
+    defaultQuery,
+    value,
+    onValueChange,
+    onSearch,
+    onAIQuery,
+    onDeleteRecent,
+    onChange,
+    onFocus,
+    onBlur,
+    onKeyDown,
+    disabled = false,
+    isLoading = false,
+    forceOpen = false,
+    disableFullscreen: _disableFullscreen = false,
+    shortcut = "K",
+    showHotkey = true,
+    className,
+    inputClassName,
+    autoComplete = "off",
+    spellCheck = false,
+    ...props
+  },
+  forwardedRef,
+) {
   const [open, setOpen] = React.useState(forceOpen);
   const [activeIndex, setActiveIndex] = React.useState(-1);
-
-  const value = controlledValue ?? internalValue;
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [query, setQuery] = useControllableValue({
+    value,
+    defaultValue: defaultQuery ?? "",
+    onChange: onValueChange,
+  });
+  const localInputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = mergeRefs(localInputRef, forwardedRef);
   const rootRef = React.useRef<HTMLDivElement>(null);
   const listRef = React.useRef<HTMLDivElement>(null);
   const isTouch = useIsTouchDevice();
 
-  const aiMode = detectAiQuery(value);
-  const commandMode = detectCommandQuery(value);
+  const aiMode = detectAiQuery(query);
+  const commandMode = detectCommandQuery(query);
   const groups = React.useMemo(() => groupResults(results), [results]);
   const isOpen = forceOpen || open;
-  const showDropdown = isOpen && (results.length > 0 || value.length > 0);
+  const showDropdown = isOpen && (results.length > 0 || query.length > 0);
   const hotkeyLabel = shortcut.toUpperCase();
 
-  // ── Handlers ────────────────────────────────────────────────────────────────
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const v = e.target.value;
-    if (controlledValue === undefined) setInternalValue(v);
-    onValueChange?.(v);
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setQuery(event.target.value);
+    onChange?.(event);
     setActiveIndex(-1);
-    if (!forceOpen) setOpen(true);
+
+    if (!forceOpen) {
+      setOpen(true);
+    }
   }
 
   function handleClear() {
-    if (controlledValue === undefined) setInternalValue("");
-    onValueChange?.("");
-    inputRef.current?.focus();
-    if (!forceOpen) setOpen(false);
+    setQuery("");
+    localInputRef.current?.focus();
+
+    if (!forceOpen) {
+      setOpen(false);
+    }
   }
 
   function handleSelect(item: SearchResult) {
     item.onSelect?.();
-    if (controlledValue === undefined) setInternalValue(item.label);
-    if (!forceOpen) setOpen(false);
+    setQuery(item.label);
+
+    if (!forceOpen) {
+      setOpen(false);
+    }
   }
 
   function handleSubmit() {
     if (aiMode) {
-      onAIQuery?.(value);
+      onAIQuery?.(query);
     } else {
-      onSearch?.(value);
+      onSearch?.(query);
     }
-    if (!forceOpen) setOpen(false);
+
+    if (!forceOpen) {
+      setOpen(false);
+    }
   }
 
   function handleChip(prefix: string) {
-    const next = prefix;
-    if (controlledValue === undefined) setInternalValue(next);
-    onValueChange?.(next);
+    setQuery(prefix);
     setOpen(true);
+
     setTimeout(() => {
-      inputRef.current?.focus();
-      const len = next.length;
-      inputRef.current?.setSelectionRange(len, len);
+      localInputRef.current?.focus();
+      const length = prefix.length;
+      localInputRef.current?.setSelectionRange(length, length);
     }, 0);
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     const flatItems = results;
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((i) => Math.min(i + 1, flatItems.length - 1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((i) => Math.max(i - 1, -1));
-    } else if (e.key === "Enter") {
-      e.preventDefault();
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActiveIndex((index) => Math.min(index + 1, flatItems.length - 1));
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActiveIndex((index) => Math.max(index - 1, -1));
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+
       if (activeIndex >= 0 && flatItems[activeIndex]) {
         handleSelect(flatItems[activeIndex]);
       } else {
         handleSubmit();
       }
-    } else if (e.key === "Escape") {
-      if (!forceOpen) {
-        setOpen(false);
-        inputRef.current?.blur();
-      }
+    } else if (event.key === "Escape" && !forceOpen) {
+      setOpen(false);
+      localInputRef.current?.blur();
     }
+
+    onKeyDown?.(event);
   }
 
   React.useEffect(() => {
-    if (activeIndex < 0 || !listRef.current) return;
+    if (activeIndex < 0 || !listRef.current) {
+      return;
+    }
+
     const items =
       listRef.current.querySelectorAll<HTMLElement>("[role='option']");
     items[activeIndex]?.scrollIntoView({ block: "nearest" });
   }, [activeIndex]);
 
   React.useEffect(() => {
-    if (forceOpen) return;
-    function onPointerDown(e: PointerEvent) {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+    if (forceOpen) {
+      return;
+    }
+
+    function onPointerDown(event: PointerEvent) {
+      if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
         setOpen(false);
       }
     }
+
     document.addEventListener("pointerdown", onPointerDown);
     return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [forceOpen]);
 
   React.useEffect(() => {
-    if (forceOpen || isTouch) return;
-    function onKey(e: KeyboardEvent) {
+    if (forceOpen || isTouch) {
+      return;
+    }
+
+    function onShortcut(event: KeyboardEvent) {
       if (
-        (e.metaKey || e.ctrlKey) &&
-        e.key.toLowerCase() === shortcut.toLowerCase()
+        (event.metaKey || event.ctrlKey) &&
+        event.key.toLowerCase() === shortcut.toLowerCase()
       ) {
-        e.preventDefault();
+        event.preventDefault();
         setOpen(true);
-        setTimeout(() => inputRef.current?.focus(), 0);
+        setTimeout(() => localInputRef.current?.focus(), 0);
       }
     }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [forceOpen, shortcut, isTouch]);
 
-  // ── Render ──────────────────────────────────────────────────────────────────
+    window.addEventListener("keydown", onShortcut);
+    return () => window.removeEventListener("keydown", onShortcut);
+  }, [forceOpen, isTouch, shortcut]);
 
   return (
     <div
@@ -352,15 +389,17 @@ export function SmartSearchBar({
         className,
       )}
     >
-      {isOpen && isTouch && (
+      {isOpen && isTouch ? (
         <div
           className="search-bar-backdrop"
           onPointerDown={() => {
-            if (!forceOpen) setOpen(false);
+            if (!forceOpen) {
+              setOpen(false);
+            }
           }}
           aria-hidden
         />
-      )}
+      ) : null}
 
       <div
         className={cn(
@@ -374,9 +413,13 @@ export function SmartSearchBar({
         aria-haspopup="listbox"
         aria-owns="search-bar-listbox"
         onClick={() => {
+          if (disabled) {
+            return;
+          }
+
           if (!forceOpen && !open) {
             setOpen(true);
-            setTimeout(() => inputRef.current?.focus(), 0);
+            setTimeout(() => localInputRef.current?.focus(), 0);
           }
         }}
       >
@@ -395,6 +438,7 @@ export function SmartSearchBar({
         </span>
 
         <input
+          {...props}
           ref={inputRef}
           type="text"
           role="searchbox"
@@ -403,32 +447,40 @@ export function SmartSearchBar({
           aria-activedescendant={
             activeIndex >= 0 ? `search-bar-item-${activeIndex}` : undefined
           }
-          value={value}
+          value={query}
           onChange={handleChange}
-          onFocus={() => {
-            if (!forceOpen) setOpen(true);
+          onFocus={(event) => {
+            if (!forceOpen) {
+              setOpen(true);
+            }
+
+            onFocus?.(event);
           }}
-          onBlur={() => {}}
+          onBlur={onBlur}
           onKeyDown={handleKeyDown}
+          disabled={disabled}
           placeholder={
             aiMode
-              ? "Chiedi all'IA…"
+              ? "Chiedi all'IA..."
               : commandMode
-                ? "Scrivi un comando…"
+                ? "Scrivi un comando..."
                 : placeholder
           }
-          className="search-bar-input"
-          autoComplete="off"
-          spellCheck={false}
-          readOnly={!isOpen && !forceOpen}
-          style={{ cursor: !isOpen && !forceOpen ? "pointer" : "text" }}
+          className={cn("search-bar-input", inputClassName)}
+          autoComplete={autoComplete}
+          spellCheck={spellCheck}
+          readOnly={props.readOnly || (!isOpen && !forceOpen)}
+          style={{
+            ...props.style,
+            cursor: !isOpen && !forceOpen ? "pointer" : "text",
+          }}
         />
 
-        {value && isOpen ? (
+        {query && isOpen ? (
           <button
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={(event) => {
+              event.stopPropagation();
               handleClear();
             }}
             className="search-bar-clear"
@@ -444,8 +496,7 @@ export function SmartSearchBar({
         ) : null}
       </div>
 
-      {/* Dropdown */}
-      {showDropdown && (
+      {showDropdown ? (
         <div
           id="search-bar-listbox"
           className={cn(
@@ -454,7 +505,7 @@ export function SmartSearchBar({
           )}
           role="presentation"
         >
-          {aiMode && value.length > 2 && (
+          {aiMode && query.length > 2 ? (
             <div className="search-bar-ai-row">
               <Sparkles
                 size={13}
@@ -463,30 +514,33 @@ export function SmartSearchBar({
               />
               <span>
                 Chiedi all'IA:{" "}
-                <strong>{value.replace(/^(\?|\/ai\s)/i, "")}</strong>
+                <strong>{query.replace(/^(\?|\/ai\s)/i, "")}</strong>
               </span>
               <button
                 type="button"
                 className="search-bar-ai-cta"
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  onAIQuery?.(value);
-                  if (!forceOpen) setOpen(false);
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  onAIQuery?.(query);
+
+                  if (!forceOpen) {
+                    setOpen(false);
+                  }
                 }}
               >
                 Chiedi
                 <ArrowRight size={12} strokeWidth={2} />
               </button>
             </div>
-          )}
+          ) : null}
 
-          {isTouch && (
+          {isTouch ? (
             <MobileChipBar
               onChip={handleChip}
               onSearch={handleSubmit}
-              hasQuery={value.trim().length > 0}
+              hasQuery={query.trim().length > 0}
             />
-          )}
+          ) : null}
 
           {groups.length > 0 ? (
             <div ref={listRef} className="search-bar-list" role="listbox">
@@ -499,22 +553,23 @@ export function SmartSearchBar({
                     {label}
                   </div>
                   {items.map((item) => {
-                    const globalIdx = results.indexOf(item);
+                    const globalIndex = results.indexOf(item);
                     const isRecent = item.category === "recent";
+
                     return (
                       <div
                         key={item.id}
-                        id={`search-bar-item-${globalIdx}`}
+                        id={`search-bar-item-${globalIndex}`}
                         role="option"
-                        aria-selected={globalIdx === activeIndex}
+                        aria-selected={globalIndex === activeIndex}
                         className={cn(
                           "search-bar-item",
-                          globalIdx === activeIndex &&
+                          globalIndex === activeIndex &&
                             "search-bar-item--active",
                         )}
-                        onMouseEnter={() => setActiveIndex(globalIdx)}
-                        onMouseDown={(e) => {
-                          e.preventDefault();
+                        onMouseEnter={() => setActiveIndex(globalIndex)}
+                        onMouseDown={(event) => {
+                          event.preventDefault();
                           handleSelect(item);
                         }}
                       >
@@ -525,14 +580,14 @@ export function SmartSearchBar({
                           <span className="search-bar-item-label">
                             {item.label}
                           </span>
-                          {item.description && (
+                          {item.description ? (
                             <span className="search-bar-item-desc">
                               {item.description}
                             </span>
-                          )}
+                          ) : null}
                         </span>
 
-                        {!isTouch && (item.shortcut || item.badge) && (
+                        {!isTouch && (item.shortcut || item.badge) ? (
                           <span className="search-bar-item-meta">
                             {item.shortcut ? (
                               <kbd className="search-bar-shortcut">
@@ -544,9 +599,9 @@ export function SmartSearchBar({
                               </span>
                             )}
                           </span>
-                        )}
+                        ) : null}
 
-                        {isRecent && onDeleteRecent && (
+                        {isRecent && onDeleteRecent ? (
                           <button
                             type="button"
                             className={cn(
@@ -554,37 +609,37 @@ export function SmartSearchBar({
                               isTouch && "search-bar-item-delete--touch",
                             )}
                             aria-label={`Rimuovi "${item.label}" dai recenti`}
-                            onMouseDown={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
+                            onMouseDown={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
                               onDeleteRecent(item.id);
                             }}
                           >
                             <X size={12} strokeWidth={2} />
                           </button>
-                        )}
+                        ) : null}
 
-                        {!isTouch && !isRecent && (
+                        {!isTouch && !isRecent ? (
                           <span className="search-bar-item-arrow" aria-hidden>
                             <ArrowRight size={12} strokeWidth={1.5} />
                           </span>
-                        )}
+                        ) : null}
                       </div>
                     );
                   })}
                 </div>
               ))}
             </div>
-          ) : !aiMode && value.length > 0 ? (
+          ) : !aiMode && query.length > 0 ? (
             <div className="search-bar-empty">
               <ChefHat size={16} strokeWidth={1.5} />
               <span>
-                Nessun risultato per <strong>{value}</strong>
+                Nessun risultato per <strong>{query}</strong>
               </span>
             </div>
           ) : null}
 
-          {!isTouch && (
+          {!isTouch ? (
             <div className="search-bar-footer" aria-hidden>
               <span>
                 <kbd>↑↓</kbd> naviga
@@ -595,15 +650,17 @@ export function SmartSearchBar({
               <span>
                 <kbd>esc</kbd> chiudi
               </span>
-              {!aiMode && (
+              {!aiMode ? (
                 <span className="search-bar-footer-ai-hint">
                   <kbd>/ai</kbd> oppure <kbd>?</kbd> per l'IA
                 </span>
-              )}
+              ) : null}
             </div>
-          )}
+          ) : null}
         </div>
-      )}
+      ) : null}
     </div>
   );
-}
+});
+
+SmartSearchBar.displayName = "SmartSearchBar";

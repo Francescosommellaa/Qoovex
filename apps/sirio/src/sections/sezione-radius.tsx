@@ -76,7 +76,6 @@ export function SezioneRadius() {
               gap: "var(--space-4)",
             }}
           >
-            {/* Demo box */}
             <div
               style={{
                 height: "64px",
@@ -101,7 +100,6 @@ export function SezioneRadius() {
                 {r.value}
               </span>
             </div>
-            {/* Info */}
             <div>
               <div
                 style={{

@@ -2,13 +2,13 @@
 
 import * as React from "react";
 import { Loader2 } from "lucide-react";
-
-// ─── Types ───────────────────────────────────────────────────────
+import { cn } from "../lib/utils";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "destructive";
 export type ButtonSize = "sm" | "md" | "lg";
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
@@ -18,8 +18,6 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   children: React.ReactNode;
 }
 
-// ─── Base ────────────────────────────────────────────────────────
-
 const BASE =
   "group relative inline-flex items-center justify-center select-none cursor-pointer " +
   "rounded-full font-medium whitespace-nowrap tracking-[0.012em] overflow-hidden " +
@@ -28,8 +26,6 @@ const BASE =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary " +
   "disabled:opacity-35 disabled:pointer-events-none disabled:saturate-50";
 
-// ─── Variants ────────────────────────────────────────────────────
-
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
     "bg-surface-offset text-text border border-primary/40 " +
@@ -37,17 +33,14 @@ const VARIANTS: Record<ButtonVariant, string> = {
     "hover:text-[oklch(0.97_0_0)] hover:border-transparent " +
     "hover:shadow-[var(--shadow-btn-hover)] " +
     "active:shadow-[var(--shadow-btn-active)]",
-
   secondary:
     "bg-surface-offset text-text border border-border " +
     "shadow-[var(--shadow-btn-resting)] " +
     "hover:shadow-[var(--shadow-btn-hover)] " +
     "active:shadow-[var(--shadow-btn-active)]",
-
   ghost:
     "bg-transparent text-text-muted border border-transparent " +
     "hover:text-text active:opacity-70",
-
   destructive:
     "bg-surface-offset text-text border border-error/40 " +
     "shadow-[var(--shadow-btn-resting)] " +
@@ -55,8 +48,6 @@ const VARIANTS: Record<ButtonVariant, string> = {
     "hover:shadow-[var(--shadow-btn-hover)] " +
     "active:shadow-[var(--shadow-btn-active)]",
 };
-
-// ─── Fill ─────────────────────────────────────────────────────────
 
 const FILL_BASE =
   "absolute inset-0 rounded-[inherit] scale-x-0 origin-left pointer-events-none " +
@@ -70,8 +61,6 @@ const FILLS: Record<ButtonVariant, string> = {
   destructive: FILL_BASE + " bg-error",
 };
 
-// ─── Sizes ────────────────────────────────────────────────────────
-
 const SIZES: Record<ButtonSize, string> = {
   sm: "h-9  px-6   gap-2   text-[length:var(--text-xs)]",
   md: "h-10 px-6   gap-2   text-[length:var(--text-sm)]",
@@ -84,8 +73,6 @@ const SPINNER_SIZES: Record<ButtonSize, number> = {
   lg: 16,
 };
 
-// ─── Swap ─────────────────────────────────────────────────────────
-
 const SWAP_SHIFT: Record<ButtonSize, string> = {
   sm: "group-hover:-translate-x-[calc(12px+var(--spacing-2))]",
   md: "group-hover:-translate-x-[calc(14px+var(--spacing-2))]",
@@ -97,8 +84,6 @@ const SWAP_GAP: Record<ButtonSize, string> = {
   md: "var(--spacing-2)",
   lg: "var(--spacing-2)",
 };
-
-// ─── Component ───────────────────────────────────────────────────
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
@@ -124,14 +109,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={isDisabled}
         aria-disabled={isDisabled || undefined}
         aria-busy={loading || undefined}
-        className={[BASE, VARIANTS[variant], SIZES[size], className]
-          .filter(Boolean)
-          .join(" ")}
+        className={cn(BASE, VARIANTS[variant], SIZES[size], className)}
         {...props}
       >
         <span className={FILLS[variant]} aria-hidden="true" />
 
-        {loading && (
+        {loading ? (
           <span className="absolute inset-0 z-20 flex items-center justify-center rounded-[inherit]">
             <Loader2
               size={SPINNER_SIZES[size]}
@@ -140,19 +123,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               aria-hidden="true"
             />
           </span>
-        )}
+        ) : null}
 
         {iconSwap ? (
-          // ── Swap mode ─────────────────────────────────────────────
           <span
-            className={[
+            className={cn(
               "relative z-10 inline-flex items-center gap-[inherit]",
               "transition-transform duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
               SWAP_SHIFT[size],
-              loading ? "invisible" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
+              loading && "invisible",
+            )}
           >
             <span
               className={
@@ -181,35 +161,35 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </span>
         ) : (
           <span
-            className={[
+            className={cn(
               "relative z-10 inline-flex items-center justify-center gap-[inherit]",
-              loading ? "invisible" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
+              loading && "invisible",
+            )}
           >
-            {iconLeft && (
+            {iconLeft ? (
               <span
                 className="inline-flex items-center shrink-0"
                 aria-hidden="true"
               >
                 {iconLeft}
               </span>
-            )}
+            ) : null}
 
             {children}
 
-            {iconRight && (
+            {iconRight ? (
               <span
                 className="inline-flex items-center shrink-0"
                 aria-hidden="true"
               >
                 {iconRight}
               </span>
-            )}
+            ) : null}
           </span>
         )}
       </button>
     );
   },
 );
+
+Button.displayName = "Button";

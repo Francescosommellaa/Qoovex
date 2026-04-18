@@ -1,55 +1,43 @@
-/* ═══════════════════════════════════════════════════════════════
-   QOOVEX DESIGN SYSTEM — TOKEN FOUNDATION
-═══════════════════════════════════════════════════════════════ */
-
 @theme {
-  /* ─── FONT ──────────────────────────────────────────── */
+  /* Shared design tokens for apps and packages. */
   --font-body: "Satoshi", sans-serif;
   --font-display: "Chillax", sans-serif;
   --font-sans: var(--font-body);
 
-  /* ─── SUPERFICI ─────────────────────────────────────── */
   --color-bg: oklch(0.1 0 0);
   --color-surface: oklch(0.12 0 0);
   --color-surface-2: oklch(0.14 0 0);
   --color-surface-offset: oklch(0.16 0 0);
   --color-surface-dynamic: oklch(0.19 0 0);
 
-  /* ─── BORDI ─────────────────────────────────────────── */
   --color-border: oklch(1 0 0 / 0.08);
   --color-divider: oklch(1 0 0 / 0.05);
 
-  /* ─── TESTO ─────────────────────────────────────────── */
   --color-text: oklch(0.94 0 0);
   --color-text-muted: oklch(0.94 0 0 / 0.5);
   --color-text-faint: oklch(0.94 0 0 / 0.25);
   --color-text-inverse: oklch(0.1 0 0);
 
-  /* ─── PRIMARY — Ink Slate ────────────────────────────── */
   --color-primary: oklch(0.42 0.05 240);
   --color-primary-hover: oklch(0.36 0.06 240);
   --color-primary-active: oklch(0.3 0.06 240);
   --color-primary-highlight: oklch(0.42 0.05 240 / 0.14);
 
-  /* ─── SUCCESS ────────────────────────────────────────── */
   --color-success: oklch(0.65 0.15 152);
   --color-success-hover: oklch(0.58 0.16 152);
   --color-success-active: oklch(0.5 0.16 152);
   --color-success-highlight: oklch(0.65 0.15 152 / 0.12);
 
-  /* ─── WARNING ────────────────────────────────────────── */
   --color-warning: oklch(0.72 0.16 65);
   --color-warning-hover: oklch(0.65 0.17 65);
   --color-warning-active: oklch(0.57 0.17 65);
   --color-warning-highlight: oklch(0.72 0.16 65 / 0.12);
 
-  /* ─── ERROR ──────────────────────────────────────────── */
   --color-error: oklch(0.52 0.22 22);
   --color-error-hover: oklch(0.46 0.22 22);
   --color-error-active: oklch(0.4 0.22 22);
   --color-error-highlight: oklch(0.62 0.22 22 / 0.14);
 
-  /* ─── TYPE SCALE ─────────────────────────────────────── */
   --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
   --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
   --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
@@ -57,7 +45,6 @@
   --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
   --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
 
-  /* ─── SPACING — 4px base ─────────────────────────────── */
   --spacing-1: 0.25rem;
   --spacing-2: 0.5rem;
   --spacing-3: 0.75rem;
@@ -72,7 +59,7 @@
   --spacing-24: 6rem;
   --spacing-32: 8rem;
 
-  /* Legacy aliases for direct CSS var consumers */
+  /* Legacy aliases for raw CSS consumers. */
   --space-1: var(--spacing-1);
   --space-2: var(--spacing-2);
   --space-3: var(--spacing-3);
@@ -87,7 +74,6 @@
   --space-24: var(--spacing-24);
   --space-32: var(--spacing-32);
 
-  /* ─── RADIUS ─────────────────────────────────────────── */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
@@ -95,14 +81,12 @@
   --radius-2xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* ─── SHADOWS ────────────────────────────────────────── */
   --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.4);
   --shadow-md: 0 1px 2px oklch(0 0 0 / 0.3), 0 4px 12px oklch(0 0 0 / 0.5);
   --shadow-lg:
     0 1px 3px oklch(0 0 0 / 0.3), 0 8px 24px oklch(0 0 0 / 0.55),
     0 20px 48px oklch(0 0 0 / 0.35);
 
-  /* ─── TRANSIZIONI ────────────────────────────────────── */
   --ease-qoovex: cubic-bezier(0.16, 1, 0.3, 1);
 
   --duration-fast: 120ms;
@@ -114,7 +98,6 @@
   --transition-slow: 300ms cubic-bezier(0.16, 1, 0.3, 1);
   --transition-interactive: 180ms cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* ─── Z-INDEX ─────────────────────────────────────────── */
   --z-base: 0;
   --z-raised: 10;
   --z-dropdown: 100;
@@ -123,7 +106,6 @@
   --z-toast: 400;
   --z-overlay: 500;
 
-  /* ─── BUTTON TOKENS ─────────────────────────────────────── */
   --shadow-btn-resting: 0 1px 2px oklch(0 0 0 / 0.3);
   --shadow-btn-hover: 0 1px 3px oklch(0 0 0 / 0.35);
   --shadow-btn-active: 0 1px 2px oklch(0 0 0 / 0.3);
@@ -137,7 +119,6 @@
   --color-btn-fill-destructive: var(--color-error);
   --btn-swap-gap: var(--spacing-2);
 
-  /* ─── INPUT TOKENS ──────────────────────────────────────────── */
   --color-input-bg: var(--color-surface);
   --color-input-border: var(--color-border);
   --color-input-border-focus: var(--color-primary);
@@ -152,21 +133,18 @@
 
   --color-label: var(--color-text-muted);
 
-  --input-height-sm: 2.25rem; /* 36px */
-  --input-height-md: 2.5rem; /* 40px */
-  --input-height-lg: 2.75rem; /* 44px */
-
+  --input-height-sm: 2.25rem;
+  --input-height-md: 2.5rem;
+  --input-height-lg: 2.75rem;
   --input-radius: var(--radius-lg);
   --input-px: var(--spacing-3);
-  --input-icon-size: 1rem; /* 16px */
+  --input-icon-size: 1rem;
   --input-gap: var(--spacing-2);
 
-  /* ─── TOOLTIP TOKENS ─────────────────────────────────────────── */
   --color-tooltip-bg: var(--color-surface-offset);
   --color-tooltip-text: var(--color-text);
   --color-tooltip-border: var(--color-border);
 
-  /* ─── PASSWORD STRENGTH TOKENS ──────────────────────────────── */
   --color-strength-empty: var(--color-border);
   --color-strength-weak: var(--color-error);
   --color-strength-fair: var(--color-warning);
@@ -175,7 +153,6 @@
   --strength-bar-height: 3px;
   --strength-bar-radius: var(--radius-full);
 
-  /* ─── TEXTAREA TOKENS ─────────────────────────────────────────── */
   --textarea-radius: var(--radius-lg);
   --textarea-px: var(--spacing-3);
   --textarea-py: var(--spacing-2);
@@ -183,7 +160,6 @@
   --textarea-max-height: 16rem;
   --textarea-line-height: 1.6;
 
-  /* ─── SearchBar ─────────────────────────────────────────────────────────── */
   --search-bar-height: 2.5rem;
   --search-bar-height-lg: 3rem;
   --search-bar-radius: var(--radius-lg);
