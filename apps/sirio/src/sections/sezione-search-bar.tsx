@@ -67,7 +67,7 @@ export function SezioneSearchBar() {
               fontFamily: "monospace",
             }}
           >
-            → onSearch: "{lastSearch}"
+            {`→ onSearch: "${lastSearch}"`}
           </p>
         )}
         {value && (
@@ -78,7 +78,7 @@ export function SezioneSearchBar() {
               fontFamily: "monospace",
             }}
           >
-            value: "{value}"
+            {`value: "${value}"`}
           </p>
         )}
       </Row>

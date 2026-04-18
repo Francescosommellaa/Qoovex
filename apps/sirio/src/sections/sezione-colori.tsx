@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Button } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
 
 type ColorToken = {
   token: string;
-  value: string;
+  oklch: string;
   label: string;
-  textColor?: string;
 };
 
 type ColorGroup = {
@@ -19,17 +19,21 @@ const COLOR_GROUPS: ColorGroup[] = [
   {
     title: "Superfici",
     tokens: [
-      { token: "--color-bg", value: "#1a1a1a", label: "Background" },
-      { token: "--color-surface", value: "#1f1f1f", label: "Surface" },
-      { token: "--color-surface-2", value: "#242424", label: "Surface 2" },
+      { token: "--color-bg", oklch: "oklch(0.1 0 0)", label: "Background" },
+      { token: "--color-surface", oklch: "oklch(0.12 0 0)", label: "Surface" },
+      {
+        token: "--color-surface-2",
+        oklch: "oklch(0.14 0 0)",
+        label: "Surface 2",
+      },
       {
         token: "--color-surface-offset",
-        value: "#292929",
+        oklch: "oklch(0.16 0 0)",
         label: "Surface Offset",
       },
       {
         token: "--color-surface-dynamic",
-        value: "#303030",
+        oklch: "oklch(0.19 0 0)",
         label: "Surface Dynamic",
       },
     ],
@@ -39,12 +43,12 @@ const COLOR_GROUPS: ColorGroup[] = [
     tokens: [
       {
         token: "--color-border",
-        value: "rgba(255,255,255,0.08)",
+        oklch: "oklch(1 0 0 / 0.08)",
         label: "Border",
       },
       {
         token: "--color-divider",
-        value: "rgba(255,255,255,0.05)",
+        oklch: "oklch(1 0 0 / 0.05)",
         label: "Divider",
       },
     ],
@@ -52,94 +56,191 @@ const COLOR_GROUPS: ColorGroup[] = [
   {
     title: "Testo",
     tokens: [
-      { token: "--color-text", value: "#f0f0f0", label: "Text" },
+      { token: "--color-text", oklch: "oklch(0.94 0 0)", label: "Text" },
       {
         token: "--color-text-muted",
-        value: "rgba(240,240,240,0.50)",
+        oklch: "oklch(0.94 0 0 / 0.5)",
         label: "Text Muted",
       },
       {
         token: "--color-text-faint",
-        value: "rgba(240,240,240,0.25)",
+        oklch: "oklch(0.94 0 0 / 0.25)",
         label: "Text Faint",
       },
       {
         token: "--color-text-inverse",
-        value: "#1a1a1a",
+        oklch: "oklch(0.1 0 0)",
         label: "Text Inverse",
-        textColor: "#f0f0f0",
       },
     ],
   },
   {
-    title: "Primary — Corallo Tartare",
+    title: "Primary — Ink Slate",
     tokens: [
-      { token: "--color-primary", value: "#FF6B6B", label: "Primary" },
+      {
+        token: "--color-primary",
+        oklch: "oklch(0.42 0.05 240)",
+        label: "Primary",
+      },
       {
         token: "--color-primary-hover",
-        value: "#ff5252",
+        oklch: "oklch(0.36 0.06 240)",
         label: "Primary Hover",
       },
       {
         token: "--color-primary-active",
-        value: "#e03e3e",
+        oklch: "oklch(0.3 0.06 240)",
         label: "Primary Active",
       },
       {
         token: "--color-primary-highlight",
-        value: "rgba(255,107,107,0.12)",
+        oklch: "oklch(0.42 0.05 240 / 0.14)",
         label: "Primary Highlight",
       },
     ],
   },
   {
-    title: "Feedback",
+    title: "Success",
     tokens: [
-      { token: "--color-success", value: "#4caf7d", label: "Success" },
+      {
+        token: "--color-success",
+        oklch: "oklch(0.65 0.15 152)",
+        label: "Success",
+      },
+      {
+        token: "--color-success-hover",
+        oklch: "oklch(0.58 0.16 152)",
+        label: "Success Hover",
+      },
+      {
+        token: "--color-success-active",
+        oklch: "oklch(0.5 0.16 152)",
+        label: "Success Active",
+      },
       {
         token: "--color-success-highlight",
-        value: "rgba(76,175,125,0.12)",
+        oklch: "oklch(0.65 0.15 152 / 0.12)",
         label: "Success Highlight",
       },
-      { token: "--color-warning", value: "#f5a623", label: "Warning" },
+    ],
+  },
+  {
+    title: "Warning",
+    tokens: [
+      {
+        token: "--color-warning",
+        oklch: "oklch(0.72 0.16 65)",
+        label: "Warning",
+      },
+      {
+        token: "--color-warning-hover",
+        oklch: "oklch(0.65 0.17 65)",
+        label: "Warning Hover",
+      },
+      {
+        token: "--color-warning-active",
+        oklch: "oklch(0.57 0.17 65)",
+        label: "Warning Active",
+      },
       {
         token: "--color-warning-highlight",
-        value: "rgba(245,166,35,0.12)",
+        oklch: "oklch(0.72 0.16 65 / 0.12)",
         label: "Warning Highlight",
       },
-      { token: "--color-error", value: "#ff4d4d", label: "Error" },
+    ],
+  },
+  {
+    title: "Error",
+    tokens: [
+      { token: "--color-error", oklch: "oklch(0.52 0.22 22)", label: "Error" },
+      {
+        token: "--color-error-hover",
+        oklch: "oklch(0.46 0.22 22)",
+        label: "Error Hover",
+      },
+      {
+        token: "--color-error-active",
+        oklch: "oklch(0.4 0.22 22)",
+        label: "Error Active",
+      },
       {
         token: "--color-error-highlight",
-        value: "rgba(255,77,77,0.12)",
+        oklch: "oklch(0.62 0.22 22 / 0.14)",
         label: "Error Highlight",
       },
     ],
   },
 ];
 
-function ColorChip({ token, value, label, textColor }: ColorToken) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(token).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    });
+// Canvas converts OKLCH → sRGB reliably across all modern browsers.
+function parseColorFormats(
+  oklchStr: string,
+): { hex: string; rgb: string } | null {
+  if (typeof document === "undefined") return null;
+  const canvas = document.createElement("canvas");
+  canvas.width = 1;
+  canvas.height = 1;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+  ctx.fillStyle = oklchStr;
+  ctx.fillRect(0, 0, 1, 1);
+  const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+  const alpha = +(a / 255).toFixed(2);
+  const h = (n: number) => n.toString(16).padStart(2, "0");
+  return {
+    hex:
+      alpha === 1 ? `#${h(r)}${h(g)}${h(b)}` : `#${h(r)}${h(g)}${h(b)}${h(a)}`,
+    rgb:
+      alpha === 1
+        ? `rgb(${r}, ${g}, ${b})`
+        : `rgba(${r}, ${g}, ${b}, ${alpha})`,
   };
+}
+
+// Fallback for HTTP contexts and mobile WebViews where navigator.clipboard is absent.
+async function copyToClipboard(text: string): Promise<void> {
+  if (navigator.clipboard?.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  const el = document.createElement("textarea");
+  el.value = text;
+  el.style.cssText = "position:fixed;top:-9999px;left:-9999px;opacity:0;";
+  document.body.appendChild(el);
+  el.focus();
+  el.select();
+  try {
+    document.execCommand("copy");
+  } finally {
+    document.body.removeChild(el);
+  }
+}
+
+type CopiedFormat = "OKLCH" | "HEX" | "RGB" | null;
+
+function ColorChip({ token, oklch, label }: ColorToken) {
+  const [copiedFormat, setCopiedFormat] = useState<CopiedFormat>(null);
+  const [formats, setFormats] = useState<{ hex: string; rgb: string } | null>(
+    null,
+  );
+
+  useEffect(() => {
+    setFormats(parseColorFormats(oklch));
+  }, [oklch]);
+
+  function copy(text: string, format: CopiedFormat) {
+    if (!text) return;
+    copyToClipboard(text).then(() => {
+      setCopiedFormat(format);
+      setTimeout(() => setCopiedFormat(null), 1600);
+    });
+  }
 
   return (
-    <button
-      onClick={handleCopy}
-      className="sirio-token-chip"
-      title={`Copia ${token}`}
+    <div
       style={{
         display: "flex",
         flexDirection: "column",
         gap: "var(--space-2)",
-        background: "none",
-        border: "none",
-        padding: 0,
-        textAlign: "left",
         width: "100%",
       }}
     >
@@ -147,42 +248,11 @@ function ColorChip({ token, value, label, textColor }: ColorToken) {
         style={{
           height: "56px",
           borderRadius: "var(--radius-md)",
-          background: `var(${token}, ${value})`,
+          background: `var(${token}, ${oklch})`,
           border: "1px solid var(--color-border)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          transition:
-            "transform var(--transition-fast), box-shadow var(--transition-fast)",
-          position: "relative",
-          overflow: "hidden",
         }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLDivElement).style.transform = "scale(1.02)";
-          (e.currentTarget as HTMLDivElement).style.boxShadow =
-            "var(--shadow-md)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
-          (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-        }}
-      >
-        {copied && (
-          <span
-            style={{
-              fontSize: "0.65rem",
-              fontWeight: 600,
-              color: textColor ?? "var(--color-text)",
-              background: "oklch(0 0 0 / 0.4)",
-              padding: "3px 8px",
-              borderRadius: "var(--radius-full)",
-              backdropFilter: "blur(4px)",
-            }}
-          >
-            copiato ✓
-          </span>
-        )}
-      </div>
+      />
+
       <div>
         <div
           style={{
@@ -206,16 +276,67 @@ function ColorChip({ token, value, label, textColor }: ColorToken) {
         </div>
         <div
           style={{
-            fontSize: "0.6rem",
+            fontSize: "0.58rem",
             color: "var(--color-text-faint)",
             fontFamily: "monospace",
-            opacity: 0.6,
+            opacity: 0.55,
+            marginBottom: "var(--space-2)",
           }}
         >
-          {value}
+          {oklch}
         </div>
       </div>
-    </button>
+
+      <div
+        style={{
+          display: "flex",
+          gap: "var(--space-2)",
+          padding: "var(--space-2) 0",
+        }}
+      >
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => copy(oklch, "OKLCH")}
+          style={{
+            flex: 1,
+            fontFamily: "monospace",
+            fontSize: "0.7rem",
+            transition: "all 0.2s ease",
+          }}
+        >
+          {copiedFormat === "OKLCH" ? "Copiato" : "OKLCH"}
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => copy(formats?.hex ?? "", "HEX")}
+          disabled={!formats}
+          style={{
+            flex: 1,
+            fontFamily: "monospace",
+            fontSize: "0.7rem",
+            transition: "all 0.2s ease",
+          }}
+        >
+          {copiedFormat === "HEX" ? "Copiato" : "HEX"}
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => copy(formats?.rgb ?? "", "RGB")}
+          disabled={!formats}
+          style={{
+            flex: 1,
+            fontFamily: "monospace",
+            fontSize: "0.7rem",
+            transition: "all 0.2s ease",
+          }}
+        >
+          {copiedFormat === "RGB" ? "Copiato" : "RGB"}
+        </Button>
+      </div>
+    </div>
   );
 }
 
@@ -245,7 +366,7 @@ export function SezioneColori() {
         >
           packages/ui/styles/tokens.css
         </code>
-        . Clicca su un chip per copiare il nome del token.
+        . Copia ogni colore nel formato che preferisci.
       </p>
 
       <div
@@ -272,8 +393,8 @@ export function SezioneColori() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-                gap: "var(--space-4)",
+                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                gap: "var(--space-6)",
               }}
             >
               {group.tokens.map((t) => (

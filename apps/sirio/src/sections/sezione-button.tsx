@@ -9,7 +9,6 @@ import {
   Save,
   ArrowLeft,
   Sparkles,
-  MoveRight,
 } from "lucide-react";
 import { Button } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
@@ -204,7 +203,7 @@ export function SezioneButton() {
           size="lg"
           iconSwap={{
             from: <Save size={16} strokeWidth={2} />,
-            to: <MoveRight size={16} strokeWidth={2} />,
+            to: <ArrowRight size={16} strokeWidth={2} />,
           }}
         >
           Salva e continua
