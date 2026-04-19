@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Lock, Search, User } from "lucide-react";
+import {
+  EnvelopeSimple,
+  Lock,
+  MagnifyingGlass,
+  User,
+} from "@phosphor-icons/react";
 import { Input } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
 
@@ -70,17 +75,17 @@ export function SezioneInput() {
         <Input
           label="Email"
           placeholder="chef@ristorante.it"
-          iconLeading={<Mail size={16} strokeWidth={1.5} />}
+          iconLeading={<EnvelopeSimple size={16} />}
         />
         <Input
           label="Username"
           placeholder="chef_mario"
-          iconLeading={<User size={16} strokeWidth={1.5} />}
+          iconLeading={<User size={16} />}
         />
         <Input
           label="Cerca"
           placeholder="Cerca ricette..."
-          iconLeading={<Search size={16} strokeWidth={1.5} />}
+          iconLeading={<MagnifyingGlass size={16} />}
         />
       </Row>
 
@@ -89,7 +94,7 @@ export function SezioneInput() {
           label="Password"
           type="password"
           placeholder="........"
-          iconLeading={<Lock size={16} strokeWidth={1.5} />}
+          iconLeading={<Lock size={16} />}
           showPasswordToggle
           showStrength
         />
@@ -110,7 +115,7 @@ export function SezioneInput() {
           status="error"
           helperText="Formato email non valido."
           defaultValue="non-una-email"
-          iconLeading={<Mail size={16} strokeWidth={1.5} />}
+          iconLeading={<EnvelopeSimple size={16} />}
         />
       </Row>
 
@@ -121,7 +126,7 @@ export function SezioneInput() {
           status="success"
           helperText="Username disponibile."
           defaultValue="chef_mario_bianchi"
-          iconLeading={<User size={16} strokeWidth={1.5} />}
+          iconLeading={<User size={16} />}
         />
       </Row>
 
@@ -138,7 +143,7 @@ export function SezioneInput() {
         <Input
           label="Email"
           placeholder="chef@ristorante.it"
-          iconLeading={<Mail size={16} strokeWidth={1.5} />}
+          iconLeading={<EnvelopeSimple size={16} />}
           value={emailValue}
           onChange={(event) => setEmailValue(event.target.value)}
           status={emailStatus}

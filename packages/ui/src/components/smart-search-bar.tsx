@@ -2,20 +2,20 @@
 
 import * as React from "react";
 import {
-  Search,
+  MagnifyingGlassPlus,
   X,
-  Sparkles,
+  Sparkle,
   ArrowRight,
   Hash,
   ChefHat,
   BookOpen,
-  UtensilsCrossed,
-  ClipboardList,
-  Loader2,
-  Zap,
+  ForkKnife,
+  ClipboardText,
+  CircleNotch,
+  Lightning,
   Command,
   Clock,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import { cn, mergeRefs, useControllableValue } from "../lib/utils";
 
 export type SearchResultCategory =
@@ -38,11 +38,10 @@ export interface SearchResult {
   onSelect?: () => void;
 }
 
-export interface SmartSearchBarProps
-  extends Omit<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    "className" | "defaultValue" | "results" | "size" | "value"
-  > {
+export interface SmartSearchBarProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "className" | "defaultValue" | "results" | "size" | "value"
+> {
   results?: SearchResult[];
   defaultQuery?: string;
   value?: string;
@@ -60,13 +59,13 @@ export interface SmartSearchBarProps
 }
 
 const CATEGORY_ICONS: Record<SearchResultCategory, React.ReactNode> = {
-  recipe: <BookOpen size={14} strokeWidth={1.5} />,
-  menu: <UtensilsCrossed size={14} strokeWidth={1.5} />,
-  "work-plan": <ClipboardList size={14} strokeWidth={1.5} />,
-  command: <Hash size={14} strokeWidth={1.5} />,
-  action: <Zap size={14} strokeWidth={1.5} />,
-  ai: <Sparkles size={14} strokeWidth={1.5} />,
-  recent: <Clock size={14} strokeWidth={1.5} />,
+  recipe: <BookOpen size={14} />,
+  menu: <ForkKnife size={14} />,
+  "work-plan": <ClipboardText size={14} />,
+  command: <Hash size={14} />,
+  action: <Lightning size={14} />,
+  ai: <Sparkle size={14} />,
+  recent: <Clock size={14} />,
 };
 
 const CATEGORY_LABELS: Record<SearchResultCategory, string> = {
@@ -147,7 +146,7 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
         }}
         aria-label="Attiva modalità IA"
       >
-        <Sparkles size={12} strokeWidth={1.5} />
+        <Sparkle size={12} />
         IA
       </button>
 
@@ -160,7 +159,7 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
         }}
         aria-label="Attiva modalità comando"
       >
-        <Hash size={12} strokeWidth={1.5} />
+        <Hash size={12} />
         Comando
       </button>
 
@@ -173,7 +172,7 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
         }}
         aria-label="Cerca ricette"
       >
-        <BookOpen size={12} strokeWidth={1.5} />
+        <BookOpen size={12} />
         Ricette
       </button>
 
@@ -186,7 +185,7 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
         }}
         aria-label="Cerca menu"
       >
-        <UtensilsCrossed size={12} strokeWidth={1.5} />
+        <ForkKnife size={12} />
         Menu
       </button>
 
@@ -200,7 +199,7 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
           }}
           aria-label="Esegui ricerca"
         >
-          <ArrowRight size={12} strokeWidth={2} />
+          <ArrowRight size={12} />
           Cerca
         </button>
       ) : null}
@@ -425,15 +424,11 @@ export const SmartSearchBar = React.forwardRef<
       >
         <span className="search-bar-icon-lead" aria-hidden>
           {isLoading ? (
-            <Loader2 size={16} strokeWidth={2} className="search-bar-spinner" />
+            <CircleNotch size={16} className="animate-spin" />
           ) : aiMode ? (
-            <Sparkles
-              size={16}
-              strokeWidth={1.5}
-              className="search-bar-icon-ai"
-            />
+            <Sparkle size={16} className="search-bar-icon-ai" />
           ) : (
-            <Search size={16} strokeWidth={1.5} />
+            <MagnifyingGlassPlus size={16} />
           )}
         </span>
 
@@ -507,11 +502,7 @@ export const SmartSearchBar = React.forwardRef<
         >
           {aiMode && query.length > 2 ? (
             <div className="search-bar-ai-row">
-              <Sparkles
-                size={13}
-                strokeWidth={1.5}
-                className="search-bar-icon-ai"
-              />
+              <Sparkle size={13} className="search-bar-icon-ai" />
               <span>
                 Chiedi all'IA:{" "}
                 <strong>{query.replace(/^(\?|\/ai\s)/i, "")}</strong>

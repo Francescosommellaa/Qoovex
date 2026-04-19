@@ -1,13 +1,21 @@
 "use client";
 
 import * as React from "react";
-import { AlertCircle, CheckCircle2, Check, Eye, EyeOff } from "lucide-react";
+import {
+  Warning,
+  CheckCircle,
+  Check,
+  Eye,
+  EyeSlash,
+} from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 
 export type InputStatus = "default" | "error" | "success";
 
-export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
+export interface InputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "size"
+> {
   label?: string;
   helperText?: string;
   status?: InputStatus;
@@ -137,9 +145,7 @@ function StrengthMeter({ value }: { value: string }) {
             }}
             aria-label={`${check.label}: ${check.passed ? "soddisfatto" : "mancante"}`}
           >
-            {check.passed ? (
-              <Check size={8} strokeWidth={2.5} aria-hidden="true" />
-            ) : null}
+            {check.passed ? <Check size={8} aria-hidden="true" /> : null}
             <span>{check.label}</span>
           </span>
         ))}
@@ -166,9 +172,8 @@ function ErrorTooltip({
         role="img"
         aria-hidden="true"
       >
-        <AlertCircle
+        <Warning
           size={14}
-          strokeWidth={2}
           className="text-[var(--color-error)]"
           aria-hidden="true"
         />
@@ -205,11 +210,7 @@ function ErrorTooltip({
         ].join(" ")}
         aria-hidden="true"
       >
-        <AlertCircle
-          size={14}
-          strokeWidth={2}
-          className="text-[var(--color-error)]"
-        />
+        <Warning size={14} className="text-[var(--color-error)]" />
       </span>
     </>
   );
@@ -239,9 +240,9 @@ function PasswordToggle({
       ].join(" ")}
     >
       {revealed ? (
-        <EyeOff size={14} strokeWidth={1.5} aria-hidden="true" />
+        <EyeSlash size={14} aria-hidden="true" />
       ) : (
-        <Eye size={14} strokeWidth={1.5} aria-hidden="true" />
+        <Eye size={14} aria-hidden="true" />
       )}
     </button>
   );
@@ -358,11 +359,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         {hasSuccessIcon ? (
           <span className="inline-flex items-center" aria-hidden="true">
-            <CheckCircle2
-              size={14}
-              strokeWidth={2}
-              className="text-[var(--color-success)]"
-            />
+            <CheckCircle size={14} className="text-[var(--color-success)]" />
           </span>
         ) : null}
       </span>

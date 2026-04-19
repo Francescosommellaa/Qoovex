@@ -1,86 +1,130 @@
 "use client";
 
-const sections = [
-  { id: "fondamenta", label: "Fondamenta" },
-  { id: "colori", label: "Colori" },
-  { id: "tipografia", label: "Tipografia" },
-  { id: "spacing", label: "Spacing" },
-  { id: "radius", label: "Corner Radius" },
-  { id: "shadows", label: "Shadows" },
-  { id: "animazioni", label: "Animazioni" },
-  { id: "pulsanti", label: "Button" },
-  { id: "input", label: "Input" },
-  { id: "textarea", label: "Textarea" },
-  { id: "smartsearchbar", label: "Smart Search Bar" },
-  { id: "searchbar", label: "Search Bar" },
-  { id: "card", label: "Card" },
-  { id: "badge", label: "Badge" },
-  { id: "form", label: "Form" },
-];
+import { SECTIONS, type SectionId } from "./sirio-content";
 
-export function SiriaSidebar() {
+interface SirioSidebarProps {
+  active: SectionId;
+}
+
+export function SirioSidebar({ active }: SirioSidebarProps) {
   return (
     <aside
+      className="sirio-sidebar"
       style={{
         width: "220px",
         flexShrink: 0,
-        borderRight: "1px solid rgba(255,255,255,0.08)",
+        borderRight: "1px solid var(--color-border)",
         position: "sticky",
-        top: "56px",
-        height: "calc(100dvh - 56px)",
+        top: "52px",
+        height: "calc(100dvh - 52px)",
         overflowY: "auto",
-        padding: "1.5rem 0",
-        display: "none",
+        padding: "var(--space-5) 0",
+        scrollbarWidth: "none",
       }}
-      className="sirio-sidebar"
     >
+      <div
+        style={{ padding: "0 var(--space-4)", marginBottom: "var(--space-3)" }}
+      >
+        <span
+          style={{
+            fontSize: "0.6rem",
+            fontWeight: 600,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "var(--color-text-faint)",
+          }}
+        >
+          Contenuti
+        </span>
+      </div>
+
       <nav aria-label="Sezioni design system">
         <ul
           style={{
             listStyle: "none",
             display: "flex",
             flexDirection: "column",
-            gap: "2px",
-            padding: "0 0.75rem",
+            gap: "1px",
+            padding: "0 var(--space-3)",
           }}
         >
-          {sections.map((s) => (
-            <SidebarLink key={s.id} id={s.id} label={s.label} />
-          ))}
+          {SECTIONS.map((s) => {
+            const isActive = active === s.id;
+            return (
+              <li key={s.id}>
+                <a
+                  href={`#${s.id}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "var(--space-3)",
+                    padding: "6px var(--space-3)",
+                    borderRadius: "var(--radius-md)",
+                    fontSize: "var(--text-sm)",
+                    fontWeight: isActive ? 600 : 400,
+                    color: isActive
+                      ? "var(--color-text)"
+                      : "var(--color-text-muted)",
+                    background: isActive
+                      ? "var(--color-surface-offset)"
+                      : "transparent",
+                    transition:
+                      "color var(--transition-fast), background var(--transition-fast)",
+                    textDecoration: "none",
+                    position: "relative",
+                  }}
+                >
+                  {isActive && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        width: "2px",
+                        height: "14px",
+                        borderRadius: "var(--radius-full)",
+                        background: "var(--color-primary)",
+                      }}
+                    />
+                  )}
+                  <span
+                    style={{
+                      fontSize: "0.65rem",
+                      fontFamily: "monospace",
+                      opacity: isActive ? 0.6 : 0.25,
+                      minWidth: "12px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {s.icon}
+                  </span>
+                  {s.label}
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </nav>
-    </aside>
-  );
-}
 
-function SidebarLink({ id, label }: { id: string; label: string }) {
-  return (
-    <li>
-      <a
-        href={`#${id}`}
+      <div
         style={{
-          display: "block",
-          padding: "0.4rem 0.75rem",
-          borderRadius: "6px",
-          fontSize: "0.85rem",
-          fontWeight: 500,
-          color: "rgba(237,237,237,0.6)",
-          textDecoration: "none",
-          transition: "color 150ms ease, background 150ms ease",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.color = "#ededed";
-          (e.currentTarget as HTMLElement).style.background =
-            "rgba(255,255,255,0.06)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.color =
-            "rgba(237,237,237,0.6)";
-          (e.currentTarget as HTMLElement).style.background = "transparent";
+          padding: "var(--space-5) var(--space-4) 0",
+          marginTop: "var(--space-5)",
+          borderTop: "1px solid var(--color-border)",
         }}
       >
-        {label}
-      </a>
-    </li>
+        <p
+          style={{
+            fontSize: "0.65rem",
+            color: "var(--color-text-faint)",
+            lineHeight: 1.6,
+          }}
+        >
+          Sirio cresce in parallelo al prodotto. Ogni sezione appare quando il
+          codice esiste.
+        </p>
+      </div>
+    </aside>
   );
 }

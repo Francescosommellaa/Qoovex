@@ -1,14 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Loader2 } from "lucide-react";
+import { CircleNotch } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "destructive";
 export type ButtonSize = "sm" | "md" | "lg";
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
@@ -116,9 +115,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
         {loading ? (
           <span className="absolute inset-0 z-20 flex items-center justify-center rounded-[inherit]">
-            <Loader2
+            <CircleNotch
               size={SPINNER_SIZES[size]}
-              strokeWidth={2}
               className="animate-spin opacity-60"
               aria-hidden="true"
             />

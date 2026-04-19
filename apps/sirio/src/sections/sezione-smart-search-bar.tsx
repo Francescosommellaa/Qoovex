@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from "react";
-import { Plus } from "lucide-react";
+import { Plus } from "@phosphor-icons/react";
 import { Button, SmartSearchBar, type SearchResult } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
 
@@ -57,8 +57,9 @@ function SearchPreview({
     const rootElement = element;
 
     function measure() {
-      const dropdown =
-        rootElement.querySelector<HTMLElement>(".search-bar-dropdown");
+      const dropdown = rootElement.querySelector<HTMLElement>(
+        ".search-bar-dropdown",
+      );
       if (dropdown) {
         setExtraHeight(dropdown.offsetHeight + 16);
       } else {
@@ -160,7 +161,7 @@ const ALL_RESULTS: SearchResult[] = [
     label: "Nuova ricetta",
     description: "Crea una ricetta da zero",
     shortcut: "Cmd+N",
-    icon: <Plus size={14} strokeWidth={1.5} />,
+    icon: <Plus size={14} />,
   },
   {
     id: "ac2",

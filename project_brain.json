@@ -154,10 +154,11 @@
       "display": "Chillax"
     },
     "icons": {
-      "library": "Lucide React",
-      "decorative_stroke_width": 1.5,
-      "functional_stroke_width": [2, 2.5],
-      "inline_svg": false
+      "package": "@phosphor-icons/react",
+      "version": "^2.1.0",
+      "default_weight": "regular",
+      "functional_weight": "bold",
+      "note": "Migrato da lucide-react in data 2026-04-19. Niente strokeWidth, usare prop weight."
     },
     "rules": [
       "use semantic tokens only",
@@ -679,7 +680,7 @@
     "semantic token usage",
     "FSD import direction",
     "shared code placement in packages",
-    "Lucide-only icon rule",
+    "phosphor-only icon rule",
     "database env canonical source",
     "single source of truth for shared brand assets",
     "PrepItem stock atomicity (always use $transaction)",

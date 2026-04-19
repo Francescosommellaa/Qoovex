@@ -1,14 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Search, X } from "lucide-react";
+import { MagnifyingGlass, X } from "@phosphor-icons/react";
 import { cn, mergeRefs, useControllableValue } from "../lib/utils";
 
-export interface SearchBarProps
-  extends Omit<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    "className" | "defaultValue" | "size" | "value"
-  > {
+export interface SearchBarProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "className" | "defaultValue" | "size" | "value"
+> {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
@@ -69,7 +68,7 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
       <div className={cn("search-bar-root", className)}>
         <div className="search-bar-field">
           <span className="search-bar-icon-lead" aria-hidden>
-            <Search size={16} strokeWidth={1.5} />
+            <MagnifyingGlass size={16} />
           </span>
 
           <input
@@ -94,7 +93,7 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
               className="search-bar-clear"
               aria-label="Cancella ricerca"
             >
-              <X size={14} strokeWidth={2} />
+              <X size={14} />
             </button>
           )}
         </div>

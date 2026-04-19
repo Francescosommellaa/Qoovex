@@ -1,14 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { Warning, CheckCircle } from "@phosphor-icons/react";
 import { cn, mergeRefs } from "../lib/utils";
 
 export type TextareaStatus = "default" | "error" | "success";
 export type TextareaVariant = "auto" | "fixed" | "static";
 
-export interface TextareaProps
-  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "style"> {
+export interface TextareaProps extends Omit<
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  "style"
+> {
   label?: string;
   helperText?: string;
   status?: TextareaStatus;
@@ -62,9 +64,8 @@ function ResizeHandle() {
 function ErrorTooltip({ text }: { text: string }) {
   return (
     <span className="group relative inline-flex items-center">
-      <AlertCircle
+      <Warning
         size={13}
-        strokeWidth={2}
         className="cursor-default text-[var(--color-error)]"
         aria-hidden="true"
       />
@@ -211,9 +212,8 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       status === "error" && errorMessage ? (
         <ErrorTooltip text={errorMessage} />
       ) : status === "success" ? (
-        <CheckCircle2
+        <CheckCircle
           size={13}
-          strokeWidth={2}
           className="text-[var(--color-success)]"
           aria-hidden="true"
         />
