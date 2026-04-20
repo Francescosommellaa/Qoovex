@@ -175,8 +175,11 @@
   --search-bar-item-height: 2.5rem;
   --search-bar-item-radius: var(--radius-md);
   --search-bar-item-active-bg: oklch(from var(--color-primary) l c h / 0.08);
-  --search-bar-ai-color: var(--color-gold);
   --search-bar-hotkey-bg: var(--color-surface-offset);
   --search-bar-hotkey-radius: var(--radius-sm);
   --search-bar-footer-size: var(--text-xs);
+  --search-bar-ai-ring-color: oklch(1 0 0 / 0.18);
+  --search-bar-ai-border-focus: oklch(1 0 0 / 0.5);
+  --search-bar-ai-row-bg: oklch(1 0 0 / 0.04);
+  --search-bar-chip-ai-bg: oklch(1 0 0 / 0.06);
 }
