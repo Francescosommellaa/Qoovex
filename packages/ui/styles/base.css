@@ -564,6 +564,11 @@
     display: none;
   }
 
+  /*
+   * Chip — rest state: tutti uguali, neutri.
+   * Nessun chip appare "selezionato" a riposo.
+   * Lo stato attivo (tap/press) viene comunicato solo da :active.
+   */
   .search-bar-chip {
     display: inline-flex;
     align-items: center;
@@ -590,15 +595,20 @@
     color: var(--color-text);
   }
 
-  /* Chip AI — bianco */
+  /*
+   * Chip AI — a riposo uguale agli altri chip (neutro).
+   * Differenziato solo dal colore del testo e dell'icona,
+   * NON dal bordo: evita l'effetto "sempre attivo".
+   * Il bordo AI appare solo su :active per dare feedback al tap.
+   */
   .search-bar-chip--ai {
     color: var(--search-bar-ai-text);
     background: var(--search-bar-chip-ai-bg);
-    border-color: var(--search-bar-ai-ring-color);
   }
 
   .search-bar-chip--ai:active {
     background: var(--search-bar-chip-ai-active-bg);
+    border-color: var(--search-bar-ai-ring-color);
   }
 
   /* Chip Primary */
