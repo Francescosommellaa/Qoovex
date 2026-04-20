@@ -234,6 +234,7 @@
   /* Input */
 
   .search-bar-input {
+    font-size: 16px;
     flex: 1;
     height: 100%;
     min-width: 0;
