@@ -49,7 +49,7 @@ export function SirioMobileSheet({
           padding: `var(--space-2) 0 calc(var(--space-6) + env(safe-area-inset-bottom))`,
           transform: open ? "translateY(0)" : "translateY(100%)",
           transition: "transform var(--transition-slow)",
-          maxHeight: "75dvh",
+          maxHeight: "90%",
           overflowY: "auto",
           scrollbarWidth: "none",
         }}

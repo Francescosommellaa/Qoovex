@@ -17,7 +17,12 @@
 .sirio-main {
   flex: 1;
   min-width: 0;
-  padding: var(--space-8) var(--space-5);
+  overflow-x: hidden;
+  padding: var(--space-6) var(--space-4);
+}
+
+.sirio-burger {
+  display: flex;
 }
 
 @media (min-width: 768px) {
@@ -31,6 +36,10 @@
 
   .sirio-header-tagline {
     display: block !important;
+  }
+
+  .sirio-main {
+    padding: var(--space-8) var(--space-10);
   }
 }
 

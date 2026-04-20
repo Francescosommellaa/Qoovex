@@ -192,7 +192,22 @@ const ALL_RESULTS: SearchResult[] = [
   },
 ];
 
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, [breakpoint]);
+
+  return isMobile;
+}
+
 export function SezioneSmartSearchBar() {
+  const isMobile = useIsMobile();
   const [isLoading, setIsLoading] = useState(false);
   const [liveQuery, setLiveQuery] = useState("");
   const [lastAction, setLastAction] = useState<string | null>(null);
@@ -229,7 +244,7 @@ export function SezioneSmartSearchBar() {
                 result.category === "action" ||
                 result.category === "command",
             )}
-            forceOpen
+            forceOpen={!isMobile}
             showHotkey={false}
           />
         </SearchPreview>
@@ -240,7 +255,7 @@ export function SezioneSmartSearchBar() {
           <SmartSearchBar
             defaultQuery="? quali ricette posso fare con zucchine e gamberi"
             results={[]}
-            forceOpen
+            forceOpen={!isMobile}
             showHotkey={false}
           />
         </SearchPreview>
@@ -251,7 +266,7 @@ export function SezioneSmartSearchBar() {
           <SmartSearchBar
             defaultQuery="xyzqwerty123"
             results={[]}
-            forceOpen
+            forceOpen={!isMobile}
             showHotkey={false}
           />
         </SearchPreview>

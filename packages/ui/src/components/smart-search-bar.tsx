@@ -95,7 +95,6 @@ function groupResults(results: SearchResult[]) {
     if (!map.has(result.category)) {
       map.set(result.category, []);
     }
-
     map.get(result.category)?.push(result);
   }
 
@@ -116,6 +115,11 @@ function detectCommandQuery(value: string) {
   return value.startsWith("/") && !value.toLowerCase().startsWith("/ai ");
 }
 
+/**
+ * SSR-safe: parte da false, si aggiorna dopo l'hydration.
+ * Non causa problemi perché il layout touch/desktop diverge
+ * solo nel dropdown (che appare dopo interazione utente).
+ */
 function useIsTouchDevice() {
   const [isTouch, setIsTouch] = React.useState(false);
 
@@ -140,10 +144,7 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
       <button
         type="button"
         className="search-bar-chip search-bar-chip--ai"
-        onMouseDown={(event) => {
-          event.preventDefault();
-          onChip("?");
-        }}
+        onClick={() => onChip("?")}
         aria-label="Attiva modalità IA"
       >
         <Sparkle size={12} />
@@ -153,10 +154,7 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
       <button
         type="button"
         className="search-bar-chip"
-        onMouseDown={(event) => {
-          event.preventDefault();
-          onChip("/");
-        }}
+        onClick={() => onChip("/")}
         aria-label="Attiva modalità comando"
       >
         <Hash size={12} />
@@ -166,10 +164,7 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
       <button
         type="button"
         className="search-bar-chip"
-        onMouseDown={(event) => {
-          event.preventDefault();
-          onChip("");
-        }}
+        onClick={() => onChip("")}
         aria-label="Cerca ricette"
       >
         <BookOpen size={12} />
@@ -179,10 +174,7 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
       <button
         type="button"
         className="search-bar-chip"
-        onMouseDown={(event) => {
-          event.preventDefault();
-          onChip("");
-        }}
+        onClick={() => onChip("")}
         aria-label="Cerca menu"
       >
         <ForkKnife size={12} />
@@ -193,10 +185,7 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
         <button
           type="button"
           className="search-bar-chip search-bar-chip--primary"
-          onMouseDown={(event) => {
-            event.preventDefault();
-            onSearch();
-          }}
+          onClick={onSearch}
           aria-label="Esegui ricerca"
         >
           <ArrowRight size={12} />
@@ -302,11 +291,9 @@ export const SmartSearchBar = React.forwardRef<
     setQuery(prefix);
     setOpen(true);
 
-    setTimeout(() => {
-      localInputRef.current?.focus();
-      const length = prefix.length;
-      localInputRef.current?.setSelectionRange(length, length);
-    }, 0);
+    localInputRef.current?.focus();
+    const length = prefix.length;
+    localInputRef.current?.setSelectionRange(length, length);
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -335,34 +322,22 @@ export const SmartSearchBar = React.forwardRef<
   }
 
   React.useEffect(() => {
-    if (activeIndex < 0 || !listRef.current) {
-      return;
-    }
-
-    const items =
-      listRef.current.querySelectorAll<HTMLElement>("[role='option']");
-    items[activeIndex]?.scrollIntoView({ block: "nearest" });
-  }, [activeIndex]);
-
-  React.useEffect(() => {
-    if (forceOpen) {
-      return;
-    }
+    if (forceOpen) return;
 
     function onPointerDown(event: PointerEvent) {
       if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
         setOpen(false);
+        setQuery("");
       }
     }
 
     document.addEventListener("pointerdown", onPointerDown);
     return () => document.removeEventListener("pointerdown", onPointerDown);
-  }, [forceOpen]);
+  }, [forceOpen, setQuery]);
 
+  // Shortcut da tastiera (solo desktop)
   React.useEffect(() => {
-    if (forceOpen || isTouch) {
-      return;
-    }
+    if (forceOpen || isTouch) return;
 
     function onShortcut(event: KeyboardEvent) {
       if (
@@ -388,18 +363,6 @@ export const SmartSearchBar = React.forwardRef<
         className,
       )}
     >
-      {isOpen && isTouch ? (
-        <div
-          className="search-bar-backdrop"
-          onPointerDown={() => {
-            if (!forceOpen) {
-              setOpen(false);
-            }
-          }}
-          aria-hidden
-        />
-      ) : null}
-
       <div
         className={cn(
           "search-bar-field",
@@ -412,13 +375,10 @@ export const SmartSearchBar = React.forwardRef<
         aria-haspopup="listbox"
         aria-owns="search-bar-listbox"
         onClick={() => {
-          if (disabled) {
-            return;
-          }
-
-          if (!forceOpen && !open) {
+          if (disabled) return;
+          if (!open) {
             setOpen(true);
-            setTimeout(() => localInputRef.current?.focus(), 0);
+            localInputRef.current?.focus();
           }
         }}
       >
@@ -445,10 +405,7 @@ export const SmartSearchBar = React.forwardRef<
           value={query}
           onChange={handleChange}
           onFocus={(event) => {
-            if (!forceOpen) {
-              setOpen(true);
-            }
-
+            if (!forceOpen) setOpen(true);
             onFocus?.(event);
           }}
           onBlur={onBlur}
@@ -464,7 +421,7 @@ export const SmartSearchBar = React.forwardRef<
           className={cn("search-bar-input", inputClassName)}
           autoComplete={autoComplete}
           spellCheck={spellCheck}
-          readOnly={props.readOnly || (!isOpen && !forceOpen)}
+          // Rimosso readOnly: su iOS Safari blocca apertura tastiera al primo tap
           style={{
             ...props.style,
             cursor: !isOpen && !forceOpen ? "pointer" : "text",
@@ -481,7 +438,7 @@ export const SmartSearchBar = React.forwardRef<
             className="search-bar-clear"
             aria-label="Cancella ricerca"
           >
-            <X size={14} strokeWidth={2} />
+            <X size={14} />
           </button>
         ) : showHotkey && !isOpen && !isTouch ? (
           <span className="search-bar-hotkey" aria-hidden>
@@ -496,10 +453,31 @@ export const SmartSearchBar = React.forwardRef<
           id="search-bar-listbox"
           className={cn(
             "search-bar-dropdown",
-            isTouch && "search-bar-dropdown--mobile",
+            isTouch && "search-bar-dropdown",
           )}
           role="presentation"
         >
+          {/* Header mobile */}
+          {isTouch ? (
+            <div className="search-bar-mobile-header">
+              <span className="search-bar-mobile-title">
+                {aiMode ? "Chiedi all'IA" : commandMode ? "Comandi" : "Cerca"}
+              </span>
+              {!forceOpen ? (
+                <button
+                  type="button"
+                  className="search-bar-mobile-close"
+                  onClick={() => {
+                    setOpen(false);
+                    localInputRef.current?.blur();
+                  }}
+                  aria-label="Chiudi ricerca"
+                ></button>
+              ) : null}
+            </div>
+          ) : null}
+
+          {/* AI row */}
           {aiMode && query.length > 2 ? (
             <div className="search-bar-ai-row">
               <Sparkle size={13} className="search-bar-icon-ai" />
@@ -510,13 +488,9 @@ export const SmartSearchBar = React.forwardRef<
               <button
                 type="button"
                 className="search-bar-ai-cta"
-                onMouseDown={(event) => {
-                  event.preventDefault();
+                onClick={() => {
                   onAIQuery?.(query);
-
-                  if (!forceOpen) {
-                    setOpen(false);
-                  }
+                  if (!forceOpen) setOpen(false);
                 }}
               >
                 Chiedi
@@ -525,6 +499,7 @@ export const SmartSearchBar = React.forwardRef<
             </div>
           ) : null}
 
+          {/* Chip bar — solo mobile */}
           {isTouch ? (
             <MobileChipBar
               onChip={handleChip}
@@ -533,6 +508,7 @@ export const SmartSearchBar = React.forwardRef<
             />
           ) : null}
 
+          {/* Lista risultati */}
           {groups.length > 0 ? (
             <div ref={listRef} className="search-bar-list" role="listbox">
               {groups.map(({ category, label, items }) => (
@@ -558,11 +534,10 @@ export const SmartSearchBar = React.forwardRef<
                           globalIndex === activeIndex &&
                             "search-bar-item--active",
                         )}
-                        onMouseEnter={() => setActiveIndex(globalIndex)}
-                        onMouseDown={(event) => {
-                          event.preventDefault();
-                          handleSelect(item);
-                        }}
+                        onMouseEnter={() =>
+                          !isTouch && setActiveIndex(globalIndex)
+                        }
+                        onClick={() => handleSelect(item)}
                       >
                         <span className="search-bar-item-icon">
                           {item.icon ?? CATEGORY_ICONS[item.category]}
@@ -578,6 +553,7 @@ export const SmartSearchBar = React.forwardRef<
                           ) : null}
                         </span>
 
+                        {/* Badge/shortcut solo desktop */}
                         {!isTouch && (item.shortcut || item.badge) ? (
                           <span className="search-bar-item-meta">
                             {item.shortcut ? (
@@ -592,6 +568,14 @@ export const SmartSearchBar = React.forwardRef<
                           </span>
                         ) : null}
 
+                        {/* Badge testo su touch */}
+                        {isTouch && item.badge ? (
+                          <span className="search-bar-type-pill">
+                            {item.badge}
+                          </span>
+                        ) : null}
+
+                        {/* Delete recenti */}
                         {isRecent && onDeleteRecent ? (
                           <button
                             type="button"
@@ -600,8 +584,7 @@ export const SmartSearchBar = React.forwardRef<
                               isTouch && "search-bar-item-delete--touch",
                             )}
                             aria-label={`Rimuovi "${item.label}" dai recenti`}
-                            onMouseDown={(event) => {
-                              event.preventDefault();
+                            onClick={(event) => {
                               event.stopPropagation();
                               onDeleteRecent(item.id);
                             }}
@@ -610,6 +593,7 @@ export const SmartSearchBar = React.forwardRef<
                           </button>
                         ) : null}
 
+                        {/* Arrow solo desktop */}
                         {!isTouch && !isRecent ? (
                           <span className="search-bar-item-arrow" aria-hidden>
                             <ArrowRight size={12} strokeWidth={1.5} />
@@ -630,6 +614,7 @@ export const SmartSearchBar = React.forwardRef<
             </div>
           ) : null}
 
+          {/* Footer keyboard — solo desktop */}
           {!isTouch ? (
             <div className="search-bar-footer" aria-hidden>
               <span>

@@ -55,11 +55,10 @@ export default function SirioPage() {
           <div style={{ marginBottom: "var(--space-16)" }}>
             <div
               style={{
-                display: "flex",
-                alignItems: "flex-end",
-                gap: "var(--space-4)",
-                marginBottom: "var(--space-4)",
-                flexWrap: "wrap",
+                flex: 1,
+                minWidth: 0,
+                overflowX: "hidden",
+                padding: "var(--space-8) var(--space-8) var(--space-32)",
               }}
             >
               <h1
