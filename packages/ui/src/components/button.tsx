@@ -5,7 +5,7 @@ import { CircleNotch } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "destructive";
-export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonSize = "xs" | "sm" | "md" | "lg";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -14,8 +14,14 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
   iconSwap?: { from: React.ReactNode; to: React.ReactNode };
-  children: React.ReactNode;
+  swapLabel?: { idle: React.ReactNode; active: React.ReactNode };
+  swapActive?: boolean;
+  caption?: React.ReactNode;
+  captionPosition?: "top" | "bottom";
+  children?: React.ReactNode;
 }
+
+// ─── Static style maps ────────────────────────────────────────────────────────
 
 const BASE =
   "group relative inline-flex items-center justify-center select-none cursor-pointer " +
@@ -61,29 +67,119 @@ const FILLS: Record<ButtonVariant, string> = {
 };
 
 const SIZES: Record<ButtonSize, string> = {
+  xs: "h-8  px-4   gap-1.5 text-[length:var(--text-xs)]",
   sm: "h-9  px-6   gap-2   text-[length:var(--text-xs)]",
   md: "h-10 px-6   gap-2   text-[length:var(--text-sm)]",
   lg: "h-12 px-8   gap-2.5 text-[length:var(--text-base)]",
 };
 
 const SPINNER_SIZES: Record<ButtonSize, number> = {
+  xs: 10,
   sm: 12,
   md: 14,
   lg: 16,
 };
 
-const SWAP_SHIFT: Record<ButtonSize, string> = {
+const ICON_SWAP_SHIFT: Record<ButtonSize, string> = {
+  xs: "group-hover:-translate-x-[calc(10px+var(--spacing-1))]",
   sm: "group-hover:-translate-x-[calc(12px+var(--spacing-2))]",
   md: "group-hover:-translate-x-[calc(14px+var(--spacing-2))]",
   lg: "group-hover:-translate-x-[calc(16px+var(--spacing-2))]",
 };
 
-const SWAP_GAP: Record<ButtonSize, string> = {
+const ICON_SWAP_GAP: Record<ButtonSize, string> = {
+  xs: "var(--spacing-1.5)",
   sm: "var(--spacing-2)",
   md: "var(--spacing-2)",
   lg: "var(--spacing-2)",
 };
 
+const SWAP_TRANSITION =
+  "transform var(--duration-base) var(--ease-qoovex), opacity var(--duration-base) var(--ease-qoovex)";
+
+const CAPTION_STYLE: React.CSSProperties = {
+  fontSize: "0.7rem",
+  color: "var(--color-text-faint)",
+  lineHeight: 1.4,
+  textAlign: "center",
+  userSelect: "none",
+};
+
+// ─── SwapLabel ────────────────────────────────────────────────────────────────
+function SwapLabelContent({
+  swapLabel,
+  swapActive,
+  invisible,
+}: {
+  swapLabel: { idle: React.ReactNode; active: React.ReactNode };
+  swapActive: boolean;
+  invisible: boolean;
+}) {
+  return (
+    <span
+      style={{
+        position: "relative",
+        display: "inline-flex",
+        overflow: "hidden",
+        alignItems: "center",
+        visibility: invisible ? "hidden" : undefined,
+      }}
+    >
+      <span
+        aria-hidden="true"
+        style={{
+          visibility: "hidden",
+          pointerEvents: "none",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+          overflow: "hidden",
+          maxHeight: "1.5em",
+        }}
+      >
+        <span style={{ whiteSpace: "nowrap" }}>{swapLabel.idle}</span>
+        <span style={{ whiteSpace: "nowrap" }}>{swapLabel.active}</span>
+      </span>
+
+      <span
+        aria-hidden={swapActive || undefined}
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          whiteSpace: "nowrap",
+          transform: swapActive ? "translateX(-110%)" : "translateX(0)",
+          opacity: swapActive ? 0 : 1,
+          transition: SWAP_TRANSITION,
+        }}
+      >
+        {swapLabel.idle}
+      </span>
+
+      {/* Active label — slides in from the right when swapActive. */}
+      <span
+        aria-hidden={!swapActive || undefined}
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          whiteSpace: "nowrap",
+          transform: swapActive ? "translateX(0)" : "translateX(110%)",
+          opacity: swapActive ? 1 : 0,
+          transition: SWAP_TRANSITION,
+        }}
+      >
+        {swapLabel.active}
+      </span>
+    </span>
+  );
+}
+
+// ─── Button ───────────────────────────────────────────────────────────────────
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
     {
@@ -94,6 +190,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       iconLeft,
       iconRight,
       iconSwap,
+      swapLabel,
+      swapActive = false,
+      caption,
+      captionPosition = "bottom",
       className = "",
       children,
       ...props
@@ -102,7 +202,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) {
     const isDisabled = disabled || loading;
 
-    return (
+    const buttonEl = (
       <button
         ref={ref}
         disabled={isDisabled}
@@ -123,12 +223,25 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </span>
         ) : null}
 
-        {iconSwap ? (
+        {swapLabel ? (
+          <span
+            className={cn(
+              "relative z-10 inline-flex items-center",
+              loading && "invisible",
+            )}
+          >
+            <SwapLabelContent
+              swapLabel={swapLabel}
+              swapActive={swapActive}
+              invisible={false}
+            />
+          </span>
+        ) : iconSwap ? (
           <span
             className={cn(
               "relative z-10 inline-flex items-center gap-[inherit]",
               "transition-transform duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
-              SWAP_SHIFT[size],
+              ICON_SWAP_SHIFT[size],
               loading && "invisible",
             )}
           >
@@ -151,7 +264,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 "transition-opacity duration-[var(--duration-base)] ease-[var(--ease-qoovex)] " +
                 "opacity-0 group-hover:opacity-100"
               }
-              style={{ left: `calc(100% + ${SWAP_GAP[size]})` }}
+              style={{ left: `calc(100% + ${ICON_SWAP_GAP[size]})` }}
               aria-hidden="true"
             >
               {iconSwap.to}
@@ -187,6 +300,26 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
       </button>
     );
+
+    if (caption) {
+      const captionEl = <span style={CAPTION_STYLE}>{caption}</span>;
+      return (
+        <span
+          style={{
+            display: "inline-flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "var(--space-1)",
+          }}
+        >
+          {captionPosition === "top" && captionEl}
+          {buttonEl}
+          {captionPosition === "bottom" && captionEl}
+        </span>
+      );
+    }
+
+    return buttonEl;
   },
 );
 

@@ -51,7 +51,7 @@ export default function SirioPage() {
 
       <div className="sirio-layout">
         <SirioSidebar active={active} />
-        <main className="sirio-main" style={{ maxWidth: "820px" }}>
+        <main className="sirio-main">
           <div style={{ marginBottom: "var(--space-16)" }}>
             <div
               style={{

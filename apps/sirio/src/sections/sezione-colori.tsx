@@ -172,7 +172,7 @@ const COLOR_GROUPS: ColorGroup[] = [
   },
 ];
 
-// Canvas converts OKLCH → sRGB reliably across all modern browsers.
+// Canvas converts OKLCH → sRGB — reliable across all modern browsers.
 function parseColorFormats(
   oklchStr: string,
 ): { hex: string; rgb: string } | null {
@@ -197,7 +197,7 @@ function parseColorFormats(
   };
 }
 
-// Fallback for HTTP contexts and mobile WebViews where navigator.clipboard is absent.
+// Fallback for HTTP and mobile WebViews where navigator.clipboard may be absent.
 async function copyToClipboard(text: string): Promise<void> {
   if (navigator.clipboard?.writeText) {
     return navigator.clipboard.writeText(text);
@@ -240,26 +240,31 @@ function ColorChip({ token, oklch, label }: ColorToken) {
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: "var(--space-2)",
-        width: "100%",
+        gap: "var(--space-3)",
+        padding: "var(--space-4)",
+        background: "var(--color-surface)",
+        border: "1px solid var(--color-border)",
+        borderRadius: "var(--radius-lg)",
       }}
     >
+      {/* Swatch */}
       <div
         style={{
-          height: "56px",
+          height: "80px",
           borderRadius: "var(--radius-md)",
           background: `var(${token}, ${oklch})`,
           border: "1px solid var(--color-border)",
+          flexShrink: 0,
         }}
       />
 
-      <div>
+      {/* Token info */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
         <div
           style={{
             fontSize: "var(--text-sm)",
             fontWeight: 500,
             color: "var(--color-text)",
-            marginBottom: "1px",
           }}
         >
           {label}
@@ -280,60 +285,45 @@ function ColorChip({ token, oklch, label }: ColorToken) {
             color: "var(--color-text-faint)",
             fontFamily: "monospace",
             opacity: 0.55,
-            marginBottom: "var(--space-2)",
           }}
         >
           {oklch}
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "var(--space-2)",
-          padding: "var(--space-2) 0",
-        }}
-      >
+      {/* Copy buttons — swapLabel gives "copiato ✓" feedback without layout shift. */}
+      <div style={{ display: "flex", gap: "var(--space-2)" }}>
         <Button
           variant="ghost"
           size="sm"
+          swapLabel={{ idle: "OKLCH", active: "copiato ✓" }}
+          swapActive={copiedFormat === "OKLCH"}
           onClick={() => copy(oklch, "OKLCH")}
-          style={{
-            flex: 1,
-            fontFamily: "monospace",
-            fontSize: "0.7rem",
-            transition: "all 0.2s ease",
-          }}
+          style={{ flex: 1, minWidth: 0, fontFamily: "monospace" }}
         >
-          {copiedFormat === "OKLCH" ? "Copiato" : "OKLCH"}
+          OKLCH
         </Button>
         <Button
           variant="ghost"
           size="sm"
+          swapLabel={{ idle: "HEX", active: "copiato ✓" }}
+          swapActive={copiedFormat === "HEX"}
           onClick={() => copy(formats?.hex ?? "", "HEX")}
           disabled={!formats}
-          style={{
-            flex: 1,
-            fontFamily: "monospace",
-            fontSize: "0.7rem",
-            transition: "all 0.2s ease",
-          }}
+          style={{ flex: 1, minWidth: 0, fontFamily: "monospace" }}
         >
-          {copiedFormat === "HEX" ? "Copiato" : "HEX"}
+          HEX
         </Button>
         <Button
           variant="ghost"
           size="sm"
+          swapLabel={{ idle: "RGB", active: "copiato ✓" }}
+          swapActive={copiedFormat === "RGB"}
           onClick={() => copy(formats?.rgb ?? "", "RGB")}
           disabled={!formats}
-          style={{
-            flex: 1,
-            fontFamily: "monospace",
-            fontSize: "0.7rem",
-            transition: "all 0.2s ease",
-          }}
+          style={{ flex: 1, minWidth: 0, fontFamily: "monospace" }}
         >
-          {copiedFormat === "RGB" ? "Copiato" : "RGB"}
+          RGB
         </Button>
       </div>
     </div>
@@ -373,7 +363,7 @@ export function SezioneColori() {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "var(--space-8)",
+          gap: "var(--space-10)",
         }}
       >
         {COLOR_GROUPS.map((group) => (
@@ -393,8 +383,8 @@ export function SezioneColori() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                gap: "var(--space-6)",
+                gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+                gap: "var(--space-3)",
               }}
             >
               {group.tokens.map((t) => (
