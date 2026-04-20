@@ -187,9 +187,13 @@
   --search-bar-hotkey-radius: var(--radius-sm);
   --search-bar-footer-size: var(--text-xs);
 
-  /* Search bar — AI (bianco/testo) */
+  /* Search bar — AI (bianco/testo)
+   * --search-bar-ai-ring-color usa /0.09 invece di /0.18:
+   * oklch(0.94) bianco su sfondo dark è percettivamente 2× più visibile
+   * di oklch(0.42) blu scuro alla stessa opacità → si dimezza per pareggiare.
+   */
   --search-bar-ai-text: oklch(from var(--color-text) l c h / 0.9);
-  --search-bar-ai-ring-color: oklch(from var(--color-text) l c h / 0.18);
+  --search-bar-ai-ring-color: oklch(from var(--color-text) l c h / 0.09);
   --search-bar-ai-border-focus: oklch(from var(--color-text) l c h / 0.5);
   --search-bar-ai-row-bg: oklch(from var(--color-text) l c h / 0.04);
   --search-bar-ai-cta-border: oklch(from var(--color-text) l c h / 0.25);

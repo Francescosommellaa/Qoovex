@@ -136,16 +136,25 @@ interface MobileChipBarProps {
   onChip: (value: string) => void;
   onSearch: () => void;
   hasQuery: boolean;
+  aiMode: boolean;
+  commandMode: boolean;
 }
 
-function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
+function MobileChipBar({ onChip, onSearch, hasQuery, aiMode, commandMode }: MobileChipBarProps) {
+  // classic mode = nessun prefisso speciale (né AI né comando)
+  const classicMode = !aiMode && !commandMode;
+
   return (
     <div className="search-bar-chip-bar" aria-label="Azioni rapide">
       <button
         type="button"
-        className="search-bar-chip search-bar-chip--ai"
+        className={cn(
+          "search-bar-chip",
+          aiMode && "search-bar-chip--active",
+        )}
         onClick={() => onChip("?")}
         aria-label="Attiva modalità IA"
+        aria-pressed={aiMode}
       >
         <Sparkle size={12} />
         IA
@@ -153,9 +162,13 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
 
       <button
         type="button"
-        className="search-bar-chip"
+        className={cn(
+          "search-bar-chip",
+          commandMode && "search-bar-chip--active",
+        )}
         onClick={() => onChip("/")}
         aria-label="Attiva modalità comando"
+        aria-pressed={commandMode}
       >
         <Hash size={12} />
         Comando
@@ -163,9 +176,14 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
 
       <button
         type="button"
-        className="search-bar-chip"
+        className={cn(
+          "search-bar-chip",
+          // Ricette attivo se siamo in classic mode senza query specifica
+          classicMode && "search-bar-chip--active",
+        )}
         onClick={() => onChip("")}
         aria-label="Cerca ricette"
+        aria-pressed={classicMode}
       >
         <BookOpen size={12} />
         Ricette
@@ -176,6 +194,7 @@ function MobileChipBar({ onChip, onSearch, hasQuery }: MobileChipBarProps) {
         className="search-bar-chip"
         onClick={() => onChip("")}
         aria-label="Cerca menu"
+        aria-pressed={false}
       >
         <ForkKnife size={12} />
         Menu
@@ -505,6 +524,8 @@ export const SmartSearchBar = React.forwardRef<
               onChip={handleChip}
               onSearch={handleSubmit}
               hasQuery={query.trim().length > 0}
+              aiMode={aiMode}
+              commandMode={commandMode}
             />
           ) : null}
 
