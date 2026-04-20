@@ -13,6 +13,10 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
+    /* Blocca il resize automatico del testo su iOS/Android */
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
   }
 
   body {
@@ -51,6 +55,14 @@
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  /* Previene lo zoom automatico su tap su tutti gli elementi interattivi */
+  input,
+  textarea,
+  select,
+  button {
+    touch-action: manipulation;
   }
 
   /* Resize gestito dai component variants */
@@ -231,14 +243,13 @@
     }
   }
 
-  /* Input */
+  /* Input — 1rem (16px) minimo per bloccare lo zoom automatico su iOS */
 
   .search-bar-input {
-    font-size: 16px;
     flex: 1;
     height: 100%;
     min-width: 0;
-    font-size: var(--text-sm);
+    font-size: 1rem;
     color: var(--color-text);
     background: transparent;
     border: none;
