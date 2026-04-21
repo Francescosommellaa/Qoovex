@@ -23,6 +23,7 @@ import { SezioneInput } from "../sections/sezione-input";
 import { SezioneTextarea } from "@/sections/sezione-textarea";
 import { SezioneSmartSearchBar } from "@/sections/sezione-smart-search-bar";
 import { SezioneSearchBar } from "@/sections/sezione-search-bar";
+import { SezioneSelect } from "@/sections/sezione-select";
 
 export default function SirioPage() {
   const [active, setActive] = useState<SectionId>("fondamenta");
@@ -142,6 +143,7 @@ export default function SirioPage() {
           <SezioneTextarea />
           <SezioneSmartSearchBar />
           <SezioneSearchBar />
+          <SezioneSelect />
 
           {(["card", "badge", "form"] as const).map((id) => {
             const s = SECTIONS.find((x) => x.id === id)!;

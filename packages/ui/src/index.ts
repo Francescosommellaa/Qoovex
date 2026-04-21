@@ -1,5 +1,9 @@
 export { Button } from "./components/button";
-export type { ButtonProps, ButtonSize, ButtonVariant } from "./components/button";
+export type {
+  ButtonProps,
+  ButtonSize,
+  ButtonVariant,
+} from "./components/button";
 
 export { Input } from "./components/input";
 export type { InputProps, InputStatus } from "./components/input";
@@ -20,3 +24,13 @@ export type {
 
 export { SearchBar } from "./components/search-bar";
 export type { SearchBarProps } from "./components/search-bar";
+
+export { Select } from "./components/select";
+export type {
+  SelectProps,
+  SelectOption,
+  SelectGroup,
+  SelectItem,
+  SelectSize,
+  SelectStatus,
+} from "./components/select";

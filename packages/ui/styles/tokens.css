@@ -187,11 +187,7 @@
   --search-bar-hotkey-radius: var(--radius-sm);
   --search-bar-footer-size: var(--text-xs);
 
-  /* Search bar — AI (bianco/testo)
-   * --search-bar-ai-ring-color usa /0.09 invece di /0.18:
-   * oklch(0.94) bianco su sfondo dark è percettivamente 2× più visibile
-   * di oklch(0.42) blu scuro alla stessa opacità → si dimezza per pareggiare.
-   */
+  /* Search bar — AI */
   --search-bar-ai-text: oklch(from var(--color-text) l c h / 0.9);
   --search-bar-ai-ring-color: oklch(from var(--color-text) l c h / 0.09);
   --search-bar-ai-border-focus: oklch(from var(--color-text) l c h / 0.5);
@@ -209,4 +205,21 @@
   --search-bar-chip-primary-active-bg: oklch(
     from var(--color-primary) l c h / 0.15
   );
+
+  /* Select */
+  --color-select-item-hover: var(--color-surface-offset);
+  --color-select-item-selected-bg: var(--color-primary-highlight);
+  --color-select-item-selected-text: var(--color-primary);
+  --color-select-group-label: var(--color-text-faint);
+  --select-radius: var(--input-radius);
+  --select-dropdown-radius: var(--radius-md);
+  --select-dropdown-shadow: var(--shadow-md);
+  --select-item-radius: var(--radius-md);
+  /* Select — multi tag */
+  --select-tag-height: 1.375rem;
+  --select-tag-radius: var(--radius-sm);
+  --color-select-tag-bg: var(--color-surface-offset);
+  --color-select-tag-border: var(--color-border);
+  --color-select-tag-text: var(--color-text-muted);
+  --color-select-tag-remove: var(--color-text-faint);
 }
