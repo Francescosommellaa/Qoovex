@@ -237,7 +237,7 @@ export const SECTION_STATUS: Record<SectionId, SectionStatus> = {
   smartsearchbar: "done",
   searchbar: "done",
   select: "done",
-  card: "coming-soon",
+  card: "done",
   badge: "coming-soon",
   avatar: "coming-soon",
   divider: "coming-soon",

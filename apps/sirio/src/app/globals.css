@@ -59,3 +59,44 @@
 .sirio-section {
   margin-bottom: var(--space-16);
 }
+
+/* ─── Sirio Row layout ───────────────────────────────────────── */
+
+.sirio-row {
+  margin-bottom: var(--spacing-8);
+}
+
+.sirio-row__label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  font-family: monospace;
+  margin-bottom: var(--spacing-3);
+}
+
+.sirio-row__grid {
+  display: grid;
+  gap: var(--spacing-4);
+  align-items: start;
+}
+
+.sirio-row__grid--card {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+/* ─── Sirio testi generici ───────────────────────────────────── */
+
+.sirio-preview-text {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.sirio-token-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+  font-family: monospace;
+  margin-bottom: var(--spacing-2);
+}

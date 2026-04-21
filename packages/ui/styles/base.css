@@ -675,4 +675,111 @@
     background: var(--color-surface-offset);
     color: var(--color-text);
   }
+
+  /* ─── Card ───────────────────────────────────────────────────── */
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--card-radius);
+    border: 1px solid var(--card-border);
+  }
+
+  /* Varianti superfice */
+  .card--flat {
+    background: var(--card-bg-flat);
+    box-shadow: var(--shadow-card-flat);
+  }
+
+  .card--elevated {
+    background: var(--card-bg-elevated);
+    box-shadow: var(--shadow-card-elevated);
+  }
+
+  .card--outlined {
+    background: var(--card-bg-outlined);
+    box-shadow: none;
+  }
+
+  .card--ghost {
+    background: var(--card-bg-ghost);
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  .card--tinted {
+    background: var(--card-bg-tinted);
+    border-color: oklch(from var(--color-primary) l c h / 0.18);
+    box-shadow: none;
+  }
+
+  /* Variante interattiva — microinterazione: solo ombra/bordo, niente translate */
+  .card--interactive {
+    background: var(--card-bg-elevated);
+    box-shadow: var(--shadow-card-interactive);
+    cursor: pointer;
+    transition: var(--card-interactive-transition);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .card--interactive:hover {
+    box-shadow: var(--shadow-card-interactive-hover);
+    border-color: var(--card-border-interactive-hover);
+  }
+
+  .card--interactive:active {
+    box-shadow: var(--shadow-card-interactive-active);
+    border-color: var(--card-border);
+  }
+
+  .card--interactive:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Slot: header */
+  .card__header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--card-header-py) var(--card-padding);
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  /* Slot: body */
+  .card__body {
+    flex: 1;
+    min-width: 0;
+    padding: var(--card-padding);
+  }
+
+  .card__body--no-padding {
+    padding: 0;
+  }
+
+  /* Slot: footer */
+  .card__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--card-footer-py) var(--card-padding);
+    border-top: 1px solid var(--card-border);
+  }
+
+  /* Slot: media (immagine full-bleed in cima) */
+  .card__media {
+    width: 100%;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 }

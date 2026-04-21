@@ -222,4 +222,30 @@
   --color-select-tag-border: var(--color-border);
   --color-select-tag-text: var(--color-text-muted);
   --color-select-tag-remove: var(--color-text-faint);
+
+  /* ─── Card ───────────────────────────────────────────────────── */
+  --card-radius: var(--radius-lg);
+  --card-padding: var(--spacing-5);
+  --card-border: oklch(from var(--color-text) l c h / 0.08);
+
+  --card-bg-flat: var(--color-surface);
+  --card-bg-elevated: var(--color-surface-2);
+  --card-bg-outlined: transparent;
+  --card-bg-ghost: transparent;
+  --card-bg-tinted: var(--color-primary-highlight);
+
+  --shadow-card-flat: none;
+  --shadow-card-elevated: var(--shadow-md);
+  --shadow-card-interactive: var(--shadow-sm);
+  --shadow-card-interactive-hover:
+    0 2px 8px oklch(0 0 0 / 0.5),
+    0 0 0 1px oklch(from var(--color-primary) l c h / 0.2);
+
+  --card-interactive-transition:
+    box-shadow var(--duration-base) var(--ease-qoovex),
+    border-color var(--duration-base) var(--ease-qoovex);
+  --card-border-interactive-hover: oklch(from var(--color-primary) l c h / 0.3);
+
+  --card-header-py: var(--spacing-4);
+  --card-footer-py: var(--spacing-4);
 }

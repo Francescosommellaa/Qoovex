@@ -34,3 +34,12 @@ export type {
   SelectSize,
   SelectStatus,
 } from "./components/select";
+
+export {
+  Card,
+  CardMedia,
+  CardHeader,
+  CardBody,
+  CardFooter,
+} from "./components/card";
+export type { CardProps, CardVariant } from "./components/card";
