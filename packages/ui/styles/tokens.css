@@ -216,12 +216,62 @@
   --select-dropdown-shadow: var(--shadow-md);
   --select-item-radius: var(--radius-md);
   /* Select — multi tag */
-  --select-tag-height: 1.75rem;
-  --select-tag-radius: var(--radius-sm);
-  --color-select-tag-bg: var(--color-surface-offset);
+  --select-trigger-py: var(--spacing-1);
+  --select-tag-min-height: 1.625rem;
+  --select-tag-radius: var(--radius-full);
+  --select-tag-px: var(--spacing-2);
+  --select-tag-py: var(--spacing-1);
+  --select-tag-gap-x: var(--spacing-2);
+  --select-tag-gap-y: var(--spacing-1);
+  --select-tag-max-width: min(10rem, 62vw);
+  --select-tag-rail-mask: linear-gradient(
+    to right,
+    black calc(100% - 0.875rem),
+    transparent
+  );
+  --select-tag-shadow:
+    inset 0 1px 0 oklch(from var(--color-text) l c h / 0.06),
+    inset 0 -0.5rem 1rem oklch(0 0 0 / 0.14);
+  --select-tag-hover-shadow:
+    inset 0 1px 0 oklch(from var(--color-text) l c h / 0.1),
+    inset 0 -0.5rem 1rem oklch(0 0 0 / 0.1);
+  --color-select-tag-bg-blue:
+    linear-gradient(
+      135deg,
+      oklch(0.15 0.026 240),
+      oklch(0.105 0.018 240)
+    );
+  --color-select-tag-bg-green:
+    linear-gradient(
+      135deg,
+      oklch(0.15 0.028 152),
+      oklch(0.105 0.018 152)
+    );
+  --color-select-tag-bg-purple:
+    linear-gradient(
+      135deg,
+      oklch(0.15 0.028 302),
+      oklch(0.105 0.019 302)
+    );
+  --color-select-tag-bg-amber:
+    linear-gradient(
+      135deg,
+      oklch(0.15 0.03 65),
+      oklch(0.105 0.019 65)
+    );
+  --color-select-tag-bg-red:
+    linear-gradient(
+      135deg,
+      oklch(0.15 0.03 22),
+      oklch(0.105 0.019 22)
+    );
   --color-select-tag-border: var(--color-border);
-  --color-select-tag-text: var(--color-text-muted);
-  --color-select-tag-remove: var(--color-text-faint);
+  --color-select-tag-border-hover: oklch(from var(--color-text) l c h / 0.14);
+  --color-select-tag-text: oklch(from var(--color-text) l c h / 0.82);
+  --color-select-tag-more-bg: oklch(from var(--color-text) l c h / 0.045);
+  --color-select-tag-more-border: oklch(from var(--color-text) l c h / 0.09);
+  --color-select-tag-more-text: var(--color-text-muted);
+  --color-select-count-text: var(--color-text-faint);
 
   /* ─── Card ───────────────────────────────────────────────────── */
   --card-radius: var(--radius-lg);

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CaretDown, Check, X } from "@phosphor-icons/react";
+import { CaretDown, Check } from "@phosphor-icons/react";
 import { cn, useControllableValue } from "../lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -101,50 +101,62 @@ const OPTION_SIZE: Record<SelectSize, string> = {
   lg: "min-h-[var(--input-height-lg)] text-[length:var(--text-base)]",
 };
 
+const MULTI_TAG_TONES = [
+  "[background:var(--color-select-tag-bg-blue)]",
+  "[background:var(--color-select-tag-bg-green)]",
+  "[background:var(--color-select-tag-bg-purple)]",
+  "[background:var(--color-select-tag-bg-amber)]",
+  "[background:var(--color-select-tag-bg-red)]",
+] as const;
+
+const MULTI_TAG_MIN_VISIBLE_RATIO = 0.8;
+
 // ─── Multi-tag chip ────────────────────────────────────────────────────────────
 
 function MultiTag({
   label,
   onRemove,
   size,
+  tone,
+  measureRef,
+  inert = false,
 }: {
   label: string;
   onRemove: (e: React.MouseEvent<HTMLButtonElement>) => void;
   size: SelectSize;
+  tone: (typeof MULTI_TAG_TONES)[number];
+  measureRef?: (node: HTMLButtonElement | null) => void;
+  inert?: boolean;
 }) {
   return (
-    <span
+    <button
+      ref={measureRef}
+      type="button"
+      aria-label={`Rimuovi ${label}`}
+      onClick={onRemove}
+      tabIndex={inert ? -1 : undefined}
       className={cn(
-        "inline-flex items-center gap-[var(--spacing-1)]",
-        "px-[var(--spacing-2)] rounded-[var(--select-tag-radius)]",
-        "bg-[var(--color-select-tag-bg)] border border-[var(--color-select-tag-border)]",
+        "inline-flex items-center justify-center",
+        "min-h-[var(--select-tag-min-height)] max-w-[var(--select-tag-max-width)]",
+        "px-[var(--select-tag-px)] py-[var(--select-tag-py)] rounded-[var(--select-tag-radius)]",
+        "border border-[var(--color-select-tag-border)]",
         "text-[var(--color-select-tag-text)]",
-        "h-[var(--select-tag-height)]",
+        "leading-none",
+        "shadow-[var(--select-tag-shadow)]",
+        "cursor-pointer touch-manipulation select-none",
+        "transition-[border-color,box-shadow,transform] duration-[var(--duration-fast)] ease-[var(--ease-qoovex)]",
+        "hover:border-[var(--color-select-tag-border-hover)] hover:shadow-[var(--select-tag-hover-shadow)]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-highlight)]",
+        "active:scale-[0.98]",
         size === "lg"
           ? "text-[length:var(--text-sm)]"
           : "text-[length:var(--text-xs)]",
         "shrink-0",
+        tone,
       )}
     >
-      <span className="max-w-[8rem] truncate">{label}</span>
-      <button
-        type="button"
-        aria-label={`Rimuovi ${label}`}
-        onClick={onRemove}
-        className={cn(
-          "flex items-center justify-center",
-          "min-h-7 min-w-7",
-          "rounded-[var(--radius-sm)]",
-          "text-[var(--color-select-tag-remove)]",
-          "hover:text-[var(--color-text)]",
-          "transition-colors duration-[var(--duration-fast)]",
-          "cursor-pointer",
-          "-mr-[var(--spacing-1)]",
-        )}
-      >
-        <X size={10} weight="bold" aria-hidden="true" />
-      </button>
-    </span>
+      <span className="truncate">{label}</span>
+    </button>
   );
 }
 
@@ -167,8 +179,9 @@ function Option({
       aria-selected={selected}
       aria-disabled={option.disabled || undefined}
       className={cn(
-        "flex w-full items-center justify-between gap-2",
+        "flex w-full items-center justify-between gap-[var(--spacing-2)]",
         "px-[var(--input-px)] rounded-[var(--select-item-radius)]",
+        "mb-[var(--spacing-1)] last:mb-0",
         "cursor-pointer select-none",
         "transition-colors duration-[var(--duration-fast)] ease-[var(--ease-qoovex)]",
         OPTION_SIZE[size],
@@ -216,6 +229,12 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
 
     const [open, setOpen] = React.useState(false);
     const containerRef = React.useRef<HTMLDivElement>(null);
+    const multiContentRef = React.useRef<HTMLDivElement>(null);
+    const measureOverflowRef = React.useRef<HTMLSpanElement>(null);
+    const measureChipRefs = React.useRef<Map<string, HTMLButtonElement>>(
+      new Map(),
+    );
+    const [visibleMultiCount, setVisibleMultiCount] = React.useState(3);
 
     // ── Valore singolo ──
     const [singleValue, setSingleValue] = useControllableValue<string>({
@@ -279,30 +298,148 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       setMultiValue(multiValue.filter((v) => v !== val));
     }
 
+    function handleTriggerKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+      if (disabled) return;
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        setOpen((p) => !p);
+        return;
+      }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setOpen(true);
+        return;
+      }
+      if (e.key === "Escape") {
+        setOpen(false);
+      }
+    }
+
+    function setMeasureChipRef(
+      value: string,
+      node: HTMLButtonElement | null,
+    ) {
+      if (node) {
+        measureChipRefs.current.set(value, node);
+        return;
+      }
+      measureChipRefs.current.delete(value);
+    }
+
+    const updateVisibleMultiCount = React.useCallback(() => {
+      if (!isMulti) return;
+      if (multiValue.length === 0) {
+        setVisibleMultiCount(0);
+        return;
+      }
+
+      const content = multiContentRef.current;
+      if (!content) return;
+
+      const contentWidth = content.getBoundingClientRect().width;
+      if (contentWidth <= 0) return;
+
+      const contentStyle = window.getComputedStyle(content);
+      const contentGap =
+        Number.parseFloat(contentStyle.columnGap || contentStyle.gap) || 0;
+      const overflowWidth =
+        measureOverflowRef.current?.getBoundingClientRect().width ?? 0;
+
+      let usedWidth = 0;
+      let nextVisibleCount = 0;
+
+      for (const value of multiValue) {
+        const chip = measureChipRefs.current.get(value);
+        const chipWidth = chip?.getBoundingClientRect().width ?? 0;
+        if (chipWidth <= 0) break;
+
+        const gapBeforeChip = nextVisibleCount === 0 ? 0 : contentGap;
+        const hasHiddenAfterChip =
+          nextVisibleCount + 1 < multiValue.length && overflowWidth > 0;
+        const overflowReservation = hasHiddenAfterChip
+          ? contentGap + overflowWidth
+          : 0;
+        const minimumVisibleWidth =
+          usedWidth +
+          gapBeforeChip +
+          chipWidth * MULTI_TAG_MIN_VISIBLE_RATIO +
+          overflowReservation;
+
+        if (minimumVisibleWidth > contentWidth) break;
+
+        usedWidth += gapBeforeChip + chipWidth;
+        nextVisibleCount += 1;
+      }
+
+      setVisibleMultiCount(
+        Math.min(Math.max(nextVisibleCount, 1), multiValue.length),
+      );
+    }, [isMulti, multiValue]);
+
+    React.useEffect(() => {
+      if (!isMulti) return;
+
+      const frame = window.requestAnimationFrame(updateVisibleMultiCount);
+      const content = multiContentRef.current;
+
+      if (!content || typeof ResizeObserver === "undefined") {
+        window.addEventListener("resize", updateVisibleMultiCount);
+        return () => {
+          window.cancelAnimationFrame(frame);
+          window.removeEventListener("resize", updateVisibleMultiCount);
+        };
+      }
+
+      const observer = new ResizeObserver(updateVisibleMultiCount);
+      observer.observe(content);
+
+      return () => {
+        window.cancelAnimationFrame(frame);
+        observer.disconnect();
+      };
+    }, [isMulti, updateVisibleMultiCount]);
+
     const caretSize = size === "sm" ? 12 : size === "lg" ? 16 : 14;
+    const visibleMultiValue = isMulti
+      ? multiValue.slice(0, visibleMultiCount)
+      : [];
+    const hiddenMultiCount = isMulti
+      ? Math.max(multiValue.length - visibleMultiCount, 0)
+      : 0;
 
     // ── Render trigger content ──
     const triggerContent = isMulti ? (
       multiValue.length === 0 ? (
-        <span className="text-[var(--color-input-placeholder)] truncate">
+        <span className="flex-1 truncate text-[var(--color-input-placeholder)]">
           {placeholder}
         </span>
       ) : (
-        <div className="flex flex-wrap gap-[var(--spacing-1)] py-[var(--spacing-1)] flex-1 min-w-0">
-          {multiValue.map((v) => {
-            const opt = findOption(options, v);
-            return opt ? (
-              <MultiTag
-                key={v}
-                label={opt.label}
-                size={size}
-                onRemove={(e) => handleRemoveTag(v, e)}
-              />
-            ) : null;
-          })}
-          {maxSelected && (
-            <span className="text-[length:var(--text-xs)] text-[var(--color-text-faint)] self-center ml-auto shrink-0">
-              {multiValue.length}/{maxSelected}
+        <div
+          ref={multiContentRef}
+          className="flex flex-1 items-center gap-x-[var(--select-tag-gap-x)] min-w-0"
+        >
+          <div
+            className="flex flex-1 flex-nowrap items-center gap-x-[var(--select-tag-gap-x)] min-w-0 overflow-hidden pr-[var(--spacing-1)] [mask-image:var(--select-tag-rail-mask)]"
+          >
+            {visibleMultiValue.map((v, index) => {
+              const opt = findOption(options, v);
+              return opt ? (
+                <MultiTag
+                  key={v}
+                  label={opt.label}
+                  size={size}
+                  tone={MULTI_TAG_TONES[index % MULTI_TAG_TONES.length]}
+                  onRemove={(e) => handleRemoveTag(v, e)}
+                />
+              ) : null;
+            })}
+          </div>
+          {hiddenMultiCount > 0 && (
+            <span
+              aria-label={`${hiddenMultiCount} selezioni aggiuntive`}
+              className="inline-flex min-h-[var(--select-tag-min-height)] shrink-0 items-center rounded-[var(--select-tag-radius)] border border-[var(--color-select-tag-more-border)] bg-[var(--color-select-tag-more-bg)] px-[var(--select-tag-px)] py-[var(--select-tag-py)] text-[length:var(--text-xs)] font-medium leading-none text-[var(--color-select-tag-more-text)]"
+            >
+              +{hiddenMultiCount}
             </span>
           )}
         </div>
@@ -310,7 +447,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     ) : (
       <span
         className={cn(
-          "truncate",
+          "flex-1 truncate",
           !findOption(options, singleValue) &&
             "text-[var(--color-input-placeholder)]",
         )}
@@ -319,46 +456,65 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       </span>
     );
 
+    const selectedCountMeta =
+      isMulti && maxSelected !== undefined ? (
+        <span className="ml-auto shrink-0 text-[length:var(--text-xs)] font-medium leading-none tracking-[0.04em] text-[var(--color-select-count-text)]">
+          {multiValue.length}/{maxSelected}
+        </span>
+      ) : null;
+
     return (
       <div
         ref={ref}
         className={cn("flex w-full flex-col gap-[var(--input-gap)]", className)}
       >
-        {label && (
-          <label
-            id={`${selectId}-label`}
-            className={cn(
-              "text-[length:var(--text-xs)] font-medium text-[var(--color-label)] tracking-[0.03em] uppercase select-none",
-              srOnlyLabel && "sr-only",
+        {(label || selectedCountMeta) && (
+          <div className="flex min-h-[0.75rem] w-full items-center gap-[var(--spacing-3)]">
+            {label && (
+              <label
+                id={`${selectId}-label`}
+                className={cn(
+                  "text-[length:var(--text-xs)] font-medium text-[var(--color-label)] tracking-[0.03em] uppercase select-none",
+                  srOnlyLabel && "sr-only",
+                )}
+              >
+                {label}
+              </label>
             )}
-          >
-            {label}
-          </label>
+            {selectedCountMeta}
+          </div>
         )}
 
         <div ref={containerRef} className="relative w-full">
-          <button
-            type="button"
+          <div
             role="combobox"
             aria-expanded={open}
             aria-haspopup="listbox"
             aria-controls={listboxId}
+            aria-label={label ? undefined : placeholder}
             aria-labelledby={label ? `${selectId}-label` : undefined}
             aria-describedby={helperId}
             aria-invalid={status === "error" || undefined}
-            disabled={disabled}
+            aria-disabled={disabled || undefined}
+            tabIndex={disabled ? -1 : 0}
             data-open={open}
-            onClick={() => setOpen((p) => !p)}
+            data-disabled={disabled}
+            onClick={() => {
+              if (!disabled) setOpen((p) => !p);
+            }}
+            onKeyDown={handleTriggerKeyDown}
             className={cn(
               "relative flex w-full items-center justify-between",
               "rounded-[var(--select-radius)] border",
               "bg-[var(--color-input-bg)]",
-              "px-[var(--input-px)] gap-[var(--input-gap)]",
+              "px-[var(--input-px)] py-[var(--select-trigger-py)] gap-[var(--input-gap)]",
               "cursor-pointer",
               "transition-[border-color,box-shadow]",
               "duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
               "focus-visible:outline-none",
-              "disabled:opacity-50 disabled:pointer-events-none",
+              "focus-visible:border-[var(--color-input-border-focus)]",
+              "focus-visible:ring-2 focus-visible:ring-[var(--color-primary-highlight)]",
+              "data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none",
               TRIGGER_SIZE[size],
               TRIGGER_STATUS[status],
             )}
@@ -366,14 +522,42 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
             {triggerContent}
             <CaretDown
               size={caretSize}
-              className="shrink-0 text-[var(--color-input-icon)] ml-auto"
+              className="shrink-0 text-[var(--color-input-icon)]"
               aria-hidden="true"
               style={{
                 transform: open ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "transform var(--duration-base) var(--ease-qoovex)",
               }}
             />
-          </button>
+          </div>
+
+          {isMulti && multiValue.length > 0 && (
+            <div
+              aria-hidden="true"
+              className="pointer-events-none invisible absolute left-0 top-0 flex flex-nowrap items-center gap-x-[var(--select-tag-gap-x)]"
+            >
+              {multiValue.map((v, index) => {
+                const opt = findOption(options, v);
+                return opt ? (
+                  <MultiTag
+                    key={v}
+                    label={opt.label}
+                    size={size}
+                    tone={MULTI_TAG_TONES[index % MULTI_TAG_TONES.length]}
+                    onRemove={() => undefined}
+                    measureRef={(node) => setMeasureChipRef(v, node)}
+                    inert
+                  />
+                ) : null;
+              })}
+              <span
+                ref={measureOverflowRef}
+                className="inline-flex min-h-[var(--select-tag-min-height)] shrink-0 items-center rounded-[var(--select-tag-radius)] border border-[var(--color-select-tag-more-border)] bg-[var(--color-select-tag-more-bg)] px-[var(--select-tag-px)] py-[var(--select-tag-py)] text-[length:var(--text-xs)] font-medium leading-none text-[var(--color-select-tag-more-text)]"
+              >
+                +{multiValue.length}
+              </span>
+            </div>
+          )}
 
           {/* Dropdown */}
           <div
