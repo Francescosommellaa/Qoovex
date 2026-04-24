@@ -42,7 +42,7 @@ export async function POST(req: Request) {
 
   if (old.length > 0) {
     await db.recentSearch.deleteMany({
-      where: { id: { in: old.map((r) => r.id) } },
+      where: { id: { in: old.map((r: { id: string }) => r.id) } },    
     });
   }
 
