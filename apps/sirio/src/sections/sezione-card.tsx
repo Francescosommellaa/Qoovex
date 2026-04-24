@@ -1,365 +1,513 @@
 "use client";
 
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardMedia,
-  Button,
-} from "@qoovex/ui";
-import { SectionHeader } from "../app/sirio-content";
+import type { ReactNode } from "react";
 import {
   ChefHat,
-  Star,
   ClockCountdown,
+  Flame,
+  Info,
+  Leaf,
   Lightning,
+  Star,
   Tag,
   UsersThree,
-  Flame,
-  Leaf,
-  Info,
 } from "@phosphor-icons/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  CardMedia,
+} from "@qoovex/ui";
+import type { CardTone } from "@qoovex/ui";
+import { SectionHeader } from "../app/sirio-content";
 
-// ─── Row helper ──────────────────────────────────────────────────────────────
-
-function Row({
-  label,
-  children,
-}: {
+interface ShowcaseBlockProps {
   label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="sirio-row">
-      <p className="sirio-row__label">{label}</p>
-      <div className="sirio-row__grid sirio-row__grid--card">{children}</div>
-    </div>
-  );
+  description: string;
+  children: ReactNode;
+  className?: string;
 }
 
-// ─── Dati mockup ─────────────────────────────────────────────────────────────
+interface RecipePreview {
+  title: string;
+  category: string;
+  time: string;
+  station: string;
+  description: string;
+  tone: CardTone;
+  starred?: boolean;
+}
 
-const RICETTE = [
+const RECIPE_PREVIEWS: RecipePreview[] = [
   {
-    titolo: "Cacio e pepe",
-    categoria: "Primo",
-    tempo: "30 min",
-    difficoltà: "Media",
+    title: "Cacio e pepe",
+    category: "Primo",
+    time: "18 min",
+    station: "Primi",
+    description: "Pecorino, pepe tostato e acqua di cottura gestita al grammo.",
+    tone: "primary",
     starred: true,
   },
   {
-    titolo: "Ossobuco",
-    categoria: "Secondo",
-    tempo: "90 min",
-    difficoltà: "Alta",
-    starred: false,
+    title: "Ossobuco",
+    category: "Secondo",
+    time: "90 min",
+    station: "Linea calda",
+    description: "Cottura lenta, fondo filtrato e gremolada pronta al servizio.",
+    tone: "warning",
   },
   {
-    titolo: "Panna cotta",
-    categoria: "Dolce",
-    tempo: "20 min",
-    difficoltà: "Facile",
+    title: "Panna cotta",
+    category: "Dolce",
+    time: "20 min",
+    station: "Pasticceria",
+    description: "Base pronta, abbattimento controllato e topping separato.",
+    tone: "success",
     starred: true,
   },
 ];
 
-// ─── Sezione ──────────────────────────────────────────────────────────────────
+const handleDemoCardClick = () => undefined;
+
+function ShowcaseBlock({
+  label,
+  description,
+  children,
+  className,
+}: ShowcaseBlockProps) {
+  return (
+    <div className="mb-[var(--spacing-10)]">
+      <div className="mb-[var(--spacing-4)] max-w-3xl">
+        <p className="sirio-row__label">{label}</p>
+        <p className="sirio-preview-text">{description}</p>
+      </div>
+      <div
+        className={
+          className ??
+          "grid grid-cols-1 gap-[var(--spacing-4)] md:grid-cols-2 xl:grid-cols-4"
+        }
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function AccentIcon({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-[var(--card-accent-border)] bg-[var(--card-accent-soft)] text-[var(--card-accent)]">
+      {children}
+    </span>
+  );
+}
+
+function MetaPill({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex items-center rounded-full border border-border bg-surface-offset px-[var(--spacing-2)] py-[var(--spacing-1)] text-[length:var(--text-xs)] text-text-muted">
+      {children}
+    </span>
+  );
+}
+
+function RecipeCard({ recipe }: { recipe: RecipePreview }) {
+  return (
+    <Card
+      variant="panel"
+      tone={recipe.tone}
+      interactive
+      onCardClick={handleDemoCardClick}
+    >
+      <CardHeader className="justify-between">
+        <div className="flex min-w-0 items-center gap-[var(--spacing-3)]">
+          <AccentIcon>
+            <ChefHat size={16} aria-hidden="true" />
+          </AccentIcon>
+          <div className="min-w-0">
+            <p className="text-[length:var(--text-xs)] font-medium uppercase tracking-[0.08em] text-text-faint">
+              {recipe.category}
+            </p>
+            <h3 className="truncate font-display text-[length:var(--text-base)] font-semibold text-text">
+              {recipe.title}
+            </h3>
+          </div>
+        </div>
+        {recipe.starred ? (
+          <Star
+            size={15}
+            weight="fill"
+            className="shrink-0 text-warning"
+            aria-hidden="true"
+          />
+        ) : null}
+      </CardHeader>
+      <CardBody className="flex flex-col gap-[var(--spacing-5)]">
+        <p className="sirio-preview-text">{recipe.description}</p>
+        <div className="mt-auto flex flex-wrap gap-[var(--spacing-2)] pt-[var(--spacing-2)]">
+          <MetaPill>{recipe.time}</MetaPill>
+          <MetaPill>{recipe.station}</MetaPill>
+        </div>
+      </CardBody>
+    </Card>
+  );
+}
+
+function MediaPlaceholder({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex h-full min-h-[10rem] items-center justify-center bg-[var(--card-accent-soft)] text-[var(--card-accent)]">
+      {children}
+    </div>
+  );
+}
 
 export function SezioneCard() {
   return (
     <section id="card" className="sirio-section">
       <SectionHeader label="Card" id="card" />
 
-      {/* 1. Varianti superficie */}
-      <Row label="Varianti — flat / elevated / outlined / ghost / tinted">
-        <Card variant="flat">
-          <CardBody>
-            <p className="sirio-token-label">flat</p>
+      <ShowcaseBlock
+        label="Superfici"
+        description="La variante descrive il ruolo della superficie, non un effetto visivo isolato."
+      >
+        <Card variant="surface">
+          <CardBody className="flex flex-col gap-[var(--spacing-3)]">
+            <p className="sirio-token-label">surface</p>
+            <h3 className="font-display text-[length:var(--text-base)] font-semibold text-text">
+              Contenuto standard
+            </h3>
             <p className="sirio-preview-text">
-              Superficie base. Per contenuti secondari o liste dense.
+              Base per liste, riepiloghi e contenuti che non devono dominare la
+              pagina.
             </p>
           </CardBody>
         </Card>
 
-        <Card variant="elevated">
-          <CardBody>
-            <p className="sirio-token-label">elevated</p>
+        <Card variant="panel">
+          <CardBody className="flex flex-col gap-[var(--spacing-3)]">
+            <p className="sirio-token-label">panel</p>
+            <h3 className="font-display text-[length:var(--text-base)] font-semibold text-text">
+              Pannello operativo
+            </h3>
             <p className="sirio-preview-text">
-              Ombra media. Per card principali e panel.
+              Superficie piu` presente per dashboard, form compatti e blocchi di
+              controllo.
             </p>
           </CardBody>
         </Card>
 
-        <Card variant="outlined">
-          <CardBody>
-            <p className="sirio-token-label">outlined</p>
+        <Card variant="bento" tone="primary">
+          <CardBody className="flex flex-col gap-[var(--spacing-3)]">
+            <p className="sirio-token-label">bento</p>
+            <h3 className="font-display text-[length:var(--text-base)] font-semibold text-text">
+              Blocco editoriale
+            </h3>
             <p className="sirio-preview-text">
-              Background trasparente, solo bordo. Per UI leggera.
+              Pensata per griglie bento, feature card e preview con gerarchia
+              forte.
             </p>
           </CardBody>
         </Card>
 
-        <Card variant="ghost">
-          <CardBody>
-            <p className="sirio-token-label">ghost</p>
+        <Card variant="quiet">
+          <CardBody className="flex flex-col gap-[var(--spacing-3)]">
+            <p className="sirio-token-label">quiet</p>
+            <h3 className="font-display text-[length:var(--text-base)] font-semibold text-text">
+              Wrapper silenzioso
+            </h3>
             <p className="sirio-preview-text">
-              Nessun bordo né ombra. Contenitore puro per layout.
+              Per comporre contenuti senza aggiungere peso visivo o bordi non
+              necessari.
             </p>
           </CardBody>
         </Card>
+      </ShowcaseBlock>
 
-        <Card variant="tinted">
-          <CardBody>
-            <p className="sirio-token-label">tinted</p>
-            <p className="sirio-preview-text">
-              Tinta primaria. Per highlight, suggerimenti IA, onboarding.
-            </p>
-          </CardBody>
-        </Card>
-      </Row>
-
-      {/* 2. Variante interactive */}
-      <Row label="Interactive — microinterazione ombra/bordo al hover">
-        {RICETTE.map((r) => (
-          <Card key={r.titolo} variant="interactive" onCardClick={() => {}}>
-            <CardHeader>
-              <ChefHat
-                size={14}
-                weight="regular"
-                aria-hidden="true"
-                className="card-icon-primary"
-              />
-              <span className="card-category-label">{r.categoria}</span>
-              {r.starred && (
-                <Star
-                  size={13}
-                  weight="fill"
-                  aria-hidden="true"
-                  className="card-icon-gold card-icon-ml-auto"
-                />
-              )}
-            </CardHeader>
-            <CardBody>
-              <h3 className="card-title">{r.titolo}</h3>
-              <div className="card-tags">
-                <span className="card-tag">{r.tempo}</span>
-                <span className="card-tag">{r.difficoltà}</span>
-              </div>
-            </CardBody>
-          </Card>
+      <ShowcaseBlock
+        label="Card ricetta"
+        description="Interattiva solo quando serve davvero: hover, focus e tastiera vengono attivati con `interactive` e `onCardClick`."
+        className="grid grid-cols-1 gap-[var(--spacing-4)] lg:grid-cols-3"
+      >
+        {RECIPE_PREVIEWS.map((recipe) => (
+          <RecipeCard key={recipe.title} recipe={recipe} />
         ))}
-      </Row>
+      </ShowcaseBlock>
 
-      {/* 3. Con header + footer */}
-      <Row label="Slot header + footer">
-        <Card variant="elevated">
-          <CardHeader>
-            <ChefHat
-              size={15}
-              weight="regular"
-              aria-hidden="true"
-              className="card-icon-primary"
-            />
-            <span className="card-slot-title">Risotto al tartufo</span>
-            <span className="card-slot-meta card-icon-ml-auto">Primo</span>
+      <ShowcaseBlock
+        label="Bento layout"
+        description="La prop `span` aiuta le card a vivere dentro griglie bento senza classi locali ripetute."
+        className="grid auto-rows-[minmax(15rem,auto)] grid-cols-1 gap-[var(--spacing-4)] md:grid-cols-2 2xl:grid-cols-4"
+      >
+        <Card
+          variant="bento"
+          tone="primary"
+          span="featured"
+          interactive
+          onCardClick={handleDemoCardClick}
+        >
+          <CardBody className="gap-[var(--spacing-6)]">
+            <div className="flex items-center justify-between gap-[var(--spacing-3)]">
+              <AccentIcon>
+                <ChefHat size={18} aria-hidden="true" />
+              </AccentIcon>
+              <MetaPill>Qoovex Workspace</MetaPill>
+            </div>
+            <div className="mt-auto max-w-lg">
+              <p className="sirio-token-label">featured</p>
+              <h3 className="font-display text-[length:var(--text-xl)] font-semibold leading-tight text-text">
+                Ricette, menu e piano di lavoro in una sola superficie.
+              </h3>
+              <p className="mt-[var(--spacing-3)] text-[length:var(--text-sm)] leading-7 text-text-muted">
+                Card editoriale per hero interni, overview di feature e stati
+                importanti del prodotto.
+              </p>
+            </div>
+          </CardBody>
+        </Card>
+
+        <Card variant="bento" tone="warning" span="tall">
+          <CardHeader className="justify-between">
+            <AccentIcon>
+              <ClockCountdown size={17} aria-hidden="true" />
+            </AccentIcon>
+            <span className="text-[length:var(--text-xs)] text-text-faint">
+              18:00
+            </span>
           </CardHeader>
-          <CardBody>
+          <CardBody className="gap-[var(--spacing-3)]">
+            <p className="sirio-token-label">tall</p>
+            <h3 className="font-display text-[length:var(--text-lg)] font-semibold text-text">
+              Servizio serale
+            </h3>
             <p className="sirio-preview-text">
-              Riso Carnaroli, tartufo nero, burro di bufala. Mantecato al
-              momento del servizio.
+              12 task aperti, 4 chef assegnati e due preparazioni critiche da
+              chiudere prima della linea.
+            </p>
+            <div className="mt-auto grid grid-cols-2 gap-[var(--spacing-3)]">
+              <div>
+                <p className="font-display text-[length:var(--text-lg)] text-text">
+                  12
+                </p>
+                <p className="text-[length:var(--text-xs)] text-text-faint">
+                  task
+                </p>
+              </div>
+              <div>
+                <p className="font-display text-[length:var(--text-lg)] text-text">
+                  4
+                </p>
+                <p className="text-[length:var(--text-xs)] text-text-faint">
+                  chef
+                </p>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+
+        <Card variant="bento" tone="success">
+          <CardBody className="gap-[var(--spacing-4)]">
+            <AccentIcon>
+              <Leaf size={17} weight="bold" aria-hidden="true" />
+            </AccentIcon>
+            <div className="mt-auto">
+              <p className="sirio-token-label">auto</p>
+              <h3 className="font-display text-[length:var(--text-base)] font-semibold text-text">
+                Allergeni chiari
+              </h3>
+              <p className="sirio-preview-text">
+                Evidenza semantica senza creare varianti dedicate a ogni caso.
+              </p>
+            </div>
+          </CardBody>
+        </Card>
+
+        <Card variant="bento" tone="neutral" span="wide">
+          <CardBody className="gap-[var(--spacing-4)]">
+            <div className="flex items-start justify-between gap-[var(--spacing-3)]">
+              <div>
+                <p className="sirio-token-label">wide</p>
+                <h3 className="font-display text-[length:var(--text-lg)] font-semibold text-text">
+                  Menu digitale
+                </h3>
+              </div>
+              <AccentIcon>
+                <Tag size={17} aria-hidden="true" />
+              </AccentIcon>
+            </div>
+            <p className="sirio-preview-text">
+              Spazio orizzontale per KPI, preview QR o dettagli compatti del
+              menu.
+            </p>
+            <div className="mt-auto flex flex-wrap gap-[var(--spacing-2)]">
+              <MetaPill>6 portate</MetaPill>
+              <MetaPill>QR attivo</MetaPill>
+              <MetaPill>3 allergeni</MetaPill>
+            </div>
+          </CardBody>
+        </Card>
+      </ShowcaseBlock>
+
+      <ShowcaseBlock
+        label="Media e azioni"
+        description="Gli slot restano semplici: media full-bleed, header compatto, body e footer con azioni."
+        className="grid grid-cols-1 gap-[var(--spacing-4)] lg:grid-cols-2"
+      >
+        <Card variant="panel" tone="primary" padding="lg">
+          <CardMedia ratio="wide">
+            <MediaPlaceholder>
+              <Flame size={38} aria-hidden="true" />
+            </MediaPlaceholder>
+          </CardMedia>
+          <CardHeader className="justify-between">
+            <div className="flex items-center gap-[var(--spacing-3)]">
+              <AccentIcon>
+                <ChefHat size={16} aria-hidden="true" />
+              </AccentIcon>
+              <span className="font-display text-[length:var(--text-base)] font-semibold text-text">
+                Risotto al tartufo
+              </span>
+            </div>
+            <MetaPill>Primo</MetaPill>
+          </CardHeader>
+          <CardBody className="flex flex-col gap-[var(--spacing-3)]">
+            <p className="sirio-preview-text">
+              Carnaroli, tartufo nero e burro di bufala. Lo slot media non
+              forza contenuti business, ma rende la composizione pronta per le
+              ricette.
             </p>
           </CardBody>
-          <CardFooter>
+          <CardFooter className="justify-between">
             <Button size="sm" variant="ghost">
               Annulla
             </Button>
-            <span className="card-footer-spacer" />
             <Button size="sm" variant="primary">
               Salva ricetta
             </Button>
           </CardFooter>
         </Card>
 
-        <Card variant="flat">
-          <CardHeader>
-            <span className="card-slot-title">Piano del giorno</span>
-            <span className="card-slot-meta card-icon-ml-auto">Oggi</span>
+        <Card variant="surface" tone="success">
+          <CardHeader className="justify-between">
+            <div className="flex items-center gap-[var(--spacing-3)]">
+              <AccentIcon>
+                <UsersThree size={16} aria-hidden="true" />
+              </AccentIcon>
+              <span className="font-display text-[length:var(--text-base)] font-semibold text-text">
+                Piano del giorno
+              </span>
+            </div>
+            <MetaPill>Oggi</MetaPill>
           </CardHeader>
-          <CardBody>
+          <CardBody className="flex flex-col gap-[var(--spacing-4)]">
             <p className="sirio-preview-text">
               3 task completati su 7. Prep serale da avviare alle 17:00.
             </p>
+            <div className="grid grid-cols-3 gap-[var(--spacing-3)]">
+              <div className="rounded-[var(--radius-lg)] border border-border bg-surface-2 p-[var(--spacing-3)]">
+                <p className="font-display text-[length:var(--text-lg)] text-text">
+                  3
+                </p>
+                <p className="text-[length:var(--text-xs)] text-text-faint">
+                  fatti
+                </p>
+              </div>
+              <div className="rounded-[var(--radius-lg)] border border-border bg-surface-2 p-[var(--spacing-3)]">
+                <p className="font-display text-[length:var(--text-lg)] text-text">
+                  7
+                </p>
+                <p className="text-[length:var(--text-xs)] text-text-faint">
+                  task
+                </p>
+              </div>
+              <div className="rounded-[var(--radius-lg)] border border-border bg-surface-2 p-[var(--spacing-3)]">
+                <p className="font-display text-[length:var(--text-lg)] text-text">
+                  4
+                </p>
+                <p className="text-[length:var(--text-xs)] text-text-faint">
+                  membri
+                </p>
+              </div>
+            </div>
           </CardBody>
-          <CardFooter>
-            <ClockCountdown
-              size={13}
-              weight="regular"
-              aria-hidden="true"
-              className="card-icon-faint"
-            />
-            <span className="card-footer-meta">Aggiornato 12:45</span>
+          <CardFooter className="justify-between text-[length:var(--text-xs)] text-text-faint">
+            <span className="inline-flex items-center gap-[var(--spacing-2)]">
+              <ClockCountdown size={14} aria-hidden="true" />
+              Aggiornato 12:45
+            </span>
+            <span>Start</span>
           </CardFooter>
         </Card>
-      </Row>
+      </ShowcaseBlock>
 
-      {/* 4. Con media full-bleed */}
-      <Row label="Con slot media (immagine full-bleed)">
-        <Card variant="elevated" noPadding>
-          <CardMedia>
-            <div className="card-media-placeholder">
-              <ChefHat
-                size={32}
-                weight="thin"
-                aria-hidden="true"
-                className="card-media-icon"
-              />
-            </div>
-          </CardMedia>
-          <CardBody>
-            <h3 className="card-title">Immagine full-bleed</h3>
-            <p className="sirio-preview-text">
-              CardMedia elimina il padding e occupa tutta la larghezza. Ideale
-              per ricette con foto.
-            </p>
-          </CardBody>
-        </Card>
-
-        <Card variant="interactive" noPadding onCardClick={() => {}}>
-          <CardMedia>
-            <div className="card-media-placeholder card-media-placeholder--tall">
-              <Flame
-                size={28}
-                weight="thin"
-                aria-hidden="true"
-                className="card-media-icon"
-              />
-            </div>
-          </CardMedia>
-          <CardBody>
-            <h3 className="card-title">Media + Interactive</h3>
-            <p className="sirio-preview-text">
-              Hover: ombra e bordo primario. Nessun translate.
-            </p>
-          </CardBody>
-          <CardFooter>
-            <Leaf
-              size={13}
-              weight="regular"
-              aria-hidden="true"
-              className="card-icon-success"
-            />
-            <span className="card-footer-meta">Vegetariano · 25 min</span>
-          </CardFooter>
-        </Card>
-      </Row>
-
-      {/* 5. Card semantiche (tinted + status) */}
-      <Row label="Uso semantico — info, warning, alert (via className override)">
-        <Card variant="tinted">
-          <CardBody>
-            <div className="card-semantic-row">
-              <Info
-                size={15}
-                weight="regular"
-                aria-hidden="true"
-                className="card-icon-primary"
-              />
-              <div>
-                <p className="card-semantic-title">Suggerimento IA</p>
-                <p className="sirio-preview-text">
-                  Questo menu ha 3 allergeni sovrapposti. Vuoi ottimizzarlo?
-                </p>
-              </div>
+      <ShowcaseBlock
+        label="Toni semantici"
+        description="Il tono controlla accento, bordo e highlight; non serve creare varianti nuove per ogni stato."
+        className="grid grid-cols-1 gap-[var(--spacing-4)] md:grid-cols-2 xl:grid-cols-4"
+      >
+        <Card variant="surface" tone="primary">
+          <CardBody className="flex gap-[var(--spacing-3)]">
+            <AccentIcon>
+              <Info size={16} weight="bold" aria-hidden="true" />
+            </AccentIcon>
+            <div>
+              <p className="font-display text-[length:var(--text-base)] font-semibold text-text">
+                Suggerimento
+              </p>
+              <p className="sirio-preview-text">
+                Questo menu ha 3 allergeni sovrapposti.
+              </p>
             </div>
           </CardBody>
         </Card>
 
-        <Card variant="outlined">
-          <CardBody>
-            <div className="card-semantic-row">
-              <Lightning
-                size={15}
-                weight="regular"
-                aria-hidden="true"
-                className="card-icon-warning"
-              />
-              <div>
-                <p className="card-semantic-title">Piano attivo</p>
-                <p className="sirio-preview-text">
-                  Servizio serale — 4 chef, 12 task, inizio ore 18:00.
-                </p>
-              </div>
+        <Card variant="surface" tone="warning">
+          <CardBody className="flex gap-[var(--spacing-3)]">
+            <AccentIcon>
+              <Lightning size={16} weight="bold" aria-hidden="true" />
+            </AccentIcon>
+            <div>
+              <p className="font-display text-[length:var(--text-base)] font-semibold text-text">
+                Preparazione critica
+              </p>
+              <p className="sirio-preview-text">
+                Avviare il fondo entro 15 minuti.
+              </p>
             </div>
           </CardBody>
         </Card>
 
-        <Card variant="outlined">
-          <CardBody>
-            <div className="card-semantic-row">
-              <UsersThree
-                size={15}
-                weight="regular"
-                aria-hidden="true"
-                className="card-icon-success"
-              />
-              <div>
-                <p className="card-semantic-title">Team</p>
-                <p className="sirio-preview-text">
-                  8 membri attivi nel workspace. Piano Pro attivo.
-                </p>
-              </div>
+        <Card variant="surface" tone="success">
+          <CardBody className="flex gap-[var(--spacing-3)]">
+            <AccentIcon>
+              <Leaf size={16} weight="bold" aria-hidden="true" />
+            </AccentIcon>
+            <div>
+              <p className="font-display text-[length:var(--text-base)] font-semibold text-text">
+                Vegetariano
+              </p>
+              <p className="sirio-preview-text">
+                Ricetta pronta per filtro menu.
+              </p>
             </div>
           </CardBody>
         </Card>
-      </Row>
 
-      {/* 6. Card composita con tag multipli */}
-      <Row label="Card ricetta completa">
-        {RICETTE.map((r) => (
-          <Card
-            key={`full-${r.titolo}`}
-            variant="interactive"
-            noPadding
-            onCardClick={() => {}}
-          >
-            <CardMedia>
-              <div className="card-media-placeholder">
-                <ChefHat
-                  size={24}
-                  weight="thin"
-                  aria-hidden="true"
-                  className="card-media-icon"
-                />
-              </div>
-            </CardMedia>
-            <CardHeader>
-              <Tag
-                size={13}
-                weight="regular"
-                aria-hidden="true"
-                className="card-icon-faint"
-              />
-              <span className="card-category-label">{r.categoria}</span>
-              {r.starred && (
-                <Star
-                  size={12}
-                  weight="fill"
-                  aria-hidden="true"
-                  className="card-icon-gold card-icon-ml-auto"
-                />
-              )}
-            </CardHeader>
-            <CardBody>
-              <h3 className="card-title">{r.titolo}</h3>
-              <div className="card-tags">
-                <span className="card-tag">{r.tempo}</span>
-                <span className="card-tag">{r.difficoltà}</span>
-              </div>
-            </CardBody>
-          </Card>
-        ))}
-      </Row>
+        <Card variant="surface" tone="error">
+          <CardBody className="flex gap-[var(--spacing-3)]">
+            <AccentIcon>
+              <Flame size={16} weight="bold" aria-hidden="true" />
+            </AccentIcon>
+            <div>
+              <p className="font-display text-[length:var(--text-base)] font-semibold text-text">
+                Stock insufficiente
+              </p>
+              <p className="sirio-preview-text">
+                Manca una materia prima per il servizio.
+              </p>
+            </div>
+          </CardBody>
+        </Card>
+      </ShowcaseBlock>
     </section>
   );
 }

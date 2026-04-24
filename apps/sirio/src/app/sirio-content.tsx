@@ -89,7 +89,7 @@ export const SECTIONS = [
     id: "card",
     label: "Card",
     icon: "▪",
-    description: "Flat, elevated, interactive",
+    description: "Surface, panel, bento",
   },
   {
     id: "badge",

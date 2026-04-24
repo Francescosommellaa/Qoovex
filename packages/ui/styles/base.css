@@ -676,110 +676,202 @@
     color: var(--color-text);
   }
 
-  /* ─── Card ───────────────────────────────────────────────────── */
+  /* Card */
 
-  .card {
+  .qv-card {
+    --card-accent: var(--card-tone-neutral);
+    --card-accent-soft: var(--card-tone-neutral-soft);
+    --card-accent-border: var(--card-tone-neutral-border);
+
+    position: relative;
+    isolation: isolate;
     display: flex;
     flex-direction: column;
     width: 100%;
+    min-width: 0;
     overflow: hidden;
-    border-radius: var(--card-radius);
     border: 1px solid var(--card-border);
-  }
-
-  /* Varianti superfice */
-  .card--flat {
-    background: var(--card-bg-flat);
-    box-shadow: var(--shadow-card-flat);
-  }
-
-  .card--elevated {
-    background: var(--card-bg-elevated);
-    box-shadow: var(--shadow-card-elevated);
-  }
-
-  .card--outlined {
-    background: var(--card-bg-outlined);
+    border-radius: var(--card-radius-surface);
+    background: var(--card-bg-surface);
+    color: var(--color-text);
     box-shadow: none;
+    transition:
+      background var(--duration-base) var(--ease-qoovex),
+      border-color var(--duration-base) var(--ease-qoovex),
+      box-shadow var(--duration-base) var(--ease-qoovex);
   }
 
-  .card--ghost {
-    background: var(--card-bg-ghost);
+  .qv-card--surface {
+    background: var(--card-bg-surface);
+  }
+
+  .qv-card--panel {
+    background: var(--card-bg-panel);
+    border-color: var(--card-border-strong);
+    box-shadow: var(--shadow-card-panel);
+  }
+
+  .qv-card--bento {
+    min-height: var(--card-bento-min-height);
+    height: 100%;
+    border-radius: var(--card-radius-bento);
+    border-color: var(--card-accent-border);
+    background: var(--card-bg-bento);
+    box-shadow: var(--shadow-card-bento);
+  }
+
+  .qv-card--quiet {
+    background: var(--card-bg-quiet);
     border-color: transparent;
-    box-shadow: none;
   }
 
-  .card--tinted {
-    background: var(--card-bg-tinted);
-    border-color: oklch(from var(--color-primary) l c h / 0.18);
-    box-shadow: none;
+  .qv-card--tone-neutral {
+    --card-accent: var(--card-tone-neutral);
+    --card-accent-soft: var(--card-tone-neutral-soft);
+    --card-accent-border: var(--card-tone-neutral-border);
   }
 
-  /* Variante interattiva — microinterazione: solo ombra/bordo, niente translate */
-  .card--interactive {
-    background: var(--card-bg-elevated);
-    box-shadow: var(--shadow-card-interactive);
+  .qv-card--tone-primary {
+    --card-accent: var(--card-tone-primary);
+    --card-accent-soft: var(--card-tone-primary-soft);
+    --card-accent-border: var(--card-tone-primary-border);
+  }
+
+  .qv-card--tone-success {
+    --card-accent: var(--card-tone-success);
+    --card-accent-soft: var(--card-tone-success-soft);
+    --card-accent-border: var(--card-tone-success-border);
+  }
+
+  .qv-card--tone-warning {
+    --card-accent: var(--card-tone-warning);
+    --card-accent-soft: var(--card-tone-warning-soft);
+    --card-accent-border: var(--card-tone-warning-border);
+  }
+
+  .qv-card--tone-error {
+    --card-accent: var(--card-tone-error);
+    --card-accent-soft: var(--card-tone-error-soft);
+    --card-accent-border: var(--card-tone-error-border);
+  }
+
+  .qv-card--interactive {
     cursor: pointer;
-    transition: var(--card-interactive-transition);
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
 
-  .card--interactive:hover {
-    box-shadow: var(--shadow-card-interactive-hover);
-    border-color: var(--card-border-interactive-hover);
+  @media (hover: hover) {
+    .qv-card--interactive:hover {
+      border-color: var(--card-accent-border);
+      box-shadow: var(--shadow-card-interactive-hover);
+    }
   }
 
-  .card--interactive:active {
-    box-shadow: var(--shadow-card-interactive-active);
-    border-color: var(--card-border);
+  .qv-card--interactive:active {
+    border-color: var(--card-accent-border);
   }
 
-  .card--interactive:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+  .qv-card--interactive:focus-visible {
+    outline: 2px solid var(--card-accent);
+    outline-offset: 3px;
   }
 
-  /* Slot: header */
-  .card__header {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-3);
-    padding: var(--card-header-py) var(--card-padding);
-    border-bottom: 1px solid var(--card-border);
+  .qv-card__slot {
+    position: relative;
+    z-index: 1;
+    padding: var(--card-slot-padding, var(--card-padding-md));
   }
 
-  /* Slot: body */
-  .card__body {
-    flex: 1;
-    min-width: 0;
-    padding: var(--card-padding);
-  }
-
-  .card__body--no-padding {
+  .qv-card__slot--padding-none {
     padding: 0;
   }
 
-  /* Slot: footer */
-  .card__footer {
+  .qv-card__slot--padding-sm {
+    padding: var(--card-padding-sm);
+  }
+
+  .qv-card__slot--padding-md {
+    padding: var(--card-padding-md);
+  }
+
+  .qv-card__slot--padding-lg {
+    padding: var(--card-padding-lg);
+  }
+
+  .qv-card__header,
+  .qv-card__footer {
     display: flex;
     align-items: center;
-    gap: var(--spacing-3);
-    padding: var(--card-footer-py) var(--card-padding);
+    gap: var(--card-gap);
+  }
+
+  .qv-card__header {
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .qv-card__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .qv-card--bento .qv-card__body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .qv-card__footer {
     border-top: 1px solid var(--card-border);
   }
 
-  /* Slot: media (immagine full-bleed in cima) */
-  .card__media {
+  .qv-card__media {
+    position: relative;
+    z-index: 1;
     width: 100%;
+    min-width: 0;
     overflow: hidden;
     flex-shrink: 0;
+    background:
+      radial-gradient(circle at 50% 0%, var(--card-accent-soft), transparent 52%),
+      var(--color-surface-2);
   }
 
-  .card__media img {
+  .qv-card__media--wide {
+    aspect-ratio: 16 / 9;
+  }
+
+  .qv-card__media--square {
+    aspect-ratio: 1 / 1;
+  }
+
+  .qv-card__media--portrait {
+    aspect-ratio: 4 / 5;
+  }
+
+  .qv-card__media > img,
+  .qv-card__media > picture,
+  .qv-card__media > video,
+  .qv-card__media > * > img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  @media (min-width: 768px) {
+    .qv-card--span-wide {
+      grid-column: span 2 / span 2;
+    }
+
+    .qv-card--span-tall {
+      grid-row: span 2 / span 2;
+      min-height: calc((var(--card-bento-min-height) * 2) + var(--spacing-4));
+    }
+
+    .qv-card--span-featured {
+      grid-column: span 2 / span 2;
+      grid-row: span 2 / span 2;
+      min-height: calc((var(--card-bento-min-height) * 2) + var(--spacing-4));
+    }
   }
 }

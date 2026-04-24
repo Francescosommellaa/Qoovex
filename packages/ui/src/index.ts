@@ -42,4 +42,11 @@ export {
   CardBody,
   CardFooter,
 } from "./components/card";
-export type { CardProps, CardVariant } from "./components/card";
+export type {
+  CardMediaRatio,
+  CardPadding,
+  CardProps,
+  CardSpan,
+  CardTone,
+  CardVariant,
+} from "./components/card";
