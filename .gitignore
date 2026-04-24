@@ -21,8 +21,9 @@ coverage/
 # vercel
 .vercel/
 
-# vscode
+# ide
 .vscode/
+.cursor/
 
 # logs
 npm-debug.log*
