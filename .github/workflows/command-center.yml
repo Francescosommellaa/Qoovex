@@ -1,23 +1,33 @@
-name: Quality
+name: Command Center
 
 on:
-  push:
-    branches:
-      - "**"
-  pull_request:
   workflow_dispatch:
+    inputs:
+      task:
+        description: Task root da eseguire
+        required: true
+        type: choice
+        default: check:ci
+        options:
+          - check:ci
+          - check:fast
+          - check:repo
+          - lint
+          - type-check
+          - check:build
+          - check:audit
 
 permissions:
   contents: read
 
 concurrency:
-  group: quality-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: command-center-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  quality:
+  run-task:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       CI: "1"
       NEXT_TELEMETRY_DISABLED: "1"
@@ -40,5 +50,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run full quality gate
-        run: pnpm check:ci
+      - name: Run selected task
+        run: pnpm ${{ inputs.task }}
