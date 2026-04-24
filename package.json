@@ -7,6 +7,12 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
+    "check": "pnpm check:repo && pnpm lint && pnpm type-check && pnpm check:build && pnpm check:audit",
+    "check:repo": "node scripts/repo-guard.mjs",
+    "check:build": "node scripts/check-builds.mjs",
+    "check:audit": "node scripts/lighthouse-audit.mjs",
+    "check:fast": "pnpm check:repo && pnpm lint && pnpm type-check",
+    "check:ci": "pnpm check",
     "db:generate": "turbo run db:generate --filter=@qoovex/db",
     "db:push": "turbo run db:push --filter=@qoovex/db",
     "db:migrate": "turbo run db:migrate --filter=@qoovex/db",
@@ -22,6 +28,9 @@
     }
   },
   "devDependencies": {
+    "chrome-launcher": "^1.2.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "lighthouse": "^12.8.2",
     "turbo": "^2.5.0"
   },
   "dependencies": {

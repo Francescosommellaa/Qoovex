@@ -9,7 +9,6 @@ import {
   FloppyDisk,
   ArrowLeft,
   Sparkle,
-  Check,
   PaperPlaneTilt,
   UploadSimple,
   BookOpen,

@@ -389,10 +389,6 @@ export const SmartSearchBar = React.forwardRef<
           aiMode && "search-bar-field--ai",
           commandMode && "search-bar-field--command",
         )}
-        role="combobox"
-        aria-expanded={showDropdown}
-        aria-haspopup="listbox"
-        aria-owns="search-bar-listbox"
         onClick={() => {
           if (disabled) return;
           if (!open) {
@@ -461,7 +457,7 @@ export const SmartSearchBar = React.forwardRef<
           </button>
         ) : showHotkey && !isOpen && !isTouch ? (
           <span className="search-bar-hotkey" aria-hidden>
-            <Command size={11} strokeWidth={1.5} />
+            <Command size={11} />
             <kbd>{hotkeyLabel}</kbd>
           </span>
         ) : null}
@@ -513,7 +509,7 @@ export const SmartSearchBar = React.forwardRef<
                 }}
               >
                 Chiedi
-                <ArrowRight size={12} strokeWidth={2} />
+                <ArrowRight size={12} weight="bold" />
               </button>
             </div>
           ) : null}
@@ -531,7 +527,12 @@ export const SmartSearchBar = React.forwardRef<
 
           {/* Lista risultati */}
           {groups.length > 0 ? (
-            <div ref={listRef} className="search-bar-list" role="listbox">
+            <div
+              ref={listRef}
+              className="search-bar-list"
+              role="listbox"
+              aria-label="Risultati ricerca"
+            >
               {groups.map(({ category, label, items }) => (
                 <div key={category} className="search-bar-group">
                   <div className="search-bar-group-label" aria-hidden>
@@ -610,14 +611,14 @@ export const SmartSearchBar = React.forwardRef<
                               onDeleteRecent(item.id);
                             }}
                           >
-                            <X size={12} strokeWidth={2} />
+                            <X size={12} weight="bold" />
                           </button>
                         ) : null}
 
                         {/* Arrow solo desktop */}
                         {!isTouch && !isRecent ? (
                           <span className="search-bar-item-arrow" aria-hidden>
-                            <ArrowRight size={12} strokeWidth={1.5} />
+                            <ArrowRight size={12} />
                           </span>
                         ) : null}
                       </div>
@@ -628,7 +629,7 @@ export const SmartSearchBar = React.forwardRef<
             </div>
           ) : !aiMode && query.length > 0 ? (
             <div className="search-bar-empty">
-              <ChefHat size={16} strokeWidth={1.5} />
+              <ChefHat size={16} />
               <span>
                 Nessun risultato per <strong>{query}</strong>
               </span>

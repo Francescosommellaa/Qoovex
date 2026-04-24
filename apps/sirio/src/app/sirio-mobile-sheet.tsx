@@ -23,8 +23,10 @@ export function SirioMobileSheet({
 
   return (
     <>
-      <div
+      <button
+        type="button"
         onClick={onClose}
+        aria-label="Chiudi menu sezioni"
         style={{
           position: "fixed",
           inset: 0,

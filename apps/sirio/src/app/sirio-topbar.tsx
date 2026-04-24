@@ -1,5 +1,8 @@
 "use client";
 
+import Image from "next/image";
+import { ArrowUpRight } from "@phosphor-icons/react";
+
 interface SirioTopbarProps {
   onMenuOpen: () => void;
 }
@@ -27,7 +30,7 @@ export function SirioTopbar({ onMenuOpen }: SirioTopbarProps) {
       <div
         style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}
       >
-        <img
+        <Image
           src="/logo-icon/sirio-icon-white.svg"
           alt="Sirio"
           width={16}
@@ -81,18 +84,7 @@ export function SirioTopbar({ onMenuOpen }: SirioTopbarProps) {
           aria-label="Vai al sito Qoovex"
         >
           Qoovex
-          <svg
-            width="10"
-            height="10"
-            viewBox="0 0 256 256"
-            aria-hidden="true"
-            style={{ opacity: 0.5 }}
-          >
-            <path
-              fill="currentColor"
-              d="M224,104a8,8,0,0,1-16,0V59.32l-82.34,82.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"
-            />
-          </svg>
+          <ArrowUpRight size={10} aria-hidden="true" style={{ opacity: 0.5 }} />
         </a>
       </div>
 

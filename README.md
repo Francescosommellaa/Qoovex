@@ -35,7 +35,7 @@ Il prodotto si divide in due app:
 | Auth       | Clerk                       |
 | Monorepo   | Turborepo + pnpm workspaces |
 | Deploy     | Vercel                      |
-| Icone      | Lucide React                |
+| Icone      | Phosphor Icons              |
 | Animazioni | Framer Motion               |
 
 ---
@@ -136,6 +136,8 @@ pnpm db:workspace                       # Prisma workspace (GUI)
 # Qualità del codice
 pnpm lint                               # Lint di tutto il monorepo
 pnpm type-check                         # Typecheck TypeScript
+pnpm check:fast                         # Guardrail repo + lint + typecheck
+pnpm check                              # Guardrail completi: repo + lint + typecheck + build + audit browser
 ```
 
 ---
@@ -181,10 +183,10 @@ Il design system è documentato in `packages/ui`. Regole chiave:
 
 - **Font testi:** Satoshi
 - **Font titoli:** Chillax (`font-display`)
-- **Icone:** Lucide React — `strokeWidth={1.5}` decorative, `strokeWidth={2}` funzionali
+- **Icone:** Phosphor Icons — `weight="regular"` decorative/UI, `weight="bold"` funzionali/check/alert
 - **Token semantici** obbligatori — niente valori hardcoded se esiste il token
 - **Mai hover** su elementi non interattivi
-- **Mai SVG inline** — usa sempre Lucide React
+- **Mai SVG inline** — usa sempre Phosphor Icons
 
 ---
 
@@ -206,10 +208,15 @@ vercel --prod
 Questo è un repository privato. Prima di lavorare su qualsiasi feature:
 
 1. Leggi `docs/HowToUse.md` — regole operative del progetto
-2. Leggi `project_brain.json` — memoria viva e decisioni confermate
-3. Verifica l'architettura FSD in `apps/workspace`
-4. Non introdurre dipendenze nuove senza verificarne la necessità
-5. Consegna sempre file completi — niente patch parziali
+2. Leggi `project_brain.json` — memoria operativa corrente e decisioni attive
+3. Leggi il `README.md` della cartella in cui stai entrando
+4. Verifica l'architettura FSD in `apps/workspace`
+5. Leggi `docs/OperationalProtocol.md` per la checklist operativa del monorepo
+6. Leggi `docs/CodePatterns.md` per l'ordine standard dei file
+7. Non introdurre dipendenze nuove senza verificarne la necessità
+8. Consegna sempre file completi — niente patch parziali
+
+Se serve il contesto storico dettagliato, leggi `docs/project_brain.archive.json` solo quando il task lo richiede davvero.
 
 ---
 

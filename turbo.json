@@ -17,6 +17,12 @@
         "NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL"
       ]
     },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "type-check": {
+      "dependsOn": ["^type-check"]
+    },
     "dev": {
       "cache": false,
       "persistent": true

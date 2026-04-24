@@ -109,7 +109,7 @@ function MultiTag({
   size,
 }: {
   label: string;
-  onRemove: (e: React.MouseEvent) => void;
+  onRemove: (e: React.MouseEvent<HTMLButtonElement>) => void;
   size: SelectSize;
 }) {
   return (
@@ -127,19 +127,13 @@ function MultiTag({
       )}
     >
       <span className="max-w-[8rem] truncate">{label}</span>
-      <span
-        role="button"
-        tabIndex={0}
+      <button
+        type="button"
         aria-label={`Rimuovi ${label}`}
         onClick={onRemove}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            onRemove(e as unknown as React.MouseEvent);
-          }
-        }}
         className={cn(
           "flex items-center justify-center",
+          "min-h-7 min-w-7",
           "rounded-[var(--radius-sm)]",
           "text-[var(--color-select-tag-remove)]",
           "hover:text-[var(--color-text)]",
@@ -149,7 +143,7 @@ function MultiTag({
         )}
       >
         <X size={10} weight="bold" aria-hidden="true" />
-      </span>
+      </button>
     </span>
   );
 }
@@ -352,7 +346,6 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
             aria-labelledby={label ? `${selectId}-label` : undefined}
             aria-describedby={helperId}
             aria-invalid={status === "error" || undefined}
-            aria-multiselectable={isMulti || undefined}
             disabled={disabled}
             data-open={open}
             onClick={() => setOpen((p) => !p)}

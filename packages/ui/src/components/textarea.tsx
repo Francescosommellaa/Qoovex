@@ -1,7 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { Warning, CheckCircle } from "@phosphor-icons/react";
+import {
+  Warning,
+  CheckCircle,
+  DotsSixVertical,
+} from "@phosphor-icons/react";
 import { cn, mergeRefs } from "../lib/utils";
 
 export type TextareaStatus = "default" | "error" | "success";
@@ -42,22 +46,13 @@ const STATUS_HELPER: Record<TextareaStatus, string> = {
 
 function ResizeHandle() {
   return (
-    <svg
+    <DotsSixVertical
       data-resize-handle
-      width="10"
-      height="10"
-      viewBox="0 0 10 10"
-      fill="currentColor"
+      size={12}
+      weight="bold"
       aria-hidden="true"
       className="cursor-ns-resize shrink-0 text-[var(--color-text-faint)] opacity-40"
-    >
-      <circle cx="3" cy="3" r="1" />
-      <circle cx="7" cy="3" r="1" />
-      <circle cx="3" cy="6" r="1" />
-      <circle cx="7" cy="6" r="1" />
-      <circle cx="3" cy="9" r="1" />
-      <circle cx="7" cy="9" r="1" />
-    </svg>
+    />
   );
 }
 
