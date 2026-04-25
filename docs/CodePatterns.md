@@ -22,6 +22,7 @@ Prima di creare o modificare codice:
 - se il codice e` condiviso fra piu` app, spostalo in `packages/*`;
 - se il codice e` riusato solo in un layer FSD, resta nel layer corretto;
 - importa sempre verso il basso nell'architettura FSD.
+- nelle classi Tailwind v4 usa la sintassi canonica dei token: `gap-4`/`mb-10` al posto di `gap-[var(--spacing-4)]`, `text-(length:--text-sm)` al posto di `text-[length:var(--text-sm)]`, e `bg-(--token)`/`border-(--token)`/`text-(--token)` al posto di `bg-[var(--token)]`.
 
 ## Ordine standard file TSX
 

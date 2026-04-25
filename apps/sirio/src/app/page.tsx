@@ -25,6 +25,12 @@ import { SezioneSmartSearchBar } from "@/sections/sezione-smart-search-bar";
 import { SezioneSearchBar } from "@/sections/sezione-search-bar";
 import { SezioneSelect } from "@/sections/sezione-select";
 import { SezioneCard } from "@/sections/sezione-card";
+import { SezioneBadge } from "@/sections/sezione-badge";
+import { SezioneAvatar } from "@/sections/sezione-avatar";
+import { SezioneDivider } from "@/sections/sezione-divider";
+import { SezioneToggle } from "@/sections/sezione-toggle";
+import { SezioneCheckbox } from "@/sections/sezione-checkbox";
+import { SezioneToast } from "@/sections/sezione-toast";
 
 export default function SirioPage() {
   const [active, setActive] = useState<SectionId>("fondamenta");
@@ -146,8 +152,14 @@ export default function SirioPage() {
           <SezioneSearchBar />
           <SezioneSelect />
           <SezioneCard />
+          <SezioneBadge />
+          <SezioneAvatar />
+          <SezioneDivider />
+          <SezioneToggle />
+          <SezioneCheckbox />
+          <SezioneToast />
 
-          {(["badge", "form"] as const).map((id) => {
+          {(["form"] as const).map((id) => {
             const s = SECTIONS.find((x) => x.id === id)!;
             return (
               <section key={id} id={id} className="sirio-section">

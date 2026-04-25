@@ -86,9 +86,11 @@
     ],
     "rules": [
       "packages/ui/styles/tokens.css is the single source of truth for design tokens",
+      "desaturated chromatic component surfaces must use shared tone-surface tokens instead of per-component recalibration",
       "packages/ui/styles/base.css contains shared base styles and must stay wrapped in @layer base",
       "app globals.css files must stay minimal and app-specific",
       "never use @theme static because CSS vars must be emitted to :root",
+      "Tailwind v4 token utilities must use canonical syntax such as gap-4, text-(length:--text-sm), and bg-(--token) instead of arbitrary var(...) wrappers",
       "@source paths are relative to the CSS file itself"
     ],
     "transpile_packages_rule": "every app importing a @qoovex/* TypeScript package must list it in transpilePackages in next.config.ts"

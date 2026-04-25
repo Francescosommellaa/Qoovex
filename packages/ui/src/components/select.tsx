@@ -102,11 +102,11 @@ const OPTION_SIZE: Record<SelectSize, string> = {
 };
 
 const MULTI_TAG_TONES = [
-  "[background:var(--color-select-tag-bg-blue)]",
-  "[background:var(--color-select-tag-bg-green)]",
-  "[background:var(--color-select-tag-bg-purple)]",
-  "[background:var(--color-select-tag-bg-amber)]",
-  "[background:var(--color-select-tag-bg-red)]",
+  "[background:var(--tone-surface-blue)]",
+  "[background:var(--tone-surface-green)]",
+  "[background:var(--tone-surface-purple)]",
+  "[background:var(--tone-surface-amber)]",
+  "[background:var(--tone-surface-red)]",
 ] as const;
 
 const MULTI_TAG_MIN_VISIBLE_RATIO = 0.8;

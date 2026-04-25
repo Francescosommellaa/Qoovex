@@ -206,6 +206,31 @@
     from var(--color-primary) l c h / 0.15
   );
 
+  /* Tone surfaces */
+  --tone-surface-neutral:
+    linear-gradient(135deg, oklch(0.15 0 0), oklch(0.105 0 0));
+  --tone-surface-blue:
+    linear-gradient(135deg, oklch(0.15 0.026 240), oklch(0.105 0.018 240));
+  --tone-surface-green:
+    linear-gradient(135deg, oklch(0.15 0.028 152), oklch(0.105 0.018 152));
+  --tone-surface-purple:
+    linear-gradient(135deg, oklch(0.15 0.028 302), oklch(0.105 0.019 302));
+  --tone-surface-amber:
+    linear-gradient(135deg, oklch(0.15 0.03 65), oklch(0.105 0.019 65));
+  --tone-surface-red:
+    linear-gradient(135deg, oklch(0.15 0.03 22), oklch(0.105 0.019 22));
+
+  --tone-surface-primary: var(--tone-surface-blue);
+  --tone-surface-success: var(--tone-surface-green);
+  --tone-surface-warning: var(--tone-surface-amber);
+  --tone-surface-error: var(--tone-surface-red);
+
+  --tone-border-neutral: oklch(from var(--color-text) l c h / 0.12);
+  --tone-border-primary: oklch(from var(--color-primary) l c h / 0.3);
+  --tone-border-success: oklch(from var(--color-success) l c h / 0.3);
+  --tone-border-warning: oklch(from var(--color-warning) l c h / 0.34);
+  --tone-border-error: oklch(from var(--color-error) l c h / 0.34);
+
   /* Select */
   --color-select-item-hover: var(--color-surface-offset);
   --color-select-item-selected-bg: var(--color-primary-highlight);
@@ -235,36 +260,6 @@
   --select-tag-hover-shadow:
     inset 0 1px 0 oklch(from var(--color-text) l c h / 0.1),
     inset 0 -0.5rem 1rem oklch(0 0 0 / 0.1);
-  --color-select-tag-bg-blue:
-    linear-gradient(
-      135deg,
-      oklch(0.15 0.026 240),
-      oklch(0.105 0.018 240)
-    );
-  --color-select-tag-bg-green:
-    linear-gradient(
-      135deg,
-      oklch(0.15 0.028 152),
-      oklch(0.105 0.018 152)
-    );
-  --color-select-tag-bg-purple:
-    linear-gradient(
-      135deg,
-      oklch(0.15 0.028 302),
-      oklch(0.105 0.019 302)
-    );
-  --color-select-tag-bg-amber:
-    linear-gradient(
-      135deg,
-      oklch(0.15 0.03 65),
-      oklch(0.105 0.019 65)
-    );
-  --color-select-tag-bg-red:
-    linear-gradient(
-      135deg,
-      oklch(0.15 0.03 22),
-      oklch(0.105 0.019 22)
-    );
   --color-select-tag-border: var(--color-border);
   --color-select-tag-border-hover: oklch(from var(--color-text) l c h / 0.14);
   --color-select-tag-text: oklch(from var(--color-text) l c h / 0.82);
@@ -272,6 +267,224 @@
   --color-select-tag-more-border: oklch(from var(--color-text) l c h / 0.09);
   --color-select-tag-more-text: var(--color-text-muted);
   --color-select-count-text: var(--color-text-faint);
+
+  /* Badge */
+  --badge-radius: var(--radius-full);
+  --badge-border-width: 1px;
+  --badge-gap: var(--spacing-1);
+  --badge-height-sm: 1.375rem;
+  --badge-height-md: 1.625rem;
+  --badge-height-lg: 2rem;
+  --badge-px-sm: var(--spacing-2);
+  --badge-px-md: var(--spacing-3);
+  --badge-px-lg: var(--spacing-3);
+  --badge-icon-size-sm: 0.75rem;
+  --badge-icon-size-md: 0.875rem;
+  --badge-icon-size-lg: 1rem;
+
+  --badge-tone-neutral: var(--color-text-muted);
+  --badge-tone-neutral-soft: oklch(from var(--color-text) l c h / 0.055);
+  --badge-tone-neutral-border: oklch(from var(--color-text) l c h / 0.1);
+  --badge-tone-neutral-fill: var(--color-surface-raised);
+  --badge-tone-neutral-fill-text: var(--color-text);
+
+  --badge-tone-primary: var(--color-primary);
+  --badge-tone-primary-soft: var(--color-primary-highlight);
+  --badge-tone-primary-border: oklch(from var(--color-primary) l c h / 0.26);
+  --badge-tone-primary-fill: var(--color-primary);
+  --badge-tone-primary-fill-text: var(--color-text);
+
+  --badge-tone-success: var(--color-success);
+  --badge-tone-success-soft: var(--color-success-highlight);
+  --badge-tone-success-border: oklch(from var(--color-success) l c h / 0.26);
+  --badge-tone-success-fill: var(--color-success);
+  --badge-tone-success-fill-text: var(--color-text-inverse);
+
+  --badge-tone-warning: var(--color-warning);
+  --badge-tone-warning-soft: var(--color-warning-highlight);
+  --badge-tone-warning-border: oklch(from var(--color-warning) l c h / 0.3);
+  --badge-tone-warning-fill: var(--color-warning);
+  --badge-tone-warning-fill-text: var(--color-text-inverse);
+
+  --badge-tone-error: var(--color-error);
+  --badge-tone-error-soft: var(--color-error-highlight);
+  --badge-tone-error-border: oklch(from var(--color-error) l c h / 0.32);
+  --badge-tone-error-fill: var(--color-error);
+  --badge-tone-error-fill-text: var(--color-text);
+
+  /* Avatar */
+  --avatar-radius: var(--radius-full);
+  --avatar-border-width: 1px;
+  --avatar-size-sm: 2rem;
+  --avatar-size-md: 2.5rem;
+  --avatar-size-lg: 3rem;
+  --avatar-size-xl: 4rem;
+  --avatar-font-sm: var(--text-xs);
+  --avatar-font-md: var(--text-sm);
+  --avatar-font-lg: var(--text-base);
+  --avatar-font-xl: var(--text-lg);
+  --avatar-icon-sm: 0.875rem;
+  --avatar-icon-md: 1rem;
+  --avatar-icon-lg: 1.25rem;
+  --avatar-icon-xl: 1.5rem;
+  --avatar-status-size-sm: 0.5rem;
+  --avatar-status-size-md: 0.625rem;
+  --avatar-status-size-lg: 0.75rem;
+  --avatar-status-size-xl: 0.875rem;
+  --avatar-status-border-width: 2px;
+  --avatar-status-border: var(--color-bg);
+
+  --avatar-tone-neutral: var(--color-text-muted);
+  --avatar-tone-neutral-soft: var(--tone-surface-neutral);
+  --avatar-tone-neutral-border: var(--tone-border-neutral);
+  --avatar-tone-primary: var(--color-primary);
+  --avatar-tone-primary-soft: var(--tone-surface-primary);
+  --avatar-tone-primary-border: var(--tone-border-primary);
+  --avatar-tone-success: var(--color-success);
+  --avatar-tone-success-soft: var(--tone-surface-success);
+  --avatar-tone-success-border: var(--tone-border-success);
+  --avatar-tone-warning: var(--color-warning);
+  --avatar-tone-warning-soft: var(--tone-surface-warning);
+  --avatar-tone-warning-border: var(--tone-border-warning);
+  --avatar-tone-error: var(--color-error);
+  --avatar-tone-error-soft: var(--tone-surface-error);
+  --avatar-tone-error-border: var(--tone-border-error);
+
+  --avatar-status-online: var(--color-success);
+  --avatar-status-busy: var(--color-error);
+  --avatar-status-away: var(--color-warning);
+  --avatar-status-offline: var(--color-surface-raised);
+
+  /* Divider */
+  --divider-line-width: 1px;
+  --divider-line-width-strong: 2px;
+  --divider-gap: var(--spacing-3);
+  --divider-label-px: var(--spacing-2);
+  --divider-label-size: var(--text-xs);
+  --divider-vertical-min-height: 4rem;
+  --divider-spacing-none: 0;
+  --divider-spacing-sm: var(--spacing-3);
+  --divider-spacing-md: var(--spacing-5);
+  --divider-spacing-lg: var(--spacing-8);
+  --divider-tone-neutral: var(--color-divider);
+  --divider-tone-primary: var(--tone-border-primary);
+  --divider-tone-success: var(--tone-border-success);
+  --divider-tone-warning: var(--tone-border-warning);
+  --divider-tone-error: var(--tone-border-error);
+  --divider-label-neutral: var(--color-text-faint);
+  --divider-label-primary: var(--color-primary);
+  --divider-label-success: var(--color-success);
+  --divider-label-warning: var(--color-warning);
+  --divider-label-error: var(--color-error);
+
+  /* Toggle */
+  --toggle-width-sm: 2rem;
+  --toggle-width-md: 2.5rem;
+  --toggle-width-lg: 3rem;
+  --toggle-height-sm: 1.125rem;
+  --toggle-height-md: 1.375rem;
+  --toggle-height-lg: 1.625rem;
+  --toggle-thumb-sm: 0.75rem;
+  --toggle-thumb-md: 1rem;
+  --toggle-thumb-lg: 1.25rem;
+  --toggle-icon-sm: 0.5rem;
+  --toggle-icon-md: 0.625rem;
+  --toggle-icon-lg: 0.75rem;
+  --toggle-padding: 0.1875rem;
+  --toggle-radius: var(--radius-full);
+  --toggle-border: oklch(from var(--color-text) l c h / 0.1);
+  --toggle-bg: var(--color-surface-raised);
+  --toggle-bg-disabled: var(--color-surface-offset);
+  --toggle-thumb-bg: var(--color-text-muted);
+  --toggle-thumb-checked: var(--color-text);
+  --toggle-shadow:
+    inset 0 1px 0 oklch(from var(--color-text) l c h / 0.05),
+    inset 0 -0.5rem 1rem oklch(0 0 0 / 0.14);
+  --toggle-thumb-shadow: 0 1px 2px oklch(0 0 0 / 0.34);
+  --toggle-tone-primary: var(--tone-surface-primary);
+  --toggle-tone-success: var(--tone-surface-success);
+  --toggle-tone-warning: var(--tone-surface-warning);
+  --toggle-tone-error: var(--tone-surface-error);
+  --toggle-tone-primary-border: var(--tone-border-primary);
+  --toggle-tone-success-border: var(--tone-border-success);
+  --toggle-tone-warning-border: var(--tone-border-warning);
+  --toggle-tone-error-border: var(--tone-border-error);
+  --toggle-field-gap: var(--spacing-3);
+  --toggle-copy-gap: var(--spacing-1);
+  --toggle-label-color: var(--color-text);
+  --toggle-description-color: var(--color-text-faint);
+
+  /* Choice controls */
+  --choice-size-sm: 1rem;
+  --choice-size-md: 1.125rem;
+  --choice-size-lg: 1.25rem;
+  --choice-mark-size-sm: 0.5rem;
+  --choice-mark-size-md: 0.625rem;
+  --choice-mark-size-lg: 0.75rem;
+  --choice-dot-size-sm: 0.375rem;
+  --choice-dot-size-md: 0.5rem;
+  --choice-dot-size-lg: 0.625rem;
+  --choice-indeterminate-width-sm: 0.5rem;
+  --choice-indeterminate-width-md: 0.625rem;
+  --choice-indeterminate-width-lg: 0.75rem;
+  --choice-indeterminate-height: 2px;
+  --choice-radius: var(--radius-sm);
+  --choice-field-gap: var(--spacing-3);
+  --choice-copy-gap: var(--spacing-1);
+  --choice-control-offset: 0.125rem;
+  --choice-border: oklch(from var(--color-text) l c h / 0.14);
+  --choice-border-hover: oklch(from var(--color-text) l c h / 0.22);
+  --choice-bg: var(--color-surface-raised);
+  --choice-bg-disabled: var(--color-surface-offset);
+  --choice-mark-color: var(--color-text);
+  --choice-label-color: var(--color-text);
+  --choice-description-color: var(--color-text-faint);
+  --choice-tone-primary: var(--tone-surface-primary);
+  --choice-tone-success: var(--tone-surface-success);
+  --choice-tone-warning: var(--tone-surface-warning);
+  --choice-tone-error: var(--tone-surface-error);
+  --choice-tone-primary-border: var(--tone-border-primary);
+  --choice-tone-success-border: var(--tone-border-success);
+  --choice-tone-warning-border: var(--tone-border-warning);
+  --choice-tone-error-border: var(--tone-border-error);
+
+  /* Toast */
+  --toast-width: 24.5rem;
+  --toast-mobile-offset: var(--spacing-3);
+  --toast-offset: var(--spacing-5);
+  --toast-gap: var(--spacing-3);
+  --toast-radius: var(--radius-lg);
+  --toast-px: var(--spacing-4);
+  --toast-py: var(--spacing-3);
+  --toast-min-height: 4.5rem;
+  --toast-icon-shell-size: 2.25rem;
+  --toast-icon-size: 1rem;
+  --toast-close-size: 2rem;
+  --toast-action-gap: var(--spacing-2);
+  --toast-surface: var(--color-surface);
+  --toast-surface-raised: var(--color-surface-2);
+  --toast-border: oklch(from var(--color-text) l c h / 0.16);
+  --toast-title-color: var(--color-text);
+  --toast-description-color: oklch(from var(--color-text) l c h / 0.82);
+  --toast-close-color: var(--color-text-muted);
+  --toast-close-hover-color: var(--color-text);
+  --toast-shadow:
+    0 1px 2px oklch(0 0 0 / 0.38),
+    0 16px 36px oklch(0 0 0 / 0.34);
+  --toast-enter-duration: 260ms;
+  --toast-exit-duration: 220ms;
+  --toast-success: var(--color-success);
+  --toast-info: var(--color-primary);
+  --toast-warning: var(--color-warning);
+  --toast-error: var(--color-error);
+  --toast-success-soft: var(--color-success-highlight);
+  --toast-info-soft: var(--color-primary-highlight);
+  --toast-warning-soft: var(--color-warning-highlight);
+  --toast-error-soft: var(--color-error-highlight);
+  --toast-success-border: var(--tone-border-success);
+  --toast-info-border: var(--tone-border-primary);
+  --toast-warning-border: var(--tone-border-warning);
+  --toast-error-border: var(--tone-border-error);
 
   /* Card */
   --card-radius-surface: var(--radius-xl);
