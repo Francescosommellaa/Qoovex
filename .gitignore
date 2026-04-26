@@ -24,6 +24,7 @@ coverage/
 # ide
 .vscode/
 .cursor/
+.cursorignore
 
 # logs
 npm-debug.log*
