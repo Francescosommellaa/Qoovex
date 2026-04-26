@@ -3,42 +3,7 @@
 import { useState } from "react";
 import { Button, Textarea } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-function Row({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div style={{ marginBottom: "var(--space-8)" }}>
-      <p
-        style={{
-          fontSize: "0.65rem",
-          fontWeight: 600,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "var(--color-text-faint)",
-          marginBottom: "var(--space-3)",
-          fontFamily: "monospace",
-        }}
-      >
-        {label}
-      </p>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "var(--space-4)",
-          maxWidth: "400px",
-        }}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
+import { ShowcaseRow as Row } from "./showcase-block";
 
 export function SezioneTextarea() {
   const [feedback, setFeedback] = useState("");
@@ -49,7 +14,7 @@ export function SezioneTextarea() {
     <section id="textarea" className="sirio-section">
       <SectionHeader label="Textarea" id="textarea" />
 
-      <Row label="Variant - auto">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Variant - auto">
         <Textarea
           label="Note ricetta"
           placeholder="Aggiungi note di preparazione..."
@@ -58,7 +23,7 @@ export function SezioneTextarea() {
         />
       </Row>
 
-      <Row label="Variant - fixed">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Variant - fixed">
         <Textarea
           label="Descrizione menu"
           placeholder="Descrivi il menu..."
@@ -66,7 +31,7 @@ export function SezioneTextarea() {
         />
       </Row>
 
-      <Row label="Variant - static">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Variant - static">
         <Textarea
           label="Istruzioni brevi"
           placeholder="Max 3 righe visibili..."
@@ -75,7 +40,7 @@ export function SezioneTextarea() {
         />
       </Row>
 
-      <Row label="Con contatore caratteri">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Con contatore caratteri">
         <Textarea
           label="Bio chef"
           placeholder="Racconta la tua storia..."
@@ -85,7 +50,7 @@ export function SezioneTextarea() {
         />
       </Row>
 
-      <Row label="Status - error">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Status - error">
         <Textarea
           label="Ingredienti"
           status="error"
@@ -95,7 +60,7 @@ export function SezioneTextarea() {
         />
       </Row>
 
-      <Row label="Status - success">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Status - success">
         <Textarea
           label="Procedimento"
           status="success"
@@ -103,7 +68,7 @@ export function SezioneTextarea() {
         />
       </Row>
 
-      <Row label="State - disabled">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="State - disabled">
         <Textarea
           label="Campo bloccato"
           defaultValue="Valore non modificabile."
@@ -111,7 +76,7 @@ export function SezioneTextarea() {
         />
       </Row>
 
-      <Row label={`Live - min ${minChars} caratteri per inviare`}>
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label={`Live - min ${minChars} caratteri per inviare`}>
         <Textarea
           label="Feedback"
           placeholder={`Scrivi almeno ${minChars} caratteri...`}

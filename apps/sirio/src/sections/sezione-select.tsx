@@ -3,42 +3,7 @@
 import { useState } from "react";
 import { Select, type SelectOption } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-function Row({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div style={{ marginBottom: "var(--space-8)" }}>
-      <p
-        style={{
-          fontSize: "0.65rem",
-          fontWeight: 600,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "var(--color-text-faint)",
-          fontFamily: "monospace",
-          marginBottom: "var(--space-3)",
-        }}
-      >
-        {label}
-      </p>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-          gap: "var(--space-4)",
-          alignItems: "start",
-        }}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
+import { ShowcaseRow as Row } from "./showcase-block";
 
 const ALLERGENI: SelectOption[] = [
   { value: "glutine", label: "Glutine" },
@@ -85,13 +50,13 @@ export function SezioneSelect() {
     <section id="select" className="sirio-section">
       <SectionHeader label="Select" id="select" />
 
-      <Row label="Sizes — sm / md / lg">
+      <Row contentClassName="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] items-start gap-4" label="Sizes — sm / md / lg">
         <Select options={ALLERGENI} size="sm" placeholder="Small" label="Sm" />
         <Select options={ALLERGENI} size="md" placeholder="Medium" label="Md" />
         <Select options={ALLERGENI} size="lg" placeholder="Large" label="Lg" />
       </Row>
 
-      <Row label="Controlled vs Uncontrolled">
+      <Row contentClassName="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] items-start gap-4" label="Controlled vs Uncontrolled">
         <Select
           options={ALLERGENI}
           label="Controllato"
@@ -107,7 +72,7 @@ export function SezioneSelect() {
         />
       </Row>
 
-      <Row label="Grouped options">
+      <Row contentClassName="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] items-start gap-4" label="Grouped options">
         <Select
           options={PORTATE}
           label="Portata"
@@ -120,7 +85,7 @@ export function SezioneSelect() {
         />
       </Row>
 
-      <Row label="Stati — error / success">
+      <Row contentClassName="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] items-start gap-4" label="Stati — error / success">
         <Select
           options={ALLERGENI}
           label="Obbligatorio"
@@ -137,7 +102,7 @@ export function SezioneSelect() {
         />
       </Row>
 
-      <Row label="Disabled">
+      <Row contentClassName="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] items-start gap-4" label="Disabled">
         <Select
           options={ALLERGENI}
           label="Disabilitato vuoto"
@@ -152,7 +117,7 @@ export function SezioneSelect() {
         />
       </Row>
 
-      <Row label="Option disabilitata">
+      <Row contentClassName="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] items-start gap-4" label="Option disabilitata">
         <Select
           options={ALLERGENI}
           label="Con opzione disabilitata"
@@ -160,7 +125,7 @@ export function SezioneSelect() {
         />
       </Row>
 
-      <Row label="Multiselect">
+      <Row contentClassName="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] items-start gap-4" label="Multiselect">
         <Select
           multiple
           options={ALLERGENI}
@@ -177,7 +142,7 @@ export function SezioneSelect() {
         />
       </Row>
 
-      <Row label="Multiselect con gruppi">
+      <Row contentClassName="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] items-start gap-4" label="Multiselect con gruppi">
         <Select
           multiple
           options={PORTATE}

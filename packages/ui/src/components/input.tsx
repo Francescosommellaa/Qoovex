@@ -1,13 +1,14 @@
 "use client";
 
 import * as React from "react";
+import { CheckCircle, Check, Eye, EyeSlash } from "@phosphor-icons/react";
 import {
-  Warning,
-  CheckCircle,
-  Check,
-  Eye,
-  EyeSlash,
-} from "@phosphor-icons/react";
+  FIELD_ROOT_CLASS,
+  FIELD_STATUS_RING,
+  FieldErrorTooltip,
+  FieldHelperText,
+  FieldLabel,
+} from "./field-control";
 import { cn } from "../lib/utils";
 
 export type InputStatus = "default" | "error" | "success";
@@ -90,11 +91,11 @@ function StrengthMeter({ value }: { value: string }) {
       aria-live="polite"
       aria-label="Sicurezza password"
     >
-      <div className="flex w-full gap-[var(--spacing-1)]" aria-hidden="true">
+      <div className="flex w-full gap-(--spacing-1)" aria-hidden="true">
         {Array.from({ length: 5 }).map((_, index) => (
           <span
             key={index}
-            className="flex-1 rounded-[var(--strength-bar-radius)]"
+            className="flex-1 rounded-(--strength-bar-radius)"
             style={{
               height: "var(--strength-bar-height)",
               backgroundColor:
@@ -108,7 +109,7 @@ function StrengthMeter({ value }: { value: string }) {
       </div>
 
       <div
-        className="flex w-full items-center justify-end gap-[var(--spacing-1)] overflow-hidden"
+        className="flex w-full items-center justify-end gap-(--spacing-1) overflow-hidden"
         style={{ flexWrap: "nowrap" }}
       >
         <span
@@ -130,13 +131,13 @@ function StrengthMeter({ value }: { value: string }) {
             key={check.key}
             className={[
               "inline-flex items-center justify-center gap-[2px]",
-              "rounded-[var(--radius-full)]",
+              "rounded-(--radius-full)",
               "border shrink-0",
               "transition-[background-color,border-color,color]",
               "duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
               check.passed
-                ? "bg-[var(--color-success-highlight)] border-[var(--color-success)] text-[var(--color-success)]"
-                : "bg-transparent border-[var(--color-border)] text-[var(--color-text-faint)]",
+                ? "bg-(--color-success-highlight) border-(--color-success) text-(--color-success)"
+                : "bg-transparent border-(--color-border) text-(--color-text-faint)",
             ].join(" ")}
             style={{
               fontSize: "0.75rem",
@@ -154,68 +155,6 @@ function StrengthMeter({ value }: { value: string }) {
   );
 }
 
-function ErrorTooltip({
-  message,
-  inputId,
-}: {
-  message: string;
-  inputId: string;
-}) {
-  return (
-    <>
-      <span
-        className={[
-          "relative group/tooltip",
-          "inline-flex items-center shrink-0 cursor-default",
-          "[@media(hover:none)]:hidden",
-        ].join(" ")}
-        role="img"
-        aria-hidden="true"
-      >
-        <Warning
-          size={14}
-          className="text-[var(--color-error)]"
-          aria-hidden="true"
-        />
-
-        <span
-          role="tooltip"
-          id={`${inputId}-tooltip`}
-          className={[
-            "absolute bottom-[calc(100%+var(--spacing-2))] right-0",
-            "z-[var(--z-dropdown)]",
-            "w-max max-w-[220px]",
-            "px-[var(--spacing-3)] py-[var(--spacing-2)]",
-            "rounded-[var(--radius-md)]",
-            "bg-[var(--color-tooltip-bg)] border border-[var(--color-tooltip-border)]",
-            "text-[length:var(--text-xs)] text-[var(--color-tooltip-text)]",
-            "shadow-[var(--shadow-md)]",
-            "pointer-events-none select-none",
-            "opacity-0 translate-y-1",
-            "group-hover/tooltip:opacity-100 group-hover/tooltip:translate-y-0",
-            "transition-[opacity,transform] duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
-            "after:content-[''] after:absolute after:top-full after:right-3",
-            "after:border-4 after:border-transparent",
-            "after:border-t-[var(--color-tooltip-bg)]",
-          ].join(" ")}
-        >
-          {message}
-        </span>
-      </span>
-
-      <span
-        className={[
-          "inline-flex items-center shrink-0",
-          "[@media(hover:hover)]:hidden",
-        ].join(" ")}
-        aria-hidden="true"
-      >
-        <Warning size={14} className="text-[var(--color-error)]" />
-      </span>
-    </>
-  );
-}
-
 function PasswordToggle({
   revealed,
   onToggle,
@@ -230,12 +169,12 @@ function PasswordToggle({
       aria-label={revealed ? "Nascondi password" : "Mostra password"}
       className={[
         "inline-flex items-center shrink-0",
-        "text-[var(--color-input-icon)]",
-        "hover:text-[var(--color-text)]",
+        "text-(--color-input-icon)",
+        "hover:text-(--color-text)",
         "transition-colors duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
         "focus-visible:outline-none focus-visible:ring-2",
-        "focus-visible:ring-[var(--color-primary-highlight)]",
-        "rounded-[var(--radius-sm)]",
+        "focus-visible:ring-(--color-primary-highlight)",
+        "rounded-(--radius-sm)",
         "cursor-pointer",
       ].join(" ")}
     >
@@ -249,42 +188,23 @@ function PasswordToggle({
 }
 
 const SIZE_HEIGHT: Record<NonNullable<InputProps["size"]>, string> = {
-  sm: "h-[var(--input-height-sm)] text-[length:var(--text-xs)]",
-  md: "h-[var(--input-height-md)] text-[length:var(--text-sm)]",
-  lg: "h-[var(--input-height-lg)] text-[length:var(--text-base)]",
-};
-
-const STATUS_RING: Record<InputStatus, string> = {
-  default:
-    "border-[var(--color-input-border)] " +
-    "focus-within:border-[var(--color-input-border-focus)] " +
-    "focus-within:ring-2 focus-within:ring-[var(--color-primary-highlight)]",
-  error:
-    "border-[var(--color-input-border-error)] " +
-    "ring-2 ring-[var(--color-error-highlight)]",
-  success:
-    "border-[var(--color-input-border-success)] " +
-    "ring-2 ring-[var(--color-success-highlight)]",
-};
-
-const STATUS_HELPER: Record<InputStatus, string> = {
-  default: "text-[var(--color-input-helper)]",
-  error: "text-[var(--color-input-helper-error)]",
-  success: "text-[var(--color-input-helper-success)]",
+  sm: "h-(--input-height-sm) text-(length:--text-xs)",
+  md: "h-(--input-height-md) text-(length:--text-sm)",
+  lg: "h-(--input-height-lg) text-(length:--text-base)",
 };
 
 const WRAPPER_BASE =
-  "relative flex items-center gap-[var(--input-gap)] " +
-  "w-full rounded-[var(--input-radius)] " +
-  "bg-[var(--color-input-bg)] border " +
-  "px-[var(--input-px)] " +
+  "relative flex items-center gap-(--input-gap) " +
+  "w-full rounded-(--input-radius) " +
+  "bg-(--color-input-bg) border " +
+  "px-(--input-px) " +
   "transition-[border-color,box-shadow] " +
   "duration-[var(--duration-base)] ease-[var(--ease-qoovex)]";
 
 const INPUT_BASE =
   "flex-1 min-w-0 bg-transparent outline-none " +
-  "text-[var(--color-text)] " +
-  "placeholder:text-[var(--color-input-placeholder)] " +
+  "text-(--color-text) " +
+  "placeholder:text-(--color-input-placeholder) " +
   "disabled:cursor-not-allowed disabled:opacity-50";
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -336,10 +256,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const hasToggle = showPasswordToggle && type === "password";
 
     const trailingSlot = (
-      <span className="inline-flex shrink-0 items-center gap-[var(--spacing-2)]">
+      <span className="inline-flex shrink-0 items-center gap-(--spacing-2)">
         {!hasStatusIcon && !hasSuccessIcon && iconTrailing ? (
           <span
-            className="inline-flex items-center text-[var(--color-input-icon)]"
+            className="inline-flex items-center text-(--color-input-icon)"
             aria-hidden="true"
           >
             {iconTrailing}
@@ -354,43 +274,40 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ) : null}
 
         {hasStatusIcon ? (
-          <ErrorTooltip message={helperText} inputId={inputId} />
+          <FieldErrorTooltip
+            message={helperText}
+            tooltipId={`${inputId}-tooltip`}
+          />
         ) : null}
 
         {hasSuccessIcon ? (
           <span className="inline-flex items-center" aria-hidden="true">
-            <CheckCircle size={14} className="text-[var(--color-success)]" />
+            <CheckCircle size={14} className="text-(--color-success)" />
           </span>
         ) : null}
       </span>
     );
 
     return (
-      <div className="flex w-full flex-col gap-[var(--input-gap)]">
+      <div className={FIELD_ROOT_CLASS}>
         {label ? (
-          <label
-            htmlFor={inputId}
-            className={cn(
-              "text-[length:var(--text-xs)] font-medium text-[var(--color-label)] tracking-[0.03em] uppercase select-none",
-              srOnlyLabel && "sr-only",
-            )}
-          >
+          <FieldLabel htmlFor={inputId} srOnly={srOnlyLabel}>
             {label}
-          </label>
+          </FieldLabel>
         ) : null}
 
         <div
           className={cn(
             WRAPPER_BASE,
             SIZE_HEIGHT[size],
-            STATUS_RING[status],
+            FIELD_STATUS_RING[status],
             disabled && "opacity-50 pointer-events-none",
             className,
           )}
         >
           {iconLeading ? (
             <span
-              className="inline-flex shrink-0 items-center text-[var(--color-input-icon)]"
+              className="inline-flex shrink-0 items-center text-(--color-input-icon)"
               aria-hidden="true"
             >
               {iconLeading}
@@ -419,16 +336,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ) : null}
 
         {helperText ? (
-          <p
+          <FieldHelperText
             id={helperId}
-            className={cn(
-              "text-[length:var(--text-xs)]",
-              STATUS_HELPER[status],
-              status === "error" && "[@media(hover:hover)]:hidden",
-            )}
+            status={status}
+            hideWhenHoverTooltip={status === "error"}
           >
             {helperText}
-          </p>
+          </FieldHelperText>
         ) : null}
       </div>
     );

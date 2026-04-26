@@ -2,6 +2,12 @@
 
 import * as React from "react";
 import { CaretDown, Check } from "@phosphor-icons/react";
+import {
+  FIELD_ROOT_CLASS,
+  FIELD_TRIGGER_STATUS_RING,
+  FieldHelperText,
+  FieldLabel,
+} from "./field-control";
 import { cn, useControllableValue } from "../lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -47,6 +53,7 @@ export type SelectProps = {
   size?: SelectSize;
   disabled?: boolean;
   srOnlyLabel?: boolean;
+  showSelectedCount?: boolean;
   id?: string;
   className?: string;
 } & (SelectSingleProps | SelectMultiProps);
@@ -71,34 +78,15 @@ function findOption(
 // ─── Static maps ──────────────────────────────────────────────────────────────
 
 const TRIGGER_SIZE: Record<SelectSize, string> = {
-  sm: "min-h-[var(--input-height-sm)] text-[length:var(--text-xs)]",
-  md: "min-h-[var(--input-height-md)] text-[length:var(--text-sm)]",
-  lg: "min-h-[var(--input-height-lg)] text-[length:var(--text-base)]",
-};
-
-const TRIGGER_STATUS: Record<SelectStatus, string> = {
-  default:
-    "border-[var(--color-input-border)] " +
-    "data-[open=true]:border-[var(--color-input-border-focus)] " +
-    "data-[open=true]:ring-2 data-[open=true]:ring-[var(--color-primary-highlight)]",
-  error:
-    "border-[var(--color-input-border-error)] " +
-    "ring-2 ring-[var(--color-error-highlight)]",
-  success:
-    "border-[var(--color-input-border-success)] " +
-    "ring-2 ring-[var(--color-success-highlight)]",
-};
-
-const HELPER_STATUS: Record<SelectStatus, string> = {
-  default: "text-[var(--color-input-helper)]",
-  error: "text-[var(--color-input-helper-error)]",
-  success: "text-[var(--color-input-helper-success)]",
+  sm: "min-h-(--input-height-sm) text-(length:--text-xs)",
+  md: "min-h-(--input-height-md) text-(length:--text-sm)",
+  lg: "min-h-(--input-height-lg) text-(length:--text-base)",
 };
 
 const OPTION_SIZE: Record<SelectSize, string> = {
-  sm: "min-h-[var(--input-height-sm)] text-[length:var(--text-xs)]",
-  md: "min-h-[var(--input-height-md)] text-[length:var(--text-sm)]",
-  lg: "min-h-[var(--input-height-lg)] text-[length:var(--text-base)]",
+  sm: "min-h-(--input-height-sm) text-(length:--text-xs)",
+  md: "min-h-(--input-height-md) text-(length:--text-sm)",
+  lg: "min-h-(--input-height-lg) text-(length:--text-base)",
 };
 
 const MULTI_TAG_TONES = [
@@ -137,20 +125,18 @@ function MultiTag({
       tabIndex={inert ? -1 : undefined}
       className={cn(
         "inline-flex items-center justify-center",
-        "min-h-[var(--select-tag-min-height)] max-w-[var(--select-tag-max-width)]",
-        "px-[var(--select-tag-px)] py-[var(--select-tag-py)] rounded-[var(--select-tag-radius)]",
-        "border border-[var(--color-select-tag-border)]",
-        "text-[var(--color-select-tag-text)]",
+        "min-h-(--select-tag-min-height) max-w-(--select-tag-max-width)",
+        "px-(--select-tag-px) py-(--select-tag-py) rounded-(--select-tag-radius)",
+        "border border-(--color-select-tag-border)",
+        "text-(--color-select-tag-text)",
         "leading-none",
         "shadow-[var(--select-tag-shadow)]",
         "cursor-pointer touch-manipulation select-none",
         "transition-[border-color,box-shadow,transform] duration-[var(--duration-fast)] ease-[var(--ease-qoovex)]",
-        "hover:border-[var(--color-select-tag-border-hover)] hover:shadow-[var(--select-tag-hover-shadow)]",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-highlight)]",
+        "hover:border-(--color-select-tag-border-hover) hover:shadow-[var(--select-tag-hover-shadow)]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary-highlight)",
         "active:scale-[0.98]",
-        size === "lg"
-          ? "text-[length:var(--text-sm)]"
-          : "text-[length:var(--text-xs)]",
+        "text-(length:--text-xs)",
         "shrink-0",
         tone,
       )}
@@ -179,15 +165,15 @@ function Option({
       aria-selected={selected}
       aria-disabled={option.disabled || undefined}
       className={cn(
-        "flex w-full items-center justify-between gap-[var(--spacing-2)]",
-        "px-[var(--input-px)] rounded-[var(--select-item-radius)]",
-        "mb-[var(--spacing-1)] last:mb-0",
+        "flex w-full items-center justify-between gap-(--spacing-2)",
+        "px-(--input-px) rounded-(--select-item-radius)",
+        "mb-(--spacing-1) last:mb-0",
         "cursor-pointer select-none",
         "transition-colors duration-[var(--duration-fast)] ease-[var(--ease-qoovex)]",
         OPTION_SIZE[size],
         selected
-          ? "bg-[var(--color-select-item-selected-bg)] text-[var(--color-select-item-selected-text)]"
-          : "text-[var(--color-text)] hover:bg-[var(--color-select-item-hover)]",
+          ? "bg-(--color-select-item-selected-bg) text-(--color-select-item-selected-text)"
+          : "text-(--color-text) hover:bg-(--color-select-item-hover)",
         option.disabled && "opacity-40 pointer-events-none",
       )}
       onClick={() => !option.disabled && onSelect(option.value)}
@@ -218,6 +204,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       size = "md",
       disabled = false,
       srOnlyLabel = false,
+      showSelectedCount = true,
       id,
       className,
     } = props;
@@ -257,6 +244,9 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     const maxSelected = isMulti
       ? (props as SelectMultiProps).maxSelected
       : undefined;
+    const multiValueSignature = isMulti ? multiValue.join("\u0000") : "";
+    const [measuredMultiSignature, setMeasuredMultiSignature] =
+      React.useState("");
 
     // chiudi su click esterno
     React.useEffect(() => {
@@ -330,6 +320,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       if (!isMulti) return;
       if (multiValue.length === 0) {
         setVisibleMultiCount(0);
+        setMeasuredMultiSignature(multiValueSignature);
         return;
       }
 
@@ -374,7 +365,8 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       setVisibleMultiCount(
         Math.min(Math.max(nextVisibleCount, 1), multiValue.length),
       );
-    }, [isMulti, multiValue]);
+      setMeasuredMultiSignature(multiValueSignature);
+    }, [isMulti, multiValue, multiValueSignature]);
 
     React.useEffect(() => {
       if (!isMulti) return;
@@ -403,23 +395,24 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     const visibleMultiValue = isMulti
       ? multiValue.slice(0, visibleMultiCount)
       : [];
-    const hiddenMultiCount = isMulti
+    const multiMeasurementReady = measuredMultiSignature === multiValueSignature;
+    const hiddenMultiCount = isMulti && multiMeasurementReady
       ? Math.max(multiValue.length - visibleMultiCount, 0)
       : 0;
 
     // ── Render trigger content ──
     const triggerContent = isMulti ? (
       multiValue.length === 0 ? (
-        <span className="flex-1 truncate text-[var(--color-input-placeholder)]">
+        <span className="flex-1 truncate text-(--color-input-placeholder)">
           {placeholder}
         </span>
       ) : (
         <div
           ref={multiContentRef}
-          className="flex flex-1 items-center gap-x-[var(--select-tag-gap-x)] min-w-0"
+          className="flex flex-1 items-center gap-x-(--select-tag-gap-x) min-w-0"
         >
           <div
-            className="flex flex-1 flex-nowrap items-center gap-x-[var(--select-tag-gap-x)] min-w-0 overflow-hidden pr-[var(--spacing-1)] [mask-image:var(--select-tag-rail-mask)]"
+            className="flex flex-1 flex-nowrap items-center gap-x-(--select-tag-gap-x) min-w-0 overflow-hidden pr-(--spacing-1) [mask-image:var(--select-tag-rail-mask)]"
           >
             {visibleMultiValue.map((v, index) => {
               const opt = findOption(options, v);
@@ -437,7 +430,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           {hiddenMultiCount > 0 && (
             <span
               aria-label={`${hiddenMultiCount} selezioni aggiuntive`}
-              className="inline-flex min-h-[var(--select-tag-min-height)] shrink-0 items-center rounded-[var(--select-tag-radius)] border border-[var(--color-select-tag-more-border)] bg-[var(--color-select-tag-more-bg)] px-[var(--select-tag-px)] py-[var(--select-tag-py)] text-[length:var(--text-xs)] font-medium leading-none text-[var(--color-select-tag-more-text)]"
+              className="inline-flex min-h-(--select-tag-min-height) shrink-0 items-center rounded-(--select-tag-radius) border border-(--color-select-tag-more-border) bg-(--color-select-tag-more-bg) px-(--select-tag-px) py-(--select-tag-py) text-(length:--text-xs) font-medium leading-none text-(--color-select-tag-more-text)"
             >
               +{hiddenMultiCount}
             </span>
@@ -449,7 +442,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
         className={cn(
           "flex-1 truncate",
           !findOption(options, singleValue) &&
-            "text-[var(--color-input-placeholder)]",
+            "text-(--color-input-placeholder)",
         )}
       >
         {findOption(options, singleValue)?.label ?? placeholder}
@@ -457,8 +450,8 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     );
 
     const selectedCountMeta =
-      isMulti && maxSelected !== undefined ? (
-        <span className="ml-auto shrink-0 text-[length:var(--text-xs)] font-medium leading-none tracking-[0.04em] text-[var(--color-select-count-text)]">
+      isMulti && showSelectedCount && maxSelected !== undefined ? (
+        <span className="ml-auto shrink-0 text-(length:--text-xs) font-medium leading-none tracking-[0.04em] text-(--color-select-count-text)">
           {multiValue.length}/{maxSelected}
         </span>
       ) : null;
@@ -466,20 +459,17 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex w-full flex-col gap-[var(--input-gap)]", className)}
+        className={cn(FIELD_ROOT_CLASS, className)}
       >
         {(label || selectedCountMeta) && (
-          <div className="flex min-h-[0.75rem] w-full items-center gap-[var(--spacing-3)]">
+          <div className="flex min-h-[0.75rem] w-full items-center gap-(--spacing-3)">
             {label && (
-              <label
+              <FieldLabel
                 id={`${selectId}-label`}
-                className={cn(
-                  "text-[length:var(--text-xs)] font-medium text-[var(--color-label)] tracking-[0.03em] uppercase select-none",
-                  srOnlyLabel && "sr-only",
-                )}
+                srOnly={srOnlyLabel}
               >
                 {label}
-              </label>
+              </FieldLabel>
             )}
             {selectedCountMeta}
           </div>
@@ -505,24 +495,24 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
             onKeyDown={handleTriggerKeyDown}
             className={cn(
               "relative flex w-full items-center justify-between",
-              "rounded-[var(--select-radius)] border",
-              "bg-[var(--color-input-bg)]",
-              "px-[var(--input-px)] py-[var(--select-trigger-py)] gap-[var(--input-gap)]",
+              "rounded-(--select-radius) border",
+              "bg-(--color-input-bg)",
+              "px-(--input-px) py-(--select-trigger-py) gap-(--input-gap)",
               "cursor-pointer",
               "transition-[border-color,box-shadow]",
               "duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
               "focus-visible:outline-none",
-              "focus-visible:border-[var(--color-input-border-focus)]",
-              "focus-visible:ring-2 focus-visible:ring-[var(--color-primary-highlight)]",
+              "focus-visible:border-(--color-input-border-focus)",
+              "focus-visible:ring-2 focus-visible:ring-(--color-primary-highlight)",
               "data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none",
               TRIGGER_SIZE[size],
-              TRIGGER_STATUS[status],
+              FIELD_TRIGGER_STATUS_RING[status],
             )}
           >
             {triggerContent}
             <CaretDown
               size={caretSize}
-              className="shrink-0 text-[var(--color-input-icon)]"
+              className="shrink-0 text-(--color-input-icon)"
               aria-hidden="true"
               style={{
                 transform: open ? "rotate(180deg)" : "rotate(0deg)",
@@ -534,7 +524,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           {isMulti && multiValue.length > 0 && (
             <div
               aria-hidden="true"
-              className="pointer-events-none invisible absolute left-0 top-0 flex flex-nowrap items-center gap-x-[var(--select-tag-gap-x)]"
+              className="pointer-events-none invisible absolute left-0 top-0 flex flex-nowrap items-center gap-x-(--select-tag-gap-x)"
             >
               {multiValue.map((v, index) => {
                 const opt = findOption(options, v);
@@ -552,7 +542,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
               })}
               <span
                 ref={measureOverflowRef}
-                className="inline-flex min-h-[var(--select-tag-min-height)] shrink-0 items-center rounded-[var(--select-tag-radius)] border border-[var(--color-select-tag-more-border)] bg-[var(--color-select-tag-more-bg)] px-[var(--select-tag-px)] py-[var(--select-tag-py)] text-[length:var(--text-xs)] font-medium leading-none text-[var(--color-select-tag-more-text)]"
+                className="inline-flex min-h-(--select-tag-min-height) shrink-0 items-center rounded-(--select-tag-radius) border border-(--color-select-tag-more-border) bg-(--color-select-tag-more-bg) px-(--select-tag-px) py-(--select-tag-py) text-(length:--text-xs) font-medium leading-none text-(--color-select-tag-more-text)"
               >
                 +{multiValue.length}
               </span>
@@ -567,10 +557,10 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
             aria-multiselectable={isMulti || undefined}
             className={cn(
               "absolute z-[var(--z-dropdown)] w-full",
-              "mt-[var(--spacing-1)]",
-              "rounded-[var(--select-dropdown-radius)]",
-              "border border-[var(--color-border)]",
-              "bg-[var(--color-surface-2)]",
+              "mt-(--spacing-1)",
+              "rounded-(--select-dropdown-radius)",
+              "border border-(--color-border)",
+              "bg-(--color-surface-2)",
               "shadow-[var(--select-dropdown-shadow)]",
               "overflow-hidden overflow-y-auto max-h-64",
               "origin-top",
@@ -582,16 +572,16 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
               pointerEvents: open ? "auto" : "none",
             }}
           >
-            <div className="p-[var(--spacing-1)]">
+            <div className="p-(--spacing-1)">
               {options.map((item, idx) => {
                 if (isGroup(item)) {
                   return (
                     <div key={idx} role="group" aria-label={item.label}>
                       <div
                         className={
-                          "px-[var(--input-px)] py-[var(--spacing-1)] " +
-                          "text-[length:var(--text-xs)] font-semibold uppercase " +
-                          "tracking-[0.06em] text-[var(--color-select-group-label)] select-none"
+                          "px-(--input-px) py-(--spacing-1) " +
+                          "text-(length:--text-xs) font-semibold uppercase " +
+                          "tracking-[0.06em] text-(--color-select-group-label) select-none"
                         }
                       >
                         {item.label}
@@ -631,15 +621,9 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
         </div>
 
         {helperText && (
-          <p
-            id={helperId}
-            className={cn(
-              "text-[length:var(--text-xs)]",
-              HELPER_STATUS[status],
-            )}
-          >
+          <FieldHelperText id={helperId} status={status}>
             {helperText}
-          </p>
+          </FieldHelperText>
         )}
       </div>
     );

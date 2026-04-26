@@ -22,13 +22,7 @@ import {
 } from "@qoovex/ui";
 import type { CardTone } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-interface ShowcaseBlockProps {
-  label: string;
-  description: string;
-  children: ReactNode;
-  className?: string;
-}
+import { ShowcaseBlock } from "./showcase-block";
 
 interface RecipePreview {
   title: string;
@@ -70,30 +64,6 @@ const RECIPE_PREVIEWS: RecipePreview[] = [
 ];
 
 const handleDemoCardClick = () => undefined;
-
-function ShowcaseBlock({
-  label,
-  description,
-  children,
-  className,
-}: ShowcaseBlockProps) {
-  return (
-    <div className="mb-10">
-      <div className="mb-4 max-w-3xl">
-        <p className="sirio-row__label">{label}</p>
-        <p className="sirio-preview-text">{description}</p>
-      </div>
-      <div
-        className={
-          className ??
-          "grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4"
-        }
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
 
 function AccentIcon({ children }: { children: ReactNode }) {
   return (

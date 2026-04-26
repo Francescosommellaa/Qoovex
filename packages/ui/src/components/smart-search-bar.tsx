@@ -265,6 +265,12 @@ export const SmartSearchBar = React.forwardRef<
   const isOpen = forceOpen || open;
   const showDropdown = isOpen && (results.length > 0 || query.length > 0);
   const hotkeyLabel = shortcut.toUpperCase();
+  const generatedId = React.useId();
+  const listboxId = `${generatedId}-search-bar-listbox`;
+  const getOptionId = React.useCallback(
+    (index: number) => `${generatedId}-search-bar-item-${index}`,
+    [generatedId],
+  );
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setQuery(event.target.value);
@@ -413,9 +419,11 @@ export const SmartSearchBar = React.forwardRef<
           type="text"
           role="searchbox"
           aria-autocomplete="list"
-          aria-controls="search-bar-listbox"
+          aria-controls={groups.length > 0 ? listboxId : undefined}
           aria-activedescendant={
-            activeIndex >= 0 ? `search-bar-item-${activeIndex}` : undefined
+            activeIndex >= 0 && results[activeIndex]
+              ? getOptionId(activeIndex)
+              : undefined
           }
           value={query}
           onChange={handleChange}
@@ -465,7 +473,6 @@ export const SmartSearchBar = React.forwardRef<
 
       {showDropdown ? (
         <div
-          id="search-bar-listbox"
           className={cn(
             "search-bar-dropdown",
             isTouch && "search-bar-dropdown",
@@ -528,6 +535,7 @@ export const SmartSearchBar = React.forwardRef<
           {/* Lista risultati */}
           {groups.length > 0 ? (
             <div
+              id={listboxId}
               ref={listRef}
               className="search-bar-list"
               role="listbox"
@@ -548,7 +556,7 @@ export const SmartSearchBar = React.forwardRef<
                     return (
                       <div
                         key={item.id}
-                        id={`search-bar-item-${globalIndex}`}
+                        id={getOptionId(globalIndex)}
                         role="option"
                         aria-selected={globalIndex === activeIndex}
                         className={cn(

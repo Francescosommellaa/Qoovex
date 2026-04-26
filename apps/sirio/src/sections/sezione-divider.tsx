@@ -1,17 +1,10 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { ChefHat, ClockCountdown, Leaf } from "@phosphor-icons/react";
 import { Badge, Card, CardBody, Divider } from "@qoovex/ui";
 import type { DividerTone } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-interface ShowcaseBlockProps {
-  label: string;
-  description: string;
-  children: ReactNode;
-  className?: string;
-}
+import { ShowcaseBlock } from "./showcase-block";
 
 const TONES: DividerTone[] = [
   "neutral",
@@ -21,36 +14,13 @@ const TONES: DividerTone[] = [
   "error",
 ];
 
-function ShowcaseBlock({
-  label,
-  description,
-  children,
-  className,
-}: ShowcaseBlockProps) {
-  return (
-    <div className="mb-10">
-      <div className="mb-4 max-w-3xl">
-        <p className="sirio-row__label">{label}</p>
-        <p className="sirio-preview-text">{description}</p>
-      </div>
-      <div
-        className={
-          className ??
-          "grid grid-cols-1 gap-4 md:grid-cols-2"
-        }
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
-
 export function SezioneDivider() {
   return (
     <section id="divider" className="sirio-section">
       <SectionHeader label="Divider" id="divider" />
 
       <ShowcaseBlock
+        className="grid grid-cols-1 gap-4 md:grid-cols-2"
         label="Separazione semplice"
         description="Divider e` decorativo di default quando non ha label; con contenuto diventa un separatore leggibile."
       >
@@ -134,3 +104,4 @@ export function SezioneDivider() {
     </section>
   );
 }
+

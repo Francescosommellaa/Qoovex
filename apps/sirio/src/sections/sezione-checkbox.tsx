@@ -11,13 +11,7 @@ import {
 import { Badge, Card, CardBody, Checkbox, Divider, Radio } from "@qoovex/ui";
 import type { CheckboxTone, RadioTone } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-interface ShowcaseBlockProps {
-  label: string;
-  description: string;
-  children: ReactNode;
-  className?: string;
-}
+import { ShowcaseBlock } from "./showcase-block";
 
 interface ChoiceToneExample {
   tone: CheckboxTone;
@@ -78,30 +72,6 @@ const RADIO_OPTIONS: Array<{
     tone: "warning",
   },
 ];
-
-function ShowcaseBlock({
-  label,
-  description,
-  children,
-  className,
-}: ShowcaseBlockProps) {
-  return (
-    <div className="mb-10">
-      <div className="mb-4 max-w-3xl">
-        <p className="sirio-row__label">{label}</p>
-        <p className="sirio-preview-text">{description}</p>
-      </div>
-      <div
-        className={
-          className ??
-          "grid grid-cols-1 gap-4 md:grid-cols-2"
-        }
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
 
 function ControlledCheckboxDemo() {
   const [checked, setChecked] = useState(true);
@@ -233,3 +203,4 @@ export function SezioneCheckbox() {
     </section>
   );
 }
+

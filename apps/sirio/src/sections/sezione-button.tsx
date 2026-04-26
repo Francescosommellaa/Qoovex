@@ -15,42 +15,7 @@ import {
 } from "@phosphor-icons/react";
 import { Button } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-function Row({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div style={{ marginBottom: "var(--space-8)" }}>
-      <p
-        style={{
-          fontSize: "0.65rem",
-          fontWeight: 600,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "var(--color-text-faint)",
-          marginBottom: "var(--space-3)",
-          fontFamily: "monospace",
-        }}
-      >
-        {label}
-      </p>
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "var(--space-3)",
-          alignItems: "center",
-        }}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
+import { ShowcaseRow as Row } from "./showcase-block";
 
 // ─── Controlled demo per lo swapLabel ─────────────────────────────────────────
 

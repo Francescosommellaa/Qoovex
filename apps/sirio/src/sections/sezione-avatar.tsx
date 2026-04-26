@@ -1,6 +1,5 @@
 "use client";
 
-import type { ReactNode } from "react";
 import {
   ChefHat,
   CrownSimple,
@@ -10,13 +9,7 @@ import {
 import { Avatar, Badge, Card, CardBody } from "@qoovex/ui";
 import type { AvatarStatus, AvatarTone } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-interface ShowcaseBlockProps {
-  label: string;
-  description: string;
-  children: ReactNode;
-  className?: string;
-}
+import { ShowcaseBlock } from "./showcase-block";
 
 interface TeamMember {
   name: string;
@@ -59,30 +52,6 @@ const TONES: AvatarTone[] = [
   "warning",
   "error",
 ];
-
-function ShowcaseBlock({
-  label,
-  description,
-  children,
-  className,
-}: ShowcaseBlockProps) {
-  return (
-    <div className="mb-10">
-      <div className="mb-4 max-w-3xl">
-        <p className="sirio-row__label">{label}</p>
-        <p className="sirio-preview-text">{description}</p>
-      </div>
-      <div
-        className={
-          className ??
-          "grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4"
-        }
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
 
 function TeamMemberCard({ member }: { member: TeamMember }) {
   return (

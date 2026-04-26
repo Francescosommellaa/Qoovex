@@ -20,13 +20,7 @@ import {
 } from "@qoovex/ui";
 import type { ToastVariant } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-interface ShowcaseBlockProps {
-  label: string;
-  description: string;
-  children: ReactNode;
-  className?: string;
-}
+import { ShowcaseBlock } from "./showcase-block";
 
 interface ToastExample {
   variant: ToastVariant;
@@ -104,25 +98,6 @@ const CARD_TONES: Record<ToastVariant, "primary" | "success" | "warning" | "erro
   warning: "warning",
   error: "error",
 };
-
-function ShowcaseBlock({
-  label,
-  description,
-  children,
-  className,
-}: ShowcaseBlockProps) {
-  return (
-    <div className="mb-10">
-      <div className="mb-4 max-w-3xl">
-        <p className="sirio-row__label">{label}</p>
-        <p className="sirio-preview-text">{description}</p>
-      </div>
-      <div className={className ?? "grid grid-cols-1 gap-4 md:grid-cols-2"}>
-        {children}
-      </div>
-    </div>
-  );
-}
 
 function ToastActionsDemo() {
   const { toast, dismissToast } = useToast();

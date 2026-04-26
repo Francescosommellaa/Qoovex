@@ -151,100 +151,13 @@ export type SectionId = (typeof SECTIONS)[number]["id"];
 
 export function SectionHeader({ label, id }: { label: string; id: string }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "0.625rem",
-        marginBottom: "var(--space-6)",
-        paddingBottom: "var(--space-4)",
-        borderBottom: "1px solid var(--color-border)",
-      }}
-    >
-      <span
-        style={{
-          fontFamily: "monospace",
-          fontSize: "0.65rem",
-          color: "var(--color-text-faint)",
-          letterSpacing: "0.08em",
-          userSelect: "none",
-        }}
-      >
+    <div className="mb-6 flex items-center gap-2.5 border-b border-border pb-4">
+      <span className="select-none font-mono text-(length:--text-xs) tracking-[0.08em] text-text-faint">
         #{id}
       </span>
-      <h2
-        style={{
-          fontFamily: "var(--font-display)",
-          fontWeight: 600,
-          fontSize: "var(--text-lg)",
-          letterSpacing: "-0.02em",
-          color: "var(--color-text)",
-        }}
-      >
+      <h2 className="font-display text-(length:--text-lg) font-semibold tracking-[-0.02em] text-text">
         {label}
       </h2>
     </div>
   );
 }
-
-export function ComingSoon({ label }: { label: string }) {
-  return (
-    <div
-      style={{
-        padding: "var(--space-8) var(--space-6)",
-        borderRadius: "var(--radius-lg)",
-        border: "1px dashed var(--color-border)",
-        background: "var(--color-surface)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "var(--space-3)",
-        textAlign: "center",
-      }}
-    >
-      <span style={{ fontSize: "1.25rem", opacity: 0.2 }}>◌</span>
-      <p
-        style={{
-          fontSize: "var(--text-sm)",
-          color: "var(--color-text-faint)",
-        }}
-      >
-        <strong
-          style={{ fontStyle: "normal", color: "var(--color-text-muted)" }}
-        >
-          {label}
-        </strong>{" "}
-        verra popolato nella prossima fase.
-      </p>
-    </div>
-  );
-}
-
-export type SectionStatus = "done" | "coming-soon";
-
-export const SECTION_STATUS: Record<SectionId, SectionStatus> = {
-  fondamenta: "done",
-  colori: "done",
-  tipografia: "done",
-  spacing: "done",
-  radius: "done",
-  shadows: "done",
-  animazioni: "done",
-  zindex: "done",
-  button: "done",
-  input: "done",
-  textarea: "done",
-  smartsearchbar: "done",
-  searchbar: "done",
-  select: "done",
-  card: "done",
-  badge: "done",
-  avatar: "done",
-  divider: "done",
-  toggle: "done",
-  checkbox: "done",
-  toast: "done",
-  modal: "coming-soon",
-  form: "coming-soon",
-  skeleton: "coming-soon",
-};

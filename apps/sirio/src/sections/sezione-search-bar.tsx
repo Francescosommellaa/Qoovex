@@ -3,42 +3,7 @@
 import { useState } from "react";
 import { SearchBar } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-function Row({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div style={{ marginBottom: "var(--space-8)" }}>
-      <p
-        style={{
-          fontSize: "0.65rem",
-          fontWeight: 600,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "var(--color-text-faint)",
-          marginBottom: "var(--space-3)",
-          fontFamily: "monospace",
-        }}
-      >
-        {label}
-      </p>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "var(--space-4)",
-          maxWidth: "560px",
-        }}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
+import { ShowcaseRow as Row } from "./showcase-block";
 
 export function SezioneSearchBar() {
   const [value, setValue] = useState("");
@@ -48,11 +13,11 @@ export function SezioneSearchBar() {
     <section id="searchbar" className="sirio-section">
       <SectionHeader label="SearchBar" id="searchbar" />
 
-      <Row label="Default">
+      <Row contentClassName="flex max-w-[560px] flex-col gap-4" label="Default">
         <SearchBar placeholder="Cerca ricette…" />
       </Row>
 
-      <Row label="Controlled — digita per filtrare">
+      <Row contentClassName="flex max-w-[560px] flex-col gap-4" label="Controlled — digita per filtrare">
         <SearchBar
           value={value}
           onValueChange={setValue}
@@ -83,11 +48,11 @@ export function SezioneSearchBar() {
         )}
       </Row>
 
-      <Row label="Disabled">
+      <Row contentClassName="flex max-w-[560px] flex-col gap-4" label="Disabled">
         <SearchBar placeholder="Cerca…" disabled />
       </Row>
 
-      <Row label="Con valore iniziale">
+      <Row contentClassName="flex max-w-[560px] flex-col gap-4" label="Con valore iniziale">
         <SearchBar defaultValue="risotto" />
       </Row>
     </section>

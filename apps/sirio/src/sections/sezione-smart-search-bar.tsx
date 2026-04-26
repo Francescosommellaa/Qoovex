@@ -4,42 +4,7 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import { Plus } from "@phosphor-icons/react";
 import { Button, SmartSearchBar, type SearchResult } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-function Row({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div style={{ marginBottom: "var(--space-8)" }}>
-      <p
-        style={{
-          fontSize: "0.65rem",
-          fontWeight: 600,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "var(--color-text-faint)",
-          marginBottom: "var(--space-3)",
-          fontFamily: "monospace",
-        }}
-      >
-        {label}
-      </p>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "var(--space-4)",
-          maxWidth: "560px",
-        }}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
+import { ShowcaseRow as Row } from "./showcase-block";
 
 function SearchPreview({
   children,
@@ -234,7 +199,7 @@ export function SezioneSmartSearchBar() {
     <section id="smartsearchbar" className="sirio-section">
       <SectionHeader label="Smart Search Bar" id="smartsearchbar" />
 
-      <Row label="Dropdown - risultati per categoria">
+      <Row contentClassName="flex max-w-[560px] flex-col gap-4" label="Dropdown - risultati per categoria">
         <SearchPreview zIndex={40}>
           <SmartSearchBar
             defaultQuery="pasta"
@@ -250,7 +215,7 @@ export function SezioneSmartSearchBar() {
         </SearchPreview>
       </Row>
 
-      <Row label='Modalita IA - query con "?" o "/ai"'>
+      <Row contentClassName="flex max-w-[560px] flex-col gap-4" label='Modalita IA - query con "?" o "/ai"'>
         <SearchPreview zIndex={30}>
           <SmartSearchBar
             defaultQuery="? quali ricette posso fare con zucchine e gamberi"
@@ -261,7 +226,7 @@ export function SezioneSmartSearchBar() {
         </SearchPreview>
       </Row>
 
-      <Row label="State - empty">
+      <Row contentClassName="flex max-w-[560px] flex-col gap-4" label="State - empty">
         <SearchPreview zIndex={20}>
           <SmartSearchBar
             defaultQuery="xyzqwerty123"
@@ -272,7 +237,7 @@ export function SezioneSmartSearchBar() {
         </SearchPreview>
       </Row>
 
-      <Row label="State - loading">
+      <Row contentClassName="flex max-w-[560px] flex-col gap-4" label="State - loading">
         <SmartSearchBar
           defaultQuery="Risotto"
           results={[]}
@@ -286,15 +251,15 @@ export function SezioneSmartSearchBar() {
         </div>
       </Row>
 
-      <Row label="Default - collapsed con hotkey">
+      <Row contentClassName="flex max-w-[560px] flex-col gap-4" label="Default - collapsed con hotkey">
         <SmartSearchBar showHotkey />
       </Row>
 
-      <Row label='Shortcut custom - prop shortcut="P"'>
+      <Row contentClassName="flex max-w-[560px] flex-col gap-4" label='Shortcut custom - prop shortcut="P"'>
         <SmartSearchBar shortcut="P" showHotkey />
       </Row>
 
-      <Row label="Live - digita per cercare, prova /ai o ? per l'IA">
+      <Row contentClassName="flex max-w-[560px] flex-col gap-4" label="Live - digita per cercare, prova /ai o ? per l'IA">
         <SmartSearchBar
           results={liveResults}
           value={liveQuery}

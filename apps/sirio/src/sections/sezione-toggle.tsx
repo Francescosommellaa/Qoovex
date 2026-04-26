@@ -12,13 +12,7 @@ import {
 import { Card, CardBody, Divider, Toggle } from "@qoovex/ui";
 import type { ToggleTone } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-interface ShowcaseBlockProps {
-  label: string;
-  description: string;
-  children: ReactNode;
-  className?: string;
-}
+import { ShowcaseBlock } from "./showcase-block";
 
 interface ToggleExample {
   tone: ToggleTone;
@@ -53,30 +47,6 @@ const TOGGLE_EXAMPLES: ToggleExample[] = [
     icon: <Flame size={16} weight="bold" aria-hidden="true" />,
   },
 ];
-
-function ShowcaseBlock({
-  label,
-  description,
-  children,
-  className,
-}: ShowcaseBlockProps) {
-  return (
-    <div className="mb-10">
-      <div className="mb-4 max-w-3xl">
-        <p className="sirio-row__label">{label}</p>
-        <p className="sirio-preview-text">{description}</p>
-      </div>
-      <div
-        className={
-          className ??
-          "grid grid-cols-1 gap-4 md:grid-cols-2"
-        }
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
 
 function ControlledToggleDemo() {
   const [checked, setChecked] = useState(true);
@@ -191,3 +161,4 @@ export function SezioneToggle() {
     </section>
   );
 }
+

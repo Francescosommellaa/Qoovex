@@ -26,8 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="it" className="dark">
-      <body>{children}</body>
-      <Analytics />
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

@@ -29,13 +29,13 @@ const BASE =
   "transition-[color,border-color,box-shadow,opacity] " +
   "duration-[var(--duration-base)] ease-[var(--ease-qoovex)] " +
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary " +
-  "disabled:opacity-35 disabled:pointer-events-none disabled:saturate-50";
+  "disabled:opacity-[var(--button-disabled-opacity)] disabled:pointer-events-none disabled:saturate-50";
 
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
     "bg-surface-offset text-text border border-primary/40 " +
     "shadow-[var(--shadow-btn-resting)] " +
-    "hover:text-[oklch(0.97_0_0)] hover:border-transparent " +
+    "hover:text-(--color-btn-filled-text) hover:border-transparent " +
     "hover:shadow-[var(--shadow-btn-hover)] " +
     "active:shadow-[var(--shadow-btn-active)]",
   secondary:
@@ -49,7 +49,7 @@ const VARIANTS: Record<ButtonVariant, string> = {
   destructive:
     "bg-surface-offset text-text border border-error/40 " +
     "shadow-[var(--shadow-btn-resting)] " +
-    "hover:text-[oklch(0.97_0_0)] hover:border-transparent " +
+    "hover:text-(--color-btn-filled-text) hover:border-transparent " +
     "hover:shadow-[var(--shadow-btn-hover)] " +
     "active:shadow-[var(--shadow-btn-active)]",
 };
@@ -61,16 +61,16 @@ const FILL_BASE =
 
 const FILLS: Record<ButtonVariant, string> = {
   primary: FILL_BASE + " bg-primary",
-  secondary: FILL_BASE + " bg-[var(--color-btn-fill-secondary)]",
-  ghost: FILL_BASE + " bg-[var(--color-btn-fill-ghost)]",
+  secondary: FILL_BASE + " bg-(--color-btn-fill-secondary)",
+  ghost: FILL_BASE + " bg-(--color-btn-fill-ghost)",
   destructive: FILL_BASE + " bg-error",
 };
 
 const SIZES: Record<ButtonSize, string> = {
-  xs: "h-8  px-4   gap-1.5 text-[length:var(--text-xs)]",
-  sm: "h-9  px-6   gap-2   text-[length:var(--text-xs)]",
-  md: "h-10 px-6   gap-2   text-[length:var(--text-sm)]",
-  lg: "h-12 px-8   gap-2.5 text-[length:var(--text-base)]",
+  xs: "h-8  px-4   gap-1.5 text-(length:--text-xs)",
+  sm: "h-9  px-6   gap-2   text-(length:--text-xs)",
+  md: "h-10 px-6   gap-2   text-(length:--text-sm)",
+  lg: "h-12 px-8   gap-2.5 text-(length:--text-base)",
 };
 
 const SPINNER_SIZES: Record<ButtonSize, number> = {
@@ -96,14 +96,6 @@ const ICON_SWAP_GAP: Record<ButtonSize, string> = {
 
 const SWAP_TRANSITION =
   "transform var(--duration-base) var(--ease-qoovex), opacity var(--duration-base) var(--ease-qoovex)";
-
-const CAPTION_STYLE: React.CSSProperties = {
-  fontSize: "0.7rem",
-  color: "var(--color-text-faint)",
-  lineHeight: 1.4,
-  textAlign: "center",
-  userSelect: "none",
-};
 
 // ─── SwapLabel ────────────────────────────────────────────────────────────────
 function SwapLabelContent({
@@ -302,16 +294,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     if (caption) {
-      const captionEl = <span style={CAPTION_STYLE}>{caption}</span>;
+      const captionEl = (
+        <span className="select-none text-center text-(length:--text-xs) leading-snug text-(--color-text-faint)">
+          {caption}
+        </span>
+      );
       return (
-        <span
-          style={{
-            display: "inline-flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "var(--space-1)",
-          }}
-        >
+        <span className="inline-flex flex-col items-center gap-1">
           {captionPosition === "top" && captionEl}
           {buttonEl}
           {captionPosition === "bottom" && captionEl}

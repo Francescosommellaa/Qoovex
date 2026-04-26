@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from "react";
 import {
-  ComingSoon,
   SECTIONS,
-  SectionHeader,
   type SectionId,
 } from "./sirio-content";
 import { SirioTopbar } from "./sirio-topbar";
@@ -31,6 +29,9 @@ import { SezioneDivider } from "@/sections/sezione-divider";
 import { SezioneToggle } from "@/sections/sezione-toggle";
 import { SezioneCheckbox } from "@/sections/sezione-checkbox";
 import { SezioneToast } from "@/sections/sezione-toast";
+import { SezioneModal } from "@/sections/sezione-modal";
+import { SezioneForm } from "@/sections/sezione-form";
+import { SezioneSkeleton } from "@/sections/sezione-skeleton";
 
 export default function SirioPage() {
   const [active, setActive] = useState<SectionId>("fondamenta");
@@ -158,16 +159,9 @@ export default function SirioPage() {
           <SezioneToggle />
           <SezioneCheckbox />
           <SezioneToast />
-
-          {(["form"] as const).map((id) => {
-            const s = SECTIONS.find((x) => x.id === id)!;
-            return (
-              <section key={id} id={id} className="sirio-section">
-                <SectionHeader label={s.label} id={id} />
-                <ComingSoon label={s.label} />
-              </section>
-            );
-          })}
+          <SezioneModal />
+          <SezioneForm />
+          <SezioneSkeleton />
         </main>
       </div>
 

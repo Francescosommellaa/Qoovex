@@ -9,42 +9,7 @@ import {
 } from "@phosphor-icons/react";
 import { Input } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-function Row({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div style={{ marginBottom: "var(--space-8)" }}>
-      <p
-        style={{
-          fontSize: "0.65rem",
-          fontWeight: 600,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "var(--color-text-faint)",
-          marginBottom: "var(--space-3)",
-          fontFamily: "monospace",
-        }}
-      >
-        {label}
-      </p>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "var(--space-4)",
-          maxWidth: "400px",
-        }}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
+import { ShowcaseRow as Row } from "./showcase-block";
 
 export function SezioneInput() {
   const [emailValue, setEmailValue] = useState("");
@@ -60,18 +25,18 @@ export function SezioneInput() {
     <section id="input" className="sirio-section">
       <SectionHeader label="Input" id="input" />
 
-      <Row label="Default">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Default">
         <Input label="Nome chef" placeholder="Mario Rossi" />
         <Input label="Senza label" placeholder="Placeholder visibile" />
       </Row>
 
-      <Row label="Sizes">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Sizes">
         <Input size="sm" label="Small" placeholder="Piccolo" />
         <Input size="md" label="Medium" placeholder="Medio (default)" />
         <Input size="lg" label="Large" placeholder="Grande" />
       </Row>
 
-      <Row label="Icon leading">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Icon leading">
         <Input
           label="Email"
           placeholder="chef@ristorante.it"
@@ -89,7 +54,7 @@ export function SezioneInput() {
         />
       </Row>
 
-      <Row label="Icon trailing">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Icon trailing">
         <Input
           label="Password"
           type="password"
@@ -100,7 +65,7 @@ export function SezioneInput() {
         />
       </Row>
 
-      <Row label="Helper text">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Helper text">
         <Input
           label="Username"
           placeholder="chef_mario"
@@ -108,7 +73,7 @@ export function SezioneInput() {
         />
       </Row>
 
-      <Row label="Status - error">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Status - error">
         <Input
           label="Email"
           placeholder="chef@ristorante.it"
@@ -119,7 +84,7 @@ export function SezioneInput() {
         />
       </Row>
 
-      <Row label="Status - success">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Status - success">
         <Input
           label="Username"
           placeholder="chef_mario"
@@ -130,7 +95,7 @@ export function SezioneInput() {
         />
       </Row>
 
-      <Row label="State - disabled">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="State - disabled">
         <Input
           label="Piano attivo"
           value="Pro"
@@ -139,7 +104,7 @@ export function SezioneInput() {
         />
       </Row>
 
-      <Row label="Live - validazione email">
+      <Row contentClassName="flex max-w-[400px] flex-col gap-4" label="Live - validazione email">
         <Input
           label="Email"
           placeholder="chef@ristorante.it"

@@ -1,11 +1,14 @@
 "use client";
 
 import * as React from "react";
+import { CheckCircle, DotsSixVertical } from "@phosphor-icons/react";
 import {
-  Warning,
-  CheckCircle,
-  DotsSixVertical,
-} from "@phosphor-icons/react";
+  FIELD_ROOT_CLASS,
+  FIELD_STATUS_RING,
+  FieldErrorTooltip,
+  FieldHelperText,
+  FieldLabel,
+} from "./field-control";
 import { cn, mergeRefs } from "../lib/utils";
 
 export type TextareaStatus = "default" | "error" | "success";
@@ -25,25 +28,6 @@ export interface TextareaProps extends Omit<
   srOnlyLabel?: boolean;
 }
 
-const STATUS_RING: Record<TextareaStatus, string> = {
-  default:
-    "border-[var(--color-input-border)] " +
-    "focus-within:border-[var(--color-input-border-focus)] " +
-    "focus-within:ring-2 focus-within:ring-[var(--color-primary-highlight)]",
-  error:
-    "border-[var(--color-input-border-error)] " +
-    "ring-2 ring-[var(--color-error-highlight)]",
-  success:
-    "border-[var(--color-input-border-success)] " +
-    "ring-2 ring-[var(--color-success-highlight)]",
-};
-
-const STATUS_HELPER: Record<TextareaStatus, string> = {
-  default: "text-[var(--color-input-helper)]",
-  error: "text-[var(--color-input-helper-error)]",
-  success: "text-[var(--color-input-helper-success)]",
-};
-
 function ResizeHandle() {
   return (
     <DotsSixVertical
@@ -51,40 +35,8 @@ function ResizeHandle() {
       size={12}
       weight="bold"
       aria-hidden="true"
-      className="cursor-ns-resize shrink-0 text-[var(--color-text-faint)] opacity-40"
+      className="cursor-ns-resize shrink-0 text-(--color-text-faint) opacity-40"
     />
-  );
-}
-
-function ErrorTooltip({ text }: { text: string }) {
-  return (
-    <span className="group relative inline-flex items-center">
-      <Warning
-        size={13}
-        className="cursor-default text-[var(--color-error)]"
-        aria-hidden="true"
-      />
-      <span
-        className={[
-          "pointer-events-none absolute bottom-full right-0 mb-2",
-          "hidden [@media(hover:hover)]:group-hover:flex",
-          "items-center whitespace-nowrap",
-          "rounded-[var(--radius-md)]",
-          "bg-[var(--color-surface-offset)]",
-          "border border-[var(--color-border)]",
-          "px-[var(--spacing-2)] py-[var(--spacing-1)]",
-          "text-[length:var(--text-xs)] text-[var(--color-text-muted)]",
-          "shadow-[var(--shadow-md)]",
-          "z-20",
-        ].join(" ")}
-      >
-        {text}
-        <span
-          aria-hidden="true"
-          className="absolute -bottom-1 right-2 size-2 rotate-45 border-b border-r border-[var(--color-border)] bg-[var(--color-surface-offset)]"
-        />
-      </span>
-    </span>
   );
 }
 
@@ -205,38 +157,32 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     const statusNode =
       status === "error" && errorMessage ? (
-        <ErrorTooltip text={errorMessage} />
+        <FieldErrorTooltip message={errorMessage} />
       ) : status === "success" ? (
         <CheckCircle
           size={13}
-          className="text-[var(--color-success)]"
+          className="text-(--color-success)"
           aria-hidden="true"
         />
       ) : null;
 
     return (
-      <div className="flex w-full flex-col gap-[var(--input-gap)]">
+      <div className={FIELD_ROOT_CLASS}>
         {label ? (
-          <label
-            htmlFor={inputId}
-            className={cn(
-              "text-[length:var(--text-xs)] font-medium text-[var(--color-label)] tracking-[0.03em] uppercase select-none",
-              srOnlyLabel && "sr-only",
-            )}
-          >
+          <FieldLabel htmlFor={inputId} srOnly={srOnlyLabel}>
             {label}
-          </label>
+          </FieldLabel>
         ) : null}
 
         <div
           ref={wrapperRef}
           className={cn(
             "relative flex w-full flex-col overflow-hidden",
-            "rounded-[var(--textarea-radius)]",
-            "bg-[var(--color-input-bg)] border",
+            "rounded-(--textarea-radius)",
+            "bg-(--color-input-bg) border",
             "transition-[border-color,box-shadow]",
             "duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
-            STATUS_RING[status],
+            FIELD_STATUS_RING[status],
             disabled && "opacity-50 pointer-events-none",
             className,
           )}
@@ -253,10 +199,10 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             onChange={handleChange}
             className={[
               "w-full bg-transparent outline-none resize-none",
-              "px-[var(--textarea-px)] pt-[var(--textarea-py)]",
-              "pb-[var(--spacing-2)]",
-              "text-[length:var(--text-sm)] text-[var(--color-text)]",
-              "placeholder:text-[var(--color-input-placeholder)]",
+              "px-(--textarea-px) pt-(--textarea-py)",
+              "pb-(--spacing-2)",
+              "text-(length:--text-sm) text-(--color-text)",
+              "placeholder:text-(--color-input-placeholder)",
               "leading-[var(--textarea-line-height)]",
               "disabled:cursor-not-allowed",
             ].join(" ")}
@@ -282,26 +228,26 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           />
 
           <div
-            className="sticky bottom-0 z-10 flex items-center justify-between px-[var(--textarea-px)] pb-[var(--spacing-1)]"
+            className="sticky bottom-0 z-10 flex items-center justify-between px-(--textarea-px) pb-(--spacing-1)"
             aria-hidden="true"
           >
             <span
               className={[
-                "text-[length:var(--text-xs)] tabular-nums",
+                "text-(length:--text-xs) tabular-nums",
                 !showCount
                   ? "invisible"
                   : status === "error"
-                    ? "text-[var(--color-error)]"
+                    ? "text-(--color-error)"
                     : status === "success"
-                      ? "text-[var(--color-success)]"
-                      : "text-[var(--color-text-faint)]",
+                      ? "text-(--color-success)"
+                      : "text-(--color-text-faint)",
               ].join(" ")}
             >
               {currentValue.length}
               {maxLength ? ` / ${maxLength}` : ""}
             </span>
 
-            <span className="inline-flex h-4 items-center gap-[var(--spacing-2)]">
+            <span className="inline-flex h-4 items-center gap-(--spacing-2)">
               {statusNode}
               {variant === "fixed" ? <ResizeHandle /> : null}
             </span>
@@ -309,30 +255,21 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         </div>
 
         {status === "error" && errorMessage ? (
-          <p
+          <FieldHelperText
             id={helperId}
             role="alert"
-            aria-live="polite"
-            className={cn(
-              "text-[length:var(--text-xs)]",
-              STATUS_HELPER.error,
-              "[@media(hover:hover)]:hidden",
-            )}
+            live="polite"
+            status="error"
+            hideWhenHoverTooltip
           >
             {errorMessage}
-          </p>
+          </FieldHelperText>
         ) : null}
 
         {status === "default" && helperText ? (
-          <p
-            id={helperId}
-            className={cn(
-              "text-[length:var(--text-xs)]",
-              STATUS_HELPER.default,
-            )}
-          >
+          <FieldHelperText id={helperId} status="default">
             {helperText}
-          </p>
+          </FieldHelperText>
         ) : null}
       </div>
     );

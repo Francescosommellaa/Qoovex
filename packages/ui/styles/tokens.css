@@ -119,9 +119,11 @@
   --z-overlay: 500;
 
   /* Pulsanti */
+  --button-disabled-opacity: var(--form-disabled-opacity);
   --color-btn-fill-secondary: var(--color-surface-raised);
   --color-btn-fill-ghost: oklch(from var(--color-text) l c h / 0.06);
   --color-btn-fill-destructive: var(--color-error);
+  --color-btn-filled-text: oklch(0.97 0 0);
   --btn-swap-gap: var(--spacing-2);
 
   /* Input */
@@ -242,13 +244,13 @@
   --select-item-radius: var(--radius-md);
   /* Select — multi tag */
   --select-trigger-py: var(--spacing-1);
-  --select-tag-min-height: 1.625rem;
+  --select-tag-min-height: 1.25rem;
   --select-tag-radius: var(--radius-full);
-  --select-tag-px: var(--spacing-2);
-  --select-tag-py: var(--spacing-1);
-  --select-tag-gap-x: var(--spacing-2);
+  --select-tag-px: 0.45rem;
+  --select-tag-py: 0.0625rem;
+  --select-tag-gap-x: var(--spacing-1);
   --select-tag-gap-y: var(--spacing-1);
-  --select-tag-max-width: min(10rem, 62vw);
+  --select-tag-max-width: min(8.5rem, 56vw);
   --select-tag-rail-mask: linear-gradient(
     to right,
     black calc(100% - 0.875rem),
@@ -377,6 +379,54 @@
   --divider-label-warning: var(--color-warning);
   --divider-label-error: var(--color-error);
 
+  /* Skeleton */
+  --skeleton-radius-sm: var(--radius-sm);
+  --skeleton-radius-md: var(--radius-md);
+  --skeleton-radius-lg: var(--radius-lg);
+  --skeleton-radius-full: var(--radius-full);
+  --skeleton-stack-gap-xs: var(--spacing-1);
+  --skeleton-stack-gap-sm: var(--spacing-2);
+  --skeleton-stack-gap-md: var(--spacing-2);
+  --skeleton-stack-gap-lg: var(--spacing-3);
+  --skeleton-stack-gap-xl: var(--spacing-3);
+  --skeleton-text-height-xs: 0.375rem;
+  --skeleton-text-height-sm: 0.5rem;
+  --skeleton-text-height-md: 0.625rem;
+  --skeleton-text-height-lg: 0.75rem;
+  --skeleton-text-height-xl: 0.875rem;
+  --skeleton-title-height-xs: 0.625rem;
+  --skeleton-title-height-sm: 0.75rem;
+  --skeleton-title-height-md: 1rem;
+  --skeleton-title-height-lg: 1.25rem;
+  --skeleton-title-height-xl: 1.5rem;
+  --skeleton-block-height-xs: var(--spacing-4);
+  --skeleton-block-height-sm: var(--spacing-6);
+  --skeleton-block-height-md: var(--spacing-8);
+  --skeleton-block-height-lg: var(--spacing-12);
+  --skeleton-block-height-xl: var(--spacing-16);
+  --skeleton-avatar-size-xs: 1rem;
+  --skeleton-avatar-size-sm: 1.5rem;
+  --skeleton-avatar-size-md: var(--avatar-size-md);
+  --skeleton-avatar-size-lg: var(--avatar-size-lg);
+  --skeleton-avatar-size-xl: var(--avatar-size-xl);
+  --skeleton-thumbnail-height-xs: var(--spacing-12);
+  --skeleton-thumbnail-height-sm: var(--spacing-16);
+  --skeleton-thumbnail-height-md: 9rem;
+  --skeleton-thumbnail-height-lg: 12rem;
+  --skeleton-thumbnail-height-xl: 16rem;
+  --skeleton-shimmer-width: 46%;
+  --skeleton-shimmer-duration: 1450ms;
+  --skeleton-tone-neutral: oklch(from var(--color-text) l c h / 0.075);
+  --skeleton-tone-neutral-shimmer: oklch(from var(--color-text) l c h / 0.18);
+  --skeleton-tone-primary: oklch(from var(--color-primary) l c h / 0.16);
+  --skeleton-tone-primary-shimmer: oklch(from var(--color-primary) l c h / 0.32);
+  --skeleton-tone-success: oklch(from var(--color-success) l c h / 0.14);
+  --skeleton-tone-success-shimmer: oklch(from var(--color-success) l c h / 0.3);
+  --skeleton-tone-warning: oklch(from var(--color-warning) l c h / 0.14);
+  --skeleton-tone-warning-shimmer: oklch(from var(--color-warning) l c h / 0.3);
+  --skeleton-tone-error: oklch(from var(--color-error) l c h / 0.16);
+  --skeleton-tone-error-shimmer: oklch(from var(--color-error) l c h / 0.32);
+
   /* Toggle */
   --toggle-width-sm: 2rem;
   --toggle-width-md: 2.5rem;
@@ -485,6 +535,127 @@
   --toast-info-border: var(--tone-border-primary);
   --toast-warning-border: var(--tone-border-warning);
   --toast-error-border: var(--tone-border-error);
+
+  /* Form */
+  --form-radius: var(--radius-xl);
+  --form-section-radius: var(--radius-lg);
+  --form-padding-compact: var(--spacing-4);
+  --form-padding-comfortable: var(--spacing-5);
+  --form-padding-spacious: var(--spacing-6);
+  --form-gap-compact: var(--spacing-3);
+  --form-gap-comfortable: var(--spacing-4);
+  --form-gap-spacious: var(--spacing-6);
+  --form-grid-min: 16rem;
+  --form-inline-min: 12rem;
+  --form-header-gap: var(--spacing-1);
+  --form-section-gap: var(--spacing-4);
+  --form-field-gap: var(--spacing-2);
+  --form-field-horizontal-label-width: 10rem;
+  --form-actions-gap: var(--spacing-2);
+
+  --form-bg-surface: var(--color-surface);
+  --form-bg-panel:
+    linear-gradient(
+      180deg,
+      oklch(from var(--color-surface-2) l c h / 0.98),
+      oklch(from var(--color-surface) l c h / 0.98)
+    );
+  --form-section-bg: oklch(from var(--color-text) l c h / 0.025);
+  --form-border: oklch(from var(--color-text) l c h / 0.08);
+  --form-border-strong: oklch(from var(--color-text) l c h / 0.12);
+  --form-title-color: var(--color-text);
+  --form-description-color: var(--color-text-muted);
+  --form-label-color: var(--color-label);
+  --form-required-color: var(--color-error);
+  --form-helper-color: var(--color-input-helper);
+  --form-error-color: var(--color-input-helper-error);
+  --form-success-color: var(--color-input-helper-success);
+  --form-disabled-opacity: 0.45;
+
+  --form-tone-neutral: var(--color-text-muted);
+  --form-tone-neutral-soft: oklch(from var(--color-text) l c h / 0.045);
+  --form-tone-neutral-border: oklch(from var(--color-text) l c h / 0.1);
+  --form-tone-primary: var(--color-primary);
+  --form-tone-primary-soft: var(--color-primary-highlight);
+  --form-tone-primary-border: var(--tone-border-primary);
+  --form-tone-success: var(--color-success);
+  --form-tone-success-soft: var(--color-success-highlight);
+  --form-tone-success-border: var(--tone-border-success);
+  --form-tone-warning: var(--color-warning);
+  --form-tone-warning-soft: var(--color-warning-highlight);
+  --form-tone-warning-border: var(--tone-border-warning);
+  --form-tone-error: var(--color-error);
+  --form-tone-error-soft: var(--color-error-highlight);
+  --form-tone-error-border: var(--tone-border-error);
+
+  /* Modal / Sheet */
+  --modal-viewport-padding: var(--spacing-4);
+  --modal-viewport-padding-desktop: var(--spacing-6);
+  --modal-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --modal-width-sm: 22rem;
+  --modal-width-md: 32rem;
+  --modal-width-lg: 44rem;
+  --modal-width-xl: 58rem;
+  --modal-width-full: min(72rem, calc(100vw - var(--spacing-8)));
+  --modal-side-width: min(28rem, 92vw);
+  --modal-max-height: min(86dvh, 46rem);
+  --modal-full-height: calc(100dvh - (var(--modal-viewport-padding) * 2));
+  --modal-sheet-height-peek: min(22rem, 42dvh);
+  --modal-sheet-height-default: min(34rem, 68dvh);
+  --modal-sheet-height-expanded: calc(
+    100dvh - max(var(--modal-viewport-padding), env(safe-area-inset-top, 0px))
+  );
+  --modal-radius: var(--radius-2xl);
+  --modal-sheet-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  --modal-side-radius: var(--radius-2xl);
+  --modal-fullscreen-radius: var(--radius-xl);
+  --modal-slot-padding-sm: var(--spacing-4);
+  --modal-slot-padding-md: var(--spacing-5);
+  --modal-slot-padding-lg: var(--spacing-6);
+  --modal-gap: var(--spacing-3);
+  --modal-header-gap: var(--spacing-4);
+  --modal-footer-gap: var(--spacing-2);
+  --modal-handle-width: 2.75rem;
+  --modal-handle-height: 0.25rem;
+  --modal-close-size: 2rem;
+  --modal-overlay-open-opacity: 1;
+  --modal-overlay-sheet-peek-opacity: 0.48;
+  --modal-overlay-sheet-default-opacity: 0.72;
+  --modal-overlay-sheet-expanded-opacity: 0.92;
+
+  --modal-overlay-bg: oklch(0 0 0 / 0.62);
+  --modal-overlay-blur: 10px;
+  --modal-surface: var(--color-surface);
+  --modal-surface-raised: var(--color-surface-2);
+  --modal-border: oklch(from var(--color-text) l c h / 0.12);
+  --modal-border-strong: oklch(from var(--color-text) l c h / 0.18);
+  --modal-title-color: var(--color-text);
+  --modal-description-color: var(--color-text-muted);
+  --modal-close-color: var(--color-text-muted);
+  --modal-close-hover-color: var(--color-text);
+  --modal-handle-bg: oklch(from var(--color-text) l c h / 0.22);
+  --modal-shadow:
+    0 1px 2px oklch(0 0 0 / 0.42),
+    0 22px 70px oklch(0 0 0 / 0.42);
+  --modal-side-shadow:
+    0 1px 2px oklch(0 0 0 / 0.4),
+    0 18px 54px oklch(0 0 0 / 0.42);
+
+  --modal-tone-neutral: var(--color-text-muted);
+  --modal-tone-neutral-soft: oklch(from var(--color-text) l c h / 0.055);
+  --modal-tone-neutral-border: oklch(from var(--color-text) l c h / 0.12);
+  --modal-tone-primary: var(--color-primary);
+  --modal-tone-primary-soft: var(--color-primary-highlight);
+  --modal-tone-primary-border: var(--tone-border-primary);
+  --modal-tone-success: var(--color-success);
+  --modal-tone-success-soft: var(--color-success-highlight);
+  --modal-tone-success-border: var(--tone-border-success);
+  --modal-tone-warning: var(--color-warning);
+  --modal-tone-warning-soft: var(--color-warning-highlight);
+  --modal-tone-warning-border: var(--tone-border-warning);
+  --modal-tone-error: var(--color-error);
+  --modal-tone-error-soft: var(--color-error-highlight);
+  --modal-tone-error-border: var(--tone-border-error);
 
   /* Card */
   --card-radius-surface: var(--radius-xl);

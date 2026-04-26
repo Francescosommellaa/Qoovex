@@ -12,13 +12,7 @@ import {
 import { Badge, Card, CardBody } from "@qoovex/ui";
 import type { BadgeTone, BadgeVariant } from "@qoovex/ui";
 import { SectionHeader } from "../app/sirio-content";
-
-interface ShowcaseBlockProps {
-  label: string;
-  description: string;
-  children: ReactNode;
-  className?: string;
-}
+import { ShowcaseBlock } from "./showcase-block";
 
 interface ToneExample {
   tone: BadgeTone;
@@ -62,30 +56,6 @@ const TONE_EXAMPLES: ToneExample[] = [
 
 const VARIANTS: BadgeVariant[] = ["soft", "outline", "filled"];
 
-function ShowcaseBlock({
-  label,
-  description,
-  children,
-  className,
-}: ShowcaseBlockProps) {
-  return (
-    <div className="mb-10">
-      <div className="mb-4 max-w-3xl">
-        <p className="sirio-row__label">{label}</p>
-        <p className="sirio-preview-text">{description}</p>
-      </div>
-      <div
-        className={
-          className ??
-          "grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5"
-        }
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
-
 function ToneCard({ example }: { example: ToneExample }) {
   return (
     <Card variant="surface" tone={example.tone}>
@@ -105,6 +75,7 @@ export function SezioneBadge() {
       <SectionHeader label="Badge" id="badge" />
 
       <ShowcaseBlock
+        className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5"
         label="Toni semantici"
         description="Il tono comunica lo stato del contenuto: neutro, primario, positivo, attenzione o errore."
       >
@@ -181,3 +152,4 @@ export function SezioneBadge() {
     </section>
   );
 }
+
