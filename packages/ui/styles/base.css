@@ -2199,6 +2199,38 @@
     width: 100%;
   }
 
+  .qv-otp-input {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--spacing-2);
+  }
+
+  .qv-otp-input__slot {
+    width: 100%;
+    min-height: var(--input-height-md);
+    border: 1px solid var(--color-input-border);
+    background: var(--color-input-bg);
+    border-radius: var(--input-radius);
+    text-align: center;
+    color: var(--color-text);
+    font-size: var(--text-base);
+    font-weight: 600;
+    outline: none;
+    transition:
+      border-color var(--duration-base) var(--ease-qoovex),
+      box-shadow var(--duration-base) var(--ease-qoovex);
+  }
+
+  .qv-otp-input__slot:focus-visible {
+    border-color: var(--color-input-border-focus);
+    box-shadow: 0 0 0 2px var(--color-primary-highlight);
+  }
+
+  .qv-otp-input__slot:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
   .qv-form-actions {
     display: flex;
     flex-wrap: wrap;
@@ -2238,6 +2270,10 @@
 
     .qv-phone-number-field__row {
       grid-template-columns: 1fr;
+    }
+
+    .qv-otp-input {
+      gap: var(--spacing-1);
     }
 
     .qv-form-actions {

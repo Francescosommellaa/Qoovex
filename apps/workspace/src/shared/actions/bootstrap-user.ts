@@ -3,14 +3,44 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { db } from "@qoovex/db";
 
-export async function bootstrapUser() {
+interface BootstrapUserOptions {
+  phoneNumber?: string | null;
+}
+
+function normalizePhoneNumber(phoneNumber?: string | null): string | undefined {
+  if (!phoneNumber) return undefined;
+
+  const trimmed = phoneNumber.trim();
+  if (!trimmed) return undefined;
+
+  const hasPlus = trimmed.startsWith("+");
+  const digits = trimmed.replace(/[^\d]/g, "");
+  if (!digits) return undefined;
+
+  return hasPlus ? `+${digits}` : digits;
+}
+
+export async function bootstrapUser(options?: BootstrapUserOptions) {
   const { userId } = await auth();
   if (!userId) return null;
 
+  const normalizedPhoneNumber = normalizePhoneNumber(options?.phoneNumber);
   const existing = await db.user.findUnique({
     where: { clerkId: userId },
   });
-  if (existing) return existing;
+  if (existing) {
+    if (
+      normalizedPhoneNumber &&
+      existing.phoneNumber !== normalizedPhoneNumber
+    ) {
+      return await db.user.update({
+        where: { id: existing.id },
+        data: { phoneNumber: normalizedPhoneNumber },
+      });
+    }
+
+    return existing;
+  }
 
   const clerkUser = await currentUser();
   if (!clerkUser) return null;
@@ -41,6 +71,7 @@ export async function bootstrapUser() {
       name,
       email: primaryEmail,
       username,
+      phoneNumber: normalizedPhoneNumber,
       plan: "FREE",
     },
   });

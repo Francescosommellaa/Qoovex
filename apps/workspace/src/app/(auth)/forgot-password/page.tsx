@@ -8,6 +8,7 @@ import { WarningCircle, CheckCircle } from "@phosphor-icons/react";
 import {
   Button,
   Input,
+  OtpInput,
   Form,
   FormField,
   FormControl,
@@ -191,19 +192,13 @@ export default function ForgotPasswordPage() {
                 required
                 helperText={codeError ?? "Controlla la tua casella di posta, incluso lo spam."}
               >
-                <FormControl>
-                  <Input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    maxLength={6}
-                    placeholder="000000"
-                    autoComplete="one-time-code"
-                    value={code}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCode(e.target.value)}
-                    required
-                  />
-                </FormControl>
+                <OtpInput
+                  value={code}
+                  onChange={setCode}
+                  length={6}
+                  autoFocus
+                  aria-label="Codice di recupero password"
+                />
               </FormField>
               <FormActions align="stretch">
                 <Button

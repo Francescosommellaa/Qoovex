@@ -8,12 +8,14 @@ import { WarningCircle } from "@phosphor-icons/react";
 import {
   Button,
   Input,
+  OtpInput,
   Form,
   FormField,
   FormControl,
   FormActions,
   PhoneNumberField,
 } from "@qoovex/ui";
+import { bootstrapUser } from "@shared/actions/bootstrap-user";
 import { AuthShell, OAuthButton } from "../ui";
 
 type Step = "form" | "verify";
@@ -32,19 +34,28 @@ export default function SignUpPage() {
   const [error, setError] = useState<string | null>(null);
   const isLoading = fetchStatus === "fetching";
 
+  function getNormalizedPhoneNumber(): string | undefined {
+    const normalizedPhoneDigits = phoneNumber.replace(/[^\d]/g, "");
+    if (normalizedPhoneDigits === "") return undefined;
+    return `${phoneRegionCode}${normalizedPhoneDigits}`;
+  }
+
   // ─── Step 1: crea il sign-up e avvia verifica email ──────────────────────
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
 
     const normalizedPhoneDigits = phoneNumber.replace(/[^\d]/g, "");
-    const normalizedPhoneNumber =
-      normalizedPhoneDigits === "" ? undefined : `${phoneRegionCode}${normalizedPhoneDigits}`;
+    const normalizedPhoneNumber = getNormalizedPhoneNumber();
+
+    if (normalizedPhoneDigits !== "" && normalizedPhoneDigits.length < 6) {
+      setError("Inserisci un numero di telefono valido.");
+      return;
+    }
 
     const { error: createError } = await signUp.create({
       emailAddress: email,
       username,
-      phoneNumber: normalizedPhoneNumber,
       password,
     });
     if (createError) {
@@ -80,6 +91,8 @@ export default function SignUpPage() {
         setError(finalizeError.message ?? "Errore durante la registrazione");
         return;
       }
+
+      await bootstrapUser({ phoneNumber: getNormalizedPhoneNumber() });
       router.push("/");
       return;
     }
@@ -206,20 +219,15 @@ export default function SignUpPage() {
           </p>
         </>
       ) : (
-        <Form variant="plain" layout="stack" density="comfortable" onSubmit={handleVerify}>
+        <Form variant="plain" layout="stack" density="comfortable" labelStyle="soft" onSubmit={handleVerify}>
           <FormField label="Codice di verifica" required>
-            <FormControl>
-              <Input
-                type="text"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                maxLength={6}
-                placeholder="000000"
-                value={code}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCode(e.target.value)}
-                required
-              />
-            </FormControl>
+            <OtpInput
+              value={code}
+              onChange={setCode}
+              length={6}
+              autoFocus
+              aria-label="Codice di verifica email"
+            />
           </FormField>
 
           <FormActions align="stretch">

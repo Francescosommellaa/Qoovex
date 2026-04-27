@@ -8,6 +8,9 @@ export type {
 export { Input } from "./components/input";
 export type { InputProps, InputStatus } from "./components/input";
 
+export { OtpInput } from "./components/otp-input";
+export type { OtpInputProps } from "./components/otp-input";
+
 export { Textarea } from "./components/textarea";
 export type {
   TextareaProps,

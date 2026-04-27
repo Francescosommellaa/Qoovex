@@ -62,6 +62,11 @@ export function PhoneNumberField({
     onE164ValueChange?.(e164Value);
   }, [nationalNumber, onE164ValueChange, regionCode]);
 
+  function handleNationalNumberChange(rawValue: string) {
+    const digitsOnly = rawValue.replace(/[^\d]/g, "");
+    onNationalNumberChange(digitsOnly);
+  }
+
   return (
     <FormField
       label={label}
@@ -83,10 +88,12 @@ export function PhoneNumberField({
           type="tel"
           placeholder={inputPlaceholder}
           autoComplete={inputAutoComplete}
+          inputMode="numeric"
+          pattern="[0-9]*"
           disabled={disabled}
           value={nationalNumber}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            onNationalNumberChange(e.target.value)
+            handleNationalNumberChange(e.target.value)
           }
           className={cn("qv-phone-number-field__number", inputClassName)}
         />
