@@ -14,6 +14,7 @@ import {
   FormControl,
   FormActions,
   PhoneNumberField,
+  useToast,
 } from "@qoovex/ui";
 import { bootstrapUser } from "@shared/actions/bootstrap-user";
 import { AuthShell, OAuthButton } from "../ui";
@@ -22,6 +23,7 @@ type Step = "form" | "verify";
 
 export default function SignUpPage() {
   const { signUp, fetchStatus } = useSignUp();
+  const { toast } = useToast();
   const router = useRouter();
 
   const [step, setStep] = useState<Step>("form");
@@ -32,6 +34,17 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [warningFields, setWarningFields] = useState<{
+    email: boolean;
+    username: boolean;
+    password: boolean;
+    code: boolean;
+  }>({
+    email: false,
+    username: false,
+    password: false,
+    code: false,
+  });
   const isLoading = fetchStatus === "fetching";
 
   function getNormalizedPhoneNumber(): string | undefined {
@@ -44,6 +57,23 @@ export default function SignUpPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    const nextWarnings = {
+      email: email.trim() === "",
+      username: username.trim() === "",
+      password: password.trim() === "",
+      code: false,
+    };
+    setWarningFields(nextWarnings);
+
+    if (nextWarnings.email || nextWarnings.username || nextWarnings.password) {
+      toast({
+        variant: "warning",
+        title: "Controlla i campi evidenziati",
+        description: "Compila i campi obbligatori prima di continuare.",
+      });
+      return;
+    }
 
     const normalizedPhoneDigits = phoneNumber.replace(/[^\d]/g, "");
     const normalizedPhoneNumber = getNormalizedPhoneNumber();
@@ -76,6 +106,17 @@ export default function SignUpPage() {
   async function handleVerify(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    const isCodeMissing = code.trim() === "";
+    if (isCodeMissing) {
+      setWarningFields((current) => ({ ...current, code: true }));
+      toast({
+        variant: "warning",
+        title: "Controlla i campi evidenziati",
+        description: "Inserisci il codice di verifica per continuare.",
+      });
+      return;
+    }
 
     const { error: attemptError } = await signUp.verifications.verifyEmailCode({
       code,
@@ -142,30 +183,47 @@ export default function SignUpPage() {
             layout="stack"
             density="comfortable"
             labelStyle="soft"
+            noValidate
             onSubmit={handleSubmit}
           >
-            <FormField label="Email" required>
+            <FormField
+              label="Email"
+              required
+              className={warningFields.email ? "auth-warning-field" : undefined}
+            >
               <FormControl>
                 <Input
                   type="email"
                   placeholder="chef@cucina.it"
                   autoComplete="email"
                   value={email}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                  required
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setEmail(e.target.value);
+                    if (warningFields.email) {
+                      setWarningFields((current) => ({ ...current, email: false }));
+                    }
+                  }}
                 />
               </FormControl>
             </FormField>
 
-            <FormField label="Username" required>
+            <FormField
+              label="Username"
+              required
+              className={warningFields.username ? "auth-warning-field" : undefined}
+            >
               <FormControl>
                 <Input
                   type="text"
                   placeholder="nomechef"
                   autoComplete="username"
                   value={username}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
-                  required
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setUsername(e.target.value);
+                    if (warningFields.username) {
+                      setWarningFields((current) => ({ ...current, username: false }));
+                    }
+                  }}
                 />
               </FormControl>
             </FormField>
@@ -186,7 +244,11 @@ export default function SignUpPage() {
               onNationalNumberChange={setPhoneNumber}
             />
 
-            <FormField label="Password" required>
+            <FormField
+              label="Password"
+              required
+              className={warningFields.password ? "auth-warning-field" : undefined}
+            >
               <FormControl>
                 <Input
                   type="password"
@@ -194,8 +256,12 @@ export default function SignUpPage() {
                   autoComplete="new-password"
                   showPasswordToggle
                   value={password}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                  required
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setPassword(e.target.value);
+                    if (warningFields.password) {
+                      setWarningFields((current) => ({ ...current, password: false }));
+                    }
+                  }}
                 />
               </FormControl>
             </FormField>
@@ -219,11 +285,27 @@ export default function SignUpPage() {
           </p>
         </>
       ) : (
-        <Form variant="plain" layout="stack" density="comfortable" labelStyle="soft" onSubmit={handleVerify}>
-          <FormField label="Codice di verifica" required>
+        <Form
+          variant="plain"
+          layout="stack"
+          density="comfortable"
+          labelStyle="soft"
+          noValidate
+          onSubmit={handleVerify}
+        >
+          <FormField
+            label="Codice di verifica"
+            required
+            className={warningFields.code ? "auth-warning-field" : undefined}
+          >
             <OtpInput
               value={code}
-              onChange={setCode}
+              onChange={(nextCode) => {
+                setCode(nextCode);
+                if (warningFields.code) {
+                  setWarningFields((current) => ({ ...current, code: false }));
+                }
+              }}
               length={6}
               autoFocus
               aria-label="Codice di verifica email"

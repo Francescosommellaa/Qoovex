@@ -158,6 +158,19 @@
   background: var(--color-surface-elevated);
 }
 
+.auth-warning-field .qv-form-field__label {
+  color: var(--color-warning);
+}
+
+.auth-warning-field .qv-form-field__required {
+  color: var(--color-warning);
+}
+
+.auth-warning-field input {
+  border-color: var(--color-warning) !important;
+  box-shadow: 0 0 0 1px oklch(from var(--color-warning) l c h / 0.2);
+}
+
 @media (max-width: 420px) {
   .auth-card {
     max-width: 100%;

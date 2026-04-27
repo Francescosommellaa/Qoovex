@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { WarningCircle } from "@phosphor-icons/react";
 import {
   Button,
   Input,
@@ -12,84 +11,132 @@ import {
   FormField,
   FormControl,
   FormActions,
+  useToast,
 } from "@qoovex/ui";
 import { AuthShell, OAuthButton } from "../ui";
 
 export default function SignInPage() {
-  const { signIn, errors, fetchStatus } = useSignIn();
+  const { signIn, fetchStatus } = useSignIn();
+  const { toast } = useToast();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [globalError, setGlobalError] = useState<string | null>(null);
+  const [isCredentialsInvalid, setIsCredentialsInvalid] = useState(false);
+  const [warningFields, setWarningFields] = useState<{
+    email: boolean;
+    password: boolean;
+  }>({
+    email: false,
+    password: false,
+  });
 
   const isLoading = fetchStatus === "fetching";
 
+  function notifyAuthFailure() {
+    toast({
+      variant: "error",
+      title: "Accesso non riuscito",
+      description: "Credenziali non valide oppure account non disponibile.",
+    });
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setGlobalError(null);
+    setIsCredentialsInvalid(false);
+
+    const nextWarnings = {
+      email: email.trim() === "",
+      password: password.trim() === "",
+    };
+    setWarningFields(nextWarnings);
+
+    if (nextWarnings.email || nextWarnings.password) {
+      setIsCredentialsInvalid(true);
+      notifyAuthFailure();
+      return;
+    }
 
     const { error } = await signIn.password({ emailAddress: email, password });
 
     if (error) {
-      setGlobalError(error.message ?? "Credenziali non valide. Riprova.");
+      setIsCredentialsInvalid(true);
+      notifyAuthFailure();
       return;
     }
 
     if (signIn.status === "complete") {
       const { error: finalizeError } = await signIn.finalize();
       if (finalizeError) {
-        setGlobalError(finalizeError.message ?? "Errore durante il login.");
+        setIsCredentialsInvalid(true);
+        notifyAuthFailure();
         return;
       }
       router.push("/");
     }
   }
 
-  // Errori field-level da Clerk signals
-  const identifierError =
-    errors.fields.identifier?.message ?? errors.fields.password?.message ?? null;
-  const globalClerkError = errors.global?.[0]?.message ?? null;
-  const displayError = globalError ?? globalClerkError ?? identifierError;
-
   return (
     <AuthShell title="Bentornato" subtitle="Accedi al tuo workspace">
       {/* OAuth */}
       <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-3)" }}>
-        <OAuthButton mode="signIn" provider="google" onError={setGlobalError} />
-        <OAuthButton mode="signIn" provider="apple" onError={setGlobalError} />
+        <OAuthButton
+          mode="signIn"
+          provider="google"
+          onError={() => {
+            setIsCredentialsInvalid(true);
+            notifyAuthFailure();
+          }}
+        />
+        <OAuthButton
+          mode="signIn"
+          provider="apple"
+          onError={() => {
+            setIsCredentialsInvalid(true);
+            notifyAuthFailure();
+          }}
+        />
       </div>
 
       <div className="auth-divider">oppure</div>
-
-      {displayError && (
-        <div className="auth-error-banner" role="alert">
-          <WarningCircle size={16} weight="bold" aria-hidden="true" />
-          {displayError}
-        </div>
-      )}
 
       <Form
         variant="plain"
         layout="stack"
         density="comfortable"
         labelStyle="soft"
+        noValidate
         onSubmit={handleSubmit}
       >
-        <FormField label="Email" required>
+        <FormField
+          label="Email"
+          required
+          status={isCredentialsInvalid ? "error" : "default"}
+          className={warningFields.email ? "auth-warning-field" : undefined}
+        >
           <FormControl>
             <Input
               type="email"
               placeholder="nome@esempio.com"
               autoComplete="email"
               value={email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-              required
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setEmail(e.target.value);
+                if (isCredentialsInvalid) setIsCredentialsInvalid(false);
+                if (warningFields.email) {
+                  setWarningFields((current) => ({ ...current, email: false }));
+                }
+              }}
             />
           </FormControl>
         </FormField>
 
-        <FormField label="Password" required>
+        <FormField
+          label="Password"
+          required
+          status={isCredentialsInvalid ? "error" : "default"}
+          className={warningFields.password ? "auth-warning-field" : undefined}
+        >
           <FormControl>
             <Input
               type="password"
@@ -97,8 +144,13 @@ export default function SignInPage() {
               autoComplete="current-password"
               showPasswordToggle
               value={password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-              required
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setPassword(e.target.value);
+                if (isCredentialsInvalid) setIsCredentialsInvalid(false);
+                if (warningFields.password) {
+                  setWarningFields((current) => ({ ...current, password: false }));
+                }
+              }}
             />
           </FormControl>
         </FormField>

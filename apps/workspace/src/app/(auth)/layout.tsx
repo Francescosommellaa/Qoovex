@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ToastProvider } from "@qoovex/ui";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="it">
-        <body>{children}</body>
+        <body>
+          <ToastProvider position="top-right">{children}</ToastProvider>
+        </body>
       </html>
     </ClerkProvider>
   );

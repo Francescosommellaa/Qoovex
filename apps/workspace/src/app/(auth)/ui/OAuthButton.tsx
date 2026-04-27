@@ -36,13 +36,13 @@ export function OAuthButton({
   onError,
 }: OAuthButtonProps) {
   const { signIn, fetchStatus } = useSignIn();
-  const { signUp, fetchStatus: signUpFetchStatus } = useSignUp();
+  const { fetchStatus: signUpFetchStatus } = useSignUp();
 
   const isLoading =
     mode === "signIn"
       ? fetchStatus === "fetching"
       : signUpFetchStatus === "fetching";
-  const isUnavailable = mode === "signIn" ? !signIn : !signUp;
+  const isUnavailable = !signIn;
   const config = providerConfig[provider];
 
   async function handleOAuthAuth() {
@@ -52,6 +52,8 @@ export function OAuthButton({
     }
 
     try {
+      await signIn.reset();
+
       if (mode === "signIn") {
         const { error } = await signIn.sso({
           strategy: config.strategy,
@@ -65,10 +67,11 @@ export function OAuthButton({
         return;
       }
 
-      const { error } = await signUp.sso({
+      const { error } = await signIn.create({
         strategy: config.strategy,
         redirectUrl: `${window.location.origin}/sso-callback`,
-        redirectCallbackUrl: "/",
+        actionCompleteRedirectUrl: `${window.location.origin}/complete-profile`,
+        signUpIfMissing: true,
       });
 
       if (error) {

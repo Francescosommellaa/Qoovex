@@ -13,6 +13,7 @@ import {
   FormField,
   FormControl,
   FormActions,
+  useToast,
 } from "@qoovex/ui";
 import { AuthShell } from "../ui";
 
@@ -20,6 +21,7 @@ type Step = "email" | "verify" | "new-password";
 
 export default function ForgotPasswordPage() {
   const { signIn, errors, fetchStatus } = useSignIn();
+  const { toast } = useToast();
   const router = useRouter();
 
   const [step, setStep] = useState<Step>("email");
@@ -28,12 +30,32 @@ export default function ForgotPasswordPage() {
   const [newPassword, setNewPassword] = useState("");
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [warningFields, setWarningFields] = useState<{
+    email: boolean;
+    code: boolean;
+    newPassword: boolean;
+  }>({
+    email: false,
+    code: false,
+    newPassword: false,
+  });
 
   const isLoading = fetchStatus === "fetching";
 
   async function handleSendCode(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setGlobalError(null);
+
+    const isEmailMissing = email.trim() === "";
+    if (isEmailMissing) {
+      setWarningFields((current) => ({ ...current, email: true }));
+      toast({
+        variant: "warning",
+        title: "Controlla i campi evidenziati",
+        description: "Inserisci la tua email per continuare.",
+      });
+      return;
+    }
 
     // Step 1: inizializza il signin con l'email
     const { error: createError } = await signIn.create({ identifier: email });
@@ -56,6 +78,17 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setGlobalError(null);
 
+    const isCodeMissing = code.trim() === "";
+    if (isCodeMissing) {
+      setWarningFields((current) => ({ ...current, code: true }));
+      toast({
+        variant: "warning",
+        title: "Controlla i campi evidenziati",
+        description: "Inserisci il codice di verifica.",
+      });
+      return;
+    }
+
     const { error } = await signIn.resetPasswordEmailCode.verifyCode({ code });
     if (error) {
       setGlobalError(error.message ?? "Codice non valido. Riprova.");
@@ -68,6 +101,17 @@ export default function ForgotPasswordPage() {
   async function handleSetPassword(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setGlobalError(null);
+
+    const isPasswordMissing = newPassword.trim() === "";
+    if (isPasswordMissing) {
+      setWarningFields((current) => ({ ...current, newPassword: true }));
+      toast({
+        variant: "warning",
+        title: "Controlla i campi evidenziati",
+        description: "Inserisci una nuova password per continuare.",
+      });
+      return;
+    }
 
     const { error } = await signIn.resetPasswordEmailCode.submitPassword({
       password: newPassword,
@@ -150,17 +194,26 @@ export default function ForgotPasswordPage() {
               layout="stack"
               density="comfortable"
               labelStyle="soft"
+              noValidate
               onSubmit={handleSendCode}
             >
-              <FormField label="Email" required>
+              <FormField
+                label="Email"
+                required
+                className={warningFields.email ? "auth-warning-field" : undefined}
+              >
                 <FormControl>
                   <Input
                     type="email"
                     placeholder="nome@esempio.com"
                     autoComplete="email"
                     value={email}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                    required
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setEmail(e.target.value);
+                      if (warningFields.email) {
+                        setWarningFields((current) => ({ ...current, email: false }));
+                      }
+                    }}
                   />
                 </FormControl>
               </FormField>
@@ -185,16 +238,23 @@ export default function ForgotPasswordPage() {
               layout="stack"
               density="comfortable"
               labelStyle="soft"
+              noValidate
               onSubmit={handleVerifyCode}
             >
               <FormField
                 label="Codice di verifica"
                 required
                 helperText={codeError ?? "Controlla la tua casella di posta, incluso lo spam."}
+                className={warningFields.code ? "auth-warning-field" : undefined}
               >
                 <OtpInput
                   value={code}
-                  onChange={setCode}
+                  onChange={(nextCode) => {
+                    setCode(nextCode);
+                    if (warningFields.code) {
+                      setWarningFields((current) => ({ ...current, code: false }));
+                    }
+                  }}
                   length={6}
                   autoFocus
                   aria-label="Codice di recupero password"
@@ -238,12 +298,14 @@ export default function ForgotPasswordPage() {
               layout="stack"
               density="comfortable"
               labelStyle="soft"
+              noValidate
               onSubmit={handleSetPassword}
             >
               <FormField
                 label="Nuova password"
                 required
                 helperText={passwordError ?? undefined}
+                className={warningFields.newPassword ? "auth-warning-field" : undefined}
               >
                 <FormControl>
                   <Input
@@ -253,8 +315,15 @@ export default function ForgotPasswordPage() {
                     showPasswordToggle
                     showStrength
                     value={newPassword}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
-                    required
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setNewPassword(e.target.value);
+                      if (warningFields.newPassword) {
+                        setWarningFields((current) => ({
+                          ...current,
+                          newPassword: false,
+                        }));
+                      }
+                    }}
                   />
                 </FormControl>
               </FormField>

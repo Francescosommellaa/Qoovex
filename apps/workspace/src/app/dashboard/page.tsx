@@ -1,11 +1,15 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@qoovex/db";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
+  if (!userId) {
+    redirect("/sign-in");
+  }
 
   const user = await db.user.findUnique({
-    where: { clerkId: userId! },
+    where: { clerkId: userId },
     select: {
       id: true,
       name: true,
@@ -14,6 +18,10 @@ export default async function DashboardPage() {
       createdAt: true,
     },
   });
+
+  if (!user) {
+    redirect("/sign-in");
+  }
 
   return (
     <main style={{ padding: "2rem" }}>
