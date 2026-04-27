@@ -2005,6 +2005,18 @@
     --form-gap: var(--form-gap-spacious);
   }
 
+  .qv-form--label-style-default {
+    --form-label-text-transform: uppercase;
+    --form-label-letter-spacing: 0.06em;
+    --form-label-font-weight: 600;
+  }
+
+  .qv-form--label-style-soft {
+    --form-label-text-transform: none;
+    --form-label-letter-spacing: 0.01em;
+    --form-label-font-weight: 500;
+  }
+
   .qv-form--tone-neutral,
   .qv-form-section.qv-form--tone-neutral {
     --form-accent: var(--form-tone-neutral);
@@ -2128,10 +2140,10 @@
     gap: var(--spacing-1);
     color: var(--form-label-color);
     font-size: var(--text-xs);
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    font-weight: var(--form-label-font-weight, 600);
+    letter-spacing: var(--form-label-letter-spacing, 0.06em);
     line-height: 1.2;
-    text-transform: uppercase;
+    text-transform: var(--form-label-text-transform, uppercase);
     user-select: none;
   }
 
@@ -2172,6 +2184,21 @@
     opacity: var(--form-disabled-opacity);
   }
 
+  .qv-phone-number-field__row {
+    display: grid;
+    grid-template-columns: minmax(6.5rem, 8rem) minmax(0, 1fr);
+    gap: var(--spacing-2);
+    align-items: start;
+  }
+
+  .qv-phone-number-field__region {
+    min-width: 0;
+  }
+
+  .qv-phone-number-field__number {
+    width: 100%;
+  }
+
   .qv-form-actions {
     display: flex;
     flex-wrap: wrap;
@@ -2207,6 +2234,10 @@
     .qv-form-field--horizontal {
       display: flex;
       flex-direction: column;
+    }
+
+    .qv-phone-number-field__row {
+      grid-template-columns: 1fr;
     }
 
     .qv-form-actions {

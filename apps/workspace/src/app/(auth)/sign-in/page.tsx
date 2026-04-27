@@ -1,131 +1,137 @@
 "use client";
 
+import { useState } from "react";
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
 import { WarningCircle } from "@phosphor-icons/react";
-import { Button, Input } from "@qoovex/ui";
-import { AuthCard } from "../ui/AuthCard";
-import { OAuthButton } from "../ui/OAuthButton";
+import {
+  Button,
+  Input,
+  Form,
+  FormField,
+  FormControl,
+  FormActions,
+} from "@qoovex/ui";
+import { AuthShell, OAuthButton } from "../ui";
 
 export default function SignInPage() {
-  const { signIn, fetchStatus } = useSignIn();
+  const { signIn, errors, fetchStatus } = useSignIn();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [globalError, setGlobalError] = useState<string | null>(null);
 
-  const isLoading = isSubmitting || fetchStatus === "fetching";
+  const isLoading = fetchStatus === "fetching";
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!signIn) return;
+    setGlobalError(null);
 
-    setError(null);
-    setIsSubmitting(true);
+    const { error } = await signIn.password({ emailAddress: email, password });
 
-    try {
-      // Clerk v7: signIn.password() per email+password
-      await signIn.password({
-        identifier: email,
-        password,
-      });
+    if (error) {
+      setGlobalError(error.message ?? "Credenziali non valide. Riprova.");
+      return;
+    }
 
-      // Finalizza la sessione e reindirizza
-      await signIn.finalize();
-      router.push("/dashboard");
-    } catch (err: unknown) {
-      const clerkError = err as { errors?: { message: string }[] };
-      setError(
-        clerkError.errors?.[0]?.message ?? "Credenziali non valide. Riprova.",
-      );
-    } finally {
-      setIsSubmitting(false);
+    if (signIn.status === "complete") {
+      const { error: finalizeError } = await signIn.finalize();
+      if (finalizeError) {
+        setGlobalError(finalizeError.message ?? "Errore durante il login.");
+        return;
+      }
+      router.push("/");
     }
   }
 
-  return (
-    <AuthCard
-      title="Bentornato"
-      subtitle="Accedi al tuo workspace Qoovex"
-    >
-      {/* OAuth Google */}
-      <OAuthButton mode="signIn" />
+  // Errori field-level da Clerk signals
+  const identifierError =
+    errors.fields.identifier?.message ?? errors.fields.password?.message ?? null;
+  const globalClerkError = errors.global?.[0]?.message ?? null;
+  const displayError = globalError ?? globalClerkError ?? identifierError;
 
-      {/* Separatore */}
+  return (
+    <AuthShell title="Bentornato" subtitle="Accedi al tuo workspace">
+      {/* OAuth */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-3)" }}>
+        <OAuthButton mode="signIn" provider="google" onError={setGlobalError} />
+        <OAuthButton mode="signIn" provider="apple" onError={setGlobalError} />
+      </div>
+
       <div className="auth-divider">oppure</div>
 
-      {/* Form email + password */}
-      <form
+      {displayError && (
+        <div className="auth-error-banner" role="alert">
+          <WarningCircle size={16} weight="bold" aria-hidden="true" />
+          {displayError}
+        </div>
+      )}
+
+      <Form
+        variant="plain"
+        layout="stack"
+        density="comfortable"
+        labelStyle="soft"
         onSubmit={handleSubmit}
-        noValidate
-        style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-4)" }}
       >
-        {/* Banner errore globale */}
-        {error && (
-          <div className="auth-error-banner" role="alert">
-            <WarningCircle size={16} weight="bold" aria-hidden="true" />
-            {error}
-          </div>
-        )}
+        <FormField label="Email" required>
+          <FormControl>
+            <Input
+              type="email"
+              placeholder="nome@esempio.com"
+              autoComplete="email"
+              value={email}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+              required
+            />
+          </FormControl>
+        </FormField>
 
-        <Input
-          label="Email"
-          type="email"
-          placeholder="tu@esempio.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="email"
-          disabled={isLoading}
-        />
+        <FormField label="Password" required>
+          <FormControl>
+            <Input
+              type="password"
+              placeholder="La tua password"
+              autoComplete="current-password"
+              showPasswordToggle
+              value={password}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+              required
+            />
+          </FormControl>
+        </FormField>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-1)" }}>
-          <Input
-            label="Password"
-            type="password"
-            placeholder="La tua password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password"
-            disabled={isLoading}
-            showPasswordToggle
-          />
-          <div style={{ textAlign: "right" }}>
-            <Link
-              href="/forgot-password"
-              style={{
-                fontSize: "var(--text-xs)",
-                color: "var(--color-text-muted)",
-                textDecoration: "none",
-              }}
-            >
-              Password dimenticata?
-            </Link>
-          </div>
+        <div style={{ textAlign: "right", marginTop: "calc(var(--spacing-1) * -1)" }}>
+          <Link
+            href="/forgot-password"
+            style={{
+              fontSize: "var(--text-xs)",
+              color: "var(--color-text-muted)",
+              textDecoration: "none",
+            }}
+          >
+            Password dimenticata?
+          </Link>
         </div>
 
-        <Button
-          type="submit"
-          variant="primary"
-          size="md"
-          loading={isSubmitting}
-          disabled={isLoading || !email || !password}
-          className="w-full"
-        >
-          Accedi
-        </Button>
-      </form>
+        <FormActions align="stretch">
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            loading={isLoading}
+            className="w-full"
+          >
+            Accedi
+          </Button>
+        </FormActions>
+      </Form>
 
-      {/* Footer */}
       <p className="auth-footer-text">
-        Non hai un account?{" "}
-        <Link href="/sign-up">Registrati gratis</Link>
+        Non hai un account? <Link href="/sign-up">Registrati</Link>
       </p>
-    </AuthCard>
+    </AuthShell>
   );
 }

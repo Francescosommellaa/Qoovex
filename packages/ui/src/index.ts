@@ -35,6 +35,12 @@ export type {
   SelectStatus,
 } from "./components/select";
 
+export { PhoneNumberField } from "./components/phone-number-field";
+export type {
+  PhoneNumberFieldProps,
+  PhoneRegionOption,
+} from "./components/phone-number-field";
+
 export { Badge } from "./components/badge";
 export type {
   BadgeProps,
@@ -127,6 +133,7 @@ export type {
   FormDescriptionProps,
   FormFieldOrientation,
   FormFieldProps,
+  FormLabelStyle,
   FormFieldStatus,
   FormLabelProps,
   FormLayout,

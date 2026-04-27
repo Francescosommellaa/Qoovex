@@ -1,2 +1,2 @@
-export { AuthCard } from "./AuthCard";
+export { AuthShell } from "./AuthShell";
 export { OAuthButton } from "./OAuthButton";

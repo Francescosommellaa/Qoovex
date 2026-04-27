@@ -6,6 +6,7 @@ import { cn } from "../lib/utils";
 export type FormVariant = "plain" | "ghost" | "surface" | "panel";
 export type FormLayout = "stack" | "grid" | "inline";
 export type FormDensity = "compact" | "comfortable" | "spacious";
+export type FormLabelStyle = "default" | "soft";
 export type FormTone = "neutral" | "primary" | "success" | "warning" | "error";
 export type FormFieldStatus = "default" | "error" | "success";
 export type FormFieldOrientation = "vertical" | "horizontal";
@@ -15,6 +16,7 @@ export interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
   variant?: FormVariant;
   layout?: FormLayout;
   density?: FormDensity;
+  labelStyle?: FormLabelStyle;
   tone?: FormTone;
 }
 
@@ -99,6 +101,11 @@ const DENSITIES: Record<FormDensity, string> = {
   spacious: "qv-form--density-spacious",
 };
 
+const LABEL_STYLES: Record<FormLabelStyle, string> = {
+  default: "qv-form--label-style-default",
+  soft: "qv-form--label-style-soft",
+};
+
 const TONES: Record<FormTone, string> = {
   neutral: "qv-form--tone-neutral",
   primary: "qv-form--tone-primary",
@@ -140,6 +147,7 @@ export const Form = React.forwardRef<HTMLFormElement, FormProps>(function Form(
     variant = "plain",
     layout = "stack",
     density = "comfortable",
+    labelStyle = "default",
     tone = "neutral",
     className,
     ...props
@@ -154,6 +162,7 @@ export const Form = React.forwardRef<HTMLFormElement, FormProps>(function Form(
         VARIANTS[variant],
         LAYOUTS[layout],
         DENSITIES[density],
+        LABEL_STYLES[labelStyle],
         TONES[tone],
         className,
       )}
