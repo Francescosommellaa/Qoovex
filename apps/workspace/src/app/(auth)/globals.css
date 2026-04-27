@@ -45,6 +45,7 @@
 .auth-title {
   font-family: var(--font-display);
   font-size: var(--text-xl);
+  font-weight: 600;
   color: var(--color-text);
   line-height: 1.15;
 }
@@ -59,6 +60,8 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
+  margin-top: var(--spacing-5);
+  margin-bottom: var(--spacing-5);
   color: var(--color-text-faint);
   font-size: var(--text-xs);
   text-transform: uppercase;
@@ -100,6 +103,79 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
+}
+
+/* Softer inline feedback (evita solo testo rosso aggressivo) */
+.auth-message-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.auth-neutral-banner {
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  text-align: center;
+}
+
+/* Mobile-first campi auth: font ≥16px (iOS), padding e raggio ≥12px */
+.auth-form-scope .qv-form-field__control > .flex.w-full.flex-col > .relative.flex.items-center {
+  border-radius: max(0.75rem, var(--radius-md, 0.5rem));
+  padding-left: max(0.75rem, var(--spacing-3));
+  padding-right: max(0.75rem, var(--spacing-3));
+  min-height: max(2.75rem, var(--input-height-md, 2.5rem));
+}
+
+.auth-form-scope .qv-form-field__control input:not([type="hidden"]) {
+  font-size: max(1rem, var(--text-sm));
+}
+
+.auth-form-scope .qv-phone-number-field__region,
+.auth-form-scope .qv-phone-number-field__number {
+  font-size: max(1rem, var(--text-sm));
+  border-radius: max(0.75rem, var(--radius-md, 0.5rem));
+  min-height: max(2.75rem, var(--input-height-md, 2.5rem));
+  padding-left: max(0.75rem, var(--spacing-3));
+  padding-right: max(0.75rem, var(--spacing-3));
+}
+
+.auth-form-scope .qv-otp-input__slot {
+  font-size: max(1rem, var(--text-base));
+  border-radius: max(0.75rem, var(--radius-md, 0.5rem));
+  min-height: max(2.75rem, var(--input-height-md, 2.5rem));
+}
+
+.auth-form-scope .qv-form-field--status-error .qv-form-field__label {
+  color: var(--form-error-color, var(--color-error));
+}
+
+.auth-form-scope .qv-form-field--status-error .qv-form-field__required {
+  color: var(--form-error-color, var(--color-error));
+}
+
+/* Errore sul gruppo OTP: bordo rosso token (stesso linguaggio di Input in errore) */
+.auth-form-scope .qv-form-field--status-error .qv-otp-input__slot {
+  border-color: var(--color-input-border-error);
+  box-shadow: 0 0 0 2px var(--color-error-highlight);
+}
+
+/* Più respiro sopra/sotto la riga delle azioni (divider interno al form) */
+.auth-form-scope .qv-form-actions {
+  margin-top: var(--spacing-5);
+  padding-top: var(--spacing-5);
 }
 
 .auth-steps {

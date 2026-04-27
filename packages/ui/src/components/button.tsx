@@ -11,6 +11,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
+  /** When `loading` is true, shown beside the spinner instead of hiding all label text. */
+  loadingLabel?: React.ReactNode;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
   iconSwap?: { from: React.ReactNode; to: React.ReactNode };
@@ -178,6 +180,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant = "primary",
       size = "md",
       loading = false,
+      loadingLabel,
       disabled,
       iconLeft,
       iconRight,
@@ -206,12 +209,21 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <span className={FILLS[variant]} aria-hidden="true" />
 
         {loading ? (
-          <span className="absolute inset-0 z-20 flex items-center justify-center rounded-[inherit]">
+          <span
+            className={cn(
+              "absolute inset-0 z-20 flex items-center justify-center rounded-[inherit]",
+              loadingLabel ? "gap-2 px-3" : "",
+            )}
+            aria-live="polite"
+          >
             <CircleNotch
               size={SPINNER_SIZES[size]}
-              className="animate-spin opacity-60"
+              className="shrink-0 animate-spin opacity-60"
               aria-hidden="true"
             />
+            {loadingLabel ? (
+              <span className="truncate text-(length:--text-sm) font-medium">{loadingLabel}</span>
+            ) : null}
           </span>
         ) : null}
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useSignIn, useSignUp } from "@clerk/nextjs";
+import Image from "next/image";
 import { Button } from "@qoovex/ui";
 
 interface OAuthButtonProps {
@@ -97,7 +98,14 @@ export function OAuthButton({
       className="w-full"
       aria-label={config.label[mode]}
       iconLeft={
-        <img src={config.logoSrc} alt={config.logoAlt} width={16} height={16} />
+        <Image
+          src={config.logoSrc}
+          alt=""
+          width={16}
+          height={16}
+          unoptimized
+          aria-hidden={true}
+        />
       }
     >
       {config.label[mode]}

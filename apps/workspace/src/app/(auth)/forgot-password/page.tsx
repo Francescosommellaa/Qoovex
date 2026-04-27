@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSignIn } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { WarningCircle, CheckCircle } from "@phosphor-icons/react";
 import {
   Button,
   Input,
@@ -19,17 +18,21 @@ import { AuthShell } from "../ui";
 
 type Step = "email" | "verify" | "new-password";
 
+function isLikelyValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+}
+
 export default function ForgotPasswordPage() {
-  const { signIn, errors, fetchStatus } = useSignIn();
+  const { signIn, fetchStatus } = useSignIn();
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const didHydrateEmail = useRef(false);
 
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [globalError, setGlobalError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
   const [warningFields, setWarningFields] = useState<{
     email: boolean;
     code: boolean;
@@ -39,59 +42,98 @@ export default function ForgotPasswordPage() {
     code: false,
     newPassword: false,
   });
+  const [fieldErrors, setFieldErrors] = useState<{
+    email?: string;
+    code?: string;
+    newPassword?: string;
+  }>({});
 
   const isLoading = fetchStatus === "fetching";
 
+  useEffect(() => {
+    if (didHydrateEmail.current) return;
+    const fromUrl = searchParams.get("email");
+    if (fromUrl) {
+      setEmail(decodeURIComponent(fromUrl));
+      didHydrateEmail.current = true;
+    }
+  }, [searchParams]);
+
   async function handleSendCode(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setGlobalError(null);
+    setFieldErrors({});
 
     const isEmailMissing = email.trim() === "";
     if (isEmailMissing) {
       setWarningFields((current) => ({ ...current, email: true }));
       toast({
         variant: "warning",
-        title: "Controlla i campi evidenziati",
-        description: "Inserisci la tua email per continuare.",
+        title: "Email mancante",
+        description: "Inserisci l'indirizzo email associato al tuo account.",
       });
       return;
     }
 
-    // Step 1: inizializza il signin con l'email
-    const { error: createError } = await signIn.create({ identifier: email });
-    if (createError) {
-      setGlobalError(createError.message ?? "Email non trovata. Riprova.");
+    if (!isLikelyValidEmail(email)) {
+      setWarningFields((current) => ({ ...current, email: true }));
+      toast({
+        variant: "warning",
+        title: "Formato email",
+        description: "Controlla che l'indirizzo email sia completo (es. nome@dominio.it).",
+      });
       return;
     }
 
-    // Step 2: invia il codice di reset via email
+    const { error: createError } = await signIn.create({ identifier: email.trim() });
+    if (createError) {
+      toast({
+        variant: "info",
+        title: "Richiesta registrata",
+        description:
+          "Se esiste un account con questo indirizzo, riceverai un'email con le istruzioni. Controlla anche lo spam.",
+      });
+      return;
+    }
+
     const { error: sendError } = await signIn.resetPasswordEmailCode.sendCode();
     if (sendError) {
-      setGlobalError(sendError.message ?? "Errore nell'invio del codice.");
+      toast({
+        variant: "info",
+        title: "Richiesta registrata",
+        description:
+          "Se esiste un account con questo indirizzo, riceverai un'email con le istruzioni. Controlla anche lo spam.",
+      });
       return;
     }
 
     setStep("verify");
+    toast({
+      variant: "success",
+      title: "Codice inviato",
+      description: "Controlla la posta in arrivo e inserisci il codice a 6 cifre.",
+    });
   }
 
   async function handleVerifyCode(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setGlobalError(null);
+    setFieldErrors((current) => ({ ...current, code: undefined }));
 
     const isCodeMissing = code.trim() === "";
     if (isCodeMissing) {
       setWarningFields((current) => ({ ...current, code: true }));
       toast({
         variant: "warning",
-        title: "Controlla i campi evidenziati",
-        description: "Inserisci il codice di verifica.",
+        title: "Codice mancante",
+        description: "Inserisci il codice a 6 cifre ricevuto via email.",
       });
       return;
     }
 
     const { error } = await signIn.resetPasswordEmailCode.verifyCode({ code });
     if (error) {
-      setGlobalError(error.message ?? "Codice non valido. Riprova.");
+      const msg = error.message ?? "Codice non valido o scaduto. Richiedine uno nuovo dalla mail.";
+      setFieldErrors({ code: msg });
+      toast({ variant: "error", title: "Codice non accettato", description: msg });
       return;
     }
 
@@ -100,15 +142,15 @@ export default function ForgotPasswordPage() {
 
   async function handleSetPassword(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setGlobalError(null);
+    setFieldErrors((current) => ({ ...current, newPassword: undefined }));
 
     const isPasswordMissing = newPassword.trim() === "";
     if (isPasswordMissing) {
       setWarningFields((current) => ({ ...current, newPassword: true }));
       toast({
         variant: "warning",
-        title: "Controlla i campi evidenziati",
-        description: "Inserisci una nuova password per continuare.",
+        title: "Password mancante",
+        description: "Scegli una nuova password di almeno 8 caratteri.",
       });
       return;
     }
@@ -119,31 +161,63 @@ export default function ForgotPasswordPage() {
     });
 
     if (error) {
-      setGlobalError(error.message ?? "Errore nel cambio password. Riprova.");
+      const msg = error.message ?? "Non è stato possibile aggiornare la password. Riprova.";
+      setFieldErrors({ newPassword: msg });
+      toast({ variant: "error", title: "Aggiornamento non riuscito", description: msg });
       return;
     }
 
     if (signIn.status === "complete") {
-      const { error: finalizeError } = await signIn.finalize();
+      const { error: finalizeError } = await signIn.finalize({
+        navigate: async ({ session, decorateUrl }) => {
+          if (session?.currentTask) {
+            toast({
+              variant: "warning",
+              title: "Azione richiesta",
+              description: "Completa i passaggi richiesti dal tuo account prima di continuare.",
+            });
+            return;
+          }
+          const url = decorateUrl("/dashboard");
+          if (url.startsWith("http")) {
+            window.location.href = url;
+          } else {
+            router.push(url);
+          }
+        },
+      });
       if (finalizeError) {
-        setGlobalError(finalizeError.message ?? "Errore durante l'accesso.");
-        return;
+        const msg =
+          finalizeError.message ?? "Sessione non completata. Prova ad accedere dalla pagina di login.";
+        toast({ variant: "error", title: "Accesso", description: msg });
       }
-      setSuccess(true);
-      setTimeout(() => router.push("/"), 1500);
+    } else {
+      toast({
+        variant: "warning",
+        title: "Flusso incompleto",
+        description: "Riprova dal codice o contatta il supporto se il problema persiste.",
+      });
     }
   }
 
   async function handleResendCode() {
-    setGlobalError(null);
+    setFieldErrors((current) => ({ ...current, code: undefined }));
     const { error } = await signIn.resetPasswordEmailCode.sendCode();
-    if (error) setGlobalError(error.message ?? "Errore nel reinvio del codice.");
+    if (error) {
+      toast({
+        variant: "info",
+        title: "Reinvio",
+        description:
+          "Se esiste un account con questo indirizzo, riceverai un'email. Controlla la posta e lo spam.",
+      });
+      return;
+    }
+    toast({
+      variant: "success",
+      title: "Codice reinviato",
+      description: "Controlla di nuovo la posta in arrivo.",
+    });
   }
-
-  const globalClerkError = errors.global?.[0]?.message ?? null;
-  const codeError = errors.fields.code?.message ?? null;
-  const passwordError = errors.fields.password?.message ?? null;
-  const displayError = globalError ?? globalClerkError;
 
   const stepMap: Record<Step, number> = { email: 1, verify: 2, "new-password": 3 };
 
@@ -151,43 +225,37 @@ export default function ForgotPasswordPage() {
     <AuthShell
       title={
         step === "email"
-          ? "Recupera password"
+          ? "Recupera la password"
           : step === "verify"
-            ? "Verifica codice di recupero"
-            : "Nuova password"
+            ? "Inserisci il codice"
+            : "Scegli una nuova password"
       }
       subtitle={
         step === "email"
-          ? "Inserisci la tua email: ti inviamo un codice di recupero"
+          ? "Ti inviamo un codice sicuro per reimpostare l'accesso"
           : step === "verify"
-            ? `Abbiamo inviato un codice a ${email}`
-            : "Scegli una nuova password sicura"
+            ? `Codice inviato a ${email}`
+            : "Usa almeno 8 caratteri, meglio se con lettere e numeri"
       }
       steps={{ current: stepMap[step], total: 3 }}
       onBack={
         step !== "email"
           ? () => {
-              setStep(step === "new-password" ? "verify" : "email");
-              setGlobalError(null);
+              if (step === "verify") {
+                void signIn?.reset?.();
+                setStep("email");
+                setCode("");
+                setFieldErrors({});
+              } else {
+                setStep("verify");
+                setNewPassword("");
+                setFieldErrors({});
+              }
             }
           : undefined
       }
     >
-      {success ? (
-        <div className="auth-success-banner" role="status">
-          <CheckCircle size={16} weight="bold" aria-hidden="true" />
-          Password aggiornata! Reindirizzamento in corso…
-        </div>
-      ) : (
-        <>
-          {displayError && (
-            <div className="auth-error-banner" role="alert">
-              <WarningCircle size={16} weight="bold" aria-hidden="true" />
-              {displayError}
-            </div>
-          )}
-
-          {/* Step 1 — Email */}
+      <>
           {step === "email" && (
             <Form
               variant="plain"
@@ -200,7 +268,11 @@ export default function ForgotPasswordPage() {
               <FormField
                 label="Email"
                 required
-                className={warningFields.email ? "auth-warning-field" : undefined}
+                helperText="Useremo solo questo indirizzo per inviarti il codice di recupero."
+                error={fieldErrors.email}
+                status={
+                  fieldErrors.email || warningFields.email ? "error" : "default"
+                }
               >
                 <FormControl>
                   <Input
@@ -213,6 +285,9 @@ export default function ForgotPasswordPage() {
                       if (warningFields.email) {
                         setWarningFields((current) => ({ ...current, email: false }));
                       }
+                      if (fieldErrors.email) {
+                        setFieldErrors((current) => ({ ...current, email: undefined }));
+                      }
                     }}
                   />
                 </FormControl>
@@ -223,6 +298,7 @@ export default function ForgotPasswordPage() {
                   variant="primary"
                   size="md"
                   loading={isLoading}
+                  loadingLabel="Invio in corso…"
                   className="w-full"
                 >
                   Invia codice
@@ -231,7 +307,6 @@ export default function ForgotPasswordPage() {
             </Form>
           )}
 
-          {/* Step 2 — Verifica codice */}
           {step === "verify" && (
             <Form
               variant="plain"
@@ -244,8 +319,9 @@ export default function ForgotPasswordPage() {
               <FormField
                 label="Codice di verifica"
                 required
-                helperText={codeError ?? "Controlla la tua casella di posta, incluso lo spam."}
-                className={warningFields.code ? "auth-warning-field" : undefined}
+                helperText="Incolla il codice dalla mail oppure digitacelo. Se non arriva, attendi qualche minuto o reinvia."
+                error={fieldErrors.code}
+                status={fieldErrors.code || warningFields.code ? "error" : "default"}
               >
                 <OtpInput
                   value={code}
@@ -254,9 +330,12 @@ export default function ForgotPasswordPage() {
                     if (warningFields.code) {
                       setWarningFields((current) => ({ ...current, code: false }));
                     }
+                    if (fieldErrors.code) {
+                      setFieldErrors((current) => ({ ...current, code: undefined }));
+                    }
                   }}
                   length={6}
-                  autoFocus
+                  requestInitialFocusOnDesktop
                   aria-label="Codice di recupero password"
                 />
               </FormField>
@@ -266,6 +345,7 @@ export default function ForgotPasswordPage() {
                   variant="primary"
                   size="md"
                   loading={isLoading}
+                  loadingLabel="Verifica in corso…"
                   className="w-full"
                 >
                   Verifica codice
@@ -291,7 +371,6 @@ export default function ForgotPasswordPage() {
             </Form>
           )}
 
-          {/* Step 3 — Nuova password */}
           {step === "new-password" && (
             <Form
               variant="plain"
@@ -304,8 +383,11 @@ export default function ForgotPasswordPage() {
               <FormField
                 label="Nuova password"
                 required
-                helperText={passwordError ?? undefined}
-                className={warningFields.newPassword ? "auth-warning-field" : undefined}
+                helperText="Suggerimento: combina maiuscole, minuscole e numeri per una password più sicura."
+                error={fieldErrors.newPassword}
+                status={
+                  fieldErrors.newPassword || warningFields.newPassword ? "error" : "default"
+                }
               >
                 <FormControl>
                   <Input
@@ -323,6 +405,12 @@ export default function ForgotPasswordPage() {
                           newPassword: false,
                         }));
                       }
+                      if (fieldErrors.newPassword) {
+                        setFieldErrors((current) => ({
+                          ...current,
+                          newPassword: undefined,
+                        }));
+                      }
                     }}
                   />
                 </FormControl>
@@ -333,6 +421,7 @@ export default function ForgotPasswordPage() {
                   variant="primary"
                   size="md"
                   loading={isLoading}
+                  loadingLabel="Salvataggio password…"
                   className="w-full"
                 >
                   Salva nuova password
@@ -340,8 +429,7 @@ export default function ForgotPasswordPage() {
               </FormActions>
             </Form>
           )}
-        </>
-      )}
+      </>
 
       <p className="auth-footer-text">
         Ricordi la password? <Link href="/sign-in">Accedi</Link>

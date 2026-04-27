@@ -1,10 +1,9 @@
 "use client";
 
 import { useSignUp } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { WarningCircle } from "@phosphor-icons/react";
 import {
   Button,
   Input,
@@ -21,10 +20,27 @@ import { AuthShell, OAuthButton } from "../ui";
 
 type Step = "form" | "verify";
 
+type FieldErrors = {
+  email?: string;
+  username?: string;
+  password?: string;
+  code?: string;
+};
+
+function mapCreateErrorToFields(message: string): FieldErrors {
+  const lower = message.toLowerCase();
+  if (lower.includes("username")) return { username: message };
+  if (lower.includes("email")) return { email: message };
+  if (lower.includes("password")) return { password: message };
+  return {};
+}
+
 export default function SignUpPage() {
   const { signUp, fetchStatus } = useSignUp();
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const didHydrateEmail = useRef(false);
 
   const [step, setStep] = useState<Step>("form");
   const [email, setEmail] = useState("");
@@ -33,7 +49,7 @@ export default function SignUpPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [warningFields, setWarningFields] = useState<{
     email: boolean;
     username: boolean;
@@ -47,16 +63,37 @@ export default function SignUpPage() {
   });
   const isLoading = fetchStatus === "fetching";
 
+  useEffect(() => {
+    if (didHydrateEmail.current) return;
+    const fromUrl = searchParams.get("email");
+    if (fromUrl) {
+      setEmail(decodeURIComponent(fromUrl));
+      didHydrateEmail.current = true;
+    }
+  }, [searchParams]);
+
   function getNormalizedPhoneNumber(): string | undefined {
     const normalizedPhoneDigits = phoneNumber.replace(/[^\d]/g, "");
     if (normalizedPhoneDigits === "") return undefined;
     return `${phoneRegionCode}${normalizedPhoneDigits}`;
   }
 
-  // ─── Step 1: crea il sign-up e avvia verifica email ──────────────────────
+  async function finalizeAndEnterApp() {
+    const { error: finalizeError } = await signUp.finalize();
+    if (finalizeError) {
+      const msg =
+        finalizeError.message ??
+        "Errore nel completare la registrazione. Riprova o contatta il supporto.";
+      toast({ variant: "error", title: "Completamento fallito", description: msg });
+      return;
+    }
+    await bootstrapUser({ phoneNumber: getNormalizedPhoneNumber() });
+    router.replace("/dashboard");
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
+    setFieldErrors({});
 
     const nextWarnings = {
       email: email.trim() === "",
@@ -70,16 +107,17 @@ export default function SignUpPage() {
       toast({
         variant: "warning",
         title: "Controlla i campi evidenziati",
-        description: "Compila i campi obbligatori prima di continuare.",
+        description: "Compila email, username e password prima di continuare.",
       });
       return;
     }
 
     const normalizedPhoneDigits = phoneNumber.replace(/[^\d]/g, "");
-    const normalizedPhoneNumber = getNormalizedPhoneNumber();
 
     if (normalizedPhoneDigits !== "" && normalizedPhoneDigits.length < 6) {
-      setError("Inserisci un numero di telefono valido.");
+      const msg =
+        "Inserisci un numero di telefono valido (almeno 6 cifre) oppure lascia il campo vuoto.";
+      toast({ variant: "warning", title: "Telefono incompleto", description: msg });
       return;
     }
 
@@ -89,31 +127,46 @@ export default function SignUpPage() {
       password,
     });
     if (createError) {
-      setError(createError.message ?? "Errore durante la registrazione");
+      const msg =
+        createError.message ??
+        "Non è stato possibile creare l'account. Verifica i dati e riprova.";
+      const mapped = mapCreateErrorToFields(msg);
+      setFieldErrors(Object.keys(mapped).length > 0 ? mapped : {});
+      toast({
+        variant: "error",
+        title: "Registrazione bloccata",
+        description: msg,
+      });
       return;
     }
 
     const { error: prepareError } = await signUp.verifications.sendEmailCode();
     if (prepareError) {
-      setError(prepareError.message ?? "Impossibile inviare il codice");
+      const msg =
+        prepareError.message ??
+        "Non siamo riusciti a inviare il codice. Riprova tra qualche istante.";
+      toast({
+        variant: "error",
+        title: "Invio codice non riuscito",
+        description: msg,
+      });
       return;
     }
 
     setStep("verify");
   }
 
-  // ─── Step 2: verifica codice OTP ─────────────────────────────────────────
   async function handleVerify(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
+    setFieldErrors((current) => ({ ...current, code: undefined }));
 
     const isCodeMissing = code.trim() === "";
     if (isCodeMissing) {
       setWarningFields((current) => ({ ...current, code: true }));
       toast({
         variant: "warning",
-        title: "Controlla i campi evidenziati",
-        description: "Inserisci il codice di verifica per continuare.",
+        title: "Codice mancante",
+        description: "Inserisci il codice a 6 cifre che hai ricevuto via email.",
       });
       return;
     }
@@ -121,59 +174,99 @@ export default function SignUpPage() {
     const { error: attemptError } = await signUp.verifications.verifyEmailCode({
       code,
     });
+
     if (attemptError) {
-      setError(attemptError.message ?? "Codice non valido");
+      const msg = attemptError.message ?? "";
+      if (/already been verified/i.test(msg)) {
+        if (signUp.status === "complete") {
+          await finalizeAndEnterApp();
+          return;
+        }
+        toast({
+          variant: "info",
+          title: "Già verificato",
+          description: "Questo codice è già stato usato. Se l'account è attivo, accedi dalla pagina di login.",
+        });
+        return;
+      }
+      const display =
+        msg || "Il codice non è valido o è scaduto. Richiedine uno nuovo dalla mail.";
+      setFieldErrors({ code: display });
+      toast({
+        variant: "error",
+        title: "Verifica non riuscita",
+        description: display,
+      });
       return;
     }
 
     if (signUp.status === "complete") {
-      const { error: finalizeError } = await signUp.finalize();
-      if (finalizeError) {
-        setError(finalizeError.message ?? "Errore durante la registrazione");
-        return;
-      }
-
-      await bootstrapUser({ phoneNumber: getNormalizedPhoneNumber() });
-      router.push("/");
+      await finalizeAndEnterApp();
       return;
     }
 
-    setError("Verifica non completata. Riprova.");
+    const display = "Verifica non completata. Controlla il codice e riprova.";
+    setFieldErrors({ code: display });
+    toast({ variant: "warning", title: "Verifica incompleta", description: display });
   }
 
-  // ─── Step 2b: reinvia codice ──────────────────────────────────────────────
   async function handleResend() {
-    setError(null);
+    setFieldErrors((current) => ({ ...current, code: undefined }));
 
     const { error: resendError } = await signUp.verifications.sendEmailCode();
     if (resendError) {
-      setError(resendError.message ?? "Impossibile reinviare il codice");
+      const msg = resendError.message ?? "Impossibile reinviare il codice in questo momento.";
+      toast({ variant: "error", title: "Reinvio non riuscito", description: msg });
+      return;
     }
+    toast({
+      variant: "success",
+      title: "Codice reinviato",
+      description: "Controlla di nuovo la posta in arrivo e lo spam.",
+    });
   }
+
+  const signInHref =
+    email.trim() === ""
+      ? "/sign-in"
+      : `/sign-in?email=${encodeURIComponent(email.trim())}`;
 
   return (
     <AuthShell
-      title={step === "form" ? "Crea account" : "Verifica email"}
+      title={step === "form" ? "Crea il tuo account" : "Verifica la tua email"}
       subtitle={
         step === "form"
-          ? "Inizia gratis, nessuna carta richiesta"
-          : `Abbiamo inviato un codice a ${email}`
+          ? "Inizia gratis in pochi secondi"
+          : "Controlla la posta in arrivo e inserisci il codice a 6 cifre (controlla anche lo spam)."
       }
       steps={{ current: step === "form" ? 1 : 2, total: 2 }}
       onBack={step === "verify" ? () => setStep("form") : undefined}
     >
-      {error && (
-        <div className="auth-error-banner" role="alert">
-          <WarningCircle size={16} weight="bold" aria-hidden="true" />
-          {error}
-        </div>
-      )}
-
       {step === "form" ? (
         <>
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-3)" }}>
-            <OAuthButton mode="signUp" provider="google" onError={setError} />
-            <OAuthButton mode="signUp" provider="apple" onError={setError} />
+            <OAuthButton
+              mode="signUp"
+              provider="google"
+              onError={(msg) => {
+                toast({
+                  variant: "error",
+                  title: "Accesso Google non riuscito",
+                  description: msg,
+                });
+              }}
+            />
+            <OAuthButton
+              mode="signUp"
+              provider="apple"
+              onError={(msg) => {
+                toast({
+                  variant: "error",
+                  title: "Accesso Apple non riuscito",
+                  description: msg,
+                });
+              }}
+            />
           </div>
 
           <div className="auth-divider">oppure</div>
@@ -189,7 +282,10 @@ export default function SignUpPage() {
             <FormField
               label="Email"
               required
-              className={warningFields.email ? "auth-warning-field" : undefined}
+              error={fieldErrors.email}
+              status={
+                fieldErrors.email || warningFields.email ? "error" : "default"
+              }
             >
               <FormControl>
                 <Input
@@ -202,6 +298,9 @@ export default function SignUpPage() {
                     if (warningFields.email) {
                       setWarningFields((current) => ({ ...current, email: false }));
                     }
+                    if (fieldErrors.email) {
+                      setFieldErrors((current) => ({ ...current, email: undefined }));
+                    }
                   }}
                 />
               </FormControl>
@@ -210,7 +309,10 @@ export default function SignUpPage() {
             <FormField
               label="Username"
               required
-              className={warningFields.username ? "auth-warning-field" : undefined}
+              error={fieldErrors.username}
+              status={
+                fieldErrors.username || warningFields.username ? "error" : "default"
+              }
             >
               <FormControl>
                 <Input
@@ -222,6 +324,9 @@ export default function SignUpPage() {
                     setUsername(e.target.value);
                     if (warningFields.username) {
                       setWarningFields((current) => ({ ...current, username: false }));
+                    }
+                    if (fieldErrors.username) {
+                      setFieldErrors((current) => ({ ...current, username: undefined }));
                     }
                   }}
                 />
@@ -247,7 +352,10 @@ export default function SignUpPage() {
             <FormField
               label="Password"
               required
-              className={warningFields.password ? "auth-warning-field" : undefined}
+              error={fieldErrors.password}
+              status={
+                fieldErrors.password || warningFields.password ? "error" : "default"
+              }
             >
               <FormControl>
                 <Input
@@ -261,13 +369,23 @@ export default function SignUpPage() {
                     if (warningFields.password) {
                       setWarningFields((current) => ({ ...current, password: false }));
                     }
+                    if (fieldErrors.password) {
+                      setFieldErrors((current) => ({ ...current, password: undefined }));
+                    }
                   }}
                 />
               </FormControl>
             </FormField>
 
             <FormActions align="stretch">
-              <Button type="submit" variant="primary" size="md" loading={isLoading} className="w-full">
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                loading={isLoading}
+                loadingLabel="Creazione account…"
+                className="w-full"
+              >
                 Crea account
               </Button>
             </FormActions>
@@ -281,7 +399,7 @@ export default function SignUpPage() {
           </Form>
 
           <p className="auth-footer-text">
-            Hai già un account? <Link href="/sign-in">Accedi</Link>
+            Hai già un account? <Link href={signInHref}>Accedi</Link>
           </p>
         </>
       ) : (
@@ -296,7 +414,9 @@ export default function SignUpPage() {
           <FormField
             label="Codice di verifica"
             required
-            className={warningFields.code ? "auth-warning-field" : undefined}
+            helperText="Il codice scade dopo alcuni minuti. Se non lo vedi, prova a reinviarlo."
+            error={fieldErrors.code}
+            status={fieldErrors.code || warningFields.code ? "error" : "default"}
           >
             <OtpInput
               value={code}
@@ -305,15 +425,25 @@ export default function SignUpPage() {
                 if (warningFields.code) {
                   setWarningFields((current) => ({ ...current, code: false }));
                 }
+                if (fieldErrors.code) {
+                  setFieldErrors((current) => ({ ...current, code: undefined }));
+                }
               }}
               length={6}
-              autoFocus
+              requestInitialFocusOnDesktop
               aria-label="Codice di verifica email"
             />
           </FormField>
 
           <FormActions align="stretch">
-            <Button type="submit" variant="primary" size="md" loading={isLoading} className="w-full">
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              loading={isLoading}
+              loadingLabel="Verifica in corso…"
+              className="w-full"
+            >
               Verifica email
             </Button>
           </FormActions>

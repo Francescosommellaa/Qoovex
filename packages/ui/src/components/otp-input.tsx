@@ -8,7 +8,11 @@ export interface OtpInputProps {
   onChange: (value: string) => void;
   length?: number;
   disabled?: boolean;
-  autoFocus?: boolean;
+  /**
+   * Focus the first slot once on mount when the viewport is at least 768px wide.
+   * Avoids opening the software keyboard on phones (no DOM `autoFocus`).
+   */
+  requestInitialFocusOnDesktop?: boolean;
   className?: string;
   "aria-label"?: string;
 }
@@ -17,12 +21,14 @@ function sanitizeOtpValue(rawValue: string, length: number): string {
   return rawValue.replace(/[^\d]/g, "").slice(0, length);
 }
 
+const DESKTOP_MEDIA = "(min-width: 768px)";
+
 export function OtpInput({
   value,
   onChange,
   length = 6,
   disabled = false,
-  autoFocus = false,
+  requestInitialFocusOnDesktop = false,
   className,
   "aria-label": ariaLabel = "Codice di verifica",
 }: OtpInputProps) {
@@ -30,9 +36,14 @@ export function OtpInput({
   const normalizedValue = sanitizeOtpValue(value, length);
 
   React.useEffect(() => {
-    if (!autoFocus || disabled) return;
-    inputRefs.current[0]?.focus();
-  }, [autoFocus, disabled]);
+    if (!requestInitialFocusOnDesktop || disabled) return;
+    if (typeof window === "undefined") return;
+    if (!window.matchMedia(DESKTOP_MEDIA).matches) return;
+    const id = window.requestAnimationFrame(() => {
+      inputRefs.current[0]?.focus();
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [requestInitialFocusOnDesktop, disabled]);
 
   function focusInput(index: number) {
     const clampedIndex = Math.max(0, Math.min(length - 1, index));

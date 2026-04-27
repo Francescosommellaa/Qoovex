@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSignIn } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   Button,
@@ -15,10 +15,16 @@ import {
 } from "@qoovex/ui";
 import { AuthShell, OAuthButton } from "../ui";
 
+function isLikelyValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+}
+
 export default function SignInPage() {
   const { signIn, fetchStatus } = useSignIn();
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const didHydrateEmail = useRef(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,6 +38,15 @@ export default function SignInPage() {
   });
 
   const isLoading = fetchStatus === "fetching";
+
+  useEffect(() => {
+    if (didHydrateEmail.current) return;
+    const fromUrl = searchParams.get("email");
+    if (fromUrl) {
+      setEmail(decodeURIComponent(fromUrl));
+      didHydrateEmail.current = true;
+    }
+  }, [searchParams]);
 
   function notifyAuthFailure() {
     toast({
@@ -52,12 +67,25 @@ export default function SignInPage() {
     setWarningFields(nextWarnings);
 
     if (nextWarnings.email || nextWarnings.password) {
-      setIsCredentialsInvalid(true);
-      notifyAuthFailure();
+      toast({
+        variant: "warning",
+        title: "Campi mancanti",
+        description: "Inserisci email e password per continuare.",
+      });
       return;
     }
 
-    const { error } = await signIn.password({ emailAddress: email, password });
+    if (!isLikelyValidEmail(email)) {
+      setWarningFields({ email: true, password: false });
+      toast({
+        variant: "warning",
+        title: "Email non valida",
+        description: "Controlla il formato dell'indirizzo email.",
+      });
+      return;
+    }
+
+    const { error } = await signIn.password({ emailAddress: email.trim(), password });
 
     if (error) {
       setIsCredentialsInvalid(true);
@@ -66,19 +94,41 @@ export default function SignInPage() {
     }
 
     if (signIn.status === "complete") {
-      const { error: finalizeError } = await signIn.finalize();
+      const { error: finalizeError } = await signIn.finalize({
+        navigate: async ({ session, decorateUrl }) => {
+          if (session?.currentTask) {
+            toast({
+              variant: "warning",
+              title: "Azione richiesta",
+              description: "Completa i passaggi richiesti dal tuo account prima di continuare.",
+            });
+            return;
+          }
+          const url = decorateUrl("/dashboard");
+          if (url.startsWith("http")) {
+            window.location.href = url;
+          } else {
+            router.replace(url);
+          }
+        },
+      });
       if (finalizeError) {
         setIsCredentialsInvalid(true);
         notifyAuthFailure();
-        return;
       }
-      router.push("/");
     }
   }
 
+  const signUpHref =
+    email.trim() === ""
+      ? "/sign-up"
+      : `/sign-up?email=${encodeURIComponent(email.trim())}`;
+
   return (
-    <AuthShell title="Bentornato" subtitle="Accedi al tuo workspace">
-      {/* OAuth */}
+    <AuthShell
+      title="Accedi al workspace"
+      subtitle="Inserisci le tue credenziali o usa un accesso rapido"
+    >
       <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-3)" }}>
         <OAuthButton
           mode="signIn"
@@ -111,8 +161,7 @@ export default function SignInPage() {
         <FormField
           label="Email"
           required
-          status={isCredentialsInvalid ? "error" : "default"}
-          className={warningFields.email ? "auth-warning-field" : undefined}
+          status={warningFields.email || isCredentialsInvalid ? "error" : "default"}
         >
           <FormControl>
             <Input
@@ -134,8 +183,7 @@ export default function SignInPage() {
         <FormField
           label="Password"
           required
-          status={isCredentialsInvalid ? "error" : "default"}
-          className={warningFields.password ? "auth-warning-field" : undefined}
+          status={warningFields.password || isCredentialsInvalid ? "error" : "default"}
         >
           <FormControl>
             <Input
@@ -157,7 +205,11 @@ export default function SignInPage() {
 
         <div style={{ textAlign: "right", marginTop: "calc(var(--spacing-1) * -1)" }}>
           <Link
-            href="/forgot-password"
+            href={
+              email.trim()
+                ? `/forgot-password?email=${encodeURIComponent(email.trim())}`
+                : "/forgot-password"
+            }
             style={{
               fontSize: "var(--text-xs)",
               color: "var(--color-text-muted)",
@@ -174,6 +226,7 @@ export default function SignInPage() {
             variant="primary"
             size="md"
             loading={isLoading}
+            loadingLabel="Accesso in corso…"
             className="w-full"
           >
             Accedi
@@ -182,7 +235,7 @@ export default function SignInPage() {
       </Form>
 
       <p className="auth-footer-text">
-        Non hai un account? <Link href="/sign-up">Registrati</Link>
+        Non hai un account? <Link href={signUpHref}>Registrati</Link>
       </p>
     </AuthShell>
   );

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ToastProvider } from "@qoovex/ui";
 import "./globals.css";
@@ -21,7 +22,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="it">
         <body>
-          <ToastProvider position="top-right">{children}</ToastProvider>
+          <ToastProvider position="top-right">
+            <Suspense fallback={null}>{children}</Suspense>
+          </ToastProvider>
         </body>
       </html>
     </ClerkProvider>

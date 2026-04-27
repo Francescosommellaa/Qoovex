@@ -54,7 +54,7 @@ export function AuthShell({
           </button>
         )}
 
-        {children}
+        <div className="auth-form-scope">{children}</div>
       </div>
     </main>
   );
