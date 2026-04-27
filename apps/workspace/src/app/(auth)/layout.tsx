@@ -1,10 +1,26 @@
-// apps/workspace/src/app/(auth)/layout.tsx
-import type { ReactNode } from "react";
+import type { Metadata, Viewport } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
+import "./globals.css";
 
-export default function AuthLayout({ children }: { children: ReactNode }) {
+export const metadata: Metadata = {
+  title: "Qoovex Workspace",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="auth-shell">
-      {children}
-    </div>
+    <ClerkProvider>
+      <html lang="it">
+        <body>{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }
