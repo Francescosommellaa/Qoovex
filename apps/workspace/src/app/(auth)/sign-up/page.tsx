@@ -262,7 +262,7 @@ export default function SignUpPage() {
     >
       {step === "form" ? (
         <>
-          <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-3)" }}>
+          <div className="auth-oauth-stack">
             <OAuthButton
               mode="signUp"
               provider="google"
@@ -300,7 +300,6 @@ export default function SignUpPage() {
             <FormField
               label="Email"
               required
-              error={fieldErrors.email}
               status={
                 fieldErrors.email || warningFields.email ? "error" : "default"
               }
@@ -327,7 +326,6 @@ export default function SignUpPage() {
             <FormField
               label="Username"
               required
-              error={fieldErrors.username}
               status={
                 fieldErrors.username || warningFields.username ? "error" : "default"
               }
@@ -370,7 +368,6 @@ export default function SignUpPage() {
             <FormField
               label="Password"
               required
-              error={fieldErrors.password}
               status={
                 fieldErrors.password || warningFields.password ? "error" : "default"
               }
@@ -381,6 +378,7 @@ export default function SignUpPage() {
                   placeholder="Minimo 8 caratteri"
                   autoComplete="new-password"
                   showPasswordToggle
+                  showStrength
                   value={password}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setPassword(e.target.value);
@@ -433,7 +431,6 @@ export default function SignUpPage() {
             label="Codice di verifica"
             required
             helperText="Il codice scade dopo alcuni minuti. Se non lo vedi, prova a reinviarlo."
-            error={fieldErrors.code}
             status={fieldErrors.code || warningFields.code ? "error" : "default"}
           >
             <OtpInput
@@ -471,14 +468,7 @@ export default function SignUpPage() {
             <button
               type="button"
               onClick={handleResend}
-              style={{
-                background: "none",
-                border: "none",
-                padding: 0,
-                color: "var(--color-primary)",
-                cursor: "pointer",
-                fontSize: "inherit",
-              }}
+              className="auth-inline-link-button"
             >
               Invialo di nuovo
             </button>

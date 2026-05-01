@@ -3,7 +3,6 @@
 import { useSignUp, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { WarningCircle } from "@phosphor-icons/react";
 import { Button, Form, FormActions, FormControl, FormField, Input, useToast } from "@qoovex/ui";
 import { bootstrapUser } from "@shared/actions/bootstrap-user";
 import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
@@ -16,7 +15,6 @@ export default function CompleteProfilePage() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [isUsernameWarning, setIsUsernameWarning] = useState(false);
 
   useEffect(() => {
@@ -55,12 +53,10 @@ export default function CompleteProfilePage() {
         title: "Controlla i campi evidenziati",
         description: "Lo username deve avere almeno 3 caratteri.",
       });
-      setError("Username troppo corto. Minimo 3 caratteri.");
       return;
     }
 
     setIsSaving(true);
-    setError(null);
 
     try {
       if (signUp.status === "missing_requirements") {
@@ -68,23 +64,28 @@ export default function CompleteProfilePage() {
           username: normalizedUsername,
         });
         if (updateError) {
-          setError(
-            getSafeAuthErrorMessage(
+          setIsUsernameWarning(true);
+          toast({
+            variant: "error",
+            title: "Username non salvato",
+            description: getSafeAuthErrorMessage(
               updateError,
               "Impossibile salvare lo username.",
             ),
-          );
+          });
           return;
         }
 
         const { error: finalizeError } = await signUp.finalize();
         if (finalizeError) {
-          setError(
-            getSafeAuthErrorMessage(
+          toast({
+            variant: "error",
+            title: "Registrazione incompleta",
+            description: getSafeAuthErrorMessage(
               finalizeError,
               "Impossibile completare la registrazione OAuth.",
             ),
-          );
+          });
           return;
         }
       } else {
@@ -95,12 +96,14 @@ export default function CompleteProfilePage() {
       await bootstrapUser();
       router.replace("/");
     } catch (unknownError: unknown) {
-      setError(
-        getSafeAuthErrorMessage(
+      toast({
+        variant: "error",
+        title: "Profilo non salvato",
+        description: getSafeAuthErrorMessage(
           unknownError,
           "Impossibile salvare lo username. Riprova.",
         ),
-      );
+      });
     } finally {
       setIsSaving(false);
     }
@@ -114,13 +117,6 @@ export default function CompleteProfilePage() {
       subtitle="Scegli il tuo username per terminare l'accesso"
       steps={{ current: 2, total: 2 }}
     >
-      {error && (
-        <div className="auth-error-banner" role="alert">
-          <WarningCircle size={16} weight="bold" aria-hidden="true" />
-          {error}
-        </div>
-      )}
-
       <Form
         variant="plain"
         layout="stack"

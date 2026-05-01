@@ -278,7 +278,6 @@ export default function ForgotPasswordPage() {
                 label="Email"
                 required
                 helperText="Useremo solo questo indirizzo per inviarti il codice di recupero."
-                error={fieldErrors.email}
                 status={
                   fieldErrors.email || warningFields.email ? "error" : "default"
                 }
@@ -329,7 +328,6 @@ export default function ForgotPasswordPage() {
                 label="Codice di verifica"
                 required
                 helperText="Incolla il codice dalla mail oppure digitacelo. Se non arriva, attendi qualche minuto o reinvia."
-                error={fieldErrors.code}
                 status={fieldErrors.code || warningFields.code ? "error" : "default"}
               >
                 <OtpInput
@@ -365,14 +363,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="button"
                   onClick={handleResendCode}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    padding: 0,
-                    color: "var(--color-primary)",
-                    cursor: "pointer",
-                    fontSize: "inherit",
-                  }}
+                  className="auth-inline-link-button"
                 >
                   Invia di nuovo
                 </button>
@@ -393,7 +384,6 @@ export default function ForgotPasswordPage() {
                 label="Nuova password"
                 required
                 helperText="Suggerimento: combina maiuscole, minuscole e numeri per una password più sicura."
-                error={fieldErrors.newPassword}
                 status={
                   fieldErrors.newPassword || warningFields.newPassword ? "error" : "default"
                 }

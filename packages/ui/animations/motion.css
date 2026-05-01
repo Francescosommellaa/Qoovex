@@ -1,0 +1,65 @@
+@keyframes qv-motion-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes qv-motion-soft-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.qv-motion-fade-up {
+  animation: qv-motion-fade-up var(--motion-duration-base, 200ms)
+    var(--ease-qoovex, cubic-bezier(0.2, 0, 0, 1)) both;
+}
+
+.qv-motion-soft-scale {
+  animation: qv-motion-soft-scale var(--motion-duration-base, 200ms)
+    var(--ease-qoovex, cubic-bezier(0.2, 0, 0, 1)) both;
+}
+
+.qv-motion-interactive {
+  transition:
+    background-color var(--transition-fast, 150ms ease),
+    border-color var(--transition-fast, 150ms ease),
+    color var(--transition-fast, 150ms ease),
+    box-shadow var(--transition-fast, 150ms ease),
+    opacity var(--transition-fast, 150ms ease),
+    transform var(--transition-fast, 150ms ease);
+}
+
+.qv-motion-interactive:hover {
+  transform: translateY(-1px);
+}
+
+.qv-motion-interactive:active {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qv-motion-fade-up,
+  .qv-motion-soft-scale {
+    animation: none;
+  }
+
+  .qv-motion-interactive,
+  .qv-motion-interactive:hover,
+  .qv-motion-interactive:active {
+    transition: none;
+    transform: none;
+  }
+}

@@ -137,7 +137,7 @@ export default function SignInPage() {
       title="Accedi al workspace"
       subtitle="Inserisci le tue credenziali o usa un accesso rapido"
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-3)" }}>
+      <div className="auth-oauth-stack">
         <OAuthButton
           mode="signIn"
           provider="google"
@@ -211,18 +211,14 @@ export default function SignInPage() {
           </FormControl>
         </FormField>
 
-        <div style={{ textAlign: "right", marginTop: "calc(var(--spacing-1) * -1)" }}>
+        <div className="auth-inline-link-row">
           <Link
             href={
               email.trim()
                 ? `/forgot-password?email=${encodeURIComponent(email.trim())}`
                 : "/forgot-password"
             }
-            style={{
-              fontSize: "var(--text-xs)",
-              color: "var(--color-text-muted)",
-              textDecoration: "none",
-            }}
+            className="auth-muted-link"
           >
             Password dimenticata?
           </Link>

@@ -99,7 +99,7 @@ export async function sendClerkEmailWithResend(rawData: unknown) {
   }
 
   const resend = new Resend(apiKey);
-  return await resend.emails.send({
+  const result = await resend.emails.send({
     from,
     to,
     subject: getEmailSubject(emailData),
@@ -107,4 +107,25 @@ export async function sendClerkEmailWithResend(rawData: unknown) {
     text: getEmailText(emailData),
     replyTo: process.env.RESEND_REPLY_TO_EMAIL,
   });
+
+  if (result.error) {
+    console.error("[clerk-email] Resend rejected email", {
+      message: result.error.message,
+      name: result.error.name,
+      to,
+      from,
+      slug: emailData.slug,
+    });
+
+    throw new Error(result.error.message);
+  }
+
+  console.info("[clerk-email] Resend accepted email", {
+    id: result.data?.id,
+    to,
+    from,
+    slug: emailData.slug,
+  });
+
+  return result;
 }

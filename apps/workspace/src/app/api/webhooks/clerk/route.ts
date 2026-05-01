@@ -155,8 +155,17 @@ async function handleUserDeleted(event: ClerkEvent) {
 }
 
 async function handleEmailCreated(event: ClerkEvent) {
-  await sendClerkEmailWithResend(event.data);
-  return NextResponse.json({ ok: true });
+  try {
+    await sendClerkEmailWithResend(event.data);
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("[clerk-webhook] email delivery failed", {
+      eventType: event.type,
+      message: error instanceof Error ? error.message : "Unknown email error",
+    });
+
+    return NextResponse.json({ error: "Email delivery failed" }, { status: 502 });
+  }
 }
 
 export async function POST(req: Request) {

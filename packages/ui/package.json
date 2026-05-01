@@ -5,6 +5,7 @@
   "exports": {
     "./styles/tokens": "./styles/tokens.css",
     "./styles/base": "./styles/base.css",
+    "./animations/motion": "./animations/motion.css",
     ".": {
       "types": "./src/index.ts",
       "import": "./src/index.ts",
