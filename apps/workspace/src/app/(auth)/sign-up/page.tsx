@@ -37,6 +37,7 @@ function mapCreateErrorToFields(message: string): FieldErrors {
 }
 
 export default function SignUpPage() {
+  const RESEND_COOLDOWN_SECONDS = 45;
   const { signUp, fetchStatus } = useSignUp();
   const { toast } = useToast();
   const router = useRouter();
@@ -50,6 +51,9 @@ export default function SignUpPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
+  const [resendAvailableAt, setResendAvailableAt] = useState<number | null>(null);
+  const [nowMs, setNowMs] = useState(Date.now());
+  const [isResending, setIsResending] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [warningFields, setWarningFields] = useState<{
     email: boolean;
@@ -72,6 +76,26 @@ export default function SignUpPage() {
       didHydrateEmail.current = true;
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    if (!resendAvailableAt) return;
+    const intervalId = window.setInterval(() => {
+      setNowMs(Date.now());
+    }, 1000);
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [resendAvailableAt]);
+
+  function startResendCooldown() {
+    setNowMs(Date.now());
+    setResendAvailableAt(Date.now() + RESEND_COOLDOWN_SECONDS * 1000);
+  }
+
+  function getResendCountdown(): number {
+    if (!resendAvailableAt) return 0;
+    return Math.max(0, Math.ceil((resendAvailableAt - nowMs) / 1000));
+  }
 
   function getNormalizedPhoneNumber(): string | undefined {
     const normalizedPhoneDigits = phoneNumber.replace(/[^\d]/g, "");
@@ -105,10 +129,11 @@ export default function SignUpPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setFieldErrors({});
+    const normalizedUsername = username.trim().toLowerCase();
 
     const nextWarnings = {
       email: email.trim() === "",
-      username: username.trim() === "",
+      username: normalizedUsername === "",
       password: password.trim() === "",
       code: false,
     };
@@ -134,7 +159,7 @@ export default function SignUpPage() {
 
     const { error: createError } = await signUp.create({
       emailAddress: email,
-      username,
+      username: normalizedUsername,
       password,
     });
     if (createError) {
@@ -167,6 +192,7 @@ export default function SignUpPage() {
     }
 
     setStep("verify");
+    startResendCooldown();
   }
 
   async function handleVerify(e: React.FormEvent) {
@@ -226,7 +252,11 @@ export default function SignUpPage() {
   }
 
   async function handleResend() {
+    const countdown = getResendCountdown();
+    if (countdown > 0 || isResending) return;
+
     setFieldErrors((current) => ({ ...current, code: undefined }));
+    setIsResending(true);
 
     const { error: resendError } = await signUp.verifications.sendEmailCode();
     if (resendError) {
@@ -235,13 +265,16 @@ export default function SignUpPage() {
         "Impossibile reinviare il codice in questo momento.",
       );
       toast({ variant: "error", title: "Reinvio non riuscito", description: msg });
+      setIsResending(false);
       return;
     }
+    startResendCooldown();
     toast({
       variant: "success",
       title: "Codice reinviato",
-      description: "Controlla di nuovo la posta in arrivo e lo spam.",
+      description: `Controlla di nuovo la posta in arrivo e lo spam su ${email.trim()}.`,
     });
+    setIsResending(false);
   }
 
   const signInHref =
@@ -255,7 +288,7 @@ export default function SignUpPage() {
       subtitle={
         step === "form"
           ? "Inizia gratis in pochi secondi"
-          : "Controlla la posta in arrivo e inserisci il codice a 6 cifre (controlla anche lo spam)."
+          : `Stiamo inviando il codice a ${email.trim()}. Controlla la posta in arrivo e lo spam.`
       }
       steps={{ current: step === "form" ? 1 : 2, total: 2 }}
       onBack={step === "verify" ? () => setStep("form") : undefined}
@@ -335,9 +368,11 @@ export default function SignUpPage() {
                   type="text"
                   placeholder="nomechef"
                   autoComplete="username"
+                  autoCapitalize="none"
+                  autoCorrect="off"
                   value={username}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setUsername(e.target.value);
+                    setUsername(e.target.value.toLowerCase().replace(/\s+/g, ""));
                     if (warningFields.username) {
                       setWarningFields((current) => ({ ...current, username: false }));
                     }
@@ -468,9 +503,14 @@ export default function SignUpPage() {
             <button
               type="button"
               onClick={handleResend}
+              disabled={getResendCountdown() > 0 || isResending}
               className="auth-inline-link-button"
             >
-              Invialo di nuovo
+              {isResending
+                ? "Reinvio in corso..."
+                : getResendCountdown() > 0
+                  ? `Invia di nuovo tra ${getResendCountdown()}s`
+                  : "Invialo di nuovo"}
             </button>
           </p>
         </Form>
