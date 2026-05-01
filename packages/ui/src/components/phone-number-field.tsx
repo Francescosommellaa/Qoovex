@@ -75,36 +75,32 @@ export function PhoneNumberField({
       disabled={disabled}
       className={cn("qv-phone-number-field", className)}
     >
-      <div
-        className={cn(
-          "qv-phone-number-field__row",
-          "grid grid-cols-[minmax(0,10rem)_minmax(0,1fr)] items-stretch gap-(--spacing-2)",
-        )}
-      >
-        <Select
-          options={regionOptions}
-          value={regionCode}
-          onChange={onRegionCodeChange}
-          placeholder={selectPlaceholder}
-          disabled={disabled}
-          className={cn(
-            "qv-phone-number-field__region min-w-0 self-stretch",
-            selectClassName,
-          )}
-        />
-        <Input
-          type="tel"
-          placeholder={inputPlaceholder}
-          autoComplete={inputAutoComplete}
-          inputMode="numeric"
-          pattern="[0-9]*"
-          disabled={disabled}
-          value={nationalNumber}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleNationalNumberChange(e.target.value)
-          }
-          className={cn("qv-phone-number-field__number min-w-0", inputClassName)}
-        />
+      <div className="flex w-full items-stretch gap-(--spacing-2)">
+        <div className="w-40 shrink-0">
+          <Select
+            options={regionOptions}
+            value={regionCode}
+            onChange={onRegionCodeChange}
+            placeholder={selectPlaceholder}
+            disabled={disabled}
+            className={cn("w-full", selectClassName)}
+          />
+        </div>
+        <div className="min-w-0 flex-1">
+          <Input
+            type="tel"
+            placeholder={inputPlaceholder}
+            autoComplete={inputAutoComplete}
+            inputMode="numeric"
+            pattern="[0-9]*"
+            disabled={disabled}
+            value={nationalNumber}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleNationalNumberChange(e.target.value)
+            }
+            className={cn("w-full", inputClassName)}
+          />
+        </div>
       </div>
     </FormField>
   );

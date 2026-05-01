@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 interface AuthShellProps {
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   steps?: { current: number; total: number };
   onBack?: () => void;
   children: ReactNode;

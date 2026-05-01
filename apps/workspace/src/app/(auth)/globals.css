@@ -62,6 +62,11 @@
   line-height: 1.5;
 }
 
+.auth-email-highlight {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
 .auth-divider {
   display: flex;
   align-items: center;
@@ -178,6 +183,21 @@
 .auth-inline-link-button:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.auth-inline-link-button:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  color: var(--color-text-faint);
+  opacity: 0.7;
+}
+
+.auth-inline-countdown {
+  display: inline-block;
+  min-width: 8ch;
+  text-align: left;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .auth-error-banner {

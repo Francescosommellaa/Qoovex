@@ -281,6 +281,8 @@ export default function SignUpPage() {
     email.trim() === ""
       ? "/sign-in"
       : `/sign-in?email=${encodeURIComponent(email.trim())}`;
+  const resendCountdown = getResendCountdown();
+  const isResendDisabled = resendCountdown > 0 || isResending;
 
   return (
     <AuthShell
@@ -288,7 +290,13 @@ export default function SignUpPage() {
       subtitle={
         step === "form"
           ? "Inizia gratis in pochi secondi"
-          : `Stiamo inviando il codice a ${email.trim()}. Controlla la posta in arrivo e lo spam.`
+          : (
+            <>
+              Stiamo inviando il codice a{" "}
+              <span className="auth-email-highlight">{email.trim()}</span>. Controlla la
+              posta in arrivo e lo spam.
+            </>
+          )
       }
       steps={{ current: step === "form" ? 1 : 2, total: 2 }}
       onBack={step === "verify" ? () => setStep("form") : undefined}
@@ -503,15 +511,14 @@ export default function SignUpPage() {
             <button
               type="button"
               onClick={handleResend}
-              disabled={getResendCountdown() > 0 || isResending}
+              disabled={isResendDisabled}
               className="auth-inline-link-button"
             >
-              {isResending
-                ? "Reinvio in corso..."
-                : getResendCountdown() > 0
-                  ? `Invia di nuovo tra ${getResendCountdown()}s`
-                  : "Invialo di nuovo"}
+              {isResending ? "Reinvio in corso..." : "Invia di nuovo"}
             </button>
+            <span className="auth-inline-countdown" aria-live="polite" aria-atomic="true">
+              {resendCountdown > 0 ? ` tra ${resendCountdown}s` : "\u00a0"}
+            </span>
           </p>
         </Form>
       )}
