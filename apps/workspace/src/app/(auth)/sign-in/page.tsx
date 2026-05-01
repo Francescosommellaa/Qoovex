@@ -19,36 +19,32 @@ import {
 } from "@shared/lib/auth-error";
 import { AuthShell, OAuthButton } from "../ui";
 
-function isLikelyValidEmail(value: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-}
-
 export default function SignInPage() {
   const { signIn, fetchStatus } = useSignIn();
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const didHydrateEmail = useRef(false);
+  const didHydrateIdentifier = useRef(false);
 
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [isCredentialsInvalid, setIsCredentialsInvalid] = useState(false);
   const [warningFields, setWarningFields] = useState<{
-    email: boolean;
+    identifier: boolean;
     password: boolean;
   }>({
-    email: false,
+    identifier: false,
     password: false,
   });
 
   const isLoading = fetchStatus === "fetching";
 
   useEffect(() => {
-    if (didHydrateEmail.current) return;
+    if (didHydrateIdentifier.current) return;
     const fromUrl = searchParams.get("email");
     if (fromUrl) {
-      setEmail(decodeURIComponent(fromUrl));
-      didHydrateEmail.current = true;
+      setIdentifier(decodeURIComponent(fromUrl));
+      didHydrateIdentifier.current = true;
     }
   }, [searchParams]);
 
@@ -65,31 +61,24 @@ export default function SignInPage() {
     setIsCredentialsInvalid(false);
 
     const nextWarnings = {
-      email: email.trim() === "",
+      identifier: identifier.trim() === "",
       password: password.trim() === "",
     };
     setWarningFields(nextWarnings);
 
-    if (nextWarnings.email || nextWarnings.password) {
+    if (nextWarnings.identifier || nextWarnings.password) {
       toast({
         variant: "warning",
         title: "Campi mancanti",
-        description: "Inserisci email e password per continuare.",
+        description: "Inserisci email o username e password per continuare.",
       });
       return;
     }
 
-    if (!isLikelyValidEmail(email)) {
-      setWarningFields({ email: true, password: false });
-      toast({
-        variant: "warning",
-        title: "Email non valida",
-        description: "Controlla il formato dell'indirizzo email.",
-      });
-      return;
-    }
-
-    const { error } = await signIn.password({ emailAddress: email.trim(), password });
+    const { error } = await signIn.create({
+      identifier: identifier.trim(),
+      password,
+    });
 
     if (error) {
       setIsCredentialsInvalid(true);
@@ -128,9 +117,9 @@ export default function SignInPage() {
   }
 
   const signUpHref =
-    email.trim() === ""
+    identifier.trim() === ""
       ? "/sign-up"
-      : `/sign-up?email=${encodeURIComponent(email.trim())}`;
+      : `/sign-up?email=${encodeURIComponent(identifier.trim())}`;
 
   return (
     <AuthShell
@@ -167,21 +156,21 @@ export default function SignInPage() {
         onSubmit={handleSubmit}
       >
         <FormField
-          label="Email"
+          label="Email o username"
           required
-          status={warningFields.email || isCredentialsInvalid ? "error" : "default"}
+          status={warningFields.identifier || isCredentialsInvalid ? "error" : "default"}
         >
           <FormControl>
             <Input
-              type="email"
-              placeholder="nome@esempio.com"
-              autoComplete="email"
-              value={email}
+              type="text"
+              placeholder="nome@esempio.com o nomechef"
+              autoComplete="username"
+              value={identifier}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setEmail(e.target.value);
+                setIdentifier(e.target.value);
                 if (isCredentialsInvalid) setIsCredentialsInvalid(false);
-                if (warningFields.email) {
-                  setWarningFields((current) => ({ ...current, email: false }));
+                if (warningFields.identifier) {
+                  setWarningFields((current) => ({ ...current, identifier: false }));
                 }
               }}
             />
@@ -214,8 +203,8 @@ export default function SignInPage() {
         <div className="auth-inline-link-row">
           <Link
             href={
-              email.trim()
-                ? `/forgot-password?email=${encodeURIComponent(email.trim())}`
+              identifier.trim()
+                ? `/forgot-password?email=${encodeURIComponent(identifier.trim())}`
                 : "/forgot-password"
             }
             className="auth-muted-link"
