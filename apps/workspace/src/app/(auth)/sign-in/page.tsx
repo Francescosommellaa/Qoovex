@@ -13,6 +13,10 @@ import {
   FormActions,
   useToast,
 } from "@qoovex/ui";
+import {
+  getGenericAuthFailureMessage,
+  getSafeAuthErrorMessage,
+} from "@shared/lib/auth-error";
 import { AuthShell, OAuthButton } from "../ui";
 
 function isLikelyValidEmail(value: string): boolean {
@@ -52,7 +56,7 @@ export default function SignInPage() {
     toast({
       variant: "error",
       title: "Accesso non riuscito",
-      description: "Credenziali non valide oppure account non disponibile.",
+      description: getGenericAuthFailureMessage(),
     });
   }
 
@@ -114,7 +118,11 @@ export default function SignInPage() {
       });
       if (finalizeError) {
         setIsCredentialsInvalid(true);
-        notifyAuthFailure();
+        toast({
+          variant: "error",
+          title: "Accesso non riuscito",
+          description: getSafeAuthErrorMessage(finalizeError),
+        });
       }
     }
   }

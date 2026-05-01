@@ -3,6 +3,7 @@
 import { useSignIn, useSignUp } from "@clerk/nextjs";
 import Image from "next/image";
 import { Button } from "@qoovex/ui";
+import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 
 interface OAuthButtonProps {
   mode: "signIn" | "signUp";
@@ -59,11 +60,13 @@ export function OAuthButton({
         const { error } = await signIn.sso({
           strategy: config.strategy,
           redirectUrl: `${window.location.origin}/sso-callback`,
-          redirectCallbackUrl: "/",
+          redirectCallbackUrl: "/complete-profile",
         });
 
         if (error) {
-          onError?.(error.message ?? "Accesso OAuth non riuscito.");
+          onError?.(
+            getSafeAuthErrorMessage(error, "Accesso OAuth non riuscito."),
+          );
         }
         return;
       }
@@ -76,14 +79,17 @@ export function OAuthButton({
       });
 
       if (error) {
-        onError?.(error.message ?? "Registrazione OAuth non riuscita.");
+        onError?.(
+          getSafeAuthErrorMessage(error, "Registrazione OAuth non riuscita."),
+        );
       }
     } catch (runtimeError: unknown) {
-      const message =
-        runtimeError instanceof Error
-          ? runtimeError.message
-          : "Errore inatteso durante OAuth. Riprova.";
-      onError?.(message);
+      onError?.(
+        getSafeAuthErrorMessage(
+          runtimeError,
+          "Errore inatteso durante OAuth. Riprova.",
+        ),
+      );
     }
   }
 

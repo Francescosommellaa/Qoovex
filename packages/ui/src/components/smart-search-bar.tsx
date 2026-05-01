@@ -419,7 +419,7 @@ export const SmartSearchBar = React.forwardRef<
           type="text"
           role="searchbox"
           aria-autocomplete="list"
-          aria-controls={groups.length > 0 ? listboxId : undefined}
+          aria-controls={showDropdown && groups.length > 0 ? listboxId : undefined}
           aria-activedescendant={
             activeIndex >= 0 && results[activeIndex]
               ? getOptionId(activeIndex)

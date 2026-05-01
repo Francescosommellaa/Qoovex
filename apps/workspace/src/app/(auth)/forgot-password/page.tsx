@@ -14,6 +14,7 @@ import {
   FormActions,
   useToast,
 } from "@qoovex/ui";
+import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 import { AuthShell } from "../ui";
 
 type Step = "email" | "verify" | "new-password";
@@ -131,7 +132,10 @@ export default function ForgotPasswordPage() {
 
     const { error } = await signIn.resetPasswordEmailCode.verifyCode({ code });
     if (error) {
-      const msg = error.message ?? "Codice non valido o scaduto. Richiedine uno nuovo dalla mail.";
+      const msg = getSafeAuthErrorMessage(
+        error,
+        "Codice non valido o scaduto. Richiedine uno nuovo dalla mail.",
+      );
       setFieldErrors({ code: msg });
       toast({ variant: "error", title: "Codice non accettato", description: msg });
       return;
@@ -161,7 +165,10 @@ export default function ForgotPasswordPage() {
     });
 
     if (error) {
-      const msg = error.message ?? "Non è stato possibile aggiornare la password. Riprova.";
+      const msg = getSafeAuthErrorMessage(
+        error,
+        "Non e stato possibile aggiornare la password. Riprova.",
+      );
       setFieldErrors({ newPassword: msg });
       toast({ variant: "error", title: "Aggiornamento non riuscito", description: msg });
       return;
@@ -187,8 +194,10 @@ export default function ForgotPasswordPage() {
         },
       });
       if (finalizeError) {
-        const msg =
-          finalizeError.message ?? "Sessione non completata. Prova ad accedere dalla pagina di login.";
+        const msg = getSafeAuthErrorMessage(
+          finalizeError,
+          "Sessione non completata. Prova ad accedere dalla pagina di login.",
+        );
         toast({ variant: "error", title: "Accesso", description: msg });
       }
     } else {

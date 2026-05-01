@@ -6,12 +6,20 @@ const isPublicRoute = createRouteMatcher([
   "/forgot-password(.*)",
   "/sso-callback(.*)",
   "/complete-profile(.*)",
+  "/api/webhooks/clerk(.*)",
 ]);
 
-export default clerkMiddleware((auth, req) => {
+const authorizedParties = [
+  "http://localhost:3000",
+  "https://app.qoovex.com",
+];
+
+export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
-    auth.protect();
+    await auth.protect();
   }
+}, {
+  authorizedParties,
 });
 
 export const config = {

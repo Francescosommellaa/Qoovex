@@ -1,10 +1,6 @@
-import { auth } from "@clerk/nextjs/server";
-import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { ClerkProvider } from "@clerk/nextjs";
 import type { ReactNode } from "react";
 
-export default async function DashboardLayout({ children }: { children: ReactNode }) {
-  const { userId } = await auth();
-  if (userId) await bootstrapUser();
-
-  return <>{children}</>;
+export default function DashboardLayout({ children }: { children: ReactNode }) {
+  return <ClerkProvider>{children}</ClerkProvider>;
 }

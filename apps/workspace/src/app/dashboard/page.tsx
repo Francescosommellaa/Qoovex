@@ -1,24 +1,8 @@
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@qoovex/db";
+import { bootstrapUser } from "@shared/actions/bootstrap-user";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
-  const { userId } = await auth();
-  if (!userId) {
-    redirect("/sign-in");
-  }
-
-  const user = await db.user.findUnique({
-    where: { clerkId: userId },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      plan: true,
-      createdAt: true,
-    },
-  });
-
+  const user = await bootstrapUser();
   if (!user) {
     redirect("/sign-in");
   }

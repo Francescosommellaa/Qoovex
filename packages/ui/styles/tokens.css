@@ -17,7 +17,7 @@
 
   --color-text: oklch(0.94 0 0);
   --color-text-muted: oklch(0.94 0 0 / 0.7);
-  --color-text-faint: oklch(0.94 0 0 / 0.48);
+  --color-text-faint: oklch(0.94 0 0 / 0.56);
   --color-text-inverse: oklch(0.1 0 0);
 
   --color-primary: oklch(0.42 0.05 240);
@@ -244,7 +244,7 @@
   --select-item-radius: var(--radius-md);
   /* Select — multi tag */
   --select-trigger-py: var(--spacing-1);
-  --select-tag-min-height: 1.25rem;
+  --select-tag-min-height: 1.5rem;
   --select-tag-radius: var(--radius-full);
   --select-tag-px: 0.45rem;
   --select-tag-py: 0.0625rem;

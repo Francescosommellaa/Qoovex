@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { WarningCircle } from "@phosphor-icons/react";
 import { Button, Form, FormActions, FormControl, FormField, Input, useToast } from "@qoovex/ui";
 import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 import { AuthShell } from "../ui";
 
 export default function CompleteProfilePage() {
@@ -67,15 +68,22 @@ export default function CompleteProfilePage() {
           username: normalizedUsername,
         });
         if (updateError) {
-          setError(updateError.message ?? "Impossibile salvare lo username.");
+          setError(
+            getSafeAuthErrorMessage(
+              updateError,
+              "Impossibile salvare lo username.",
+            ),
+          );
           return;
         }
 
         const { error: finalizeError } = await signUp.finalize();
         if (finalizeError) {
           setError(
-            finalizeError.message ??
+            getSafeAuthErrorMessage(
+              finalizeError,
               "Impossibile completare la registrazione OAuth.",
+            ),
           );
           return;
         }
@@ -87,11 +95,12 @@ export default function CompleteProfilePage() {
       await bootstrapUser();
       router.replace("/");
     } catch (unknownError: unknown) {
-      const message =
-        unknownError instanceof Error
-          ? unknownError.message
-          : "Impossibile salvare lo username. Riprova.";
-      setError(message);
+      setError(
+        getSafeAuthErrorMessage(
+          unknownError,
+          "Impossibile salvare lo username. Riprova.",
+        ),
+      );
     } finally {
       setIsSaving(false);
     }

@@ -20,13 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="it">
-        <body>
-          <ToastProvider position="top-right">
-            <Suspense fallback={null}>{children}</Suspense>
-          </ToastProvider>
-        </body>
-      </html>
+      <ToastProvider position="top-right">
+        <Suspense fallback={null}>{children}</Suspense>
+      </ToastProvider>
     </ClerkProvider>
   );
 }

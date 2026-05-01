@@ -16,6 +16,7 @@ import {
   useToast,
 } from "@qoovex/ui";
 import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 import { AuthShell, OAuthButton } from "../ui";
 
 type Step = "form" | "verify";
@@ -81,14 +82,24 @@ export default function SignUpPage() {
   async function finalizeAndEnterApp() {
     const { error: finalizeError } = await signUp.finalize();
     if (finalizeError) {
-      const msg =
-        finalizeError.message ??
-        "Errore nel completare la registrazione. Riprova o contatta il supporto.";
+      const msg = getSafeAuthErrorMessage(
+        finalizeError,
+        "Errore nel completare la registrazione. Riprova o contatta il supporto.",
+      );
       toast({ variant: "error", title: "Completamento fallito", description: msg });
       return;
     }
-    await bootstrapUser({ phoneNumber: getNormalizedPhoneNumber() });
-    router.replace("/dashboard");
+    try {
+      await bootstrapUser({ phoneNumber: getNormalizedPhoneNumber() });
+      router.replace("/dashboard");
+    } catch {
+      toast({
+        variant: "error",
+        title: "Profilo non sincronizzato",
+        description:
+          "Account creato, ma non siamo riusciti a preparare il profilo. Riprova l'accesso tra poco.",
+      });
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -127,9 +138,10 @@ export default function SignUpPage() {
       password,
     });
     if (createError) {
-      const msg =
-        createError.message ??
-        "Non è stato possibile creare l'account. Verifica i dati e riprova.";
+      const msg = getSafeAuthErrorMessage(
+        createError,
+        "Non e stato possibile creare l'account. Verifica i dati e riprova.",
+      );
       const mapped = mapCreateErrorToFields(msg);
       setFieldErrors(Object.keys(mapped).length > 0 ? mapped : {});
       toast({
@@ -142,9 +154,10 @@ export default function SignUpPage() {
 
     const { error: prepareError } = await signUp.verifications.sendEmailCode();
     if (prepareError) {
-      const msg =
-        prepareError.message ??
-        "Non siamo riusciti a inviare il codice. Riprova tra qualche istante.";
+      const msg = getSafeAuthErrorMessage(
+        prepareError,
+        "Non siamo riusciti a inviare il codice. Riprova tra qualche istante.",
+      );
       toast({
         variant: "error",
         title: "Invio codice non riuscito",
@@ -189,8 +202,10 @@ export default function SignUpPage() {
         });
         return;
       }
-      const display =
-        msg || "Il codice non è valido o è scaduto. Richiedine uno nuovo dalla mail.";
+      const display = getSafeAuthErrorMessage(
+        attemptError,
+        "Il codice non e valido o e scaduto. Richiedine uno nuovo dalla mail.",
+      );
       setFieldErrors({ code: display });
       toast({
         variant: "error",
@@ -215,7 +230,10 @@ export default function SignUpPage() {
 
     const { error: resendError } = await signUp.verifications.sendEmailCode();
     if (resendError) {
-      const msg = resendError.message ?? "Impossibile reinviare il codice in questo momento.";
+      const msg = getSafeAuthErrorMessage(
+        resendError,
+        "Impossibile reinviare il codice in questo momento.",
+      );
       toast({ variant: "error", title: "Reinvio non riuscito", description: msg });
       return;
     }
