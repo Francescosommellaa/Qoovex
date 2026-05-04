@@ -48,15 +48,11 @@ export function getSafeAuthErrorMessage(
 
   if (
     fingerprint.includes("username") &&
-    (fingerprint.includes("not enabled") ||
-      fingerprint.includes("not allowed") ||
-      fingerprint.includes("unsupported") ||
-      fingerprint.includes("strategy"))
+    (fingerprint.includes("taken") ||
+      fingerprint.includes("in use") ||
+      fingerprint.includes("already") ||
+      fingerprint.includes("exists"))
   ) {
-    return "Login via username non disponibile su questo ambiente. Usa email e password oppure abilita lo username come identificatore in Clerk.";
-  }
-
-  if (fingerprint.includes("username")) {
     return "Scegli uno username valido e non gia in uso.";
   }
 

@@ -13,13 +13,12 @@ import {
   FormActions,
   useToast,
 } from "@qoovex/ui";
+import { resolveEmailForUsername } from "@shared/actions/resolve-email-for-username";
+import { getGenericAuthFailureMessage } from "@shared/lib/auth-error";
 import {
   formatAuthIdentifierInput,
   normalizeAuthIdentifierForClerk,
 } from "@shared/lib/auth-identifier";
-import {
-  getSafeAuthErrorMessage,
-} from "@shared/lib/auth-error";
 import { AuthShell, OAuthButton } from "../ui";
 
 export default function SignInPage() {
@@ -51,19 +50,11 @@ export default function SignInPage() {
     }
   }, [searchParams]);
 
-  function notifyAuthFailure(error?: unknown, normalizedIdentifier?: string) {
-    const usedUsername =
-      typeof normalizedIdentifier === "string" &&
-      normalizedIdentifier !== "" &&
-      !normalizedIdentifier.includes("@");
-    const fallback = usedUsername
-      ? "Username o password non validi. Se lo username e corretto, prova con l'email: il login via username potrebbe non essere abilitato su Clerk."
-      : "Credenziali non valide oppure account non disponibile.";
-
+  function notifyAuthFailure() {
     toast({
       variant: "error",
       title: "Accesso non riuscito",
-      description: error ? getSafeAuthErrorMessage(error, fallback) : fallback,
+      description: getGenericAuthFailureMessage(),
     });
   }
 
@@ -88,14 +79,28 @@ export default function SignInPage() {
       return;
     }
 
-    const { error } = await signIn.create({
+    let { error } = await signIn.create({
       identifier: normalizedIdentifier,
       password,
     });
 
+    if (
+      error &&
+      !normalizedIdentifier.includes("@")
+    ) {
+      const emailFromProfile = await resolveEmailForUsername(normalizedIdentifier);
+      if (emailFromProfile) {
+        await signIn.reset();
+        ({ error } = await signIn.create({
+          identifier: emailFromProfile,
+          password,
+        }));
+      }
+    }
+
     if (error) {
       setIsCredentialsInvalid(true);
-      notifyAuthFailure(error, normalizedIdentifier);
+      notifyAuthFailure();
       return;
     }
 
@@ -123,7 +128,7 @@ export default function SignInPage() {
         toast({
           variant: "error",
           title: "Accesso non riuscito",
-          description: getSafeAuthErrorMessage(finalizeError),
+          description: getGenericAuthFailureMessage(),
         });
       }
     }
