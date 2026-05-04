@@ -46,6 +46,16 @@ export function getSafeAuthErrorMessage(
     return "Il codice non e valido o e scaduto. Richiedine uno nuovo e riprova.";
   }
 
+  if (
+    fingerprint.includes("username") &&
+    (fingerprint.includes("not enabled") ||
+      fingerprint.includes("not allowed") ||
+      fingerprint.includes("unsupported") ||
+      fingerprint.includes("strategy"))
+  ) {
+    return "Login via username non disponibile su questo ambiente. Usa email e password oppure abilita lo username come identificatore in Clerk.";
+  }
+
   if (fingerprint.includes("username")) {
     return "Scegli uno username valido e non gia in uso.";
   }

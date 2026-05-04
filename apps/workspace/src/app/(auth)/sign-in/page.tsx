@@ -18,7 +18,6 @@ import {
   normalizeAuthIdentifierForClerk,
 } from "@shared/lib/auth-identifier";
 import {
-  getGenericAuthFailureMessage,
   getSafeAuthErrorMessage,
 } from "@shared/lib/auth-error";
 import { AuthShell, OAuthButton } from "../ui";
@@ -52,11 +51,19 @@ export default function SignInPage() {
     }
   }, [searchParams]);
 
-  function notifyAuthFailure() {
+  function notifyAuthFailure(error?: unknown, normalizedIdentifier?: string) {
+    const usedUsername =
+      typeof normalizedIdentifier === "string" &&
+      normalizedIdentifier !== "" &&
+      !normalizedIdentifier.includes("@");
+    const fallback = usedUsername
+      ? "Username o password non validi. Se lo username e corretto, prova con l'email: il login via username potrebbe non essere abilitato su Clerk."
+      : "Credenziali non valide oppure account non disponibile.";
+
     toast({
       variant: "error",
       title: "Accesso non riuscito",
-      description: getGenericAuthFailureMessage(),
+      description: error ? getSafeAuthErrorMessage(error, fallback) : fallback,
     });
   }
 
@@ -88,7 +95,7 @@ export default function SignInPage() {
 
     if (error) {
       setIsCredentialsInvalid(true);
-      notifyAuthFailure();
+      notifyAuthFailure(error, normalizedIdentifier);
       return;
     }
 
