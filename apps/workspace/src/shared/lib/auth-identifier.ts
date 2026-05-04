@@ -1,13 +1,20 @@
+function isLikelyEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 /**
  * Allinea email e username a come vengono inviati a Clerk dalla registrazione:
- * - email: trim + minuscolo (RFC local-part raramente case-sensitive; Clerk accetta match case-insensitive);
- * - username: trim + minuscolo + rimozione spazi (stesso criterio del campo sign-up).
+ * - email: minuscolo;
+ * - username: minuscolo, senza spazi, con eventuale prefisso "@" rimosso.
  */
 function applyIdentifierCaseAndSpaces(value: string): string {
-  if (value.includes("@")) {
-    return value.toLowerCase();
+  const lowered = value.toLowerCase();
+
+  if (isLikelyEmail(lowered)) {
+    return lowered;
   }
-  return value.toLowerCase().replace(/\s+/g, "");
+
+  return lowered.replace(/\s+/g, "").replace(/^@+/, "");
 }
 
 /** Valore mostrato nel campo mentre l’utente digita (senza trim agli estremi). */
