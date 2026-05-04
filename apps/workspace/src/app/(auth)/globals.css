@@ -14,6 +14,7 @@
   place-items: center;
   padding: var(--spacing-6) var(--spacing-4);
   background-color: var(--color-bg);
+  position: relative;
 }
 
 .auth-card {
@@ -109,6 +110,25 @@
   --auth-footer-gap: var(--spacing-6);
   display: flex;
   flex-direction: column;
+}
+
+.auth-loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: oklch(from var(--color-bg) l c h / 0.82);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  padding: var(--spacing-4);
+}
+
+.auth-loading-overlay__card {
+  width: 100%;
+  max-width: 23rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
 }
 
 .auth-form-scope > *,

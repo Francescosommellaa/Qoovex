@@ -1,114 +1,49 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Badge, Button, Card, CardBody, CardFooter, CardHeader } from "@qoovex/ui";
 
 export default function NotFound() {
   return (
-    <main
-      style={{
-        minHeight: "100dvh",
-        display: "grid",
-        placeItems: "center",
-        padding: "var(--spacing-6)",
-        backgroundColor: "var(--color-bg)",
-        color: "var(--color-text)",
-      }}
-    >
-      <section
+    <main className="grid min-h-dvh place-items-center bg-bg px-4 py-6 text-text">
+      <Card
+        variant="panel"
+        tone="neutral"
+        className="w-full max-w-120 text-center"
         aria-labelledby="not-found-title"
-        style={{
-          width: "100%",
-          maxWidth: "28rem",
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "var(--spacing-4)",
-        }}
       >
-        <Image
-          src="/logo-icon/qoovex-icona-nera-sfondo-quadrato.svg"
-          alt="Qoovex"
-          width={48}
-          height={48}
-          priority
-          style={{ borderRadius: "var(--radius-lg)" }}
-        />
-        <div>
-          <p
-            style={{
-              color: "var(--color-text-faint)",
-              fontSize: "var(--text-xs)",
-              letterSpacing: "0",
-              marginBottom: "var(--spacing-2)",
-              textTransform: "uppercase",
-            }}
-          >
+        <CardHeader className="items-center gap-3">
+          <Image
+            src="/logo-icon/qoovex-icona-nera-sfondo-quadrato.svg"
+            alt="Qoovex"
+            width={48}
+            height={48}
+            priority
+            className="rounded-lg"
+          />
+          <Badge variant="soft" tone="warning" size="sm">
             Errore 404
-          </p>
-          <h1
-            id="not-found-title"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "var(--text-xl)",
-              fontWeight: 600,
-              lineHeight: 1.15,
-            }}
-          >
+          </Badge>
+        </CardHeader>
+
+        <CardBody className="items-center gap-3">
+          <h1 id="not-found-title" className="font-display text-(length:--text-xl) font-semibold">
             Pagina non trovata
           </h1>
-        </div>
-        <p
-          style={{
-            color: "var(--color-text-muted)",
-            lineHeight: 1.6,
-            margin: 0,
-          }}
-        >
-          L&apos;indirizzo richiesto non corrisponde a nessuna pagina del
-          workspace. Se stavi entrando nell&apos;app, torna al percorso sicuro.
-        </p>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            gap: "var(--spacing-3)",
-          }}
-        >
-          <Link
-            href="/dashboard"
-            style={{
-              alignItems: "center",
-              background: "var(--color-primary)",
-              borderRadius: "var(--radius-md)",
-              color: "var(--color-primary-foreground)",
-              display: "inline-flex",
-              fontWeight: 600,
-              minHeight: "2.5rem",
-              padding: "0 var(--spacing-4)",
-              textDecoration: "none",
-            }}
-          >
-            Vai al workspace
+          <p className="m-0 text-sm leading-relaxed text-text-muted">
+            L&apos;indirizzo richiesto non corrisponde a nessuna pagina del workspace.
+            Torna a un percorso sicuro per continuare.
+          </p>
+        </CardBody>
+
+        <CardFooter className="flex flex-wrap justify-center gap-3">
+          <Link href="/dashboard">
+            <Button variant="primary" size="md">Vai al workspace</Button>
           </Link>
-          <Link
-            href="/sign-in"
-            style={{
-              alignItems: "center",
-              border: "1px solid var(--color-border)",
-              borderRadius: "var(--radius-md)",
-              color: "var(--color-text)",
-              display: "inline-flex",
-              fontWeight: 500,
-              minHeight: "2.5rem",
-              padding: "0 var(--spacing-4)",
-              textDecoration: "none",
-            }}
-          >
-            Accedi
+          <Link href="/sign-in">
+            <Button variant="secondary" size="md">Accedi</Button>
           </Link>
-        </div>
-      </section>
+        </CardFooter>
+      </Card>
     </main>
   );
 }

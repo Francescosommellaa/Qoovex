@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useSignIn } from "@clerk/nextjs";
+import { useAuth, useSignIn } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   Button,
   Input,
+  Skeleton,
   Form,
   FormField,
   FormControl,
@@ -22,6 +23,7 @@ import {
 import { AuthShell, OAuthButton } from "../ui";
 
 export default function SignInPage() {
+  const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
   const { signIn, fetchStatus } = useSignIn();
   const { toast } = useToast();
   const router = useRouter();
@@ -31,6 +33,7 @@ export default function SignInPage() {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [isCredentialsInvalid, setIsCredentialsInvalid] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [warningFields, setWarningFields] = useState<{
     identifier: boolean;
     password: boolean;
@@ -40,6 +43,7 @@ export default function SignInPage() {
   });
 
   const isLoading = fetchStatus === "fetching";
+  const isBusy = isLoading || isSubmitting || !isAuthLoaded || isSignedIn;
 
   useEffect(() => {
     if (didHydrateIdentifier.current) return;
@@ -49,6 +53,13 @@ export default function SignInPage() {
       didHydrateIdentifier.current = true;
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    if (!isAuthLoaded) return;
+    if (isSignedIn) {
+      router.replace("/dashboard");
+    }
+  }, [isAuthLoaded, isSignedIn, router]);
 
   function notifyAuthFailure() {
     toast({
@@ -79,58 +90,66 @@ export default function SignInPage() {
       return;
     }
 
-    let { error } = await signIn.create({
-      identifier: normalizedIdentifier,
-      password,
-    });
+    setIsSubmitting(true);
 
-    if (
-      error &&
-      !normalizedIdentifier.includes("@")
-    ) {
-      const emailFromProfile = await resolveEmailForUsername(normalizedIdentifier);
-      if (emailFromProfile) {
-        await signIn.reset();
-        ({ error } = await signIn.create({
-          identifier: emailFromProfile,
-          password,
-        }));
-      }
-    }
+    try {
+      await signIn.reset();
 
-    if (error) {
-      setIsCredentialsInvalid(true);
-      notifyAuthFailure();
-      return;
-    }
-
-    if (signIn.status === "complete") {
-      const { error: finalizeError } = await signIn.finalize({
-        navigate: async ({ session, decorateUrl }) => {
-          if (session?.currentTask) {
-            toast({
-              variant: "warning",
-              title: "Azione richiesta",
-              description: "Completa i passaggi richiesti dal tuo account prima di continuare.",
-            });
-            return;
-          }
-          const url = decorateUrl("/dashboard");
-          if (url.startsWith("http")) {
-            window.location.href = url;
-          } else {
-            router.replace(url);
-          }
-        },
+      let { error } = await signIn.create({
+        identifier: normalizedIdentifier,
+        password,
       });
-      if (finalizeError) {
-        setIsCredentialsInvalid(true);
-        toast({
-          variant: "error",
-          title: "Accesso non riuscito",
-          description: getGenericAuthFailureMessage(),
-        });
+
+      if (
+        error &&
+        !normalizedIdentifier.includes("@")
+      ) {
+        const emailFromProfile = await resolveEmailForUsername(normalizedIdentifier);
+        if (emailFromProfile) {
+          await signIn.reset();
+          ({ error } = await signIn.create({
+            identifier: emailFromProfile,
+            password,
+          }));
+        }
       }
+
+      if (error) {
+        setIsCredentialsInvalid(true);
+        notifyAuthFailure();
+        return;
+      }
+
+      if (signIn.status === "complete") {
+        const { error: finalizeError } = await signIn.finalize({
+          navigate: async ({ session, decorateUrl }) => {
+            if (session?.currentTask) {
+              toast({
+                variant: "warning",
+                title: "Azione richiesta",
+                description: "Completa i passaggi richiesti dal tuo account prima di continuare.",
+              });
+              return;
+            }
+            const url = decorateUrl("/dashboard");
+            if (url.startsWith("http")) {
+              window.location.href = url;
+            } else {
+              router.replace(url);
+            }
+          },
+        });
+        if (finalizeError) {
+          setIsCredentialsInvalid(true);
+          toast({
+            variant: "error",
+            title: "Accesso non riuscito",
+            description: getGenericAuthFailureMessage(),
+          });
+        }
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -186,6 +205,7 @@ export default function SignInPage() {
               autoComplete="username"
               autoCapitalize="none"
               autoCorrect="off"
+              disabled={isBusy}
               value={identifier}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setIdentifier(formatAuthIdentifierInput(e.target.value));
@@ -209,6 +229,7 @@ export default function SignInPage() {
               placeholder="La tua password"
               autoComplete="current-password"
               showPasswordToggle
+              disabled={isBusy}
               value={password}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setPassword(e.target.value);
@@ -239,8 +260,9 @@ export default function SignInPage() {
             type="submit"
             variant="primary"
             size="md"
-            loading={isLoading}
+            loading={isBusy}
             loadingLabel="Accesso in corso…"
+            disabled={isBusy}
             className="w-full"
           >
             Accedi
@@ -251,6 +273,18 @@ export default function SignInPage() {
       <p className="auth-footer-text">
         Non hai un account? <Link href={signUpHref}>Registrati</Link>
       </p>
+
+      {isBusy ? (
+        <div className="auth-loading-overlay" aria-live="polite" aria-busy="true">
+          <div className="auth-loading-overlay__card">
+            <Skeleton variant="title" size="md" width="52%" />
+            <Skeleton variant="text" lines={2} lineWidths={["100%", "76%"]} />
+            <Skeleton variant="block" height="3rem" radius="lg" />
+            <Skeleton variant="block" height="3rem" radius="lg" />
+            <Skeleton variant="block" height="2.75rem" radius="full" tone="primary" />
+          </div>
+        </div>
+      ) : null}
     </AuthShell>
   );
 }
