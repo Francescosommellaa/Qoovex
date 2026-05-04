@@ -106,7 +106,6 @@
 }
 
 .auth-form-scope {
-  --auth-flow-gap: var(--spacing-5);
   --auth-footer-gap: var(--spacing-6);
   display: flex;
   flex-direction: column;
@@ -129,13 +128,19 @@
   animation-delay: 105ms;
 }
 
+/* Stesso respiro tra ultimo blocco del form (pulsante primario) e riga footer: sign-in / sign-up / verify. */
 .auth-form-scope > .qv-form + .auth-footer-text,
-.auth-form-scope > .auth-footer-text {
+.auth-form-scope > .auth-footer-text,
+.auth-form-scope .qv-form > .auth-footer-text {
   margin-top: var(--auth-footer-gap);
 }
 
-.auth-form-scope .qv-form > .auth-footer-text {
-  margin-top: var(--auth-flow-gap);
+/* Mount Clerk Turnstile prima del submit: il pulsante resta l’ultimo elemento del form come in sign-in. */
+.auth-form-scope .auth-captcha-slot {
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .auth-oauth-stack {

@@ -14,6 +14,10 @@ import {
   useToast,
 } from "@qoovex/ui";
 import {
+  formatAuthIdentifierInput,
+  normalizeAuthIdentifierForClerk,
+} from "@shared/lib/auth-identifier";
+import {
   getGenericAuthFailureMessage,
   getSafeAuthErrorMessage,
 } from "@shared/lib/auth-error";
@@ -43,7 +47,7 @@ export default function SignInPage() {
     if (didHydrateIdentifier.current) return;
     const fromUrl = searchParams.get("email");
     if (fromUrl) {
-      setIdentifier(decodeURIComponent(fromUrl));
+      setIdentifier(normalizeAuthIdentifierForClerk(decodeURIComponent(fromUrl)));
       didHydrateIdentifier.current = true;
     }
   }, [searchParams]);
@@ -60,8 +64,10 @@ export default function SignInPage() {
     e.preventDefault();
     setIsCredentialsInvalid(false);
 
+    const normalizedIdentifier = normalizeAuthIdentifierForClerk(identifier);
+
     const nextWarnings = {
-      identifier: identifier.trim() === "",
+      identifier: normalizedIdentifier === "",
       password: password.trim() === "",
     };
     setWarningFields(nextWarnings);
@@ -76,7 +82,7 @@ export default function SignInPage() {
     }
 
     const { error } = await signIn.create({
-      identifier: identifier.trim(),
+      identifier: normalizedIdentifier,
       password,
     });
 
@@ -116,10 +122,11 @@ export default function SignInPage() {
     }
   }
 
+  const normalizedForLinks = normalizeAuthIdentifierForClerk(identifier);
   const signUpHref =
-    identifier.trim() === ""
+    normalizedForLinks === ""
       ? "/sign-up"
-      : `/sign-up?email=${encodeURIComponent(identifier.trim())}`;
+      : `/sign-up?email=${encodeURIComponent(normalizedForLinks)}`;
 
   return (
     <AuthShell
@@ -165,9 +172,11 @@ export default function SignInPage() {
               type="text"
               placeholder="nome@esempio.com o nomechef"
               autoComplete="username"
+              autoCapitalize="none"
+              autoCorrect="off"
               value={identifier}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setIdentifier(e.target.value);
+                setIdentifier(formatAuthIdentifierInput(e.target.value));
                 if (isCredentialsInvalid) setIsCredentialsInvalid(false);
                 if (warningFields.identifier) {
                   setWarningFields((current) => ({ ...current, identifier: false }));
@@ -203,8 +212,8 @@ export default function SignInPage() {
         <div className="auth-inline-link-row">
           <Link
             href={
-              identifier.trim()
-                ? `/forgot-password?email=${encodeURIComponent(identifier.trim())}`
+              normalizedForLinks
+                ? `/forgot-password?email=${encodeURIComponent(normalizedForLinks)}`
                 : "/forgot-password"
             }
             className="auth-muted-link"

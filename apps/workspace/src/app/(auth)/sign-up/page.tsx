@@ -165,7 +165,7 @@ export default function SignUpPage() {
     if (createError) {
       const msg = getSafeAuthErrorMessage(
         createError,
-        "Non e stato possibile creare l'account. Verifica i dati e riprova.",
+        "Non è stato possibile creare l'account. Verifica i dati e riprova.",
       );
       const mapped = mapCreateErrorToFields(msg);
       setFieldErrors(Object.keys(mapped).length > 0 ? mapped : {});
@@ -230,7 +230,7 @@ export default function SignUpPage() {
       }
       const display = getSafeAuthErrorMessage(
         attemptError,
-        "Il codice non e valido o e scaduto. Richiedine uno nuovo dalla mail.",
+        "Il codice non è valido o è scaduto. Richiedine uno nuovo dalla mail.",
       );
       setFieldErrors({ code: display });
       toast({
@@ -436,6 +436,14 @@ export default function SignUpPage() {
               </FormControl>
             </FormField>
 
+            <div
+              id="clerk-captcha"
+              className="auth-captcha-slot"
+              data-cl-theme="dark"
+              data-cl-size="flexible"
+              data-cl-language="it-IT"
+            />
+
             <FormActions align="stretch">
               <Button
                 type="submit"
@@ -448,13 +456,6 @@ export default function SignUpPage() {
                 Crea account
               </Button>
             </FormActions>
-
-            <div
-              id="clerk-captcha"
-              data-cl-theme="dark"
-              data-cl-size="flexible"
-              data-cl-language="it-IT"
-            />
           </Form>
 
           <p className="auth-footer-text">

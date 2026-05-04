@@ -4,11 +4,11 @@ Componenti React locali del route group `(auth)`. **Non esportare al di fuori di
 
 | File | Scopo |
 |---|---|
-| `AuthCard.tsx` | Shell visiva: logo, titolo, subtitle, footer |
-| `AuthField.tsx` | Input nativo con label, errore e hint (usato fuori da Clerk Elements) |
+| `AuthShell.tsx` | Shell visiva: logo, titolo, sottotitolo, step, indietro, area form |
+| `OAuthButton.tsx` | Pulsanti OAuth Clerk (Google / Apple) |
 | `index.ts` | Barrel export |
 
 ## Regole
-- Importa sempre da `../../ui` nelle pagine auth
-- Solo classi CSS da `../global/auth.css`
-- Nessuna dipendenza esterna oltre React
+
+- Importa da `../ui` nelle pagine `(auth)`.
+- Stili auth dedicati: `../globals.css` del route group `(auth)` (non sovrascrivere il design system in `packages/ui`; token e componenti da `@qoovex/ui`).
