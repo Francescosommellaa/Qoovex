@@ -189,3 +189,5 @@ export type {
   CardTone,
   CardVariant,
 } from "./components/card";
+
+export { cn } from "./lib/utils";
