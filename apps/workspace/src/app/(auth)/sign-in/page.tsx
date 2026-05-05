@@ -142,11 +142,10 @@ export default function SignInPage() {
             }
 
             const url = decorateUrl("/dashboard");
-            if (url.startsWith("http")) {
-              window.location.href = url;
-            } else {
-              router.replace(url);
-            }
+            const destination = url.startsWith("http")
+              ? url
+              : `${window.location.origin}${url}`;
+            window.location.assign(destination);
           },
         });
         if (finalizeError) {
