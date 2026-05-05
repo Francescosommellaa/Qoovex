@@ -14,6 +14,7 @@ import {
   FormActions,
   useToast,
 } from "@qoovex/ui";
+import { bootstrapUser, hasBootstrappedUser } from "@shared/actions/bootstrap-user";
 import { resolveEmailForUsername } from "@shared/actions/resolve-email-for-username";
 import { getGenericAuthFailureMessage } from "@shared/lib/auth-error";
 import {
@@ -34,6 +35,7 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
   const [isCredentialsInvalid, setIsCredentialsInvalid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProvisioningDashboard, setIsProvisioningDashboard] = useState(false);
   const [warningFields, setWarningFields] = useState<{
     identifier: boolean;
     password: boolean;
@@ -43,7 +45,7 @@ export default function SignInPage() {
   });
 
   const isLoading = fetchStatus === "fetching";
-  const isBusy = isLoading || isSubmitting || !isAuthLoaded || isSignedIn;
+  const isBusy = isLoading || isSubmitting || !isAuthLoaded || isProvisioningDashboard;
 
   useEffect(() => {
     if (didHydrateIdentifier.current) return;
@@ -131,6 +133,14 @@ export default function SignInPage() {
               });
               return;
             }
+
+            const alreadyBootstrapped = await hasBootstrappedUser();
+
+            if (!alreadyBootstrapped) {
+              setIsProvisioningDashboard(true);
+              await bootstrapUser();
+            }
+
             const url = decorateUrl("/dashboard");
             if (url.startsWith("http")) {
               window.location.href = url;
@@ -274,14 +284,20 @@ export default function SignInPage() {
         Non hai un account? <Link href={signUpHref}>Registrati</Link>
       </p>
 
-      {isBusy ? (
+      {isProvisioningDashboard ? (
         <div className="auth-loading-overlay" aria-live="polite" aria-busy="true">
-          <div className="auth-loading-overlay__card">
-            <Skeleton variant="title" size="md" width="52%" />
-            <Skeleton variant="text" lines={2} lineWidths={["100%", "76%"]} />
-            <Skeleton variant="block" height="3rem" radius="lg" />
-            <Skeleton variant="block" height="3rem" radius="lg" />
-            <Skeleton variant="block" height="2.75rem" radius="full" tone="primary" />
+          <div className="w-full max-w-160 space-y-4 p-8">
+            <Skeleton variant="title" size="md" width="34%" />
+            <div className="space-y-2 rounded-lg border border-(--color-border) bg-(--color-surface) p-4">
+              <Skeleton variant="text" size="sm" width="92%" />
+              <Skeleton variant="text" size="sm" width="88%" />
+              <Skeleton variant="text" size="sm" width="84%" />
+              <Skeleton variant="text" size="sm" width="90%" />
+              <Skeleton variant="text" size="sm" width="80%" />
+              <Skeleton variant="text" size="sm" width="86%" />
+              <Skeleton variant="text" size="sm" width="82%" />
+            </div>
+            <Skeleton variant="block" height="2.5rem" width="7rem" radius="full" />
           </div>
         </div>
       ) : null}
