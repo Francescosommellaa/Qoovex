@@ -7,8 +7,12 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
+    "brain:sync": "tsx scripts/brain/sync-brain.ts",
+    "brain:validate": "tsx scripts/brain/validate-brain.ts",
+    "brain:check": "pnpm brain:sync && pnpm brain:validate",
+    "brain:hooks": "tsx scripts/brain/install-hooks.ts",
     "check": "pnpm check:repo && pnpm lint && pnpm type-check && pnpm check:build && pnpm check:audit",
-    "check:repo": "node scripts/repo-guard.mjs",
+    "check:repo": "pnpm brain:validate && node scripts/repo-guard.mjs",
     "check:build": "node scripts/check-builds.mjs",
     "check:audit": "node scripts/lighthouse-audit.mjs",
     "check:fast": "pnpm check:repo && pnpm lint && pnpm type-check",
@@ -25,12 +29,20 @@
         "@clerk/nextjs>react": "19",
         "@clerk/nextjs>react-dom": "19"
       }
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@prisma/engines",
+      "esbuild",
+      "prisma",
+      "sharp",
+      "unrs-resolver"
+    ]
   },
   "devDependencies": {
     "chrome-launcher": "^1.2.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "lighthouse": "^12.8.2",
+    "tsx": "^4.20.6",
     "turbo": "^2.5.0"
   },
   "dependencies": {

@@ -16,3 +16,4 @@ Regole:
 Workflow attivi:
 - `quality.yml`: quality gate completo (`pnpm check:ci`) su ogni push, PR e run manuale.
 - `command-center.yml`: esecuzione manuale da GitHub Actions di task root selezionabili (lint, type-check, build-check, audit, check completo).
+- `brain-consistency.yml`: sincronizzazione e validazione del Qoovex Brain canonico (`pnpm brain:check`) con root esterna passata via secret `QOOVEX_BRAIN_ROOT`.

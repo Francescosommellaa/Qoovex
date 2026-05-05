@@ -1,0 +1,48 @@
+name: Brain Consistency
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  brain-consistency:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      CI: "1"
+      NEXT_TELEMETRY_DISABLED: "1"
+      QOOVEX_BRAIN_ROOT: ${{ secrets.QOOVEX_BRAIN_ROOT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Verify Brain root secret is configured
+        shell: bash
+        run: |
+          if [ -z "$QOOVEX_BRAIN_ROOT" ]; then
+            echo "Missing required secret QOOVEX_BRAIN_ROOT"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Sync and validate Brain
+        run: pnpm brain:check

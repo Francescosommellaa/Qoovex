@@ -1,0 +1,330 @@
+{
+  "vaultRoot": "A:/Qoovex-Brain",
+  "indexFile": "00_System/index.json",
+  "generatedFrom": [
+    "A:/Qoovex/docs/HowToUse.md",
+    "A:/Qoovex/docs/OperationalProtocol.md",
+    "A:/Qoovex/docs/CodePatterns.md",
+    "A:/Qoovex/project_brain.json",
+    "A:/Qoovex/README.md",
+    "A:/Qoovex/packages/ui/src/index.ts",
+    "A:/Qoovex/packages/ui/src/components"
+  ],
+  "entries": [
+    {
+      "id": "operational-brain",
+      "title": "Operational Brain",
+      "file": "00_System/operational-brain.md",
+      "tags": ["brain", "project", "rules", "architecture", "product", "truth", "work-plan", "permissions"],
+      "keywords": ["project brain", "current truth", "do not break", "qoovex", "monorepo", "fsd", "clerk", "prisma", "vercel", "architecture", "piano di lavoro", "permessi", "work plan rules"],
+      "priority": 100,
+      "maxChars": 2600
+    },
+    {
+      "id": "howto-use",
+      "title": "HowToUse",
+      "file": "00_System/howto-use.md",
+      "tags": ["workflow", "before-coding", "repo-rules", "questions", "read-order"],
+      "keywords": ["how to use", "before coding", "read order", "workflow", "repo rules", "ask before coding", "non negotiable rules"],
+      "priority": 95,
+      "maxChars": 2400
+    },
+    {
+      "id": "operational-protocol",
+      "title": "Operational Protocol",
+      "file": "00_System/operational-protocol.md",
+      "tags": ["protocol", "placement", "checklist", "documentation", "scope"],
+      "keywords": ["operational protocol", "placement", "checklist", "file creation", "documentation update", "classificazione task", "where to put code"],
+      "priority": 92,
+      "maxChars": 2400
+    },
+    {
+      "id": "code-patterns",
+      "title": "Code Patterns",
+      "file": "00_System/code-patterns.md",
+      "tags": ["code-patterns", "tsx", "server", "css", "prisma", "naming"],
+      "keywords": ["code patterns", "tsx order", "server file order", "page tsx", "route ts", "tailwind tokens", "prisma order", "naming"],
+      "priority": 90,
+      "maxChars": 2200
+    },
+    {
+      "id": "product-rules",
+      "title": "Product Rules",
+      "file": "00_System/product-rules.md",
+      "tags": ["product", "plans", "work-plan", "piano-di-lavoro", "pricing", "recipes", "menus", "permissions", "task-completion"],
+      "keywords": ["product rules", "plans", "free start pro enterprise", "work plan", "piano di lavoro", "permessi", "chi puo creare task", "chi puo completare task", "task completion", "flusso task completion", "notifications", "recipes", "menus"],
+      "priority": 94,
+      "maxChars": 2300
+    },
+    {
+      "id": "task-routing",
+      "title": "Task Routing",
+      "file": "00_System/task-routing.md",
+      "tags": ["routing", "entrypoint", "task-first", "navigation"],
+      "keywords": ["task routing", "what should i read", "which file to read", "context routing", "instant context"],
+      "priority": 85,
+      "maxChars": 1800
+    },
+    {
+      "id": "obsidian-operating-model",
+      "title": "Obsidian Operating Model",
+      "file": "00_System/obsidian-operating-model.md",
+      "tags": ["obsidian", "workflow", "standardization", "plugin-ready"],
+      "keywords": ["obsidian", "dataview", "tasks plugin", "templater", "quickadd", "standardized workflow"],
+      "priority": 84,
+      "maxChars": 1700
+    },
+    {
+      "id": "domain-moc",
+      "title": "Domain MOC",
+      "file": "00_System/domain-moc.md",
+      "tags": ["moc", "domain-routing", "ui", "auth", "db", "workflow"],
+      "keywords": ["domain moc", "ui domain", "auth domain", "db domain", "workflow domain"],
+      "priority": 91,
+      "maxChars": 1800
+    },
+    {
+      "id": "project-identity",
+      "title": "Project Identity",
+      "file": "00_System/project.md",
+      "tags": ["identity", "project", "country", "audience"],
+      "keywords": ["project", "identity", "audience", "italy", "italian", "saas"],
+      "priority": 70,
+      "maxChars": 500
+    },
+    {
+      "id": "architecture",
+      "title": "Architecture",
+      "file": "01_Architecture/architecture.md",
+      "tags": ["architecture", "fsd", "placement", "monorepo", "boundaries"],
+      "keywords": ["architecture", "fsd", "placement", "layers", "shared code", "packages", "apps", "import direction", "clerk scope"],
+      "priority": 97,
+      "maxChars": 2400
+    },
+    {
+      "id": "features",
+      "title": "Features",
+      "file": "02_Features/features.md",
+      "tags": ["features", "product", "work-plan", "plans", "permissions"],
+      "keywords": ["features", "work plan", "piano di lavoro", "plans", "free start pro enterprise", "permissions", "task completion", "recipes", "menu"],
+      "priority": 96,
+      "maxChars": 2300
+    },
+    {
+      "id": "decisions",
+      "title": "Decisions",
+      "file": "04_Decisions/decisions.md",
+      "tags": ["decisions", "standards", "guardrails", "process"],
+      "keywords": ["decisions", "technical decisions", "standards", "guardrails", "process", "source of truth"],
+      "priority": 89,
+      "maxChars": 2000
+    },
+    {
+      "id": "bugs",
+      "title": "Bugs And Failure Modes",
+      "file": "05_Bugs/bugs.md",
+      "tags": ["bugs", "failure-modes", "anti-patterns", "quality"],
+      "keywords": ["bugs", "failure mode", "anti-pattern", "incoerenze", "errori", "dirty code", "obsoleto"],
+      "priority": 88,
+      "maxChars": 1900
+    },
+    {
+      "id": "components-map",
+      "title": "Components Map",
+      "file": "03_Components/components-map.md",
+      "tags": ["components", "design-system", "ui", "catalog"],
+      "keywords": ["components map", "packages ui components", "design system components"],
+      "priority": 98,
+      "maxChars": 2200
+    },
+    {
+      "id": "component-button",
+      "title": "Component: Button",
+      "file": "03_Components/button.md",
+      "tags": ["component", "button", "ui"],
+      "keywords": ["button", "ButtonProps", "ButtonVariant", "ButtonSize"],
+      "priority": 86,
+      "maxChars": 1200
+    },
+    {
+      "id": "component-input",
+      "title": "Component: Input",
+      "file": "03_Components/input.md",
+      "tags": ["component", "input", "ui"],
+      "keywords": ["input", "InputProps", "InputStatus"],
+      "priority": 86,
+      "maxChars": 1200
+    },
+    {
+      "id": "component-textarea",
+      "title": "Component: Textarea",
+      "file": "03_Components/textarea.md",
+      "tags": ["component", "textarea", "ui"],
+      "keywords": ["textarea", "TextareaProps", "TextareaStatus", "TextareaVariant"],
+      "priority": 84,
+      "maxChars": 1200
+    },
+    {
+      "id": "component-select",
+      "title": "Component: Select",
+      "file": "03_Components/select.md",
+      "tags": ["component", "select", "ui"],
+      "keywords": ["select", "SelectProps", "SelectOption", "SelectGroup", "SelectStatus"],
+      "priority": 86,
+      "maxChars": 1400
+    },
+    {
+      "id": "component-form",
+      "title": "Component: Form",
+      "file": "03_Components/form.md",
+      "tags": ["component", "form", "ui"],
+      "keywords": ["form", "FormProps", "FormField", "FormLabel", "FormControl", "FormVariant"],
+      "priority": 87,
+      "maxChars": 1600
+    },
+    {
+      "id": "component-modal",
+      "title": "Component: Modal",
+      "file": "03_Components/modal.md",
+      "tags": ["component", "modal", "ui"],
+      "keywords": ["modal", "ModalProps", "ModalPlacement", "ModalSize", "ModalTone"],
+      "priority": 87,
+      "maxChars": 1600
+    },
+    {
+      "id": "component-toast",
+      "title": "Component: Toast",
+      "file": "03_Components/toast.md",
+      "tags": ["component", "toast", "ui"],
+      "keywords": ["toast", "ToastProvider", "useToast", "ToastProps", "ToastVariant"],
+      "priority": 85,
+      "maxChars": 1400
+    },
+    {
+      "id": "component-card",
+      "title": "Component: Card",
+      "file": "03_Components/card.md",
+      "tags": ["component", "card", "ui"],
+      "keywords": ["card", "CardProps", "CardVariant", "CardTone", "CardMedia"],
+      "priority": 84,
+      "maxChars": 1300
+    },
+    {
+      "id": "component-smart-search-bar",
+      "title": "Component: SmartSearchBar",
+      "file": "03_Components/smart-search-bar.md",
+      "tags": ["component", "search", "ui"],
+      "keywords": ["smart search bar", "SmartSearchBarProps", "SearchResult", "SearchResultCategory"],
+      "priority": 84,
+      "maxChars": 1300
+    },
+    {
+      "id": "component-search-bar",
+      "title": "Component: SearchBar",
+      "file": "03_Components/search-bar.md",
+      "tags": ["component", "search", "ui"],
+      "keywords": ["search bar", "SearchBarProps"],
+      "priority": 82,
+      "maxChars": 1100
+    },
+    {
+      "id": "component-otp-input",
+      "title": "Component: OtpInput",
+      "file": "03_Components/otp-input.md",
+      "tags": ["component", "otp", "ui"],
+      "keywords": ["otp input", "OtpInputProps"],
+      "priority": 82,
+      "maxChars": 1000
+    },
+    {
+      "id": "component-phone-number-field",
+      "title": "Component: PhoneNumberField",
+      "file": "03_Components/phone-number-field.md",
+      "tags": ["component", "phone", "ui"],
+      "keywords": ["phone number field", "PhoneNumberFieldProps", "PhoneRegionOption"],
+      "priority": 82,
+      "maxChars": 1200
+    },
+    {
+      "id": "component-avatar",
+      "title": "Component: Avatar",
+      "file": "03_Components/avatar.md",
+      "tags": ["component", "avatar", "ui"],
+      "keywords": ["avatar", "AvatarProps", "AvatarSize", "AvatarTone", "AvatarStatus"],
+      "priority": 80,
+      "maxChars": 1100
+    },
+    {
+      "id": "component-badge",
+      "title": "Component: Badge",
+      "file": "03_Components/badge.md",
+      "tags": ["component", "badge", "ui"],
+      "keywords": ["badge", "BadgeProps", "BadgeVariant", "BadgeTone", "BadgeSize"],
+      "priority": 80,
+      "maxChars": 1100
+    },
+    {
+      "id": "component-divider",
+      "title": "Component: Divider",
+      "file": "03_Components/divider.md",
+      "tags": ["component", "divider", "ui"],
+      "keywords": ["divider", "DividerProps", "DividerOrientation", "DividerVariant"],
+      "priority": 79,
+      "maxChars": 1100
+    },
+    {
+      "id": "component-skeleton",
+      "title": "Component: Skeleton",
+      "file": "03_Components/skeleton.md",
+      "tags": ["component", "skeleton", "ui"],
+      "keywords": ["skeleton", "SkeletonProps", "SkeletonVariant", "SkeletonSize"],
+      "priority": 79,
+      "maxChars": 1100
+    },
+    {
+      "id": "component-toggle",
+      "title": "Component: Toggle",
+      "file": "03_Components/toggle.md",
+      "tags": ["component", "toggle", "ui"],
+      "keywords": ["toggle", "ToggleProps", "ToggleSize", "ToggleTone"],
+      "priority": 79,
+      "maxChars": 1100
+    },
+    {
+      "id": "component-checkbox",
+      "title": "Component: Checkbox",
+      "file": "03_Components/checkbox.md",
+      "tags": ["component", "checkbox", "ui"],
+      "keywords": ["checkbox", "CheckboxProps", "CheckboxSize", "CheckboxTone"],
+      "priority": 79,
+      "maxChars": 1100
+    },
+    {
+      "id": "component-radio",
+      "title": "Component: Radio",
+      "file": "03_Components/radio.md",
+      "tags": ["component", "radio", "ui"],
+      "keywords": ["radio", "RadioProps", "RadioSize", "RadioTone"],
+      "priority": 79,
+      "maxChars": 1100
+    },
+    {
+      "id": "component-field-control",
+      "title": "Component: FieldControl",
+      "file": "03_Components/field-control.md",
+      "tags": ["component", "field-control", "ui"],
+      "keywords": ["field control", "FieldLabel", "FieldHelperText", "FieldErrorTooltip", "FieldControlStatus"],
+      "priority": 81,
+      "maxChars": 1300
+    },
+    {
+      "id": "component-sidebar-policy",
+      "title": "Component: Sidebar Composition Policy",
+      "file": "03_Components/sidebar-composition-policy.md",
+      "tags": ["component", "sidebar", "composition-first", "ui-policy"],
+      "keywords": ["sidebar", "composition first", "SidebarV2", "do not duplicate", "ui hard block"],
+      "priority": 93,
+      "maxChars": 1600
+    }
+  ]
+}
