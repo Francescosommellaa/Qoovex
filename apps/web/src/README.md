@@ -1,17 +1,14 @@
 # Web Source
 
-Scopo: sorgente del sito marketing.
+Scopo: sorgente del sito marketing Qoovex (`apps/web`).
 
-Metti qui:
-- routing Next via `src/pages`;
-- sezioni e componenti interni del sito vetrina.
-
-Non mettere qui:
-- codice condiviso che puo` stare in `packages/*`;
-- logica business operativa del workspace.
+Struttura:
+- `app/` — routing Next.js App Router, layout e pagine marketing
+- `shared/` — componenti, sezioni e animazioni riusabili internamente ad `apps/web`
 
 Regole:
-- mantieni l'albero semplice e leggibile;
-- usa `pages/` per routing e pagine marketing;
-- usa `shared/` per componenti e sezioni riusabili interne a `apps/web`;
-- ogni sottocartella manuale deve avere il suo `README.md`.
+- usa `app/` per routing, layout e pagine
+- usa `shared/` per componenti e sezioni riusabili dentro `apps/web`
+- il codice condiviso tra più app va in `packages/*`, non qui
+- ogni sottocartella creata manualmente deve avere il suo `README.md`
+- nessuna business logic del workspace in questa app

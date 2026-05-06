@@ -1,6 +1,5 @@
-import type { AppProps } from "next/app";
-import "./globals.css";
+import { redirect } from "next/navigation";
 
-export default function WebApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+export default function RootPage() {
+  redirect("/home");
 }

@@ -1,13 +1,21 @@
 import type { ReactNode } from "react";
-import { SiteShell } from "@/shared/components/index";
-import { HomePage } from "@/pages/home/index";
-import { EnterprisePage } from "@/pages/enterprise/index";
+import type { Metadata } from "next";
+import "./globals.css";
 
-type MarketingLayoutProps = {
-  children: ReactNode;
+export const metadata: Metadata = {
+  title: {
+    default: "Qoovex — Il workspace per chef professionisti",
+    template: "%s | Qoovex",
+  },
+  description:
+    "Gestisci ricette, menu digitali, allergeni, valori nutrizionali e piani di lavoro collaborativi. Il workspace operativo pensato per cuochi e chef professionisti.",
+  metadataBase: new URL("https://qoovex.com"),
 };
 
-export function MarketingLayout({ children }: MarketingLayoutProps) {
-  return <SiteShell>{children}</SiteShell>;
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="it">
+      <body>{children}</body>
+    </html>
+  );
 }
-export { HomePage, EnterprisePage };

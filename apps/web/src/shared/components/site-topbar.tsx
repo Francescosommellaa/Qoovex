@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MarketingLinkButton } from "@/shared/components/marketing-ds";
+import { Button } from "@qoovex/ui";
 
 const navLinkClass =
   "text-(length:--text-sm) text-text-muted transition-colors hover:text-text focus-visible:outline-none";
@@ -39,12 +39,14 @@ export function SiteTopbar() {
         </nav>
 
         <div className="ml-auto inline-flex items-center gap-2">
-          <MarketingLinkButton href="https://app.qoovex.com/sign-in" variant="ghost" size="sm">
+          <Button variant="ghost" size="sm">
+            <Link href="https://app.qoovex.com/sign-in">Sign in</Link>
             Sign in
-          </MarketingLinkButton>
-          <MarketingLinkButton href="/contact" variant="secondary" size="sm">
+          </Button>
+          <Button variant="secondary" size="sm">
+            <Link href="/contact">Contact</Link>
             Contact
-          </MarketingLinkButton>
+          </Button>
         </div>
       </div>
     </header>
