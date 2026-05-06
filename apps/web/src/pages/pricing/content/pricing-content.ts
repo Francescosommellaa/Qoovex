@@ -1,4 +1,5 @@
 export const pricingContent = {
   title: "Prezzi",
-  description: "Scegli il piano Qoovex piu` adatto al tuo ritmo operativo.",
+  description:
+    "Parti dal piano piu` adatto al tuo team e scala con limiti chiari su ricette, menu e piani di lavoro.",
 };

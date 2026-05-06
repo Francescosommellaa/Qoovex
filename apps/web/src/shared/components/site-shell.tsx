@@ -8,9 +8,9 @@ type SiteShellProps = {
 
 export function SiteShell({ children }: SiteShellProps) {
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col bg-bg px-6 py-8 text-text">
+    <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col bg-bg px-4 py-6 text-text md:px-6 md:py-8">
       <SiteTopbar />
-      <main className="flex-1 py-10">{children}</main>
+      <main className="flex-1">{children}</main>
       <SiteFooter />
     </div>
   );

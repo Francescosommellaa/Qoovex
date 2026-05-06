@@ -1,12 +1,12 @@
 import { MarketingLayout } from "@/pages/layout";
-import { AboutStorySection } from "@/pages/about/sections/index";
+import { StorySection } from "@/pages/enterprise/sections/index";
 import { SharedCtaSection } from "@/shared/sections/index";
 
-export function AboutPage() {
+export function EnterprisePage() {
   return (
     <MarketingLayout>
       <div className="space-y-10">
-        <AboutStorySection />
+        <StorySection />
         <SharedCtaSection />
       </div>
     </MarketingLayout>
