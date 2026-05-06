@@ -1,0 +1,7 @@
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=chillax@400,500,600,700&display=swap");
+@import "@qoovex/ui/styles/tokens";
+@import "@qoovex/ui/styles/base";
+@import "tailwindcss";
+
+@source "../../../../packages/ui/src/";
+@source "../shared/";
