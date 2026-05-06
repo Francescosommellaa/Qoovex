@@ -1,5 +1,5 @@
-import { resourcesContent } from "@/pages/resources/content/index";
-import { MarketingQuietSurface } from "@/shared/components/marketing-ds";
+import { resourcesContent } from "../content/index";
+import { MarketingQuietSurface } from "@/shared/components/index";
 
 export function ResourcesLibrarySection() {
   return (

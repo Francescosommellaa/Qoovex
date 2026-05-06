@@ -1,5 +1,5 @@
-import { legalContent } from "@/pages/legal/content/index";
-import { MarketingQuietSurface } from "@/shared/components/marketing-ds";
+import { legalContent } from "../content/index";
+import { MarketingQuietSurface } from "@/shared/components/index";
 
 export function LegalDocumentsSection() {
   return (

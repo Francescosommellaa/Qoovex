@@ -1,5 +1,5 @@
 export const enterpriseContent = {
-  title: "Azienda",
+  title: "Qoovex per team e ristoranti strutturati.",
   description:
-    "Qoovex nasce in Italia per dare struttura, velocita` e controllo operativo a cuochi e chef professionisti.",
+    "Limiti custom, supporto dedicato e integrazioni avanzate per brighe di cucina professionali, ristoranti multi-sede e realtà enterprise.",
 };

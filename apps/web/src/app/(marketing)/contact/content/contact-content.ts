@@ -1,4 +1,5 @@
 export const contactContent = {
-  title: "Contatti",
-  description: "Parliamo del tuo flusso operativo e di come Qoovex puo` supportare il tuo team.",
+  title: "Contattaci",
+  description:
+    "Scrivici per supporto, partnership o qualsiasi informazione su Qoovex. Ti risponderemo nel più breve tempo possibile.",
 };

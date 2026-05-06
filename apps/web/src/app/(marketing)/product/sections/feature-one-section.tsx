@@ -1,5 +1,5 @@
-import { productContent } from "@/pages/product/content/index";
-import { MarketingQuietSurface } from "@/shared/components/marketing-ds";
+import { productContent } from "../content/index";
+import { MarketingQuietSurface } from "@/shared/components/index";
 
 export function FeatureOneSection() {
   return (

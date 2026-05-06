@@ -9,21 +9,37 @@ interface MarketingLinkButtonProps {
   href: string;
   children: ReactNode;
   className?: string;
+  variant?: "primary" | "secondary" | "ghost";
+  size?: "sm" | "md";
 }
 
 export function MarketingLinkButton({
   href,
   children,
   className = "",
+  variant = "primary",
+  size = "md",
 }: MarketingLinkButtonProps) {
+  const variantClasses: Record<NonNullable<MarketingLinkButtonProps["variant"]>, string> = {
+    primary: "text-primary hover:text-primary/90",
+    secondary: "text-text hover:text-text-muted",
+    ghost: "text-text-muted hover:text-text",
+  };
+  const sizeClasses: Record<NonNullable<MarketingLinkButtonProps["size"]>, string> = {
+    sm: "text-(length:--text-xs)",
+    md: "text-(length:--text-sm)",
+  };
+
   return (
     <a
       href={href}
       className={[
         "inline-flex items-center gap-1.5",
-        "text-(length:--text-sm) font-medium text-primary",
+        "font-medium",
         "underline-offset-4 hover:underline",
         "transition-colors duration-(--transition-interactive)",
+        variantClasses[variant],
+        sizeClasses[size],
         className,
       ]
         .filter(Boolean)
@@ -74,24 +90,32 @@ export function MarketingQuietSurface({
 interface MarketingPanelSurfaceProps {
   children: ReactNode;
   className?: string;
+  bodyClassName?: string;
 }
 
 export function MarketingPanelSurface({
   children,
   className = "",
+  bodyClassName = "",
 }: MarketingPanelSurfaceProps) {
   return (
     <div
       className={[
         "rounded-lg border border-border bg-surface",
-        "p-6 flex flex-col gap-3",
+        "p-6",
         "shadow-sm",
         className,
       ]
         .filter(Boolean)
         .join(" ")}
     >
-      {children}
+      <div
+        className={["flex flex-col gap-3", bodyClassName]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {children}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 {
   "name": "qoovex",
   "private": true,
-  "packageManager": "pnpm@10.33.2",
+  "packageManager": "pnpm@10.33.4",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
