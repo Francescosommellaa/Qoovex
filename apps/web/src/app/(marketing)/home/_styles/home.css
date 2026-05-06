@@ -1,0 +1,10 @@
+/*
+ * home.css — solo keyframe non esprimibili in Tailwind
+ * Tutto il resto: var(--*) tramite classi Tailwind v4.
+ * Nessun override di token, componenti o stili del DS.
+ */
+
+ @keyframes grow-x {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
