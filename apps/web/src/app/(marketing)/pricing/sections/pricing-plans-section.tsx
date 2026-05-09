@@ -1,21 +1,39 @@
+import { FeatureShowcase, PageSection } from "@qoovex/ui";
 import { pricingContent } from "../content/index";
-import { MarketingPanelSurface } from "@/shared/components/index";
 
 export function PricingPlansSection() {
   return (
-    <MarketingPanelSurface>
-      <p className="text-(length:--text-xs) font-medium uppercase tracking-widest text-text-faint">
-        Placeholder — Piani
-      </p>
-      <h1 className="m-0 font-display text-(length:--text-3xl) font-semibold text-text">
-        {pricingContent.title}
-      </h1>
-      <p className="m-0 max-w-3xl text-(length:--text-sm) leading-relaxed text-text-muted">
-        {pricingContent.description}
-      </p>
-      <p className="m-0 mt-2 text-(length:--text-xs) text-text-faint">
-        Placeholder tabella piani: Free · Start · Pro · Enterprise.
-      </p>
-    </MarketingPanelSurface>
+    <PageSection
+      eyebrow="Prezzi"
+      title={pricingContent.title}
+      description={pricingContent.description}
+    >
+      <FeatureShowcase
+        items={[
+          {
+            title: "Free",
+            body: "Per iniziare a ordinare ricette e prove di menu.",
+            label: "Base",
+          },
+          {
+            title: "Start",
+            body: "Per piccoli team che vogliono lavorare su ricette e menu condivisi.",
+            label: "Team",
+            tone: "primary",
+          },
+          {
+            title: "Pro",
+            body: "Per workspace con piu flussi, dati nutrizionali e operativita ricorrente.",
+            label: "Operativo",
+            tone: "success",
+          },
+          {
+            title: "Enterprise",
+            body: "Per limiti custom, supporto dedicato e realta multi-sede.",
+            label: "Custom",
+          },
+        ]}
+      />
+    </PageSection>
   );
 }

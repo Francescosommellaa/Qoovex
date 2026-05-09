@@ -5,9 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
+  Box,
   Button,
   Input,
   OtpInput,
+  Stack,
+  Text,
   Form,
   FormField,
   FormControl,
@@ -293,7 +296,7 @@ export default function SignUpPage() {
           : (
             <>
               Stiamo inviando il codice a{" "}
-              <span className="auth-email-highlight">{email.trim()}</span>. Controlla la
+              <Text as="span" className="auth-email-highlight">{email.trim()}</Text>. Controlla la
               posta in arrivo e lo spam.
             </>
           )
@@ -303,7 +306,7 @@ export default function SignUpPage() {
     >
       {step === "form" ? (
         <>
-          <div className="auth-oauth-stack">
+          <Stack gap="3">
             <OAuthButton
               mode="signUp"
               provider="google"
@@ -326,9 +329,11 @@ export default function SignUpPage() {
                 });
               }}
             />
-          </div>
+          </Stack>
 
-          <div className="auth-divider">oppure</div>
+          <Text as="span" className="auth-divider">
+            oppure
+          </Text>
 
           <Form
             variant="plain"
@@ -396,9 +401,9 @@ export default function SignUpPage() {
               label={
                 <>
                   Numero di telefono{" "}
-                  <span className="auth-optional-label" aria-label="campo facoltativo">
+                  <Text as="span" className="auth-optional-label" aria-label="campo facoltativo">
                     facoltativo
-                  </span>
+                  </Text>
                 </>
               }
               helperText="Usato solo per sicurezza account e notifiche importanti. Inserisci solo il numero, senza prefisso."
@@ -436,7 +441,7 @@ export default function SignUpPage() {
               </FormControl>
             </FormField>
 
-            <div
+            <Box
               id="clerk-captcha"
               className="auth-captcha-slot"
               data-cl-theme="dark"
@@ -458,9 +463,9 @@ export default function SignUpPage() {
             </FormActions>
           </Form>
 
-          <p className="auth-footer-text">
+          <Text className="auth-footer-text">
             Hai già un account? <Link href={signInHref}>Accedi</Link>
-          </p>
+          </Text>
         </>
       ) : (
         <Form
@@ -507,7 +512,7 @@ export default function SignUpPage() {
             </Button>
           </FormActions>
 
-          <p className="auth-footer-text">
+          <Text className="auth-footer-text">
             Non hai ricevuto il codice?{" "}
             <button
               type="button"
@@ -517,10 +522,10 @@ export default function SignUpPage() {
             >
               {isResending ? "Reinvio in corso..." : "Invia di nuovo"}
             </button>
-            <span className="auth-inline-countdown" aria-live="polite" aria-atomic="true">
+            <Text as="span" className="auth-inline-countdown" aria-live="polite" aria-atomic="true">
               {resendCountdown > 0 ? ` tra ${resendCountdown}s` : "\u00a0"}
-            </span>
-          </p>
+            </Text>
+          </Text>
         </Form>
       )}
     </AuthShell>

@@ -4,68 +4,49 @@
 @import "@qoovex/ui/animations/motion";
 @import "tailwindcss";
 
-@source "../../../../packages/ui/src";
-
-/* ─── Auth shell layout ──────────────────────────────────────────────── */
-
-.auth-shell {
-  min-height: 100dvh;
-  display: grid;
-  place-items: center;
-  padding: var(--spacing-6) var(--spacing-4);
-  background-color: var(--color-bg);
-  position: relative;
-}
-
-.auth-card {
-  width: 100%;
-  max-width: 26rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-lg);
-  padding: var(--spacing-8);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-6);
-  animation: qv-motion-soft-scale var(--motion-duration-slow) var(--ease-qoovex) both;
-  transition:
-    border-color var(--transition-base),
-    box-shadow var(--transition-base),
-    transform var(--transition-base);
-}
-
-.auth-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-3);
-  text-align: center;
-}
+@source "../../../../../packages/ui/src";
+@source "../../../../../packages/ui/config";
 
 .auth-logo {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: var(--auth-logo-size);
+  height: var(--auth-logo-size);
   border-radius: var(--radius-lg);
 }
 
-.auth-title {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 600;
-  color: var(--color-text);
-  line-height: 1.15;
+.auth-form-scope {
+  --auth-footer-gap: var(--spacing-6);
+  display: flex;
+  flex-direction: column;
 }
 
-.auth-subtitle {
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-  line-height: 1.5;
+.auth-form-scope > *,
+.auth-form-scope .qv-form > .auth-footer-text {
+  animation: qv-motion-fade-up var(--motion-duration-base) var(--ease-qoovex) both;
 }
 
-.auth-email-highlight {
-  color: var(--color-text);
-  font-weight: 600;
+.auth-form-scope > *:nth-child(2) {
+  animation-delay: var(--auth-stagger-1);
+}
+
+.auth-form-scope > *:nth-child(3) {
+  animation-delay: var(--auth-stagger-2);
+}
+
+.auth-form-scope > *:nth-child(4) {
+  animation-delay: var(--auth-stagger-3);
+}
+
+.auth-form-scope > .qv-form + .auth-footer-text,
+.auth-form-scope > .auth-footer-text,
+.auth-form-scope .qv-form > .auth-footer-text {
+  margin-top: var(--auth-footer-gap);
+}
+
+.auth-captcha-slot {
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .auth-divider {
@@ -77,14 +58,14 @@
   color: var(--color-text-faint);
   font-size: var(--text-xs);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--tracking-wide);
 }
 
 .auth-divider::before,
 .auth-divider::after {
   content: "";
   flex: 1;
-  height: 1px;
+  height: var(--border-thin);
   background: var(--color-divider);
 }
 
@@ -106,67 +87,9 @@
   color: var(--color-text);
 }
 
-.auth-form-scope {
-  --auth-footer-gap: var(--spacing-6);
-  display: flex;
-  flex-direction: column;
-}
-
-.auth-loading-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  background: oklch(from var(--color-bg) l c h / 0.82);
-  backdrop-filter: blur(2px);
-  display: grid;
-  place-items: center;
-  padding: var(--spacing-4);
-}
-
-.auth-loading-overlay__card {
-  width: 100%;
-  max-width: 23rem;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3);
-}
-
-.auth-form-scope > *,
-.auth-form-scope .qv-form > .auth-footer-text {
-  animation: qv-motion-fade-up var(--motion-duration-base) var(--ease-qoovex) both;
-}
-
-.auth-form-scope > *:nth-child(2) {
-  animation-delay: 35ms;
-}
-
-.auth-form-scope > *:nth-child(3) {
-  animation-delay: 70ms;
-}
-
-.auth-form-scope > *:nth-child(4) {
-  animation-delay: 105ms;
-}
-
-/* Stesso respiro tra ultimo blocco del form (pulsante primario) e riga footer: sign-in / sign-up / verify. */
-.auth-form-scope > .qv-form + .auth-footer-text,
-.auth-form-scope > .auth-footer-text,
-.auth-form-scope .qv-form > .auth-footer-text {
-  margin-top: var(--auth-footer-gap);
-}
-
-/* Mount Clerk Turnstile prima del submit: il pulsante resta l’ultimo elemento del form come in sign-in. */
-.auth-form-scope .auth-captcha-slot {
-  width: 100%;
-  min-height: 0;
-  display: flex;
-  justify-content: center;
-}
-
-.auth-oauth-stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3);
+.auth-email-highlight {
+  color: var(--color-text);
+  font-weight: 600;
 }
 
 .auth-inline-link-row {
@@ -207,7 +130,7 @@
 
 .auth-inline-link-button:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
+  box-shadow: 0 0 0 var(--border-focus) var(--color-focus-ring);
 }
 
 .auth-inline-link-button:disabled {
@@ -219,15 +142,26 @@
 
 .auth-inline-countdown {
   display: inline-block;
-  min-width: 8ch;
+  min-width: var(--auth-countdown-width);
   text-align: left;
   color: var(--color-primary);
   font-variant-numeric: tabular-nums;
 }
 
+.auth-loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-overlay);
+  background: var(--auth-overlay-bg);
+  backdrop-filter: blur(var(--blur-sm));
+  display: grid;
+  place-items: center;
+  padding: var(--spacing-4);
+}
+
 .auth-error-banner {
   background: var(--color-error-highlight);
-  border: 1px solid oklch(from var(--color-error) l c h / 0.3);
+  border: var(--border-thin) solid var(--color-error);
   border-radius: var(--radius-lg);
   padding: var(--spacing-3) var(--spacing-4);
   font-size: var(--text-sm);
@@ -237,14 +171,13 @@
   gap: var(--spacing-2);
 }
 
-/* Softer inline feedback (evita solo testo rosso aggressivo) */
 .auth-message-banner {
   display: flex;
   align-items: flex-start;
   gap: var(--spacing-2);
   background: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-primary);
+  border: var(--border-thin) solid var(--color-border);
+  border-left: var(--border-accent) solid var(--color-primary);
   border-radius: var(--radius-lg);
   padding: var(--spacing-3) var(--spacing-4);
   font-size: var(--text-sm);
@@ -254,7 +187,7 @@
 
 .auth-neutral-banner {
   background: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
+  border: var(--border-thin) solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-4);
   font-size: var(--text-sm);
@@ -263,102 +196,28 @@
   text-align: center;
 }
 
-/* Mobile-first campi auth: font ≥16px (iOS), padding e raggio ≥12px */
-.auth-form-scope .qv-form-field__control > .flex.w-full.flex-col > .relative.flex.items-center {
-  border-radius: max(0.75rem, var(--radius-md, 0.5rem));
-  padding-left: max(0.75rem, var(--spacing-3));
-  padding-right: max(0.75rem, var(--spacing-3));
-  min-height: max(2.75rem, var(--input-height-md, 2.5rem));
-}
-
-.auth-form-scope .qv-form-field__control input:not([type="hidden"]) {
-  font-size: max(1rem, var(--text-sm));
-}
-
-.auth-form-scope .qv-phone-number-field__region,
-.auth-form-scope .qv-phone-number-field__number {
-  font-size: max(1rem, var(--text-sm));
-  border-radius: max(0.75rem, var(--radius-md, 0.5rem));
-  min-height: max(2.75rem, var(--input-height-md, 2.5rem));
-  padding-left: max(0.75rem, var(--spacing-3));
-  padding-right: max(0.75rem, var(--spacing-3));
-}
-
-.auth-form-scope .qv-otp-input__slot {
-  font-size: max(1rem, var(--text-base));
-  border-radius: max(0.75rem, var(--radius-md, 0.5rem));
-  min-height: max(2.75rem, var(--input-height-md, 2.5rem));
-}
-
-.auth-form-scope .qv-form-field--status-error .qv-form-field__label {
-  color: var(--form-error-color, var(--color-error));
-}
-
+.auth-form-scope .qv-form-field--status-error .qv-form-field__label,
 .auth-form-scope .qv-form-field--status-error .qv-form-field__required {
   color: var(--form-error-color, var(--color-error));
 }
 
-/* Errore sul gruppo OTP: bordo rosso token (stesso linguaggio di Input in errore) */
 .auth-form-scope .qv-form-field--status-error .qv-otp-input__slot {
   border-color: var(--color-input-border-error);
-  box-shadow: 0 0 0 2px var(--color-error-highlight);
+  box-shadow: 0 0 0 var(--border-focus) var(--color-error-highlight);
 }
 
-/* Più respiro sopra/sotto la riga delle azioni (divider interno al form) */
 .auth-form-scope .qv-form-actions {
   margin-top: var(--spacing-5);
   padding-top: var(--spacing-5);
 }
 
-.auth-steps {
-  display: flex;
-  gap: var(--spacing-2);
-  justify-content: center;
-}
-
-.auth-step-dot {
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: var(--radius-full);
-  background: var(--color-border);
-  transition: background var(--transition-base), width var(--transition-base);
-}
-
-.auth-step-dot[data-active="true"] {
-  width: 1.25rem;
-  background: var(--color-primary);
-}
-
-.auth-step-dot[data-done="true"] {
-  background: var(--color-primary);
-  opacity: 0.4;
-}
-
-.auth-back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-1);
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: color var(--transition-fast);
-  align-self: flex-start;
-}
-
-.auth-back-btn:hover {
-  color: var(--color-text);
-}
-
 .auth-optional-label {
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--color-border);
+  border: var(--border-thin) solid var(--color-border);
   border-radius: var(--radius-full);
   padding: 0 var(--spacing-2);
-  min-height: 1.125rem;
+  min-height: var(--auth-optional-min-height);
   font-size: var(--text-xs);
   letter-spacing: 0;
   text-transform: none;
@@ -366,31 +225,12 @@
   background: var(--color-surface-elevated);
 }
 
-.auth-warning-field .qv-form-field__label {
-  color: var(--color-warning);
-}
-
+.auth-warning-field .qv-form-field__label,
 .auth-warning-field .qv-form-field__required {
   color: var(--color-warning);
 }
 
 .auth-warning-field input {
   border-color: var(--color-warning) !important;
-  box-shadow: 0 0 0 1px oklch(from var(--color-warning) l c h / 0.2);
-}
-
-@media (max-width: 420px) {
-  .auth-card {
-    max-width: 100%;
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-6);
-    box-shadow: none;
-    border: none;
-  }
-
-  .auth-shell {
-    align-items: flex-start;
-    padding-top: var(--spacing-8);
-  }
-
+  box-shadow: 0 0 0 var(--border-thin) var(--color-warning);
 }

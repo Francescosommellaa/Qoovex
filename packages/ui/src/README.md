@@ -1,14 +1,44 @@
 # UI Source
 
-Scopo: sorgente TypeScript del design system.
+## Cosa e
+Sorgente TypeScript del design system pubblico Qoovex.
 
-Metti qui:
-- componenti shared, utilita` interne e `index.ts` del package.
+## Come e composto
+- `primitives`: layout, testo e icone token-safe.
+- `components`: componenti presentazionali riutilizzabili.
+- `patterns`: composizioni ufficiali per sezioni e shell.
+- `hooks`: hook UI senza logica business.
+- `lib`: utility interne.
+- `index.ts`: export pubblico.
 
-Non mettere qui:
-- stili globali CSS canonici;
-- componenti business-specific.
+## Props / API
+| Area | Tipo | Default | Valori ammessi |
+|------|------|---------|----------------|
+| primitives | React components | token-safe | solo token scale |
+| components | React components | documented | props documentate nei README |
+| patterns | React compositions | DS layout | primitives + components |
 
-Regole:
-- l'API pubblica passa da `index.ts`;
-- `components/` per i componenti, `lib/` per supporto interno.
+## Token usati
+- Ogni elemento visivo deve passare da `styles/tokens`.
+- Le classi arbitrarie sono ammesse solo se leggono `var(--token)`.
+
+## Regole ferree
+- Non importare da app.
+- Non introdurre business logic.
+- Non esportare API non documentate.
+- Non usare `div`, `p`, `h*`, `span` nelle app quando esiste una primitive.
+
+## Esempi
+```tsx
+// Corretto
+import { Box, Stack, Text } from "@qoovex/ui";
+
+<Box surface="surface" radius="lg" padding="4">
+  <Stack gap="3">
+    <Text as="h2" size="lg">Titolo</Text>
+  </Stack>
+</Box>
+
+// Sbagliato
+<section className="p-7 rounded-[18px]">Titolo</section>
+```

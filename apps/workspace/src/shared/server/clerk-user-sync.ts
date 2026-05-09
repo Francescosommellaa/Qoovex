@@ -1,6 +1,13 @@
 import "server-only";
 
-import { db } from "@qoovex/db";
+import {
+  deleteUserByClerkId,
+  findUserIdByClerkId,
+  findUserIdentityByClerkId,
+  findUserIdentityByEmail,
+  findUserIdentityByUsername,
+  upsertSyncedUser,
+} from "@shared/server/repositories/user-repository";
 
 interface SyncClerkUserInput {
   clerkId: string;
@@ -58,10 +65,7 @@ export async function syncClerkUser(input: SyncClerkUserInput) {
   const email = input.email.trim().toLowerCase();
   if (!email) return null;
 
-  const existingByEmail = await db.user.findUnique({
-    where: { email },
-    select: { clerkId: true },
-  });
+  const existingByEmail = await findUserIdentityByEmail(email);
 
   if (existingByEmail && existingByEmail.clerkId !== input.clerkId) {
     throw new ClerkUserSyncConflictError(
@@ -69,20 +73,15 @@ export async function syncClerkUser(input: SyncClerkUserInput) {
     );
   }
 
-  const existingByClerkId = await db.user.findUnique({
-    where: { clerkId: input.clerkId },
-    select: { id: true, username: true },
-  });
+  const existingByClerkId = await findUserIdentityByClerkId(input.clerkId);
 
   const normalizedUsername =
     normalizeUsername(input.username ?? "") ||
     existingByClerkId?.username ||
     getStableFallbackUsername(input.clerkId);
 
-  const existingByUsername = await db.user.findUnique({
-    where: { username: normalizedUsername },
-    select: { clerkId: true },
-  });
+  const existingByUsername =
+    await findUserIdentityByUsername(normalizedUsername);
 
   if (existingByUsername && existingByUsername.clerkId !== input.clerkId) {
     throw new ClerkUserSyncConflictError(
@@ -93,27 +92,20 @@ export async function syncClerkUser(input: SyncClerkUserInput) {
   const normalizedPhoneNumber = normalizePhoneNumber(input.phoneNumber);
   const name = getDisplayName(input, normalizedUsername);
 
-  return await db.user.upsert({
-    where: { clerkId: input.clerkId },
-    create: {
-      clerkId: input.clerkId,
-      name,
-      email,
-      username: normalizedUsername,
-      phoneNumber: normalizedPhoneNumber,
-      plan: "FREE",
-    },
-    update: {
-      name,
-      email,
-      username: normalizedUsername,
-      ...(normalizedPhoneNumber ? { phoneNumber: normalizedPhoneNumber } : {}),
-    },
+  return await upsertSyncedUser({
+    clerkId: input.clerkId,
+    name,
+    email,
+    username: normalizedUsername,
+    phoneNumber: normalizedPhoneNumber,
   });
 }
 
 export async function deleteClerkUser(clerkId: string) {
-  return await db.user.deleteMany({
-    where: { clerkId },
-  });
+  return await deleteUserByClerkId(clerkId);
+}
+
+export async function hasSyncedClerkUser(clerkId: string) {
+  const existingUser = await findUserIdByClerkId(clerkId);
+  return Boolean(existingUser);
 }

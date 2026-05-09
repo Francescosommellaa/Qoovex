@@ -1,8 +1,10 @@
 "use server";
 
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { db } from "@qoovex/db";
-import { syncClerkUser } from "@shared/server/clerk-user-sync";
+import {
+  hasSyncedClerkUser,
+  syncClerkUser,
+} from "@shared/server/clerk-user-sync";
 
 interface BootstrapUserOptions {
   phoneNumber?: string | null;
@@ -36,10 +38,5 @@ export async function hasBootstrappedUser() {
   const { userId } = await auth();
   if (!userId) return false;
 
-  const existingUser = await db.user.findUnique({
-    where: { clerkId: userId },
-    select: { id: true },
-  });
-
-  return Boolean(existingUser);
+  return await hasSyncedClerkUser(userId);
 }

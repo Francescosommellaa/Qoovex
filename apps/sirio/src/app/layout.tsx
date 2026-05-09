@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import { ThemeProvider } from "@qoovex/ui";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -25,9 +26,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it" className="dark">
+    <html lang="it" className="dark" data-theme="dark">
       <body>
-        {children}
+        <ThemeProvider defaultTheme="dark">{children}</ThemeProvider>
         <Analytics />
       </body>
     </html>

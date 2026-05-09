@@ -5,6 +5,8 @@
   "exports": {
     "./styles/tokens": "./styles/tokens.css",
     "./styles/base": "./styles/base.css",
+    "./styles/themes": "./styles/themes/index.ts",
+    "./config/variants": "./config/variants.ts",
     "./animations/motion": "./animations/motion.css",
     ".": {
       "types": "./src/index.ts",
@@ -29,6 +31,7 @@
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.5.0"
   }

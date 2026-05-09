@@ -12,6 +12,7 @@ import {
   FormField,
   FormControl,
   FormActions,
+  Text,
   useToast,
 } from "@qoovex/ui";
 import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
@@ -358,7 +359,7 @@ export default function ForgotPasswordPage() {
                   Verifica codice
                 </Button>
               </FormActions>
-              <p className="auth-footer-text">
+              <Text className="auth-footer-text">
                 Non hai ricevuto il codice?{" "}
                 <button
                   type="button"
@@ -367,7 +368,7 @@ export default function ForgotPasswordPage() {
                 >
                   Invia di nuovo
                 </button>
-              </p>
+              </Text>
             </Form>
           )}
 
@@ -430,9 +431,9 @@ export default function ForgotPasswordPage() {
           )}
       </>
 
-      <p className="auth-footer-text">
+      <Text className="auth-footer-text">
         Ricordi la password? <Link href="/sign-in">Accedi</Link>
-      </p>
+      </Text>
     </AuthShell>
   );
 }

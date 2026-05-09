@@ -1,7 +1,7 @@
-import { bootstrapUser } from "@shared/actions/bootstrap-user";
 import { SignOutButton } from "@clerk/nextjs";
-import { Button } from "@qoovex/ui";
 import { redirect } from "next/navigation";
+import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { Badge, Button, Card, CardBody, PageSection, Stack, Text } from "@qoovex/ui";
 
 export default async function DashboardPage() {
   const user = await bootstrapUser();
@@ -10,18 +10,30 @@ export default async function DashboardPage() {
   }
 
   return (
-    <main className="space-y-4 p-8">
-      <h1 className="text-(length:--text-lg) font-bold text-(--color-text)">
-        ✅ Login funzionante
-      </h1>
-      <pre className="overflow-x-auto rounded-lg border border-(--color-border) bg-(--color-surface) p-4 text-(length:--text-sm) text-(--color-text-muted)">
-        {JSON.stringify(user, null, 2)}
-      </pre>
-      <SignOutButton redirectUrl="/sign-in">
-        <Button type="button" variant="secondary" size="md" className="mt-4">
-          Esci
-        </Button>
-      </SignOutButton>
-    </main>
+    <PageSection
+      title="Workspace pronto"
+      description="Il profilo e sincronizzato. Questa vista placeholder usa solo blocchi del design system."
+    >
+      <Card variant="panel" tone="success" padding="lg">
+        <CardBody>
+          <Stack gap="4">
+            <Badge variant="soft" tone="success" size="md">
+              Login funzionante
+            </Badge>
+            <Text as="h1" family="display" size="lg" weight="semibold">
+              Ciao, {user.email ?? user.username ?? "chef"}
+            </Text>
+            <Text size="sm" tone="muted" leading="relaxed">
+              La dashboard applicativa verra composta con pattern e componenti condivisi.
+            </Text>
+            <SignOutButton redirectUrl="/sign-in">
+              <Button type="button" variant="secondary" size="md">
+                Esci
+              </Button>
+            </SignOutButton>
+          </Stack>
+        </CardBody>
+      </Card>
+    </PageSection>
   );
 }

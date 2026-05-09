@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { FeatureShowcase, PageSection } from "@qoovex/ui";
+import { legalContent } from "./content/index";
 
 export const metadata: Metadata = {
   title: "Note legali",
@@ -8,18 +10,31 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="space-y-10">
-      <section className="py-16">
-        <p className="mb-3 text-(length:--text-xs) font-medium uppercase tracking-widest text-text-faint">
-          Placeholder — Note legali
-        </p>
-        <h1 className="font-display text-(length:--text-3xl) font-semibold text-text">
-          Note legali.
-        </h1>
-        <p className="mt-4 max-w-2xl text-(length:--text-base) leading-relaxed text-text-muted">
-          Privacy policy, termini di servizio e cookie policy di Qoovex.
-        </p>
-      </section>
-    </div>
+    <PageSection
+      eyebrow="Trasparenza"
+      title={legalContent.title}
+      description={legalContent.description}
+    >
+      <FeatureShowcase
+        items={[
+          {
+            title: "Privacy policy",
+            body: "Informazioni sul trattamento dei dati e sulle responsabilita di Qoovex.",
+            label: "Privacy",
+          },
+          {
+            title: "Termini di servizio",
+            body: "Condizioni d'uso della piattaforma, account e servizi collegati.",
+            label: "Termini",
+            tone: "primary",
+          },
+          {
+            title: "Cookie policy",
+            body: "Dettagli sui cookie tecnici e sugli strumenti usati per migliorare il servizio.",
+            label: "Cookie",
+          },
+        ]}
+      />
+    </PageSection>
   );
 }

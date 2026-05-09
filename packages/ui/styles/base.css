@@ -8,12 +8,11 @@
   }
 
   html {
-    color-scheme: dark;
+    color-scheme: dark light;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
-    /* Blocca il resize automatico del testo su iOS/Android */
     -moz-text-size-adjust: none;
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
@@ -26,6 +25,9 @@
     background-color: var(--color-bg);
     color: var(--color-text);
     font-size: var(--text-base);
+    transition:
+      background-color var(--transition-base),
+      color var(--transition-base);
   }
 
   h1,
@@ -2820,6 +2822,14 @@
     border-color: transparent;
   }
 
+  .qv-card--overflow-hidden {
+    overflow: hidden;
+  }
+
+  .qv-card--overflow-visible {
+    overflow: visible;
+  }
+
   .qv-card--tone-neutral {
     --card-accent: var(--card-tone-neutral);
     --card-accent-soft: var(--card-tone-neutral-soft);
@@ -2951,6 +2961,64 @@
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  /* BackToTop */
+
+  .qv-back-to-top {
+    position: fixed;
+    right: var(--back-to-top-offset);
+    bottom: calc(var(--back-to-top-offset) + env(safe-area-inset-bottom, 0px));
+    z-index: var(--z-sticky);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    min-width: var(--back-to-top-size);
+    min-height: var(--back-to-top-size);
+    padding-inline: var(--spacing-4);
+    border: 1px solid var(--back-to-top-border);
+    border-radius: var(--back-to-top-radius);
+    background: var(--back-to-top-bg);
+    color: var(--back-to-top-text);
+    box-shadow: var(--back-to-top-shadow);
+    opacity: 0;
+    pointer-events: none;
+    text-decoration: none;
+    transform: translateY(var(--spacing-2)) scale(0.96);
+    transition:
+      opacity var(--duration-base) var(--ease-qoovex),
+      transform var(--duration-base) var(--ease-qoovex),
+      background var(--duration-base) var(--ease-qoovex),
+      border-color var(--duration-base) var(--ease-qoovex),
+      color var(--duration-base) var(--ease-qoovex);
+  }
+
+  .qv-back-to-top[data-visible="true"] {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  .qv-back-to-top:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 3px;
+  }
+
+  @media (hover: hover) {
+    .qv-back-to-top:hover {
+      border-color: transparent;
+      background: var(--back-to-top-bg-hover);
+      color: var(--back-to-top-text-hover);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .qv-back-to-top {
+      right: var(--back-to-top-mobile-offset);
+      bottom: calc(var(--back-to-top-mobile-offset) + env(safe-area-inset-bottom, 0px));
+      padding-inline: var(--spacing-3);
+    }
   }
 
   @media (min-width: 768px) {

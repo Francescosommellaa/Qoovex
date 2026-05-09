@@ -1,13 +1,28 @@
+import { FeatureShowcase, PageSection } from "@qoovex/ui";
 import { legalContent } from "../content/index";
-import { MarketingQuietSurface } from "@/shared/components/index";
 
 export function LegalDocumentsSection() {
   return (
-    <MarketingQuietSurface>
-      <h1 className="m-0 font-display text-(length:--text-3xl) font-semibold text-text">{legalContent.title}</h1>
-      <p className="m-0 max-w-3xl text-(length:--text-sm) leading-relaxed text-text-muted">
-        {legalContent.description}
-      </p>
-    </MarketingQuietSurface>
+    <PageSection
+      eyebrow="Legale"
+      title={legalContent.title}
+      description={legalContent.description}
+    >
+      <FeatureShowcase
+        items={[
+          {
+            title: "Privacy",
+            body: "Trattamento dei dati e informazioni per utenti e workspace.",
+            label: "Privacy",
+          },
+          {
+            title: "Termini",
+            body: "Condizioni di utilizzo della piattaforma Qoovex.",
+            label: "Termini",
+            tone: "primary",
+          },
+        ]}
+      />
+    </PageSection>
   );
 }

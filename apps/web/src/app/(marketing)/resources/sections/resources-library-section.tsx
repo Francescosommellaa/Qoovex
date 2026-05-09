@@ -1,18 +1,28 @@
+import { FeatureShowcase, PageSection } from "@qoovex/ui";
 import { resourcesContent } from "../content/index";
-import { MarketingQuietSurface } from "@/shared/components/index";
 
 export function ResourcesLibrarySection() {
   return (
-    <MarketingQuietSurface>
-      <h1 className="m-0 font-display text-(length:--text-3xl) font-semibold text-text">
-        {resourcesContent.title}
-      </h1>
-      <p className="m-0 max-w-3xl text-(length:--text-sm) leading-relaxed text-text-muted">
-        {resourcesContent.description}
-      </p>
-      <p className="m-0 text-(length:--text-xs) text-text-faint">
-        Sezione base: presto troverai guide, template e FAQ.
-      </p>
-    </MarketingQuietSurface>
+    <PageSection
+      eyebrow="Risorse"
+      title={resourcesContent.title}
+      description={resourcesContent.description}
+    >
+      <FeatureShowcase
+        items={[
+          {
+            title: "Guide",
+            body: "Documentazione operativa per lavorare meglio con il workspace.",
+            label: "Guide",
+            tone: "primary",
+          },
+          {
+            title: "FAQ",
+            body: "Risposte sintetiche per dubbi comuni su ricette, menu e account.",
+            label: "Supporto",
+          },
+        ]}
+      />
+    </PageSection>
   );
 }

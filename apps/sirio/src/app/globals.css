@@ -4,99 +4,31 @@
 @import "tailwindcss";
 
 @source "../../../../packages/ui/src";
+@source "../../../../packages/ui/config";
 
-.sirio-layout {
-  display: flex;
-  min-height: calc(100dvh - 52px);
+.sirio-doc-anchor {
+  position: relative;
+  scroll-margin-top: var(--sirio-section-scroll-margin);
 }
 
-.sirio-sidebar {
-  display: none;
+.sirio-doc-anchor:focus-within {
+  z-index: var(--z-dropdown);
 }
 
-.sirio-main {
-  flex: 1;
-  min-width: 0;
-  overflow-x: hidden;
-  padding: var(--space-6) var(--space-4);
+.sirio-brand-link {
+  color: var(--color-text);
+  text-decoration: none;
 }
 
-.sirio-burger {
-  display: flex;
+.sirio-brand-icon {
+  display: block;
+  width: var(--sirio-brand-icon-size);
+  height: var(--sirio-brand-icon-size);
+  flex-shrink: 0;
+  filter: var(--sirio-brand-icon-filter);
+  transition: filter var(--duration-base) var(--ease-qoovex);
 }
 
-@media (min-width: 768px) {
-  .sirio-sidebar {
-    display: block;
-  }
-
-  .sirio-burger {
-    display: none !important;
-  }
-
-  .sirio-header-tagline {
-    display: block !important;
-  }
-
-  .sirio-main {
-    padding: var(--space-8) var(--space-10);
-  }
-}
-
-.sirio-token-chip {
-  cursor: pointer;
-  transition: opacity var(--transition-fast);
-}
-
-.sirio-token-chip:hover {
-  opacity: 0.8;
-}
-
-.sirio-token-chip:active {
-  opacity: 0.6;
-}
-
-.sirio-section {
-  margin-bottom: var(--space-16);
-}
-
-/* ─── Sirio Row layout ───────────────────────────────────────── */
-
-.sirio-row {
-  margin-bottom: var(--spacing-8);
-}
-
-.sirio-row__label {
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-faint);
-  font-family: monospace;
-  margin-bottom: var(--spacing-3);
-}
-
-.sirio-row__grid {
-  display: grid;
-  gap: var(--spacing-4);
-  align-items: start;
-}
-
-.sirio-row__grid--card {
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-}
-
-/* ─── Sirio testi generici ───────────────────────────────────── */
-
-.sirio-preview-text {
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-  line-height: 1.6;
-}
-
-.sirio-token-label {
-  font-size: var(--text-xs);
-  color: var(--color-text-faint);
-  font-family: monospace;
-  margin-bottom: var(--spacing-2);
+.sirio-preview-reserve-dropdown {
+  padding-bottom: var(--sirio-preview-reserve-dropdown);
 }

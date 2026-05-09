@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { FeatureShowcase, PageSection } from "@qoovex/ui";
+import { resourcesContent } from "./content/index";
 
 export const metadata: Metadata = {
   title: "Risorse",
@@ -7,19 +9,32 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="space-y-10">
-      <section className="py-16">
-        <p className="mb-3 text-(length:--text-xs) font-medium uppercase tracking-widest text-text-faint">
-          Placeholder — Risorse
-        </p>
-        <h1 className="font-display text-(length:--text-3xl) font-semibold text-text">
-          Guide e risorse.
-        </h1>
-        <p className="mt-4 max-w-2xl text-(length:--text-base) leading-relaxed text-text-muted">
-          Tutorial, changelog e materiali per sfruttare al massimo il tuo
-          workspace Qoovex.
-        </p>
-      </section>
-    </div>
+    <PageSection
+      eyebrow="Risorse"
+      title={resourcesContent.title}
+      description={resourcesContent.description}
+    >
+      <FeatureShowcase
+        items={[
+          {
+            title: "Guide operative",
+            body: "Materiali pratici per impostare ricette, menu e allergeni con una struttura coerente.",
+            label: "Guide",
+            tone: "primary",
+          },
+          {
+            title: "Template",
+            body: "Schemi riutilizzabili per partire piu velocemente con il tuo workspace Qoovex.",
+            label: "Template",
+          },
+          {
+            title: "Aggiornamenti",
+            body: "Novita di prodotto e note di rilascio pensate per team di cucina.",
+            label: "Changelog",
+            tone: "success",
+          },
+        ]}
+      />
+    </PageSection>
   );
 }

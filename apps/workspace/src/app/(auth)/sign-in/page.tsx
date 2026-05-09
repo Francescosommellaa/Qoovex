@@ -5,9 +5,12 @@ import { useAuth, useSignIn } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
+  Box,
   Button,
   Input,
-  Skeleton,
+  LoadingState,
+  Stack,
+  Text,
   Form,
   FormField,
   FormControl,
@@ -173,7 +176,7 @@ export default function SignInPage() {
       title="Accedi al workspace"
       subtitle="Inserisci le tue credenziali o usa un accesso rapido"
     >
-      <div className="auth-oauth-stack">
+      <Stack gap="3">
         <OAuthButton
           mode="signIn"
           provider="google"
@@ -190,9 +193,11 @@ export default function SignInPage() {
             notifyAuthFailure();
           }}
         />
-      </div>
+      </Stack>
 
-      <div className="auth-divider">oppure</div>
+      <Text as="span" className="auth-divider">
+        oppure
+      </Text>
 
       <Form
         variant="plain"
@@ -251,7 +256,7 @@ export default function SignInPage() {
           </FormControl>
         </FormField>
 
-        <div className="auth-inline-link-row">
+        <Box className="auth-inline-link-row">
           <Link
             href={
               normalizedForLinks
@@ -262,7 +267,7 @@ export default function SignInPage() {
           >
             Password dimenticata?
           </Link>
-        </div>
+        </Box>
 
         <FormActions align="stretch">
           <Button
@@ -279,26 +284,14 @@ export default function SignInPage() {
         </FormActions>
       </Form>
 
-      <p className="auth-footer-text">
+      <Text className="auth-footer-text">
         Non hai un account? <Link href={signUpHref}>Registrati</Link>
-      </p>
+      </Text>
 
       {isProvisioningDashboard ? (
-        <div className="auth-loading-overlay" aria-live="polite" aria-busy="true">
-          <div className="w-full max-w-160 space-y-4 p-8">
-            <Skeleton variant="title" size="md" width="34%" />
-            <div className="space-y-2 rounded-lg border border-(--color-border) bg-(--color-surface) p-4">
-              <Skeleton variant="text" size="sm" width="92%" />
-              <Skeleton variant="text" size="sm" width="88%" />
-              <Skeleton variant="text" size="sm" width="84%" />
-              <Skeleton variant="text" size="sm" width="90%" />
-              <Skeleton variant="text" size="sm" width="80%" />
-              <Skeleton variant="text" size="sm" width="86%" />
-              <Skeleton variant="text" size="sm" width="82%" />
-            </div>
-            <Skeleton variant="block" height="2.5rem" width="7rem" radius="full" />
-          </div>
-        </div>
+        <Box className="auth-loading-overlay" aria-live="polite" aria-busy="true">
+          <LoadingState rows={7} />
+        </Box>
       ) : null}
     </AuthShell>
   );

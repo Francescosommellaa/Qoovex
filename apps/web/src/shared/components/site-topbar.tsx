@@ -1,18 +1,31 @@
-import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@qoovex/ui";
+import Link from "next/link";
+import { ActionLink, Box, Stack, Text, ThemeToggle } from "@qoovex/ui";
 
-const navLinkClass =
-  "text-(length:--text-sm) text-text-muted transition-colors hover:text-text focus-visible:outline-none";
+const navItems = [
+  { href: "/product", label: "Prodotto" },
+  { href: "/enterprise", label: "Azienda" },
+  { href: "/pricing", label: "Prezzi" },
+  { href: "/resources", label: "Risorse" },
+];
 
 export function SiteTopbar() {
   return (
-    <header className="sticky top-4 z-30 mb-8 rounded-(--radius-lg) border border-border bg-bg/85 px-4 py-3 backdrop-blur-md md:px-6">
-      <div className="flex flex-wrap items-center gap-4">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 font-display text-(length:--text-lg) font-semibold text-text focus-visible:outline-none"
-        >
+    <Box
+      as="header"
+      surface="bg"
+      radius="lg"
+      border="subtle"
+      className="sticky top-(--spacing-4) z-(--z-sticky) mb-(--spacing-8) backdrop-blur-md"
+    >
+      <Stack
+        direction="row"
+        gap="4"
+        align="center"
+        wrap
+        className="px-(--spacing-4) py-(--spacing-3) md:px-(--spacing-6)"
+      >
+        <Link href="/" className="inline-flex items-center gap-(--spacing-2) no-underline">
           <Image
             src="/logo-icon/qoovex-icona-bianca-no-sfondo.svg"
             alt="Qoovex"
@@ -20,35 +33,31 @@ export function SiteTopbar() {
             height={24}
             priority
           />
-          <span>Qoovex</span>
+          <Text as="span" family="display" size="lg" weight="semibold">
+            Qoovex
+          </Text>
         </Link>
 
-        <nav className="flex min-w-full flex-wrap items-center gap-x-5 gap-y-2 text-(length:--text-sm) md:min-w-0 md:flex-1">
-          <Link href="/product" className={navLinkClass}>
-            Prodotto
-          </Link>
-          <Link href="/enterprise" className={navLinkClass}>
-            Azienda
-          </Link>
-          <Link href="/pricing" className={navLinkClass}>
-            Prezzi
-          </Link>
-          <Link href="/resources" className={navLinkClass}>
-            Risorse
-          </Link>
+        <nav className="flex min-w-full flex-wrap items-center gap-x-(--spacing-5) gap-y-(--spacing-2) md:min-w-0 md:flex-1">
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href} className="no-underline">
+              <Text as="span" size="sm" tone="muted" className="transition-colors hover:text-(--color-text)">
+                {item.label}
+              </Text>
+            </Link>
+          ))}
         </nav>
 
-        <div className="ml-auto inline-flex items-center gap-2">
-          <Button variant="ghost" size="sm">
-            <Link href="https://app.qoovex.com/sign-in">Sign in</Link>
+        <Stack direction="row" gap="2" align="center" className="ml-auto">
+          <ThemeToggle label="Tema" />
+          <ActionLink href="https://app.qoovex.com/sign-in" variant="ghost" size="sm">
             Sign in
-          </Button>
-          <Button variant="secondary" size="sm">
-            <Link href="/contact">Contact</Link>
+          </ActionLink>
+          <ActionLink href="/contact" variant="secondary" size="sm">
             Contact
-          </Button>
-        </div>
-      </div>
-    </header>
+          </ActionLink>
+        </Stack>
+      </Stack>
+    </Box>
   );
 }

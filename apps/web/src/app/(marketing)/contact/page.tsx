@@ -7,9 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return (
-    <div className="space-y-10">
-      <ContactFormSection />
-    </div>
-  );
+  return <ContactFormSection />;
 }

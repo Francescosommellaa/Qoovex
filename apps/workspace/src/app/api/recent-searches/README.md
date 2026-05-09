@@ -3,7 +3,8 @@
 Scopo: endpoint delle ricerche recenti utente.
 
 Metti qui:
-- solo il route handler e helper strettamente necessari a questa risorsa.
+- solo il route handler di questa risorsa;
+- parsing HTTP, auth, chiamata service e response.
 
 Non mettere qui:
 - hook client;
@@ -12,4 +13,6 @@ Non mettere qui:
 
 Regole:
 - validazione input chiara;
-- delega a funzioni condivise se l'endpoint cresce.
+- nessun import diretto da `@qoovex/db`;
+- delega use case a `@shared/server/recent-search-service`;
+- il service delega la persistenza a `@shared/server/repositories/recent-search-repository`.

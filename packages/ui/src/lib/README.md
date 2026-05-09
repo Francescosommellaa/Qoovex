@@ -1,14 +1,30 @@
 # UI Lib
 
-Scopo: utility interne al package UI.
+## Cosa e
+Utility interne che supportano componenti e pattern del design system.
 
-Metti qui:
-- helper di class merge, supporto a componenti e funzioni pure del package.
+## Come e composto
+- `utils.ts`: merge classi e helper minimi.
+- Funzioni pure usate dai componenti UI.
 
-Non mettere qui:
-- componenti React completi;
-- utility shared generiche che dovrebbero stare in `packages/utils`.
+## Props / API
+| Export | Tipo | Default | Valori ammessi |
+|------|------|---------|----------------|
+| `cn` | function | none | classi token-safe |
 
-Regole:
-- supporta il design system, non il business;
-- API minima e privata quando possibile.
+## Token usati
+- Nessun token diretto obbligatorio: le utility non decidono valori visuali.
+
+## Regole ferree
+- Non inserire logica business.
+- Non generare classi visuali arbitrarie.
+- Non duplicare helper condivisi gia presenti in altri package.
+
+## Esempi
+```ts
+// Corretto
+cn("qv-card", isActive && "qv-card--active");
+
+// Sbagliato
+cn(`p-[${padding}px]`);
+```
