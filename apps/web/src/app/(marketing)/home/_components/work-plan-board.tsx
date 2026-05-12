@@ -1,7 +1,7 @@
 import { Box, Card, CardBody, Stack, Text } from "@qoovex/ui";
 
 const tasks = [
-  { time: "08:20", title: "Cuoci fondi e basi", meta: "Mario - 45 min attivi" },
+  { time: "08:20", title: "Cuoci fondi e basi", meta: "Mario \u00b7 45 min attivi" },
   { time: "09:10", title: "Abbattimento impasti", meta: "Tempo passivo sfruttato" },
   { time: "10:30", title: "Porziona tartare", meta: "Ricetta allegata" },
 ];
@@ -27,20 +27,26 @@ export function WorkPlanBoard() {
               </Text>
             </Stack>
             <Text as="span" size="xs" tone="faint" weight="semibold">
-              Screenshot app
+              Anteprima app
             </Text>
           </Stack>
 
-          <Stack gap="3">
+          <Stack gap="2">
             {tasks.map((task) => (
-              <Box key={task.title} radius="lg" border="subtle" surface="surface" padding="3">
-                <Stack direction="row" align="center" gap="3">
+              <Box
+                key={task.title}
+                radius="lg"
+                border="subtle"
+                surface="surface"
+                className="px-(--spacing-4) py-(--spacing-4)"
+              >
+                <Stack direction="row" align="center" gap="4">
                   <Box
                     radius="md"
                     surface="offset"
-                    className="flex h-(--spacing-10) w-(--spacing-12) shrink-0 items-center justify-center"
+                    className="flex h-(--spacing-10) w-(--spacing-14) shrink-0 items-center justify-center"
                   >
-                    <Text as="span" size="xs" tone="muted" weight="semibold">
+                    <Text as="span" size="xs" tone="muted" weight="semibold" className="font-mono">
                       {task.time}
                     </Text>
                   </Box>
@@ -57,7 +63,7 @@ export function WorkPlanBoard() {
             ))}
           </Stack>
 
-          <Text size="xs" tone="muted">
+          <Text size="xs" tone="muted" leading="snug">
             I tempi passivi diventano spazio utile, non attesa confusa.
           </Text>
         </Stack>
