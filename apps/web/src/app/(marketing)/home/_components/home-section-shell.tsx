@@ -10,10 +10,10 @@ type HomeSectionShellProps = {
   className?: string;
 };
 
-const accentClass = {
-  primary: "bg-(--color-border)",
-  success: "bg-(--color-border)",
-  warning: "bg-(--color-border)",
+const accentColorClass = {
+  primary: "bg-(--color-primary)",
+  success: "bg-(--color-success)",
+  warning: "bg-(--color-warning)",
   neutral: "bg-(--color-text-faint)",
 } as const;
 
@@ -31,12 +31,12 @@ export function HomeSectionShell({
     <section className={className}>
       <Stack gap="8" className="py-(--spacing-14) md:py-(--spacing-16)">
         <Stack
-          gap="3"
+          gap="4"
           align={isCentered ? "center" : "start"}
           className={isCentered ? "mx-auto max-w-(--measure-copy) text-center" : "max-w-(--measure-copy)"}
         >
           <span
-            className={`h-px w-(--spacing-12) rounded-(--radius-full) ${accentClass[accent]}`}
+            className={`block h-px w-(--spacing-10) rounded-(--radius-full) opacity-70 ${accentColorClass[accent]}`}
             aria-hidden="true"
           />
           <Text

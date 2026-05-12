@@ -4,14 +4,17 @@ export const homeHero = {
   title: "Il prossimo passo.",
   highlight: "Sempre chiaro.",
   description:
-    "Qoovex tiene insieme ricette, preparazioni, menu, allergeni e lavoro della brigata. Cosi non devi ricordare tutto: apri, assegni, esegui.",
+    "Qoovex tiene insieme ricette, preparazioni, menu, allergeni e lavoro della brigata. Così non devi ricordare tutto: apri, assegni, esegui.",
   primaryAction: { label: "Metti ordine in cucina", href: `${workspaceUrl}/sign-up` },
-  proof: [
-    "Una ricetta sola, sempre quella giusta.",
-    "Menu, allergeni e preparazioni restano collegati.",
-    "La brigata vede cosa fare, senza chiedere ogni volta.",
-  ],
+  secondaryAction: { label: "Guarda come funziona", href: "/product" },
 } as const;
+
+export const socialProof = [
+  { value: "50+", label: "ricette organizzate nella prima settimana" },
+  { value: "100%", label: "allergeni calcolati in automatico" },
+  { value: "0", label: "fogli sparsi, chat e appunti persi" },
+  { value: "1", label: "posto solo per tutto il lavoro" },
+] as const;
 
 export const kitchenProblems = [
   {
@@ -22,7 +25,7 @@ export const kitchenProblems = [
   {
     label: "Servizio",
     today: "Cambi, urgenze e tempi passivi si incastrano a mano.",
-    qoovex: "Il piano mostra priorita, assegnazioni e prossimo passo.",
+    qoovex: "Il piano mostra priorità, assegnazioni e prossimo passo.",
   },
   {
     label: "Stock",
@@ -50,7 +53,7 @@ export const workflowSteps = [
     label: "Piano",
     title: "La brigata vede il prossimo passo.",
     description:
-      "Produzione, evento o servizio: assegni task, tempi, dipendenze e quantita. Chi lavora vede cosa fare, non tutto il caos.",
+      "Produzione, evento o servizio: assegni task, tempi, dipendenze e quantità. Chi lavora vede cosa fare, non tutto il caos.",
     tone: "warning",
   },
   {
@@ -65,7 +68,7 @@ export const workflowSteps = [
 export const workPlanHighlights = [
   {
     label: "Produzione e stock",
-    description: "Tieni sotto controllo basi, salse, impasti e semilavorati con soglie minime e quantita prodotte.",
+    description: "Tieni sotto controllo basi, salse, impasti e semilavorati con soglie minime e quantità prodotte.",
   },
   {
     label: "Eventi e servizi",
@@ -73,7 +76,7 @@ export const workPlanHighlights = [
   },
   {
     label: "Ricette dentro il lavoro",
-    description: "Ogni task puo portare con se la ricetta giusta, anche come snapshot leggibile dal team.",
+    description: "Ogni task può portare con sé la ricetta giusta, anche come snapshot leggibile dal team.",
   },
   {
     label: "AI contestuale",
@@ -88,8 +91,10 @@ export const operatingPrinciples = [
 ] as const;
 
 export const finalCta = {
-  title: "Meno cose da ricordare. Piu servizio da guidare.",
+  title: "Meno cose da ricordare.",
+  highlight: "Più servizio da guidare.",
   description:
     "Qoovex mette ordine prima che inizi la pressione: ricette pronte, task chiari, stock visibile e meno decisioni ripetute.",
   primaryAction: { label: "Inizia a mettere ordine", href: `${workspaceUrl}/sign-up` },
+  secondaryAction: { label: "Parla con noi", href: "/contact" },
 } as const;

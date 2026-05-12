@@ -7,6 +7,7 @@ import {
   ProductValueSection,
   WorkflowSection,
 } from "./sections/index";
+import { HomeSocialProofSection } from "./_components/index";
 
 export const metadata: Metadata = {
   title: "Qoovex - Il workspace per chef professionisti",
@@ -19,6 +20,7 @@ export default function Page() {
     <>
       <HomeHeroSection />
       <AppScreenshotSection />
+      <HomeSocialProofSection />
       <KitchenRealitySection />
       <WorkflowSection />
       <ProductValueSection />

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Button, Icon, Stack, Text } from "@qoovex/ui";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { homeHero } from "../content/index";
@@ -11,12 +12,27 @@ const reviewPhotos = [
 
 export function HomeHeroSection() {
   return (
-    <section className="min-w-0 overflow-hidden pb-(--spacing-8) pt-(--spacing-8) md:pb-(--spacing-10) md:pt-(--spacing-8)">
+    <section className="relative min-w-0 overflow-hidden pb-(--spacing-4) pt-(--spacing-24) md:pb-(--spacing-6) md:pt-(--spacing-32)">
+      {/* Atmospheric radial glow — Linear-style background depth */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10"
+        aria-hidden="true"
+      >
+        <div
+          className="absolute left-1/2 top-0 h-[40rem] w-[70rem] -translate-x-1/2 -translate-y-1/4 rounded-full"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 30%, oklch(0.32 0.04 240 / 0.18) 0%, oklch(0.18 0.02 240 / 0.08) 45%, transparent 70%)",
+            filter: "blur(48px)",
+          }}
+        />
+      </div>
+
       <Stack
-        gap="6"
+        gap="8"
         align="start"
-        className="w-full md:max-w-[58rem]"
-        style={{ width: "min(100%, calc(100vw - var(--spacing-8)))" }}
+        className="w-full"
+        style={{ maxWidth: "min(100%, 58rem)" }}
       >
         <Stack gap="5">
           <Text
@@ -53,6 +69,14 @@ export function HomeHeroSection() {
             iconRight={<Icon icon={ArrowRight} size="sm" weight="bold" />}
           >
             {homeHero.primaryAction.label}
+          </Button>
+          <Button
+            as={Link}
+            href={homeHero.secondaryAction.href}
+            size="lg"
+            variant="ghost"
+          >
+            {homeHero.secondaryAction.label}
           </Button>
         </Stack>
 
