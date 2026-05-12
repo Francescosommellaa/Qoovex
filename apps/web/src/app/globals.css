@@ -6,3 +6,51 @@
 @source "../../../../packages/ui/src/";
 @source "../../../../packages/ui/config/";
 @source "../shared/";
+
+@layer base {
+  :root {
+    --shadow-md:
+      0 1px 2px oklch(0 0 0 / 0.16),
+      0 8px 22px oklch(0 0 0 / 0.18);
+    --shadow-lg:
+      0 1px 3px oklch(0 0 0 / 0.16),
+      0 14px 36px oklch(0 0 0 / 0.2);
+    --shadow-btn-hover: var(--shadow-sm);
+    --shadow-card-bento:
+      0 1px 2px oklch(0 0 0 / 0.14),
+      0 12px 30px oklch(0 0 0 / 0.16);
+    --shadow-card-interactive-hover:
+      0 1px 2px oklch(0 0 0 / 0.14),
+      0 10px 24px oklch(0 0 0 / 0.16),
+      0 0 0 1px var(--card-accent-border);
+  }
+
+  [data-theme="white"] {
+    --shadow-md:
+      0 1px 2px oklch(0.16 0.01 248 / 0.05),
+      0 8px 20px oklch(0.16 0.01 248 / 0.08);
+    --shadow-lg:
+      0 1px 3px oklch(0.16 0.01 248 / 0.06),
+      0 14px 36px oklch(0.16 0.01 248 / 0.1);
+    --shadow-card-bento:
+      0 1px 2px oklch(0.16 0.01 248 / 0.06),
+      0 10px 28px oklch(0.16 0.01 248 / 0.08);
+    --shadow-card-interactive-hover:
+      0 1px 2px oklch(0.16 0.01 248 / 0.06),
+      0 8px 24px oklch(0.16 0.01 248 / 0.08),
+      0 0 0 1px var(--card-accent-border);
+  }
+
+  ::selection {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  .qv-page-section h2 {
+    font-size: var(--text-2xl);
+  }
+
+  .qv-card--bento {
+    background: var(--color-surface);
+  }
+}

@@ -1,12 +1,4 @@
-import { Badge, Box, Card, CardBody, Icon, Stack, Text } from "@qoovex/ui";
-import {
-  ArrowRight,
-  Brain,
-  CheckCircle,
-  Clock,
-  CookingPot,
-  UsersThree,
-} from "@phosphor-icons/react/dist/ssr";
+import { Box, Card, CardBody, Stack, Text } from "@qoovex/ui";
 
 const tasks = [
   { time: "08:20", title: "Cuoci fondi e basi", meta: "Mario - 45 min attivi" },
@@ -16,7 +8,13 @@ const tasks = [
 
 export function WorkPlanBoard() {
   return (
-    <Card variant="panel" tone="primary" padding="lg" overflow="hidden">
+    <Card
+      variant="panel"
+      tone="primary"
+      padding="lg"
+      overflow="hidden"
+      className="pointer-events-none select-none [box-shadow:none]"
+    >
       <CardBody>
         <Stack gap="6">
           <Stack direction="row" align="center" justify="between" gap="4">
@@ -28,14 +26,9 @@ export function WorkPlanBoard() {
                 Piano di lavoro
               </Text>
             </Stack>
-            <Badge
-              variant="soft"
-              tone="success"
-              size="sm"
-              iconLeft={<Icon icon={CheckCircle} size="xs" weight="bold" />}
-            >
-              Pronto
-            </Badge>
+            <Text as="span" size="xs" tone="faint" weight="semibold">
+              Screenshot app
+            </Text>
           </Stack>
 
           <Stack gap="3">
@@ -64,35 +57,9 @@ export function WorkPlanBoard() {
             ))}
           </Stack>
 
-          <div className="grid grid-cols-1 gap-(--spacing-3) sm:grid-cols-3">
-            {[
-              { label: "Stock", value: "Crocchette sotto soglia", icon: CookingPot, tone: "warning" as const },
-              { label: "Brigata", value: "3 persone allineate", icon: UsersThree, tone: "success" as const },
-              { label: "AI", value: "2 task suggeriti", icon: Brain, tone: "primary" as const },
-            ].map((item) => (
-              <Box key={item.label} radius="lg" border="divider" surface="surface2" padding="3">
-                <Stack gap="2">
-                  <Icon icon={item.icon} tone={item.tone} size="md" weight="bold" />
-                  <Stack gap="1">
-                    <Text as="span" size="xs" tone="faint">
-                      {item.label}
-                    </Text>
-                    <Text as="span" size="xs" weight="semibold" leading="snug">
-                      {item.value}
-                    </Text>
-                  </Stack>
-                </Stack>
-              </Box>
-            ))}
-          </div>
-
-          <Stack direction="row" align="center" gap="2">
-            <Icon icon={Clock} tone="primary" size="sm" weight="bold" />
-            <Text size="xs" tone="muted">
-              I tempi passivi diventano spazio utile, non attesa confusa.
-            </Text>
-            <Icon icon={ArrowRight} tone="faint" size="xs" weight="bold" className="ml-auto" />
-          </Stack>
+          <Text size="xs" tone="muted">
+            I tempi passivi diventano spazio utile, non attesa confusa.
+          </Text>
         </Stack>
       </CardBody>
     </Card>

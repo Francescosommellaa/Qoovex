@@ -7,6 +7,7 @@ import {
   SquaresFour,
 } from "@phosphor-icons/react/dist/ssr";
 import { Badge, Skeleton } from "../../components";
+import { cn } from "../../lib/utils";
 import { Box, Icon, Stack, Text } from "../../primitives";
 import type {
   ProductPreviewFrameProps,
@@ -49,6 +50,7 @@ const screenCopy: Record<ProductPreviewScreen, { title: string; action: string; 
 
 export function ProductPreviewFrame({
   activeScreen = "recipes",
+  className,
   ...props
 }: ProductPreviewFrameProps) {
   const screen = screenCopy[activeScreen];
@@ -57,11 +59,13 @@ export function ProductPreviewFrame({
     <Box
       radius="2xl"
       border="subtle"
-      shadow="lg"
       surface="surface"
-      className="mx-auto w-full max-w-(--product-preview-width) overflow-hidden"
+      className={cn(
+        "pointer-events-none mx-auto w-full max-w-(--product-preview-width) select-none overflow-hidden border-dashed [box-shadow:none]",
+        className,
+      )}
       role="img"
-      aria-label="Anteprima Qoovex Workspace"
+      aria-label="Screenshot statico di Qoovex Workspace"
       {...props}
     >
       <div className="flex min-h-(--product-preview-chrome-height) items-center gap-(--spacing-3) border-b border-(--color-border) bg-(--color-surface-2) px-(--spacing-3)">
@@ -73,8 +77,11 @@ export function ProductPreviewFrame({
         <Badge variant="soft" tone="neutral" size="sm">
           app.qoovex.com
         </Badge>
+        <Text as="span" size="xs" tone="faint" weight="semibold" className="ml-auto">
+          Screenshot app
+        </Text>
       </div>
-      <div className="grid min-h-(--product-preview-height) grid-cols-[var(--product-preview-nav-width)_minmax(0,1fr)]">
+      <div className="grid min-h-(--product-preview-height) grid-cols-[var(--product-preview-nav-width)_minmax(0,1fr)] opacity-90">
         <aside className="border-r border-(--color-border) bg-(--color-surface-2) p-(--spacing-3)">
           <Stack gap="3">
             <Icon icon={SquaresFour} tone="primary" weight="bold" />
@@ -105,17 +112,17 @@ export function ProductPreviewFrame({
             <Text as="span" size="sm" weight="semibold">
               {screen.title}
             </Text>
-            <Badge variant="soft" tone="primary" size="sm">
+            <Badge variant="soft" tone="neutral" size="sm">
               {screen.action}
             </Badge>
           </div>
           <Stack gap="2" className="p-(--spacing-3)">
             {screen.rows.map((row, index) => (
-              <Box key={row} surface="surface" border="subtle" radius="lg" padding="3">
+              <Box key={row} surface="surface" border="divider" radius="lg" padding="3">
                 <Stack direction="row" align="center" gap="3">
                   <Skeleton variant="block" size="sm" radius="md" className="shrink-0" />
                   <Stack gap="1" className="min-w-0">
-                    <Text as="span" size="xs" weight="medium" className="truncate">
+                    <Text as="span" size="xs" tone="faint" weight="medium" className="truncate">
                       {row}
                     </Text>
                     <Skeleton variant="text" size="xs" width={index % 2 === 0 ? "62%" : "48%"} />

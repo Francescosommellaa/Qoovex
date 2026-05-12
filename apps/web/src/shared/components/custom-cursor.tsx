@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 
 const interactiveSelector = [
-  "a",
+  "a[href]",
   "button",
   "input",
   "textarea",
   "select",
   "[role='button']",
-  "[data-cursor]",
+  "[role='link']",
 ].join(",");
 
 export function CustomCursor() {
@@ -20,6 +20,7 @@ export function CustomCursor() {
   const lastTrailRef = useRef(0);
   const ringPositionRef = useRef({ x: 0, y: 0 });
   const pointerRef = useRef({ x: 0, y: 0 });
+  const isInteractiveRef = useRef(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const [isInteractive, setIsInteractive] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
@@ -81,21 +82,28 @@ export function CustomCursor() {
       window.setTimeout(() => mark.remove(), 460);
     }
 
+    function syncInteractiveState(x: number, y: number) {
+      const element = document.elementFromPoint(x, y);
+      const target = element instanceof Element ? element.closest(interactiveSelector) : null;
+      const isDisabled =
+        target instanceof HTMLButtonElement ||
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement
+          ? target.disabled
+          : target?.getAttribute("aria-disabled") === "true";
+      const nextIsInteractive = Boolean(target && !isDisabled);
+
+      if (isInteractiveRef.current !== nextIsInteractive) {
+        isInteractiveRef.current = nextIsInteractive;
+        setIsInteractive(nextIsInteractive);
+      }
+    }
+
     function handlePointerMove(event: PointerEvent) {
       pointerRef.current = { x: event.clientX, y: event.clientY };
+      syncInteractiveState(event.clientX, event.clientY);
       addTrail(event.clientX, event.clientY);
-    }
-
-    function handlePointerOver(event: PointerEvent) {
-      const target = event.target;
-      setIsInteractive(target instanceof Element && Boolean(target.closest(interactiveSelector)));
-    }
-
-    function handlePointerOut(event: PointerEvent) {
-      const target = event.target;
-      if (target instanceof Element && target.closest(interactiveSelector)) {
-        setIsInteractive(false);
-      }
     }
 
     function handlePointerDown() {
@@ -107,8 +115,6 @@ export function CustomCursor() {
     }
 
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
-    window.addEventListener("pointerover", handlePointerOver, { passive: true });
-    window.addEventListener("pointerout", handlePointerOut, { passive: true });
     window.addEventListener("pointerdown", handlePointerDown, { passive: true });
     window.addEventListener("pointerup", handlePointerUp, { passive: true });
     frameRef.current = window.requestAnimationFrame(render);
@@ -116,8 +122,6 @@ export function CustomCursor() {
     return () => {
       document.documentElement.classList.remove("qv-custom-cursor-enabled");
       window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerover", handlePointerOver);
-      window.removeEventListener("pointerout", handlePointerOut);
       window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("pointerup", handlePointerUp);
       if (frameRef.current) {

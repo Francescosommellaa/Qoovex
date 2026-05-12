@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import {
+  AppScreenshotSection,
   HomeFinalCtaSection,
   HomeHeroSection,
   KitchenRealitySection,
@@ -17,6 +18,7 @@ export default function Page() {
   return (
     <>
       <HomeHeroSection />
+      <AppScreenshotSection />
       <KitchenRealitySection />
       <WorkflowSection />
       <ProductValueSection />

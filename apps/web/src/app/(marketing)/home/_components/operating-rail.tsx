@@ -1,6 +1,5 @@
-import { Badge, Box, Card, CardBody, Icon, Stack, Text } from "@qoovex/ui";
+import { Box, Card, CardBody, Icon, Stack, Text } from "@qoovex/ui";
 import {
-  CheckCircle,
   ClipboardText,
   ForkKnife,
   QrCode,
@@ -16,26 +15,22 @@ const railItems = [
 
 export function OperatingRail() {
   return (
-    <Card variant="panel" tone="primary" padding="lg" overflow="visible">
+    <Card
+      variant="panel"
+      tone="primary"
+      padding="lg"
+      overflow="visible"
+      className="border-dashed [box-shadow:none]"
+    >
       <CardBody>
         <Stack gap="5">
-          <Stack direction="row" align="center" justify="between" gap="4">
-            <Stack gap="1">
-              <Text as="span" size="xs" tone="faint" weight="medium">
-                Qoovex Workspace
-              </Text>
-              <Text as="h2" family="display" size="lg" weight="semibold" leading="tight">
-                Regia del servizio
-              </Text>
-            </Stack>
-            <Badge
-              variant="soft"
-              tone="success"
-              size="sm"
-              iconLeft={<Icon icon={CheckCircle} size="xs" weight="bold" />}
-            >
-              Live
-            </Badge>
+          <Stack gap="1">
+            <Text as="span" size="xs" tone="faint" weight="medium">
+              Qoovex Workspace
+            </Text>
+            <Text as="h2" family="display" size="lg" weight="semibold" leading="tight">
+              Regia del servizio
+            </Text>
           </Stack>
 
           <Stack gap="3">
@@ -46,7 +41,6 @@ export function OperatingRail() {
                 border="subtle"
                 surface="surface"
                 padding="3"
-                className="transition-colors hover:bg-(--color-surface-2)"
               >
                 <Stack direction="row" align="center" gap="3">
                   <Box

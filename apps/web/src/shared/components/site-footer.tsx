@@ -48,8 +48,8 @@ export function SiteFooter() {
             </Text>
           </Link>
           <Text size="sm" tone="muted" leading="relaxed">
-            Il workspace che aiuta chef e brigate a tenere insieme ricette,
-            preparazioni, menu, stock e lavoro del giorno.
+            Il workspace che aiuta cuochi e chef professionisti a tenere
+            insieme ricette, preparazioni, menu, stock e lavoro del giorno.
           </Text>
           <Stack direction="row" gap="3" wrap>
             <Button
@@ -93,7 +93,7 @@ export function SiteFooter() {
           (c) 2026 Qoovex. Tutti i diritti riservati.
         </Text>
         <Text size="xs" tone="faint">
-          Pensato per cucine professionali in Italia.
+          Pensato per cuochi e chef professionisti in Italia.
         </Text>
       </Stack>
     </Box>
