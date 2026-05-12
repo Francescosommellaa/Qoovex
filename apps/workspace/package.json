@@ -15,8 +15,8 @@
     "@qoovex/utils": "workspace:*",
     "@vercel/analytics": "^2.0.1",
     "next": "15.5.14",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "19.1.4",
+    "react-dom": "19.1.4",
     "resend": "^6.12.0",
     "svix": "^1.90.0"
   },

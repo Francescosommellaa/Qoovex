@@ -6,8 +6,3 @@
 @source "../../../../packages/ui/src/";
 @source "../../../../packages/ui/config/";
 @source "../shared/";
-
-
-@theme {
-    --radius-lg: var(--radius-lg);
-  }
