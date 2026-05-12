@@ -13,22 +13,32 @@ export function WorkflowSection() {
         {workflowSteps.slice(0, 3).map((step, index) => (
           <Stack
             key={step.label}
-            gap="5"
-            className="bg-(--color-bg) px-(--spacing-6) py-(--spacing-7)"
+            gap="8"
+            className="bg-(--color-bg) px-(--spacing-8) py-(--spacing-8)"
           >
+            {/* Step number: piccolo, monospace, faint — orientamento, non gerarchia */}
             <Text
               as="span"
-              family="display"
-              weight="semibold"
+              size="xs"
               tone="faint"
-              className="text-[2.5rem] leading-none tabular-nums"
+              weight="semibold"
+              className="font-mono tracking-widest uppercase"
             >
               0{index + 1}
             </Text>
-            <Stack gap="2">
-              <Text as="h3" family="display" size="lg" weight="semibold" leading="tight">
+            <Stack gap="3">
+              {/* Title: display font grande — questo è il primario */}
+              <Text
+                as="h3"
+                family="display"
+                size="lg"
+                weight="semibold"
+                leading="tight"
+                className="md:text-(length:--text-xl)"
+              >
                 {step.title}
               </Text>
+              {/* Description: muted, supporto */}
               <Text size="sm" tone="muted" leading="relaxed">
                 {step.description}
               </Text>
