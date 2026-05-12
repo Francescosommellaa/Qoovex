@@ -29,14 +29,15 @@ export function HomeSectionShell({
 
   return (
     <section className={className}>
-      <Stack gap="8" className="py-(--spacing-14) md:py-(--spacing-16)">
+      <Stack gap="10" className="py-(--spacing-16) md:py-(--spacing-20)">
         <Stack
-          gap="4"
+          gap="5"
           align={isCentered ? "center" : "start"}
-          className={isCentered ? "mx-auto max-w-(--measure-copy) text-center" : "max-w-(--measure-copy)"}
+          className={isCentered ? "mx-auto max-w-(--measure-copy) text-center" : "max-w-[44rem]"}
         >
+          {/* Accent line — 2px, full color, no opacity reduction */}
           <span
-            className={`block h-px w-(--spacing-10) rounded-(--radius-full) opacity-70 ${accentColorClass[accent]}`}
+            className={`block h-[2px] w-(--spacing-8) rounded-(--radius-full) ${accentColorClass[accent]}`}
             aria-hidden="true"
           />
           <Text
