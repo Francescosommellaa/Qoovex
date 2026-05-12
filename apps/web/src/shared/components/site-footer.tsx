@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
-import { Button, Divider, Icon, Stack, Text } from "@qoovex/ui";
+import { Button, Card, CardBody, Divider, Icon, Stack, Text } from "@qoovex/ui";
+import { workspaceSignUpHref } from "@/shared/workspace-url";
 
 const footerGroups = [
   {
@@ -13,7 +14,7 @@ const footerGroups = [
     ],
   },
   {
-    title: "Features",
+    title: "Funzionalità",
     links: [
       { href: "/product#ricette", label: "Ricette" },
       { href: "/product#menu", label: "Menu digitali" },
@@ -42,75 +43,83 @@ const footerGroups = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-(--spacing-16) pb-(--spacing-6) pt-(--spacing-10)">
-      <Divider spacing="lg" />
-
-      <div className="grid grid-cols-2 gap-(--spacing-8) sm:grid-cols-3 md:grid-cols-[1fr_auto_auto_auto_auto]">
-        {/* Brand column */}
-        <div className="col-span-2 sm:col-span-3 md:col-span-1">
-          <Stack gap="5" className="max-w-[18rem]">
-            <Link href="/" className="inline-flex items-center gap-(--spacing-2) no-underline">
-              <Image
-                src="/logo-icon/qoovex-icona-bianca-no-sfondo.svg"
-                alt="Qoovex"
-                width={26}
-                height={26}
-              />
-              <Text as="span" family="display" size="lg" weight="semibold">
-                Qoovex
-              </Text>
-            </Link>
-            <Text size="sm" tone="muted" leading="relaxed">
-              Il workspace operativo per cuochi e chef professionisti.
-              Ricette, menu, allergeni e lavoro della brigata in un solo posto.
-            </Text>
-            <Button
-              as="a"
-              href="https://app.qoovex.com/sign-up"
-              size="sm"
-              iconRight={<Icon icon={ArrowRight} size="xs" weight="bold" />}
-            >
-              Inizia gratis
-            </Button>
-          </Stack>
-        </div>
-
-        {/* Link groups */}
-        {footerGroups.map((group) => (
-          <Stack key={group.title} gap="4">
-            <Text as="h3" size="xs" tone="faint" weight="semibold" className="uppercase tracking-wide">
-              {group.title}
-            </Text>
-            <Stack as="ul" gap="3">
-              {group.links.map((item) => (
-                <li key={item.href} className="list-none">
-                  <Link href={item.href} className="no-underline">
-                    <Text
-                      as="span"
-                      size="sm"
-                      tone="muted"
-                      className="transition-colors hover:text-(--color-text)"
-                    >
-                      {item.label}
+    <footer className="mt-(--spacing-16) pb-(--spacing-6)">
+      <Card variant="surface" tone="neutral" padding="none" className="w-full">
+        <CardBody padding="lg">
+          <Stack gap="10">
+            <div className="grid grid-cols-2 gap-(--spacing-8) sm:grid-cols-3 md:grid-cols-[1fr_auto_auto_auto_auto]">
+              <div className="col-span-2 sm:col-span-3 md:col-span-1">
+                <Stack gap="5" className="max-w-(--qv-footer-brand-max)">
+                  <Link href="/" className="inline-flex items-center gap-(--spacing-2) no-underline">
+                    <Image
+                      src="/logo-icon/qoovex-icona-bianca-no-sfondo.svg"
+                      alt="Qoovex"
+                      width={26}
+                      height={26}
+                    />
+                    <Text as="span" family="display" size="lg" weight="semibold">
+                      Qoovex
                     </Text>
                   </Link>
-                </li>
+                  <Text size="sm" tone="muted" leading="relaxed">
+                    Il workspace operativo per cuochi e chef professionisti.
+                    Ricette, menu, allergeni e lavoro della brigata in un solo posto.
+                  </Text>
+                  <Button
+                    as="a"
+                    href={workspaceSignUpHref}
+                    size="sm"
+                    iconRight={<Icon icon={ArrowRight} size="xs" weight="bold" />}
+                  >
+                    Inizia gratis
+                  </Button>
+                </Stack>
+              </div>
+
+              {footerGroups.map((group) => (
+                <Stack key={group.title} gap="4">
+                  <Text
+                    as="h3"
+                    size="xs"
+                    tone="faint"
+                    weight="semibold"
+                    className="uppercase tracking-wide"
+                  >
+                    {group.title}
+                  </Text>
+                  <Stack as="ul" gap="3">
+                    {group.links.map((item) => (
+                      <li key={item.href} className="list-none">
+                        <Link href={item.href} className="no-underline">
+                          <Text
+                            as="span"
+                            size="sm"
+                            tone="muted"
+                            className="transition-colors hover:text-(--color-text)"
+                          >
+                            {item.label}
+                          </Text>
+                        </Link>
+                      </li>
+                    ))}
+                  </Stack>
+                </Stack>
               ))}
+            </div>
+
+            <Divider spacing="md" />
+
+            <Stack direction="row" gap="3" align="center" justify="between" wrap>
+              <Text size="xs" tone="faint">
+                © 2026 Qoovex. Tutti i diritti riservati.
+              </Text>
+              <Text size="xs" tone="faint">
+                Pensato per cuochi e chef professionisti in Italia.
+              </Text>
             </Stack>
           </Stack>
-        ))}
-      </div>
-
-      <div className="mt-(--spacing-12) border-t border-(--color-divider) pt-(--spacing-6)">
-        <Stack direction="row" gap="3" align="center" justify="between" wrap>
-          <Text size="xs" tone="faint">
-            © 2026 Qoovex. Tutti i diritti riservati.
-          </Text>
-          <Text size="xs" tone="faint">
-            Pensato per cuochi e chef professionisti in Italia.
-          </Text>
-        </Stack>
-      </div>
+        </CardBody>
+      </Card>
     </footer>
   );
 }

@@ -1,11 +1,13 @@
-export const workspaceUrl = "https://app.qoovex.com";
+import { WORKSPACE_ORIGIN, workspaceSignUpHref } from "@/shared/workspace-url";
+
+export const workspaceUrl = WORKSPACE_ORIGIN;
 
 export const homeHero = {
   title: "Il prossimo passo.",
   highlight: "Sempre chiaro.",
   description:
     "Qoovex tiene insieme ricette, preparazioni, menu, allergeni e lavoro della brigata. Così non devi ricordare tutto: apri, assegni, esegui.",
-  primaryAction: { label: "Metti ordine in cucina", href: `${workspaceUrl}/sign-up` },
+  primaryAction: { label: "Metti ordine in cucina", href: workspaceSignUpHref },
   secondaryAction: { label: "Guarda come funziona", href: "/product" },
 } as const;
 
@@ -65,6 +67,8 @@ export const workflowSteps = [
   },
 ] as const;
 
+export const workPlanHighlightsHeading = "Dalle preparazioni al servizio" as const;
+
 export const workPlanHighlights = [
   {
     label: "Produzione e stock",
@@ -95,6 +99,6 @@ export const finalCta = {
   highlight: "Più servizio da guidare.",
   description:
     "Qoovex mette ordine prima che inizi la pressione: ricette pronte, task chiari, stock visibile e meno decisioni ripetute.",
-  primaryAction: { label: "Inizia a mettere ordine", href: `${workspaceUrl}/sign-up` },
+  primaryAction: { label: "Inizia a mettere ordine", href: workspaceSignUpHref },
   secondaryAction: { label: "Parla con noi", href: "/contact" },
 } as const;

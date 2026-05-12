@@ -13,11 +13,11 @@ export function HomeSocialProofSection() {
                 family="display"
                 size="2xl"
                 weight="semibold"
-                leading="none"
+                leading="tight"
               >
                 {item.value}
               </Text>
-              <Text size="xs" tone="faint" leading="snug" className="max-w-[14rem]">
+              <Text size="xs" tone="faint" leading="snug" className="max-w-(--qv-social-proof-stat-label-max)">
                 {item.label}
               </Text>
             </Stack>

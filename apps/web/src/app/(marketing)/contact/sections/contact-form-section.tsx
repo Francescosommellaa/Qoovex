@@ -1,4 +1,5 @@
 import { CtaBand, PageSection, Text } from "@qoovex/ui";
+import { workspaceSignUpHref } from "@/shared/workspace-url";
 import { contactContent } from "../content/index";
 
 export function ContactFormSection() {
@@ -18,7 +19,7 @@ export function ContactFormSection() {
         title="Preferisci iniziare subito?"
         description="Crea il workspace e organizza ricette, menu e piani di lavoro dalla stessa base dati."
         actions={[
-          { label: "Registrati gratis", href: "https://app.qoovex.com/sign-up" },
+          { label: "Registrati gratis", href: workspaceSignUpHref },
           { label: "Vedi i piani", href: "/pricing", variant: "secondary" },
         ]}
       />

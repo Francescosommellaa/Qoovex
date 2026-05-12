@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Button, Icon, Stack, Text } from "@qoovex/ui";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { homeHero } from "../content/index";
@@ -21,9 +20,8 @@ export function HomeHeroSection() {
         <div
           className="absolute left-1/2 top-0 h-[40rem] w-[70rem] -translate-x-1/2 -translate-y-1/4 rounded-full"
           style={{
-            background:
-              "radial-gradient(ellipse at 50% 30%, oklch(0.32 0.04 240 / 0.18) 0%, oklch(0.18 0.02 240 / 0.08) 45%, transparent 70%)",
-            filter: "blur(48px)",
+            background: "var(--qv-marketing-radial-hero)",
+            filter: "blur(var(--qv-marketing-blur-hero))",
           }}
         />
       </div>
@@ -31,8 +29,7 @@ export function HomeHeroSection() {
       <Stack
         gap="8"
         align="start"
-        className="w-full"
-        style={{ maxWidth: "min(100%, 58rem)" }}
+        className="w-full max-w-(--qv-marketing-hero-inner-max)"
       >
         <Stack gap="5">
           <Text
@@ -41,7 +38,7 @@ export function HomeHeroSection() {
             size="xl"
             weight="semibold"
             leading="tight"
-            className="break-words text-wrap md:text-[4rem] lg:text-[4.5rem]"
+            className="break-words text-wrap text-(length:--qv-marketing-hero-title-size)"
           >
             {homeHero.title}{" "}
             <Text
@@ -51,7 +48,7 @@ export function HomeHeroSection() {
               tone="muted"
               weight="semibold"
               leading="tight"
-              className="md:text-[4rem] lg:text-[4.5rem]"
+              className="text-(length:--qv-marketing-hero-title-size)"
             >
               {homeHero.highlight}
             </Text>
@@ -71,7 +68,7 @@ export function HomeHeroSection() {
             {homeHero.primaryAction.label}
           </Button>
           <Button
-            as={Link}
+            as="a"
             href={homeHero.secondaryAction.href}
             size="lg"
             variant="ghost"
@@ -95,7 +92,7 @@ export function HomeHeroSection() {
             ))}
           </div>
           <Text size="xs" tone="faint" leading="snug">
-            Piccole brigate e chef usano Qoovex per vedere subito cosa fare.
+            Oltre 100 chef e brigate risparmiano già più di 2 ore al giorno grazie a Qoovex.
           </Text>
         </div>
       </Stack>

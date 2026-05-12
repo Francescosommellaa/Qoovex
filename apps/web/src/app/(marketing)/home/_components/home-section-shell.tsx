@@ -33,7 +33,9 @@ export function HomeSectionShell({
         <Stack
           gap="5"
           align={isCentered ? "center" : "start"}
-          className={isCentered ? "mx-auto max-w-(--measure-copy) text-center" : "max-w-[44rem]"}
+          className={
+            isCentered ? "mx-auto max-w-(--measure-copy) text-center" : "max-w-(--qv-marketing-section-intro-max)"
+          }
         >
           {/* Accent line — 2px, full color, no opacity reduction */}
           <span

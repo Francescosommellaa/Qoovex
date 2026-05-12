@@ -23,6 +23,40 @@
       0 1px 2px oklch(0 0 0 / 0.14),
       0 10px 24px oklch(0 0 0 / 0.16),
       0 0 0 1px var(--card-accent-border);
+
+    /* Marketing home — radial glow, layout, screenshot chrome (token centralizzati) */
+    --qv-marketing-radial-hero: radial-gradient(
+      ellipse at 50% 30%,
+      oklch(0.32 0.04 240 / 0.18) 0%,
+      oklch(0.18 0.02 240 / 0.08) 45%,
+      transparent 70%
+    );
+    --qv-marketing-radial-cta: radial-gradient(
+      ellipse at 50% 50%,
+      oklch(0.32 0.04 240 / 0.16) 0%,
+      oklch(0.18 0.02 240 / 0.06) 50%,
+      transparent 75%
+    );
+    --qv-marketing-blur-hero: 48px;
+    --qv-marketing-blur-cta: 56px;
+    --qv-marketing-hero-inner-max: min(100%, 58rem);
+    --qv-marketing-section-intro-max: 44rem;
+    --qv-marketing-screenshot-max: min(100%, var(--container-wide));
+    --qv-marketing-screenshot-mask: linear-gradient(to bottom, black 55%, transparent 100%);
+    --qv-marketing-screenshot-shadow:
+      0 0 0 1px oklch(1 0 0 / 0.04),
+      0 24px 64px oklch(0 0 0 / 0.5),
+      0 4px 16px oklch(0 0 0 / 0.3);
+    --qv-marketing-screenshot-inner-shine: linear-gradient(
+      to right,
+      transparent,
+      oklch(1 0 0 / 0.12),
+      transparent
+    );
+    --qv-marketing-hero-title-size: clamp(2.125rem, 1.25rem + 3.2vw, 4.5rem);
+    --qv-marketing-cta-title-size: clamp(2rem, 1.1rem + 2.8vw, 3.5rem);
+    --qv-social-proof-stat-label-max: 14rem;
+    --qv-footer-brand-max: 18rem;
   }
 
   [data-theme="white"] {

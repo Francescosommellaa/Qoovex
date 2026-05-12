@@ -13,57 +13,63 @@ const railItems = [
   { label: "Brigata", value: "Prossimo passo", icon: ClipboardText, tone: "neutral" as const },
 ];
 
-export function OperatingRail() {
-  return (
-    <Card
-      variant="panel"
-      tone="primary"
-      padding="lg"
-      overflow="visible"
-      className="border-dashed [box-shadow:none]"
-    >
-      <CardBody>
-        <Stack gap="5">
-          <Stack gap="1">
-            <Text as="span" size="xs" tone="faint" weight="medium">
-              Qoovex Workspace
-            </Text>
-            <Text as="h2" family="display" size="lg" weight="semibold" leading="tight">
-              Regia del servizio
-            </Text>
-          </Stack>
+type OperatingRailProps = {
+  className?: string;
+};
 
-          <Stack gap="3">
-            {railItems.map((item) => (
-              <Box
-                key={item.label}
-                radius="lg"
-                border="subtle"
-                surface="surface"
-                padding="3"
-              >
-                <Stack direction="row" align="center" gap="3">
-                  <Box
-                    radius="full"
-                    surface="offset"
-                    className="flex size-(--spacing-8) shrink-0 items-center justify-center"
-                  >
-                    <Icon icon={item.icon} tone={item.tone} size="md" weight="bold" />
-                  </Box>
-                  <Stack gap="1" className="min-w-0">
-                    <Text as="span" size="xs" tone="faint" weight="medium">
-                      {item.label}
-                    </Text>
-                    <Text as="span" size="sm" weight="semibold" className="truncate">
-                      {item.value}
-                    </Text>
+export function OperatingRail({ className }: OperatingRailProps) {
+  return (
+    <div className={className}>
+      <Card
+        variant="panel"
+        tone="primary"
+        padding="lg"
+        overflow="visible"
+        className="border-dashed [box-shadow:none]"
+      >
+        <CardBody>
+          <Stack gap="5">
+            <Stack gap="1">
+              <Text as="span" size="xs" tone="faint" weight="medium">
+                Qoovex Workspace
+              </Text>
+              <Text as="h2" family="display" size="lg" weight="semibold" leading="tight">
+                Regia del servizio
+              </Text>
+            </Stack>
+
+            <Stack gap="3">
+              {railItems.map((item) => (
+                <Box
+                  key={item.label}
+                  radius="lg"
+                  border="subtle"
+                  surface="surface"
+                  padding="3"
+                >
+                  <Stack direction="row" align="center" gap="3">
+                    <Box
+                      radius="full"
+                      surface="offset"
+                      className="flex size-(--spacing-8) shrink-0 items-center justify-center"
+                    >
+                      <Icon icon={item.icon} tone={item.tone} size="md" weight="bold" />
+                    </Box>
+                    <Stack gap="1" className="min-w-0">
+                      <Text as="span" size="xs" tone="faint" weight="medium">
+                        {item.label}
+                      </Text>
+                      <Text as="span" size="sm" weight="semibold" className="truncate">
+                        {item.value}
+                      </Text>
+                    </Stack>
                   </Stack>
-                </Stack>
-              </Box>
-            ))}
+                </Box>
+              ))}
+            </Stack>
           </Stack>
-        </Stack>
-      </CardBody>
-    </Card>
+        </CardBody>
+      </Card>
+    </div>
   );
 }

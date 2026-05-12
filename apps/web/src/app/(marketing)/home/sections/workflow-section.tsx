@@ -9,8 +9,8 @@ export function WorkflowSection() {
       description="Il ricettario diventa operativo: non resta archivio, entra nei menu, nei task e nelle preparazioni del giorno."
       accent="success"
     >
-      <div className="grid grid-cols-1 gap-px border border-(--color-divider) bg-(--color-divider) overflow-hidden rounded-(--radius-xl) md:grid-cols-3">
-        {workflowSteps.slice(0, 3).map((step, index) => (
+      <div className="grid grid-cols-1 gap-px overflow-hidden rounded-(--radius-xl) border border-(--color-divider) bg-(--color-divider) md:grid-cols-2 xl:grid-cols-4">
+        {workflowSteps.map((step, index) => (
           <Stack
             key={step.label}
             gap="8"

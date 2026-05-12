@@ -10,8 +10,7 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { Box, Button, Icon, Stack, Text } from "@qoovex/ui";
-
-const workspaceUrl = "https://app.qoovex.com";
+import { workspaceSignInHref, workspaceSignUpHref } from "@/shared/workspace-url";
 const scrollDirectionThreshold = 4;
 const topbarHideOffset = 24;
 
@@ -304,25 +303,26 @@ export function SiteTopbar() {
           <Stack direction="row" gap="2" align="center" className="ml-auto">
             <Button
               as="a"
-              href={`${workspaceUrl}/sign-in`}
+              href={workspaceSignInHref}
               variant="ghost"
               size="sm"
               className="h-8 px-(--spacing-3) md:hidden"
             >
-              Login
+              Accedi
             </Button>
             <Button
               as="a"
-              href={`${workspaceUrl}/sign-up`}
+              href={workspaceSignUpHref}
               variant="secondary"
               size="sm"
               className="h-8 px-(--spacing-3) md:hidden"
             >
-              Signup
+              Iscriviti
             </Button>
             <Button
               as="a"
-              href={`${workspaceUrl}/sign-up`}
+              href={workspaceSignUpHref}
+              variant="secondary"
               size="sm"
               iconRight={<Icon icon={ArrowRight} size="xs" weight="bold" />}
               className="hidden md:inline-flex"
@@ -372,7 +372,7 @@ export function SiteTopbar() {
 
               <Button
                 as="a"
-                href={`${workspaceUrl}/sign-up`}
+                href={workspaceSignUpHref}
                 size="md"
                 iconRight={<Icon icon={ArrowRight} size="sm" weight="bold" />}
                 className="w-full"

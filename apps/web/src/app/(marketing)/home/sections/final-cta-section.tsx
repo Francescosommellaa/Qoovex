@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Button, Icon, Stack, Text } from "@qoovex/ui";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { finalCta } from "../content/index";
@@ -14,14 +13,13 @@ export function HomeFinalCtaSection() {
         <div
           className="absolute left-1/2 top-1/2 h-[36rem] w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
           style={{
-            background:
-              "radial-gradient(ellipse at 50% 50%, oklch(0.32 0.04 240 / 0.16) 0%, oklch(0.18 0.02 240 / 0.06) 50%, transparent 75%)",
-            filter: "blur(56px)",
+            background: "var(--qv-marketing-radial-cta)",
+            filter: "blur(var(--qv-marketing-blur-cta))",
           }}
         />
       </div>
 
-      <Stack gap="10" align="center" className="mx-auto max-w-[44rem] text-center">
+      <Stack gap="10" align="center" className="mx-auto max-w-(--qv-marketing-section-intro-max) text-center">
         <Stack gap="5" align="center">
           <span
             className="block h-px w-(--spacing-10) rounded-(--radius-full) bg-(--color-success) opacity-70"
@@ -33,7 +31,7 @@ export function HomeFinalCtaSection() {
             size="xl"
             weight="semibold"
             leading="tight"
-            className="md:text-[3rem] lg:text-[3.5rem]"
+            className="text-(length:--qv-marketing-cta-title-size)"
           >
             {finalCta.title}{" "}
             <Text
@@ -43,7 +41,7 @@ export function HomeFinalCtaSection() {
               tone="muted"
               weight="semibold"
               leading="tight"
-              className="md:text-[3rem] lg:text-[3.5rem]"
+              className="text-(length:--qv-marketing-cta-title-size)"
             >
               {finalCta.highlight}
             </Text>
@@ -63,7 +61,7 @@ export function HomeFinalCtaSection() {
             {finalCta.primaryAction.label}
           </Button>
           <Button
-            as={Link}
+            as="a"
             href={finalCta.secondaryAction.href}
             size="lg"
             variant="ghost"
