@@ -21,7 +21,7 @@ jobs:
     env:
       CI: "1"
       NEXT_TELEMETRY_DISABLED: "1"
-      DATABASE_URL: "postgresql://user:password@localhost:5432/dummy"  # Add this line
+      DATABASE_URL: "postgresql://user:password@localhost:5432/dummy"
 
     steps:
       - name: Checkout
@@ -30,7 +30,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 11.1.1
+          version: 11.1.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
