@@ -13,4 +13,6 @@ Non mettere qui:
 Regole:
 - `page.tsx` e `layout.tsx` restano sottili;
 - le route API validano e delegano;
-- le cartelle route-specific hanno il loro `README.md`.
+- le cartelle route-specific hanno il loro `README.md`;
+- componenti route-local sono ammessi solo quando non sono riusabili fuori dalla route;
+- eccezione corrente: `app/(auth)/ui` contiene componenti strettamente legati al route group auth e non va importato fuori da `app/(auth)`.

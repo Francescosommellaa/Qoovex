@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@qoovex/db", "@qoovex/utils"],
+  transpilePackages: ["@qoovex/ui", "@qoovex/db", "@qoovex/utils"],
   images: {
     remotePatterns: [
       {

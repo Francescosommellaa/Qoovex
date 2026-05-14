@@ -13,4 +13,11 @@ Non mettere qui:
 Regole:
 - l'ordine dei layer e`: `shared -> entities -> features -> widgets -> views -> app`;
 - nessun import verso l'alto;
-- ogni nuova cartella sorgente richiede il suo `README.md`.
+- ogni nuova cartella sorgente richiede il suo `README.md`;
+- le route in `app/` devono comporre layer inferiori e delegare logica lunga;
+- `shared` non importa da altri layer workspace;
+- `entities` importa solo da `shared`, package e dalla stessa entita`;
+- `features` importa da `entities` e `shared`;
+- `widgets` importa da `features`, `entities` e `shared`;
+- `views` importa da `widgets`, `features`, `entities` e `shared`;
+- `app` puo` importare da tutti i layer inferiori.
