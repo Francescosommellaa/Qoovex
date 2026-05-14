@@ -1,0 +1,44 @@
+.viewport {
+  scrollbar-width: none;
+}
+
+.viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.rail {
+  opacity: 0;
+  transform: translateY(-50%) translateX(var(--spacing-2));
+  transition:
+    opacity var(--duration-base) var(--ease-qoovex),
+    transform var(--duration-base) var(--ease-qoovex);
+}
+
+.rail[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.thumb {
+  transition:
+    background-color var(--duration-base) var(--ease-qoovex),
+    opacity var(--duration-base) var(--ease-qoovex);
+}
+
+.thumb[data-dragging="true"] {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .rail:hover {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail,
+  .thumb {
+    transition: none;
+  }
+}

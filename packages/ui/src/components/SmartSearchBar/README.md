@@ -13,6 +13,8 @@ Componente condiviso del design system Qoovex.
 |------|------|---------|----------------|
 | variant | string | dipende | valori esportati dai tipi del componente |
 | size | string | dipende | valori esportati dai tipi del componente |
+| enableAiMode | boolean | true | abilita prefissi e suggerimenti IA |
+| enableCommandMode | boolean | true | abilita prefissi e suggerimenti comando |
 
 ## Token usati
 - Spacing: solo `--spacing-*` o token componente dedicati.

@@ -49,6 +49,8 @@ export interface SmartSearchBarProps extends Omit<
   onSearch?: (query: string) => void;
   onAIQuery?: (query: string) => void;
   onDeleteRecent?: (id: string) => void;
+  enableAiMode?: boolean;
+  enableCommandMode?: boolean;
   isLoading?: boolean;
   forceOpen?: boolean;
   disableFullscreen?: boolean;
@@ -138,15 +140,26 @@ interface MobileChipBarProps {
   hasQuery: boolean;
   aiMode: boolean;
   commandMode: boolean;
+  enableAiMode: boolean;
+  enableCommandMode: boolean;
 }
 
-function MobileChipBar({ onChip, onSearch, hasQuery, aiMode, commandMode }: MobileChipBarProps) {
+function MobileChipBar({
+  onChip,
+  onSearch,
+  hasQuery,
+  aiMode,
+  commandMode,
+  enableAiMode,
+  enableCommandMode,
+}: MobileChipBarProps) {
   // classic mode = nessun prefisso speciale (né AI né comando)
   const classicMode = !aiMode && !commandMode;
 
   return (
     <div className="search-bar-chip-bar" aria-label="Azioni rapide">
-      <button
+      {enableAiMode ? (
+        <button
         type="button"
         className={cn(
           "search-bar-chip",
@@ -158,9 +171,11 @@ function MobileChipBar({ onChip, onSearch, hasQuery, aiMode, commandMode }: Mobi
       >
         <Sparkle size={12} />
         IA
-      </button>
+        </button>
+      ) : null}
 
-      <button
+      {enableCommandMode ? (
+        <button
         type="button"
         className={cn(
           "search-bar-chip",
@@ -172,7 +187,8 @@ function MobileChipBar({ onChip, onSearch, hasQuery, aiMode, commandMode }: Mobi
       >
         <Hash size={12} />
         Comando
-      </button>
+        </button>
+      ) : null}
 
       <button
         type="button"
@@ -228,6 +244,8 @@ export const SmartSearchBar = React.forwardRef<
     onSearch,
     onAIQuery,
     onDeleteRecent,
+    enableAiMode = true,
+    enableCommandMode = true,
     onChange,
     onFocus,
     onBlur,
@@ -259,8 +277,8 @@ export const SmartSearchBar = React.forwardRef<
   const listRef = React.useRef<HTMLDivElement>(null);
   const isTouch = useIsTouchDevice();
 
-  const aiMode = detectAiQuery(query);
-  const commandMode = detectCommandQuery(query);
+  const aiMode = enableAiMode && detectAiQuery(query);
+  const commandMode = enableCommandMode && detectCommandQuery(query);
   const groups = React.useMemo(() => groupResults(results), [results]);
   const isOpen = forceOpen || open;
   const showDropdown = isOpen && (results.length > 0 || query.length > 0);
@@ -500,7 +518,7 @@ export const SmartSearchBar = React.forwardRef<
           ) : null}
 
           {/* AI row */}
-          {aiMode && query.length > 2 ? (
+          {enableAiMode && aiMode && query.length > 2 ? (
             <div className="search-bar-ai-row">
               <Sparkle size={13} className="search-bar-icon-ai" />
               <span>
@@ -529,6 +547,8 @@ export const SmartSearchBar = React.forwardRef<
               hasQuery={query.trim().length > 0}
               aiMode={aiMode}
               commandMode={commandMode}
+              enableAiMode={enableAiMode}
+              enableCommandMode={enableCommandMode}
             />
           ) : null}
 
@@ -656,7 +676,7 @@ export const SmartSearchBar = React.forwardRef<
               <span>
                 <kbd>esc</kbd> chiudi
               </span>
-              {!aiMode ? (
+              {enableAiMode && !aiMode ? (
                 <span className="search-bar-footer-ai-hint">
                   <kbd>/ai</kbd> oppure <kbd>?</kbd> per l'IA
                 </span>

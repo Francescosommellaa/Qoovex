@@ -9,3 +9,25 @@
 :root {
   color-scheme: dark;
 }
+
+html[data-qv-text-scale="large"] {
+  font-size: 106.25%;
+}
+
+html[data-qv-text-scale="xlarge"] {
+  font-size: 112.5%;
+}
+
+html[data-qv-contrast="more"][data-theme="dark"] {
+  --color-border: oklch(from var(--color-text) l c h / 0.16);
+  --color-divider: oklch(from var(--color-text) l c h / 0.12);
+  --color-text-muted: oklch(from var(--color-text) l c h / 0.82);
+  --color-text-faint: oklch(from var(--color-text) l c h / 0.68);
+}
+
+html[data-qv-contrast="more"][data-theme="white"] {
+  --color-border: oklch(from var(--color-text) l c h / 0.18);
+  --color-divider: oklch(from var(--color-text) l c h / 0.14);
+  --color-text-muted: oklch(from var(--color-text) l c h / 0.82);
+  --color-text-faint: oklch(from var(--color-text) l c h / 0.66);
+}
