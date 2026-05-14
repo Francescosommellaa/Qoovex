@@ -1,0 +1,88 @@
+name: CI - Workspace
+
+on:
+  pull_request:
+    paths:
+      - "apps/workspace/**"
+      - "apps/sirio/**"
+      - "packages/ui/**"
+      - "packages/db/**"
+      - "packages/types/**"
+      - "packages/utils/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - ".github/workflows/ci-workspace.yml"
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "apps/workspace/**"
+      - "apps/sirio/**"
+      - "packages/ui/**"
+      - "packages/db/**"
+      - "packages/types/**"
+      - "packages/utils/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - ".github/workflows/ci-workspace.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-workspace-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  workspace:
+    name: Build workspace app
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.2
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Restore Turbo cache
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-workspace-${{ hashFiles('pnpm-lock.yaml', 'apps/workspace/**', 'apps/sirio/**', 'packages/ui/**', 'packages/db/**', 'packages/types/**', 'packages/utils/**') }}
+          restore-keys: |
+            ${{ runner.os }}-workspace-
+            ${{ runner.os }}-turbo-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Precompile Sirio UI package
+        run: pnpm --filter @qoovex/ui build
+
+      - name: Type-check workspace
+        run: pnpm --filter @qoovex/workspace type-check
+
+      - name: Lint workspace
+        run: pnpm --filter @qoovex/workspace lint
+
+      - name: Run end-to-end tests when present
+        run: pnpm --filter @qoovex/workspace --if-present test:e2e
+
+      - name: Build workspace
+        run: pnpm --filter @qoovex/workspace build
