@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-set -eu
-
-echo "Running Qoovex Brain sync + validate..."
-pnpm brain:sync
-pnpm brain:validate
