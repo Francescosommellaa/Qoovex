@@ -1,5 +1,8 @@
 name: CI - Workspace
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 on:
   pull_request:
     paths:
@@ -42,6 +45,8 @@ jobs:
   workspace:
     name: Build workspace app
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/qoovex_ci' }}
 
     steps:
       - name: Checkout repository
@@ -50,7 +55,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 11.1.2
+          version: 11.1.0
           run_install: false
 
       - name: Setup Node.js
@@ -76,8 +81,6 @@ jobs:
         run: pnpm --filter @qoovex/ui build
 
       - name: Generate Prisma client
-        env:
-          DATABASE_URL: postgres://bf25bbbe488745d882a0a247c6c698e394524bb6af2e755afb22552c972d950b:sk_GQWYlLl8XLyJYwafeXzKA@db.prisma.io:5432/postgres?sslmode=require
         run: pnpm --filter @qoovex/db db:generate
 
       - name: Type-check workspace
