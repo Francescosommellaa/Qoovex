@@ -75,6 +75,9 @@ jobs:
       - name: Precompile Sirio UI package
         run: pnpm --filter @qoovex/ui build
 
+      - name: Generate Prisma client
+        run: pnpm --filter @qoovex/db db:generate
+
       - name: Type-check workspace
         run: pnpm --filter @qoovex/workspace type-check
 
