@@ -78,7 +78,7 @@ const tokenGroups = [
     id: "tokens-type",
     name: "Tipografia",
     value: "--text-*",
-    body: "Satoshi per UI, Chillax per display e pesi coerenti con il prodotto.",
+    body: "Satoshi per UI, Cabinet Grotesk per display e pesi coerenti con il prodotto.",
   },
   {
     id: "tokens-radius",

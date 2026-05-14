@@ -211,7 +211,7 @@ Il Piano di Lavoro usa tre componenti distinti per tre problemi distinti:
 Il design system è documentato in `packages/ui` e mostrato in `apps/sirio`. Regole chiave:
 
 - **Font testi:** Satoshi
-- **Font titoli:** Chillax (`font-display`)
+- **Font titoli:** Cabinet Grotesk (`font-display`)
 - **Icone:** Phosphor Icons — `weight="regular"` decorative/UI, `weight="bold"` funzionali/check/alert
 - **Token semantici** obbligatori — niente valori hardcoded se esiste il token
 - **Asset brand condivisi** — sempre da `packages/brand`, mai duplicati in `apps/*/public`
