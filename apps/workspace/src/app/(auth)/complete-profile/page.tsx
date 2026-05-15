@@ -1,108 +1,176 @@
 "use client";
 
-import { useSignUp, useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Button, Form, FormActions, FormControl, FormField, Input, useToast } from "@qoovex/ui";
-import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { useUser } from "@clerk/nextjs";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import {
+  Button,
+  Form,
+  FormActions,
+  FormControl,
+  FormField,
+  Input,
+  LoadingState,
+  Stack,
+  Text,
+  useToast,
+} from "@qoovex/ui";
+import {
+  bootstrapUser,
+  updateCurrentUserProfile,
+} from "@shared/actions/bootstrap-user";
 import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 import { AuthShell } from "../ui";
 
+function getSafeNextPath(value: string | null) {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) {
+    return "/dashboard";
+  }
+
+  return value;
+}
+
 export default function CompleteProfilePage() {
   const { user, isLoaded } = useUser();
-  const { signUp } = useSignUp();
   const { toast } = useToast();
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const searchParams = useSearchParams();
+  const didHydrateProfileFields = useRef(false);
+  const didAttemptBootstrap = useRef(false);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const [isUsernameWarning, setIsUsernameWarning] = useState(false);
+  const [isFirstNameWarning, setIsFirstNameWarning] = useState(false);
+  const [syncError, setSyncError] = useState<string | null>(null);
+  const [didCompleteProfileUpgrade, setDidCompleteProfileUpgrade] = useState(false);
+
+  const nextPath = getSafeNextPath(searchParams.get("next"));
+  const source = searchParams.get("source");
+  const hasForcedSyncFailure = searchParams.get("sync") === "failed";
+  const shouldShowProfileUpgrade = Boolean(
+    user &&
+      !hasForcedSyncFailure &&
+      !didCompleteProfileUpgrade &&
+      (source === "signup" || !user.firstName?.trim()),
+  );
 
   useEffect(() => {
     if (!isLoaded) return;
     if (!user) {
-      if (signUp.status === "missing_requirements") return;
       router.replace("/sign-in");
       return;
     }
 
-    if (user.username && signUp.status !== "missing_requirements") {
-      void bootstrapUser().then(() => {
-        router.replace("/");
-      });
+    if (shouldShowProfileUpgrade) {
+      if (!didHydrateProfileFields.current) {
+        setFirstName(user.firstName ?? "");
+        setLastName(user.lastName ?? "");
+        didHydrateProfileFields.current = true;
+      }
       return;
     }
 
-    const fallbackSource = user?.emailAddresses[0]?.emailAddress ?? signUp.emailAddress ?? "";
-    const fallback =
-      fallbackSource
-        ?.split("@")[0]
-        ?.replace(/[^a-zA-Z0-9._-]/g, "")
-        ?.slice(0, 24) ?? "";
-    setUsername(fallback.toLowerCase());
-  }, [isLoaded, router, signUp.emailAddress, signUp.status, user]);
+    if (syncError || hasForcedSyncFailure || didAttemptBootstrap.current) return;
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    didAttemptBootstrap.current = true;
+    setIsSaving(true);
+    void bootstrapUser()
+      .then(() => {
+        router.replace(nextPath);
+      })
+      .catch((unknownError: unknown) => {
+        didAttemptBootstrap.current = false;
+        const message = getSafeAuthErrorMessage(
+          unknownError,
+          "Impossibile sincronizzare il profilo con il database. Controlla le credenziali Postgres e riprova.",
+        );
+        setSyncError(message);
+        toast({
+          variant: "error",
+          title: "Database non raggiungibile",
+          description: message,
+        });
+      })
+      .finally(() => {
+        setIsSaving(false);
+      });
+  }, [
+    hasForcedSyncFailure,
+    isLoaded,
+    nextPath,
+    router,
+    shouldShowProfileUpgrade,
+    syncError,
+    toast,
+    user,
+  ]);
+
+  async function handleProfileSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!user && signUp.status !== "missing_requirements") return;
+    if (!user) return;
 
-    const normalizedUsername = username.trim().toLowerCase();
-    if (normalizedUsername.length < 3) {
-      setIsUsernameWarning(true);
+    const normalizedFirstName = firstName.trim();
+    const normalizedLastName = lastName.trim();
+
+    if (!normalizedFirstName) {
+      setIsFirstNameWarning(true);
       toast({
         variant: "warning",
-        title: "Controlla i campi evidenziati",
-        description: "Lo username deve avere almeno 3 caratteri.",
+        title: "Nome mancante",
+        description: "Inserisci il nome prima di entrare nel workspace.",
       });
       return;
     }
 
     setIsSaving(true);
+    setSyncError(null);
 
     try {
-      if (signUp.status === "missing_requirements") {
-        const { error: updateError } = await signUp.create({
-          username: normalizedUsername,
-        });
-        if (updateError) {
-          setIsUsernameWarning(true);
-          toast({
-            variant: "error",
-            title: "Username non salvato",
-            description: getSafeAuthErrorMessage(
-              updateError,
-              "Impossibile salvare lo username.",
-            ),
-          });
-          return;
-        }
+      await updateCurrentUserProfile({
+        firstName: normalizedFirstName,
+        lastName: normalizedLastName || undefined,
+      });
+      setDidCompleteProfileUpgrade(true);
 
-        const { error: finalizeError } = await signUp.finalize();
-        if (finalizeError) {
-          toast({
-            variant: "error",
-            title: "Registrazione incompleta",
-            description: getSafeAuthErrorMessage(
-              finalizeError,
-              "Impossibile completare la registrazione OAuth.",
-            ),
-          });
-          return;
-        }
-      } else {
-        if (!user) return;
-        await user.update({ username: normalizedUsername });
-      }
-
-      await bootstrapUser();
-      router.replace("/");
+      await bootstrapUser({
+        firstName: normalizedFirstName,
+        lastName: normalizedLastName || undefined,
+      });
+      router.replace(nextPath);
     } catch (unknownError: unknown) {
+      const message = getSafeAuthErrorMessage(
+        unknownError,
+        "Profilo salvato su Clerk, ma il database non e raggiungibile. Controlla le credenziali Postgres e riprova.",
+      );
+      setSyncError(message);
       toast({
         variant: "error",
-        title: "Profilo non salvato",
-        description: getSafeAuthErrorMessage(
-          unknownError,
-          "Impossibile salvare lo username. Riprova.",
-        ),
+        title: "Profilo non sincronizzato",
+        description: message,
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function handleRetryBootstrap() {
+    setIsSaving(true);
+    setSyncError(null);
+
+    try {
+      await bootstrapUser();
+      router.replace(nextPath);
+    } catch (unknownError: unknown) {
+      const message = getSafeAuthErrorMessage(
+        unknownError,
+        "Impossibile sincronizzare il profilo con il database. Controlla le credenziali Postgres e riprova.",
+      );
+      setSyncError(message);
+      toast({
+        variant: "error",
+        title: "Database non raggiungibile",
+        description: message,
       });
     } finally {
       setIsSaving(false);
@@ -111,11 +179,64 @@ export default function CompleteProfilePage() {
 
   if (!isLoaded) return null;
 
+  if (isSaving && !shouldShowProfileUpgrade) {
+    return (
+      <AuthShell
+        title="Preparazione workspace"
+        subtitle="Stiamo sincronizzando il profilo con il workspace"
+        steps={{ current: 3, total: 3 }}
+      >
+        <LoadingState rows={5} />
+      </AuthShell>
+    );
+  }
+
+  if (syncError || hasForcedSyncFailure) {
+    return (
+      <AuthShell
+        title="Workspace non pronto"
+        subtitle="Il profilo Clerk esiste, ma il database non ha completato la sincronizzazione"
+        steps={{ current: 3, total: 3 }}
+      >
+        <Stack gap="5">
+          <Text tone="muted" size="sm">
+            {syncError ??
+              "Impossibile sincronizzare il profilo con il database. Controlla le credenziali Postgres e riprova."}
+          </Text>
+          <FormActions align="stretch">
+            <Button
+              type="button"
+              variant="primary"
+              size="md"
+              loading={isSaving}
+              onClick={handleRetryBootstrap}
+              className="w-full"
+            >
+              Riprova sincronizzazione
+            </Button>
+          </FormActions>
+        </Stack>
+      </AuthShell>
+    );
+  }
+
+  if (!shouldShowProfileUpgrade) {
+    return (
+      <AuthShell
+        title="Preparazione workspace"
+        subtitle="Stiamo completando l'accesso al workspace"
+        steps={{ current: 3, total: 3 }}
+      >
+        <LoadingState rows={5} />
+      </AuthShell>
+    );
+  }
+
   return (
     <AuthShell
-      title="Completa il profilo"
-      subtitle="Scegli il tuo username per terminare l'accesso"
-      steps={{ current: 2, total: 2 }}
+      title="Come possiamo chiamarti?"
+      subtitle="Aggiungi il tuo nome mentre prepariamo il workspace"
+      steps={{ current: 3, total: 3 }}
     >
       <Form
         variant="plain"
@@ -123,33 +244,54 @@ export default function CompleteProfilePage() {
         density="comfortable"
         labelStyle="soft"
         noValidate
-        onSubmit={handleSubmit}
+        onSubmit={handleProfileSubmit}
       >
         <FormField
-          label="Username"
+          label="Nome"
           required
-          helperText="Solo lettere, numeri, punti, underscore e trattini."
-          className={isUsernameWarning ? "auth-warning-field" : undefined}
+          status={isFirstNameWarning ? "error" : "default"}
         >
           <FormControl>
             <Input
               type="text"
-              autoComplete="username"
-              placeholder="nomechef"
-              value={username}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                {
-                  setUsername(event.target.value.replace(/\s+/g, ""));
-                  if (isUsernameWarning) setIsUsernameWarning(false);
-                }
-              }
+              autoComplete="given-name"
+              placeholder="Mario"
+              value={firstName}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setFirstName(event.target.value);
+                if (isFirstNameWarning) setIsFirstNameWarning(false);
+              }}
+            />
+          </FormControl>
+        </FormField>
+
+        <FormField
+          label="Cognome"
+          helperText="Puoi completarlo anche piu avanti dal profilo."
+        >
+          <FormControl>
+            <Input
+              type="text"
+              autoComplete="family-name"
+              placeholder="Rossi"
+              value={lastName}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setLastName(event.target.value);
+              }}
             />
           </FormControl>
         </FormField>
 
         <FormActions align="stretch">
-          <Button type="submit" variant="primary" size="md" loading={isSaving} className="w-full">
-            Continua
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            loading={isSaving}
+            loadingLabel="Preparazione workspace..."
+            className="w-full"
+          >
+            Entra nel workspace
           </Button>
         </FormActions>
       </Form>

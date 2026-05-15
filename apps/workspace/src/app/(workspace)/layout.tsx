@@ -12,7 +12,16 @@ export default async function WorkspaceLayout({
 }: {
   children: ReactNode;
 }) {
-  const user = await bootstrapUser();
+  let user: Awaited<ReturnType<typeof bootstrapUser>>;
+  try {
+    user = await bootstrapUser();
+  } catch (error) {
+    if (process.env.NODE_ENV !== "production") {
+      console.error("[workspace] bootstrap failed", error);
+    }
+    redirect("/complete-profile?next=/dashboard&sync=failed");
+  }
+
   if (!user) {
     redirect("/sign-in");
   }

@@ -17,7 +17,6 @@ import {
   FormActions,
   useToast,
 } from "@qoovex/ui";
-import { bootstrapUser, hasBootstrappedUser } from "@shared/actions/bootstrap-user";
 import { resolveEmailForUsername } from "@shared/actions/resolve-email-for-username";
 import { getGenericAuthFailureMessage } from "@shared/lib/auth-error";
 import {
@@ -109,7 +108,15 @@ export default function SignInPage() {
         error &&
         !normalizedIdentifier.includes("@")
       ) {
-        const emailFromProfile = await resolveEmailForUsername(normalizedIdentifier);
+        let emailFromProfile: string | null = null;
+        try {
+          emailFromProfile = await resolveEmailForUsername(normalizedIdentifier);
+        } catch (unknownError) {
+          if (process.env.NODE_ENV !== "production") {
+            console.warn("[sign-in] username lookup skipped", unknownError);
+          }
+        }
+
         if (emailFromProfile) {
           await signIn.reset();
           ({ error } = await signIn.create({
@@ -137,13 +144,7 @@ export default function SignInPage() {
               return;
             }
 
-            const alreadyBootstrapped = await hasBootstrappedUser();
-
-            if (!alreadyBootstrapped) {
-              setIsProvisioningDashboard(true);
-              await bootstrapUser();
-            }
-
+            setIsProvisioningDashboard(true);
             const url = decorateUrl("/dashboard");
             const destination = url.startsWith("http")
               ? url

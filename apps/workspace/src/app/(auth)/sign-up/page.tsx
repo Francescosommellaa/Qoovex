@@ -1,7 +1,7 @@
 "use client";
 
 import { useSignUp } from "@clerk/nextjs";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
@@ -18,7 +18,6 @@ import {
   PhoneNumberField,
   useToast,
 } from "@qoovex/ui";
-import { bootstrapUser } from "@shared/actions/bootstrap-user";
 import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 import { AuthShell, OAuthButton } from "../ui";
 
@@ -31,6 +30,8 @@ type FieldErrors = {
   code?: string;
 };
 
+type SignUpState = ReturnType<typeof useSignUp>["signUp"];
+
 function mapCreateErrorToFields(message: string): FieldErrors {
   const lower = message.toLowerCase();
   if (lower.includes("username")) return { username: message };
@@ -39,11 +40,71 @@ function mapCreateErrorToFields(message: string): FieldErrors {
   return {};
 }
 
+function isAlreadyUsedVerificationError(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) return false;
+
+  const clerkError = error as {
+    code?: string;
+    message?: string;
+    errors?: Array<{ code?: string; message?: string }>;
+  };
+  const first = clerkError.errors?.[0];
+  const fingerprint = `${first?.code ?? clerkError.code ?? ""} ${
+    first?.message ?? clerkError.message ?? ""
+  }`.toLowerCase();
+
+  return (
+    fingerprint.includes("already") &&
+    (fingerprint.includes("verified") || fingerprint.includes("used"))
+  );
+}
+
+function canFinalizeSignUp(signUp: SignUpState) {
+  return signUp.status === "complete" || Boolean(signUp.createdSessionId);
+}
+
+function getPendingSignUpMessage(signUp: SignUpState) {
+  if (signUp.unverifiedFields.length > 0) {
+    return "La dev instance Clerk richiede ancora una verifica. Richiedi un nuovo codice e riprova.";
+  }
+
+  if (signUp.missingFields.length > 0) {
+    return `La dev instance Clerk richiede ancora: ${signUp.missingFields.join(", ")}. Allinea le impostazioni Clerk dev alla live oppure completa questi campi.`;
+  }
+
+  return "Verifica non completata nella dev instance Clerk. Controlla che le impostazioni di sign-up dev siano allineate alla live.";
+}
+
+function logDevSignUpState(context: string, signUp: SignUpState, error?: unknown) {
+  if (process.env.NODE_ENV === "production") return;
+
+  console.info("[sign-up]", context, {
+    status: signUp.status,
+    missingFields: signUp.missingFields,
+    unverifiedFields: signUp.unverifiedFields,
+    requiredFields: signUp.requiredFields,
+    createdSessionId: signUp.createdSessionId,
+    createdUserId: signUp.createdUserId,
+    error,
+  });
+}
+
+function ClerkCaptchaSlot() {
+  return (
+    <Box
+      id="clerk-captcha"
+      className="auth-captcha-slot"
+      data-cl-theme="dark"
+      data-cl-size="flexible"
+      data-cl-language="it"
+    />
+  );
+}
+
 export default function SignUpPage() {
   const RESEND_COOLDOWN_SECONDS = 45;
   const { signUp, fetchStatus } = useSignUp();
   const { toast } = useToast();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const didHydrateEmail = useRef(false);
 
@@ -106,32 +167,38 @@ export default function SignUpPage() {
     return `${phoneRegionCode}${normalizedPhoneDigits}`;
   }
 
-  async function finalizeAndEnterApp() {
-    const { error: finalizeError } = await signUp.finalize();
+  async function finalizeAndEnterApp(destinationPath = "/dashboard") {
+    const { error: finalizeError } = await signUp.finalize({
+      navigate: async ({ session, decorateUrl }) => {
+        if (session?.currentTask) {
+          toast({
+            variant: "warning",
+            title: "Azione richiesta",
+            description: "Completa i passaggi richiesti dal tuo account prima di continuare.",
+          });
+          return;
+        }
+
+        const url = decorateUrl(destinationPath);
+        const destination = url.startsWith("http")
+          ? url
+          : `${window.location.origin}${url}`;
+        window.location.assign(destination);
+      },
+    });
     if (finalizeError) {
       const msg = getSafeAuthErrorMessage(
         finalizeError,
         "Errore nel completare la registrazione. Riprova o contatta il supporto.",
       );
       toast({ variant: "error", title: "Completamento fallito", description: msg });
-      return;
-    }
-    try {
-      await bootstrapUser({ phoneNumber: getNormalizedPhoneNumber() });
-      router.replace("/dashboard");
-    } catch {
-      toast({
-        variant: "error",
-        title: "Profilo non sincronizzato",
-        description:
-          "Account creato, ma non siamo riusciti a preparare il profilo. Riprova l'accesso tra poco.",
-      });
     }
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setFieldErrors({});
+    setCode("");
     const normalizedUsername = username.trim().toLowerCase();
 
     const nextWarnings = {
@@ -160,11 +227,17 @@ export default function SignUpPage() {
       return;
     }
 
-    const { error: createError } = await signUp.create({
-      emailAddress: email,
+    await signUp.reset();
+
+    const { error: createError } = await signUp.password({
+      emailAddress: email.trim(),
       username: normalizedUsername,
       password,
+      unsafeMetadata: {
+        phoneNumber: getNormalizedPhoneNumber(),
+      },
     });
+    logDevSignUpState("after password", signUp, createError);
     if (createError) {
       const msg = getSafeAuthErrorMessage(
         createError,
@@ -181,6 +254,7 @@ export default function SignUpPage() {
     }
 
     const { error: prepareError } = await signUp.verifications.sendEmailCode();
+    logDevSignUpState("after sendEmailCode", signUp, prepareError);
     if (prepareError) {
       const msg = getSafeAuthErrorMessage(
         prepareError,
@@ -214,20 +288,25 @@ export default function SignUpPage() {
     }
 
     const { error: attemptError } = await signUp.verifications.verifyEmailCode({
-      code,
+      code: code.trim(),
     });
+    logDevSignUpState("after verifyEmailCode", signUp, attemptError);
 
     if (attemptError) {
-      const msg = attemptError.message ?? "";
-      if (/already been verified/i.test(msg)) {
-        if (signUp.status === "complete") {
-          await finalizeAndEnterApp();
+      if (isAlreadyUsedVerificationError(attemptError)) {
+        if (canFinalizeSignUp(signUp)) {
+          await finalizeAndEnterApp("/complete-profile?source=signup&next=/dashboard");
           return;
         }
+
+        const display =
+          "Questo codice è già stato usato. Richiedi un nuovo codice e riprova.";
+        setFieldErrors({ code: display });
+        setCode("");
         toast({
-          variant: "info",
-          title: "Già verificato",
-          description: "Questo codice è già stato usato. Se l'account è attivo, accedi dalla pagina di login.",
+          variant: "warning",
+          title: "Codice già usato",
+          description: display,
         });
         return;
       }
@@ -236,6 +315,7 @@ export default function SignUpPage() {
         "Il codice non è valido o è scaduto. Richiedine uno nuovo dalla mail.",
       );
       setFieldErrors({ code: display });
+      setCode("");
       toast({
         variant: "error",
         title: "Verifica non riuscita",
@@ -244,14 +324,15 @@ export default function SignUpPage() {
       return;
     }
 
-    if (signUp.status === "complete") {
-      await finalizeAndEnterApp();
+    if (!canFinalizeSignUp(signUp)) {
+      const display = getPendingSignUpMessage(signUp);
+      setFieldErrors({ code: display });
+      setCode("");
+      toast({ variant: "warning", title: "Verifica incompleta", description: display });
       return;
     }
 
-    const display = "Verifica non completata. Controlla il codice e riprova.";
-    setFieldErrors({ code: display });
-    toast({ variant: "warning", title: "Verifica incompleta", description: display });
+    await finalizeAndEnterApp("/complete-profile?source=signup&next=/dashboard");
   }
 
   async function handleResend() {
@@ -272,6 +353,7 @@ export default function SignUpPage() {
       return;
     }
     startResendCooldown();
+    setCode("");
     toast({
       variant: "success",
       title: "Codice reinviato",
@@ -289,7 +371,11 @@ export default function SignUpPage() {
 
   return (
     <AuthShell
-      title={step === "form" ? "Crea il tuo account" : "Verifica la tua email"}
+      title={
+        step === "form"
+          ? "Crea il tuo account"
+          : "Verifica la tua email"
+      }
       subtitle={
         step === "form"
           ? "Inizia gratis in pochi secondi"
@@ -299,11 +385,13 @@ export default function SignUpPage() {
               <Text as="span" className="auth-email-highlight">{email.trim()}</Text>. Controlla la
               posta in arrivo e lo spam.
             </>
-          )
+            )
       }
       steps={{ current: step === "form" ? 1 : 2, total: 2 }}
       onBack={step === "verify" ? () => setStep("form") : undefined}
     >
+      <ClerkCaptchaSlot />
+
       {step === "form" ? (
         <>
           <Stack gap="3">
@@ -441,14 +529,6 @@ export default function SignUpPage() {
               </FormControl>
             </FormField>
 
-            <Box
-              id="clerk-captcha"
-              className="auth-captcha-slot"
-              data-cl-theme="dark"
-              data-cl-size="flexible"
-              data-cl-language="it-IT"
-            />
-
             <FormActions align="stretch">
               <Button
                 type="submit"
@@ -482,21 +562,23 @@ export default function SignUpPage() {
             helperText="Il codice scade dopo alcuni minuti. Se non lo vedi, prova a reinviarlo."
             status={fieldErrors.code || warningFields.code ? "error" : "default"}
           >
-            <OtpInput
-              value={code}
-              onChange={(nextCode) => {
-                setCode(nextCode);
-                if (warningFields.code) {
-                  setWarningFields((current) => ({ ...current, code: false }));
-                }
-                if (fieldErrors.code) {
-                  setFieldErrors((current) => ({ ...current, code: undefined }));
-                }
-              }}
-              length={6}
-              requestInitialFocusOnDesktop
-              aria-label="Codice di verifica email"
-            />
+            <FormControl>
+              <OtpInput
+                value={code}
+                onChange={(nextCode) => {
+                  setCode(nextCode);
+                  if (warningFields.code) {
+                    setWarningFields((current) => ({ ...current, code: false }));
+                  }
+                  if (fieldErrors.code) {
+                    setFieldErrors((current) => ({ ...current, code: undefined }));
+                  }
+                }}
+                length={6}
+                requestInitialFocusOnDesktop
+                aria-label="Codice di verifica email"
+              />
+            </FormControl>
           </FormField>
 
           <FormActions align="stretch">

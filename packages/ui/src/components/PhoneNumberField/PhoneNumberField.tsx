@@ -55,6 +55,8 @@ export function PhoneNumberField({
   inputAutoComplete = "tel-national",
   inputClassName,
 }: PhoneNumberFieldProps) {
+  const nationalNumberId = React.useId();
+
   React.useEffect(() => {
     const normalizedDigits = nationalNumber.replace(/[^\d]/g, "");
     const e164Value =
@@ -73,6 +75,7 @@ export function PhoneNumberField({
       helperText={helperText}
       required={required}
       disabled={disabled}
+      controlId={nationalNumberId}
       className={cn("qv-phone-number-field", className)}
     >
       <div className="flex w-full items-stretch gap-(--spacing-2)">
@@ -88,6 +91,7 @@ export function PhoneNumberField({
         </div>
         <div className="min-w-0 flex-1">
           <Input
+            id={nationalNumberId}
             type="tel"
             placeholder={inputPlaceholder}
             autoComplete={inputAutoComplete}

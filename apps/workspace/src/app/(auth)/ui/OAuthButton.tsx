@@ -109,6 +109,7 @@ export function OAuthButton({
           alt=""
           width={16}
           height={16}
+          style={{ width: 16, height: "auto" }}
           unoptimized
           aria-hidden={true}
         />

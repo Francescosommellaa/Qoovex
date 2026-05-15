@@ -1,9 +1,10 @@
-# Complete Profile Route
+# Name Step Route
 
-Scopo: completare i dati minimi post-OAuth necessari al bootstrap utente.
+Scopo: raccogliere nome e cognome post-account prima dell'ingresso nel workspace.
 
 Metti qui:
-- UI e logica strettamente legate alla finalizzazione profilo dopo callback SSO.
+- UI e logica per l'upgrade del profilo Clerk gia creato;
+- sincronizzazione controllata del profilo verso il database prima della dashboard.
 
 Non mettere qui:
 - logica di dominio non legata ad auth;
@@ -11,5 +12,6 @@ Non mettere qui:
 
 Regole:
 - la pagina deve essere sicura da refresh;
-- se username esiste, redirect immediato al workspace;
-- dopo update username, eseguire bootstrap utente nel DB.
+- non chiedere username nel flusso email/password: lo username e obbligatorio in signup;
+- chiedere nome/cognome come step separato dopo sessione Clerk creata;
+- dopo update nome/cognome, eseguire bootstrap utente nel DB.

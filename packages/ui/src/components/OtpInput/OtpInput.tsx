@@ -4,17 +4,22 @@ import * as React from "react";
 import { cn } from "../../lib/utils";
 
 export interface OtpInputProps {
+  id?: string;
   value: string;
   onChange: (value: string) => void;
   length?: number;
   disabled?: boolean;
+  required?: boolean;
+  status?: "default" | "error" | "success";
   /**
    * Focus the first slot once on mount when the viewport is at least 768px wide.
    * Avoids opening the software keyboard on phones (no DOM `autoFocus`).
    */
   requestInitialFocusOnDesktop?: boolean;
   className?: string;
+  "aria-describedby"?: string;
   "aria-label"?: string;
+  "aria-labelledby"?: string;
 }
 
 function sanitizeOtpValue(rawValue: string, length: number): string {
@@ -24,13 +29,17 @@ function sanitizeOtpValue(rawValue: string, length: number): string {
 const DESKTOP_MEDIA = "(min-width: 768px)";
 
 export function OtpInput({
+  id,
   value,
   onChange,
   length = 6,
   disabled = false,
+  required = false,
   requestInitialFocusOnDesktop = false,
   className,
+  "aria-describedby": ariaDescribedBy,
   "aria-label": ariaLabel = "Codice di verifica",
+  "aria-labelledby": ariaLabelledBy,
 }: OtpInputProps) {
   const inputRefs = React.useRef<Array<HTMLInputElement | null>>([]);
   const normalizedValue = sanitizeOtpValue(value, length);
@@ -116,12 +125,15 @@ export function OtpInput({
     <div
       className={cn("qv-otp-input", className)}
       role="group"
-      aria-label={ariaLabel}
+      aria-label={ariaLabelledBy ? undefined : ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
       onPaste={handlePaste}
     >
       {Array.from({ length }).map((_, index) => (
         <input
           key={index}
+          id={index === 0 ? id : undefined}
           ref={(node) => {
             inputRefs.current[index] = node;
           }}
@@ -131,10 +143,12 @@ export function OtpInput({
           pattern="[0-9]*"
           maxLength={1}
           disabled={disabled}
+          required={required}
           value={normalizedValue[index] ?? ""}
           onChange={(event) => handleChange(index, event)}
           onKeyDown={(event) => handleKeyDown(index, event)}
           className="qv-otp-input__slot"
+          aria-describedby={ariaDescribedBy}
           aria-label={`Digit ${index + 1}`}
         />
       ))}
