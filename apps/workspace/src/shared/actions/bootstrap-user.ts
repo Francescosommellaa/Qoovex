@@ -21,6 +21,16 @@ function getUnsafeMetadataPhoneNumber(
   return typeof phoneNumber === "string" ? phoneNumber : undefined;
 }
 
+function hasAdminAccess(metadata: unknown) {
+  if (!metadata || typeof metadata !== "object") {
+    return false;
+  }
+
+  const adminMetadata = metadata as Record<string, unknown>;
+
+  return adminMetadata.role === "admin" || adminMetadata.isAdmin === true;
+}
+
 export async function bootstrapUser(options?: BootstrapUserOptions) {
   const { userId } = await auth();
   if (!userId) return null;
@@ -37,7 +47,7 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
 
   const { syncClerkUser } = await import("@shared/server/clerk-user-sync");
 
-  return await syncClerkUser({
+  const syncedUser = await syncClerkUser({
     clerkId: userId,
     email: primaryEmail,
     username: clerkUser.username,
@@ -46,6 +56,13 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
     phoneNumber:
       options?.phoneNumber ?? getUnsafeMetadataPhoneNumber(clerkUser.unsafeMetadata),
   });
+
+  if (!syncedUser) return null;
+
+  return {
+    ...syncedUser,
+    isAdmin: hasAdminAccess(clerkUser.publicMetadata),
+  };
 }
 
 export async function hasBootstrappedUser() {

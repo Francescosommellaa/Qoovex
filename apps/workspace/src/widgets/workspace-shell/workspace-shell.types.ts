@@ -7,6 +7,7 @@ export interface WorkspaceUserSummary {
   username: string | null;
   email: string;
   plan: WorkspacePlan;
+  isAdmin: boolean;
 }
 
 export interface WorkspaceShellProps {

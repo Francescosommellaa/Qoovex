@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { SignOutButton } from "@clerk/nextjs";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import {
   Bell,
   BookOpen,
@@ -12,15 +14,14 @@ import {
   GearSix,
   ListChecks,
   MagnifyingGlass,
-  Receipt,
   SignOut,
-  TextAa,
   type IconProps as PhosphorIconProps,
 } from "@phosphor-icons/react";
 import {
   Avatar,
   Badge,
   Button,
+  Divider,
   Icon,
   Text,
   ThemeToggle,
@@ -50,6 +51,10 @@ const navigationItems: WorkspaceNavigationItem[] = [
   { label: "Piani di lavoro", icon: ClipboardText, disabled: true },
   { label: "Esplora", icon: MagnifyingGlass, disabled: true },
   { label: "Notifiche", icon: Bell, disabled: true },
+];
+
+const adminNavigationItems: WorkspaceNavigationItem[] = [
+  { label: "Admin", href: "/admin", icon: GearSix },
 ];
 
 const planLabel: Record<WorkspaceUserSummary["plan"], string> = {
@@ -83,44 +88,73 @@ function getInitials(user: WorkspaceUserSummary) {
     .toUpperCase();
 }
 
-function WorkspaceSidebarNavigation({ onNavigate }: { onNavigate?: () => void }) {
+function WorkspaceSidebarNavigation({
+  isAdmin,
+  onNavigate,
+}: {
+  isAdmin: boolean;
+  onNavigate?: () => void;
+}) {
+  const pathname = usePathname();
+
+  const renderNavigationItem = (item: WorkspaceNavigationItem) => {
+    const itemIcon = <Icon icon={item.icon} size="md" weight="regular" />;
+
+    if (item.disabled || !item.href) {
+      return (
+        <button
+          key={item.label}
+          type="button"
+          className="flex h-10 w-full cursor-not-allowed items-center gap-(--spacing-3) rounded-(--radius-lg) px-(--spacing-3) text-left text-(length:--text-sm) font-medium text-(--color-text-faint) opacity-70"
+          disabled
+          aria-disabled="true"
+        >
+          {itemIcon}
+          <span className="min-w-0 flex-1 truncate">{item.label}</span>
+          <Badge size="sm" variant="soft" tone="neutral">
+            presto
+          </Badge>
+        </button>
+      );
+    }
+
+    const isActive =
+      pathname === item.href || pathname.startsWith(`${item.href}/`);
+
+    return (
+      <a
+        key={item.label}
+        href={item.href}
+        className={cn(
+          "flex h-10 items-center gap-(--spacing-3) rounded-(--radius-lg) px-(--spacing-3) text-(length:--text-sm) font-medium transition-[background,border-color,color] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:bg-(--color-surface-offset)",
+          isActive
+            ? "border border-(--color-border) bg-(--color-primary-highlight) text-(--color-text) shadow-[var(--shadow-sm)]"
+            : "text-(--color-text-muted) hover:text-(--color-text)",
+        )}
+        aria-current={isActive ? "page" : undefined}
+        onClick={onNavigate}
+      >
+        {itemIcon}
+        <span className="min-w-0 flex-1 truncate">{item.label}</span>
+      </a>
+    );
+  };
+
   return (
-    <nav className="flex flex-1 flex-col gap-(--spacing-1)" aria-label="Workspace">
-      {navigationItems.map((item) => {
-        const itemIcon = <Icon icon={item.icon} size="md" weight="regular" />;
+    <div className="flex flex-1 flex-col gap-(--spacing-3)">
+      <nav className="flex flex-col gap-(--spacing-1)" aria-label="Workspace">
+        {navigationItems.map(renderNavigationItem)}
+      </nav>
 
-        if (item.disabled || !item.href) {
-          return (
-            <button
-              key={item.label}
-              type="button"
-              className="flex h-10 w-full cursor-not-allowed items-center gap-(--spacing-3) rounded-(--radius-lg) px-(--spacing-3) text-left text-(length:--text-sm) font-medium text-(--color-text-faint) opacity-70"
-              disabled
-              aria-disabled="true"
-            >
-              {itemIcon}
-              <span className="min-w-0 flex-1 truncate">{item.label}</span>
-              <Badge size="sm" variant="soft" tone="neutral">
-                presto
-              </Badge>
-            </button>
-          );
-        }
-
-        return (
-          <a
-            key={item.label}
-            href={item.href}
-            className="flex h-10 items-center gap-(--spacing-3) rounded-(--radius-lg) border border-(--color-border) bg-(--color-primary-highlight) px-(--spacing-3) text-(length:--text-sm) font-medium text-(--color-text) shadow-[var(--shadow-sm)] transition-[background,border-color,color] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:bg-(--color-surface-offset)"
-            aria-current="page"
-            onClick={onNavigate}
-          >
-            {itemIcon}
-            <span className="min-w-0 flex-1 truncate">{item.label}</span>
-          </a>
-        );
-      })}
-    </nav>
+      {isAdmin ? (
+        <>
+          <Divider spacing="none" decorative className="my-(--spacing-1)" />
+          <nav className="flex flex-col gap-(--spacing-1)" aria-label="Admin">
+            {adminNavigationItems.map(renderNavigationItem)}
+          </nav>
+        </>
+      ) : null}
+    </div>
   );
 }
 
@@ -252,36 +286,28 @@ export function WorkspaceSidebar({
           : "p-(--spacing-4)",
       )}
     >
-      <div className="mb-(--spacing-5) flex items-center gap-(--spacing-3)">
-        <span className="flex size-10 items-center justify-center rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface-raised)">
-          <Icon icon={Receipt} size="lg" weight="bold" />
-        </span>
-        <div className="min-w-0">
-          <Text size="sm" weight="semibold">
-            Qoovex
-          </Text>
-          <Text size="xs" tone="muted">
-            Workspace
-          </Text>
-        </div>
+      <div className="flex items-center gap-(--spacing-3)">
+        <Image
+          src="/logo-icon/qoovex-icona-bianca-no-sfondo.svg"
+          alt=""
+          width={28}
+          height={28}
+          className="size-7 shrink-0"
+          priority
+        />
+        <Text size="sm" weight="semibold" className="min-w-0 truncate">
+          Qoovex
+        </Text>
       </div>
 
-      <WorkspaceSidebarNavigation onNavigate={onNavigate} />
+      <Divider spacing="none" decorative className="my-(--spacing-5)" />
+
+      <WorkspaceSidebarNavigation
+        isAdmin={user.isAdmin}
+        onNavigate={onNavigate}
+      />
 
       <div className="mt-(--spacing-5) grid gap-(--spacing-3)">
-        <div className="rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface) p-(--spacing-3)">
-          <div className="flex items-start gap-(--spacing-3)">
-            <Icon icon={TextAa} size="md" tone="primary" />
-            <div className="min-w-0">
-              <Text size="xs" weight="semibold">
-                Cura visiva
-              </Text>
-              <Text size="xs" tone="muted" leading="relaxed">
-                Tema, testo e contrasto sempre a portata.
-              </Text>
-            </div>
-          </div>
-        </div>
         <UserMenu user={user} />
       </div>
     </div>

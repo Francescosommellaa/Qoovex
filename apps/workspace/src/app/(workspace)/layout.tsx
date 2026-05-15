@@ -31,6 +31,7 @@ export default async function WorkspaceLayout({
     username: user.username,
     email: user.email,
     plan: user.plan,
+    isAdmin: user.isAdmin,
   };
 
   return (
