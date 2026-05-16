@@ -39,7 +39,7 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "lighthouse": "^12.8.2",
     "tsx": "^4.20.6",
-    "turbo": "^2.9.12"
+    "turbo": "^2.9.14"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
