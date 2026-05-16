@@ -1,6 +1,7 @@
 "use server";
 
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
+import { bootstrapDevUser } from "@shared/server/dev-auth";
 
 interface BootstrapUserOptions {
   phoneNumber?: string | null;
@@ -32,6 +33,9 @@ function hasAdminAccess(metadata: unknown) {
 }
 
 export async function bootstrapUser(options?: BootstrapUserOptions) {
+  const devUser = await bootstrapDevUser();
+  if (devUser) return devUser;
+
   const { userId } = await auth();
   if (!userId) return null;
 
@@ -66,6 +70,8 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
 }
 
 export async function hasBootstrappedUser() {
+  if (await bootstrapDevUser()) return true;
+
   const { userId } = await auth();
   if (!userId) return false;
 

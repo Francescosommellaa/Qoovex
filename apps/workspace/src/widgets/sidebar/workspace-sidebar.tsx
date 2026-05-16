@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { SignOutButton } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
@@ -14,7 +14,9 @@ import {
   GearSix,
   ListChecks,
   MagnifyingGlass,
+  Moon,
   SignOut,
+  Sun,
   type IconProps as PhosphorIconProps,
 } from "@phosphor-icons/react";
 import {
@@ -24,8 +26,9 @@ import {
   Divider,
   Icon,
   Text,
-  ThemeToggle,
+  Toggle,
   cn,
+  useTheme,
 } from "@qoovex/ui";
 import { useDisplayPreferences, type WorkspaceTextScale } from "@shared/ui";
 import type { WorkspaceUserSummary } from "@widgets/workspace-shell";
@@ -174,9 +177,9 @@ function AccessibilityControls() {
               key={option.value}
               type="button"
               className={cn(
-                "h-8 flex-1 rounded-(--radius-full) text-(length:--text-xs) font-semibold text-(--color-text-muted) transition-[background,color] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:text-(--color-text)",
+                "h-8 flex-1 rounded-(--radius-full) border border-transparent text-(length:--text-xs) font-semibold text-(--color-text-muted) transition-[background,border-color,color,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:border-(--color-border) hover:bg-(--color-surface-offset) hover:text-(--color-text) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)",
                 textScale === option.value &&
-                  "bg-(--color-surface-raised) text-(--color-text) shadow-[var(--shadow-sm)]",
+                  "border-(--color-primary)/40 bg-(--color-primary-highlight) text-(--color-text) shadow-[var(--shadow-sm)]",
               )}
               aria-pressed={textScale === option.value}
               onClick={() => setTextScale(option.value)}
@@ -187,26 +190,74 @@ function AccessibilityControls() {
         </div>
       </div>
 
-      <button
-        type="button"
-        className={cn(
-          "flex h-9 items-center justify-between rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) text-(length:--text-xs) font-medium text-(--color-text-muted) transition-[background,color,border-color] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:bg-(--color-surface-offset) hover:text-(--color-text)",
-          highContrast &&
-            "border-(--color-primary) bg-(--color-primary-highlight) text-(--color-text)",
-        )}
-        aria-pressed={highContrast}
-        onClick={() => setHighContrast(!highContrast)}
-      >
-        <span>Contrasto aumentato</span>
-        <span>{highContrast ? "On" : "Off"}</span>
-      </button>
+      <div className="flex h-10 items-center justify-between gap-(--spacing-3) rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) transition-[background,border-color] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:border-(--color-primary)/40 hover:bg-(--color-surface-offset)">
+        <Text size="xs" tone="muted" weight="medium">
+          Contrasto aumentato
+        </Text>
+        <Toggle
+          checked={highContrast}
+          onCheckedChange={setHighContrast}
+          size="sm"
+          aria-label={
+            highContrast
+              ? "Disattiva contrasto aumentato"
+              : "Attiva contrasto aumentato"
+          }
+        />
+      </div>
+    </div>
+  );
+}
+
+function ThemeSwitch() {
+  const { theme, setTheme } = useTheme();
+  const isWhite = theme === "white";
+
+  return (
+    <div className="flex h-10 items-center justify-between gap-(--spacing-3) rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) transition-[background,border-color] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:border-(--color-primary)/40 hover:bg-(--color-surface-offset)">
+      <Text size="xs" tone="muted" weight="medium">
+        Tema
+      </Text>
+      <Toggle
+        checked={isWhite}
+        onCheckedChange={(checked) => setTheme(checked ? "white" : "dark")}
+        size="sm"
+        iconChecked={<Sun size={10} weight="bold" />}
+        iconUnchecked={<Moon size={10} weight="bold" />}
+        aria-label={isWhite ? "Attiva tema scuro" : "Attiva tema chiaro"}
+      />
     </div>
   );
 }
 
 function UserMenu({ user }: { user: WorkspaceUserSummary }) {
+  const { signOut } = useClerk();
+  const { isSignedIn } = useUser();
+  const [isLoggingOut, setIsLoggingOut] = React.useState(false);
+
+  async function handleLogout() {
+    setIsLoggingOut(true);
+
+    try {
+      await fetch("/api/dev-auth", { method: "DELETE" }).catch(() => null);
+
+      if (process.env.NODE_ENV === "development" && !isSignedIn) {
+        window.location.assign("/sign-in");
+        return;
+      }
+
+      await signOut({ redirectUrl: "/sign-in" });
+    } catch (error) {
+      if (process.env.NODE_ENV !== "production") {
+        console.error("[workspace] logout failed", error);
+      }
+
+      window.location.assign("/sign-in");
+    }
+  }
+
   return (
-    <details className="group rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface-2) p-(--spacing-3) shadow-[var(--shadow-sm)]">
+    <details className="group/user-menu overflow-hidden rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface-2) p-(--spacing-3) shadow-[var(--shadow-sm)]">
       <summary className="flex cursor-pointer list-none items-center gap-(--spacing-3) rounded-(--radius-lg) outline-none transition-colors duration-[var(--duration-base)] ease-[var(--ease-qoovex)] focus-visible:ring-2 focus-visible:ring-(--color-primary-highlight)">
         <Avatar
           name={getDisplayName(user)}
@@ -219,14 +270,16 @@ function UserMenu({ user }: { user: WorkspaceUserSummary }) {
           <span className="block truncate text-(length:--text-sm) font-semibold text-(--color-text)">
             {getDisplayName(user)}
           </span>
-          <span className="block truncate text-(length:--text-xs) text-(--color-text-muted)">
-            {user.email}
+          <span className="workspace-sidebar-profile-email text-(length:--text-xs) text-(--color-text-muted)">
+            <span className="workspace-sidebar-profile-email__text">
+              {user.email}
+            </span>
           </span>
         </span>
         <Icon
           icon={CaretDown}
           size="sm"
-          className="transition-transform duration-[var(--duration-base)] ease-[var(--ease-qoovex)] group-open:rotate-180"
+          className="transition-transform duration-[var(--duration-base)] ease-[var(--ease-qoovex)] group-open/user-menu:rotate-180"
         />
       </summary>
 
@@ -240,7 +293,7 @@ function UserMenu({ user }: { user: WorkspaceUserSummary }) {
           </Badge>
         </div>
 
-        <ThemeToggle className="w-full justify-start" />
+        <ThemeSwitch />
 
         <AccessibilityControls />
 
@@ -255,17 +308,18 @@ function UserMenu({ user }: { user: WorkspaceUserSummary }) {
           >
             Impostazioni
           </Button>
-          <SignOutButton redirectUrl="/sign-in">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="w-full justify-start text-(--color-error)"
-              iconLeft={<SignOut size={14} />}
-            >
-              Esci
-            </Button>
-          </SignOutButton>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-(--color-error)"
+            iconLeft={<SignOut size={14} />}
+            loading={isLoggingOut}
+            loadingLabel="Uscita..."
+            onClick={handleLogout}
+          >
+            Esci
+          </Button>
         </div>
       </div>
     </details>

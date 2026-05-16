@@ -36,6 +36,8 @@ export interface SearchResult {
   badge?: string;
   icon?: React.ReactNode;
   onSelect?: () => void;
+  query?: string;
+  keepOpen?: boolean;
 }
 
 export interface SmartSearchBarProps extends Omit<
@@ -49,6 +51,8 @@ export interface SmartSearchBarProps extends Omit<
   onSearch?: (query: string) => void;
   onAIQuery?: (query: string) => void;
   onDeleteRecent?: (id: string) => void;
+  quickActions?: SearchResult[];
+  mobileQuickActions?: SearchResult[];
   enableAiMode?: boolean;
   enableCommandMode?: boolean;
   isLoading?: boolean;
@@ -126,9 +130,18 @@ function useIsTouchDevice() {
   const [isTouch, setIsTouch] = React.useState(false);
 
   React.useEffect(() => {
-    setIsTouch(
-      window.matchMedia("(hover: none) and (pointer: coarse)").matches,
-    );
+    const touchQuery = window.matchMedia("(hover: none) and (pointer: coarse)");
+    const compactQuery = window.matchMedia("(max-width: 1023px)");
+    const update = () => setIsTouch(touchQuery.matches || compactQuery.matches);
+
+    update();
+    touchQuery.addEventListener("change", update);
+    compactQuery.addEventListener("change", update);
+
+    return () => {
+      touchQuery.removeEventListener("change", update);
+      compactQuery.removeEventListener("change", update);
+    };
   }, []);
 
   return isTouch;
@@ -231,6 +244,17 @@ function MobileChipBar({
   );
 }
 
+function isQuickActionCategory(category: SearchResultCategory) {
+  return (
+    category === "action" ||
+    category === "command" ||
+    category === "recipe" ||
+    category === "menu" ||
+    category === "work-plan" ||
+    category === "ai"
+  );
+}
+
 export const SmartSearchBar = React.forwardRef<
   HTMLInputElement,
   SmartSearchBarProps
@@ -244,6 +268,8 @@ export const SmartSearchBar = React.forwardRef<
     onSearch,
     onAIQuery,
     onDeleteRecent,
+    quickActions = [],
+    mobileQuickActions,
     enableAiMode = true,
     enableCommandMode = true,
     onChange,
@@ -280,8 +306,21 @@ export const SmartSearchBar = React.forwardRef<
   const aiMode = enableAiMode && detectAiQuery(query);
   const commandMode = enableCommandMode && detectCommandQuery(query);
   const groups = React.useMemo(() => groupResults(results), [results]);
+  const fallbackQuickActions = React.useMemo(
+    () => results.filter((result) => isQuickActionCategory(result.category)).slice(0, 6),
+    [results],
+  );
+  const desktopQuickActions = quickActions.length > 0 ? quickActions : fallbackQuickActions;
+  const touchQuickActions = React.useMemo(
+    () => mobileQuickActions ?? desktopQuickActions,
+    [desktopQuickActions, mobileQuickActions],
+  );
   const isOpen = forceOpen || open;
-  const showDropdown = isOpen && (results.length > 0 || query.length > 0);
+  const showDropdown =
+    isOpen &&
+    (results.length > 0 ||
+      query.length > 0 ||
+      (isTouch && touchQuickActions.length > 0));
   const hotkeyLabel = shortcut.toUpperCase();
   const generatedId = React.useId();
   const listboxId = `${generatedId}-search-bar-listbox`;
@@ -311,7 +350,16 @@ export const SmartSearchBar = React.forwardRef<
 
   function handleSelect(item: SearchResult) {
     item.onSelect?.();
-    setQuery(item.label);
+    setQuery(item.query ?? item.label);
+
+    if (item.keepOpen) {
+      localInputRef.current?.focus();
+      const nextQuery = item.query ?? item.label;
+      window.setTimeout(() => {
+        localInputRef.current?.setSelectionRange(nextQuery.length, nextQuery.length);
+      }, 0);
+      return;
+    }
 
     if (!forceOpen) {
       setOpen(false);
@@ -539,21 +587,46 @@ export const SmartSearchBar = React.forwardRef<
             </div>
           ) : null}
 
-          {/* Chip bar — solo mobile */}
-          {isTouch ? (
-            <MobileChipBar
-              onChip={handleChip}
-              onSearch={handleSubmit}
-              hasQuery={query.trim().length > 0}
-              aiMode={aiMode}
-              commandMode={commandMode}
-              enableAiMode={enableAiMode}
-              enableCommandMode={enableCommandMode}
-            />
+          {(isTouch ? touchQuickActions : desktopQuickActions).length > 0 ? (
+            <div className="search-bar-quick-actions" aria-label="Comandi rapidi">
+              <div className="search-bar-quick-actions__header">
+                <span className="search-bar-group-icon" aria-hidden>
+                  <Lightning size={14} />
+                </span>
+                Comandi rapidi
+              </div>
+              <div className="search-bar-quick-actions__grid">
+                {(isTouch ? touchQuickActions : desktopQuickActions).map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="search-bar-quick-action"
+                    onClick={() => handleSelect(item)}
+                  >
+                    <span className="search-bar-quick-action__icon" aria-hidden>
+                      {item.icon ?? CATEGORY_ICONS[item.category]}
+                    </span>
+                    <span className="search-bar-quick-action__body">
+                      <span className="search-bar-quick-action__label">
+                        {item.label}
+                      </span>
+                      {item.description ? (
+                        <span className="search-bar-quick-action__desc">
+                          {item.description}
+                        </span>
+                      ) : null}
+                    </span>
+                    {item.badge ? (
+                      <span className="search-bar-type-pill">{item.badge}</span>
+                    ) : null}
+                  </button>
+                ))}
+              </div>
+            </div>
           ) : null}
 
           {/* Lista risultati */}
-          {groups.length > 0 ? (
+          {!isTouch && groups.length > 0 ? (
             <div
               id={listboxId}
               ref={listRef}

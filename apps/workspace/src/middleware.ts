@@ -7,6 +7,7 @@ const isPublicRoute = createRouteMatcher([
   "/forgot-password(.*)",
   "/sso-callback(.*)",
   "/complete-profile(.*)",
+  "/api/dev-auth(.*)",
   "/api/webhooks/clerk(.*)",
 ]);
 
@@ -18,6 +19,14 @@ const authorizedParties = [
 ];
 
 export default clerkMiddleware(async (auth, req) => {
+  const hasDevAuthSession =
+    process.env.NODE_ENV === "development" &&
+    req.cookies.get("qv-dev-auth")?.value === "enabled";
+
+  if (hasDevAuthSession) {
+    return;
+  }
+
   if (!isPublicRoute(req)) {
     await auth.protect();
   }

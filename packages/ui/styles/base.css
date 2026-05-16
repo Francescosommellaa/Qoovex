@@ -404,6 +404,16 @@
     background: var(--search-bar-item-active-bg);
   }
 
+  .search-bar-item--button {
+    width: 100%;
+    border: 0;
+    text-align: left;
+  }
+
+  .search-bar-item--button .search-bar-item-arrow {
+    opacity: 1;
+  }
+
   .search-bar-item-icon {
     display: flex;
     align-items: center;
@@ -558,6 +568,85 @@
 
   .search-bar-footer-ai-hint {
     margin-left: auto;
+  }
+
+  /* Quick actions */
+
+  .search-bar-quick-actions {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--color-divider);
+  }
+
+  .search-bar-quick-actions__header {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .search-bar-quick-actions__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: var(--space-2);
+  }
+
+  .search-bar-quick-action {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-offset);
+    padding: var(--space-2);
+    text-align: left;
+    transition:
+      background var(--transition-interactive),
+      border-color var(--transition-interactive);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .search-bar-quick-action:hover,
+  .search-bar-quick-action:active {
+    background: var(--color-surface-dynamic);
+    border-color: var(--search-bar-ring-color);
+  }
+
+  .search-bar-quick-action__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+  }
+
+  .search-bar-quick-action__body {
+    display: inline-flex;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .search-bar-quick-action__label {
+    overflow: hidden;
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .search-bar-quick-action__desc {
+    overflow: hidden;
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* Chip bar */

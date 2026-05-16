@@ -1,9 +1,22 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
-import { CalendarBlank, List } from "@phosphor-icons/react";
-import { Button, Icon, SmartSearchBar, Text, ThemeToggle } from "@qoovex/ui";
+import {
+  CalendarBlank,
+  CookingPot,
+  ForkKnife,
+  List,
+  NotePencil,
+  PlayCircle,
+  Sparkle,
+} from "@phosphor-icons/react";
+import {
+  Button,
+  Icon,
+  SmartSearchBar,
+  Text,
+  type SearchResult,
+} from "@qoovex/ui";
 import { useRecentSearches } from "@qoovex/utils";
 
 interface WorkspaceTopbarProps {
@@ -41,20 +54,166 @@ function useWorkspaceClock(nowIso: string) {
 function WorkspaceSearch() {
   const { recents, loading, saveSearch, deleteSearch } = useRecentSearches();
 
+  const runQuickSearch = React.useCallback(
+    (query: string) => {
+      void saveSearch(query);
+    },
+    [saveSearch],
+  );
+
+  const quickActions = React.useMemo<SearchResult[]>(
+    () => [
+      {
+        id: "quick-ai-mode",
+        category: "ai",
+        label: "Modalità IA",
+        description: "Scrivi una richiesta assistita",
+        icon: <Sparkle size={14} />,
+        query: "?",
+        keepOpen: true,
+      },
+      {
+        id: "quick-live",
+        category: "action",
+        label: "Live",
+        description: "Ingresso rapido quando la modalità sarà attiva",
+        badge: "presto",
+        icon: <PlayCircle size={14} />,
+        onSelect: () => {
+          runQuickSearch("modalita live");
+        },
+      },
+      {
+        id: "quick-new-recipe",
+        category: "action",
+        label: "Nuova ricetta",
+        description: "Azione frequente per creare una preparazione",
+        badge: "presto",
+        icon: <NotePencil size={14} />,
+        onSelect: () => runQuickSearch("nuova ricetta"),
+      },
+      {
+        id: "quick-service-menu",
+        category: "action",
+        label: "Menu servizio",
+        description: "Accesso rapido alla gestione menu",
+        badge: "presto",
+        icon: <ForkKnife size={14} />,
+        onSelect: () => runQuickSearch("menu servizio"),
+      },
+    ],
+    [runQuickSearch],
+  );
+
+  const quickResults = React.useMemo<SearchResult[]>(
+    () => [
+      {
+        id: "suggestion-recipes",
+        category: "recipe",
+        label: "Ricette",
+        description: "Cerca e organizza le tue preparazioni",
+        badge: "presto",
+      },
+      {
+        id: "suggestion-menus",
+        category: "menu",
+        label: "Menu",
+        description: "Componi menu e carte digitali",
+        badge: "presto",
+      },
+      {
+        id: "suggestion-work-plans",
+        category: "work-plan",
+        label: "Piani di lavoro",
+        description: "Coordina preparazioni e task",
+        badge: "presto",
+      },
+    ],
+    [],
+  );
+
+  const mobileQuickActions = React.useMemo<SearchResult[]>(
+    () => [
+      {
+        id: "mobile-quick-ai-mode",
+        category: "ai",
+        label: "Modalità IA",
+        description: "Scrivi una richiesta assistita",
+        icon: <Sparkle size={14} />,
+        query: "?",
+        keepOpen: true,
+      },
+      {
+        id: "mobile-quick-live",
+        category: "action",
+        label: "Live",
+        description: "Ingresso rapido alla modalità live",
+        badge: "presto",
+        icon: <PlayCircle size={14} />,
+        onSelect: () => {
+          runQuickSearch("modalita live");
+        },
+      },
+      {
+        id: "mobile-quick-new-recipe",
+        category: "action",
+        label: "Nuova ricetta",
+        description: "Crea una preparazione",
+        badge: "presto",
+        icon: <NotePencil size={14} />,
+        onSelect: () => runQuickSearch("nuova ricetta"),
+      },
+      {
+        id: "mobile-quick-service-menu",
+        category: "action",
+        label: "Menu servizio",
+        description: "Apri la gestione menu",
+        badge: "presto",
+        icon: <ForkKnife size={14} />,
+        onSelect: () => runQuickSearch("menu servizio"),
+      },
+      {
+        id: "mobile-quick-prep",
+        category: "action",
+        label: "Prep veloce",
+        description: "Cerca preparazioni operative",
+        icon: <CookingPot size={14} />,
+        onSelect: () => runQuickSearch("prep"),
+      },
+    ],
+    [runQuickSearch],
+  );
+
+  const results = React.useMemo<SearchResult[]>(
+    () => [
+      ...recents.map((recent) => ({
+        id: recent.id,
+        category: "recent" as const,
+        label: recent.query,
+        description: "Ricerca recente",
+      })),
+      ...quickResults,
+    ],
+    [quickResults, recents],
+  );
+
+  function handleSearch(query: string) {
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) return;
+
+    saveSearch(trimmedQuery);
+  }
+
   return (
     <SmartSearchBar
       placeholder="Cerca nel workspace..."
-      results={recents.map((recent) => ({
-        id: recent.id,
-        category: "recent",
-        label: recent.query,
-        description: "Ricerca recente",
-      }))}
-      onSearch={saveSearch}
+      results={results}
+      quickActions={quickActions}
+      mobileQuickActions={mobileQuickActions}
+      onSearch={handleSearch}
+      onAIQuery={handleSearch}
       onDeleteRecent={deleteSearch}
       isLoading={loading}
-      enableAiMode={false}
-      enableCommandMode={false}
       className="w-full"
     />
   );
@@ -68,38 +227,18 @@ export function WorkspaceTopbar({
 
   return (
     <header className="shrink-0 border-b border-(--color-border) bg-(--color-bg) px-(--spacing-4) py-(--spacing-3) md:px-(--spacing-6) lg:px-(--spacing-8)">
-      <div className="grid gap-(--spacing-3) md:grid-cols-[auto_minmax(16rem,34rem)_auto] md:items-center md:gap-(--spacing-4)">
-        <div className="flex min-w-0 items-center justify-between gap-(--spacing-3) md:justify-start">
-          <div className="flex min-w-0 items-center gap-(--spacing-3)">
-            <Button
-              type="button"
-              variant="ghost"
-              size="xs"
-              className="size-10 px-0 lg:hidden"
-              aria-label="Apri navigazione"
-              onClick={onOpenNavigation}
-            >
-              <List size={18} weight="bold" />
-            </Button>
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface-raised)">
-              <Image
-                src="/logo-icon/qoovex-icona-nera-no-sfondo.svg"
-                alt=""
-                width={22}
-                height={22}
-                className="[filter:var(--sirio-brand-icon-filter)]"
-                priority
-              />
-            </span>
-            <div className="hidden min-w-0 sm:block">
-              <Text size="sm" weight="semibold">
-                Qoovex Workspace
-              </Text>
-              <Text size="xs" tone="muted">
-                Regia operativa
-              </Text>
-            </div>
-          </div>
+      <div className="grid gap-(--spacing-3) md:grid-cols-[auto_minmax(16rem,34rem)_auto] md:items-center md:gap-(--spacing-4) lg:grid-cols-[minmax(16rem,34rem)_auto]">
+        <div className="flex min-w-0 items-center justify-between gap-(--spacing-3) md:justify-start lg:hidden">
+          <Button
+            type="button"
+            variant="ghost"
+            size="xs"
+            className="size-10 px-0 lg:hidden"
+            aria-label="Apri navigazione"
+            onClick={onOpenNavigation}
+          >
+            <List size={18} weight="bold" />
+          </Button>
 
           <div className="flex items-center gap-(--spacing-2) md:hidden">
             <div className="flex items-center gap-(--spacing-2) rounded-(--radius-full) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) py-(--spacing-2)">
@@ -108,7 +247,6 @@ export function WorkspaceTopbar({
                 {clock.time}
               </span>
             </div>
-            <ThemeToggle label="Tema" className="h-9 px-(--spacing-3)" />
           </div>
         </div>
 
@@ -123,7 +261,6 @@ export function WorkspaceTopbar({
               {clock.time}
             </Text>
           </div>
-          <ThemeToggle />
         </div>
       </div>
     </header>

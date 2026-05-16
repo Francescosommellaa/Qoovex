@@ -37,6 +37,7 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
   const [isCredentialsInvalid, setIsCredentialsInvalid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDevSigningIn, setIsDevSigningIn] = useState(false);
   const [isProvisioningDashboard, setIsProvisioningDashboard] = useState(false);
   const [warningFields, setWarningFields] = useState<{
     identifier: boolean;
@@ -47,7 +48,13 @@ export default function SignInPage() {
   });
 
   const isLoading = fetchStatus === "fetching";
-  const isBusy = isLoading || isSubmitting || !isAuthLoaded || isProvisioningDashboard;
+  const isBusy =
+    isLoading ||
+    isSubmitting ||
+    isDevSigningIn ||
+    !isAuthLoaded ||
+    isProvisioningDashboard;
+  const showDevAuthButton = process.env.NODE_ENV === "development";
 
   useEffect(() => {
     if (didHydrateIdentifier.current) return;
@@ -71,6 +78,32 @@ export default function SignInPage() {
       title: "Accesso non riuscito",
       description: getGenericAuthFailureMessage(),
     });
+  }
+
+  async function handleDevSignIn() {
+    setIsDevSigningIn(true);
+
+    try {
+      const redirectUrl = searchParams.get("redirect_url") ?? "/dashboard";
+      const response = await fetch(
+        `/api/dev-auth?redirect_url=${encodeURIComponent(redirectUrl)}`,
+        { method: "POST" },
+      );
+
+      if (!response.ok) {
+        notifyAuthFailure();
+        return;
+      }
+
+      const payload = (await response.json()) as { destination?: unknown };
+      const destination =
+        typeof payload.destination === "string" ? payload.destination : "/dashboard";
+
+      setIsProvisioningDashboard(true);
+      window.location.assign(destination);
+    } finally {
+      setIsDevSigningIn(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -195,6 +228,21 @@ export default function SignInPage() {
           }}
         />
       </Stack>
+
+      {showDevAuthButton ? (
+        <Button
+          type="button"
+          variant="secondary"
+          size="md"
+          className="w-full"
+          loading={isDevSigningIn}
+          loadingLabel="Accesso sviluppo..."
+          disabled={isBusy}
+          onClick={handleDevSignIn}
+        >
+          Entra in sviluppo
+        </Button>
+      ) : null}
 
       <Text as="span" className="auth-divider">
         oppure
