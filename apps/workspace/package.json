@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^7.2.1",
+    "@qoovex/config": "workspace:*",
     "@qoovex/ui": "workspace:*",
     "@qoovex/utils": "workspace:*",
     "@vercel/analytics": "^2.0.1",

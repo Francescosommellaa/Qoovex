@@ -45,6 +45,23 @@ export async function findUserEmailByUsername(username: string) {
   });
 }
 
+export async function findUserSummaryByIdentifier(identifier: string) {
+  const normalized = identifier.trim();
+
+  return await db.user.findFirst({
+    where: {
+      OR: [{ email: normalized }, { username: normalized }],
+    },
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      email: true,
+      plan: true,
+    },
+  });
+}
+
 export async function upsertSyncedUser(input: UpsertSyncedUserInput) {
   return await db.user.upsert({
     where: { clerkId: input.clerkId },

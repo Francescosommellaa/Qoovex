@@ -12,3 +12,4 @@ Non mettere qui:
 Regole:
 - usa `entities/work-plan` per model e UI di base;
 - la composizione finale sta in `views/work-plan`.
+- il completamento task puo creare notifiche persistenti per il creator.

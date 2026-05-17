@@ -12,3 +12,4 @@ Non mettere qui:
 Regole:
 - usa `features/work-plan-board` per i casi d'uso;
 - usa `entities/work-plan` per il dominio.
+- notifiche persistenti sono create dal service quando un membro completa un task.

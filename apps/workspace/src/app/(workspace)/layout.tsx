@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
+import { ToastProvider } from "@qoovex/ui";
 import { bootstrapUser } from "@shared/actions/bootstrap-user";
 import {
   WorkspaceShell,
@@ -36,9 +37,11 @@ export default async function WorkspaceLayout({
 
   return (
     <ClerkProvider>
-      <WorkspaceShell user={userSummary} nowIso={new Date().toISOString()}>
-        {children}
-      </WorkspaceShell>
+      <ToastProvider position="bottom-right">
+        <WorkspaceShell user={userSummary} nowIso={new Date().toISOString()}>
+          {children}
+        </WorkspaceShell>
+      </ToastProvider>
     </ClerkProvider>
   );
 }

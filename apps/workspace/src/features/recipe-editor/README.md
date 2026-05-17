@@ -12,3 +12,4 @@ Non mettere qui:
 Regole:
 - `Recipe` come dominio sta in `entities/recipe`;
 - l'editor resta qui finche' e` un caso d'uso utente.
+- feedback temporanei tramite `useToast`, non notifiche persistenti.

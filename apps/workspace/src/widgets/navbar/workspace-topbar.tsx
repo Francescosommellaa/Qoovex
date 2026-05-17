@@ -18,6 +18,7 @@ import {
   type SearchResult,
 } from "@qoovex/ui";
 import { useRecentSearches } from "@qoovex/utils";
+import { NotificationDropdown } from "./notification-dropdown";
 
 interface WorkspaceTopbarProps {
   nowIso: string;
@@ -241,6 +242,7 @@ export function WorkspaceTopbar({
           </Button>
 
           <div className="flex items-center gap-(--spacing-2) md:hidden">
+            <NotificationDropdown />
             <div className="flex items-center gap-(--spacing-2) rounded-(--radius-full) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) py-(--spacing-2)">
               <Icon icon={CalendarBlank} size="sm" tone="current" />
               <span className="text-(length:--text-xs) font-medium text-(--color-text-muted)">
@@ -253,6 +255,7 @@ export function WorkspaceTopbar({
         <WorkspaceSearch />
 
         <div className="hidden items-center justify-end gap-(--spacing-3) md:flex">
+          <NotificationDropdown />
           <div className="rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) py-(--spacing-2) text-right">
             <Text size="xs" tone="muted">
               {clock.day}

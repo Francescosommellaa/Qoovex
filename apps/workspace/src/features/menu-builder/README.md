@@ -12,3 +12,4 @@ Non mettere qui:
 Regole:
 - il codice qui descrive azioni utente, non il modello puro del menu;
 - niente dipendenze da layer superiori.
+- feedback temporanei tramite toast del design system.

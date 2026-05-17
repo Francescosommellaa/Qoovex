@@ -12,3 +12,4 @@ Non mettere qui:
 Regole:
 - usa `features/menu-builder` per l'interazione;
 - usa `entities/menu` per il modello.
+- gating watermark e QR deriva da `plan_rules.json`.

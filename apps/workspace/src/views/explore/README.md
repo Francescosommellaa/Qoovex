@@ -12,3 +12,4 @@ Non mettere qui:
 Regole:
 - la view compone, non implementa i casi d'uso nel dettaglio;
 - delega interazioni a `features/explore`.
+- in V1 il fork e` disponibile per ricette pubbliche, non per menu.

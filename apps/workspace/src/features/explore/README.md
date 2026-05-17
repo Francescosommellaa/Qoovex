@@ -12,3 +12,4 @@ Non mettere qui:
 Regole:
 - usa `entities/menu` e `entities/recipe` per il dominio;
 - lascia a `views/explore` la composizione schermata.
+- fork ricetta tramite server action e toast di feedback.

@@ -12,3 +12,4 @@ Non mettere qui:
 Regole:
 - separa la logica di calcolo dai componenti di pagina;
 - tieni qui solo cio` che rappresenta un'interazione.
+- la lista spesa non gestisce prezzi nello scope corrente.

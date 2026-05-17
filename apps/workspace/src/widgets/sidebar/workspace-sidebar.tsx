@@ -5,7 +5,6 @@ import { useClerk, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  Bell,
   BookOpen,
   CaretDown,
   ChartBar,
@@ -48,12 +47,12 @@ interface WorkspaceNavigationItem {
 
 const navigationItems: WorkspaceNavigationItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: ChartBar },
-  { label: "Ricette", icon: BookOpen, disabled: true },
-  { label: "Menu", icon: ForkKnife, disabled: true },
-  { label: "Lista spesa", icon: ListChecks, disabled: true },
-  { label: "Piani di lavoro", icon: ClipboardText, disabled: true },
-  { label: "Esplora", icon: MagnifyingGlass, disabled: true },
-  { label: "Notifiche", icon: Bell, disabled: true },
+  { label: "Ricette", href: "/recipes", icon: BookOpen },
+  { label: "Menu", href: "/menus", icon: ForkKnife },
+  { label: "Lista spesa", href: "/shopping-list", icon: ListChecks },
+  { label: "Piani di lavoro", href: "/work-plans", icon: ClipboardText },
+  { label: "Esplora", href: "/explore", icon: MagnifyingGlass },
+  { label: "Impostazioni", href: "/settings", icon: GearSix },
 ];
 
 const adminNavigationItems: WorkspaceNavigationItem[] = [

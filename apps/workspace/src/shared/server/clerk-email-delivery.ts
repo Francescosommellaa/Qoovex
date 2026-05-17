@@ -38,15 +38,15 @@ function getEmailHtml(data: ClerkEmailData): string {
   if (data.body) return data.body;
 
   const codeBlock = data.otp_code
-    ? `<p style="font-size:24px;font-weight:700;letter-spacing:4px;">${data.otp_code}</p>`
+    ? `<p><strong>${data.otp_code}</strong></p>`
     : "";
   const actionBlock = data.action_url
     ? `<p><a href="${data.action_url}">Continua su Qoovex</a></p>`
     : "";
 
   return `
-    <div style="font-family:Arial,sans-serif;line-height:1.6;color:#111;">
-      <h1 style="font-size:20px;">Qoovex</h1>
+    <div>
+      <h1>Qoovex</h1>
       <p>Usa queste informazioni per completare l'operazione richiesta.</p>
       ${codeBlock}
       ${actionBlock}

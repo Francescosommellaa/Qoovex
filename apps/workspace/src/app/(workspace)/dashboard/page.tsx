@@ -1,27 +1,10 @@
-import { Badge, Card, CardBody, PageSection, Stack, Text } from "@qoovex/ui";
+import { redirect } from "next/navigation";
+import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { DashboardView } from "@views/dashboard";
 
-export default function DashboardPage() {
-  return (
-    <PageSection
-      title="Workspace pronto"
-      description="La shell applicativa e stabile: navigazione, ricerca, preferenze e content scrollabile sono pronti per ospitare le feature."
-    >
-      <Card variant="panel" tone="success" padding="lg">
-        <CardBody>
-          <Stack gap="4">
-            <Badge variant="soft" tone="success" size="md">
-              Shell attiva
-            </Badge>
-            <Text as="h1" family="display" size="lg" weight="semibold">
-              Fondamenta workspace operative
-            </Text>
-            <Text size="sm" tone="muted" leading="relaxed">
-              Le prossime schermate potranno essere composte dentro questo
-              spazio senza duplicare layout, navigazione o controlli globali.
-            </Text>
-          </Stack>
-        </CardBody>
-      </Card>
-    </PageSection>
-  );
+export default async function DashboardPage() {
+  const user = await bootstrapUser();
+  if (!user) redirect("/sign-in");
+
+  return <DashboardView user={user} />;
 }
