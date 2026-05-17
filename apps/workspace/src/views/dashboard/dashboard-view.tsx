@@ -4,11 +4,11 @@ import {
   Card,
   CardBody,
   EmptyState,
-  PageSection,
   Stack,
   Text,
 } from "@qoovex/ui";
 import type { WorkspacePlan } from "@shared/lib/workspace-types";
+import { WorkspacePage } from "@shared/ui";
 import { getWorkspaceDashboard } from "@shared/server/dashboard-service";
 
 interface DashboardViewProps {
@@ -64,7 +64,7 @@ export async function DashboardView({ user }: DashboardViewProps) {
     0;
 
   return (
-    <PageSection
+    <WorkspacePage
       title={`Workspace di ${user.name}`}
       description="Panoramica operativa delle preparazioni, dei menu e del lavoro condiviso."
     >
@@ -186,6 +186,6 @@ export async function DashboardView({ user }: DashboardViewProps) {
           />
         ) : null}
       </Stack>
-    </PageSection>
+    </WorkspacePage>
   );
 }

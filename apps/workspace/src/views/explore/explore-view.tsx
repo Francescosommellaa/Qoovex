@@ -5,12 +5,12 @@ import {
   CardBody,
   EmptyState,
   Input,
-  PageSection,
   Stack,
   Text,
 } from "@qoovex/ui";
 import { ForkRecipeButton } from "@features/explore";
 import type { WorkspacePlan } from "@shared/lib/workspace-types";
+import { WorkspacePage } from "@shared/ui";
 import { getPublicMenus } from "@shared/server/menu-service";
 import { getPublicRecipes } from "@shared/server/recipe-service";
 
@@ -34,7 +34,7 @@ export async function ExploreView({
   const hasResults = recipes.length > 0 || menus.length > 0;
 
   return (
-    <PageSection
+    <WorkspacePage
       title="Esplora"
       description="Ricette e menu pubblici della community Qoovex. In V1 puoi copiare le ricette nel tuo workspace."
     >
@@ -152,6 +152,6 @@ export async function ExploreView({
           </Stack>
         ) : null}
       </Stack>
-    </PageSection>
+    </WorkspacePage>
   );
 }

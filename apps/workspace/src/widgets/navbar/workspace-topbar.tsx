@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import {
-  CalendarBlank,
   CookingPot,
   ForkKnife,
   List,
@@ -12,44 +11,16 @@ import {
 } from "@phosphor-icons/react";
 import {
   Button,
-  Icon,
   SmartSearchBar,
-  Text,
   type SearchResult,
 } from "@qoovex/ui";
 import { useRecentSearches } from "@qoovex/utils";
+import { ClockDropdown } from "./clock-dropdown";
 import { NotificationDropdown } from "./notification-dropdown";
 
 interface WorkspaceTopbarProps {
   nowIso: string;
   onOpenNavigation: () => void;
-}
-
-function useWorkspaceClock(nowIso: string) {
-  const [date, setDate] = React.useState(() => new Date(nowIso));
-
-  React.useEffect(() => {
-    const interval = window.setInterval(() => {
-      setDate(new Date());
-    }, 30_000);
-
-    return () => window.clearInterval(interval);
-  }, []);
-
-  return React.useMemo(
-    () => ({
-      day: new Intl.DateTimeFormat("it-IT", {
-        weekday: "short",
-        day: "2-digit",
-        month: "short",
-      }).format(date),
-      time: new Intl.DateTimeFormat("it-IT", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }).format(date),
-    }),
-    [date],
-  );
 }
 
 function WorkspaceSearch() {
@@ -224,8 +195,6 @@ export function WorkspaceTopbar({
   nowIso,
   onOpenNavigation,
 }: WorkspaceTopbarProps) {
-  const clock = useWorkspaceClock(nowIso);
-
   return (
     <header className="shrink-0 border-b border-(--color-border) bg-(--color-bg) px-(--spacing-4) py-(--spacing-3) md:px-(--spacing-6) lg:px-(--spacing-8)">
       <div className="grid gap-(--spacing-3) md:grid-cols-[auto_minmax(16rem,34rem)_auto] md:items-center md:gap-(--spacing-4) lg:grid-cols-[minmax(16rem,34rem)_auto]">
@@ -243,12 +212,7 @@ export function WorkspaceTopbar({
 
           <div className="flex items-center gap-(--spacing-2) md:hidden">
             <NotificationDropdown />
-            <div className="flex items-center gap-(--spacing-2) rounded-(--radius-full) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) py-(--spacing-2)">
-              <Icon icon={CalendarBlank} size="sm" tone="current" />
-              <span className="text-(length:--text-xs) font-medium text-(--color-text-muted)">
-                {clock.time}
-              </span>
-            </div>
+            <ClockDropdown nowIso={nowIso} compact />
           </div>
         </div>
 
@@ -256,14 +220,7 @@ export function WorkspaceTopbar({
 
         <div className="hidden items-center justify-end gap-(--spacing-3) md:flex">
           <NotificationDropdown />
-          <div className="rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) py-(--spacing-2) text-right">
-            <Text size="xs" tone="muted">
-              {clock.day}
-            </Text>
-            <Text size="sm" weight="semibold">
-              {clock.time}
-            </Text>
-          </div>
+          <ClockDropdown nowIso={nowIso} />
         </div>
       </div>
     </header>

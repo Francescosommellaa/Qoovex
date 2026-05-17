@@ -6,12 +6,12 @@ import {
   CardBody,
   EmptyState,
   Input,
-  PageSection,
   Stack,
   Text,
 } from "@qoovex/ui";
 import { MenuBuilderForm } from "@features/menu-builder";
 import type { WorkspacePlan } from "@shared/lib/workspace-types";
+import { WorkspacePage } from "@shared/ui";
 import { getRecipeOptions } from "@shared/server/recipe-service";
 import { getMenuDetail, getMenusIndex } from "@shared/server/menu-service";
 
@@ -35,7 +35,7 @@ export async function MenusIndexView({
     await getMenusIndex(user.id, user.plan, query);
 
   return (
-    <PageSection
+    <WorkspacePage
       title="Menu"
       description="Carte digitali e menu operativi composti dalle ricette del workspace."
     >
@@ -121,7 +121,7 @@ export async function MenusIndexView({
           </div>
         )}
       </Stack>
-    </PageSection>
+    </WorkspacePage>
   );
 }
 
@@ -129,12 +129,12 @@ export async function NewMenuView({ user }: { user: MenusViewUser }) {
   const recipes = await getRecipeOptions(user.id);
 
   return (
-    <PageSection
+    <WorkspacePage
       title="Nuovo menu"
       description="Componi sezioni e ordine di servizio usando le ricette esistenti."
     >
       <MenuBuilderForm mode="create" recipes={recipes} />
-    </PageSection>
+    </WorkspacePage>
   );
 }
 
@@ -149,7 +149,7 @@ export async function MenuDetailView({
   if (!menu) notFound();
 
   return (
-    <PageSection title={menu.title} description={menu.description ?? undefined}>
+    <WorkspacePage title={menu.title} description={menu.description ?? undefined}>
       <Stack gap="6">
         <div className="flex flex-wrap items-center gap-(--spacing-2)">
           <Badge tone={menu.isPublic ? "success" : "neutral"}>
@@ -210,7 +210,7 @@ export async function MenuDetailView({
           </CardBody>
         </Card>
       </Stack>
-    </PageSection>
+    </WorkspacePage>
   );
 }
 
@@ -228,11 +228,11 @@ export async function EditMenuView({
   if (!menu || !menu.canEdit) notFound();
 
   return (
-    <PageSection
+    <WorkspacePage
       title={`Modifica ${menu.title}`}
       description="Aggiorna struttura, sezioni e visibilita del menu."
     >
       <MenuBuilderForm mode="edit" recipes={recipes} initialMenu={menu} />
-    </PageSection>
+    </WorkspacePage>
   );
 }

@@ -5,7 +5,6 @@ import {
   Card,
   CardBody,
   EmptyState,
-  PageSection,
   Stack,
   Text,
 } from "@qoovex/ui";
@@ -15,6 +14,7 @@ import {
   SourceShoppingListForm,
 } from "@features/shopping-list";
 import type { WorkspacePlan } from "@shared/lib/workspace-types";
+import { WorkspacePage } from "@shared/ui";
 import { getMenuOptionsForShoppingList } from "@shared/server/workspace-option-service";
 import { getRecipeOptions } from "@shared/server/recipe-service";
 import {
@@ -39,7 +39,7 @@ export async function ShoppingListsIndexView({
   ]);
 
   return (
-    <PageSection
+    <WorkspacePage
       title="Lista spesa"
       description="Liste operative da ricette, menu o inserimento manuale. Nessuna gestione prezzi nello scope corrente."
     >
@@ -111,7 +111,7 @@ export async function ShoppingListsIndexView({
           </Stack>
         </div>
       </Stack>
-    </PageSection>
+    </WorkspacePage>
   );
 }
 
@@ -126,7 +126,7 @@ export async function ShoppingListDetailView({
   if (!list) notFound();
 
   return (
-    <PageSection title={list.title} description="Checklist operativa della spesa.">
+    <WorkspacePage title={list.title} description="Checklist operativa della spesa.">
       <Stack gap="5">
         <div className="flex flex-wrap items-center gap-(--spacing-2)">
           <Badge tone="primary">
@@ -147,6 +147,6 @@ export async function ShoppingListDetailView({
           </div>
         )}
       </Stack>
-    </PageSection>
+    </WorkspacePage>
   );
 }

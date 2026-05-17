@@ -6,12 +6,12 @@ import {
   CardBody,
   EmptyState,
   Input,
-  PageSection,
   Stack,
   Text,
 } from "@qoovex/ui";
 import { RecipeEditorForm } from "@features/recipe-editor";
 import type { WorkspacePlan } from "@shared/lib/workspace-types";
+import { WorkspacePage } from "@shared/ui";
 import {
   getRecipeDetail,
   getRecipesIndex,
@@ -36,7 +36,7 @@ export async function RecipesIndexView({
   const { recipes, limit } = await getRecipesIndex(user.id, user.plan, query);
 
   return (
-    <PageSection
+    <WorkspacePage
       title="Ricette"
       description="Archivio operativo delle preparazioni, con allergeni e valori nutrizionali collegati agli ingredienti."
     >
@@ -126,18 +126,18 @@ export async function RecipesIndexView({
           </div>
         )}
       </Stack>
-    </PageSection>
+    </WorkspacePage>
   );
 }
 
 export function NewRecipeView() {
   return (
-    <PageSection
+    <WorkspacePage
       title="Nuova ricetta"
       description="Crea una preparazione completa di ingredienti, allergeni e valori nutrizionali."
     >
       <RecipeEditorForm mode="create" />
-    </PageSection>
+    </WorkspacePage>
   );
 }
 
@@ -152,7 +152,7 @@ export async function RecipeDetailView({
   if (!recipe) notFound();
 
   return (
-    <PageSection title={recipe.title} description={recipe.description ?? undefined}>
+    <WorkspacePage title={recipe.title} description={recipe.description ?? undefined}>
       <Stack gap="6">
         <div className="flex flex-wrap items-center gap-(--spacing-2)">
           <Badge tone={recipe.isPublic ? "success" : "neutral"}>
@@ -223,7 +223,7 @@ export async function RecipeDetailView({
           </Card>
         </div>
       </Stack>
-    </PageSection>
+    </WorkspacePage>
   );
 }
 
@@ -238,11 +238,11 @@ export async function EditRecipeView({
   if (!recipe || !recipe.canEdit) notFound();
 
   return (
-    <PageSection
+    <WorkspacePage
       title={`Modifica ${recipe.title}`}
       description="Aggiorna ingredienti, allergeni, valori nutrizionali e visibilita."
     >
       <RecipeEditorForm mode="edit" initialRecipe={recipe} />
-    </PageSection>
+    </WorkspacePage>
   );
 }

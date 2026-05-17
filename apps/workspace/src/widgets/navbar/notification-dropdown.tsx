@@ -144,7 +144,7 @@ export function NotificationDropdown() {
       </Button>
 
       {open ? (
-        <div className="absolute right-0 top-[calc(100%+var(--spacing-2))] z-(--z-dropdown) w-[min(22rem,calc(100vw-var(--spacing-8)))] overflow-hidden rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface-2) shadow-[var(--shadow-lg)]">
+        <div className="fixed left-(--spacing-3) right-(--spacing-3) top-[calc(var(--spacing-16)+var(--spacing-2))] z-(--z-dropdown) overflow-hidden rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface-2) shadow-[var(--shadow-lg)] md:absolute md:left-auto md:right-0 md:top-[calc(100%+var(--spacing-2))] md:w-[min(22rem,calc(100vw-var(--spacing-8)))]">
           <div className="flex items-center justify-between gap-(--spacing-3) border-b border-(--color-divider) px-(--spacing-4) py-(--spacing-3)">
             <div className="min-w-0">
               <Text size="sm" weight="semibold">
@@ -235,23 +235,34 @@ export function NotificationDropdown() {
             )}
           </div>
 
-          <div className="flex items-center justify-between gap-(--spacing-3) border-t border-(--color-divider) px-(--spacing-3) py-(--spacing-3)">
+          <div className="flex flex-wrap items-center justify-between gap-(--spacing-2) border-t border-(--color-divider) px-(--spacing-3) py-(--spacing-3)">
             <Text size="xs" tone="muted">
               Persistenti, separate dai toast
             </Text>
-            <Button
-              type="button"
-              variant="ghost"
-              size="xs"
-              loading={updating}
-              disabled={!hasUnread || updating}
-              iconLeft={<WarningCircle size={14} />}
-              onClick={() => {
-                void patchNotifications({ action: "mark-all-read" });
-              }}
-            >
-              Segna lette
-            </Button>
+            <div className="flex items-center gap-(--spacing-2)">
+              <Button
+                as="a"
+                href="/notifications"
+                variant="ghost"
+                size="xs"
+                onClick={() => setOpen(false)}
+              >
+                Vedi tutte
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="xs"
+                loading={updating}
+                disabled={!hasUnread || updating}
+                iconLeft={<WarningCircle size={14} />}
+                onClick={() => {
+                  void patchNotifications({ action: "mark-all-read" });
+                }}
+              >
+                Segna lette
+              </Button>
+            </div>
           </div>
         </div>
       ) : null}

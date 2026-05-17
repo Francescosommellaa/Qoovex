@@ -5,7 +5,6 @@ import {
   Card,
   CardBody,
   EmptyState,
-  PageSection,
   Stack,
   Text,
 } from "@qoovex/ui";
@@ -16,6 +15,7 @@ import {
   WorkTaskToggle,
 } from "@features/work-plan-board";
 import type { WorkspacePlan } from "@shared/lib/workspace-types";
+import { WorkspacePage } from "@shared/ui";
 import { getRecipeOptions } from "@shared/server/recipe-service";
 import {
   getWorkPlanDetail,
@@ -36,7 +36,7 @@ export async function WorkPlansIndexView({ user }: { user: WorkPlanViewUser }) {
     await getWorkPlansIndex(user.id, user.plan);
 
   return (
-    <PageSection
+    <WorkspacePage
       title="Piani di lavoro"
       description="Coordina task e membri: partecipare ai piani altrui resta gratis e illimitato."
     >
@@ -110,13 +110,13 @@ export async function WorkPlansIndexView({ user }: { user: WorkPlanViewUser }) {
           </div>
         )}
       </Stack>
-    </PageSection>
+    </WorkspacePage>
   );
 }
 
 export function NewWorkPlanView() {
   return (
-    <PageSection
+    <WorkspacePage
       title="Nuovo piano di lavoro"
       description="I limiti si applicano solo ai piani creati da te, non alle partecipazioni."
     >
@@ -125,7 +125,7 @@ export function NewWorkPlanView() {
           <CreateWorkPlanForm />
         </CardBody>
       </Card>
-    </PageSection>
+    </WorkspacePage>
   );
 }
 
@@ -143,7 +143,7 @@ export async function WorkPlanDetailView({
   if (!workPlan) notFound();
 
   return (
-    <PageSection title={workPlan.title} description={workPlan.description ?? undefined}>
+    <WorkspacePage title={workPlan.title} description={workPlan.description ?? undefined}>
       <Stack gap="6">
         <div className="flex flex-wrap gap-(--spacing-2)">
           <Badge tone={workPlan.role === "creator" ? "primary" : "neutral"}>
@@ -237,6 +237,6 @@ export async function WorkPlanDetailView({
           </Stack>
         </div>
       </Stack>
-    </PageSection>
+    </WorkspacePage>
   );
 }

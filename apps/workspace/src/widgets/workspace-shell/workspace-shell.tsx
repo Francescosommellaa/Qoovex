@@ -5,6 +5,8 @@ import { Modal, ModalBody } from "@qoovex/ui";
 import { DisplayPreferencesProvider } from "@shared/ui";
 import { WorkspaceTopbar } from "@widgets/navbar";
 import { WorkspaceSidebar } from "@widgets/sidebar";
+import { WorkspaceRoutePrefetcher } from "./workspace-route-prefetcher";
+import { WorkspaceRouteTransition } from "./workspace-route-transition";
 import { WorkspaceScrollArea } from "./workspace-scroll-area";
 import type { WorkspaceShellProps } from "./workspace-shell.types";
 
@@ -18,6 +20,7 @@ export function WorkspaceShell({
 
   return (
     <DisplayPreferencesProvider>
+      <WorkspaceRoutePrefetcher />
       <div className="flex h-dvh min-h-dvh overflow-hidden bg-(--color-bg) text-(--color-text)">
         <aside className="hidden w-[17.5rem] shrink-0 border-r border-(--color-border) bg-(--color-surface)/94 lg:flex">
           <WorkspaceSidebar user={user} />
@@ -28,7 +31,9 @@ export function WorkspaceShell({
             nowIso={nowIso}
             onOpenNavigation={() => setMobileNavigationOpen(true)}
           />
-          <WorkspaceScrollArea>{children}</WorkspaceScrollArea>
+          <WorkspaceScrollArea>
+            <WorkspaceRouteTransition>{children}</WorkspaceRouteTransition>
+          </WorkspaceScrollArea>
         </div>
 
         <Modal

@@ -14,7 +14,7 @@ export function WorkspaceScrollArea({ children }: WorkspaceScrollAreaProps) {
       <div
         className={cn(
           styles.viewport,
-          "h-full overflow-y-auto overscroll-contain px-(--spacing-4) pb-(--spacing-6) pt-(--spacing-4) md:px-(--spacing-6) md:pb-(--spacing-8) lg:px-(--spacing-8)",
+          "h-full overflow-y-auto overscroll-contain px-(--spacing-3) pb-(--spacing-5) pt-(--spacing-2) md:px-(--spacing-5) md:pb-(--spacing-6) md:pt-(--spacing-3) lg:px-(--spacing-8)",
         )}
       >
         {children}

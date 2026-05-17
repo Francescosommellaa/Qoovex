@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useClerk, useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BookOpen,
@@ -52,7 +53,6 @@ const navigationItems: WorkspaceNavigationItem[] = [
   { label: "Lista spesa", href: "/shopping-list", icon: ListChecks },
   { label: "Piani di lavoro", href: "/work-plans", icon: ClipboardText },
   { label: "Esplora", href: "/explore", icon: MagnifyingGlass },
-  { label: "Impostazioni", href: "/settings", icon: GearSix },
 ];
 
 const adminNavigationItems: WorkspaceNavigationItem[] = [
@@ -124,9 +124,10 @@ function WorkspaceSidebarNavigation({
       pathname === item.href || pathname.startsWith(`${item.href}/`);
 
     return (
-      <a
+      <Link
         key={item.label}
         href={item.href}
+        prefetch
         className={cn(
           "flex h-10 items-center gap-(--spacing-3) rounded-(--radius-lg) px-(--spacing-3) text-(length:--text-sm) font-medium transition-[background,border-color,color] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:bg-(--color-surface-offset)",
           isActive
@@ -138,7 +139,7 @@ function WorkspaceSidebarNavigation({
       >
         {itemIcon}
         <span className="min-w-0 flex-1 truncate">{item.label}</span>
-      </a>
+      </Link>
     );
   };
 
@@ -229,10 +230,41 @@ function ThemeSwitch() {
   );
 }
 
-function UserMenu({ user }: { user: WorkspaceUserSummary }) {
+function UserMenu({
+  user,
+  onNavigate,
+}: {
+  user: WorkspaceUserSummary;
+  onNavigate?: () => void;
+}) {
   const { signOut } = useClerk();
   const { isSignedIn } = useUser();
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const menuId = React.useId();
+  const [open, setOpen] = React.useState(false);
   const [isLoggingOut, setIsLoggingOut] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!open) return;
+
+    function handlePointerDown(event: PointerEvent) {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false);
+    }
+
+    window.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
 
   async function handleLogout() {
     setIsLoggingOut(true);
@@ -256,8 +288,19 @@ function UserMenu({ user }: { user: WorkspaceUserSummary }) {
   }
 
   return (
-    <details className="group/user-menu overflow-hidden rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface-2) p-(--spacing-3) shadow-[var(--shadow-sm)]">
-      <summary className="flex cursor-pointer list-none items-center gap-(--spacing-3) rounded-(--radius-lg) outline-none transition-colors duration-[var(--duration-base)] ease-[var(--ease-qoovex)] focus-visible:ring-2 focus-visible:ring-(--color-primary-highlight)">
+    <div
+      ref={rootRef}
+      className={cn("group/user-menu relative shrink-0", open && "z-(--z-dropdown)")}
+    >
+      <button
+        type="button"
+        data-state={open ? "open" : "closed"}
+        className="flex w-full cursor-pointer items-center gap-(--spacing-3) rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface-2) p-(--spacing-3) text-left shadow-[var(--shadow-sm)] transition-[border-color,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:border-(--color-primary)/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary) data-[state=open]:border-(--color-primary)/30 data-[state=open]:shadow-[var(--shadow-md)]"
+        aria-controls={menuId}
+        aria-expanded={open}
+        aria-haspopup="dialog"
+        onClick={() => setOpen((current) => !current)}
+      >
         <Avatar
           name={getDisplayName(user)}
           initials={getInitials(user)}
@@ -278,50 +321,64 @@ function UserMenu({ user }: { user: WorkspaceUserSummary }) {
         <Icon
           icon={CaretDown}
           size="sm"
-          className="transition-transform duration-[var(--duration-base)] ease-[var(--ease-qoovex)] group-open/user-menu:rotate-180"
+          className={cn(
+            "transition-transform duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
+            open && "rotate-180",
+          )}
         />
-      </summary>
+      </button>
 
-      <div className="mt-(--spacing-4) grid gap-(--spacing-3)">
-        <div className="flex items-center justify-between gap-(--spacing-3)">
-          <Text size="xs" tone="muted">
-            Piano
-          </Text>
-          <Badge size="sm" variant="soft" tone="primary">
-            {planLabel[user.plan]}
-          </Badge>
+      {open ? (
+        <div
+          id={menuId}
+          className="absolute bottom-full left-0 right-0 mb-(--spacing-2) grid max-h-[min(28rem,calc(100dvh-var(--spacing-12)))] gap-(--spacing-3) overflow-y-auto rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface-2) p-(--spacing-3) shadow-[var(--shadow-lg)]"
+          role="dialog"
+          aria-label="Menu profilo"
+        >
+          <div className="flex items-center justify-between gap-(--spacing-3)">
+            <Text size="xs" tone="muted">
+              Piano
+            </Text>
+            <Badge size="sm" variant="soft" tone="primary">
+              {planLabel[user.plan]}
+            </Badge>
+          </div>
+
+          <ThemeSwitch />
+
+          <AccessibilityControls />
+
+          <div className="grid gap-(--spacing-2) border-t border-(--color-divider) pt-(--spacing-3)">
+            <Button
+              as="a"
+              href="/settings"
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start"
+              iconLeft={<GearSix size={14} />}
+              onClick={() => {
+                setOpen(false);
+                onNavigate?.();
+              }}
+            >
+              Impostazioni
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start text-(--color-error)"
+              iconLeft={<SignOut size={14} />}
+              loading={isLoggingOut}
+              loadingLabel="Uscita..."
+              onClick={handleLogout}
+            >
+              Esci
+            </Button>
+          </div>
         </div>
-
-        <ThemeSwitch />
-
-        <AccessibilityControls />
-
-        <div className="grid gap-(--spacing-2) border-t border-(--color-divider) pt-(--spacing-3)">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="w-full justify-start"
-            iconLeft={<GearSix size={14} />}
-            disabled
-          >
-            Impostazioni
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="w-full justify-start text-(--color-error)"
-            iconLeft={<SignOut size={14} />}
-            loading={isLoggingOut}
-            loadingLabel="Uscita..."
-            onClick={handleLogout}
-          >
-            Esci
-          </Button>
-        </div>
-      </div>
-    </details>
+      ) : null}
+    </div>
   );
 }
 
@@ -361,7 +418,7 @@ export function WorkspaceSidebar({
       />
 
       <div className="mt-(--spacing-5) grid gap-(--spacing-3)">
-        <UserMenu user={user} />
+        <UserMenu user={user} onNavigate={onNavigate} />
       </div>
     </div>
   );

@@ -2,12 +2,12 @@ import {
   Badge,
   Card,
   CardBody,
-  PageSection,
   Stack,
   Text,
 } from "@qoovex/ui";
 import { getPlanLabel } from "@shared/config/plan-rules";
 import type { WorkspacePlan } from "@shared/lib/workspace-types";
+import { WorkspacePage } from "@shared/ui";
 import { getWorkspaceDashboard } from "@shared/server/dashboard-service";
 
 interface SettingsViewUser {
@@ -26,7 +26,7 @@ export async function SettingsView({ user }: { user: SettingsViewUser }) {
   const dashboard = await getWorkspaceDashboard(user.id, user.plan);
 
   return (
-    <PageSection
+    <WorkspacePage
       title="Impostazioni"
       description="Profilo, piano e usage del workspace personale."
     >
@@ -137,6 +137,6 @@ export async function SettingsView({ user }: { user: SettingsViewUser }) {
           </Card>
         </Stack>
       </div>
-    </PageSection>
+    </WorkspacePage>
   );
 }

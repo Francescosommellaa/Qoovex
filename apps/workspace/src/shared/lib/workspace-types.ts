@@ -206,6 +206,22 @@ export interface NotificationFeedDto {
   notifications: NotificationDto[];
 }
 
+export type NotificationReadFilter = "all" | "read" | "unread";
+
+export interface NotificationQueryFilters {
+  read?: NotificationReadFilter;
+  type?: string;
+  from?: string;
+  to?: string;
+  cursor?: string;
+  take?: number;
+}
+
+export interface NotificationInboxDto extends NotificationFeedDto {
+  nextCursor: string | null;
+  types: string[];
+}
+
 export interface DashboardSummaryDto {
   stats: {
     recipes: number;
