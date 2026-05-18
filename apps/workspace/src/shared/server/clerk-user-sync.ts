@@ -6,6 +6,7 @@ import {
   findUserIdentityByClerkId,
   findUserIdentityByEmail,
   findUserIdentityByUsername,
+  updateSyncedUserByEmail,
   upsertSyncedUser,
 } from "@shared/server/repositories/user-repository";
 
@@ -66,24 +67,33 @@ export async function syncClerkUser(input: SyncClerkUserInput) {
   if (!email) return null;
 
   const existingByEmail = await findUserIdentityByEmail(email);
+  const existingByClerkId = await findUserIdentityByClerkId(input.clerkId);
 
-  if (existingByEmail && existingByEmail.clerkId !== input.clerkId) {
+  if (
+    existingByEmail &&
+    existingByEmail.clerkId !== input.clerkId &&
+    existingByClerkId &&
+    existingByClerkId.id !== existingByEmail.id
+  ) {
     throw new ClerkUserSyncConflictError(
-      `Email ${email} already belongs to a different Clerk user.`,
+      `Clerk user ${input.clerkId} already belongs to a different email.`,
     );
   }
-
-  const existingByClerkId = await findUserIdentityByClerkId(input.clerkId);
 
   const normalizedUsername =
     normalizeUsername(input.username ?? "") ||
     existingByClerkId?.username ||
+    existingByEmail?.username ||
     getStableFallbackUsername(input.clerkId);
 
   const existingByUsername =
     await findUserIdentityByUsername(normalizedUsername);
 
-  if (existingByUsername && existingByUsername.clerkId !== input.clerkId) {
+  if (
+    existingByUsername &&
+    existingByUsername.clerkId !== input.clerkId &&
+    existingByUsername.id !== existingByEmail?.id
+  ) {
     throw new ClerkUserSyncConflictError(
       `Username ${normalizedUsername} already belongs to a different Clerk user.`,
     );
@@ -91,6 +101,16 @@ export async function syncClerkUser(input: SyncClerkUserInput) {
 
   const normalizedPhoneNumber = normalizePhoneNumber(input.phoneNumber);
   const name = getDisplayName(input, normalizedUsername);
+
+  if (existingByEmail && existingByEmail.clerkId !== input.clerkId) {
+    return await updateSyncedUserByEmail({
+      clerkId: input.clerkId,
+      name,
+      email,
+      username: normalizedUsername,
+      phoneNumber: normalizedPhoneNumber,
+    });
+  }
 
   return await upsertSyncedUser({
     clerkId: input.clerkId,

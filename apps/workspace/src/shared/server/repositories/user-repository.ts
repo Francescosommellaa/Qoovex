@@ -13,21 +13,21 @@ export interface UpsertSyncedUserInput {
 export async function findUserIdentityByEmail(email: string) {
   return await db.user.findUnique({
     where: { email },
-    select: { clerkId: true },
+    select: { id: true, clerkId: true, username: true },
   });
 }
 
 export async function findUserIdentityByClerkId(clerkId: string) {
   return await db.user.findUnique({
     where: { clerkId },
-    select: { id: true, username: true },
+    select: { id: true, email: true, username: true },
   });
 }
 
 export async function findUserIdentityByUsername(username: string) {
   return await db.user.findUnique({
     where: { username },
-    select: { clerkId: true },
+    select: { id: true, clerkId: true },
   });
 }
 
@@ -89,6 +89,18 @@ export async function upsertSyncedUser(input: UpsertSyncedUserInput) {
     update: {
       name: input.name,
       email: input.email,
+      username: input.username,
+      ...(input.phoneNumber ? { phoneNumber: input.phoneNumber } : {}),
+    },
+  });
+}
+
+export async function updateSyncedUserByEmail(input: UpsertSyncedUserInput) {
+  return await db.user.update({
+    where: { email: input.email },
+    data: {
+      clerkId: input.clerkId,
+      name: input.name,
       username: input.username,
       ...(input.phoneNumber ? { phoneNumber: input.phoneNumber } : {}),
     },
