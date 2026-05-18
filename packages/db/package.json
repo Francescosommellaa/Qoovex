@@ -8,6 +8,7 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:workspace": "prisma workspace",
     "postinstall": "prisma generate || true"
   },

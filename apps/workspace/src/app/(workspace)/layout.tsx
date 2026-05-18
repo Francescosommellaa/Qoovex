@@ -8,6 +8,31 @@ import {
   type WorkspaceUserSummary,
 } from "@widgets/workspace-shell";
 
+function getWorkspaceBootstrapLogContext(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return { kind: "unknown" };
+  }
+
+  const record = error as Record<string, unknown>;
+  const message =
+    typeof record.message === "string" ? record.message.toLowerCase() : "";
+
+  if (message.includes("database connection env missing")) {
+    return { kind: "missing_database_env", name: record.name };
+  }
+
+  if (message.includes("does not exist") || message.includes("migration")) {
+    return { kind: "database_schema", name: record.name };
+  }
+
+  return {
+    kind: "database_bootstrap",
+    name: record.name,
+    code: record.code,
+    clientVersion: record.clientVersion,
+  };
+}
+
 export default async function WorkspaceLayout({
   children,
 }: {
@@ -19,6 +44,11 @@ export default async function WorkspaceLayout({
   } catch (error) {
     if (process.env.NODE_ENV !== "production") {
       console.error("[workspace] bootstrap failed", error);
+    } else {
+      console.error(
+        "[workspace] bootstrap failed",
+        getWorkspaceBootstrapLogContext(error),
+      );
     }
     redirect("/complete-profile?next=/dashboard&sync=failed");
   }
