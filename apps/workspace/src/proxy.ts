@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 import {
   DEV_AUTH_COOKIE_NAME,
   verifyDevAuthCookieValue,
@@ -29,6 +30,18 @@ export default clerkMiddleware(async (auth, req) => {
   const devAuthCookie = req.cookies.get(DEV_AUTH_COOKIE_NAME)?.value;
   const hasDevAuthSession =
     isDevAuthAllowedForHost(host) && (await verifyDevAuthCookieValue(devAuthCookie));
+
+  if (req.nextUrl.pathname === "/") {
+    const destination = req.nextUrl.clone();
+    if (hasDevAuthSession) {
+      destination.pathname = "/dashboard";
+      return NextResponse.redirect(destination);
+    }
+
+    const { userId } = await auth();
+    destination.pathname = userId ? "/dashboard" : "/sign-up";
+    return NextResponse.redirect(destination);
+  }
 
   if (hasDevAuthSession) {
     return;

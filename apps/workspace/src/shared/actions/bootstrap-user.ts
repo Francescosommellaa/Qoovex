@@ -16,7 +16,7 @@ interface CompleteCurrentUserProfileInput {
   phoneNumber?: string | null;
 }
 
-export type CompleteCurrentUserProfileResult =
+type CompleteCurrentUserProfileResult =
   | { ok: true }
   | {
       ok: false;
@@ -40,6 +40,10 @@ type ClerkProfileForSync = {
   }>;
   unsafeMetadata?: Record<string, unknown>;
 };
+
+function getTrimmedInputValue(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
+}
 
 function getUnsafeMetadataPhoneNumber(
   unsafeMetadata: Record<string, unknown>,
@@ -148,8 +152,8 @@ export async function updateCurrentUserProfile(
   const { userId } = await auth();
   if (!userId) return null;
 
-  const firstName = input.firstName.trim();
-  const lastName = input.lastName?.trim() || undefined;
+  const firstName = getTrimmedInputValue(input?.firstName);
+  const lastName = getTrimmedInputValue(input?.lastName) || undefined;
   if (!firstName) return null;
 
   const client = await clerkClient();
@@ -173,8 +177,8 @@ export async function completeCurrentUserProfile(
     };
   }
 
-  const firstName = input.firstName.trim();
-  const lastName = input.lastName?.trim() || undefined;
+  const firstName = getTrimmedInputValue(input?.firstName);
+  const lastName = getTrimmedInputValue(input?.lastName) || undefined;
   if (!firstName) {
     return {
       ok: false,

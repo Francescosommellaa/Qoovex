@@ -18,10 +18,21 @@ import {
 import {
   bootstrapUser,
   completeCurrentUserProfile,
-  type CompleteCurrentUserProfileResult,
 } from "@shared/actions/bootstrap-user";
 import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 import { AuthShell } from "../ui";
+
+type CompleteProfileResult =
+  | { ok: true }
+  | {
+      ok: false;
+      code:
+        | "UNAUTHENTICATED"
+        | "MISSING_NAME"
+        | "CLERK_UPDATE_FAILED"
+        | "DATABASE_SYNC_FAILED";
+      message: string;
+    };
 
 function getSafeNextPath(value: string | null) {
   if (!value || !value.startsWith("/") || value.startsWith("//")) {
@@ -32,7 +43,7 @@ function getSafeNextPath(value: string | null) {
 }
 
 function getCompleteProfileErrorToast(
-  result: Exclude<CompleteCurrentUserProfileResult, { ok: true }>,
+  result: Exclude<CompleteProfileResult, { ok: true }>,
 ) {
   if (result.code === "CLERK_UPDATE_FAILED") {
     return {
@@ -140,9 +151,7 @@ export default function CompleteProfilePage() {
     user,
   ]);
 
-  function handleProfileCompletionResult(
-    result: CompleteCurrentUserProfileResult,
-  ) {
+  function handleProfileCompletionResult(result: CompleteProfileResult) {
     if (result.ok) {
       router.replace(nextPath);
       return;
