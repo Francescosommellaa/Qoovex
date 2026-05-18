@@ -85,9 +85,14 @@ export async function getMenuLimitStatus(userId: string, plan: WorkspacePlan): P
   return getPlanLimit(plan, "menus", await countMenusForUser(userId));
 }
 
-export async function getMenusIndex(userId: string, plan: WorkspacePlan, query?: string) {
+export async function getMenusIndex(
+  userId: string,
+  plan: WorkspacePlan,
+  query?: string,
+  take = 50,
+) {
   const [menus, limit] = await Promise.all([
-    listMenusForUser(userId, query),
+    listMenusForUser(userId, query, take),
     getMenuLimitStatus(userId, plan),
   ]);
 

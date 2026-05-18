@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { WorkspaceRouteSkeleton } from "@shared/ui";
+import { WorkspaceBrandLoader, WorkspaceRouteSkeleton } from "@shared/ui";
 
 function getSkeletonVariant(pathname: string) {
   if (pathname === "/dashboard") return "dashboard";
@@ -16,5 +16,14 @@ function getSkeletonVariant(pathname: string) {
 export default function WorkspaceLoading() {
   const pathname = usePathname();
 
-  return <WorkspaceRouteSkeleton variant={getSkeletonVariant(pathname)} />;
+  return (
+    <>
+      <WorkspaceRouteSkeleton variant={getSkeletonVariant(pathname)} />
+      <WorkspaceBrandLoader
+        fullscreen
+        delayedMs={600}
+        label="Caricamento workspace..."
+      />
+    </>
+  );
 }

@@ -38,6 +38,19 @@ export async function findUserIdByClerkId(clerkId: string) {
   });
 }
 
+export async function findWorkspaceUserByClerkId(clerkId: string) {
+  return await db.user.findUnique({
+    where: { clerkId },
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      email: true,
+      plan: true,
+    },
+  });
+}
+
 export async function findUserEmailByUsername(username: string) {
   return await db.user.findUnique({
     where: { username },

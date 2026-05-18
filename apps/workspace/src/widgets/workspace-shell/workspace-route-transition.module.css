@@ -1,17 +1,15 @@
 .frame {
   min-height: 100%;
-  animation: workspace-route-enter var(--duration-base) var(--ease-qoovex);
+  animation: workspace-route-enter 120ms var(--ease-qoovex);
 }
 
 @keyframes workspace-route-enter {
   from {
     opacity: 0;
-    transform: translateY(var(--spacing-2));
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 

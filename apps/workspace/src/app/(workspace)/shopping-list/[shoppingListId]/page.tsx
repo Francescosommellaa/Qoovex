@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { getCurrentWorkspaceUser } from "@shared/server/current-workspace-user";
 import { ShoppingListDetailView } from "@views/shopping-list";
 
 export default async function ShoppingListDetailPage({
@@ -7,7 +7,7 @@ export default async function ShoppingListDetailPage({
 }: {
   params: Promise<{ shoppingListId: string }>;
 }) {
-  const user = await bootstrapUser();
+  const user = await getCurrentWorkspaceUser();
   if (!user) redirect("/sign-in");
 
   const { shoppingListId } = await params;

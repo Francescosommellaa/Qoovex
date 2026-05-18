@@ -68,6 +68,10 @@ export async function getNotificationFeed(userId: string): Promise<NotificationF
   };
 }
 
+export async function getUnreadNotificationCount(userId: string) {
+  return await countUnreadNotificationsForUser(userId);
+}
+
 export async function getNotificationInbox(
   userId: string,
   filters: NotificationQueryFilters = {},

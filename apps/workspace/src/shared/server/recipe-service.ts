@@ -143,9 +143,14 @@ export async function getRecipeLimitStatus(userId: string, plan: WorkspacePlan):
   return getPlanLimit(plan, "recipes", await countRecipesForUser(userId));
 }
 
-export async function getRecipesIndex(userId: string, plan: WorkspacePlan, query?: string) {
+export async function getRecipesIndex(
+  userId: string,
+  plan: WorkspacePlan,
+  query?: string,
+  take = 50,
+) {
   const [recipes, limit] = await Promise.all([
-    listRecipesForUser(userId, query),
+    listRecipesForUser(userId, query, take),
     getRecipeLimitStatus(userId, plan),
   ]);
 

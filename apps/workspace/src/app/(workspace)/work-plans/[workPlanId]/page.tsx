@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { getCurrentWorkspaceUser } from "@shared/server/current-workspace-user";
 import { WorkPlanDetailView } from "@views/work-plan";
 
 export default async function WorkPlanDetailPage({
@@ -7,7 +7,7 @@ export default async function WorkPlanDetailPage({
 }: {
   params: Promise<{ workPlanId: string }>;
 }) {
-  const user = await bootstrapUser();
+  const user = await getCurrentWorkspaceUser();
   if (!user) redirect("/sign-in");
 
   const { workPlanId } = await params;

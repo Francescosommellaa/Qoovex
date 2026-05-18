@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { getCurrentWorkspaceUser } from "@shared/server/current-workspace-user";
 import { RecipesIndexView } from "@views/recipes";
 
 export default async function RecipesPage({
@@ -7,7 +7,7 @@ export default async function RecipesPage({
 }: {
   searchParams: Promise<{ q?: string }>;
 }) {
-  const user = await bootstrapUser();
+  const user = await getCurrentWorkspaceUser();
   if (!user) redirect("/sign-in");
 
   const params = await searchParams;

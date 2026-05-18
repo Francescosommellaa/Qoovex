@@ -99,9 +99,9 @@ export async function getWorkPlanCreationLimitStatus(
   return getPlanLimit(plan, "creatable_work_plans", await countCreatedWorkPlansForUser(userId));
 }
 
-export async function getWorkPlansIndex(userId: string, plan: WorkspacePlan) {
+export async function getWorkPlansIndex(userId: string, plan: WorkspacePlan, take = 50) {
   const [workPlans, createdCount, joinedCount] = await Promise.all([
-    listWorkPlansForUser(userId),
+    listWorkPlansForUser(userId, take),
     countCreatedWorkPlansForUser(userId),
     countJoinedWorkPlansForUser(userId),
   ]);

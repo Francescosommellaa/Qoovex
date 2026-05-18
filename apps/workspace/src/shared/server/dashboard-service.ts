@@ -1,11 +1,16 @@
 import "server-only";
 
 import type { DashboardSummaryDto, WorkspacePlan } from "@shared/lib/workspace-types";
-import { getMenuLimitStatus, getMenusIndex } from "@shared/server/menu-service";
-import { getNotificationFeed } from "@shared/server/notification-service";
-import { getRecipeLimitStatus, getRecipesIndex } from "@shared/server/recipe-service";
-import { getShoppingListsIndex } from "@shared/server/shopping-list-service";
+import { getMenusIndex } from "@shared/server/menu-service";
+import { getUnreadNotificationCount } from "@shared/server/notification-service";
+import { getRecipesIndex } from "@shared/server/recipe-service";
+import {
+  getShoppingListCount,
+  getShoppingListsIndex,
+} from "@shared/server/shopping-list-service";
 import { getWorkPlansIndex } from "@shared/server/work-plan-service";
+
+const DASHBOARD_RECENT_LIMIT = 4;
 
 export async function getWorkspaceDashboard(
   userId: string,
@@ -14,38 +19,36 @@ export async function getWorkspaceDashboard(
   const [
     recipesIndex,
     menusIndex,
+    shoppingListsCount,
     shoppingLists,
     workPlansIndex,
-    notifications,
-    recipeLimit,
-    menuLimit,
+    unreadNotifications,
   ] = await Promise.all([
-    getRecipesIndex(userId, plan),
-    getMenusIndex(userId, plan),
-    getShoppingListsIndex(userId),
-    getWorkPlansIndex(userId, plan),
-    getNotificationFeed(userId),
-    getRecipeLimitStatus(userId, plan),
-    getMenuLimitStatus(userId, plan),
+    getRecipesIndex(userId, plan, undefined, DASHBOARD_RECENT_LIMIT),
+    getMenusIndex(userId, plan, undefined, DASHBOARD_RECENT_LIMIT),
+    getShoppingListCount(userId),
+    getShoppingListsIndex(userId, DASHBOARD_RECENT_LIMIT),
+    getWorkPlansIndex(userId, plan, DASHBOARD_RECENT_LIMIT),
+    getUnreadNotificationCount(userId),
   ]);
 
   return {
     stats: {
-      recipes: recipesIndex.recipes.length,
-      menus: menusIndex.menus.length,
-      shoppingLists: shoppingLists.length,
+      recipes: recipesIndex.limit.used,
+      menus: menusIndex.limit.used,
+      shoppingLists: shoppingListsCount,
       createdWorkPlans: workPlansIndex.createdCount,
       joinedWorkPlans: workPlansIndex.joinedCount,
-      unreadNotifications: notifications.unreadCount,
+      unreadNotifications,
     },
     limits: {
-      recipes: recipeLimit,
-      menus: menuLimit,
+      recipes: recipesIndex.limit,
+      menus: menusIndex.limit,
       workPlans: workPlansIndex.creationLimit,
     },
-    recentRecipes: recipesIndex.recipes.slice(0, 4),
-    recentMenus: menusIndex.menus.slice(0, 4),
-    recentShoppingLists: shoppingLists.slice(0, 4),
-    recentWorkPlans: workPlansIndex.workPlans.slice(0, 4),
+    recentRecipes: recipesIndex.recipes,
+    recentMenus: menusIndex.menus,
+    recentShoppingLists: shoppingLists,
+    recentWorkPlans: workPlansIndex.workPlans,
   };
 }

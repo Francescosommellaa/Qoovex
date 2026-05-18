@@ -26,7 +26,7 @@ function getSafeDestination(req: Request) {
 }
 
 export async function POST(req: Request) {
-  if (!isDevAuthAllowed()) {
+  if (!(await isDevAuthAllowed())) {
     return NextResponse.json(null, { status: 404 });
   }
 
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE() {
-  if (!isDevAuthAllowed()) {
+  if (!(await isDevAuthAllowed())) {
     return NextResponse.json(null, { status: 404 });
   }
 

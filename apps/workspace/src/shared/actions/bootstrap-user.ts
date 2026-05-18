@@ -2,6 +2,7 @@
 
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { bootstrapDevUser } from "@shared/server/dev-auth";
+import { findWorkspaceUserByClerkId } from "@shared/server/repositories/user-repository";
 
 interface BootstrapUserOptions {
   phoneNumber?: string | null;
@@ -32,12 +33,36 @@ function hasAdminAccess(metadata: unknown) {
   return adminMetadata.role === "admin" || adminMetadata.isAdmin === true;
 }
 
+function getClaimsMetadata(claims: unknown) {
+  if (!claims || typeof claims !== "object") {
+    return null;
+  }
+
+  const record = claims as Record<string, unknown>;
+  return (
+    record.publicMetadata ??
+    record.public_metadata ??
+    record.metadata ??
+    null
+  );
+}
+
 export async function bootstrapUser(options?: BootstrapUserOptions) {
   const devUser = await bootstrapDevUser();
   if (devUser) return devUser;
 
-  const { userId } = await auth();
+  const { userId, sessionClaims } = await auth();
   if (!userId) return null;
+
+  if (!options) {
+    const existingUser = await findWorkspaceUserByClerkId(userId);
+    if (existingUser) {
+      return {
+        ...existingUser,
+        isAdmin: hasAdminAccess(getClaimsMetadata(sessionClaims)),
+      };
+    }
+  }
 
   const clerkUser = await currentUser();
   if (!clerkUser) return null;

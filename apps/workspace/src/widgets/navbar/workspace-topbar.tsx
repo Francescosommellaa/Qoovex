@@ -24,7 +24,24 @@ interface WorkspaceTopbarProps {
 }
 
 function WorkspaceSearch() {
-  const { recents, loading, saveSearch, deleteSearch } = useRecentSearches();
+  const [searchDataEnabled, setSearchDataEnabled] = React.useState(false);
+  const { recents, loading, saveSearch, deleteSearch } = useRecentSearches({
+    enabled: searchDataEnabled,
+  });
+
+  React.useEffect(() => {
+    function enableSearchData() {
+      setSearchDataEnabled(true);
+    }
+
+    if (typeof window.requestIdleCallback === "function") {
+      const idleId = window.requestIdleCallback(enableSearchData, { timeout: 2_500 });
+      return () => window.cancelIdleCallback?.(idleId);
+    }
+
+    const timeoutId = window.setTimeout(enableSearchData, 1_500);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
 
   const runQuickSearch = React.useCallback(
     (query: string) => {
@@ -186,6 +203,7 @@ function WorkspaceSearch() {
       onAIQuery={handleSearch}
       onDeleteRecent={deleteSearch}
       isLoading={loading}
+      onFocus={() => setSearchDataEnabled(true)}
       className="w-full"
     />
   );

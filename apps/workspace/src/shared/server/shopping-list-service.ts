@@ -10,6 +10,7 @@ import type {
   WorkspacePlan,
 } from "@shared/lib/workspace-types";
 import {
+  countShoppingListsForUser,
   createShoppingListForUser,
   findMenuIngredientsForShoppingList,
   findRecipeIngredientsForShoppingList,
@@ -101,8 +102,12 @@ function aggregateIngredients(title: string, ingredients: RawIngredient[]): Shop
   };
 }
 
-export async function getShoppingListsIndex(userId: string) {
-  const lists = await listShoppingListsForUser(userId);
+export async function getShoppingListCount(userId: string) {
+  return await countShoppingListsForUser(userId);
+}
+
+export async function getShoppingListsIndex(userId: string, take = 50) {
+  const lists = await listShoppingListsForUser(userId, take);
   return lists.map(mapShoppingListSummary);
 }
 

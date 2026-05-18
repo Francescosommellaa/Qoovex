@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { isDevAuthAllowedForHost } from "@shared/lib/dev-auth-guard";
 
 const isPublicRoute = createRouteMatcher([
   "/",
@@ -20,7 +21,7 @@ const authorizedParties = [
 
 export default clerkMiddleware(async (auth, req) => {
   const hasDevAuthSession =
-    process.env.NODE_ENV === "development" &&
+    isDevAuthAllowedForHost(req.headers.get("host") ?? req.nextUrl.host) &&
     req.cookies.get("qv-dev-auth")?.value === "enabled";
 
   if (hasDevAuthSession) {

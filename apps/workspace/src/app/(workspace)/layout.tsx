@@ -2,7 +2,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import { ToastProvider } from "@qoovex/ui";
-import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { getCurrentWorkspaceUser } from "@shared/server/current-workspace-user";
 import {
   WorkspaceShell,
   type WorkspaceUserSummary,
@@ -13,9 +13,9 @@ export default async function WorkspaceLayout({
 }: {
   children: ReactNode;
 }) {
-  let user: Awaited<ReturnType<typeof bootstrapUser>>;
+  let user: Awaited<ReturnType<typeof getCurrentWorkspaceUser>>;
   try {
-    user = await bootstrapUser();
+    user = await getCurrentWorkspaceUser();
   } catch (error) {
     if (process.env.NODE_ENV !== "production") {
       console.error("[workspace] bootstrap failed", error);

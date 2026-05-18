@@ -1,0 +1,32 @@
+.indicator {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: var(--z-overlay);
+  height: 2px;
+  pointer-events: none;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      oklch(from var(--color-primary) l c h / 0.95),
+      oklch(0.68 0.16 240 / 0.98)
+    );
+  box-shadow: 0 0 18px oklch(from var(--color-primary) l c h / 0.5);
+  transition:
+    opacity var(--duration-fast) var(--ease-qoovex),
+    transform 420ms var(--ease-qoovex);
+}
+
+.indicator[data-pending="true"] {
+  opacity: 1;
+  transform: scaleX(0.82);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicator {
+    transition: none;
+  }
+}

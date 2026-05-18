@@ -35,7 +35,14 @@ export function WorkspacePage({
           <div className="flex flex-col gap-(--spacing-3) border-b border-(--color-divider) pb-(--spacing-4) md:flex-row md:items-end md:justify-between">
             <div className="min-w-0 max-w-(--measure-copy)">
               {title ? (
-                <Text as="h1" family="display" size="lg" weight="semibold" leading="tight">
+                <Text
+                  as="h1"
+                  family="display"
+                  size="xl"
+                  weight="semibold"
+                  leading="tight"
+                  className="md:text-(length:--text-2xl)"
+                >
                   {title}
                 </Text>
               ) : null}

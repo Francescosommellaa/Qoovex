@@ -8,7 +8,6 @@ import {
   Box,
   Button,
   Input,
-  LoadingState,
   Stack,
   Text,
   Form,
@@ -23,6 +22,7 @@ import {
   formatAuthIdentifierInput,
   normalizeAuthIdentifierForClerk,
 } from "@shared/lib/auth-identifier";
+import { WorkspaceBrandLoader } from "@shared/ui";
 import { AuthShell, OAuthButton } from "../ui";
 
 export default function SignInPage() {
@@ -39,6 +39,7 @@ export default function SignInPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDevSigningIn, setIsDevSigningIn] = useState(false);
   const [isProvisioningDashboard, setIsProvisioningDashboard] = useState(false);
+  const [isLocalDevHost, setIsLocalDevHost] = useState(false);
   const [warningFields, setWarningFields] = useState<{
     identifier: boolean;
     password: boolean;
@@ -54,7 +55,17 @@ export default function SignInPage() {
     isDevSigningIn ||
     !isAuthLoaded ||
     isProvisioningDashboard;
-  const showDevAuthButton = process.env.NODE_ENV === "development";
+  const showDevAuthButton =
+    process.env.NODE_ENV === "development" || isLocalDevHost;
+
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    setIsLocalDevHost(
+      hostname === "localhost" ||
+        hostname === "127.0.0.1" ||
+        hostname === "::1",
+    );
+  }, []);
 
   useEffect(() => {
     if (didHydrateIdentifier.current) return;
@@ -338,9 +349,7 @@ export default function SignInPage() {
       </Text>
 
       {isProvisioningDashboard ? (
-        <Box className="auth-loading-overlay" aria-live="polite" aria-busy="true">
-          <LoadingState rows={7} />
-        </Box>
+        <WorkspaceBrandLoader fullscreen label="Apertura dashboard..." />
       ) : null}
     </AuthShell>
   );

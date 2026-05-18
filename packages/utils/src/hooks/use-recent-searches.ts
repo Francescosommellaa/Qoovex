@@ -8,17 +8,28 @@ export interface RecentSearchEntry {
   createdAt: string;
 }
 
-export function useRecentSearches() {
+export interface UseRecentSearchesOptions {
+  enabled?: boolean;
+}
+
+export function useRecentSearches(options: UseRecentSearchesOptions = {}) {
+  const enabled = options.enabled ?? true;
   const [recents, setRecents] = React.useState<RecentSearchEntry[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(enabled);
 
   React.useEffect(() => {
+    if (!enabled) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
     fetch("/api/recent-searches")
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => setRecents(data))
       .catch(() => setRecents([]))
       .finally(() => setLoading(false));
-  }, []);
+  }, [enabled]);
 
   const saveSearch = React.useCallback(async (query: string) => {
     if (!query.trim()) return;
