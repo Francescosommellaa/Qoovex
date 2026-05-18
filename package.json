@@ -37,12 +37,12 @@
   "devDependencies": {
     "chrome-launcher": "^1.2.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "lighthouse": "^12.8.2",
-    "tsx": "^4.20.6",
+    "lighthouse": "^13.3.0",
+    "tsx": "^4.22.2",
     "turbo": "^2.9.14"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
-    "better-sqlite3": "^12.9.0"
+    "better-sqlite3": "^12.10.0"
   }
 }
