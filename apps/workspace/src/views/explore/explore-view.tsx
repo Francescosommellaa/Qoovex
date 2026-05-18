@@ -9,6 +9,7 @@ import {
   Text,
 } from "@qoovex/ui";
 import { ForkRecipeButton } from "@features/explore";
+import { formatGdaRange, formatNutritionRange } from "@shared/lib/ingredient-normalization";
 import type { WorkspacePlan } from "@shared/lib/workspace-types";
 import { WorkspacePage } from "@shared/ui";
 import { getPublicMenus } from "@shared/server/menu-service";
@@ -65,6 +66,16 @@ export async function ExploreView({
                 <Card key={recipe.id} variant="panel" padding="md">
                   <CardBody>
                     <Stack gap="4">
+                      {recipe.imageUrl ? (
+                        <div className="aspect-[16/10] overflow-hidden rounded-(--radius-lg) bg-(--color-surface-muted)">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={recipe.imageUrl}
+                            alt=""
+                            className="h-full w-full object-cover transition-transform duration-200 hover:scale-[1.03]"
+                          />
+                        </div>
+                      ) : null}
                       <div className="min-w-0">
                         <Text as="h3" size="lg" weight="semibold" className="truncate">
                           {recipe.title}
@@ -82,6 +93,12 @@ export async function ExploreView({
                         <Badge size="sm" tone="primary">
                           {recipe.servings} porzioni
                         </Badge>
+                        <Badge size="sm" tone="neutral">
+                          {formatNutritionRange(recipe.nutrition.calories)}
+                        </Badge>
+                        <Badge size="sm" tone="neutral">
+                          GDA {formatGdaRange(recipe.nutrition.calories)}
+                        </Badge>
                         {recipe.allergens.slice(0, 3).map((allergen) => (
                           <Badge key={allergen} size="sm" tone="warning">
                             {allergen}
@@ -92,7 +109,7 @@ export async function ExploreView({
                         <Button
                           as="a"
                           href={`/recipes/${recipe.id}`}
-                          variant="ghost"
+                          variant="secondary"
                           size="sm"
                         >
                           Apri

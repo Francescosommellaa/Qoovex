@@ -4,7 +4,10 @@
     "RESEND_API_KEY",
     "RESEND_FROM_EMAIL",
     "RESEND_REPLY_TO_EMAIL",
-    "CLERK_WEBHOOK_SECRET"
+    "CLERK_WEBHOOK_SECRET",
+    "OLLAMA_BASE_URL",
+    "OLLAMA_MODEL",
+    "FOODDATA_CENTRAL_API_KEY"
   ],
   "tasks": {
     "build": {
@@ -24,7 +27,10 @@
         "RESEND_API_KEY",
         "RESEND_FROM_EMAIL",
         "RESEND_REPLY_TO_EMAIL",
-        "CLERK_WEBHOOK_SECRET"
+        "CLERK_WEBHOOK_SECRET",
+        "OLLAMA_BASE_URL",
+        "OLLAMA_MODEL",
+        "FOODDATA_CENTRAL_API_KEY"
       ]
     },
     "lint": {

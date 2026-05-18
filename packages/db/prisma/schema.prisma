@@ -13,23 +13,59 @@ enum Plan {
   ENTERPRISE
 }
 
+enum RecipeCategory {
+  ANTIPASTO
+  PRIMO
+  SECONDO
+  CONTORNO
+  DOLCE
+  PANE_LIEVITATI
+  SALSA_BASE
+  BEVANDA
+  ALTRO
+}
+
+enum RecipeStatus {
+  DRAFT
+  READY
+  PENDING_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum IngredientVerificationStatus {
+  VERIFIED
+  SUGGESTED
+  PENDING_REVIEW
+  REJECTED
+}
+
+enum IngredientSource {
+  USER
+  QOOVEX
+  OPEN_FOOD_FACTS
+  USDA
+  OLLAMA
+}
+
 model User {
-  id                  String           @id @default(cuid())
-  clerkId             String           @unique
+  id                  String             @id @default(cuid())
+  clerkId             String             @unique
   name                String
-  username            String           @unique
-  email               String           @unique
+  username            String             @unique
+  email               String             @unique
   phoneNumber         String?
-  plan                Plan             @default(FREE)
+  plan                Plan               @default(FREE)
   recipes             Recipe[]
   menus               Menu[]
   shoppingLists       ShoppingList[]
-  workPlans           WorkPlan[]       @relation("WorkPlanCreator")
+  workPlans           WorkPlan[]         @relation("WorkPlanCreator")
   workPlanMemberships WorkPlanMember[]
   notifications       Notification[]
   recentSearches      RecentSearch[]
-  createdAt           DateTime         @default(now())
-  updatedAt           DateTime         @updatedAt
+  ingredientReviews   IngredientReview[]
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
 }
 
 model RecentSearch {
@@ -45,35 +81,89 @@ model RecentSearch {
 }
 
 model Recipe {
-  id              String             @id @default(cuid())
-  title           String
-  description     String?
-  instructions    String?
-  servings        Int                @default(4)
-  prepTime        Int?
-  cookTime        Int?
-  imageUrl        String?
-  isPublic        Boolean            @default(false)
-  authorId        String
-  author          User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  ingredients     RecipeIngredient[]
-  menuItems       MenuItem[]
-  workTasks       WorkTask[]
-  likesCount      Int                @default(0)
-  forkedFromId    String?
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
+  id                String             @id @default(cuid())
+  title             String
+  description       String?
+  instructions      String?
+  category          RecipeCategory     @default(ALTRO)
+  status            RecipeStatus       @default(DRAFT)
+  servings          Int                @default(4)
+  prepTime          Int?
+  cookTime          Int?
+  imageUrl          String?
+  isPublic          Boolean            @default(false)
+  totalCalories     Float?
+  totalCaloriesMin  Float?
+  totalCaloriesMax  Float?
+  totalProteins     Float?
+  totalProteinsMin  Float?
+  totalProteinsMax  Float?
+  totalCarbs        Float?
+  totalCarbsMin     Float?
+  totalCarbsMax     Float?
+  totalSugarsMin    Float?
+  totalSugarsMax    Float?
+  totalFats         Float?
+  totalFatsMin      Float?
+  totalFatsMax      Float?
+  totalFiberMin     Float?
+  totalFiberMax     Float?
+  totalSaltMin      Float?
+  totalSaltMax      Float?
+  deletedAt         DateTime?
+  authorId          String
+  author            User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  ingredients       RecipeIngredient[]
+  menuItems         MenuItem[]
+  workTasks         WorkTask[]
+  ingredientReviews IngredientReview[]
+  likesCount        Int                @default(0)
+  forkedFromId      String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([authorId, deletedAt, updatedAt])
+  @@index([authorId, category, status])
+  @@index([isPublic, status, updatedAt])
 }
 
 model Ingredient {
-  id          String             @id @default(cuid())
-  name        String             @unique
-  allergens   String[]
-  calories    Float?
-  proteins    Float?
-  carbs       Float?
-  fats        Float?
-  recipes     RecipeIngredient[]
+  id                 String                       @id @default(cuid())
+  name               String                       @unique
+  slug               String                       @unique
+  sourceName         String?
+  aliases            String[]                     @default([])
+  allergens          String[]
+  calories           Float?
+  caloriesMin        Float?
+  caloriesMax        Float?
+  proteins           Float?
+  proteinsMin        Float?
+  proteinsMax        Float?
+  carbs              Float?
+  carbsMin           Float?
+  carbsMax           Float?
+  sugarsMin          Float?
+  sugarsMax          Float?
+  fats               Float?
+  fatsMin            Float?
+  fatsMax            Float?
+  fiberMin           Float?
+  fiberMax           Float?
+  saltMin            Float?
+  saltMax            Float?
+  source             IngredientSource             @default(USER)
+  sourceRef          String?
+  confidence         Float?
+  verificationStatus IngredientVerificationStatus @default(VERIFIED)
+  sourceUpdatedAt    DateTime?
+  createdAt          DateTime                     @default(now())
+  updatedAt          DateTime                     @updatedAt
+  recipes            RecipeIngredient[]
+  reviews            IngredientReview[]
+
+  @@index([slug])
+  @@index([verificationStatus, updatedAt])
 }
 
 model RecipeIngredient {
@@ -86,6 +176,27 @@ model RecipeIngredient {
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
 
   @@unique([recipeId, ingredientId])
+}
+
+model IngredientReview {
+  id             String                       @id @default(cuid())
+  ingredientId   String?
+  recipeId       String?
+  userId         String
+  rawName        String
+  normalizedSlug String
+  status         IngredientVerificationStatus @default(PENDING_REVIEW)
+  note           String?
+  resolvedAt     DateTime?
+  createdAt      DateTime                     @default(now())
+  updatedAt      DateTime                     @updatedAt
+  ingredient     Ingredient?                  @relation(fields: [ingredientId], references: [id], onDelete: SetNull)
+  recipe         Recipe?                      @relation(fields: [recipeId], references: [id], onDelete: SetNull)
+  user           User                         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([normalizedSlug, userId, status])
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
 }
 
 model Menu {
