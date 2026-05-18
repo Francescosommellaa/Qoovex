@@ -17,7 +17,8 @@ import {
 } from "@qoovex/ui";
 import {
   bootstrapUser,
-  updateCurrentUserProfile,
+  completeCurrentUserProfile,
+  type CompleteCurrentUserProfileResult,
 } from "@shared/actions/bootstrap-user";
 import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 import { AuthShell } from "../ui";
@@ -28,6 +29,37 @@ function getSafeNextPath(value: string | null) {
   }
 
   return value;
+}
+
+function getCompleteProfileErrorToast(
+  result: Exclude<CompleteCurrentUserProfileResult, { ok: true }>,
+) {
+  if (result.code === "CLERK_UPDATE_FAILED") {
+    return {
+      title: "Profilo non salvato su Clerk",
+      description: result.message,
+    };
+  }
+
+  if (result.code === "DATABASE_SYNC_FAILED") {
+    return {
+      title: "Profilo salvato su Clerk",
+      description:
+        "Sincronizzazione database non completata. Riprova la sincronizzazione tra qualche istante.",
+    };
+  }
+
+  if (result.code === "UNAUTHENTICATED") {
+    return {
+      title: "Sessione scaduta",
+      description: result.message,
+    };
+  }
+
+  return {
+    title: "Nome mancante",
+    description: result.message,
+  };
 }
 
 export default function CompleteProfilePage() {
@@ -48,11 +80,13 @@ export default function CompleteProfilePage() {
   const nextPath = getSafeNextPath(searchParams.get("next"));
   const source = searchParams.get("source");
   const hasForcedSyncFailure = searchParams.get("sync") === "failed";
+  const hasClerkFirstName = Boolean(user?.firstName?.trim());
   const shouldShowProfileUpgrade = Boolean(
     user &&
-      !hasForcedSyncFailure &&
       !didCompleteProfileUpgrade &&
-      (source === "signup" || !user.firstName?.trim()),
+      (source === "signup" ||
+        !hasClerkFirstName ||
+        (hasForcedSyncFailure && !hasClerkFirstName)),
   );
 
   useEffect(() => {
@@ -106,6 +140,43 @@ export default function CompleteProfilePage() {
     user,
   ]);
 
+  function handleProfileCompletionResult(
+    result: CompleteCurrentUserProfileResult,
+  ) {
+    if (result.ok) {
+      router.replace(nextPath);
+      return;
+    }
+
+    if (result.code === "UNAUTHENTICATED") {
+      toast({
+        variant: "error",
+        ...getCompleteProfileErrorToast(result),
+      });
+      router.replace("/sign-in");
+      return;
+    }
+
+    if (result.code === "MISSING_NAME") {
+      setIsFirstNameWarning(true);
+      toast({
+        variant: "warning",
+        ...getCompleteProfileErrorToast(result),
+      });
+      return;
+    }
+
+    if (result.code === "DATABASE_SYNC_FAILED") {
+      setDidCompleteProfileUpgrade(true);
+      setSyncError(result.message);
+    }
+
+    toast({
+      variant: "error",
+      ...getCompleteProfileErrorToast(result),
+    });
+  }
+
   async function handleProfileSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!user) return;
@@ -127,26 +198,21 @@ export default function CompleteProfilePage() {
     setSyncError(null);
 
     try {
-      await updateCurrentUserProfile({
+      const result = await completeCurrentUserProfile({
         firstName: normalizedFirstName,
         lastName: normalizedLastName || undefined,
       });
-      setDidCompleteProfileUpgrade(true);
 
-      await bootstrapUser({
-        firstName: normalizedFirstName,
-        lastName: normalizedLastName || undefined,
-      });
-      router.replace(nextPath);
+      handleProfileCompletionResult(result);
     } catch (unknownError: unknown) {
       const message = getSafeAuthErrorMessage(
         unknownError,
-        "Profilo salvato su Clerk, ma il database non e raggiungibile. Controlla le credenziali Postgres e riprova.",
+        "Non siamo riusciti a completare il profilo. Riprova tra qualche istante.",
       );
       setSyncError(message);
       toast({
         variant: "error",
-        title: "Profilo non sincronizzato",
+        title: "Profilo non completato",
         description: message,
       });
     } finally {
@@ -155,21 +221,39 @@ export default function CompleteProfilePage() {
   }
 
   async function handleRetryBootstrap() {
+    const retryFirstName = user?.firstName?.trim() || firstName.trim();
+    const retryLastName = user?.lastName?.trim() || lastName.trim();
+
+    if (!retryFirstName) {
+      setSyncError(null);
+      setIsFirstNameWarning(true);
+      toast({
+        variant: "warning",
+        title: "Nome mancante",
+        description: "Inserisci il nome prima di riprovare la sincronizzazione.",
+      });
+      return;
+    }
+
     setIsSaving(true);
     setSyncError(null);
 
     try {
-      await bootstrapUser();
-      router.replace(nextPath);
+      const result = await completeCurrentUserProfile({
+        firstName: retryFirstName,
+        lastName: retryLastName || undefined,
+      });
+
+      handleProfileCompletionResult(result);
     } catch (unknownError: unknown) {
       const message = getSafeAuthErrorMessage(
         unknownError,
-        "Impossibile sincronizzare il profilo con il database. Controlla le credenziali Postgres e riprova.",
+        "Impossibile riprovare la sincronizzazione del profilo. Riprova tra qualche istante.",
       );
       setSyncError(message);
       toast({
         variant: "error",
-        title: "Database non raggiungibile",
+        title: "Sincronizzazione non riuscita",
         description: message,
       });
     } finally {
@@ -191,7 +275,7 @@ export default function CompleteProfilePage() {
     );
   }
 
-  if (syncError || hasForcedSyncFailure) {
+  if ((syncError || hasForcedSyncFailure) && !shouldShowProfileUpgrade) {
     return (
       <AuthShell
         title="Workspace non pronto"

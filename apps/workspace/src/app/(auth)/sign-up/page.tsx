@@ -32,12 +32,116 @@ type FieldErrors = {
 
 type SignUpState = ReturnType<typeof useSignUp>["signUp"];
 
+const USERNAME_EMAIL_MESSAGE =
+  "Lo username non puo essere un indirizzo email. Usa solo lettere, numeri, punto, trattino o underscore.";
+const USERNAME_FORMAT_MESSAGE =
+  "Lo username deve avere 3-32 caratteri: lettere minuscole, numeri, punto, trattino o underscore.";
+const USERNAME_PATTERN = /^[a-z0-9._-]{3,32}$/;
+
 function mapCreateErrorToFields(message: string): FieldErrors {
   const lower = message.toLowerCase();
   if (lower.includes("username")) return { username: message };
   if (lower.includes("email")) return { email: message };
   if (lower.includes("password")) return { password: message };
   return {};
+}
+
+function readClerkCreateError(error: unknown) {
+  if (typeof error !== "object" || error === null) return "";
+
+  const clerkError = error as {
+    code?: string;
+    message?: string;
+    longMessage?: string;
+    errors?: Array<{ code?: string; message?: string; longMessage?: string }>;
+  };
+  const first = clerkError.errors?.[0];
+
+  return `${first?.code ?? clerkError.code ?? ""} ${
+    first?.longMessage ??
+    first?.message ??
+    clerkError.longMessage ??
+    clerkError.message ??
+    ""
+  }`.toLowerCase();
+}
+
+function getCreateErrorFeedback(error: unknown): {
+  title: string;
+  description: string;
+  fields: FieldErrors;
+} {
+  const fingerprint = readClerkCreateError(error);
+
+  if (
+    (fingerprint.includes("email") || fingerprint.includes("identifier")) &&
+    (fingerprint.includes("already") ||
+      fingerprint.includes("exists") ||
+      fingerprint.includes("taken") ||
+      fingerprint.includes("in use"))
+  ) {
+    const description =
+      "Questa email e gia registrata. Accedi con questo indirizzo oppure usa un'altra email.";
+    return {
+      title: "Email gia registrata",
+      description,
+      fields: { email: description },
+    };
+  }
+
+  if (
+    fingerprint.includes("username") &&
+    (fingerprint.includes("already") ||
+      fingerprint.includes("exists") ||
+      fingerprint.includes("taken") ||
+      fingerprint.includes("in use"))
+  ) {
+    const description =
+      "Questo username e gia in uso. Scegline uno diverso, senza usare un indirizzo email.";
+    return {
+      title: "Username non disponibile",
+      description,
+      fields: { username: description },
+    };
+  }
+
+  if (fingerprint.includes("username")) {
+    return {
+      title: "Username non valido",
+      description: USERNAME_FORMAT_MESSAGE,
+      fields: { username: USERNAME_FORMAT_MESSAGE },
+    };
+  }
+
+  const description = getSafeAuthErrorMessage(
+    error,
+    "Non e stato possibile creare l'account. Verifica i campi evidenziati e riprova.",
+  );
+
+  return {
+    title: "Registrazione bloccata",
+    description,
+    fields: mapCreateErrorToFields(description),
+  };
+}
+
+function isLikelyEmail(value: string): boolean {
+  return value.includes("@") || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function normalizeUsernameInput(value: string): string {
+  const lowered = value.toLowerCase().replace(/\s+/g, "").replace(/^@+/, "");
+  const withoutEmailDomain = lowered.includes("@")
+    ? lowered.split("@")[0]
+    : lowered;
+
+  return withoutEmailDomain.replace(/[^a-z0-9._-]/g, "").slice(0, 32);
+}
+
+function validateUsername(value: string): string | undefined {
+  if (isLikelyEmail(value)) return USERNAME_EMAIL_MESSAGE;
+  if (!USERNAME_PATTERN.test(value)) return USERNAME_FORMAT_MESSAGE;
+  return undefined;
 }
 
 function isAlreadyUsedVerificationError(error: unknown): boolean {
@@ -167,6 +271,27 @@ export default function SignUpPage() {
     return `${phoneRegionCode}${normalizedPhoneDigits}`;
   }
 
+  function handleUsernameInput(rawValue: string) {
+    if (warningFields.username) {
+      setWarningFields((current) => ({ ...current, username: false }));
+    }
+
+    if (isLikelyEmail(rawValue)) {
+      setUsername("");
+      setFieldErrors((current) => ({
+        ...current,
+        username: USERNAME_EMAIL_MESSAGE,
+      }));
+      return;
+    }
+
+    setUsername(normalizeUsernameInput(rawValue));
+
+    if (fieldErrors.username) {
+      setFieldErrors((current) => ({ ...current, username: undefined }));
+    }
+  }
+
   async function finalizeAndEnterApp(destinationPath = "/dashboard") {
     const { error: finalizeError } = await signUp.finalize({
       navigate: async ({ session, decorateUrl }) => {
@@ -197,6 +322,7 @@ export default function SignUpPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const previousUsernameError = fieldErrors.username;
     setFieldErrors({});
     setCode("");
     const normalizedUsername = username.trim().toLowerCase();
@@ -210,10 +336,40 @@ export default function SignUpPage() {
     setWarningFields(nextWarnings);
 
     if (nextWarnings.email || nextWarnings.username || nextWarnings.password) {
+      const missingFieldErrors: FieldErrors = {};
+      if (nextWarnings.email) missingFieldErrors.email = "Inserisci la tua email.";
+      if (nextWarnings.username) {
+        missingFieldErrors.username =
+          previousUsernameError === USERNAME_EMAIL_MESSAGE
+            ? USERNAME_EMAIL_MESSAGE
+            : "Scegli uno username per continuare.";
+      }
+      if (nextWarnings.password) {
+        missingFieldErrors.password = "Inserisci una password per continuare.";
+      }
+      setFieldErrors(missingFieldErrors);
       toast({
         variant: "warning",
-        title: "Controlla i campi evidenziati",
-        description: "Compila email, username e password prima di continuare.",
+        title:
+          missingFieldErrors.username === USERNAME_EMAIL_MESSAGE
+            ? "Username da correggere"
+            : "Controlla i campi evidenziati",
+        description:
+          missingFieldErrors.username === USERNAME_EMAIL_MESSAGE
+            ? USERNAME_EMAIL_MESSAGE
+            : "Compila i campi richiesti evidenziati prima di continuare.",
+      });
+      return;
+    }
+
+    const usernameError = validateUsername(normalizedUsername);
+    if (usernameError) {
+      setFieldErrors({ username: usernameError });
+      setWarningFields((current) => ({ ...current, username: true }));
+      toast({
+        variant: "warning",
+        title: "Username da correggere",
+        description: usernameError,
       });
       return;
     }
@@ -239,16 +395,12 @@ export default function SignUpPage() {
     });
     logDevSignUpState("after password", signUp, createError);
     if (createError) {
-      const msg = getSafeAuthErrorMessage(
-        createError,
-        "Non è stato possibile creare l'account. Verifica i dati e riprova.",
-      );
-      const mapped = mapCreateErrorToFields(msg);
-      setFieldErrors(Object.keys(mapped).length > 0 ? mapped : {});
+      const feedback = getCreateErrorFeedback(createError);
+      setFieldErrors(feedback.fields);
       toast({
         variant: "error",
-        title: "Registrazione bloccata",
-        description: msg,
+        title: feedback.title,
+        description: feedback.description,
       });
       return;
     }
@@ -434,6 +586,7 @@ export default function SignUpPage() {
             <FormField
               label="Email"
               required
+              error={fieldErrors.email}
               status={
                 fieldErrors.email || warningFields.email ? "error" : "default"
               }
@@ -460,6 +613,7 @@ export default function SignUpPage() {
             <FormField
               label="Username"
               required
+              error={fieldErrors.username}
               status={
                 fieldErrors.username || warningFields.username ? "error" : "default"
               }
@@ -468,18 +622,21 @@ export default function SignUpPage() {
                 <Input
                   type="text"
                   placeholder="nomechef"
-                  autoComplete="username"
+                  name="qoovex-signup-username"
+                  autoComplete="off"
                   autoCapitalize="none"
                   autoCorrect="off"
+                  spellCheck={false}
+                  inputMode="text"
+                  data-lpignore="true"
+                  data-1p-ignore="true"
+                  data-form-type="other"
                   value={username}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setUsername(e.target.value.toLowerCase().replace(/\s+/g, ""));
-                    if (warningFields.username) {
-                      setWarningFields((current) => ({ ...current, username: false }));
-                    }
-                    if (fieldErrors.username) {
-                      setFieldErrors((current) => ({ ...current, username: undefined }));
-                    }
+                    handleUsernameInput(e.target.value);
+                  }}
+                  onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+                    handleUsernameInput(e.target.value);
                   }}
                 />
               </FormControl>
@@ -504,6 +661,7 @@ export default function SignUpPage() {
             <FormField
               label="Password"
               required
+              error={fieldErrors.password}
               status={
                 fieldErrors.password || warningFields.password ? "error" : "default"
               }
