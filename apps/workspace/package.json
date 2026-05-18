@@ -16,10 +16,11 @@
     "@qoovex/utils": "workspace:*",
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.3.3",
-    "next": "15.5.14",
+    "next": "15.5.15",
     "react": "19.1.4",
     "react-dom": "19.1.4",
     "resend": "^6.12.0",
+    "sharp": "^0.34.5",
     "svix": "^1.90.0"
   },
   "devDependencies": {
@@ -29,7 +30,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.5.14",
+    "eslint-config-next": "15.5.15",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

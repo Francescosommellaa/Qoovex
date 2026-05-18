@@ -23,6 +23,7 @@ function getUnsafeMetadataPhoneNumber(
   return typeof phoneNumber === "string" ? phoneNumber : undefined;
 }
 
+/** Admin only from Clerk publicMetadata / session claims set server-side — never from client-writable fields. */
 function hasAdminAccess(metadata: unknown) {
   if (!metadata || typeof metadata !== "object") {
     return false;

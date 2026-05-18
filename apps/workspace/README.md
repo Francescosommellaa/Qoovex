@@ -22,4 +22,7 @@ Guardrail:
 - `pnpm check:repo` esegue il guard locale su README, import FSD, naming e confine Clerk;
 - `pnpm check:fast` combina guard repo, lint e type-check.
 
+Env locale (sviluppo):
+- `DEV_AUTH_SECRET` (min 32 caratteri) in `.env.local` per dev-auth firmato — vedi `src/app/api/dev-auth/README.md`.
+
 Ordine file: segui il Brain canonico `00_System/code-patterns.md`.

@@ -1,6 +1,11 @@
 packages:
   - "apps/*"
   - "packages/*"
+peerDependencyRules:
+  ignoreMissing: []
+  allowedVersions:
+    "@clerk/nextjs>react": "19"
+    "@clerk/nextjs>react-dom": "19"
 allowBuilds:
   '@clerk/shared': true
   '@prisma/engines': true

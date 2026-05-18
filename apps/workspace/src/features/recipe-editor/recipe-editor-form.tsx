@@ -486,6 +486,9 @@ export function RecipeEditorForm({
   );
   const [saving, setSaving] = React.useState(false);
   const [uploadingImage, setUploadingImage] = React.useState(false);
+  const [imagePreviewUrl, setImagePreviewUrl] = React.useState<string | null>(
+    () => initialRecipe?.imageUrl ?? null,
+  );
 
   const preview = React.useMemo(() => calculatePreview(input.ingredients), [input.ingredients]);
   const hasPendingIngredients = preview.pending > 0;
@@ -519,11 +522,16 @@ export function RecipeEditorForm({
         method: "POST",
         body: formData,
       });
-      const payload = (await response.json()) as { url?: string; message?: string };
+      const payload = (await response.json()) as {
+        url?: string;
+        displayUrl?: string;
+        message?: string;
+      };
       if (!response.ok || !payload.url) {
         throw new Error(payload.message ?? "Upload non riuscito.");
       }
       updateInput({ imageUrl: payload.url });
+      setImagePreviewUrl(payload.displayUrl ?? payload.url);
       toast({
         variant: "success",
         title: "Immagine caricata",
@@ -635,7 +643,7 @@ export function RecipeEditorForm({
                     {input.imageUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={input.imageUrl}
+                        src={imagePreviewUrl ?? input.imageUrl}
                         alt=""
                         className="h-full w-full object-cover"
                       />
@@ -672,7 +680,10 @@ export function RecipeEditorForm({
                           type="button"
                           variant="secondary"
                           size="sm"
-                          onClick={() => updateInput({ imageUrl: null })}
+                          onClick={() => {
+                            updateInput({ imageUrl: null });
+                            setImagePreviewUrl(null);
+                          }}
                         >
                           Rimuovi immagine
                         </Button>

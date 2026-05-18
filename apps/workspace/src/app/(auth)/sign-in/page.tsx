@@ -55,8 +55,7 @@ export default function SignInPage() {
     isDevSigningIn ||
     !isAuthLoaded ||
     isProvisioningDashboard;
-  const showDevAuthButton =
-    process.env.NODE_ENV === "development" || isLocalDevHost;
+  const showDevAuthButton = isLocalDevHost;
 
   useEffect(() => {
     const hostname = window.location.hostname;

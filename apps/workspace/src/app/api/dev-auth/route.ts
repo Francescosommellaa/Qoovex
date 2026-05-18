@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import {
-  DEV_AUTH_COOKIE_NAME,
-  DEV_AUTH_COOKIE_VALUE,
-  isDevAuthAllowed,
-} from "@shared/server/dev-auth";
+  clearDevAuthCookieValue,
+  isDevAuthSecretConfigured,
+  signDevAuthCookieValue,
+} from "@shared/lib/dev-auth-cookie";
+import { isDevAuthAllowed } from "@shared/server/dev-auth";
 
 function getSafeDestination(req: Request) {
   const url = new URL(req.url);
@@ -25,9 +26,36 @@ function getSafeDestination(req: Request) {
   }
 }
 
+function devAuthCookieOptions(maxAge: number) {
+  return {
+    httpOnly: true,
+    sameSite: "lax" as const,
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge,
+  };
+}
+
 export async function POST(req: Request) {
   if (!(await isDevAuthAllowed())) {
     return NextResponse.json(null, { status: 404 });
+  }
+
+  if (!isDevAuthSecretConfigured()) {
+    return NextResponse.json(
+      { error: "DEV_AUTH_SECRET non configurato (minimo 32 caratteri)." },
+      { status: 503 },
+    );
+  }
+
+  let signedCookie;
+  try {
+    signedCookie = await signDevAuthCookieValue();
+  } catch {
+    return NextResponse.json(
+      { error: "DEV_AUTH_SECRET non configurato (minimo 32 caratteri)." },
+      { status: 503 },
+    );
   }
 
   const response = NextResponse.json({
@@ -35,13 +63,9 @@ export async function POST(req: Request) {
   });
 
   response.cookies.set({
-    name: DEV_AUTH_COOKIE_NAME,
-    value: DEV_AUTH_COOKIE_VALUE,
-    httpOnly: true,
-    sameSite: "lax",
-    secure: false,
-    path: "/",
-    maxAge: 60 * 60 * 8,
+    name: signedCookie.name,
+    value: signedCookie.value,
+    ...devAuthCookieOptions(signedCookie.maxAge),
   });
 
   return response;
@@ -52,15 +76,12 @@ export async function DELETE() {
     return NextResponse.json(null, { status: 404 });
   }
 
+  const cleared = clearDevAuthCookieValue();
   const response = NextResponse.json({ ok: true });
   response.cookies.set({
-    name: DEV_AUTH_COOKIE_NAME,
-    value: "",
-    httpOnly: true,
-    sameSite: "lax",
-    secure: false,
-    path: "/",
-    maxAge: 0,
+    name: cleared.name,
+    value: cleared.value,
+    ...devAuthCookieOptions(cleared.maxAge),
   });
 
   return response;

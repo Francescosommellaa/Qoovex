@@ -1,7 +1,7 @@
 {
   "name": "qoovex",
   "private": true,
-  "packageManager": "pnpm@11.1.2",
+  "packageManager": "pnpm@11.1.3",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
@@ -17,22 +17,6 @@
     "db:push": "turbo run db:push --filter=@qoovex/db",
     "db:migrate": "turbo run db:migrate --filter=@qoovex/db",
     "db:workspace": "turbo run db:workspace --filter=@qoovex/db"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [],
-      "allowedVersions": {
-        "@clerk/nextjs>react": "19",
-        "@clerk/nextjs>react-dom": "19"
-      }
-    },
-    "onlyBuiltDependencies": [
-      "@prisma/engines",
-      "esbuild",
-      "prisma",
-      "sharp",
-      "unrs-resolver"
-    ]
   },
   "devDependencies": {
     "chrome-launcher": "^1.2.1",

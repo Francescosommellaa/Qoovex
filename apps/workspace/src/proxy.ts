@@ -1,4 +1,8 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import {
+  DEV_AUTH_COOKIE_NAME,
+  verifyDevAuthCookieValue,
+} from "@shared/lib/dev-auth-cookie";
 import { isDevAuthAllowedForHost } from "@shared/lib/dev-auth-guard";
 
 const isPublicRoute = createRouteMatcher([
@@ -10,6 +14,7 @@ const isPublicRoute = createRouteMatcher([
   "/complete-profile(.*)",
   "/api/dev-auth(.*)",
   "/api/webhooks/clerk(.*)",
+  "/api/recipes/media(.*)",
 ]);
 
 const authorizedParties = [
@@ -20,9 +25,10 @@ const authorizedParties = [
 ];
 
 export default clerkMiddleware(async (auth, req) => {
+  const host = req.headers.get("host") ?? req.nextUrl.host;
+  const devAuthCookie = req.cookies.get(DEV_AUTH_COOKIE_NAME)?.value;
   const hasDevAuthSession =
-    isDevAuthAllowedForHost(req.headers.get("host") ?? req.nextUrl.host) &&
-    req.cookies.get("qv-dev-auth")?.value === "enabled";
+    isDevAuthAllowedForHost(host) && (await verifyDevAuthCookieValue(devAuthCookie));
 
   if (hasDevAuthSession) {
     return;

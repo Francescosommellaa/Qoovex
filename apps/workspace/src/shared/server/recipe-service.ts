@@ -21,6 +21,7 @@ import type {
   RecipeStatus,
   WorkspacePlan,
 } from "@shared/lib/workspace-types";
+import { resolveRecipeImageUrl } from "@shared/server/recipe-image-access";
 import {
   archiveRecipeForUser,
   countRecipesForUser,
@@ -198,7 +199,7 @@ interface RecipeDetailRecord extends RecipeSummaryRecord {
   ingredients: RecipeIngredientRecord[];
 }
 
-function mapRecipeSummary(recipe: RecipeSummaryRecord): RecipeSummaryDto {
+async function mapRecipeSummary(recipe: RecipeSummaryRecord): Promise<RecipeSummaryDto> {
   return {
     id: recipe.id,
     title: recipe.title,
@@ -209,7 +210,7 @@ function mapRecipeSummary(recipe: RecipeSummaryRecord): RecipeSummaryDto {
     prepTime: recipe.prepTime,
     cookTime: recipe.cookTime,
     isPublic: recipe.isPublic,
-    imageUrl: recipe.imageUrl,
+    imageUrl: await resolveRecipeImageUrl(recipe.imageUrl),
     totalCalories: recipe.totalCalories,
     totalProteins: recipe.totalProteins,
     totalCarbs: recipe.totalCarbs,
@@ -264,8 +265,8 @@ function mapRecipeIngredient(
   };
 }
 
-function mapRecipeDetail(recipe: RecipeDetailRecord, userId: string): RecipeDetailDto {
-  const summary = mapRecipeSummary(recipe);
+async function mapRecipeDetail(recipe: RecipeDetailRecord, userId: string): Promise<RecipeDetailDto> {
+  const summary = await mapRecipeSummary(recipe);
   return {
     ...summary,
     instructions: recipe.instructions,
@@ -296,7 +297,7 @@ export async function getRecipesIndex(
   ]);
 
   return {
-    recipes: recipes.map(mapRecipeSummary),
+    recipes: await Promise.all(recipes.map((recipe) => mapRecipeSummary(recipe))),
     limit,
   };
 }
@@ -314,7 +315,7 @@ export async function getRecipeOptions(userId: string) {
 
 export async function getRecipeDetail(userId: string, recipeId: string) {
   const recipe = await findRecipeDetailVisibleToUser(recipeId, userId);
-  return recipe ? mapRecipeDetail(recipe, userId) : null;
+  return recipe ? await mapRecipeDetail(recipe, userId) : null;
 }
 
 export async function createRecipe(userId: string, plan: WorkspacePlan, input: RecipeEditorInput) {
@@ -329,10 +330,12 @@ export async function updateRecipe(userId: string, recipeId: string, input: Reci
 
 export async function getPublicRecipes(userId: string, query?: string) {
   const recipes = await listPublicRecipes(query);
-  return recipes.map((recipe) => ({
-    ...mapRecipeSummary(recipe),
-    canEdit: recipe.author.id === userId,
-  }));
+  return Promise.all(
+    recipes.map(async (recipe) => ({
+      ...(await mapRecipeSummary(recipe)),
+      canEdit: recipe.author.id === userId,
+    })),
+  );
 }
 
 export async function forkPublicRecipe(userId: string, plan: WorkspacePlan, recipeId: string) {

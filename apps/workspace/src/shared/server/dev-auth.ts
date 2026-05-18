@@ -1,12 +1,15 @@
 import "server-only";
 
 import { cookies, headers } from "next/headers";
+import {
+  DEV_AUTH_COOKIE_NAME,
+  verifyDevAuthCookieValue,
+} from "@shared/lib/dev-auth-cookie";
 import { isDevAuthAllowedForHost } from "@shared/lib/dev-auth-guard";
 import { findWorkspaceUserByClerkId } from "@shared/server/repositories/user-repository";
 import { syncClerkUser } from "@shared/server/clerk-user-sync";
 
-export const DEV_AUTH_COOKIE_NAME = "qv-dev-auth";
-export const DEV_AUTH_COOKIE_VALUE = "enabled";
+export { DEV_AUTH_COOKIE_NAME } from "@shared/lib/dev-auth-cookie";
 
 const DEV_USER = {
   clerkId: "dev_qoovex_local_user",
@@ -25,7 +28,7 @@ export async function hasDevAuthSession() {
   if (!(await isDevAuthAllowed())) return false;
 
   const cookieStore = await cookies();
-  return cookieStore.get(DEV_AUTH_COOKIE_NAME)?.value === DEV_AUTH_COOKIE_VALUE;
+  return verifyDevAuthCookieValue(cookieStore.get(DEV_AUTH_COOKIE_NAME)?.value);
 }
 
 export async function bootstrapDevUser() {

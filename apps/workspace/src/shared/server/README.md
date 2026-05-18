@@ -16,3 +16,7 @@ Regole:
 - importa `server-only` nei file che non devono finire nel bundle client;
 - mantieni input espliciti e serializzabili quando una funzione viene chiamata da una server action.
 - non importare `@qoovex/db` fuori da `shared/server/repositories`.
+
+## Rate limit (`rate-limit.ts`)
+
+Limiter in-memory per route API costose. Non e' distribuito tra piu' istanze serverless: in produzione ad alto traffico valutare Upstash Redis.
