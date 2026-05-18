@@ -108,7 +108,7 @@ export async function getNotificationInbox(
     notifications: visibleNotifications.map(mapNotification),
     nextCursor:
       notifications.length > take
-        ? visibleNotifications.at(-1)?.id ?? null
+        ? visibleNotifications[visibleNotifications.length - 1]?.id ?? null
         : null,
     types: types.map((notificationType) => notificationType.type),
   };
