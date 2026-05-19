@@ -11,23 +11,10 @@ interface BootstrapUserOptions {
   lastName?: string | null;
 }
 
-interface CompleteCurrentUserProfileInput {
+interface UpdateCurrentUserProfileInput {
   firstName: string;
   lastName?: string | null;
-  phoneNumber?: string | null;
 }
-
-type CompleteCurrentUserProfileResult =
-  | { ok: true }
-  | {
-      ok: false;
-      code:
-        | "UNAUTHENTICATED"
-        | "MISSING_NAME"
-        | "CLERK_UPDATE_FAILED"
-        | "DATABASE_SYNC_FAILED";
-      message: string;
-    };
 
 type ClerkProfileForSync = {
   firstName?: string | null;
@@ -63,17 +50,6 @@ function hasAdminAccess(metadata: unknown) {
   const adminMetadata = metadata as Record<string, unknown>;
 
   return adminMetadata.role === "admin" || adminMetadata.isAdmin === true;
-}
-
-function getPrimaryEmailFromClerkProfile(
-  clerkUser: ClerkProfileForSync,
-): string | undefined {
-  const primaryEmail =
-    clerkUser.emailAddresses?.find(
-      (emailAddress) => emailAddress.id === clerkUser.primaryEmailAddressId,
-    ) ?? clerkUser.emailAddresses?.[0];
-
-  return primaryEmail?.emailAddress ?? primaryEmail?.email_address ?? undefined;
 }
 
 function getClaimsMetadata(claims: unknown) {
@@ -159,7 +135,7 @@ export async function hasBootstrappedUser() {
 }
 
 export async function updateCurrentUserProfile(
-  input: CompleteCurrentUserProfileInput,
+  input: UpdateCurrentUserProfileInput,
 ) {
   const { userId } = await auth();
   if (!userId) return null;
@@ -173,88 +149,6 @@ export async function updateCurrentUserProfile(
     firstName,
     lastName,
   });
-
-  return { ok: true };
-}
-
-export async function completeCurrentUserProfile(
-  input: CompleteCurrentUserProfileInput,
-): Promise<CompleteCurrentUserProfileResult> {
-  const { userId } = await auth();
-  if (!userId) {
-    return {
-      ok: false,
-      code: "UNAUTHENTICATED",
-      message: "Sessione scaduta. Accedi di nuovo per completare il profilo.",
-    };
-  }
-
-  const firstName = getTrimmedInputValue(input?.firstName);
-  const lastName = getTrimmedInputValue(input?.lastName) || undefined;
-  if (!firstName) {
-    return {
-      ok: false,
-      code: "MISSING_NAME",
-      message: "Inserisci il nome prima di entrare nel workspace.",
-    };
-  }
-
-  let updatedClerkUser: ClerkProfileForSync;
-  try {
-    const client = await clerkClient();
-    updatedClerkUser = await client.users.updateUser(userId, {
-      firstName,
-      lastName,
-    });
-  } catch (error) {
-    console.error("[complete-profile] clerk profile update failed", {
-      userId,
-      error,
-    });
-
-    return {
-      ok: false,
-      code: "CLERK_UPDATE_FAILED",
-      message:
-        "Non siamo riusciti a salvare nome e cognome su Clerk. Riprova tra qualche istante.",
-    };
-  }
-
-  const primaryEmail = getPrimaryEmailFromClerkProfile(updatedClerkUser);
-  if (!primaryEmail) {
-    return {
-      ok: false,
-      code: "DATABASE_SYNC_FAILED",
-      message:
-        "Profilo salvato su Clerk, ma manca un'email primaria per sincronizzare il database.",
-    };
-  }
-
-  try {
-    const { syncClerkUser } = await import("@shared/server/clerk-user-sync");
-    await syncClerkUser({
-      clerkId: userId,
-      email: primaryEmail,
-      username: updatedClerkUser.username,
-      firstName: updatedClerkUser.firstName ?? firstName,
-      lastName: updatedClerkUser.lastName ?? lastName,
-      phoneNumber:
-        input.phoneNumber ??
-        getUnsafeMetadataPhoneNumber(updatedClerkUser.unsafeMetadata ?? {}),
-    });
-  } catch (error) {
-    console.error("[complete-profile] database profile sync failed", {
-      userId,
-      error,
-    });
-
-    return {
-      ok: false,
-      code: "DATABASE_SYNC_FAILED",
-      message:
-        "Profilo salvato su Clerk, ma la sincronizzazione con il database non e riuscita. Riprova.",
-    };
-  }
 
   return { ok: true };
 }

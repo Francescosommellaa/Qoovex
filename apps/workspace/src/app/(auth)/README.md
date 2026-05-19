@@ -11,4 +11,5 @@ Non mettere qui:
 
 Regole:
 - URL pubblici restano `/sign-in` e `/sign-up`;
+- il profilo richiesto per il bootstrap viene raccolto in `/sign-up`;
 - niente altro routing prodotto in questa route group.

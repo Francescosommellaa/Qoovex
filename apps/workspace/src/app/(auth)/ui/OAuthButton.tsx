@@ -64,7 +64,7 @@ export function OAuthButton({
         const { error } = await signIn.sso({
           strategy: config.strategy,
           redirectUrl: `${window.location.origin}/sso-callback`,
-          redirectCallbackUrl: "/complete-profile",
+          redirectCallbackUrl: "/dashboard",
         });
 
         if (error) {
@@ -78,7 +78,7 @@ export function OAuthButton({
       const { error } = await signIn.create({
         strategy: config.strategy,
         redirectUrl: `${window.location.origin}/sso-callback`,
-        actionCompleteRedirectUrl: `${window.location.origin}/complete-profile`,
+        actionCompleteRedirectUrl: `${window.location.origin}/dashboard`,
         signUpIfMissing: true,
       });
 

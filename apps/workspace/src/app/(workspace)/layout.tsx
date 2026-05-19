@@ -50,7 +50,7 @@ export default async function WorkspaceLayout({
         getWorkspaceBootstrapLogContext(error),
       );
     }
-    redirect("/complete-profile?next=/dashboard&sync=failed");
+    redirect("/workspace-unavailable");
   }
 
   if (!user) {

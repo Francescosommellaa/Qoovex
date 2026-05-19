@@ -28,7 +28,6 @@ type FieldErrors = {
   phone?: string;
   username?: string;
   firstName?: string;
-  lastName?: string;
   password?: string;
   confirmPassword?: string;
   code?: string;
@@ -235,7 +234,6 @@ export default function SignUpPage() {
     phone: boolean;
     username: boolean;
     firstName: boolean;
-    lastName: boolean;
     password: boolean;
     confirmPassword: boolean;
     code: boolean;
@@ -244,7 +242,6 @@ export default function SignUpPage() {
     phone: false,
     username: false,
     firstName: false,
-    lastName: false,
     password: false,
     confirmPassword: false,
     code: false,
@@ -344,7 +341,6 @@ export default function SignUpPage() {
       phone: normalizedPhoneDigits.length < 6,
       username: false,
       firstName: firstName.trim() === "",
-      lastName: lastName.trim() === "",
       password: false,
       confirmPassword: false,
       code: false,
@@ -354,14 +350,12 @@ export default function SignUpPage() {
     if (
       nextWarnings.email ||
       nextWarnings.phone ||
-      nextWarnings.firstName ||
-      nextWarnings.lastName
+      nextWarnings.firstName
     ) {
       const missingFieldErrors: FieldErrors = {};
       if (nextWarnings.email) missingFieldErrors.email = "Inserisci la tua email.";
       if (nextWarnings.phone) missingFieldErrors.phone = "Inserisci un telefono valido.";
       if (nextWarnings.firstName) missingFieldErrors.firstName = "Inserisci il nome.";
-      if (nextWarnings.lastName) missingFieldErrors.lastName = "Inserisci il cognome.";
       setFieldErrors(missingFieldErrors);
       toast({
         variant: "warning",
@@ -384,7 +378,6 @@ export default function SignUpPage() {
       phone: false,
       username: username.trim() === "",
       firstName: false,
-      lastName: false,
       password: password.trim() === "",
       confirmPassword: confirmPassword.trim() === "",
       code: false,
@@ -442,7 +435,7 @@ export default function SignUpPage() {
       emailAddress: email.trim(),
       username: normalizedUsername,
       firstName: firstName.trim(),
-      lastName: lastName.trim(),
+      lastName: lastName.trim() || undefined,
       password,
       unsafeMetadata: {
         phoneNumber: getNormalizedPhoneNumber(),
@@ -718,13 +711,7 @@ export default function SignUpPage() {
 
               <FormField
                 label="Cognome"
-                required
-                error={fieldErrors.lastName}
-                status={
-                  fieldErrors.lastName || warningFields.lastName
-                    ? "error"
-                    : "default"
-                }
+                status="default"
               >
                 <FormControl>
                   <Input
@@ -734,18 +721,6 @@ export default function SignUpPage() {
                     value={lastName}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setLastName(e.target.value);
-                      if (warningFields.lastName) {
-                        setWarningFields((current) => ({
-                          ...current,
-                          lastName: false,
-                        }));
-                      }
-                      if (fieldErrors.lastName) {
-                        setFieldErrors((current) => ({
-                          ...current,
-                          lastName: undefined,
-                        }));
-                      }
                     }}
                   />
                 </FormControl>
