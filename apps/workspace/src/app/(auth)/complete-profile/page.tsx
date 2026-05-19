@@ -19,8 +19,8 @@ import {
   bootstrapUser,
   completeCurrentUserProfile,
 } from "@shared/actions/bootstrap-user";
-import { getSafeRedirectPath } from "@shared/lib/auth-flow";
 import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
+import { getSafeRedirectPath } from "@shared/lib/auth-flow";
 import { AuthShell } from "../ui";
 
 type CompleteProfileResult =
@@ -38,21 +38,6 @@ type CompleteProfileResult =
 function getCompleteProfileErrorToast(
   result: Exclude<CompleteProfileResult, { ok: true }>,
 ) {
-  if (result.code === "CLERK_UPDATE_FAILED") {
-    return {
-      title: "Profilo non salvato su Clerk",
-      description: result.message,
-    };
-  }
-
-  if (result.code === "DATABASE_SYNC_FAILED") {
-    return {
-      title: "Profilo salvato su Clerk",
-      description:
-        "Sincronizzazione database non completata. Riprova la sincronizzazione tra qualche istante.",
-    };
-  }
-
   if (result.code === "UNAUTHENTICATED") {
     return {
       title: "Sessione scaduta",
@@ -60,9 +45,17 @@ function getCompleteProfileErrorToast(
     };
   }
 
+  if (result.code === "MISSING_NAME") {
+    return {
+      title: "Nome richiesto",
+      description: result.message,
+    };
+  }
+
   return {
-    title: "Nome mancante",
-    description: result.message,
+    title: "Workspace non pronto",
+    description:
+      "Non siamo riusciti a completare la sincronizzazione. Riprova tra qualche istante.",
   };
 }
 
@@ -79,18 +72,16 @@ export default function CompleteProfilePage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isFirstNameWarning, setIsFirstNameWarning] = useState(false);
   const [syncError, setSyncError] = useState<string | null>(null);
-  const [didCompleteProfileUpgrade, setDidCompleteProfileUpgrade] = useState(false);
+  const [didCompleteProfileUpgrade, setDidCompleteProfileUpgrade] =
+    useState(false);
 
   const nextPath = getSafeRedirectPath(searchParams.get("next"));
-  const source = searchParams.get("source");
   const hasForcedSyncFailure = searchParams.get("sync") === "failed";
   const hasClerkFirstName = Boolean(user?.firstName?.trim());
   const shouldShowProfileUpgrade = Boolean(
     user &&
       !didCompleteProfileUpgrade &&
-      (source === "signup" ||
-        !hasClerkFirstName ||
-        (hasForcedSyncFailure && !hasClerkFirstName)),
+      !hasClerkFirstName,
   );
 
   useEffect(() => {
@@ -121,12 +112,12 @@ export default function CompleteProfilePage() {
         didAttemptBootstrap.current = false;
         const message = getSafeAuthErrorMessage(
           unknownError,
-          "Impossibile sincronizzare il profilo con il database. Controlla le credenziali Postgres e riprova.",
+          "Impossibile sincronizzare il profilo con il workspace. Riprova tra qualche istante.",
         );
         setSyncError(message);
         toast({
           variant: "error",
-          title: "Database non raggiungibile",
+          title: "Workspace non pronto",
           description: message,
         });
       })
@@ -190,7 +181,7 @@ export default function CompleteProfilePage() {
       setIsFirstNameWarning(true);
       toast({
         variant: "warning",
-        title: "Nome mancante",
+        title: "Nome richiesto",
         description: "Inserisci il nome prima di entrare nel workspace.",
       });
       return;
@@ -231,7 +222,7 @@ export default function CompleteProfilePage() {
       setIsFirstNameWarning(true);
       toast({
         variant: "warning",
-        title: "Nome mancante",
+        title: "Nome richiesto",
         description: "Inserisci il nome prima di riprovare la sincronizzazione.",
       });
       return;
@@ -281,13 +272,13 @@ export default function CompleteProfilePage() {
     return (
       <AuthShell
         title="Workspace non pronto"
-        subtitle="Il profilo Clerk esiste, ma il database non ha completato la sincronizzazione"
+        subtitle="Il profilo e pronto, ma la sincronizzazione non e stata completata"
         steps={{ current: 3, total: 3 }}
       >
         <Stack gap="5">
           <Text tone="muted" size="sm">
             {syncError ??
-              "Impossibile sincronizzare il profilo con il database. Controlla le credenziali Postgres e riprova."}
+              "Impossibile sincronizzare il profilo con il workspace. Riprova tra qualche istante."}
           </Text>
           <FormActions align="stretch">
             <Button
@@ -320,8 +311,8 @@ export default function CompleteProfilePage() {
 
   return (
     <AuthShell
-      title="Come possiamo chiamarti?"
-      subtitle="Aggiungi il tuo nome mentre prepariamo il workspace"
+      title="Completa il profilo"
+      subtitle="Serve solo se il tuo account non ha ancora un nome salvato"
       steps={{ current: 3, total: 3 }}
     >
       <Form
@@ -351,10 +342,7 @@ export default function CompleteProfilePage() {
           </FormControl>
         </FormField>
 
-        <FormField
-          label="Cognome"
-          helperText="Puoi completarlo anche piu avanti dal profilo."
-        >
+        <FormField label="Cognome">
           <FormControl>
             <Input
               type="text"

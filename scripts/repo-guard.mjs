@@ -168,6 +168,19 @@ function assertClerkConfinedToWorkspace() {
   }
 }
 
+function assertWorkspaceProxyConvention() {
+  const proxyPath = join(workspaceSrc, "proxy.ts");
+  const middlewarePath = join(workspaceSrc, "middleware.ts");
+
+  if (!existsSync(proxyPath)) {
+    failures.push("Workspace request interception must live in apps/workspace/src/proxy.ts");
+  }
+
+  if (existsSync(middlewarePath)) {
+    failures.push("apps/workspace/src/middleware.ts is not supported; use apps/workspace/src/proxy.ts");
+  }
+}
+
 function assertRequiredRoots() {
   for (const path of [workspaceSrc]) {
     if (!existsSync(path) || !statSync(path).isDirectory()) {
@@ -182,6 +195,7 @@ if (failures.length === 0) {
   assertNoVagueWorkspaceFiles();
   assertWorkspaceImportDirection();
   assertClerkConfinedToWorkspace();
+  assertWorkspaceProxyConvention();
 }
 
 if (failures.length > 0) {

@@ -1,15 +1,10 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 /**
- * Punto di ingresso `/`: evita 404 in locale e dopo login.
- * La home prodotto e' la dashboard; senza sessione si va al sign-up.
+ * Punto di ingresso `/`.
+ * La decisione sessione vive in `src/proxy.ts`; qui non chiamare Clerk per
+ * evitare errori Server Components se l'interception non gira ancora.
  */
-export default async function RootPage() {
-  const { userId } = await auth();
-  if (userId) {
-    redirect("/dashboard");
-  }
-
+export default function RootPage() {
   redirect("/sign-up");
 }

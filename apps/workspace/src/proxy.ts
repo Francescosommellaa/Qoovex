@@ -29,7 +29,8 @@ export default clerkMiddleware(async (auth, req) => {
   const host = req.headers.get("host") ?? req.nextUrl.host;
   const devAuthCookie = req.cookies.get(DEV_AUTH_COOKIE_NAME)?.value;
   const hasDevAuthSession =
-    isDevAuthAllowedForHost(host) && (await verifyDevAuthCookieValue(devAuthCookie));
+    isDevAuthAllowedForHost(host) &&
+    (await verifyDevAuthCookieValue(devAuthCookie));
 
   if (req.nextUrl.pathname === "/") {
     const destination = req.nextUrl.clone();

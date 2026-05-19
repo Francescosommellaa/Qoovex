@@ -404,7 +404,6 @@ export function WorkspaceSidebar({
           width={28}
           height={28}
           className="size-7 shrink-0"
-          priority
         />
         <Text size="sm" weight="semibold" className="min-w-0 truncate">
           Qoovex
