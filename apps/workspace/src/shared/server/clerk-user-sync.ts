@@ -17,6 +17,7 @@ interface SyncClerkUserInput {
   firstName?: string | null;
   lastName?: string | null;
   phoneNumber?: string | null;
+  imageUrl?: string | null;
 }
 
 export class ClerkUserSyncConflictError extends Error {
@@ -109,6 +110,7 @@ export async function syncClerkUser(input: SyncClerkUserInput) {
       email,
       username: normalizedUsername,
       phoneNumber: normalizedPhoneNumber,
+      imageUrl: input.imageUrl ?? undefined,
     });
   }
 
@@ -118,6 +120,7 @@ export async function syncClerkUser(input: SyncClerkUserInput) {
     email,
     username: normalizedUsername,
     phoneNumber: normalizedPhoneNumber,
+    imageUrl: input.imageUrl ?? undefined,
   });
 }
 

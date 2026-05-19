@@ -6,6 +6,7 @@ export interface WorkspaceUserSummary {
   name: string | null;
   username: string | null;
   email: string;
+  imageUrl?: string | null;
   plan: WorkspacePlan;
   isAdmin: boolean;
 }

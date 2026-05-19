@@ -302,6 +302,7 @@ function UserMenu({
         onClick={() => setOpen((current) => !current)}
       >
         <Avatar
+          src={user.imageUrl ?? undefined}
           name={getDisplayName(user)}
           initials={getInitials(user)}
           size="md"

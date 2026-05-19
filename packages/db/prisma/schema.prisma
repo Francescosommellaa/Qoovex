@@ -55,6 +55,7 @@ model User {
   username            String             @unique
   email               String             @unique
   phoneNumber         String?
+  imageUrl            String?
   plan                Plan               @default(FREE)
   recipes             Recipe[]
   menus               Menu[]

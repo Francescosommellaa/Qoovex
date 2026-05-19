@@ -32,6 +32,7 @@ type ClerkProfileForSync = {
   firstName?: string | null;
   lastName?: string | null;
   username?: string | null;
+  imageUrl?: string | null;
   primaryEmailAddressId?: string | null;
   emailAddresses?: Array<{
     id?: string | null;
@@ -125,6 +126,7 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
     lastName: options?.lastName ?? clerkUser.lastName,
     phoneNumber:
       options?.phoneNumber ?? getUnsafeMetadataPhoneNumber(clerkUser.unsafeMetadata),
+    imageUrl: clerkUser.imageUrl,
   });
 
   if (!syncedUser) return null;
@@ -229,6 +231,7 @@ export async function completeCurrentUserProfile(
       phoneNumber:
         input.phoneNumber ??
         getUnsafeMetadataPhoneNumber(updatedClerkUser.unsafeMetadata ?? {}),
+      imageUrl: updatedClerkUser.imageUrl,
     });
   } catch (error) {
     console.error("[complete-profile] database profile sync failed", {

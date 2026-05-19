@@ -15,14 +15,15 @@ import {
   Text,
   useToast,
 } from "@qoovex/ui";
+import {
+  getAuthRequestAcceptedToast,
+  getSafeRedirectPath,
+  isLikelyValidEmail,
+} from "@shared/lib/auth-flow";
 import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 import { AuthShell } from "../ui";
 
 type Step = "email" | "verify" | "new-password";
-
-function isLikelyValidEmail(value: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-}
 
 export default function ForgotPasswordPage() {
   const { signIn, fetchStatus } = useSignIn();
@@ -90,9 +91,7 @@ export default function ForgotPasswordPage() {
     if (createError) {
       toast({
         variant: "info",
-        title: "Richiesta registrata",
-        description:
-          "Se esiste un account con questo indirizzo, riceverai un'email con le istruzioni. Controlla anche lo spam.",
+        ...getAuthRequestAcceptedToast(),
       });
       return;
     }
@@ -101,9 +100,7 @@ export default function ForgotPasswordPage() {
     if (sendError) {
       toast({
         variant: "info",
-        title: "Richiesta registrata",
-        description:
-          "Se esiste un account con questo indirizzo, riceverai un'email con le istruzioni. Controlla anche lo spam.",
+        ...getAuthRequestAcceptedToast(),
       });
       return;
     }
@@ -186,7 +183,7 @@ export default function ForgotPasswordPage() {
             });
             return;
           }
-          const url = decorateUrl("/dashboard");
+          const url = decorateUrl(getSafeRedirectPath("/dashboard"));
           if (url.startsWith("http")) {
             window.location.href = url;
           } else {
@@ -217,8 +214,7 @@ export default function ForgotPasswordPage() {
       toast({
         variant: "info",
         title: "Reinvio",
-        description:
-          "Se esiste un account con questo indirizzo, riceverai un'email. Controlla la posta e lo spam.",
+        description: getAuthRequestAcceptedToast().description,
       });
       return;
     }

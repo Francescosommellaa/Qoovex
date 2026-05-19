@@ -10,6 +10,7 @@ export interface ClerkUserData {
   first_name?: string | null;
   last_name?: string | null;
   username?: string | null;
+  image_url?: string | null;
   primary_email_address_id?: string | null;
   email_addresses?: ClerkEmailAddress[];
 }

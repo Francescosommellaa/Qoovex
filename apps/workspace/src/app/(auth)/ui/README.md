@@ -8,7 +8,7 @@ perche` compone solo pagine auth Clerk e non rappresenta UI shared del prodotto.
 | File | Scopo |
 |---|---|
 | `AuthShell.tsx` | Shell visiva: logo, titolo, sottotitolo, step, indietro, area form |
-| `OAuthButton.tsx` | Pulsanti OAuth Clerk (Google / Apple) |
+| `OAuthButton.tsx` | Pulsanti OAuth Clerk (Google / Apple), oggi renderizzati come disabilitati finche` il social login resta sospeso |
 | `index.ts` | Barrel export |
 
 ## Regole

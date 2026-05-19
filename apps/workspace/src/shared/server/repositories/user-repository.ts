@@ -8,6 +8,7 @@ export interface UpsertSyncedUserInput {
   email: string;
   username: string;
   phoneNumber?: string;
+  imageUrl?: string | null;
 }
 
 export async function findUserIdentityByEmail(email: string) {
@@ -46,6 +47,8 @@ export async function findWorkspaceUserByClerkId(clerkId: string) {
       name: true,
       username: true,
       email: true,
+      phoneNumber: true,
+      imageUrl: true,
       plan: true,
     },
   });
@@ -84,6 +87,7 @@ export async function upsertSyncedUser(input: UpsertSyncedUserInput) {
       email: input.email,
       username: input.username,
       phoneNumber: input.phoneNumber,
+      imageUrl: input.imageUrl,
       plan: "FREE",
     },
     update: {
@@ -91,6 +95,7 @@ export async function upsertSyncedUser(input: UpsertSyncedUserInput) {
       email: input.email,
       username: input.username,
       ...(input.phoneNumber ? { phoneNumber: input.phoneNumber } : {}),
+      imageUrl: input.imageUrl,
     },
   });
 }
@@ -103,6 +108,7 @@ export async function updateSyncedUserByEmail(input: UpsertSyncedUserInput) {
       name: input.name,
       username: input.username,
       ...(input.phoneNumber ? { phoneNumber: input.phoneNumber } : {}),
+      imageUrl: input.imageUrl,
     },
   });
 }

@@ -17,6 +17,7 @@
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.3.3",
     "next": "15.5.15",
+    "qrcode.react": "^4.2.0",
     "react": "19.1.4",
     "react-dom": "19.1.4",
     "resend": "^6.12.0",

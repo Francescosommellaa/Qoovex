@@ -81,11 +81,11 @@ function getCreateErrorFeedback(error: unknown): {
       fingerprint.includes("in use"))
   ) {
     const description =
-      "Questa email e gia registrata. Accedi con questo indirizzo oppure usa un'altra email.";
+      "Non siamo riusciti a completare la registrazione con questi dati. Controlla i campi e riprova.";
     return {
-      title: "Email gia registrata",
+      title: "Registrazione non completata",
       description,
-      fields: { email: description },
+      fields: {},
     };
   }
 
@@ -97,11 +97,11 @@ function getCreateErrorFeedback(error: unknown): {
       fingerprint.includes("in use"))
   ) {
     const description =
-      "Questo username e gia in uso. Scegline uno diverso, senza usare un indirizzo email.";
+      "Non siamo riusciti a completare la registrazione con questi dati. Controlla i campi e riprova.";
     return {
-      title: "Username non disponibile",
+      title: "Registrazione non completata",
       description,
-      fields: { username: description },
+      fields: {},
     };
   }
 
@@ -550,6 +550,7 @@ export default function SignUpPage() {
             <OAuthButton
               mode="signUp"
               provider="google"
+              disabledReason="Accesso social presto disponibile"
               onError={(msg) => {
                 toast({
                   variant: "error",
@@ -561,6 +562,7 @@ export default function SignUpPage() {
             <OAuthButton
               mode="signUp"
               provider="apple"
+              disabledReason="Accesso social presto disponibile"
               onError={(msg) => {
                 toast({
                   variant: "error",

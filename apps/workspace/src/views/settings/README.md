@@ -12,4 +12,4 @@ Non mettere qui:
 Regole:
 - mantieni chiari i confini tra settings e dominio `User`;
 - se una parte diventa riusabile cross-view, estraila nel layer giusto.
-- V1 read-only per profilo e piano.
+- Profilo e sicurezza account sono interattivi, ma Clerk resta source of truth per identita`, password, telefono e 2FA.

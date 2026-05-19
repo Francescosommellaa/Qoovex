@@ -14,16 +14,39 @@ import {
   FormField,
   FormControl,
   FormActions,
+  OtpInput,
   useToast,
 } from "@qoovex/ui";
-import { resolveEmailForUsername } from "@shared/actions/resolve-email-for-username";
-import { getGenericAuthFailureMessage } from "@shared/lib/auth-error";
+import {
+  getGenericAuthFailureToast,
+  getSafeRedirectPath,
+} from "@shared/lib/auth-flow";
 import {
   formatAuthIdentifierInput,
   normalizeAuthIdentifierForClerk,
 } from "@shared/lib/auth-identifier";
 import { WorkspaceBrandLoader } from "@shared/ui";
 import { AuthShell, OAuthButton } from "../ui";
+
+type SignInMfaStrategy = "totp" | "phone" | "backup";
+
+type SignInWithMfa = {
+  status?: string | null;
+  reset: () => Promise<unknown>;
+  create: (params: Record<string, unknown>) => Promise<{ error?: unknown }>;
+  finalize: (params: {
+    navigate: (params: {
+      session?: { currentTask?: unknown } | null;
+      decorateUrl: (url: string) => string;
+    }) => Promise<void> | void;
+  }) => Promise<{ error?: unknown }>;
+  mfa?: {
+    sendPhoneCode?: () => Promise<{ error?: unknown } | void>;
+    verifyPhoneCode?: (params: { code: string }) => Promise<{ error?: unknown } | void>;
+    verifyTOTP?: (params: { code: string }) => Promise<{ error?: unknown } | void>;
+    verifyBackupCode?: (params: { code: string }) => Promise<{ error?: unknown } | void>;
+  };
+};
 
 export default function SignInPage() {
   const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
@@ -40,6 +63,10 @@ export default function SignInPage() {
   const [isDevSigningIn, setIsDevSigningIn] = useState(false);
   const [isProvisioningDashboard, setIsProvisioningDashboard] = useState(false);
   const [isLocalDevHost, setIsLocalDevHost] = useState(false);
+  const [mfaCode, setMfaCode] = useState("");
+  const [mfaStrategy, setMfaStrategy] = useState<SignInMfaStrategy>("totp");
+  const [isMfaRequired, setIsMfaRequired] = useState(false);
+  const [isMfaInvalid, setIsMfaInvalid] = useState(false);
   const [warningFields, setWarningFields] = useState<{
     identifier: boolean;
     password: boolean;
@@ -86,15 +113,56 @@ export default function SignInPage() {
     toast({
       variant: "error",
       title: "Accesso non riuscito",
-      description: getGenericAuthFailureMessage(),
+      description: getGenericAuthFailureToast().description,
     });
+  }
+
+  async function finalizeSignIn(destinationPath = "/dashboard") {
+    const activeSignIn = signIn as SignInWithMfa | undefined;
+    if (!activeSignIn) return;
+
+    const { error: finalizeError } = await activeSignIn.finalize({
+      navigate: async ({ session, decorateUrl }) => {
+        if (session?.currentTask) {
+          toast({
+            variant: "warning",
+            title: "Azione richiesta",
+            description: "Completa i passaggi richiesti dal tuo account prima di continuare.",
+          });
+          return;
+        }
+
+        setIsProvisioningDashboard(true);
+        const url = decorateUrl(getSafeRedirectPath(destinationPath));
+        const destination = url.startsWith("http")
+          ? url
+          : `${window.location.origin}${url}`;
+        window.location.assign(destination);
+      },
+    });
+
+    if (finalizeError) {
+      setIsCredentialsInvalid(true);
+      notifyAuthFailure();
+    }
+  }
+
+  async function prepareMfa(nextStrategy: SignInMfaStrategy) {
+    const activeSignIn = signIn as SignInWithMfa | undefined;
+    setMfaStrategy(nextStrategy);
+    setMfaCode("");
+    setIsMfaInvalid(false);
+
+    if (nextStrategy === "phone") {
+      await activeSignIn?.mfa?.sendPhoneCode?.();
+    }
   }
 
   async function handleDevSignIn() {
     setIsDevSigningIn(true);
 
     try {
-      const redirectUrl = searchParams.get("redirect_url") ?? "/dashboard";
+      const redirectUrl = getSafeRedirectPath(searchParams.get("redirect_url"));
       const response = await fetch(
         `/api/dev-auth?redirect_url=${encodeURIComponent(redirectUrl)}`,
         { method: "POST" },
@@ -140,34 +208,18 @@ export default function SignInPage() {
     setIsSubmitting(true);
 
     try {
-      await signIn.reset();
+      const activeSignIn = signIn as SignInWithMfa | undefined;
+      if (!activeSignIn) {
+        notifyAuthFailure();
+        return;
+      }
 
-      let { error } = await signIn.create({
+      await activeSignIn.reset();
+
+      const { error } = await activeSignIn.create({
         identifier: normalizedIdentifier,
         password,
       });
-
-      if (
-        error &&
-        !normalizedIdentifier.includes("@")
-      ) {
-        let emailFromProfile: string | null = null;
-        try {
-          emailFromProfile = await resolveEmailForUsername(normalizedIdentifier);
-        } catch (unknownError) {
-          if (process.env.NODE_ENV !== "production") {
-            console.warn("[sign-in] username lookup skipped", unknownError);
-          }
-        }
-
-        if (emailFromProfile) {
-          await signIn.reset();
-          ({ error } = await signIn.create({
-            identifier: emailFromProfile,
-            password,
-          }));
-        }
-      }
 
       if (error) {
         setIsCredentialsInvalid(true);
@@ -175,35 +227,66 @@ export default function SignInPage() {
         return;
       }
 
-      if (signIn.status === "complete") {
-        const { error: finalizeError } = await signIn.finalize({
-          navigate: async ({ session, decorateUrl }) => {
-            if (session?.currentTask) {
-              toast({
-                variant: "warning",
-                title: "Azione richiesta",
-                description: "Completa i passaggi richiesti dal tuo account prima di continuare.",
-              });
-              return;
-            }
-
-            setIsProvisioningDashboard(true);
-            const url = decorateUrl("/dashboard");
-            const destination = url.startsWith("http")
-              ? url
-              : `${window.location.origin}${url}`;
-            window.location.assign(destination);
-          },
+      if (activeSignIn.status === "needs_second_factor") {
+        setIsMfaRequired(true);
+        await prepareMfa("totp");
+        toast({
+          variant: "info",
+          title: "Verifica richiesta",
+          description: "Inserisci il codice del secondo fattore per completare l'accesso.",
         });
-        if (finalizeError) {
-          setIsCredentialsInvalid(true);
-          toast({
-            variant: "error",
-            title: "Accesso non riuscito",
-            description: getGenericAuthFailureMessage(),
-          });
-        }
+        return;
       }
+
+      if (activeSignIn.status === "complete") {
+        await finalizeSignIn("/dashboard");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function handleMfaSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const activeSignIn = signIn as SignInWithMfa | undefined;
+    const normalizedCode = mfaCode.trim();
+
+    if (!activeSignIn || !normalizedCode) {
+      setIsMfaInvalid(true);
+      toast({
+        variant: "warning",
+        title: "Codice richiesto",
+        description: "Inserisci il codice di verifica per continuare.",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setIsMfaInvalid(false);
+
+    try {
+      const verifier =
+        mfaStrategy === "phone"
+          ? activeSignIn.mfa?.verifyPhoneCode
+          : mfaStrategy === "backup"
+            ? activeSignIn.mfa?.verifyBackupCode
+            : activeSignIn.mfa?.verifyTOTP;
+
+      const result = await verifier?.({ code: normalizedCode });
+      if (result && "error" in result && result.error) {
+        setIsMfaInvalid(true);
+        setMfaCode("");
+        notifyAuthFailure();
+        return;
+      }
+
+      if (activeSignIn.status === "complete") {
+        await finalizeSignIn("/dashboard");
+        return;
+      }
+
+      setIsMfaInvalid(true);
+      notifyAuthFailure();
     } finally {
       setIsSubmitting(false);
     }
@@ -224,6 +307,7 @@ export default function SignInPage() {
         <OAuthButton
           mode="signIn"
           provider="google"
+          disabledReason="Accesso social presto disponibile"
           onError={() => {
             setIsCredentialsInvalid(true);
             notifyAuthFailure();
@@ -232,6 +316,7 @@ export default function SignInPage() {
         <OAuthButton
           mode="signIn"
           provider="apple"
+          disabledReason="Accesso social presto disponibile"
           onError={() => {
             setIsCredentialsInvalid(true);
             notifyAuthFailure();
@@ -258,7 +343,100 @@ export default function SignInPage() {
         oppure
       </Text>
 
-      <Form
+      {isMfaRequired ? (
+        <Form
+          variant="plain"
+          layout="stack"
+          density="comfortable"
+          labelStyle="soft"
+          noValidate
+          onSubmit={handleMfaSubmit}
+        >
+          <FormField
+            label={
+              mfaStrategy === "backup"
+                ? "Codice di backup"
+                : "Codice di verifica"
+            }
+            required
+            helperText={
+              mfaStrategy === "phone"
+                ? "Usa il codice ricevuto via SMS."
+                : mfaStrategy === "backup"
+                  ? "Usa uno dei codici di backup salvati in precedenza."
+                  : "Usa il codice della tua app authenticator."
+            }
+            status={isMfaInvalid ? "error" : "default"}
+          >
+            <FormControl>
+              {mfaStrategy === "backup" ? (
+                <Input
+                  type="text"
+                  autoComplete="one-time-code"
+                  value={mfaCode}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setMfaCode(event.target.value);
+                    if (isMfaInvalid) setIsMfaInvalid(false);
+                  }}
+                />
+              ) : (
+                <OtpInput
+                  value={mfaCode}
+                  onChange={(nextCode) => {
+                    setMfaCode(nextCode);
+                    if (isMfaInvalid) setIsMfaInvalid(false);
+                  }}
+                  length={6}
+                  requestInitialFocusOnDesktop
+                  aria-label="Codice secondo fattore"
+                />
+              )}
+            </FormControl>
+          </FormField>
+
+          <div className="grid gap-(--spacing-2) sm:grid-cols-3">
+            <Button
+              type="button"
+              variant={mfaStrategy === "totp" ? "secondary" : "ghost"}
+              size="sm"
+              onClick={() => void prepareMfa("totp")}
+            >
+              App
+            </Button>
+            <Button
+              type="button"
+              variant={mfaStrategy === "phone" ? "secondary" : "ghost"}
+              size="sm"
+              onClick={() => void prepareMfa("phone")}
+            >
+              SMS
+            </Button>
+            <Button
+              type="button"
+              variant={mfaStrategy === "backup" ? "secondary" : "ghost"}
+              size="sm"
+              onClick={() => void prepareMfa("backup")}
+            >
+              Backup
+            </Button>
+          </div>
+
+          <FormActions align="stretch">
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              loading={isBusy}
+              loadingLabel="Verifica in corso..."
+              disabled={isBusy}
+              className="w-full"
+            >
+              Completa accesso
+            </Button>
+          </FormActions>
+        </Form>
+      ) : (
+        <Form
         variant="plain"
         layout="stack"
         density="comfortable"
@@ -341,7 +519,8 @@ export default function SignInPage() {
             Accedi
           </Button>
         </FormActions>
-      </Form>
+        </Form>
+      )}
 
       <Text className="auth-footer-text">
         Non hai un account? <Link href={signUpHref}>Registrati</Link>

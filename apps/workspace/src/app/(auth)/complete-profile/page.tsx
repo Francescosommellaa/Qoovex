@@ -19,6 +19,7 @@ import {
   bootstrapUser,
   completeCurrentUserProfile,
 } from "@shared/actions/bootstrap-user";
+import { getSafeRedirectPath } from "@shared/lib/auth-flow";
 import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 import { AuthShell } from "../ui";
 
@@ -33,14 +34,6 @@ type CompleteProfileResult =
         | "DATABASE_SYNC_FAILED";
       message: string;
     };
-
-function getSafeNextPath(value: string | null) {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) {
-    return "/dashboard";
-  }
-
-  return value;
-}
 
 function getCompleteProfileErrorToast(
   result: Exclude<CompleteProfileResult, { ok: true }>,
@@ -88,7 +81,7 @@ export default function CompleteProfilePage() {
   const [syncError, setSyncError] = useState<string | null>(null);
   const [didCompleteProfileUpgrade, setDidCompleteProfileUpgrade] = useState(false);
 
-  const nextPath = getSafeNextPath(searchParams.get("next"));
+  const nextPath = getSafeRedirectPath(searchParams.get("next"));
   const source = searchParams.get("source");
   const hasForcedSyncFailure = searchParams.get("sync") === "failed";
   const hasClerkFirstName = Boolean(user?.firstName?.trim());

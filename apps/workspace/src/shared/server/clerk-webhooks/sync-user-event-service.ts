@@ -29,6 +29,7 @@ export async function handleClerkUserSyncEvent(event: ClerkEvent) {
       username: event.data.username,
       firstName: event.data.first_name,
       lastName: event.data.last_name,
+      imageUrl: event.data.image_url,
     });
   } catch (error) {
     if (error instanceof ClerkUserSyncConflictError) {

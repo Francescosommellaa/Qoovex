@@ -8,6 +8,7 @@ import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 interface OAuthButtonProps {
   mode: "signIn" | "signUp";
   provider?: "google" | "apple";
+  disabledReason?: string;
   onError?: (message: string) => void;
 }
 
@@ -35,6 +36,7 @@ const providerConfig = {
 export function OAuthButton({
   mode,
   provider = "google",
+  disabledReason,
   onError,
 }: OAuthButtonProps) {
   const { signIn, fetchStatus } = useSignIn();
@@ -44,10 +46,12 @@ export function OAuthButton({
     mode === "signIn"
       ? fetchStatus === "fetching"
       : signUpFetchStatus === "fetching";
-  const isUnavailable = !signIn;
+  const isUnavailable = !signIn || Boolean(disabledReason);
   const config = providerConfig[provider];
 
   async function handleOAuthAuth() {
+    if (disabledReason) return;
+
     if (isUnavailable) {
       onError?.("Autenticazione non pronta. Riprova tra un attimo.");
       return;
@@ -101,6 +105,7 @@ export function OAuthButton({
       onClick={handleOAuthAuth}
       disabled={isLoading || isUnavailable}
       loading={isLoading}
+      caption={disabledReason}
       className="w-full"
       aria-label={config.label[mode]}
       iconLeft={
