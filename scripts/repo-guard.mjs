@@ -168,16 +168,16 @@ function assertClerkConfinedToWorkspace() {
   }
 }
 
-function assertWorkspaceProxyConvention() {
-  const proxyPath = join(workspaceSrc, "proxy.ts");
+function assertWorkspaceMiddlewareConvention() {
   const middlewarePath = join(workspaceSrc, "middleware.ts");
+  const proxyPath = join(workspaceSrc, "proxy.ts");
 
-  if (!existsSync(proxyPath)) {
-    failures.push("Workspace request interception must live in apps/workspace/src/proxy.ts");
+  if (!existsSync(middlewarePath)) {
+    failures.push("Workspace request interception must live in apps/workspace/src/middleware.ts");
   }
 
-  if (existsSync(middlewarePath)) {
-    failures.push("apps/workspace/src/middleware.ts is not supported; use apps/workspace/src/proxy.ts");
+  if (existsSync(proxyPath)) {
+    failures.push("apps/workspace/src/proxy.ts is not supported; use apps/workspace/src/middleware.ts");
   }
 }
 
@@ -195,7 +195,7 @@ if (failures.length === 0) {
   assertNoVagueWorkspaceFiles();
   assertWorkspaceImportDirection();
   assertClerkConfinedToWorkspace();
-  assertWorkspaceProxyConvention();
+  assertWorkspaceMiddlewareConvention();
 }
 
 if (failures.length > 0) {
