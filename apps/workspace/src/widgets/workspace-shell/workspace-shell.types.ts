@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 export type WorkspacePlan = "FREE" | "START" | "PRO" | "ENTERPRISE";
 
 export interface WorkspaceUserSummary {
-  name: string | null;
+  firstName: string;
   username: string | null;
   email: string;
   imageUrl?: string | null;

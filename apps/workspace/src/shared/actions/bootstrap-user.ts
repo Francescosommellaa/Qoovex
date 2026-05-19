@@ -2,6 +2,7 @@
 
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { bootstrapDevUser } from "@shared/server/dev-auth";
+import { getAccountAvatarUrlFromMetadata } from "@shared/server/account-avatar-storage";
 import { findWorkspaceUserByClerkId } from "@shared/server/repositories/user-repository";
 
 interface BootstrapUserOptions {
@@ -89,6 +90,12 @@ function getClaimsMetadata(claims: unknown) {
   );
 }
 
+function getClerkAvatarUrl(clerkUser: ClerkProfileForSync | null | undefined) {
+  if (!clerkUser) return null;
+
+  return getAccountAvatarUrlFromMetadata(clerkUser.unsafeMetadata) ?? clerkUser.imageUrl ?? null;
+}
+
 export async function bootstrapUser(options?: BootstrapUserOptions) {
   const devUser = await bootstrapDevUser();
   if (devUser) return devUser;
@@ -99,8 +106,11 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
   if (!options) {
     const existingUser = await findWorkspaceUserByClerkId(userId);
     if (existingUser) {
+      const clerkUser = await currentUser().catch(() => null);
+
       return {
         ...existingUser,
+        imageUrl: getClerkAvatarUrl(clerkUser),
         isAdmin: hasAdminAccess(getClaimsMetadata(sessionClaims)),
       };
     }
@@ -126,13 +136,13 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
     lastName: options?.lastName ?? clerkUser.lastName,
     phoneNumber:
       options?.phoneNumber ?? getUnsafeMetadataPhoneNumber(clerkUser.unsafeMetadata),
-    imageUrl: clerkUser.imageUrl,
   });
 
   if (!syncedUser) return null;
 
   return {
     ...syncedUser,
+    imageUrl: getClerkAvatarUrl(clerkUser),
     isAdmin: hasAdminAccess(clerkUser.publicMetadata),
   };
 }
@@ -231,7 +241,6 @@ export async function completeCurrentUserProfile(
       phoneNumber:
         input.phoneNumber ??
         getUnsafeMetadataPhoneNumber(updatedClerkUser.unsafeMetadata ?? {}),
-      imageUrl: updatedClerkUser.imageUrl,
     });
   } catch (error) {
     console.error("[complete-profile] database profile sync failed", {

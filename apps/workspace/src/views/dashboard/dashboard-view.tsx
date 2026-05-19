@@ -34,7 +34,7 @@ interface DashboardViewProps {
   user: {
     id: string;
     plan: WorkspacePlan;
-    name: string;
+    firstName: string;
   };
 }
 
@@ -356,7 +356,7 @@ export async function DashboardView({ user }: DashboardViewProps) {
 
   return (
     <WorkspacePage
-      title={`Workspace di ${user.name}`}
+      title={`Workspace di ${user.firstName}`}
       description="Panoramica operativa delle preparazioni, dei menu e del lavoro condiviso."
       actions={
         <Button

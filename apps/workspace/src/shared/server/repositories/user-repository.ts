@@ -4,11 +4,11 @@ import { db } from "@qoovex/db";
 
 export interface UpsertSyncedUserInput {
   clerkId: string;
-  name: string;
+  firstName: string;
+  lastName?: string | null;
   email: string;
   username: string;
   phoneNumber?: string;
-  imageUrl?: string | null;
 }
 
 export async function findUserIdentityByEmail(email: string) {
@@ -44,11 +44,11 @@ export async function findWorkspaceUserByClerkId(clerkId: string) {
     where: { clerkId },
     select: {
       id: true,
-      name: true,
+      firstName: true,
+      lastName: true,
       username: true,
       email: true,
       phoneNumber: true,
-      imageUrl: true,
       plan: true,
     },
   });
@@ -70,7 +70,6 @@ export async function findUserSummaryByIdentifier(identifier: string) {
     },
     select: {
       id: true,
-      name: true,
       username: true,
       email: true,
       plan: true,
@@ -83,19 +82,19 @@ export async function upsertSyncedUser(input: UpsertSyncedUserInput) {
     where: { clerkId: input.clerkId },
     create: {
       clerkId: input.clerkId,
-      name: input.name,
+      firstName: input.firstName,
+      lastName: input.lastName ?? null,
       email: input.email,
       username: input.username,
       phoneNumber: input.phoneNumber,
-      imageUrl: input.imageUrl,
       plan: "FREE",
     },
     update: {
-      name: input.name,
+      firstName: input.firstName,
+      lastName: input.lastName ?? null,
       email: input.email,
       username: input.username,
       ...(input.phoneNumber ? { phoneNumber: input.phoneNumber } : {}),
-      imageUrl: input.imageUrl,
     },
   });
 }
@@ -105,10 +104,10 @@ export async function updateSyncedUserByEmail(input: UpsertSyncedUserInput) {
     where: { email: input.email },
     data: {
       clerkId: input.clerkId,
-      name: input.name,
+      firstName: input.firstName,
+      lastName: input.lastName ?? null,
       username: input.username,
       ...(input.phoneNumber ? { phoneNumber: input.phoneNumber } : {}),
-      imageUrl: input.imageUrl,
     },
   });
 }

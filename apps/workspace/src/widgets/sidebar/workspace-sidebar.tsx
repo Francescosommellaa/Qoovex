@@ -76,7 +76,7 @@ const textScaleOptions: Array<{
 ];
 
 function getDisplayName(user: WorkspaceUserSummary) {
-  return user.name || user.username || user.email;
+  return user.firstName || user.username || user.email;
 }
 
 function getInitials(user: WorkspaceUserSummary) {

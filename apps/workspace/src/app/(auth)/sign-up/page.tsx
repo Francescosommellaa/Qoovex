@@ -694,7 +694,7 @@ export default function SignUpPage() {
                 <FormControl>
                   <Input
                     type="text"
-                    placeholder="Francesco"
+                    placeholder="Mario"
                     autoComplete="given-name"
                     value={firstName}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -729,7 +729,7 @@ export default function SignUpPage() {
                 <FormControl>
                   <Input
                     type="text"
-                    placeholder="Sommella"
+                    placeholder="Rossi"
                     autoComplete="family-name"
                     value={lastName}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

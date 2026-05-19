@@ -57,7 +57,7 @@ function mapMenuSummary(menu: Awaited<ReturnType<typeof listMenusForUser>>[numbe
     qrCodeUrl: menu.qrCodeUrl,
     itemsCount: menu._count.items,
     updatedAt: menu.updatedAt.toISOString(),
-    authorName: menu.author.name,
+    authorUsername: menu.author.username,
   };
 }
 

@@ -10,7 +10,7 @@ const menuSummarySelect = {
   isPublic: true,
   qrCodeUrl: true,
   updatedAt: true,
-  author: { select: { id: true, name: true } },
+  author: { select: { id: true, username: true } },
   _count: { select: { items: true } },
 } as const;
 

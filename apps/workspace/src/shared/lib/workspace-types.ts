@@ -146,7 +146,7 @@ export interface RecipeSummaryDto {
   allergens: string[];
   updatedAt: string;
   deletedAt?: string | null;
-  authorName?: string;
+  authorUsername?: string;
   forkedFromId?: string | null;
 }
 
@@ -199,7 +199,7 @@ export interface MenuSummaryDto {
   qrCodeUrl: string | null;
   itemsCount: number;
   updatedAt: string;
-  authorName?: string;
+  authorUsername?: string;
 }
 
 export interface MenuRecipeItemDto {
@@ -266,7 +266,7 @@ export interface WorkPlanSummaryDto {
   title: string;
   description: string | null;
   creatorId: string;
-  creatorName: string;
+  creatorUsername: string;
   taskCount: number;
   completedTaskCount: number;
   memberCount: number;
@@ -288,7 +288,6 @@ export interface WorkTaskDto {
 export interface WorkPlanMemberDto {
   id: string;
   userId: string;
-  name: string;
   username: string;
 }
 

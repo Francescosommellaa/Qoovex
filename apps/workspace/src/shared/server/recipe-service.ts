@@ -153,7 +153,7 @@ interface RecipeSummaryRecord {
   forkedFromId: string | null;
   updatedAt: Date;
   deletedAt: Date | null;
-  author: { id: string; name: string };
+  author: { id: string; username: string };
   ingredients: Array<{
     ingredient: {
       allergens: string[];
@@ -232,7 +232,7 @@ async function mapRecipeSummary(recipe: RecipeSummaryRecord): Promise<RecipeSumm
     ),
     updatedAt: recipe.updatedAt.toISOString(),
     deletedAt: recipe.deletedAt?.toISOString() ?? null,
-    authorName: recipe.author.name,
+    authorUsername: recipe.author.username,
   };
 }
 

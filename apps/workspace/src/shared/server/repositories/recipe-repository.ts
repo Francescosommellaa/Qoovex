@@ -46,7 +46,7 @@ const recipeSummarySelect = {
   forkedFromId: true,
   updatedAt: true,
   deletedAt: true,
-  author: { select: { id: true, name: true } },
+  author: { select: { id: true, username: true } },
   ingredients: {
     select: {
       ingredient: {

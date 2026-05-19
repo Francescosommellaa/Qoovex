@@ -48,7 +48,6 @@ export function WorkspaceBrandLoader({
             width={64}
             height={64}
             className={styles.logo}
-            priority={fullscreen}
           />
         </span>
         {label ? <span className={styles.label}>{label}</span> : null}

@@ -219,9 +219,6 @@ export async function WorkPlanDetailView({
                         className="rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) p-(--spacing-3)"
                       >
                         <Text size="sm" weight="medium">
-                          {member.name}
-                        </Text>
-                        <Text size="xs" tone="muted">
                           @{member.username}
                         </Text>
                       </div>

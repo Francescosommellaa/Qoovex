@@ -6,11 +6,12 @@ import { AccountSettingsClient } from "./account-settings-client";
 
 interface SettingsViewUser {
   id: string;
-  name: string;
+  firstName: string;
+  lastName?: string | null;
   username: string;
   email: string;
-  phoneNumber?: string | null;
   imageUrl?: string | null;
+  phoneNumber?: string | null;
   plan: WorkspacePlan;
 }
 

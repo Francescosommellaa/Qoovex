@@ -17,7 +17,6 @@ interface SyncClerkUserInput {
   firstName?: string | null;
   lastName?: string | null;
   phoneNumber?: string | null;
-  imageUrl?: string | null;
 }
 
 export class ClerkUserSyncConflictError extends Error {
@@ -56,11 +55,8 @@ function getStableFallbackUsername(clerkId: string): string {
   return `user_${clerkId.replace(/[^a-zA-Z0-9]/g, "").slice(-12).toLowerCase()}`;
 }
 
-function getDisplayName(input: SyncClerkUserInput, username: string): string {
-  return (
-    [input.firstName, input.lastName].filter(Boolean).join(" ").trim() ||
-    username
-  );
+function normalizeNamePart(value: string | null | undefined) {
+  return value?.trim() || undefined;
 }
 
 export async function syncClerkUser(input: SyncClerkUserInput) {
@@ -101,26 +97,27 @@ export async function syncClerkUser(input: SyncClerkUserInput) {
   }
 
   const normalizedPhoneNumber = normalizePhoneNumber(input.phoneNumber);
-  const name = getDisplayName(input, normalizedUsername);
+  const firstName = normalizeNamePart(input.firstName) ?? normalizedUsername;
+  const lastName = normalizeNamePart(input.lastName) ?? null;
 
   if (existingByEmail && existingByEmail.clerkId !== input.clerkId) {
     return await updateSyncedUserByEmail({
       clerkId: input.clerkId,
-      name,
+      firstName,
+      lastName,
       email,
       username: normalizedUsername,
       phoneNumber: normalizedPhoneNumber,
-      imageUrl: input.imageUrl ?? undefined,
     });
   }
 
   return await upsertSyncedUser({
     clerkId: input.clerkId,
-    name,
+    firstName,
+    lastName,
     email,
     username: normalizedUsername,
     phoneNumber: normalizedPhoneNumber,
-    imageUrl: input.imageUrl ?? undefined,
   });
 }
 

@@ -51,7 +51,6 @@ export async function syncCurrentAccountProfile() {
     firstName: clerkUser.firstName,
     lastName: clerkUser.lastName,
     phoneNumber: getPrimaryPhoneNumber(clerkUser),
-    imageUrl: clerkUser.imageUrl,
   });
 
   return { ok: true as const };

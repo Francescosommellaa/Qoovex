@@ -66,6 +66,7 @@ type ClerkAccountUser = {
   lastName?: string | null;
   username?: string | null;
   imageUrl?: string | null;
+  unsafeMetadata?: Record<string, unknown>;
   twoFactorEnabled?: boolean;
   totpEnabled?: boolean;
   backupCodeEnabled?: boolean;
@@ -90,7 +91,8 @@ type ClerkAccountUser = {
 interface AccountSettingsClientProps {
   user: {
     id: string;
-    name: string;
+    firstName: string;
+    lastName?: string | null;
     username: string;
     email: string;
     phoneNumber?: string | null;
@@ -136,6 +138,26 @@ function getFriendlyError(error: unknown) {
   );
 }
 
+function getAvatarUrlFromMetadata(metadata: Record<string, unknown> | undefined) {
+  const pathname = metadata?.avatarBlobPathname;
+  return typeof pathname === "string"
+    ? `/api/account/avatar/media?pathname=${encodeURIComponent(pathname)}`
+    : undefined;
+}
+
+async function readApiError(response: Response, fallback: string) {
+  const payload = (await response.json().catch(() => null)) as {
+    message?: unknown;
+    url?: unknown;
+  } | null;
+
+  if (!response.ok) {
+    throw new Error(typeof payload?.message === "string" ? payload.message : fallback);
+  }
+
+  return payload;
+}
+
 async function preparePhoneVerification(phone: ClerkPhoneNumber) {
   if (!phone.prepareVerification) return;
 
@@ -156,15 +178,27 @@ export function AccountSettingsClient({
   const accountUser = user as ClerkAccountUser | null | undefined;
   const displayName =
     [accountUser?.firstName, accountUser?.lastName].filter(Boolean).join(" ") ||
-    initialUser.name;
-  const imageUrl = accountUser?.imageUrl ?? initialUser.imageUrl ?? undefined;
+    [initialUser.firstName, initialUser.lastName].filter(Boolean).join(" ") ||
+    initialUser.username;
+  const [avatarUrl, setAvatarUrl] = React.useState<string | undefined>(
+    initialUser.imageUrl ?? undefined,
+  );
+  const imageUrl =
+    avatarUrl ??
+    getAvatarUrlFromMetadata(accountUser?.unsafeMetadata) ??
+    accountUser?.imageUrl ??
+    undefined;
   const phoneNumbers = accountUser?.phoneNumbers ?? [];
   const verifiedPhones = phoneNumbers.filter(isVerifiedPhone);
   const mfaPhones = verifiedPhones.filter((phone) => phone.reservedForSecondFactor);
   const hasSecondFactor = Boolean(accountUser?.twoFactorEnabled);
 
-  const [firstName, setFirstName] = React.useState(accountUser?.firstName ?? "");
-  const [lastName, setLastName] = React.useState(accountUser?.lastName ?? "");
+  const [firstName, setFirstName] = React.useState(
+    accountUser?.firstName ?? initialUser.firstName,
+  );
+  const [lastName, setLastName] = React.useState(
+    accountUser?.lastName ?? initialUser.lastName ?? "",
+  );
   const [isSavingProfile, setIsSavingProfile] = React.useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = React.useState(false);
   const [phoneRegionCode, setPhoneRegionCode] = React.useState("+39");
@@ -215,9 +249,23 @@ export function AccountSettingsClient({
 
   React.useEffect(() => {
     if (!accountUser) return;
-    setFirstName(accountUser.firstName ?? "");
-    setLastName(accountUser.lastName ?? "");
-  }, [accountUser?.firstName, accountUser?.lastName, accountUser]);
+    setFirstName(accountUser.firstName ?? initialUser.firstName);
+    setLastName(accountUser.lastName ?? initialUser.lastName ?? "");
+  }, [
+    accountUser?.firstName,
+    accountUser?.lastName,
+    accountUser,
+    initialUser.firstName,
+    initialUser.lastName,
+  ]);
+
+  React.useEffect(() => {
+    setAvatarUrl(
+      getAvatarUrlFromMetadata(accountUser?.unsafeMetadata) ??
+        initialUser.imageUrl ??
+        undefined,
+    );
+  }, [accountUser?.unsafeMetadata, initialUser.imageUrl]);
 
   async function reloadAndSync() {
     await accountUser?.reload?.();
@@ -281,7 +329,7 @@ export function AccountSettingsClient({
   async function handleAvatarChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     event.target.value = "";
-    if (!file || !accountUser?.setProfileImage) return;
+    if (!file) return;
 
     if (!file.type.startsWith("image/")) {
       toast({
@@ -294,12 +342,23 @@ export function AccountSettingsClient({
 
     setIsUploadingAvatar(true);
     try {
-      await accountUser.setProfileImage({ file });
+      const formData = new FormData();
+      formData.set("file", file);
+      const response = await fetch("/api/account/avatar", {
+        method: "POST",
+        body: formData,
+      });
+      const payload = await readApiError(response, "Upload immagine non riuscito.");
+      const nextAvatarUrl =
+        typeof payload?.url === "string" ? payload.url : undefined;
+
+      await accountUser?.setProfileImage?.({ file }).catch(() => undefined);
+      if (nextAvatarUrl) setAvatarUrl(nextAvatarUrl);
       await reloadAndSync();
       toast({
         variant: "success",
         title: "Immagine aggiornata",
-        description: "La foto profilo e sincronizzata con il workspace.",
+        description: "La foto profilo e salvata in Blob e sincronizzata con Clerk.",
       });
     } catch (error) {
       toast({
@@ -313,11 +372,12 @@ export function AccountSettingsClient({
   }
 
   async function handleRemoveAvatar() {
-    if (!accountUser?.setProfileImage) return;
-
     setIsUploadingAvatar(true);
     try {
-      await accountUser.setProfileImage({ file: null });
+      const response = await fetch("/api/account/avatar", { method: "DELETE" });
+      await readApiError(response, "Immagine non rimossa.");
+      await accountUser?.setProfileImage?.({ file: null }).catch(() => undefined);
+      setAvatarUrl(undefined);
       await reloadAndSync();
       toast({
         variant: "success",

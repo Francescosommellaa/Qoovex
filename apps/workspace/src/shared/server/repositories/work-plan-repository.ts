@@ -9,7 +9,7 @@ const workPlanSummarySelect = {
   description: true,
   creatorId: true,
   createdAt: true,
-  creator: { select: { name: true } },
+  creator: { select: { username: true } },
   members: {
     select: { id: true },
   },
@@ -29,7 +29,6 @@ const workPlanDetailSelect = {
       userId: true,
       user: {
         select: {
-          name: true,
           username: true,
         },
       },

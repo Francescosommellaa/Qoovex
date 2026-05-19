@@ -60,7 +60,7 @@ function mapWorkPlanSummary(
     title: plan.title,
     description: plan.description,
     creatorId: plan.creatorId,
-    creatorName: plan.creator.name,
+    creatorUsername: plan.creator.username,
     taskCount,
     completedTaskCount: plan.tasks.filter((task) => task.completedAt).length,
     memberCount: plan.members.length,
@@ -83,7 +83,6 @@ function mapWorkPlanDetail(
     members: plan.members.map((member) => ({
       id: member.id,
       userId: member.userId,
-      name: member.user.name,
       username: member.user.username,
     })),
     canCreateTask: plan.creatorId === userId,

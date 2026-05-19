@@ -13,10 +13,10 @@ export { DEV_AUTH_COOKIE_NAME } from "@shared/lib/dev-auth-cookie";
 
 const DEV_USER = {
   clerkId: "dev_qoovex_local_user",
-  email: "francesco.sommella.dev.profile.email.molto.lunga@qoovex.local",
-  username: "dev_francesco_sommella",
-  firstName: "Francesco",
-  lastName: "Sommella",
+  email: "mario.rossi.dev.profile.email.molto.lunga@qoovex.local",
+  username: "dev_mario_rossi",
+  firstName: "Mario",
+  lastName: "Rossi",
 };
 
 export async function isDevAuthAllowed() {

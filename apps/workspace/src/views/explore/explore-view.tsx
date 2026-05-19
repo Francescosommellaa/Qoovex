@@ -81,7 +81,7 @@ export async function ExploreView({
                           {recipe.title}
                         </Text>
                         <Text size="xs" tone="muted">
-                          di {recipe.authorName}
+                          di @{recipe.authorUsername}
                         </Text>
                       </div>
                       {recipe.description ? (
@@ -141,7 +141,7 @@ export async function ExploreView({
                           {menu.title}
                         </Text>
                         <Text size="xs" tone="muted">
-                          di {menu.authorName}
+                          di @{menu.authorUsername}
                         </Text>
                       </div>
                       {menu.description ? (

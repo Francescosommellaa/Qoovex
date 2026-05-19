@@ -58,10 +58,10 @@ export default async function WorkspaceLayout({
   }
 
   const userSummary: WorkspaceUserSummary = {
-    name: user.name,
+    firstName: user.firstName,
     username: user.username,
     email: user.email,
-    imageUrl: user.imageUrl,
+    imageUrl: "imageUrl" in user ? user.imageUrl : null,
     plan: user.plan,
     isAdmin: user.isAdmin,
   };
