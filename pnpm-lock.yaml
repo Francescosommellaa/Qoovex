@@ -140,6 +140,9 @@ importers:
       '@qoovex/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@qoovex/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@qoovex/ui':
         specifier: workspace:*
         version: link:../../packages/ui

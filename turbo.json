@@ -33,6 +33,12 @@
         "FOODDATA_CENTRAL_API_KEY"
       ]
     },
+    "@qoovex/db#build": {
+      "cache": false
+    },
+    "db:generate": {
+      "cache": false
+    },
     "lint": {
       "dependsOn": ["^lint"]
     },
