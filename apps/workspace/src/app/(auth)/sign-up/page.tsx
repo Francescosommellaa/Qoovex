@@ -336,9 +336,12 @@ export default function SignUpPage() {
     setFieldErrors({});
     const normalizedPhoneDigits = phoneNumber.replace(/[^\d]/g, "");
 
+    const phoneHasContent = normalizedPhoneDigits.length > 0;
+    const phoneIsInvalid = phoneHasContent && normalizedPhoneDigits.length < 7;
+
     const nextWarnings = {
       email: email.trim() === "",
-      phone: normalizedPhoneDigits.length < 6,
+      phone: phoneIsInvalid,
       username: false,
       firstName: firstName.trim() === "",
       password: false,
@@ -354,13 +357,15 @@ export default function SignUpPage() {
     ) {
       const missingFieldErrors: FieldErrors = {};
       if (nextWarnings.email) missingFieldErrors.email = "Inserisci la tua email.";
-      if (nextWarnings.phone) missingFieldErrors.phone = "Inserisci un telefono valido.";
+      if (nextWarnings.phone) missingFieldErrors.phone = "Numero non valido.";
       if (nextWarnings.firstName) missingFieldErrors.firstName = "Inserisci il nome.";
       setFieldErrors(missingFieldErrors);
       toast({
         variant: "warning",
         title: "Controlla i campi evidenziati",
-        description: "Compila i dati richiesti prima di continuare.",
+        description: nextWarnings.phone
+          ? "Il numero di telefono inserito non è valido."
+          : "Compila i dati richiesti prima di continuare.",
       });
       return;
     }
@@ -431,16 +436,21 @@ export default function SignUpPage() {
 
     await signUp.reset();
 
+    const normalizedPhone = getNormalizedPhoneNumber();
+
     const { error: createError } = await signUp.password({
       emailAddress: email.trim(),
       username: normalizedUsername,
       firstName: firstName.trim(),
       lastName: lastName.trim() || undefined,
       password,
-      unsafeMetadata: {
-        phoneNumber: getNormalizedPhoneNumber(),
-      },
+      ...(normalizedPhone.length >= 8 && {
+        unsafeMetadata: {
+          phoneNumber: normalizedPhone,
+        },
+      }),
     });
+
     logDevSignUpState("after password", signUp, createError);
     if (createError) {
       const feedback = getCreateErrorFeedback(createError);
@@ -728,8 +738,7 @@ export default function SignUpPage() {
             </div>
 
             <PhoneNumberField
-              label="Telefono"
-              required
+              label="Telefono (opzionale)"
               regionCode={phoneRegionCode}
               onRegionCodeChange={(nextRegionCode) => {
                 setPhoneRegionCode(nextRegionCode);
@@ -750,9 +759,8 @@ export default function SignUpPage() {
                   setFieldErrors((current) => ({ ...current, phone: undefined }));
                 }
               }}
-              helperText={fieldErrors.phone}
               className={
-                fieldErrors.phone || warningFields.phone ? "auth-warning-field" : undefined
+                warningFields.phone ? "auth-warning-field" : undefined
               }
             />
 

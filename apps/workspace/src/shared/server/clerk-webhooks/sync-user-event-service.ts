@@ -22,6 +22,12 @@ export async function handleClerkUserSyncEvent(event: ClerkEvent) {
     return clerkWebhookError("No email found", 400);
   }
 
+  const phoneFromMetadata =
+    typeof event.data.unsafe_metadata?.phoneNumber === "string" &&
+    event.data.unsafe_metadata.phoneNumber.length > 0
+      ? event.data.unsafe_metadata.phoneNumber
+      : undefined;
+
   try {
     await syncClerkUser({
       clerkId: event.data.id,
@@ -29,6 +35,7 @@ export async function handleClerkUserSyncEvent(event: ClerkEvent) {
       username: event.data.username,
       firstName: event.data.first_name,
       lastName: event.data.last_name,
+      phoneNumber: phoneFromMetadata,
     });
   } catch (error) {
     if (error instanceof ClerkUserSyncConflictError) {

@@ -14,7 +14,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="it" data-theme="dark">
+    <html lang="it" data-theme="dark" data-scroll-behavior="smooth">
       <body>
         <ThemeProvider defaultTheme="dark">{children}</ThemeProvider>
       </body>
