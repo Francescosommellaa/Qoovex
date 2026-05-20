@@ -212,28 +212,16 @@
 
 .auth-social-stack::before {
   content: "oppure continua con";
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-3);
+  display: block;
+  padding-top: var(--spacing-4);
   margin-bottom: var(--spacing-5);
+  border-top: var(--border-thin) solid var(--color-divider);
   color: var(--color-text-faint);
   font-size: var(--text-xs);
   line-height: 1;
   text-align: center;
   white-space: nowrap;
-}
-
-.auth-social-stack::before,
-.auth-social-stack::after {
   pointer-events: none;
-}
-
-.auth-social-stack::before {
-  background:
-    linear-gradient(var(--color-divider), var(--color-divider)) left center / 1fr
-      var(--border-thin) no-repeat,
-    linear-gradient(var(--color-divider), var(--color-divider)) right center / 1fr
-      var(--border-thin) no-repeat;
 }
 
 .auth-social-stack .grid {
