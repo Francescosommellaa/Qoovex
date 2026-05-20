@@ -109,12 +109,11 @@ export function OAuthButton({
     <Button
       type="button"
       variant="secondary"
-      size="lg"
+      size="md"
       onClick={handleOAuthAuth}
       disabled={isLoading || isUnavailable}
       loading={isLoading}
-      caption={disabledReason}
-      className="w-full"
+      className="auth-oauth-button w-full"
       aria-label={config.ariaLabel[mode]}
       iconLeft={
         <Image
