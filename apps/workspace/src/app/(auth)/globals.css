@@ -74,7 +74,7 @@
 
 .auth-inline-link-row {
   text-align: right;
-  margin-top: calc(var(--spacing-1) * -1);
+  margin-top: 0;
 }
 
 .auth-muted-link {
@@ -207,7 +207,41 @@
 }
 
 .auth-social-stack {
-  margin-top: var(--spacing-5);
+  margin-top: var(--spacing-6);
+}
+
+.auth-social-stack::before {
+  content: "oppure continua con";
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-5);
+  color: var(--color-text-faint);
+  font-size: var(--text-xs);
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.auth-social-stack::before,
+.auth-social-stack::after {
+  pointer-events: none;
+}
+
+.auth-social-stack::before {
+  background:
+    linear-gradient(var(--color-divider), var(--color-divider)) left center / 1fr
+      var(--border-thin) no-repeat,
+    linear-gradient(var(--color-divider), var(--color-divider)) right center / 1fr
+      var(--border-thin) no-repeat;
+}
+
+.auth-social-stack .grid {
+  align-items: stretch;
+}
+
+.auth-oauth-button {
+  min-height: var(--input-height-md);
 }
 
 .auth-terms-text {
@@ -215,4 +249,5 @@
   font-size: var(--text-xs);
   line-height: 1.5;
   text-align: center;
+  opacity: var(--button-disabled-opacity);
 }
