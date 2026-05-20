@@ -55,6 +55,7 @@ export type SelectProps = {
   srOnlyLabel?: boolean;
   showSelectedCount?: boolean;
   id?: string;
+  name?: string;
   className?: string;
 } & (SelectSingleProps | SelectMultiProps);
 
@@ -206,6 +207,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       srOnlyLabel = false,
       showSelectedCount = true,
       id,
+      name,
       className,
     } = props;
 
@@ -461,6 +463,14 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
         ref={ref}
         className={cn(FIELD_ROOT_CLASS, className)}
       >
+        {name && !isMulti ? (
+          <input type="hidden" name={name} value={singleValue} />
+        ) : null}
+        {name && isMulti
+          ? multiValue.map((value) => (
+              <input key={value} type="hidden" name={name} value={value} />
+            ))
+          : null}
         {(label || selectedCountMeta) && (
           <div className="flex min-h-[0.75rem] w-full items-center gap-(--spacing-3)">
             {label && (

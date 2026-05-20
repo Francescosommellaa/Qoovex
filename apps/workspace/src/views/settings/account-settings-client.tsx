@@ -1,13 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { useReverification, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import {
-  CheckCircle,
-  DeviceMobile,
   EnvelopeSimple,
   Key,
   LockKey,
+  QrCode,
   ShieldCheck,
   UploadSimple,
   UserCircle,
@@ -26,28 +25,26 @@ import {
   Icon,
   Input,
   OtpInput,
-  PhoneNumberField,
   Stack,
   Text,
-  Toggle,
   useToast,
 } from "@qoovex/ui";
+import {
+  confirmTotpSetupAction,
+  disableMfaAction,
+  getCurrentMfaStatusAction,
+  regenerateBackupCodesAction,
+  startTotpSetupAction,
+} from "@shared/actions/mfa-actions";
+import { changeUsernameAction } from "@shared/actions/username-actions";
 import { updateCurrentUserProfile } from "@shared/actions/bootstrap-user";
 import { syncCurrentAccountProfile } from "@shared/actions/sync-account-profile";
 import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
-
-type ClerkPhoneNumber = {
-  id: string;
-  phoneNumber: string;
-  reservedForSecondFactor?: boolean;
-  defaultSecondFactor?: boolean;
-  verification?: { status?: string };
-  prepareVerification?: (params?: Record<string, unknown>) => Promise<unknown>;
-  attemptVerification?: (params: { code: string }) => Promise<unknown>;
-  setReservedForSecondFactor?: (params: { reserved: boolean }) => Promise<unknown>;
-  makeDefaultSecondFactor?: () => Promise<unknown>;
-  destroy?: () => Promise<unknown>;
-};
+import {
+  buildUsernameSuggestions,
+  normalizeUsernameInput,
+  validateUsername,
+} from "@shared/lib/username";
 
 type ClerkEmailAddress = {
   id: string;
@@ -57,31 +54,18 @@ type ClerkEmailAddress = {
   attemptVerification?: (params: { code: string }) => Promise<unknown>;
 };
 
-type ClerkTotp = {
-  uri?: string;
-};
-
 type ClerkAccountUser = {
   firstName?: string | null;
   lastName?: string | null;
   username?: string | null;
   imageUrl?: string | null;
   unsafeMetadata?: Record<string, unknown>;
-  twoFactorEnabled?: boolean;
-  totpEnabled?: boolean;
-  backupCodeEnabled?: boolean;
-  phoneNumbers?: ClerkPhoneNumber[];
-  emailAddresses?: ClerkEmailAddress[];
   primaryEmailAddressId?: string | null;
   primaryEmailAddress?: ClerkEmailAddress | null;
+  emailAddresses?: ClerkEmailAddress[];
   update?: (params: Record<string, unknown>) => Promise<unknown>;
   reload?: () => Promise<unknown>;
   setProfileImage?: (params: { file: File | Blob | null }) => Promise<unknown>;
-  createPhoneNumber?: (params: { phoneNumber: string }) => Promise<ClerkPhoneNumber>;
-  createTOTP?: () => Promise<ClerkTotp>;
-  verifyTOTP?: (params: { code: string }) => Promise<unknown>;
-  disableTOTP?: () => Promise<unknown>;
-  createBackupCode?: () => Promise<{ codes?: string[] }>;
   createEmailAddress?: (
     params: Record<string, unknown>,
   ) => Promise<ClerkEmailAddress>;
@@ -95,8 +79,9 @@ interface AccountSettingsClientProps {
     lastName?: string | null;
     username: string;
     email: string;
-    phoneNumber?: string | null;
     imageUrl?: string | null;
+    mfaEnabled?: boolean;
+    usernameChangedAt?: Date | string | null;
   };
   usage: {
     recipes: string;
@@ -109,9 +94,16 @@ interface AccountSettingsClientProps {
   planLabel: string;
 }
 
-type PhoneStep = "idle" | "verify";
-type TotpStep = "idle" | "setup" | "verify" | "backup";
 type EmailStep = "idle" | "verify";
+type TotpStep = "idle" | "setup" | "backup";
+
+type UsernameAvailability = {
+  username: string;
+  valid: boolean;
+  available: boolean;
+  message: string;
+  suggestions: string[];
+};
 
 function getInitials(name: string) {
   return name
@@ -120,15 +112,6 @@ function getInitials(name: string) {
     .map((part) => part.charAt(0))
     .join("")
     .toUpperCase();
-}
-
-function normalizePhoneNumber(regionCode: string, nationalNumber: string) {
-  const digits = nationalNumber.replace(/[^\d]/g, "");
-  return digits ? `${regionCode}${digits}` : "";
-}
-
-function isVerifiedPhone(phone: ClerkPhoneNumber) {
-  return phone.verification?.status === "verified";
 }
 
 function getFriendlyError(error: unknown) {
@@ -145,6 +128,27 @@ function getAvatarUrlFromMetadata(metadata: Record<string, unknown> | undefined)
     : undefined;
 }
 
+function parseDate(value: Date | string | null | undefined) {
+  if (!value) return null;
+  const parsed = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function getNextUsernameChangeDate(value: Date | string | null | undefined) {
+  const changedAt = parseDate(value);
+  return changedAt
+    ? new Date(changedAt.getTime() + 7 * 24 * 60 * 60 * 1000)
+    : null;
+}
+
+function formatDate(value: Date | null) {
+  if (!value) return "";
+  return new Intl.DateTimeFormat("it-IT", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(value);
+}
+
 async function readApiError(response: Response, fallback: string) {
   const payload = (await response.json().catch(() => null)) as {
     message?: unknown;
@@ -156,16 +160,6 @@ async function readApiError(response: Response, fallback: string) {
   }
 
   return payload;
-}
-
-async function preparePhoneVerification(phone: ClerkPhoneNumber) {
-  if (!phone.prepareVerification) return;
-
-  try {
-    await phone.prepareVerification({ strategy: "phone_code" });
-  } catch {
-    await phone.prepareVerification();
-  }
 }
 
 export function AccountSettingsClient({
@@ -180,18 +174,6 @@ export function AccountSettingsClient({
     [accountUser?.firstName, accountUser?.lastName].filter(Boolean).join(" ") ||
     [initialUser.firstName, initialUser.lastName].filter(Boolean).join(" ") ||
     initialUser.username;
-  const [avatarUrl, setAvatarUrl] = React.useState<string | undefined>(
-    initialUser.imageUrl ?? undefined,
-  );
-  const imageUrl =
-    avatarUrl ??
-    getAvatarUrlFromMetadata(accountUser?.unsafeMetadata) ??
-    accountUser?.imageUrl ??
-    undefined;
-  const phoneNumbers = accountUser?.phoneNumbers ?? [];
-  const verifiedPhones = phoneNumbers.filter(isVerifiedPhone);
-  const mfaPhones = verifiedPhones.filter((phone) => phone.reservedForSecondFactor);
-  const hasSecondFactor = Boolean(accountUser?.twoFactorEnabled);
 
   const [firstName, setFirstName] = React.useState(
     accountUser?.firstName ?? initialUser.firstName,
@@ -200,18 +182,31 @@ export function AccountSettingsClient({
     accountUser?.lastName ?? initialUser.lastName ?? "",
   );
   const [isSavingProfile, setIsSavingProfile] = React.useState(false);
+  const [avatarUrl, setAvatarUrl] = React.useState<string | undefined>(
+    initialUser.imageUrl ?? undefined,
+  );
   const [isUploadingAvatar, setIsUploadingAvatar] = React.useState(false);
-  const [phoneRegionCode, setPhoneRegionCode] = React.useState("+39");
-  const [phoneNumber, setPhoneNumber] = React.useState("");
-  const [pendingPhone, setPendingPhone] = React.useState<ClerkPhoneNumber | null>(null);
-  const [phoneCode, setPhoneCode] = React.useState("");
-  const [phoneStep, setPhoneStep] = React.useState<PhoneStep>("idle");
-  const [isPhoneBusy, setIsPhoneBusy] = React.useState(false);
-  const [totp, setTotp] = React.useState<ClerkTotp | null>(null);
-  const [totpCode, setTotpCode] = React.useState("");
+  const avatarInputRef = React.useRef<HTMLInputElement>(null);
+
+  const [currentUsername, setCurrentUsername] = React.useState(initialUser.username);
+  const [username, setUsername] = React.useState(initialUser.username);
+  const [usernameChangedAt, setUsernameChangedAt] = React.useState<
+    Date | string | null | undefined
+  >(initialUser.usernameChangedAt);
+  const [usernameAvailability, setUsernameAvailability] =
+    React.useState<UsernameAvailability | null>(null);
+  const [isCheckingUsername, setIsCheckingUsername] = React.useState(false);
+  const [isSavingUsername, setIsSavingUsername] = React.useState(false);
+
+  const [mfaEnabled, setMfaEnabled] = React.useState(Boolean(initialUser.mfaEnabled));
+  const [backupCodesRemaining, setBackupCodesRemaining] = React.useState(0);
   const [totpStep, setTotpStep] = React.useState<TotpStep>("idle");
+  const [totpUrl, setTotpUrl] = React.useState("");
+  const [totpSecret, setTotpSecret] = React.useState("");
+  const [totpCode, setTotpCode] = React.useState("");
   const [backupCodes, setBackupCodes] = React.useState<string[]>([]);
   const [isSecurityBusy, setIsSecurityBusy] = React.useState(false);
+
   const [newEmail, setNewEmail] = React.useState("");
   const [pendingEmail, setPendingEmail] = React.useState<ClerkEmailAddress | null>(null);
   const [emailCode, setEmailCode] = React.useState("");
@@ -219,42 +214,34 @@ export function AccountSettingsClient({
   const [currentPassword, setCurrentPassword] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
   const [isCredentialsBusy, setIsCredentialsBusy] = React.useState(false);
-  const avatarInputRef = React.useRef<HTMLInputElement>(null);
-  const createPhoneNumberWithReverification = useReverification((phone: string) =>
-    accountUser?.createPhoneNumber?.({ phoneNumber: phone }),
-  );
-  const createTotpWithReverification = useReverification(() =>
-    accountUser?.createTOTP?.(),
-  );
-  const disableTotpWithReverification = useReverification(() =>
-    accountUser?.disableTOTP?.(),
-  );
-  const createBackupCodeWithReverification = useReverification(() =>
-    accountUser?.createBackupCode?.(),
-  );
-  const createEmailWithReverification = useReverification((email: string) =>
-    accountUser?.createEmailAddress?.({
-      email,
-      emailAddress: email,
-    }),
-  );
-  const updatePasswordWithReverification = useReverification(
-    (currentValue: string, nextValue: string) =>
-      accountUser?.updatePassword?.({
-        currentPassword: currentValue,
-        newPassword: nextValue,
-        signOutOfOtherSessions: true,
-      }),
-  );
+
+  const imageUrl =
+    avatarUrl ??
+    getAvatarUrlFromMetadata(accountUser?.unsafeMetadata) ??
+    accountUser?.imageUrl ??
+    undefined;
+  const nextUsernameChangeAt = getNextUsernameChangeDate(usernameChangedAt);
+  const isUsernameCooldownActive =
+    Boolean(nextUsernameChangeAt && nextUsernameChangeAt.getTime() > Date.now()) &&
+    normalizeUsernameInput(username) !== currentUsername;
+  const normalizedUsername = normalizeUsernameInput(username);
+  const usernameSuggestions =
+    usernameAvailability?.suggestions.length
+      ? usernameAvailability.suggestions
+      : buildUsernameSuggestions({
+          firstName,
+          lastName,
+          email: accountUser?.primaryEmailAddress?.emailAddress ?? initialUser.email,
+        });
 
   React.useEffect(() => {
     if (!accountUser) return;
     setFirstName(accountUser.firstName ?? initialUser.firstName);
     setLastName(accountUser.lastName ?? initialUser.lastName ?? "");
   }, [
+    accountUser,
     accountUser?.firstName,
     accountUser?.lastName,
-    accountUser,
     initialUser.firstName,
     initialUser.lastName,
   ]);
@@ -266,6 +253,92 @@ export function AccountSettingsClient({
         undefined,
     );
   }, [accountUser?.unsafeMetadata, initialUser.imageUrl]);
+
+  React.useEffect(() => {
+    const normalized = normalizeUsernameInput(username);
+    const localError = validateUsername(normalized);
+
+    if (!normalized) {
+      setUsernameAvailability(null);
+      setIsCheckingUsername(false);
+      return;
+    }
+
+    if (normalized === currentUsername) {
+      setUsernameAvailability({
+        username: normalized,
+        valid: true,
+        available: true,
+        message: "Username attuale.",
+        suggestions: [],
+      });
+      setIsCheckingUsername(false);
+      return;
+    }
+
+    if (localError) {
+      setUsernameAvailability({
+        username: normalized,
+        valid: false,
+        available: false,
+        message: localError,
+        suggestions: buildUsernameSuggestions({
+          firstName,
+          lastName,
+          email: accountUser?.primaryEmailAddress?.emailAddress ?? initialUser.email,
+        }),
+      });
+      setIsCheckingUsername(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(async () => {
+      setIsCheckingUsername(true);
+      try {
+        const params = new URLSearchParams({
+          username: normalized,
+          firstName,
+          lastName,
+          email: accountUser?.primaryEmailAddress?.emailAddress ?? initialUser.email,
+        });
+        const response = await fetch(`/api/auth/username?${params}`, {
+          signal: controller.signal,
+        });
+        if (!response.ok) return;
+        const payload = (await response.json()) as UsernameAvailability;
+        setUsernameAvailability(payload);
+      } finally {
+        setIsCheckingUsername(false);
+      }
+    }, 300);
+
+    return () => {
+      controller.abort();
+      window.clearTimeout(timeout);
+    };
+  }, [
+    accountUser?.primaryEmailAddress?.emailAddress,
+    currentUsername,
+    firstName,
+    initialUser.email,
+    lastName,
+    username,
+  ]);
+
+  React.useEffect(() => {
+    let mounted = true;
+
+    void getCurrentMfaStatusAction().then((result) => {
+      if (!mounted || !result.ok || !result.status) return;
+      setMfaEnabled(result.status.enabled);
+      setBackupCodesRemaining(result.status.backupCodesRemaining);
+    });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   async function reloadAndSync() {
     await accountUser?.reload?.();
@@ -309,7 +382,7 @@ export function AccountSettingsClient({
         return;
       }
 
-      await accountUser?.reload?.();
+      await reloadAndSync();
       toast({
         variant: "success",
         title: "Profilo aggiornato",
@@ -358,7 +431,7 @@ export function AccountSettingsClient({
       toast({
         variant: "success",
         title: "Immagine aggiornata",
-        description: "La foto profilo e salvata in Blob e sincronizzata con Clerk.",
+        description: "La foto profilo e salvata e sincronizzata.",
       });
     } catch (error) {
       toast({
@@ -395,129 +468,93 @@ export function AccountSettingsClient({
     }
   }
 
-  async function handleAddPhone(event: React.FormEvent<HTMLFormElement>) {
+  async function handleUsernameSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const normalizedPhone = normalizePhoneNumber(phoneRegionCode, phoneNumber);
+    const usernameError = validateUsername(normalizedUsername);
 
-    if (!normalizedPhone || normalizedPhone.replace(/[^\d]/g, "").length < 6) {
+    if (
+      usernameError ||
+      !usernameAvailability?.available ||
+      usernameAvailability.username !== normalizedUsername
+    ) {
       toast({
         variant: "warning",
-        title: "Numero da completare",
-        description: "Inserisci un numero valido prima di inviare il codice.",
+        title: "Username da correggere",
+        description:
+          usernameError ??
+          "Scegli uno username disponibile tra quelli suggeriti o modificane uno valido.",
       });
       return;
     }
 
-    setIsPhoneBusy(true);
-    try {
-      const createdPhone = await createPhoneNumberWithReverification(normalizedPhone);
+    if (isUsernameCooldownActive) {
+      toast({
+        variant: "warning",
+        title: "Cambio non ancora disponibile",
+        description: `Potrai cambiare username dal ${formatDate(nextUsernameChangeAt)}.`,
+      });
+      return;
+    }
 
-      if (!createdPhone) {
-        throw new Error("phone_not_created");
+    setIsSavingUsername(true);
+    try {
+      const result = await changeUsernameAction(normalizedUsername);
+      if (!result.ok || !result.data) {
+        toast({
+          variant: "error",
+          title: "Username non aggiornato",
+          description: result.message,
+        });
+        return;
       }
 
-      await preparePhoneVerification(createdPhone);
-      setPendingPhone(createdPhone);
-      setPhoneStep("verify");
-      setPhoneCode("");
+      setCurrentUsername(result.data.username);
+      setUsername(result.data.username);
+      setUsernameChangedAt(result.data.usernameChangedAt);
+      await accountUser?.reload?.();
       toast({
         variant: "success",
-        title: "Codice inviato",
-        description: "Controlla gli SMS e inserisci il codice ricevuto.",
+        title: "Username aggiornato",
+        description: "Il prossimo cambio sara disponibile tra 7 giorni.",
       });
     } catch (error) {
       toast({
         variant: "error",
-        title: "Telefono non aggiunto",
+        title: "Username non aggiornato",
         description: getFriendlyError(error),
       });
     } finally {
-      setIsPhoneBusy(false);
-    }
-  }
-
-  async function handleVerifyPhone(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!pendingPhone || !phoneCode.trim()) {
-      toast({
-        variant: "warning",
-        title: "Codice richiesto",
-        description: "Inserisci il codice SMS per verificare il numero.",
-      });
-      return;
-    }
-
-    setIsPhoneBusy(true);
-    try {
-      await pendingPhone.attemptVerification?.({ code: phoneCode.trim() });
-      await pendingPhone.setReservedForSecondFactor?.({ reserved: true });
-      await pendingPhone.makeDefaultSecondFactor?.();
-      await reloadAndSync();
-      setPhoneStep("idle");
-      setPendingPhone(null);
-      setPhoneCode("");
-      setPhoneNumber("");
-      toast({
-        variant: "success",
-        title: "Telefono verificato",
-        description: "Il numero e pronto per la sicurezza dell'account.",
-      });
-    } catch (error) {
-      setPhoneCode("");
-      toast({
-        variant: "error",
-        title: "Verifica non riuscita",
-        description: getFriendlyError(error),
-      });
-    } finally {
-      setIsPhoneBusy(false);
-    }
-  }
-
-  async function togglePhoneSecondFactor(phone: ClerkPhoneNumber, reserved: boolean) {
-    setIsPhoneBusy(true);
-    try {
-      await phone.setReservedForSecondFactor?.({ reserved });
-      if (reserved) await phone.makeDefaultSecondFactor?.();
-      await reloadAndSync();
-      toast({
-        variant: "success",
-        title: reserved ? "SMS 2FA attivo" : "SMS 2FA disattivato",
-        description: "Le impostazioni di sicurezza sono aggiornate.",
-      });
-    } catch (error) {
-      toast({
-        variant: "error",
-        title: "Sicurezza non aggiornata",
-        description: getFriendlyError(error),
-      });
-    } finally {
-      setIsPhoneBusy(false);
+      setIsSavingUsername(false);
     }
   }
 
   async function startTotpSetup() {
     setIsSecurityBusy(true);
     setBackupCodes([]);
+    setTotpCode("");
     try {
-      const createdTotp = await createTotpWithReverification();
-      if (!createdTotp?.uri) throw new Error("totp_not_created");
-      setTotp(createdTotp);
+      const result = await startTotpSetupAction();
+      if (!result.ok || !result.data) {
+        toast({
+          variant: "error",
+          title: "A2F non avviata",
+          description: result.message,
+        });
+        return;
+      }
+
+      setTotpUrl(result.data.otpauthUrl);
+      setTotpSecret(result.data.secret);
       setTotpStep("setup");
-    } catch (error) {
-      toast({
-        variant: "error",
-        title: "2FA non avviata",
-        description: getFriendlyError(error),
-      });
     } finally {
       setIsSecurityBusy(false);
     }
   }
 
-  async function verifyTotp(event: React.FormEvent<HTMLFormElement>) {
+  async function confirmTotpSetup(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!totpCode.trim()) {
+    const code = totpCode.trim();
+    if (!code) {
       toast({
         variant: "warning",
         title: "Codice richiesto",
@@ -528,62 +565,81 @@ export function AccountSettingsClient({
 
     setIsSecurityBusy(true);
     try {
-      await accountUser?.verifyTOTP?.({ code: totpCode.trim() });
-      const backup = await accountUser?.createBackupCode?.();
-      await accountUser?.reload?.();
-      setBackupCodes(backup?.codes ?? []);
-      setTotpStep("backup");
+      const result = await confirmTotpSetupAction(code);
+      if (!result.ok || !result.data) {
+        setTotpCode("");
+        toast({
+          variant: "error",
+          title: "Codice non valido",
+          description: result.message,
+        });
+        return;
+      }
+
+      setMfaEnabled(true);
+      setBackupCodes(result.data.backupCodes);
+      setBackupCodesRemaining(result.data.backupCodes.length);
       setTotpCode("");
+      setTotpStep("backup");
       toast({
         variant: "success",
-        title: "2FA attiva",
+        title: "A2F attiva",
         description: "Salva i codici di backup in un posto sicuro.",
-      });
-    } catch (error) {
-      setTotpCode("");
-      toast({
-        variant: "error",
-        title: "Codice non valido",
-        description: getFriendlyError(error),
       });
     } finally {
       setIsSecurityBusy(false);
     }
   }
 
-  async function disableTotp() {
+  async function disableMfa() {
+    if (!window.confirm("Disattivare la A2F per questo account?")) return;
+
     setIsSecurityBusy(true);
     try {
-      await disableTotpWithReverification();
-      await accountUser?.reload?.();
+      const result = await disableMfaAction();
+      if (!result.ok) {
+        toast({
+          variant: "error",
+          title: "A2F non aggiornata",
+          description: result.message,
+        });
+        return;
+      }
+
+      setMfaEnabled(false);
+      setBackupCodes([]);
+      setBackupCodesRemaining(0);
       setTotpStep("idle");
       toast({
         variant: "success",
-        title: "2FA app disattivata",
+        title: "A2F disattivata",
         description: "Puoi riattivarla quando vuoi dalle impostazioni.",
-      });
-    } catch (error) {
-      toast({
-        variant: "error",
-        title: "2FA non aggiornata",
-        description: getFriendlyError(error),
       });
     } finally {
       setIsSecurityBusy(false);
     }
   }
 
-  async function generateBackupCodes() {
+  async function regenerateBackupCodes() {
     setIsSecurityBusy(true);
     try {
-      const backup = await createBackupCodeWithReverification();
-      setBackupCodes(backup?.codes ?? []);
+      const result = await regenerateBackupCodesAction();
+      if (!result.ok || !result.data) {
+        toast({
+          variant: "error",
+          title: "Codici non generati",
+          description: result.message,
+        });
+        return;
+      }
+
+      setBackupCodes(result.data.backupCodes);
+      setBackupCodesRemaining(result.data.backupCodes.length);
       setTotpStep("backup");
-    } catch (error) {
       toast({
-        variant: "error",
-        title: "Codici non generati",
-        description: getFriendlyError(error),
+        variant: "success",
+        title: "Nuovi codici generati",
+        description: "I codici precedenti non sono piu validi.",
       });
     } finally {
       setIsSecurityBusy(false);
@@ -593,11 +649,21 @@ export function AccountSettingsClient({
   async function handleStartEmailChange(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const normalizedEmail = newEmail.trim().toLowerCase();
-    if (!hasSecondFactor) return;
+    if (!normalizedEmail || !normalizedEmail.includes("@")) {
+      toast({
+        variant: "warning",
+        title: "Email da controllare",
+        description: "Inserisci una nuova email valida.",
+      });
+      return;
+    }
 
     setIsCredentialsBusy(true);
     try {
-      const createdEmail = await createEmailWithReverification(normalizedEmail);
+      const createdEmail = await accountUser?.createEmailAddress?.({
+        email: normalizedEmail,
+        emailAddress: normalizedEmail,
+      });
       if (!createdEmail) throw new Error("email_not_created");
       await createdEmail.prepareVerification?.({ strategy: "email_code" });
       setPendingEmail(createdEmail);
@@ -621,7 +687,14 @@ export function AccountSettingsClient({
 
   async function handleVerifyEmail(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!pendingEmail || !emailCode.trim()) return;
+    if (!pendingEmail || !emailCode.trim()) {
+      toast({
+        variant: "warning",
+        title: "Codice richiesto",
+        description: "Inserisci il codice ricevuto via email.",
+      });
+      return;
+    }
 
     setIsCredentialsBusy(true);
     try {
@@ -651,17 +724,28 @@ export function AccountSettingsClient({
 
   async function handlePasswordChange(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!hasSecondFactor) return;
+    if (!currentPassword || !newPassword) {
+      toast({
+        variant: "warning",
+        title: "Password da completare",
+        description: "Inserisci password attuale e nuova password.",
+      });
+      return;
+    }
 
     setIsCredentialsBusy(true);
     try {
-      await updatePasswordWithReverification(currentPassword, newPassword);
+      await accountUser?.updatePassword?.({
+        currentPassword,
+        newPassword,
+        signOutOfOtherSessions: true,
+      });
       setCurrentPassword("");
       setNewPassword("");
       toast({
         variant: "success",
         title: "Password aggiornata",
-        description: "Le altre sessioni sono state chiuse per sicurezza.",
+        description: "La nuova password sara richiesta al prossimo accesso.",
       });
     } catch (error) {
       toast({
@@ -674,18 +758,15 @@ export function AccountSettingsClient({
     }
   }
 
-  if (!isLoaded) {
-    return (
-      <Card variant="panel" padding="lg">
-        <CardBody>
-          <Text tone="muted">Caricamento impostazioni account...</Text>
-        </CardBody>
-      </Card>
-    );
-  }
+  const usernameStatus =
+    usernameAvailability && !usernameAvailability.available
+      ? "error"
+      : usernameAvailability?.available
+        ? "success"
+        : "default";
 
   return (
-    <div className="grid gap-(--spacing-4) xl:grid-cols-[minmax(0,1fr)_24rem]">
+    <div className="grid gap-(--spacing-4) xl:grid-cols-[minmax(0,1fr)_22rem]">
       <Stack gap="4">
         <Card variant="panel" padding="lg">
           <CardBody>
@@ -704,11 +785,18 @@ export function AccountSettingsClient({
                       Profilo
                     </Text>
                     <Text size="sm" tone="muted">
-                      @{accountUser?.username ?? initialUser.username}
+                      Nome, cognome e immagine visibili nel workspace.
                     </Text>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-(--spacing-2)">
+                  <input
+                    ref={avatarInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="sr-only"
+                    onChange={handleAvatarChange}
+                  />
                   <Button
                     type="button"
                     variant="secondary"
@@ -717,27 +805,19 @@ export function AccountSettingsClient({
                     loading={isUploadingAvatar}
                     onClick={() => avatarInputRef.current?.click()}
                   >
-                    Cambia foto
+                    Carica
                   </Button>
                   {imageUrl ? (
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      onClick={handleRemoveAvatar}
                       disabled={isUploadingAvatar}
+                      onClick={handleRemoveAvatar}
                     >
                       Rimuovi
                     </Button>
                   ) : null}
-                  <input
-                    ref={avatarInputRef}
-                    id="avatar-upload"
-                    type="file"
-                    accept="image/*"
-                    className="sr-only"
-                    onChange={handleAvatarChange}
-                  />
                 </div>
               </div>
 
@@ -791,113 +871,88 @@ export function AccountSettingsClient({
         <Card variant="panel" padding="lg">
           <CardBody>
             <Stack gap="5">
-              <div className="flex items-start justify-between gap-(--spacing-3)">
+              <div className="flex flex-col gap-(--spacing-3) sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <Text as="h2" size="lg" weight="semibold">
-                    Telefono
+                    Username
                   </Text>
                   <Text size="sm" tone="muted">
-                    Numero verificato per recupero e secondo fattore SMS.
+                    Puoi cambiarlo una volta ogni 7 giorni.
                   </Text>
                 </div>
-                <Badge tone={verifiedPhones.length ? "success" : "warning"}>
-                  {verifiedPhones.length ? "verificato" : "da verificare"}
+                <Badge tone={isUsernameCooldownActive ? "warning" : "neutral"}>
+                  {nextUsernameChangeAt
+                    ? `prossimo cambio ${formatDate(nextUsernameChangeAt)}`
+                    : "mai cambiato"}
                 </Badge>
               </div>
 
-              {verifiedPhones.length ? (
+              <Form
+                variant="plain"
+                layout="stack"
+                density="comfortable"
+                labelStyle="soft"
+                noValidate
+                onSubmit={handleUsernameSubmit}
+              >
+                <FormField label="Username" required status={usernameStatus}>
+                  <FormControl>
+                    <Input
+                      value={username}
+                      autoComplete="off"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      spellCheck={false}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        setUsername(normalizeUsernameInput(event.target.value))
+                      }
+                    />
+                  </FormControl>
+                </FormField>
                 <Stack gap="2">
-                  {verifiedPhones.map((phone) => (
-                    <div
-                      key={phone.id}
-                      className="flex flex-col gap-(--spacing-3) rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) p-(--spacing-3) sm:flex-row sm:items-center sm:justify-between"
-                    >
-                      <div className="flex items-center gap-(--spacing-3)">
-                        <Icon icon={DeviceMobile} size="md" />
-                        <div>
-                          <Text size="sm" weight="medium">
-                            {phone.phoneNumber}
-                          </Text>
-                          <Text size="xs" tone="muted">
-                            {phone.reservedForSecondFactor
-                              ? "Usato per 2FA"
-                              : "Verificato"}
-                          </Text>
-                        </div>
-                      </div>
-                      <Toggle
-                        checked={Boolean(phone.reservedForSecondFactor)}
-                        onCheckedChange={(checked) =>
-                          void togglePhoneSecondFactor(phone, checked)
-                        }
-                        disabled={isPhoneBusy}
-                        aria-label="Usa questo telefono per 2FA"
-                      />
+                  <Text
+                    size="xs"
+                    tone={usernameAvailability?.available ? "success" : "muted"}
+                    aria-live="polite"
+                  >
+                    {isCheckingUsername
+                      ? "Verifica disponibilita..."
+                      : usernameAvailability?.message ??
+                        "Usa 3-32 caratteri: lettere, numeri, punto, trattino o underscore."}
+                  </Text>
+                  {usernameSuggestions.length ? (
+                    <div className="flex flex-wrap gap-(--spacing-2)">
+                      {usernameSuggestions.map((suggestion) => (
+                        <Button
+                          key={suggestion}
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setUsername(suggestion)}
+                        >
+                          @{suggestion}
+                        </Button>
+                      ))}
                     </div>
-                  ))}
+                  ) : null}
                 </Stack>
-              ) : null}
-
-              {phoneStep === "verify" ? (
-                <Form
-                  variant="plain"
-                  layout="stack"
-                  density="comfortable"
-                  labelStyle="soft"
-                  noValidate
-                  onSubmit={handleVerifyPhone}
-                >
-                  <FormField label="Codice SMS" required>
-                    <FormControl>
-                      <OtpInput
-                        value={phoneCode}
-                        onChange={setPhoneCode}
-                        length={6}
-                        requestInitialFocusOnDesktop
-                        aria-label="Codice verifica telefono"
-                      />
-                    </FormControl>
-                  </FormField>
-                  <FormActions align="stretch">
-                    <Button
-                      type="submit"
-                      loading={isPhoneBusy}
-                      loadingLabel="Verifica..."
-                      className="w-full"
-                    >
-                      Verifica telefono
-                    </Button>
-                  </FormActions>
-                </Form>
-              ) : (
-                <Form
-                  variant="plain"
-                  layout="stack"
-                  density="comfortable"
-                  labelStyle="soft"
-                  noValidate
-                  onSubmit={handleAddPhone}
-                >
-                  <PhoneNumberField
-                    label="Aggiungi o aggiorna numero"
-                    regionCode={phoneRegionCode}
-                    onRegionCodeChange={setPhoneRegionCode}
-                    nationalNumber={phoneNumber}
-                    onNationalNumberChange={setPhoneNumber}
-                  />
-                  <FormActions align="stretch">
-                    <Button
-                      type="submit"
-                      variant="secondary"
-                      loading={isPhoneBusy}
-                      loadingLabel="Invio codice..."
-                      className="w-full"
-                    >
-                      Invia codice SMS
-                    </Button>
-                  </FormActions>
-                </Form>
-              )}
+                <FormActions align="end">
+                  <Button
+                    type="submit"
+                    size="sm"
+                    disabled={
+                      !isLoaded ||
+                      isUsernameCooldownActive ||
+                      normalizedUsername === currentUsername ||
+                      !usernameAvailability?.available
+                    }
+                    loading={isSavingUsername}
+                    loadingLabel="Salvataggio..."
+                  >
+                    Cambia username
+                  </Button>
+                </FormActions>
+              </Form>
             </Stack>
           </CardBody>
         </Card>
@@ -905,17 +960,17 @@ export function AccountSettingsClient({
         <Card variant="panel" padding="lg">
           <CardBody>
             <Stack gap="5">
-              <div className="flex items-start justify-between gap-(--spacing-3)">
+              <div className="flex flex-col gap-(--spacing-3) sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <Text as="h2" size="lg" weight="semibold">
                     Sicurezza
                   </Text>
                   <Text size="sm" tone="muted">
-                    Secondo fattore e codici di backup.
+                    A2F interna con app authenticator e codici di backup.
                   </Text>
                 </div>
-                <Badge tone={hasSecondFactor ? "success" : "warning"}>
-                  {hasSecondFactor ? "2FA attiva" : "2FA consigliata"}
+                <Badge tone={mfaEnabled ? "success" : "neutral"}>
+                  {mfaEnabled ? "A2F attiva" : "A2F non attiva"}
                 </Badge>
               </div>
 
@@ -925,19 +980,17 @@ export function AccountSettingsClient({
                     <Icon icon={ShieldCheck} size="lg" />
                     <Text weight="semibold">App authenticator</Text>
                     <Text size="sm" tone="muted">
-                      {accountUser?.totpEnabled
-                        ? "Codici temporanei attivi."
-                        : "Scansiona il QR con la tua app 2FA."}
+                      Genera codici temporanei TOTP senza usare la 2FA Clerk Pro.
                     </Text>
-                    {accountUser?.totpEnabled ? (
+                    {mfaEnabled ? (
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={disableTotp}
+                        onClick={disableMfa}
                         loading={isSecurityBusy}
                       >
-                        Disattiva app 2FA
+                        Disattiva A2F
                       </Button>
                     ) : (
                       <Button
@@ -947,7 +1000,7 @@ export function AccountSettingsClient({
                         onClick={startTotpSetup}
                         loading={isSecurityBusy}
                       >
-                        Attiva app 2FA
+                        Attiva A2F
                       </Button>
                     )}
                   </Stack>
@@ -955,84 +1008,75 @@ export function AccountSettingsClient({
 
                 <div className="rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) p-(--spacing-4)">
                   <Stack gap="3">
-                    <Icon icon={DeviceMobile} size="lg" />
-                    <Text weight="semibold">SMS 2FA</Text>
+                    <Icon icon={QrCode} size="lg" />
+                    <Text weight="semibold">Codici di backup</Text>
                     <Text size="sm" tone="muted">
-                      {mfaPhones.length
-                        ? "Un numero verificato e riservato per 2FA."
-                        : "Verifica un telefono e abilita il toggle SMS."}
+                      Ogni codice puo essere usato una sola volta nel login A2F.
                     </Text>
-                    <Badge tone={mfaPhones.length ? "success" : "neutral"}>
-                      {mfaPhones.length ? "attivo" : "non attivo"}
-                    </Badge>
+                    <Badge tone="neutral">{backupCodesRemaining} disponibili</Badge>
                   </Stack>
                 </div>
               </div>
 
-              {totpStep === "setup" && totp?.uri ? (
+              {totpStep === "setup" && totpUrl ? (
                 <div className="grid gap-(--spacing-4) rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) p-(--spacing-4) md:grid-cols-[auto,minmax(0,1fr)]">
-                  <div className="rounded-(--radius-lg) bg-white p-(--spacing-3)">
-                    <QRCodeSVG value={totp.uri} size={176} />
+                  <div className="w-fit rounded-(--radius-lg) bg-white p-(--spacing-3)">
+                    <QRCodeSVG value={totpUrl} size={176} />
                   </div>
                   <Stack gap="3">
                     <Text weight="semibold">Scansiona il QR</Text>
                     <Text size="sm" tone="muted" className="break-all">
-                      {totp.uri}
+                      Chiave manuale: {totpSecret}
                     </Text>
-                    <Button
-                      type="button"
-                      size="sm"
-                      onClick={() => setTotpStep("verify")}
+                    <Form
+                      variant="plain"
+                      layout="stack"
+                      density="comfortable"
+                      labelStyle="soft"
+                      noValidate
+                      onSubmit={confirmTotpSetup}
                     >
-                      Ho aggiunto il codice
-                    </Button>
+                      <FormField label="Codice app authenticator" required>
+                        <FormControl>
+                          <OtpInput
+                            value={totpCode}
+                            onChange={setTotpCode}
+                            length={6}
+                            requestInitialFocusOnDesktop
+                            aria-label="Codice TOTP"
+                          />
+                        </FormControl>
+                      </FormField>
+                      <FormActions align="stretch">
+                        <Button
+                          type="submit"
+                          loading={isSecurityBusy}
+                          loadingLabel="Verifica..."
+                          className="w-full"
+                        >
+                          Verifica e attiva
+                        </Button>
+                      </FormActions>
+                    </Form>
                   </Stack>
                 </div>
               ) : null}
 
-              {totpStep === "verify" ? (
-                <Form
-                  variant="plain"
-                  layout="stack"
-                  density="comfortable"
-                  labelStyle="soft"
-                  noValidate
-                  onSubmit={verifyTotp}
-                >
-                  <FormField label="Codice app authenticator" required>
-                    <FormControl>
-                      <OtpInput
-                        value={totpCode}
-                        onChange={setTotpCode}
-                        length={6}
-                        requestInitialFocusOnDesktop
-                        aria-label="Codice TOTP"
-                      />
-                    </FormControl>
-                  </FormField>
-                  <FormActions align="stretch">
-                    <Button
-                      type="submit"
-                      loading={isSecurityBusy}
-                      loadingLabel="Verifica..."
-                      className="w-full"
-                    >
-                      Verifica e attiva
-                    </Button>
-                  </FormActions>
-                </Form>
-              ) : null}
-
-              {hasSecondFactor ? (
+              {mfaEnabled ? (
                 <div className="rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) p-(--spacing-4)">
                   <Stack gap="3">
-                    <div className="flex items-center justify-between gap-(--spacing-3)">
-                      <Text weight="semibold">Codici di backup</Text>
+                    <div className="flex flex-col gap-(--spacing-3) sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <Text weight="semibold">Backup code</Text>
+                        <Text size="sm" tone="muted">
+                          Generarli sostituisce quelli precedenti.
+                        </Text>
+                      </div>
                       <Button
                         type="button"
                         variant="secondary"
                         size="sm"
-                        onClick={generateBackupCodes}
+                        onClick={regenerateBackupCodes}
                         loading={isSecurityBusy}
                       >
                         Genera codici
@@ -1051,7 +1095,7 @@ export function AccountSettingsClient({
                       </div>
                     ) : (
                       <Text size="sm" tone="muted">
-                        Generali solo quando sei pronto a salvarli.
+                        I codici vengono mostrati solo subito dopo la generazione.
                       </Text>
                     )}
                   </Stack>
@@ -1070,123 +1114,115 @@ export function AccountSettingsClient({
                     Email e password
                   </Text>
                   <Text size="sm" tone="muted">
-                    Modifiche sensibili disponibili solo con 2FA attiva.
+                    Clerk resta il provider della sessione primaria.
                   </Text>
                 </div>
-                <Icon icon={hasSecondFactor ? CheckCircle : LockKey} size="lg" />
+                <Icon icon={LockKey} size="lg" />
               </div>
 
-              {!hasSecondFactor ? (
-                <div className="rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) p-(--spacing-4)">
-                  <Text size="sm" tone="muted">
-                    Attiva un secondo fattore prima di cambiare email o password.
-                  </Text>
-                </div>
-              ) : (
-                <div className="grid gap-(--spacing-4) lg:grid-cols-2">
-                  <Form
-                    variant="plain"
-                    layout="stack"
-                    density="comfortable"
-                    labelStyle="soft"
-                    noValidate
-                    onSubmit={
-                      emailStep === "verify"
-                        ? handleVerifyEmail
-                        : handleStartEmailChange
-                    }
-                  >
-                    {emailStep === "verify" ? (
-                      <FormField label="Codice nuova email" required>
-                        <FormControl>
-                          <OtpInput
-                            value={emailCode}
-                            onChange={setEmailCode}
-                            length={6}
-                            requestInitialFocusOnDesktop
-                            aria-label="Codice nuova email"
-                          />
-                        </FormControl>
-                      </FormField>
-                    ) : (
-                      <FormField label="Nuova email" required>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            autoComplete="email"
-                            value={newEmail}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                              setNewEmail(event.target.value)
-                            }
-                            iconLeading={<Icon icon={EnvelopeSimple} size="sm" />}
-                          />
-                        </FormControl>
-                      </FormField>
-                    )}
-                    <FormActions align="stretch">
-                      <Button
-                        type="submit"
-                        variant="secondary"
-                        loading={isCredentialsBusy}
-                        loadingLabel="Aggiornamento..."
-                        className="w-full"
-                      >
-                        {emailStep === "verify" ? "Verifica email" : "Cambia email"}
-                      </Button>
-                    </FormActions>
-                  </Form>
+              <div className="grid gap-(--spacing-4) lg:grid-cols-2">
+                <Form
+                  variant="plain"
+                  layout="stack"
+                  density="comfortable"
+                  labelStyle="soft"
+                  noValidate
+                  onSubmit={
+                    emailStep === "verify"
+                      ? handleVerifyEmail
+                      : handleStartEmailChange
+                  }
+                >
+                  {emailStep === "verify" ? (
+                    <FormField label="Codice nuova email" required>
+                      <FormControl>
+                        <OtpInput
+                          value={emailCode}
+                          onChange={setEmailCode}
+                          length={6}
+                          requestInitialFocusOnDesktop
+                          aria-label="Codice nuova email"
+                        />
+                      </FormControl>
+                    </FormField>
+                  ) : (
+                    <FormField label="Nuova email" required>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          autoComplete="email"
+                          value={newEmail}
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                            setNewEmail(event.target.value)
+                          }
+                          iconLeading={<Icon icon={EnvelopeSimple} size="sm" />}
+                        />
+                      </FormControl>
+                    </FormField>
+                  )}
+                  <FormActions align="stretch">
+                    <Button
+                      type="submit"
+                      variant="secondary"
+                      loading={isCredentialsBusy}
+                      loadingLabel="Aggiornamento..."
+                      className="w-full"
+                    >
+                      {emailStep === "verify" ? "Verifica email" : "Cambia email"}
+                    </Button>
+                  </FormActions>
+                </Form>
 
-                  <Form
-                    variant="plain"
-                    layout="stack"
-                    density="comfortable"
-                    labelStyle="soft"
-                    noValidate
-                    onSubmit={handlePasswordChange}
-                  >
-                    <FormField label="Password attuale" required>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          autoComplete="current-password"
-                          showPasswordToggle
-                          value={currentPassword}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                            setCurrentPassword(event.target.value)
-                          }
-                          iconLeading={<Icon icon={Key} size="sm" />}
-                        />
-                      </FormControl>
-                    </FormField>
-                    <FormField label="Nuova password" required>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          autoComplete="new-password"
-                          showPasswordToggle
-                          showStrength
-                          value={newPassword}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                            setNewPassword(event.target.value)
-                          }
-                          iconLeading={<Icon icon={LockKey} size="sm" />}
-                        />
-                      </FormControl>
-                    </FormField>
-                    <FormActions align="stretch">
-                      <Button
-                        type="submit"
-                        variant="secondary"
-                        loading={isCredentialsBusy}
-                        loadingLabel="Salvataggio..."
-                        className="w-full"
-                      >
-                        Cambia password
-                      </Button>
-                    </FormActions>
-                  </Form>
-                </div>
-              )}
+                <Form
+                  variant="plain"
+                  layout="stack"
+                  density="comfortable"
+                  labelStyle="soft"
+                  noValidate
+                  onSubmit={handlePasswordChange}
+                >
+                  <FormField label="Password attuale" required>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        autoComplete="current-password"
+                        showPasswordToggle
+                        value={currentPassword}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                          setCurrentPassword(event.target.value)
+                        }
+                        iconLeading={<Icon icon={Key} size="sm" />}
+                      />
+                    </FormControl>
+                  </FormField>
+                  <FormField label="Nuova password" required>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        autoComplete="new-password"
+                        showPasswordToggle
+                        showStrength
+                        value={newPassword}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                          setNewPassword(event.target.value)
+                        }
+                        iconLeading={<Icon icon={LockKey} size="sm" />}
+                      />
+                    </FormControl>
+                  </FormField>
+                  <FormActions align="stretch">
+                    <Button
+                      type="submit"
+                      variant="secondary"
+                      loading={isCredentialsBusy}
+                      loadingLabel="Salvataggio..."
+                      className="w-full"
+                    >
+                      Cambia password
+                    </Button>
+                  </FormActions>
+                </Form>
+              </div>
             </Stack>
           </CardBody>
         </Card>
@@ -1229,9 +1265,14 @@ export function AccountSettingsClient({
               <Text size="sm" tone="muted" className="break-all">
                 {accountUser?.primaryEmailAddress?.emailAddress ?? initialUser.email}
               </Text>
-              <Badge tone={hasSecondFactor ? "success" : "warning"}>
-                {hasSecondFactor ? "protetto con 2FA" : "2FA non attiva"}
+              <Badge tone={mfaEnabled ? "success" : "neutral"}>
+                {mfaEnabled ? "protetto con A2F" : "A2F non attiva"}
               </Badge>
+              {isLoaded ? (
+                <Text size="xs" tone="muted">
+                  Dati sessione caricati da Clerk, sicurezza gestita da Qoovex.
+                </Text>
+              ) : null}
             </Stack>
           </CardBody>
         </Card>

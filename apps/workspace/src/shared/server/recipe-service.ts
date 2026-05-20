@@ -3,7 +3,7 @@ import "server-only";
 import { getPlanLimit, assertLimitAvailable } from "@shared/config/plan-rules";
 import {
   buildNutritionRanges,
-  normalizeAllergens,
+  mergeInferredAllergens,
   normalizeNutritionRanges,
   slugifyIngredientName,
 } from "@shared/lib/ingredient-normalization";
@@ -64,7 +64,7 @@ function normalizeIngredients(rawIngredients: IngredientInput[]) {
       name: ingredient.name.trim(),
       unit: ingredient.unit.trim(),
       slug: ingredient.slug?.trim() || slugifyIngredientName(ingredient.name),
-      allergens: normalizeAllergens(ingredient.allergens).join(", "),
+      allergens: mergeInferredAllergens(ingredient.name, ingredient.allergens).join(", "),
       quantity: normalizeNumber(ingredient.quantity),
       calories: normalizeOptionalNumber(ingredient.calories),
       proteins: normalizeOptionalNumber(ingredient.proteins),

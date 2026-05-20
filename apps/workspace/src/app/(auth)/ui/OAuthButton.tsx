@@ -16,6 +16,10 @@ const providerConfig = {
   google: {
     strategy: "oauth_google" as const,
     label: {
+      signIn: "Google",
+      signUp: "Google",
+    },
+    ariaLabel: {
       signIn: "Accedi con Google",
       signUp: "Registrati con Google",
     },
@@ -25,6 +29,10 @@ const providerConfig = {
   apple: {
     strategy: "oauth_apple" as const,
     label: {
+      signIn: "Apple",
+      signUp: "Apple",
+    },
+    ariaLabel: {
       signIn: "Accedi con Apple",
       signUp: "Registrati con Apple",
     },
@@ -101,13 +109,13 @@ export function OAuthButton({
     <Button
       type="button"
       variant="secondary"
-      size="md"
+      size="lg"
       onClick={handleOAuthAuth}
       disabled={isLoading || isUnavailable}
       loading={isLoading}
       caption={disabledReason}
       className="w-full"
-      aria-label={config.label[mode]}
+      aria-label={config.ariaLabel[mode]}
       iconLeft={
         <Image
           src={config.logoSrc}

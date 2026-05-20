@@ -53,6 +53,46 @@ export function normalizeAllergens(values: string[] | string | null | undefined)
   ).sort((a, b) => a.localeCompare(b, "it"));
 }
 
+const GLUTEN_FREE_FLOUR_PATTERNS = [
+  /\bfarina\s+(?:di\s+)?(?:riso|mais|granturco|ceci|piselli|lenticchie|fagioli|soia|mandorle|nocciole|cocco|castagne|quinoa|amaranto|miglio|sorgo|teff)\b/,
+  /\bgrano\s+saraceno\b/,
+  /\bmaizena\b/,
+  /\bamido\s+di\s+mais\b/,
+  /\bfecola\s+di\s+patate\b/,
+];
+
+const GLUTEN_PATTERNS = [
+  /\bfarina(?:\s+(?:00|0|1|2|tipo\s*00|tipo\s*0|tipo\s*1|tipo\s*2|manitoba|integrale))?\b/,
+  /\bfarina\s+(?:di\s+)?(?:grano|frumento|farro|segale|orzo|avena|kamut|spelta)\b/,
+  /\b(?:grano|frumento|farro|segale|orzo|avena|kamut|spelta)\b/,
+  /\b(?:semola|semolino|cous\s*cous|couscous|bulgur|seitan)\b/,
+  /\bpane\b/,
+  /\bpasta\b/,
+];
+
+export function inferAllergensForIngredientName(name: string) {
+  const normalized = normalizeIngredientName(name)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("it");
+
+  if (!normalized) return [];
+  if (GLUTEN_FREE_FLOUR_PATTERNS.some((pattern) => pattern.test(normalized))) {
+    return [];
+  }
+
+  return GLUTEN_PATTERNS.some((pattern) => pattern.test(normalized))
+    ? ["glutine"]
+    : [];
+}
+
+export function mergeInferredAllergens(
+  name: string,
+  values: string[] | string | null | undefined,
+) {
+  return normalizeAllergens([...normalizeAllergens(values), ...inferAllergensForIngredientName(name)]);
+}
+
 export function formatNutrition(value: number | null | undefined, suffix = "") {
   if (typeof value !== "number" || !Number.isFinite(value)) return "-";
   const formatted = Number.isInteger(value) ? value.toString() : value.toFixed(1);

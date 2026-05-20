@@ -3,7 +3,7 @@ import "server-only";
 import { db } from "@qoovex/db";
 import {
   buildNutritionRanges,
-  normalizeAllergens,
+  mergeInferredAllergens,
   normalizeNutritionRanges,
   slugifyIngredientName,
 } from "@shared/lib/ingredient-normalization";
@@ -75,7 +75,7 @@ function mapIngredient(ingredient: {
     id: ingredient.id,
     name: ingredient.name,
     slug: ingredient.slug,
-    allergens: ingredient.allergens,
+    allergens: mergeInferredAllergens(ingredient.name, ingredient.allergens),
     calories: ingredient.calories,
     proteins: ingredient.proteins,
     carbs: ingredient.carbs,
@@ -164,7 +164,7 @@ export async function findIngredientByNameOrSlug(rawName: string) {
 export async function upsertCatalogIngredient(input: IngredientInput) {
   const name = input.name.trim();
   const slug = input.slug?.trim() || slugifyIngredientName(name);
-  const allergens = normalizeAllergens(input.allergens);
+  const allergens = mergeInferredAllergens(name, input.allergens);
   const nutrition = normalizeNutritionRanges(
     input.nutrition ??
       buildNutritionRanges({

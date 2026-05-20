@@ -56,6 +56,14 @@ model User {
   username            String             @unique
   email               String             @unique
   phoneNumber         String?
+  mfaEnabled          Boolean            @default(false)
+  totpSecretEncrypted String?
+  totpSecretNonce     String?
+  totpPendingSecretEncrypted String?
+  totpPendingSecretNonce     String?
+  totpPendingCreatedAt       DateTime?
+  totpVerifiedAt      DateTime?
+  usernameChangedAt   DateTime?
   plan                Plan               @default(FREE)
   recipes             Recipe[]
   menus               Menu[]
@@ -65,8 +73,21 @@ model User {
   notifications       Notification[]
   recentSearches      RecentSearch[]
   ingredientReviews   IngredientReview[]
+  mfaBackupCodes      MfaBackupCode[]
   createdAt           DateTime           @default(now())
   updatedAt           DateTime           @updatedAt
+}
+
+model MfaBackupCode {
+  id        String    @id @default(cuid())
+  userId    String
+  codeHash  String
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, usedAt])
 }
 
 model RecentSearch {

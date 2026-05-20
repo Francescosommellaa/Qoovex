@@ -12,6 +12,8 @@ interface SettingsViewUser {
   email: string;
   imageUrl?: string | null;
   phoneNumber?: string | null;
+  mfaEnabled?: boolean;
+  usernameChangedAt?: Date | null;
   plan: WorkspacePlan;
 }
 

@@ -388,6 +388,12 @@ export function WorkspaceSidebar({
   variant = "desktop",
   onNavigate,
 }: WorkspaceSidebarProps) {
+  const { theme } = useTheme();
+  const logoSrc =
+    theme === "white"
+      ? "/logo-icon/qoovex-icona-nera-no-sfondo.svg"
+      : "/logo-icon/qoovex-icona-bianca-no-sfondo.svg";
+
   return (
     <div
       className={cn(
@@ -399,7 +405,7 @@ export function WorkspaceSidebar({
     >
       <div className="flex items-center gap-(--spacing-3)">
         <Image
-          src="/logo-icon/qoovex-icona-bianca-no-sfondo.svg"
+          src={logoSrc}
           alt=""
           width={28}
           height={28}

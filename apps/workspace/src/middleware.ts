@@ -11,9 +11,11 @@ const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/forgot-password(.*)",
+  "/mfa-challenge(.*)",
   "/sso-callback(.*)",
   "/workspace-unavailable(.*)",
   "/api/dev-auth(.*)",
+  "/api/auth/username(.*)",
   "/api/webhooks/clerk(.*)",
   "/api/recipes/media(.*)",
 ]);

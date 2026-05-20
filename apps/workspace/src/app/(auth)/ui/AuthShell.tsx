@@ -1,7 +1,9 @@
+"use client";
+
 import Image from "next/image";
-import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeft } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
-import { AuthShell as DsAuthShell, Box, Button, Icon } from "@qoovex/ui";
+import { AuthShell as DsAuthShell, Box, Button, Icon, useTheme } from "@qoovex/ui";
 
 interface AuthShellProps {
   title: string;
@@ -18,6 +20,12 @@ export function AuthShell({
   onBack,
   children,
 }: AuthShellProps) {
+  const { theme } = useTheme();
+  const logoSrc =
+    theme === "white"
+      ? "/logo-icon/qoovex-icona-nera-no-sfondo.svg"
+      : "/logo-icon/qoovex-icona-bianca-no-sfondo.svg";
+
   return (
     <DsAuthShell
       title={title}
@@ -25,7 +33,7 @@ export function AuthShell({
       steps={steps}
       logo={
         <Image
-          src="/logo-icon/qoovex-icona-nera-sfondo-quadrato.svg"
+          src={logoSrc}
           alt="Qoovex"
           width={40}
           height={40}

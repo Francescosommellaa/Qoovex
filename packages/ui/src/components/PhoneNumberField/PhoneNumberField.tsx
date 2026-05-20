@@ -7,6 +7,7 @@ import { FormField } from "../Form";
 import { cn } from "../../lib/utils";
 
 export type PhoneRegionOption = SelectOption;
+export type PhoneNumberFieldStatus = "default" | "error" | "success";
 
 const DEFAULT_PHONE_REGION_OPTIONS: PhoneRegionOption[] = [
   { value: "+39", label: "IT (+39)" },
@@ -21,6 +22,7 @@ const DEFAULT_PHONE_REGION_OPTIONS: PhoneRegionOption[] = [
 export interface PhoneNumberFieldProps {
   label?: React.ReactNode;
   helperText?: React.ReactNode;
+  status?: PhoneNumberFieldStatus;
   required?: boolean;
   disabled?: boolean;
   className?: string;
@@ -40,6 +42,7 @@ export interface PhoneNumberFieldProps {
 export function PhoneNumberField({
   label = "Numero di telefono",
   helperText,
+  status = "default",
   required = false,
   disabled = false,
   className,
@@ -73,6 +76,7 @@ export function PhoneNumberField({
     <FormField
       label={label}
       helperText={helperText}
+      status={status}
       required={required}
       disabled={disabled}
       controlId={nationalNumberId}
@@ -85,6 +89,7 @@ export function PhoneNumberField({
             value={regionCode}
             onChange={onRegionCodeChange}
             placeholder={selectPlaceholder}
+            status={status}
             disabled={disabled}
             className={cn("w-full", selectClassName)}
           />
@@ -97,6 +102,7 @@ export function PhoneNumberField({
             autoComplete={inputAutoComplete}
             inputMode="numeric"
             pattern="[0-9]*"
+            status={status}
             disabled={disabled}
             value={nationalNumber}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

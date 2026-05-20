@@ -1,1 +1,5 @@
-export type { PhoneNumberFieldProps, PhoneRegionOption } from "./PhoneNumberField";
+export type {
+  PhoneNumberFieldProps,
+  PhoneNumberFieldStatus,
+  PhoneRegionOption,
+} from "./PhoneNumberField";

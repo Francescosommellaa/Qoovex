@@ -1,6 +1,6 @@
 import type * as React from "react";
 import { notFound } from "next/navigation";
-import { Clock, ForkKnife, ListBullets, SquaresFour } from "@phosphor-icons/react/dist/ssr";
+import { Clock, ForkKnife, ImageSquare } from "@phosphor-icons/react/dist/ssr";
 import {
   Badge,
   Button,
@@ -8,6 +8,7 @@ import {
   CardBody,
   EmptyState,
   Input,
+  Select,
   Stack,
   Text,
 } from "@qoovex/ui";
@@ -31,6 +32,7 @@ import {
   getRecipeDetail,
   getRecipesIndex,
 } from "@shared/server/recipe-service";
+import { RecipeViewModeToggle } from "./recipe-view-mode-toggle";
 
 interface RecipesViewUser {
   id: string;
@@ -58,11 +60,6 @@ const VALIDITY_OPTIONS = [
   { value: "archived", label: "Archiviate" },
 ];
 
-const VIEW_OPTIONS = [
-  { value: "cards", label: "Card" },
-  { value: "list", label: "Lista" },
-];
-
 function formatLimit(used: number, value: number | null) {
   return value === null ? `${used} / illimitato` : `${used} / ${value}`;
 }
@@ -82,28 +79,10 @@ function statusLabel(recipe: RecipeSummaryDto) {
   return "Privata";
 }
 
-function filterParams(filters: RecipeFiltersDto) {
-  const params = new URLSearchParams();
-  if (filters.query) params.set("q", filters.query);
-  if (filters.category && filters.category !== "all") params.set("category", filters.category);
-  if (filters.sort && filters.sort !== "updated-desc") params.set("sort", filters.sort);
-  if (filters.visibility && filters.visibility !== "all") params.set("visibility", filters.visibility);
-  if (filters.validity && filters.validity !== "all") params.set("validity", filters.validity);
-  if (filters.allergen) params.set("allergen", filters.allergen);
-  if (typeof filters.kcalMin === "number") params.set("kcalMin", String(filters.kcalMin));
-  if (typeof filters.kcalMax === "number") params.set("kcalMax", String(filters.kcalMax));
-  if (filters.view && filters.view !== "cards") params.set("view", filters.view);
-  return params.toString();
-}
-
-function hrefForFilters(filters: RecipeFiltersDto) {
-  const params = filterParams(filters);
-  return params ? `/recipes?${params}` : "/recipes";
-}
-
 function RecipeFilters({ filters }: { filters: RecipeFiltersDto }) {
   return (
     <div className="grid gap-(--spacing-4)">
+      <input type="hidden" name="view" value={filters.view ?? "cards"} />
       <Input
         name="q"
         label="Cerca"
@@ -133,12 +112,6 @@ function RecipeFilters({ filters }: { filters: RecipeFiltersDto }) {
         label="Ordine"
         options={SORT_OPTIONS}
         defaultValue={filters.sort ?? "updated-desc"}
-      />
-      <FilterSelect
-        name="view"
-        label="Vista"
-        options={VIEW_OPTIONS}
-        defaultValue={filters.view ?? "cards"}
       />
       <Input
         name="allergen"
@@ -186,44 +159,61 @@ function FilterSelect({
   defaultValue: string;
 }) {
   return (
-    <label className="grid gap-(--spacing-1)">
-      <span className="text-(length:--text-xs) font-(--font-weight-medium) text-(--color-text-muted)">
-        {label}
-      </span>
-      <select
-        name={name}
-        defaultValue={defaultValue}
-        className="min-h-(--input-height-md) rounded-(--radius-md) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) text-(length:--text-sm) text-(--color-text) outline-none transition-colors focus:border-(--color-primary)"
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </label>
+    <Select
+      name={name}
+      label={label}
+      options={options}
+      defaultValue={defaultValue}
+    />
   );
 }
 
-function RecipeCard({ recipe, compact = false }: { recipe: RecipeSummaryDto; compact?: boolean }) {
+function RecipeImage({
+  src,
+  title,
+  size = "card",
+}: {
+  src: string | null;
+  title: string;
+  size?: "card" | "list" | "detail";
+}) {
+  const frameClass =
+    size === "list"
+      ? "size-14 sm:size-16"
+      : size === "detail"
+        ? "min-h-56 lg:min-h-full"
+        : "aspect-square";
+
+  return (
+    <div
+      className={`${frameClass} overflow-hidden rounded-(--radius-lg) bg-(--color-surface-muted)`}
+    >
+      {src ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={src}
+          alt=""
+          className="h-full w-full object-cover transition-transform duration-200 hover:scale-[1.03]"
+        />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center text-(--color-text-muted)">
+          <ImageSquare size={size === "list" ? 20 : 36} aria-label={`Immagine ${title}`} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RecipeCard({ recipe }: { recipe: RecipeSummaryDto }) {
   return (
     <Card variant="panel" padding="md" className="h-full">
       <CardBody>
         <Stack gap="4">
-          {recipe.imageUrl ? (
-            <div className="aspect-[16/10] overflow-hidden rounded-(--radius-lg) bg-(--color-surface-muted)">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={recipe.imageUrl}
-                alt=""
-                className="h-full w-full object-cover transition-transform duration-200 hover:scale-[1.03]"
-              />
-            </div>
-          ) : null}
+          <RecipeImage src={recipe.imageUrl} title={recipe.title} />
 
           <div className="flex items-start justify-between gap-(--spacing-3)">
             <div className="min-w-0">
-              <Text as="h2" size={compact ? "base" : "lg"} weight="semibold" className="truncate">
+              <Text as="h2" size="lg" weight="semibold" className="truncate">
                 {recipe.title}
               </Text>
               <Text size="xs" tone="muted">
@@ -248,7 +238,7 @@ function RecipeCard({ recipe, compact = false }: { recipe: RecipeSummaryDto; com
 
           <div className="flex flex-wrap gap-(--spacing-2)">
             {recipe.allergens.slice(0, 4).map((allergen) => (
-              <Badge key={allergen} size="sm" tone="warning">
+              <Badge key={allergen} size="sm" tone="neutral">
                 {allergen}
               </Badge>
             ))}
@@ -269,6 +259,65 @@ function RecipeCard({ recipe, compact = false }: { recipe: RecipeSummaryDto; com
             Apri ricetta
           </Button>
         </Stack>
+      </CardBody>
+    </Card>
+  );
+}
+
+function RecipeListItem({ recipe }: { recipe: RecipeSummaryDto }) {
+  const totalTime = (recipe.prepTime ?? 0) + (recipe.cookTime ?? 0);
+
+  return (
+    <Card variant="panel" padding="sm">
+      <CardBody>
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-(--spacing-3) sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center">
+          <RecipeImage src={recipe.imageUrl} title={recipe.title} size="list" />
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-(--spacing-2)">
+              <Text as="h2" size="base" weight="semibold" className="truncate">
+                {recipe.title}
+              </Text>
+              <Badge size="sm" tone={statusTone(recipe)}>
+                {statusLabel(recipe)}
+              </Badge>
+            </div>
+            <div className="mt-(--spacing-1) flex flex-wrap gap-x-(--spacing-3) gap-y-(--spacing-1)">
+              <Text size="xs" tone="muted">
+                {getRecipeCategoryLabel(recipe.category)}
+              </Text>
+              <Text size="xs" tone="muted">
+                {recipe.ingredientsCount} ingredienti
+              </Text>
+              <Text size="xs" tone="muted">
+                {totalTime || "-"} min
+              </Text>
+              <Text size="xs" tone="muted">
+                {formatNutritionRange(recipe.nutrition.calories)}
+              </Text>
+            </div>
+            <div className="mt-(--spacing-2) flex flex-wrap gap-(--spacing-1)">
+              {recipe.allergens.slice(0, 3).map((allergen) => (
+                <Badge key={allergen} size="sm" tone="neutral">
+                  {allergen}
+                </Badge>
+              ))}
+              {recipe.allergens.length === 0 ? (
+                <Badge size="sm" tone="neutral">
+                  nessun allergene noto
+                </Badge>
+              ) : null}
+            </div>
+          </div>
+          <Button
+            as="a"
+            href={`/recipes/${recipe.id}`}
+            variant="secondary"
+            size="sm"
+            className="col-span-2 w-full sm:col-span-1 sm:w-auto"
+          >
+            Apri
+          </Button>
+        </div>
       </CardBody>
     </Card>
   );
@@ -338,25 +387,8 @@ export async function RecipesIndexView({
               {recipes.length} risultati visibili. Piano: {formatLimit(limit.used, limit.value)}.
             </Text>
           </div>
-          <div className="flex flex-wrap gap-(--spacing-2)">
-            <Button
-              as="a"
-              href={hrefForFilters({ ...filters, view: "cards" })}
-              variant={view === "cards" ? "primary" : "secondary"}
-              size="sm"
-              iconLeft={<SquaresFour size={14} />}
-            >
-              Card
-            </Button>
-            <Button
-              as="a"
-              href={hrefForFilters({ ...filters, view: "list" })}
-              variant={view === "list" ? "primary" : "secondary"}
-              size="sm"
-              iconLeft={<ListBullets size={14} />}
-            >
-              Lista
-            </Button>
+          <div className="flex flex-wrap items-center gap-(--spacing-3)">
+            <RecipeViewModeToggle view={view} />
             <Button
               as="a"
               href="/recipes/new"
@@ -393,7 +425,7 @@ export async function RecipesIndexView({
             ) : view === "list" ? (
               <div className="grid gap-(--spacing-3)">
                 {recipes.map((recipe) => (
-                  <RecipeCard key={recipe.id} recipe={recipe} compact />
+                  <RecipeListItem key={recipe.id} recipe={recipe} />
                 ))}
               </div>
             ) : (
@@ -484,16 +516,7 @@ export async function RecipeDetailView({
               canPublish={recipe.canPublish}
             />
           </div>
-          {recipe.imageUrl ? (
-            <div className="min-h-48 bg-(--color-surface-muted) lg:min-h-full">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={recipe.imageUrl}
-                alt=""
-                className="h-full w-full object-cover"
-              />
-            </div>
-          ) : null}
+          <RecipeImage src={recipe.imageUrl} title={recipe.title} size="detail" />
         </section>
 
         <div className="grid gap-(--spacing-4) xl:grid-cols-[minmax(0,1fr)_22rem]">
@@ -556,7 +579,7 @@ export async function RecipeDetailView({
                             </Badge>
                           ) : (
                             ingredient.allergens.map((allergen) => (
-                              <Badge key={allergen} size="sm" tone="warning">
+                              <Badge key={allergen} size="sm" tone="neutral">
                                 {allergen}
                               </Badge>
                             ))

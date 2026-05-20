@@ -49,26 +49,6 @@
   justify-content: center;
 }
 
-.auth-divider {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-3);
-  margin-top: var(--spacing-5);
-  margin-bottom: var(--spacing-5);
-  color: var(--color-text-faint);
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-}
-
-.auth-divider::before,
-.auth-divider::after {
-  content: "";
-  flex: 1;
-  height: var(--border-thin);
-  background: var(--color-divider);
-}
-
 .auth-footer-text {
   text-align: center;
   font-size: var(--text-sm);
@@ -208,7 +188,8 @@
 
 .auth-form-scope .qv-form-actions {
   margin-top: var(--spacing-5);
-  padding-top: var(--spacing-5);
+  padding-top: 0;
+  border-top: 0;
 }
 
 .auth-optional-label {
@@ -225,12 +206,13 @@
   background: var(--color-surface-elevated);
 }
 
-.auth-warning-field .qv-form-field__label,
-.auth-warning-field .qv-form-field__required {
-  color: var(--color-warning);
+.auth-social-stack {
+  margin-top: var(--spacing-5);
 }
 
-.auth-warning-field input {
-  border-color: var(--color-warning) !important;
-  box-shadow: 0 0 0 var(--border-thin) var(--color-warning);
+.auth-terms-text {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  text-align: center;
 }

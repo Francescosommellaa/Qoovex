@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import { ToastProvider } from "@qoovex/ui";
 import { getCurrentWorkspaceUser } from "@shared/server/current-workspace-user";
+import { isMfaSatisfiedForUser } from "@shared/server/mfa-service";
 import {
   WorkspaceShell,
   type WorkspaceUserSummary,
@@ -55,6 +56,10 @@ export default async function WorkspaceLayout({
 
   if (!user) {
     redirect("/sign-in");
+  }
+
+  if (!(await isMfaSatisfiedForUser(user.id))) {
+    redirect("/mfa-challenge");
   }
 
   const userSummary: WorkspaceUserSummary = {

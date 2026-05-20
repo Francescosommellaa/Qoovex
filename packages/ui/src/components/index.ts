@@ -93,7 +93,11 @@ export type {
 export { OtpInput } from "./OtpInput";
 export type { OtpInputProps } from "./OtpInput";
 export { PhoneNumberField } from "./PhoneNumberField";
-export type { PhoneNumberFieldProps, PhoneRegionOption } from "./PhoneNumberField";
+export type {
+  PhoneNumberFieldProps,
+  PhoneNumberFieldStatus,
+  PhoneRegionOption,
+} from "./PhoneNumberField";
 export { Radio } from "./Radio";
 export type { RadioLabelPosition, RadioProps, RadioSize, RadioTone } from "./Radio";
 export { SearchBar } from "./SearchBar";

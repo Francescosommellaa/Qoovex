@@ -44,11 +44,14 @@ export async function findWorkspaceUserByClerkId(clerkId: string) {
     where: { clerkId },
     select: {
       id: true,
+      clerkId: true,
       firstName: true,
       lastName: true,
       username: true,
       email: true,
       phoneNumber: true,
+      mfaEnabled: true,
+      usernameChangedAt: true,
       plan: true,
     },
   });
@@ -115,5 +118,24 @@ export async function updateSyncedUserByEmail(input: UpsertSyncedUserInput) {
 export async function deleteUserByClerkId(clerkId: string) {
   return await db.user.deleteMany({
     where: { clerkId },
+  });
+}
+
+export async function updateUserUsernameByClerkId(input: {
+  clerkId: string;
+  username: string;
+  changedAt: Date;
+}) {
+  return await db.user.update({
+    where: { clerkId: input.clerkId },
+    data: {
+      username: input.username,
+      usernameChangedAt: input.changedAt,
+    },
+    select: {
+      id: true,
+      username: true,
+      usernameChangedAt: true,
+    },
   });
 }

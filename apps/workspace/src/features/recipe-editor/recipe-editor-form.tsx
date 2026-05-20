@@ -31,6 +31,7 @@ import {
   RECIPE_CATEGORY_OPTIONS,
   formatGdaRange,
   formatNutritionRange,
+  mergeInferredAllergens,
   normalizeAllergens,
   normalizeNutritionRanges,
 } from "@shared/lib/ingredient-normalization";
@@ -210,7 +211,7 @@ function calculatePreview(ingredients: IngredientInput[]) {
         }),
         allergens: normalizeAllergens([
           ...acc.allergens,
-          ...(ingredient.allergens?.split(",") ?? []),
+          ...mergeInferredAllergens(ingredient.name, ingredient.allergens),
         ]),
         pending: acc.pending + (ingredient.verificationStatus === "PENDING_REVIEW" ? 1 : 0),
       };
@@ -221,6 +222,14 @@ function calculatePreview(ingredients: IngredientInput[]) {
       pending: 0,
     },
   );
+}
+
+function formatNutritionRangeCompact(range: NutritionRangeDto) {
+  return range.min === null || range.max === null ? "-" : formatNutritionRange(range);
+}
+
+function formatGdaRangeCompact(calories: NutritionRangeDto) {
+  return calories.min === null || calories.max === null ? "-" : formatGdaRange(calories);
 }
 
 function IngredientRow({
@@ -429,9 +438,9 @@ function IngredientRow({
       </div>
 
       <div className="flex flex-wrap gap-(--spacing-2)">
-        {normalizeAllergens(ingredient.allergens).length > 0 ? (
-          normalizeAllergens(ingredient.allergens).map((allergen) => (
-            <Badge key={allergen} size="sm" tone="warning">
+        {mergeInferredAllergens(ingredient.name, ingredient.allergens).length > 0 ? (
+          mergeInferredAllergens(ingredient.name, ingredient.allergens).map((allergen) => (
+            <Badge key={allergen} size="sm" tone="neutral">
               {allergen}
             </Badge>
           ))
@@ -459,7 +468,7 @@ function NutritionRangeList({ nutrition }: { nutrition: NutritionRangesDto }) {
             {row.label}
           </Text>
           <Text size="sm" weight={row.indented ? "medium" : "semibold"} className="text-right">
-            {formatNutritionRange(nutrition[row.key])}
+            {formatNutritionRangeCompact(nutrition[row.key])}
           </Text>
         </div>
       ))}
@@ -468,7 +477,7 @@ function NutritionRangeList({ nutrition }: { nutrition: NutritionRangesDto }) {
           GDA
         </Text>
         <Text size="sm" weight="semibold" className="text-right">
-          {formatGdaRange(nutrition.calories)}
+          {formatGdaRangeCompact(nutrition.calories)}
         </Text>
       </div>
     </div>
@@ -489,6 +498,7 @@ export function RecipeEditorForm({
   const [imagePreviewUrl, setImagePreviewUrl] = React.useState<string | null>(
     () => initialRecipe?.imageUrl ?? null,
   );
+  const imageInputRef = React.useRef<HTMLInputElement>(null);
 
   const preview = React.useMemo(() => calculatePreview(input.ingredients), [input.ingredients]);
   const hasPendingIngredients = preview.pending > 0;
@@ -639,7 +649,7 @@ export function RecipeEditorForm({
                 />
 
                 <div className="grid gap-(--spacing-3) rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface-muted) p-(--spacing-3) md:grid-cols-[9rem_minmax(0,1fr)] md:items-center">
-                  <div className="aspect-[4/3] overflow-hidden rounded-(--radius-md) bg-(--color-surface)">
+                  <div className="aspect-square overflow-hidden rounded-(--radius-md) bg-(--color-surface)">
                     {input.imageUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -661,20 +671,28 @@ export function RecipeEditorForm({
                       Opzionale. JPG, PNG o WebP fino a 5 MB.
                     </Text>
                     <div className="flex flex-wrap gap-(--spacing-2)">
-                      <label className="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-(--radius-md) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) text-(length:--text-sm) font-(--font-weight-semibold) text-(--color-text) transition-colors hover:bg-(--color-surface-elevated)">
-                        {uploadingImage ? "Carico..." : "Carica immagine"}
-                        <input
-                          type="file"
-                          accept="image/jpeg,image/png,image/webp"
-                          className="sr-only"
-                          disabled={uploadingImage}
-                          onChange={(event) => {
-                            const file = event.target.files?.[0];
-                            event.target.value = "";
-                            if (file) void uploadImage(file);
-                          }}
-                        />
-                      </label>
+                      <input
+                        ref={imageInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        className="sr-only"
+                        disabled={uploadingImage}
+                        onChange={(event) => {
+                          const file = event.target.files?.[0];
+                          event.target.value = "";
+                          if (file) void uploadImage(file);
+                        }}
+                      />
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        loading={uploadingImage}
+                        loadingLabel="Carico..."
+                        onClick={() => imageInputRef.current?.click()}
+                      >
+                        Carica immagine
+                      </Button>
                       {input.imageUrl ? (
                         <Button
                           type="button"
@@ -752,12 +770,12 @@ export function RecipeEditorForm({
                 <div className="flex flex-wrap gap-(--spacing-2)">
                   {preview.allergens.length > 0 ? (
                     preview.allergens.map((allergen) => (
-                      <Badge key={allergen} size="sm" tone="warning">
+                      <Badge key={allergen} size="sm" tone="neutral">
                         {allergen}
                       </Badge>
                     ))
                   ) : (
-                    <Badge size="sm" tone="success">
+                    <Badge size="sm" tone="neutral">
                       Nessun allergene noto
                     </Badge>
                   )}
