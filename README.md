@@ -33,7 +33,7 @@ Il prodotto si divide in tre app:
 | ORM | Prisma 7 |
 | Database | Vercel Postgres |
 | Storage | Vercel Blob |
-| Auth | Clerk (solo `apps/workspace`) |
+| Auth | NextAuth v5 + Prisma adapter (solo `apps/workspace`) |
 | Monorepo | Turborepo + pnpm workspaces |
 | Deploy | Vercel |
 | Icone | Phosphor Icons |
@@ -92,7 +92,7 @@ apps/workspace/src/
 - **Node.js** ≥ 20
 - **pnpm** ≥ 9
 - Account **Vercel** con Postgres e Blob configurati
-- Account **Clerk** per autenticazione workspace
+- **Resend** (magic link) e opzionale **Google OAuth** per autenticazione workspace (`AUTH_SECRET`, `AUTH_URL`, `DATABASE_URL`)
 
 ***
 
@@ -245,7 +245,7 @@ Il deploy è gestito da **Vercel** con preview automatica su ogni PR e produzion
 - `apps/workspace` → Vercel project **Qoovex-workspace** → `app.qoovex.com`
 - `apps/web` → Vercel project separato → `qoovex.com`
 
-> Le variabili d'ambiente Clerk devono essere configurate **esclusivamente** nel progetto Vercel `Qoovex-workspace`.
+> Le variabili d'ambiente auth (`AUTH_SECRET`, `AUTH_URL`, `DATABASE_URL`, `RESEND_*`, …) vanno configurate **esclusivamente** nel progetto Vercel `Qoovex-workspace`.
 
 ***
 

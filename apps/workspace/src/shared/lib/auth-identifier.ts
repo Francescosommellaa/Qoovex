@@ -3,7 +3,7 @@ function isLikelyEmail(value: string): boolean {
 }
 
 /**
- * Allinea email e username a come vengono inviati a Clerk dalla registrazione:
+ * Allinea email e username per i flussi auth (magic link / identificatore):
  * - email: minuscolo;
  * - username: minuscolo, senza spazi, con eventuale prefisso "@" rimosso.
  */
@@ -17,14 +17,17 @@ function applyIdentifierCaseAndSpaces(value: string): string {
   return lowered.replace(/\s+/g, "").replace(/^@+/, "");
 }
 
-/** Valore mostrato nel campo mentre l’utente digita (senza trim agli estremi). */
+/** Valore mostrato nel campo mentre l'utente digita (senza trim agli estremi). */
 export function formatAuthIdentifierInput(value: string): string {
   return applyIdentifierCaseAndSpaces(value);
 }
 
-/** Valore da passare a `signIn.create({ identifier })` e a link/query string. */
-export function normalizeAuthIdentifierForClerk(value: string): string {
+/** Valore normalizzato per sign-in (email o username). */
+export function normalizeAuthIdentifier(value: string): string {
   const trimmed = value.trim();
   if (trimmed === "") return "";
   return applyIdentifierCaseAndSpaces(trimmed);
 }
+
+/** @deprecated Usa `normalizeAuthIdentifier`. */
+export const normalizeAuthIdentifierForClerk = normalizeAuthIdentifier;

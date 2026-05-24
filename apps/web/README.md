@@ -7,7 +7,7 @@ Metti qui:
 - componenti e sezioni specifiche del sito vetrina.
 
 Non mettere qui:
-- auth Clerk, workspace logic o feature operative del prodotto;
+- auth NextAuth, sessioni workspace o feature operative del prodotto;
 - componenti shared che dovrebbero vivere in `packages/ui`.
 
 Regole:

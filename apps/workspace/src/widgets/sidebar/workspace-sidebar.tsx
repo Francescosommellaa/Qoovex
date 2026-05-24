@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useClerk, useUser } from "@clerk/nextjs";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -237,8 +237,7 @@ function UserMenu({
   user: WorkspaceUserSummary;
   onNavigate?: () => void;
 }) {
-  const { signOut } = useClerk();
-  const { isSignedIn } = useUser();
+  const isSignedIn = true;
   const rootRef = React.useRef<HTMLDivElement>(null);
   const menuId = React.useId();
   const [open, setOpen] = React.useState(false);
@@ -277,7 +276,7 @@ function UserMenu({
         return;
       }
 
-      await signOut({ redirectUrl: "/sign-in" });
+      await signOut({ callbackUrl: "/sign-in" });
     } catch (error) {
       if (process.env.NODE_ENV !== "production") {
         console.error("[workspace] logout failed", error);

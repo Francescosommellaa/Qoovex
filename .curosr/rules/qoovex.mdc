@@ -1,0 +1,44 @@
+---
+alwaysApply: true
+---
+
+# Qoovex Brain-First Rules
+
+## Canonical Memory
+
+Before any non-trivial task, always read:
+- `A:/Qoovex-Brain/00_System/index.json`
+- `A:/Qoovex-Brain/00_System/task-routing.md`
+
+Then read:
+- the local `README.md` of each folder you will modify
+- real files already present in the touched feature/package
+
+## Mandatory Execution Flow
+
+1. classify task type (architecture, feature, decision, bug, workflow, auth/db/ui)
+2. load Brain extracts via routing or MCP `get_task_context`
+3. validate placement/layer ownership
+4. implement with minimal, coherent changes
+5. run quality checks
+6. run `pnpm brain:check` before considering the task closed
+
+## Monorepo Safety
+
+- keep placement consistent with repo ownership
+- avoid duplicate patterns for same concern
+- packages never import app code
+- workspace FSD imports must stay downward
+- NextAuth v5 only in `apps/workspace` (never in `apps/web`); see `A:/Qoovex-Brain/02_Features/auth.md`
+- use semantic tokens and Phosphor icon rules
+
+## Documentation Policy
+
+- `Qoovex-Brain` is canonical for operational memory
+- repository docs remain lightweight pointers and must not duplicate large operational content
+- if a stable rule changes, update Brain first, then align repo pointers
+
+## Folder Contract Rule
+
+If a folder has `README.md`, read it before writing code there.
+If you create a new manual source folder, add its `README.md` in the same change.

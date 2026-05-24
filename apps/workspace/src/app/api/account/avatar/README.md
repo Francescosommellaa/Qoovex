@@ -4,5 +4,5 @@ Upload e rimozione avatar account.
 
 ## Storage
 - Il file immagine vive in Vercel Blob private.
-- Clerk conserva il pathname Blob in `unsafeMetadata.avatarBlobPathname`.
-- Prisma non conserva l'avatar utente.
+- Il pathname Blob è salvato in `User.avatarBlobPathname` (Prisma).
+- La UI consuma il proxy autenticato sotto `avatar/media/`.

@@ -21,7 +21,7 @@ Interfacce ammesse:
 - `next/image`: asset statici pubblici come logo Sirio.
 
 ## Repository Boundaries
-Sirio non parla con database, API private, Clerk o servizi esterni di prodotto. Ogni contenuto visuale deve arrivare dal design system o da asset pubblici in `apps/sirio/public`.
+Sirio non parla con database, API private, NextAuth o servizi esterni di prodotto. Ogni contenuto visuale deve arrivare dal design system o da asset pubblici in `apps/sirio/public`.
 
 Regola Repository Pattern: non creare repository locali finche non esiste persistenza. Se in futuro Sirio dovesse leggere documentazione remota, creare prima un `docsRepository` server-only e un service che espone DTO puliti alla view.
 

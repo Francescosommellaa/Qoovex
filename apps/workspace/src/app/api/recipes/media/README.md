@@ -12,4 +12,4 @@ Streams private recipe images from Vercel Blob after authorization.
 - `pathname` — Blob pathname (preferred)
 - `url` — legacy private Blob URL (pathname extracted)
 
-Public route in Clerk proxy; authorization is enforced in the handler.
+Public route (no middleware auth); authorization is enforced in the handler.

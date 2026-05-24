@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useUser } from "@clerk/nextjs";
 import {
   EnvelopeSimple,
   Key,
@@ -12,6 +11,7 @@ import {
   UserCircle,
 } from "@phosphor-icons/react";
 import { QRCodeSVG } from "qrcode.react";
+import { signOut } from "next-auth/react";
 import {
   Avatar,
   Badge,
@@ -36,41 +36,19 @@ import {
   regenerateBackupCodesAction,
   startTotpSetupAction,
 } from "@shared/actions/mfa-actions";
+import {
+  changePasswordAction,
+  confirmEmailChangeAction,
+  requestEmailChangeAction,
+} from "@shared/actions/account-security-actions";
 import { changeUsernameAction } from "@shared/actions/username-actions";
 import { updateCurrentUserProfile } from "@shared/actions/bootstrap-user";
-import { syncCurrentAccountProfile } from "@shared/actions/sync-account-profile";
 import { getSafeAuthErrorMessage } from "@shared/lib/auth-error";
 import {
   buildUsernameSuggestions,
   normalizeUsernameInput,
   validateUsername,
 } from "@shared/lib/username";
-
-type ClerkEmailAddress = {
-  id: string;
-  emailAddress: string;
-  verification?: { status?: string };
-  prepareVerification?: (params?: Record<string, unknown>) => Promise<unknown>;
-  attemptVerification?: (params: { code: string }) => Promise<unknown>;
-};
-
-type ClerkAccountUser = {
-  firstName?: string | null;
-  lastName?: string | null;
-  username?: string | null;
-  imageUrl?: string | null;
-  unsafeMetadata?: Record<string, unknown>;
-  primaryEmailAddressId?: string | null;
-  primaryEmailAddress?: ClerkEmailAddress | null;
-  emailAddresses?: ClerkEmailAddress[];
-  update?: (params: Record<string, unknown>) => Promise<unknown>;
-  reload?: () => Promise<unknown>;
-  setProfileImage?: (params: { file: File | Blob | null }) => Promise<unknown>;
-  createEmailAddress?: (
-    params: Record<string, unknown>,
-  ) => Promise<ClerkEmailAddress>;
-  updatePassword?: (params: Record<string, unknown>) => Promise<unknown>;
-};
 
 interface AccountSettingsClientProps {
   user: {
@@ -121,13 +99,6 @@ function getFriendlyError(error: unknown) {
   );
 }
 
-function getAvatarUrlFromMetadata(metadata: Record<string, unknown> | undefined) {
-  const pathname = metadata?.avatarBlobPathname;
-  return typeof pathname === "string"
-    ? `/api/account/avatar/media?pathname=${encodeURIComponent(pathname)}`
-    : undefined;
-}
-
 function parseDate(value: Date | string | null | undefined) {
   if (!value) return null;
   const parsed = value instanceof Date ? value : new Date(value);
@@ -167,19 +138,15 @@ export function AccountSettingsClient({
   usage,
   planLabel,
 }: AccountSettingsClientProps) {
-  const { user, isLoaded } = useUser();
   const { toast } = useToast();
-  const accountUser = user as ClerkAccountUser | null | undefined;
   const displayName =
-    [accountUser?.firstName, accountUser?.lastName].filter(Boolean).join(" ") ||
     [initialUser.firstName, initialUser.lastName].filter(Boolean).join(" ") ||
     initialUser.username;
 
-  const [firstName, setFirstName] = React.useState(
-    accountUser?.firstName ?? initialUser.firstName,
-  );
+  const [currentEmail, setCurrentEmail] = React.useState(initialUser.email);
+  const [firstName, setFirstName] = React.useState(initialUser.firstName);
   const [lastName, setLastName] = React.useState(
-    accountUser?.lastName ?? initialUser.lastName ?? "",
+    initialUser.lastName ?? "",
   );
   const [isSavingProfile, setIsSavingProfile] = React.useState(false);
   const [avatarUrl, setAvatarUrl] = React.useState<string | undefined>(
@@ -208,18 +175,13 @@ export function AccountSettingsClient({
   const [isSecurityBusy, setIsSecurityBusy] = React.useState(false);
 
   const [newEmail, setNewEmail] = React.useState("");
-  const [pendingEmail, setPendingEmail] = React.useState<ClerkEmailAddress | null>(null);
   const [emailCode, setEmailCode] = React.useState("");
   const [emailStep, setEmailStep] = React.useState<EmailStep>("idle");
   const [currentPassword, setCurrentPassword] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
   const [isCredentialsBusy, setIsCredentialsBusy] = React.useState(false);
 
-  const imageUrl =
-    avatarUrl ??
-    getAvatarUrlFromMetadata(accountUser?.unsafeMetadata) ??
-    accountUser?.imageUrl ??
-    undefined;
+  const imageUrl = avatarUrl;
   const nextUsernameChangeAt = getNextUsernameChangeDate(usernameChangedAt);
   const isUsernameCooldownActive =
     Boolean(nextUsernameChangeAt && nextUsernameChangeAt.getTime() > Date.now()) &&
@@ -231,28 +193,8 @@ export function AccountSettingsClient({
       : buildUsernameSuggestions({
           firstName,
           lastName,
-          email: accountUser?.primaryEmailAddress?.emailAddress ?? initialUser.email,
+          email: currentEmail,
         });
-
-  React.useEffect(() => {
-    if (!accountUser) return;
-    setFirstName(accountUser.firstName ?? initialUser.firstName);
-    setLastName(accountUser.lastName ?? initialUser.lastName ?? "");
-  }, [
-    accountUser,
-    accountUser?.firstName,
-    accountUser?.lastName,
-    initialUser.firstName,
-    initialUser.lastName,
-  ]);
-
-  React.useEffect(() => {
-    setAvatarUrl(
-      getAvatarUrlFromMetadata(accountUser?.unsafeMetadata) ??
-        initialUser.imageUrl ??
-        undefined,
-    );
-  }, [accountUser?.unsafeMetadata, initialUser.imageUrl]);
 
   React.useEffect(() => {
     const normalized = normalizeUsernameInput(username);
@@ -285,7 +227,7 @@ export function AccountSettingsClient({
         suggestions: buildUsernameSuggestions({
           firstName,
           lastName,
-          email: accountUser?.primaryEmailAddress?.emailAddress ?? initialUser.email,
+          email: currentEmail,
         }),
       });
       setIsCheckingUsername(false);
@@ -300,7 +242,7 @@ export function AccountSettingsClient({
           username: normalized,
           firstName,
           lastName,
-          email: accountUser?.primaryEmailAddress?.emailAddress ?? initialUser.email,
+          email: currentEmail,
         });
         const response = await fetch(`/api/auth/username?${params}`, {
           signal: controller.signal,
@@ -318,10 +260,9 @@ export function AccountSettingsClient({
       window.clearTimeout(timeout);
     };
   }, [
-    accountUser?.primaryEmailAddress?.emailAddress,
     currentUsername,
+    currentEmail,
     firstName,
-    initialUser.email,
     lastName,
     username,
   ]);
@@ -341,15 +282,7 @@ export function AccountSettingsClient({
   }, []);
 
   async function reloadAndSync() {
-    await accountUser?.reload?.();
-    const result = await syncCurrentAccountProfile();
-    if (!result.ok) {
-      toast({
-        variant: "warning",
-        title: "Sincronizzazione in sospeso",
-        description: "La modifica e salvata su Clerk. Riprova la sincronizzazione tra poco.",
-      });
-    }
+    return;
   }
 
   async function handleProfileSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -425,7 +358,6 @@ export function AccountSettingsClient({
       const nextAvatarUrl =
         typeof payload?.url === "string" ? payload.url : undefined;
 
-      await accountUser?.setProfileImage?.({ file }).catch(() => undefined);
       if (nextAvatarUrl) setAvatarUrl(nextAvatarUrl);
       await reloadAndSync();
       toast({
@@ -449,7 +381,6 @@ export function AccountSettingsClient({
     try {
       const response = await fetch("/api/account/avatar", { method: "DELETE" });
       await readApiError(response, "Immagine non rimossa.");
-      await accountUser?.setProfileImage?.({ file: null }).catch(() => undefined);
       setAvatarUrl(undefined);
       await reloadAndSync();
       toast({
@@ -511,7 +442,6 @@ export function AccountSettingsClient({
       setCurrentUsername(result.data.username);
       setUsername(result.data.username);
       setUsernameChangedAt(result.data.usernameChangedAt);
-      await accountUser?.reload?.();
       toast({
         variant: "success",
         title: "Username aggiornato",
@@ -660,13 +590,18 @@ export function AccountSettingsClient({
 
     setIsCredentialsBusy(true);
     try {
-      const createdEmail = await accountUser?.createEmailAddress?.({
-        email: normalizedEmail,
-        emailAddress: normalizedEmail,
+      const result = await requestEmailChangeAction({
+        newEmail: normalizedEmail,
+        currentPassword,
       });
-      if (!createdEmail) throw new Error("email_not_created");
-      await createdEmail.prepareVerification?.({ strategy: "email_code" });
-      setPendingEmail(createdEmail);
+      if (!result.ok) {
+        toast({
+          variant: "error",
+          title: "Email non aggiornata",
+          description: result.message,
+        });
+        return;
+      }
       setEmailStep("verify");
       setEmailCode("");
       toast({
@@ -687,7 +622,7 @@ export function AccountSettingsClient({
 
   async function handleVerifyEmail(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!pendingEmail || !emailCode.trim()) {
+    if (!newEmail.trim() || !emailCode.trim()) {
       toast({
         variant: "warning",
         title: "Codice richiesto",
@@ -698,13 +633,24 @@ export function AccountSettingsClient({
 
     setIsCredentialsBusy(true);
     try {
-      await pendingEmail.attemptVerification?.({ code: emailCode.trim() });
-      await accountUser?.update?.({ primaryEmailAddressId: pendingEmail.id });
-      await reloadAndSync();
-      setPendingEmail(null);
+      const result = await confirmEmailChangeAction({
+        newEmail: newEmail.trim().toLowerCase(),
+        code: emailCode.trim(),
+      });
+      if (!result.ok || !result.data) {
+        setEmailCode("");
+        toast({
+          variant: "error",
+          title: "Email non verificata",
+          description: result.message,
+        });
+        return;
+      }
+      setCurrentEmail(result.data.email);
       setEmailStep("idle");
       setEmailCode("");
       setNewEmail("");
+      setCurrentPassword("");
       toast({
         variant: "success",
         title: "Email aggiornata",
@@ -735,18 +681,26 @@ export function AccountSettingsClient({
 
     setIsCredentialsBusy(true);
     try {
-      await accountUser?.updatePassword?.({
+      const result = await changePasswordAction({
         currentPassword,
         newPassword,
-        signOutOfOtherSessions: true,
       });
+      if (!result.ok) {
+        toast({
+          variant: "error",
+          title: "Password non aggiornata",
+          description: result.message,
+        });
+        return;
+      }
       setCurrentPassword("");
       setNewPassword("");
       toast({
         variant: "success",
         title: "Password aggiornata",
-        description: "La nuova password sara richiesta al prossimo accesso.",
+        description: "Accedi di nuovo con la nuova password.",
       });
+      await signOut({ callbackUrl: "/sign-in" });
     } catch (error) {
       toast({
         variant: "error",
@@ -941,7 +895,6 @@ export function AccountSettingsClient({
                     type="submit"
                     size="sm"
                     disabled={
-                      !isLoaded ||
                       isUsernameCooldownActive ||
                       normalizedUsername === currentUsername ||
                       !usernameAvailability?.available
@@ -980,7 +933,7 @@ export function AccountSettingsClient({
                     <Icon icon={ShieldCheck} size="lg" />
                     <Text weight="semibold">App authenticator</Text>
                     <Text size="sm" tone="muted">
-                      Genera codici temporanei TOTP senza usare la 2FA Clerk Pro.
+                      Genera codici temporanei TOTP con MFA interna Qoovex.
                     </Text>
                     {mfaEnabled ? (
                       <Button
@@ -1114,7 +1067,7 @@ export function AccountSettingsClient({
                     Email e password
                   </Text>
                   <Text size="sm" tone="muted">
-                    Clerk resta il provider della sessione primaria.
+                    La sessione primaria e gestita da NextAuth.
                   </Text>
                 </div>
                 <Icon icon={LockKey} size="lg" />
@@ -1146,19 +1099,35 @@ export function AccountSettingsClient({
                       </FormControl>
                     </FormField>
                   ) : (
-                    <FormField label="Nuova email" required>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          autoComplete="email"
-                          value={newEmail}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                            setNewEmail(event.target.value)
-                          }
-                          iconLeading={<Icon icon={EnvelopeSimple} size="sm" />}
-                        />
-                      </FormControl>
-                    </FormField>
+                    <>
+                      <FormField label="Nuova email" required>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            autoComplete="email"
+                            value={newEmail}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                              setNewEmail(event.target.value)
+                            }
+                            iconLeading={<Icon icon={EnvelopeSimple} size="sm" />}
+                          />
+                        </FormControl>
+                      </FormField>
+                      <FormField label="Password attuale" required>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            autoComplete="current-password"
+                            showPasswordToggle
+                            value={currentPassword}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                              setCurrentPassword(event.target.value)
+                            }
+                            iconLeading={<Icon icon={Key} size="sm" />}
+                          />
+                        </FormControl>
+                      </FormField>
+                    </>
                   )}
                   <FormActions align="stretch">
                     <Button
@@ -1263,16 +1232,14 @@ export function AccountSettingsClient({
                 Account
               </Text>
               <Text size="sm" tone="muted" className="break-all">
-                {accountUser?.primaryEmailAddress?.emailAddress ?? initialUser.email}
+                {currentEmail}
               </Text>
               <Badge tone={mfaEnabled ? "success" : "neutral"}>
                 {mfaEnabled ? "protetto con A2F" : "A2F non attiva"}
               </Badge>
-              {isLoaded ? (
-                <Text size="xs" tone="muted">
-                  Dati sessione caricati da Clerk, sicurezza gestita da Qoovex.
-                </Text>
-              ) : null}
+              <Text size="xs" tone="muted">
+                Dati sessione da NextAuth, sicurezza MFA gestita da Qoovex.
+              </Text>
             </Stack>
           </CardBody>
         </Card>

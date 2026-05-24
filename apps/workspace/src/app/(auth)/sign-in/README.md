@@ -1,14 +1,9 @@
-# Sign-In Route
+# Sign In
 
-Scopo: contenitore della route pubblica `/sign-in`.
+Scopo: accesso workspace con email/username + password, Google OAuth opzionale e dev-auth locale.
 
 Metti qui:
-- solo file necessari al flusso di accesso Clerk.
+- solo file necessari al flusso di accesso NextAuth e UI correlata.
 
 Non mettere qui:
-- logica condivisa con altre route;
-- UI prodotto post-login.
-
-Regole:
-- mantieni la route minimale;
-- se serve riuso con sign-up, estrai nel layer corretto e non duplicare.
+- bootstrap utente o logica dashboard.

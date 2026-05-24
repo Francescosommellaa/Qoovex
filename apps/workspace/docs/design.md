@@ -8,19 +8,17 @@
 |---|---|---|
 | View | App Router pages, FSD views, widgets e UI composition | `apps/workspace/src/app`, `src/views`, `src/widgets` |
 | Controller | Route handler, server action e page server component sottili | `src/app/api`, `src/shared/actions` |
-| Service | Use case applicativi, validazioni, orchestrazione Clerk/DB | `src/shared/server`, futuri `src/features/*/model` |
+| Service | Use case applicativi, validazioni, orchestrazione auth/DB | `src/shared/server`, futuri `src/features/*/model` |
 | Repository | Accesso a Prisma/DB e provider esterni nascosto dietro funzioni server-only | oggi `src/shared/server`, target `src/shared/server/repositories` |
 | Model | Prisma schema, entity model FSD, DTO e value object | `packages/db/prisma`, `src/entities`, `src/shared/lib` |
 
 ## Service Interfaces
 Interfacce attuali:
-- `bootstrapUser()` in `src/shared/actions/bootstrap-user.ts`: controller/action per ottenere o creare l'utente corrente.
-- `syncClerkUser()` in `src/shared/server/clerk-user-sync.ts`: service server-only per allineare Clerk e DB.
-- `sendClerkEmailWithResend()` in `src/shared/server/clerk-email-delivery.ts`: adapter/service per email Clerk.
-- `handleClerkWebhookEvent()` in `src/shared/server/clerk-webhooks/clerk-webhook-dispatcher.ts`: dispatcher evento Clerk.
-- `handleClerkUserSyncEvent()`, `handleClerkUserDeletedEvent()`, `handleClerkEmailCreatedEvent()`: service dedicati per evento.
+- `bootstrapUser()` in `src/shared/actions/bootstrap-user.ts`: controller/action per ottenere o creare l'utente corrente nel DB applicativo.
+- `syncWorkspaceUser()` in `src/shared/server/workspace-user-sync.ts`: service server-only per allineare sessione NextAuth e riga `User` Prisma.
+- Config auth in `src/shared/server/auth/` (`auth.config.ts` Edge, `config.ts` server con Prisma adapter e provider Resend/Google).
 - API recent searches in `src/app/api/recent-searches/route.ts`: controller HTTP.
-- Clerk webhook in `src/app/api/webhooks/clerk/route.ts`: controller HTTP per eventi Clerk.
+- Handler NextAuth in `src/app/api/auth/[...nextauth]/route.ts`: controller HTTP sessioni e callback provider.
 
 Regola: controller e route handler devono contenere parsing input, auth, chiamata service e risposta. Business rules, query DB e provider SDK devono stare in service/repository server-only.
 
@@ -52,10 +50,10 @@ Non esporre entita Prisma complete alla view. Se serve un campo in UI, aggiunger
 ## OWASP And Security
 Regole minime:
 - validare ogni body JSON prima di usarlo;
-- non restituire errori raw di Prisma, Clerk, Resend o Svix;
+- non restituire errori raw di Prisma, NextAuth, Resend o provider esterni;
 - verificare auth e ownership prima di leggere o mutare dati;
 - usare `select` espliciti per evitare data leakage;
-- tenere webhook verification e secret solo server-side;
+- tenere `AUTH_SECRET` e secret provider solo server-side;
 - non loggare token, email payload completi o dati personali non necessari.
 
 ## Scalability Notes
@@ -74,7 +72,7 @@ Azioni consigliate:
 - API controllers: `apps/workspace/src/app/api`.
 - Server actions: `apps/workspace/src/shared/actions`.
 - Server services/adapters: `apps/workspace/src/shared/server`.
-- Clerk webhook services: `apps/workspace/src/shared/server/clerk-webhooks`.
+- Auth services: `apps/workspace/src/shared/server/auth`.
 - Repository DB: `apps/workspace/src/shared/server/repositories`.
 - Utility pure: `apps/workspace/src/shared/lib`.
 - Feature layer: `apps/workspace/src/features`.

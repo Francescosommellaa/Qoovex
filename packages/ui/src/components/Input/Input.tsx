@@ -110,7 +110,7 @@ function StrengthMeter({ value }: { value: string }) {
 
       <div
         className="flex w-full items-center justify-end gap-(--spacing-1) overflow-hidden"
-        style={{ flexWrap: "nowrap" }}
+        style={{ flexWrap: "wrap" }}
       >
         <span
           className="shrink-0 font-medium"

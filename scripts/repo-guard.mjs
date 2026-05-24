@@ -148,22 +148,15 @@ function assertWorkspaceImportDirection() {
   }
 }
 
-function assertClerkConfinedToWorkspace() {
-  const sourceFiles = readDirectoryTree(repoRoot).filter((file) =>
-    sourceExtensions.has(extname(file)),
-  );
+function assertNoLegacyRootApp() {
+  const legacyPaths = [
+    join(repoRoot, "src", "app"),
+    join(repoRoot, "prisma", "schema.prisma"),
+  ];
 
-  for (const file of sourceFiles) {
-    const repoPath = toRepoPath(file);
-    if (repoPath.startsWith("apps/workspace/")) continue;
-
-    const content = readFileSync(file, "utf8");
-    const importsClerk = getImportSpecifiers(content).some((specifier) =>
-      specifier.startsWith("@clerk/"),
-    );
-
-    if (importsClerk) {
-      failures.push(`Clerk import outside apps/workspace: ${repoPath}`);
+  for (const path of legacyPaths) {
+    if (existsSync(path)) {
+      failures.push(`Legacy template path must be removed: ${toRepoPath(path)}`);
     }
   }
 }
@@ -194,7 +187,7 @@ if (failures.length === 0) {
   assertWorkspaceReadmes();
   assertNoVagueWorkspaceFiles();
   assertWorkspaceImportDirection();
-  assertClerkConfinedToWorkspace();
+  assertNoLegacyRootApp();
   assertWorkspaceMiddlewareConvention();
 }
 

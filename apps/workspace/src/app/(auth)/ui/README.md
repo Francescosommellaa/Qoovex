@@ -1,18 +1,11 @@
-# (auth)/ui
+# Auth UI (route-local)
 
-Componenti React locali del route group `(auth)`. **Non esportare al di fuori di `(auth)/`.**
+Scopo: componenti UI usati solo dal route group `(auth)`.
 
-Questa cartella e` una eccezione route-local documentata al placement FSD: resta in `app`
-perche` compone solo pagine auth Clerk e non rappresenta UI shared del prodotto.
+Eccezione FSD documentata: questa cartella non è API condivisa del prodotto.
 
-| File | Scopo |
-|---|---|
-| `AuthShell.tsx` | Shell visiva: logo, titolo, sottotitolo, step, indietro, area form |
-| `OAuthButton.tsx` | Pulsanti OAuth Clerk (Google / Apple), oggi renderizzati come disabilitati finche` il social login resta sospeso |
-| `index.ts` | Barrel export |
+| File | Ruolo |
+|------|--------|
+| `sign-in-form.tsx` | Form accesso: magic link Resend, Google, pulsante dev-auth (solo localhost) |
 
-## Regole
-
-- Importa da `../ui` nelle pagine `(auth)`.
-- Stili auth dedicati: `../globals.css` del route group `(auth)` (non sovrascrivere il design system in `packages/ui`; token e componenti da `@qoovex/ui`).
-- Se un componente diventa riusabile fuori dall'auth, spostarlo nel layer corretto invece di importarlo da questa cartella.
+Non importare questi componenti da `features`, `widgets` o `views` fuori da `(auth)`.

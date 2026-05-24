@@ -3,12 +3,8 @@ packages:
   - "packages/*"
 peerDependencyRules:
   ignoreMissing: []
-  allowedVersions:
-    "@clerk/nextjs>react": "19"
-    "@clerk/nextjs>react-dom": "19"
 allowBuilds:
-  '@clerk/shared': true
-  '@prisma/engines': true
+  "@prisma/engines": true
   better-sqlite3: false
   esbuild: true
   prisma: true

@@ -9,7 +9,7 @@ export type FieldControlStatus = "default" | "error" | "success";
 export const FIELD_LABEL_CLASS =
   "text-(length:--text-xs) font-medium text-(--color-label) tracking-[0.03em] uppercase select-none";
 
-export const FIELD_ROOT_CLASS = "flex w-full flex-col gap-(--input-gap)";
+export const FIELD_ROOT_CLASS = "flex w-full min-w-0 flex-col gap-(--input-gap)";
 
 export const FIELD_STATUS_RING: Record<FieldControlStatus, string> = {
   default:

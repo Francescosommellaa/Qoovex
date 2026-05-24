@@ -12,4 +12,4 @@ Non mettere qui:
 Regole:
 - mantieni chiari i confini tra settings e dominio `User`;
 - se una parte diventa riusabile cross-view, estraila nel layer giusto.
-- Profilo e sicurezza account sono interattivi, ma Clerk resta source of truth per identita`, password, telefono e 2FA.
+- Profilo e sicurezza: identità da sessione NextAuth + riga `User` Prisma; MFA TOTP interna Qoovex; avatar su Vercel Blob (`avatarBlobPathname` in DB).

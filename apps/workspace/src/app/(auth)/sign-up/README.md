@@ -1,14 +1,9 @@
-# Sign-Up Route
+# Sign Up
 
-Scopo: contenitore della route pubblica `/sign-up`.
+Scopo: registrazione workspace con email, username e password, piu verifica email tramite codice.
 
 Metti qui:
-- solo file necessari al flusso di registrazione Clerk.
+- solo file necessari al flusso di registrazione e UI correlata.
 
 Non mettere qui:
-- feature del prodotto;
-- logica condivisa che puo` stare altrove.
-
-Regole:
-- route minimale;
-- stessa disciplina di `sign-in`.
+- sync DB pesante o logica prodotto post-login.

@@ -1,9 +1,9 @@
 "use server";
 
-import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@shared/server/auth/config";
 import { bootstrapDevUser } from "@shared/server/dev-auth";
-import { getAccountAvatarUrlFromMetadata } from "@shared/server/account-avatar-storage";
-import { findWorkspaceUserByClerkId } from "@shared/server/repositories/user-repository";
+import { getAccountAvatarProxyUrl } from "@shared/server/account-avatar-storage";
+import { findWorkspaceUserById } from "@shared/server/repositories/user-repository";
 
 interface BootstrapUserOptions {
   phoneNumber?: string | null;
@@ -16,136 +16,93 @@ interface UpdateCurrentUserProfileInput {
   lastName?: string | null;
 }
 
-type ClerkProfileForSync = {
-  firstName?: string | null;
-  lastName?: string | null;
-  username?: string | null;
-  imageUrl?: string | null;
-  primaryEmailAddressId?: string | null;
-  emailAddresses?: Array<{
-    id?: string | null;
-    emailAddress?: string | null;
-    email_address?: string | null;
-  }>;
-  unsafeMetadata?: Record<string, unknown>;
-};
-
 function getTrimmedInputValue(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function getUnsafeMetadataPhoneNumber(
-  unsafeMetadata: Record<string, unknown>,
-): string | undefined {
-  const phoneNumber = unsafeMetadata.phoneNumber;
-  return typeof phoneNumber === "string" ? phoneNumber : undefined;
-}
-
-/** Admin only from Clerk publicMetadata / session claims set server-side — never from client-writable fields. */
-function hasAdminAccess(metadata: unknown) {
-  if (!metadata || typeof metadata !== "object") {
-    return false;
+function getUserAvatarUrl(input: {
+  avatarBlobPathname?: string | null;
+  image?: string | null;
+}) {
+  if (input.avatarBlobPathname) {
+    return getAccountAvatarProxyUrl(input.avatarBlobPathname);
   }
 
-  const adminMetadata = metadata as Record<string, unknown>;
-
-  return adminMetadata.role === "admin" || adminMetadata.isAdmin === true;
-}
-
-function getClaimsMetadata(claims: unknown) {
-  if (!claims || typeof claims !== "object") {
-    return null;
-  }
-
-  const record = claims as Record<string, unknown>;
-  return (
-    record.publicMetadata ??
-    record.public_metadata ??
-    record.metadata ??
-    null
-  );
-}
-
-function getClerkAvatarUrl(clerkUser: ClerkProfileForSync | null | undefined) {
-  if (!clerkUser) return null;
-
-  return getAccountAvatarUrlFromMetadata(clerkUser.unsafeMetadata) ?? clerkUser.imageUrl ?? null;
+  return input.image ?? null;
 }
 
 export async function bootstrapUser(options?: BootstrapUserOptions) {
   const devUser = await bootstrapDevUser();
   if (devUser) return devUser;
 
-  const { userId, sessionClaims } = await auth();
+  const session = await auth();
+  const userId = session?.user?.id;
   if (!userId) return null;
 
-  if (!options) {
-    const existingUser = await findWorkspaceUserByClerkId(userId);
-    if (existingUser) {
-      const clerkUser = await currentUser().catch(() => null);
-
-      return {
-        ...existingUser,
-        imageUrl: getClerkAvatarUrl(clerkUser),
-        isAdmin: hasAdminAccess(getClaimsMetadata(sessionClaims)),
-      };
-    }
+  const existingUser = await findWorkspaceUserById(userId);
+  if (existingUser && !options) {
+    return {
+      ...existingUser,
+      imageUrl: getUserAvatarUrl(existingUser),
+      isAdmin: false,
+    };
   }
 
-  const clerkUser = await currentUser();
-  if (!clerkUser) return null;
+  const email = session.user?.email?.trim().toLowerCase();
+  if (!email) return null;
 
-  const primaryEmail =
-    clerkUser.emailAddresses.find(
-      (emailAddress) => emailAddress.id === clerkUser.primaryEmailAddressId,
-    )?.emailAddress ?? clerkUser.emailAddresses[0]?.emailAddress;
+  const { syncWorkspaceUser } = await import("@shared/server/workspace-user-sync");
 
-  if (!primaryEmail) return null;
-
-  const { syncClerkUser } = await import("@shared/server/clerk-user-sync");
-
-  const syncedUser = await syncClerkUser({
-    clerkId: userId,
-    email: primaryEmail,
-    username: clerkUser.username,
-    firstName: options?.firstName ?? clerkUser.firstName,
-    lastName: options?.lastName ?? clerkUser.lastName,
-    phoneNumber:
-      options?.phoneNumber ?? getUnsafeMetadataPhoneNumber(clerkUser.unsafeMetadata),
+  const syncedUser = await syncWorkspaceUser({
+    id: userId,
+    email,
+    firstName: options?.firstName ?? existingUser?.firstName ?? session.user?.name,
+    lastName: options?.lastName ?? existingUser?.lastName,
+    phoneNumber: options?.phoneNumber ?? existingUser?.phoneNumber,
+    name: session.user?.name,
+    image: session.user?.image,
   });
 
   if (!syncedUser) return null;
 
+  const workspaceUser = await findWorkspaceUserById(userId);
+  if (!workspaceUser) return null;
+
   return {
-    ...syncedUser,
-    imageUrl: getClerkAvatarUrl(clerkUser),
-    isAdmin: hasAdminAccess(clerkUser.publicMetadata),
+    ...workspaceUser,
+    imageUrl: getUserAvatarUrl(workspaceUser),
+    isAdmin: false,
   };
 }
 
 export async function hasBootstrappedUser() {
   if (await bootstrapDevUser()) return true;
 
-  const { userId } = await auth();
-  if (!userId) return false;
+  const session = await auth();
+  if (!session?.user?.id) return false;
 
-  const { hasSyncedClerkUser } = await import("@shared/server/clerk-user-sync");
+  const { hasWorkspaceUser } = await import("@shared/server/workspace-user-sync");
 
-  return await hasSyncedClerkUser(userId);
+  return await hasWorkspaceUser(session.user.id);
 }
 
 export async function updateCurrentUserProfile(
   input: UpdateCurrentUserProfileInput,
 ) {
-  const { userId } = await auth();
+  const session = await auth();
+  const userId = session?.user?.id;
   if (!userId) return null;
 
   const firstName = getTrimmedInputValue(input?.firstName);
   const lastName = getTrimmedInputValue(input?.lastName) || undefined;
   if (!firstName) return null;
 
-  const client = await clerkClient();
-  await client.users.updateUser(userId, {
+  const { updateUserProfileById } = await import(
+    "@shared/server/repositories/user-repository"
+  );
+
+  await updateUserProfileById({
+    userId,
     firstName,
     lastName,
   });

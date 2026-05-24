@@ -1,14 +1,15 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { getMfaStatusByClerkId } from "@shared/server/mfa-service";
+import { auth } from "@shared/server/auth/config";
+import { getMfaStatusByUserId } from "@shared/server/mfa-service";
 import { AuthShell } from "../ui";
 import { MfaChallengeClient } from "./mfa-challenge-client";
 
 export default async function MfaChallengePage() {
-  const { userId } = await auth();
+  const session = await auth();
+  const userId = session?.user?.id;
   if (!userId) redirect("/sign-in");
 
-  const status = await getMfaStatusByClerkId(userId);
+  const status = await getMfaStatusByUserId(userId);
   if (!status?.enabled) redirect("/dashboard");
 
   return (

@@ -1,18 +1,21 @@
 import { del, put } from "@vercel/blob";
-import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { auth } from "@shared/server/auth/config";
 import {
-  ACCOUNT_AVATAR_METADATA_KEY,
   buildAccountAvatarPathname,
-  getAccountAvatarPathnameFromMetadata,
   getAccountAvatarProxyUrl,
   InvalidAccountAvatarError,
   validateAccountAvatarFile,
 } from "@shared/server/account-avatar-storage";
+import {
+  findUserAvatarPathname,
+  updateUserAvatarPathname,
+} from "@shared/server/repositories/user-repository";
 import { assertRateLimit, RateLimitExceededError } from "@shared/server/rate-limit";
 
 export async function POST(request: Request) {
-  const { userId } = await auth();
+  const session = await auth();
+  const userId = session?.user?.id;
   if (!userId) {
     return NextResponse.json({ message: "Sessione non valida." }, { status: 401 });
   }
@@ -49,10 +52,8 @@ export async function POST(request: Request) {
     throw error;
   }
 
-  const clerkUser = await currentUser();
-  const previousPathname = getAccountAvatarPathnameFromMetadata(
-    clerkUser?.unsafeMetadata,
-  );
+  const existing = await findUserAvatarPathname(userId);
+  const previousPathname = existing?.avatarBlobPathname ?? null;
 
   try {
     const pathname = buildAccountAvatarPathname(userId, validated.extension);
@@ -62,12 +63,9 @@ export async function POST(request: Request) {
       addRandomSuffix: false,
     });
 
-    const client = await clerkClient();
-    await client.users.updateUser(userId, {
-      unsafeMetadata: {
-        ...(clerkUser?.unsafeMetadata ?? {}),
-        [ACCOUNT_AVATAR_METADATA_KEY]: pathname,
-      },
+    await updateUserAvatarPathname({
+      userId,
+      avatarBlobPathname: pathname,
     });
 
     if (previousPathname && previousPathname !== pathname) {
@@ -88,19 +86,18 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE() {
-  const { userId } = await auth();
+  const session = await auth();
+  const userId = session?.user?.id;
   if (!userId) {
     return NextResponse.json({ message: "Sessione non valida." }, { status: 401 });
   }
 
-  const clerkUser = await currentUser();
-  const pathname = getAccountAvatarPathnameFromMetadata(clerkUser?.unsafeMetadata);
-  const nextMetadata = { ...(clerkUser?.unsafeMetadata ?? {}) };
-  delete nextMetadata[ACCOUNT_AVATAR_METADATA_KEY];
+  const existing = await findUserAvatarPathname(userId);
+  const pathname = existing?.avatarBlobPathname ?? null;
 
-  const client = await clerkClient();
-  await client.users.updateUser(userId, {
-    unsafeMetadata: nextMetadata,
+  await updateUserAvatarPathname({
+    userId,
+    avatarBlobPathname: null,
   });
 
   if (pathname) {

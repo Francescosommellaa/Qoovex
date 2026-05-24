@@ -1,9 +1,10 @@
 import { get } from "@vercel/blob";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@shared/server/auth/config";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const { userId } = await auth();
+  const session = await auth();
+  const userId = session?.user?.id;
   if (!userId) {
     return NextResponse.json({ message: "Immagine non disponibile." }, { status: 404 });
   }

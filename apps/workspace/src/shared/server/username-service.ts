@@ -1,13 +1,12 @@
 import "server-only";
 
-import { clerkClient } from "@clerk/nextjs/server";
 import { db } from "@qoovex/db";
 import {
   buildUsernameSuggestions,
   normalizeUsernameInput,
   validateUsername,
 } from "@shared/lib/username";
-import { updateUserUsernameByClerkId } from "@shared/server/repositories/user-repository";
+import { updateUserUsernameById } from "@shared/server/repositories/user-repository";
 
 const USERNAME_CHANGE_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -82,13 +81,19 @@ export async function getAvailableUsernameSuggestions(input: {
   return expanded.filter((value) => !taken.has(value)).slice(0, 4);
 }
 
-export async function changeUsernameForClerkUser(input: {
-  clerkId: string;
+export async function changeUsernameForUser(input: {
+  userId: string;
   username: string;
+  markOnboarded?: boolean;
 }) {
   const user = await db.user.findUnique({
-    where: { clerkId: input.clerkId },
-    select: { id: true, username: true, usernameChangedAt: true },
+    where: { id: input.userId },
+    select: {
+      id: true,
+      username: true,
+      usernameChangedAt: true,
+      usernameOnboarded: true,
+    },
   });
 
   if (!user) {
@@ -102,6 +107,14 @@ export async function changeUsernameForClerkUser(input: {
   }
 
   if (username === user.username) {
+    if (input.markOnboarded && !user.usernameOnboarded) {
+      return await updateUserUsernameById({
+        userId: input.userId,
+        username,
+        usernameOnboarded: true,
+        changedAt: user.usernameChangedAt ?? new Date(),
+      });
+    }
     return user;
   }
 
@@ -120,12 +133,10 @@ export async function changeUsernameForClerkUser(input: {
     throw new UsernameValidationError("Username gia in uso.");
   }
 
-  const client = await clerkClient();
-  await client.users.updateUser(input.clerkId, { username });
-
-  return await updateUserUsernameByClerkId({
-    clerkId: input.clerkId,
+  return await updateUserUsernameById({
+    userId: input.userId,
     username,
+    usernameOnboarded: input.markOnboarded,
     changedAt: new Date(),
   });
 }

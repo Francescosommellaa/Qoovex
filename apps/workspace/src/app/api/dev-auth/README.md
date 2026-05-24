@@ -31,4 +31,4 @@ Senza secret valido, `POST` risponde `503`.
 
 ## Sicurezza
 
-Non usare in preview o produzione. Il bypass Clerk è solo per sviluppo locale controllato.
+Non usare in preview o produzione. Il bypass NextAuth è solo per sviluppo locale controllato (cookie `qv-dev-auth`, utente seed `dev_qoovex_local_user`).

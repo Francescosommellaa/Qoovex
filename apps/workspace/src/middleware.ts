@@ -1,60 +1,65 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
+import { authConfig } from "@shared/server/auth/auth.config";
 import {
   DEV_AUTH_COOKIE_NAME,
   verifyDevAuthCookieValue,
 } from "@shared/lib/dev-auth-cookie";
 import { isDevAuthAllowedForHost } from "@shared/lib/dev-auth-guard";
 
-const isPublicRoute = createRouteMatcher([
+const { auth } = NextAuth(authConfig);
+
+const publicRoutes = new Set([
   "/",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/forgot-password(.*)",
-  "/mfa-challenge(.*)",
-  "/sso-callback(.*)",
-  "/workspace-unavailable(.*)",
-  "/api/dev-auth(.*)",
-  "/api/auth/username(.*)",
-  "/api/webhooks/clerk(.*)",
-  "/api/recipes/media(.*)",
+  "/sign-in",
+  "/sign-up",
+  "/sign-in/verify",
+  "/complete-profile",
+  "/forgot-password",
+  "/reset-password",
+  "/mfa-challenge",
+  "/workspace-unavailable",
+  "/api/dev-auth",
 ]);
 
-const authorizedParties = [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "http://localhost:3002",
-  "https://app.qoovex.com",
-];
+function isPublicPath(pathname: string) {
+  if (publicRoutes.has(pathname)) return true;
+  if (pathname.startsWith("/api/auth/")) return true;
+  return false;
+}
 
-export default clerkMiddleware(async (auth, req) => {
+export default auth(async (req) => {
+  const { pathname } = req.nextUrl;
   const host = req.headers.get("host") ?? req.nextUrl.host;
   const devAuthCookie = req.cookies.get(DEV_AUTH_COOKIE_NAME)?.value;
   const hasDevAuthSession =
     isDevAuthAllowedForHost(host) &&
     (await verifyDevAuthCookieValue(devAuthCookie));
 
-  if (req.nextUrl.pathname === "/") {
+  if (pathname === "/") {
     const destination = req.nextUrl.clone();
-    if (hasDevAuthSession) {
+    if (hasDevAuthSession || req.auth) {
       destination.pathname = "/dashboard";
       return NextResponse.redirect(destination);
     }
 
-    const { userId } = await auth();
-    destination.pathname = userId ? "/dashboard" : "/sign-up";
+    destination.pathname = "/sign-up";
     return NextResponse.redirect(destination);
   }
 
-  if (hasDevAuthSession) {
+  if (hasDevAuthSession || isPublicPath(pathname)) {
     return;
   }
 
-  if (!isPublicRoute(req)) {
-    await auth.protect();
+  if (!req.auth) {
+    const signInUrl = req.nextUrl.clone();
+    signInUrl.pathname = "/sign-in";
+    signInUrl.searchParams.set(
+      "callbackUrl",
+      `${pathname}${req.nextUrl.search}`,
+    );
+    return NextResponse.redirect(signInUrl);
   }
-}, {
-  authorizedParties,
 });
 
 export const config = {

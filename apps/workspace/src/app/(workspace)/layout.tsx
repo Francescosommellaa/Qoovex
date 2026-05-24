@@ -1,9 +1,7 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import { ToastProvider } from "@qoovex/ui";
 import { getCurrentWorkspaceUser } from "@shared/server/current-workspace-user";
-import { isMfaSatisfiedForUser } from "@shared/server/mfa-service";
 import {
   WorkspaceShell,
   type WorkspaceUserSummary,
@@ -58,8 +56,8 @@ export default async function WorkspaceLayout({
     redirect("/sign-in");
   }
 
-  if (!(await isMfaSatisfiedForUser(user.id))) {
-    redirect("/mfa-challenge");
+  if (!user.usernameOnboarded) {
+    redirect("/complete-profile");
   }
 
   const userSummary: WorkspaceUserSummary = {
@@ -72,12 +70,10 @@ export default async function WorkspaceLayout({
   };
 
   return (
-    <ClerkProvider>
-      <ToastProvider position="bottom-right">
-        <WorkspaceShell user={userSummary} nowIso={new Date().toISOString()}>
-          {children}
-        </WorkspaceShell>
-      </ToastProvider>
-    </ClerkProvider>
+    <ToastProvider position="bottom-right">
+      <WorkspaceShell user={userSummary} nowIso={new Date().toISOString()}>
+        {children}
+      </WorkspaceShell>
+    </ToastProvider>
   );
 }

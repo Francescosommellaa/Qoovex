@@ -1,5 +1,3 @@
-# Recupero password
+# forgot-password
 
-Route pubblica: `/forgot-password`.
-
-Flusso Clerk per reset password via email (codice + nuova password). Non aggiungere logica prodotto qui.
+Richiesta reset password tramite codice email. Non usa magic link.

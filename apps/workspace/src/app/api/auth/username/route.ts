@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@shared/server/auth/config";
 import { getUsernameAvailability } from "@shared/server/username-service";
-import { findUserIdentityByClerkId } from "@shared/server/repositories/user-repository";
+import { findUserIdentityById } from "@shared/server/repositories/user-repository";
 import {
   RateLimitExceededError,
-  assertRateLimit,
+  assertPersistentRateLimit,
 } from "@shared/server/rate-limit";
 
 export async function GET(request: Request) {
@@ -13,19 +13,20 @@ export async function GET(request: Request) {
   const firstName = url.searchParams.get("firstName") ?? "";
   const lastName = url.searchParams.get("lastName") ?? "";
   const email = url.searchParams.get("email") ?? "";
-  const { userId } = await auth();
+  const session = await auth();
+  const userId = session?.user?.id;
   const forwardedFor = request.headers.get("x-forwarded-for") ?? "anonymous";
   const rateLimitId = userId ?? forwardedFor.split(",")[0]?.trim() ?? "anonymous";
 
   try {
-    assertRateLimit({
-      userId: rateLimitId,
+    await assertPersistentRateLimit({
+      identifier: rateLimitId,
       bucket: "auth:username-availability",
       limit: 90,
       windowMs: 60_000,
     });
 
-    const currentUser = userId ? await findUserIdentityByClerkId(userId) : null;
+    const currentUser = userId ? await findUserIdentityById(userId) : null;
     const result = await getUsernameAvailability({
       username,
       currentUserId: currentUser?.id,

@@ -26,7 +26,7 @@ function getRequiredSecret(name: string) {
   const value =
     process.env[name] ??
     (name === "QOOVEX_MFA_COOKIE_SECRET"
-      ? process.env.QOOVEX_MFA_ENCRYPTION_KEY ?? process.env.CLERK_SECRET_KEY
+      ? process.env.QOOVEX_MFA_ENCRYPTION_KEY ?? process.env.AUTH_SECRET
       : undefined);
 
   if (!value) {
@@ -209,18 +209,9 @@ export async function getMfaStatusByUserId(userId: string) {
   };
 }
 
-export async function getMfaStatusByClerkId(clerkId: string) {
+export async function startTotpSetupForUser(userId: string) {
   const user = await db.user.findUnique({
-    where: { clerkId },
-    select: { id: true },
-  });
-
-  return user ? getMfaStatusByUserId(user.id) : null;
-}
-
-export async function startTotpSetupForClerkUser(clerkId: string) {
-  const user = await db.user.findUnique({
-    where: { clerkId },
+    where: { id: userId },
     select: { id: true, email: true, username: true },
   });
 
@@ -244,12 +235,12 @@ export async function startTotpSetupForClerkUser(clerkId: string) {
   };
 }
 
-export async function confirmTotpSetupForClerkUser(input: {
-  clerkId: string;
+export async function confirmTotpSetupForUser(input: {
+  userId: string;
   code: string;
 }) {
   const user = await db.user.findUnique({
-    where: { clerkId: input.clerkId },
+    where: { id: input.userId },
     select: {
       id: true,
       totpPendingSecretEncrypted: true,
@@ -305,9 +296,9 @@ export async function confirmTotpSetupForClerkUser(input: {
   return { backupCodes };
 }
 
-export async function disableMfaForClerkUser(clerkId: string) {
+export async function disableMfaForUser(userId: string) {
   const user = await db.user.findUnique({
-    where: { clerkId },
+    where: { id: userId },
     select: { id: true },
   });
 
@@ -332,9 +323,9 @@ export async function disableMfaForClerkUser(clerkId: string) {
   await clearMfaSessionCookie();
 }
 
-export async function regenerateBackupCodesForClerkUser(clerkId: string) {
+export async function regenerateBackupCodesForUser(userId: string) {
   const user = await db.user.findUnique({
-    where: { clerkId },
+    where: { id: userId },
     select: { id: true, mfaEnabled: true },
   });
 
@@ -356,12 +347,12 @@ export async function regenerateBackupCodesForClerkUser(clerkId: string) {
   return { backupCodes };
 }
 
-export async function verifyMfaChallengeForClerkUser(input: {
-  clerkId: string;
+export async function verifyMfaChallengeForUser(input: {
+  userId: string;
   code: string;
 }) {
   const user = await db.user.findUnique({
-    where: { clerkId: input.clerkId },
+    where: { id: input.userId },
     select: {
       id: true,
       mfaEnabled: true,

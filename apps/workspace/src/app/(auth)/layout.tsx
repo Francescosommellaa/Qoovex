@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
-import { ClerkProvider } from "@clerk/nextjs";
 import { ToastProvider } from "@qoovex/ui";
+import { AuthSessionProvider } from "@shared/providers/session-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,16 +13,16 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default function AuthRouteLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <AuthSessionProvider>
       <ToastProvider position="top-right">
         <Suspense fallback={null}>{children}</Suspense>
       </ToastProvider>
-    </ClerkProvider>
+    </AuthSessionProvider>
   );
 }

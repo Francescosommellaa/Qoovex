@@ -1,4 +1,4 @@
-type ClerkLikeError = {
+type AuthProviderLikeError = {
   code?: string;
   message?: string;
   errors?: Array<{ code?: string; message?: string }>;
@@ -9,12 +9,12 @@ function readAuthError(error: unknown): { code: string; message: string } {
     return { code: "", message: "" };
   }
 
-  const clerkError = error as ClerkLikeError;
-  const first = clerkError.errors?.[0];
+  const providerError = error as AuthProviderLikeError;
+  const first = providerError.errors?.[0];
 
   return {
-    code: String(first?.code ?? clerkError.code ?? "").toLowerCase(),
-    message: String(first?.message ?? clerkError.message ?? "").toLowerCase(),
+    code: String(first?.code ?? providerError.code ?? "").toLowerCase(),
+    message: String(first?.message ?? providerError.message ?? "").toLowerCase(),
   };
 }
 

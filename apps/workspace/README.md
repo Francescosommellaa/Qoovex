@@ -19,7 +19,7 @@ Regole:
 - non costruire pagine, shell prodotto o feature finche` le fondamenta non sono stabili.
 
 Guardrail:
-- `pnpm check:repo` esegue il guard locale su README, import FSD, naming e confine Clerk;
+- `pnpm check:repo` esegue il guard locale su README, import FSD, naming e assenza legacy root (`src/app`, `prisma/` a repo root);
 - `pnpm check:fast` combina guard repo, lint e type-check.
 
 Env locale (sviluppo):

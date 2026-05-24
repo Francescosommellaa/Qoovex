@@ -13,7 +13,15 @@ export function AuthShell({
 }: AuthShellProps) {
   return (
     <main className="grid min-h-dvh place-items-center bg-(--color-bg) px-(--spacing-4) py-(--spacing-6) text-(--color-text)">
-      <Card variant="panel" tone="neutral" padding="lg" className="w-full max-w-(--auth-card-width)">
+      <Card
+        variant="panel"
+        tone="neutral"
+        padding="lg"
+        style={{
+          width: "calc(100vw - 2rem)",
+          maxWidth: "var(--auth-card-width)",
+        }}
+      >
         <CardBody>
           <Stack gap="6">
             <Stack gap="3" align="center" className="text-center">
@@ -49,4 +57,3 @@ export function AuthShell({
     </main>
   );
 }
-
