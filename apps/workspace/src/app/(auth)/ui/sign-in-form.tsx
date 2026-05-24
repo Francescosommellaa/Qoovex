@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import {
   Button,
+  Divider,
   Form,
   FormActions,
   FormControl,
@@ -23,9 +25,11 @@ import { AuthShell } from "./AuthShell";
 export function SignInForm({
   mode,
   devAuthEnabled = false,
+  googleAuthEnabled = false,
 }: {
   mode: "sign-in" | "sign-up";
   devAuthEnabled?: boolean;
+  googleAuthEnabled?: boolean;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -105,6 +109,16 @@ export function SignInForm({
   }
 
   async function handleGoogleSignIn() {
+    if (!googleAuthEnabled) {
+      toast({
+        variant: "warning",
+        title: "Google non configurato",
+        description:
+          "Aggiungi GOOGLE_CLIENT_ID e GOOGLE_CLIENT_SECRET in apps/workspace/.env.local.",
+      });
+      return;
+    }
+
     setIsGoogleLoading(true);
     try {
       await signIn("google", { callbackUrl });
@@ -273,6 +287,8 @@ export function SignInForm({
         </FormActions>
       </Form>
 
+      <Divider spacing="lg">oppure</Divider>
+
       <Stack gap="3" className="auth-social-stack">
         <Button
           type="button"
@@ -283,6 +299,15 @@ export function SignInForm({
           loadingLabel="Connessione Google..."
           disabled={isBusy}
           onClick={handleGoogleSignIn}
+          iconLeft={
+            <Image
+              src="/auth/google-g.svg"
+              alt=""
+              width={18}
+              height={18}
+              aria-hidden="true"
+            />
+          }
         >
           Continua con Google
         </Button>
