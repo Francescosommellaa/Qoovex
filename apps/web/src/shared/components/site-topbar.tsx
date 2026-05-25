@@ -232,12 +232,6 @@ export function SiteTopbar() {
     };
   }, []);
 
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      setIsHidden(false);
-    }
-  }, [isMobileMenuOpen]);
-
   const isTopbarHidden = isHidden && !isMobileMenuOpen;
 
   return (
@@ -335,7 +329,10 @@ export function SiteTopbar() {
               size="sm"
               aria-label={isMobileMenuOpen ? "Chiudi menu" : "Apri menu"}
               aria-expanded={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen((current) => !current)}
+              onClick={() => {
+                setIsHidden(false);
+                setIsMobileMenuOpen((current) => !current);
+              }}
               iconLeft={<Icon icon={isMobileMenuOpen ? X : List} size="sm" weight="bold" />}
               className="h-9 w-9 px-0 md:hidden"
             />
