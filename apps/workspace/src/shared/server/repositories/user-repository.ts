@@ -50,6 +50,7 @@ export async function findWorkspaceUserById(userId: string) {
       lastName: true,
       username: true,
       usernameOnboarded: true,
+      profileOnboarded: true,
       email: true,
       phoneNumber: true,
       mfaEnabled: true,
@@ -57,6 +58,9 @@ export async function findWorkspaceUserById(userId: string) {
       plan: true,
       avatarBlobPathname: true,
       image: true,
+      credential: {
+        select: { userId: true },
+      },
     },
   });
 }
@@ -106,6 +110,16 @@ export async function upsertWorkspaceUser(input: UpsertWorkspaceUserInput) {
       ...(input.phoneNumber ? { phoneNumber: input.phoneNumber } : {}),
       ...(input.name !== undefined ? { name: input.name } : {}),
       ...(input.image !== undefined ? { image: input.image } : {}),
+    },
+  });
+}
+
+export async function findUserCredentialState(userId: string) {
+  return await db.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      credential: { select: { userId: true } },
     },
   });
 }
@@ -183,6 +197,7 @@ export async function updateUserProfileById(input: {
       firstName: input.firstName,
       lastName: input.lastName ?? null,
       name: [input.firstName, input.lastName].filter(Boolean).join(" ").trim() || null,
+      profileOnboarded: true,
     },
   });
 }

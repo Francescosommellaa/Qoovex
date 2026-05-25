@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import * as React from "react";
 import { signIn } from "next-auth/react";
 import {
   Button,
@@ -16,10 +16,11 @@ import {
   Text,
   useToast,
 } from "@qoovex/ui";
-import { getSafeRedirectPath } from "@shared/lib/auth-flow";
+import { requestSignupEmailAction } from "@shared/actions/auth-actions";
+import { getSafeRedirectPath, isLikelyValidEmail } from "@shared/lib/auth-flow";
 import { AuthShell } from "./AuthShell";
 
-export function SignInForm({
+export function SignUpEmailForm({
   googleAuthEnabled = false,
 }: {
   googleAuthEnabled?: boolean;
@@ -27,51 +28,45 @@ export function SignInForm({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [email, setEmail] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
   const isBusy = isSubmitting || isGoogleLoading;
   const callbackUrl = getSafeRedirectPath(
     searchParams.get("callbackUrl") ?? searchParams.get("redirect_url"),
   );
-  const alternateHref = `/sign-up${
+  const signInHref = `/sign-in${
     searchParams.toString() ? `?${searchParams.toString()}` : ""
   }`;
 
-  async function handleCredentialsSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const normalizedEmail = email.trim().toLowerCase();
 
-    if (!identifier.trim() || !password) {
+    if (!isLikelyValidEmail(normalizedEmail)) {
       toast({
         variant: "warning",
-        title: "Dati richiesti",
-        description: "Inserisci email o username e password.",
+        title: "Email da controllare",
+        description: "Inserisci una email valida per continuare.",
       });
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const result = await signIn("credentials", {
-        identifier: identifier.trim(),
-        password,
-        redirect: false,
-        callbackUrl,
-      });
-
-      if (result?.error) {
+      const result = await requestSignupEmailAction({ email: normalizedEmail });
+      if (!result.ok || !result.data) {
         toast({
           variant: "error",
-          title: "Accesso non riuscito",
-          description:
-            "Credenziali non valide, account non verificato o troppi tentativi.",
+          title: "Registrazione non avviata",
+          description: result.message,
         });
         return;
       }
 
-      router.replace(callbackUrl);
-      router.refresh();
+      router.push(
+        `/sign-up/verify?email=${encodeURIComponent(result.data.email)}&callbackUrl=${encodeURIComponent(callbackUrl)}`,
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -97,8 +92,9 @@ export function SignInForm({
 
   return (
     <AuthShell
-      title="Accedi al workspace"
-      subtitle="Email o username con password. Se hai attivato la A2F, ti chiederemo il codice dopo l'accesso."
+      title="Crea il tuo account"
+      subtitle="Parti dalla email: la verifichiamo prima di chiederti username e password."
+      steps={{ current: 1, total: 3 }}
     >
       <Form
         variant="plain"
@@ -106,50 +102,31 @@ export function SignInForm({
         density="comfortable"
         labelStyle="soft"
         noValidate
-        onSubmit={handleCredentialsSubmit}
+        onSubmit={handleSubmit}
       >
-        <FormField label="Email o username" required>
+        <FormField label="Email" required>
           <FormControl>
             <Input
-              autoComplete="username"
+              type="email"
+              autoComplete="email"
+              placeholder="nome@esempio.com"
               disabled={isBusy}
-              value={identifier}
+              value={email}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                setIdentifier(event.target.value)
+                setEmail(event.target.value)
               }
             />
           </FormControl>
         </FormField>
-        <FormField label="Password" required>
-          <FormControl>
-            <Input
-              type="password"
-              autoComplete="current-password"
-              showPasswordToggle
-              disabled={isBusy}
-              value={password}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                setPassword(event.target.value)
-              }
-            />
-          </FormControl>
-        </FormField>
-        <div className="auth-inline-link-row">
-          <Link className="auth-muted-link" href="/forgot-password">
-            Password dimenticata?
-          </Link>
-        </div>
         <FormActions align="stretch">
           <Button
             type="submit"
-            variant="primary"
-            size="md"
             loading={isSubmitting}
-            loadingLabel="Accesso..."
+            loadingLabel="Invio codice..."
             disabled={isBusy}
             className="w-full"
           >
-            Accedi
+            Procedi con email
           </Button>
         </FormActions>
       </Form>
@@ -172,7 +149,7 @@ export function SignInForm({
       </Stack>
 
       <Text className="auth-footer-text">
-        Non hai un account? <Link href={alternateHref}>Registrati</Link>
+        Hai gia un account? <Link href={signInHref}>Accedi</Link>
       </Text>
     </AuthShell>
   );

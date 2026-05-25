@@ -22,42 +22,51 @@ export function MfaChallengeClient() {
   const [isInvalid, setIsInvalid] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
+  const submitCode = React.useCallback(
+    async (nextCode: string) => {
+      const normalizedCode = nextCode.trim();
+
+      if (!normalizedCode || isSubmitting) {
+        if (!normalizedCode) {
+          setIsInvalid(true);
+          toast({
+            variant: "warning",
+            title: "Codice richiesto",
+            description: "Inserisci il codice dell'app authenticator o un codice di backup.",
+          });
+        }
+        return;
+      }
+
+      setIsSubmitting(true);
+      const result = await verifyMfaChallengeAction(normalizedCode);
+      setIsSubmitting(false);
+
+      if (!result.ok) {
+        setCode("");
+        setIsInvalid(true);
+        toast({
+          variant: "error",
+          title: "Verifica non riuscita",
+          description: "Il codice non e valido o e gia stato usato.",
+        });
+        return;
+      }
+
+      toast({
+        variant: "success",
+        title: "Accesso verificato",
+        description: "Secondo fattore completato.",
+      });
+      router.replace("/dashboard");
+      router.refresh();
+    },
+    [isSubmitting, router, toast],
+  );
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const normalizedCode = code.trim();
-
-    if (!normalizedCode) {
-      setIsInvalid(true);
-      toast({
-        variant: "warning",
-        title: "Codice richiesto",
-        description: "Inserisci il codice dell'app authenticator o un codice di backup.",
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    const result = await verifyMfaChallengeAction(normalizedCode);
-    setIsSubmitting(false);
-
-    if (!result.ok) {
-      setCode("");
-      setIsInvalid(true);
-      toast({
-        variant: "error",
-        title: "Verifica non riuscita",
-        description: "Il codice non e valido o e gia stato usato.",
-      });
-      return;
-    }
-
-    toast({
-      variant: "success",
-      title: "Accesso verificato",
-      description: "Secondo fattore completato.",
-    });
-    router.replace("/dashboard");
-    router.refresh();
+    await submitCode(code);
   }
 
   return (
@@ -83,8 +92,10 @@ export function MfaChallengeClient() {
               placeholder="123456 o backup"
               value={code}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setCode(event.target.value);
+                const nextCode = event.target.value;
+                setCode(nextCode);
                 if (isInvalid) setIsInvalid(false);
+                if (/^\d{6}$/.test(nextCode)) void submitCode(nextCode);
               }}
             />
           </FormControl>

@@ -1,7 +1,12 @@
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import { ToastProvider } from "@qoovex/ui";
 import { getCurrentWorkspaceUser } from "@shared/server/current-workspace-user";
+import { registerAuthDeviceForRequest } from "@shared/server/auth-device-service";
+import { isMfaSatisfiedForUser } from "@shared/server/mfa-service";
+import { getRequestIpHash } from "@shared/server/security-audit-service";
+import { ProfileOnboardingFreeze } from "@shared/ui";
 import {
   WorkspaceShell,
   type WorkspaceUserSummary,
@@ -60,8 +65,26 @@ export default async function WorkspaceLayout({
     redirect("/complete-profile");
   }
 
+  if (!(await isMfaSatisfiedForUser(user.id))) {
+    redirect("/mfa-challenge");
+  }
+
+  const headerStore = await headers();
+  try {
+    await registerAuthDeviceForRequest({
+      userId: user.id,
+      email: user.email,
+      headers: headerStore,
+      ipHash: getRequestIpHash(headerStore),
+    });
+  } catch (error) {
+    if (process.env.NODE_ENV !== "production") {
+      console.error("[workspace] device registration failed", error);
+    }
+  }
+
   const userSummary: WorkspaceUserSummary = {
-    firstName: user.firstName,
+    firstName: user.firstName || user.username,
     username: user.username,
     email: user.email,
     imageUrl: "imageUrl" in user ? user.imageUrl : null,
@@ -72,7 +95,13 @@ export default async function WorkspaceLayout({
   return (
     <ToastProvider position="bottom-right">
       <WorkspaceShell user={userSummary} nowIso={new Date().toISOString()}>
-        {children}
+        <ProfileOnboardingFreeze
+          required={!user.profileOnboarded}
+          initialFirstName={user.firstName}
+          initialLastName={user.lastName}
+        >
+          {children}
+        </ProfileOnboardingFreeze>
       </WorkspaceShell>
     </ToastProvider>
   );

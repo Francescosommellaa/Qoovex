@@ -3,21 +3,25 @@
 import { auth } from "@shared/server/auth/config";
 import type { ActionResult } from "@shared/lib/workspace-types";
 import {
-  AuthCredentialsError,
+  completeCredentialsSignup,
   registerCredentialsUser,
+  requestCredentialsSignupEmail,
   requestPasswordReset,
   resetPasswordWithCode,
   verifyCredentialsEmail,
 } from "@shared/server/auth-credentials-service";
-import { issueAuthCode } from "@shared/server/auth-code-service";
+import { issueAuthCode, verifyAuthCode } from "@shared/server/auth-code-service";
 import { getRequestIpHash } from "@shared/server/security-audit-service";
+import {
+  clearVerifiedSignupEmailCookie,
+  getVerifiedSignupEmailFromCookie,
+  setVerifiedSignupEmailCookie,
+} from "@shared/server/signup-session-service";
+import { getSafeAuthActionMessage } from "@shared/actions/auth-action-errors";
 import { headers } from "next/headers";
 
 function getErrorMessage(error: unknown, fallback: string) {
-  if (error instanceof AuthCredentialsError || error instanceof Error) {
-    return error.message;
-  }
-  return fallback;
+  return getSafeAuthActionMessage(error, fallback);
 }
 
 async function getIpHash() {
@@ -45,6 +49,87 @@ export async function registerCredentialsAction(input: {
     return {
       ok: false,
       message: getErrorMessage(error, "Registrazione non completata."),
+    };
+  }
+}
+
+export async function requestSignupEmailAction(input: {
+  email: string;
+}): Promise<ActionResult<{ email: string }>> {
+  try {
+    const result = await requestCredentialsSignupEmail({
+      email: input.email,
+      ipHash: await getIpHash(),
+    });
+    return {
+      ok: true,
+      message: "Codice inviato. Controlla la tua email.",
+      data: { email: result.email },
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: getErrorMessage(error, "Codice non inviato."),
+    };
+  }
+}
+
+export async function verifySignupEmailAction(input: {
+  email: string;
+  code: string;
+}): Promise<ActionResult<{ email: string }>> {
+  try {
+    const email = input.email.trim().toLowerCase();
+    await verifyAuthCode({
+      email,
+      code: input.code,
+      purpose: "EMAIL_VERIFICATION",
+      ipHash: await getIpHash(),
+    });
+    await setVerifiedSignupEmailCookie(email);
+    return {
+      ok: true,
+      message: "Email verificata. Completa username e password.",
+      data: { email },
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: getErrorMessage(error, "Codice non valido o scaduto."),
+    };
+  }
+}
+
+export async function completeEmailSignupAction(input: {
+  email: string;
+  username: string;
+  password: string;
+}): Promise<ActionResult<{ email: string }>> {
+  try {
+    const email = input.email.trim().toLowerCase();
+    const verifiedEmail = await getVerifiedSignupEmailFromCookie();
+    if (!verifiedEmail || verifiedEmail !== email) {
+      return {
+        ok: false,
+        message: "Sessione registrazione scaduta. Verifica di nuovo la email.",
+      };
+    }
+
+    const result = await completeCredentialsSignup({
+      ...input,
+      email,
+      ipHash: await getIpHash(),
+    });
+    await clearVerifiedSignupEmailCookie();
+    return {
+      ok: true,
+      message: "Account creato. Accesso in corso.",
+      data: { email: result.email },
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: getErrorMessage(error, "Account non creato."),
     };
   }
 }

@@ -7,5 +7,6 @@ export interface AuthShellProps {
   logo?: React.ReactNode;
   steps?: { current: number; total: number };
   backAction?: React.ReactNode;
+  variant?: "card" | "split";
+  aside?: React.ReactNode;
 }
-

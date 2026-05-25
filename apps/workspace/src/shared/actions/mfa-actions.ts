@@ -3,7 +3,6 @@
 import { auth } from "@shared/server/auth/config";
 import type { ActionResult } from "@shared/lib/workspace-types";
 import {
-  MfaError,
   confirmTotpSetupForUser,
   disableMfaForUser,
   getMfaStatusByUserId,
@@ -12,10 +11,25 @@ import {
   verifyMfaChallengeForUser,
 } from "@shared/server/mfa-service";
 import { assertPersistentRateLimit } from "@shared/server/rate-limit";
+import { registerAuthDeviceForRequest } from "@shared/server/auth-device-service";
+import { findUserCredentialState } from "@shared/server/repositories/user-repository";
+import { getRequestIpHash } from "@shared/server/security-audit-service";
+import { sendTransactionalEmail } from "@shared/server/transactional-email-service";
+import { getSafeAuthActionMessage } from "@shared/actions/auth-action-errors";
+import { headers } from "next/headers";
 
 function getActionError(error: unknown, fallback: string) {
-  if (error instanceof MfaError || error instanceof Error) return error.message;
-  return fallback;
+  return getSafeAuthActionMessage(error, fallback);
+}
+
+async function sendMfaEmailBestEffort(input: Parameters<typeof sendTransactionalEmail>[0]) {
+  try {
+    await sendTransactionalEmail(input);
+  } catch (error) {
+    if (process.env.NODE_ENV !== "production") {
+      console.error("[auth] mfa email failed", error);
+    }
+  }
 }
 
 export async function getCurrentMfaStatusAction() {
@@ -35,6 +49,14 @@ export async function startTotpSetupAction(): Promise<
   if (!userId) return { ok: false, message: "Sessione non valida." };
 
   try {
+    const credentialState = await findUserCredentialState(userId);
+    if (!credentialState?.credential) {
+      return {
+        ok: false,
+        message: "Crea prima una password Qoovex per attivare la A2F.",
+      };
+    }
+
     await assertPersistentRateLimit({
       identifier: userId,
       bucket: "auth:mfa-setup",
@@ -57,6 +79,7 @@ export async function confirmTotpSetupAction(
 ): Promise<ActionResult<{ backupCodes: string[] }>> {
   const session = await auth();
   const userId = session?.user?.id;
+  const email = session?.user?.email;
   if (!userId) return { ok: false, message: "Sessione non valida." };
 
   try {
@@ -67,6 +90,12 @@ export async function confirmTotpSetupAction(
       windowMs: 15 * 60 * 1000,
     });
     const result = await confirmTotpSetupForUser({ userId, code });
+    if (email) {
+      await sendMfaEmailBestEffort({
+        to: email,
+        template: { kind: "security-event", event: "MFA_ENABLED" },
+      });
+    }
     return {
       ok: true,
       message: "A2F attiva. Salva i codici di backup.",
@@ -82,6 +111,7 @@ export async function verifyMfaChallengeAction(
 ): Promise<ActionResult> {
   const session = await auth();
   const userId = session?.user?.id;
+  const email = session?.user?.email;
   if (!userId) return { ok: false, message: "Sessione non valida." };
 
   try {
@@ -92,6 +122,21 @@ export async function verifyMfaChallengeAction(
       windowMs: 15 * 60 * 1000,
     });
     const verified = await verifyMfaChallengeForUser({ userId, code });
+    if (verified && email) {
+      const headerStore = await headers();
+      try {
+        await registerAuthDeviceForRequest({
+          userId,
+          email,
+          headers: headerStore,
+          ipHash: getRequestIpHash(headerStore),
+        });
+      } catch (error) {
+        if (process.env.NODE_ENV !== "production") {
+          console.error("[auth] mfa device registration failed", error);
+        }
+      }
+    }
     return verified
       ? { ok: true, message: "Verifica completata." }
       : { ok: false, message: "Codice non valido." };
@@ -103,6 +148,7 @@ export async function verifyMfaChallengeAction(
 export async function disableMfaAction(): Promise<ActionResult> {
   const session = await auth();
   const userId = session?.user?.id;
+  const email = session?.user?.email;
   if (!userId) return { ok: false, message: "Sessione non valida." };
 
   try {
@@ -113,6 +159,12 @@ export async function disableMfaAction(): Promise<ActionResult> {
       windowMs: 15 * 60 * 1000,
     });
     await disableMfaForUser(userId);
+    if (email) {
+      await sendMfaEmailBestEffort({
+        to: email,
+        template: { kind: "security-event", event: "MFA_DISABLED" },
+      });
+    }
     return { ok: true, message: "A2F disattivata." };
   } catch (error) {
     return { ok: false, message: getActionError(error, "A2F non aggiornata.") };

@@ -1,9 +1,7 @@
 import { Suspense } from "react";
-import { SignInForm } from "../ui";
-import { isDevAuthAllowed } from "@shared/server/dev-auth";
+import { SignUpEmailForm } from "../ui";
 
 export default async function SignUpPage() {
-  const devAuthEnabled = await isDevAuthAllowed();
   const googleAuthEnabled = Boolean(
     process.env.GOOGLE_CLIENT_ID?.trim() &&
       process.env.GOOGLE_CLIENT_SECRET?.trim(),
@@ -11,11 +9,7 @@ export default async function SignUpPage() {
 
   return (
     <Suspense fallback={null}>
-      <SignInForm
-        mode="sign-up"
-        devAuthEnabled={devAuthEnabled}
-        googleAuthEnabled={googleAuthEnabled}
-      />
+      <SignUpEmailForm googleAuthEnabled={googleAuthEnabled} />
     </Suspense>
   );
 }

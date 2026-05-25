@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { db, Prisma, type AuthCodePurpose } from "@qoovex/db";
 import { assertPersistentRateLimit } from "@shared/server/rate-limit";
 import { recordSecurityEvent } from "@shared/server/security-audit-service";
+import { sendTransactionalEmail } from "@shared/server/transactional-email-service";
 
 const CODE_TTL_MS = 10 * 60 * 1000;
 const CODE_LENGTH = 6;
@@ -51,55 +52,6 @@ function generateCode() {
   return String(crypto.randomInt(min, max));
 }
 
-async function sendAuthCodeEmail(input: {
-  email: string;
-  code: string;
-  purpose: AuthCodePurpose;
-}) {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = process.env.RESEND_FROM_EMAIL?.trim();
-
-  if (!apiKey || !from) {
-    if (process.env.NODE_ENV !== "production") {
-      console.info(`[auth-code] ${input.purpose} ${input.email}: ${input.code}`);
-      return;
-    }
-
-    throw new AuthCodeError("Email auth non configurata.");
-  }
-
-  const subject =
-    input.purpose === "PASSWORD_RESET"
-      ? "Codice reset password Qoovex"
-      : input.purpose === "EMAIL_CHANGE"
-        ? "Codice cambio email Qoovex"
-        : "Codice verifica email Qoovex";
-
-  const text = [
-    `Il tuo codice Qoovex e ${input.code}.`,
-    "Scade tra 10 minuti e puo essere usato una sola volta.",
-    "Se non hai richiesto tu questa operazione, ignora questa email.",
-  ].join("\n\n");
-
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: input.email,
-      subject,
-      text,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new AuthCodeError("Invio codice non riuscito.");
-  }
-}
-
 export async function issueAuthCode(input: {
   email: string;
   purpose: AuthCodePurpose;
@@ -140,7 +92,10 @@ export async function issueAuthCode(input: {
     }),
   ]);
 
-  await sendAuthCodeEmail({ email, code, purpose: input.purpose });
+  await sendTransactionalEmail({
+    to: email,
+    template: { kind: "auth-code", purpose: input.purpose, code },
+  });
   await recordSecurityEvent({
     userId: input.userId,
     email,

@@ -13,6 +13,7 @@ Componente condiviso del design system Qoovex.
 |------|------|---------|----------------|
 | variant | string | dipende | valori esportati dai tipi del componente |
 | size | string | dipende | valori esportati dai tipi del componente |
+| onComplete | function | undefined | chiamata quando il codice raggiunge la lunghezza prevista |
 
 ## Token usati
 - Spacing: solo `--spacing-*` o token componente dedicati.

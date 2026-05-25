@@ -819,6 +819,8 @@
   --sirio-brand-icon-filter: invert(1);
   --sirio-preview-reserve-dropdown: var(--spacing-24);
   --auth-card-width: 26rem;
+  --auth-shell-width: 72rem;
+  --auth-aside-width: 31rem;
   --auth-logo-size: 2.5rem;
   --auth-overlay-bg: oklch(from var(--color-bg) l c h / 0.82);
   --auth-loading-card-width: 23rem;

@@ -114,6 +114,121 @@ export async function registerCredentialsUser(input: {
   return { userId: user.id, email };
 }
 
+export async function requestCredentialsSignupEmail(input: {
+  email: string;
+  ipHash?: string | null;
+}) {
+  const email = normalizeEmail(input.email);
+  if (!email || !email.includes("@")) {
+    throw new AuthCredentialsError("Inserisci una email valida.");
+  }
+
+  await assertPersistentRateLimit({
+    identifier: email,
+    bucket: "auth:signup-email",
+    limit: 5,
+    windowMs: 60 * 60 * 1000,
+  });
+
+  const existing = await db.user.findUnique({
+    where: { email },
+    select: { id: true, credential: { select: { userId: true } } },
+  });
+
+  if (existing?.credential) {
+    throw new AuthCredentialsError("Account gia esistente. Accedi o recupera la password.");
+  }
+
+  if (existing) {
+    throw new AuthCredentialsError("Account gia collegato a Google. Accedi con Google e crea una password dalle impostazioni.");
+  }
+
+  await issueAuthCode({
+    email,
+    purpose: "EMAIL_VERIFICATION",
+    ipHash: input.ipHash,
+    metadata: { flow: "email_signup" },
+  });
+  await recordSecurityEvent({
+    email,
+    type: "credentials_signup_email_requested",
+    ipHash: input.ipHash,
+  });
+
+  return { email };
+}
+
+export async function completeCredentialsSignup(input: {
+  email: string;
+  username: string;
+  password: string;
+  ipHash?: string | null;
+}) {
+  const email = normalizeEmail(input.email);
+  const username = normalizeUsernameInput(input.username);
+  const usernameError = validateUsername(username);
+
+  if (!email || !email.includes("@")) {
+    throw new AuthCredentialsError("Sessione registrazione non valida.");
+  }
+  if (usernameError) throw new AuthCredentialsError(usernameError);
+  validatePasswordPolicy(input.password);
+
+  await assertPersistentRateLimit({
+    identifier: email,
+    bucket: "auth:signup-complete",
+    limit: 5,
+    windowMs: 60 * 60 * 1000,
+  });
+
+  const existing = await db.user.findUnique({
+    where: { email },
+    select: { id: true },
+  });
+  if (existing) {
+    throw new AuthCredentialsError("Account gia esistente. Accedi o recupera la password.");
+  }
+
+  const availability = await getUsernameAvailability({ username });
+  if (!availability.available) {
+    throw new AuthCredentialsError("Username gia in uso.");
+  }
+
+  const passwordHash = await hashPassword(input.password);
+  const user = await db.$transaction(async (tx) => {
+    const record = await tx.user.create({
+      data: {
+        email,
+        emailVerified: new Date(),
+        username,
+        usernameOnboarded: true,
+        profileOnboarded: false,
+        firstName: "",
+        lastName: null,
+        name: null,
+      },
+    });
+
+    await tx.userCredential.create({
+      data: {
+        userId: record.id,
+        passwordHash,
+      },
+    });
+
+    return record;
+  });
+
+  await recordSecurityEvent({
+    userId: user.id,
+    email,
+    type: "credentials_signup_completed",
+    ipHash: input.ipHash,
+  });
+
+  return { userId: user.id, email };
+}
+
 export async function verifyCredentialsEmail(input: {
   email: string;
   code: string;

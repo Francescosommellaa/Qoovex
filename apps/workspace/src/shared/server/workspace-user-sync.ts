@@ -170,6 +170,7 @@ export async function createUserForAuthAdapter(user: {
       lastName,
       username,
       usernameOnboarded: false,
+      profileOnboarded: false,
     },
   });
 

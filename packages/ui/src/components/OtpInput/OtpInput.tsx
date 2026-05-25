@@ -7,6 +7,7 @@ export interface OtpInputProps {
   id?: string;
   value: string;
   onChange: (value: string) => void;
+  onComplete?: (value: string) => void;
   length?: number;
   disabled?: boolean;
   required?: boolean;
@@ -32,6 +33,7 @@ export function OtpInput({
   id,
   value,
   onChange,
+  onComplete,
   length = 6,
   disabled = false,
   required = false,
@@ -42,7 +44,21 @@ export function OtpInput({
   "aria-labelledby": ariaLabelledBy,
 }: OtpInputProps) {
   const inputRefs = React.useRef<Array<HTMLInputElement | null>>([]);
+  const completedValueRef = React.useRef("");
   const normalizedValue = sanitizeOtpValue(value, length);
+
+  React.useEffect(() => {
+    if (!onComplete || normalizedValue.length !== length) return;
+    if (completedValueRef.current === normalizedValue) return;
+    completedValueRef.current = normalizedValue;
+    onComplete(normalizedValue);
+  }, [length, normalizedValue, onComplete]);
+
+  React.useEffect(() => {
+    if (normalizedValue.length < length) {
+      completedValueRef.current = "";
+    }
+  }, [length, normalizedValue.length]);
 
   React.useEffect(() => {
     if (!requestInitialFocusOnDesktop || disabled) return;

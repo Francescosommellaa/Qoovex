@@ -24,8 +24,8 @@ export function ResetPasswordClient({ initialEmail }: { initialEmail: string }) 
   const [password, setPassword] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const submitReset = React.useCallback(async () => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
     try {
       const result = await resetPasswordWithCodeAction({
@@ -52,6 +52,11 @@ export function ResetPasswordClient({ initialEmail }: { initialEmail: string }) 
     } finally {
       setIsSubmitting(false);
     }
+  }, [code, email, isSubmitting, password, router, toast]);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await submitReset();
   }
 
   return (
@@ -81,8 +86,12 @@ export function ResetPasswordClient({ initialEmail }: { initialEmail: string }) 
             <OtpInput
               value={code}
               onChange={setCode}
+              onComplete={() => {
+                if (email.trim() && password.trim()) void submitReset();
+              }}
               length={6}
               requestInitialFocusOnDesktop
+              disabled={isSubmitting}
               aria-label="Codice reset password"
             />
           </FormControl>

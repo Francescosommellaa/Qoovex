@@ -239,3 +239,110 @@
   text-align: center;
   opacity: var(--button-disabled-opacity);
 }
+
+.auth-preview-panel {
+  position: relative;
+  min-height: 34rem;
+  overflow: hidden;
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  background:
+    linear-gradient(145deg, oklch(from var(--color-primary) l c h / 0.16), transparent 42%),
+    var(--color-surface);
+  padding: var(--spacing-7);
+  box-shadow: var(--shadow-xl);
+}
+
+.auth-preview-panel::after {
+  content: "";
+  position: absolute;
+  inset: auto -10% -18% 18%;
+  height: 16rem;
+  background: radial-gradient(ellipse at center, oklch(from var(--color-primary) l c h / 0.28), transparent 68%);
+  pointer-events: none;
+}
+
+.auth-preview-header {
+  display: grid;
+  gap: var(--spacing-3);
+  max-width: 24rem;
+}
+
+.auth-preview-window {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: oklch(from var(--color-surface-elevated) l c h / 0.88);
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-preview-window__bar {
+  display: flex;
+  gap: var(--spacing-2);
+  border-bottom: var(--border-thin) solid var(--color-divider);
+  padding: var(--spacing-3) var(--spacing-4);
+}
+
+.auth-preview-window__bar span {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+}
+
+.auth-preview-window__body {
+  padding: var(--spacing-4);
+}
+
+.auth-preview-stat,
+.auth-preview-chart {
+  display: grid;
+  gap: var(--spacing-3);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  padding: var(--spacing-4);
+}
+
+.auth-preview-stat {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.auth-preview-chart > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.auth-preview-bars {
+  display: grid;
+  height: 7rem;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: end;
+  gap: var(--spacing-3);
+}
+
+.auth-preview-bars span {
+  min-height: 2rem;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--color-primary);
+  opacity: 0.52;
+}
+
+.auth-preview-bars span:nth-child(2) {
+  min-height: 4.25rem;
+  opacity: 0.74;
+}
+
+.auth-preview-bars span:nth-child(3) {
+  min-height: 5.75rem;
+  opacity: 1;
+}
+
+.auth-preview-bars span:nth-child(4) {
+  min-height: 3.5rem;
+  opacity: 0.64;
+}

@@ -103,6 +103,7 @@ model User {
   lastName            String?
   username            String             @unique
   usernameOnboarded   Boolean            @default(true)
+  profileOnboarded    Boolean            @default(true)
   avatarBlobPathname  String?
   phoneNumber         String?
   accounts            Account[]
@@ -128,6 +129,7 @@ model User {
   recentSearches      RecentSearch[]
   ingredientReviews   IngredientReview[]
   mfaBackupCodes      MfaBackupCode[]
+  authDevices         AuthDevice[]
   createdAt           DateTime           @default(now())
   updatedAt           DateTime           @updatedAt
 }
@@ -186,6 +188,23 @@ model SecurityAuditEvent {
   @@index([userId, createdAt])
   @@index([email, createdAt])
   @@index([type, createdAt])
+}
+
+model AuthDevice {
+  id              String   @id @default(cuid())
+  userId          String
+  fingerprintHash String
+  userAgentHash   String?
+  label           String?
+  firstSeenAt     DateTime @default(now())
+  lastSeenAt      DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, fingerprintHash])
+  @@index([userId, lastSeenAt])
 }
 
 model MfaBackupCode {

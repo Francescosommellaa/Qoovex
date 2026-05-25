@@ -15,9 +15,13 @@ Pattern per schermate autenticazione mobile-first.
 | subtitle | ReactNode | undefined | testo |
 | steps | object | undefined | current/total |
 | backAction | ReactNode | undefined | componente DS |
+| variant | "card" / "split" | "card" | layout centrato o split desktop |
+| aside | ReactNode | undefined | contenuto laterale visibile nel layout split |
 
 ## Token usati
 - `--auth-card-width`.
+- `--auth-shell-width`.
+- `--auth-aside-width`.
 - `--auth-step-dot`.
 - Card e typography tokens.
 
@@ -33,4 +37,3 @@ Pattern per schermate autenticazione mobile-first.
 // Sbagliato
 <main style={{ maxWidth: "420px" }} />
 ```
-

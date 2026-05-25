@@ -15,6 +15,7 @@ interface SettingsViewUser {
   mfaEnabled?: boolean;
   usernameChangedAt?: Date | null;
   plan: WorkspacePlan;
+  credential?: { userId: string } | null;
 }
 
 function formatLimit(used: number, value: number | null) {
@@ -22,6 +23,7 @@ function formatLimit(used: number, value: number | null) {
 }
 
 export async function SettingsView({ user }: { user: SettingsViewUser }) {
+  const { credential, ...safeUser } = user;
   const dashboard = await getWorkspaceDashboard(user.id, user.plan);
   const usage = {
     recipes: formatLimit(dashboard.limits.recipes.used, dashboard.limits.recipes.value),
@@ -41,7 +43,7 @@ export async function SettingsView({ user }: { user: SettingsViewUser }) {
       description="Profilo, piano e usage del workspace personale."
     >
       <AccountSettingsClient
-        user={user}
+        user={{ ...safeUser, hasPassword: Boolean(credential) }}
         usage={usage}
         planLabel={getPlanLabel(user.plan)}
       />

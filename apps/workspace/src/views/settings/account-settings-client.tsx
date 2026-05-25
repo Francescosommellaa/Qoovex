@@ -39,6 +39,7 @@ import {
 import {
   changePasswordAction,
   confirmEmailChangeAction,
+  createPasswordAction,
   requestEmailChangeAction,
 } from "@shared/actions/account-security-actions";
 import { changeUsernameAction } from "@shared/actions/username-actions";
@@ -60,6 +61,7 @@ interface AccountSettingsClientProps {
     imageUrl?: string | null;
     mfaEnabled?: boolean;
     usernameChangedAt?: Date | string | null;
+    hasPassword?: boolean;
   };
   usage: {
     recipes: string;
@@ -160,12 +162,14 @@ export function AccountSettingsClient({
   const [usernameChangedAt, setUsernameChangedAt] = React.useState<
     Date | string | null | undefined
   >(initialUser.usernameChangedAt);
-  const [usernameAvailability, setUsernameAvailability] =
+  const [remoteUsernameAvailability, setRemoteUsernameAvailability] =
     React.useState<UsernameAvailability | null>(null);
   const [isCheckingUsername, setIsCheckingUsername] = React.useState(false);
   const [isSavingUsername, setIsSavingUsername] = React.useState(false);
+  const [nowMs] = React.useState(Date.now);
 
   const [mfaEnabled, setMfaEnabled] = React.useState(Boolean(initialUser.mfaEnabled));
+  const [hasPassword, setHasPassword] = React.useState(Boolean(initialUser.hasPassword));
   const [backupCodesRemaining, setBackupCodesRemaining] = React.useState(0);
   const [totpStep, setTotpStep] = React.useState<TotpStep>("idle");
   const [totpUrl, setTotpUrl] = React.useState("");
@@ -182,11 +186,47 @@ export function AccountSettingsClient({
   const [isCredentialsBusy, setIsCredentialsBusy] = React.useState(false);
 
   const imageUrl = avatarUrl;
+  const normalizedUsername = normalizeUsernameInput(username);
+  const localUsernameError = validateUsername(normalizedUsername);
   const nextUsernameChangeAt = getNextUsernameChangeDate(usernameChangedAt);
   const isUsernameCooldownActive =
-    Boolean(nextUsernameChangeAt && nextUsernameChangeAt.getTime() > Date.now()) &&
+    Boolean(nextUsernameChangeAt && nextUsernameChangeAt.getTime() > nowMs) &&
     normalizeUsernameInput(username) !== currentUsername;
-  const normalizedUsername = normalizeUsernameInput(username);
+  const shouldCheckRemoteUsername = Boolean(
+    normalizedUsername &&
+      normalizedUsername !== currentUsername &&
+      !localUsernameError,
+  );
+  const immediateUsernameAvailability: UsernameAvailability | null =
+    !normalizedUsername
+      ? null
+      : normalizedUsername === currentUsername
+        ? {
+            username: normalizedUsername,
+            valid: true,
+            available: true,
+            message: "Username attuale.",
+            suggestions: [],
+          }
+        : localUsernameError
+          ? {
+              username: normalizedUsername,
+              valid: false,
+              available: false,
+              message: localUsernameError,
+              suggestions: buildUsernameSuggestions({
+                firstName,
+                lastName,
+                email: currentEmail,
+              }),
+            }
+          : null;
+  const usernameAvailability =
+    immediateUsernameAvailability ??
+    (remoteUsernameAvailability?.username === normalizedUsername
+      ? remoteUsernameAvailability
+      : null);
+  const isUsernameCheckVisible = shouldCheckRemoteUsername && isCheckingUsername;
   const usernameSuggestions =
     usernameAvailability?.suggestions.length
       ? usernameAvailability.suggestions
@@ -197,49 +237,14 @@ export function AccountSettingsClient({
         });
 
   React.useEffect(() => {
-    const normalized = normalizeUsernameInput(username);
-    const localError = validateUsername(normalized);
-
-    if (!normalized) {
-      setUsernameAvailability(null);
-      setIsCheckingUsername(false);
-      return;
-    }
-
-    if (normalized === currentUsername) {
-      setUsernameAvailability({
-        username: normalized,
-        valid: true,
-        available: true,
-        message: "Username attuale.",
-        suggestions: [],
-      });
-      setIsCheckingUsername(false);
-      return;
-    }
-
-    if (localError) {
-      setUsernameAvailability({
-        username: normalized,
-        valid: false,
-        available: false,
-        message: localError,
-        suggestions: buildUsernameSuggestions({
-          firstName,
-          lastName,
-          email: currentEmail,
-        }),
-      });
-      setIsCheckingUsername(false);
-      return;
-    }
+    if (!shouldCheckRemoteUsername) return;
 
     const controller = new AbortController();
     const timeout = window.setTimeout(async () => {
       setIsCheckingUsername(true);
       try {
         const params = new URLSearchParams({
-          username: normalized,
+          username: normalizedUsername,
           firstName,
           lastName,
           email: currentEmail,
@@ -249,7 +254,7 @@ export function AccountSettingsClient({
         });
         if (!response.ok) return;
         const payload = (await response.json()) as UsernameAvailability;
-        setUsernameAvailability(payload);
+        setRemoteUsernameAvailability(payload);
       } finally {
         setIsCheckingUsername(false);
       }
@@ -260,11 +265,11 @@ export function AccountSettingsClient({
       window.clearTimeout(timeout);
     };
   }, [
-    currentUsername,
     currentEmail,
     firstName,
     lastName,
-    username,
+    normalizedUsername,
+    shouldCheckRemoteUsername,
   ]);
 
   React.useEffect(() => {
@@ -459,6 +464,15 @@ export function AccountSettingsClient({
   }
 
   async function startTotpSetup() {
+    if (!hasPassword) {
+      toast({
+        variant: "warning",
+        title: "Password richiesta",
+        description: "Crea prima una password Qoovex per attivare la A2F.",
+      });
+      return;
+    }
+
     setIsSecurityBusy(true);
     setBackupCodes([]);
     setTotpCode("");
@@ -481,9 +495,9 @@ export function AccountSettingsClient({
     }
   }
 
-  async function confirmTotpSetup(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const code = totpCode.trim();
+  async function confirmTotpSetupWithCode(nextCode: string) {
+    if (isSecurityBusy) return;
+    const code = nextCode.trim();
     if (!code) {
       toast({
         variant: "warning",
@@ -519,6 +533,11 @@ export function AccountSettingsClient({
     } finally {
       setIsSecurityBusy(false);
     }
+  }
+
+  async function confirmTotpSetup(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await confirmTotpSetupWithCode(totpCode);
   }
 
   async function disableMfa() {
@@ -620,9 +639,9 @@ export function AccountSettingsClient({
     }
   }
 
-  async function handleVerifyEmail(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!newEmail.trim() || !emailCode.trim()) {
+  async function verifyEmailChangeWithCode(nextCode: string) {
+    if (isCredentialsBusy) return;
+    if (!newEmail.trim() || !nextCode.trim()) {
       toast({
         variant: "warning",
         title: "Codice richiesto",
@@ -635,7 +654,7 @@ export function AccountSettingsClient({
     try {
       const result = await confirmEmailChangeAction({
         newEmail: newEmail.trim().toLowerCase(),
-        code: emailCode.trim(),
+        code: nextCode.trim(),
       });
       if (!result.ok || !result.data) {
         setEmailCode("");
@@ -666,6 +685,11 @@ export function AccountSettingsClient({
     } finally {
       setIsCredentialsBusy(false);
     }
+  }
+
+  async function handleVerifyEmail(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await verifyEmailChangeWithCode(emailCode);
   }
 
   async function handlePasswordChange(event: React.FormEvent<HTMLFormElement>) {
@@ -705,6 +729,47 @@ export function AccountSettingsClient({
       toast({
         variant: "error",
         title: "Password non aggiornata",
+        description: getFriendlyError(error),
+      });
+    } finally {
+      setIsCredentialsBusy(false);
+    }
+  }
+
+  async function handleCreatePassword(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!newPassword) {
+      toast({
+        variant: "warning",
+        title: "Password richiesta",
+        description: "Inserisci una password Qoovex sicura.",
+      });
+      return;
+    }
+
+    setIsCredentialsBusy(true);
+    try {
+      const result = await createPasswordAction({ newPassword });
+      if (!result.ok) {
+        toast({
+          variant: "error",
+          title: "Password non creata",
+          description: result.message,
+        });
+        return;
+      }
+
+      setHasPassword(true);
+      setNewPassword("");
+      toast({
+        variant: "success",
+        title: "Password creata",
+        description: "Ora puoi attivare la A2F con app authenticator.",
+      });
+    } catch (error) {
+      toast({
+        variant: "error",
+        title: "Password non creata",
         description: getFriendlyError(error),
       });
     } finally {
@@ -869,7 +934,7 @@ export function AccountSettingsClient({
                     tone={usernameAvailability?.available ? "success" : "muted"}
                     aria-live="polite"
                   >
-                    {isCheckingUsername
+                    {isUsernameCheckVisible
                       ? "Verifica disponibilita..."
                       : usernameAvailability?.message ??
                         "Usa 3-32 caratteri: lettere, numeri, punto, trattino o underscore."}
@@ -994,6 +1059,7 @@ export function AccountSettingsClient({
                           <OtpInput
                             value={totpCode}
                             onChange={setTotpCode}
+                            onComplete={confirmTotpSetupWithCode}
                             length={6}
                             requestInitialFocusOnDesktop
                             aria-label="Codice TOTP"
@@ -1092,6 +1158,7 @@ export function AccountSettingsClient({
                         <OtpInput
                           value={emailCode}
                           onChange={setEmailCode}
+                          onComplete={verifyEmailChangeWithCode}
                           length={6}
                           requestInitialFocusOnDesktop
                           aria-label="Codice nuova email"
@@ -1148,23 +1215,29 @@ export function AccountSettingsClient({
                   density="comfortable"
                   labelStyle="soft"
                   noValidate
-                  onSubmit={handlePasswordChange}
+                  onSubmit={hasPassword ? handlePasswordChange : handleCreatePassword}
                 >
-                  <FormField label="Password attuale" required>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        autoComplete="current-password"
-                        showPasswordToggle
-                        value={currentPassword}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                          setCurrentPassword(event.target.value)
-                        }
-                        iconLeading={<Icon icon={Key} size="sm" />}
-                      />
-                    </FormControl>
-                  </FormField>
-                  <FormField label="Nuova password" required>
+                  {hasPassword ? (
+                    <FormField label="Password attuale" required>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          autoComplete="current-password"
+                          showPasswordToggle
+                          value={currentPassword}
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                            setCurrentPassword(event.target.value)
+                          }
+                          iconLeading={<Icon icon={Key} size="sm" />}
+                        />
+                      </FormControl>
+                    </FormField>
+                  ) : (
+                    <Text size="sm" tone="muted" leading="relaxed">
+                      Questo account usa Google. Crea una password Qoovex prima di attivare la A2F.
+                    </Text>
+                  )}
+                  <FormField label={hasPassword ? "Nuova password" : "Password Qoovex"} required>
                     <FormControl>
                       <Input
                         type="password"
@@ -1187,7 +1260,7 @@ export function AccountSettingsClient({
                       loadingLabel="Salvataggio..."
                       className="w-full"
                     >
-                      Cambia password
+                      {hasPassword ? "Cambia password" : "Crea password"}
                     </Button>
                   </FormActions>
                 </Form>

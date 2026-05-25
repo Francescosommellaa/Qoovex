@@ -19,6 +19,7 @@ Route handler: `src/app/api/auth/[...nextauth]/route.ts`.
 | Variabile | Note |
 | --------- | ---- |
 | `RESEND_API_KEY` + `RESEND_FROM_EMAIL` | Invio codici email per verifica, reset password e cambio email |
+| `RESEND_REPLY_TO_EMAIL` | Reply-to opzionale per template transazionali |
 | `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` | OAuth Google |
 | `QOOVEX_AUTH_CODE_SECRET` | HMAC codici auth; fallback `AUTH_SECRET` |
 | `QOOVEX_PASSWORD_PEPPER` | Pepper password; fallback `AUTH_SECRET` |

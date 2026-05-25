@@ -14,24 +14,32 @@ import {
   useToast,
 } from "@qoovex/ui";
 import {
-  resendVerificationCodeAction,
-  verifyEmailCodeAction,
+  requestSignupEmailAction,
+  verifySignupEmailAction,
 } from "@shared/actions/auth-actions";
+import { getSafeRedirectPath } from "@shared/lib/auth-flow";
 
-export function VerifyEmailClient({ email }: { email: string }) {
+export function SignUpVerifyClient({
+  email,
+  callbackUrl,
+}: {
+  email: string;
+  callbackUrl?: string;
+}) {
   const router = useRouter();
   const { toast } = useToast();
   const [code, setCode] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isResending, setIsResending] = React.useState(false);
+  const safeCallbackUrl = getSafeRedirectPath(callbackUrl);
 
   const submitCode = React.useCallback(
     async (nextCode: string) => {
       if (isSubmitting) return;
       setIsSubmitting(true);
       try {
-        const result = await verifyEmailCodeAction({ email, code: nextCode });
-        if (!result.ok) {
+        const result = await verifySignupEmailAction({ email, code: nextCode });
+        if (!result.ok || !result.data) {
           setCode("");
           toast({
             variant: "error",
@@ -41,17 +49,14 @@ export function VerifyEmailClient({ email }: { email: string }) {
           return;
         }
 
-        toast({
-          variant: "success",
-          title: "Email verificata",
-          description: "Ora puoi accedere con email o username e password.",
-        });
-        router.replace("/sign-in");
+        router.replace(
+          `/sign-up/setup?email=${encodeURIComponent(result.data.email)}&callbackUrl=${encodeURIComponent(safeCallbackUrl)}`,
+        );
       } finally {
         setIsSubmitting(false);
       }
     },
-    [email, isSubmitting, router, toast],
+    [email, isSubmitting, router, safeCallbackUrl, toast],
   );
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -71,7 +76,7 @@ export function VerifyEmailClient({ email }: { email: string }) {
   async function resendCode() {
     setIsResending(true);
     try {
-      const result = await resendVerificationCodeAction({ email });
+      const result = await requestSignupEmailAction({ email });
       toast({
         variant: result.ok ? "success" : "error",
         title: result.ok ? "Codice inviato" : "Codice non inviato",
@@ -101,7 +106,7 @@ export function VerifyEmailClient({ email }: { email: string }) {
               length={6}
               requestInitialFocusOnDesktop
               disabled={isSubmitting}
-              aria-label="Codice verifica email"
+              aria-label="Codice verifica registrazione"
             />
           </FormControl>
         </FormField>
@@ -111,6 +116,7 @@ export function VerifyEmailClient({ email }: { email: string }) {
             className="w-full"
             loading={isSubmitting}
             loadingLabel="Verifica..."
+            disabled={isSubmitting}
           >
             Verifica email
           </Button>
@@ -122,14 +128,14 @@ export function VerifyEmailClient({ email }: { email: string }) {
         <button
           type="button"
           className="auth-inline-link-button"
-          disabled={isResending}
+          disabled={isResending || isSubmitting}
           onClick={resendCode}
         >
           Reinvia
         </button>
       </Text>
       <Text className="auth-footer-text">
-        <Link href="/sign-in">Torna al login</Link>
+        <Link href="/sign-up">Cambia email</Link>
       </Text>
     </>
   );
