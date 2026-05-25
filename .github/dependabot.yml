@@ -8,12 +8,67 @@ updates:
       time: "06:00"
       timezone: Europe/Rome
     cooldown:
-      default-days: 3
-    open-pull-requests-limit: 10
+      default-days: 5
+      semver-major-days: 14
+      semver-minor-days: 5
+      semver-patch-days: 2
+    open-pull-requests-limit: 4
+    versioning-strategy: increase-if-necessary
+    labels:
+      - dependencies
+      - dependabot
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
     groups:
-      node-dependencies:
+      # Patch/minor updates are grouped by area so each PR stays reviewable.
+      # Major updates are intentionally left ungrouped: one risky upgrade per PR.
+      next-react-minor-patch:
         patterns:
-          - "*"
+          - next
+          - eslint-config-next
+          - react
+          - react-dom
+          - "@types/react"
+          - "@types/react-dom"
+        update-types:
+          - minor
+          - patch
+      tooling-minor-patch:
+        patterns:
+          - typescript
+          - eslint
+          - tsx
+          - turbo
+          - tailwindcss
+          - "@tailwindcss/*"
+          - "@eslint/*"
+        update-types:
+          - minor
+          - patch
+      node-types-minor-patch:
+        patterns:
+          - "@types/node"
+        update-types:
+          - minor
+          - patch
+      platform-minor-patch:
+        patterns:
+          - "@vercel/*"
+          - pg
+          - dotenv
+          - prisma
+          - "@prisma/*"
+        update-types:
+          - minor
+          - patch
+      animation-minor-patch:
+        patterns:
+          - motion
+          - gsap
+        update-types:
+          - minor
+          - patch
 
   - package-ecosystem: github-actions
     directory: /
@@ -22,3 +77,17 @@ updates:
       day: monday
       time: "06:30"
       timezone: Europe/Rome
+    cooldown:
+      default-days: 5
+    open-pull-requests-limit: 2
+    labels:
+      - dependencies
+      - dependabot
+      - github-actions
+    commit-message:
+      prefix: "chore(actions)"
+      include: scope
+    groups:
+      github-actions:
+        patterns:
+          - "*"
