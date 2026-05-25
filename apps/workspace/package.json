@@ -17,7 +17,7 @@
     "@qoovex/utils": "workspace:*",
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.3.3",
-    "next": "15.5.15",
+    "next": "16.2.6",
     "next-auth": "^5.0.0-beta.25",
     "qrcode.react": "^4.2.0",
     "react": "19.2.6",
