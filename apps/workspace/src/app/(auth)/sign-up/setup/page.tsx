@@ -16,8 +16,8 @@ export default async function SignUpSetupPage({
   return (
     <AuthShell
       title="Scegli username e password"
-      subtitle="La email e verificata. Ora crea le credenziali Qoovex."
-      steps={{ current: 3, total: 3 }}
+      subtitle="Crea le credenziali del tuo account."
+      steps={{ current: 3, total: 3, labels: ["Email", "Codice", "Credenziali"] }}
     >
       <SignUpSetupClient email={email} callbackUrl={params.callbackUrl} />
     </AuthShell>

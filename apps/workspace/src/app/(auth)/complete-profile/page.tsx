@@ -16,8 +16,8 @@ export default async function CompleteProfilePage() {
   return (
     <AuthShell
       title="Completa il profilo"
-      subtitle="Conferma lo username da usare nel workspace Qoovex."
-      steps={{ current: 2, total: 2 }}
+      subtitle="Scegli lo username da usare nel workspace."
+      steps={{ current: 2, total: 2, labels: ["Google", "Username"] }}
     >
       <CompleteProfileClient initialUsername={user.username} />
     </AuthShell>

@@ -19,7 +19,7 @@ export default async function MfaChallengePage() {
   return (
     <AuthShell
       title="Verifica l'accesso"
-      subtitle="Completa il secondo fattore per aprire il workspace"
+      subtitle="Inserisci il codice di verifica."
     >
       <MfaChallengeClient />
     </AuthShell>

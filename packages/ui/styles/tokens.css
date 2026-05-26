@@ -819,8 +819,14 @@
   --sirio-brand-icon-filter: invert(1);
   --sirio-preview-reserve-dropdown: var(--spacing-24);
   --auth-card-width: 26rem;
-  --auth-shell-width: 72rem;
-  --auth-aside-width: 31rem;
+  --auth-form-width: 27rem;
+  --auth-shell-width: 84rem;
+  --auth-aside-width: 38rem;
+  --auth-shell-gap: var(--spacing-10);
+  --auth-shell-padding-block: var(--spacing-4);
+  --auth-shell-padding-inline: var(--spacing-4);
+  --auth-shell-desktop-padding-block: var(--spacing-8);
+  --auth-shell-desktop-padding-inline: var(--spacing-8);
   --auth-logo-size: 2.5rem;
   --auth-overlay-bg: oklch(from var(--color-bg) l c h / 0.82);
   --auth-loading-card-width: 23rem;
@@ -828,9 +834,19 @@
   --auth-optional-min-height: 1.125rem;
   --auth-step-dot: 0.375rem;
   --auth-step-dot-active: 1.25rem;
+  --auth-step-marker-size: 1.5rem;
   --auth-stagger-1: 35ms;
   --auth-stagger-2: 70ms;
   --auth-stagger-3: 105ms;
+  --auth-pattern-grid-size: 1.25rem;
+  --auth-pattern-primary-soft: oklch(from var(--color-primary) l c h / 0.18);
+  --auth-pattern-primary-medium: oklch(from var(--color-primary) l c h / 0.34);
+  --auth-pattern-primary-strong: oklch(from var(--color-primary) l c h / 0.58);
+  --auth-pattern-primary-glow: oklch(from var(--color-primary) l c h / 0.28);
+  --auth-pattern-grid-line: oklch(1 0 0 / 0.05);
+  --auth-pattern-shadow:
+    0 1px 2px oklch(0 0 0 / 0.36),
+    0 24px 70px oklch(0 0 0 / 0.36);
   --product-preview-width: 28.75rem;
   --product-preview-height: 30rem;
   --product-preview-nav-width: 7rem;

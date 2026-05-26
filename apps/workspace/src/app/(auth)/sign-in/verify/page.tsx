@@ -15,7 +15,7 @@ export default async function SignInVerifyPage({
     <AuthShell
       title="Verifica la tua email"
       subtitle={`Inserisci il codice a 6 cifre inviato a ${email}.`}
-      steps={{ current: 2, total: 2 }}
+      steps={{ current: 2, total: 2, labels: ["Account", "Codice"] }}
     >
       <VerifyEmailClient email={email} />
     </AuthShell>

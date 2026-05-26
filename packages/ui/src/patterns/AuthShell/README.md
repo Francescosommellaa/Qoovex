@@ -1,9 +1,9 @@
 # AuthShell
 
-## Cosa è
+## Cosa e'
 Pattern per schermate autenticazione mobile-first.
 
-## Come è composto
+## Come e' composto
 - `Card`.
 - `Stack`.
 - `Text`.
@@ -13,27 +13,41 @@ Pattern per schermate autenticazione mobile-first.
 |------|------|---------|----------------|
 | title | ReactNode | n/a | testo |
 | subtitle | ReactNode | undefined | testo |
-| steps | object | undefined | current/total |
+| steps | object | undefined | current/total/labels |
 | backAction | ReactNode | undefined | componente DS |
-| variant | "card" / "split" | "card" | layout centrato o split desktop |
+| variant | "card" / "split" / "split-open" | "card" | layout centrato, split desktop, o split con form libero desktop |
 | aside | ReactNode | undefined | contenuto laterale visibile nel layout split |
 
 ## Token usati
 - `--auth-card-width`.
+- `--auth-form-width`.
 - `--auth-shell-width`.
 - `--auth-aside-width`.
 - `--auth-step-dot`.
+- `--auth-step-marker-size`.
+- `--auth-pattern-*`.
 - Card e typography tokens.
 
 ## Regole ferree
 - Non creare shell auth locali con CSS custom.
 - Non usare padding o max-width hardcoded.
+- Per form desktop fuori card usare `variant="split-open"`, non markup alternativo locale.
 
 ## Esempi
 ```tsx
 // Corretto
 <AuthShell title="Accedi">...</AuthShell>
 
+// Corretto, split desktop con form libero
+<AuthShell
+  title="Crea account"
+  variant="split-open"
+  aside={<Preview />}
+  steps={{ current: 1, total: 3, labels: ["Email", "Codice", "Credenziali"] }}
+>
+  ...
+</AuthShell>
+
 // Sbagliato
-<main style={{ maxWidth: "420px" }} />
+<main className="custom-auth-shell">...</main>
 ```

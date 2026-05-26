@@ -130,19 +130,6 @@ export async function requestCredentialsSignupEmail(input: {
     windowMs: 60 * 60 * 1000,
   });
 
-  const existing = await db.user.findUnique({
-    where: { email },
-    select: { id: true, credential: { select: { userId: true } } },
-  });
-
-  if (existing?.credential) {
-    throw new AuthCredentialsError("Account gia esistente. Accedi o recupera la password.");
-  }
-
-  if (existing) {
-    throw new AuthCredentialsError("Account gia collegato a Google. Accedi con Google e crea una password dalle impostazioni.");
-  }
-
   await issueAuthCode({
     email,
     purpose: "EMAIL_VERIFICATION",

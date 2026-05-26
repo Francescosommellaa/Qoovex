@@ -1,3 +1,2 @@
 export { AuthShell } from "./AuthShell";
-export type { AuthShellProps } from "./AuthShell.types";
-
+export type { AuthShellProps, AuthShellSteps } from "./AuthShell.types";

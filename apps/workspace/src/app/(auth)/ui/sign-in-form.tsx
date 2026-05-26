@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
@@ -12,7 +13,6 @@ import {
   FormControl,
   FormField,
   Input,
-  Stack,
   Text,
   useToast,
 } from "@qoovex/ui";
@@ -98,7 +98,7 @@ export function SignInForm({
   return (
     <AuthShell
       title="Accedi al workspace"
-      subtitle="Email o username con password. Se hai attivato la A2F, ti chiederemo il codice dopo l'accesso."
+      subtitle="Inserisci le tue credenziali per accedere."
     >
       <Form
         variant="plain"
@@ -156,20 +156,28 @@ export function SignInForm({
 
       <Divider spacing="lg">oppure</Divider>
 
-      <Stack gap="3">
-        <Button
-          type="button"
-          variant="secondary"
-          size="md"
-          className="w-full"
-          loading={isGoogleLoading}
-          loadingLabel="Connessione Google..."
-          disabled={isBusy}
-          onClick={handleGoogleSignIn}
-        >
-          Continua con Google
-        </Button>
-      </Stack>
+      <Button
+        type="button"
+        variant="secondary"
+        size="md"
+        className="w-full"
+        loading={isGoogleLoading}
+        loadingLabel="Connessione Google..."
+        disabled={isBusy}
+        onClick={handleGoogleSignIn}
+        iconLeft={
+          <Image
+            src="/img/icona-google.png"
+            alt="Google"
+            width={16}
+            height={16}
+            aria-hidden="true"
+            className="auth-google-icon"
+          />
+        }
+      >
+        Continua con Google
+      </Button>
 
       <Text className="auth-footer-text">
         Non hai un account? <Link href={alternateHref}>Registrati</Link>

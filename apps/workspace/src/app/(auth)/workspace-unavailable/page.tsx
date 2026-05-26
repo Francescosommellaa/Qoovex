@@ -5,7 +5,7 @@ export default function WorkspaceUnavailablePage() {
   return (
     <AuthShell
       title="Workspace non disponibile"
-      subtitle="Il profilo non richiede altre azioni, ma il workspace non e raggiungibile in questo momento"
+      subtitle="Riprova ad aprire il workspace tra qualche istante."
     >
       <Stack gap="5">
         <Text tone="muted" size="sm" leading="relaxed">

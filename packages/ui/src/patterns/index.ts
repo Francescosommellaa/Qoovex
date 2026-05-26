@@ -1,5 +1,5 @@
 export { AuthShell } from "./AuthShell";
-export type { AuthShellProps } from "./AuthShell";
+export type { AuthShellProps, AuthShellSteps } from "./AuthShell";
 export { CtaBand } from "./CtaBand";
 export type { CtaBandProps } from "./CtaBand";
 export { EmptyState } from "./EmptyState";
@@ -17,4 +17,3 @@ export type {
   ProductPreviewFrameProps,
   ProductPreviewScreen,
 } from "./ProductPreviewFrame";
-

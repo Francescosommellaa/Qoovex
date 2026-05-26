@@ -12,7 +12,7 @@ export default async function ResetPasswordPage({
   return (
     <AuthShell
       title="Imposta nuova password"
-      subtitle="Inserisci il codice ricevuto via email e scegli una password sicura."
+      subtitle="Inserisci il codice ricevuto e scegli una nuova password."
     >
       <ResetPasswordClient initialEmail={email} />
     </AuthShell>

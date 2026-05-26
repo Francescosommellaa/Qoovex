@@ -1,7 +1,67 @@
 import * as React from "react";
 import { Card, CardBody } from "../../components";
-import { Stack, Text } from "../../primitives";
+import { cn } from "../../lib/utils";
+import { Text } from "../../primitives";
 import type { AuthShellProps } from "./AuthShell.types";
+
+function AuthStepIndicator({ steps }: Pick<AuthShellProps, "steps">) {
+  if (!steps || steps.total <= 1) return null;
+
+  const items = Array.from({ length: steps.total });
+  const hasLabels = Boolean(steps.labels?.some(Boolean));
+
+  if (!hasLabels) {
+    return (
+      <div
+        className="qv-auth-shell__step-dots"
+        aria-label={`Step ${steps.current} di ${steps.total}`}
+      >
+        {items.map((_, index) => {
+          const isCurrent = index === steps.current - 1;
+
+          return (
+            <span
+              key={index}
+              className={cn(
+                "qv-auth-shell__step-dot",
+                isCurrent && "qv-auth-shell__step-dot--current",
+              )}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  return (
+    <ol
+      className="qv-auth-shell__steps"
+      aria-label={`Step ${steps.current} di ${steps.total}`}
+    >
+      {items.map((_, index) => {
+        const stepNumber = index + 1;
+        const isCurrent = stepNumber === steps.current;
+        const isComplete = stepNumber < steps.current;
+        const label = steps.labels?.[index] ?? `Step ${stepNumber}`;
+
+        return (
+          <li
+            key={stepNumber}
+            className={cn(
+              "qv-auth-shell__step",
+              isCurrent && "qv-auth-shell__step--current",
+              isComplete && "qv-auth-shell__step--complete",
+            )}
+            aria-current={isCurrent ? "step" : undefined}
+          >
+            <span className="qv-auth-shell__step-marker">{stepNumber}</span>
+            <span className="qv-auth-shell__step-label">{label}</span>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
 
 export function AuthShell({
   title,
@@ -13,33 +73,33 @@ export function AuthShell({
   variant = "card",
   aside,
 }: AuthShellProps) {
-  const isSplit = variant === "split" && Boolean(aside);
+  const isSplit =
+    (variant === "split" || variant === "split-open") && Boolean(aside);
+  const isSplitOpen = variant === "split-open" && Boolean(aside);
 
   return (
-    <main className="grid min-h-dvh place-items-center bg-(--color-bg) px-(--spacing-4) py-(--spacing-6) text-(--color-text)">
+    <main
+      className={cn(
+        "qv-auth-shell",
+        isSplit && "qv-auth-shell--split",
+        isSplitOpen && "qv-auth-shell--split-open",
+      )}
+    >
       <div
-        className={
-          isSplit
-            ? "grid w-full items-center gap-(--spacing-8) lg:grid-cols-[minmax(0,var(--auth-card-width))_var(--auth-aside-width)]"
-            : "grid w-full place-items-center"
-        }
-        style={{
-          width: "calc(100vw - 2rem)",
-          maxWidth: isSplit ? "var(--auth-shell-width)" : "var(--auth-card-width)",
-        }}
+        className={cn(
+          "qv-auth-shell__frame",
+          isSplit && "qv-auth-shell__frame--split",
+        )}
       >
         <Card
           variant="panel"
           tone="neutral"
           padding="lg"
-          style={{
-            width: "100%",
-            maxWidth: "var(--auth-card-width)",
-          }}
+          className="qv-auth-shell__card"
         >
           <CardBody>
-            <Stack gap="6">
-              <Stack gap="3" align="center" className="text-center">
+            <div className="qv-auth-shell__content">
+              <div className="qv-auth-shell__header">
                 {logo}
                 <Text as="h1" family="display" size="xl" weight="semibold" leading="tight">
                   {title}
@@ -49,28 +109,15 @@ export function AuthShell({
                     {subtitle}
                   </Text>
                 ) : null}
-                {steps && steps.total > 1 ? (
-                  <div className="flex justify-center gap-(--spacing-2)" aria-label={`Step ${steps.current} di ${steps.total}`}>
-                    {Array.from({ length: steps.total }).map((_, index) => (
-                      <span
-                        key={index}
-                        className={
-                          index === steps.current - 1
-                            ? "h-(--auth-step-dot) w-(--auth-step-dot-active) rounded-(--radius-full) bg-(--color-primary)"
-                            : "h-(--auth-step-dot) w-(--auth-step-dot) rounded-(--radius-full) bg-(--color-border)"
-                        }
-                      />
-                    ))}
-                  </div>
-                ) : null}
-              </Stack>
+                {!isSplitOpen ? <AuthStepIndicator steps={steps} /> : null}
+              </div>
               {backAction}
-              <Stack gap="6">{children}</Stack>
-            </Stack>
+              <div className="qv-auth-shell__body">{children}</div>
+            </div>
           </CardBody>
         </Card>
         {isSplit ? (
-          <aside className="hidden min-h-[34rem] lg:block" aria-hidden="true">
+          <aside className="qv-auth-shell__aside" aria-hidden="true">
             {aside}
           </aside>
         ) : null}

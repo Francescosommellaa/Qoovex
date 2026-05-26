@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 import { signIn } from "next-auth/react";
@@ -12,7 +13,6 @@ import {
   FormControl,
   FormField,
   Input,
-  Stack,
   Text,
   useToast,
 } from "@qoovex/ui";
@@ -93,8 +93,8 @@ export function SignUpEmailForm({
   return (
     <AuthShell
       title="Crea il tuo account"
-      subtitle="Parti dalla email: la verifichiamo prima di chiederti username e password."
-      steps={{ current: 1, total: 3 }}
+      subtitle="Inserisci la tua email per iniziare."
+      steps={{ current: 1, total: 3, labels: ["Email", "Codice", "Credenziali"] }}
     >
       <Form
         variant="plain"
@@ -133,20 +133,28 @@ export function SignUpEmailForm({
 
       <Divider spacing="lg">oppure</Divider>
 
-      <Stack gap="3">
-        <Button
-          type="button"
-          variant="secondary"
-          size="md"
-          className="w-full"
-          loading={isGoogleLoading}
-          loadingLabel="Connessione Google..."
-          disabled={isBusy}
-          onClick={handleGoogleSignIn}
-        >
-          Continua con Google
-        </Button>
-      </Stack>
+      <Button
+        type="button"
+        variant="secondary"
+        size="md"
+        className="w-full"
+        loading={isGoogleLoading}
+        loadingLabel="Connessione Google..."
+        disabled={isBusy}
+        onClick={handleGoogleSignIn}
+        iconLeft={
+          <Image
+            src="/img/icona-google.svg"
+            alt=""
+            width={16}
+            height={16}
+            aria-hidden="true"
+            className="auth-google-icon"
+          />
+        }
+      >
+        Continua con Google
+      </Button>
 
       <Text className="auth-footer-text">
         Hai gia un account? <Link href={signInHref}>Accedi</Link>
