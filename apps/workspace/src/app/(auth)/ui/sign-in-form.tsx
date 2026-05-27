@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { signIn } from "next-auth/react";
 import {
   Button,
@@ -20,24 +20,39 @@ import { getSafeRedirectPath } from "@shared/lib/auth-flow";
 import { AuthShell } from "./AuthShell";
 
 export function SignInForm({
+  devAuthEnabled = false,
   googleAuthEnabled = false,
 }: {
+  devAuthEnabled?: boolean;
   googleAuthEnabled?: boolean;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const [identifier, setIdentifier] = useState("");
+  const [identifier, setIdentifier] = useState(searchParams.get("email") ?? "");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const isBusy = isSubmitting || isGoogleLoading;
+  const [isDevAuthLoading, setIsDevAuthLoading] = useState(false);
+  const isBusy = isSubmitting || isGoogleLoading || isDevAuthLoading;
   const callbackUrl = getSafeRedirectPath(
     searchParams.get("callbackUrl") ?? searchParams.get("redirect_url"),
   );
   const alternateHref = `/sign-up${
     searchParams.toString() ? `?${searchParams.toString()}` : ""
   }`;
+  const noticeShownRef = useRef(false);
+
+  useEffect(() => {
+    if (noticeShownRef.current) return;
+    if (searchParams.get("notice") !== "account-exists") return;
+    noticeShownRef.current = true;
+    toast({
+      variant: "warning",
+      title: "Email gia registrata",
+      description: "Usa il login per entrare con questa email.",
+    });
+  }, [searchParams, toast]);
 
   async function handleCredentialsSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -95,6 +110,34 @@ export function SignInForm({
     }
   }
 
+  async function handleDevSignIn() {
+    setIsDevAuthLoading(true);
+    try {
+      const response = await fetch(
+        `/api/dev-auth?redirect_url=${encodeURIComponent(callbackUrl)}`,
+        { method: "POST" },
+      );
+
+      if (!response.ok) {
+        toast({
+          variant: "error",
+          title: "Accesso sviluppo non disponibile",
+          description: "Verifica host locale e DEV_AUTH_SECRET.",
+        });
+        return;
+      }
+
+      const payload = (await response.json().catch(() => null)) as {
+        destination?: unknown;
+      } | null;
+      window.location.assign(
+        typeof payload?.destination === "string" ? payload.destination : "/dashboard",
+      );
+    } finally {
+      setIsDevAuthLoading(false);
+    }
+  }
+
   return (
     <AuthShell
       title="Accedi al workspace"
@@ -112,6 +155,7 @@ export function SignInForm({
           <FormControl>
             <Input
               autoComplete="username"
+              placeholder="email@esempio.com oppure username"
               disabled={isBusy}
               value={identifier}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -125,6 +169,7 @@ export function SignInForm({
             <Input
               type="password"
               autoComplete="current-password"
+              placeholder="La tua password"
               showPasswordToggle
               disabled={isBusy}
               value={password}
@@ -168,7 +213,7 @@ export function SignInForm({
         iconLeft={
           <Image
             src="/img/icona-google.png"
-            alt="Google"
+            alt=""
             width={16}
             height={16}
             aria-hidden="true"
@@ -178,6 +223,21 @@ export function SignInForm({
       >
         Continua con Google
       </Button>
+
+      {devAuthEnabled ? (
+        <Button
+          type="button"
+          variant="secondary"
+          size="md"
+          className="auth-dev-button w-full"
+          loading={isDevAuthLoading}
+          loadingLabel="Accesso sviluppo..."
+          disabled={isBusy}
+          onClick={handleDevSignIn}
+        >
+          Accedi come dev
+        </Button>
+      ) : null}
 
       <Text className="auth-footer-text">
         Non hai un account? <Link href={alternateHref}>Registrati</Link>

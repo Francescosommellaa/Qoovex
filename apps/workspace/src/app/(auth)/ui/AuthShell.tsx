@@ -61,15 +61,34 @@ function getPreviewSteps(steps?: AuthShellSteps) {
   });
 }
 
-function AuthPreviewPanel({ steps }: { steps?: AuthShellSteps }) {
+function AuthPreviewPanel({
+  steps,
+  theme,
+}: {
+  steps?: AuthShellSteps;
+  theme: "dark" | "white";
+}) {
   const previewSteps = getPreviewSteps(steps);
+  const isLight = theme === "white";
 
   return (
-    <div className="auth-preview-panel qv-pixel-pattern-blue">
+    <div
+      className={
+        previewSteps.length
+          ? `auth-preview-panel${isLight ? " auth-preview-panel--light" : ""}`
+          : `auth-preview-panel auth-preview-panel--compact${
+              isLight ? " auth-preview-panel--light" : ""
+            }`
+      }
+    >
       <div className="auth-preview-content">
         <div className="auth-preview-brand">
           <Image
-            src="/logo-icon/qoovex-icona-bianca-no-sfondo.svg"
+            src={
+              isLight
+                ? "/logo-icon/qoovex-icona-nera-no-sfondo.svg"
+                : "/logo-icon/qoovex-icona-bianca-no-sfondo.svg"
+            }
             alt=""
             width={18}
             height={18}
@@ -132,7 +151,7 @@ export function AuthShell({
       title={title}
       subtitle={subtitle}
       steps={steps}
-      aside={<AuthPreviewPanel steps={steps} />}
+      aside={<AuthPreviewPanel steps={steps} theme={theme} />}
       logo={
         <Image
           src={logoSrc}

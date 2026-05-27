@@ -55,7 +55,7 @@ export async function registerCredentialsAction(input: {
 
 export async function requestSignupEmailAction(input: {
   email: string;
-}): Promise<ActionResult<{ email: string }>> {
+}): Promise<ActionResult<{ email: string; existing?: boolean }>> {
   try {
     const result = await requestCredentialsSignupEmail({
       email: input.email,
@@ -63,8 +63,10 @@ export async function requestSignupEmailAction(input: {
     });
     return {
       ok: true,
-      message: "Codice inviato. Controlla la tua email.",
-      data: { email: result.email },
+      message: result.existing
+        ? "Questa email e gia registrata. Accedi per continuare."
+        : "Codice inviato. Controlla la tua email.",
+      data: { email: result.email, existing: result.existing },
     };
   } catch (error) {
     return {

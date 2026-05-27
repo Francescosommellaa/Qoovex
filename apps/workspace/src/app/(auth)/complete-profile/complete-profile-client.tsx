@@ -13,7 +13,7 @@ import {
   useToast,
 } from "@qoovex/ui";
 import { completeUsernameOnboardingAction } from "@shared/actions/username-actions";
-import { normalizeUsernameInput } from "@shared/lib/username";
+import { normalizeUsernameInput, validateUsername } from "@shared/lib/username";
 
 export function CompleteProfileClient({ initialUsername }: { initialUsername: string }) {
   const router = useRouter();
@@ -23,10 +23,22 @@ export function CompleteProfileClient({ initialUsername }: { initialUsername: st
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const normalizedUsername = normalizeUsernameInput(username);
+    const usernameError = validateUsername(normalizedUsername);
+
+    if (usernameError) {
+      toast({
+        variant: "warning",
+        title: "Username da correggere",
+        description: usernameError,
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const result = await completeUsernameOnboardingAction(
-        normalizeUsernameInput(username),
+        normalizedUsername,
       );
       if (!result.ok) {
         toast({
@@ -64,6 +76,7 @@ export function CompleteProfileClient({ initialUsername }: { initialUsername: st
             autoComplete="username"
             autoCapitalize="none"
             autoCorrect="off"
+            placeholder="chef_rossi"
             spellCheck={false}
             value={username}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>

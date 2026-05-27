@@ -10,6 +10,7 @@ export interface OtpInputProps {
   onComplete?: (value: string) => void;
   length?: number;
   disabled?: boolean;
+  placeholder?: string;
   required?: boolean;
   status?: "default" | "error" | "success";
   /**
@@ -36,6 +37,7 @@ export function OtpInput({
   onComplete,
   length = 6,
   disabled = false,
+  placeholder = "",
   required = false,
   requestInitialFocusOnDesktop = false,
   className,
@@ -159,6 +161,7 @@ export function OtpInput({
           pattern="[0-9]*"
           maxLength={1}
           disabled={disabled}
+          placeholder={placeholder}
           required={required}
           value={normalizedValue[index] ?? ""}
           onChange={(event) => handleChange(index, event)}

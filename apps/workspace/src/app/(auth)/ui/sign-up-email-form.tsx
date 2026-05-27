@@ -64,6 +64,18 @@ export function SignUpEmailForm({
         return;
       }
 
+      if (result.data.existing) {
+        toast({
+          variant: "warning",
+          title: "Email gia registrata",
+          description: "Accedi con questa email per continuare.",
+        });
+        router.replace(
+          `/sign-in?email=${encodeURIComponent(result.data.email)}&notice=account-exists&callbackUrl=${encodeURIComponent(callbackUrl)}`,
+        );
+        return;
+      }
+
       router.push(
         `/sign-up/verify?email=${encodeURIComponent(result.data.email)}&callbackUrl=${encodeURIComponent(callbackUrl)}`,
       );
@@ -144,7 +156,7 @@ export function SignUpEmailForm({
         onClick={handleGoogleSignIn}
         iconLeft={
           <Image
-            src="/img/icona-google.svg"
+            src="/img/icona-google.png"
             alt=""
             width={16}
             height={16}

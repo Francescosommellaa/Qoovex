@@ -63,6 +63,18 @@ export function SignUpSetupClient({
         password,
       });
       if (!result.ok || !result.data) {
+        if (result.message.toLowerCase().includes("account gia esistente")) {
+          toast({
+            variant: "warning",
+            title: "Email gia registrata",
+            description: "Accedi con questa email per continuare.",
+          });
+          router.replace(
+            `/sign-in?email=${encodeURIComponent(email)}&notice=account-exists&callbackUrl=${encodeURIComponent(safeCallbackUrl)}`,
+          );
+          return;
+        }
+
         toast({
           variant: "error",
           title: "Account non creato",
@@ -111,6 +123,7 @@ export function SignUpSetupClient({
               autoComplete="username"
               autoCapitalize="none"
               autoCorrect="off"
+              placeholder="chef_rossi"
               spellCheck={false}
               disabled={isSubmitting}
               value={username}
@@ -141,6 +154,7 @@ export function SignUpSetupClient({
             <Input
               type="password"
               autoComplete="new-password"
+              placeholder="Minimo 8 caratteri"
               showPasswordToggle
               showStrength
               disabled={isSubmitting}

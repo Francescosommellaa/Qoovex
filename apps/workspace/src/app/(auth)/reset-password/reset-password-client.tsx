@@ -74,6 +74,7 @@ export function ResetPasswordClient({ initialEmail }: { initialEmail: string }) 
             <Input
               type="email"
               autoComplete="email"
+              placeholder="nome@esempio.com"
               value={email}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                 setEmail(event.target.value)
@@ -86,6 +87,7 @@ export function ResetPasswordClient({ initialEmail }: { initialEmail: string }) 
             <OtpInput
               value={code}
               onChange={setCode}
+              placeholder="0"
               onComplete={() => {
                 if (email.trim() && password.trim()) void submitReset();
               }}
@@ -101,6 +103,7 @@ export function ResetPasswordClient({ initialEmail }: { initialEmail: string }) 
             <Input
               type="password"
               autoComplete="new-password"
+              placeholder="Minimo 8 caratteri"
               showPasswordToggle
               showStrength
               value={password}

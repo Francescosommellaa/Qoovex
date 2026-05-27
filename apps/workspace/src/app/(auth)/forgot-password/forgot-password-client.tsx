@@ -55,6 +55,7 @@ export function ForgotPasswordClient() {
             <Input
               type="email"
               autoComplete="email"
+              placeholder="nome@esempio.com"
               value={email}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                 setEmail(event.target.value)

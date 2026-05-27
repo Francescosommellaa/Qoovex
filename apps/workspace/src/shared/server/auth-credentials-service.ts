@@ -130,6 +130,21 @@ export async function requestCredentialsSignupEmail(input: {
     windowMs: 60 * 60 * 1000,
   });
 
+  const existing = await db.user.findUnique({
+    where: { email },
+    select: { id: true },
+  });
+
+  if (existing) {
+    await recordSecurityEvent({
+      userId: existing.id,
+      email,
+      type: "credentials_signup_existing_email",
+      ipHash: input.ipHash,
+    });
+    return { email, existing: true };
+  }
+
   await issueAuthCode({
     email,
     purpose: "EMAIL_VERIFICATION",
@@ -142,7 +157,7 @@ export async function requestCredentialsSignupEmail(input: {
     ipHash: input.ipHash,
   });
 
-  return { email };
+  return { email, existing: false };
 }
 
 export async function completeCredentialsSignup(input: {

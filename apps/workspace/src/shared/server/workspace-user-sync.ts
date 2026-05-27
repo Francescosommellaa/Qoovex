@@ -10,6 +10,7 @@ import {
   updateWorkspaceUserByEmail,
   upsertWorkspaceUser,
 } from "@shared/server/repositories/user-repository";
+import { normalizeUsernameInput, validateUsername } from "@shared/lib/username";
 
 export interface SyncWorkspaceUserInput {
   id: string;
@@ -45,13 +46,9 @@ export function normalizePhoneNumber(
 }
 
 function normalizeUsername(username: string): string {
-  const normalized = username
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9._-]/g, "")
-    .slice(0, 32);
+  const normalized = normalizeUsernameInput(username);
 
-  return normalized.length >= 3 ? normalized : "";
+  return validateUsername(normalized) === undefined ? normalized : "";
 }
 
 function getStableFallbackUsername(userId: string): string {

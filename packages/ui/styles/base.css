@@ -2034,6 +2034,89 @@
 
   /* Abstract patterns */
 
+  .qv-grain-texture {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .qv-grain-texture::before,
+  .qv-grain-texture::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .qv-grain-texture::before {
+    background:
+      radial-gradient(
+        ellipse at 50% 0%,
+        oklch(from var(--color-primary) 0.78 0.15 h / 0.46),
+        oklch(from var(--color-primary) 0.5 0.1 h / 0.2) 34%,
+        transparent 58%
+      );
+  }
+
+  .qv-grain-texture::after {
+    background-image: radial-gradient(oklch(1 0 0 / 0.07) 0.42px, transparent 0.58px);
+    background-size: 2px 2px;
+    mask-image: linear-gradient(180deg, black 0 68%, transparent 100%);
+  }
+
+  .qv-grain-texture--tone-neutral::before {
+    background:
+      radial-gradient(
+        ellipse at 50% 0%,
+        oklch(1 0 0 / 0.22),
+        oklch(1 0 0 / 0.08) 36%,
+        transparent 58%
+      );
+  }
+
+  .qv-grain-texture--shape-top-ellipse::before,
+  .qv-grain-texture--shape-top-ellipse::after {
+    inset: -14% -8% auto;
+    height: 62%;
+  }
+
+  .qv-grain-texture--shape-center-ellipse::before,
+  .qv-grain-texture--shape-center-ellipse::after {
+    inset: 10% -10% auto;
+    height: 70%;
+  }
+
+  .qv-grain-texture--shape-full::before,
+  .qv-grain-texture--shape-full::after {
+    inset: 0;
+    height: 100%;
+  }
+
+  .qv-grain-texture--intensity-soft::before {
+    opacity: 0.72;
+  }
+
+  .qv-grain-texture--intensity-medium::before {
+    opacity: 0.92;
+  }
+
+  .qv-grain-texture--grain-fine::after {
+    opacity: 0.38;
+    background-size: 2px 2px;
+  }
+
+  .qv-grain-texture--grain-medium::after {
+    opacity: 0.5;
+    background-size: 3px 3px;
+  }
+
+  .qv-grain-texture--grain-none::after {
+    display: none;
+  }
+
   .qv-pixel-pattern-blue {
     position: relative;
     isolation: isolate;
@@ -2096,13 +2179,7 @@
   }
 
   .qv-auth-shell--split-open::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(circle at 78% 16%, var(--auth-pattern-primary-soft), transparent 24rem),
-      radial-gradient(circle at 12% 82%, oklch(from var(--color-primary) l c h / 0.1), transparent 18rem);
+    content: none;
   }
 
   .qv-auth-shell__frame {
@@ -2113,6 +2190,9 @@
     max-height: 100%;
     place-items: center;
     gap: var(--spacing-8);
+    transition:
+      gap var(--duration-base) var(--ease-qoovex),
+      grid-template-rows var(--duration-base) var(--ease-qoovex);
   }
 
   .qv-auth-shell__frame--split {
@@ -2248,9 +2328,9 @@
 
   .qv-auth-shell--split-open .qv-auth-shell__frame--split {
     height: 100%;
-    grid-template-rows: minmax(18rem, 35dvh) minmax(0, 1fr);
+    grid-template-rows: minmax(9rem, 20dvh) minmax(0, 1fr);
     align-items: stretch;
-    gap: var(--spacing-4);
+    gap: var(--spacing-2);
   }
 
   .qv-auth-shell--split-open .qv-auth-shell__aside {
@@ -2267,6 +2347,12 @@
     border-color: transparent;
     background: transparent;
     box-shadow: none;
+  }
+
+  @media (max-width: 63.999rem) {
+    .qv-auth-shell--split-open .qv-auth-shell__card {
+      align-self: start;
+    }
   }
 
   .qv-auth-shell--split-open .qv-auth-shell__card > .qv-card__body {
@@ -2287,8 +2373,8 @@
     }
 
     .qv-auth-shell--split-open .qv-auth-shell__frame--split {
-      grid-template-rows: minmax(11.5rem, 29dvh) minmax(0, 1fr);
-      gap: var(--spacing-3);
+      grid-template-rows: minmax(7rem, 17dvh) minmax(0, 1fr);
+      gap: var(--spacing-2);
     }
 
     .qv-auth-shell--split-open .qv-auth-shell__content,
@@ -2316,6 +2402,7 @@
       grid-template-columns: minmax(0, var(--auth-form-width)) minmax(0, var(--auth-aside-width));
       grid-template-rows: none;
       align-items: center;
+      gap: var(--auth-shell-gap);
       height: auto;
     }
 

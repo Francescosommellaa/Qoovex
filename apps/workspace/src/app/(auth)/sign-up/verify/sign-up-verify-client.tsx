@@ -103,6 +103,7 @@ export function SignUpVerifyClient({
               value={code}
               onChange={setCode}
               onComplete={submitCode}
+              placeholder="0"
               length={6}
               requestInitialFocusOnDesktop
               disabled={isSubmitting}
