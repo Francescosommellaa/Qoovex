@@ -1,7 +1,7 @@
 # Auth (NextAuth)
 
 - `auth-env.ts` - risolve `AUTH_SECRET` (fallback `NEXTAUTH_SECRET`, in dev anche `DEV_AUTH_SECRET`)
-- `auth.config.ts` - provider Google + pagine, usata dal middleware (Edge-safe)
+- `auth.config.ts` - provider Google + pagine, usata da `src/proxy.ts` senza Prisma/adapter
 - `config.ts` - istanza completa: Prisma adapter, Google OAuth, Credentials provider e callback profilo/sessione
 
 Route handler: `src/app/api/auth/[...nextauth]/route.ts`.

@@ -17,18 +17,16 @@ export function WorkspaceBrandLoader({
   label = "Prepariamo il tuo workspace...",
 }: WorkspaceBrandLoaderProps) {
   const [visible, setVisible] = React.useState(delayedMs <= 0);
+  const isVisible = delayedMs <= 0 || visible;
 
   React.useEffect(() => {
-    if (delayedMs <= 0) {
-      setVisible(true);
-      return;
-    }
+    if (delayedMs <= 0) return;
 
     const timeoutId = window.setTimeout(() => setVisible(true), delayedMs);
     return () => window.clearTimeout(timeoutId);
   }, [delayedMs]);
 
-  if (!visible) return null;
+  if (!isVisible) return null;
 
   return (
     <div

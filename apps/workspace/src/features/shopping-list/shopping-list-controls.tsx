@@ -217,16 +217,26 @@ export function SourceShoppingListForm({
   const sourceOptions = sourceKind === "recipe" ? recipes : menus;
   const [sourceId, setSourceId] = React.useState(sourceOptions[0]?.id ?? "");
   const [saving, setSaving] = React.useState(false);
+  const selectedSourceId = sourceOptions.some((source) => source.id === sourceId)
+    ? sourceId
+    : sourceOptions[0]?.id ?? "";
 
-  React.useEffect(() => {
-    setSourceId(sourceOptions[0]?.id ?? "");
-  }, [sourceKind, sourceOptions]);
+  function handleSourceKindChange(value: string) {
+    const nextSourceKind = value as ShoppingListSourceKind;
+    const nextSourceOptions = nextSourceKind === "recipe" ? recipes : menus;
+
+    setSourceKind(nextSourceKind);
+    setSourceId(nextSourceOptions[0]?.id ?? "");
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSaving(true);
 
-    const result = await createShoppingListFromSourceAction(sourceKind, sourceId);
+    const result = await createShoppingListFromSourceAction(
+      sourceKind,
+      selectedSourceId,
+    );
     setSaving(false);
 
     if (!result.ok || !result.data) {
@@ -265,11 +275,11 @@ export function SourceShoppingListForm({
           { value: "recipe", label: "Ricetta" },
           { value: "menu", label: "Menu" },
         ]}
-        onChange={(value) => setSourceKind(value as ShoppingListSourceKind)}
+        onChange={handleSourceKindChange}
       />
       <Select
         label="Elemento"
-        value={sourceId}
+        value={selectedSourceId}
         placeholder="Seleziona origine"
         options={sourceOptions.map((source) => ({
           value: source.id,

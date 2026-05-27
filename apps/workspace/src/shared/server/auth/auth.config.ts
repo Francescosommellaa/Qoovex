@@ -15,7 +15,7 @@ function getGoogleProvider() {
 }
 
 /**
- * Config condivisa e compatibile Edge (middleware).
+ * Config condivisa e compatibile con `src/proxy.ts`.
  * Adapter, Resend e Prisma vivono solo in `config.ts`.
  */
 export const authConfig = {

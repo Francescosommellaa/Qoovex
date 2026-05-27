@@ -75,7 +75,7 @@ Usata per: chat contestuale durante costruzione del piano, suggerimenti proattiv
 
 ### Provider Strategy
 
-Usare **Vercel AI SDK** (`ai` package) con provider multipli — già compatibile con lo stack Next.js 15:
+Usare **Vercel AI SDK** (`ai` package) con provider multipli — compatibile con lo stack Next.js 16:
 
 ```
 packages/ai/              ← nuovo package condiviso

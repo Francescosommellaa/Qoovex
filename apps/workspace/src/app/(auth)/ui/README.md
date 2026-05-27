@@ -6,6 +6,6 @@ Eccezione FSD documentata: questa cartella non è API condivisa del prodotto.
 
 | File | Ruolo |
 |------|--------|
-| `sign-in-form.tsx` | Form accesso: magic link Resend, Google, pulsante dev-auth (solo localhost) |
+| `sign-in-form.tsx` | Form accesso: email/password, Google, pulsante dev-auth (solo localhost) |
 
 Non importare questi componenti da `features`, `widgets` o `views` fuori da `(auth)`.

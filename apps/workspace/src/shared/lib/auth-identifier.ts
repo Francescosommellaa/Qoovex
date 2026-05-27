@@ -3,7 +3,7 @@ function isLikelyEmail(value: string): boolean {
 }
 
 /**
- * Allinea email e username per i flussi auth (magic link / identificatore):
+ * Allinea email e username per i flussi auth credentials:
  * - email: minuscolo;
  * - username: minuscolo, senza spazi, con eventuale prefisso "@" rimosso.
  */
@@ -28,6 +28,3 @@ export function normalizeAuthIdentifier(value: string): string {
   if (trimmed === "") return "";
   return applyIdentifierCaseAndSpaces(trimmed);
 }
-
-/** @deprecated Usa `normalizeAuthIdentifier`. */
-export const normalizeAuthIdentifierForClerk = normalizeAuthIdentifier;

@@ -24,7 +24,8 @@ Regola: controller e route handler devono contenere parsing input, auth, chiamat
 
 ## Repository Boundaries
 Repository Pattern attivo:
-- `@qoovex/db` puo essere importato solo da `apps/workspace/src/shared/server/repositories`;
+- `@qoovex/db` puo essere importato da `apps/workspace/src/shared/server/repositories`;
+- eccezioni temporanee ammesse solo in servizi server-only auth/security/storage/rate-limit sotto `src/shared/server`;
 - `user-repository` gestisce lookup, upsert e delete user;
 - `recent-search-repository` gestisce CRUD e pruning dati recent searches;
 - service e controller dipendono dai repository, mai da Prisma direttamente;

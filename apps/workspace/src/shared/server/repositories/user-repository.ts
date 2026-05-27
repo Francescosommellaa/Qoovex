@@ -124,6 +124,51 @@ export async function findUserCredentialState(userId: string) {
   });
 }
 
+export async function findUserPasswordHash(userId: string) {
+  return await db.userCredential.findUnique({
+    where: { userId },
+    select: { passwordHash: true },
+  });
+}
+
+export async function findUserCredentialId(userId: string) {
+  return await db.userCredential.findUnique({
+    where: { userId },
+    select: { userId: true },
+  });
+}
+
+export async function createUserCredential(input: {
+  userId: string;
+  passwordHash: string;
+}) {
+  return await db.userCredential.create({
+    data: {
+      userId: input.userId,
+      passwordHash: input.passwordHash,
+    },
+    select: { userId: true },
+  });
+}
+
+export async function updateUserPasswordAndClearSessions(input: {
+  userId: string;
+  passwordHash: string;
+  passwordUpdatedAt: Date;
+}) {
+  await db.$transaction([
+    db.userCredential.update({
+      where: { userId: input.userId },
+      data: {
+        passwordHash: input.passwordHash,
+        passwordUpdatedAt: input.passwordUpdatedAt,
+        passwordResetRequired: false,
+      },
+    }),
+    db.session.deleteMany({ where: { userId: input.userId } }),
+  ]);
+}
+
 export async function updateWorkspaceUserByEmail(input: UpsertWorkspaceUserInput) {
   return await db.user.update({
     where: { email: input.email },

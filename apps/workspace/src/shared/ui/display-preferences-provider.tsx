@@ -19,6 +19,10 @@ const STORAGE_KEY = "qoovex-workspace-display-preferences";
 
 const DisplayPreferencesContext =
   React.createContext<DisplayPreferencesContextValue | null>(null);
+const DEFAULT_PREFERENCES = {
+  textScale: "regular" as WorkspaceTextScale,
+  highContrast: false,
+};
 
 function isTextScale(value: unknown): value is WorkspaceTextScale {
   return value === "regular" || value === "large" || value === "xlarge";
@@ -51,16 +55,19 @@ function readStoredPreferences() {
 export function DisplayPreferencesProvider({
   children,
 }: DisplayPreferencesProviderProps) {
-  const [textScale, setTextScale] =
-    React.useState<WorkspaceTextScale>("regular");
-  const [highContrast, setHighContrast] = React.useState(false);
+  const [preferences, setPreferences] = React.useState(
+    () => readStoredPreferences() ?? DEFAULT_PREFERENCES,
+  );
+  const { textScale, highContrast } = preferences;
 
-  React.useEffect(() => {
-    const stored = readStoredPreferences();
-    if (!stored) return;
-
-    setTextScale(stored.textScale);
-    setHighContrast(stored.highContrast);
+  const setTextScale = React.useCallback((nextTextScale: WorkspaceTextScale) => {
+    setPreferences((current) => ({ ...current, textScale: nextTextScale }));
+  }, []);
+  const setHighContrast = React.useCallback((nextHighContrast: boolean) => {
+    setPreferences((current) => ({
+      ...current,
+      highContrast: nextHighContrast,
+    }));
   }, []);
 
   React.useEffect(() => {
@@ -82,7 +89,7 @@ export function DisplayPreferencesProvider({
       setTextScale,
       setHighContrast,
     }),
-    [highContrast, textScale],
+    [highContrast, setHighContrast, setTextScale, textScale],
   );
 
   return (

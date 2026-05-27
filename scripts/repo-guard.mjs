@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const workspaceSrc = join(repoRoot, "apps", "workspace", "src");
+const appsRoot = join(repoRoot, "apps");
+const packagesRoot = join(repoRoot, "packages");
 
 const layerOrder = {
   shared: 0,
@@ -165,12 +167,90 @@ function assertWorkspaceMiddlewareConvention() {
   const middlewarePath = join(workspaceSrc, "middleware.ts");
   const proxyPath = join(workspaceSrc, "proxy.ts");
 
-  if (!existsSync(middlewarePath)) {
-    failures.push("Workspace request interception must live in apps/workspace/src/middleware.ts");
+  if (!existsSync(proxyPath)) {
+    failures.push("Workspace request interception must live in apps/workspace/src/proxy.ts");
   }
 
-  if (existsSync(proxyPath)) {
-    failures.push("apps/workspace/src/proxy.ts is not supported; use apps/workspace/src/middleware.ts");
+  if (existsSync(middlewarePath)) {
+    failures.push("apps/workspace/src/middleware.ts is deprecated; use apps/workspace/src/proxy.ts");
+  }
+}
+
+function getAppPackageNames() {
+  return readdirSync(appsRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
+}
+
+function readJson(path) {
+  return JSON.parse(readFileSync(path, "utf8"));
+}
+
+function assertAppTranspilePackages() {
+  for (const appName of getAppPackageNames()) {
+    const appRoot = join(appsRoot, appName);
+    const packagePath = join(appRoot, "package.json");
+    const nextConfigPath = join(appRoot, "next.config.ts");
+
+    if (!existsSync(packagePath) || !existsSync(nextConfigPath)) continue;
+
+    const packageJson = readJson(packagePath);
+    const dependencies = {
+      ...packageJson.dependencies,
+      ...packageJson.devDependencies,
+    };
+    const workspacePackages = Object.keys(dependencies).filter((name) =>
+      name.startsWith("@qoovex/"),
+    );
+    if (workspacePackages.length === 0) continue;
+
+    const nextConfig = readFileSync(nextConfigPath, "utf8");
+    for (const packageName of workspacePackages) {
+      if (!nextConfig.includes(`"${packageName}"`)) {
+        failures.push(
+          `${toRepoPath(nextConfigPath)} must include ${packageName} in transpilePackages`,
+        );
+      }
+    }
+  }
+}
+
+function assertNoControllerDbImports() {
+  const files = readDirectoryTree(workspaceSrc).filter((file) =>
+    sourceExtensions.has(extname(file)),
+  );
+
+  for (const file of files) {
+    const rel = toRepoPath(file);
+    if (rel.startsWith("apps/workspace/src/shared/server/")) continue;
+
+    const content = readFileSync(file, "utf8");
+    if (content.includes('"@qoovex/db"') || content.includes("'@qoovex/db'")) {
+      failures.push(
+        `Direct @qoovex/db import is only allowed in shared/server: ${rel}`,
+      );
+    }
+  }
+}
+
+function assertPackagesDoNotImportApps() {
+  const files = readDirectoryTree(packagesRoot).filter((file) =>
+    sourceExtensions.has(extname(file)),
+  );
+
+  for (const file of files) {
+    const content = readFileSync(file, "utf8");
+    for (const specifier of getImportSpecifiers(content)) {
+      if (
+        specifier.startsWith("@/") ||
+        specifier.startsWith("apps/") ||
+        specifier.includes("/apps/")
+      ) {
+        failures.push(
+          `Package code must not import app code in ${toRepoPath(file)}: ${specifier}`,
+        );
+      }
+    }
   }
 }
 
@@ -189,6 +269,9 @@ if (failures.length === 0) {
   assertWorkspaceImportDirection();
   assertNoLegacyRootApp();
   assertWorkspaceMiddlewareConvention();
+  assertAppTranspilePackages();
+  assertNoControllerDbImports();
+  assertPackagesDoNotImportApps();
 }
 
 if (failures.length > 0) {

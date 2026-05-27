@@ -10,14 +10,9 @@ export function RecipeViewModeToggle({ view }: { view: RecipeViewMode }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [checked, setChecked] = React.useState(view === "list");
-
-  React.useEffect(() => {
-    setChecked(view === "list");
-  }, [view]);
+  const checked = view === "list";
 
   function handleChange(nextChecked: boolean) {
-    setChecked(nextChecked);
     const params = new URLSearchParams(searchParams.toString());
 
     if (nextChecked) {

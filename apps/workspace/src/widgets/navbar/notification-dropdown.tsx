@@ -60,7 +60,11 @@ export function NotificationDropdown() {
   }, [toast]);
 
   React.useEffect(() => {
-    void loadNotifications();
+    const timeoutId = window.setTimeout(() => {
+      void loadNotifications();
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
   }, [loadNotifications]);
 
   React.useEffect(() => {

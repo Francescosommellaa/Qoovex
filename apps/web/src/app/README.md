@@ -1,6 +1,6 @@
 ## App
 
-Routing Next.js 15 App Router del sito marketing Qoovex.
+Routing Next.js 16 App Router del sito marketing Qoovex.
 
 Struttura:
 - `layout.tsx` — Root Layout: `<html>`, `<body>`, metadata globali, import `globals.css`

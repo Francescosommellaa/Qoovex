@@ -246,7 +246,10 @@ function IngredientRow({
   onRemove: (index: number) => void;
 }) {
   const { toast } = useToast();
-  const [suggestions, setSuggestions] = React.useState<IngredientSuggestionDto[]>([]);
+  const [suggestionState, setSuggestionState] = React.useState<{
+    query: string;
+    items: IngredientSuggestionDto[];
+  }>({ query: "", items: [] });
   const [loadingSuggestions, setLoadingSuggestions] = React.useState(false);
   const [verifying, setVerifying] = React.useState(false);
 
@@ -254,23 +257,30 @@ function IngredientRow({
     onChange(index, { ...ingredient, ...patch });
   }
 
+  const ingredientSearchQuery = ingredient.name.trim();
+  const canSearchSuggestions = ingredientSearchQuery.length > 0 && !ingredient.slug;
+  const suggestions =
+    canSearchSuggestions && suggestionState.query === ingredientSearchQuery
+      ? suggestionState.items
+      : [];
+
   React.useEffect(() => {
-    const query = ingredient.name.trim();
-    if (query.length < 1 || ingredient.slug) {
-      setSuggestions([]);
-      return;
-    }
+    if (!canSearchSuggestions) return;
 
     const controller = new AbortController();
     const timeout = window.setTimeout(async () => {
       setLoadingSuggestions(true);
       try {
-        const response = await fetch(`/api/ingredients/search?q=${encodeURIComponent(query)}`, {
-          signal: controller.signal,
-        });
+        const response = await fetch(
+          `/api/ingredients/search?q=${encodeURIComponent(ingredientSearchQuery)}`,
+          { signal: controller.signal },
+        );
         if (!response.ok) return;
         const payload = (await response.json()) as { suggestions?: IngredientSuggestionDto[] };
-        setSuggestions(payload.suggestions ?? []);
+        setSuggestionState({
+          query: ingredientSearchQuery,
+          items: payload.suggestions ?? [],
+        });
       } finally {
         setLoadingSuggestions(false);
       }
@@ -280,7 +290,7 @@ function IngredientRow({
       controller.abort();
       window.clearTimeout(timeout);
     };
-  }, [ingredient.name, ingredient.slug]);
+  }, [canSearchSuggestions, ingredientSearchQuery]);
 
   const predictiveSuggestion = suggestions[0];
 
@@ -334,7 +344,7 @@ function IngredientRow({
               if (event.key === "Tab" && predictiveSuggestion) {
                 event.preventDefault();
                 onChange(index, applySuggestion(ingredient, predictiveSuggestion));
-                setSuggestions([]);
+                setSuggestionState({ query: "", items: [] });
               }
             }}
             onChange={(event) =>
@@ -355,7 +365,7 @@ function IngredientRow({
                   className="grid w-full gap-(--spacing-1) rounded-(--radius-md) px-(--spacing-3) py-(--spacing-2) text-left transition-colors hover:bg-(--color-surface-muted)"
                   onClick={() => {
                     onChange(index, applySuggestion(ingredient, suggestion));
-                    setSuggestions([]);
+                    setSuggestionState({ query: "", items: [] });
                   }}
                 >
                   <Text size="sm" weight="medium">

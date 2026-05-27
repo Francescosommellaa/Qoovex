@@ -30,7 +30,7 @@ function isPublicPath(pathname: string) {
   return false;
 }
 
-export default auth(async (req) => {
+export const proxy = auth(async (req) => {
   const { pathname } = req.nextUrl;
   const host = req.headers.get("host") ?? req.nextUrl.host;
   const devAuthCookie = req.cookies.get(DEV_AUTH_COOKIE_NAME)?.value;

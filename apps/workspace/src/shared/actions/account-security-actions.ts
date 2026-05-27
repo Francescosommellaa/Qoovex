@@ -2,12 +2,18 @@
 
 import { auth } from "@shared/server/auth/config";
 import type { ActionResult } from "@shared/lib/workspace-types";
-import { db } from "@qoovex/db";
 import { verifyPassword, hashPassword, validatePasswordPolicy } from "@shared/server/auth-password";
 import { issueAuthCode, verifyAuthCode } from "@shared/server/auth-code-service";
 import { getRequestIpHash, recordSecurityEvent } from "@shared/server/security-audit-service";
 import { sendTransactionalEmail } from "@shared/server/transactional-email-service";
 import { getSafeAuthActionMessage } from "@shared/actions/auth-action-errors";
+import {
+  createUserCredential,
+  findUserCredentialId,
+  findUserPasswordHash,
+  updateUserEmailById,
+  updateUserPasswordAndClearSessions,
+} from "@shared/server/repositories/user-repository";
 import { headers } from "next/headers";
 
 class AccountSecurityActionError extends Error {
@@ -41,10 +47,7 @@ async function sendSecurityEmailBestEffort(input: Parameters<typeof sendTransact
 }
 
 async function assertCurrentPassword(userId: string, currentPassword: string) {
-  const credential = await db.userCredential.findUnique({
-    where: { userId },
-    select: { passwordHash: true },
-  });
+  const credential = await findUserPasswordHash(userId);
   if (!credential) {
     throw new AccountSecurityActionError("Questo account non ha ancora una password Qoovex.");
   }
@@ -66,17 +69,11 @@ export async function changePasswordAction(input: {
     await assertCurrentPassword(userId, input.currentPassword);
     validatePasswordPolicy(input.newPassword);
     const passwordHash = await hashPassword(input.newPassword);
-    await db.$transaction([
-      db.userCredential.update({
-        where: { userId },
-        data: {
-          passwordHash,
-          passwordUpdatedAt: new Date(),
-          passwordResetRequired: false,
-        },
-      }),
-      db.session.deleteMany({ where: { userId } }),
-    ]);
+    await updateUserPasswordAndClearSessions({
+      userId,
+      passwordHash,
+      passwordUpdatedAt: new Date(),
+    });
     await recordSecurityEvent({
       userId,
       email,
@@ -107,21 +104,16 @@ export async function createPasswordAction(input: {
   if (!userId) return { ok: false, message: "Sessione non valida." };
 
   try {
-    const existing = await db.userCredential.findUnique({
-      where: { userId },
-      select: { userId: true },
-    });
+    const existing = await findUserCredentialId(userId);
     if (existing) {
       throw new AccountSecurityActionError("Questo account ha gia una password Qoovex.");
     }
 
     validatePasswordPolicy(input.newPassword);
     const passwordHash = await hashPassword(input.newPassword);
-    await db.userCredential.create({
-      data: {
-        userId,
-        passwordHash,
-      },
+    await createUserCredential({
+      userId,
+      passwordHash,
     });
     await recordSecurityEvent({
       userId,
@@ -190,12 +182,10 @@ export async function confirmEmailChangeAction(input: {
       purpose: "EMAIL_CHANGE",
       ipHash: await getIpHash(),
     });
-    await db.user.update({
-      where: { id: userId },
-      data: {
-        email,
-        emailVerified: new Date(),
-      },
+    await updateUserEmailById({
+      userId,
+      email,
+      verifiedAt: new Date(),
     });
     await recordSecurityEvent({
       userId,

@@ -1,6 +1,6 @@
 # Server Repositories
 
-Scopo: unico confine autorizzato tra Workspace e `@qoovex/db`.
+Scopo: confine ordinario autorizzato tra Workspace e `@qoovex/db`.
 
 Metti qui:
 - funzioni server-only che leggono o scrivono con Prisma;
@@ -16,4 +16,5 @@ Non mettere qui:
 Regole:
 - ogni file deve importare `server-only`;
 - nessun controller in `src/app` o `src/shared/actions` deve importare `@qoovex/db`;
+- i servizi server-only auth/security/storage possono restare eccezioni documentate finche richiedono transazioni, adapter o primitive Prisma non ancora estratte;
 - i repository restituiscono DTO o record minimi, non entita complete se non serve.

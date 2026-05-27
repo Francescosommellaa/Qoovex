@@ -32,16 +32,14 @@ export function WorkspaceInstantNavigation() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [pending, setPending] = React.useState(false);
-
-  React.useEffect(() => {
-    setPending(false);
-  }, [pathname, searchParams]);
+  const currentUrl = `${pathname}?${searchParams.toString()}`;
+  const [pendingUrl, setPendingUrl] = React.useState<string | null>(null);
+  const pending = pendingUrl !== null && pendingUrl !== currentUrl;
 
   React.useEffect(() => {
     if (!pending) return;
 
-    const timeoutId = window.setTimeout(() => setPending(false), 5_000);
+    const timeoutId = window.setTimeout(() => setPendingUrl(null), 5_000);
     return () => window.clearTimeout(timeoutId);
   }, [pending]);
 
@@ -55,7 +53,9 @@ export function WorkspaceInstantNavigation() {
     function handleClick(event: MouseEvent) {
       const anchor = findAnchor(event.target);
       if (!anchor || !shouldHandleNavigation(event, anchor)) return;
-      setPending(true);
+      const url = getInternalUrl(anchor.href);
+      if (!url) return;
+      setPendingUrl(`${url.pathname}?${url.searchParams.toString()}`);
     }
 
     function handlePrefetch(event: Event) {

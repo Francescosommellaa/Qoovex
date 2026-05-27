@@ -189,6 +189,17 @@ export function NotificationInbox({ feed, filters }: NotificationInboxProps) {
   const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
   const [updating, setUpdating] = React.useState(false);
 
+  const visibleNotificationIds = React.useMemo(
+    () => feed.notifications.map((notification) => notification.id),
+    [feed.notifications],
+  );
+  const visibleNotificationIdSet = React.useMemo(
+    () => new Set(visibleNotificationIds),
+    [visibleNotificationIds],
+  );
+  const visibleSelectedIds = selectedIds.filter((id) =>
+    visibleNotificationIdSet.has(id),
+  );
   const typeOptions = React.useMemo(
     () => [
       { value: "all", label: "Tutti i tipi" },
@@ -198,11 +209,7 @@ export function NotificationInbox({ feed, filters }: NotificationInboxProps) {
   );
   const allSelected =
     feed.notifications.length > 0 &&
-    selectedIds.length === feed.notifications.length;
-
-  React.useEffect(() => {
-    setSelectedIds([]);
-  }, [feed.notifications]);
+    visibleSelectedIds.length === feed.notifications.length;
 
   function applyFilters(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -271,10 +278,10 @@ export function NotificationInbox({ feed, filters }: NotificationInboxProps) {
   }
 
   function toggleAllSelected(checked: boolean) {
-    setSelectedIds(checked ? feed.notifications.map((notification) => notification.id) : []);
+    setSelectedIds(checked ? visibleNotificationIds : []);
   }
 
-  const hasSelected = selectedIds.length > 0;
+  const hasSelected = visibleSelectedIds.length > 0;
 
   return (
     <Stack gap="5">
@@ -344,7 +351,7 @@ export function NotificationInbox({ feed, filters }: NotificationInboxProps) {
           </Badge>
           {hasSelected ? (
             <Text size="xs" tone="muted">
-              {selectedIds.length} selezionate
+              {visibleSelectedIds.length} selezionate
             </Text>
           ) : null}
         </div>
@@ -374,7 +381,7 @@ export function NotificationInbox({ feed, filters }: NotificationInboxProps) {
             onClick={() =>
               requestNotificationUpdate({
                 method: "PATCH",
-                body: { action: "mark-read", ids: selectedIds },
+                body: { action: "mark-read", ids: visibleSelectedIds },
                 successTitle: "Notifiche segnate come lette",
               })
             }
@@ -389,7 +396,7 @@ export function NotificationInbox({ feed, filters }: NotificationInboxProps) {
             onClick={() =>
               requestNotificationUpdate({
                 method: "PATCH",
-                body: { action: "mark-unread", ids: selectedIds },
+                body: { action: "mark-unread", ids: visibleSelectedIds },
                 successTitle: "Notifiche segnate come non lette",
               })
             }
@@ -406,7 +413,7 @@ export function NotificationInbox({ feed, filters }: NotificationInboxProps) {
             onClick={() =>
               requestNotificationUpdate({
                 method: "DELETE",
-                body: { ids: selectedIds },
+                body: { ids: visibleSelectedIds },
                 successTitle: "Notifiche eliminate",
               })
             }

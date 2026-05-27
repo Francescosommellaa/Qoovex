@@ -37,6 +37,10 @@ function getWorkspaceBootstrapLogContext(error: unknown) {
   };
 }
 
+function isProductionBuildPhase() {
+  return process.env.NEXT_PHASE === "phase-production-build";
+}
+
 export default async function WorkspaceLayout({
   children,
 }: {
@@ -46,6 +50,10 @@ export default async function WorkspaceLayout({
   try {
     user = await getCurrentWorkspaceUser();
   } catch (error) {
+    if (isProductionBuildPhase()) {
+      redirect("/workspace-unavailable");
+    }
+
     if (process.env.NODE_ENV !== "production") {
       console.error("[workspace] bootstrap failed", error);
     } else {
