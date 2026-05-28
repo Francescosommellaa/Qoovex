@@ -3,19 +3,17 @@
 import * as React from "react";
 import { ListBullets, SquaresFour } from "@phosphor-icons/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Toggle } from "@qoovex/ui";
+import { Button } from "@qoovex/ui";
 import type { RecipeViewMode } from "@shared/lib/workspace-types";
 
 export function RecipeViewModeToggle({ view }: { view: RecipeViewMode }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const checked = view === "list";
-
-  function handleChange(nextChecked: boolean) {
+  function setView(nextView: RecipeViewMode) {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (nextChecked) {
+    if (nextView === "list") {
       params.set("view", "list");
     } else {
       params.delete("view");
@@ -26,14 +24,25 @@ export function RecipeViewModeToggle({ view }: { view: RecipeViewMode }) {
   }
 
   return (
-    <Toggle
-      checked={checked}
-      onCheckedChange={handleChange}
-      label={checked ? "Lista" : "Card"}
-      description="Cambia vista"
-      iconChecked={<ListBullets size={12} weight="bold" aria-hidden="true" />}
-      iconUnchecked={<SquaresFour size={12} weight="bold" aria-hidden="true" />}
-      aria-label="Cambia vista ricette"
-    />
+    <div className="inline-flex rounded-(--radius-full) border border-(--color-border) bg-(--color-surface-offset) p-0.5" aria-label="Cambia vista ricette">
+      <Button
+        type="button"
+        variant={view === "cards" ? "secondary" : "ghost"}
+        size="xs"
+        iconLeft={<SquaresFour size={13} weight="bold" aria-hidden="true" />}
+        onClick={() => setView("cards")}
+      >
+        Card
+      </Button>
+      <Button
+        type="button"
+        variant={view === "list" ? "secondary" : "ghost"}
+        size="xs"
+        iconLeft={<ListBullets size={13} weight="bold" aria-hidden="true" />}
+        onClick={() => setView("list")}
+      >
+        Lista
+      </Button>
+    </div>
   );
 }

@@ -19,6 +19,7 @@ const ingredientSelect = {
   name: true,
   slug: true,
   sourceName: true,
+  sourceRef: true,
   aliases: true,
   allergens: true,
   calories: true,
@@ -48,6 +49,8 @@ function mapIngredient(ingredient: {
   id: string;
   name: string;
   slug: string;
+  sourceName: string | null;
+  sourceRef: string | null;
   allergens: string[];
   calories: number | null;
   caloriesMin: number | null;
@@ -75,6 +78,8 @@ function mapIngredient(ingredient: {
     id: ingredient.id,
     name: ingredient.name,
     slug: ingredient.slug,
+    sourceName: ingredient.sourceName,
+    sourceRef: ingredient.sourceRef,
     allergens: mergeInferredAllergens(ingredient.name, ingredient.allergens),
     calories: ingredient.calories,
     proteins: ingredient.proteins,
@@ -186,6 +191,7 @@ export async function upsertCatalogIngredient(input: IngredientInput) {
       name,
       slug,
       sourceName: input.sourceName ?? null,
+      sourceRef: input.sourceRef ?? null,
       aliases: Array.from(
         new Set([name.toLocaleLowerCase("it"), input.sourceName?.toLocaleLowerCase("it")].filter(Boolean)),
       ) as string[],
@@ -218,6 +224,7 @@ export async function upsertCatalogIngredient(input: IngredientInput) {
       ...(verificationStatus === "VERIFIED"
         ? {
             sourceName: input.sourceName ?? undefined,
+            sourceRef: input.sourceRef ?? undefined,
             allergens,
             calories: input.calories ?? null,
             caloriesMin: nutrition.calories.min,

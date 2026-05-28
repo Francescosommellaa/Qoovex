@@ -238,6 +238,7 @@ function toIngredientInput(result: ExternalIngredientResult, requestedName: stri
       salt: result.salt,
     }),
     source: result.source,
+    sourceRef: result.sourceRef ?? null,
     confidence: result.confidence,
     verificationStatus: "VERIFIED",
   };
@@ -281,6 +282,7 @@ export async function enrichIngredientForUser(input: {
     return {
       ingredient: existing,
       status: existing.verificationStatus === "PENDING_REVIEW" ? "pending_review" : "matched",
+      matchReason: "catalog",
       message:
         existing.verificationStatus === "PENDING_REVIEW"
           ? "Ingrediente gia in revisione."
@@ -294,6 +296,7 @@ export async function enrichIngredientForUser(input: {
     return {
       ingredient: suggested,
       status: "suggested",
+      matchReason: "local_candidate",
       message: `Forse intendevi ${suggested.name}.`,
     };
   }
@@ -304,6 +307,7 @@ export async function enrichIngredientForUser(input: {
     return {
       ingredient,
       status: "matched",
+      matchReason: external.source === "USDA" ? "usda" : "open_food_facts",
       message: "Ingrediente verificato e salvato nel catalogo Qoovex.",
     };
   }
@@ -328,7 +332,25 @@ export async function enrichIngredientForUser(input: {
   return {
     ingredient: pendingIngredient,
     status: "pending_review",
+    matchReason: "manual_review",
+    warnings: ["Nessuna fonte affidabile ha restituito dati nutrizionali completi."],
     message: "Ingrediente non verificato: salvato in revisione, tempo stimato 24 ore.",
     reviewId: review.id,
   };
+}
+
+export async function enrichIngredientsForUser(input: {
+  userId: string;
+  names: string[];
+}) {
+  const uniqueNames = Array.from(
+    new Set(input.names.map((name) => normalizeIngredientName(name)).filter((name) => name.length >= 2)),
+  ).slice(0, 12);
+
+  const results = [];
+  for (const name of uniqueNames) {
+    results.push(await enrichIngredientForUser({ userId: input.userId, name }));
+  }
+
+  return results;
 }

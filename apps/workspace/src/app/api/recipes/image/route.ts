@@ -1,4 +1,6 @@
 import { put } from "@vercel/blob";
+import { dirname, join } from "node:path";
+import { mkdir, writeFile } from "node:fs/promises";
 import { NextResponse } from "next/server";
 import { bootstrapUser } from "@shared/actions/bootstrap-user";
 import {
@@ -8,6 +10,19 @@ import {
 } from "@shared/server/recipe-image-upload";
 import { getRecipeMediaProxyUrl } from "@shared/server/recipe-image-access";
 import { assertRateLimit, RateLimitExceededError } from "@shared/server/rate-limit";
+
+async function saveRecipeImageLocally(input: {
+  pathname: string;
+  buffer: Buffer;
+}) {
+  const publicPathname = `uploads/${input.pathname}`;
+  const absolutePath = join(process.cwd(), "public", publicPathname);
+
+  await mkdir(dirname(absolutePath), { recursive: true });
+  await writeFile(absolutePath, input.buffer);
+
+  return `/${publicPathname.replace(/\\/g, "/")}`;
+}
 
 export async function POST(request: Request) {
   const user = await bootstrapUser();
@@ -47,8 +62,21 @@ export async function POST(request: Request) {
     throw error;
   }
 
+  const pathname = buildRecipeImagePathname(user.id, validated.extension);
+
   try {
-    const pathname = buildRecipeImagePathname(user.id, validated.extension);
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      const localUrl = await saveRecipeImageLocally({
+        pathname,
+        buffer: validated.buffer,
+      });
+
+      return NextResponse.json({
+        url: localUrl,
+        displayUrl: localUrl,
+      });
+    }
+
     const blob = await put(pathname, validated.buffer, {
       access: "private",
       contentType: validated.contentType,
@@ -60,6 +88,18 @@ export async function POST(request: Request) {
       displayUrl: getRecipeMediaProxyUrl(pathname),
     });
   } catch (error) {
+    if (process.env.NODE_ENV !== "production") {
+      const localUrl = await saveRecipeImageLocally({
+        pathname,
+        buffer: validated.buffer,
+      });
+
+      return NextResponse.json({
+        url: localUrl,
+        displayUrl: localUrl,
+      });
+    }
+
     const message =
       error instanceof Error && error.message.includes("BLOB_READ_WRITE_TOKEN")
         ? "Configura BLOB_READ_WRITE_TOKEN per caricare immagini."

@@ -217,18 +217,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           />
 
           <div
-            aria-hidden="true"
-            className="pointer-events-none absolute bottom-0 left-0 right-0 z-0 h-7"
-            style={{
-              background:
-                "linear-gradient(to bottom, transparent 0%, var(--color-input-bg) 65%)",
-              backdropFilter: "blur(4px)",
-              WebkitBackdropFilter: "blur(4px)",
-            }}
-          />
-
-          <div
-            className="sticky bottom-0 z-10 flex items-center justify-between px-(--textarea-px) pb-(--spacing-1)"
+            className="flex min-h-6 items-center justify-between border-t border-(--color-divider) bg-(--color-input-bg) px-(--textarea-px) py-(--spacing-1)"
             aria-hidden="true"
           >
             <span

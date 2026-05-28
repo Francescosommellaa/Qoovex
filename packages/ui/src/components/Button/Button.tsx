@@ -13,6 +13,10 @@ interface ButtonOwnProps {
   loading?: boolean;
   /** When `loading` is true, shown beside the spinner instead of hiding all label text. */
   loadingLabel?: React.ReactNode;
+  /** Destructive buttons require a second click by default. Set to false only for non-mutating previews. */
+  destructiveConfirm?: boolean;
+  destructiveConfirmLabel?: React.ReactNode;
+  destructiveConfirmTimeoutMs?: number;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
   iconSwap?: { from: React.ReactNode; to: React.ReactNode };
@@ -44,7 +48,7 @@ export type ButtonProps = NativeButtonProps | AnchorButtonProps;
 const BASE =
   "group relative inline-flex items-center justify-center select-none cursor-pointer " +
   "rounded-full font-medium whitespace-nowrap tracking-[0.012em] overflow-hidden " +
-  "transition-[color,border-color,box-shadow,opacity] " +
+  "transition-[width,color,background-color,border-color,box-shadow,opacity] " +
   "duration-[var(--duration-base)] ease-[var(--ease-qoovex)] " +
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary " +
   "disabled:opacity-[var(--button-disabled-opacity)] disabled:pointer-events-none disabled:saturate-50";
@@ -89,6 +93,20 @@ const SIZES: Record<ButtonSize, string> = {
   sm: "h-9  px-6   gap-2   text-(length:--text-xs)",
   md: "h-10 px-6   gap-2   text-(length:--text-sm)",
   lg: "h-12 px-8   gap-2.5 text-(length:--text-base)",
+};
+
+const DESTRUCTIVE_ICON_ONLY_SIZES: Record<ButtonSize, string> = {
+  xs: "w-8 px-0 gap-0",
+  sm: "w-9 px-0 gap-0",
+  md: "w-10 px-0 gap-0",
+  lg: "w-12 px-0 gap-0",
+};
+
+const DESTRUCTIVE_CONFIRM_SIZES: Record<ButtonSize, string> = {
+  xs: "w-[6rem] px-3",
+  sm: "w-[6.75rem] px-4",
+  md: "w-[7.25rem] px-4",
+  lg: "w-[8rem] px-5",
 };
 
 const SPINNER_SIZES: Record<ButtonSize, number> = {
@@ -198,6 +216,9 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       size = "md",
       loading = false,
       loadingLabel,
+      destructiveConfirm = true,
+      destructiveConfirmLabel = "Conferma",
+      destructiveConfirmTimeoutMs = 3000,
       disabled,
       iconLeft,
       iconRight,
@@ -213,15 +234,52 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
     },
     ref,
   ) {
+    const [destructiveConfirming, setDestructiveConfirming] = React.useState(false);
     const isDisabled = disabled || loading;
     const isAnchor = as === "a";
+    const shouldConfirmDestructive = variant === "destructive" && destructiveConfirm;
+    const destructiveConfirmActive = shouldConfirmDestructive && destructiveConfirming && !isDisabled;
+    const destructiveStartsAsIconOnly =
+      shouldConfirmDestructive && !destructiveConfirmActive && !loading && Boolean(iconLeft || iconRight);
+
+    React.useEffect(() => {
+      if (!destructiveConfirming) return;
+
+      const timeout = window.setTimeout(
+        () => setDestructiveConfirming(false),
+        destructiveConfirmTimeoutMs,
+      );
+      return () => window.clearTimeout(timeout);
+    }, [destructiveConfirmTimeoutMs, destructiveConfirming]);
+
+    function confirmDestructiveAction(event: React.SyntheticEvent) {
+      if (!shouldConfirmDestructive) return false;
+      if (destructiveConfirmActive) {
+        setDestructiveConfirming(false);
+        return false;
+      }
+
+      event.preventDefault();
+      setDestructiveConfirming(true);
+      return true;
+    }
 
     function handleAnchorClick(event: React.MouseEvent<HTMLAnchorElement>) {
       if (isDisabled) {
         event.preventDefault();
         return;
       }
+      if (confirmDestructiveAction(event)) return;
       (onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined)?.(event);
+    }
+
+    function handleButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
+      if (isDisabled) {
+        event.preventDefault();
+        return;
+      }
+      if (confirmDestructiveAction(event)) return;
+      (onClick as React.MouseEventHandler<HTMLButtonElement> | undefined)?.(event);
     }
 
     const content = (
@@ -247,7 +305,16 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
           </span>
         ) : null}
 
-        {swapLabel ? (
+        {destructiveConfirmActive ? (
+          <span
+            className={cn(
+              "relative z-10 inline-flex items-center justify-center",
+              loading && "invisible",
+            )}
+          >
+            {destructiveConfirmLabel}
+          </span>
+        ) : swapLabel ? (
           <span
             className={cn(
               "relative z-10 inline-flex items-center",
@@ -310,7 +377,11 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
               </span>
             ) : null}
 
-            {children}
+            {destructiveStartsAsIconOnly && children ? (
+              <span className="sr-only">{children}</span>
+            ) : (
+              children
+            )}
 
             {iconRight ? (
               <span
@@ -331,7 +402,18 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
         aria-disabled={isDisabled || undefined}
         aria-busy={loading || undefined}
         tabIndex={isDisabled ? -1 : (props as AnchorButtonProps).tabIndex}
-        className={cn(BASE, VARIANTS[variant], SIZES[size], isDisabled && "pointer-events-none", className)}
+        data-confirming={destructiveConfirmActive || undefined}
+        className={cn(
+          BASE,
+          VARIANTS[variant],
+          SIZES[size],
+          destructiveStartsAsIconOnly && DESTRUCTIVE_ICON_ONLY_SIZES[size],
+          destructiveConfirmActive &&
+            "border-transparent bg-(--color-error) text-(--color-btn-filled-text)",
+          destructiveConfirmActive && DESTRUCTIVE_CONFIRM_SIZES[size],
+          isDisabled && "pointer-events-none",
+          className,
+        )}
         onClick={handleAnchorClick}
         {...(props as Omit<AnchorButtonProps, keyof ButtonOwnProps | "as" | "disabled" | "onClick">)}
       >
@@ -343,8 +425,18 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
         disabled={isDisabled}
         aria-disabled={isDisabled || undefined}
         aria-busy={loading || undefined}
-        className={cn(BASE, VARIANTS[variant], SIZES[size], className)}
-        onClick={onClick as React.MouseEventHandler<HTMLButtonElement> | undefined}
+        data-confirming={destructiveConfirmActive || undefined}
+        className={cn(
+          BASE,
+          VARIANTS[variant],
+          SIZES[size],
+          destructiveStartsAsIconOnly && DESTRUCTIVE_ICON_ONLY_SIZES[size],
+          destructiveConfirmActive &&
+            "border-transparent bg-(--color-error) text-(--color-btn-filled-text)",
+          destructiveConfirmActive && DESTRUCTIVE_CONFIRM_SIZES[size],
+          className,
+        )}
+        onClick={handleButtonClick}
         {...(props as Omit<NativeButtonProps, keyof ButtonOwnProps | "as" | "onClick">)}
       >
         {content}

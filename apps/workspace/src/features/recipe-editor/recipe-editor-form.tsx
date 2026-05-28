@@ -2,17 +2,14 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle, ImageSquare, MagnifyingGlass, Plus, Trash, WarningCircle } from "@phosphor-icons/react";
+import { CaretDown, ImageSquare, MagnifyingGlass, Minus, Plus, Trash, WarningCircle } from "@phosphor-icons/react";
 import {
-  Badge,
   Button,
   Card,
   CardBody,
   Checkbox,
   Form,
   FormActions,
-  FormControl,
-  FormField,
   Input,
   Select,
   Stack,
@@ -20,6 +17,11 @@ import {
   Textarea,
   useToast,
 } from "@qoovex/ui";
+import {
+  IngredientVerificationBadge,
+  IngredientVerificationNote,
+} from "@entities/ingredient";
+import { NutritionRows, RecipeAllergenChips } from "@entities/recipe";
 import {
   createRecipeAction,
   updateRecipeAction,
@@ -32,14 +34,13 @@ import {
   formatGdaRange,
   formatNutritionRange,
   mergeInferredAllergens,
-  normalizeAllergens,
   normalizeNutritionRanges,
 } from "@shared/lib/ingredient-normalization";
+import { calculateNutritionPreview } from "@shared/lib/nutrition-calculation";
 import type {
   IngredientEnrichmentDto,
   IngredientInput,
   IngredientSuggestionDto,
-  NutritionRangeDto,
   NutritionRangesDto,
   RecipeDetailDto,
   RecipeEditorInput,
@@ -48,6 +49,13 @@ import type {
 interface RecipeEditorFormProps {
   mode: "create" | "edit";
   initialRecipe?: RecipeDetailDto;
+}
+
+let ingredientRowKeySequence = 0;
+
+function createIngredientRowKey() {
+  ingredientRowKeySequence += 1;
+  return `ingredient-row-${ingredientRowKeySequence}`;
 }
 
 function createEmptyIngredient(): IngredientInput {
@@ -96,6 +104,8 @@ function getInitialInput(initialRecipe?: RecipeDetailDto): RecipeEditorInput {
     ingredients: initialRecipe.ingredients.map((ingredient) => ({
       name: ingredient.name,
       slug: ingredient.slug,
+      sourceName: ingredient.sourceName,
+      sourceRef: ingredient.sourceRef,
       quantity: ingredient.quantity,
       unit: ingredient.unit,
       allergens: ingredient.allergens.join(", "),
@@ -112,9 +122,78 @@ function getInitialInput(initialRecipe?: RecipeDetailDto): RecipeEditorInput {
 }
 
 function parseNumber(value: string, fallback: number | null) {
-  if (!value.trim()) return fallback;
-  const parsed = Number(value);
+  const normalizedValue = value.trim().replace(",", ".");
+  if (!normalizedValue) return fallback;
+  const parsed = Number(normalizedValue);
   return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function formatNumberInput(value: number | null | undefined) {
+  if (typeof value !== "number" || !Number.isFinite(value)) return "";
+  return Number.isInteger(value) ? value.toString() : value.toString();
+}
+
+function NumberStepper({
+  label,
+  value,
+  min = 0,
+  step = 1,
+  fallback = null,
+  onChange,
+}: {
+  label: string;
+  value: number | null | undefined;
+  min?: number;
+  step?: number;
+  fallback?: number | null;
+  onChange: (value: number | null) => void;
+}) {
+  const currentValue = typeof value === "number" && Number.isFinite(value) ? value : fallback;
+
+  function applyStep(direction: 1 | -1) {
+    const base = typeof currentValue === "number" ? currentValue : min;
+    const nextValue = Math.max(min, Number((base + direction * step).toFixed(2)));
+    onChange(nextValue);
+  }
+
+  return (
+    <div className="grid gap-(--spacing-1)">
+      <Text as="span" size="xs" tone="muted" weight="medium" className="uppercase">
+        {label}
+      </Text>
+      <div className="grid h-10 grid-cols-[2.125rem_minmax(3.5rem,1fr)_2.125rem] items-center overflow-hidden rounded-(--radius-full) border border-(--color-border) bg-(--color-input-bg) transition-[border-color,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] focus-within:border-(--color-primary) focus-within:shadow-(--shadow-sm)">
+        <Button
+          type="button"
+          variant="ghost"
+          size="xs"
+          className="h-full rounded-none px-0"
+          aria-label={`Diminuisci ${label}`}
+          onClick={() => applyStep(-1)}
+        >
+          <Minus size={13} weight="bold" />
+        </Button>
+        <Input
+          type="text"
+          inputMode="decimal"
+          value={formatNumberInput(value)}
+          onChange={(event) => onChange(parseNumber(event.target.value, fallback))}
+          srOnlyLabel
+          label={label}
+          className="h-full rounded-none border-0 bg-transparent px-0 text-center shadow-none"
+        />
+        <Button
+          type="button"
+          variant="ghost"
+          size="xs"
+          className="h-full rounded-none px-0"
+          aria-label={`Aumenta ${label}`}
+          onClick={() => applyStep(1)}
+        >
+          <Plus size={13} weight="bold" />
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 function applySuggestion(ingredient: IngredientInput, suggestion: IngredientSuggestionDto): IngredientInput {
@@ -122,6 +201,8 @@ function applySuggestion(ingredient: IngredientInput, suggestion: IngredientSugg
     ...ingredient,
     name: suggestion.name,
     slug: suggestion.slug,
+    sourceName: suggestion.sourceName,
+    sourceRef: suggestion.sourceRef,
     allergens: suggestion.allergens.join(", "),
     calories: suggestion.calories,
     proteins: suggestion.proteins,
@@ -134,102 +215,11 @@ function applySuggestion(ingredient: IngredientInput, suggestion: IngredientSugg
   };
 }
 
-function addRange(
-  current: NutritionRangeDto,
-  range: NutritionRangeDto,
-  factor: number,
-): NutritionRangeDto {
-  if (range.min === null || range.max === null) return current;
-  return {
-    unit: current.unit,
-    min: (current.min ?? 0) + range.min * factor,
-    max: (current.max ?? 0) + range.max * factor,
-  };
-}
-
-function roundPreviewNutrition(nutrition: NutritionRangesDto): NutritionRangesDto {
-  return {
-    calories: {
-      ...nutrition.calories,
-      min: nutrition.calories.min === null ? null : Number(nutrition.calories.min.toFixed(1)),
-      max: nutrition.calories.max === null ? null : Number(nutrition.calories.max.toFixed(1)),
-    },
-    proteins: {
-      ...nutrition.proteins,
-      min: nutrition.proteins.min === null ? null : Number(nutrition.proteins.min.toFixed(1)),
-      max: nutrition.proteins.max === null ? null : Number(nutrition.proteins.max.toFixed(1)),
-    },
-    carbs: {
-      ...nutrition.carbs,
-      min: nutrition.carbs.min === null ? null : Number(nutrition.carbs.min.toFixed(1)),
-      max: nutrition.carbs.max === null ? null : Number(nutrition.carbs.max.toFixed(1)),
-    },
-    sugars: {
-      ...nutrition.sugars,
-      min: nutrition.sugars.min === null ? null : Number(nutrition.sugars.min.toFixed(1)),
-      max: nutrition.sugars.max === null ? null : Number(nutrition.sugars.max.toFixed(1)),
-    },
-    fats: {
-      ...nutrition.fats,
-      min: nutrition.fats.min === null ? null : Number(nutrition.fats.min.toFixed(1)),
-      max: nutrition.fats.max === null ? null : Number(nutrition.fats.max.toFixed(1)),
-    },
-    fiber: {
-      ...nutrition.fiber,
-      min: nutrition.fiber.min === null ? null : Number(nutrition.fiber.min.toFixed(1)),
-      max: nutrition.fiber.max === null ? null : Number(nutrition.fiber.max.toFixed(1)),
-    },
-    salt: {
-      ...nutrition.salt,
-      min: nutrition.salt.min === null ? null : Number(nutrition.salt.min.toFixed(2)),
-      max: nutrition.salt.max === null ? null : Number(nutrition.salt.max.toFixed(2)),
-    },
-  };
-}
-
-function calculatePreview(ingredients: IngredientInput[]) {
-  return ingredients.reduce(
-    (acc, ingredient) => {
-      const unit = ingredient.unit.toLocaleLowerCase("it");
-      const factor =
-        unit === "kg" || unit === "l"
-          ? (ingredient.quantity * 1000) / 100
-          : unit === "g" || unit === "ml"
-            ? ingredient.quantity / 100
-            : 0;
-      const nutrition = normalizeNutritionRanges(ingredient.nutrition);
-
-      return {
-        nutrition: roundPreviewNutrition({
-          calories: addRange(acc.nutrition.calories, nutrition.calories, factor),
-          proteins: addRange(acc.nutrition.proteins, nutrition.proteins, factor),
-          carbs: addRange(acc.nutrition.carbs, nutrition.carbs, factor),
-          sugars: addRange(acc.nutrition.sugars, nutrition.sugars, factor),
-          fats: addRange(acc.nutrition.fats, nutrition.fats, factor),
-          fiber: addRange(acc.nutrition.fiber, nutrition.fiber, factor),
-          salt: addRange(acc.nutrition.salt, nutrition.salt, factor),
-        }),
-        allergens: normalizeAllergens([
-          ...acc.allergens,
-          ...mergeInferredAllergens(ingredient.name, ingredient.allergens),
-        ]),
-        pending: acc.pending + (ingredient.verificationStatus === "PENDING_REVIEW" ? 1 : 0),
-      };
-    },
-    {
-      nutrition: EMPTY_NUTRITION_RANGES,
-      allergens: [] as string[],
-      pending: 0,
-    },
-  );
-}
-
-function formatNutritionRangeCompact(range: NutritionRangeDto) {
-  return range.min === null || range.max === null ? "-" : formatNutritionRange(range);
-}
-
-function formatGdaRangeCompact(calories: NutritionRangeDto) {
-  return calories.min === null || calories.max === null ? "-" : formatGdaRange(calories);
+function canVerifyIngredientInput(ingredient: IngredientInput, minNameLength = 1) {
+  const nameLength = ingredient.name.trim().length;
+  const isVerified = ingredient.verificationStatus === "VERIFIED" || ingredient.verificationStatus === "SUGGESTED";
+  const existsInCatalog = Boolean(ingredient.slug || ingredient.sourceRef);
+  return nameLength >= minNameLength && !isVerified && !existsInCatalog;
 }
 
 function IngredientRow({
@@ -252,9 +242,16 @@ function IngredientRow({
   }>({ query: "", items: [] });
   const [loadingSuggestions, setLoadingSuggestions] = React.useState(false);
   const [verifying, setVerifying] = React.useState(false);
+  const [removing, setRemoving] = React.useState(false);
 
   function updateIngredient(patch: Partial<IngredientInput>) {
     onChange(index, { ...ingredient, ...patch });
+  }
+
+  function handleRemoveClick() {
+    if (!canRemove || removing) return;
+    setRemoving(true);
+    window.setTimeout(() => onRemove(index), 180);
   }
 
   const ingredientSearchQuery = ingredient.name.trim();
@@ -275,20 +272,30 @@ function IngredientRow({
           `/api/ingredients/search?q=${encodeURIComponent(ingredientSearchQuery)}`,
           { signal: controller.signal },
         );
+        if (controller.signal.aborted) return;
         if (!response.ok) return;
         const payload = (await response.json()) as { suggestions?: IngredientSuggestionDto[] };
+        if (controller.signal.aborted) return;
         setSuggestionState({
           query: ingredientSearchQuery,
           items: payload.suggestions ?? [],
         });
+      } catch {
+        if (controller.signal.aborted) return;
+        setSuggestionState({
+          query: ingredientSearchQuery,
+          items: [],
+        });
       } finally {
-        setLoadingSuggestions(false);
+        if (!controller.signal.aborted) {
+          setLoadingSuggestions(false);
+        }
       }
     }, 250);
 
     return () => {
-      controller.abort();
       window.clearTimeout(timeout);
+      controller.abort();
     };
   }, [canSearchSuggestions, ingredientSearchQuery]);
 
@@ -330,164 +337,216 @@ function IngredientRow({
 
   const isPending = ingredient.verificationStatus === "PENDING_REVIEW";
   const isVerified = ingredient.verificationStatus === "VERIFIED" || ingredient.verificationStatus === "SUGGESTED";
+  const canVerifyIngredient = canVerifyIngredientInput(ingredient);
   const nutrition = normalizeNutritionRanges(ingredient.nutrition);
+  const allergens = mergeInferredAllergens(ingredient.name, ingredient.allergens);
+  const ingredientDisplayName = ingredient.name.trim() || "Ingrediente non compilato";
 
   return (
-    <div className="grid gap-(--spacing-3) rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) p-(--spacing-3) shadow-(--shadow-sm)">
-      <div className="grid gap-(--spacing-3) lg:grid-cols-[minmax(0,1fr)_7rem_8rem_auto] lg:items-end">
-        <div className="relative">
-          <Input
-            label={`Ingrediente ${index + 1}`}
-            value={ingredient.name}
-            placeholder="Farina 00"
-            onKeyDown={(event) => {
-              if (event.key === "Tab" && predictiveSuggestion) {
-                event.preventDefault();
-                onChange(index, applySuggestion(ingredient, predictiveSuggestion));
-                setSuggestionState({ query: "", items: [] });
-              }
-            }}
-            onChange={(event) =>
-              onChange(index, {
-                ...ingredient,
-                name: event.target.value,
-                slug: undefined,
-                verificationStatus: "PENDING_REVIEW",
-              })
-            }
-          />
-          {suggestions.length > 0 ? (
-            <div className="absolute z-20 mt-(--spacing-1) max-h-56 w-full overflow-auto rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface-elevated) p-(--spacing-1) shadow-(--shadow-lg)">
-              {suggestions.map((suggestion) => (
-                <button
-                  key={suggestion.id}
-                  type="button"
-                  className="grid w-full gap-(--spacing-1) rounded-(--radius-md) px-(--spacing-3) py-(--spacing-2) text-left transition-colors hover:bg-(--color-surface-muted)"
-                  onClick={() => {
-                    onChange(index, applySuggestion(ingredient, suggestion));
-                    setSuggestionState({ query: "", items: [] });
-                  }}
-                >
-                  <Text size="sm" weight="medium">
-                    {suggestion.name}
-                  </Text>
-                  <Text size="xs" tone="muted">
-                    {suggestion.allergens.length > 0
-                      ? `Allergeni: ${suggestion.allergens.join(", ")}`
-                      : "Nessun allergene noto"}
-                  </Text>
-                </button>
-              ))}
+    <Card
+      variant="panel"
+      padding="none"
+      overflow="visible"
+      data-removing={removing}
+      className="qv-motion-fade-up transform-gpu border-(--color-border) bg-(--color-surface) shadow-(--shadow-sm) transition-[opacity,transform,border-color,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:border-(--color-border-strong) hover:shadow-(--shadow-md) data-[removing=true]:translate-y-2 data-[removing=true]:scale-[0.985] data-[removing=true]:opacity-0"
+    >
+      <CardBody padding="md" className="grid gap-(--spacing-4)">
+        <div className="flex flex-wrap items-start justify-between gap-(--spacing-3)">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-(--spacing-2)">
+              <Text as="h4" size="sm" weight="semibold" className="uppercase tracking-[0.03em]">
+                Ingrediente {index + 1}
+              </Text>
+              <IngredientVerificationBadge
+                status={isPending ? "PENDING_REVIEW" : isVerified ? ingredient.verificationStatus : undefined}
+              />
             </div>
-          ) : null}
-          {predictiveSuggestion ? (
-            <Text size="xs" tone="muted" className="mt-(--spacing-1)">
-              Suggerimento: {predictiveSuggestion.name}. Premi Tab per confermare.
+            <Text size="xs" tone="muted" className="mt-1 truncate">
+              {ingredientDisplayName}
+              {ingredient.sourceName ? ` · ${ingredient.sourceName}` : ""}
             </Text>
-          ) : null}
-          {loadingSuggestions ? (
-            <Text size="xs" tone="muted" className="mt-(--spacing-1)">
+          </div>
+          <div className="flex items-center gap-(--spacing-2)">
+            <BadgeLike label="GDA" value={formatGdaRange(nutrition.calories)} />
+          </div>
+        </div>
+
+        <div className="grid gap-(--spacing-3)">
+          <div className="relative">
+            <Input
+              label="Nome ingrediente"
+              value={ingredient.name}
+              placeholder="Farina 00"
+              onKeyDown={(event) => {
+                if (event.key === "Tab" && predictiveSuggestion) {
+                  event.preventDefault();
+                  onChange(index, applySuggestion(ingredient, predictiveSuggestion));
+                  setSuggestionState({ query: "", items: [] });
+                }
+              }}
+              onChange={(event) =>
+                onChange(index, {
+                  ...ingredient,
+                  name: event.target.value,
+                  slug: undefined,
+                  sourceRef: undefined,
+                  sourceName: undefined,
+                  verificationStatus: "PENDING_REVIEW",
+                })
+              }
+            />
+            {suggestions.length > 0 ? (
+              <div className="absolute z-20 mt-(--spacing-1) max-h-56 w-full overflow-auto rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface-elevated) p-(--spacing-1) shadow-(--shadow-lg)">
+                {suggestions.map((suggestion) => (
+                  <button
+                    key={suggestion.id}
+                    type="button"
+                    className="grid w-full gap-(--spacing-1) rounded-(--radius-md) px-(--spacing-3) py-(--spacing-2) text-left transition-colors hover:bg-(--color-surface-muted)"
+                    onClick={() => {
+                      onChange(index, applySuggestion(ingredient, suggestion));
+                      setSuggestionState({ query: "", items: [] });
+                    }}
+                  >
+                    <Text size="sm" weight="medium">
+                      {suggestion.name}
+                    </Text>
+                    <Text size="xs" tone="muted">
+                      {suggestion.allergens.length > 0
+                        ? `Allergeni: ${suggestion.allergens.join(", ")}`
+                        : "Nessun allergene noto"}
+                    </Text>
+                  </button>
+                ))}
+              </div>
+            ) : null}
+            {predictiveSuggestion ? (
+              <Text size="xs" tone="muted" className="mt-(--spacing-1)">
+                Suggerimento: {predictiveSuggestion.name}. Premi Tab per confermare.
+              </Text>
+            ) : null}
+            {loadingSuggestions ? (
+              <Text size="xs" tone="muted" className="mt-(--spacing-1)">
               Ricerca nel catalogo...
             </Text>
           ) : null}
         </div>
 
-        <Input
-          label="Quantita"
-          type="number"
-          min={0}
-          step="0.01"
-          value={ingredient.quantity}
-          onChange={(event) =>
-            updateIngredient({
-              quantity: parseNumber(event.target.value, 0) ?? 0,
-            })
-          }
-        />
-        <Select
-          label="Unita"
-          options={INGREDIENT_UNIT_OPTIONS}
-          value={ingredient.unit}
-          onChange={(unit) => updateIngredient({ unit })}
-        />
-        <div className="flex gap-(--spacing-2) lg:justify-end">
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            iconLeft={<MagnifyingGlass size={14} />}
-            loading={verifying}
-            loadingLabel="Verifico"
-            onClick={verifyIngredient}
-          >
-            Verifica
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            iconLeft={<Trash size={14} />}
-            disabled={!canRemove}
-            onClick={() => onRemove(index)}
-          >
-            Rimuovi
-          </Button>
+          <div className="grid gap-(--spacing-3) sm:grid-cols-[minmax(10rem,1fr)_8rem_auto] sm:items-end">
+            <NumberStepper
+              label="Quantita"
+              min={0}
+              step={10}
+              fallback={0}
+              value={ingredient.quantity}
+              onChange={(value) => updateIngredient({ quantity: value ?? 0 })}
+            />
+            <Select
+              label="Unita"
+              options={INGREDIENT_UNIT_OPTIONS}
+              value={ingredient.unit}
+              onChange={(unit) => updateIngredient({ unit })}
+            />
+            <div className="flex gap-(--spacing-2) sm:justify-end">
+              <Button
+                type="button"
+                variant="primary"
+                size="md"
+                iconLeft={<MagnifyingGlass size={14} />}
+                loading={verifying}
+                loadingLabel="Verifico"
+                disabled={!canVerifyIngredient}
+                onClick={verifyIngredient}
+              >
+                Verifica
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                size="md"
+                iconLeft={<Trash size={14} />}
+                disabled={!canRemove}
+                onClick={handleRemoveClick}
+              >
+                Rimuovi
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className="grid gap-(--spacing-2) sm:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_9rem]">
-        <NutritionRangeList nutrition={nutrition} />
-        <div className="rounded-(--radius-md) bg-(--color-surface-muted) p-(--spacing-2)">
-          <Text size="xs" tone="muted">
-            Stato
-          </Text>
-          <Badge size="sm" tone={isPending ? "warning" : isVerified ? "success" : "neutral"}>
-            {isPending ? "In revisione" : isVerified ? "Verificato" : "Da verificare"}
-          </Badge>
+        <div className="grid gap-(--spacing-3) rounded-(--radius-lg) border border-(--color-divider) bg-(--color-surface-offset) p-(--spacing-3)">
+          <div className="grid gap-(--spacing-2) md:grid-cols-3">
+            <IngredientSignal label="Energia" value={formatGdaRange(nutrition.calories)} />
+            <IngredientSignal label="Proteine" value={formatNutritionRange(nutrition.proteins)} />
+            <IngredientSignal label="Carboidrati" value={formatNutritionRange(nutrition.carbs)} />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-(--spacing-2)">
+            <RecipeAllergenChips
+              allergens={allergens}
+              emptyLabel="allergeni non presenti o non disponibili"
+              compact
+            />
+          </div>
+
+          <details className="group/ingredient-details">
+            <summary className="flex min-h-9 cursor-pointer list-none items-center justify-between gap-(--spacing-3) rounded-(--radius-md) px-(--spacing-2) text-(length:--text-xs) font-medium uppercase tracking-[0.03em] text-(--color-text-muted) transition-colors duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:bg-(--color-surface-muted) hover:text-(--color-text)">
+              Dettaglio nutrizionale
+              <CaretDown size={13} className="transition-transform group-open/ingredient-details:rotate-180" aria-hidden />
+            </summary>
+            <div className="qv-motion-fade-up px-(--spacing-1) pb-(--spacing-1) pt-(--spacing-2)">
+              <IngredientNutritionDetails nutrition={nutrition} />
+            </div>
+          </details>
         </div>
-      </div>
+      </CardBody>
+    </Card>
+  );
+}
 
-      <div className="flex flex-wrap gap-(--spacing-2)">
-        {mergeInferredAllergens(ingredient.name, ingredient.allergens).length > 0 ? (
-          mergeInferredAllergens(ingredient.name, ingredient.allergens).map((allergen) => (
-            <Badge key={allergen} size="sm" tone="neutral">
-              {allergen}
-            </Badge>
-          ))
-        ) : (
-          <Badge size="sm" tone="neutral">
-            allergeni non presenti o non disponibili
-          </Badge>
-        )}
-      </div>
+function IngredientSignal({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="grid min-h-16 content-center gap-1 rounded-(--radius-md) border border-(--color-divider) bg-(--color-surface) px-(--spacing-3) py-(--spacing-2)">
+      <Text size="xs" tone="faint" className="uppercase tracking-[0.03em]">
+        {label}
+      </Text>
+      <Text size="sm" weight="semibold" className="truncate">
+        {value}
+      </Text>
     </div>
   );
 }
 
-function NutritionRangeList({ nutrition }: { nutrition: NutritionRangesDto }) {
+function BadgeLike({ label, value }: { label: string; value: string }) {
   return (
-    <div className="grid gap-(--spacing-1) rounded-(--radius-md) bg-(--color-surface-muted) p-(--spacing-3)">
+    <span className="inline-flex items-center gap-(--spacing-1) rounded-(--radius-full) border border-(--color-border) bg-(--color-surface) px-(--spacing-2) py-1 text-(length:--text-xs)">
+      <span className="text-(--color-text-faint)">{label}</span>
+      <span className="font-medium text-(--color-text)">{value}</span>
+    </span>
+  );
+}
+
+function IngredientNutritionDetails({ nutrition }: { nutrition: NutritionRangesDto }) {
+  return (
+    <div className="grid gap-(--spacing-1) pt-(--spacing-1)">
       {NUTRITION_DISPLAY_ROWS.map((row) => (
         <div
           key={row.key}
-          className={`flex items-baseline justify-between gap-(--spacing-3) ${
-            row.indented ? "pl-(--spacing-3)" : ""
-          }`}
+          className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-(--spacing-3) rounded-(--radius-sm) px-(--spacing-2) py-1.5 transition-colors duration-[var(--duration-fast)] ease-[var(--ease-qoovex)] hover:bg-(--color-surface-muted)"
         >
-          <Text size="xs" tone="muted">
+          <Text size="xs" tone="muted" className={row.indented ? "pl-(--spacing-3)" : ""}>
             {row.label}
           </Text>
-          <Text size="sm" weight={row.indented ? "medium" : "semibold"} className="text-right">
-            {formatNutritionRangeCompact(nutrition[row.key])}
+          <Text size="xs" weight="medium" className="text-right">
+            {formatNutritionRange(nutrition[row.key])}
           </Text>
         </div>
       ))}
-      <div className="flex items-baseline justify-between gap-(--spacing-3)">
-        <Text size="xs" tone="muted">
+      <div className="mt-(--spacing-1) grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-(--spacing-3) rounded-(--radius-sm) bg-(--color-surface-muted) px-(--spacing-2) py-1.5">
+        <Text size="xs" tone="muted" className="uppercase">
           GDA
         </Text>
-        <Text size="sm" weight="semibold" className="text-right">
-          {formatGdaRangeCompact(nutrition.calories)}
+        <Text size="xs" weight="semibold" className="text-right">
+          {formatGdaRange(nutrition.calories)}
         </Text>
       </div>
     </div>
@@ -503,15 +562,22 @@ export function RecipeEditorForm({
   const [input, setInput] = React.useState<RecipeEditorInput>(() =>
     getInitialInput(initialRecipe),
   );
+  const [ingredientRowKeys, setIngredientRowKeys] = React.useState(() =>
+    getInitialInput(initialRecipe).ingredients.map(() => createIngredientRowKey()),
+  );
   const [saving, setSaving] = React.useState(false);
+  const [verifyingAll, setVerifyingAll] = React.useState(false);
   const [uploadingImage, setUploadingImage] = React.useState(false);
   const [imagePreviewUrl, setImagePreviewUrl] = React.useState<string | null>(
     () => initialRecipe?.imageUrl ?? null,
   );
   const imageInputRef = React.useRef<HTMLInputElement>(null);
 
-  const preview = React.useMemo(() => calculatePreview(input.ingredients), [input.ingredients]);
+  const preview = React.useMemo(() => calculateNutritionPreview(input.ingredients), [input.ingredients]);
   const hasPendingIngredients = preview.pending > 0;
+  const hasVerifiableIngredients = input.ingredients.some((ingredient) =>
+    canVerifyIngredientInput(ingredient, 2),
+  );
 
   function updateInput(patch: Partial<RecipeEditorInput>) {
     setInput((current) => ({ ...current, ...patch }));
@@ -531,6 +597,84 @@ export function RecipeEditorForm({
       ...current,
       ingredients: current.ingredients.filter((_, itemIndex) => itemIndex !== index),
     }));
+    setIngredientRowKeys((current) => current.filter((_, itemIndex) => itemIndex !== index));
+  }
+
+  function addIngredient() {
+    setInput((current) => {
+      const nextIngredients = [...current.ingredients];
+      nextIngredients.push(createEmptyIngredient());
+      return {
+        ...current,
+        ingredients: nextIngredients,
+      };
+    });
+    setIngredientRowKeys((current) => [...current, createIngredientRowKey()]);
+  }
+
+  async function verifyAllIngredients() {
+    const targets = input.ingredients
+      .map((ingredient, index) => ({ ingredient, index }))
+      .filter(({ ingredient }) => canVerifyIngredientInput(ingredient, 2));
+
+    if (targets.length === 0) {
+      toast({
+        variant: "success",
+        title: "Ingredienti gia verificati",
+        description: "Non ci sono ingredienti da aggiornare.",
+      });
+      return;
+    }
+
+    setVerifyingAll(true);
+    try {
+      const response = await fetch("/api/ingredients/enrich-batch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ names: targets.map(({ ingredient }) => ingredient.name) }),
+      });
+      const payload = (await response.json()) as {
+        results?: IngredientEnrichmentDto[];
+        message?: string;
+      };
+
+      if (!response.ok || !payload.results) {
+        throw new Error(payload.message ?? "Verifica non riuscita.");
+      }
+
+      setInput((current) => {
+        const nextIngredients = [...current.ingredients];
+        for (const result of payload.results ?? []) {
+          const target = targets.find(
+            ({ ingredient }) =>
+              ingredient.name.trim().toLocaleLowerCase("it") ===
+              result.ingredient.name.trim().toLocaleLowerCase("it"),
+          );
+          if (target) {
+            nextIngredients[target.index] = applySuggestion(nextIngredients[target.index], result.ingredient);
+          }
+        }
+        return { ...current, ingredients: nextIngredients };
+      });
+
+      const pending = payload.results.filter((result) => result.status === "pending_review").length;
+      toast({
+        variant: pending > 0 ? "warning" : "success",
+        title: "Ingredienti verificati",
+        description:
+          pending > 0
+            ? `${pending} ingredienti restano in revisione.`
+            : "Allergeni e valori nutrizionali sono stati aggiornati.",
+      });
+    } catch (error) {
+      toast({
+        variant: "error",
+        title: "Verifica non riuscita",
+        description: error instanceof Error ? error.message : "Riprova tra poco.",
+      });
+    } finally {
+      setVerifyingAll(false);
+    }
   }
 
   async function uploadImage(file: File) {
@@ -618,15 +762,13 @@ export function RecipeEditorForm({
             <CardBody>
               <Stack gap="4">
                 <div className="grid gap-(--spacing-4) md:grid-cols-[minmax(0,1fr)_14rem]">
-                  <FormField label="Titolo ricetta" required>
-                    <FormControl>
-                      <Input
-                        value={input.title}
-                        placeholder="Ragu bianco di cortile"
-                        onChange={(event) => updateInput({ title: event.target.value })}
-                      />
-                    </FormControl>
-                  </FormField>
+                  <Input
+                    label="TITOLO RICETTA"
+                    required
+                    value={input.title}
+                    placeholder="Ragu bianco di cortile"
+                    onChange={(event) => updateInput({ title: event.target.value })}
+                  />
                   <Select
                     label="Categoria"
                     options={RECIPE_CATEGORY_OPTIONS}
@@ -638,7 +780,8 @@ export function RecipeEditorForm({
                 </div>
 
                 <Textarea
-                  label="Descrizione"
+                  label="DESCRIZIONE"
+                  variant="static"
                   value={input.description}
                   placeholder="Sintesi operativa della preparazione"
                   maxLength={240}
@@ -649,7 +792,8 @@ export function RecipeEditorForm({
                 />
 
                 <Textarea
-                  label="Istruzioni"
+                  label="ISTRUZIONI"
+                  variant="fixed"
                   value={input.instructions}
                   placeholder="Passaggi, tempi e note di servizio"
                   maxRows={14}
@@ -674,7 +818,7 @@ export function RecipeEditorForm({
                     )}
                   </div>
                   <div className="grid gap-(--spacing-2)">
-                    <Text size="sm" weight="semibold">
+                    <Text size="sm" weight="semibold" className="uppercase">
                       Immagine ricetta
                     </Text>
                     <Text size="xs" tone="muted">
@@ -726,32 +870,32 @@ export function RecipeEditorForm({
           <Stack gap="4">
             <div className="flex flex-col gap-(--spacing-3) sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <Text as="h3" size="xl" weight="semibold">
+                <Text as="h3" size="xl" weight="semibold" className="uppercase">
                   Ingredienti
                 </Text>
                 <Text size="sm" tone="muted">
                   Scrivi, scegli dal catalogo o verifica: allergeni e nutrienti restano automatici.
                 </Text>
               </div>
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                iconLeft={<Plus size={14} />}
-                onClick={() =>
-                  setInput((current) => ({
-                    ...current,
-                    ingredients: [...current.ingredients, createEmptyIngredient()],
-                  }))
-                }
-              >
-                Ingrediente
-              </Button>
+              <div className="flex flex-wrap gap-(--spacing-2)">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  loading={verifyingAll}
+                  loadingLabel="Verifico"
+                  iconLeft={<MagnifyingGlass size={14} />}
+                  disabled={!hasVerifiableIngredients}
+                  onClick={verifyAllIngredients}
+                >
+                  Verifica tutti
+                </Button>
+              </div>
             </div>
 
             {input.ingredients.map((ingredient, index) => (
               <IngredientRow
-                key={index}
+                key={ingredientRowKeys[index] ?? `ingredient-row-fallback-${index}`}
                 ingredient={ingredient}
                 index={index}
                 canRemove={input.ingredients.length > 1}
@@ -759,6 +903,16 @@ export function RecipeEditorForm({
                 onRemove={removeIngredient}
               />
             ))}
+            <Button
+              type="button"
+              variant="secondary"
+              size="md"
+              iconLeft={<Plus size={16} />}
+              className="qv-motion-interactive w-full justify-center border-dashed"
+              onClick={addIngredient}
+            >
+              Aggiungi ingrediente
+            </Button>
           </Stack>
         </Stack>
 
@@ -767,7 +921,7 @@ export function RecipeEditorForm({
             <CardBody>
               <Stack gap="4">
                 <div>
-                  <Text as="h3" size="lg" weight="semibold">
+                  <Text as="h3" size="lg" weight="semibold" className="uppercase">
                     Stato ricetta
                   </Text>
                   <Text size="sm" tone="muted">
@@ -775,72 +929,53 @@ export function RecipeEditorForm({
                   </Text>
                 </div>
 
-                <NutritionRangeList nutrition={preview.nutrition} />
+                <NutritionRows nutrition={preview.nutrition} compact />
 
-                <div className="flex flex-wrap gap-(--spacing-2)">
-                  {preview.allergens.length > 0 ? (
-                    preview.allergens.map((allergen) => (
-                      <Badge key={allergen} size="sm" tone="neutral">
-                        {allergen}
-                      </Badge>
-                    ))
-                  ) : (
-                    <Badge size="sm" tone="neutral">
-                      Nessun allergene noto
-                    </Badge>
-                  )}
-                </div>
+                <RecipeAllergenChips allergens={preview.allergens} emptyLabel="Nessun allergene noto" />
 
                 <div className="rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface-muted) p-(--spacing-3)">
-                  <div className="flex items-start gap-(--spacing-2)">
-                    {hasPendingIngredients ? (
-                      <WarningCircle size={18} className="mt-0.5 text-(--color-warning)" />
-                    ) : (
-                      <CheckCircle size={18} className="mt-0.5 text-(--color-success)" />
-                    )}
-                    <div>
-                      <Text size="sm" weight="semibold">
-                        {hasPendingIngredients ? "Bozza non pubblicabile" : "Pronta per Esplora"}
-                      </Text>
-                      <Text size="xs" tone="muted" leading="relaxed">
-                        {hasPendingIngredients
-                          ? `${preview.pending} ingredienti richiedono revisione umana entro 24 ore.`
-                          : "Tutti gli ingredienti sono verificati o suggeriti dal catalogo."}
-                      </Text>
-                    </div>
-                  </div>
+                  <IngredientVerificationNote
+                    status={hasPendingIngredients ? "PENDING_REVIEW" : "VERIFIED"}
+                    pendingCount={preview.pending}
+                  />
                 </div>
 
+                {preview.warnings.length > 0 ? (
+                  <div className="grid gap-(--spacing-2) rounded-(--radius-lg) border border-(--color-warning)/30 bg-(--color-warning-highlight) p-(--spacing-3)">
+                    {preview.warnings.map((warning) => (
+                      <div key={warning} className="flex items-start gap-(--spacing-2)">
+                        <WarningCircle size={16} className="mt-0.5 shrink-0 text-(--color-warning)" />
+                        <Text size="xs" tone="muted" leading="relaxed">
+                          {warning}
+                        </Text>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+
                 <div className="grid gap-(--spacing-3)">
-                  <Input
+                  <NumberStepper
                     label="Porzioni"
-                    type="number"
                     min={1}
+                    step={1}
+                    fallback={4}
                     value={input.servings}
-                    onChange={(event) =>
-                      updateInput({
-                        servings: parseNumber(event.target.value, 4) ?? 4,
-                      })
-                    }
+                    onChange={(value) => updateInput({ servings: value ?? 4 })}
                   />
-                  <div className="grid grid-cols-2 gap-(--spacing-3)">
-                    <Input
+                  <div className="grid gap-(--spacing-3)">
+                    <NumberStepper
                       label="Prep min."
-                      type="number"
                       min={0}
-                      value={input.prepTime ?? ""}
-                      onChange={(event) =>
-                        updateInput({ prepTime: parseNumber(event.target.value, null) })
-                      }
+                      step={5}
+                      value={input.prepTime}
+                      onChange={(value) => updateInput({ prepTime: value })}
                     />
-                    <Input
+                    <NumberStepper
                       label="Cottura"
-                      type="number"
                       min={0}
-                      value={input.cookTime ?? ""}
-                      onChange={(event) =>
-                        updateInput({ cookTime: parseNumber(event.target.value, null) })
-                      }
+                      step={5}
+                      value={input.cookTime}
+                      onChange={(value) => updateInput({ cookTime: value })}
                     />
                   </div>
                   <Checkbox

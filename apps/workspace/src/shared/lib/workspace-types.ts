@@ -49,6 +49,8 @@ export type RecipeSort = "updated-desc" | "updated-asc" | "kcal-desc" | "kcal-as
 export type RecipeViewMode = "cards" | "list";
 export type RecipeVisibilityFilter = "all" | "public" | "private";
 export type RecipeValidityFilter = "all" | "ready" | "pending" | "archived";
+export type RecipeVerificationFilter = "all" | "verified" | "pending";
+export type RecipeAllergenMode = "contains" | "without";
 
 export interface RecipeFiltersDto {
   query?: string;
@@ -56,7 +58,9 @@ export interface RecipeFiltersDto {
   sort?: RecipeSort;
   visibility?: RecipeVisibilityFilter;
   validity?: RecipeValidityFilter;
+  verification?: RecipeVerificationFilter;
   allergen?: string;
+  allergenMode?: RecipeAllergenMode;
   kcalMin?: number | null;
   kcalMax?: number | null;
   view?: RecipeViewMode;
@@ -84,6 +88,7 @@ export interface IngredientInput {
   unit: string;
   slug?: string;
   sourceName?: string | null;
+  sourceRef?: string | null;
   allergens?: string;
   calories?: number | null;
   proteins?: number | null;
@@ -122,7 +127,11 @@ export interface RecipeIngredientDto {
   nutrition: NutritionRangesDto;
   verificationStatus: IngredientVerificationStatus;
   source: IngredientSource;
+  sourceName?: string | null;
+  sourceRef?: string | null;
   confidence: number | null;
+  warnings?: string[];
+  matchReason?: string;
 }
 
 export interface RecipeSummaryDto {
@@ -169,7 +178,11 @@ export interface IngredientSuggestionDto {
   nutrition: NutritionRangesDto;
   verificationStatus: IngredientVerificationStatus;
   source: IngredientSource;
+  sourceName?: string | null;
+  sourceRef?: string | null;
   confidence: number | null;
+  warnings?: string[];
+  matchReason?: string;
 }
 
 export interface IngredientEnrichmentDto {
@@ -177,6 +190,8 @@ export interface IngredientEnrichmentDto {
   status: "matched" | "suggested" | "pending_review";
   message: string;
   reviewId?: string;
+  warnings?: string[];
+  matchReason?: string;
 }
 
 export interface MenuBuilderItemInput {

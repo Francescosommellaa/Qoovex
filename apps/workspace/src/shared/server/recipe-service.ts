@@ -169,6 +169,8 @@ interface RecipeIngredientRecord {
   ingredient: {
     name: string;
     slug: string;
+    sourceName: string | null;
+    sourceRef: string | null;
     allergens: string[];
     calories: number | null;
     proteins: number | null;
@@ -243,6 +245,8 @@ function mapRecipeIngredient(
     id: item.id,
     name: item.ingredient.name,
     slug: item.ingredient.slug,
+    sourceName: item.ingredient.sourceName,
+    sourceRef: item.ingredient.sourceRef,
     quantity: item.quantity,
     unit: item.unit,
     allergens: item.ingredient.allergens,

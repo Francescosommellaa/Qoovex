@@ -1,6 +1,5 @@
-import type * as React from "react";
 import { notFound } from "next/navigation";
-import { Clock, ForkKnife, ImageSquare } from "@phosphor-icons/react/dist/ssr";
+import { CaretDown, Funnel } from "@phosphor-icons/react/dist/ssr";
 import {
   Badge,
   Button,
@@ -8,23 +7,29 @@ import {
   CardBody,
   EmptyState,
   Input,
+  Modal,
+  ModalBody,
   Select,
   Stack,
   Text,
 } from "@qoovex/ui";
+import {
+  NutritionInsightCard,
+  NutritionRows,
+  RecipeAllergenChips,
+  RecipeCategoryBadge,
+  RecipeImage,
+  RecipeStatusBadge,
+} from "@entities/recipe";
 import { RecipeDetailActions } from "@features/recipe-actions";
 import { RecipeEditorForm } from "@features/recipe-editor";
+import { IngredientVerificationBadge } from "@entities/ingredient";
 import {
-  NUTRITION_DISPLAY_ROWS,
   RECIPE_CATEGORY_OPTIONS,
-  formatGdaRange,
-  formatNutritionRange,
   getRecipeCategoryLabel,
 } from "@shared/lib/ingredient-normalization";
 import type {
-  NutritionRangesDto,
   RecipeFiltersDto,
-  RecipeSummaryDto,
   WorkspacePlan,
 } from "@shared/lib/workspace-types";
 import { WorkspaceBreadcrumb, WorkspacePage } from "@shared/ui";
@@ -32,6 +37,8 @@ import {
   getRecipeDetail,
   getRecipesIndex,
 } from "@shared/server/recipe-service";
+import { RecipeCard, RecipeListHeader, RecipeListItem } from "@widgets/recipe-card";
+import { RecipeKcalRangeFilter } from "./recipe-kcal-range-filter";
 import { RecipeViewModeToggle } from "./recipe-view-mode-toggle";
 
 interface RecipesViewUser {
@@ -60,87 +67,105 @@ const VALIDITY_OPTIONS = [
   { value: "archived", label: "Archiviate" },
 ];
 
+const VERIFICATION_OPTIONS = [
+  { value: "all", label: "Tutti" },
+  { value: "verified", label: "Verificati" },
+  { value: "pending", label: "Da rivedere" },
+];
+
+const ALLERGEN_MODE_OPTIONS = [
+  { value: "contains", label: "Contiene" },
+  { value: "without", label: "Esclude" },
+];
+
 function formatLimit(used: number, value: number | null) {
   return value === null ? `${used} / illimitato` : `${used} / ${value}`;
 }
 
-function statusTone(recipe: RecipeSummaryDto) {
-  if (recipe.status === "PENDING_REVIEW") return "warning";
-  if (recipe.status === "PUBLISHED" || recipe.isPublic) return "success";
-  if (recipe.status === "ARCHIVED") return "neutral";
-  return "primary";
+function getActiveFilterCount(filters: RecipeFiltersDto) {
+  return [
+    filters.query,
+    filters.category && filters.category !== "all" ? filters.category : "",
+    filters.visibility && filters.visibility !== "all" ? filters.visibility : "",
+    filters.validity && filters.validity !== "all" ? filters.validity : "",
+    filters.verification && filters.verification !== "all" ? filters.verification : "",
+    filters.allergen,
+    typeof filters.kcalMin === "number" ? filters.kcalMin.toString() : "",
+    typeof filters.kcalMax === "number" ? filters.kcalMax.toString() : "",
+  ].filter(Boolean).length;
 }
 
-function statusLabel(recipe: RecipeSummaryDto) {
-  if (recipe.status === "PENDING_REVIEW") return "In revisione";
-  if (recipe.status === "PUBLISHED" || recipe.isPublic) return "Pubblica";
-  if (recipe.status === "ARCHIVED") return "Archiviata";
-  if (recipe.status === "DRAFT") return "Bozza";
-  return "Privata";
-}
+function RecipeFilters({
+  filters,
+  layout,
+}: {
+  filters: RecipeFiltersDto;
+  layout: "mobile" | "desktop";
+}) {
+  const isMobile = layout === "mobile";
 
-function RecipeFilters({ filters }: { filters: RecipeFiltersDto }) {
   return (
-    <div className="grid gap-(--spacing-4)">
+    <div className={isMobile ? "grid gap-(--spacing-4)" : "grid gap-(--spacing-5)"}>
       <input type="hidden" name="view" value={filters.view ?? "cards"} />
       <Input
         name="q"
         label="Cerca"
-        placeholder="Titolo, descrizione"
+        placeholder="Titolo o descrizione"
         defaultValue={filters.query ?? ""}
       />
-      <FilterSelect
-        name="category"
-        label="Categoria"
-        options={[{ value: "all", label: "Tutte le categorie" }, ...RECIPE_CATEGORY_OPTIONS]}
-        defaultValue={filters.category ?? "all"}
-      />
-      <FilterSelect
-        name="visibility"
-        label="Visibilita"
-        options={VISIBILITY_OPTIONS}
-        defaultValue={filters.visibility ?? "all"}
-      />
-      <FilterSelect
-        name="validity"
-        label="Stato"
-        options={VALIDITY_OPTIONS}
-        defaultValue={filters.validity ?? "all"}
-      />
-      <FilterSelect
-        name="sort"
-        label="Ordine"
-        options={SORT_OPTIONS}
-        defaultValue={filters.sort ?? "updated-desc"}
-      />
-      <Input
-        name="allergen"
-        label="Allergene"
-        placeholder="glutine"
-        defaultValue={filters.allergen ?? ""}
-      />
-      <div className="grid grid-cols-2 gap-(--spacing-3)">
-        <Input
-          name="kcalMin"
-          label="Kcal min"
-          type="number"
-          min={0}
-          defaultValue={filters.kcalMin ?? ""}
+      <div className={isMobile ? "grid gap-(--spacing-3) sm:grid-cols-2" : "grid gap-(--spacing-3)"}>
+        <FilterSelect
+          name="category"
+          label="Categoria"
+          options={[{ value: "all", label: "Tutte le categorie" }, ...RECIPE_CATEGORY_OPTIONS]}
+          defaultValue={filters.category ?? "all"}
         />
-        <Input
-          name="kcalMax"
-          label="Kcal max"
-          type="number"
-          min={0}
-          defaultValue={filters.kcalMax ?? ""}
+        <FilterSelect
+          name="visibility"
+          label="Visibilita"
+          options={VISIBILITY_OPTIONS}
+          defaultValue={filters.visibility ?? "all"}
+        />
+        <FilterSelect
+          name="validity"
+          label="Stato ricetta"
+          options={VALIDITY_OPTIONS}
+          defaultValue={filters.validity ?? "all"}
+        />
+        <FilterSelect
+          name="verification"
+          label="Ingredienti"
+          options={VERIFICATION_OPTIONS}
+          defaultValue={filters.verification ?? "all"}
+        />
+        <FilterSelect
+          name="sort"
+          label="Ordine"
+          options={SORT_OPTIONS}
+          defaultValue={filters.sort ?? "updated-desc"}
         />
       </div>
+      <div className={isMobile ? "grid gap-(--spacing-3) sm:grid-cols-[minmax(0,1fr)_11rem]" : "grid gap-(--spacing-3)"}>
+        <Input
+          name="allergen"
+          label="Allergene"
+          placeholder="glutine"
+          defaultValue={filters.allergen ?? ""}
+        />
+        <FilterSelect
+          name="allergenMode"
+          label="Modalita allergene"
+          options={ALLERGEN_MODE_OPTIONS}
+          defaultValue={filters.allergenMode ?? "contains"}
+        />
+      </div>
+      <RecipeKcalRangeFilter minValue={filters.kcalMin} maxValue={filters.kcalMax} />
       <div className="grid grid-cols-2 gap-(--spacing-2)">
         <Button type="submit" variant="primary" size="sm">
-          Applica
+          {isMobile ? "Mostra risultati" : "Applica"}
         </Button>
         <Button as="a" href="/recipes" variant="secondary" size="sm">
-          Reset
+          Pulisci
         </Button>
       </div>
     </div>
@@ -168,196 +193,27 @@ function FilterSelect({
   );
 }
 
-function RecipeImage({
-  src,
-  title,
-  size = "card",
-}: {
-  src: string | null;
-  title: string;
-  size?: "card" | "list" | "detail";
-}) {
-  const frameClass =
-    size === "list"
-      ? "size-14 sm:size-16"
-      : size === "detail"
-        ? "min-h-56 lg:min-h-full"
-        : "aspect-square";
+function ActiveFilters({ filters }: { filters: RecipeFiltersDto }) {
+  const chips: string[] = [];
+  if (filters.query) chips.push(`"${filters.query}"`);
+  if (filters.category && filters.category !== "all") chips.push(getRecipeCategoryLabel(filters.category));
+  if (filters.visibility && filters.visibility !== "all") chips.push(filters.visibility === "public" ? "Pubbliche" : "Private");
+  if (filters.validity && filters.validity !== "all") chips.push(VALIDITY_OPTIONS.find((item) => item.value === filters.validity)?.label ?? filters.validity);
+  if (filters.verification && filters.verification !== "all") chips.push(VERIFICATION_OPTIONS.find((item) => item.value === filters.verification)?.label ?? filters.verification);
+  if (filters.allergen) chips.push(`${filters.allergenMode === "without" ? "Senza" : "Con"} ${filters.allergen}`);
+  if (typeof filters.kcalMin === "number" || typeof filters.kcalMax === "number") {
+    chips.push(`${filters.kcalMin ?? 0}-${filters.kcalMax ?? "max"} kcal`);
+  }
+
+  if (chips.length === 0) return null;
 
   return (
-    <div
-      className={`${frameClass} overflow-hidden rounded-(--radius-lg) bg-(--color-surface-muted)`}
-    >
-      {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={src}
-          alt=""
-          className="h-full w-full object-cover transition-transform duration-200 hover:scale-[1.03]"
-        />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center text-(--color-text-muted)">
-          <ImageSquare size={size === "list" ? 20 : 36} aria-label={`Immagine ${title}`} />
-        </div>
-      )}
-    </div>
-  );
-}
-
-function RecipeCard({ recipe }: { recipe: RecipeSummaryDto }) {
-  return (
-    <Card variant="panel" padding="md" className="h-full">
-      <CardBody>
-        <Stack gap="4">
-          <RecipeImage src={recipe.imageUrl} title={recipe.title} />
-
-          <div className="flex items-start justify-between gap-(--spacing-3)">
-            <div className="min-w-0">
-              <Text as="h2" size="lg" weight="semibold" className="truncate">
-                {recipe.title}
-              </Text>
-              <Text size="xs" tone="muted">
-                {getRecipeCategoryLabel(recipe.category)}
-              </Text>
-            </div>
-            <Badge tone={statusTone(recipe)}>{statusLabel(recipe)}</Badge>
-          </div>
-
-          {recipe.description ? (
-            <Text size="sm" tone="muted" leading="relaxed" className="line-clamp-2">
-              {recipe.description}
-            </Text>
-          ) : null}
-
-          <div className="grid grid-cols-2 gap-(--spacing-2)">
-            <Metric icon={<ForkKnife size={14} />} label={`${recipe.ingredientsCount} ingr.`} />
-            <Metric icon={<Clock size={14} />} label={`${(recipe.prepTime ?? 0) + (recipe.cookTime ?? 0)} min`} />
-            <Metric label={`${recipe.servings} porzioni`} />
-            <Metric label={formatNutritionRange(recipe.nutrition.calories)} />
-          </div>
-
-          <div className="flex flex-wrap gap-(--spacing-2)">
-            {recipe.allergens.slice(0, 4).map((allergen) => (
-              <Badge key={allergen} size="sm" tone="neutral">
-                {allergen}
-              </Badge>
-            ))}
-            {recipe.allergens.length === 0 ? (
-              <Badge size="sm" tone="neutral">
-                allergeni non noti
-              </Badge>
-            ) : null}
-          </div>
-
-          <Button
-            as="a"
-            href={`/recipes/${recipe.id}`}
-            variant="secondary"
-            size="sm"
-            className="self-start"
-          >
-            Apri ricetta
-          </Button>
-        </Stack>
-      </CardBody>
-    </Card>
-  );
-}
-
-function RecipeListItem({ recipe }: { recipe: RecipeSummaryDto }) {
-  const totalTime = (recipe.prepTime ?? 0) + (recipe.cookTime ?? 0);
-
-  return (
-    <Card variant="panel" padding="sm">
-      <CardBody>
-        <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-(--spacing-3) sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center">
-          <RecipeImage src={recipe.imageUrl} title={recipe.title} size="list" />
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-(--spacing-2)">
-              <Text as="h2" size="base" weight="semibold" className="truncate">
-                {recipe.title}
-              </Text>
-              <Badge size="sm" tone={statusTone(recipe)}>
-                {statusLabel(recipe)}
-              </Badge>
-            </div>
-            <div className="mt-(--spacing-1) flex flex-wrap gap-x-(--spacing-3) gap-y-(--spacing-1)">
-              <Text size="xs" tone="muted">
-                {getRecipeCategoryLabel(recipe.category)}
-              </Text>
-              <Text size="xs" tone="muted">
-                {recipe.ingredientsCount} ingredienti
-              </Text>
-              <Text size="xs" tone="muted">
-                {totalTime || "-"} min
-              </Text>
-              <Text size="xs" tone="muted">
-                {formatNutritionRange(recipe.nutrition.calories)}
-              </Text>
-            </div>
-            <div className="mt-(--spacing-2) flex flex-wrap gap-(--spacing-1)">
-              {recipe.allergens.slice(0, 3).map((allergen) => (
-                <Badge key={allergen} size="sm" tone="neutral">
-                  {allergen}
-                </Badge>
-              ))}
-              {recipe.allergens.length === 0 ? (
-                <Badge size="sm" tone="neutral">
-                  nessun allergene noto
-                </Badge>
-              ) : null}
-            </div>
-          </div>
-          <Button
-            as="a"
-            href={`/recipes/${recipe.id}`}
-            variant="secondary"
-            size="sm"
-            className="col-span-2 w-full sm:col-span-1 sm:w-auto"
-          >
-            Apri
-          </Button>
-        </div>
-      </CardBody>
-    </Card>
-  );
-}
-
-function Metric({ icon, label }: { icon?: React.ReactNode; label: string }) {
-  return (
-    <div className="flex min-h-9 items-center gap-(--spacing-2) rounded-(--radius-md) bg-(--color-surface-muted) px-(--spacing-2) text-(length:--text-xs) font-(--font-weight-medium) text-(--color-text-muted)">
-      {icon}
-      <span className="truncate">{label}</span>
-    </div>
-  );
-}
-
-function NutritionSummaryRows({ nutrition }: { nutrition: NutritionRangesDto }) {
-  return (
-    <div className="grid gap-(--spacing-2)">
-      {NUTRITION_DISPLAY_ROWS.map((row) => (
-        <div
-          key={row.key}
-          className={`flex items-baseline justify-between gap-(--spacing-3) rounded-(--radius-md) bg-(--color-surface-muted) px-(--spacing-3) py-(--spacing-2) ${
-            row.indented ? "ml-(--spacing-3)" : ""
-          }`}
-        >
-          <Text size="xs" tone="muted">
-            {row.label}
-          </Text>
-          <Text size="sm" weight={row.indented ? "medium" : "semibold"} className="text-right">
-            {formatNutritionRange(nutrition[row.key])}
-          </Text>
-        </div>
+    <div className="flex flex-wrap gap-(--spacing-1)">
+      {chips.map((chip) => (
+        <Badge key={chip} size="sm" tone="neutral" variant="outline">
+          {chip}
+        </Badge>
       ))}
-      <div className="flex items-baseline justify-between gap-(--spacing-3) rounded-(--radius-md) bg-(--color-surface-muted) px-(--spacing-3) py-(--spacing-2)">
-        <Text size="xs" tone="muted">
-          GDA
-        </Text>
-        <Text size="sm" weight="semibold" className="text-right">
-          {formatGdaRange(nutrition.calories)}
-        </Text>
-      </div>
     </div>
   );
 }
@@ -371,47 +227,68 @@ export async function RecipesIndexView({
 }) {
   const { recipes, limit } = await getRecipesIndex(user.id, user.plan, filters);
   const view = filters.view ?? "cards";
+  const activeFilterCount = getActiveFilterCount(filters);
 
   return (
     <WorkspacePage
-      title="Ricette"
+      title="RICETTE"
       description="Catalogo operativo con ingredienti verificati, allergeni automatici e pubblicazione su Esplora."
     >
       <Stack gap="5">
-        <section className="grid gap-(--spacing-4) rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) p-(--spacing-4) shadow-(--shadow-sm) lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-          <div>
-            <Text as="h2" size="xl" weight="semibold">
-              Archivio ricette
-            </Text>
-            <Text size="sm" tone="muted">
-              {recipes.length} risultati visibili. Piano: {formatLimit(limit.used, limit.value)}.
-            </Text>
-          </div>
-          <div className="flex flex-wrap items-center gap-(--spacing-3)">
-            <RecipeViewModeToggle view={view} />
-            <Button
-              as="a"
-              href="/recipes/new"
-              variant="primary"
-              size="sm"
-              disabled={limit.reached}
-            >
-              Nuova ricetta
-            </Button>
-          </div>
-        </section>
+        <Card variant="panel" padding="md" overflow="visible">
+          <CardBody>
+            <div className="grid gap-(--spacing-4) lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+              <div className="min-w-0">
+                <Text as="h2" size="xl" weight="semibold" className="uppercase">
+                  Archivio ricette
+                </Text>
+                <Text size="sm" tone="muted" className="mt-(--spacing-1)">
+                  {recipes.length} risultati visibili. Piano: {formatLimit(limit.used, limit.value)}.
+                </Text>
+              </div>
+              <div className="flex flex-wrap items-center gap-(--spacing-2)">
+                <RecipeViewModeToggle view={view} />
+                <Modal
+                  title="Filtri ricette"
+                  description="Riduci la lista mantenendo visibili i criteri attivi."
+                  placement="bottom"
+                  size="md"
+                  trigger={
+                    <Button type="button" variant="secondary" size="sm" className="xl:hidden" iconLeft={<Funnel size={14} />}>
+                      Filtri {activeFilterCount > 0 ? `(${activeFilterCount})` : ""}
+                    </Button>
+                  }
+                >
+                  <ModalBody>
+                    <form action="/recipes">
+                      <RecipeFilters filters={filters} layout="mobile" />
+                    </form>
+                  </ModalBody>
+                </Modal>
+                <Button
+                  as="a"
+                  href="/recipes/new"
+                  variant="primary"
+                  size="sm"
+                  disabled={limit.reached}
+                >
+                  Nuova ricetta
+                </Button>
+              </div>
+            </div>
+            {activeFilterCount > 0 ? (
+              <div className="qv-motion-fade-up mt-(--spacing-4) flex flex-wrap items-center justify-between gap-(--spacing-3) rounded-(--radius-lg) border border-(--color-divider) bg-(--color-surface-offset) p-(--spacing-3)">
+                <ActiveFilters filters={filters} />
+                <Button as="a" href="/recipes" variant="secondary" size="xs">
+                  Reset filtri
+                </Button>
+              </div>
+            ) : null}
+          </CardBody>
+        </Card>
 
         <div className="grid gap-(--spacing-5) xl:grid-cols-[minmax(0,1fr)_20rem]">
           <Stack gap="4">
-            <details className="rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) p-(--spacing-3) xl:hidden">
-              <summary className="cursor-pointer text-(length:--text-sm) font-(--font-weight-semibold)">
-                Filtri ricette
-              </summary>
-              <form action="/recipes" className="mt-(--spacing-4)">
-                <RecipeFilters filters={filters} />
-              </form>
-            </details>
-
             {recipes.length === 0 ? (
               <EmptyState
                 title="Nessuna ricetta trovata"
@@ -423,11 +300,12 @@ export async function RecipesIndexView({
                 }
               />
             ) : view === "list" ? (
-              <div className="grid gap-(--spacing-3)">
+              <Card variant="panel" padding="none" overflow="visible">
+                <RecipeListHeader />
                 {recipes.map((recipe) => (
                   <RecipeListItem key={recipe.id} recipe={recipe} />
                 ))}
-              </div>
+              </Card>
             ) : (
               <div className="grid gap-(--spacing-4) md:grid-cols-2 2xl:grid-cols-3">
                 {recipes.map((recipe) => (
@@ -438,22 +316,37 @@ export async function RecipesIndexView({
           </Stack>
 
           <aside className="hidden xl:block xl:sticky xl:top-(--spacing-5) xl:self-start">
-            <Card variant="panel" padding="lg">
-              <CardBody>
-                <Stack gap="4">
-                  <div>
-                    <Text as="h2" size="lg" weight="semibold">
-                      Filtri
-                    </Text>
-                    <Text size="sm" tone="muted">
-                      Riduci la lista senza perdere contesto.
-                    </Text>
-                  </div>
+            <Card variant="panel" padding="none" overflow="visible">
+              <details className="group/recipe-filters">
+                <summary className="qv-motion-interactive flex cursor-pointer list-none items-center justify-between gap-(--spacing-3) px-(--spacing-4) py-(--spacing-4) transition-[border-color,background-color] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] group-open/recipe-filters:border-b group-open/recipe-filters:border-(--color-divider)">
+                  <span className="flex min-w-0 items-center gap-(--spacing-3)">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-(--radius-full) border border-(--color-border) bg-(--color-surface-offset) text-(--color-text-muted)">
+                      <Funnel size={15} aria-hidden />
+                    </span>
+                    <span className="min-w-0">
+                      <Text as="span" size="lg" weight="semibold" className="block uppercase">
+                        Filtri
+                      </Text>
+                      <Text as="span" size="xs" tone="muted" className="block truncate">
+                        {activeFilterCount > 0
+                          ? `${activeFilterCount} criteri attivi`
+                          : "Clicca per aprire"}
+                      </Text>
+                    </span>
+                  </span>
+                  <span className="inline-flex items-center gap-(--spacing-2)">
+                    <Badge size="sm" tone={activeFilterCount > 0 ? "primary" : "neutral"} variant="outline">
+                      {activeFilterCount}
+                    </Badge>
+                    <CaretDown size={14} className="text-(--color-text-muted) transition-transform duration-[var(--duration-base)] ease-[var(--ease-qoovex)] group-open/recipe-filters:rotate-180" aria-hidden />
+                  </span>
+                </summary>
+                <CardBody padding="md" className="qv-motion-fade-up">
                   <form action="/recipes">
-                    <RecipeFilters filters={filters} />
+                    <RecipeFilters filters={filters} layout="desktop" />
                   </form>
-                </Stack>
-              </CardBody>
+                </CardBody>
+              </details>
             </Card>
           </aside>
         </div>
@@ -465,7 +358,7 @@ export async function RecipesIndexView({
 export function NewRecipeView() {
   return (
     <WorkspacePage
-      title="Nuova ricetta"
+      title="NUOVA RICETTA"
       description="Crea una preparazione con ingredienti verificati, allergeni automatici e valori nutrizionali calcolati."
     >
       <WorkspaceBreadcrumb
@@ -499,14 +392,17 @@ export async function RecipeDetailView({
       />
 
       <Stack gap="5">
-        <section className="grid gap-(--spacing-4) overflow-hidden rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) shadow-(--shadow-sm) lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-stretch">
-          <div className="grid gap-(--spacing-4) p-(--spacing-4)">
-            <div className="flex flex-wrap items-center gap-(--spacing-2)">
-              <Badge tone={statusTone(recipe)}>{statusLabel(recipe)}</Badge>
-              <Badge tone="primary">{getRecipeCategoryLabel(recipe.category)}</Badge>
-              <Badge tone="neutral">{recipe.servings} porzioni</Badge>
-              {recipe.prepTime ? <Badge tone="neutral">{recipe.prepTime} min prep</Badge> : null}
-              {recipe.cookTime ? <Badge tone="neutral">{recipe.cookTime} min cottura</Badge> : null}
+        <section className="grid gap-(--spacing-4) overflow-hidden rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface) shadow-(--shadow-sm) lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-stretch">
+          <div className="grid content-between gap-(--spacing-6) p-(--spacing-5)">
+            <div className="grid gap-(--spacing-3)">
+              <div className="flex flex-wrap items-center gap-(--spacing-2)">
+                <RecipeStatusBadge status={recipe.status} isPublic={recipe.isPublic} size="md" />
+                <RecipeCategoryBadge category={recipe.category} />
+                <Badge tone="neutral" variant="outline">{recipe.servings} porzioni</Badge>
+                {recipe.prepTime ? <Badge tone="neutral" variant="outline">{recipe.prepTime} min prep</Badge> : null}
+                {recipe.cookTime ? <Badge tone="neutral" variant="outline">{recipe.cookTime} min cottura</Badge> : null}
+              </div>
+              <RecipeAllergenChips allergens={recipe.allergens} max={6} />
             </div>
             <RecipeDetailActions
               recipeId={recipe.id}
@@ -516,7 +412,7 @@ export async function RecipeDetailView({
               canPublish={recipe.canPublish}
             />
           </div>
-          <RecipeImage src={recipe.imageUrl} title={recipe.title} size="detail" />
+          <RecipeImage src={recipe.imageUrl} title={recipe.title} size="detail" className="rounded-none border-0" />
         </section>
 
         <div className="grid gap-(--spacing-4) xl:grid-cols-[minmax(0,1fr)_22rem]">
@@ -534,16 +430,11 @@ export async function RecipeDetailView({
           </Card>
 
           <Stack gap="4">
-            <Card variant="panel" padding="lg">
-              <CardBody>
-                <Stack gap="4">
-                  <Text as="h2" size="lg" weight="semibold">
-                    Totali stimati
-                  </Text>
-                  <NutritionSummaryRows nutrition={recipe.nutrition} />
-                </Stack>
-              </CardBody>
-            </Card>
+            <NutritionInsightCard
+              title="Totali stimati"
+              description="Calcolati dagli ingredienti e normalizzati per quantita."
+              nutrition={recipe.nutrition}
+            />
 
             <Card variant="panel" padding="lg">
               <CardBody>
@@ -565,25 +456,10 @@ export async function RecipeDetailView({
                             {ingredient.quantity} {ingredient.unit}
                           </Text>
                         </div>
-                        <NutritionSummaryRows nutrition={ingredient.nutrition} />
-                        <div className="flex flex-wrap gap-(--spacing-1)">
-                          <Badge
-                            size="sm"
-                            tone={ingredient.verificationStatus === "PENDING_REVIEW" ? "warning" : "success"}
-                          >
-                            {ingredient.verificationStatus === "PENDING_REVIEW" ? "in revisione" : "verificato"}
-                          </Badge>
-                          {ingredient.allergens.length === 0 ? (
-                            <Badge size="sm" tone="neutral">
-                              nessun allergene noto
-                            </Badge>
-                          ) : (
-                            ingredient.allergens.map((allergen) => (
-                              <Badge key={allergen} size="sm" tone="neutral">
-                                {allergen}
-                              </Badge>
-                            ))
-                          )}
+                        <NutritionRows nutrition={ingredient.nutrition} compact />
+                        <div className="flex flex-wrap items-center gap-(--spacing-1)">
+                          <IngredientVerificationBadge status={ingredient.verificationStatus} />
+                          <RecipeAllergenChips allergens={ingredient.allergens} max={4} compact />
                         </div>
                       </div>
                     ))}
@@ -610,7 +486,7 @@ export async function EditRecipeView({
 
   return (
     <WorkspacePage
-      title={`Modifica ${recipe.title}`}
+      title={`MODIFICA ${recipe.title}`}
       description="Aggiorna ingredienti verificati, categoria, procedura e pubblicazione."
     >
       <WorkspaceBreadcrumb

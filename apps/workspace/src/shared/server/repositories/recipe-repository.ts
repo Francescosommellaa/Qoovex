@@ -4,9 +4,9 @@ import { db } from "@qoovex/db";
 import type { Prisma, RecipeStatus } from "@qoovex/db";
 import {
   normalizeAllergens,
-  normalizeNutritionRanges,
   slugifyIngredientName,
 } from "@shared/lib/ingredient-normalization";
+import { calculateRecipeNutritionTotals } from "@shared/lib/nutrition-calculation";
 import type { IngredientInput, RecipeEditorInput, RecipeFiltersDto } from "@shared/lib/workspace-types";
 import {
   attachPendingIngredientReviewsToRecipe,
@@ -72,6 +72,8 @@ const recipeDetailSelect = {
         select: {
           name: true,
           slug: true,
+          sourceName: true,
+          sourceRef: true,
           allergens: true,
           calories: true,
           caloriesMin: true,
@@ -106,6 +108,55 @@ function buildRecipeWhere(userId: string, filters?: RecipeFiltersDto): Prisma.Re
   const category = filters?.category && filters.category !== "all" ? filters.category : undefined;
   const visibility = filters?.visibility ?? "all";
   const validity = filters?.validity ?? "all";
+  const verification = filters?.verification ?? "all";
+  const allergenMode = filters?.allergenMode ?? "contains";
+  const allergen = filters?.allergen?.trim().toLocaleLowerCase("it");
+  const ingredientFilters: Prisma.RecipeWhereInput[] = [];
+
+  if (verification === "pending") {
+    ingredientFilters.push({
+      ingredients: {
+        some: {
+          ingredient: {
+            verificationStatus: "PENDING_REVIEW",
+          },
+        },
+      },
+    });
+  }
+
+  if (verification === "verified") {
+    ingredientFilters.push({
+      ingredients: {
+        none: {
+          ingredient: {
+            verificationStatus: "PENDING_REVIEW",
+          },
+        },
+      },
+    });
+  }
+
+  if (allergen) {
+    ingredientFilters.push({
+      ingredients:
+        allergenMode === "without"
+          ? {
+              none: {
+                ingredient: {
+                  allergens: { has: allergen },
+                },
+              },
+            }
+          : {
+              some: {
+                ingredient: {
+                  allergens: { has: allergen },
+                },
+              },
+            },
+    });
+  }
 
   return {
     authorId: userId,
@@ -123,17 +174,7 @@ function buildRecipeWhere(userId: string, filters?: RecipeFiltersDto): Prisma.Re
           },
         }
       : {}),
-    ...(filters?.allergen
-      ? {
-          ingredients: {
-            some: {
-              ingredient: {
-                allergens: { has: filters.allergen },
-              },
-            },
-          },
-        }
-      : {}),
+    ...(ingredientFilters.length > 0 ? { AND: ingredientFilters } : {}),
     ...(search
       ? {
           OR: [
@@ -142,104 +183,6 @@ function buildRecipeWhere(userId: string, filters?: RecipeFiltersDto): Prisma.Re
           ],
         }
       : {}),
-  };
-}
-
-function nutritionFactor(quantity: number, unit: string) {
-  const normalizedUnit = unit.trim().toLocaleLowerCase("it");
-  if (normalizedUnit === "kg" || normalizedUnit === "l") return (quantity * 1000) / 100;
-  if (normalizedUnit === "g" || normalizedUnit === "ml") return quantity / 100;
-  return 0;
-}
-
-function addNutritionRange(
-  acc: { min: number; max: number; available: boolean },
-  range: { min: number | null; max: number | null },
-  factor: number,
-) {
-  if (range.min === null || range.max === null) return acc;
-  return {
-    min: acc.min + range.min * factor,
-    max: acc.max + range.max * factor,
-    available: true,
-  };
-}
-
-function formatNutritionTotal(value: { min: number; max: number; available: boolean }, decimals = 1) {
-  if (!value.available) return { min: null, max: null };
-  return {
-    min: Number(value.min.toFixed(decimals)),
-    max: Number(value.max.toFixed(decimals)),
-  };
-}
-
-function calculateRecipeNutrition(ingredients: IngredientInput[]) {
-  const nutrition = ingredients.reduce(
-    (acc, ingredient) => {
-      const factor = nutritionFactor(ingredient.quantity, ingredient.unit);
-      const ranges = normalizeNutritionRanges(ingredient.nutrition);
-
-      return {
-        calories: addNutritionRange(acc.calories, ranges.calories, factor),
-        proteins: addNutritionRange(acc.proteins, ranges.proteins, factor),
-        carbs: addNutritionRange(acc.carbs, ranges.carbs, factor),
-        sugars: addNutritionRange(acc.sugars, ranges.sugars, factor),
-        fats: addNutritionRange(acc.fats, ranges.fats, factor),
-        fiber: addNutritionRange(acc.fiber, ranges.fiber, factor),
-        salt: addNutritionRange(acc.salt, ranges.salt, factor),
-      };
-    },
-    {
-      calories: { min: 0, max: 0, available: false },
-      proteins: { min: 0, max: 0, available: false },
-      carbs: { min: 0, max: 0, available: false },
-      sugars: { min: 0, max: 0, available: false },
-      fats: { min: 0, max: 0, available: false },
-      fiber: { min: 0, max: 0, available: false },
-      salt: { min: 0, max: 0, available: false },
-    },
-  );
-
-  const totals = ingredients.reduce(
-    (acc, ingredient) => {
-      const factor = nutritionFactor(ingredient.quantity, ingredient.unit);
-      return {
-        calories: acc.calories + (ingredient.calories ?? 0) * factor,
-        proteins: acc.proteins + (ingredient.proteins ?? 0) * factor,
-        carbs: acc.carbs + (ingredient.carbs ?? 0) * factor,
-        fats: acc.fats + (ingredient.fats ?? 0) * factor,
-      };
-    },
-    { calories: 0, proteins: 0, carbs: 0, fats: 0 },
-  );
-
-  const calories = formatNutritionTotal(nutrition.calories);
-  const proteins = formatNutritionTotal(nutrition.proteins);
-  const carbs = formatNutritionTotal(nutrition.carbs);
-  const sugars = formatNutritionTotal(nutrition.sugars);
-  const fats = formatNutritionTotal(nutrition.fats);
-  const fiber = formatNutritionTotal(nutrition.fiber);
-  const salt = formatNutritionTotal(nutrition.salt, 2);
-
-  return {
-    totalCalories: Number(totals.calories.toFixed(1)),
-    totalCaloriesMin: calories.min,
-    totalCaloriesMax: calories.max,
-    totalProteins: Number(totals.proteins.toFixed(1)),
-    totalProteinsMin: proteins.min,
-    totalProteinsMax: proteins.max,
-    totalCarbs: Number(totals.carbs.toFixed(1)),
-    totalCarbsMin: carbs.min,
-    totalCarbsMax: carbs.max,
-    totalSugarsMin: sugars.min,
-    totalSugarsMax: sugars.max,
-    totalFats: Number(totals.fats.toFixed(1)),
-    totalFatsMin: fats.min,
-    totalFatsMax: fats.max,
-    totalFiberMin: fiber.min,
-    totalFiberMax: fiber.max,
-    totalSaltMin: salt.min,
-    totalSaltMax: salt.max,
   };
 }
 
@@ -316,7 +259,7 @@ export async function findRecipeDetailVisibleToUser(recipeId: string, userId: st
 
 export async function createRecipeForUser(userId: string, input: RecipeEditorInput) {
   return await db.$transaction(async (tx) => {
-    const nutrition = calculateRecipeNutrition(input.ingredients);
+    const nutrition = calculateRecipeNutritionTotals(input.ingredients);
     const status = getRecipeStatus(input);
     const recipe = await tx.recipe.create({
       data: {
@@ -377,7 +320,7 @@ export async function updateRecipeForUser(
 
     if (!existing) return null;
 
-    const nutrition = calculateRecipeNutrition(input.ingredients);
+    const nutrition = calculateRecipeNutritionTotals(input.ingredients);
     const status = getRecipeStatus(input);
     await tx.recipe.update({
       where: { id: recipeId },

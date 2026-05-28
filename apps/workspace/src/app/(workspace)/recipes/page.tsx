@@ -4,6 +4,8 @@ import type {
   RecipeFiltersDto,
   RecipeSort,
   RecipeViewMode,
+  RecipeAllergenMode,
+  RecipeVerificationFilter,
   RecipeVisibilityFilter,
   RecipeValidityFilter,
 } from "@shared/lib/workspace-types";
@@ -14,6 +16,8 @@ const CATEGORY_VALUES = new Set(["ANTIPASTO", "PRIMO", "SECONDO", "CONTORNO", "D
 const SORT_VALUES = new Set(["updated-desc", "updated-asc", "kcal-desc", "kcal-asc", "title-asc"]);
 const VISIBILITY_VALUES = new Set(["all", "public", "private"]);
 const VALIDITY_VALUES = new Set(["all", "ready", "pending", "archived"]);
+const VERIFICATION_VALUES = new Set(["all", "verified", "pending"]);
+const ALLERGEN_MODE_VALUES = new Set(["contains", "without"]);
 const VIEW_VALUES = new Set(["cards", "list"]);
 
 function parseNumber(value: string | undefined) {
@@ -31,7 +35,9 @@ export default async function RecipesPage({
     sort?: string;
     visibility?: string;
     validity?: string;
+    verification?: string;
     allergen?: string;
+    allergenMode?: string;
     kcalMin?: string;
     kcalMax?: string;
     view?: string;
@@ -53,7 +59,13 @@ export default async function RecipesPage({
     validity: VALIDITY_VALUES.has(params.validity ?? "")
       ? (params.validity as RecipeValidityFilter)
       : "all",
+    verification: VERIFICATION_VALUES.has(params.verification ?? "")
+      ? (params.verification as RecipeVerificationFilter)
+      : "all",
     allergen: params.allergen,
+    allergenMode: ALLERGEN_MODE_VALUES.has(params.allergenMode ?? "")
+      ? (params.allergenMode as RecipeAllergenMode)
+      : "contains",
     kcalMin: parseNumber(params.kcalMin),
     kcalMax: parseNumber(params.kcalMax),
     view: VIEW_VALUES.has(params.view ?? "") ? (params.view as RecipeViewMode) : "cards",

@@ -139,21 +139,21 @@ export function ClockDropdown({ nowIso, compact = false }: ClockDropdownProps) {
       <button
         type="button"
         className={cn(
-          "flex items-center gap-(--spacing-2) rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) py-(--spacing-2) text-left transition-[background,border-color,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:border-(--color-primary)/40 hover:bg-(--color-surface-offset) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)",
-          compact ? "rounded-(--radius-full)" : "min-w-(--spacing-24)",
+          "grid grid-cols-[auto_minmax(0,1fr)] items-center gap-(--spacing-2) rounded-(--radius-xl) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) py-(--spacing-2) text-left transition-[background,border-color,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:border-(--color-primary)/40 hover:bg-(--color-surface-offset) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-primary)",
+          compact ? "min-w-0 rounded-(--radius-full)" : "min-w-[7.25rem]",
         )}
         aria-label="Apri calendario"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
       >
         <Icon icon={CalendarBlank} size="sm" tone="current" />
-        <span className="grid leading-none">
+        <span className="grid min-w-0 gap-0.5 leading-tight">
           {!compact ? (
-            <span className="text-(length:--text-xs) text-(--color-text-muted)">
+            <span className="truncate text-(length:--text-xs) text-(--color-text-muted)">
               {clock.day}
             </span>
           ) : null}
-          <span className={cn("font-semibold", compact ? "text-(length:--text-xs)" : "text-(length:--text-sm)")}>
+          <span className={cn("block tabular-nums font-semibold", compact ? "text-(length:--text-xs)" : "text-(length:--text-sm)")}>
             {clock.time}
           </span>
         </span>

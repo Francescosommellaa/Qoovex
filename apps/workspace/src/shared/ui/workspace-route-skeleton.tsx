@@ -35,6 +35,7 @@ function CardGridSkeleton({ count }: { count: number }) {
         <Card key={index} variant="panel" padding="md">
           <CardBody>
             <Stack gap="4">
+              <Skeleton variant="thumbnail" size="md" radius="lg" width="100%" />
               <Skeleton variant="title" size="sm" width="70%" />
               <Stack gap="2">
                 <Skeleton variant="text" size="sm" width="100%" />
