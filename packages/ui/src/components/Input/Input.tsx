@@ -12,6 +12,7 @@ import {
 import { cn } from "../../lib/utils";
 
 export type InputStatus = "default" | "error" | "success";
+export type InputSurface = "light" | "dark";
 
 export interface InputProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -27,6 +28,7 @@ export interface InputProps extends Omit<
   showStrength?: boolean;
   /** Shows the toggle that reveals or hides the password. */
   showPasswordToggle?: boolean;
+  surface?: InputSurface;
 }
 
 interface StrengthCheck {
@@ -219,6 +221,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       srOnlyLabel = false,
       showStrength = false,
       showPasswordToggle = false,
+      surface = "light",
       id,
       className = "",
       disabled,
@@ -302,6 +305,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             SIZE_HEIGHT[size],
             FIELD_STATUS_RING[status],
             disabled && "opacity-50 pointer-events-none",
+            surface === "dark" && "qv-input--dark",
             className,
           )}
         >

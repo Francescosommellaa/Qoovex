@@ -56,6 +56,13 @@ yarn-error.log*
 # vercel
 .vercel
 
+# codex
+/.codex-runtime
+.codex
+tests/
+
+# typescript
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

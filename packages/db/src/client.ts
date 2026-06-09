@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { normalizeDatabaseConnectionString } from "./connection-string";
 
 const DATABASE_ENV_NAMES = [
   "DATABASE_URL",
@@ -10,7 +11,9 @@ const DATABASE_ENV_NAMES = [
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 function createPrismaClient() {
-  const connectionString = getDatabaseConnectionString();
+  const connectionString = normalizeDatabaseConnectionString(
+    getDatabaseConnectionString(),
+  );
   const adapter = new PrismaPg({ connectionString });
   return new PrismaClient({ adapter });
 }

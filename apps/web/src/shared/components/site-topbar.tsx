@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { QoovexMark } from "@qoovex/brand/qoovex-mark";
 import {
   ArrowRight,
   CaretDown,
@@ -252,14 +252,12 @@ export function SiteTopbar() {
           align="center"
           className="px-(--spacing-4) py-(--spacing-3) md:px-(--spacing-5)"
         >
-          <Link href="/" className="inline-flex items-center gap-(--spacing-2) no-underline">
-            <Image
-              src="/logo-icon/qoovex-icona-bianca-no-sfondo.svg"
-              alt="Qoovex"
-              width={26}
-              height={26}
-              priority
-            />
+          <Link
+            href="/"
+            aria-label="Qoovex home"
+            className="inline-flex items-center gap-(--spacing-2) no-underline"
+          >
+            <QoovexMark width={26} height={26} />
             <Text as="span" family="display" size="lg" weight="semibold" className="hidden min-[430px]:inline">
               Qoovex
             </Text>
@@ -307,7 +305,7 @@ export function SiteTopbar() {
             <Button
               as="a"
               href={workspaceSignUpHref}
-              variant="secondary"
+              variant="primary"
               size="sm"
               className="h-8 px-(--spacing-3) md:hidden"
             >

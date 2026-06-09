@@ -8,14 +8,13 @@ Fonte unica del design system Qoovex per token, primitives, components e pattern
 - `src/components`: componenti UI riutilizzabili con README, tipi e variants.
 - `src/patterns`: sezioni composte e shell applicative.
 - `styles/tokens`: token TypeScript e mirror CSS runtime.
-- `styles/themes`: temi dark e white.
 - `config/variants.ts`: mappe CVA e scale globali.
 
 ## Props / API
 | Export | Tipo | Default | Valori ammessi |
 |------|------|---------|----------------|
 | `@qoovex/ui` | package API | centrale | primitives, components, patterns, hooks, tokens |
-| `@qoovex/ui/styles/tokens` | CSS | dark | token CSS variables |
+| `@qoovex/ui/styles/tokens` | CSS | light | token CSS variables |
 | `@qoovex/ui/styles/base` | CSS | base | reset e base layer |
 
 ## Token usati
@@ -24,6 +23,7 @@ Fonte unica del design system Qoovex per token, primitives, components e pattern
 - Colors: solo semantici `colors`.
 - Typography: solo scala `typography`.
 - Motion/effects/z-index: solo token dedicati.
+- Tema globale: light-first; Obsidian e Violet sono superfici contestuali.
 
 ## Regole ferree
 - Le app assemblano UI importando da `@qoovex/ui`.

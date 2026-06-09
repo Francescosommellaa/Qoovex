@@ -214,7 +214,7 @@ export function WorkspaceTopbar({
   onOpenNavigation,
 }: WorkspaceTopbarProps) {
   return (
-    <header className="shrink-0 border-b border-(--color-border) bg-(--color-bg) px-(--spacing-4) py-(--spacing-3) md:px-(--spacing-6) lg:px-(--spacing-8)">
+    <header className="shrink-0 border-b border-(--color-divider) bg-(--color-paper-white)/95 px-(--spacing-4) py-(--spacing-3) backdrop-blur-md md:px-(--spacing-6) lg:px-(--spacing-8)">
       <div className="grid gap-(--spacing-3) md:grid-cols-[auto_minmax(16rem,34rem)_auto] md:items-center md:gap-(--spacing-4) lg:grid-cols-[minmax(16rem,34rem)_auto]">
         <div className="flex min-w-0 items-center justify-between gap-(--spacing-3) md:justify-start lg:hidden">
           <Button

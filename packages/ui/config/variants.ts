@@ -20,12 +20,37 @@ export const qvSpacing = [
 export const qvRadius = ["none", "sm", "md", "lg", "xl", "2xl", "full"] as const;
 export const qvTone = ["neutral", "primary", "success", "warning", "error"] as const;
 export const qvTextSize = ["xs", "sm", "base", "lg", "xl", "2xl"] as const;
-export const qvSurface = ["transparent", "bg", "surface", "surface2", "offset", "raised"] as const;
+export const qvTextRole = [
+  "caption",
+  "eyebrow",
+  "body-sm",
+  "body",
+  "subheading",
+  "heading-sm",
+  "heading",
+  "heading-lg",
+  "display",
+  "hero",
+] as const;
+export const qvSurface = [
+  "transparent",
+  "paper",
+  "cream",
+  "pastel",
+  "obsidian",
+  "violet",
+  "bg",
+  "surface",
+  "surface2",
+  "offset",
+  "raised",
+] as const;
 
 export type QvSpacing = (typeof qvSpacing)[number];
 export type QvRadius = (typeof qvRadius)[number];
 export type QvTone = (typeof qvTone)[number];
 export type QvTextSize = (typeof qvTextSize)[number];
+export type QvTextRole = (typeof qvTextRole)[number];
 export type QvSurface = (typeof qvSurface)[number];
 
 export const spacingClass: Record<QvSpacing, string> = {
@@ -81,6 +106,19 @@ export const textSizeClass: Record<QvTextSize, string> = {
   "2xl": "text-(length:--text-2xl)",
 };
 
+export const textRoleClass: Record<QvTextRole, string> = {
+  caption: "text-(length:--text-caption) leading-(--leading-caption) tracking-(--tracking-caption)",
+  eyebrow: "text-(length:--text-eyebrow) leading-(--leading-eyebrow) tracking-(--tracking-eyebrow) uppercase",
+  "body-sm": "text-(length:--text-body-sm) leading-(--leading-body-sm) tracking-(--tracking-body-sm)",
+  body: "text-(length:--text-body) leading-(--leading-body) tracking-(--tracking-body)",
+  subheading: "text-(length:--text-subheading) leading-(--leading-subheading) tracking-(--tracking-subheading)",
+  "heading-sm": "text-(length:--text-heading-sm) leading-(--leading-heading-sm) tracking-(--tracking-heading-sm)",
+  heading: "text-(length:--text-heading) leading-(--leading-heading) tracking-(--tracking-heading)",
+  "heading-lg": "text-(length:--text-heading-lg) leading-(--leading-heading-lg) tracking-(--tracking-heading-lg)",
+  display: "text-(length:--text-display) leading-(--leading-display) tracking-(--tracking-display)",
+  hero: "text-(length:--text-hero) leading-(--leading-hero) tracking-(--tracking-hero)",
+};
+
 export const toneTextClass: Record<QvTone | "muted" | "faint" | "inverse", string> = {
   neutral: "text-(--color-text)",
   primary: "text-(--color-primary)",
@@ -94,6 +132,11 @@ export const toneTextClass: Record<QvTone | "muted" | "faint" | "inverse", strin
 
 export const surfaceClass: Record<QvSurface, string> = {
   transparent: "bg-transparent",
+  paper: "bg-(--surface-paper)",
+  cream: "bg-(--surface-cream)",
+  pastel: "bg-(--surface-pastel)",
+  obsidian: "bg-(--surface-obsidian)",
+  violet: "bg-(--surface-violet)",
   bg: "bg-(--color-bg)",
   surface: "bg-(--color-surface)",
   surface2: "bg-(--color-surface-2)",
@@ -128,13 +171,14 @@ export const qvBoxVariants = cva("min-w-0", {
   },
 });
 
-export const qvTextVariants = cva("m-0 tracking-normal", {
+export const qvTextVariants = cva("m-0 font-sans", {
   variants: {
+    role: textRoleClass,
     size: textSizeClass,
     tone: toneTextClass,
     family: {
-      body: "font-body",
-      display: "font-display",
+      body: "font-sans",
+      display: "font-sans",
       mono: "font-mono",
     },
     weight: {
@@ -151,14 +195,11 @@ export const qvTextVariants = cva("m-0 tracking-normal", {
     },
   },
   defaultVariants: {
-    size: "base",
+    role: "body",
     tone: "neutral",
-    family: "body",
     weight: "regular",
-    leading: "normal",
   },
 });
 
 export type QvBoxVariantProps = VariantProps<typeof qvBoxVariants>;
 export type QvTextVariantProps = VariantProps<typeof qvTextVariants>;
-

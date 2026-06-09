@@ -1,34 +1,18 @@
 # Text
 
-## Cosa è
-Primitive obbligatoria per ogni contenuto testuale.
+Primitive tipografica canonica. General Sans e l'unica famiglia del sistema.
 
-## Come è composto
-- Elemento HTML semantico configurabile tramite `as`.
-- Scala tipografica tokenizzata.
+## API
 
-## Props / API
-| Prop | Tipo | Default | Valori ammessi |
-|------|------|---------|----------------|
-| as | string | "p" | tag HTML semantico |
-| size | string | "base" | "xs" / "sm" / "base" / "lg" / "xl" / "2xl" |
-| tone | string | "neutral" | "neutral" / "muted" / "faint" / semantic tones |
-| family | string | "body" | "body" / "display" / "mono" |
+- `as`: elemento HTML semantico.
+- `textStyle`: `caption | eyebrow | body-sm | body | subheading | heading-sm |
+  heading | heading-lg | display | hero`.
+- `tone`: neutro, attenuato, inverso o semantico.
 
-## Token usati
-- Tipografia: `--text-*`.
-- Colori: `--color-text*`.
+Le props legacy `size` e `family` restano disponibili solo per la migrazione.
+Il nuovo codice usa ruoli tipografici.
 
-## Regole ferree
-- Non usare `p`, `h1`, `span` diretti nelle app.
-- Non usare dimensioni font hardcoded.
-
-## Esempi
 ```tsx
-// Corretto
-<Text as="h1" family="display" size="2xl">Qoovex</Text>
-
-// Sbagliato
-<h1 style={{ fontSize: "41px" }}>Qoovex</h1>
+<Text as="h1" textStyle="hero">Il prossimo passo.</Text>
+<Text textStyle="body" tone="muted">Descrizione operativa.</Text>
 ```
-

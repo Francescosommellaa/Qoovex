@@ -18,20 +18,25 @@ export const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
       <Box
         as="section"
         ref={ref}
-        className={cn("qv-hero-section", className)}
+        className={cn("relative overflow-hidden", className)}
         {...props}
       >
-        <Box className="mx-auto grid w-full max-w-(--container-wide) items-center gap-(--spacing-12) py-(--spacing-16) lg:grid-cols-2">
+        <div
+          className="pointer-events-none absolute inset-0 -z-10"
+          aria-hidden="true"
+          style={{ background: "var(--gradient-warm)" }}
+        />
+        <Box className="mx-auto grid w-full max-w-(--container-wide) items-center gap-(--spacing-12) px-(--page-gutter) py-(--spacing-20) lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)]">
           <Stack gap="6" align="start" className="max-w-(--measure-hero)">
             {eyebrow ? (
-              <Badge variant="soft" tone="primary" size="sm">
+              <Badge variant="outline" tone="neutral" size="sm">
                 {eyebrow}
               </Badge>
             ) : null}
-            <Text as="h1" family="display" size="2xl" weight="semibold" leading="tight">
+            <Text as="h1" textStyle="hero" weight="medium">
               {title}
             </Text>
-            <Text size="base" tone="muted" leading="relaxed">
+            <Text textStyle="subheading" tone="muted">
               {description}
             </Text>
             {actions.length > 0 ? (
@@ -41,9 +46,13 @@ export const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
                     key={String(action.label)}
                     as="a"
                     href={action.href}
-                    variant={action.variant === "secondary" ? "ghost" : "primary"}
-                    size="md"
-                    iconRight={action.variant === "secondary" ? undefined : <Icon icon={ArrowRight} size="sm" weight="bold" />}
+                    variant={action.variant === "secondary" ? "secondary" : "primary"}
+                    size="lg"
+                    iconRight={
+                      action.variant === "secondary" ? undefined : (
+                        <Icon icon={ArrowRight} size="sm" weight="bold" />
+                      )
+                    }
                   >
                     {action.label}
                   </Button>
@@ -52,13 +61,13 @@ export const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
             ) : null}
             {isProofList(proof) ? (
               proof.length > 0 ? (
-                <Box className="grid w-full grid-cols-1 gap-(--spacing-4) sm:grid-cols-3">
+                <Box className="grid w-full grid-cols-1 gap-(--spacing-4) border-t border-(--color-divider) pt-(--spacing-4) sm:grid-cols-3">
                   {proof.map((item, index) => (
                     <Stack key={index} gap="1">
-                      <Text family="display" size="lg" weight="semibold">
+                      <Text textStyle="subheading" weight="medium">
                         {item.value}
                       </Text>
-                      <Text size="xs" tone="faint">
+                      <Text textStyle="caption" tone="muted">
                         {item.label}
                       </Text>
                     </Stack>

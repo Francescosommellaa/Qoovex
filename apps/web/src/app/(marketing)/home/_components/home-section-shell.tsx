@@ -29,7 +29,7 @@ export function HomeSectionShell({
 
   return (
     <section className={className}>
-      <Stack gap="10" className="py-(--spacing-16) md:py-(--spacing-20)">
+      <Stack gap="10" className="mx-auto max-w-(--container-wide) px-(--page-gutter) py-(--spacing-16) md:py-(--spacing-20)">
         <Stack
           gap="5"
           align={isCentered ? "center" : "start"}
@@ -44,16 +44,13 @@ export function HomeSectionShell({
           />
           <Text
             as="h2"
-            family="display"
-            size="xl"
-            weight="semibold"
-            leading="tight"
-            className="md:text-(length:--text-2xl)"
+            textStyle="display"
+            weight="medium"
           >
             {title}
           </Text>
           {description ? (
-            <Text size="base" tone="muted" leading="relaxed">
+            <Text textStyle="body" tone="muted">
               {description}
             </Text>
           ) : null}

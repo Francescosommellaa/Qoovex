@@ -4,7 +4,7 @@
 Pattern per presentare funzioni o vantaggi in card DS.
 
 ## Come è composto
-- `Card`, `Badge`, `Stack`, `Text`.
+- `Card`, `Badge`, `Stack`, `Text` su superfici pastel controllate.
 
 ## Props / API
 | Prop | Tipo | Default | Valori ammessi |
@@ -12,7 +12,7 @@ Pattern per presentare funzioni o vantaggi in card DS.
 | items | array | n/a | title/body/tone/label/icon |
 
 ## Token usati
-- Card tokens.
+- Superfici Blush, Mint, Yellow e Lilac definite dai token.
 - Badge tokens.
 - Spacing: `--spacing-4`.
 
@@ -28,4 +28,3 @@ Pattern per presentare funzioni o vantaggi in card DS.
 // Sbagliato
 <div className="grid gap-[19px]" />
 ```
-

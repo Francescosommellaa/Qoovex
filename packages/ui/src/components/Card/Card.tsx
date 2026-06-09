@@ -4,6 +4,11 @@ import * as React from "react";
 import { cn } from "../../lib/utils";
 
 export type CardVariant =
+  | "paper"
+  | "cream"
+  | "pastel"
+  | "obsidian"
+  | "violet"
   | "surface"
   | "panel"
   | "bento"
@@ -41,6 +46,11 @@ type CardStyle = React.CSSProperties & {
 };
 
 const VARIANTS: Record<CardVariant, string> = {
+  paper: "qv-card--paper",
+  cream: "qv-card--cream",
+  pastel: "qv-card--pastel",
+  obsidian: "qv-card--obsidian",
+  violet: "qv-card--violet",
   surface: "qv-card--surface",
   panel: "qv-card--panel",
   bento: "qv-card--bento",
@@ -175,7 +185,7 @@ CardMedia.displayName = "CardMedia";
 
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
   {
-    variant = "surface",
+    variant = "paper",
     tone = "neutral",
     padding = "md",
     span = "auto",

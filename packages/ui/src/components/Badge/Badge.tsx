@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
-export type BadgeVariant = "soft" | "outline" | "filled";
+export type BadgeVariant = "soft" | "outline" | "filled" | "announcement";
 export type BadgeTone = "neutral" | "primary" | "success" | "warning" | "error";
 export type BadgeSize = "sm" | "md" | "lg";
 
@@ -20,6 +20,7 @@ const VARIANTS: Record<BadgeVariant, string> = {
   soft: "qv-badge--soft",
   outline: "qv-badge--outline",
   filled: "qv-badge--filled",
+  announcement: "qv-badge--announcement",
 };
 
 const TONES: Record<BadgeTone, string> = {

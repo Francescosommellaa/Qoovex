@@ -4,7 +4,12 @@ import * as React from "react";
 import { CircleNotch } from "@phosphor-icons/react";
 import { cn } from "../../lib/utils";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "destructive";
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "ghost"
+  | "destructive"
+  | "inverse";
 export type ButtonSize = "xs" | "sm" | "md" | "lg";
 
 interface ButtonOwnProps {
@@ -47,33 +52,31 @@ export type ButtonProps = NativeButtonProps | AnchorButtonProps;
 
 const BASE =
   "group relative inline-flex items-center justify-center select-none cursor-pointer " +
-  "rounded-full font-medium whitespace-nowrap tracking-[0.012em] overflow-hidden " +
+  "rounded-(--radius-lg) font-medium whitespace-nowrap tracking-(--tracking-body) overflow-hidden " +
   "transition-[width,color,background-color,border-color,box-shadow,opacity] " +
   "duration-[var(--duration-base)] ease-[var(--ease-qoovex)] " +
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary " +
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-ink-black) " +
   "disabled:opacity-[var(--button-disabled-opacity)] disabled:pointer-events-none disabled:saturate-50";
 
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    "bg-surface-offset text-text border border-primary/40 " +
-    "shadow-[var(--shadow-btn-resting)] " +
-    "hover:text-(--color-btn-filled-text) hover:border-transparent " +
+    "bg-(--color-ink-black) text-(--color-paper-white) border border-(--color-ink-black) " +
     "hover:shadow-[var(--shadow-btn-hover)] " +
     "active:shadow-[var(--shadow-btn-active)]",
   secondary:
-    "bg-surface-offset text-text border border-border " +
-    "shadow-[var(--shadow-btn-resting)] " +
+    "bg-(--color-paper-white) text-(--color-ink-black) border border-(--color-ink-black) " +
     "hover:shadow-[var(--shadow-btn-hover)] " +
     "active:shadow-[var(--shadow-btn-active)]",
   ghost:
-    "bg-transparent text-text-muted border border-transparent " +
-    "hover:text-text active:opacity-70",
+    "bg-transparent text-(--color-ink-black) border border-transparent " +
+    "hover:bg-(--color-pearl-mist) active:opacity-70",
   destructive:
-    "bg-surface-offset text-text border border-error/40 " +
-    "shadow-[var(--shadow-btn-resting)] " +
-    "hover:text-(--color-btn-filled-text) hover:border-transparent " +
+    "bg-(--color-error) text-(--color-paper-white) border border-(--color-error) " +
     "hover:shadow-[var(--shadow-btn-hover)] " +
     "active:shadow-[var(--shadow-btn-active)]",
+  inverse:
+    "bg-(--color-paper-white) text-(--color-ink-black) border border-(--color-paper-white) " +
+    "hover:shadow-[0_0_0_1px_rgba(255,255,255,0.3)_inset] active:opacity-90",
 };
 
 const FILL_BASE =
@@ -82,17 +85,18 @@ const FILL_BASE =
   "group-hover:scale-x-100";
 
 const FILLS: Record<ButtonVariant, string> = {
-  primary: FILL_BASE + " bg-primary",
-  secondary: FILL_BASE + " bg-(--color-btn-fill-secondary)",
-  ghost: FILL_BASE + " bg-(--color-btn-fill-ghost)",
-  destructive: FILL_BASE + " bg-error",
+  primary: FILL_BASE + " bg-transparent",
+  secondary: FILL_BASE + " bg-(--color-pearl-mist)",
+  ghost: FILL_BASE + " bg-transparent",
+  destructive: FILL_BASE + " bg-transparent",
+  inverse: FILL_BASE + " bg-transparent",
 };
 
 const SIZES: Record<ButtonSize, string> = {
-  xs: "h-8  px-4   gap-1.5 text-(length:--text-xs)",
-  sm: "h-9  px-6   gap-2   text-(length:--text-xs)",
-  md: "h-10 px-6   gap-2   text-(length:--text-sm)",
-  lg: "h-12 px-8   gap-2.5 text-(length:--text-base)",
+  xs: "h-8 px-3 gap-1.5 text-(length:--text-caption)",
+  sm: "h-9 px-4 gap-2 text-(length:--text-body-sm)",
+  md: "h-11 px-5 gap-2 text-(length:--text-body-sm)",
+  lg: "h-12 px-5 gap-2.5 text-(length:--text-body)",
 };
 
 const DESTRUCTIVE_ICON_ONLY_SIZES: Record<ButtonSize, string> = {

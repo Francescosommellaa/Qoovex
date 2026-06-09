@@ -3,6 +3,9 @@
 ## Cosa e'
 Pattern per schermate autenticazione mobile-first.
 
+Il layout e light-first; eventuali pannelli scuri sono contesti locali e non
+dipendono da un provider di tema.
+
 ## Come e' composto
 - `Card`.
 - `Stack`.

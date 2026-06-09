@@ -1,34 +1,18 @@
 # Button
 
-## Cosa ?
-Componente condiviso del design system Qoovex.
+Gerarchie operative del Design System V2.
 
-## Come ? composto
-- Implementazione React pubblica tramite `Button.tsx`.
-- Tipi pubblici in `Button.types.ts`.
-- Varianti dichiarate in `Button.variants.ts`.
+## API
 
-## Props / API
-| Prop | Tipo | Default | Valori ammessi |
-|------|------|---------|----------------|
-| variant | string | dipende | valori esportati dai tipi del componente |
-| size | string | dipende | valori esportati dai tipi del componente |
+- `variant`: `primary | secondary | ghost | destructive | inverse`
+- `size`: `xs | sm | md | lg`
+- Supporta loading, icone, label swap e conferma a due click per azioni distruttive.
+- `inverse` si usa esclusivamente su superfici Obsidian o Violet.
 
-## Token usati
-- Spacing: solo `--spacing-*` o token componente dedicati.
-- Radius: solo `--radius-*` o token componente dedicati.
-- Colori: solo `--color-*` e token semantici del componente.
-
-## Regole ferree
-- Non usare `style` inline nei consumer.
-- Non creare copie locali del componente nelle app.
-- Non passare classi con valori visuali hardcoded.
-
-## Esempi
 ```tsx
-// Corretto
-<Button />
-
-// Sbagliato
-<div style={{ padding: "13px" }} />
+<Button variant="primary">Salva</Button>
+<Button variant="secondary">Annulla</Button>
+<Button variant="inverse">Inizia gratis</Button>
 ```
+
+Non creare varianti decorative locali e non usare colori hardcoded.

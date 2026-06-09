@@ -422,7 +422,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(function Modal
   }, [currentOpen, defaultSheetSnap]);
 
   React.useEffect(() => {
-    if (!currentOpen) {
+    if (!currentOpen || !present) {
       return undefined;
     }
 
@@ -440,7 +440,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(function Modal
       document.body.style.overflow = previousOverflow;
       document.body.style.paddingRight = previousPaddingRight;
     };
-  }, [currentOpen]);
+  }, [currentOpen, present]);
 
   React.useEffect(() => {
     if (!currentOpen || !dismissible || !closeOnEscape) {
@@ -460,7 +460,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(function Modal
   }, [closeOnEscape, currentOpen, dismissible, setCurrentOpen]);
 
   React.useEffect(() => {
-    if (!currentOpen) {
+    if (!currentOpen || !present) {
       return undefined;
     }
 
@@ -489,7 +489,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(function Modal
         returnTarget.focus({ preventScroll: true });
       }
     };
-  }, [currentOpen, finalFocusRef, initialFocusRef]);
+  }, [currentOpen, finalFocusRef, initialFocusRef, present]);
 
   function closeModal() {
     if (dismissible) {
@@ -653,6 +653,21 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(function Modal
               ref(node);
             } else if (ref) {
               ref.current = node;
+            }
+
+            if (node && currentOpen && !node.contains(document.activeElement)) {
+              previousActiveElementRef.current =
+                document.activeElement instanceof HTMLElement
+                  ? document.activeElement
+                  : null;
+
+              window.requestAnimationFrame(() => {
+                const initialTarget =
+                  initialFocusRef?.current ??
+                  getFocusableElements(node)[0] ??
+                  node;
+                initialTarget.focus({ preventScroll: true });
+              });
             }
           }}
           role={role}

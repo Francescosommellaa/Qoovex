@@ -829,6 +829,7 @@ export function RecipeEditorForm({
                         ref={imageInputRef}
                         type="file"
                         accept="image/jpeg,image/png,image/webp"
+                        aria-label="Seleziona immagine ricetta"
                         className="sr-only"
                         disabled={uploadingImage}
                         onChange={(event) => {

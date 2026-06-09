@@ -28,24 +28,28 @@ export const PageSection = React.forwardRef<HTMLElement, PageSectionProps>(
       <Box
         as="section"
         ref={ref}
-        className={cn("qv-page-section", paddingClass[spacing], className)}
+        className={cn(
+          "qv-page-section px-(--page-gutter)",
+          paddingClass[spacing],
+          className,
+        )}
         {...props}
       >
         <Stack gap="8" className={widthClass[width]}>
           {title || description || eyebrow ? (
             <Stack gap="3" className="max-w-(--measure-copy)">
               {eyebrow ? (
-                <Text as="p" size="xs" tone="primary" weight="semibold" family="mono">
+                <Text as="p" textStyle="eyebrow" tone="muted" weight="bold">
                   {eyebrow}
                 </Text>
               ) : null}
               {title ? (
-                <Text as="h2" family="display" size="xl" weight="semibold" leading="tight">
+                <Text as="h2" textStyle="display" weight="medium">
                   {title}
                 </Text>
               ) : null}
               {description ? (
-                <Text size="base" tone="muted" leading="relaxed">
+                <Text textStyle="body" tone="muted">
                   {description}
                 </Text>
               ) : null}
@@ -59,4 +63,3 @@ export const PageSection = React.forwardRef<HTMLElement, PageSectionProps>(
 );
 
 PageSection.displayName = "PageSection";
-

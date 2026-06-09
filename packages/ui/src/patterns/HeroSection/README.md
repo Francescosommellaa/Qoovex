@@ -9,6 +9,7 @@ Hero mobile-first per pagine pubbliche Qoovex.
 - `Button` per azioni.
 - Slot visuale opzionale.
 - Blocco proof opzionale con coppie valore/label.
+- Gradiente radiale atmosferico off-canvas, mai strutturale.
 
 ## Props / API
 | Prop | Tipo | Default | Valori ammessi |
@@ -22,7 +23,7 @@ Hero mobile-first per pagine pubbliche Qoovex.
 
 ## Token usati
 - Spacing: `--spacing-6`, `--spacing-12`, `--spacing-16`.
-- Typography: `--text-2xl`, `--text-base`, `--text-xs`.
+- Typography: ruoli `hero`, `body` e `caption`.
 - Container: `--container-wide`.
 
 ## Regole ferree

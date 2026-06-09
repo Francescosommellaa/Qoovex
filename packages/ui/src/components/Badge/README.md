@@ -1,34 +1,17 @@
 # Badge
 
-## Cosa ?
-Componente condiviso del design system Qoovex.
+Etichetta compatta per stato, categoria e annunci.
 
-## Come ? composto
-- Implementazione React pubblica tramite `Badge.tsx`.
-- Tipi pubblici in `Badge.types.ts`.
-- Varianti dichiarate in `Badge.variants.ts`.
+## API
 
-## Props / API
-| Prop | Tipo | Default | Valori ammessi |
-|------|------|---------|----------------|
-| variant | string | dipende | valori esportati dai tipi del componente |
-| size | string | dipende | valori esportati dai tipi del componente |
+- `variant`: `soft | outline | filled | announcement`
+- `tone`: `neutral | primary | success | warning | error`
+- `size`: `sm | md | lg`
 
-## Token usati
-- Spacing: solo `--spacing-*` o token componente dedicati.
-- Radius: solo `--radius-*` o token componente dedicati.
-- Colori: solo `--color-*` e token semantici del componente.
+`announcement` aggiunge il prefisso visivo `NEW` e va usato per novita brevi,
+non per stati operativi.
 
-## Regole ferree
-- Non usare `style` inline nei consumer.
-- Non creare copie locali del componente nelle app.
-- Non passare classi con valori visuali hardcoded.
-
-## Esempi
 ```tsx
-// Corretto
-<Badge />
-
-// Sbagliato
-<div style={{ padding: "13px" }} />
+<Badge variant="announcement">Nuovo sistema</Badge>
+<Badge variant="outline">Bozza</Badge>
 ```

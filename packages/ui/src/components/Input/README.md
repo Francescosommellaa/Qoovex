@@ -1,34 +1,17 @@
 # Input
 
-## Cosa ?
-Componente condiviso del design system Qoovex.
+Campo testuale accessibile con label, messaggi, stato e contesto di superficie.
 
-## Come ? composto
-- Implementazione React pubblica tramite `Input.tsx`.
-- Tipi pubblici in `Input.types.ts`.
-- Varianti dichiarate in `Input.variants.ts`.
+## API
 
-## Props / API
-| Prop | Tipo | Default | Valori ammessi |
-|------|------|---------|----------------|
-| variant | string | dipende | valori esportati dai tipi del componente |
-| size | string | dipende | valori esportati dai tipi del componente |
+- `status`: `default | error | success`
+- `surface`: `light | dark`
+- Supporta label visibile o screen-reader-only, helper, prefissi, suffissi e
+  toggle password.
 
-## Token usati
-- Spacing: solo `--spacing-*` o token componente dedicati.
-- Radius: solo `--radius-*` o token componente dedicati.
-- Colori: solo `--color-*` e token semantici del componente.
-
-## Regole ferree
-- Non usare `style` inline nei consumer.
-- Non creare copie locali del componente nelle app.
-- Non passare classi con valori visuali hardcoded.
-
-## Esempi
 ```tsx
-// Corretto
-<Input />
-
-// Sbagliato
-<div style={{ padding: "13px" }} />
+<Input label="Titolo ricetta" />
+<Input label="Cerca" surface="dark" />
 ```
+
+`surface="dark"` si usa solo dentro superfici Obsidian o Violet.

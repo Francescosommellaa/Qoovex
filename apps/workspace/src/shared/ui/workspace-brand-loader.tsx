@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import * as React from "react";
-import { cn, useTheme } from "@qoovex/ui";
+import { QoovexMark } from "@qoovex/brand/qoovex-mark";
+import { cn } from "@qoovex/ui";
 import styles from "./workspace-brand-loader.module.css";
 
 export interface WorkspaceBrandLoaderProps {
@@ -16,13 +16,8 @@ export function WorkspaceBrandLoader({
   delayedMs = 0,
   label = "Prepariamo il tuo workspace...",
 }: WorkspaceBrandLoaderProps) {
-  const { theme } = useTheme();
   const [visible, setVisible] = React.useState(delayedMs <= 0);
   const isVisible = delayedMs <= 0 || visible;
-  const logoSrc =
-    theme === "white"
-      ? "/logo-icon/qoovex-icona-nera-no-sfondo.svg"
-      : "/logo-icon/qoovex-icona-bianca-no-sfondo.svg";
 
   React.useEffect(() => {
     if (delayedMs <= 0) return;
@@ -43,13 +38,7 @@ export function WorkspaceBrandLoader({
       <div className={styles.inner}>
         <span className={styles.logoWrap} aria-hidden="true">
           <span className={styles.ring} />
-          <Image
-            src={logoSrc}
-            alt=""
-            width={48}
-            height={48}
-            className={styles.logo}
-          />
+          <QoovexMark width={48} height={48} className={styles.logo} />
         </span>
         <span className={styles.progress} aria-hidden="true" />
         {label ? <span className={styles.label}>{label}</span> : null}

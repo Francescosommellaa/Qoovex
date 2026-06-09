@@ -19,11 +19,6 @@
   "exports": {
     "./styles/tokens": "./styles/tokens.css",
     "./styles/base": "./styles/base.css",
-    "./styles/themes": {
-      "types": "./dist/styles/themes/index.d.ts",
-      "import": "./dist/styles/themes/index.js",
-      "default": "./dist/styles/themes/index.js"
-    },
     "./config/variants": {
       "types": "./dist/config/variants.d.ts",
       "import": "./dist/config/variants.js",

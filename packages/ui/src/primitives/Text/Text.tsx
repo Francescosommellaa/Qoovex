@@ -6,6 +6,7 @@ import type { TextProps } from "./Text.types";
 export const Text = React.forwardRef<HTMLElement, TextProps>(function Text(
   {
     as: Component = "p",
+    textStyle,
     size,
     tone,
     family,
@@ -21,7 +22,10 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(function Text(
   return (
     <Element
       ref={ref as never}
-      className={cn(qvTextVariants({ size, tone, family, weight, leading }), className)}
+      className={cn(
+        qvTextVariants({ role: textStyle, size, tone, family, weight, leading }),
+        className,
+      )}
       {...props}
     />
   );

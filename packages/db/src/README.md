@@ -12,3 +12,4 @@ Non mettere qui:
 Regole:
 - entrypoint minimo e leggibile;
 - separa bootstrap client da eventuali helper futuri.
+- normalizza gli SSL mode PostgreSQL legacy a `verify-full` prima di inizializzare Prisma.

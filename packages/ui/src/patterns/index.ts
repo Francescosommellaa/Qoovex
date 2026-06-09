@@ -6,14 +6,6 @@ export { EmptyState } from "./EmptyState";
 export type { EmptyStateProps } from "./EmptyState";
 export { FeatureShowcase } from "./FeatureShowcase";
 export type { FeatureShowcaseItem, FeatureShowcaseProps } from "./FeatureShowcase";
-export { GrainTexture } from "./GrainTexture";
-export type {
-  GrainTextureGrain,
-  GrainTextureIntensity,
-  GrainTextureProps,
-  GrainTextureShape,
-  GrainTextureTone,
-} from "./GrainTexture";
 export { HeroSection } from "./HeroSection";
 export type { HeroAction, HeroSectionProps } from "./HeroSection";
 export { LoadingState } from "./LoadingState";

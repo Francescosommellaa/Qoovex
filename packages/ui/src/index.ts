@@ -9,6 +9,7 @@ export type {
   QvRadius,
   QvSpacing,
   QvSurface,
+  QvTextRole,
   QvTextSize,
   QvTextVariantProps,
   QvTone,
@@ -18,9 +19,9 @@ export {
   qvRadius,
   qvSpacing,
   qvSurface,
+  qvTextRole,
   qvTextSize,
   qvTextVariants,
   qvTone,
 } from "../config/variants";
-export * from "../styles/themes";
 export * from "../styles/tokens";

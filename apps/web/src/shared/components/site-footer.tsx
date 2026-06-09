@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { QoovexMark } from "@qoovex/brand/qoovex-mark";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { Button, Card, CardBody, Divider, Icon, Stack, Text } from "@qoovex/ui";
 import { workspaceSignUpHref } from "@/shared/workspace-url";
@@ -43,20 +43,15 @@ const footerGroups = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-(--spacing-16) pb-(--spacing-6)">
-      <Card variant="surface" tone="neutral" padding="none" className="w-full">
+    <footer className="mx-auto mt-(--spacing-16) w-full max-w-(--container-wide) px-(--page-gutter) pb-(--spacing-6)">
+      <Card variant="cream" tone="neutral" padding="none" className="w-full">
         <CardBody padding="lg">
           <Stack gap="10">
             <div className="grid grid-cols-2 gap-(--spacing-8) sm:grid-cols-3 md:grid-cols-[1fr_auto_auto_auto_auto]">
               <div className="col-span-2 sm:col-span-3 md:col-span-1">
                 <Stack gap="5" className="max-w-(--qv-footer-brand-max)">
                   <Link href="/" className="inline-flex items-center gap-(--spacing-2) no-underline">
-                    <Image
-                      src="/logo-icon/qoovex-icona-bianca-no-sfondo.svg"
-                      alt="Qoovex"
-                      width={26}
-                      height={26}
-                    />
+                    <QoovexMark width={26} height={26} />
                     <Text as="span" family="display" size="lg" weight="semibold">
                       Qoovex
                     </Text>

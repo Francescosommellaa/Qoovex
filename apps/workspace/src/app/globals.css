@@ -1,4 +1,4 @@
-@import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=cabinet-grotesk@400,500,600,700&display=swap");
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap");
 @import "@qoovex/ui/styles/tokens";
 @import "@qoovex/ui/styles/base";
 @import "tailwindcss";
@@ -7,7 +7,7 @@
 @source "../../../../packages/ui/config";
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html[data-qv-text-scale="large"] {
@@ -18,18 +18,11 @@ html[data-qv-text-scale="xlarge"] {
   font-size: 112.5%;
 }
 
-html[data-qv-contrast="more"][data-theme="dark"] {
+html[data-qv-contrast="more"] {
   --color-border: oklch(from var(--color-text) l c h / 0.16);
   --color-divider: oklch(from var(--color-text) l c h / 0.12);
   --color-text-muted: oklch(from var(--color-text) l c h / 0.82);
   --color-text-faint: oklch(from var(--color-text) l c h / 0.68);
-}
-
-html[data-qv-contrast="more"][data-theme="white"] {
-  --color-border: oklch(from var(--color-text) l c h / 0.18);
-  --color-divider: oklch(from var(--color-text) l c h / 0.14);
-  --color-text-muted: oklch(from var(--color-text) l c h / 0.82);
-  --color-text-faint: oklch(from var(--color-text) l c h / 0.66);
 }
 
 * {

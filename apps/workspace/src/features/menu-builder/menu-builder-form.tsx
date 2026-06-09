@@ -2,10 +2,13 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash } from "@phosphor-icons/react";
+import { BookOpen, Plus, Trash } from "@phosphor-icons/react";
 import {
   Button,
+  Card,
+  CardBody,
   Checkbox,
+  EmptyState,
   Form,
   FormActions,
   Input,
@@ -49,7 +52,7 @@ function getInitialInput(
       title: "",
       description: "",
       isPublic: false,
-      items: [createEmptyItem(recipes)],
+      items: recipes.length > 0 ? [createEmptyItem(recipes)] : [],
     };
   }
 
@@ -189,79 +192,113 @@ export function MenuBuilderForm({
       noValidate
       onSubmit={handleSubmit}
     >
-      <div className="grid gap-(--spacing-4) lg:grid-cols-[minmax(0,1fr)_18rem]">
-        <Stack gap="4">
-          <Input
-            label="Titolo menu"
-            value={input.title}
-            placeholder="Carta degustazione primavera"
-            onChange={(event) => updateInput({ title: event.target.value })}
-          />
-          <Textarea
-            label="Descrizione"
-            value={input.description}
-            placeholder="Note per sala, servizio e preview digitale"
-            maxLength={220}
-            showCount
-            onChange={(event) =>
-              updateInput({ description: event.target.value })
-            }
-          />
-        </Stack>
-        <Stack gap="4">
-          <Checkbox
-            label="Pubblica menu"
-            description="Il menu sara consultabile nella sezione Esplora."
-            checked={input.isPublic}
-            onCheckedChange={(checked) => updateInput({ isPublic: checked })}
-          />
-          {noRecipes ? (
-            <Text size="sm" tone="muted">
-              Crea almeno una ricetta prima di comporre un menu.
-            </Text>
-          ) : null}
-        </Stack>
-      </div>
+      <Stack gap="4">
+        <Input
+          label="Titolo menu"
+          value={input.title}
+          placeholder="Carta degustazione primavera"
+          onChange={(event) => updateInput({ title: event.target.value })}
+        />
+        <Textarea
+          label="Descrizione"
+          value={input.description}
+          placeholder="Note per sala, servizio e preview digitale"
+          maxLength={220}
+          showCount
+          onChange={(event) =>
+            updateInput({ description: event.target.value })
+          }
+        />
+      </Stack>
 
       <Stack gap="4">
-        <div className="flex items-center justify-between gap-(--spacing-3)">
-          <div>
-            <Text as="h3" size="lg" weight="semibold">
-              Composizione
-            </Text>
-            <Text size="sm" tone="muted">
-              Ogni voce mantiene la ricetta di origine e ordine di servizio.
-            </Text>
-          </div>
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            iconLeft={<Plus size={14} />}
-            disabled={noRecipes}
-            onClick={() =>
-              setInput((current) => ({
-                ...current,
-                items: [...current.items, createEmptyItem(recipes)],
-              }))
-            }
-          >
-            Voce menu
-          </Button>
+        <div>
+          <Text as="h3" size="lg" weight="semibold">
+            Composizione
+          </Text>
+          <Text size="sm" tone="muted">
+            Aggiungi le ricette nell&apos;ordine in cui verranno servite.
+          </Text>
         </div>
 
-        {input.items.map((item, index) => (
-          <MenuItemRow
-            key={index}
-            item={item}
-            index={index}
-            recipes={recipes}
-            canRemove={input.items.length > 1}
-            onChange={updateItem}
-            onRemove={removeItem}
+        {noRecipes ? (
+          <EmptyState
+            icon={
+              <BookOpen
+                size={28}
+                className="text-(--color-text-muted)"
+                aria-hidden
+              />
+            }
+            title="Ti serve almeno una ricetta"
+            description="Esplora le ricette disponibili oppure creane una nuova per iniziare a comporre il menu."
+            action={
+              <div className="flex flex-wrap justify-center gap-(--spacing-2)">
+                <Button as="a" href="/explore" variant="secondary" size="md">
+                  Esplora ricette
+                </Button>
+                <Button as="a" href="/recipes/new" variant="primary" size="md">
+                  Crea nuova ricetta
+                </Button>
+              </div>
+            }
           />
-        ))}
+        ) : (
+          <>
+            {input.items.map((item, index) => (
+              <MenuItemRow
+                key={index}
+                item={item}
+                index={index}
+                recipes={recipes}
+                canRemove={input.items.length > 1}
+                onChange={updateItem}
+                onRemove={removeItem}
+              />
+            ))}
+            <Button
+              type="button"
+              variant="secondary"
+              size="md"
+              iconLeft={<Plus size={16} />}
+              className="qv-motion-interactive w-full justify-center border-dashed"
+              onClick={() =>
+                setInput((current) => ({
+                  ...current,
+                  items: [...current.items, createEmptyItem(recipes)],
+                }))
+              }
+            >
+              Aggiungi ricetta
+            </Button>
+          </>
+        )}
       </Stack>
+
+      <Card variant="panel" padding="md">
+        <CardBody>
+          <div className="flex flex-col gap-(--spacing-4) sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <Text as="h3" size="lg" weight="semibold">
+                Visibilità
+              </Text>
+              <Text size="sm" tone="muted">
+                Scegli se mostrare il menu nella sezione Esplora.
+              </Text>
+            </div>
+            <Checkbox
+              label="Menu pubblico"
+              description={
+                input.isPublic
+                  ? "Sarà visibile in Esplora dopo il salvataggio."
+                  : "Rimarrà visibile solo nel tuo workspace."
+              }
+              checked={input.isPublic}
+              onCheckedChange={(checked) => updateInput({ isPublic: checked })}
+            />
+          </div>
+        </CardBody>
+      </Card>
 
       <FormActions align="end">
         <Button

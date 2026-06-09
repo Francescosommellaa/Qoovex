@@ -24,7 +24,7 @@ export function WorkspaceShell({
       <WorkspaceRoutePrefetcher />
       <WorkspaceInstantNavigation />
       <div className="flex h-dvh min-h-dvh overflow-hidden bg-(--color-bg) text-(--color-text)">
-        <aside className="hidden w-[17.5rem] shrink-0 border-r border-(--color-border) bg-(--color-surface)/94 lg:flex">
+        <aside className="hidden w-[17.5rem] shrink-0 border-r border-(--color-divider) bg-(--surface-cream) lg:flex">
           <WorkspaceSidebar user={user} />
         </aside>
 

@@ -1,50 +1,23 @@
 # Card
 
-## Cosa è
-Surface riutilizzabile per panel, bento, preview, slot media e gruppi di contenuto.
+Superficie strutturale piatta per contenuti, form, liste e composizioni.
 
-## Come è composto
-- `Card` come contenitore principale.
-- `CardHeader`, `CardBody`, `CardFooter` per slot strutturali.
-- `CardMedia` per immagini o preview con ratio controllato.
-- Varianti e token definiti nel package UI.
+## API
 
-## Props / API
-| Prop | Tipo | Default | Valori ammessi |
-|------|------|---------|----------------|
-| variant | string | "surface" | "surface" \| "panel" \| "bento" \| "quiet" |
-| tone | string | "neutral" | "neutral" \| "primary" \| "success" \| "warning" \| "error" |
-| padding | string | "md" | "none" \| "sm" \| "md" \| "lg" |
-| span | string | "auto" | "auto" \| "wide" \| "tall" \| "featured" |
-| overflow | string | "hidden" | "hidden" \| "visible" |
-| interactive | boolean | false | true \| false |
+- `variant`: `paper | cream | pastel | obsidian | violet`
+- `tone`: `neutral | primary | success | warning | error`
+- `padding`: `none | sm | md | lg`
+- `span`: `auto | wide | tall | featured`
+- `overflow`: `hidden | visible`
+- `interactive`: abilita il comportamento interattivo tokenizzato.
 
-## Token usati
-- Spacing: `--card-padding-*`, `--card-gap`, `--spacing-*` per span composti.
-- Radius: `--card-radius-surface`, `--card-radius-bento`.
-- Colori: `--card-bg-*`, `--card-border-*`, `--card-tone-*`.
-- Effects: `--shadow-card-*`.
+Le varianti legacy `surface`, `panel`, `bento` e `quiet` restano temporaneamente
+come alias di migrazione e non vanno usate nel nuovo codice.
 
-## Regole ferree
-- Non usare `style` inline nei consumer.
-- Non creare copie locali del componente nelle app.
-- Usa `overflow="visible"` solo quando il contenuto ufficiale del DS deve uscire dal frame, per esempio dropdown o popover in preview.
-- Non passare classi con valori visuali hardcoded.
-
-## Esempi
 ```tsx
-// Corretto
-<Card variant="panel" padding="lg">
-  <CardBody>Contenuto</CardBody>
+<Card variant="cream" padding="lg">
+  <CardBody>Contenuto operativo</CardBody>
 </Card>
-
-// Corretto per preview con dropdown
-<Card overflow="visible">
-  <CardBody>
-    <Select options={options} />
-  </CardBody>
-</Card>
-
-// Sbagliato
-<div style={{ padding: "13px" }} />
 ```
+
+Obsidian e Violet sono contesti locali intenzionali, non temi globali.

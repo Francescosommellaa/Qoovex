@@ -1,15 +1,14 @@
 "use client";
 
-import Image from "next/image";
 import { ArrowLeft } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
+import { QoovexMark } from "@qoovex/brand/qoovex-mark";
 import {
   AuthShell as DsAuthShell,
   Box,
   Button,
   Icon,
   Text,
-  useTheme,
 } from "@qoovex/ui";
 import type { AuthShellSteps } from "@qoovex/ui";
 
@@ -63,38 +62,22 @@ function getPreviewSteps(steps?: AuthShellSteps) {
 
 function AuthPreviewPanel({
   steps,
-  theme,
 }: {
   steps?: AuthShellSteps;
-  theme: "dark" | "white";
 }) {
   const previewSteps = getPreviewSteps(steps);
-  const isLight = theme === "white";
 
   return (
     <div
       className={
         previewSteps.length
-          ? `auth-preview-panel${isLight ? " auth-preview-panel--light" : ""}`
-          : `auth-preview-panel auth-preview-panel--compact${
-              isLight ? " auth-preview-panel--light" : ""
-            }`
+          ? "auth-preview-panel auth-preview-panel--light"
+          : "auth-preview-panel auth-preview-panel--compact auth-preview-panel--light"
       }
     >
       <div className="auth-preview-content">
         <div className="auth-preview-brand">
-          <Image
-            src={
-              isLight
-                ? "/logo-icon/qoovex-icona-nera-no-sfondo.svg"
-                : "/logo-icon/qoovex-icona-bianca-no-sfondo.svg"
-            }
-            alt=""
-            width={18}
-            height={18}
-            aria-hidden="true"
-            className="auth-preview-logo"
-          />
+          <QoovexMark width={18} height={18} className="auth-preview-logo" />
           <span>Qoovex</span>
         </div>
         <div className="auth-preview-copy">
@@ -139,28 +122,15 @@ export function AuthShell({
   onBack,
   children,
 }: AuthShellProps) {
-  const { theme } = useTheme();
-  const logoSrc =
-    theme === "white"
-      ? "/logo-icon/qoovex-icona-nera-no-sfondo.svg"
-      : "/logo-icon/qoovex-icona-bianca-no-sfondo.svg";
-
   return (
     <DsAuthShell
       variant="split-open"
       title={title}
       subtitle={subtitle}
       steps={steps}
-      aside={<AuthPreviewPanel steps={steps} theme={theme} />}
+      aside={<AuthPreviewPanel steps={steps} />}
       logo={
-        <Image
-          src={logoSrc}
-          alt="Qoovex"
-          width={40}
-          height={40}
-          className="auth-logo"
-          priority
-        />
+        <QoovexMark width={40} height={40} className="auth-logo" />
       }
       backAction={
         onBack ? (

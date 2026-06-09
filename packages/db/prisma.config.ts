@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
+import { normalizeDatabaseConnectionString } from "./src/connection-string";
 
 const FALLBACK_GENERATE_DATABASE_URL =
   "postgresql://qoovex:qoovex@localhost:5432/qoovex?schema=public";
@@ -16,6 +17,6 @@ function getPrismaConfigDatabaseUrl() {
 export default defineConfig({
   schema: "./prisma/schema.prisma",
   datasource: {
-    url: getPrismaConfigDatabaseUrl(),
+    url: normalizeDatabaseConnectionString(getPrismaConfigDatabaseUrl()),
   },
 });

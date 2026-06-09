@@ -13,6 +13,8 @@
     "check:audit": "pnpm audit --prod",
     "check:fast": "pnpm check:repo && pnpm lint && pnpm type-check",
     "check:ci": "pnpm check",
+    "test:e2e": "playwright test",
+    "test:e2e:update": "playwright test --update-snapshots",
     "db:generate": "turbo run db:generate --filter=@qoovex/db",
     "db:push": "turbo run db:push --filter=@qoovex/db",
     "db:migrate": "turbo run db:migrate --filter=@qoovex/db",
@@ -20,6 +22,8 @@
     "db:workspace": "turbo run db:workspace --filter=@qoovex/db"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@playwright/test": "^1.57.0",
     "chrome-launcher": "^1.2.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "lighthouse": "^13.3.0",

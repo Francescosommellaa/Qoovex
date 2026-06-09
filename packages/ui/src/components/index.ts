@@ -65,7 +65,7 @@ export type {
   FormVariant,
 } from "./Form";
 export { Input } from "./Input";
-export type { InputProps, InputStatus } from "./Input";
+export type { InputProps, InputStatus, InputSurface } from "./Input";
 export {
   Modal,
   ModalBody,
@@ -127,12 +127,6 @@ export type {
 } from "./SmartSearchBar";
 export { Textarea } from "./Textarea";
 export type { TextareaProps, TextareaStatus, TextareaVariant } from "./Textarea";
-export { ThemeProvider, ThemeToggle, useTheme } from "./ThemeProvider";
-export type {
-  ThemeContextValue,
-  ThemeProviderProps,
-  ThemeToggleProps,
-} from "./ThemeProvider";
 export { Toast, ToastProvider, useToast } from "./Toast";
 export type {
   ToastApi,

@@ -1,6 +1,7 @@
 import Image from "next/image";
-import { Button, Icon, Stack, Text } from "@qoovex/ui";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import heroIllustration from "@qoovex/brand/illustrations/kitchen-service-line.png";
+import { Badge, Button, Stack, Text } from "@qoovex/ui";
+import { HeroEmailCapture } from "../_components/index";
 import { homeHero } from "../content/index";
 
 const reviewPhotos = [
@@ -11,73 +12,43 @@ const reviewPhotos = [
 
 export function HomeHeroSection() {
   return (
-    <section className="relative min-w-0 overflow-hidden pb-(--spacing-4) pt-(--spacing-24) md:pb-(--spacing-6) md:pt-(--spacing-32)">
-      {/* Atmospheric radial glow — Linear-style background depth */}
+    <section className="relative min-w-0 overflow-hidden pb-(--spacing-16) pt-(--spacing-24) md:pb-(--spacing-20) md:pt-(--spacing-32)">
       <div
         className="pointer-events-none absolute inset-0 -z-10"
         aria-hidden="true"
-      >
-        <div
-          className="absolute left-1/2 top-0 h-[40rem] w-[70rem] -translate-x-1/2 -translate-y-1/4 rounded-full"
-          style={{
-            background: "var(--qv-marketing-radial-hero)",
-            filter: "blur(var(--qv-marketing-blur-hero))",
-          }}
-        />
-      </div>
+        style={{ background: "var(--qv-marketing-radial-hero)" }}
+      />
 
-      <Stack
-        gap="8"
-        align="start"
-        className="w-full max-w-(--qv-marketing-hero-inner-max)"
-      >
-        <Stack gap="5">
-          <Text
-            as="h1"
-            family="display"
-            size="xl"
-            weight="semibold"
-            leading="tight"
-            className="break-words text-wrap text-(length:--qv-marketing-hero-title-size)"
-          >
+      <div className="mx-auto grid w-full max-w-(--container-wide) items-center gap-(--spacing-12) px-(--page-gutter) lg:grid-cols-[minmax(0,1.05fr)_minmax(24rem,0.95fr)]">
+        <Stack gap="8" align="start">
+          <Badge variant="announcement" tone="neutral" size="sm">
+            Il workspace operativo per la cucina
+          </Badge>
+
+          <Stack gap="5" className="max-w-(--qv-marketing-hero-inner-max)">
+          <Text as="h1" textStyle="hero" weight="medium" className="break-words text-wrap">
             {homeHero.title}{" "}
-            <Text
-              as="span"
-              family="display"
-              size="xl"
-              tone="muted"
-              weight="semibold"
-              leading="tight"
-              className="text-(length:--qv-marketing-hero-title-size)"
-            >
+            <Text as="span" textStyle="hero" tone="muted" weight="medium">
               {homeHero.highlight}
             </Text>
           </Text>
-          <Text size="base" tone="muted" leading="relaxed" className="max-w-(--measure-copy)">
+          <Text textStyle="subheading" tone="muted" className="max-w-(--measure-copy)">
             {homeHero.description}
           </Text>
-        </Stack>
+          </Stack>
 
-        <Stack direction="row" gap="3" wrap>
-          <Button
-            as="a"
-            href={homeHero.primaryAction.href}
-            size="lg"
-            iconRight={<Icon icon={ArrowRight} size="sm" weight="bold" />}
-          >
-            {homeHero.primaryAction.label}
-          </Button>
+          <HeroEmailCapture />
+
           <Button
             as="a"
             href={homeHero.secondaryAction.href}
-            size="lg"
+            size="sm"
             variant="ghost"
           >
             {homeHero.secondaryAction.label}
           </Button>
-        </Stack>
 
-        <div className="flex max-w-(--measure-copy) items-center gap-(--spacing-3)">
+          <div className="flex max-w-(--measure-copy) items-center gap-(--spacing-3)">
           <div className="flex shrink-0 -space-x-2" aria-hidden="true">
             {reviewPhotos.map((src, index) => (
               <Image
@@ -91,11 +62,23 @@ export function HomeHeroSection() {
               />
             ))}
           </div>
-          <Text size="xs" tone="faint" leading="snug">
-            Oltre 100 chef e brigate risparmiano già più di 2 ore al giorno grazie a Qoovex.
+          <Text textStyle="caption" tone="muted">
+            Oltre 100 chef e brigate risparmiano gia piu di 2 ore al giorno con Qoovex.
           </Text>
+          </div>
+        </Stack>
+
+        <div className="relative hidden min-h-[30rem] lg:block">
+          <Image
+            src={heroIllustration}
+            alt="Chef professionista che coordina il servizio con una checklist"
+            fill
+            priority
+            sizes="(min-width: 1024px) 46vw, 0px"
+            className="object-contain object-right"
+          />
         </div>
-      </Stack>
+      </div>
     </section>
   );
 }

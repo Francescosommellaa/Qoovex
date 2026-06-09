@@ -1,4 +1,4 @@
-@import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=cabinet-grotesk@400,500,600,700&display=swap");
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap");
 @import "@qoovex/ui/styles/tokens";
 @import "@qoovex/ui/styles/base";
 @import "tailwindcss";
@@ -25,20 +25,10 @@
       0 0 0 1px var(--card-accent-border);
 
     /* Marketing home — radial glow, layout, screenshot chrome (token centralizzati) */
-    --qv-marketing-radial-hero: radial-gradient(
-      ellipse at 50% 30%,
-      oklch(0.32 0.04 240 / 0.18) 0%,
-      oklch(0.18 0.02 240 / 0.08) 45%,
-      transparent 70%
-    );
-    --qv-marketing-radial-cta: radial-gradient(
-      ellipse at 50% 50%,
-      oklch(0.32 0.04 240 / 0.16) 0%,
-      oklch(0.18 0.02 240 / 0.06) 50%,
-      transparent 75%
-    );
-    --qv-marketing-blur-hero: 48px;
-    --qv-marketing-blur-cta: 56px;
+    --qv-marketing-radial-hero: var(--gradient-warm);
+    --qv-marketing-radial-cta: var(--gradient-cool);
+    --qv-marketing-blur-hero: 0;
+    --qv-marketing-blur-cta: 0;
     --qv-marketing-hero-inner-max: min(100%, 58rem);
     --qv-marketing-section-intro-max: 44rem;
     --qv-marketing-screenshot-max: min(100%, var(--container-wide));
@@ -53,26 +43,10 @@
       oklch(1 0 0 / 0.12),
       transparent
     );
-    --qv-marketing-hero-title-size: clamp(2.125rem, 1.25rem + 3.2vw, 4.5rem);
-    --qv-marketing-cta-title-size: clamp(2rem, 1.1rem + 2.8vw, 3.5rem);
+    --qv-marketing-hero-title-size: var(--text-hero);
+    --qv-marketing-cta-title-size: var(--text-display);
     --qv-social-proof-stat-label-max: 14rem;
     --qv-footer-brand-max: 18rem;
-  }
-
-  [data-theme="white"] {
-    --shadow-md:
-      0 1px 2px oklch(0.16 0.01 248 / 0.05),
-      0 8px 20px oklch(0.16 0.01 248 / 0.08);
-    --shadow-lg:
-      0 1px 3px oklch(0.16 0.01 248 / 0.06),
-      0 14px 36px oklch(0.16 0.01 248 / 0.1);
-    --shadow-card-bento:
-      0 1px 2px oklch(0.16 0.01 248 / 0.06),
-      0 10px 28px oklch(0.16 0.01 248 / 0.08);
-    --shadow-card-interactive-hover:
-      0 1px 2px oklch(0.16 0.01 248 / 0.06),
-      0 8px 24px oklch(0.16 0.01 248 / 0.08),
-      0 0 0 1px var(--card-accent-border);
   }
 
   ::selection {
@@ -85,6 +59,6 @@
   }
 
   .qv-card--bento {
-    background: var(--color-surface);
+    background: var(--surface-pastel);
   }
 }

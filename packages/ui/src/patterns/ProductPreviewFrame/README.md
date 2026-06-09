@@ -3,6 +3,8 @@
 ## Cosa è
 Pattern per mostrare una preview compatta del workspace Qoovex.
 
+La preview usa Paper, Cream, Ink e bordi piatti del Design System V2.
+
 ## Come è composto
 - `Box`, `Stack`, `Text`, `Icon`.
 - `Badge` e `Skeleton`.
@@ -28,4 +30,3 @@ Pattern per mostrare una preview compatta del workspace Qoovex.
 // Sbagliato
 <div style={{ width: 460 }} />
 ```
-

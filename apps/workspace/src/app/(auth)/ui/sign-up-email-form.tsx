@@ -28,7 +28,9 @@ export function SignUpEmailForm({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const [email, setEmail] = React.useState("");
+  const [email, setEmail] = React.useState(
+    () => searchParams.get("email")?.trim().toLowerCase() ?? "",
+  );
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
   const isBusy = isSubmitting || isGoogleLoading;

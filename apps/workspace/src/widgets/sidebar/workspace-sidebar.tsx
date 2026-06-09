@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { signOut } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { QoovexMark } from "@qoovex/brand/qoovex-mark";
 import {
   BookOpen,
   CaretDown,
@@ -14,9 +14,7 @@ import {
   GearSix,
   ListChecks,
   MagnifyingGlass,
-  Moon,
   SignOut,
-  Sun,
   type IconProps as PhosphorIconProps,
 } from "@phosphor-icons/react";
 import {
@@ -28,7 +26,6 @@ import {
   Text,
   Toggle,
   cn,
-  useTheme,
 } from "@qoovex/ui";
 import { useDisplayPreferences, type WorkspaceTextScale } from "@shared/ui";
 import type { WorkspaceUserSummary } from "@widgets/workspace-shell";
@@ -209,27 +206,6 @@ function AccessibilityControls() {
   );
 }
 
-function ThemeSwitch() {
-  const { theme, setTheme } = useTheme();
-  const isWhite = theme === "white";
-
-  return (
-    <div className="flex h-10 items-center justify-between gap-(--spacing-3) rounded-(--radius-lg) border border-(--color-border) bg-(--color-surface) px-(--spacing-3) transition-[background,border-color] duration-[var(--duration-base)] ease-[var(--ease-qoovex)] hover:border-(--color-primary)/40 hover:bg-(--color-surface-offset)">
-      <Text size="xs" tone="muted" weight="medium">
-        Tema
-      </Text>
-      <Toggle
-        checked={isWhite}
-        onCheckedChange={(checked) => setTheme(checked ? "white" : "dark")}
-        size="sm"
-        iconChecked={<Sun size={10} weight="bold" />}
-        iconUnchecked={<Moon size={10} weight="bold" />}
-        aria-label={isWhite ? "Attiva tema scuro" : "Attiva tema chiaro"}
-      />
-    </div>
-  );
-}
-
 function UserMenu({
   user,
   onNavigate,
@@ -344,8 +320,6 @@ function UserMenu({
             </Badge>
           </div>
 
-          <ThemeSwitch />
-
           <AccessibilityControls />
 
           <div className="grid gap-(--spacing-2) border-t border-(--color-divider) pt-(--spacing-3)">
@@ -387,12 +361,6 @@ export function WorkspaceSidebar({
   variant = "desktop",
   onNavigate,
 }: WorkspaceSidebarProps) {
-  const { theme } = useTheme();
-  const logoSrc =
-    theme === "white"
-      ? "/logo-icon/qoovex-icona-nera-no-sfondo.svg"
-      : "/logo-icon/qoovex-icona-bianca-no-sfondo.svg";
-
   return (
     <div
       className={cn(
@@ -403,13 +371,7 @@ export function WorkspaceSidebar({
       )}
     >
       <div className="flex items-center gap-(--spacing-3)">
-        <Image
-          src={logoSrc}
-          alt=""
-          width={28}
-          height={28}
-          className="size-7 shrink-0"
-        />
+        <QoovexMark width={28} height={28} className="size-7 shrink-0" />
         <Text size="sm" weight="semibold" className="min-w-0 truncate">
           Qoovex
         </Text>

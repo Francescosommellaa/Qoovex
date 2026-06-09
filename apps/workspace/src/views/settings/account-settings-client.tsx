@@ -813,6 +813,7 @@ export function AccountSettingsClient({
                     ref={avatarInputRef}
                     type="file"
                     accept="image/*"
+                    aria-label="Seleziona immagine profilo"
                     className="sr-only"
                     onChange={handleAvatarChange}
                   />
