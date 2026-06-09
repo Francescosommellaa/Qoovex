@@ -1,34 +1,11 @@
 # Divider
 
-## Cosa ?
-Componente condiviso del design system Qoovex.
+Separatore orizzontale o verticale condiviso.
 
-## Come ? composto
-- Implementazione React pubblica tramite `Divider.tsx`.
-- Tipi pubblici in `Divider.types.ts`.
-- Varianti dichiarate in `Divider.variants.ts`.
-
-## Props / API
-| Prop | Tipo | Default | Valori ammessi |
-|------|------|---------|----------------|
-| variant | string | dipende | valori esportati dai tipi del componente |
-| size | string | dipende | valori esportati dai tipi del componente |
-
-## Token usati
-- Spacing: solo `--spacing-*` o token componente dedicati.
-- Radius: solo `--radius-*` o token componente dedicati.
-- Colori: solo `--color-*` e token semantici del componente.
-
-## Regole ferree
-- Non usare `style` inline nei consumer.
-- Non creare copie locali del componente nelle app.
-- Non passare classi con valori visuali hardcoded.
-
-## Esempi
-```tsx
-// Corretto
-<Divider />
-
-// Sbagliato
-<div style={{ padding: "13px" }} />
-```
+- `variant`: `solid | strong`
+- `tone`: `neutral | primary | success | warning | error`
+- `spacing`: `none | sm | md | lg`
+- Il tono neutral usa Ink al 5%, coerente con menu, form e pannelli.
+- Le label restano sentence case, peso 500 e tracking compatto.
+- Con contenuto espone `role="separator"`; senza contenuto è decorativo per
+  default.

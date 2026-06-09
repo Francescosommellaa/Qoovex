@@ -11,7 +11,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { QoovexMark } from "@qoovex/brand/qoovex-mark";
 import { CaretDown, List, X } from "@phosphor-icons/react";
-import { Button, Icon } from "@qoovex/ui";
+import { Button, Icon, cn } from "@qoovex/ui";
 import { workspaceSignInHref, workspaceSignUpHref } from "@/shared/workspace-url";
 import styles from "./site-topbar.module.css";
 
@@ -126,6 +126,48 @@ const focusableSelector = [
   "[tabindex]:not([tabindex='-1'])",
 ].join(",");
 
+function colorToneFromCss(value: string): NavTone | null {
+  const channels = value.match(/[\d.]+/g)?.map(Number);
+  if (!channels || channels.length < 3) return null;
+
+  const [red, green, blue, alpha = 1] = channels;
+  if (alpha < 0.2) return null;
+
+  const linearChannels = [red, green, blue].map((channel) => {
+    const normalized = channel / 255;
+    return normalized <= 0.04045
+      ? normalized / 12.92
+      : ((normalized + 0.055) / 1.055) ** 2.4;
+  });
+  const luminance =
+    linearChannels[0] * 0.2126 +
+    linearChannels[1] * 0.7152 +
+    linearChannels[2] * 0.0722;
+
+  return luminance < 0.32 ? "dark" : "light";
+}
+
+function getRenderedTone(
+  element: Element,
+  header: HTMLElement | null,
+): NavTone | null {
+  const explicitSurface = element.closest<HTMLElement>("[data-nav-tone]");
+  if (explicitSurface && !header?.contains(explicitSurface)) {
+    return explicitSurface.dataset.navTone === "dark" ? "dark" : "light";
+  }
+
+  let current: HTMLElement | null =
+    element instanceof HTMLElement ? element : element.parentElement;
+
+  while (current && !header?.contains(current)) {
+    const tone = colorToneFromCss(getComputedStyle(current).backgroundColor);
+    if (tone) return tone;
+    current = current.parentElement;
+  }
+
+  return null;
+}
+
 export function SiteTopbar() {
   const pathname = usePathname();
   const [isCompact, setIsCompact] = useState(false);
@@ -187,17 +229,37 @@ export function SiteTopbar() {
       setIsCompact(window.scrollY > 24);
 
       const header = headerRef.current;
-      const sampleX = window.innerWidth / 2;
       const sampleY = Math.min(
         Math.max(header?.getBoundingClientRect().bottom ?? 48, 24),
         window.innerHeight - 1,
       );
-      const toneSurface = document
-        .elementsFromPoint(sampleX, sampleY)
-        .map((element) => element.closest<HTMLElement>("[data-nav-tone]"))
-        .find((element) => element && !header?.contains(element));
+      const samplePoints = [
+        window.innerWidth * 0.25,
+        window.innerWidth * 0.5,
+        window.innerWidth * 0.75,
+      ];
+      const sampledTones = samplePoints
+        .map((sampleX) =>
+          document
+            .elementsFromPoint(sampleX, sampleY)
+            .filter((element) => !header?.contains(element))
+            .map((element) => getRenderedTone(element, header))
+            .find((sampledTone): sampledTone is NavTone =>
+              Boolean(sampledTone),
+            ),
+        )
+        .filter((sampledTone): sampledTone is NavTone =>
+          Boolean(sampledTone),
+        );
+      const darkSamples = sampledTones.filter(
+        (sampledTone) => sampledTone === "dark",
+      ).length;
 
-      setTone(toneSurface?.dataset.navTone === "dark" ? "dark" : "light");
+      setTone(
+        sampledTones.length > 0 && darkSamples >= Math.ceil(sampledTones.length / 2)
+          ? "dark"
+          : "light",
+      );
       frameRef.current = null;
     };
 
@@ -334,7 +396,15 @@ export function SiteTopbar() {
         data-state={navState}
         data-tone={tone}
       >
-        <div className={styles.bar}>
+        <div
+          className={styles.topVeil}
+          data-testid="site-topbar-veil"
+          aria-hidden="true"
+        />
+        <div
+          className={cn(styles.bar, isCompact && "qv-glass-surface")}
+          data-testid="site-topbar-bar"
+        >
           <Link
             href="/"
             aria-label="Qoovex home"
@@ -343,8 +413,8 @@ export function SiteTopbar() {
           >
             <QoovexMark
               tone={isDark ? "white" : "ink"}
-              width={24}
-              height={24}
+              width={26}
+              height={26}
               className={styles.brandMark}
             />
             <span className={styles.wordmark}>Qoovex</span>
@@ -405,7 +475,7 @@ export function SiteTopbar() {
                   <div
                     id={`site-menu-${menu.key}`}
                     data-testid={`site-menu-${menu.key}`}
-                    className={styles.megaMenu}
+                    className={cn(styles.megaMenu, "qv-glass-surface")}
                     data-open={isOpen || undefined}
                     aria-hidden={!isOpen}
                     onMouseEnter={clearCloseTimer}
@@ -458,7 +528,7 @@ export function SiteTopbar() {
             <Button
               as="a"
               href={workspaceSignInHref}
-              variant={isDark ? "ghost" : "secondary"}
+              variant="secondary"
               size="sm"
             >
               Accedi
@@ -502,7 +572,7 @@ export function SiteTopbar() {
           ref={mobilePanelRef}
           id="site-mobile-menu"
           data-testid="site-mobile-menu"
-          className={styles.mobilePanel}
+          className={cn(styles.mobilePanel, "qv-glass-surface")}
           role="dialog"
           aria-modal="true"
           aria-label="Menu di navigazione"

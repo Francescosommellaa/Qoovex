@@ -7,15 +7,16 @@ import { cn } from "../../lib/utils";
 export type FieldControlStatus = "default" | "error" | "success";
 
 export const FIELD_LABEL_CLASS =
-  "text-(length:--text-xs) font-medium text-(--color-label) tracking-[0.03em] uppercase select-none";
+  "text-(length:--text-xs) font-medium leading-[1.3] text-(--color-label) tracking-[-0.01em] select-none";
 
 export const FIELD_ROOT_CLASS = "flex w-full min-w-0 flex-col gap-(--input-gap)";
 
 export const FIELD_STATUS_RING: Record<FieldControlStatus, string> = {
   default:
     "border-(--color-input-border) " +
+    "hover:border-(--color-input-border-hover) " +
     "focus-within:border-(--color-input-border-focus) " +
-    "focus-within:ring-2 focus-within:ring-(--color-primary-highlight)",
+    "focus-within:ring-[3px] focus-within:ring-(--input-focus-ring)",
   error:
     "border-(--color-input-border-error) " +
     "ring-2 ring-(--color-error-highlight)",
@@ -27,8 +28,9 @@ export const FIELD_STATUS_RING: Record<FieldControlStatus, string> = {
 export const FIELD_TRIGGER_STATUS_RING: Record<FieldControlStatus, string> = {
   default:
     "border-(--color-input-border) " +
+    "hover:border-(--color-input-border-hover) " +
     "data-[open=true]:border-(--color-input-border-focus) " +
-    "data-[open=true]:ring-2 data-[open=true]:ring-(--color-primary-highlight)",
+    "data-[open=true]:ring-[3px] data-[open=true]:ring-(--input-focus-ring)",
   error:
     "border-(--color-input-border-error) " +
     "ring-2 ring-(--color-error-highlight)",

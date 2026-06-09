@@ -1,34 +1,14 @@
 # Form
 
-## Cosa ?
-Componente condiviso del design system Qoovex.
+Sistema slot-composed canonico per form marketing, auth e workspace.
 
-## Come ? composto
-- Implementazione React pubblica tramite `Form.tsx`.
-- Tipi pubblici in `Form.types.ts`.
-- Varianti dichiarate in `Form.variants.ts`.
+- Varianti: `plain | ghost | surface | panel`
+- Layout: `stack | grid | inline`
+- Densità: `compact | comfortable | spacious`
+- `FormControl` propaga id, required, disabled, status e attributi ARIA.
+- Label default in sentence case; helper, error e success restano semantici.
+- `surface` usa Paper; `panel` usa Cream senza gradienti decorativi.
+- Sezioni e actions usano divider Ink al 5–6%.
 
-## Props / API
-| Prop | Tipo | Default | Valori ammessi |
-|------|------|---------|----------------|
-| variant | string | dipende | valori esportati dai tipi del componente |
-| size | string | dipende | valori esportati dai tipi del componente |
-
-## Token usati
-- Spacing: solo `--spacing-*` o token componente dedicati.
-- Radius: solo `--radius-*` o token componente dedicati.
-- Colori: solo `--color-*` e token semantici del componente.
-
-## Regole ferree
-- Non usare `style` inline nei consumer.
-- Non creare copie locali del componente nelle app.
-- Non passare classi con valori visuali hardcoded.
-
-## Esempi
-```tsx
-// Corretto
-<Form />
-
-// Sbagliato
-<div style={{ padding: "13px" }} />
-```
+Input, Select, Textarea e OTP devono ereditare i token del form senza override
+locali.

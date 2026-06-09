@@ -1,34 +1,26 @@
 # Select
 
-## Cosa ?
-Componente condiviso del design system Qoovex.
+Select canonico per scelta singola o multipla.
 
-## Come ? composto
-- Implementazione React pubblica tramite `Select.tsx`.
-- Tipi pubblici in `Select.types.ts`.
-- Varianti dichiarate in `Select.variants.ts`.
+## API
 
-## Props / API
-| Prop | Tipo | Default | Valori ammessi |
-|------|------|---------|----------------|
-| variant | string | dipende | valori esportati dai tipi del componente |
-| size | string | dipende | valori esportati dai tipi del componente |
+- `size`: `sm | md | lg`
+- `status`: `default | error | success`
+- `surface`: `light | dark`
+- Supporta gruppi, limite di selezioni, count, label e helper.
+- Propaga gli attributi ARIA ricevuti da `FormControl`.
 
-## Token usati
-- Spacing: solo `--spacing-*` o token componente dedicati.
-- Radius: solo `--radius-*` o token componente dedicati.
-- Colori: solo `--color-*` e token semantici del componente.
+## Interazione
 
-## Regole ferree
-- Non usare `style` inline nei consumer.
-- Non creare copie locali del componente nelle app.
-- Non passare classi con valori visuali hardcoded.
+- Enter e Space aprono o confermano.
+- Arrow Up/Down, Home, End e typeahead aggiornano l'opzione attiva.
+- Escape chiude e restituisce il focus al trigger.
+- Click esterno chiude sia single sia multi.
 
-## Esempi
-```tsx
-// Corretto
-<Select />
+## Aspetto
 
-// Sbagliato
-<div style={{ padding: "13px" }} />
-```
+Trigger e `Input` condividono altezza, bordo, radius e focus. Il dropdown usa
+Paper 94%, bordo Ink 6%, radius 12 px, padding 8 px, ombra multilivello e blur
+reale 20 px. I tag multi sono monocromatici.
+
+Non creare select locali o override visuali nei consumer.

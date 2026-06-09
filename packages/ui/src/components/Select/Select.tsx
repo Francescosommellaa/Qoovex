@@ -26,6 +26,7 @@ export interface SelectGroup {
 export type SelectItem = SelectOption | SelectGroup;
 export type SelectSize = "sm" | "md" | "lg";
 export type SelectStatus = "default" | "error" | "success";
+export type SelectSurface = "light" | "dark";
 
 // Single
 export interface SelectSingleProps {
@@ -54,6 +55,11 @@ export type SelectProps = {
   disabled?: boolean;
   srOnlyLabel?: boolean;
   showSelectedCount?: boolean;
+  surface?: SelectSurface;
+  required?: boolean;
+  "aria-describedby"?: string;
+  "aria-invalid"?: boolean;
+  "aria-labelledby"?: string;
   id?: string;
   name?: string;
   className?: string;
@@ -90,14 +96,6 @@ const OPTION_SIZE: Record<SelectSize, string> = {
   lg: "min-h-(--input-height-lg) text-(length:--text-base)",
 };
 
-const MULTI_TAG_TONES = [
-  "[background:var(--tone-surface-blue)]",
-  "[background:var(--tone-surface-green)]",
-  "[background:var(--tone-surface-purple)]",
-  "[background:var(--tone-surface-amber)]",
-  "[background:var(--tone-surface-red)]",
-] as const;
-
 const MULTI_TAG_MIN_VISIBLE_RATIO = 0.8;
 
 // ─── Multi-tag chip ────────────────────────────────────────────────────────────
@@ -105,15 +103,11 @@ const MULTI_TAG_MIN_VISIBLE_RATIO = 0.8;
 function MultiTag({
   label,
   onRemove,
-  size,
-  tone,
   measureRef,
   inert = false,
 }: {
   label: string;
   onRemove: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  size: SelectSize;
-  tone: (typeof MULTI_TAG_TONES)[number];
   measureRef?: (node: HTMLButtonElement | null) => void;
   inert?: boolean;
 }) {
@@ -129,17 +123,17 @@ function MultiTag({
         "min-h-(--select-tag-min-height) max-w-(--select-tag-max-width)",
         "px-(--select-tag-px) py-(--select-tag-py) rounded-(--select-tag-radius)",
         "border border-(--color-select-tag-border)",
+        "bg-(--color-select-tag-bg)",
         "text-(--color-select-tag-text)",
         "leading-none",
         "shadow-[var(--select-tag-shadow)]",
         "cursor-pointer touch-manipulation select-none",
         "transition-[border-color,box-shadow,transform] duration-[var(--duration-fast)] ease-[var(--ease-qoovex)]",
-        "hover:border-(--color-select-tag-border-hover) hover:shadow-[var(--select-tag-hover-shadow)]",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary-highlight)",
+        "hover:border-(--color-select-tag-border-hover) hover:bg-(--color-select-tag-bg-hover) hover:shadow-[var(--select-tag-hover-shadow)]",
+        "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-(--input-focus-ring)",
         "active:scale-[0.98]",
         "text-(length:--text-xs)",
         "shrink-0",
-        tone,
       )}
     >
       <span className="truncate">{label}</span>
@@ -152,16 +146,23 @@ function MultiTag({
 function Option({
   option,
   selected,
+  active,
+  id,
   size,
   onSelect,
+  onActivate,
 }: {
   option: SelectOption;
   selected: boolean;
+  active: boolean;
+  id: string;
   size: SelectSize;
   onSelect: (v: string) => void;
+  onActivate: () => void;
 }) {
   return (
     <div
+      id={id}
       role="option"
       aria-selected={selected}
       aria-disabled={option.disabled || undefined}
@@ -172,11 +173,14 @@ function Option({
         "cursor-pointer select-none",
         "transition-colors duration-[var(--duration-fast)] ease-[var(--ease-qoovex)]",
         OPTION_SIZE[size],
-        selected
+        active
+          ? "bg-(--color-select-item-active)"
+          : selected
           ? "bg-(--color-select-item-selected-bg) text-(--color-select-item-selected-text)"
           : "text-(--color-text) hover:bg-(--color-select-item-hover)",
         option.disabled && "opacity-40 pointer-events-none",
       )}
+      onMouseEnter={onActivate}
       onClick={() => !option.disabled && onSelect(option.value)}
     >
       <span className="truncate">{option.label}</span>
@@ -206,6 +210,11 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       disabled = false,
       srOnlyLabel = false,
       showSelectedCount = true,
+      surface = "light",
+      required = false,
+      "aria-describedby": ariaDescribedBy,
+      "aria-invalid": ariaInvalid,
+      "aria-labelledby": ariaLabelledBy,
       id,
       name,
       className,
@@ -215,15 +224,24 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     const selectId = id ?? React.useId();
     const listboxId = `${selectId}-listbox`;
     const helperId = helperText ? `${selectId}-helper` : undefined;
+    const describedBy = [ariaDescribedBy, helperId].filter(Boolean).join(" ");
 
     const [open, setOpen] = React.useState(false);
+    const [activeIndex, setActiveIndex] = React.useState(-1);
     const containerRef = React.useRef<HTMLDivElement>(null);
+    const triggerRef = React.useRef<HTMLDivElement>(null);
+    const typeaheadRef = React.useRef("");
+    const typeaheadTimerRef = React.useRef<number | null>(null);
     const multiContentRef = React.useRef<HTMLDivElement>(null);
     const measureOverflowRef = React.useRef<HTMLSpanElement>(null);
     const measureChipRefs = React.useRef<Map<string, HTMLButtonElement>>(
       new Map(),
     );
     const [visibleMultiCount, setVisibleMultiCount] = React.useState(3);
+    const flattenedOptions = React.useMemo(
+      () => flatOptions(options),
+      [options],
+    );
 
     // ── Valore singolo ──
     const [singleValue, setSingleValue] = useControllableValue<string>({
@@ -260,15 +278,40 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       return () => document.removeEventListener("mousedown", handler);
     }, [open]);
 
-    // chiudi su Escape (solo single)
+    // Close consistently for both single and multi selects.
     React.useEffect(() => {
-      if (!open || isMulti) return;
+      if (!open) return;
       const handler = (e: KeyboardEvent) => {
-        if (e.key === "Escape") setOpen(false);
+        if (e.key !== "Escape") return;
+        e.preventDefault();
+        setOpen(false);
+        triggerRef.current?.focus();
       };
       document.addEventListener("keydown", handler);
       return () => document.removeEventListener("keydown", handler);
-    }, [open, isMulti]);
+    }, [open]);
+
+    React.useEffect(
+      () => () => {
+        if (typeaheadTimerRef.current !== null) {
+          window.clearTimeout(typeaheadTimerRef.current);
+        }
+      },
+      [],
+    );
+
+    React.useEffect(() => {
+      if (!open) return;
+      const selectedIndex = flattenedOptions.findIndex((option) =>
+        isMulti
+          ? multiValue.includes(option.value)
+          : option.value === singleValue,
+      );
+      const fallbackIndex = flattenedOptions.findIndex(
+        (option) => !option.disabled,
+      );
+      setActiveIndex(selectedIndex >= 0 ? selectedIndex : fallbackIndex);
+    }, [flattenedOptions, isMulti, multiValue, open, singleValue]);
 
     function handleSelect(val: string) {
       if (!isMulti) {
@@ -290,20 +333,100 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       setMultiValue(multiValue.filter((v) => v !== val));
     }
 
+    function moveActiveIndex(direction: 1 | -1) {
+      if (flattenedOptions.length === 0) return;
+
+      let nextIndex = activeIndex;
+      for (let attempt = 0; attempt < flattenedOptions.length; attempt += 1) {
+        nextIndex =
+          (nextIndex + direction + flattenedOptions.length) %
+          flattenedOptions.length;
+        if (!flattenedOptions[nextIndex]?.disabled) {
+          setActiveIndex(nextIndex);
+          return;
+        }
+      }
+    }
+
     function handleTriggerKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
       if (disabled) return;
+
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        setOpen((p) => !p);
+        if (open && activeIndex >= 0) {
+          const option = flattenedOptions[activeIndex];
+          if (option && !option.disabled) handleSelect(option.value);
+        } else {
+          setOpen(true);
+        }
         return;
       }
+
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setOpen(true);
+        if (!open) {
+          setOpen(true);
+        } else {
+          moveActiveIndex(1);
+        }
         return;
       }
+
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (!open) {
+          setOpen(true);
+        } else {
+          moveActiveIndex(-1);
+        }
+        return;
+      }
+
+      if (e.key === "Home" || e.key === "End") {
+        e.preventDefault();
+        setOpen(true);
+        const orderedOptions =
+          e.key === "Home"
+            ? flattenedOptions
+            : [...flattenedOptions].reverse();
+        const option = orderedOptions.find((item) => !item.disabled);
+        if (option) setActiveIndex(flattenedOptions.indexOf(option));
+        return;
+      }
+
       if (e.key === "Escape") {
+        e.preventDefault();
         setOpen(false);
+        return;
+      }
+
+      if (
+        e.key.length === 1 &&
+        !e.altKey &&
+        !e.ctrlKey &&
+        !e.metaKey
+      ) {
+        typeaheadRef.current += e.key.toLocaleLowerCase();
+        if (typeaheadTimerRef.current !== null) {
+          window.clearTimeout(typeaheadTimerRef.current);
+        }
+        typeaheadTimerRef.current = window.setTimeout(() => {
+          typeaheadRef.current = "";
+          typeaheadTimerRef.current = null;
+        }, 500);
+
+        const matchIndex = flattenedOptions.findIndex(
+          (option) =>
+            !option.disabled &&
+            option.label
+              .toLocaleLowerCase()
+              .startsWith(typeaheadRef.current),
+        );
+        if (matchIndex >= 0) {
+          e.preventDefault();
+          setOpen(true);
+          setActiveIndex(matchIndex);
+        }
       }
     }
 
@@ -416,14 +539,12 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           <div
             className="flex flex-1 flex-nowrap items-center gap-x-(--select-tag-gap-x) min-w-0 overflow-hidden pr-(--spacing-1) [mask-image:var(--select-tag-rail-mask)]"
           >
-            {visibleMultiValue.map((v, index) => {
+            {visibleMultiValue.map((v) => {
               const opt = findOption(options, v);
               return opt ? (
                 <MultiTag
                   key={v}
                   label={opt.label}
-                  size={size}
-                  tone={MULTI_TAG_TONES[index % MULTI_TAG_TONES.length]}
                   onRemove={(e) => handleRemoveTag(v, e)}
                 />
               ) : null;
@@ -461,7 +582,11 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     return (
       <div
         ref={ref}
-        className={cn(FIELD_ROOT_CLASS, className)}
+        className={cn(
+          FIELD_ROOT_CLASS,
+          surface === "dark" && "qv-select--dark",
+          className,
+        )}
       >
         {name && !isMulti ? (
           <input type="hidden" name={name} value={singleValue} />
@@ -487,15 +612,26 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
 
         <div ref={containerRef} className="relative w-full">
           <div
+            ref={triggerRef}
             role="combobox"
             aria-expanded={open}
             aria-haspopup="listbox"
             aria-controls={listboxId}
-            aria-label={label ? undefined : placeholder}
-            aria-labelledby={label ? `${selectId}-label` : undefined}
-            aria-describedby={helperId}
-            aria-invalid={status === "error" || undefined}
+            aria-label={
+              label || ariaLabelledBy ? undefined : placeholder
+            }
+            aria-labelledby={
+              ariaLabelledBy ?? (label ? `${selectId}-label` : undefined)
+            }
+            aria-describedby={describedBy || undefined}
+            aria-invalid={ariaInvalid ?? (status === "error" || undefined)}
+            aria-required={required || undefined}
             aria-disabled={disabled || undefined}
+            aria-activedescendant={
+              open && activeIndex >= 0
+                ? `${selectId}-option-${activeIndex}`
+                : undefined
+            }
             tabIndex={disabled ? -1 : 0}
             data-open={open}
             data-disabled={disabled}
@@ -507,13 +643,14 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
               "relative flex w-full items-center justify-between",
               "rounded-(--select-radius) border",
               "bg-(--color-input-bg)",
+              "hover:bg-(--color-input-bg-hover)",
               "px-(--input-px) py-(--select-trigger-py) gap-(--input-gap)",
               "cursor-pointer",
               "transition-[border-color,box-shadow]",
               "duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
               "focus-visible:outline-none",
               "focus-visible:border-(--color-input-border-focus)",
-              "focus-visible:ring-2 focus-visible:ring-(--color-primary-highlight)",
+              "focus-visible:ring-[3px] focus-visible:ring-(--input-focus-ring)",
               "data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none",
               TRIGGER_SIZE[size],
               FIELD_TRIGGER_STATUS_RING[status],
@@ -536,14 +673,12 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
               aria-hidden="true"
               className="pointer-events-none invisible absolute left-0 top-0 flex flex-nowrap items-center gap-x-(--select-tag-gap-x)"
             >
-              {multiValue.map((v, index) => {
+              {multiValue.map((v) => {
                 const opt = findOption(options, v);
                 return opt ? (
                   <MultiTag
                     key={v}
                     label={opt.label}
-                    size={size}
-                    tone={MULTI_TAG_TONES[index % MULTI_TAG_TONES.length]}
                     onRemove={() => undefined}
                     measureRef={(node) => setMeasureChipRef(v, node)}
                     inert
@@ -565,13 +700,15 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
             role="listbox"
             aria-label={label ?? "Opzioni"}
             aria-multiselectable={isMulti || undefined}
+            aria-hidden={!open}
             className={cn(
               "absolute z-[var(--z-dropdown)] w-full",
               "mt-(--spacing-1)",
               "rounded-(--select-dropdown-radius)",
-              "border border-(--color-border)",
-              "bg-(--color-surface-2)",
+              "border border-(--select-dropdown-border)",
+              "bg-(--select-dropdown-bg)",
               "shadow-[var(--select-dropdown-shadow)]",
+              "[backdrop-filter:var(--select-dropdown-backdrop-filter)]",
               "overflow-hidden overflow-y-auto max-h-64",
               "origin-top",
               "transition-[opacity,transform] duration-[var(--duration-base)] ease-[var(--ease-qoovex)]",
@@ -579,10 +716,11 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
             style={{
               opacity: open ? 1 : 0,
               transform: open ? "scaleY(1)" : "scaleY(0.95)",
+              visibility: open ? "visible" : "hidden",
               pointerEvents: open ? "auto" : "none",
             }}
           >
-            <div className="p-(--spacing-1)">
+            <div className="p-(--select-dropdown-padding)">
               {options.map((item, idx) => {
                 if (isGroup(item)) {
                   return (
@@ -599,7 +737,9 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                       {item.options.map((opt) => (
                         <Option
                           key={opt.value}
+                          id={`${selectId}-option-${flattenedOptions.indexOf(opt)}`}
                           option={opt}
+                          active={activeIndex === flattenedOptions.indexOf(opt)}
                           selected={
                             isMulti
                               ? multiValue.includes(opt.value)
@@ -607,6 +747,9 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                           }
                           size={size}
                           onSelect={handleSelect}
+                          onActivate={() =>
+                            setActiveIndex(flattenedOptions.indexOf(opt))
+                          }
                         />
                       ))}
                     </div>
@@ -615,7 +758,9 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                 return (
                   <Option
                     key={item.value}
+                    id={`${selectId}-option-${flattenedOptions.indexOf(item)}`}
                     option={item}
+                    active={activeIndex === flattenedOptions.indexOf(item)}
                     selected={
                       isMulti
                         ? multiValue.includes(item.value)
@@ -623,6 +768,9 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                     }
                     size={size}
                     onSelect={handleSelect}
+                    onActivate={() =>
+                      setActiveIndex(flattenedOptions.indexOf(item))
+                    }
                   />
                 );
               })}

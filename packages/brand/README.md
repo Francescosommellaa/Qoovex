@@ -17,3 +17,5 @@ Non mettere qui:
 Regole:
 - una sola fonte di verita` per asset shared;
 - se un asset nasce in un'app ma diventa shared, spostalo qui.
+- il `viewBox` degli SVG deve essere otticamente aderente al disegno, senza
+  margini interni che falsino le dimensioni dichiarate dal componente.

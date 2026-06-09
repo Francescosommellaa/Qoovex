@@ -141,18 +141,18 @@
   --button-primary-border-hover: #272625;
   --button-primary-text: #ffffff;
   --button-primary-shadow: none;
-  --button-primary-shadow-hover: 0 6px 16px rgba(17, 17, 17, 0.14);
-  --button-primary-shadow-active: 0 2px 6px rgba(17, 17, 17, 0.14);
+  --button-primary-shadow-hover: none;
+  --button-primary-shadow-active: none;
 
   --button-secondary-bg: #ffffff;
-  --button-secondary-bg-hover: #f4f3ef;
-  --button-secondary-bg-active: #ecebea;
+  --button-secondary-bg-hover: #f7f7f6;
+  --button-secondary-bg-active: #efefee;
   --button-secondary-border: rgba(17, 17, 17, 0.28);
   --button-secondary-border-hover: rgba(17, 17, 17, 0.42);
   --button-secondary-text: #111111;
   --button-secondary-shadow: none;
-  --button-secondary-shadow-hover: 0 4px 12px rgba(17, 17, 17, 0.08);
-  --button-secondary-shadow-active: inset 0 1px 2px rgba(17, 17, 17, 0.08);
+  --button-secondary-shadow-hover: none;
+  --button-secondary-shadow-active: none;
 
   --button-ghost-text: #111111;
   --button-ghost-bg-hover: rgba(17, 17, 17, 0.06);
@@ -165,18 +165,18 @@
   --button-destructive-border-hover: #912018;
   --button-destructive-text: #ffffff;
   --button-destructive-shadow: none;
-  --button-destructive-shadow-hover: 0 6px 16px rgba(180, 35, 24, 0.2);
-  --button-destructive-shadow-active: 0 2px 6px rgba(180, 35, 24, 0.18);
+  --button-destructive-shadow-hover: none;
+  --button-destructive-shadow-active: none;
 
   --button-inverse-bg: #ffffff;
-  --button-inverse-bg-hover: #f4f3ef;
-  --button-inverse-bg-active: #ecebea;
+  --button-inverse-bg-hover: #f7f7f6;
+  --button-inverse-bg-active: #efefee;
   --button-inverse-border: rgba(255, 255, 255, 0.88);
   --button-inverse-border-hover: #ffffff;
   --button-inverse-text: #111111;
   --button-inverse-shadow: none;
-  --button-inverse-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.24);
-  --button-inverse-shadow-active: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --button-inverse-shadow-hover: none;
+  --button-inverse-shadow-active: none;
 
   --color-btn-fill-secondary: var(--color-surface-raised);
   --color-btn-fill-ghost: oklch(from var(--color-text) l c h / 0.06);
@@ -874,7 +874,7 @@
   --color-surface-dynamic: #e2ddfd;
   --color-surface-raised: #ffffff;
   --color-border: rgba(17, 17, 17, 0.12);
-  --color-divider: rgba(17, 17, 17, 0.08);
+  --color-divider: rgba(17, 17, 17, 0.05);
   --color-overlay: rgba(17, 17, 17, 0.42);
   --color-text: #111111;
   --color-text-muted: #4f4e4d;
@@ -902,6 +902,21 @@
   --surface-pastel: #e2ddfd;
   --surface-obsidian: #272625;
   --surface-violet: #10054d;
+
+  /* Floating and glass surfaces */
+  --glass-paper-bg: rgba(251, 250, 249, 0.85);
+  --glass-paper-bg-strong: rgba(251, 250, 249, 0.92);
+  --glass-obsidian-bg: rgba(39, 38, 37, 0.85);
+  --glass-obsidian-bg-strong: rgba(39, 38, 37, 0.92);
+  --glass-paper-border: rgba(255, 255, 255, 0.9);
+  --glass-obsidian-border: rgba(73, 72, 70, 0.85);
+  --glass-subtle-border: rgba(17, 17, 17, 0.06);
+  --glass-backdrop-filter: blur(15px);
+  --glass-shadow:
+    rgba(17, 17, 17, 0.05) 0 1px 3px,
+    rgba(17, 17, 17, 0.04) 0 6px 6px,
+    rgba(17, 17, 17, 0.03) 0 13px 8px,
+    rgba(17, 17, 17, 0.01) 0 24px 9px;
 
   --leading-caption: 1.2;
   --leading-eyebrow: 1.2;
@@ -956,13 +971,55 @@
   --color-btn-fill-ghost: rgba(17, 17, 17, 0.06);
   --color-btn-fill-destructive: var(--color-error);
   --color-btn-filled-text: #ffffff;
-  --color-input-bg: #ffffff;
-  --color-input-border: rgba(17, 17, 17, 0.22);
+  --color-input-bg: rgba(255, 255, 255, 0.96);
+  --color-input-bg-hover: #ffffff;
+  --color-input-border: rgba(17, 17, 17, 0.12);
+  --color-input-border-hover: rgba(17, 17, 17, 0.2);
   --color-input-border-focus: #111111;
-  --color-input-placeholder: #6d6c6b;
-  --color-input-icon: #6d6c6b;
+  --color-input-placeholder: rgba(17, 17, 17, 0.42);
+  --color-input-icon: rgba(17, 17, 17, 0.56);
   --color-label: #111111;
+  --input-focus-ring: rgba(17, 17, 17, 0.1);
+  --input-height-sm: 2.5rem;
+  --input-height-md: 2.75rem;
+  --input-height-lg: 3rem;
   --input-radius: 0.75rem;
+  --input-px: 1rem;
+  --input-gap: 0.625rem;
+
+  --select-dropdown-bg: rgba(255, 255, 255, 0.74);
+  --select-dropdown-border: rgba(17, 17, 17, 0.06);
+  --select-dropdown-backdrop-filter: var(--glass-backdrop-filter);
+  --select-dropdown-radius: 0.75rem;
+  --select-dropdown-padding: 0.5rem;
+  --select-dropdown-shadow: var(--glass-shadow);
+  --select-item-radius: 0.5rem;
+  --color-select-item-hover: rgba(17, 17, 17, 0.05);
+  --color-select-item-active: rgba(17, 17, 17, 0.08);
+  --color-select-item-selected-bg: rgba(17, 17, 17, 0.08);
+  --color-select-item-selected-text: #111111;
+  --color-select-group-label: rgba(17, 17, 17, 0.5);
+  --color-select-tag-bg: rgba(17, 17, 17, 0.05);
+  --color-select-tag-bg-hover: rgba(17, 17, 17, 0.08);
+  --color-select-tag-border: rgba(17, 17, 17, 0.08);
+  --color-select-tag-border-hover: rgba(17, 17, 17, 0.14);
+  --color-select-tag-text: #111111;
+  --color-select-tag-more-bg: rgba(17, 17, 17, 0.04);
+  --color-select-tag-more-border: rgba(17, 17, 17, 0.08);
+  --color-select-tag-more-text: rgba(17, 17, 17, 0.64);
+  --select-tag-shadow: none;
+  --select-tag-hover-shadow: none;
+
+  --divider-tone-neutral: rgba(17, 17, 17, 0.05);
+  --divider-label-neutral: rgba(17, 17, 17, 0.52);
+
+  --form-bg-surface: rgba(255, 255, 255, 0.96);
+  --form-bg-panel: rgba(255, 255, 255, 0.94);
+  --form-section-bg: rgba(17, 17, 17, 0.025);
+  --form-border: rgba(17, 17, 17, 0.06);
+  --form-border-strong: rgba(17, 17, 17, 0.1);
+  --form-tone-neutral-soft: transparent;
+  --form-tone-neutral-border: var(--form-border);
   --form-radius: 0.75rem;
   --form-section-radius: 0.75rem;
   --card-radius-surface: 0.75rem;

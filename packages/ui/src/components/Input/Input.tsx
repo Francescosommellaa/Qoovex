@@ -292,7 +292,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
 
     return (
-      <div className={FIELD_ROOT_CLASS}>
+      <div
+        className={cn(
+          FIELD_ROOT_CLASS,
+          surface === "dark" && "qv-input--dark",
+        )}
+      >
         {label ? (
           <FieldLabel htmlFor={inputId} srOnly={srOnlyLabel}>
             {label}
@@ -305,7 +310,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             SIZE_HEIGHT[size],
             FIELD_STATUS_RING[status],
             disabled && "opacity-50 pointer-events-none",
-            surface === "dark" && "qv-input--dark",
             className,
           )}
         >

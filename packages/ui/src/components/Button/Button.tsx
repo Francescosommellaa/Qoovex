@@ -51,9 +51,9 @@ export type ButtonProps = NativeButtonProps | AnchorButtonProps;
 const BASE =
   "group relative inline-flex cursor-pointer select-none items-center justify-center " +
   "overflow-hidden whitespace-nowrap rounded-(--radius-md) border font-medium tracking-(--tracking-body) " +
-  "transition-[width,transform,color,background-color,border-color,box-shadow,opacity] " +
+  "transition-[width,color,background-color,border-color,box-shadow,opacity] " +
   "duration-[var(--button-duration)] ease-[var(--button-ease)] " +
-  "hover:no-underline active:translate-y-px " +
+  "hover:no-underline " +
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--button-focus) " +
   "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-[var(--button-disabled-opacity)]";
 

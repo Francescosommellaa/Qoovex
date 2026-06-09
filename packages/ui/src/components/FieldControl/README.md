@@ -19,13 +19,17 @@ Helper interno per label, helper text, stato e tooltip dei campi form.
 ## Token usati
 - Spacing: `--input-gap`, `--spacing-2`, `--spacing-3`
 - Radius: `--radius-md`
-- Color: `--color-input-*`, `--color-tooltip-*`, `--color-error`
+- Color: `--color-input-*`, `--input-focus-ring`, `--color-tooltip-*`,
+  `--color-error`
 - Shadow: `--shadow-md`
 
 ## Regole ferree
 - Non esportarlo come building block app-level.
 - Non usarlo per contenuti non form.
 - Non aggiungere dimensioni fuori token.
+- Label in sentence case, tracking compatto e peso 500.
+- Focus default: bordo Ink e ring esterno 3 px; error e success restano
+  semantici.
 
 ## Esempi
 ```tsx

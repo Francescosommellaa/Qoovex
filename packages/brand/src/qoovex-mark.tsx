@@ -17,7 +17,7 @@ export function QoovexMark({
     <svg
       width={width}
       height={height}
-      viewBox="0 0 1100 1100"
+      viewBox="200 200 700 700"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"

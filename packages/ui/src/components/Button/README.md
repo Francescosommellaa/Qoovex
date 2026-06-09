@@ -10,6 +10,8 @@ Gerarchie operative monocromatiche condivise da marketing e prodotto.
   azioni distruttive.
 - `inverse` si usa esclusivamente su superfici Obsidian o Violet.
 - La size `sm` misura 42 px ed e la size canonica per le CTA della Topbar.
+- Hover e active modificano solo colore e bordo: nessun lift, translate o
+  shadow dinamico.
 - Hover, active, focus, disabled e loading appartengono al componente: non
   duplicarli con override locali.
 

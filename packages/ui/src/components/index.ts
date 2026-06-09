@@ -110,6 +110,7 @@ export type {
   SelectProps,
   SelectSize,
   SelectStatus,
+  SelectSurface,
 } from "./Select";
 export { Skeleton } from "./Skeleton";
 export type {

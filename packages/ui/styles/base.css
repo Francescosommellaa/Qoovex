@@ -1070,10 +1070,9 @@
     gap: var(--divider-gap);
     color: var(--divider-label-color);
     font-size: var(--divider-label-size);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    line-height: 1;
-    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
     user-select: none;
   }
 
@@ -2473,12 +2472,8 @@
 
   .qv-form--panel {
     border-color: var(--form-accent-border);
-    background:
-      radial-gradient(circle at 18% 0%, var(--form-accent-soft), transparent 42%),
-      var(--form-bg-panel);
-    box-shadow:
-      inset 0 0 0 1px var(--form-accent-border),
-      var(--shadow-md);
+    background: var(--form-bg-panel);
+    box-shadow: var(--shadow-md);
   }
 
   .qv-form--density-compact {
@@ -2497,9 +2492,9 @@
   }
 
   .qv-form--label-style-default {
-    --form-label-text-transform: uppercase;
-    --form-label-letter-spacing: 0.06em;
-    --form-label-font-weight: 600;
+    --form-label-text-transform: none;
+    --form-label-letter-spacing: -0.01em;
+    --form-label-font-weight: 500;
   }
 
   .qv-form--label-style-soft {
@@ -3559,6 +3554,10 @@
 }
 
 @layer components {
+  .qv-glass-surface {
+    backdrop-filter: blur(15px);
+  }
+
   .qv-card,
   .qv-card--surface {
     border-color: var(--color-border);
@@ -3668,18 +3667,34 @@
     padding: 0.375rem 0.625rem;
   }
 
-  .qv-input--dark {
-    border-color: transparent;
-    background: var(--color-violet-shade);
-    color: var(--color-paper-white);
-  }
-
-  .qv-input--dark input {
-    color: var(--color-paper-white);
-  }
-
-  .qv-input--dark input::placeholder {
-    color: rgba(255, 255, 255, 0.64);
+  .qv-input--dark,
+  .qv-select--dark {
+    --color-text: var(--color-paper-white);
+    --color-label: rgba(255, 255, 255, 0.84);
+    --color-input-bg: rgba(255, 255, 255, 0.08);
+    --color-input-bg-hover: rgba(255, 255, 255, 0.11);
+    --color-input-border: rgba(255, 255, 255, 0.18);
+    --color-input-border-hover: rgba(255, 255, 255, 0.3);
+    --color-input-border-focus: #ffffff;
+    --color-input-placeholder: rgba(255, 255, 255, 0.58);
+    --color-input-icon: rgba(255, 255, 255, 0.68);
+    --color-input-helper: rgba(255, 255, 255, 0.68);
+    --input-focus-ring: rgba(255, 255, 255, 0.16);
+    --select-dropdown-bg: rgba(39, 38, 37, 0.96);
+    --select-dropdown-border: rgba(255, 255, 255, 0.12);
+    --color-select-item-hover: rgba(255, 255, 255, 0.08);
+    --color-select-item-active: rgba(255, 255, 255, 0.12);
+    --color-select-item-selected-bg: rgba(255, 255, 255, 0.12);
+    --color-select-item-selected-text: #ffffff;
+    --color-select-group-label: rgba(255, 255, 255, 0.56);
+    --color-select-tag-bg: rgba(255, 255, 255, 0.08);
+    --color-select-tag-bg-hover: rgba(255, 255, 255, 0.12);
+    --color-select-tag-border: rgba(255, 255, 255, 0.12);
+    --color-select-tag-border-hover: rgba(255, 255, 255, 0.22);
+    --color-select-tag-text: #ffffff;
+    --color-select-tag-more-bg: rgba(255, 255, 255, 0.06);
+    --color-select-tag-more-border: rgba(255, 255, 255, 0.12);
+    --color-select-tag-more-text: rgba(255, 255, 255, 0.72);
   }
 
   .qv-auth-shell {
