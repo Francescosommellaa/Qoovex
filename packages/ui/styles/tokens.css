@@ -130,6 +130,54 @@
 
   /* Pulsanti */
   --button-disabled-opacity: var(--form-disabled-opacity);
+  --button-duration: 180ms;
+  --button-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --button-focus: #111111;
+
+  --button-primary-bg: #111111;
+  --button-primary-bg-hover: #272625;
+  --button-primary-bg-active: #000000;
+  --button-primary-border: #111111;
+  --button-primary-border-hover: #272625;
+  --button-primary-text: #ffffff;
+  --button-primary-shadow: none;
+  --button-primary-shadow-hover: 0 6px 16px rgba(17, 17, 17, 0.14);
+  --button-primary-shadow-active: 0 2px 6px rgba(17, 17, 17, 0.14);
+
+  --button-secondary-bg: #ffffff;
+  --button-secondary-bg-hover: #f4f3ef;
+  --button-secondary-bg-active: #ecebea;
+  --button-secondary-border: rgba(17, 17, 17, 0.28);
+  --button-secondary-border-hover: rgba(17, 17, 17, 0.42);
+  --button-secondary-text: #111111;
+  --button-secondary-shadow: none;
+  --button-secondary-shadow-hover: 0 4px 12px rgba(17, 17, 17, 0.08);
+  --button-secondary-shadow-active: inset 0 1px 2px rgba(17, 17, 17, 0.08);
+
+  --button-ghost-text: #111111;
+  --button-ghost-bg-hover: rgba(17, 17, 17, 0.06);
+  --button-ghost-bg-active: rgba(17, 17, 17, 0.1);
+
+  --button-destructive-bg: #b42318;
+  --button-destructive-bg-hover: #912018;
+  --button-destructive-bg-active: #761b15;
+  --button-destructive-border: #b42318;
+  --button-destructive-border-hover: #912018;
+  --button-destructive-text: #ffffff;
+  --button-destructive-shadow: none;
+  --button-destructive-shadow-hover: 0 6px 16px rgba(180, 35, 24, 0.2);
+  --button-destructive-shadow-active: 0 2px 6px rgba(180, 35, 24, 0.18);
+
+  --button-inverse-bg: #ffffff;
+  --button-inverse-bg-hover: #f4f3ef;
+  --button-inverse-bg-active: #ecebea;
+  --button-inverse-border: rgba(255, 255, 255, 0.88);
+  --button-inverse-border-hover: #ffffff;
+  --button-inverse-text: #111111;
+  --button-inverse-shadow: none;
+  --button-inverse-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.24);
+  --button-inverse-shadow-active: 0 2px 8px rgba(0, 0, 0, 0.2);
+
   --color-btn-fill-secondary: var(--color-surface-raised);
   --color-btn-fill-ghost: oklch(from var(--color-text) l c h / 0.06);
   --color-btn-fill-destructive: var(--color-error);

@@ -1,304 +1,619 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { QoovexMark } from "@qoovex/brand/qoovex-mark";
 import {
-  ArrowRight,
-  CaretDown,
-  List,
-  X,
-} from "@phosphor-icons/react";
-import { Box, Button, Icon, Stack, Text } from "@qoovex/ui";
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { QoovexMark } from "@qoovex/brand/qoovex-mark";
+import { CaretDown, List, X } from "@phosphor-icons/react";
+import { Button, Icon } from "@qoovex/ui";
 import { workspaceSignInHref, workspaceSignUpHref } from "@/shared/workspace-url";
-const scrollDirectionThreshold = 4;
-const topbarHideOffset = 24;
+import styles from "./site-topbar.module.css";
 
-function getScrollY() {
-  return Math.max(
-    window.scrollY,
-    document.documentElement.scrollTop,
-    document.body.scrollTop,
-    0,
-  );
-}
+type MenuKey = "product" | "solutions" | "resources";
+type NavTone = "light" | "dark";
 
-function getScrollYFromEvent(event: Event) {
-  const eventTarget = event.target;
+type MenuItem = {
+  href: string;
+  label: string;
+  description: string;
+};
 
-  if (eventTarget instanceof Element) {
-    return Math.max(eventTarget.scrollTop, getScrollY());
-  }
+type MenuDefinition = {
+  key: MenuKey;
+  label: string;
+  href: string;
+  items: readonly MenuItem[];
+};
 
-  return getScrollY();
-}
+const menuDefinitions: readonly MenuDefinition[] = [
+  {
+    key: "product",
+    label: "Prodotto",
+    href: "/product",
+    items: [
+      {
+        href: "/product",
+        label: "Ricette",
+        description: "Standardizza dosi, processi e costi.",
+      },
+      {
+        href: "/product",
+        label: "Menu digitali",
+        description: "Organizza piatti, stagioni e servizio.",
+      },
+      {
+        href: "/product",
+        label: "Allergeni e valori",
+        description: "Mantieni le informazioni sempre disponibili.",
+      },
+      {
+        href: "/product",
+        label: "Piani di lavoro",
+        description: "Coordina preparazioni, turni e priorita.",
+      },
+    ],
+  },
+  {
+    key: "solutions",
+    label: "Soluzioni",
+    href: "/enterprise",
+    items: [
+      {
+        href: "/enterprise",
+        label: "Chef e brigate",
+        description: "Una regia condivisa per il lavoro quotidiano.",
+      },
+      {
+        href: "/enterprise",
+        label: "Ristorazione",
+        description: "Processi coerenti tra cucina e servizio.",
+      },
+      {
+        href: "/enterprise",
+        label: "Catering",
+        description: "Pianifica volumi, menu e preparazioni.",
+      },
+      {
+        href: "/enterprise",
+        label: "Strutture",
+        description: "Controllo operativo per team e sedi.",
+      },
+    ],
+  },
+  {
+    key: "resources",
+    label: "Risorse",
+    href: "/resources",
+    items: [
+      {
+        href: "/resources",
+        label: "Tutte le risorse",
+        description: "Strumenti e materiali per la cucina.",
+      },
+      {
+        href: "/resources#guides",
+        label: "Guide operative",
+        description: "Metodi pratici per organizzare il lavoro.",
+      },
+      {
+        href: "/resources#community",
+        label: "Community",
+        description: "Ricette e idee da altri professionisti.",
+      },
+      {
+        href: "/resources#documents",
+        label: "Documenti",
+        description: "Allergeni, menu e organizzazione.",
+      },
+    ],
+  },
+] as const;
 
-const mainNavItems = [
-  { href: "/product", label: "Prodotto" },
+const directLinks = [
+  { href: "/contact", label: "Assistenza" },
   { href: "/pricing", label: "Prezzi" },
-  { href: "/enterprise", label: "Azienda" },
 ] as const;
 
-const resourceLinks = [
-  { href: "/resources", label: "Tutte le risorse", description: "Guide e materiali utili" },
-  { href: "/resources#community", label: "Community", description: "Ricette e idee da altri professionisti" },
-  { href: "/resources#documents", label: "Documenti", description: "Allergeni, menu e organizzazione" },
-  { href: "/resources#guides", label: "Guide", description: "Come mettere ordine nei processi" },
-] as const;
-
-function ResourceDropdown() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div
-      className="relative hidden md:block"
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
-    >
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        aria-expanded={isOpen}
-        aria-controls="site-resources-menu"
-        onClick={() => setIsOpen((current) => !current)}
-        iconRight={<Icon icon={CaretDown} size="xs" weight="bold" />}
-        className="px-(--spacing-2)"
-      >
-        Risorse
-      </Button>
-
-      <div
-        id="site-resources-menu"
-        className={
-          isOpen
-            ? "absolute left-1/2 top-full z-(--z-dropdown) w-[20rem] -translate-x-1/2 pt-(--spacing-2) opacity-100"
-            : "pointer-events-none absolute left-1/2 top-full z-(--z-dropdown) w-[20rem] -translate-x-1/2 pt-(--spacing-2) opacity-0"
-        }
-      >
-        <Box radius="xl" border="subtle" surface="surface" shadow="sm" padding="2">
-          <Stack gap="1">
-            {resourceLinks.map((item) => (
-              <Link key={item.href} href={item.href} className="rounded-(--radius-lg) p-(--spacing-3) no-underline transition-colors hover:bg-(--color-surface-2)">
-                <Stack gap="1">
-                  <Text as="span" size="sm" weight="semibold">
-                    {item.label}
-                  </Text>
-                  <Text as="span" size="xs" tone="muted" leading="snug">
-                    {item.description}
-                  </Text>
-                </Stack>
-              </Link>
-            ))}
-          </Stack>
-        </Box>
-      </div>
-    </div>
-  );
-}
+const focusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
 
 export function SiteTopbar() {
+  const pathname = usePathname();
+  const [isCompact, setIsCompact] = useState(false);
+  const [tone, setTone] = useState<NavTone>("light");
+  const [activeMenu, setActiveMenu] = useState<MenuKey | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
-  const animationFrameRef = useRef<number | null>(null);
-  const visualAnimationFrameRef = useRef<number | null>(null);
-  const scrollCheckIntervalRef = useRef<number | null>(null);
-  const scrollSentinelRef = useRef<HTMLDivElement | null>(null);
-  const lastSentinelTopRef = useRef<number | null>(null);
-  const lastScrollYRef = useRef(0);
-  const touchYRef = useRef<number | null>(null);
+  const [mobileAccordion, setMobileAccordion] = useState<MenuKey | null>(
+    "product",
+  );
+  const headerRef = useRef<HTMLElement | null>(null);
+  const mobilePanelRef = useRef<HTMLDivElement | null>(null);
+  const mobileMenuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const mobileCloseButtonRef = useRef<HTMLButtonElement | null>(null);
+  const closeTimerRef = useRef<number | null>(null);
+  const frameRef = useRef<number | null>(null);
+  const previousPathnameRef = useRef(pathname);
+  const triggerRefs = useRef<Record<MenuKey, HTMLButtonElement | null>>({
+    product: null,
+    solutions: null,
+    resources: null,
+  });
+
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimerRef.current === null) return;
+    window.clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = null;
+  }, []);
+
+  const closeDesktopMenu = useCallback(
+    (restoreFocus = false) => {
+      clearCloseTimer();
+      setActiveMenu((current) => {
+        if (restoreFocus && current) {
+          triggerRefs.current[current]?.focus();
+        }
+        return null;
+      });
+    },
+    [clearCloseTimer],
+  );
+
+  const scheduleDesktopMenuClose = useCallback(() => {
+    clearCloseTimer();
+    closeTimerRef.current = window.setTimeout(() => {
+      setActiveMenu(null);
+      closeTimerRef.current = null;
+    }, 120);
+  }, [clearCloseTimer]);
+
+  const closeMobileMenu = useCallback((restoreFocus = false) => {
+    setIsMobileMenuOpen(false);
+    if (restoreFocus) {
+      window.requestAnimationFrame(() => mobileMenuButtonRef.current?.focus());
+    }
+  }, []);
 
   useEffect(() => {
-    lastScrollYRef.current = getScrollY();
-    lastSentinelTopRef.current = scrollSentinelRef.current?.getBoundingClientRect().top ?? null;
+    const updateTopbar = () => {
+      setIsCompact(window.scrollY > 24);
 
-    const updateTopbarVisibilityFromSentinel = () => {
-      const sentinelTop = scrollSentinelRef.current?.getBoundingClientRect().top;
+      const header = headerRef.current;
+      const sampleX = window.innerWidth / 2;
+      const sampleY = Math.min(
+        Math.max(header?.getBoundingClientRect().bottom ?? 48, 24),
+        window.innerHeight - 1,
+      );
+      const toneSurface = document
+        .elementsFromPoint(sampleX, sampleY)
+        .map((element) => element.closest<HTMLElement>("[data-nav-tone]"))
+        .find((element) => element && !header?.contains(element));
 
-      if (sentinelTop === undefined) {
-        return;
-      }
-
-      const previousSentinelTop = lastSentinelTopRef.current;
-      lastSentinelTopRef.current = sentinelTop;
-
-      if (previousSentinelTop === null) {
-        return;
-      }
-
-      const visualDelta = sentinelTop - previousSentinelTop;
-
-      if (sentinelTop >= topbarHideOffset) {
-        setIsHidden(false);
-      } else if (visualDelta < -scrollDirectionThreshold) {
-        setIsHidden(true);
-      } else if (visualDelta > scrollDirectionThreshold) {
-        setIsHidden(false);
-      }
+      setTone(toneSurface?.dataset.navTone === "dark" ? "dark" : "light");
+      frameRef.current = null;
     };
 
-    const updateTopbarVisibility = (nextScrollY = getScrollY()) => {
-      const scrollDelta = nextScrollY - lastScrollYRef.current;
-
-      if (nextScrollY <= topbarHideOffset) {
-        setIsHidden(false);
-      } else if (scrollDelta > scrollDirectionThreshold) {
-        setIsHidden(true);
-      } else if (scrollDelta < -scrollDirectionThreshold) {
-        setIsHidden(false);
-      }
-
-      lastScrollYRef.current = nextScrollY;
-      animationFrameRef.current = null;
+    const requestUpdate = () => {
+      if (frameRef.current !== null) return;
+      frameRef.current = window.requestAnimationFrame(updateTopbar);
     };
 
-    const handleScroll = (event: Event) => {
-      if (animationFrameRef.current !== null) {
-        return;
-      }
-
-      const nextScrollY = getScrollYFromEvent(event);
-      animationFrameRef.current = window.requestAnimationFrame(() => {
-        updateTopbarVisibility(nextScrollY);
-      });
-    };
-
-    const applyDirection = (deltaY: number) => {
-      if (Math.abs(deltaY) <= scrollDirectionThreshold) {
-        return;
-      }
-
-      const currentScrollY = getScrollY();
-
-      if (currentScrollY <= topbarHideOffset || deltaY < 0) {
-        setIsHidden(false);
-      } else {
-        setIsHidden(true);
-      }
-    };
-
-    const handleWheel = (event: WheelEvent) => {
-      applyDirection(event.deltaY);
-    };
-
-    const handleTouchStart = (event: TouchEvent) => {
-      touchYRef.current = event.touches[0]?.clientY ?? null;
-    };
-
-    const handleTouchMove = (event: TouchEvent) => {
-      const previousTouchY = touchYRef.current;
-      const nextTouchY = event.touches[0]?.clientY ?? null;
-
-      if (previousTouchY === null || nextTouchY === null) {
-        touchYRef.current = nextTouchY;
-        return;
-      }
-
-      applyDirection(previousTouchY - nextTouchY);
-      touchYRef.current = nextTouchY;
-    };
-
-    const watchVisualScrollDirection = () => {
-      updateTopbarVisibilityFromSentinel();
-      visualAnimationFrameRef.current = window.requestAnimationFrame(watchVisualScrollDirection);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("wheel", handleWheel, { passive: true });
-    window.addEventListener("touchstart", handleTouchStart, { passive: true });
-    window.addEventListener("touchmove", handleTouchMove, { passive: true });
-    document.addEventListener("scroll", handleScroll, { capture: true, passive: true });
-    scrollCheckIntervalRef.current = window.setInterval(updateTopbarVisibilityFromSentinel, 120);
-    visualAnimationFrameRef.current = window.requestAnimationFrame(watchVisualScrollDirection);
+    updateTopbar();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("scroll", handleScroll, { capture: true });
-
-      if (animationFrameRef.current !== null) {
-        window.cancelAnimationFrame(animationFrameRef.current);
-      }
-
-      if (visualAnimationFrameRef.current !== null) {
-        window.cancelAnimationFrame(visualAnimationFrameRef.current);
-      }
-
-      if (scrollCheckIntervalRef.current !== null) {
-        window.clearInterval(scrollCheckIntervalRef.current);
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
       }
     };
   }, []);
 
-  const isTopbarHidden = isHidden && !isMobileMenuOpen;
+  useEffect(() => {
+    if (previousPathnameRef.current === pathname) return;
+    previousPathnameRef.current = pathname;
+
+    const frame = window.requestAnimationFrame(() => {
+      closeDesktopMenu();
+      closeMobileMenu();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [closeDesktopMenu, closeMobileMenu, pathname]);
+
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node) || headerRef.current?.contains(target)) {
+        return;
+      }
+      closeDesktopMenu();
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && activeMenu) {
+        event.preventDefault();
+        closeDesktopMenu(true);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeMenu, closeDesktopMenu]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const previousPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    const panel = mobilePanelRef.current;
+    mobileCloseButtonRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeMobileMenu(true);
+        return;
+      }
+
+      if (event.key !== "Tab" || !panel) return;
+      const currentFocusable = Array.from(
+        panel.querySelectorAll<HTMLElement>(focusableSelector),
+      );
+      const first = currentFocusable[0];
+      const last = currentFocusable.at(-1);
+      if (!first || !last) return;
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.paddingRight = previousPaddingRight;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [closeMobileMenu, isMobileMenuOpen]);
+
+  useEffect(
+    () => () => {
+      clearCloseTimer();
+    },
+    [clearCloseTimer],
+  );
+
+  function handleDesktopTriggerKeyDown(
+    event: ReactKeyboardEvent<HTMLButtonElement>,
+    key: MenuKey,
+  ) {
+    if (event.key !== "ArrowDown") return;
+    event.preventDefault();
+    setActiveMenu(key);
+    window.requestAnimationFrame(() => {
+      document
+        .getElementById(`site-menu-${key}`)
+        ?.querySelector<HTMLElement>(focusableSelector)
+        ?.focus();
+    });
+  }
+
+  const isDark = tone === "dark";
+  const navState = isCompact ? "compact" : "expanded";
 
   return (
     <>
-      <Box
-        as="header"
-        surface="bg"
-        radius="xl"
-        border="subtle"
-        className="fixed left-(--spacing-4) right-(--spacing-4) top-(--spacing-4) z-(--z-sticky) mx-auto max-w-[calc(var(--container-wide)_-_var(--spacing-8))] backdrop-blur-md transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none md:left-(--spacing-6) md:right-(--spacing-6) md:top-(--spacing-6) md:max-w-[calc(var(--container-wide)_-_var(--spacing-12))]"
-        style={{
-          transform: isTopbarHidden ? "translateY(calc(-100% - var(--spacing-8)))" : "translateY(0)",
-        }}
+      <header
+        ref={headerRef}
+        className={styles.header}
+        data-testid="site-topbar"
+        data-state={navState}
+        data-tone={tone}
       >
-        <Stack
-          direction="row"
-          gap="4"
-          align="center"
-          className="px-(--spacing-4) py-(--spacing-3) md:px-(--spacing-5)"
-        >
+        <div className={styles.bar}>
           <Link
             href="/"
             aria-label="Qoovex home"
-            className="inline-flex items-center gap-(--spacing-2) no-underline"
+            className={styles.brand}
+            onClick={() => closeDesktopMenu()}
           >
-            <QoovexMark width={26} height={26} />
-            <Text as="span" family="display" size="lg" weight="semibold" className="hidden min-[430px]:inline">
-              Qoovex
-            </Text>
+            <QoovexMark
+              tone={isDark ? "white" : "ink"}
+              width={24}
+              height={24}
+              className={styles.brandMark}
+            />
+            <span className={styles.wordmark}>Qoovex</span>
           </Link>
 
           <nav
-            className="hidden min-w-0 flex-1 items-center justify-center gap-(--spacing-3) md:flex"
+            className={styles.desktopNav}
             aria-label="Navigazione principale"
           >
-            {mainNavItems.slice(0, 2).map((item) => (
-              <Link key={item.href} href={item.href} className="px-(--spacing-2) no-underline">
-                <Text
-                  as="span"
-                  size="sm"
-                  tone="muted"
-                  className="transition-colors hover:text-(--color-text)"
+            {menuDefinitions.map((menu) => {
+              const isOpen = activeMenu === menu.key;
+              return (
+                <div
+                  key={menu.key}
+                  className={styles.desktopMenuGroup}
+                  onMouseEnter={() => {
+                    clearCloseTimer();
+                    setActiveMenu(menu.key);
+                  }}
+                  onMouseLeave={scheduleDesktopMenuClose}
+                  onFocus={() => {
+                    clearCloseTimer();
+                    setActiveMenu(menu.key);
+                  }}
+                  onBlur={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                      scheduleDesktopMenuClose();
+                    }
+                  }}
                 >
-                  {item.label}
-                </Text>
+                  <Button
+                    ref={(node) => {
+                      triggerRefs.current[menu.key] =
+                        node as HTMLButtonElement | null;
+                    }}
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    aria-expanded={isOpen}
+                    aria-controls={`site-menu-${menu.key}`}
+                    onClick={() => setActiveMenu(menu.key)}
+                    onKeyDown={(event) =>
+                      handleDesktopTriggerKeyDown(event, menu.key)
+                    }
+                    iconRight={
+                      <Icon
+                        icon={CaretDown}
+                        size="xs"
+                        weight="bold"
+                        className={styles.caret}
+                      />
+                    }
+                    className={styles.navTrigger}
+                  >
+                    {menu.label}
+                  </Button>
+
+                  <div
+                    id={`site-menu-${menu.key}`}
+                    data-testid={`site-menu-${menu.key}`}
+                    className={styles.megaMenu}
+                    data-open={isOpen || undefined}
+                    aria-hidden={!isOpen}
+                    onMouseEnter={clearCloseTimer}
+                    onMouseLeave={scheduleDesktopMenuClose}
+                  >
+                    <div className={styles.megaMenuGrid}>
+                      {menu.items.map((item) => (
+                        <Link
+                          key={`${item.href}-${item.label}`}
+                          href={item.href}
+                          className={styles.megaMenuItem}
+                          tabIndex={isOpen ? 0 : -1}
+                          onClick={() => closeDesktopMenu()}
+                        >
+                          <span className={styles.megaMenuTitle}>
+                            {item.label}
+                          </span>
+                          <span className={styles.megaMenuDescription}>
+                            {item.description}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                    <Link
+                      href={menu.href}
+                      className={styles.megaMenuAll}
+                      tabIndex={isOpen ? 0 : -1}
+                      onClick={() => closeDesktopMenu()}
+                    >
+                      Esplora {menu.label.toLowerCase()}
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+
+            {directLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={styles.navLink}
+                onClick={() => closeDesktopMenu()}
+              >
+                {item.label}
               </Link>
             ))}
-            <ResourceDropdown />
-            <Link href="/enterprise" className="px-(--spacing-2) no-underline">
-              <Text
-                as="span"
-                size="sm"
-                tone="muted"
-                className="transition-colors hover:text-(--color-text)"
-              >
-                Azienda
-              </Text>
-            </Link>
           </nav>
 
-          <Stack direction="row" gap="2" align="center" className="ml-auto">
+          <div className={styles.desktopActions}>
             <Button
               as="a"
               href={workspaceSignInHref}
-              variant="ghost"
+              variant={isDark ? "ghost" : "secondary"}
               size="sm"
-              className="h-8 px-(--spacing-3) md:hidden"
+            >
+              Accedi
+            </Button>
+            <Button
+              as="a"
+              href={workspaceSignUpHref}
+              variant={isDark ? "inverse" : "primary"}
+              size="sm"
+            >
+              Inizia gratis
+            </Button>
+          </div>
+
+          <div className={styles.mobileActions}>
+            <Button
+              as="a"
+              href={workspaceSignUpHref}
+              variant={isDark ? "inverse" : "primary"}
+              size="sm"
+            >
+              Inizia gratis
+            </Button>
+            <Button
+              ref={mobileMenuButtonRef}
+              type="button"
+              variant="ghost"
+              size="xs"
+              aria-label="Apri menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="site-mobile-menu"
+              onClick={() => setIsMobileMenuOpen(true)}
+              iconLeft={<Icon icon={List} size="lg" weight="bold" />}
+            />
+          </div>
+        </div>
+      </header>
+
+      {isMobileMenuOpen ? (
+        <div
+          ref={mobilePanelRef}
+          id="site-mobile-menu"
+          data-testid="site-mobile-menu"
+          className={styles.mobilePanel}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu di navigazione"
+        >
+          <div className={styles.mobilePanelHeader}>
+            <Link
+              href="/"
+              aria-label="Qoovex home"
+              className={styles.mobilePanelBrand}
+              onClick={() => closeMobileMenu()}
+            >
+              <QoovexMark width={24} height={24} />
+              <span>Qoovex</span>
+            </Link>
+            <Button
+              as="a"
+              href={workspaceSignUpHref}
+              variant="primary"
+              size="sm"
+            >
+              Inizia gratis
+            </Button>
+            <Button
+              ref={mobileCloseButtonRef}
+              type="button"
+              variant="ghost"
+              size="xs"
+              aria-label="Chiudi menu"
+              onClick={() => closeMobileMenu(true)}
+              iconLeft={<Icon icon={X} size="lg" weight="bold" />}
+            />
+          </div>
+
+          <nav className={styles.mobileNav} aria-label="Menu mobile">
+            {menuDefinitions.map((menu) => {
+              const isOpen = mobileAccordion === menu.key;
+              return (
+                <div key={menu.key} className={styles.mobileAccordion}>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    aria-expanded={isOpen}
+                    aria-controls={`mobile-section-${menu.key}`}
+                    onClick={() =>
+                      setMobileAccordion((current) =>
+                        current === menu.key ? null : menu.key,
+                      )
+                    }
+                    iconRight={
+                      <Icon
+                        icon={CaretDown}
+                        size="sm"
+                        weight="bold"
+                        className={styles.mobileAccordionCaret}
+                      />
+                    }
+                    className={styles.mobileAccordionTrigger}
+                  >
+                    {menu.label}
+                  </Button>
+
+                  <div
+                    id={`mobile-section-${menu.key}`}
+                    className={styles.mobileAccordionContent}
+                    data-open={isOpen || undefined}
+                    hidden={!isOpen}
+                  >
+                    <Link
+                      href={menu.href}
+                      className={styles.mobileMenuLead}
+                      onClick={() => closeMobileMenu()}
+                    >
+                      Esplora {menu.label.toLowerCase()}
+                    </Link>
+                    {menu.items.map((item) => (
+                      <Link
+                        key={`${item.href}-${item.label}`}
+                        href={item.href}
+                        className={styles.mobileMenuItem}
+                        onClick={() => closeMobileMenu()}
+                      >
+                        <span>{item.label}</span>
+                        <small>{item.description}</small>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+
+            <div className={styles.mobileDirectLinks}>
+              {directLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={styles.mobileDirectLink}
+                  onClick={() => closeMobileMenu()}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </nav>
+
+          <div className={styles.mobilePanelFooter}>
+            <Button
+              as="a"
+              href={workspaceSignInHref}
+              variant="secondary"
+              size="md"
             >
               Accedi
             </Button>
@@ -306,83 +621,15 @@ export function SiteTopbar() {
               as="a"
               href={workspaceSignUpHref}
               variant="primary"
-              size="sm"
-              className="h-8 px-(--spacing-3) md:hidden"
-            >
-              Iscriviti
-            </Button>
-            <Button
-              as="a"
-              href={workspaceSignUpHref}
-              variant="secondary"
-              size="sm"
-              iconRight={<Icon icon={ArrowRight} size="xs" weight="bold" />}
-              className="hidden md:inline-flex"
+              size="md"
             >
               Inizia gratis
             </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              aria-label={isMobileMenuOpen ? "Chiudi menu" : "Apri menu"}
-              aria-expanded={isMobileMenuOpen}
-              onClick={() => {
-                setIsHidden(false);
-                setIsMobileMenuOpen((current) => !current);
-              }}
-              iconLeft={<Icon icon={isMobileMenuOpen ? X : List} size="sm" weight="bold" />}
-              className="h-9 w-9 px-0 md:hidden"
-            />
-          </Stack>
-        </Stack>
+          </div>
+        </div>
+      ) : null}
 
-        {isMobileMenuOpen ? (
-          <Box className="border-t border-(--color-divider) px-(--spacing-4) pb-(--spacing-4) pt-(--spacing-2) md:hidden">
-            <Stack gap="4">
-              <Stack as="nav" gap="1" aria-label="Menu mobile">
-                {[...mainNavItems.slice(0, 2), { href: "/enterprise", label: "Azienda" }].map((item) => (
-                  <Link key={item.href} href={item.href} className="rounded-(--radius-lg) px-(--spacing-3) py-(--spacing-2) no-underline hover:bg-(--color-surface-2)">
-                    <Text as="span" size="sm" weight="medium">
-                      {item.label}
-                    </Text>
-                  </Link>
-                ))}
-              </Stack>
-
-              <Stack gap="2">
-                <Text as="span" size="xs" tone="faint" weight="semibold">
-                  Risorse
-                </Text>
-                <Stack gap="1">
-                  {resourceLinks.map((item) => (
-                    <Link key={item.href} href={item.href} className="rounded-(--radius-lg) px-(--spacing-3) py-(--spacing-2) no-underline hover:bg-(--color-surface-2)">
-                      <Text as="span" size="sm" weight="medium">
-                        {item.label}
-                      </Text>
-                    </Link>
-                  ))}
-                </Stack>
-              </Stack>
-
-              <Button
-                as="a"
-                href={workspaceSignUpHref}
-                size="md"
-                iconRight={<Icon icon={ArrowRight} size="sm" weight="bold" />}
-                className="w-full"
-              >
-                Metti ordine in cucina
-              </Button>
-            </Stack>
-          </Box>
-        ) : null}
-      </Box>
-      <div
-        ref={scrollSentinelRef}
-        className="h-[calc(3.75rem_+_var(--spacing-8))] md:h-[calc(3.75rem_+_var(--spacing-10))]"
-        aria-hidden="true"
-      />
+      <div className={styles.topbarSpacer} aria-hidden="true" />
     </>
   );
 }
