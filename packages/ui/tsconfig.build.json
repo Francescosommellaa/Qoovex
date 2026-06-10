@@ -10,6 +10,6 @@
     "rootDir": ".",
     "sourceMap": false
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "config/**/*.ts", "styles/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

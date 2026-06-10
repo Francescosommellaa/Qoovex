@@ -3,12 +3,11 @@
 Scopo: fonte canonica degli asset brand condivisi.
 
 Metti qui:
-- logo, icon, mark e asset visuali comuni a piu` app.
-- illustrazioni lineari originali condivise.
+- logo, icon e mark originali Qoovex.
 
 Export canonici:
 - `@qoovex/brand/qoovex-mark` per il marchio React ink/white;
-- `@qoovex/brand/illustrations/*` per le illustrazioni.
+- `@qoovex/brand/logo-Icon/*` per le varianti originali del logo.
 
 Non mettere qui:
 - asset temporanei;
@@ -16,6 +15,6 @@ Non mettere qui:
 
 Regole:
 - una sola fonte di verita` per asset shared;
-- se un asset nasce in un'app ma diventa shared, spostalo qui.
+- non ricreare il logo in componenti o SVG alternativi;
 - il `viewBox` degli SVG deve essere otticamente aderente al disegno, senza
   margini interni che falsino le dimensioni dichiarate dal componente.

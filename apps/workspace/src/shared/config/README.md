@@ -6,7 +6,7 @@ Metti qui:
 - costanti, key, default config e mappe di configurazione interne all'app.
 
 Non mettere qui:
-- business rules globali di piani o design system gia` definite altrove;
+- business rules globali gia` definite altrove;
 - utility eseguibili o componenti UI.
 
 Regole:

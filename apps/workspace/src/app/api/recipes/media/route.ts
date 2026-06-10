@@ -1,6 +1,6 @@
 import { get } from "@vercel/blob";
 import { NextResponse } from "next/server";
-import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { bootstrapUser } from "@shared/server/current-user-service";
 import { extractBlobPathname, isPrivateBlobUrl } from "@shared/server/recipe-image-access";
 import { canAccessRecipeImagePathname } from "@shared/server/recipe-image-media-access";
 

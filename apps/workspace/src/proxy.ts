@@ -9,64 +9,28 @@ import { isDevAuthAllowedForHost } from "@shared/lib/dev-auth-guard";
 
 const { auth } = NextAuth(authConfig);
 
-const publicRoutes = new Set([
-  "/",
-  "/sign-in",
-  "/sign-up",
-  "/sign-up/verify",
-  "/sign-up/setup",
-  "/sign-in/verify",
-  "/complete-profile",
-  "/forgot-password",
-  "/reset-password",
-  "/mfa-challenge",
-  "/workspace-unavailable",
-  "/api/dev-auth",
-]);
-
-function isPublicPath(pathname: string) {
-  if (publicRoutes.has(pathname)) return true;
-  if (pathname.startsWith("/api/auth/")) return true;
-  return false;
+function isPublicApi(pathname: string) {
+  return pathname.startsWith("/api/auth/") || pathname === "/api/dev-auth";
 }
 
-export const proxy = auth(async (req) => {
-  const { pathname } = req.nextUrl;
-  const host = req.headers.get("host") ?? req.nextUrl.host;
-  const devAuthCookie = req.cookies.get(DEV_AUTH_COOKIE_NAME)?.value;
+export const proxy = auth(async (request) => {
+  const { pathname } = request.nextUrl;
+  if (isPublicApi(pathname)) return;
+
+  const host = request.headers.get("host") ?? request.nextUrl.host;
+  const devAuthCookie = request.cookies.get(DEV_AUTH_COOKIE_NAME)?.value;
   const hasDevAuthSession =
     isDevAuthAllowedForHost(host) &&
     (await verifyDevAuthCookieValue(devAuthCookie));
 
-  if (pathname === "/") {
-    const destination = req.nextUrl.clone();
-    if (hasDevAuthSession || req.auth) {
-      destination.pathname = "/dashboard";
-      return NextResponse.redirect(destination);
-    }
+  if (hasDevAuthSession || request.auth) return;
 
-    destination.pathname = "/sign-up";
-    return NextResponse.redirect(destination);
-  }
-
-  if (hasDevAuthSession || isPublicPath(pathname)) {
-    return;
-  }
-
-  if (!req.auth) {
-    const signInUrl = req.nextUrl.clone();
-    signInUrl.pathname = "/sign-in";
-    signInUrl.searchParams.set(
-      "callbackUrl",
-      `${pathname}${req.nextUrl.search}`,
-    );
-    return NextResponse.redirect(signInUrl);
-  }
+  return NextResponse.json(
+    { message: "Sessione non valida." },
+    { status: 401 },
+  );
 });
 
 export const config = {
-  matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    "/(api|trpc)(.*)",
-  ],
+  matcher: ["/api/:path*"],
 };

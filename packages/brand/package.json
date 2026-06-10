@@ -10,7 +10,6 @@
   },
   "exports": {
     "./qoovex-mark": "./src/qoovex-mark.tsx",
-    "./illustrations/*": "./illustrations/*",
     "./logo-Icon/*": "./logo-Icon/*"
   }
 }

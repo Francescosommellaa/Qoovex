@@ -2,7 +2,7 @@ import { put } from "@vercel/blob";
 import { dirname, join } from "node:path";
 import { mkdir, writeFile } from "node:fs/promises";
 import { NextResponse } from "next/server";
-import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { bootstrapUser } from "@shared/server/current-user-service";
 import {
   buildRecipeImagePathname,
   InvalidRecipeImageError,

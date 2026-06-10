@@ -1,28 +1,15 @@
 # Workspace App
 
-Scopo: web app principale di Qoovex workspace.
+Runtime API-only di Qoovex.
 
-Metti qui:
-- prodotto operativo: ricette, menu, shopping list, work plan, explore, settings, onboarding;
-- routing, bootstrapping auth e composizione dei layer FSD.
-
-Non mettere qui:
-- marketing site;
-- codice shared che puo` vivere in `packages/*`.
+Contiene route API, NextAuth, servizi, repository e regole di dominio. Le
+route frontend, auth UI, viste, widget e componenti sono intenzionalmente
+assenti.
 
 Regole:
-- FSD rigorosa in `src`;
-- importa sempre verso il basso: `shared -> entities -> features -> widgets -> views -> app`;
-- ogni cartella manuale di `src` deve avere il suo `README.md`;
-- nessun file generico (`helpers.ts`, `utils.ts`, `misc.ts`, `temp.ts`);
-- `app/(auth)/ui` e` una eccezione route-local: resta dentro il route group auth e non diventa API condivisa;
-- non costruire pagine, shell prodotto o feature finche` le fondamenta non sono stabili.
-
-Guardrail:
-- `pnpm check:repo` esegue il guard locale su README, import FSD, naming e assenza legacy root (`src/app`, `prisma/` a repo root);
-- `pnpm check:fast` combina guard repo, lint e type-check.
-
-Env locale (sviluppo):
-- `DEV_AUTH_SECRET` (min 32 caratteri) in `.env.local` per dev-auth firmato — vedi `src/app/api/dev-auth/README.md`.
-
-Ordine file: segui il Brain canonico `00_System/code-patterns.md`.
+- FSD resta il modello di placement per la futura ricostruzione;
+- import sempre verso layer inferiori;
+- ogni cartella manuale in `src` richiede `README.md`;
+- nessun file generico;
+- accesso DB solo nei moduli server consentiti;
+- `src/proxy.ts` intercetta esclusivamente `/api/**`.

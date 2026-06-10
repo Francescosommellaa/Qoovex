@@ -1,7 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  transpilePackages: ["@qoovex/brand", "@qoovex/ui"],
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

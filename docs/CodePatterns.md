@@ -1,17 +1,11 @@
-# Code Patterns (Canonical Reference in Brain)
+# Code Patterns
 
-Riferimento canonico pattern:
-- `A:/Qoovex-Brain/00_System/code-patterns-extract.md`
-- `A:/Qoovex-Brain/01_Architecture/architecture-extract.md`
-- `A:/Qoovex-Brain/04_Decisions/decisions-extract.md`
-- `A:/Qoovex-Brain/05_Bugs/bugs-extract.md`
-
-Regole sintetiche mantenute nel repo:
-- file naming esplicito, no nomi vaghi;
-- no business logic pesante in componenti UI;
-- no query DB in componenti client;
-- import direction FSD verso il basso;
-- shared code in `packages/*`;
-- token semantici e regole UI rispettate.
-
-Per dettagli completi e aggiornati usare sempre il Brain canonico.
+Il Brain canonico definisce le regole complete. Nel repo restano questi
+vincoli:
+- naming esplicito e nessun file vago;
+- logica business nei servizi, non nei controller;
+- query DB attraverso repository server-only;
+- import FSD verso il basso;
+- shared code cross-app in `packages/*`;
+- logo esclusivamente da `packages/brand`;
+- future icone esclusivamente Phosphor, senza SVG sostitutivi.

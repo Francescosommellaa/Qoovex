@@ -22,7 +22,6 @@
     "db:workspace": "turbo run db:workspace --filter=@qoovex/db"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.57.0",
     "chrome-launcher": "^1.2.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -31,7 +30,6 @@
     "turbo": "^2.9.14"
   },
   "dependencies": {
-    "@phosphor-icons/react": "^2.1.10",
     "better-sqlite3": "^12.10.0"
   }
 }

@@ -21,11 +21,6 @@ function getGoogleProvider() {
 export const authConfig = {
   secret: getAuthSecret(),
   providers: [getGoogleProvider()].filter((provider) => provider !== null),
-  pages: {
-    signIn: "/sign-in",
-    verifyRequest: "/sign-in/verify",
-    error: "/sign-in",
-  },
   trustHost: true,
 } satisfies NextAuthConfig;
 

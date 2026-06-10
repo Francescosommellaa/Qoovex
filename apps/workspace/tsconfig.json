@@ -5,12 +5,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./src/shared/*"],
-      "@entities/*": ["./src/entities/*"],
-      "@features/*": ["./src/features/*"],
-      "@widgets/*": ["./src/widgets/*"],
-      "@views/*": ["./src/views/*"],
       "@qoovex/config": ["../../packages/config/src/index.ts"],
-      "@qoovex/ui": ["../../packages/ui/src/index.ts"],
       "@qoovex/db": ["../../packages/db/src/index.ts"]
     }
   },

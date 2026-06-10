@@ -4,7 +4,6 @@ export default defineConfig({
   testDir: ".",
   testMatch: [
     "tests/e2e/**/*.spec.ts",
-    "apps/web/e2e/**/*.spec.ts",
   ],
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
@@ -36,13 +35,13 @@ export default defineConfig({
   webServer: [
     {
       command: "pnpm --filter @qoovex/web dev",
-      url: "http://localhost:3000/home",
+      url: "http://localhost:3000/",
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },
     {
       command: "pnpm --filter @qoovex/workspace dev",
-      url: "http://localhost:3001/sign-in",
+      url: "http://localhost:3001/api/auth/providers",
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },

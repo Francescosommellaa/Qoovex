@@ -1,35 +1,9 @@
-import type { Metadata, Viewport } from "next";
-import { Analytics } from "@vercel/analytics/next";
-import "./globals.css";
+import type { ReactNode } from "react";
 
-export const metadata: Metadata = {
-  title: "Sirio — Qoovex Design System",
-  description:
-    "Il design system ufficiale di Qoovex. Colori, tipografia, componenti, token e pattern per costruire prodotti coerenti.",
-  openGraph: {
-    title: "Sirio — Qoovex Design System",
-    description:
-      "Il design system ufficiale di Qoovex. Colori, tipografia, componenti e token.",
-    siteName: "Sirio",
-  },
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="it">
-      <body>
-        {children}
-        <Analytics />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

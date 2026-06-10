@@ -6,26 +6,6 @@ import {
 } from "@shared/lib/dev-auth-cookie";
 import { isDevAuthAllowed } from "@shared/server/dev-auth";
 
-function getSafeDestination(req: Request) {
-  const url = new URL(req.url);
-  const requestedDestination = url.searchParams.get("redirect_url");
-
-  if (!requestedDestination) {
-    return "/dashboard";
-  }
-
-  try {
-    const destinationUrl = new URL(requestedDestination, url.origin);
-    if (destinationUrl.origin !== url.origin) {
-      return "/dashboard";
-    }
-
-    return `${destinationUrl.pathname}${destinationUrl.search}${destinationUrl.hash}`;
-  } catch {
-    return "/dashboard";
-  }
-}
-
 function devAuthCookieOptions(maxAge: number) {
   return {
     httpOnly: true,
@@ -36,7 +16,7 @@ function devAuthCookieOptions(maxAge: number) {
   };
 }
 
-export async function POST(req: Request) {
+export async function POST() {
   if (!(await isDevAuthAllowed())) {
     return NextResponse.json(null, { status: 404 });
   }
@@ -58,9 +38,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const response = NextResponse.json({
-    destination: getSafeDestination(req),
-  });
+  const response = NextResponse.json({ ok: true });
 
   response.cookies.set({
     name: signedCookie.name,

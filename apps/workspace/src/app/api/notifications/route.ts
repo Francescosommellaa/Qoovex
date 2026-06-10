@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { bootstrapUser } from "@shared/actions/bootstrap-user";
+import { bootstrapUser } from "@shared/server/current-user-service";
 import {
   deleteNotifications,
   getNotificationFeed,

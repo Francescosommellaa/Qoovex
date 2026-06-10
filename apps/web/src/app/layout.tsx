@@ -1,14 +1,8 @@
-import type { ReactNode } from "react";
 import type { Metadata } from "next";
-import "./globals.css";
+import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: {
-    default: "Qoovex — Il workspace per chef professionisti",
-    template: "%s | Qoovex",
-  },
-  description:
-    "Gestisci ricette, menu digitali, allergeni, valori nutrizionali e piani di lavoro collaborativi. Il workspace operativo pensato per cuochi e chef professionisti.",
+  title: "Qoovex",
   metadataBase: new URL("https://qoovex.com"),
 };
 
