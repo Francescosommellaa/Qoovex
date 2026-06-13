@@ -7,8 +7,9 @@ ora app, token o componenti.
 
 ## Stato
 
-La specifica documentale è la fondazione canonica. I valori numerici restano
-candidati finché non superano il prototipo Sirio e i gate descritti qui.
+La fondazione Stable v0.1 ha superato il prototipo Sirio e i gate descritti
+qui. `packages/ui@0.1.0` espone token, Blur System e le primitive `Button`,
+`Card`, `Input`, `Badge` e `GlassPanel`; le fasi successive restano incrementali.
 
 ## Fase 0 — Materiali realistici
 
@@ -48,7 +49,8 @@ Costruire pagine di prova, non schermate prodotto finali:
 - fallback senza backdrop-filter;
 - confronto 375, 768, 1024 e 1440 px.
 
-**Gate:** approvazione esplicita di palette, font, blur, radius, shadow e motion.
+**Gate:** approvato per palette, blur, radius, shadow, motion e fallback.
+I font esterni restano fuori dal contratto.
 
 ## Fase 3 — Token
 
@@ -227,10 +229,9 @@ condivisi. I componenti di dominio seguono l’ordine dei job UX.
 
 ## Richiede conferma
 
-- Inizio di ogni fase implementativa.
+- Inizio delle fasi successive alla fondazione Stable v0.1.
 - Nuove dipendenze.
-- Valori definitivi dei token.
-- API pubbliche dei componenti.
+- Breaking change a token o API pubbliche.
 - Eccezioni ai limiti blur.
 - Rollout nelle app consumer.
 

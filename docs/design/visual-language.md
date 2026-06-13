@@ -143,7 +143,8 @@ progettata.
 - Easing fisico, senza bounce.
 - In reduced motion: dissolvenza breve o cambio immediato.
 
-Gli intervalli sono candidati e richiedono validazione in Sirio.
+I token runtime stabili sono 160, 220, 360 e 600 ms con easing
+`cubic-bezier(.22, 1, .36, 1)`.
 
 ## Esempi
 
@@ -187,7 +188,6 @@ separano navigazione, contesto o focus.
 
 ## Richiede conferma
 
-- Scala finale di radius e shadow.
 - Tecnologia della distorsione della lente.
 - Uso di noise come asset o gradiente generato.
 - Qualsiasi forma aggiuntiva che diventi firma ricorrente.

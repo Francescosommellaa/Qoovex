@@ -44,6 +44,9 @@ creazione dei componenti.
 - **Hover:** variazione di luminanza o bordo.
 - **Active:** lieve compressione visiva, senza bounce.
 - **Disabled:** contrasto ridotto e label leggibile.
+- **Marketing opt-in:** `interaction="magnetic"` solo su CTA primary o glass
+  rare; massimo 6 px entro 32 px di prossimità, disattivato su touch, disabled
+  e reduced motion.
 - **Error:** non applicabile come stato autonomo; usare variante destructive
   solo per azione realmente distruttiva.
 - **Success:** label può cambiare temporaneamente con icona e testo.
@@ -89,9 +92,13 @@ creazione dei componenti.
 
 ### Card
 
-- **Ruolo blur:** nessuno per card operative; `soft` solo per card focale o
+- **Ruolo blur:** nessuno per card operative; `medium` solo per card focale o
   narrativa isolata.
-- **Massimo:** `medium`, mai in liste.
+- **Massimo:** `strong` esclusivamente per preview isolate, mai in liste.
+- **Varianti runtime:** `glass` usa medium; `glass-strong` usa strong soltanto
+  per preview o focus eccezionali fuori da liste operative.
+- **Contesto:** una card glass deve avere luce, colore o contenuto sottostante
+  percepibile; su un canvas uniforme va usata una card paper.
 - **Default:** paper, bordo sottile o ombra minima.
 - **Hover:** solo se tutta la card è interattiva.
 - **Active:** evidenza strutturale, non glow.
@@ -355,10 +362,9 @@ componenti di dominio non diventano varianti decorative delle primitive.
 
 ## Richiede conferma
 
-- API e composizione dei componenti.
+- Breaking change alle API delle primitive Stable v0.1.
 - Librerie primitive o dipendenze.
-- Ownership finale dei pattern in `packages/ui`.
-- Componenti effettivamente necessari alla prima milestone.
+- Nuove primitive oltre la prima milestone.
 - Eccezioni al composition-first.
 
 ## Checklist

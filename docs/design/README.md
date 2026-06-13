@@ -16,13 +16,14 @@ nel Qoovex Brain e in `packages/config/plan_rules.json`.
 
 ## Stato
 
-La specifica è approvata come fondazione visuale, ma non è ancora implementata.
+La fondazione visuale è implementata e approvata come Stable v0.1.
 
-- `apps/sirio` resta uno scaffold vuoto.
-- `packages/ui` resta uno scaffold vuoto.
-- Nessun token o preset descritto qui è disponibile nel runtime.
-- I valori numerici sono contratti o intervalli candidati finché non vengono
-  validati in Sirio con contenuti realistici.
+- `apps/sirio` documenta e verifica il contratto sui viewport previsti.
+- `packages/ui@0.1.0` è la fonte runtime di token, preset e primitive.
+- Palette, blur, radius, shadow, motion e API delle cinque primitive pubbliche
+  sono stabili.
+- Cabinet Grotesk e Synonym restano candidati non caricati; i ruoli tipografici
+  usano fallback di sistema.
 
 ## Mappa
 
@@ -47,8 +48,8 @@ La specifica è approvata come fondazione visuale, ma non è ancora implementata
 
 - `docs/design` decide il linguaggio visuale.
 - `docs/ux` decide target, priorità, flussi, messaggi e copy.
-- `apps/sirio` servirà a validare visivamente token, stati e responsive behavior.
-- `packages/ui` sarà la fonte runtime dei token e componenti condivisi.
+- `apps/sirio` valida visivamente token, stati e responsive behavior.
+- `packages/ui` è la fonte runtime dei token e componenti condivisi.
 - `packages/brand` resta l’unica fonte del logo originale.
 - Il Qoovex Brain registra lo stato e le decisioni stabili senza duplicare
   questa specifica.
@@ -90,8 +91,8 @@ restano qui e, dopo l’implementazione, nella fonte runtime di `packages/ui`.
 
 ## Esempio
 
-Una revisione di `glass-navigation` aggiorna prima la specifica e il prototipo
-Sirio; solo dopo approvazione modifica token o componenti in `packages/ui`.
+Una revisione di `glass-navigation` aggiorna specifica, fonte runtime e Sirio
+nella stessa milestone, con verifica prima della chiusura.
 
 ## Anti-pattern
 
@@ -119,8 +120,8 @@ rule e i flussi restano nelle fonti prodotto e UX.
 
 ## Richiede conferma
 
-- Qualsiasi valore definitivo di token.
-- Modifica di componenti condivisi.
+- Breaking change al contratto Stable v0.1.
+- Nuove primitive o responsabilità pubbliche.
 - Nuove dipendenze visuali.
 - Eccezioni ai limiti di blur, contrasto o performance.
 

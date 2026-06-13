@@ -27,14 +27,13 @@ luce e vetro.
 
 Il budget non include colori funzionali necessari per comunicare stato.
 
-## Primitive candidate
+## Primitive stabili
 
-Questi valori servono per prototipazione e confronto. Non sono ancora token
-runtime definitivi.
+Questi valori sono disponibili nel runtime `@qoovex/ui@0.1.0`.
 
 ### Monocromia
 
-| Nome candidato | Valore    | Ruolo                                     |
+| Nome           | Valore    | Ruolo                                     |
 | -------------- | --------- | ----------------------------------------- |
 | `paper-0`      | `#FFFFFF` | Canvas principale                         |
 | `paper-25`     | `#FCFCFB` | Canvas caldo quasi impercettibile         |
@@ -49,7 +48,7 @@ runtime definitivi.
 
 ### Accenti
 
-| Nome candidato   | Valore    | Ruolo                                |
+| Nome             | Valore    | Ruolo                                |
 | ---------------- | --------- | ------------------------------------ |
 | `signal-cyan`    | `#28C7D9` | Luce fredda e orientamento           |
 | `signal-cobalt`  | `#3568E8` | Focus e profondità                   |
@@ -120,12 +119,12 @@ sulla tinta.
 
 ## Colori funzionali
 
-Valori candidati, da verificare in coppie foreground/background:
+Valori stabili, verificati in coppie foreground/background:
 
-| Stato    | Base candidata | Uso                                   |
+| Stato    | Base stabile | Uso                                   |
 | -------- | -------------- | ------------------------------------- |
 | Successo | `#187A4B`      | Completato, confermato                |
-| Warning  | `#9A6700`      | Da verificare, attenzione             |
+| Warning  | `#D99A00`   | Da verificare, attenzione             |
 | Danger   | `#B4232D`      | Errore e distruttivo                  |
 | Info     | `#2459B3`      | Informazione operativa                |
 | Focus    | `#315FD6`      | Focus ring accessibile                |
@@ -195,9 +194,8 @@ decorano navigazione, card o grafici.
 
 ## Richiede conferma
 
-- Valori finali dopo test in sRGB.
+- Breaking change ai valori Stable v0.1.
 - Eventuale supporto Display P3.
-- Coppie foreground/background funzionali.
 - Palette per visualizzazioni dati, quando esisterà un caso reale.
 
 ## Checklist
@@ -207,4 +205,4 @@ decorano navigazione, card o grafici.
 - [ ] Il contrasto è misurato sulla composizione finale.
 - [ ] Nessuno stato dipende solo dal colore.
 - [ ] I gradienti restano sotto il vetro.
-- [ ] I valori candidati non sono trattati come token implementati.
+- [ ] I consumer usano i token implementati senza duplicarne i valori.

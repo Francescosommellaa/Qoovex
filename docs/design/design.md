@@ -94,7 +94,7 @@ canvas attenuato: il blur separa i livelli, ma non attraversa il contenuto.
 
 ## Richiede conferma
 
-- Valori finali dei token dopo il prototipo Sirio.
+- Breaking change ai token Stable v0.1.
 - Download e self-hosting dei font dopo test su licenza e glifi.
 - Introduzione di un dark mode completo.
 - Uso del preset `glass-ai`.

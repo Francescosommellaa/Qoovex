@@ -1,3 +1,5 @@
+import { SirioShowcase } from "@/components/sirio-showcase";
+
 export default function SirioPage() {
-  return null;
+  return <SirioShowcase />;
 }

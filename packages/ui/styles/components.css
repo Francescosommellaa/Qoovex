@@ -1,0 +1,325 @@
+@layer components {
+  .qv-button {
+    --qv-button-lift: 0px;
+    --qv-button-scale: 1;
+    --qv-magnetic-x: 0px;
+    --qv-magnetic-y: 0px;
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--qv-radius-full);
+    padding: 0.7rem 1.15rem;
+    font-size: var(--qv-type-control);
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    isolation: isolate;
+    position: relative;
+    transform: translate3d(
+        var(--qv-magnetic-x),
+        calc(var(--qv-magnetic-y) + var(--qv-button-lift)),
+        0
+      )
+      scale(var(--qv-button-scale));
+    transition:
+      color var(--qv-motion-fast) var(--qv-ease-standard),
+      background-color var(--qv-motion-fast) var(--qv-ease-standard),
+      border-color var(--qv-motion-fast) var(--qv-ease-standard),
+      box-shadow var(--qv-motion-fast) var(--qv-ease-standard),
+      transform var(--qv-motion-fast) var(--qv-ease-standard);
+  }
+
+  .qv-button:hover:not(:disabled) {
+    --qv-button-lift: -1px;
+  }
+
+  .qv-button:active:not(:disabled) {
+    --qv-button-lift: 0px;
+    --qv-button-scale: 0.985;
+  }
+
+  .qv-button[data-variant="primary"] {
+    background: var(--qv-ink-950);
+    color: var(--qv-text-inverse);
+    box-shadow: var(--qv-shadow-soft);
+  }
+
+  .qv-button[data-variant="primary"]:hover:not(:disabled) {
+    background: var(--qv-ink-800);
+    box-shadow: var(--qv-shadow-medium);
+  }
+
+  .qv-button[data-variant="secondary"] {
+    border-color: var(--qv-border-default);
+    background: var(--qv-surface-paper);
+    color: var(--qv-text-primary);
+  }
+
+  .qv-button[data-variant="secondary"]:hover:not(:disabled),
+  .qv-button[data-variant="ghost"]:hover:not(:disabled) {
+    background: var(--qv-surface-canvas-muted);
+    border-color: var(--qv-border-strong);
+  }
+
+  .qv-button[data-variant="ghost"] {
+    background: transparent;
+    color: var(--qv-text-primary);
+  }
+
+  .qv-button[data-variant="glass"] {
+    border-color: var(--qv-border-glass);
+    background: var(--qv-button-glass-surface);
+    box-shadow:
+      var(--qv-glass-highlight),
+      var(--qv-button-glass-shadow);
+    color: var(--qv-text-primary);
+  }
+
+  .qv-button[data-variant="glass"]:hover:not(:disabled) {
+    background: var(--qv-button-glass-surface-hover);
+    border-color: var(--qv-border-soft);
+  }
+
+  .qv-button[data-variant="destructive"] {
+    background: var(--qv-status-danger);
+    color: var(--qv-text-inverse);
+  }
+
+  .qv-button[data-variant="destructive"]:hover:not(:disabled) {
+    background: var(--qv-status-danger-hover);
+  }
+
+  .qv-button[data-interaction="magnetic"] {
+    --qv-button-lift: 0px;
+  }
+
+  .qv-button[data-interaction="magnetic"]::after {
+    position: absolute;
+    z-index: -1;
+    inset: -2px;
+    border-radius: inherit;
+    padding: 2px;
+    background: var(--qv-button-magnetic-border);
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    transform: rotate(0deg);
+    transition: opacity var(--qv-motion-fast) var(--qv-ease-standard);
+    -webkit-mask:
+      var(--qv-mask-solid) content-box,
+      var(--qv-mask-solid);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .qv-button[data-interaction="magnetic"][data-magnetic-enabled="true"]:hover::after {
+      opacity: 1;
+      animation: qv-button-border-orbit 1.8s linear infinite;
+    }
+  }
+
+  .qv-button:disabled {
+    --qv-button-lift: 0px;
+    --qv-button-scale: 1;
+    --qv-magnetic-x: 0px;
+    --qv-magnetic-y: 0px;
+    border-color: var(--qv-border-default);
+    background: var(--qv-stone-100);
+    box-shadow: none;
+    color: var(--qv-stone-600);
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .qv-button:disabled::after {
+    display: none;
+  }
+
+  .qv-card {
+    border: 1px solid var(--qv-border-subtle);
+    border-radius: var(--qv-radius-md);
+    color: var(--qv-text-primary);
+    padding: clamp(1.1rem, 3vw, 1.5rem);
+  }
+
+  .qv-card[data-variant="default"],
+  .qv-card[data-variant="elevated"] {
+    background: var(--qv-surface-paper);
+  }
+
+  .qv-card[data-variant="elevated"] {
+    border-color: transparent;
+    box-shadow: var(--qv-shadow-medium);
+  }
+
+  .qv-card[data-variant="glass"] {
+    border-color: var(--qv-border-glass);
+    border-radius: var(--qv-radius-md);
+  }
+
+  .qv-card[data-variant="glass-strong"] {
+    border-color: var(--qv-border-glass);
+    border-radius: var(--qv-radius-md);
+  }
+
+  .qv-card[data-variant="inverse"] {
+    border-color: var(--qv-border-inverse);
+    background: var(--qv-surface-inverse);
+    color: var(--qv-text-inverse);
+  }
+
+  .qv-field {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .qv-field__label {
+    color: var(--qv-text-primary);
+    font-size: var(--qv-type-control);
+    font-weight: 600;
+  }
+
+  .qv-input {
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid var(--qv-border-default);
+    border-radius: var(--qv-radius-sm);
+    background: var(--qv-surface-paper);
+    padding: 0.75rem 0.9rem;
+    color: var(--qv-text-primary);
+    transition:
+      border-color var(--qv-motion-fast) var(--qv-ease-standard),
+      box-shadow var(--qv-motion-fast) var(--qv-ease-standard),
+      background-color var(--qv-motion-fast) var(--qv-ease-standard);
+  }
+
+  .qv-input::placeholder {
+    color: var(--qv-text-disabled);
+  }
+
+  .qv-input:hover:not(:disabled) {
+    border-color: var(--qv-border-strong);
+  }
+
+  .qv-input:focus-visible {
+    border-color: var(--qv-border-focus);
+    outline: none;
+    box-shadow: var(--qv-focus-ring);
+  }
+
+  .qv-input:disabled {
+    background: var(--qv-surface-muted);
+    color: var(--qv-text-disabled);
+    cursor: not-allowed;
+  }
+
+  .qv-field[data-status="error"] .qv-input {
+    border-color: var(--qv-status-danger);
+  }
+
+  .qv-field[data-status="success"] .qv-input {
+    border-color: var(--qv-status-success);
+  }
+
+  .qv-field__description,
+  .qv-field__message {
+    margin: 0;
+    color: var(--qv-text-secondary);
+    font-size: var(--qv-type-caption);
+  }
+
+  .qv-field[data-status="error"] .qv-field__message {
+    color: var(--qv-status-danger);
+  }
+
+  .qv-field[data-status="success"] .qv-field__message {
+    color: var(--qv-status-success);
+  }
+
+  .qv-badge {
+    display: inline-flex;
+    min-height: 28px;
+    align-items: center;
+    border: 1px solid var(--qv-border-default);
+    border-radius: var(--qv-radius-full);
+    background: var(--qv-surface-canvas-muted);
+    padding: 0.25rem 0.65rem;
+    color: var(--qv-text-secondary);
+    font-size: var(--qv-type-caption);
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .qv-badge[data-variant="accent"] {
+    border-color: var(--qv-accent-border);
+    background: var(--qv-accent-surface);
+    color: var(--qv-accent-text);
+  }
+
+  .qv-badge[data-variant="success"] {
+    border-color: var(--qv-status-success-border);
+    background: var(--qv-status-success-surface);
+    color: var(--qv-status-success-text);
+  }
+
+  .qv-badge[data-variant="warning"] {
+    border-color: var(--qv-status-warning-border);
+    background: var(--qv-status-warning-surface);
+    color: var(--qv-status-warning-text);
+  }
+
+  .qv-badge[data-variant="danger"] {
+    border-color: var(--qv-status-danger-border);
+    background: var(--qv-status-danger-surface);
+    color: var(--qv-status-danger-text);
+  }
+
+  .qv-badge[data-variant="info"] {
+    border-color: var(--qv-status-info-border);
+    background: var(--qv-status-info-surface);
+    color: var(--qv-status-info-text);
+  }
+
+  .qv-glass-panel {
+    border-radius: var(--qv-radius-lg);
+    padding: clamp(1.1rem, 3vw, 1.75rem);
+  }
+
+  @media (forced-colors: active) {
+    .qv-button,
+    .qv-card,
+    .qv-input,
+    .qv-badge {
+      border-color: ButtonText;
+      box-shadow: none;
+      forced-color-adjust: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .qv-button {
+      transition:
+        color var(--qv-motion-fast) var(--qv-ease-standard),
+        background-color var(--qv-motion-fast) var(--qv-ease-standard),
+        border-color var(--qv-motion-fast) var(--qv-ease-standard),
+        box-shadow var(--qv-motion-fast) var(--qv-ease-standard);
+    }
+
+    .qv-button[data-interaction="magnetic"]::after {
+      animation: none;
+      transform: none;
+    }
+  }
+
+  @keyframes qv-button-border-orbit {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+}

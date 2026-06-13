@@ -28,17 +28,15 @@ Se la risposta non è esplicita, il blur va rimosso.
 | Glow         | Comunicare energia o stato raro                  | Focus, CTA primaria, conferma importante | Azioni ordinarie               |
 | Motion trail | Rendere percepibile una trasformazione           | Hero, cambio step, apertura pannello     | Animazione continua            |
 
-## Bande candidate
+## Bande stabili
 
 | Banda    | Intervallo | Uso                            |
 | -------- | ---------: | ------------------------------ |
-| `subtle` |    6–10 px | Divider e navigazione compatta |
-| `soft`   |   12–18 px | Superfici leggere e toolbar    |
-| `medium` |   20–28 px | Pannelli, popover, focus       |
-| `strong` |   32–44 px | Dialog, lens e preview isolate |
-| `deep`   |   48–72 px | Hero e fondali narrativi       |
-
-Gli intervalli orientano il prototipo. Non sono token runtime definitivi.
+| `subtle` |       8 px | Divider e navigazione compatta |
+| `soft`   |      16 px | Superfici leggere e toolbar    |
+| `medium` |      24 px | Pannelli, popover, focus       |
+| `strong` |      40 px | Dialog, lens e preview isolate |
+| `deep`   |      64 px | Hero e fondali narrativi       |
 
 ## Variabili da tokenizzare
 
@@ -63,11 +61,11 @@ Il nome del preset descrive la funzione; non sostituisce i token primitivi.
 
 | Preset             | Ruolo     | Banda        | Superficie                      | Uso                           | Non usare            |
 | ------------------ | --------- | ------------ | ------------------------------- | ----------------------------- | -------------------- |
-| `glass-subtle`     | Depth     | subtle       | Quasi opaca                     | Highlight locale, empty state | Testo su foto        |
-| `glass-soft`       | Depth     | soft         | Chiara 88–94%                   | Preview e pannelli singoli    | Liste lunghe         |
-| `glass-medium`     | Lens      | medium       | Chiara 82–90%                   | Card focale, onboarding       | Dati ad alta densità |
-| `glass-strong`     | Lens      | strong       | Chiara 76–86%                   | Hero e preview isolate        | Componenti ripetuti  |
-| `glass-deep`       | Depth     | deep         | Membrane stratificate           | Solo marketing                | Workspace operativo  |
+| `glass-subtle`     | Depth     | subtle       | Chiara 96%                      | Highlight locale, empty state | Testo su foto        |
+| `glass-soft`       | Depth     | soft         | Chiara 92%                      | Preview e pannelli singoli    | Liste lunghe         |
+| `glass-medium`     | Lens      | medium       | Chiara 88%                      | Card focale, onboarding       | Dati ad alta densità |
+| `glass-strong`     | Lens      | strong       | Chiara 80%                      | Hero e preview isolate        | Componenti ripetuti  |
+| `glass-deep`       | Depth     | deep         | Chiara 72%, solo marketing      | Fondali narrativi             | Workspace operativo  |
 | `glass-focus`      | Lens/Glow | medium       | Alta leggibilità                | Focus critico, selezione      | Hover ordinario      |
 | `glass-modal`      | Lens      | strong       | Pannello quasi opaco            | Dialog e drawer               | Form trasparente     |
 | `glass-navigation` | Divider   | subtle/soft  | Neutra e stabile                | Topbar, bottom bar, sidebar   | Glow colorato        |
@@ -75,7 +73,8 @@ Il nome del preset descrive la funzione; non sostituisce i token primitivi.
 | `glass-success`    | Glow      | soft         | Neutra con segnale verde locale | Conferma importante           | Decorazione          |
 | `glass-ai`         | Riservato | non definito | Non implementabile              | Solo futura decisione AI      | Qualsiasi UI v1      |
 
-Le percentuali sono range candidati e vanno verificate sul background reale.
+Su mobile la progressione diventa 98/96/94/92/90% e usa blur ridotto. Il
+fallback senza `backdrop-filter` usa superficie al 98%.
 
 ## Regole dei preset
 
@@ -168,8 +167,7 @@ card operative di base.
 
 ## Richiede conferma
 
-- Valori finali di blur, alpha e saturazione.
-- Supporto e fallback per `prefers-reduced-transparency`.
+- Breaking change a blur, alpha o saturazione Stable v0.1.
 - Tecnologia per feathering e rifrazione.
 - Introduzione o attivazione di `glass-ai`.
 

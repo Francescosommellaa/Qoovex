@@ -59,7 +59,10 @@ yarn-error.log*
 # codex
 /.codex-runtime
 .codex
-tests/
+/tests/*
+!/tests/e2e/
+/tests/e2e/*
+!/tests/e2e/sirio-design-system.spec.ts
 .agents
 skills-lock.json
 
