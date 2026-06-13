@@ -1,14 +1,31 @@
-# Piano di Lavoro — Feature Specification
+# Piano di Lavoro — Roadmap futura non canonica
+
+> [!WARNING]
+> Questo documento descrive una proposta di roadmap avanzata redatta prima
+> della baseline prodotto corrente. Non è una specifica approvata per la v1,
+> non modifica business rule, piani, database o architettura e non può essere
+> usato per landing, demo, personas, copy o promesse commerciali.
+>
+> AI chat, parsing AI, PrepStock, scheduling avanzato, nuovi stati, nuovi
+> permessi e limiti token sono `roadmap` e richiedono decisioni dedicate prima
+> di qualsiasi implementazione o comunicazione.
+>
+> Per lo scope corrente valgono Qoovex Brain,
+> `packages/config/plan_rules.json` e `docs/ux`.
 
 **Qoovex · apps/workspace · v1.0 · April 2026**
 
 ---
 
-## Executive Summary
+## Executive Summary della proposta futura
 
-Il Piano di Lavoro è la feature più complessa e differenziante di Qoovex. Non è un task manager generico: è un sistema di orchestrazione della cucina professionale che copre tre orizzonti temporali (produzione/stock, eventi, servizio quotidiano), tiene traccia dei semilavorati nel tempo, ottimizza le tempistiche sfruttando tempi attivi e passivi, e affianca lo chef con un AI co-pilota contestuale.
+La visione esplorata in questa roadmap estende il Piano di Lavoro verso
+orchestrazione, stock dei semilavorati, scheduling e assistenza AI. Queste
+capacità non fanno parte dello scope corrente e devono essere validate prima
+di diventare decisioni di prodotto.
 
-Questa spec definisce: architettura AI, schema DB completo, business rules, struttura FSD, gating per piano, e fasi di implementazione.
+Il contenuto seguente è materiale di esplorazione. Non costituisce architettura,
+schema DB, business rule, gating o ordine di implementazione approvati.
 
 ---
 
@@ -26,7 +43,7 @@ La novità chiave è il **PrepStock**: ogni prodotto semilavorato (crocchette, f
 
 ---
 
-## 2. AI Stack — Decisione Definitiva
+## 2. AI Stack — Ipotesi di roadmap non approvata
 
 ### Filosofia
 
