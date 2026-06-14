@@ -1,136 +1,23 @@
-# Design
+# Qoovex Design System Stable v0.5
 
-## Scopo
+Questa cartella e` la fonte canonica della fondazione visuale.
 
-Questa cartella è la fonte canonica per la direzione visuale di Qoovex:
+## Principi
 
-- identità visiva;
-- sistemi colore, tipografia, superfici e blur;
-- differenza tra marketing e workspace;
-- regole visuali dei componenti;
-- criteri di accessibilità, performance e verifica;
-- ordine di implementazione della futura UI.
+1. Il bianco sostiene il lavoro; il nero costruisce gerarchia senza creare una
+   dark mode.
+2. Forma, materiale e funzione devono coincidere.
+3. Paper e` il default per dati, liste e form.
+4. Crystal orienta focus, navigazione, feature e overlay; non decora.
+5. Il colore e` raro e legato a orientamento, stato o output.
+6. Il contenuto resta leggibile senza blur, motion o trasparenza.
 
-La strategia UX resta in [`docs/ux`](../ux/README.md). Le business rule restano
-nel Qoovex Brain e in `packages/config/plan_rules.json`.
+## Documenti
 
-## Stato
+- `visual-language.md`: costituzione visuale.
+- `typography-system.md`: Cabinet Grotesk, Synonym e scala.
+- `blur-system.md`: fisica e budget Crystal.
+- `component-visual-rules.md`: responsabilita` dei componenti.
+- `migration-0.1-to-0.5.md`: rotture e migrazione.
 
-La fondazione visuale è implementata e approvata come Stable v0.1.
-
-- `apps/sirio` documenta e verifica il contratto sui viewport previsti.
-- `packages/ui@0.1.0` è la fonte runtime di token, preset e primitive.
-- Palette, blur, radius, shadow, motion e API delle cinque primitive pubbliche
-  sono stabili.
-- Cabinet Grotesk e Synonym restano candidati non caricati; i ruoli tipografici
-  usano fallback di sistema.
-
-## Mappa
-
-- [`design.md`](design.md): decisione sintetica e principi non negoziabili.
-- [`visual-language.md`](visual-language.md): composizione, forme, gerarchia e
-  materiali.
-- [`visual-reference-analysis.md`](visual-reference-analysis.md): evidenze
-  ricavate dalle reference fornite.
-- [`blur-system.md`](blur-system.md): ruoli, bande, preset e limiti del blur.
-- [`color-system.md`](color-system.md): monocromia, accenti e colori funzionali.
-- [`typography-system.md`](typography-system.md): famiglie, ruoli e leggibilità.
-- [`marketing-ui-direction.md`](marketing-ui-direction.md): applicazione sul
-  sito pubblico.
-- [`workspace-ui-direction.md`](workspace-ui-direction.md): applicazione
-  mobile-first nell’app.
-- [`component-visual-rules.md`](component-visual-rules.md): contratti visuali
-  dei componenti.
-- [`implementation-plan.md`](implementation-plan.md): sequenza di prototipazione
-  e implementazione.
-
-## Ownership
-
-- `docs/design` decide il linguaggio visuale.
-- `docs/ux` decide target, priorità, flussi, messaggi e copy.
-- `apps/sirio` valida visivamente token, stati e responsive behavior.
-- `packages/ui` è la fonte runtime dei token e componenti condivisi.
-- `packages/brand` resta l’unica fonte del logo originale.
-- Il Qoovex Brain registra lo stato e le decisioni stabili senza duplicare
-  questa specifica.
-
-## Regole di modifica
-
-1. Richiamare il contesto con MCP `qoovex_brain`.
-2. Verificare UX, business rule e stato reale del repository.
-3. Distinguere decisione stabile, valore candidato e punto da validare.
-4. Descrivere impatto su marketing, workspace, accessibilità e performance.
-5. Non modificare token o componenti condivisi senza un piano di migrazione.
-6. Validare in Sirio a 375, 768, 1024 e 1440 px.
-7. Aggiornare Brain e session log alla chiusura.
-
-## Cosa può essere aggiunto
-
-- evidenze di test visuali e di usabilità;
-- decisioni su token validate in Sirio;
-- regole responsive;
-- audit di accessibilità e performance;
-- note sui componenti canonici;
-- motivazioni di una revisione visuale approvata.
-
-## Cosa non deve essere aggiunto
-
-- CSS o token non validati presentati come definitivi;
-- mockup che mostrano feature non disponibili;
-- copie degli screenshot di terzi usati come reference;
-- business rule, prezzi o permessi duplicati;
-- brainstorming non classificato;
-- un design system alternativo a `packages/ui`;
-- componenti app-local che duplicano primitive condivise.
-
-## Rapporto con il Brain
-
-Il Brain deve indicare che questa cartella è la fonte visuale canonica e se la
-specifica è solo documentata, prototipata o implementata. I dettagli dei token
-restano qui e, dopo l’implementazione, nella fonte runtime di `packages/ui`.
-
-## Esempio
-
-Una revisione di `glass-navigation` aggiorna specifica, fonte runtime e Sirio
-nella stessa milestone, con verifica prima della chiusura.
-
-## Anti-pattern
-
-- Aggiungere un valore CSS isolato a un documento come se fosse un token.
-- Duplicare una regola UX o una business rule.
-- Registrare nel Brain tutti i dettagli già presenti qui.
-- Descrivere come implementata una decisione ancora solo documentale.
-
-## Impatto sul marketing
-
-Questa cartella governa materiali, tipografia, blur, colore e componenti del
-sito pubblico senza cambiare messaggi e ordine delle sezioni definiti in UX.
-
-## Impatto sul workspace
-
-Questa cartella impone una UI mobile-first, sobria e leggibile. Le business
-rule e i flussi restano nelle fonti prodotto e UX.
-
-## Rischi tecnici
-
-- Divergenza tra documentazione, Sirio e runtime.
-- Token duplicati o consumer override.
-- Stato documentale interpretato come disponibilità reale.
-- Specifiche troppo astratte per produrre test verificabili.
-
-## Richiede conferma
-
-- Breaking change al contratto Stable v0.1.
-- Nuove primitive o responsabilità pubbliche.
-- Nuove dipendenze visuali.
-- Eccezioni ai limiti di blur, contrasto o performance.
-
-## Checklist
-
-- [ ] La modifica serve la strategia UX canonica.
-- [ ] È chiaro cosa è deciso e cosa deve essere validato.
-- [ ] Marketing e workspace restano coerenti ma non identici.
-- [ ] Il blur ha una funzione esplicita.
-- [ ] Leggibilità e performance prevalgono sull’effetto.
-- [ ] Non sono state introdotte feature o business rule.
-- [ ] Sirio, `packages/ui` e Brain hanno ownership non sovrapposte.
+Il runtime canonico e` `@qoovex/ui@0.5.0`; Sirio ne e` la specifica eseguibile.

@@ -1,20 +1,14 @@
 # Sirio
 
-Showcase di verifica della fondazione Qoovex Stable v0.1.
+Specifica eseguibile del Qoovex Design System Stable v0.5.
 
-## Scopo
+Sirio:
 
-- mostrare token, blur preset e primitive di `@qoovex/ui`;
-- confrontare stati e superfici su contenuti realistici;
-- validare 375, 768, 1024 e 1440 px;
-- rendere esplicito cosa è stabile e cosa resta candidato, come i font esterni.
+- importa esclusivamente componenti e stili da `@qoovex/ui`;
+- dimostra token, densita`, tipografia, materiali e stati;
+- verifica Crystal sopra contenuto reale;
+- contiene una composizione pilota ricetta -> menu;
+- usa l'icona e il favicon Sirio esistenti;
+- non introduce primitive app-local.
 
-## Non è
-
-- la landing pubblica;
-- il workspace prodotto;
-- una fonte alternativa di token o componenti;
-- una demo di feature non implementate.
-
-Gli stili condivisi arrivano da `@qoovex/ui/styles.css`. Gli stili locali
-servono solo alla struttura e agli specimen della showcase.
+Avvio: `pnpm --filter @qoovex/sirio dev`.

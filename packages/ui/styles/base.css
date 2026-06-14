@@ -34,8 +34,10 @@
   h2,
   h3,
   h4 {
-    color: var(--qv-text-primary);
+    color: inherit;
+    font-family: var(--qv-font-display);
     font-weight: 600;
+    letter-spacing: -0.025em;
     text-wrap: balance;
   }
 
@@ -49,10 +51,6 @@
     text-underline-offset: 0.18em;
   }
 
-  a:hover {
-    text-decoration-thickness: 0.12em;
-  }
-
   ::selection {
     background: rgb(40 199 217 / 0.28);
     color: var(--qv-ink-950);
@@ -61,6 +59,7 @@
   :focus-visible {
     outline: 3px solid var(--qv-border-focus);
     outline-offset: 3px;
+    scroll-margin-block: 5rem;
   }
 
   button,
@@ -94,21 +93,16 @@
     display: none !important;
   }
 
-  * {
-    scrollbar-color: var(--qv-stone-400) transparent;
-    scrollbar-width: thin;
-  }
-
-  *::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-
-  *::-webkit-scrollbar-thumb {
-    background: var(--qv-stone-400);
-    border: 3px solid transparent;
-    border-radius: var(--qv-radius-full);
-    background-clip: padding-box;
+  .qv-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   @media (prefers-reduced-motion: reduce) {

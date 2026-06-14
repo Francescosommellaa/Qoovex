@@ -1,25 +1,47 @@
-# Qoovex UI
+# @qoovex/ui
 
-Fonte runtime condivisa della fondazione visuale Qoovex Stable v0.1.
+Core runtime del Qoovex Design System Stable v0.5.
 
-## Contiene
+## Contratto
 
-- token primitivi e semantici;
-- baseline CSS condivisa;
-- preset funzionali del Blur System;
-- primitive React `Button`, `Card`, `Input`, `Badge` e `GlassPanel`.
+- `Surface` possiede Paper, Crystal e Inverse.
+- `Card` compone lo stesso contratto materiale; non esistono varianti glass
+  alternative.
+- Form e dati densi restano Paper.
+- Crystal e` consentito soltanto con uno scopo:
+  `navigation`, `focus`, `feature`, `overlay`.
+- React 19, props native, `className` e ref sono preservati.
+- Radix gestisce comportamento accessibile degli overlay e delle selezioni
+  complesse; Qoovex possiede interamente la resa visuale.
+- Phosphor e` l'unico sistema iconografico.
 
-## Ownership
+## Utilizzo
 
-Il package non dipende dalle app. Sirio documenta e verifica i contratti che
-marketing e workspace possono consumare. I font esterni non sono ancora
-integrati: i ruoli tipografici stabili usano fallback di sistema.
+```tsx
+import { Button, Card, Surface } from "@qoovex/ui";
+import "@qoovex/ui/styles.css";
 
-## Vincoli
+export function Example() {
+  return (
+    <Surface material="crystal" purpose="focus">
+      <Card>
+        <h2>Ricetta verificata</h2>
+        <Button>Genera menu</Button>
+      </Card>
+    </Surface>
+  );
+}
+```
 
-- Nessuna business logic o componente di dominio.
-- Nessuna variante puramente decorativa.
-- Glass raro: focus, navigazione, overlay o trasformazione.
-- Le Card glass applicano blur reale e richiedono un contesto sottostante utile.
-- Logo esclusivamente da `@qoovex/brand`; icone future solo Phosphor.
-- API, token e preset pubblici sono congelati nel contratto Stable v0.1.
+Non annidare una superficie Crystal dentro un'altra. Gli input inseriti in una
+lente usano sempre Paper.
+
+## Comandi
+
+- `pnpm --filter @qoovex/ui lint`
+- `pnpm --filter @qoovex/ui type-check`
+- `pnpm --filter @qoovex/ui test`
+- `pnpm --filter @qoovex/ui build`
+
+I font Cabinet Grotesk e Synonym sono self-hosted in WOFF2 variable. La licenza
+Fontshare originale e` inclusa in `styles/fonts/FONT-LICENSE.txt`.

@@ -1,17 +1,14 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const glassVariants = ["subtle", "soft", "medium", "strong", "deep"] as const;
-
-const desktopGlassAlpha = [".96", ".92", ".88", ".8", ".72"];
-const mobileGlassAlpha = [".98", ".96", ".94", ".92", ".9"];
+const isMobile = (projectName: string) => projectName.endsWith("-375");
+const isDesktop = (projectName: string) => projectName.endsWith("-1440");
 
 function parseRgb(value: string) {
   const channels = value.match(/[\d.]+/g);
-
   if (!channels || channels.length < 3) {
     throw new Error(`Unable to parse RGB value: ${value}`);
   }
-
   return channels.slice(0, 3).map(Number);
 }
 
@@ -22,289 +19,263 @@ function relativeLuminance([red, green, blue]: number[]) {
       ? normalized / 12.92
       : ((normalized + 0.055) / 1.055) ** 2.4;
   });
-
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
 function contrastRatio(foreground: string, background: string) {
   const foregroundLuminance = relativeLuminance(parseRgb(foreground));
   const backgroundLuminance = relativeLuminance(parseRgb(background));
-  const lighter = Math.max(foregroundLuminance, backgroundLuminance);
-  const darker = Math.min(foregroundLuminance, backgroundLuminance);
-
-  return (lighter + 0.05) / (darker + 0.05);
+  return (
+    (Math.max(foregroundLuminance, backgroundLuminance) + 0.05) /
+    (Math.min(foregroundLuminance, backgroundLuminance) + 0.05)
+  );
 }
 
 test.beforeEach(async ({ page }) => {
   await page.goto("http://localhost:3002/");
 });
 
-test("glass presets expose the approved responsive progression", async ({
+test("publishes Stable v0.5 with local typography and Sirio identity", async ({
+  page,
+}) => {
+  await expect(page.getByText("Stable v0.5", { exact: true })).toBeVisible();
+  await expect(page.locator(".sirio-brand-mark")).toHaveAttribute(
+    "src",
+    "/logo-icon/sirio-icon.svg",
+  );
+
+  const details = await page.evaluate(() => ({
+    display: getComputedStyle(document.querySelector("h1")!).fontFamily,
+    externalFonts: performance
+      .getEntriesByType("resource")
+      .map(({ name }) => name)
+      .filter(
+        (name) =>
+          /\.(woff2?|ttf)(\?|$)/.test(name) &&
+          !name.startsWith(window.location.origin),
+      ),
+    ui: getComputedStyle(document.body).fontFamily,
+  }));
+
+  expect(details.display).toContain("Cabinet Grotesk");
+  expect(details.ui).toContain("Synonym");
+  expect(details.externalFonts).toEqual([]);
+});
+
+test("Crystal profiles expose the stable responsive contract", async ({
   page,
 }, testInfo) => {
-  const expected =
-    testInfo.project.name === "chromium-375"
-      ? mobileGlassAlpha
-      : desktopGlassAlpha;
+  const expected = isMobile(testInfo.project.name)
+    ? {
+        feature: [".72", "14px", ".1", "24px"],
+        focus: [".88", "12px", ".08", "20px"],
+        navigation: [".96", "8px", ".06", "12px"],
+        overlay: [".98", "16px", ".08", "24px"],
+      }
+    : {
+        feature: [".48", "20px", ".1", "32px"],
+        focus: [".68", "18px", ".08", "28px"],
+        navigation: [".82", "12px", ".06", "20px"],
+        overlay: [".92", "24px", ".08", "32px"],
+      };
 
-  for (const [index, variant] of glassVariants.entries()) {
-    const specimen = page.locator(`.glass-specimen.qv-glass-${variant}`);
-    await expect(specimen).toHaveCSS("--qv-glass-alpha", expected[index]);
+  for (const [purpose, values] of Object.entries(expected)) {
+    const surface = page
+      .locator(
+        `.qv-surface[data-material="crystal"][data-purpose="${purpose}"]`,
+      )
+      .first();
+    const tokens = await surface.evaluate((element) => {
+      const styles = getComputedStyle(element);
+      return [
+        styles.getPropertyValue("--qv-crystal-center-alpha-local").trim(),
+        styles.getPropertyValue("--qv-crystal-center-blur-local").trim(),
+        styles.getPropertyValue("--qv-crystal-frame-alpha-local").trim(),
+        styles.getPropertyValue("--qv-crystal-frame-blur-local").trim(),
+      ];
+    });
+    expect(tokens).toEqual(values);
   }
 });
 
-test("warning badge is yellow and keeps AA text contrast", async ({ page }) => {
+test("Crystal keeps blur outside the host and all descendants", async ({
+  page,
+}) => {
+  const surfaces = page.locator('.qv-surface[data-material="crystal"]');
+  const count = await surfaces.count();
+
+  for (let index = 0; index < count; index += 1) {
+    const material = await surfaces.nth(index).evaluate((element) => {
+      const host = getComputedStyle(element);
+      const center = getComputedStyle(element, "::after");
+      const frame = getComputedStyle(element, "::before");
+      const blurredDescendants = [...element.querySelectorAll("*")].filter(
+        (child) => {
+          const styles = getComputedStyle(child);
+          return styles.filter !== "none" || styles.backdropFilter !== "none";
+        },
+      ).length;
+      return {
+        blurredDescendants,
+        centerBlur: center.backdropFilter,
+        frameBlur: frame.backdropFilter,
+        hostBlur: host.backdropFilter,
+        radius: host.borderRadius,
+        width: host.borderWidth,
+      };
+    });
+
+    expect(material.hostBlur).toBe("none");
+    expect(material.blurredDescendants).toBe(0);
+    expect(material.centerBlur).not.toBe("none");
+    expect(material.frameBlur).not.toBe("none");
+    expect(material.radius).toBe("28px");
+    expect(material.width).toBe("6px");
+  }
+});
+
+test("warning and disabled states remain explicit and accessible", async ({
+  page,
+}) => {
   const warning = page.getByText("Da verificare", { exact: true }).first();
   const colors = await warning.evaluate((element) => {
     const styles = getComputedStyle(element);
     return {
       background: styles.backgroundColor,
-      border: styles.borderColor,
       color: styles.color,
     };
   });
-
-  expect(colors.background).toBe("rgb(255, 243, 176)");
-  expect(colors.border).toBe("rgba(217, 154, 0, 0.42)");
   expect(contrastRatio(colors.color, colors.background)).toBeGreaterThanOrEqual(
     4.5,
   );
-});
 
-test("disabled primary button is visibly neutral", async ({ page }) => {
   const disabled = page.getByRole("button", { name: "Non disponibile" });
-
   await expect(disabled).toBeDisabled();
   await expect(disabled).toHaveCSS("background-color", "rgb(238, 238, 235)");
-  await expect(disabled).toHaveCSS("color", "rgb(102, 102, 98)");
   await expect(disabled).toHaveCSS("box-shadow", "none");
   await expect(disabled).toHaveCSS("cursor", "not-allowed");
-  await expect(disabled).toHaveCSS("transform", "none");
 });
 
-test("glass cards compose real blur over buried color", async ({
-  page,
-}, testInfo) => {
-  const glassCard = page.locator(
-    '#componenti .qv-card[data-variant="glass"]',
-  );
-  const strongCard = page.locator(
-    '#componenti .qv-card[data-variant="glass-strong"]',
-  );
-  const expectedGlassBlur =
-    testInfo.project.name === "chromium-375" ? "blur(16px)" : "blur(24px)";
-  const expectedStrongBlur =
-    testInfo.project.name === "chromium-375" ? "blur(24px)" : "blur(40px)";
-
-  await expect(glassCard).toHaveCSS(
-    "backdrop-filter",
-    `${expectedGlassBlur} saturate(1.12)`,
-  );
-  await expect(strongCard).toHaveCSS(
-    "backdrop-filter",
-    `${expectedStrongBlur} saturate(1.18)`,
-  );
-  await expect(page.locator(".pilot-output")).toHaveAttribute(
-    "data-variant",
-    "glass",
-  );
-});
-
-test("glass direction lab keeps five materially distinct options", async ({
+test("dialog traps focus, closes with Escape and restores the trigger", async ({
   page,
 }) => {
-  const directions = page.locator(".glass-direction-card");
-  await expect(directions).toHaveCount(5);
+  const trigger = page.getByRole("button", { name: "Apri dialog" });
+  await trigger.click();
 
-  const materials = await directions.evaluateAll((elements) =>
-    elements.map((element) => {
-      const center = element.querySelector<HTMLElement>(
-        ".glass-direction-center",
-      );
-      const styles =
-        element.closest('[data-direction="crystal"]') && center
-          ? getComputedStyle(center)
-          : getComputedStyle(element);
-      return {
-        alpha: styles.backgroundColor,
-        blur: styles.backdropFilter,
-        border: getComputedStyle(element).borderWidth,
-      };
-    }),
-  );
+  const dialog = page.getByRole("dialog", { name: "Pubblica menu" });
+  await expect(dialog).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Chiudi finestra" }),
+  ).toBeFocused();
 
-  expect(new Set(materials.map(({ blur }) => blur)).size).toBe(5);
-  expect(
-    new Set(
-      materials.map(
-        ({ alpha, blur, border }) => `${alpha}|${blur}|${border}`,
-      ),
-    ).size,
-  ).toBe(5);
-  expect(materials.map(({ border }) => border)).toEqual([
-    "0px",
-    "2px",
-    "1px",
-    "5px",
-    "3px",
-  ]);
-
-  const selectedFrame = page.locator(
-    '[data-direction="crystal"] .glass-direction-card',
-  );
-  const frameMaterial = await selectedFrame.evaluate((element) => {
-    const card = getComputedStyle(element);
-    const center = getComputedStyle(
-      element.querySelector<HTMLElement>(".glass-direction-center")!,
-    );
-    const stage = getComputedStyle(element.parentElement!);
-    return {
-      cardBackground: card.backgroundColor,
-      cardBlur: card.backdropFilter,
-      cardRadius: card.borderRadius,
-      centerAlpha: center.backgroundColor,
-      centerBorder: center.borderWidth,
-      centerBlur: center.backdropFilter,
-      centerRadius: center.borderRadius,
-      stageRadius: stage.borderRadius,
-    };
-  });
-
-  expect(frameMaterial.cardBackground).toBe("rgba(255, 255, 255, 0.1)");
-  expect(frameMaterial.cardBlur).toBe(
-    "blur(36px) saturate(2.8) contrast(1.28)",
-  );
-  expect(frameMaterial.cardRadius).toBe("28px");
-  expect(frameMaterial.centerAlpha).toBe("rgba(255, 255, 255, 0.72)");
-  expect(frameMaterial.centerBorder).toBe("0px");
-  expect(frameMaterial.centerBlur).toBe("none");
-  expect(frameMaterial.centerRadius).toBe("22px");
-  expect(frameMaterial.stageRadius).toBe("28px");
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
 });
 
-test("magnetic CTA stays within six pixels and preserves focus", async ({
+test("select and tabs support keyboard operation", async ({ page }) => {
+  const select = page.getByRole("combobox", { name: "Portata" });
+  await select.focus();
+  await page.keyboard.press("Enter");
+  const secondo = page.getByRole("option", { name: "Secondo" });
+  await expect(secondo).toBeVisible();
+  await secondo.focus();
+  await page.keyboard.press("Enter");
+  await expect(select).toHaveText("Secondo");
+
+  const ingredienti = page.getByRole("tab", { name: "Ingredienti" });
+  const metodo = page.getByRole("tab", { name: "Metodo" });
+  await ingredienti.focus();
+  await ingredienti.press("ArrowRight");
+  await expect(metodo).toBeFocused();
+  await expect(metodo).toHaveAttribute("aria-selected", "true");
+});
+
+test("magnetic interaction is bounded and disabled by reduced motion", async ({
   page,
 }, testInfo) => {
-  test.skip(testInfo.project.name !== "chromium-1440");
+  test.skip(!isDesktop(testInfo.project.name));
+  test.skip(testInfo.project.name.startsWith("webkit"));
 
-  const button = page.getByRole("button", { name: "Esplora la fondazione" });
-  await expect(button).toHaveAttribute("data-magnetic-enabled", "true");
-
+  const button = page.getByRole("button", { name: "Esplora il materiale" });
   const box = await button.boundingBox();
   expect(box).not.toBeNull();
-
   await page.mouse.move(box!.x + box!.width + 16, box!.y + box!.height / 2);
-  await expect(button).toHaveAttribute("data-magnetic-active", "");
 
-  const offset = await button.evaluate((element) => {
+  const offsets = await button.evaluate((element) => {
     const styles = getComputedStyle(element);
-    return {
-      x: Number.parseFloat(styles.getPropertyValue("--qv-magnetic-x")),
-      y: Number.parseFloat(styles.getPropertyValue("--qv-magnetic-y")),
-    };
+    return [
+      Number.parseFloat(styles.getPropertyValue("--qv-magnetic-x")),
+      Number.parseFloat(styles.getPropertyValue("--qv-magnetic-y")),
+    ];
   });
-
-  expect(offset.x).toBeGreaterThan(0);
-  expect(Math.abs(offset.x)).toBeLessThanOrEqual(6);
-  expect(Math.abs(offset.y)).toBeLessThanOrEqual(6);
-
-  await button.focus();
-  await expect(button).toBeFocused();
-  await expect(button).toHaveCSS("outline-style", "solid");
-  await expect(button).toHaveCSS("outline-color", "rgb(49, 95, 214)");
-
-  await page.mouse.move(0, 0);
-  await expect(button).not.toHaveAttribute("data-magnetic-active", "");
-});
-
-test("reduced motion disables magnetic movement", async ({
-  page,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== "chromium-1440");
+  expect(Math.abs(offsets[0])).toBeLessThanOrEqual(6);
+  expect(Math.abs(offsets[1])).toBeLessThanOrEqual(6);
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload();
-
-  const button = page.getByRole("button", { name: "Esplora la fondazione" });
-  await expect(button).not.toHaveAttribute("data-magnetic-enabled", "true");
-
-  const box = await button.boundingBox();
-  expect(box).not.toBeNull();
-  await page.mouse.move(box!.x + box!.width + 16, box!.y + box!.height / 2);
-  await expect(button).not.toHaveAttribute("data-magnetic-active", "");
-  await expect(button).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, 0)");
+  await expect(button).not.toHaveAttribute("data-magnetic-enabled");
 });
 
-test("touch input does not enable magnetic movement", async ({
-  browser,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== "chromium-1440");
-
-  const context = await browser.newContext({
-    hasTouch: true,
-    isMobile: true,
-    viewport: { width: 375, height: 812 },
-  });
-  const touchPage = await context.newPage();
-  await touchPage.goto("http://localhost:3002/");
-
-  const button = touchPage.getByRole("button", {
-    name: "Esplora la fondazione",
-  });
-  await expect(button).not.toHaveAttribute("data-magnetic-enabled", "true");
-
-  await context.close();
-});
-
-test("keyboard focus remains visible on the magnetic CTA", async ({
+test("page has no serious or critical Axe violations", async ({
   page,
 }, testInfo) => {
-  test.skip(testInfo.project.name !== "chromium-1440");
+  test.skip(!isDesktop(testInfo.project.name));
 
-  for (let index = 0; index < 8; index += 1) {
-    await page.keyboard.press("Tab");
-  }
-
-  const button = page.getByRole("button", { name: "Esplora la fondazione" });
-  await expect(button).toBeFocused();
-  await expect(button).toHaveCSS("outline-style", "solid");
-  await expect(button).toHaveCSS("outline-color", "rgb(49, 95, 214)");
+  const results = await new AxeBuilder({ page }).analyze();
+  const blocking = results.violations.filter(({ impact }) =>
+    ["critical", "serious"].includes(impact ?? ""),
+  );
+  expect(blocking).toEqual([]);
 });
 
-test("forced colors preserves structural boundaries", async ({
+test("layout has no horizontal overflow and survives 200 percent reflow", async ({
   page,
 }, testInfo) => {
-  test.skip(testInfo.project.name !== "chromium-1440");
+  const normal = await page.evaluate(() => ({
+    client: document.documentElement.clientWidth,
+    scroll: document.documentElement.scrollWidth,
+  }));
+  expect(normal.scroll).toBeLessThanOrEqual(normal.client);
 
+  test.skip(!isDesktop(testInfo.project.name));
+  await page.setViewportSize({ width: 720, height: 900 });
+  await page.reload();
+  const zoomed = await page.evaluate(() => ({
+    client: document.documentElement.clientWidth,
+    scroll: document.documentElement.scrollWidth,
+  }));
+  expect(zoomed.scroll).toBeLessThanOrEqual(zoomed.client);
+});
+
+test("forced colors preserves boundaries", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium-1440");
   await page.emulateMedia({ forcedColors: "active" });
   await page.reload();
 
-  const strongGlass = page.locator(".glass-specimen.qv-glass-strong");
-  const disabled = page.getByRole("button", { name: "Non disponibile" });
-
-  await expect(strongGlass).toHaveCSS("box-shadow", "none");
-  await expect(strongGlass).toHaveCSS("border-top-style", "solid");
-  await expect(disabled).toHaveCSS("box-shadow", "none");
-  await expect(disabled).toHaveCSS("border-top-style", "solid");
+  const surface = page
+    .locator('.qv-surface[data-material="crystal"]')
+    .first();
+  await expect(surface).toHaveCSS("border-top-style", "solid");
+  await expect(surface).toHaveCSS("box-shadow", "none");
 });
 
-test("layout reflows at the 200 percent equivalent width", async ({
-  page,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== "chromium-1440");
-
-  await page.setViewportSize({ width: 720, height: 900 });
-  await page.reload();
-
-  const dimensions = await page.evaluate(() => ({
-    clientWidth: document.documentElement.clientWidth,
-    scrollWidth: document.documentElement.scrollWidth,
-  }));
-
-  expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth);
-  await expect(
-    page.getByRole("heading", {
-      name: "Dal frammento all’output controllabile.",
-    }),
-  ).toBeVisible();
+test("visual contract snapshots remain stable", async ({ page }, testInfo) => {
+  test.skip(
+    !["chromium-375", "chromium-1440"].includes(testInfo.project.name),
+  );
+  await page.addStyleTag({
+    content: "nextjs-portal { display: none !important; }",
+  });
+  await expect(page.locator(".sirio-hero")).toHaveScreenshot(
+    `sirio-hero-${testInfo.project.name}.png`,
+    { animations: "disabled" },
+  );
+  await page.locator(".sirio-nav").evaluate((element) => {
+    element.setAttribute("hidden", "");
+  });
+  await expect(page.locator(".sirio-material-grid")).toHaveScreenshot(
+    `sirio-materials-${testInfo.project.name}.png`,
+    { animations: "disabled" },
+  );
 });

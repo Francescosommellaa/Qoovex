@@ -2,7 +2,7 @@
 
 Sorgente React pubblica di `@qoovex/ui`.
 
-`index.ts` espone soltanto primitive e tipi approvati per la Stable v0.1.
+`index.ts` espone soltanto primitive e tipi approvati per la Stable v0.5.
 Implementazioni, helper strettamente locali e relativi contratti vivono in
 `components`.
 

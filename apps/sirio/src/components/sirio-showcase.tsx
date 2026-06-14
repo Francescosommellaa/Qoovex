@@ -1,192 +1,116 @@
-import type { CSSProperties, ReactNode } from "react";
+"use client";
 
 import {
+  Bell,
+  Check,
+  ChefHat,
+  DotsThree,
+  FilePlus,
+  Info,
+  ListChecks,
+  SlidersHorizontal,
+} from "@phosphor-icons/react";
+import Image from "next/image";
+import { useState, type CSSProperties, type ReactNode } from "react";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogTrigger,
   Badge,
   Button,
   Card,
-  GlassPanel,
+  Checkbox,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerTrigger,
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  EmptyState,
+  Field,
+  IconButton,
   Input,
-  type BadgeVariant,
-  type ButtonVariant,
-  type CardVariant,
-  type GlassPanelVariant,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Progress,
+  RadioGroup,
+  SegmentedControl,
+  Select,
+  Separator,
+  Skeleton,
+  Surface,
+  Switch,
+  Tabs,
+  Textarea,
+  Toast,
+  ToastProvider,
+  ToastViewport,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from "@qoovex/ui";
 
-const monochromeTokens = [
-  ["Paper 0", "--qv-paper-0", "#FFFFFF", false],
-  ["Paper 25", "--qv-paper-25", "#FCFCFB", false],
-  ["Paper 50", "--qv-paper-50", "#F7F7F5", false],
-  ["Stone 100", "--qv-stone-100", "#EEEEEB", false],
-  ["Stone 200", "--qv-stone-200", "#DEDEDA", false],
-  ["Stone 400", "--qv-stone-400", "#A4A49E", false],
-  ["Stone 600", "--qv-stone-600", "#666662", true],
-  ["Ink 800", "--qv-ink-800", "#2A2A28", true],
-  ["Ink 900", "--qv-ink-900", "#151514", true],
-  ["Ink 950", "--qv-ink-950", "#090909", true],
+const palette = [
+  ["Paper", "--qv-paper-0", "#FFFFFF"],
+  ["Mist", "--qv-paper-50", "#F7F7F5"],
+  ["Stone", "--qv-stone-200", "#DEDEDA"],
+  ["Graphite", "--qv-stone-600", "#666662"],
+  ["Ink", "--qv-ink-900", "#151514"],
+  ["Obsidian", "--qv-ink-950", "#090909"],
+  ["Cyan", "--qv-signal-cyan", "#28C7D9"],
+  ["Cobalt", "--qv-signal-cobalt", "#3568E8"],
+  ["Apricot", "--qv-signal-apricot", "#F2A56F"],
+  ["Violet", "--qv-signal-violet", "#8C6DE8"],
 ] as const;
 
-const accentTokens = [
-  ["Signal cyan", "--qv-signal-cyan", "#28C7D9", false],
-  ["Signal cobalt", "--qv-signal-cobalt", "#3568E8", true],
-  ["Signal apricot", "--qv-signal-apricot", "#F2A56F", false],
-  ["Signal violet", "--qv-signal-violet", "#8C6DE8", true],
-] as const;
-
-const statusTokens = [
-  ["Success", "--qv-status-success", "#187A4B", true],
-  ["Warning", "--qv-status-warning", "#D99A00", false],
-  ["Danger", "--qv-status-danger", "#B4232D", true],
-  ["Info", "--qv-status-info", "#2459B3", true],
-  ["Focus", "--qv-status-focus", "#315FD6", true],
-] as const;
-
-const glassPresets = [
+const materialProfiles = [
   {
-    name: "Subtle",
-    variant: "subtle",
-    stage: "white",
-    role: "Depth",
-    use: "Separazione locale, empty state e highlight quieto.",
-    avoid: "Non per testo su immagini o liste ripetute.",
+    alpha: ".82 / 12 px",
+    description: "Separa una barra stabile senza trasformarla in una lente.",
+    purpose: "navigation",
+    title: "Navigation",
   },
   {
-    name: "Soft",
-    variant: "soft",
-    stage: "mist",
-    role: "Depth",
-    use: "Toolbar, preview singole e superfici leggere.",
-    avoid: "Non trasforma ogni card in vetro.",
+    alpha: ".68 / 18 px",
+    description: "Circoscrive il dettaglio selezionato e mantiene il dato nitido.",
+    purpose: "focus",
+    title: "Focus",
   },
   {
-    name: "Medium",
-    variant: "medium",
-    stage: "spectrum",
-    role: "Lens",
-    use: "Pannello focale o onboarding isolato.",
-    avoid: "Non per dati ad alta densità.",
+    alpha: ".48 / 20 px",
+    description: "La firma ad alta intensita per preview e racconto prodotto.",
+    purpose: "feature",
+    title: "Feature",
   },
   {
-    name: "Strong",
-    variant: "strong",
-    stage: "inverse",
-    role: "Lens",
-    use: "Preview isolata e momento hero controllato.",
-    avoid: "Non per componenti ripetuti.",
-  },
-  {
-    name: "Deep",
-    variant: "deep",
-    stage: "spectrum",
-    role: "Narrative depth",
-    use: "Solo marketing e fondali narrativi.",
-    avoid: "Vietato nel workspace operativo.",
-  },
-] as const satisfies ReadonlyArray<{
-  name: string;
-  variant: GlassPanelVariant;
-  stage: string;
-  role: string;
-  use: string;
-  avoid: string;
-}>;
-
-const specialGlassPresets = [
-  {
-    name: "Navigation",
-    className: "qv-glass-navigation",
-    stage: "white",
-    use: "Topbar e divider stabili, senza glow.",
-  },
-  {
-    name: "Modal",
-    className: "qv-glass-modal",
-    stage: "mist",
-    use: "Overlay quasi opaco; gli input interni restano paper.",
-  },
-  {
-    name: "Focus",
-    className: "qv-glass-focus",
-    stage: "spectrum",
-    use: "Selezione critica; non sostituisce il focus ring.",
+    alpha: ".92 / 24 px",
+    description: "Quasi opaco: protegge lettura, focus e decisioni modali.",
+    purpose: "overlay",
+    title: "Overlay",
   },
 ] as const;
-
-const glassDirections = [
-  {
-    id: "01",
-    key: "crystal",
-    name: "Crystal optical",
-    specs: "alpha 72% centro · 10% cornice · frame 6 px",
-    description:
-      "Centro bianco leggibile e cornice trasparente: nessuna linea separa i due materiali concentrici.",
-  },
-  {
-    id: "02",
-    key: "frost",
-    name: "Soft frost",
-    specs: "20 px blur · 88% alpha · bordo 2 px",
-    description:
-      "Più lattiginoso e calmo. Colore diffuso, contrasto interno stabile e ombra corta.",
-  },
-  {
-    id: "03",
-    key: "optical",
-    name: "Optical edge",
-    specs: "28 px blur · 62% alpha · doppio bordo",
-    description:
-      "Bordo ottico bianco, highlight interno e profondità più precisa senza diventare lucido.",
-  },
-  {
-    id: "04",
-    key: "frame",
-    name: "Thick lens",
-    specs: "32 px blur · 72% alpha · cornice 5 px",
-    description:
-      "Una lente più fisica e autorevole. La cornice spessa separa il vetro dal canvas.",
-  },
-  {
-    id: "05",
-    key: "chromatic",
-    name: "Chromatic rim",
-    specs: "48 px blur · 52% alpha · bordo 3 px",
-    description:
-      "Il colore vive nel bordo e sotto il vetro, mentre il centro resta neutro e leggibile.",
-  },
-] as const;
-
-const buttonVariants = [
-  "primary",
-  "secondary",
-  "ghost",
-  "glass",
-  "destructive",
-] as const satisfies ReadonlyArray<ButtonVariant>;
-
-const cardVariants = [
-  "default",
-  "elevated",
-  "glass",
-  "glass-strong",
-  "inverse",
-] as const satisfies ReadonlyArray<CardVariant>;
-
-const badgeVariants = [
-  "neutral",
-  "accent",
-  "success",
-  "warning",
-  "danger",
-  "info",
-] as const satisfies ReadonlyArray<BadgeVariant>;
 
 function SectionHeading({
+  children,
   eyebrow,
   title,
-  children,
 }: {
+  children: ReactNode;
   eyebrow: string;
   title: string;
-  children: ReactNode;
 }) {
   return (
     <header className="sirio-section-heading">
@@ -199,601 +123,674 @@ function SectionHeading({
   );
 }
 
-function Swatch({
-  dark,
+function TokenSwatch({
   hex,
   name,
   token,
 }: {
-  dark: boolean;
   hex: string;
   name: string;
   token: string;
 }) {
   return (
     <div
-      className="swatch"
-      data-dark={dark}
-      style={{ background: `var(${token})` } as CSSProperties}
+      className="sirio-swatch"
+      style={{ "--swatch": `var(${token})` } as CSSProperties}
     >
+      <span />
       <strong>{name}</strong>
-      <span>{hex}</span>
+      <small>{hex}</small>
     </div>
   );
 }
 
-export function SirioShowcase() {
+function ComponentBlock({
+  children,
+  description,
+  title,
+}: {
+  children: ReactNode;
+  description: string;
+  title: string;
+}) {
   return (
-    <div className="sirio-shell">
-      <nav className="sirio-nav qv-glass-navigation" aria-label="Sezioni Sirio">
-        <a className="sirio-brand" href="#top">
-          <span className="sirio-brand-mark" aria-hidden="true" />
-          <span className="sirio-brand-word">Sirio</span>
-          <Badge variant="success">Stable v0.1</Badge>
-        </a>
-        <div className="sirio-nav-links">
-          <a href="#fondazioni">Fondazioni</a>
-          <a href="#glass">Glass system</a>
-          <a href="#tipografia">Tipografia</a>
-          <a href="#componenti">Componenti</a>
-          <a href="#composizione">Composizione</a>
-          <a href="#revisione">Revisione</a>
-        </div>
-      </nav>
+    <Card className="component-block">
+      <header>
+        <h3>{title}</h3>
+        <p>{description}</p>
+      </header>
+      <div className="component-block__content">{children}</div>
+    </Card>
+  );
+}
 
-      <main className="sirio-main" id="top">
-        <header className="sirio-hero">
-          <div>
-            <p className="sirio-eyebrow">Qoovex visual foundation</p>
-            <h1>Chiarezza, luce e profondità controllata.</h1>
-            <p className="sirio-hero-copy">
-              Questa è la fondazione visuale Stable v0.1. Il blur mette a fuoco
-              una decisione, non decora l’interfaccia. Palette, componenti e
-              intensità condivise sono il contratto runtime approvato.
-            </p>
-            <div className="sirio-actions">
-              <Button interaction="magnetic">Esplora la fondazione</Button>
-              <Button variant="secondary">Vedi i criteri</Button>
-            </div>
-          </div>
+export function SirioShowcase() {
+  const [toastOpen, setToastOpen] = useState(false);
 
-          <div className="optic-bench" aria-label="Banco ottico operativo">
-            <span className="optic-ring" data-ring="one" />
-            <span className="optic-ring" data-ring="two" />
-            <span className="optic-ring" data-ring="three" />
-            <div className="optic-fragment" data-fragment="sheet">
-              Foglio cliente B
-              <br />
-              “Ricalcolare 24 porzioni”
-            </div>
-            <div className="optic-fragment" data-fragment="message">
-              Messaggio brigata
-              <br />
-              “Quale versione preparo?”
-            </div>
-            <GlassPanel className="optic-recipe" variant="medium">
-              <div className="optic-meta">
-                <Badge variant="success">Confermata</Badge>
-                <span>24 porzioni</span>
-              </div>
-              <h2>Risotto al limone e timo</h2>
-              <ul className="optic-ingredients">
-                <li>
-                  <span>Riso Carnaroli</span>
-                  <strong>1,92 kg</strong>
-                </li>
-                <li>
-                  <span>Brodo vegetale</span>
-                  <strong>5,4 l</strong>
-                </li>
-                <li>
-                  <span>Limoni non trattati</span>
-                  <strong>8 pz</strong>
-                </li>
-              </ul>
-            </GlassPanel>
-          </div>
-        </header>
-
-        <section className="sirio-section" id="fondazioni">
-          <SectionHeading
-            eyebrow="01 · Fondazioni"
-            title="Carta, ossidiana e segnali rari."
+  return (
+    <ToastProvider swipeDirection="right">
+      <TooltipProvider delayDuration={250}>
+        <div className="sirio-shell" data-qv-density="comfort">
+          <Surface
+            className="sirio-nav"
+            material="crystal"
+            purpose="navigation"
           >
-            Il bianco sostiene il lavoro, il nero organizza la gerarchia e il
-            colore appare come orientamento o trasformazione. Gli stati
-            funzionali non diventano decorazione.
-          </SectionHeading>
+            <a className="sirio-brand" href="#top">
+              <Image
+                alt=""
+                aria-hidden="true"
+                className="sirio-brand-mark"
+                height={20}
+                priority
+                src="/logo-icon/sirio-icon.svg"
+                style={{ height: 20, width: 20 }}
+                width={20}
+              />
+              <span>Sirio</span>
+              <Badge variant="success">Stable v0.5</Badge>
+            </a>
+            <nav aria-label="Sezioni Sirio">
+              <a href="#fondazioni">Fondazioni</a>
+              <a href="#materiali">Materiali</a>
+              <a href="#componenti">Componenti</a>
+              <a href="#composizione">Composizione</a>
+              <a href="#revisione">Revisione</a>
+            </nav>
+          </Surface>
 
-          <div className="token-group">
-            <div>
-              <h3>Scala monocromatica</h3>
-              <p>Dieci passaggi per canvas, testo, bordi e profondità.</p>
-            </div>
-            <div className="swatch-grid">
-              {monochromeTokens.map(([name, token, hex, dark]) => (
-                <Swatch
-                  dark={dark}
-                  hex={hex}
-                  key={token}
-                  name={name}
-                  token={token}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="token-group sirio-stack-lg">
-            <div>
-              <h3>Accenti sepolti</h3>
-              <p>
-                Ciano e cobalto orientano; albicocca segnala l’output; violetto
-                rifrange senza dominare.
-              </p>
-            </div>
-            <div className="swatch-grid">
-              {accentTokens.map(([name, token, hex, dark]) => (
-                <Swatch
-                  dark={dark}
-                  hex={hex}
-                  key={token}
-                  name={name}
-                  token={token}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="token-group sirio-stack-lg">
-            <div>
-              <h3>Stati funzionali</h3>
-              <p>
-                Ogni stato richiede testo o struttura oltre al colore. Il verde
-                non dichiara mai sicurezza alimentare assoluta.
-              </p>
-            </div>
-            <div className="swatch-grid">
-              {statusTokens.map(([name, token, hex, dark]) => (
-                <Swatch
-                  dark={dark}
-                  hex={hex}
-                  key={token}
-                  name={name}
-                  token={token}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="sirio-grid sirio-stack-lg" data-columns="4">
-            <Card className="surface-card">
-              <Badge>Canvas</Badge>
-              <div>
-                <h3>Bianco dominante</h3>
-                <p>Default per pagine e lavoro operativo.</p>
-              </div>
-            </Card>
-            <Card className="surface-card" variant="elevated">
-              <Badge>Paper</Badge>
-              <div>
-                <h3>Dati nitidi</h3>
-                <p>Form, liste e informazioni professionali.</p>
-              </div>
-            </Card>
-            <div className="glass-card-stage" data-light="cool-warm">
-              <Card className="surface-card" variant="glass">
-                <Badge variant="accent">Glass</Badge>
-                <div>
-                  <h3>Focus isolato</h3>
-                  <p>Una superficie dominante, non una griglia intera.</p>
-                </div>
-              </Card>
-            </div>
-            <Card className="surface-card" variant="inverse">
-              <Badge>Obsidian</Badge>
-              <div>
-                <h3>Contrasto locale</h3>
-                <p>CTA e passaggi intensi, mai dark mode diffuso.</p>
-              </div>
-            </Card>
-          </div>
-        </section>
-
-        <section className="sirio-section" id="glass">
-          <SectionHeading eyebrow="02 · Blur system" title="Un blur, una funzione.">
-            Ogni preset dichiara cosa mette a fuoco, separa o attenua. Su mobile
-            l’opacità cresce e l’intensità cala; il contenuto resta leggibile
-            anche senza backdrop-filter.
-          </SectionHeading>
-
-          <div className="sirio-grid" data-columns="2">
-            {glassPresets.map((preset) => (
-              <div
-                className="glass-stage"
-                data-stage={preset.stage}
-                key={preset.variant}
-              >
-                <GlassPanel
-                  className="glass-specimen"
-                  variant={preset.variant}
-                >
-                  <Badge variant="accent">{preset.role}</Badge>
-                  <h3>{preset.name}</h3>
-                  <p>{preset.use}</p>
-                  <ul className="glass-contract">
-                    <li>
-                      <strong>Usare:</strong> {preset.use}
-                    </li>
-                    <li>
-                      <strong>Evitare:</strong> {preset.avoid}
-                    </li>
-                  </ul>
-                </GlassPanel>
-              </div>
-            ))}
-
-            {specialGlassPresets.map((preset) => (
-              <div
-                className="glass-stage"
-                data-stage={preset.stage}
-                key={preset.name}
-              >
-                <div
-                  className={`${preset.className} qv-glass-panel glass-specimen`}
-                >
-                  <Badge>{preset.name}</Badge>
-                  <h3>Glass {preset.name.toLowerCase()}</h3>
-                  <p>{preset.use}</p>
-                  <ul className="glass-contract">
-                    <li>
-                      <strong>Contratto:</strong> nitidezza interna e fallback
-                      opaco equivalente.
-                    </li>
-                  </ul>
+          <main className="sirio-main" id="top">
+            <header className="sirio-hero">
+              <div className="sirio-hero__copy">
+                <p className="sirio-eyebrow">Qoovex design system</p>
+                <Badge variant="accent">Contratto runtime 0.5.0</Badge>
+                <h1>La precisione diventa materiale.</h1>
+                <p>
+                  Paper quando il lavoro richiede densita. Crystal quando una
+                  decisione deve emergere. Ogni raggio, contrasto e movimento
+                  nasce dalla funzione, non dall&apos;effetto.
+                </p>
+                <div className="sirio-actions">
+                  <Button
+                    interaction="magnetic"
+                    onClick={() =>
+                      document
+                        .querySelector("#materiali")
+                        ?.scrollIntoView({ behavior: "smooth" })
+                    }
+                  >
+                    Esplora il materiale
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      document
+                        .querySelector("#componenti")
+                        ?.scrollIntoView({ behavior: "smooth" })
+                    }
+                    variant="secondary"
+                  >
+                    Vedi il core
+                  </Button>
                 </div>
               </div>
-            ))}
-          </div>
 
-          <div className="glass-direction-lab">
-            <header className="glass-direction-heading">
-              <div>
-                <Badge variant="warning">Visual direction lab</Badge>
-                <h3>Quale vetro deve diventare Qoovex?</h3>
+              <div className="sirio-optical-bench">
+                <div className="sirio-source-data" aria-hidden="true">
+                  <span>24</span>
+                  <span>porzioni</span>
+                  <span>1,92 kg</span>
+                  <span>185 C</span>
+                </div>
+                <Surface
+                  className="sirio-hero-lens"
+                  material="crystal"
+                  purpose="feature"
+                >
+                  <div className="sirio-lens-meta">
+                    <Badge variant="success">Ricetta verificata</Badge>
+                    <span>Menu estate</span>
+                  </div>
+                  <div>
+                    <p className="sirio-kicker">Output operativo</p>
+                    <h2>Risotto al limone e timo</h2>
+                    <p>
+                      Il centro sfoca il contesto senza sfocare il contenuto.
+                      La cornice rifrange soltanto cio che esiste sotto.
+                    </p>
+                  </div>
+                  <Separator />
+                  <dl className="sirio-data-grid">
+                    <div>
+                      <dt>Porzioni</dt>
+                      <dd>24</dd>
+                    </div>
+                    <div>
+                      <dt>Resa</dt>
+                      <dd>7,4 kg</dd>
+                    </div>
+                    <div>
+                      <dt>Stato</dt>
+                      <dd>Pronta</dd>
+                    </div>
+                  </dl>
+                </Surface>
               </div>
-              <p>
-                Cinque prove non contrattuali sullo stesso contenuto e sullo
-                stesso fondale. Scegli un numero: nessuna di queste varianti
-                entra nella libreria prima della review.
-              </p>
             </header>
 
-            <div className="glass-direction-grid">
-              {glassDirections.map((direction) => (
-                <div
-                  className="glass-direction-stage"
-                  data-direction={direction.key}
-                  key={direction.key}
-                >
-                  <div className="glass-direction-source" aria-hidden="true">
-                    <span>24</span>
-                    <span>Menu estate</span>
-                    <span>Ricetta · Output · Servizio</span>
-                  </div>
+            <section className="sirio-section" id="fondazioni">
+              <SectionHeading
+                eyebrow="01 / Costituzione"
+                title="Bianco dominante. Nero strutturale. Colore raro."
+              >
+                La griglia parte da 4 px. Gli accenti orientano e segnalano
+                trasformazione; non classificano intere aree del prodotto.
+              </SectionHeading>
 
-                  <Card className="glass-direction-card" variant="glass">
-                    <div className="glass-direction-center">
-                      <div className="glass-direction-meta">
-                        <Badge
-                          variant={
-                            direction.key === "crystal" ? "success" : "neutral"
-                          }
-                        >
-                          {direction.key === "crystal"
-                            ? `${direction.id} · Selected`
-                            : direction.id}
-                        </Badge>
-                        <span>{direction.specs}</span>
-                      </div>
-                      <div>
-                        <h4>{direction.name}</h4>
-                        <p>{direction.description}</p>
-                      </div>
-                      <div className="glass-direction-output">
-                        <span>Menu degustazione</span>
-                        <strong>Pronto</strong>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="sirio-section" id="tipografia">
-          <SectionHeading
-            eyebrow="03 · Tipografia"
-            title="Editoriale quando racconta, precisa quando lavora."
-          >
-            Cabinet Grotesk e Synonym sono ruoli candidati, non font caricati.
-            Questa pagina usa fallback di sistema per validare scala, ritmo,
-            cifre, unità e contenuti italiani prima del self-hosting.
-          </SectionHeading>
-
-          <Card>
-            <div className="type-specimen">
-              <p className="type-label">Display / fallback candidate</p>
-              <p className="type-display">Una ricetta, più output.</p>
-            </div>
-            <div className="type-specimen">
-              <p className="type-label">Section heading</p>
-              <p className="type-heading">
-                Trasforma dati professionali in lavoro pronto.
-              </p>
-            </div>
-            <div className="type-specimen">
-              <p className="type-label">Body / UI</p>
-              <p className="type-body">
-                Aggiorna la ricetta una volta. Menu, allergeni e lista partono
-                dalla stessa base, con stati leggibili e controllo umano.
-              </p>
-            </div>
-            <div className="type-specimen">
-              <p className="type-label">Dati e unità</p>
-              <p className="type-data">
-                1,92 kg · 24 porzioni · 185 °C · 01:35 h · € 12,50
-              </p>
-            </div>
-            <div className="type-specimen">
-              <p className="type-label">Diacritici e affidabilità</p>
-              <p>
-                È già pronta? Caffè, crème brûlée, piñoli. Allergeni: rilevato,
-                da verificare, confermato.
-              </p>
-            </div>
-          </Card>
-        </section>
-
-        <section className="sirio-section" id="componenti">
-          <SectionHeading
-            eyebrow="04 · Primitive"
-            title="Cinque responsabilità, nessun riempitivo."
-          >
-            Le varianti rappresentano differenze semantiche. Focus, disabled,
-            error e success sono parte del contratto; hover non contiene
-            informazioni esclusive.
-          </SectionHeading>
-
-          <div className="sirio-grid" data-columns="2">
-            <Card className="component-card" variant="elevated">
-              <div>
-                <h3>Button</h3>
-                <p>Azioni con gerarchia chiara e target minimo di 44 px.</p>
-              </div>
-              <div className="sirio-inline">
-                {buttonVariants.map((variant) => (
-                  <Button key={variant} variant={variant}>
-                    {variant}
-                  </Button>
-                ))}
-                <Button disabled>Non disponibile</Button>
-              </div>
-            </Card>
-
-            <Card className="component-card">
-              <div>
-                <h3>Badge</h3>
-                <p>Il testo mantiene il significato anche senza colore.</p>
-              </div>
-              <div className="sirio-badge-row">
-                {badgeVariants.map((variant) => (
-                  <Badge key={variant} variant={variant}>
-                    {variant === "warning" ? "Da verificare" : variant}
-                  </Badge>
+              <div className="sirio-swatch-grid">
+                {palette.map(([name, token, hex]) => (
+                  <TokenSwatch
+                    hex={hex}
+                    key={token}
+                    name={name}
+                    token={token}
+                  />
                 ))}
               </div>
-            </Card>
 
-            <Card className="component-card">
-              <div>
-                <h3>Input</h3>
-                <p>Label persistente, superficie paper e messaggi specifici.</p>
-              </div>
-              <div className="input-stack">
-                <Input
-                  description="Nome visibile nel tuo archivio."
-                  id="recipe-name"
-                  label="Nome ricetta"
-                  placeholder="Es. Risotto al limone"
-                />
-                <Input
-                  defaultValue="0"
-                  id="recipe-portions"
-                  label="Porzioni"
-                  message="Inserisci un numero maggiore di zero."
-                  status="error"
-                />
-                <Input
-                  defaultValue="RIS-024"
-                  id="recipe-code"
-                  label="Codice interno"
-                  message="Codice disponibile."
-                  status="success"
-                />
-                <Input
-                  defaultValue="Chef Martina Rossi"
-                  disabled
-                  id="recipe-owner"
-                  label="Creatore"
-                />
-              </div>
-            </Card>
-
-            <div className="sirio-grid">
-              {cardVariants.map((variant) => (
-                <div
-                  className="card-variant-stage"
-                  data-glass={variant.startsWith("glass")}
-                  data-light={
-                    variant === "glass-strong" ? "warm-focus" : "cool-warm"
-                  }
-                  key={variant}
-                >
-                  <Card className="component-card" variant={variant}>
-                    <Badge>{variant}</Badge>
-                    <div>
-                      <h3>Card {variant}</h3>
-                      <p>
-                        {variant.startsWith("glass")
-                          ? "Vetro e blur rivelano la luce sottostante solo su contenuti focali."
-                          : "Struttura stabile per contenuto nitido e leggibile."}
-                      </p>
-                    </div>
-                  </Card>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="sirio-section" id="composizione">
-          <SectionHeading
-            eyebrow="05 · Composizione pilota"
-            title="Dal frammento all’output controllabile."
-          >
-            La lente operativa attenua file e messaggi dispersi, mantiene la
-            ricetta nitida e mostra un menu come conseguenza concreta. Non è
-            una schermata prodotto né una promessa di feature aggiuntive.
-          </SectionHeading>
-
-          <div className="pilot">
-            <div className="pilot-layout">
-              <div className="pilot-context" aria-label="Contesto attenuato">
-                <div className="pilot-fragment">
-                  Foglio cliente A
-                  <br />
-                  18 porzioni
-                </div>
-                <div className="pilot-fragment">
-                  PDF menu
-                  <br />
-                  Versione finale 3
-                </div>
-                <div className="pilot-fragment">
-                  Messaggio
-                  <br />
-                  “Manca il sedano?”
-                </div>
-              </div>
-
-              <GlassPanel className="pilot-focus" variant="strong">
-                <div className="sirio-inline">
-                  <Badge variant="accent">Ricetta sorgente</Badge>
-                  <Badge variant="warning">Allergeni da verificare</Badge>
-                </div>
-                <div>
-                  <h3>Risotto al limone e timo</h3>
+              <div className="sirio-foundation-grid">
+                <Card>
+                  <p className="sirio-kicker">Geometria</p>
+                  <h3>10 / 16 / 28 / 40</h3>
                   <p>
-                    La zona nitida contiene il dato controllabile. Gli input
-                    interni restano paper e non ereditano blur.
+                    Controlli, superfici, Crystal e grandi lens. La cornice
+                    Crystal misura 6 px; il centro usa radius 22 px.
                   </p>
-                </div>
-                <Input
-                  defaultValue="24"
-                  id="pilot-portions"
-                  label="Porzioni"
-                />
-                <div className="sirio-actions">
-                  <Button>Genera il menu</Button>
-                  <Button variant="secondary">Controlla gli allergeni</Button>
-                </div>
-              </GlassPanel>
-
-              <div className="pilot-output-stage">
-                <Card className="pilot-output" variant="glass">
-                  <Badge variant="success">Output pronto</Badge>
-                  <div>
-                    <h3>Menu degustazione</h3>
-                    <p>Cliente B · Estate</p>
-                  </div>
-                  <div className="pilot-output-row">
-                    <span>Portata</span>
-                    <strong>Primo</strong>
-                  </div>
-                  <div className="pilot-output-row">
-                    <span>Allergeni</span>
-                    <strong>Da verificare</strong>
-                  </div>
-                  <Button variant="secondary">Apri il menu</Button>
+                </Card>
+                <Card elevation="raised">
+                  <p className="sirio-kicker">Densita</p>
+                  <h3>Comfort + compact</h3>
+                  <p>
+                    Compact riduce ritmo e padding, mai il target interattivo
+                    minimo di 44 px.
+                  </p>
+                </Card>
+                <Card material="inverse">
+                  <p className="sirio-kicker">Motion</p>
+                  <h3>160 / 220 / 360 / 600</h3>
+                  <p>
+                    Risposte fisiche a stato e prossimita. Nessuna animazione
+                    ambientale continua.
+                  </p>
                 </Card>
               </div>
-            </div>
-          </div>
-        </section>
 
-        <section className="sirio-section" id="revisione">
-          <SectionHeading
-            eyebrow="06 · Gate approvato"
-            title="Il contratto visuale è stabile."
-          >
-            La review sui quattro viewport ha approvato fondazioni, gerarchia,
-            stati e responsive behavior. Le correzioni richieste sono parte
-            della Stable v0.1.
-          </SectionHeading>
+              <Card className="sirio-type-specimen">
+                <div>
+                  <p className="sirio-kicker">Cabinet Grotesk / display</p>
+                  <p className="sirio-display-line">Una base. Piu output.</p>
+                </div>
+                <Separator />
+                <div>
+                  <p className="sirio-kicker">Synonym / UI e dati</p>
+                  <p className="sirio-body-line">
+                    Caffe, creme brulee, pinoli. 1,92 kg / 24 porzioni /
+                    185 C / 01:35 h / EUR 12,50.
+                  </p>
+                </div>
+              </Card>
+            </section>
 
-          <div className="review-approval">
-            <Badge variant="success">10/10 criteri approvati</Badge>
-            <p>
-              Font esterni e componenti avanzati restano fuori dal contratto.
-            </p>
-          </div>
+            <section className="sirio-section" id="materiali">
+              <SectionHeading
+                eyebrow="02 / Materiali"
+                title="Una sola fisica, quattro responsabilita."
+              >
+                Il profilo non descrive quanto vetro vogliamo vedere, ma il
+                lavoro che la superficie deve svolgere. Nessun profilo viene
+                scelto come variante decorativa.
+              </SectionHeading>
 
-          <div className="sirio-grid" data-columns="2">
-            <Card variant="elevated">
-              <ul className="review-list">
-                {[
-                  "Il bianco resta davvero dominante?",
-                  "Il nero struttura senza trasformarsi in dark mode?",
-                  "Il colore è raro e legato a orientamento o output?",
-                  "Le intensità glass sono distinguibili ma controllate?",
-                  "Testo, quantità e stati restano leggibili sul caso peggiore?",
-                ].map((item, index) => (
-                  <li key={item}>
-                    <span className="review-index">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span>{item}</span>
-                  </li>
+              <div className="sirio-material-grid">
+                {materialProfiles.map((profile) => (
+                  <div className="sirio-material-stage" key={profile.purpose}>
+                    <div className="sirio-material-source" aria-hidden="true">
+                      <strong>{profile.title}</strong>
+                      <span>Menu / Ricetta / Servizio / Allergeni</span>
+                    </div>
+                    <Surface
+                      className="sirio-material-card"
+                      material="crystal"
+                      purpose={profile.purpose}
+                    >
+                      <div>
+                        <Badge variant="accent">{profile.title}</Badge>
+                        <span>{profile.alpha}</span>
+                      </div>
+                      <h3>{profile.title}</h3>
+                      <p>{profile.description}</p>
+                    </Surface>
+                  </div>
                 ))}
-              </ul>
-            </Card>
-            <Card>
-              <ul className="review-list">
-                {[
-                  "Il fallback opaco conserva la stessa gerarchia?",
-                  "Focus, disabled, error e success sono comprensibili?",
-                  "Mobile riduce gli effetti senza perdere significato?",
-                  "Marketing e workspace condividono il linguaggio senza avere la stessa intensità?",
-                  "C’è qualcosa che non serve a una decisione o a un flusso?",
-                ].map((item, index) => (
-                  <li key={item}>
-                    <span className="review-index">
-                      {String(index + 6).padStart(2, "0")}
-                    </span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          </div>
-        </section>
-      </main>
+              </div>
 
-      <footer className="sirio-main sirio-footer">
-        Qoovex Design Foundations · Stable v0.1 · Font esterni non caricati ·
-        Nessuna entity o feature prodotto implementata
-      </footer>
-    </div>
+              <div className="sirio-material-rules">
+                <Card>
+                  <Badge variant="success">Fare</Badge>
+                  <h3>Contenuto sempre nitido</h3>
+                  <p>
+                    I filtri appartengono alle due pseudo-superfici. Testo,
+                    controlli e discendenti non ricevono blur.
+                  </p>
+                </Card>
+                <Card>
+                  <Badge variant="danger">Non fare</Badge>
+                  <h3>Glass dentro glass</h3>
+                  <p>
+                    Form, liste e dati densi restano paper. Il budget massimo e
+                    due backdrop layer simultanei.
+                  </p>
+                </Card>
+              </div>
+            </section>
+
+            <section className="sirio-section" id="componenti">
+              <SectionHeading
+                eyebrow="03 / Core"
+                title="Componenti quieti, stati inequivocabili."
+              >
+                Le primitive condividono geometria e comportamento. Hover non
+                porta informazione esclusiva; focus, disabled ed errore restano
+                comprensibili senza colore.
+              </SectionHeading>
+
+              <div className="sirio-component-grid">
+                <ComponentBlock
+                  description="Gerarchia, pressione fisica e disabled neutro."
+                  title="Azioni"
+                >
+                  <div className="sirio-inline">
+                    <Button>Salva ricetta</Button>
+                    <Button variant="secondary">Anteprima</Button>
+                    <Button variant="tertiary">Annulla</Button>
+                    <Button variant="destructive">Elimina</Button>
+                    <Button disabled>Non disponibile</Button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <IconButton aria-label="Informazioni sul salvataggio">
+                          <Info aria-hidden="true" size={20} />
+                        </IconButton>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Salva senza pubblicare il menu.
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </ComponentBlock>
+
+                <ComponentBlock
+                  description="Label persistenti, messaggi specifici e carta opaca."
+                  title="Campi"
+                >
+                  <div className="sirio-form-grid">
+                    <Field
+                      description="Nome visibile nell'archivio."
+                      label="Nome ricetta"
+                    >
+                      <Input defaultValue="Risotto al limone e timo" />
+                    </Field>
+                    <Field
+                      label="Allergeni"
+                      message="Verifica almeno una fonte prima di pubblicare."
+                      status="error"
+                    >
+                      <Textarea defaultValue="Sedano nel brodo vegetale." />
+                    </Field>
+                    <Field
+                      label="Portata"
+                      message="Classificazione salvata."
+                      status="success"
+                    >
+                      <Select
+                        aria-label="Portata"
+                        defaultValue="primo"
+                        options={[
+                          { label: "Antipasto", value: "antipasto" },
+                          { label: "Primo", value: "primo" },
+                          { label: "Secondo", value: "secondo" },
+                        ]}
+                      />
+                    </Field>
+                  </div>
+                </ComponentBlock>
+
+                <ComponentBlock
+                  description="Scelte leggibili con mouse, touch e tastiera."
+                  title="Selezione"
+                >
+                  <div className="sirio-form-grid">
+                    <Checkbox
+                      defaultChecked
+                      description="Richiede comunque controllo umano."
+                      label="Evidenzia allergeni rilevati"
+                    />
+                    <Switch
+                      defaultChecked
+                      description="Conserva una versione pronta per la stampa."
+                      label="Genera PDF menu"
+                    />
+                    <RadioGroup
+                      defaultValue="24"
+                      label="Porzioni di servizio"
+                      name="portions"
+                      options={[
+                        { label: "12 porzioni", value: "12" },
+                        { label: "24 porzioni", value: "24" },
+                        { label: "48 porzioni", value: "48" },
+                      ]}
+                    />
+                  </div>
+                </ComponentBlock>
+
+                <ComponentBlock
+                  description="La posizione e la struttura sostengono lo stato attivo."
+                  title="Navigazione"
+                >
+                  <SegmentedControl
+                    aria-label="Densita della tabella"
+                    defaultValue="comfort"
+                    items={[
+                      { label: "Comfort", value: "comfort" },
+                      { label: "Compact", value: "compact" },
+                    ]}
+                  />
+                  <Tabs
+                    aria-label="Dettagli ricetta"
+                    defaultValue="ingredienti"
+                    items={[
+                      {
+                        content: "Riso, brodo, limone, timo e burro.",
+                        label: "Ingredienti",
+                        value: "ingredienti",
+                      },
+                      {
+                        content: "Mantecatura finale: 4 minuti.",
+                        label: "Metodo",
+                        value: "metodo",
+                      },
+                      {
+                        content: "Sedano: da verificare nel brodo.",
+                        label: "Allergeni",
+                        value: "allergeni",
+                      },
+                    ]}
+                  />
+                </ComponentBlock>
+
+                <ComponentBlock
+                  description="Focus gestito, Escape e ripristino sul trigger."
+                  title="Overlay"
+                >
+                  <div className="sirio-inline">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="secondary">Apri dialog</Button>
+                      </DialogTrigger>
+                      <DialogContent
+                        description="Conferma i dati prima di generare l'output."
+                        title="Pubblica menu"
+                      >
+                        <Field label="Nome pubblico">
+                          <Input defaultValue="Menu degustazione estate" />
+                        </Field>
+                        <div className="sirio-dialog-actions">
+                          <DialogClose asChild>
+                            <Button variant="tertiary">Annulla</Button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <Button>Pubblica</Button>
+                          </DialogClose>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+
+                    <Drawer>
+                      <DrawerTrigger asChild>
+                        <Button variant="secondary">Apri drawer</Button>
+                      </DrawerTrigger>
+                      <DrawerContent
+                        description="Contesto della ricetta senza perdere il menu."
+                        title="Dettaglio operativo"
+                      >
+                        <Card>
+                          <h3>Servizio serale</h3>
+                          <p>24 coperti / pass ore 20:30.</p>
+                        </Card>
+                        <DrawerClose asChild>
+                          <Button>Chiudi dettaglio</Button>
+                        </DrawerClose>
+                      </DrawerContent>
+                    </Drawer>
+
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="secondary">Apri popover</Button>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <strong>Fonte allergene</strong>
+                        <p>Etichetta brodo aggiornata il 12 giugno.</p>
+                      </PopoverContent>
+                    </Popover>
+
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <IconButton aria-label="Altre azioni">
+                          <DotsThree aria-hidden="true" size={22} />
+                        </IconButton>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>Duplica ricetta</DropdownMenuItem>
+                        <DropdownMenuCheckboxItem checked>
+                          Mostra quantita
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>Archivia</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive">
+                          Elimina versione
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent
+                        description="La versione pubblicata resta disponibile, ma questa bozza non potra essere recuperata."
+                        title="Eliminare la bozza?"
+                      >
+                        <div className="sirio-dialog-actions">
+                          <AlertDialogCancel asChild>
+                            <Button variant="secondary">Mantieni</Button>
+                          </AlertDialogCancel>
+                          <AlertDialogAction asChild>
+                            <Button variant="destructive">Elimina</Button>
+                          </AlertDialogAction>
+                        </div>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </ComponentBlock>
+
+                <ComponentBlock
+                  description="Stato locale, progresso e attesa senza rumore."
+                  title="Feedback"
+                >
+                  <div className="sirio-badges">
+                    <Badge>Bozza</Badge>
+                    <Badge variant="success">Pronta</Badge>
+                    <Badge variant="warning">Da verificare</Badge>
+                    <Badge variant="danger">Errore</Badge>
+                    <Badge variant="info">Informazione</Badge>
+                  </div>
+                  <Progress label="Controllo ricetta" value={72} />
+                  <div className="sirio-skeletons">
+                    <Skeleton height={16} width="72%" />
+                    <Skeleton height={16} width="48%" />
+                  </div>
+                  <Button onClick={() => setToastOpen(true)} variant="secondary">
+                    Mostra notifica
+                  </Button>
+                  <Toast
+                    description="Il menu e ora disponibile in anteprima."
+                    onOpenChange={setToastOpen}
+                    open={toastOpen}
+                    title="Menu generato"
+                    tone="success"
+                  />
+                </ComponentBlock>
+
+                <ComponentBlock
+                  description="Il vuoto spiega il motivo e offre un prossimo passo."
+                  title="Empty state"
+                >
+                  <EmptyState
+                    action={
+                      <Button>
+                        <FilePlus aria-hidden="true" size={18} />
+                        Crea il primo menu
+                      </Button>
+                    }
+                    description="Combina ricette verificate per preparare un output cliente."
+                    icon={<ChefHat aria-hidden="true" size={24} />}
+                    title="Nessun menu per questo cliente"
+                  />
+                </ComponentBlock>
+              </div>
+            </section>
+
+            <section className="sirio-section" id="composizione">
+              <SectionHeading
+                eyebrow="04 / Composizione"
+                title="Il vetro orienta. La carta fa lavorare."
+              >
+                Una ricetta professionale produce un menu controllabile. Il
+                contesto si attenua, il dato resta paper e l&apos;output emerge in
+                una sola lens.
+              </SectionHeading>
+
+              <div className="sirio-pilot">
+                <aside className="sirio-pilot-context">
+                  <p className="sirio-kicker">Contesto sorgente</p>
+                  <div>
+                    <ListChecks aria-hidden="true" size={20} />
+                    <span>Foglio cliente B</span>
+                  </div>
+                  <div>
+                    <Bell aria-hidden="true" size={20} />
+                    <span>Allergeni da verificare</span>
+                  </div>
+                  <div>
+                    <SlidersHorizontal aria-hidden="true" size={20} />
+                    <span>Servizio / 24 coperti</span>
+                  </div>
+                </aside>
+
+                <Surface
+                  className="sirio-pilot-focus"
+                  material="crystal"
+                  purpose="focus"
+                >
+                  <div className="sirio-lens-meta">
+                    <Badge variant="accent">Lente operativa</Badge>
+                    <span>Versione 3</span>
+                  </div>
+                  <div>
+                    <h3>Risotto al limone e timo</h3>
+                    <p>
+                      Dato controllabile al centro. Nessun blur interno sui
+                      campi o sulle quantita.
+                    </p>
+                  </div>
+                  <Card>
+                    <dl className="sirio-recipe-table">
+                      <div>
+                        <dt>Riso Carnaroli</dt>
+                        <dd>1,92 kg</dd>
+                      </div>
+                      <div>
+                        <dt>Brodo vegetale</dt>
+                        <dd>5,4 l</dd>
+                      </div>
+                      <div>
+                        <dt>Limoni</dt>
+                        <dd>8 pz</dd>
+                      </div>
+                    </dl>
+                  </Card>
+                  <div className="sirio-inline">
+                    <Button>Genera menu</Button>
+                    <Button variant="secondary">Controlla allergeni</Button>
+                  </div>
+                </Surface>
+
+                <Card className="sirio-pilot-output" elevation="floating">
+                  <Badge variant="success">Output pronto</Badge>
+                  <div>
+                    <p className="sirio-kicker">Menu degustazione</p>
+                    <h3>Cliente B / Estate</h3>
+                  </div>
+                  <Separator />
+                  <dl className="sirio-recipe-table">
+                    <div>
+                      <dt>Portata</dt>
+                      <dd>Primo</dd>
+                    </div>
+                    <div>
+                      <dt>Allergeni</dt>
+                      <dd>Da verificare</dd>
+                    </div>
+                  </dl>
+                </Card>
+              </div>
+            </section>
+
+            <section className="sirio-section" id="revisione">
+              <SectionHeading
+                eyebrow="05 / Gate"
+                title="Stable significa verificabile."
+              >
+                Il contratto viene accettato solo quando gerarchia,
+                accessibilita e prestazioni sopravvivono al caso peggiore.
+              </SectionHeading>
+
+              <Card className="sirio-review-card" elevation="raised">
+                {[
+                  "WCAG 2.2 AA su testo, controlli e focus.",
+                  "Nessun blur su testo, input o discendenti.",
+                  "Massimo due backdrop layer simultanei.",
+                  "Fallback opaco e forced colors equivalenti.",
+                  "Reduced motion senza perdita di stato.",
+                  "375 / 768 / 1024 / 1440 px senza overflow.",
+                  "Font locali: nessuna richiesta esterna.",
+                  "Marketing e workspace condividono la grammatica, non l'intensita.",
+                ].map((item) => (
+                  <div className="sirio-review-item" key={item}>
+                    <span>
+                      <Check aria-hidden="true" size={16} weight="bold" />
+                    </span>
+                    <p>{item}</p>
+                  </div>
+                ))}
+              </Card>
+            </section>
+          </main>
+
+          <footer className="sirio-footer">
+            <span>Qoovex Design System / Stable v0.5</span>
+            <span>Paper, Crystal, precisione operativa.</span>
+          </footer>
+        </div>
+        <ToastViewport />
+      </TooltipProvider>
+    </ToastProvider>
   );
 }

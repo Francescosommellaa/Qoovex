@@ -4,9 +4,12 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sirio — Qoovex Design Foundations",
+  title: "Sirio - Qoovex Design System",
   description:
-    "Contratto stabile della fondazione visuale Qoovex Stable v0.1.",
+    "Specifica eseguibile del Qoovex Design System Stable v0.5.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

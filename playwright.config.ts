@@ -31,6 +31,14 @@ export default defineConfig({
       name: "chromium-1440",
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 1000 } },
     },
+    {
+      name: "webkit-375",
+      use: { ...devices["Desktop Safari"], viewport: { width: 375, height: 812 } },
+    },
+    {
+      name: "webkit-1440",
+      use: { ...devices["Desktop Safari"], viewport: { width: 1440, height: 1000 } },
+    },
   ],
   webServer: [
     {

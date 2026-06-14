@@ -63,6 +63,8 @@ yarn-error.log*
 !/tests/e2e/
 /tests/e2e/*
 !/tests/e2e/sirio-design-system.spec.ts
+!/tests/e2e/sirio-design-system.spec.ts-snapshots/
+!/tests/e2e/sirio-design-system.spec.ts-snapshots/*.png
 .agents
 skills-lock.json
 

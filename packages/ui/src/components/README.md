@@ -1,22 +1,15 @@
-# UI Components
+# Componenti Stable v0.5
 
-Primitive React condivise del design system Qoovex Stable v0.1.
+## Ownership
 
-## Componenti v0.1
+- `Surface`: materiale, elevazione, Crystal e fallback.
+- `Card`: contenitore semantico che riusa Surface.
+- `Button`, `IconButton`: azioni; magnetic e` marketing-only.
+- `Field`: relazione label, descrizione, stato e messaggio dei controlli.
+- `Dialog`, `Drawer`, `Popover`, `DropdownMenu`, `Tooltip`: overlay Radix con
+  contratto visuale Qoovex.
+- `Toast`, `Progress`, `Skeleton`, `EmptyState`: feedback e attesa.
 
-- `Button`: azioni reali; la variante glass non applica backdrop blur.
-  `interaction="magnetic"` è un opt-in riservato a CTA marketing primary o
-  glass e si disattiva su touch, disabled e reduced motion.
-- `Card`: paper di default; `glass` compone il preset medium e `glass-strong`
-  il preset strong, entrambi solo sopra luce o contesto funzionale.
-- `Input`: label e id obbligatori, messaggi accessibili e stati espliciti.
-- `Badge`: stato testuale sempre presente, mai comunicato dal solo colore.
-- `GlassPanel`: pilota del Blur System, con intensità semantiche controllate.
-
-## Regole
-
-- Preservare props HTML, `className` e ref React.
-- Non introdurre API polymorphic, `asChild` o dipendenze di varianti nella v0.1.
-- Non creare alternative app-local alle primitive presenti.
-- Non aggiungere componenti di dominio, feature o business logic.
-- Ogni nuova variante deve rappresentare una responsabilità distinta.
+Ogni nuova responsabilita` estende questi componenti composition-first. Non
+creare copie app-local, varianti visuali prive di significato o blur sui
+discendenti.

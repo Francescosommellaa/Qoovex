@@ -1,7 +1,22 @@
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("./fonts/cabinet-grotesk-variable.woff2") format("woff2-variations");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: "Synonym";
+  src: url("./fonts/synonym-variable.woff2") format("woff2-variations");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 200 700;
+}
+
 :root {
   color-scheme: light;
 
-  /* Stable v0.1 primitives approved through the Sirio review. */
   --qv-paper-0: #ffffff;
   --qv-paper-25: #fcfcfb;
   --qv-paper-50: #f7f7f5;
@@ -23,7 +38,6 @@
   --qv-status-danger: #b4232d;
   --qv-status-info: #2459b3;
   --qv-status-focus: #315fd6;
-  --qv-status-danger-hover: #941c25;
   --qv-status-success-surface: #edf8f2;
   --qv-status-success-text: #11663d;
   --qv-status-warning-surface: #fff3b0;
@@ -32,122 +46,96 @@
   --qv-status-danger-text: #98202a;
   --qv-status-info-surface: #eef4ff;
   --qv-status-info-text: #1e4c9c;
-  --qv-status-success-border: rgb(24 122 75 / 0.28);
-  --qv-status-warning-border: rgb(217 154 0 / 0.42);
-  --qv-status-danger-border: rgb(180 35 45 / 0.28);
-  --qv-status-info-border: rgb(36 89 179 / 0.28);
 
   --qv-surface-canvas: var(--qv-paper-0);
   --qv-surface-canvas-muted: var(--qv-paper-50);
   --qv-surface-paper: var(--qv-paper-0);
-  --qv-surface-elevated: var(--qv-paper-25);
+  --qv-surface-raised: var(--qv-paper-25);
   --qv-surface-muted: var(--qv-stone-100);
   --qv-surface-inverse: var(--qv-ink-900);
-  --qv-surface-glass: rgb(255 255 255 / 0.88);
-  --qv-surface-glass-strong: rgb(255 255 255 / 0.8);
-  --qv-surface-glass-inverse: rgb(21 21 20 / 0.86);
-  --qv-surface-veil: rgb(9 9 9 / 0.32);
+  --qv-surface-veil: rgb(9 9 9 / 0.38);
 
   --qv-text-primary: var(--qv-ink-900);
   --qv-text-secondary: var(--qv-stone-600);
   --qv-text-muted: #74746f;
   --qv-text-inverse: var(--qv-paper-0);
-  --qv-text-disabled: #85857f;
-  --qv-text-on-glass: var(--qv-ink-900);
-  --qv-text-on-accent: var(--qv-paper-0);
+  --qv-text-disabled: #74746f;
   --qv-text-link: #244fae;
 
   --qv-border-subtle: rgb(21 21 20 / 0.08);
   --qv-border-default: var(--qv-stone-200);
-  --qv-border-soft: rgb(21 21 20 / 0.12);
-  --qv-border-glass: rgb(255 255 255 / 0.58);
-  --qv-border-strong: rgb(21 21 20 / 0.32);
-  --qv-border-inverse: rgb(255 255 255 / 0.18);
+  --qv-border-strong: rgb(21 21 20 / 0.34);
+  --qv-border-inverse: rgb(255 255 255 / 0.2);
   --qv-border-focus: var(--qv-status-focus);
 
-  --qv-accent-primary: var(--qv-signal-cobalt);
-  --qv-accent-secondary: var(--qv-signal-cyan);
-  --qv-accent-warm: var(--qv-signal-apricot);
-  --qv-accent-refracted: var(--qv-signal-violet);
-  --qv-accent-muted: #eaf1ff;
-  --qv-accent-surface: #f3f7ff;
-  --qv-accent-text: #1f489d;
-  --qv-accent-border: rgb(53 104 232 / 0.32);
-  --qv-accent-glow:
-    0 18px 70px rgb(40 199 217 / 0.18),
-    0 28px 90px rgb(242 165 111 / 0.14);
+  --qv-space-1: 0.25rem;
+  --qv-space-2: 0.5rem;
+  --qv-space-3: 0.75rem;
+  --qv-space-4: 1rem;
+  --qv-space-5: 1.25rem;
+  --qv-space-6: 1.5rem;
+  --qv-space-8: 2rem;
+  --qv-space-10: 2.5rem;
+  --qv-space-12: 3rem;
+  --qv-control-height: 48px;
+  --qv-control-padding-inline: 1rem;
 
-  --qv-blur-subtle: 8px;
-  --qv-blur-navigation: 12px;
-  --qv-blur-soft: 16px;
-  --qv-blur-medium: 24px;
-  --qv-blur-strong: 40px;
-  --qv-blur-modal: 40px;
-  --qv-blur-deep: 64px;
-
-  --qv-glass-opacity-subtle: 0.96;
-  --qv-glass-opacity-soft: 0.92;
-  --qv-glass-opacity-medium: 0.88;
-  --qv-glass-opacity-strong: 0.8;
-  --qv-glass-opacity-deep: 0.72;
-  --qv-glass-opacity-mobile-subtle: 0.98;
-  --qv-glass-opacity-mobile-soft: 0.96;
-  --qv-glass-opacity-mobile-medium: 0.94;
-  --qv-glass-opacity-mobile-strong: 0.92;
-  --qv-glass-opacity-mobile-deep: 0.9;
-  --qv-glass-tint-light: 255 255 255;
-  --qv-glass-highlight: inset 0 1px 0 rgb(255 255 255 / 0.72);
-  --qv-glass-shadow:
-    var(--qv-glass-highlight),
-    0 18px 60px rgb(9 9 9 / 0.1);
-  --qv-glass-shadow-deep:
-    var(--qv-glass-highlight),
-    0 32px 100px rgb(9 9 9 / 0.16);
-
-  --qv-radius-sm: 10px;
-  --qv-radius-md: 16px;
-  --qv-radius-lg: 28px;
+  --qv-radius-control: 10px;
+  --qv-radius-surface: 16px;
+  --qv-radius-crystal: 28px;
+  --qv-radius-lens: 40px;
   --qv-radius-full: 999px;
 
   --qv-shadow-soft: 0 8px 30px rgb(9 9 9 / 0.06);
-  --qv-shadow-medium: 0 18px 60px rgb(9 9 9 / 0.1);
-  --qv-shadow-deep: 0 32px 100px rgb(9 9 9 / 0.16);
-  --qv-shadow-glass: var(--qv-glass-shadow);
+  --qv-shadow-raised: 0 18px 60px rgb(9 9 9 / 0.1);
+  --qv-shadow-floating: 0 32px 100px rgb(9 9 9 / 0.16);
+  --qv-shadow-crystal: 0 14px 40px rgb(9 9 9 / 0.14);
 
   --qv-motion-fast: 160ms;
   --qv-motion-base: 220ms;
   --qv-motion-context: 360ms;
   --qv-motion-narrative: 600ms;
   --qv-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
-  --qv-button-glass-surface: rgb(255 255 255 / 0.78);
-  --qv-button-glass-surface-hover: rgb(255 255 255 / 0.94);
-  --qv-button-glass-shadow: 0 8px 24px rgb(9 9 9 / 0.06);
-  --qv-button-magnetic-border: conic-gradient(
-    from 0deg,
-    transparent 0deg 76deg,
-    rgb(40 199 217 / 0.9) 116deg,
-    rgb(255 255 255 / 0.92) 158deg,
-    rgb(242 165 111 / 0.92) 208deg,
-    transparent 252deg 360deg
-  );
-  --qv-mask-solid: linear-gradient(#000 0 0);
-  --qv-focus-ring: 0 0 0 3px rgb(49 95 214 / 0.22);
 
+  --qv-crystal-frame-size: 6px;
+  --qv-crystal-radius-outer: var(--qv-radius-crystal);
+  --qv-crystal-radius-inner: 22px;
+  --qv-crystal-tint-light: 255 255 255;
+  --qv-crystal-tint-inverse: 21 21 20;
+  --qv-crystal-center-alpha: 0.68;
+  --qv-crystal-center-blur: 18px;
+  --qv-crystal-frame-alpha: 0.08;
+  --qv-crystal-frame-blur: 28px;
+  --qv-crystal-center-saturation: 118%;
+  --qv-crystal-center-contrast: 103%;
+  --qv-crystal-frame-saturation: 180%;
+  --qv-crystal-frame-contrast: 112%;
+  --qv-mask-solid: linear-gradient(#000 0 0);
+
+  --qv-focus-ring: 0 0 0 3px rgb(49 95 214 / 0.24);
   --qv-font-display:
-    "Cabinet Grotesk Candidate", "Aptos Display", "Segoe UI Variable Display",
+    "Cabinet Grotesk", "Aptos Display", "Segoe UI Variable Display",
     sans-serif;
   --qv-font-ui:
-    "Synonym Candidate", "Aptos", "Segoe UI Variable Text", "Segoe UI",
-    sans-serif;
+    "Synonym", "Aptos", "Segoe UI Variable Text", "Segoe UI", sans-serif;
 
-  --qv-type-display: clamp(3rem, 8vw, 6rem);
-  --qv-type-section: clamp(2.25rem, 5vw, 4rem);
-  --qv-type-heading-lg: clamp(1.875rem, 3vw, 2.5rem);
-  --qv-type-heading-md: clamp(1.375rem, 2vw, 1.75rem);
-  --qv-type-body-lg: clamp(1.125rem, 1.8vw, 1.375rem);
+  --qv-type-display: clamp(3.2rem, 8vw, 7.5rem);
+  --qv-type-section: clamp(2.25rem, 5vw, 4.5rem);
+  --qv-type-heading-lg: clamp(1.9rem, 3vw, 2.75rem);
+  --qv-type-heading-md: clamp(1.35rem, 2vw, 1.75rem);
+  --qv-type-body-lg: clamp(1.075rem, 1.8vw, 1.3rem);
   --qv-type-body: 1rem;
   --qv-type-control: 0.9375rem;
   --qv-type-caption: 0.8125rem;
+}
+
+[data-qv-density="compact"] {
+  --qv-control-height: 44px;
+  --qv-control-padding-inline: 0.75rem;
+  --qv-space-3: 0.625rem;
+  --qv-space-4: 0.875rem;
+  --qv-space-5: 1rem;
+  --qv-space-6: 1.25rem;
 }
 
 @theme inline {
@@ -157,7 +145,7 @@
   --color-inverse: var(--qv-surface-inverse);
   --color-foreground: var(--qv-text-primary);
   --color-muted-foreground: var(--qv-text-secondary);
-  --color-accent: var(--qv-accent-primary);
+  --color-accent: var(--qv-signal-cobalt);
   --color-success: var(--qv-status-success);
   --color-warning: var(--qv-status-warning);
   --color-danger: var(--qv-status-danger);
@@ -166,7 +154,7 @@
   --color-ring: var(--qv-border-focus);
   --font-display: var(--qv-font-display);
   --font-sans: var(--qv-font-ui);
-  --radius-sm: var(--qv-radius-sm);
-  --radius-md: var(--qv-radius-md);
-  --radius-lg: var(--qv-radius-lg);
+  --radius-sm: var(--qv-radius-control);
+  --radius-md: var(--qv-radius-surface);
+  --radius-lg: var(--qv-radius-crystal);
 }

@@ -13,22 +13,18 @@ import { mergeClassNames } from "./merge-class-names";
 export type ButtonVariant =
   | "primary"
   | "secondary"
-  | "ghost"
-  | "glass"
+  | "tertiary"
   | "destructive";
-
 export type ButtonInteraction = "standard" | "magnetic";
 
 type NativeButtonProps = ComponentPropsWithRef<"button">;
-
 type StandardButtonProps = NativeButtonProps & {
   interaction?: "standard";
   variant?: ButtonVariant;
 };
-
 type MagneticButtonProps = NativeButtonProps & {
   interaction: "magnetic";
-  variant?: Extract<ButtonVariant, "primary" | "glass">;
+  variant?: "primary";
 };
 
 export type ButtonProps = StandardButtonProps | MagneticButtonProps;
@@ -36,10 +32,7 @@ export type ButtonProps = StandardButtonProps | MagneticButtonProps;
 function assignRef<T>(ref: Ref<T> | undefined, value: T | null) {
   if (typeof ref === "function") {
     ref(value);
-    return;
-  }
-
-  if (ref) {
+  } else if (ref) {
     ref.current = value;
   }
 }
@@ -64,110 +57,90 @@ export function Button({
 
   useEffect(() => {
     const button = buttonRef.current;
-
     if (!button || interaction !== "magnetic") {
       return;
     }
 
-    const hoverMedia = window.matchMedia("(hover: hover)");
-    const pointerMedia = window.matchMedia("(pointer: fine)");
-    const reducedMotionMedia = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    );
-    let animationFrame = 0;
-    let listening = false;
+    const hover = window.matchMedia("(hover: hover)");
+    const pointer = window.matchMedia("(pointer: fine)");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
 
-    const schedulePosition = (x: number, y: number, active: boolean) => {
-      cancelAnimationFrame(animationFrame);
-      animationFrame = requestAnimationFrame(() => {
-        button.style.setProperty("--qv-magnetic-x", `${x.toFixed(2)}px`);
-        button.style.setProperty("--qv-magnetic-y", `${y.toFixed(2)}px`);
-        button.toggleAttribute("data-magnetic-active", active);
+    const reset = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        button.style.removeProperty("--qv-magnetic-x");
+        button.style.removeProperty("--qv-magnetic-y");
+        button.removeAttribute("data-magnetic-active");
       });
     };
-
-    const resetPosition = () => schedulePosition(0, 0, false);
 
     const handlePointerMove = (event: PointerEvent) => {
       const rect = button.getBoundingClientRect();
       const proximity = 32;
-      const isNear =
+      const near =
         event.clientX >= rect.left - proximity &&
         event.clientX <= rect.right + proximity &&
         event.clientY >= rect.top - proximity &&
         event.clientY <= rect.bottom + proximity;
 
-      if (!isNear) {
-        resetPosition();
+      if (!near) {
+        reset();
         return;
       }
 
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const rangeX = rect.width / 2 + proximity;
-      const rangeY = rect.height / 2 + proximity;
-      const maxOffset = 6;
-      const offsetX = Math.max(
-        -maxOffset,
-        Math.min(maxOffset, ((event.clientX - centerX) / rangeX) * maxOffset),
-      );
-      const offsetY = Math.max(
-        -maxOffset,
-        Math.min(maxOffset, ((event.clientY - centerY) / rangeY) * maxOffset),
-      );
+      const x =
+        ((event.clientX - (rect.left + rect.width / 2)) /
+          (rect.width / 2 + proximity)) *
+        6;
+      const y =
+        ((event.clientY - (rect.top + rect.height / 2)) /
+          (rect.height / 2 + proximity)) *
+        6;
 
-      schedulePosition(offsetX, offsetY, true);
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        button.style.setProperty(
+          "--qv-magnetic-x",
+          `${Math.max(-6, Math.min(6, x)).toFixed(2)}px`,
+        );
+        button.style.setProperty(
+          "--qv-magnetic-y",
+          `${Math.max(-6, Math.min(6, y)).toFixed(2)}px`,
+        );
+        button.setAttribute("data-magnetic-active", "");
+      });
     };
 
-    const setListening = (shouldListen: boolean) => {
-      if (shouldListen === listening) {
-        return;
-      }
+    const update = () => {
+      const enabled =
+        hover.matches &&
+        pointer.matches &&
+        !reducedMotion.matches &&
+        !disabled;
 
-      listening = shouldListen;
-      if (shouldListen) {
+      button.toggleAttribute("data-magnetic-enabled", enabled);
+      window.removeEventListener("pointermove", handlePointerMove);
+      if (enabled) {
         window.addEventListener("pointermove", handlePointerMove, {
           passive: true,
         });
       } else {
-        window.removeEventListener("pointermove", handlePointerMove);
+        reset();
       }
     };
 
-    const updateAvailability = () => {
-      const enabled =
-        hoverMedia.matches &&
-        pointerMedia.matches &&
-        !reducedMotionMedia.matches &&
-        !disabled;
-
-      if (enabled) {
-        button.setAttribute("data-magnetic-enabled", "true");
-      } else {
-        button.removeAttribute("data-magnetic-enabled");
-      }
-      setListening(enabled);
-
-      if (!enabled) {
-        resetPosition();
-      }
-    };
-
-    updateAvailability();
-    hoverMedia.addEventListener("change", updateAvailability);
-    pointerMedia.addEventListener("change", updateAvailability);
-    reducedMotionMedia.addEventListener("change", updateAvailability);
+    update();
+    hover.addEventListener("change", update);
+    pointer.addEventListener("change", update);
+    reducedMotion.addEventListener("change", update);
 
     return () => {
-      setListening(false);
-      cancelAnimationFrame(animationFrame);
-      hoverMedia.removeEventListener("change", updateAvailability);
-      pointerMedia.removeEventListener("change", updateAvailability);
-      reducedMotionMedia.removeEventListener("change", updateAvailability);
-      button.removeAttribute("data-magnetic-active");
-      button.removeAttribute("data-magnetic-enabled");
-      button.style.removeProperty("--qv-magnetic-x");
-      button.style.removeProperty("--qv-magnetic-y");
+      cancelAnimationFrame(frame);
+      window.removeEventListener("pointermove", handlePointerMove);
+      hover.removeEventListener("change", update);
+      pointer.removeEventListener("change", update);
+      reducedMotion.removeEventListener("change", update);
     };
   }, [disabled, interaction]);
 

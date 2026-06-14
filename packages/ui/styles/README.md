@@ -1,21 +1,12 @@
-# UI Styles
+# Stili Stable v0.5
 
-Fonte runtime della fondazione visuale Qoovex Stable v0.1.
-
-## Contenuto
-
-- `tokens.css`: primitive stabili e token semantici.
-- `base.css`: reset e baseline condivisa, senza componenti.
-- `glass.css`: preset funzionali del Blur System.
-- `components.css`: contratti visuali delle primitive React.
+- `tokens.css`: palette, scala 4 px, tipografia, densita`, radius, motion e
+  profili Crystal.
+- `base.css`: reset, focus, tipografia e reduced motion.
+- `glass.css`: implementazione fisica di Paper, Inverse e Crystal.
+- `components.css`: stati e geometria delle primitive.
 - `index.css`: entrypoint pubblico `@qoovex/ui/styles.css`.
 
-## Regole
-
-- I consumer usano token semantici, non primitive cromatiche isolate.
-- Il blur deve dichiarare focus, separazione, profondità o trasformazione.
-- `glass-deep` è solo marketing; liste, input e dati operativi restano opachi.
-- Il focus ring non viene sostituito da glow o colore.
-- I valori pubblici sono congelati nel contratto Stable v0.1.
-
-Non inserire qui stili specifici di un’app, feature o componente di dominio.
+Crystal usa due pseudo-superfici non sovrapposte: frame 6 px e centro con radius
+22 px dentro un host da 28 px. Host, testo e discendenti non applicano filtri.
+I colori percepiti provengono esclusivamente dal backdrop reale.
