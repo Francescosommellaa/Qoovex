@@ -1,12 +1,11 @@
-# Stili Stable v0.5
+# Styles
 
-- `tokens.css`: palette, scala 4 px, tipografia, densita`, radius, motion e
-  profili Crystal.
-- `base.css`: reset, focus, tipografia e reduced motion.
-- `glass.css`: implementazione fisica di Paper, Inverse e Crystal.
-- `components.css`: stati e geometria delle primitive.
+Fondazione CSS Measured Heat.
+
+- `tokens.css`: primitive, token semantici e mode override per default,
+  kitchen e review.
+- `base.css`: reset, tipografia base, focus, media defaults e reduced motion.
 - `index.css`: entrypoint pubblico `@qoovex/ui/styles.css`.
 
-Crystal usa due pseudo-superfici non sovrapposte: frame 6 px e centro con radius
-22 px dentro un host da 28 px. Host, testo e discendenti non applicano filtri.
-I colori percepiti provengono esclusivamente dal backdrop reale.
+Questa cartella non contiene classi componente.
+

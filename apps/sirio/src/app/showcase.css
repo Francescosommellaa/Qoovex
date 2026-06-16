@@ -2,51 +2,40 @@
   .sirio-shell {
     min-height: 100vh;
     background:
-      linear-gradient(90deg, rgb(21 21 20 / 0.035) 1px, transparent 1px),
-      linear-gradient(rgb(21 21 20 / 0.035) 1px, transparent 1px),
+      linear-gradient(180deg, rgb(255 255 255 / 0.94), rgb(250 249 246 / 0.96)),
       var(--qv-surface-canvas);
-    background-size: 4rem 4rem;
-  }
-
-  .sirio-main {
-    width: min(100% - 2rem, 1240px);
-    margin-inline: auto;
+    color: var(--qv-text-primary);
   }
 
   .sirio-nav {
     position: sticky;
-    z-index: 50;
-    top: 0.75rem;
-    width: min(calc(100% - 1.5rem), 1280px);
+    z-index: var(--qv-z-sticky);
+    top: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--qv-space-4);
-    margin: 0 auto;
-    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--qv-border-subtle);
+    background: rgb(250 249 246 / 0.92);
+    padding: var(--qv-space-3) max(var(--qv-space-4), calc((100vw - var(--qv-layout-page-max)) / 2));
   }
 
   .sirio-brand,
-  .sirio-nav nav {
-    display: flex;
+  .sirio-nav nav,
+  .sirio-nav a {
+    display: inline-flex;
     align-items: center;
   }
 
   .sirio-brand {
-    flex: none;
     gap: var(--qv-space-2);
     color: var(--qv-text-primary);
-    font-family: var(--qv-font-display);
-    font-weight: 700;
+    font-weight: 750;
     text-decoration: none;
   }
 
-  .sirio-brand-mark {
-    flex: none;
-  }
-
   .sirio-nav nav {
-    gap: 0.1rem;
+    gap: var(--qv-space-1);
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -56,629 +45,297 @@
   }
 
   .sirio-nav nav a {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
+    min-height: 40px;
     border-radius: var(--qv-radius-full);
-    padding-inline: 0.75rem;
-    color: var(--qv-text-secondary);
-    font-size: var(--qv-type-caption);
-    font-weight: 600;
+    padding-inline: var(--qv-space-3);
+    color: var(--qv-text-muted);
+    font-size: var(--qv-type-sm);
+    font-weight: 700;
     text-decoration: none;
     white-space: nowrap;
   }
 
   .sirio-nav nav a:hover {
-    background: rgb(255 255 255 / 0.56);
+    background: var(--qv-surface-raised);
     color: var(--qv-text-primary);
   }
 
+  .sirio-hero,
+  .sirio-section {
+    width: min(calc(100% - var(--qv-space-8)), var(--qv-layout-page-max));
+    margin-inline: auto;
+  }
+
   .sirio-hero {
-    min-height: calc(100vh - 5rem);
+    min-height: calc(100vh - 68px);
     display: grid;
     align-items: center;
-    gap: clamp(3rem, 8vw, 7rem);
-    padding-block: clamp(5rem, 10vw, 9rem);
+    gap: clamp(var(--qv-space-8), 8vw, var(--qv-space-20));
+    padding-block: clamp(var(--qv-space-12), 10vw, var(--qv-space-24));
   }
 
-  .sirio-hero__copy {
-    max-width: 46rem;
+  .sirio-hero-copy {
+    max-width: 45rem;
   }
 
-  .sirio-eyebrow,
   .sirio-kicker {
-    margin-bottom: var(--qv-space-3);
-    color: var(--qv-text-muted);
-    font-size: var(--qv-type-caption);
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    margin: 0 0 var(--qv-space-3);
+    color: var(--qv-text-action);
+    font-family: var(--qv-font-data);
+    font-size: var(--qv-type-xs);
+    font-weight: 750;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-  }
-
-  .sirio-hero__copy > .qv-badge {
-    margin-bottom: var(--qv-space-6);
   }
 
   .sirio-hero h1 {
     max-width: 11ch;
-    margin-bottom: var(--qv-space-6);
-    font-size: var(--qv-type-display);
-    font-weight: 650;
-    letter-spacing: -0.065em;
-    line-height: 0.87;
+    margin: 0 0 var(--qv-space-5);
+    font-size: clamp(3.5rem, 10vw, var(--qv-type-5xl));
+    line-height: 0.92;
   }
 
-  .sirio-hero__copy > p:not(.sirio-eyebrow) {
-    max-width: 39rem;
-    margin-bottom: var(--qv-space-8);
+  .sirio-hero-copy > p:not(.sirio-kicker),
+  .sirio-section-head > p:not(.sirio-kicker) {
+    max-width: var(--qv-layout-reading-max);
+    margin: 0;
     color: var(--qv-text-secondary);
-    font-size: var(--qv-type-body-lg);
+    font-size: var(--qv-type-lg);
   }
 
-  .sirio-actions,
-  .sirio-inline,
-  .sirio-badges,
-  .sirio-dialog-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--qv-space-3);
-  }
-
-  .sirio-optical-bench {
-    position: relative;
-    min-height: 34rem;
+  .sirio-instrument {
     display: grid;
-    place-items: center;
-    border: 1px solid var(--qv-border-subtle);
-    border-radius: var(--qv-radius-lens);
+    gap: var(--qv-space-2);
+    border: 1px solid var(--qv-border-default);
+    border-radius: var(--qv-radius-xl);
     background:
-      radial-gradient(
-        circle at 14% 18%,
-        rgb(40 199 217 / 0.78),
-        transparent 35%
-      ),
-      radial-gradient(
-        circle at 86% 82%,
-        rgb(242 165 111 / 0.78),
-        transparent 38%
-      ),
-      radial-gradient(
-        circle at 84% 12%,
-        rgb(140 109 232 / 0.4),
-        transparent 28%
-      ),
-      var(--qv-stone-100);
-    box-shadow: var(--qv-shadow-floating);
-    overflow: hidden;
+      linear-gradient(90deg, rgb(217 107 43 / 0.07), transparent 42%),
+      var(--qv-surface-raised);
+    padding: var(--qv-space-4);
+    box-shadow: var(--qv-shadow-medium);
   }
 
-  .sirio-optical-bench::before,
-  .sirio-optical-bench::after {
-    position: absolute;
-    border: 1px solid rgb(255 255 255 / 0.62);
-    border-radius: 50%;
-    content: "";
-    pointer-events: none;
-  }
-
-  .sirio-optical-bench::before {
-    width: 34rem;
-    height: 34rem;
-    top: -17rem;
-    left: -12rem;
-  }
-
-  .sirio-optical-bench::after {
-    width: 30rem;
-    height: 30rem;
-    right: -15rem;
-    bottom: -14rem;
-  }
-
-  .sirio-source-data {
-    position: absolute;
-    inset: 1.5rem;
-    color: rgb(9 9 9 / 0.5);
-    font-family: var(--qv-font-display);
-    font-weight: 650;
-    pointer-events: none;
-  }
-
-  .sirio-source-data span {
-    position: absolute;
-  }
-
-  .sirio-source-data span:first-child {
-    top: 0;
-    left: 0;
-    font-size: clamp(7rem, 18vw, 13rem);
-    letter-spacing: -0.08em;
-    line-height: 0.75;
-  }
-
-  .sirio-source-data span:nth-child(2) {
-    top: 0;
-    right: 0;
-  }
-
-  .sirio-source-data span:nth-child(3) {
-    right: 0;
-    bottom: 0;
-    font-size: clamp(2rem, 6vw, 4rem);
-  }
-
-  .sirio-source-data span:last-child {
-    bottom: 0;
-    left: 0;
-  }
-
-  .sirio-hero-lens {
-    width: min(calc(100% - 2rem), 30rem);
+  .sirio-instrument-head,
+  .sirio-rail-row,
+  .sirio-state-row {
     display: grid;
-    gap: var(--qv-space-6);
-    padding: clamp(1.2rem, 4vw, 2rem);
-  }
-
-  .sirio-hero-lens h2 {
-    margin-bottom: var(--qv-space-3);
-    font-size: var(--qv-type-heading-lg);
-    letter-spacing: -0.04em;
-    line-height: 1;
-  }
-
-  .sirio-hero-lens p:not(.sirio-kicker) {
-    margin: 0;
-    color: var(--qv-text-secondary);
-  }
-
-  .sirio-lens-meta {
-    display: flex;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: space-between;
     gap: var(--qv-space-4);
-    color: var(--qv-text-secondary);
-    font-size: var(--qv-type-caption);
   }
 
-  .sirio-data-grid,
-  .sirio-recipe-table {
-    display: grid;
-    gap: 0;
-    margin: 0;
+  .sirio-instrument-head {
+    padding: 0 var(--qv-space-2) var(--qv-space-2);
+    color: var(--qv-text-muted);
+    font-family: var(--qv-font-data);
+    font-size: var(--qv-type-xs);
+    text-transform: uppercase;
   }
 
-  .sirio-data-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .sirio-rail-row {
+    min-height: 64px;
+    border: 1px solid var(--qv-border-subtle);
+    border-radius: var(--qv-radius-lg);
+    background: var(--qv-surface-canvas);
+    padding: var(--qv-space-3) var(--qv-space-4);
   }
 
-  .sirio-data-grid div {
-    border-right: 1px solid rgb(21 21 20 / 0.1);
-    padding-inline: var(--qv-space-3);
+  .sirio-rail-row strong {
+    color: var(--qv-text-muted);
+    font-family: var(--qv-font-data);
+    font-size: var(--qv-type-xs);
+    text-transform: uppercase;
   }
 
-  .sirio-data-grid div:first-child {
-    padding-left: 0;
+  .sirio-rail-row[data-tone="heat"] {
+    border-color: rgb(217 107 43 / 0.34);
+    background: var(--qv-state-changed-bg);
   }
 
-  .sirio-data-grid div:last-child {
-    border-right: 0;
+  .sirio-rail-row[data-tone="wheat"] {
+    border-color: rgb(201 166 70 / 0.45);
+    background: var(--qv-state-warning-bg);
   }
 
-  .sirio-data-grid dt,
-  .sirio-recipe-table dt {
-    color: var(--qv-text-secondary);
-    font-size: var(--qv-type-caption);
-  }
-
-  .sirio-data-grid dd {
-    margin: var(--qv-space-1) 0 0;
-    font-weight: 700;
+  .sirio-rail-row[data-tone="herb"] {
+    border-color: rgb(95 122 79 / 0.34);
+    background: var(--qv-state-success-bg);
   }
 
   .sirio-section {
-    scroll-margin-top: 7rem;
-    padding-block: clamp(5rem, 10vw, 9rem);
     border-top: 1px solid var(--qv-border-subtle);
+    padding-block: clamp(var(--qv-space-12), 9vw, var(--qv-space-20));
   }
 
-  .sirio-section-heading {
+  .sirio-section-head {
     display: grid;
-    gap: var(--qv-space-6);
-    margin-bottom: clamp(2.5rem, 6vw, 5rem);
+    gap: var(--qv-space-3);
+    margin-bottom: clamp(var(--qv-space-8), 6vw, var(--qv-space-12));
   }
 
-  .sirio-section-heading h2 {
+  .sirio-section h2 {
     max-width: 13ch;
     margin: 0;
-    font-size: var(--qv-type-section);
-    font-weight: 620;
-    letter-spacing: -0.055em;
-    line-height: 0.95;
+    font-size: clamp(var(--qv-type-3xl), 7vw, var(--qv-type-5xl));
+    line-height: 0.96;
   }
 
-  .sirio-section-heading > p {
-    max-width: 38rem;
+  .sirio-principles,
+  .sirio-color-grid,
+  .sirio-mode-grid {
+    display: grid;
+    gap: var(--qv-space-4);
+  }
+
+  .sirio-principle,
+  .sirio-swatch,
+  .sirio-mode,
+  .sirio-type-board,
+  .sirio-quality {
+    border: 1px solid var(--qv-border-default);
+    border-radius: var(--qv-radius-lg);
+    background: var(--qv-surface-raised);
+    box-shadow: var(--qv-shadow-low);
+  }
+
+  .sirio-principle,
+  .sirio-mode,
+  .sirio-type-board,
+  .sirio-quality {
+    padding: clamp(var(--qv-space-5), 4vw, var(--qv-space-8));
+  }
+
+  .sirio-principle h3,
+  .sirio-mode h3,
+  .sirio-swatch h3 {
+    margin: 0 0 var(--qv-space-2);
+    font-size: var(--qv-type-xl);
+  }
+
+  .sirio-principle p,
+  .sirio-mode p,
+  .sirio-swatch p,
+  .sirio-state-row p {
     margin: 0;
     color: var(--qv-text-secondary);
-    font-size: var(--qv-type-body-lg);
   }
 
-  .sirio-swatch-grid {
+  .sirio-token-section {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--qv-space-3);
+    gap: var(--qv-space-6);
   }
 
   .sirio-swatch {
     display: grid;
-    grid-template-columns: 3rem 1fr auto;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: var(--qv-space-4);
     align-items: center;
-    gap: var(--qv-space-3);
-    border-bottom: 1px solid var(--qv-border-subtle);
-    padding-block: var(--qv-space-3);
+    padding: var(--qv-space-4);
   }
 
   .sirio-swatch > span {
-    width: 3rem;
-    height: 3rem;
+    width: 72px;
+    aspect-ratio: 1;
     border: 1px solid var(--qv-border-subtle);
-    border-radius: var(--qv-radius-control);
-    background: var(--swatch);
+    border-radius: var(--qv-radius-md);
   }
 
-  .sirio-swatch small {
+  .sirio-swatch small,
+  .sirio-mode span {
     color: var(--qv-text-muted);
-    font-variant-numeric: tabular-nums;
+    font-family: var(--qv-font-data);
+    font-size: var(--qv-type-xs);
+    font-weight: 700;
+    text-transform: uppercase;
   }
 
-  .sirio-foundation-grid,
-  .sirio-material-rules {
-    display: grid;
-    gap: var(--qv-space-4);
-    margin-top: var(--qv-space-10);
+  .sirio-type-board {
+    margin-top: var(--qv-space-4);
   }
 
-  .sirio-foundation-grid .qv-card,
-  .sirio-material-rules .qv-card {
-    min-height: 13rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .sirio-foundation-grid h3,
-  .sirio-material-rules h3 {
-    margin-bottom: var(--qv-space-2);
-    font-size: var(--qv-type-heading-md);
-  }
-
-  .sirio-foundation-grid p:last-child,
-  .sirio-material-rules p {
-    margin: 0;
-    color: var(--qv-text-secondary);
-  }
-
-  .sirio-foundation-grid [data-material="inverse"] p {
-    color: rgb(255 255 255 / 0.68);
-  }
-
-  .sirio-type-specimen {
-    display: grid;
-    gap: var(--qv-space-8);
-    margin-top: var(--qv-space-10);
-    padding: clamp(1.5rem, 5vw, 4rem);
-  }
-
-  .sirio-display-line {
+  .sirio-display-sample {
     max-width: 12ch;
-    margin: 0;
+    margin: 0 0 var(--qv-space-4);
     font-family: var(--qv-font-display);
-    font-size: clamp(3rem, 9vw, 7rem);
-    font-weight: 650;
-    letter-spacing: -0.065em;
-    line-height: 0.88;
+    font-size: clamp(var(--qv-type-3xl), 7vw, var(--qv-type-5xl));
+    font-weight: 700;
+    line-height: 0.98;
   }
 
-  .sirio-body-line {
-    max-width: 58ch;
-    margin: 0;
+  .sirio-body-sample {
+    max-width: 48rem;
     color: var(--qv-text-secondary);
-    font-size: var(--qv-type-body-lg);
-    font-variant-numeric: tabular-nums;
+    font-size: var(--qv-type-lg);
   }
 
-  .sirio-material-grid {
-    display: grid;
-    gap: var(--qv-space-4);
+  .sirio-data-sample {
+    margin: var(--qv-space-5) 0 0;
+    border-top: 1px solid var(--qv-border-subtle);
+    padding-top: var(--qv-space-4);
+    font-family: var(--qv-font-data);
+    font-size: var(--qv-type-sm);
+    font-weight: 700;
   }
 
-  .sirio-material-stage {
-    position: relative;
-    min-height: 24rem;
+  .sirio-state-list {
     display: grid;
-    align-items: end;
-    border: 1px solid var(--qv-border-subtle);
-    border-radius: var(--qv-radius-lens);
-    background:
-      radial-gradient(
-        circle at 12% 18%,
-        rgb(40 199 217 / 0.72),
-        transparent 34%
-      ),
-      radial-gradient(
-        circle at 88% 84%,
-        rgb(242 165 111 / 0.78),
-        transparent 38%
-      ),
-      radial-gradient(
-        circle at 80% 6%,
-        rgb(140 109 232 / 0.34),
-        transparent 28%
-      ),
-      var(--qv-stone-100);
-    padding: var(--qv-space-4);
+    border: 1px solid var(--qv-border-default);
+    border-radius: var(--qv-radius-lg);
+    background: var(--qv-surface-raised);
     overflow: hidden;
   }
 
-  .sirio-material-source {
-    position: absolute;
-    inset: var(--qv-space-6);
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--qv-space-4);
-    color: rgb(9 9 9 / 0.52);
-    pointer-events: none;
-  }
-
-  .sirio-material-source strong {
-    font-family: var(--qv-font-display);
-    font-size: clamp(3.5rem, 9vw, 7rem);
-    letter-spacing: -0.06em;
-    line-height: 0.8;
-  }
-
-  .sirio-material-source span {
-    max-width: 10rem;
-    border-top: 1px solid rgb(9 9 9 / 0.26);
-    padding-top: var(--qv-space-2);
-    font-size: var(--qv-type-caption);
-  }
-
-  .sirio-material-card {
-    min-height: 15rem;
-    display: grid;
-    align-content: space-between;
-    gap: var(--qv-space-5);
-    padding: var(--qv-space-5);
-  }
-
-  .sirio-material-card > div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--qv-space-3);
-    color: var(--qv-text-secondary);
-    font-size: var(--qv-type-caption);
-  }
-
-  .sirio-material-card h3 {
-    margin-bottom: var(--qv-space-2);
-    font-size: var(--qv-type-heading-md);
-  }
-
-  .sirio-material-card p {
-    margin: 0;
-    color: var(--qv-text-secondary);
-  }
-
-  .sirio-component-grid {
-    display: grid;
-    gap: var(--qv-space-4);
-  }
-
-  .component-block {
-    display: grid;
-    align-content: start;
-    gap: var(--qv-space-6);
-  }
-
-  .component-block > header h3 {
-    margin-bottom: var(--qv-space-2);
-    font-size: var(--qv-type-heading-md);
-  }
-
-  .component-block > header p {
-    margin: 0;
-    color: var(--qv-text-secondary);
-  }
-
-  .component-block__content,
-  .sirio-form-grid,
-  .sirio-skeletons {
-    display: grid;
-    gap: var(--qv-space-5);
-  }
-
-  .sirio-dialog-actions {
-    justify-content: flex-end;
-    margin-top: var(--qv-space-6);
-  }
-
-  .qv-popover p {
-    margin: var(--qv-space-2) 0 0;
-    color: var(--qv-text-secondary);
-    font-size: var(--qv-type-caption);
-  }
-
-  .sirio-pilot {
-    position: relative;
-    display: grid;
-    gap: var(--qv-space-4);
-    border-radius: var(--qv-radius-lens);
-    background:
-      radial-gradient(
-        circle at 8% 12%,
-        rgb(40 199 217 / 0.24),
-        transparent 34%
-      ),
-      radial-gradient(
-        circle at 90% 88%,
-        rgb(242 165 111 / 0.2),
-        transparent 40%
-      ),
-      var(--qv-ink-900);
-    padding: clamp(1rem, 4vw, 3rem);
-    overflow: hidden;
-  }
-
-  .sirio-pilot-context {
-    display: grid;
-    align-content: center;
-    gap: var(--qv-space-3);
-    color: var(--qv-text-inverse);
-  }
-
-  .sirio-pilot-context > div {
-    display: flex;
-    align-items: center;
-    gap: var(--qv-space-3);
-    border: 1px solid var(--qv-border-inverse);
-    border-radius: var(--qv-radius-control);
-    background: rgb(255 255 255 / 0.07);
-    padding: var(--qv-space-3);
-    color: rgb(255 255 255 / 0.72);
-    font-size: var(--qv-type-caption);
-  }
-
-  .sirio-pilot-focus {
-    display: grid;
-    gap: var(--qv-space-5);
-    padding: clamp(1.2rem, 4vw, 2rem);
-  }
-
-  .sirio-pilot-focus h3,
-  .sirio-pilot-output h3 {
-    margin-bottom: var(--qv-space-2);
-    font-size: var(--qv-type-heading-md);
-  }
-
-  .sirio-pilot-focus p {
-    margin: 0;
-    color: var(--qv-text-secondary);
-  }
-
-  .sirio-recipe-table > div {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--qv-space-4);
+  .sirio-state-row {
+    grid-template-columns: minmax(10rem, 0.7fr) minmax(9rem, 0.5fr) minmax(0, 1fr);
+    min-height: 72px;
     border-bottom: 1px solid var(--qv-border-subtle);
-    padding-block: var(--qv-space-3);
+    padding: var(--qv-space-4);
   }
 
-  .sirio-recipe-table > div:last-child {
+  .sirio-state-row:last-child {
     border-bottom: 0;
   }
 
-  .sirio-recipe-table dd {
-    margin: 0;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
+  .sirio-state-row span {
+    color: var(--qv-text-action);
+    font-family: var(--qv-font-data);
+    font-size: var(--qv-type-xs);
+    font-weight: 750;
+    text-transform: uppercase;
   }
 
-  .sirio-pilot-output {
-    display: grid;
-    align-content: space-between;
-    gap: var(--qv-space-5);
-  }
-
-  .sirio-review-card {
+  .sirio-quality ul {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0;
-    padding: 0;
-    overflow: hidden;
-  }
-
-  .sirio-review-item {
-    display: grid;
-    grid-template-columns: 2rem 1fr;
-    align-items: start;
     gap: var(--qv-space-3);
-    border-right: 1px solid var(--qv-border-subtle);
-    border-bottom: 1px solid var(--qv-border-subtle);
-    padding: var(--qv-space-5);
-  }
-
-  .sirio-review-item:nth-child(2n) {
-    border-right: 0;
-  }
-
-  .sirio-review-item:nth-last-child(-n + 2) {
-    border-bottom: 0;
-  }
-
-  .sirio-review-item > span {
-    display: grid;
-    width: 2rem;
-    height: 2rem;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--qv-status-success-surface);
-    color: var(--qv-status-success-text);
-  }
-
-  .sirio-review-item p {
     margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .sirio-footer {
-    width: min(100% - 2rem, 1240px);
-    display: flex;
-    justify-content: space-between;
-    gap: var(--qv-space-6);
-    margin-inline: auto;
-    border-top: 1px solid var(--qv-border-subtle);
-    padding-block: var(--qv-space-8);
-    color: var(--qv-text-secondary);
-    font-size: var(--qv-type-caption);
+  .sirio-quality li {
+    border: 1px solid var(--qv-border-subtle);
+    border-radius: var(--qv-radius-md);
+    background: var(--qv-surface-canvas);
+    padding: var(--qv-space-3);
+    font-weight: 700;
   }
 
   @media (min-width: 48rem) {
-    .sirio-main {
-      width: min(100% - 4rem, 1240px);
+    .sirio-hero {
+      grid-template-columns: minmax(0, 0.92fr) minmax(22rem, 0.72fr);
     }
 
-    .sirio-section-heading {
-      grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.7fr);
-      align-items: end;
+    .sirio-principles {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .sirio-foundation-grid {
+    .sirio-color-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .sirio-material-grid,
-    .sirio-component-grid,
-    .sirio-material-rules {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 64rem) {
-    .sirio-hero {
-      grid-template-columns: minmax(0, 0.88fr) minmax(28rem, 1.12fr);
-    }
-
-    .sirio-pilot {
-      min-height: 44rem;
-      grid-template-columns:
-        minmax(10rem, 0.55fr)
-        minmax(24rem, 1.2fr)
-        minmax(13rem, 0.65fr);
-      align-items: center;
+    .sirio-mode-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 
@@ -692,29 +349,43 @@
       width: 100%;
     }
 
-    .sirio-optical-bench {
-      min-height: 30rem;
+    .sirio-hero,
+    .sirio-section {
+      width: min(calc(100% - var(--qv-space-4)), var(--qv-layout-page-max));
     }
 
-    .sirio-swatch-grid,
-    .sirio-review-card {
+    .sirio-hero {
+      min-height: auto;
+    }
+
+    .sirio-instrument-head,
+    .sirio-rail-row,
+    .sirio-state-row {
+      grid-template-columns: 1fr;
+      gap: var(--qv-space-2);
+    }
+
+    .sirio-quality ul {
       grid-template-columns: 1fr;
     }
+  }
 
-    .sirio-review-item,
-    .sirio-review-item:nth-child(2n),
-    .sirio-review-item:nth-last-child(-n + 2) {
-      border-right: 0;
-      border-bottom: 1px solid var(--qv-border-subtle);
-    }
-
-    .sirio-review-item:last-child {
-      border-bottom: 0;
-    }
-
-    .sirio-footer {
-      align-items: flex-start;
-      flex-direction: column;
+  @media (forced-colors: active) {
+    .sirio-nav,
+    .sirio-instrument,
+    .sirio-principle,
+    .sirio-swatch,
+    .sirio-mode,
+    .sirio-type-board,
+    .sirio-quality,
+    .sirio-state-list,
+    .sirio-rail-row,
+    .sirio-quality li {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      box-shadow: none;
+      color: CanvasText;
+      forced-color-adjust: auto;
     }
   }
 }

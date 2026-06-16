@@ -1,8 +1,9 @@
 # Sirio Source
 
-Sorgente del laboratorio visuale Qoovex.
+Sorgente del laboratorio visuale Measured Heat.
 
-- `app` gestisce routing, metadata e stili app-local.
-- `components` compone le primitive condivise per la revisione.
+- `app` gestisce routing, metadata e la pagina dimostrativa.
+- `components` non contiene componenti riusabili in questa fase.
 
 Non inserire logica prodotto, auth, dati o primitive riusabili.
+

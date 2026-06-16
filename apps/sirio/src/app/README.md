@@ -1,8 +1,9 @@
 # Sirio App
 
-Routing e shell della showcase Stable v0.5.
+Routing e pagina dimostrativa Measured Heat.
 
-`page.tsx` compone soltanto `SirioShowcase`; `globals.css` importa Tailwind v4,
-la fondazione condivisa e gli stili app-local del laboratorio.
+`page.tsx` contiene markup statico app-local. `globals.css` importa Tailwind,
+la fondazione styles-only condivisa e gli stili locali del laboratorio.
 
-Non aggiungere route prodotto o duplicare token e componenti.
+Non aggiungere route prodotto o duplicare token.
+

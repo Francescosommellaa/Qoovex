@@ -1,9 +1,8 @@
 # UI Source
 
-Sorgente React pubblica di `@qoovex/ui`.
+`@qoovex/ui` non espone componenti React approvati nella fase Measured Heat
+Foundations v0.
 
-`index.ts` espone soltanto primitive e tipi approvati per la Stable v0.5.
-Implementazioni, helper strettamente locali e relativi contratti vivono in
-`components`.
+`index.ts` resta intenzionalmente vuoto per preservare l'identita' del package.
+La superficie pubblica utile e' `@qoovex/ui/styles.css`.
 
-Non inserire feature, entity, composizioni specifiche di un’app o valori CSS.

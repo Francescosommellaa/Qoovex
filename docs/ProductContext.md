@@ -31,7 +31,7 @@ Qoovex non è:
 - Limiti e gating commerciali: `packages/config/plan_rules.json`.
 - Strategia UX e messaggi: [`docs/ux/README.md`](ux/README.md).
 - Visual language e direzione UI:
-  [`docs/design/README.md`](design/README.md).
+  [`docs/design/design-principles.md`](design/design-principles.md).
 - Audit e ricerca: [`docs/ux/ux-research-brief.md`](ux/ux-research-brief.md).
 - Target e personas:
   [`docs/ux/target-and-personas.md`](ux/target-and-personas.md).

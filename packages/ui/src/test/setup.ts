@@ -1,6 +1,5 @@
 import "@testing-library/jest-dom/vitest";
 
-import { cleanup } from "@testing-library/react";
 import { afterEach } from "vitest";
 
 Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
@@ -9,5 +8,5 @@ Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
 });
 
 afterEach(() => {
-  cleanup();
+  document.body.innerHTML = "";
 });

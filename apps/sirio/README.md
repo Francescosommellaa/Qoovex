@@ -1,14 +1,18 @@
 # Sirio
 
-Specifica eseguibile del Qoovex Design System Stable v0.5.
+Laboratorio visuale Measured Heat per Qoovex.
 
-Sirio:
+Sirio mostra la fondazione pre-componenti:
 
-- importa esclusivamente componenti e stili da `@qoovex/ui`;
-- dimostra token, densita`, tipografia, materiali e stati;
-- verifica Crystal sopra contenuto reale;
-- contiene una composizione pilota ricetta -> menu;
-- usa l'icona e il favicon Sirio esistenti;
-- non introduce primitive app-local.
+- principi;
+- palette e token;
+- tipografia;
+- modalita' operative;
+- stati;
+- quality bar.
+
+Sirio importa solo `@qoovex/ui/styles.css`. Non crea primitive riusabili e non
+definisce componenti runtime per `packages/ui`.
 
 Avvio: `pnpm --filter @qoovex/sirio dev`.
+
