@@ -7,24 +7,24 @@ test.beforeEach(async ({ page }) => {
   await page.goto("http://localhost:3002/");
 });
 
-test("publishes Measured Heat foundations without legacy contract text", async ({
+test("pubblica la fondazione Calore Misurato senza testo legacy", async ({
   page,
 }) => {
   await expect(
     page.getByRole("heading", {
-      name: "Finally, everything is in its place.",
+      name: "Finalmente tutto è al suo posto.",
     }),
   ).toBeVisible();
-  await expect(page.getByText("Measured Heat Foundations v0")).toBeVisible();
+  await expect(page.getByText("Fondazione Calore Misurato v0")).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Quiet Authority" }),
+    page.getByRole("heading", { name: "Autorità silenziosa" }),
   ).toBeVisible();
-  await expect(page.getByText("Kitchen-stress test")).toBeVisible();
+  await expect(page.getByText("Stress test in cucina")).toBeVisible();
   await expect(page.getByText("Stable v0.5")).toHaveCount(0);
   await expect(page.getByText("Crystal")).toHaveCount(0);
 });
 
-test("uses the Sirio identity and styles-only UI package tokens", async ({
+test("usa identita Sirio e token del package UI solo stili", async ({
   page,
 }) => {
   await expect(page.locator(".sirio-brand img")).toHaveAttribute(
@@ -56,25 +56,25 @@ test("uses the Sirio identity and styles-only UI package tokens", async ({
   expect(details.reviewPrimary).toBe("#111");
 });
 
-test("documents semantic palette, operating modes and state language", async ({
+test("documenta palette semantica, modalita operative e linguaggio degli stati", async ({
   page,
 }) => {
   for (const text of [
-    "Porcelain",
-    "Graphite",
-    "Heat",
-    "Planning",
-    "Preparation",
-    "Service",
-    "Review",
-    "Allergen critical",
-    "Ready for service",
+    "Porcellana",
+    "Grafite",
+    "Calore",
+    "Pianificazione",
+    "Preparazione",
+    "Servizio",
+    "Revisione",
+    "Allergene critico",
+    "Pronto per il servizio",
   ]) {
     await expect(page.getByText(text, { exact: true })).toBeVisible();
   }
 });
 
-test("page has no serious or critical Axe violations", async ({
+test("la pagina non ha violazioni Axe serie o critiche", async ({
   page,
 }, testInfo) => {
   test.skip(!isDesktop(testInfo.project.name));
@@ -86,7 +86,7 @@ test("page has no serious or critical Axe violations", async ({
   expect(blocking).toEqual([]);
 });
 
-test("layout has no horizontal overflow and survives 200 percent reflow", async ({
+test("il layout non ha overflow orizzontale e regge reflow 200 percento", async ({
   page,
 }, testInfo) => {
   const normal = await page.evaluate(() => ({
@@ -105,7 +105,7 @@ test("layout has no horizontal overflow and survives 200 percent reflow", async 
   expect(zoomed.scroll).toBeLessThanOrEqual(zoomed.client);
 });
 
-test("forced colors preserves visible boundaries", async ({
+test("forced colors preserva i confini visibili", async ({
   page,
 }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium-1440");

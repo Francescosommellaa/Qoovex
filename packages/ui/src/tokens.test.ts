@@ -4,8 +4,8 @@ import { resolve } from "node:path";
 const tokenFile = resolve(__dirname, "../styles/tokens.css");
 const baseFile = resolve(__dirname, "../styles/base.css");
 
-describe("Measured Heat foundations", () => {
-  it("exposes semantic tokens for the three operating modes", () => {
+describe("fondazioni Calore Misurato", () => {
+  it("espone token semantici per le tre modalita operative", () => {
     const css = readFileSync(tokenFile, "utf8");
 
     expect(css).toContain("--qv-action-primary-bg");
@@ -14,7 +14,7 @@ describe("Measured Heat foundations", () => {
     expect(css).not.toMatch(/crystal|glass/i);
   });
 
-  it("keeps base styles component-free", () => {
+  it("mantiene gli stili base senza classi componente", () => {
     const css = readFileSync(baseFile, "utf8");
 
     expect(css).toContain(":focus-visible");

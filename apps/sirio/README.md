@@ -1,6 +1,6 @@
 # Sirio
 
-Laboratorio visuale Measured Heat per Qoovex.
+Laboratorio visuale Calore Misurato per Qoovex.
 
 Sirio mostra la fondazione pre-componenti:
 
@@ -15,4 +15,3 @@ Sirio importa solo `@qoovex/ui/styles.css`. Non crea primitive riusabili e non
 definisce componenti runtime per `packages/ui`.
 
 Avvio: `pnpm --filter @qoovex/sirio dev`.
-

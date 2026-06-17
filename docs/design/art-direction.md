@@ -1,50 +1,50 @@
-# Art Direction
+# Direzione artistica
 
-## Direction Name
+## Nome della direzione
 
-Measured Heat.
+Calore Misurato.
 
-Qoovex combines measured professional precision with the living heat of a real
-kitchen. It should feel like a culinary instrument: a knife, a scale, a
-professional oven, a stainless prep table, an operational checklist.
+Qoovex unisce precisione professionale e calore vivo della cucina reale. Deve
+sembrare uno strumento culinario: una lama, una bilancia, un forno
+professionale, un piano inox, una checklist operativa.
 
-## Product Thesis
+## Tesi di prodotto
 
-Qoovex is not a recipe app, not a generic food manager and not a cute
-workspace. It is the professional culinary operating system.
+Qoovex non e' un'app di ricette, non e' un gestionale food generico e non e' un
+workspace carino. E' il sistema operativo professionale per la cucina.
 
-The desired first impression is:
+La prima impressione desiderata e':
 
-> Finally, everything is in its place.
+> Finalmente tutto e' al suo posto.
 
-## Visual Worlds
+## Mondi visivi
 
-Measured Heat blends three worlds:
+Calore Misurato fonde tre mondi:
 
-- Professional instrument: precise, reliable, clean, technical.
-- Real kitchen: warm, material, rhythmic, collaborative, under pressure.
-- Intelligent software: anticipates, organizes and reduces chaos without
-  looking like performative AI.
+- Strumento professionale: preciso, affidabile, pulito, tecnico.
+- Cucina reale: calda, materiale, ritmica, collaborativa, sotto pressione.
+- Software intelligente: anticipa, organizza e riduce caos senza sembrare AI
+  performativa.
 
-## Signature
+## Firma
 
-The signature is an operational service rail: dense, precise, calm rows of
-culinary state that behave like a control surface. It replaces generic SaaS
-cards, decorative charts and futuristic glass.
+La firma e' un binario operativo di servizio: righe dense, precise e calme di
+stato culinario che si comportano come una superficie di controllo. Sostituisce
+card SaaS generiche, grafici decorativi e vetro futuristico.
 
-## Tone
+## Tono
 
-- Quiet, direct, adult.
-- Minimal without becoming cold.
-- Warm without becoming lifestyle.
-- Technical without becoming cyber.
-- Confident without becoming arrogant.
+- Calmo, diretto, adulto.
+- Minimo senza diventare freddo.
+- Caldo senza diventare lifestyle.
+- Tecnico senza diventare cyber.
+- Sicuro senza diventare arrogante.
 
-## What Qoovex Must Not Become
+## Cosa Qoovex non deve diventare
 
-- A generic SaaS dashboard.
-- A playful food blogger interface.
-- A decorative glassmorphism system.
-- A dark futuristic AI product.
-- A component library built before the product language is resolved.
+- Una dashboard SaaS generica.
+- Un'interfaccia giocosa da food blogger.
+- Un sistema decorativo basato su vetro.
+- Un prodotto AI scuro e futuristico.
+- Una libreria componenti costruita prima del linguaggio di prodotto.
 

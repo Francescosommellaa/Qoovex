@@ -1,29 +1,29 @@
-# Component Rules
+# Regole componenti
 
-No runtime component is approved in the current foundation phase.
+Nessun componente runtime e' approvato nella fase corrente di fondazione.
 
-`packages/ui` is temporarily styles-only. It owns `tokens.css`, `base.css` and
-the public style entrypoint. Sirio may use app-local markup to show the
-direction, but that markup is not a reusable component API.
+`packages/ui` e' temporaneamente solo stili. Possiede `tokens.css`, `base.css`
+e l'entrypoint pubblico degli stili. Sirio puo' usare markup app-local per
+mostrare la direzione, ma quel markup non e' una API componente riusabile.
 
-## Before Adding A Component
+## Prima di aggiungere un componente
 
-Answer yes to every question:
+Rispondere si' a ogni domanda:
 
-1. Does this solve a recurring interface problem?
-2. Is it generic enough to belong in `packages/ui`?
-3. Does it have every required state?
-4. Does it work in default, kitchen and review modes?
-5. Is it accessible by default?
-6. Does it use semantic tokens only?
-7. Is the content model clear?
-8. Is the responsive behavior documented?
-9. Is there a focused test plan?
-10. Would removing it make Qoovex worse?
+1. Risolve un problema ricorrente d'interfaccia?
+2. E' abbastanza generico da appartenere a `packages/ui`?
+3. Ha tutti gli stati richiesti?
+4. Funziona in default, cucina e revisione?
+5. E' accessibile di default?
+6. Usa solo token semantici?
+7. Il modello di contenuto e' chiaro?
+8. Il comportamento responsive e' documentato?
+9. Esiste un piano test mirato?
+10. Rimuoverlo renderebbe Qoovex peggiore?
 
-## Required States
+## Stati richiesti
 
-Every future component must define:
+Ogni futuro componente deve definire:
 
 - default;
 - hover;
@@ -44,27 +44,27 @@ Every future component must define:
 - read-only;
 - permission denied.
 
-## Product-Specific States
+## Stati specifici Qoovex
 
-Qoovex components must eventually support culinary states such as:
+I componenti Qoovex dovranno supportare stati culinari come:
 
-- missing ingredient;
-- critical allergen;
-- scaled quantity;
-- edited recipe;
-- published menu;
-- active QR;
-- generated shopping list;
-- service task;
-- completed preparation;
-- previous version;
-- collaborator conflict.
+- ingrediente mancante;
+- allergene critico;
+- quantita' scalata;
+- ricetta modificata;
+- menu pubblicato;
+- QR attivo;
+- lista spesa generata;
+- task in servizio;
+- preparazione completata;
+- versione precedente;
+- conflitto tra collaboratori.
 
-## Prohibitions
+## Divieti
 
-- Do not create app-local alternatives to future canonical primitives.
-- Do not encode meaning through color alone.
-- Do not use decorative motion.
-- Do not introduce visual effects before a semantic purpose is clear.
-- Do not recreate the logo or use non-Phosphor icons when an icon is needed.
+- Non creare alternative app-local alle future primitive canoniche.
+- Non comunicare significato solo tramite colore.
+- Non usare movimento decorativo.
+- Non introdurre effetti visuali prima di uno scopo semantico chiaro.
+- Non ricreare il logo o usare icone non Phosphor quando serve un'icona.
 

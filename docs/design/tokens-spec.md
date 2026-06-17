@@ -1,11 +1,11 @@
-# Tokens Spec
+# Specifica token
 
-Tokens translate the design language into implementation. Components must use
-semantic tokens, not primitive values directly.
+I token traducono il linguaggio di design in implementazione. I componenti
+dovranno usare token semantici, non valori primitivi diretti.
 
-## Primitive Tokens
+## Token primitivi
 
-Color primitives:
+Primitive colore:
 
 ```css
 --qv-color-porcelain-0: #ffffff;
@@ -23,43 +23,43 @@ Color primitives:
 --qv-color-error-500: #b42318;
 ```
 
-Token groups:
+Gruppi token:
 
-- Color primitives.
-- Semantic surfaces, text, border, action and state tokens.
-- Typography roles.
-- Spacing scale.
-- Radius scale.
-- Elevation.
-- Motion duration and easing.
-- Focus, z-index and layout tokens.
-- Mode overrides for `default`, `kitchen` and `review`.
+- Primitive colore.
+- Token semantici per superfici, testo, bordi, azioni e stati.
+- Ruoli tipografici.
+- Scala spaziatura.
+- Scala radius.
+- Elevazione.
+- Durate ed easing.
+- Focus, z-index e layout.
+- Override di modalita' per `default`, `kitchen` e `review`.
 
-## Semantic Rule
+## Regola semantica
 
-Do not write:
+Non scrivere:
 
 ```css
 background: #d96b2b;
 ```
 
-Write:
+Scrivere:
 
 ```css
 background: var(--qv-action-primary-bg);
 ```
 
-## Component Readiness
+## Prontezza componenti
 
-Component tokens can exist only when a real component is approved. Until then,
-`packages/ui` exposes foundations only.
+I token componente possono esistere solo quando un componente reale viene
+approvato. Fino ad allora `packages/ui` espone solo fondazioni.
 
-Future component token files must define:
+I futuri token componente dovranno definire:
 
-- Purpose.
-- Allowed variants.
-- States.
-- Density.
-- Accessibility constraints.
-- Test requirements.
+- Scopo.
+- Varianti consentite.
+- Stati.
+- Densita'.
+- Vincoli di accessibilita'.
+- Test richiesti.
 

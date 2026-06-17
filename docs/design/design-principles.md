@@ -1,57 +1,57 @@
-# Design Principles
+# Principi di design
 
-Qoovex must feel resolved, not decorated. The product is a professional
-culinary operating system for chefs who need order, control, precision, calm,
-competence and trust.
+Qoovex deve sembrare risolto, non decorato. Il prodotto e' uno strumento
+operativo professionale per chef che hanno bisogno di ordine, controllo,
+precisione, calma, competenza e fiducia.
 
-## Quiet Authority
+## Autorita' silenziosa
 
-Qoovex does not shout. It leads with calm structure, exact hierarchy and
-disciplined restraint.
+Qoovex non alza la voce. Guida con struttura calma, gerarchia esatta e
+disciplina visiva.
 
-- Remove every line, border, shadow, color, icon or motion that does not help
-  the user understand, decide or act.
-- Avoid novelty as a visual argument.
-- Prefer fewer, stronger signals over many weak signals.
+- Rimuovere ogni linea, bordo, ombra, colore, icona o movimento che non aiuta
+  l'utente a capire, decidere o agire.
+- Evitare la novita' come argomento visuale.
+- Preferire pochi segnali forti a molti segnali deboli.
 
-## Operational Clarity
+## Chiarezza operativa
 
-Every screen must answer these questions in seconds:
+Ogni schermata deve rispondere in pochi secondi a queste domande:
 
-- Where am I?
-- What am I looking at?
-- What matters now?
-- What can I do next?
-- What happens if I act?
+- Dove sono?
+- Che cosa sto guardando?
+- Che cosa conta adesso?
+- Che cosa posso fare?
+- Che cosa succede se agisco?
 
-If the interface cannot answer those questions, it is unfinished.
+Se l'interfaccia non risponde, non e' finita.
 
-## Professional Warmth
+## Calore professionale
 
-Qoovex is professional, not sterile. A kitchen has steel, heat, rhythm,
-ingredients, hands and pressure. The system should be ordered and alive.
+Qoovex e' professionale, non sterile. Una cucina ha acciaio, calore, ritmo,
+ingredienti, mani e pressione. Il sistema deve essere ordinato e vivo.
 
-- Use warmth as material memory, not as decoration.
-- Keep operational surfaces clean and readable.
-- Let culinary context appear through language, states and layout.
+- Usare il calore come memoria materiale, non come decorazione.
+- Mantenere le superfici operative pulite e leggibili.
+- Far emergere il contesto culinario da linguaggio, stati e layout.
 
-## Information Before Decoration
+## Informazione prima della decorazione
 
-Legibility comes first, then hierarchy, then interaction, then beauty. Beauty
-must emerge from precision.
+Prima la leggibilita', poi la gerarchia, poi l'interazione, poi la bellezza. La
+bellezza deve nascere dalla precisione.
 
-- Data, quantities, allergens and states must remain sharp.
-- Decorative effects cannot carry meaning.
-- Density is a tool: compact for operational scanning, spacious for decisions
-  and review.
+- Dati, quantita', allergeni e stati devono restare nitidi.
+- Gli effetti decorativi non possono portare significato.
+- La densita' e' uno strumento: compatta per scansione operativa, piu' ampia
+  per decisione e revisione.
 
-## One Action, One Meaning
+## Un'azione, un significato
 
-Every action, badge, state and control must have one clear meaning.
+Ogni azione, badge, stato e controllo deve avere un significato unico.
 
-- Red is reserved for danger or irreversible risk.
-- Wheat is reserved for operational attention.
-- Herb is reserved for completion or verified status.
-- Heat is reserved for primary action, transformation or the next right step.
-- Steel and graphite build structure without creating ambiguity.
+- Rosso solo per pericolo o rischio irreversibile.
+- Grano solo per attenzione operativa.
+- Erba solo per completamento o verifica.
+- Calore solo per azione primaria, trasformazione o prossimo passo corretto.
+- Acciaio e grafite costruiscono struttura senza creare ambiguita'.
 

@@ -1,6 +1,6 @@
 # @qoovex/ui
 
-Fondazione styles-only temporanea del Qoovex Design System Measured Heat.
+Fondazione temporanea solo stili del design system Qoovex Calore Misurato.
 
 Questo package non espone componenti React approvati. In questa fase possiede
 solo:
@@ -31,4 +31,3 @@ import "@qoovex/ui/styles.css";
 - `pnpm --filter @qoovex/ui type-check`
 - `pnpm --filter @qoovex/ui test`
 - `pnpm --filter @qoovex/ui build`
-

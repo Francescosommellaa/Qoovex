@@ -2,79 +2,79 @@ import Image from "next/image";
 
 const principles = [
   {
-    label: "Quiet Authority",
-    text: "Qoovex does not shout. Structure, spacing and language carry authority without decorative noise.",
+    label: "Autorità silenziosa",
+    text: "Qoovex non alza la voce. Struttura, spazio e linguaggio guidano senza rumore decorativo.",
   },
   {
-    label: "Operational Clarity",
-    text: "A chef must understand location, object, state and next action within seconds.",
+    label: "Chiarezza operativa",
+    text: "Uno chef deve capire in pochi secondi dove si trova, cosa guarda, qual è lo stato e cosa può fare.",
   },
   {
-    label: "Professional Warmth",
-    text: "The system is precise and technical, but it remembers steel, heat, rhythm and real service.",
+    label: "Calore professionale",
+    text: "Il sistema resta preciso e tecnico, ma ricorda acciaio, calore, ritmo e servizio reale.",
   },
   {
-    label: "Information Before Decoration",
-    text: "Legibility, hierarchy and action come before visual effect. Beauty is the result of precision.",
+    label: "Informazione prima della decorazione",
+    text: "Leggibilità, gerarchia e azione vengono prima dell’effetto visivo. La bellezza nasce dalla precisione.",
   },
   {
-    label: "One Action, One Meaning",
-    text: "Every color, state and control has one job. No signal is decorative.",
+    label: "Un’azione, un significato",
+    text: "Ogni colore, stato e controllo ha un solo compito. Nessun segnale è decorativo.",
   },
 ] as const;
 
 const colors = [
-  ["Porcelain", "#FAF9F6", "Working surface"],
-  ["Graphite", "#111111", "Structure"],
-  ["Steel", "#8A8A84", "Separation"],
-  ["Heat", "#D96B2B", "Primary action"],
-  ["Herb", "#5F7A4F", "Verified"],
-  ["Wheat", "#C9A646", "Attention"],
+  ["Porcellana", "#FAF9F6", "Piano di lavoro"],
+  ["Grafite", "#111111", "Struttura"],
+  ["Acciaio", "#8A8A84", "Separazione"],
+  ["Calore", "#D96B2B", "Azione primaria"],
+  ["Erba", "#5F7A4F", "Verificato"],
+  ["Grano", "#C9A646", "Attenzione"],
 ] as const;
 
 const modes = [
   {
-    name: "Planning",
-    intent: "Build recipes, menus and quantities with enough room to think.",
-    density: "Medium density",
+    name: "Pianificazione",
+    intent: "Costruire ricette, menu e quantità con abbastanza spazio per ragionare.",
+    density: "Densità media",
   },
   {
-    name: "Preparation",
-    intent: "Group work into batches, ingredients and next visible tasks.",
-    density: "Ordered density",
+    name: "Preparazione",
+    intent: "Raggruppare lavoro, ingredienti e prossime attività visibili.",
+    density: "Densità ordinata",
   },
   {
-    name: "Service",
-    intent: "Large targets, fewer choices, stronger contrast and immediate state.",
-    density: "Kitchen density",
+    name: "Servizio",
+    intent: "Target grandi, meno scelte, contrasto più forte e stato immediato.",
+    density: "Densità cucina",
   },
   {
-    name: "Review",
-    intent: "Check allergens, costs, QR and publishing before anything becomes public.",
-    density: "Analytical density",
+    name: "Revisione",
+    intent: "Controllare allergeni, costi, QR e pubblicazione prima che qualcosa diventi pubblico.",
+    density: "Densità analitica",
   },
 ] as const;
 
 const states = [
-  ["Unsaved", "Heat surface", "A local change needs attention."],
-  ["Allergen critical", "Error surface", "Risk is tied to the ingredient that caused it."],
-  ["Scaled quantity", "Steel outline", "The system recalculated related values."],
-  ["Ready for service", "Herb surface", "Preparation can move forward."],
+  ["Non salvato", "Superficie calore", "Una modifica locale richiede attenzione."],
+  ["Allergene critico", "Superficie errore", "Il rischio resta legato all’ingrediente che lo genera."],
+  ["Quantità scalata", "Bordo acciaio", "Il sistema ha ricalcolato i valori collegati."],
+  ["Pronto per il servizio", "Superficie erba", "La preparazione può avanzare."],
 ] as const;
 
 const quality = [
-  "5-second test",
-  "Distance test",
-  "No-color test",
-  "One-primary-action test",
-  "Kitchen-stress test",
-  "Pixel audit",
+  "Test dei 5 secondi",
+  "Test da lontano",
+  "Test senza colore",
+  "Una sola azione primaria",
+  "Stress test in cucina",
+  "Audit pixel",
 ] as const;
 
 export default function SirioPage() {
   return (
     <main className="sirio-shell">
-      <header className="sirio-nav" aria-label="Sirio navigation">
+      <header className="sirio-nav" aria-label="Navigazione Sirio">
         <a className="sirio-brand" href="#top">
           <Image
             alt=""
@@ -87,53 +87,53 @@ export default function SirioPage() {
           />
           <span>Sirio</span>
         </a>
-        <nav aria-label="Design sections">
-          <a href="#principles">Principles</a>
+        <nav aria-label="Sezioni design">
+          <a href="#principles">Principi</a>
           <a href="#tokens">Tokens</a>
-          <a href="#modes">Modes</a>
-          <a href="#quality">Quality</a>
+          <a href="#modes">Modalità</a>
+          <a href="#quality">Qualità</a>
         </nav>
       </header>
 
       <section className="sirio-hero" id="top">
         <div className="sirio-hero-copy">
-          <p className="sirio-kicker">Measured Heat Foundations v0</p>
-          <h1>Finally, everything is in its place.</h1>
+          <p className="sirio-kicker">Fondazione Calore Misurato v0</p>
+          <h1>Finalmente tutto è al suo posto.</h1>
           <p>
-            A pre-component design foundation for Qoovex: quiet authority,
-            operational clarity and professional warmth for chefs working under
-            real pressure.
+            Una fondazione pre-componenti per Qoovex: autorità silenziosa,
+            chiarezza operativa e calore professionale per chef che lavorano
+            sotto pressione reale.
           </p>
         </div>
 
-        <div className="sirio-instrument" aria-label="Operational service rail">
+        <div className="sirio-instrument" aria-label="Binario operativo di servizio">
           <div className="sirio-instrument-head">
-            <span>Service rail</span>
+            <span>Binario servizio</span>
             <strong>18:42</strong>
           </div>
           <div className="sirio-rail-row" data-tone="heat">
             <span>Ravioli ricotta</span>
-            <strong>Scale 24 portions</strong>
+            <strong>Scala 24 porzioni</strong>
           </div>
           <div className="sirio-rail-row" data-tone="wheat">
-            <span>Fresh pasta</span>
-            <strong>Allergen check</strong>
+            <span>Pasta fresca</span>
+            <strong>Controllo allergeni</strong>
           </div>
           <div className="sirio-rail-row" data-tone="herb">
-            <span>Vegetable stock</span>
-            <strong>Ready</strong>
+            <span>Fondo vegetale</span>
+            <strong>Pronto</strong>
           </div>
           <div className="sirio-rail-row">
-            <span>Shopping list</span>
-            <strong>Generated</strong>
+            <span>Lista spesa</span>
+            <strong>Generata</strong>
           </div>
         </div>
       </section>
 
       <section className="sirio-section" id="principles">
         <div className="sirio-section-head">
-          <p className="sirio-kicker">Design principles</p>
-          <h2>The interface earns its place.</h2>
+          <p className="sirio-kicker">Principi di design</p>
+          <h2>L’interfaccia si guadagna il suo posto.</h2>
         </div>
         <div className="sirio-principles">
           {principles.map((principle) => (
@@ -147,11 +147,12 @@ export default function SirioPage() {
 
       <section className="sirio-section sirio-token-section" id="tokens">
         <div className="sirio-section-head">
-          <p className="sirio-kicker">Token foundation</p>
-          <h2>Material first, semantic always.</h2>
+          <p className="sirio-kicker">Fondazione token</p>
+          <h2>Prima il materiale, sempre la semantica.</h2>
           <p>
-            Components will not use primitive values directly. The foundation
-            separates material color from action, state, surface and text.
+            I futuri componenti non useranno valori primitivi direttamente. La
+            fondazione separa colore materiale, azione, stato, superficie e
+            testo.
           </p>
         </div>
 
@@ -168,21 +169,21 @@ export default function SirioPage() {
           ))}
         </div>
 
-        <div className="sirio-type-board" aria-label="Typography specimens">
-          <p className="sirio-kicker">Type scale</p>
-          <p className="sirio-display-sample">Precision becomes beautiful.</p>
+        <div className="sirio-type-board" aria-label="Esempi tipografici">
+          <p className="sirio-kicker">Scala tipografica</p>
+          <p className="sirio-display-sample">La precisione diventa bellezza.</p>
           <p className="sirio-body-sample">
-            Recipes, allergens, quantities and preparation steps must stay
-            readable on a tablet, in a kitchen and during service.
+            Ricette, allergeni, quantità e passaggi di preparazione devono
+            restare leggibili su tablet, in cucina e durante il servizio.
           </p>
-          <p className="sirio-data-sample">24 portions / 1.250 kg / 18 min</p>
+          <p className="sirio-data-sample">24 porzioni / 1.250 kg / 18 min</p>
         </div>
       </section>
 
       <section className="sirio-section" id="modes">
         <div className="sirio-section-head">
-          <p className="sirio-kicker">Operating modes</p>
-          <h2>Qoovex follows the kitchen state.</h2>
+          <p className="sirio-kicker">Modalità operative</p>
+          <h2>Qoovex segue lo stato della cucina.</h2>
         </div>
         <div className="sirio-mode-grid">
           {modes.map((mode) => (
@@ -197,8 +198,8 @@ export default function SirioPage() {
 
       <section className="sirio-section sirio-state-section">
         <div className="sirio-section-head">
-          <p className="sirio-kicker">State language</p>
-          <h2>Every state explains what changed.</h2>
+          <p className="sirio-kicker">Linguaggio degli stati</p>
+          <h2>Ogni stato spiega cosa è cambiato.</h2>
         </div>
         <div className="sirio-state-list">
           {states.map(([name, tone, meaning]) => (
@@ -213,11 +214,11 @@ export default function SirioPage() {
 
       <section className="sirio-section sirio-quality" id="quality">
         <div className="sirio-section-head">
-          <p className="sirio-kicker">Quality bar</p>
-          <h2>Not beautiful. Resolved.</h2>
+          <p className="sirio-kicker">Soglia qualità</p>
+          <h2>Non bello. Risolto.</h2>
           <p>
-            A future component must pass these checks before it enters
-            `packages/ui`.
+            Un futuro componente dovrà superare questi controlli prima di
+            entrare in `packages/ui`.
           </p>
         </div>
         <ul>

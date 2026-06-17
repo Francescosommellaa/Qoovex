@@ -4,9 +4,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sirio - Measured Heat",
+  title: "Sirio - Calore Misurato",
   description:
-    "Laboratorio visuale Measured Heat per la fondazione Qoovex pre-componenti.",
+    "Laboratorio visuale Calore Misurato per la fondazione Qoovex pre-componenti.",
   icons: {
     icon: "/favicon.ico",
   },

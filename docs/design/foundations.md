@@ -1,73 +1,75 @@
-# Foundations
+# Fondazioni
 
-## Color
+## Colore
 
-Color starts from materials: porcelain, graphite, steel, heat, herb and wheat.
-Heat is the primary accent, but it is rare. It appears when the interface needs
-to say: this is the right next action.
+Il colore parte dai materiali: porcellana, grafite, acciaio, calore, erba e
+grano. Calore e' l'accento primario, ma va usato raramente. Compare quando
+l'interfaccia deve dire: questo e' il prossimo passo giusto.
 
-Base materials:
+Materiali base:
 
-- Porcelain: clean working surfaces.
-- Graphite: structure, hierarchy and serious emphasis.
-- Steel: borders, secondary text and technical separation.
+- Porcellana: superfici di lavoro pulite.
+- Grafite: struttura, gerarchia ed enfasi seria.
+- Acciaio: bordi, testo secondario e separazione tecnica.
 
-Functional accents:
+Accenti funzionali:
 
-- Heat: primary action, transformation, output.
-- Herb: verified, complete, safe.
-- Wheat: warning, attention, preparation.
-- Error: danger and destructive risk.
+- Calore: azione primaria, trasformazione, output.
+- Erba: verificato, completo, sicuro.
+- Grano: warning, attenzione, preparazione.
+- Errore: pericolo e rischio distruttivo.
 
-## Typography
+## Tipografia
 
-Use system fonts until a licensed type decision is approved. The system has
-three roles:
+Usare font di sistema finche' non viene approvata una scelta tipografica con
+licenza chiara. Il sistema ha tre ruoli:
 
-- Display: controlled, confident headings.
-- UI: readable interface text.
-- Data: compact quantities, labels and operational values.
+- Display: titoli controllati e sicuri.
+- UI: testo d'interfaccia leggibile.
+- Dati: quantita', etichette e valori operativi compatti.
 
-No type should feel fashionable, startup-like or playful. Recipes, quantities,
-allergens and prep steps must stay readable under pressure.
+La tipografia non deve sembrare fashion, startup o giocosa. Ricette, quantita',
+allergeni e passaggi devono restare leggibili sotto pressione.
 
-## Spacing
+## Spaziatura
 
-The spacing system is based on a 4 px grid with larger 8 px steps. Space is not
-empty decoration; it gives objects dignity and separates decisions.
+La spaziatura segue una griglia da 4 px con step maggiori da 8 px. Lo spazio
+non e' vuoto decorativo: da dignita' agli oggetti e separa le decisioni.
 
-Operational screens use medium density. Review and publishing states breathe
-more. Kitchen mode uses larger touch targets and less visible choice.
+Le schermate operative usano densita' media. Revisione e pubblicazione
+respirano di piu'. La modalita' cucina usa target piu' grandi e meno scelte
+visibili.
 
-## Shape
+## Forma
 
-Shape is restrained:
+La forma e' trattenuta:
 
-- Small technical controls: 8 px.
-- Inputs and action controls: 12 px.
-- Operational panels: 16 px.
-- Large review surfaces: 24 px.
-- Chips and pills: 999 px.
+- Controlli tecnici piccoli: 8 px.
+- Input e azioni: 12 px.
+- Pannelli operativi: 16 px.
+- Superfici ampie di revisione: 24 px.
+- Chip e pill: 999 px.
 
-Small elements are more precise. Large containing surfaces can be softer.
+Gli elementi piccoli sono piu' precisi. Le superfici contenitive grandi possono
+essere piu' morbide.
 
-## Motion
+## Movimento
 
-Motion explains change. It never delays work.
+Il movimento spiega il cambiamento. Non deve mai ritardare il lavoro.
 
-- Instant feedback: 80 ms.
-- Fast interaction: 140 ms.
-- Normal transition: 220 ms.
-- Spatial transition: 360 ms.
-- Narrative transition: 520 ms, only in Sirio or marketing.
+- Feedback immediato: 80 ms.
+- Interazione rapida: 140 ms.
+- Transizione normale: 220 ms.
+- Transizione spaziale: 360 ms.
+- Transizione narrativa: 520 ms, solo in Sirio o marketing.
 
-Reduced motion must preserve the same information with less movement.
+Reduced motion deve preservare la stessa informazione con meno movimento.
 
-## Modes
+## Modalita'
 
-Qoovex is designed for operational states, not just breakpoints:
+Qoovex e' progettato per stati operativi, non solo per breakpoint:
 
-- Default: daily planning and management.
-- Kitchen: higher contrast, larger targets, fewer choices.
-- Review: precise validation of allergens, publishing, QR and costs.
+- Default: pianificazione e gestione quotidiana.
+- Cucina: contrasto piu' alto, target piu' grandi, meno scelte.
+- Revisione: controllo preciso di allergeni, pubblicazione, QR e costi.
 

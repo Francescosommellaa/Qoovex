@@ -1,9 +1,8 @@
-# Sirio App
+# App Sirio
 
-Routing e pagina dimostrativa Measured Heat.
+Routing e pagina dimostrativa Calore Misurato.
 
 `page.tsx` contiene markup statico app-local. `globals.css` importa Tailwind,
-la fondazione styles-only condivisa e gli stili locali del laboratorio.
+la fondazione condivisa solo stili e gli stili locali del laboratorio.
 
 Non aggiungere route prodotto o duplicare token.
-
