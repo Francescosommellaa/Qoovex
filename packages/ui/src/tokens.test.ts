@@ -9,6 +9,9 @@ describe("fondazioni Calore Misurato", () => {
     const css = readFileSync(tokenFile, "utf8");
 
     expect(css).toContain("--qv-action-primary-bg");
+    expect(css).toContain("--qv-state-changed-bg");
+    expect(css).toContain("--qv-hit-target-kitchen");
+    expect(css).toContain("--qv-layout-sidebar");
     expect(css).toContain('[data-qv-mode="kitchen"]');
     expect(css).toContain('[data-qv-mode="review"]');
     expect(css).not.toMatch(/crystal|glass/i);
@@ -19,6 +22,8 @@ describe("fondazioni Calore Misurato", () => {
 
     expect(css).toContain(":focus-visible");
     expect(css).toContain("prefers-reduced-motion");
+    expect(css).toContain("forced-colors: active");
+    expect(css).not.toMatch(/font-size:\s*clamp/i);
     expect(css).not.toMatch(/\\.qv-(button|card|surface|dialog)/);
   });
 });
