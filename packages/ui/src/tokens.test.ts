@@ -12,6 +12,10 @@ describe("fondazioni Calore Misurato", () => {
     expect(css).toContain("--qv-state-changed-bg");
     expect(css).toContain("--qv-hit-target-kitchen");
     expect(css).toContain("--qv-layout-sidebar");
+    expect(css).toContain("--qv-radius-xs: 8px");
+    expect(css).toContain("--qv-radius-sm: 12px");
+    expect(css).toContain("--qv-radius-md: 16px");
+    expect(css).toContain("--qv-radius-lg: 24px");
     expect(css).toContain('[data-qv-mode="kitchen"]');
     expect(css).toContain('[data-qv-mode="review"]');
     expect(css).not.toMatch(/crystal|glass/i);

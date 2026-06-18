@@ -244,13 +244,13 @@
 
   /* Shape */
   --qv-radius-none: 0;
-  --qv-radius-2xs: 3px;
-  --qv-radius-xs: 6px;
-  --qv-radius-sm: 10px;
-  --qv-radius-md: 14px;
-  --qv-radius-lg: 20px;
-  --qv-radius-xl: 28px;
-  --qv-radius-2xl: 36px;
+  --qv-radius-2xs: 4px;
+  --qv-radius-xs: 8px;
+  --qv-radius-sm: 12px;
+  --qv-radius-md: 16px;
+  --qv-radius-lg: 24px;
+  --qv-radius-xl: 32px;
+  --qv-radius-2xl: 40px;
   --qv-radius-full: 999px;
 
   /* Elevation */
@@ -271,8 +271,8 @@
   --qv-ease-enter: cubic-bezier(0, 0, 0.2, 1);
   --qv-ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --qv-ease-precise: cubic-bezier(0.16, 1, 0.3, 1);
-  --qv-hover-lift-y: -2px;
-  --qv-press-y: 1px;
+  --qv-interaction-tint: rgb(17 17 17 / 0.035);
+  --qv-interaction-tint-strong: rgb(17 17 17 / 0.07);
 
   /* Focus and interaction */
   --qv-focus-ring: 0 0 0 3px rgb(217 107 43 / 0.28);

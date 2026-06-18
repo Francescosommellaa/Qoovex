@@ -62,16 +62,16 @@
   }
 
   h1 {
-    font-size: var(--qv-type-6xl);
-    line-height: var(--qv-leading-display);
+    font-size: var(--qv-type-5xl);
+    line-height: var(--qv-leading-tight);
   }
 
   h2 {
-    font-size: var(--qv-type-5xl);
+    font-size: var(--qv-type-3xl);
   }
 
   h3 {
-    font-size: var(--qv-type-2xl);
+    font-size: var(--qv-type-xl);
   }
 
   h4 {
@@ -138,8 +138,10 @@
     font: inherit;
   }
 
+  a,
   button {
     touch-action: manipulation;
+    -webkit-tap-highlight-color: rgb(217 107 43 / 0.16);
   }
 
   button:disabled,
@@ -218,15 +220,15 @@
 
   @media (max-width: 47.999rem) {
     h1 {
-      font-size: var(--qv-type-4xl);
-    }
-
-    h2 {
       font-size: var(--qv-type-3xl);
     }
 
+    h2 {
+      font-size: var(--qv-type-2xl);
+    }
+
     h3 {
-      font-size: var(--qv-type-xl);
+      font-size: var(--qv-type-lg);
     }
   }
 
