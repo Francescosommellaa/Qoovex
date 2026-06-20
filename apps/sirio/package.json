@@ -13,9 +13,9 @@
     "@phosphor-icons/react": "^2.1.10",
     "@qoovex/brand": "workspace:*",
     "@qoovex/ui": "workspace:*",
-    "next": "16.2.6",
-    "react": "19.2.6",
-    "react-dom": "19.2.6"
+    "next": "16.2.9",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.0",
@@ -23,7 +23,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9.39.4",
-    "eslint-config-next": "16.2.6",
+    "eslint-config-next": "16.2.9",
     "tailwindcss": "^4.3.0",
     "typescript": "^6"
   }
