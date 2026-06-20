@@ -11,7 +11,7 @@ Route handler: `src/app/api/auth/[...nextauth]/route.ts`.
 | Variabile | Note |
 | --------- | ---- |
 | `AUTH_SECRET` | Min 32 caratteri. In dev puoi usare lo stesso valore di `DEV_AUTH_SECRET`. |
-| `AUTH_URL` | URL base workspace, es. `http://localhost:3001` |
+| `AUTH_URL` | In produzione `https://app.qoovex.com`; in locale `http://localhost:3001`. |
 | `DATABASE_URL` | Postgres per Prisma e Auth.js adapter |
 
 ## Env email codici / Google

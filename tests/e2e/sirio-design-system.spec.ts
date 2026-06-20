@@ -1,278 +1,115 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const isDesktop = (projectName: string) => projectName.endsWith("-1440");
-const usesMobileMenu = (projectName: string) =>
-  !projectName.endsWith("-1024") && !projectName.endsWith("-1440");
+const baseUrl = "http://localhost:3002";
+const isPhone = (name: string) => name.includes("390") || name.includes("375");
+const isDesktopChromium = (name: string) => name === "chromium-1440";
+const isChromium = (name: string) => name.startsWith("chromium");
 
-async function openMobileMenu(page: import("@playwright/test").Page, projectName: string) {
-  if (usesMobileMenu(projectName)) {
-    await page.mouse.wheel(0, -160);
-    await expect(
-      page.getByRole("button", { exact: true, name: "Apri menu" }),
-    ).toBeInViewport();
-    await page.getByRole("button", { exact: true, name: "Apri menu" }).click();
-    await expect(page.getByRole("button", { name: "Chiudi menu" })).toBeVisible();
-  }
-}
+test.beforeEach(async ({ page }) => { await page.goto(baseUrl); });
 
-test.beforeEach(async ({ page }) => {
-  await page.goto("http://localhost:3002/");
+test("presenta il cervello operativo pre-servizio", async ({ page }) => {
+  await expect(page.getByRole("heading", { name: /Prima del servizio.*Numeri che reggono/i })).toBeVisible();
+  await expect(page.getByText("OK — verifica fisica consigliata", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Assistente operativo.*Non gestionale live/i })).toBeVisible();
+  await expect(page.getByText(/React Native Web|apps\/product/i)).toHaveCount(0);
 });
 
-test("pubblica Sirio come strumento operativo italiano", async ({
-  page,
-}) => {
-  await expect(
-    page.getByRole("heading", {
-      name: "Il lavoro resta al centro.",
-    }),
-  ).toBeVisible();
-  await expect(page.getByText("Calore Misurato v0")).toBeVisible();
-  await expect(page.getByText("Autorita silenziosa", { exact: true })).toBeVisible();
-  await expect(page.getByText("Criterio: utile, chiaro, durevole.")).toBeVisible();
-  await expect(page.getByText("Tutti i diritti riservati.")).toBeAttached();
-  await expect(page.getByText("Fondazione pre-componenti.")).toHaveCount(0);
-  await expect(page.getByText(["Stable", "v0.5"].join(" "))).toHaveCount(0);
-  await expect(page.getByText(["Cry", "stal"].join(""))).toHaveCount(0);
+test("apre l’assistente con un click e mostra la regola", async ({ page }, testInfo) => {
+  test.skip(!isChromium(testInfo.project.name));
+  await page.goto(`${baseUrl}/components#assistant-launcher`);
+  const section = page.locator("#assistant-launcher");
+  await section.getByRole("button", { name: "Chiedi a Qoovex" }).click();
+  await expect(section.getByRole("dialog", { name: "Assistente operativo" })).toBeVisible();
+  await expect(section.getByText("Prepara 25 cotolette.", { exact: true })).toBeVisible();
+  await expect(section.locator(".sample-trace footer")).toContainText("22 × 1,10 = 24,2 → 25");
 });
 
-test("usa identita Sirio e token del package UI styles-only", async ({
-  page,
-}) => {
-  await expect(page.locator(".sirio-brand img")).toHaveAttribute(
-    "src",
-    "/logo-icon/sirio-icon.svg",
-  );
-
-  const details = await page.evaluate(() => {
-    const styles = getComputedStyle(document.documentElement);
-    document.documentElement.setAttribute("data-qv-mode", "kitchen");
-    const kitchenHeight = getComputedStyle(
-      document.documentElement,
-    ).getPropertyValue("--qv-control-height");
-    document.documentElement.setAttribute("data-qv-mode", "review");
-    const reviewPrimary = getComputedStyle(
-      document.documentElement,
-    ).getPropertyValue("--qv-action-primary-bg");
-    document.documentElement.removeAttribute("data-qv-mode");
-
-    return {
-      action: styles.getPropertyValue("--qv-action-primary-bg").trim(),
-      kitchenHeight: kitchenHeight.trim(),
-      reviewPrimary: reviewPrimary.trim(),
-    };
-  });
-
-  expect(details.action).toBe("#d96b2b");
-  expect(details.kitchenHeight).toBe("56px");
-  expect(["#111", "#111111"]).toContain(details.reviewPrimary);
+test("struttura il testo libero e restituisce dati da verificare", async ({ page }) => {
+  await page.goto(`${baseUrl}/components#free-text-intake`);
+  const section = page.locator("#free-text-intake");
+  await section.getByRole("button", { name: "Struttura evento" }).click();
+  await expect(section.getByRole("button", { name: "Evento strutturato" })).toBeVisible();
+  await expect(section.getByRole("status")).toContainText("8 dati estratti");
 });
 
-test("mostra palette, tipografia, layout, azioni, stati e modalita", async ({
-  page,
-}, testInfo) => {
-  for (const text of [
-    "Porcellana",
-    "Grafite",
-    "Calore",
-    "Tipografia",
-    "Layout",
-    "Primaria",
-    "Critico",
-    "Cucina",
-    "Revisione",
-  ]) {
-    expect(await page.getByText(text, { exact: true }).count()).toBeGreaterThan(0);
-  }
-
-  await openMobileMenu(page, testInfo.project.name);
-  await page.getByRole("link", { name: "Stati" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Ogni stato spiega cosa cambia." }),
-  ).toBeInViewport();
-  await expect(page.locator(".sirio-atlas")).toHaveAttribute(
-    "data-active-section",
-    "stati",
-  );
+test("salva una regola mancante nello specimen", async ({ page }) => {
+  await page.goto(`${baseUrl}/components#missing-data`);
+  const button = page.locator("#missing-data").getByRole("button", { name: "Salva 1 cad. + 10%" });
+  await button.click();
+  await expect(page.locator("#missing-data").getByRole("button", { name: /Regola salvata/ })).toBeDisabled();
 });
 
-test("distingue contenuti statici, comandi e selezioni", async ({
-  page,
-}, testInfo) => {
-  await expect(page.locator(".sirio-principle-list")).toHaveCSS("cursor", "auto");
-
-  await openMobileMenu(page, testInfo.project.name);
-  await page.getByRole("link", { name: "Azioni" }).click();
-  if (usesMobileMenu(testInfo.project.name)) {
-    await expect(page.locator(".sirio-sidebar nav")).toBeHidden();
-  }
-
-  const primaryAction = page.getByRole("button", { name: "Salva revisione" });
-  await expect(primaryAction).toHaveCSS("cursor", "pointer");
-  await primaryAction.click();
-  await expect(page.locator(".sirio-action-feedback")).toContainText(
-    "Salva revisione",
-  );
-  await expect(
-    page.getByRole("button", { name: "Pubblica menu" }),
-  ).toBeDisabled();
-
-  await page.getByRole("button", { name: "Blocca menu" }).click();
-  await expect(
-    page.getByRole("group", { name: "Conferma blocco menu" }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Annulla" }).click();
-  await expect(page.locator(".sirio-action-feedback")).toContainText(
-    "Blocco annullato",
-  );
-
-  if (usesMobileMenu(testInfo.project.name)) {
-    await expect(page.locator(".sirio-atlas")).toHaveAttribute(
-      "data-header-hidden",
-      "true",
-    );
-  }
-  await openMobileMenu(page, testInfo.project.name);
-  await page.getByRole("link", { name: "Modalita" }).click();
-  const modeButton = page.locator('button[data-mode="kitchen"]');
-  await modeButton.scrollIntoViewIfNeeded();
-  await modeButton.click();
-  await expect(modeButton).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator(".sirio-mode-preview")).toHaveAttribute(
-    "data-preview-mode",
-    "kitchen",
-  );
-  await expect(
-    page.getByRole("heading", { name: "Pass caldo / 18:42" }),
-  ).toBeVisible();
-  await expect(page.getByRole("button", { name: "Segna pronto" })).toBeVisible();
+test("mantiene separati richiesto approvato prodotto teorico e verificato", async ({ page }) => {
+  await page.goto(`${baseUrl}/components#quantity-status`);
+  const section = page.locator("#quantity-status");
+  await expect(section.getByText("Richiesto", { exact: true })).toBeVisible();
+  await expect(section.getByText("Extra teorico", { exact: true })).toBeVisible();
+  await expect(section.getByText("Non ancora", { exact: true })).toBeVisible();
 });
 
-test("offre uno skip link da tastiera", async ({ browserName, page }) => {
-  const skipLink = page.getByRole("link", { name: "Vai al contenuto" });
-  if (browserName === "webkit") {
-    // WebKit emula la preferenza Safari che esclude i link dal ciclo Tab.
-    await skipLink.focus();
-  } else {
-    await page.keyboard.press("Tab");
-  }
-  await expect(skipLink).toBeFocused();
-  await skipLink.press("Enter");
-  await expect(page).toHaveURL(/#sirio-content$/);
+test("approva la proposta chef e registra la produzione", async ({ page }, testInfo) => {
+  test.skip(!isChromium(testInfo.project.name));
+  await page.goto(`${baseUrl}/components#chef-approval`);
+  const approval = page.locator("#chef-approval");
+  await approval.getByRole("button", { name: "Approva preparazione" }).click();
+  await expect(approval.getByRole("button", { name: "Approvate 35 cotolette" })).toBeDisabled();
+
+  const completion = page.locator("#production-completion");
+  await completion.scrollIntoViewIfNeeded();
+  await completion.getByRole("button", { name: "Registra produzione" }).click();
+  await expect(completion.getByRole("button", { name: "Produzione registrata" })).toBeVisible();
 });
 
-test("mantiene navigazione persistente, opaca e con stato attivo", async ({
-  page,
-}, testInfo) => {
-  const sidebar = page.locator(".sirio-sidebar");
-  await expect(sidebar).toHaveCSS("background-color", "rgb(255, 255, 255)");
-
-  const before = await sidebar.boundingBox();
-  await openMobileMenu(page, testInfo.project.name);
-  await page.getByRole("link", { name: "Qualita" }).click();
-  await expect(page.locator(".sirio-atlas")).toHaveAttribute(
-    "data-active-section",
-    "qualita",
-  );
-  const after = await sidebar.boundingBox();
-
-  expect(Math.abs((before?.x ?? 0) - (after?.x ?? 0))).toBeLessThanOrEqual(1);
-  if (!usesMobileMenu(testInfo.project.name)) {
-    expect(Math.abs((before?.y ?? 0) - (after?.y ?? 0))).toBeLessThanOrEqual(1);
-  }
+test("espone briefing cucina e sala", async ({ page }) => {
+  await page.goto(`${baseUrl}/components#kitchen-briefing`);
+  await expect(page.locator("#kitchen-briefing").getByText("BRIEFING CUCINA · DOMANI")).toBeVisible();
+  await expect(page.locator("#service-briefing").getByText("BRIEFING SALA · DOMANI")).toBeVisible();
 });
 
-test("su mobile apre un menu fullscreen opaco", async ({ page }, testInfo) => {
-  test.skip(!usesMobileMenu(testInfo.project.name));
-
-  await page.getByRole("button", { exact: true, name: "Apri menu" }).click();
-  await expect(page.getByRole("button", { name: "Chiudi menu" })).toBeVisible();
-  await expect(page.locator(".sirio-sidebar nav")).toHaveCSS(
-    "background-color",
-    "rgb(250, 249, 246)",
-  );
-  await expect(page.getByRole("link", { name: "Qualita" })).toBeVisible();
-  await expect(page.getByText("Tutti i diritti riservati.")).toBeVisible();
+test("il menu phone ripristina il focus", async ({ page }, testInfo) => {
+  test.skip(!isPhone(testInfo.project.name));
+  const trigger = page.getByRole("button", { name: "Apri menu" });
+  await trigger.click();
+  await expect(page.getByRole("button", { name: "Chiudi menu" })).toBeFocused();
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("button", { name: "Apri menu" })).toBeFocused();
+  await expect(trigger).toBeFocused();
 });
 
-test("su mobile libera spazio seguendo la direzione di scroll", async ({
-  page,
-}, testInfo) => {
-  test.skip(!usesMobileMenu(testInfo.project.name));
-
-  const topbar = page.locator(".sirio-sidebar");
-  await page.mouse.wheel(0, 360);
-  await page.mouse.wheel(0, 360);
-  await expect(page.locator(".sirio-atlas")).toHaveAttribute(
-    "data-header-hidden",
-    "true",
-  );
-  await expect(topbar).toHaveCSS("top", "-64px");
-
-  await page.mouse.wheel(0, -120);
-  await expect(page.locator(".sirio-atlas")).toHaveAttribute(
-    "data-header-hidden",
-    "false",
-  );
-  await expect(topbar).toHaveCSS("top", "0px");
-});
-
-test("reduced motion elimina le transizioni di Sirio", async ({ page }) => {
+test("non genera overflow orizzontale e rispetta reduced motion", async ({ page }, testInfo) => {
+  test.skip(!isChromium(testInfo.project.name));
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload();
-  await expect(page.locator(".sirio-brand")).toHaveCSS(
-    "transition-duration",
-    "0.001s",
-  );
+  const state = await page.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth, behavior: getComputedStyle(document.documentElement).scrollBehavior }));
+  expect(state.scroll).toBeLessThanOrEqual(state.client);
+  expect(state.behavior).toBe("auto");
 });
 
-test("la pagina non ha violazioni Axe serie o critiche", async ({
-  page,
-}, testInfo) => {
-  test.skip(!isDesktop(testInfo.project.name));
-
+test("non presenta violazioni Axe serie o critiche", async ({ page }, testInfo) => {
+  test.skip(!isDesktopChromium(testInfo.project.name));
   const results = await new AxeBuilder({ page }).analyze();
-  const blocking = results.violations.filter(({ impact }) =>
-    ["critical", "serious"].includes(impact ?? ""),
-  );
-  expect(blocking).toEqual([]);
+  expect(results.violations.filter(({ impact }) => impact === "critical" || impact === "serious")).toEqual([]);
 });
 
-test("il layout non ha overflow orizzontale e regge reflow 200 percento", async ({
-  page,
-}, testInfo) => {
-  const normal = await page.evaluate(() => ({
-    client: document.documentElement.clientWidth,
-    scroll: document.documentElement.scrollWidth,
-  }));
-  expect(normal.scroll).toBeLessThanOrEqual(normal.client);
-
-  test.skip(!isDesktop(testInfo.project.name));
-  await page.setViewportSize({ width: 720, height: 900 });
-  await page.reload();
-  const zoomed = await page.evaluate(() => ({
-    client: document.documentElement.clientWidth,
-    scroll: document.documentElement.scrollWidth,
-  }));
-  expect(zoomed.scroll).toBeLessThanOrEqual(zoomed.client);
+test("documenta ruoli isolati e supporto auditato", async ({ page }) => {
+  await expect(page.getByRole("heading", { name: "Direttore" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Capo sala" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Capo cucina" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Brigata" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Super Admin" })).toBeVisible();
+  await expect(page.getByText(/Il codice identifica.*Non autentica/i)).toBeVisible();
 });
 
-test("forced colors preserva i confini visibili", async ({
-  page,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== "chromium-1440");
-  await page.emulateMedia({ forcedColors: "active" });
-  await page.reload();
+test("nasconde una destinazione non autorizzata nello shell", async ({ page }) => {
+  await page.goto(`${baseUrl}/components#adaptive-shell`);
+  const shell = page.locator("#adaptive-shell");
+  await expect(shell.getByRole("link", { name: "Prepara" })).toBeVisible();
+  await expect(shell.getByRole("link", { name: "Direzione" })).toHaveCount(0);
+});
 
-  await expect(page.locator(".sirio-command-board")).toHaveCSS(
-    "border-top-style",
-    "solid",
-  );
-  await expect(page.locator(".sirio-command-board")).toHaveCSS(
-    "box-shadow",
-    "none",
-  );
+test("espone inviti e sessione supporto come componenti canonici", async ({ page }) => {
+  await page.goto(`${baseUrl}/components#invitation-composer`);
+  await expect(page.locator("#invitation-composer").getByRole("button", { name: "Invia invito" })).toBeVisible();
+  await expect(page.locator("#support-access").getByRole("button", { name: "Apri sessione" })).toBeVisible();
+  await expect(page.locator("#support-banner").getByLabel("Sessione supporto attiva")).toBeVisible();
 });

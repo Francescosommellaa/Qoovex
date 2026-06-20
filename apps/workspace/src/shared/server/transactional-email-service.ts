@@ -20,6 +20,20 @@ export type TransactionalEmailTemplate =
       event: SecurityEmailEvent;
       deviceLabel?: string | null;
       occurredAt?: Date;
+    }
+  | {
+      kind: "structure-invitation";
+      structureName: string;
+      role: "HEAD_OF_HALL" | "HEAD_CHEF" | "KITCHEN_CREW";
+      acceptUrl: string;
+      expiresAt: Date;
+    }
+  | {
+      kind: "support-opened" | "support-closed";
+      structureName: string;
+      employeeEmail: string;
+      reason: string;
+      occurredAt: Date;
     };
 
 export class TransactionalEmailError extends Error {
@@ -118,10 +132,20 @@ function getSecurityCopy(template: Extract<TransactionalEmailTemplate, { kind: "
 }
 
 function renderEmail(input: { to: string; template: TransactionalEmailTemplate }) {
-  const copy =
-    input.template.kind === "auth-code"
-      ? getAuthCodeCopy(input.template.purpose, input.template.code)
-      : getSecurityCopy(input.template);
+  const copy = (() => {
+    if (input.template.kind === "auth-code") return getAuthCodeCopy(input.template.purpose, input.template.code);
+    if (input.template.kind === "security-event") return getSecurityCopy(input.template);
+    if (input.template.kind === "structure-invitation") {
+      const role = { HEAD_OF_HALL: "Capo sala", HEAD_CHEF: "Capo cucina", KITCHEN_CREW: "Brigata" }[input.template.role];
+      return { subject: `Invito a ${input.template.structureName}`, title: "Invito alla struttura", intro: `Sei stato invitato come ${role} in ${input.template.structureName}. Apri ${input.template.acceptUrl} entro ${formatSecurityDate(input.template.expiresAt)}.` };
+    }
+    const opened = input.template.kind === "support-opened";
+    return {
+      subject: `Supporto Qoovex ${opened ? "avviato" : "terminato"} · ${input.template.structureName}`,
+      title: `Supporto ${opened ? "attivo" : "terminato"}`,
+      intro: `${input.template.employeeEmail} ha ${opened ? "aperto" : "chiuso"} una sessione di supporto il ${formatSecurityDate(input.template.occurredAt)}. Motivo: ${input.template.reason}`,
+    };
+  })();
 
   const codeBlock =
     input.template.kind === "auth-code"

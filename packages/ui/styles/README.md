@@ -1,10 +1,6 @@
 # Styles
 
-Fondazione CSS Calore Misurato.
-
-- `tokens.css`: primitive, token semantici e override di modalita' per default,
-  kitchen e review.
-- `base.css`: reset, tipografia base, focus, media defaults e reduced motion.
-- `index.css`: entrypoint pubblico `@qoovex/ui/styles.css`.
-
-Questa cartella non contiene classi componente.
+- `tokens.css`: valori primitivi, semantici e alias della direzione Sirio.
+- `base.css`: reset, tipografia, focus, utility accessibili e reduced motion.
+- `components.css`: rendering web canonico delle primitive e superfici operative.
+- `index.css`: entrypoint `@qoovex/ui/styles.css`.

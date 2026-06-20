@@ -32,6 +32,30 @@ const vagueFileNames = new Set(["helpers.ts", "utils.ts", "misc.ts", "temp.ts"])
 
 const failures = [];
 
+function assertCanonicalOrigins() {
+  const config = readFileSync(join(repoRoot, "packages", "config", "src", "index.ts"), "utf8");
+  const webLayout = readFileSync(join(repoRoot, "apps", "web", "src", "app", "layout.tsx"), "utf8");
+  const sirioLayout = readFileSync(join(repoRoot, "apps", "sirio", "src", "app", "layout.tsx"), "utf8");
+  const expected = ["https://qoovex.com", "https://app.qoovex.com", "https://sirio.qoovex.com"];
+
+  for (const origin of expected) {
+    if (!config.includes(origin)) failures.push(`Missing canonical origin in packages/config: ${origin}`);
+  }
+  if (!webLayout.includes("https://qoovex.com")) failures.push("Web metadata must use https://qoovex.com");
+  if (!sirioLayout.includes("https://sirio.qoovex.com")) failures.push("Sirio metadata must use https://sirio.qoovex.com");
+}
+
+function assertPreServiceDirection() {
+  const productContext = readFileSync(join(repoRoot, "docs", "ProductContext.md"), "utf8");
+  const platform = readFileSync(join(repoRoot, "docs", "platform-strategy.md"), "utf8");
+  const mobileReadme = join(repoRoot, "apps", "mobile", "README.md");
+
+  if (!productContext.includes("Pre-Service Brain")) failures.push("Product context must define Pre-Service Brain");
+  if (!platform.includes("apps/mobile")) failures.push("Platform strategy must define apps/mobile");
+  if (!platform.includes("apps/workspace")) failures.push("Platform strategy must define workspace as the web product");
+  if (!existsSync(mobileReadme)) failures.push("apps/mobile must contain its document-only README");
+}
+
 function toRepoPath(path) {
   return relative(repoRoot, path).replaceAll("\\", "/");
 }
@@ -263,6 +287,8 @@ function assertRequiredRoots() {
 }
 
 assertRequiredRoots();
+assertCanonicalOrigins();
+assertPreServiceDirection();
 if (failures.length === 0) {
   assertWorkspaceReadmes();
   assertNoVagueWorkspaceFiles();

@@ -27,7 +27,6 @@
     "jsdom": "^29.1.1",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "react-dom": "19.2.6",
     "typescript": "^6",
     "typescript-eslint": "8.54.0",
     "vitest": "^4.1.8"
@@ -39,10 +38,21 @@
       "default": "./src/index.ts"
     },
     "./styles.css": "./styles/index.css",
-    "./tokens.css": "./styles/tokens.css"
+    "./tokens.css": "./styles/tokens.css",
+    "./web": {
+      "types": "./src/web/index.ts",
+      "import": "./src/web/index.ts",
+      "default": "./src/web/index.ts"
+    }
   },
   "main": "./src/index.ts",
   "module": "./src/index.ts",
   "types": "./src/index.ts",
-  "dependencies": {}
+  "dependencies": {
+    "@qoovex/types": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
 }

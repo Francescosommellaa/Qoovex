@@ -49,23 +49,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user?.id) {
         token.sub = user.id;
-        const credential = await db.userCredential.findUnique({
-          where: { userId: user.id },
-          select: { passwordUpdatedAt: true },
-        });
+        const [credential, identity] = await Promise.all([
+          db.userCredential.findUnique({ where: { userId: user.id }, select: { passwordUpdatedAt: true } }),
+          db.user.findUnique({ where: { id: user.id }, select: { authVersion: true, platformRole: true } }),
+        ]);
         token.passwordUpdatedAt = credential?.passwordUpdatedAt.toISOString() ?? null;
-      } else if (token.sub && token.passwordUpdatedAt) {
-        const credential = await db.userCredential.findUnique({
-          where: { userId: token.sub },
-          select: { passwordUpdatedAt: true },
-        });
+        token.authVersion = identity?.authVersion ?? 1;
+        token.platformRole = identity?.platformRole ?? "USER";
+      } else if (token.sub) {
+        const [credential, identity] = await Promise.all([
+          db.userCredential.findUnique({ where: { userId: token.sub }, select: { passwordUpdatedAt: true } }),
+          db.user.findUnique({ where: { id: token.sub }, select: { authVersion: true, platformRole: true } }),
+        ]);
         const currentPasswordUpdatedAt =
           credential?.passwordUpdatedAt.toISOString() ?? null;
         if (
-          currentPasswordUpdatedAt &&
-          currentPasswordUpdatedAt !== token.passwordUpdatedAt
+          !identity ||
+          (token.passwordUpdatedAt && currentPasswordUpdatedAt !== token.passwordUpdatedAt) ||
+          identity.authVersion !== token.authVersion
         ) {
           token.sub = undefined;
+        } else {
+          token.platformRole = identity.platformRole;
         }
       }
 
@@ -74,6 +79,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.sub ?? "";
+        session.user.platformRole = token.platformRole === "SUPER_ADMIN" ? "SUPER_ADMIN" : "USER";
       }
 
       return session;

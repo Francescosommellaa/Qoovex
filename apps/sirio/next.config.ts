@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@qoovex/ui"],
+  allowedDevOrigins: ["*.trycloudflare.com"],
+  transpilePackages: ["@qoovex/brand", "@qoovex/ui"],
 };
 
 export default nextConfig;

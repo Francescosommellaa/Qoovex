@@ -54,8 +54,13 @@ export async function findWorkspaceUserById(userId: string) {
       email: true,
       phoneNumber: true,
       mfaEnabled: true,
+      platformRole: true,
+      structureMemberships: {
+        where: { revokedAt: null },
+        take: 1,
+        select: { role: true, structureId: true },
+      },
       usernameChangedAt: true,
-      plan: true,
       avatarBlobPathname: true,
       image: true,
       credential: {
@@ -83,7 +88,6 @@ export async function findUserSummaryByIdentifier(identifier: string) {
       id: true,
       username: true,
       email: true,
-      plan: true,
     },
   });
 }
@@ -100,7 +104,6 @@ export async function upsertWorkspaceUser(input: UpsertWorkspaceUserInput) {
       phoneNumber: input.phoneNumber,
       name: input.name ?? null,
       image: input.image ?? null,
-      plan: "FREE",
     },
     update: {
       firstName: input.firstName,

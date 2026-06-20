@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 export const metadata: Metadata = {
   title: "Qoovex",
   metadataBase: new URL("https://qoovex.com"),
+  alternates: { canonical: "/" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -1,592 +1,71 @@
-"use client";
+import { ArrowRight, Brain, Calculator, CheckCircle, Desktop, DeviceMobile, Warning } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 
-import {
-  ArrowRight,
-  Check,
-  CheckCircle,
-  Eye,
-  List,
-  WarningOctagon,
-  X,
-} from "@phosphor-icons/react/dist/ssr";
-import Image from "next/image";
-import {
-  type Dispatch,
-  type SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { preparationFixture as prep } from "./event-data";
 
-const navItems = [
-  { id: "orientamento", label: "Orientamento" },
-  { id: "principi", label: "Principi" },
-  { id: "palette", label: "Palette" },
-  { id: "tipografia", label: "Tipografia" },
-  { id: "layout", label: "Layout" },
-  { id: "azioni", label: "Azioni" },
-  { id: "stati", label: "Stati" },
-  { id: "modalita", label: "Modalita" },
-  { id: "qualita", label: "Qualita" },
-] as const;
+const cycle = ["Insegna", "Struttura", "Calcola", "Propone", "Chef approva", "Brigata produce", "Verifica"];
 
-type SectionId = (typeof navItems)[number]["id"];
-type ModeId = "default" | "kitchen" | "review";
-type FeedbackTone = "idle" | "success" | "warning";
-
-const sectionIds = new Set<string>(navItems.map(({ id }) => id));
-
-const principles = [
-  ["01", "Autorita silenziosa", "La gerarchia guida senza gridare."],
-  ["02", "Chiarezza operativa", "Contesto, stato, rischio e prossimo passo restano visibili."],
-  ["03", "Calore professionale", "Il colore segnala un cambiamento, non decora."],
-  ["04", "Informazione prima della decorazione", "Ogni superficie deve migliorare una decisione."],
-  ["05", "Un'azione, un significato", "Comandi e stati conservano una memoria visiva affidabile."],
-] as const;
-
-const paletteGroups = [
-  {
-    label: "Campo operativo",
-    colors: [
-      ["Porcellana", "Fondo di lavoro", "--qv-color-porcelain-50", "#faf9f6"],
-      ["Cenere", "Profondita neutra", "--qv-color-ash-500", "#82827a"],
-      ["Grafite", "Testo e autorita", "--qv-color-graphite-900", "#111111"],
-      ["Acciaio", "Confini tecnici", "--qv-color-steel-500", "#8a8a84"],
-    ],
-  },
-  {
-    label: "Decisione",
-    colors: [
-      ["Calore", "Prossimo passo", "--qv-color-heat-500", "#d96b2b"],
-      ["Zafferano", "Costo e variazione", "--qv-color-saffron-500", "#d18d19"],
-      ["Informazione", "Contesto operativo", "--qv-color-info-500", "#3f8294"],
-    ],
-  },
-  {
-    label: "Esito",
-    colors: [
-      ["Erba", "Pronto e verificato", "--qv-color-herb-500", "#5f7a4f"],
-      ["Grano", "Attenzione", "--qv-color-wheat-500", "#c9a646"],
-      ["Errore", "Rischio critico", "--qv-color-error-500", "#b42318"],
-      ["Bacca", "Nota cliente", "--qv-color-berry-500", "#ad4772"],
-    ],
-  },
-] as const;
-
-const typeRows = [
-  ["Display", "--qv-type-5xl", "Identita e apertura, una volta per vista."],
-  ["Titolo", "--qv-type-3xl", "Sezioni e blocchi di decisione."],
-  ["Corpo", "--qv-type-md", "Procedure, note e descrizioni."],
-  ["Dati", "--qv-font-data", "Quantita, tempi, delta e confronti."],
-] as const;
-
-const spacing = [
-  ["4", "Micro separazione", "4px"],
-  ["8", "Ritmo interno", "8px"],
-  ["16", "Unita base", "16px"],
-  ["24", "Gruppi correlati", "24px"],
-  ["32", "Blocchi distinti", "32px"],
-  ["64", "Cambio di capitolo", "64px"],
-] as const;
-
-const actionRows = [
-  ["Primaria", "Salva revisione", "Una sola per vista.", false],
-  ["Secondaria", "Anteprima QR", "Utile, senza concorrere.", false],
-  ["Silenziosa", "Mostra dettagli", "Per comandi frequenti.", false],
-  ["Pericolo", "Blocca menu", "Richiede conferma esplicita.", false],
-  ["Disabilitata", "Pubblica menu", "Manca la verifica allergeni.", true],
-] as const;
-
-const states = [
-  ["Modificato", "Calore", "Lavoro locale da confermare.", "changed"],
-  ["Pronto", "Erba", "La preparazione puo avanzare.", "success"],
-  ["Attenzione", "Grano", "Serve un controllo, non blocca.", "warning"],
-  ["Critico", "Errore", "Allergene o pubblicazione rischiosa.", "danger"],
-  ["Informativo", "Informazione", "Contesto o sincronizzazione.", "info"],
-] as const;
-
-const modes: ReadonlyArray<{ id: ModeId; label: string; description: string }> = [
-  { id: "default", label: "Base", description: "Pianifica e confronta" },
-  { id: "kitchen", label: "Cucina", description: "Esegui con meno scelte" },
-  { id: "review", label: "Revisione", description: "Controlla prima di pubblicare" },
-];
-
-const modePreviews = {
-  default: {
-    eyebrow: "Piano del servizio",
-    title: "Cena / 24 coperti",
-    meta: "3 preparazioni aperte",
-    action: "Salva piano",
-    rows: [
-      ["Ravioli ricotta e limone", "Porzioni aggiornate", "Modificato", "changed"],
-      ["Pasta fresca", "Glutine verificato", "Controllo", "warning"],
-      ["Fondo vegetale", "Pronto per il servizio", "Pronto", "success"],
-    ],
-  },
-  kitchen: {
-    eyebrow: "Servizio in corso",
-    title: "Pass caldo / 18:42",
-    meta: "2 azioni visibili",
-    action: "Segna pronto",
-    rows: [
-      ["Ravioli ricotta e limone", "24 porzioni al pass", "In uscita", "changed"],
-      ["Fondo vegetale", "Mantieni a 72 C", "Pronto", "success"],
-    ],
-  },
-  review: {
-    eyebrow: "Revisione pubblicazione",
-    title: "Menu degustazione",
-    meta: "1 blocco critico",
-    action: "Approva menu",
-    rows: [
-      ["Pasta fresca", "Glutine non dichiarato nel QR", "Blocca", "danger"],
-      ["Costo porzione", "+12% rispetto alla versione", "Verifica", "warning"],
-      ["Note cliente", "Traduzione completata", "Pronto", "success"],
-    ],
-  },
-} as const;
-
-const quality = [
-  "Lo stato si capisce in 5 secondi.",
-  "La prossima azione si distingue a distanza.",
-  "La gerarchia resta chiara senza colore.",
-  "Le superfici sticky sono sempre opache.",
-  "Il mobile conserva orientamento e contesto.",
-  "I token restano pubblici e semantici.",
-] as const;
-
-function useActiveSection(): [SectionId, Dispatch<SetStateAction<SectionId>>] {
-  const [activeSection, setActiveSection] = useState<SectionId>(navItems[0].id);
-
-  useEffect(() => {
-    const sections = navItems
-      .map(({ id }) => document.getElementById(id))
-      .filter((section): section is HTMLElement => Boolean(section));
-
-    if (sections.length === 0) return;
-
-    let frame = 0;
-    const updateActiveSection = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const reachedPageEnd =
-          Math.ceil(window.scrollY + window.innerHeight) >=
-          document.documentElement.scrollHeight - 1;
-        const current = reachedPageEnd
-          ? sections[sections.length - 1]
-          : sections.reduce<HTMLElement>(
-              (active, section) =>
-                section.getBoundingClientRect().top <= window.innerHeight * 0.3
-                  ? section
-                  : active,
-              sections[0],
-            );
-
-        if (current.id && sectionIds.has(current.id)) {
-          setActiveSection(current.id as SectionId);
-        }
-      });
-    };
-
-    updateActiveSection();
-    window.addEventListener("scroll", updateActiveSection, { passive: true });
-    window.addEventListener("resize", updateActiveSection);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", updateActiveSection);
-      window.removeEventListener("resize", updateActiveSection);
-    };
-  }, []);
-
-  return [activeSection, setActiveSection];
-}
-
-function useMobileHeaderVisibility(menuOpen: boolean) {
-  const [headerHidden, setHeaderHidden] = useState(false);
-
-  useEffect(() => {
-    let frame = 0;
-    if (menuOpen) {
-      frame = requestAnimationFrame(() => setHeaderHidden(false));
-      return () => cancelAnimationFrame(frame);
-    }
-
-    let lastScrollY = 0;
-    const updateHeader = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const nextScrollY = window.scrollY || document.documentElement.scrollTop;
-        const delta = nextScrollY - lastScrollY;
-
-        if (nextScrollY <= 24) {
-          setHeaderHidden(false);
-        } else if (Math.abs(delta) >= 8) {
-          setHeaderHidden(delta > 0);
-        }
-
-        lastScrollY = nextScrollY;
-      });
-    };
-
-    window.addEventListener("scroll", updateHeader, { passive: true });
-    updateHeader();
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", updateHeader);
-    };
-  }, [menuOpen]);
-
-  return headerHidden;
-}
-
-export default function SirioPage() {
-  const [activeSection, setActiveSection] = useActiveSection();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [lastAction, setLastAction] = useState("Scegli un comando per provarne il feedback.");
-  const [feedbackTone, setFeedbackTone] = useState<FeedbackTone>("idle");
-  const [dangerPending, setDangerPending] = useState(false);
-  const [selectedMode, setSelectedMode] = useState<ModeId>("default");
-  const [modeFeedback, setModeFeedback] = useState("Anteprima pronta.");
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const headerHidden = useMobileHeaderVisibility(menuOpen);
-  const preview = modePreviews[selectedMode];
-
-  useEffect(() => {
-    document.body.toggleAttribute("data-sirio-menu-open", menuOpen);
-    const closeMenu = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      setMenuOpen(false);
-      menuButtonRef.current?.focus();
-    };
-
-    window.addEventListener("keydown", closeMenu);
-    return () => {
-      document.body.removeAttribute("data-sirio-menu-open");
-      window.removeEventListener("keydown", closeMenu);
-    };
-  }, [menuOpen]);
-
-  const runAction = (kind: string, label: string) => {
-    if (kind === "Pericolo") {
-      setDangerPending(true);
-      setFeedbackTone("warning");
-      setLastAction("Conferma o annulla il blocco del menu.");
-      return;
-    }
-
-    setDangerPending(false);
-    setFeedbackTone("success");
-    setLastAction(`${label}: comando ricevuto.`);
-  };
-
+export default function DirectionPage() {
   return (
     <>
-      <a className="sirio-skip-link" href="#sirio-content">
-        Vai al contenuto
-      </a>
-      <main
-        className="sirio-atlas"
-        data-active-section={activeSection}
-        data-header-hidden={headerHidden ? "true" : "false"}
-        data-menu-open={menuOpen ? "true" : "false"}
-      >
-        <aside className="sirio-sidebar" aria-label="Navigazione Sirio">
-          <a
-            aria-label="Torna a Orientamento"
-            className="sirio-brand"
-            href="#orientamento"
-            onClick={() => {
-              setActiveSection("orientamento");
-              setMenuOpen(false);
-            }}
-          >
-            <Image
-              alt=""
-              aria-hidden="true"
-              height={34}
-              priority
-              src="/logo-icon/sirio-icon.svg"
-              width={34}
-            />
-            <span>
-              <strong>Sirio</strong>
-              <small>Fondazioni Qoovex</small>
-            </span>
-          </a>
-
-          <button
-            aria-label={menuOpen ? "Chiudi menu" : "Apri menu"}
-            aria-controls="sirio-menu"
-            aria-expanded={menuOpen}
-            className="sirio-menu-button"
-            data-open={menuOpen ? "true" : "false"}
-            onClick={() => setMenuOpen((isOpen) => !isOpen)}
-            ref={menuButtonRef}
-            type="button"
-          >
-            <span aria-hidden="true" className="sirio-menu-icons">
-              <List className="sirio-menu-icons__open" size={22} weight="bold" />
-              <X className="sirio-menu-icons__close" size={22} weight="bold" />
-            </span>
-          </button>
-
-          <nav aria-label="Sezioni della pagina" id="sirio-menu">
-            {navItems.map((item) => (
-              <a
-                aria-current={activeSection === item.id ? "location" : undefined}
-                data-active={activeSection === item.id ? "true" : undefined}
-                href={`#${item.id}`}
-                key={item.id}
-                onClick={() => {
-                  setActiveSection(item.id);
-                  setMenuOpen(false);
-                }}
-              >
-                <span>{item.label}</span>
-                <ArrowRight aria-hidden="true" size={15} weight="bold" />
-              </a>
-            ))}
-          </nav>
-
-          <p className="sirio-copyright">
-            <span>&copy; 2026 Qoovex</span>
-            <span>Tutti i diritti riservati.</span>
-          </p>
-        </aside>
-
-        <div className="sirio-content" id="sirio-content">
-          <section className="sirio-hero" id="orientamento">
-            <div className="sirio-copy">
-              <p className="sirio-kicker">Calore Misurato v0</p>
-              <h1>Il lavoro resta al centro.</h1>
-              <p>
-                Sirio misura la fondazione sul lavoro reale: priorita leggibili,
-                stati espliciti e una sola prossima azione.
-              </p>
-              <p className="sirio-direction-line">Criterio: utile, chiaro, durevole.</p>
-            </div>
-
-            <div className="sirio-command-board" aria-label="Binario operativo del servizio">
-              <div className="sirio-board-header">
-                <span>Servizio cena / 24 coperti</span>
-                <strong data-qv-numeric>18:42</strong>
-              </div>
-              <div className="sirio-ticket" data-state="changed">
-                <span data-qv-numeric>01</span>
-                <div><strong>Ravioli ricotta e limone</strong><p>Porzioni e costo aggiornati.</p></div>
-                <em>Da salvare</em>
-              </div>
-              <div className="sirio-ticket" data-state="warning">
-                <span data-qv-numeric>02</span>
-                <div><strong>Pasta fresca</strong><p>Glutine da verificare nel QR.</p></div>
-                <em>Controllo</em>
-              </div>
-              <div className="sirio-ticket" data-state="success">
-                <span data-qv-numeric>03</span>
-                <div><strong>Fondo vegetale</strong><p>Preparazione pronta per il pass.</p></div>
-                <em>Pronto</em>
-              </div>
-              <div className="sirio-board-footer">
-                <span>1 modifica da confermare</span>
-                <a href="#azioni" onClick={() => setActiveSection("azioni")}>
-                  Apri revisione <ArrowRight aria-hidden="true" size={17} weight="bold" />
-                </a>
-              </div>
-            </div>
-          </section>
-
-          <section className="sirio-section" id="principi">
-            <div className="sirio-section-head">
-              <p className="sirio-kicker">Principi</p>
-              <h2>Ogni segno deve guadagnarsi spazio.</h2>
-            </div>
-            <ol className="sirio-principle-list">
-              {principles.map(([number, label, text]) => (
-                <li key={label}>
-                  <span data-qv-numeric>{number}</span><strong>{label}</strong><p>{text}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section className="sirio-section" id="palette">
-            <div className="sirio-section-head">
-              <p className="sirio-kicker">Palette</p>
-              <h2>Il colore cambia una decisione.</h2>
-              <p>Neutrali per il campo, calore per il prossimo passo, stati per gli esiti.</p>
-            </div>
-            <div className="sirio-palette-groups">
-              {paletteGroups.map((group) => (
-                <section className="sirio-palette-family" key={group.label}>
-                  <h3>{group.label}</h3>
-                  <div>
-                    {group.colors.map(([name, purpose, token, color]) => (
-                      <div className="sirio-color-row" key={token}>
-                        <span aria-hidden="true" style={{ backgroundColor: color }} />
-                        <strong>{name}</strong><p>{purpose}</p><code translate="no">{token}</code>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div>
-          </section>
-
-          <section className="sirio-section" id="tipografia">
-            <div className="sirio-section-head">
-              <p className="sirio-kicker">Tipografia</p>
-              <h2>Prima si legge. Poi si apprezza.</h2>
-            </div>
-            <div className="sirio-type-specimen">
-              <p className="sirio-display">La cucina decide in secondi.</p>
-              <p className="sirio-body">Ricette, allergeni, quantita e tempi restano confrontabili anche durante il servizio.</p>
-              <p className="sirio-data" data-qv-numeric>24 porzioni / 1.250 kg / 18 min / +12%</p>
-            </div>
-            <div className="sirio-rule-list">
-              {typeRows.map(([label, token, detail]) => (
-                <div className="sirio-rule-row" key={label}>
-                  <strong>{label}</strong><code translate="no">{token}</code><span>{detail}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="sirio-section" id="layout">
-            <div className="sirio-section-head">
-              <p className="sirio-kicker">Layout</p>
-              <h2>Il ritmo separa le decisioni.</h2>
-            </div>
-            <div className="sirio-spacing-rail">
-              {spacing.map(([label, use, size]) => (
-                <div className="sirio-space-row" key={label}>
-                  <strong data-qv-numeric>{label}px</strong><span style={{ inlineSize: size }} /><p>{use}</p>
-                </div>
-              ))}
-            </div>
-            <div className="sirio-surface-strip" aria-label="Gerarchia superfici">
-              <div><strong>Canvas</strong><span>campo operativo</span></div>
-              <div><strong>Panel</strong><span>contenuto primario</span></div>
-              <div><strong>Selected</strong><span>scelta o modifica</span></div>
-              <div><strong>Inverse</strong><span>momento raro</span></div>
-            </div>
-          </section>
-
-          <section className="sirio-section" id="azioni">
-            <div className="sirio-section-head">
-              <p className="sirio-kicker">Azioni</p>
-              <h2>Un comando principale per volta.</h2>
-              <p>Ogni specimen locale dimostra gerarchia, conseguenza e feedback.</p>
-            </div>
-            <div className="sirio-action-matrix">
-              {actionRows.map(([kind, label, detail, disabled]) => (
-                <div className="sirio-action-row" data-kind={kind} key={kind}>
-                  <div><strong>{kind}</strong><p>{detail}</p></div>
-                  <button
-                    className="sirio-fake-button"
-                    data-kind={kind}
-                    disabled={disabled}
-                    onClick={() => runAction(kind, label)}
-                    type="button"
-                  >
-                    <span>{label}</span>
-                    {kind === "Secondaria" ? <Eye aria-hidden="true" size={18} weight="bold" /> :
-                      kind === "Pericolo" ? <WarningOctagon aria-hidden="true" size={18} weight="bold" /> :
-                        kind === "Disabilitata" ? <Check aria-hidden="true" size={18} weight="bold" /> :
-                          <ArrowRight aria-hidden="true" size={18} weight="bold" />}
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            {dangerPending ? (
-              <div className="sirio-confirmation" role="group" aria-label="Conferma blocco menu">
-                <div><WarningOctagon aria-hidden="true" size={22} weight="fill" /><p><strong>Bloccare il menu?</strong><span>Non sara piu visibile ai clienti.</span></p></div>
-                <div>
-                  <button type="button" onClick={() => { setDangerPending(false); setFeedbackTone("success"); setLastAction("Blocco annullato. Nessuna modifica applicata."); }}>Annulla</button>
-                  <button className="sirio-confirm-danger" type="button" onClick={() => { setDangerPending(false); setFeedbackTone("success"); setLastAction("Menu bloccato. La pubblicazione e sospesa."); }}>Conferma blocco</button>
-                </div>
-              </div>
-            ) : null}
-
-            <p className="sirio-action-feedback" data-tone={feedbackTone} aria-atomic="true" aria-live="polite">
-              {feedbackTone === "warning" ? <WarningOctagon aria-hidden="true" size={18} weight="fill" /> :
-                feedbackTone === "success" ? <CheckCircle aria-hidden="true" size={18} weight="fill" /> :
-                  <ArrowRight aria-hidden="true" size={18} weight="bold" />}
-              <span>{lastAction}</span>
-            </p>
-          </section>
-
-          <section className="sirio-section" id="stati">
-            <div className="sirio-section-head">
-              <p className="sirio-kicker">Stati</p>
-              <h2>Ogni stato spiega cosa cambia.</h2>
-            </div>
-            <div className="sirio-state-table">
-              {states.map(([name, tone, meaning, attr]) => (
-                <div className="sirio-state-row" data-state={attr} key={name}>
-                  <i aria-hidden="true" /><strong>{name}</strong><span>{tone}</span><p>{meaning}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="sirio-section" id="modalita">
-            <div className="sirio-section-head">
-              <p className="sirio-kicker">Modalita operative</p>
-              <h2>La postura cambia. L&apos;identita resta.</h2>
-            </div>
-            <div className="sirio-mode-switch" aria-label="Seleziona modalita" role="group">
-              {modes.map((mode) => (
-                <button
-                  aria-pressed={selectedMode === mode.id}
-                  data-mode={mode.id}
-                  key={mode.id}
-                  onClick={() => {
-                    setSelectedMode(mode.id);
-                    setModeFeedback(`Modalita ${mode.label} attiva.`);
-                  }}
-                  type="button"
-                >
-                  <strong>{mode.label}</strong><span>{mode.description}</span>
-                </button>
-              ))}
-            </div>
-
-            <div
-              className="sirio-mode-preview"
-              data-preview-mode={selectedMode}
-              data-qv-mode={selectedMode === "default" ? undefined : selectedMode}
-            >
-              <header><div><span>{preview.eyebrow}</span><h3>{preview.title}</h3></div><p>{preview.meta}</p></header>
-              <div className="sirio-preview-rail">
-                {preview.rows.map(([name, detail, status, state], index) => (
-                  <div data-state={state} key={name}>
-                    <span data-qv-numeric>{String(index + 1).padStart(2, "0")}</span>
-                    <p><strong>{name}</strong><small>{detail}</small></p><em>{status}</em>
-                  </div>
-                ))}
-              </div>
-              <footer>
-                <span aria-live="polite">{modeFeedback}</span>
-                <button type="button" onClick={() => setModeFeedback(`${preview.action}: comando ricevuto.`)}>
-                  {preview.action}<ArrowRight aria-hidden="true" size={18} weight="bold" />
-                </button>
-              </footer>
-            </div>
-          </section>
-
-          <section className="sirio-section" id="qualita">
-            <div className="sirio-section-head">
-              <p className="sirio-kicker">Soglia qualita</p>
-              <h2>Non bello. Risolto.</h2>
-              <p>Sirio deve dimostrare orientamento, stato, accessibilita e resistenza prima dei componenti.</p>
-            </div>
-            <ul className="sirio-quality-list">
-              {quality.map((item) => <li key={item}><Check aria-hidden="true" size={18} weight="bold" /><span>{item}</span></li>)}
-            </ul>
-          </section>
+      <section className="hero pre-service-hero">
+        <div className="hero-copy">
+          <p className="eyebrow">Qoovex / Pre-Service Brain</p>
+          <h1>Prima del servizio.<br />Numeri che reggono.</h1>
+          <p className="hero-lead">Qoovex trasforma eventi e regole interne in quantità, briefing e preparazioni verificabili. L’AI comprende la domanda. I dati e le regole producono la risposta.</p>
+          <div className="hero-actions"><Link className="button primary" href="/components">Esplora i componenti <ArrowRight aria-hidden="true" /></Link><a className="button secondary" href="#scope">Leggi lo scope</a></div>
+          <dl className="hero-proof"><div><dt>Centro</dt><dd>Pre-Service</dd></div><div><dt>Autorità</dt><dd>Lo chef decide</dd></div><div><dt>Vincolo</dt><dd>Nessun numero inventato</dd></div></dl>
         </div>
-      </main>
+        <div className="brain-sheet" aria-label="Calcolo verificabile cotolette bambini">
+          <header><div><small>DOMANI · {prep.event.toUpperCase()}</small><h2>{prep.item}</h2></div><span><Warning aria-hidden="true" /> Da verificare</span></header>
+          <div className="calculation-spine"><div><small>DATO</small><strong>{prep.children} bambini</strong></div><i>×</i><div><small>REGOLA</small><strong>1 cad. + 10%</strong></div><i>=</i><div><small>RICHIESTO</small><strong>{prep.required}</strong></div></div>
+          <div className="quantity-ledger"><div><small>Approvato</small><strong>{prep.approved}</strong><span>Chef</span></div><div><small>Prodotto</small><strong>{prep.produced}</strong><span>{prep.location}</span></div><div><small>Assegnato</small><strong>{prep.assigned}</strong><span>Domani</span></div><div data-theoretical><small>Extra teoriche</small><strong>{prep.theoretical}</strong><span>Non verificate</span></div></div>
+          <footer><div><CheckCircle aria-hidden="true" /><span><small>STATO</small><strong>OK — verifica fisica consigliata</strong></span></div><button type="button"><Brain aria-hidden="true" /> Chiedi a Qoovex</button></footer>
+        </div>
+      </section>
+
+      <section id="scope" className="content-section scope-section">
+        <div className="section-intro"><p className="eyebrow">Tesi</p><h2>Assistente operativo.<br />Non gestionale live.</h2><p>Il prodotto prepara persone e reparti prima dell’arrivo degli ospiti. Durante il servizio resta una superficie stabile da consultare, non un altro lavoro da aggiornare.</p></div>
+        <div className="scope-grid"><article><span>Dentro</span><h3>Conoscenza applicata</h3><p>Eventi, regole, calcoli, briefing, proposte, approvazioni e verifiche.</p></article><article><span>Fuori</span><h3>Controllo continuo</h3><p>KDS, input live obbligatori, CRM, fatture e magazzino contabile completo.</p></article><article><span>Prova</span><h3>Trenta secondi</h3><p>Futuro, anticipabile, approvato, prodotto, mancante, teorico e verificato.</p></article></div>
+      </section>
+
+      <section className="content-section role-section">
+        <div className="section-intro"><p className="eyebrow">Accesso minimo necessario</p><h2>Una struttura.<br />Quattro viste isolate.</h2><p>Il dato comune resta coerente, ma ogni reparto riceve soltanto campi, azioni e notifiche pertinenti. I controlli sono applicati lato server.</p></div>
+        <div className="role-grid">
+          <article><span>Admin</span><h3>Direttore</h3><p>Accesso completo alla struttura. Invita, revoca e supervisiona sala e cucina.</p></article>
+          <article><span>Sala</span><h3>Capo sala</h3><p>Briefing, coperti, bambini, allergeni pertinenti, orari e note di servizio.</p></article>
+          <article><span>Cucina</span><h3>Capo cucina</h3><p>Fabbisogni, acquisti, piani, approvazioni, produzione e gestione brigata.</p></article>
+          <article><span>Task assegnati</span><h3>Brigata</h3><p>Solo piani approvati. Registra fatto, quantità prodotta, posizione e nota.</p></article>
+          <article><span>Qoovex</span><h3>Super Admin</h3><p>Supporto temporaneo con MFA, motivo, banner persistente e audit completo.</p></article>
+        </div>
+      </section>
+
+      <section className="content-section support-section">
+        <div className="section-intro"><p className="eyebrow">Supporto auditato</p><h2>Il codice identifica.<br />Non autentica.</h2><p>Il dipendente Qoovex cerca la struttura, conferma MFA, dichiara il motivo e apre una sessione di trenta minuti. Ogni azione conserva la sua identità.</p></div>
+        <div className="change-contract"><div><small>Ingresso</small><strong>MFA + motivo + codice struttura</strong></div><div><span>Sessione temporanea</span><span>Banner sempre visibile</span><span>Azioni registrate</span><span>Notifica al direttore</span></div></div>
+      </section>
+
+      <section className="content-section cycle-section">
+        <div className="section-intro"><p className="eyebrow">Ciclo operativo</p><h2>Dal linguaggio naturale.<br />Alla prova fisica.</h2><p>Ogni passaggio aggiunge certezza. Nessuna proposta diventa ordine senza la decisione dello chef.</p></div>
+        <ol className="cycle-grid">{cycle.map((step, index) => <li key={step}><span>{String(index + 1).padStart(2, "0")}</span><strong>{step}</strong>{index < cycle.length - 1 ? <ArrowRight aria-hidden="true" /> : <CheckCircle aria-hidden="true" />}</li>)}</ol>
+      </section>
+
+      <section className="content-section mode-section">
+        <div className="section-intro"><p className="eyebrow">Tre modalità</p><h2>Impara. Prepara.<br />Poi resta essenziale.</h2></div>
+        <div className="mode-grid"><article><span>Setup</span><Calculator aria-hidden="true" /><h3>Insegna le regole</h3><p>Grammature, pezzi, vassoi, rese, margini, formule ed eccezioni.</p><small>Usato quando cambia la conoscenza</small></article><article data-primary><span>Pre-Service</span><Brain aria-hidden="true" /><h3>Decide prima</h3><p>Intake, calcoli, briefing, criticità, piano preparazioni e approvazione chef.</p><small>Cuore del prodotto</small></article><article><span>Service</span><DeviceMobile aria-hidden="true" /><h3>Consulta soltanto</h3><p>Allergeni, evento in corso, prossima portata, note critiche e domanda rapida.</p><small>Nessun input continuo</small></article></div>
+      </section>
+
+      <section className="content-section principles-section">
+        <div className="section-intro"><p className="eyebrow">Direzione grafica</p><h2>Registro di preparazione.<br />Ogni numero ha una traccia.</h2></div>
+        <div className="principles-grid"><article><strong>01</strong><h3>Event Spine</h3><p>Data, sala e persone mantengono stabile l’identità dell’evento.</p></article><article><strong>02</strong><h3>Calculation Trace</h3><p>Dato, regola, formula, risultato e provenienza formano una catena leggibile.</p></article><article><strong>03</strong><h3>Autorità visibile</h3><p>Richiesto non è approvato. Prodotto non è verificato. Lo scostamento resta esplicito.</p></article><article><strong>04</strong><h3>Teorico dichiarato</h3><p>Ogni rimanenza calcolata porta l’etichetta “teorico” o “da verificare”.</p></article></div>
+      </section>
+
+      <section className="content-section architecture-section">
+        <div className="section-intro"><p className="eyebrow">Superfici future</p><h2>Una semantica.<br />Rendering adatto.</h2><p>Token e contratti sono comuni; DOM/CSS e primitive native divergono dove serve.</p></div>
+        <div className="architecture-map"><article><Desktop aria-hidden="true" /><span>qoovex.com</span><h3>Web</h3><p>Marketing.</p></article><article><Desktop aria-hidden="true" /><span>app.qoovex.com</span><h3>Workspace</h3><p>Next.js responsive.</p></article><article><DeviceMobile aria-hidden="true" /><span>iOS · Android</span><h3>Mobile</h3><p>Futura app Expo.</p></article><article><Calculator aria-hidden="true" /><span>sirio.qoovex.com</span><h3>Sirio</h3><p>Scope e design system.</p></article></div>
+      </section>
+
+      <section className="closing-callout"><p className="eyebrow">Criterio</p><h2>Risposta secca.<br />Calcolo verificabile.</h2><Link className="button light" href="/components">Apri il catalogo <ArrowRight aria-hidden="true" /></Link></section>
     </>
   );
 }

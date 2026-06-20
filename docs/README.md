@@ -1,25 +1,17 @@
-# Docs
+# Qoovex — fonti canoniche
 
-Questa cartella contiene le regole operative del progetto.
+Qoovex è il cervello operativo pre-servizio per strutture eventi. Trasforma
+eventi e regole interne in calcoli, briefing e preparazioni verificabili.
 
-Metti qui:
+## Ordine di lettura
 
-- documentazione trasversale valida per tutto il monorepo;
-- guide di processo, standard di commento, pattern di codice e decisioni da leggere prima di toccare il repo.
+1. `ProductContext.md`: missione, utenti, scope e criteri di riuscita.
+2. `event-operations.md`: flusso e modello concettuale.
+3. `platform-strategy.md`: workspace web, mobile nativo e architettura futura.
+4. `ux/README.md`: principi di esperienza e ruoli.
+5. `design/README.md`: direzione grafica e componenti candidati in Sirio.
+6. `deployment-domains.md`: domini canonici delle tre superfici.
 
-Non mettere qui:
-
-- documentazione locale di una singola cartella sorgente: quella vive nel `README.md` della cartella stessa;
-- note temporanee, checklist personali o appunti non stabilizzati.
-
-Regole:
-
-- `docs/HowToUse.md` resta il punto di ingresso operativo;
-- `docs/OperationalProtocol.md` contiene la checklist operativa sintetica del monorepo;
-- `docs/CodePatterns.md` definisce l'ordine dei file e i pattern comuni;
-- `docs/ux/README.md` e' la fonte canonica per strategia UX, target,
-  posizionamento, landing, flussi e copy;
-- `docs/design/design-principles.md` e' l'entrypoint canonico per la
-  fondazione visuale Calore Misurato; gli altri quattro file in `docs/design`
-  completano direzione artistica, fondazioni, token e regole componenti;
-- se una regola vale solo per una cartella, documentala nella cartella, non qui.
+Auth e stato tecnico si verificano nel Qoovex Brain, nei README locali e nel
+codice. Backend Event e AI non sono ancora definiti: nessun documento deve
+presentare tipi concettuali come API o schema Prisma approvati.

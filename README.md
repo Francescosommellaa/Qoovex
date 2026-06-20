@@ -1,45 +1,40 @@
 # Qoovex
 
-Monorepo del prodotto Qoovex per professionisti della cucina.
+Monorepo di Qoovex Pre-Service Brain: l’assistente operativo che trasforma
+eventi e regole interne in calcoli, briefing e preparazioni verificabili.
 
-## Stato Corrente
+## Stato
 
-- `apps/web`: superficie pubblica minimale. Espone `/`, `/contact`, `/legal`
-  e `/legal/[document]`.
-- `apps/workspace`: runtime API-only con NextAuth, servizi e repository.
-- `apps/sirio`: scaffold Next.js vuoto.
-- `packages/ui`: scaffold TypeScript privato e vuoto.
-- `packages/brand`: fonte canonica del logo originale Qoovex.
+- `apps/web`: futuro sito marketing.
+- `apps/workspace`: futuro prodotto web responsive, account, auth e servizi.
+- `apps/mobile`: scaffold documentale della futura app Expo iOS/Android.
+- `apps/sirio`: scope, direzione grafica e componenti candidati.
+- `packages/ui`: token platform-neutral, nessun componente runtime Approved.
+- `packages/db`: baseline Prisma auth-only.
+- `packages/brand`: unica fonte del marchio Qoovex.
 
-La UX e la UI non sono definite. Non esistono componenti, token, font,
-pattern, temi o regole visuali canoniche.
+Il prodotto web resterà Next.js; la futura app mobile userà Expo iOS/Android.
+Backend Event e AI non sono ancora definiti.
 
-## Stack
-
-- pnpm workspaces e Turborepo
-- Next.js 16, React 19 e TypeScript
-- Prisma 7 e PostgreSQL
-- NextAuth v5 nel solo workspace
-- Vercel Blob e Resend
+Domini canonici: `qoovex.com` per il web pubblico, `app.qoovex.com` per il
+prodotto e `sirio.qoovex.com` per scope e design system.
 
 ## Regole
 
-- I limiti prodotto arrivano da `packages/config/plan_rules.json`.
-- Il workspace mantiene l'ordine FSD `shared -> entities -> features ->
-  widgets -> views -> app` quando i layer frontend verranno ricostruiti.
-- Le query passano da repository e servizi server-only.
-- Il codice condiviso cross-app vive in `packages/*`.
-- Usare solo Phosphor per le icone future; non disegnare SVG alternativi se
-  esiste un'icona adatta.
-- Il logo arriva solo da `packages/brand`; non duplicarlo nelle app.
+- Pre-Service è il centro; Service Mode resta consultivo e minimale.
+- Phone serve piani e registrazioni puntuali; desktop pianifica e approva.
+- Query DB solo in repository o servizi server-only autorizzati.
+- NextAuth resta confinato a `apps/workspace`.
+- Codice cross-app nei package; package mai dipendenti dalle app.
+- Logo solo da `@qoovex/brand`, icone applicative solo Phosphor.
 
 ## Comandi
 
 ```bash
-pnpm dev
 pnpm check:repo
 pnpm lint
 pnpm type-check
+pnpm test:unit
 pnpm build
 pnpm test:e2e
 ```

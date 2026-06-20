@@ -1,17 +1,7 @@
 # Sirio
 
-Laboratorio visuale Calore Misurato per Qoovex.
+Workbench di Qoovex Pre-Service Brain. `/` documenta scope e direzione;
+`/components` contiene il catalogo a sezioni con specimen phone, tablet e
+desktop. Gli specimen sono app-local e non sono API Expo approvate.
 
-Sirio mostra la fondazione pre-componenti:
-
-- principi;
-- palette e token;
-- tipografia;
-- modalita' operative;
-- stati;
-- quality bar.
-
-Sirio importa solo `@qoovex/ui/styles.css`. Non crea primitive riusabili e non
-definisce componenti runtime per `packages/ui`.
-
-Avvio: `pnpm --filter @qoovex/sirio dev`.
+Avvio: `pnpm --filter @qoovex/sirio dev` su `http://localhost:3002`.

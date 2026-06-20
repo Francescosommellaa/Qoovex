@@ -1,60 +1,44 @@
-# Product Context
+# Product Context — Qoovex Pre-Service Brain
 
-## Scopo
+## Missione
 
-Questo file è un punto di ingresso sintetico. Non è la fonte completa della
-strategia UX e non deve duplicare target, personas, posizionamento, landing o
-copy.
+Qoovex è l’assistente operativo per strutture eventi. Prima del servizio trasforma eventi, menu, numeri, allergeni e regole interne in calcoli verificabili, briefing e preparazioni approvate.
 
-## Identità
+La domanda guida è: **cosa serve, cosa manca e quale regola produce questo numero?**
 
-Qoovex è un SaaS verticale italiano per chef e cuochi professionisti.
+## Utenti
 
-Promessa prodotto:
+- Event intake: inserisce l’evento in testo libero e verifica l’estrazione.
+- Direzione: individua eventi incompleti, conflitti e criticità future.
+- Chef: valuta quantità proposte, decide margini, priorità, assegnazioni e date.
+- Brigata: vede solo preparazioni approvate e registra produzione e posizione.
+- Sala: riceve un briefing pre-servizio con timing, note e vincoli pertinenti.
 
-> Qoovex è il workspace professionale per chef che trasforma ricette in
-> operatività reale.
+## Autorità e privacy
 
-Qoovex non è:
+- Admin/Direttore: accesso completo alla propria struttura; invita e revoca capi reparto.
+- Capo sala: esclusivamente briefing e dati necessari alla sala.
+- Capo cucina: pianificazione cucina, produzione e gestione brigata.
+- Brigata: soltanto piani approvati e assegnati dal Capo cucina.
+- Super Admin Qoovex: supporto temporaneo con MFA, motivo, banner e audit.
 
-- un’app consumer per salvare ricette;
-- un POS;
-- un ERP completo;
-- un gestionale ristorante generico;
-- un task manager generico;
-- un social food consumer;
-- un clone di Notion per il food.
+Il codice struttura identifica il tenant ma non autentica. Ogni autorizzazione è
+verificata lato server con default deny e proiezioni distinte per reparto.
 
-## Fonti canoniche
+## Modalità
 
-- Business rule, feature, piani e permessi: Qoovex Brain.
-- Limiti e gating commerciali: `packages/config/plan_rules.json`.
-- Strategia UX e messaggi: [`docs/ux/README.md`](ux/README.md).
-- Visual language e direzione UI:
-  [`docs/design/design-principles.md`](design/design-principles.md).
-- Audit e ricerca: [`docs/ux/ux-research-brief.md`](ux/ux-research-brief.md).
-- Target e personas:
-  [`docs/ux/target-and-personas.md`](ux/target-and-personas.md).
-- Posizionamento:
-  [`docs/ux/positioning-and-messaging.md`](ux/positioning-and-messaging.md).
-- Landing:
-  [`docs/ux/landing-page-ux-brief.md`](ux/landing-page-ux-brief.md).
-- Principi prodotto:
-  [`docs/ux/workspace-ux-principles.md`](ux/workspace-ux-principles.md).
-- Priorità feature:
-  [`docs/ux/feature-prioritization.md`](ux/feature-prioritization.md).
-- Copy: [`docs/ux/copy-strategy.md`](ux/copy-strategy.md).
+1. **Setup:** insegna grammature, rese, vassoi, pezzi, margini, arrotondamenti ed eccezioni.
+2. **Pre-Service:** struttura gli eventi, calcola, propone, genera briefing e segnala mancanze.
+3. **Service:** consulta allergeni, eventi in corso, prossima portata e note critiche; non richiede aggiornamento continuo.
 
-## Decisione corrente
+## Dentro la prima direzione
 
-La nicchia primaria provvisoria è costituita da chef consulenti e freelance
-italiani che gestiscono ricette e menu per più clienti, individualmente o con
-piccoli team.
+Intake testuale, revisione dati, regole interne, calcoli tracciabili, piano preparazioni futuro, approvazione chef, task brigata, briefing cucina/sala, criticità e separazione tra quantità teoriche e verificate.
 
-Questa è una decisione strategica da validare, non un dato di mercato.
+## Fuori
 
-## Regola anti-drift
+KDS, gestione live complessa, CRM, fatture, POS, payroll, HACCP completo, magazzino contabile, fornitori completi, marketplace e app cliente.
 
-Quando cambia una decisione UX o visuale, aggiornare il documento specifico in
-`docs/ux` o `docs/design`. Aggiornare questo file solo se cambia l’identità
-sintetica del prodotto o la mappa delle fonti.
+## Criterio di riuscita
+
+In meno di 30 secondi lo chef riconosce eventi futuri, lavoro anticipabile, richiesto, approvato, prodotto, mancante, teorico e da verificare. Nessun numero viene presentato come certo senza dati e regola visibili.

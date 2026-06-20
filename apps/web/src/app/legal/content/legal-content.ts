@@ -31,7 +31,7 @@ export const legalDocuments = {
         items: [
           "Dati di account e profilo, come nome, email, username e immagine.",
           "Dati di autenticazione e sicurezza, inclusi eventi di accesso, dispositivi e verifiche.",
-          "Contenuti inseriti nel workspace, come ricette, menu, liste e piani di lavoro.",
+          "Contenuti operativi inseriti nel servizio, come eventi, conteggi, menu, preparazioni e timeline.",
           "Dati tecnici necessari al funzionamento, come log applicativi, indirizzo IP e informazioni sul browser.",
           "Comunicazioni inviate volontariamente via email.",
         ],
@@ -131,7 +131,7 @@ export const legalDocuments = {
       {
         title: "1. Servizio",
         paragraphs: [
-          "Qoovex e un workspace operativo per professionisti della cucina. Permette di organizzare ricette, menu, informazioni alimentari e attivita di lavoro secondo le funzioni disponibili nel piano scelto.",
+          "Qoovex e un sistema operativo per strutture eventi. Riunisce informazioni di evento, menu operativo, allergeni, preparazioni e timing per coordinare cucina e servizio.",
         ],
       },
       {
@@ -150,9 +150,9 @@ export const legalDocuments = {
         ],
       },
       {
-        title: "4. Piani, limiti e pagamenti",
+        title: "4. Condizioni economiche future",
         paragraphs: [
-          "Funzioni, limiti e prezzi applicabili sono quelli comunicati prima dell'acquisto. Eventuali servizi a pagamento indicheranno durata, rinnovo, imposte e modalita di recesso prima della conferma.",
+          "Eventuali servizi a pagamento indicheranno funzioni, prezzi, durata, rinnovo, imposte e modalita di recesso prima della conferma.",
         ],
       },
       {

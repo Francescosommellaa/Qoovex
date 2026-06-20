@@ -1,5 +1,14 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const sirioOnly = process.env.SIRIO_ONLY === "1";
+
+const sirioServer = {
+  command: "pnpm --filter @qoovex/sirio dev",
+  url: "http://localhost:3002",
+  reuseExistingServer: !process.env.CI,
+  timeout: 120_000,
+};
+
 export default defineConfig({
   testDir: ".",
   testMatch: [
@@ -16,8 +25,8 @@ export default defineConfig({
   },
   projects: [
     {
-      name: "chromium-375",
-      use: { ...devices["Desktop Chrome"], viewport: { width: 375, height: 812 } },
+      name: "chromium-390",
+      use: { ...devices["Desktop Chrome"], viewport: { width: 390, height: 844 } },
     },
     {
       name: "chromium-375-short",
@@ -40,15 +49,15 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 1000 } },
     },
     {
-      name: "webkit-375",
-      use: { ...devices["Desktop Safari"], viewport: { width: 375, height: 812 } },
+      name: "webkit-390",
+      use: { ...devices["Desktop Safari"], viewport: { width: 390, height: 844 } },
     },
     {
       name: "webkit-1440",
       use: { ...devices["Desktop Safari"], viewport: { width: 1440, height: 1000 } },
     },
   ],
-  webServer: [
+  webServer: sirioOnly ? [sirioServer] : [
     {
       command: "pnpm --filter @qoovex/web dev",
       url: "http://localhost:3000/",
@@ -61,11 +70,6 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },
-    {
-      command: "pnpm --filter @qoovex/sirio dev",
-      url: "http://localhost:3002",
-      reuseExistingServer: !process.env.CI,
-      timeout: 120_000,
-    },
+    sirioServer,
   ],
 });

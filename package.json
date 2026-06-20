@@ -1,7 +1,7 @@
 {
   "name": "qoovex",
   "private": true,
-  "packageManager": "pnpm@11.3.0",
+  "packageManager": "pnpm@11.8.0",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
@@ -16,6 +16,8 @@
     "test:e2e": "playwright test",
     "test:e2e:update": "playwright test --update-snapshots",
     "test:unit": "turbo run test",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
     "db:generate": "turbo run db:generate --filter=@qoovex/db",
     "db:push": "turbo run db:push --filter=@qoovex/db",
     "db:migrate": "turbo run db:migrate --filter=@qoovex/db",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
+    "@changesets/cli": "^2.31.0",
     "@playwright/test": "^1.57.0",
     "chrome-launcher": "^1.2.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",

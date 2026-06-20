@@ -35,7 +35,7 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
     return {
       ...existingUser,
       imageUrl: getUserAvatarUrl(existingUser),
-      isAdmin: false,
+      isAdmin: existingUser.platformRole === "SUPER_ADMIN" || existingUser.structureMemberships.some(({ role }) => role === "ADMIN"),
     };
   }
 
@@ -63,6 +63,6 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
   return {
     ...workspaceUser,
     imageUrl: getUserAvatarUrl(workspaceUser),
-    isAdmin: false,
+    isAdmin: workspaceUser.platformRole === "SUPER_ADMIN" || workspaceUser.structureMemberships.some(({ role }) => role === "ADMIN"),
   };
 }
