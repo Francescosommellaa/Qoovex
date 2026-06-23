@@ -1,3 +1,14 @@
-@import "./tokens.css";
-@import "./base.css";
-@import "./components.css";
+@layer qv.tokens, qv.base, qv.utilities, qv.components;
+
+@import './fonts.css' layer(qv.tokens);
+@import './tokens.css' layer(qv.tokens);
+@import './base.css' layer(qv.base);
+@import './utilities.css' layer(qv.utilities);
+@import './components/primitives.css' layer(qv.components);
+@import './components/forms.css' layer(qv.components);
+@import './components/feedback.css' layer(qv.components);
+@import './components/overlays.css' layer(qv.components);
+@import './components/navigation.css' layer(qv.components);
+@import './components/layout.css' layer(qv.components);
+@import './components/product.css' layer(qv.components);
+@import './components.css' layer(qv.components);

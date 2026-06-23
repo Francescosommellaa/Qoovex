@@ -13,8 +13,8 @@ nuova firma: collega dato, regola, formula, risultato e stato di verifica.
 - Grafite `#182024`, acciaio `#526168`, canvas `#F3F6F4`.
 - Verde `#28704A` solo per pronto; ambra `#99500E` per attenzione; rosso
   `#AD3030` per blocchi.
-- Barlow Condensed per titoli operativi, Source Sans 3 per testo, IBM Plex Mono
-  per orari, quantità e revisioni.
+- Cabinet Grotesk self-hosted da Fontshare per titoli operativi, General Sans
+  self-hosted da Fontshare per testo e IBM Plex Mono per orari, quantità e revisioni.
 - Target interattivo Qoovex: minimo 48 px.
 - Motion solo per continuità; reduced motion elimina transizioni non essenziali.
 

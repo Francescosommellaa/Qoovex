@@ -1,0 +1,103 @@
+.web-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, var(--qv-color-accent-subtle), transparent 34rem),
+    var(--qv-color-background);
+  color: var(--qv-color-foreground);
+}
+
+.web-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--qv-space-3);
+}
+
+.web-action-link {
+  min-height: var(--qv-target-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--qv-space-2);
+  border: var(--qv-border-width-default) solid var(--qv-color-border);
+  border-radius: var(--qv-radius-button);
+  padding-inline: var(--qv-space-4);
+  color: var(--qv-color-foreground);
+  font-weight: var(--qv-font-weight-semibold);
+  text-decoration: none;
+  transition: var(--qv-transition-hover);
+}
+
+.web-action-link:hover {
+  border-color: var(--qv-color-border-strong);
+  background: var(--qv-color-surface-subtle);
+}
+
+.web-action-link:focus-visible {
+  outline: var(--qv-border-width-focus) solid var(--qv-color-focus-ring);
+  outline-offset: var(--qv-space-1);
+}
+
+.web-action-link[data-variant='primary'] {
+  border-color: var(--qv-color-accent);
+  background: var(--qv-color-accent);
+  color: var(--qv-color-accent-foreground);
+}
+
+.web-action-link[data-variant='subtle'] {
+  background: var(--qv-color-surface);
+}
+
+.web-contact-card {
+  max-width: var(--qv-reading-max);
+}
+
+.web-legal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.web-legal-card {
+  height: 100%;
+}
+
+.web-legal-card__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.web-legal-card__link:hover {
+  color: var(--qv-color-accent);
+}
+
+.web-document-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--qv-space-2);
+  color: var(--qv-color-muted-foreground);
+}
+
+.web-legal-section {
+  display: grid;
+  gap: var(--qv-space-3);
+}
+
+.web-legal-section ul {
+  display: grid;
+  gap: var(--qv-space-2);
+  margin: 0;
+  padding-inline-start: var(--qv-space-5);
+  color: var(--qv-color-muted-foreground);
+}
+
+@media (max-width: 47.999rem) {
+  .web-action-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .web-action-link {
+    width: 100%;
+  }
+}

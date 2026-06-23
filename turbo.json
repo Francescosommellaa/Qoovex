@@ -39,6 +39,9 @@
     "@qoovex/db#build": {
       "cache": false
     },
+    "@qoovex/brand#build": {
+      "outputs": []
+    },
     "db:generate": {
       "cache": false
     },

@@ -1,0 +1,114 @@
+.marketing-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, var(--qv-color-warning-subtle), transparent 32rem),
+    var(--qv-color-background);
+  color: var(--qv-color-foreground);
+}
+
+.marketing-hero {
+  padding-top: var(--qv-space-12);
+}
+
+.marketing-hero__copy {
+  max-width: var(--qv-reading-max);
+}
+
+.marketing-hero__visual {
+  min-width: 0;
+}
+
+.marketing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--qv-space-3);
+}
+
+.marketing-proof {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--qv-space-3);
+  margin: 0;
+}
+
+.marketing-proof div {
+  display: grid;
+  gap: var(--qv-space-1);
+  padding-top: var(--qv-space-3);
+  border-top: var(--qv-border-width-default) solid var(--qv-color-border);
+}
+
+.marketing-proof dt {
+  color: var(--qv-color-muted-foreground);
+  font-size: var(--qv-font-size-caption);
+}
+
+.marketing-proof dd {
+  margin: 0;
+  font-family: var(--qv-font-family-data);
+  font-size: var(--qv-font-size-body-sm);
+  font-weight: var(--qv-font-weight-semibold);
+}
+
+.marketing-preview {
+  display: grid;
+  gap: var(--qv-space-4);
+}
+
+.marketing-preview__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--qv-space-3);
+}
+
+.marketing-feature-card {
+  display: grid;
+  gap: var(--qv-space-3);
+}
+
+.marketing-feature-card__icon {
+  display: inline-grid;
+  place-items: center;
+  width: var(--qv-space-10);
+  height: var(--qv-space-10);
+  border-radius: var(--qv-radius-full);
+  background: var(--qv-color-accent-subtle);
+  color: var(--qv-color-accent);
+  font-family: var(--qv-font-family-data);
+  font-weight: var(--qv-font-weight-bold);
+}
+
+.marketing-feature-card__action {
+  margin-top: auto;
+}
+
+.marketing-cta[data-variant='accent'] {
+  background: var(--qv-color-accent);
+  color: var(--qv-color-accent-foreground);
+}
+
+.marketing-trust-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--qv-space-4);
+}
+
+.marketing-trust-bar__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--qv-space-4);
+}
+
+@media (max-width: 47.999rem) {
+  .marketing-proof,
+  .marketing-preview__metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .marketing-trust-bar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

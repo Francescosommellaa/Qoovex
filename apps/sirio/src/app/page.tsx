@@ -1,71 +1,331 @@
-import { ArrowRight, Brain, Calculator, CheckCircle, Desktop, DeviceMobile, Warning } from "@phosphor-icons/react/dist/ssr";
+"use client";
+
+import { ArrowRight, Brain, Calculator, CheckCircle, Desktop, DeviceMobile } from "@phosphor-icons/react";
+import {
+  Badge,
+  Button,
+  CalculationTrace,
+  Card,
+  Container,
+  DataPanel,
+  Grid,
+  Heading,
+  MetricCard,
+  PageHeader,
+  QuantityStatus,
+  Section,
+  SectionHeader,
+  Stack,
+  StatusBadge,
+  Surface,
+  Text
+} from "@qoovex/ui/web";
 import Link from "next/link";
 
 import { preparationFixture as prep } from "./event-data";
 
 const cycle = ["Insegna", "Struttura", "Calcola", "Propone", "Chef approva", "Brigata produce", "Verifica"];
 
+const scopeCards = [
+  {
+    eyebrow: "Dentro",
+    title: "Conoscenza applicata",
+    description: "Eventi, regole, calcoli, briefing, proposte, approvazioni e verifiche."
+  },
+  {
+    eyebrow: "Fuori",
+    title: "Controllo continuo",
+    description: "KDS, input live obbligatori, CRM, fatture e magazzino contabile completo."
+  },
+  {
+    eyebrow: "Prova",
+    title: "Trenta secondi",
+    description: "Futuro, anticipabile, approvato, prodotto, mancante, teorico e verificato."
+  }
+] as const;
+
+const roles = [
+  ["Admin", "Direttore", "Accesso completo alla struttura. Invita, revoca e supervisiona sala e cucina."],
+  ["Sala", "Capo sala", "Briefing, coperti, bambini, allergeni pertinenti, orari e note di servizio."],
+  ["Cucina", "Capo cucina", "Fabbisogni, acquisti, piani, approvazioni, produzione e gestione brigata."],
+  ["Task assegnati", "Brigata", "Solo piani approvati. Registra fatto, quantità prodotta, posizione e nota."],
+  ["Qoovex", "Super Admin", "Supporto temporaneo con MFA, motivo, banner persistente e audit completo."]
+] as const;
+
+const modes = [
+  ["Setup", "Insegna le regole", "Grammature, pezzi, vassoi, rese, margini, formule ed eccezioni.", "Usato quando cambia la conoscenza", Calculator],
+  ["Pre-Service", "Decide prima", "Intake, calcoli, briefing, criticità, piano preparazioni e approvazione chef.", "Cuore del prodotto", Brain],
+  ["Service", "Consulta soltanto", "Allergeni, evento in corso, prossima portata, note critiche e domanda rapida.", "Nessun input continuo", DeviceMobile]
+] as const;
+
+const principles = [
+  ["01", "Event Spine", "Data, sala e persone mantengono stabile l’identità dell’evento."],
+  ["02", "Calculation Trace", "Dato, regola, formula, risultato e provenienza formano una catena leggibile."],
+  ["03", "Autorità visibile", "Richiesto non è approvato. Prodotto non è verificato. Lo scostamento resta esplicito."],
+  ["04", "Teorico dichiarato", "Ogni rimanenza calcolata porta l’etichetta “teorico” o “da verificare”."]
+] as const;
+
+const surfaces = [
+  [Desktop, "qoovex.com", "Web", "Marketing."],
+  [Desktop, "app.qoovex.com", "Workspace", "Next.js responsive."],
+  [DeviceMobile, "iOS · Android", "Mobile", "Futura app Expo."],
+  [Calculator, "sirio.qoovex.com", "Sirio", "Scope e design system."]
+] as const;
+
 export default function DirectionPage() {
   return (
-    <>
-      <section className="hero pre-service-hero">
-        <div className="hero-copy">
-          <p className="eyebrow">Qoovex / Pre-Service Brain</p>
-          <h1>Prima del servizio.<br />Numeri che reggono.</h1>
-          <p className="hero-lead">Qoovex trasforma eventi e regole interne in quantità, briefing e preparazioni verificabili. L’AI comprende la domanda. I dati e le regole producono la risposta.</p>
-          <div className="hero-actions"><Link className="button primary" href="/components">Esplora i componenti <ArrowRight aria-hidden="true" /></Link><a className="button secondary" href="#scope">Leggi lo scope</a></div>
-          <dl className="hero-proof"><div><dt>Centro</dt><dd>Pre-Service</dd></div><div><dt>Autorità</dt><dd>Lo chef decide</dd></div><div><dt>Vincolo</dt><dd>Nessun numero inventato</dd></div></dl>
-        </div>
-        <div className="brain-sheet" aria-label="Calcolo verificabile cotolette bambini">
-          <header><div><small>DOMANI · {prep.event.toUpperCase()}</small><h2>{prep.item}</h2></div><span><Warning aria-hidden="true" /> Da verificare</span></header>
-          <div className="calculation-spine"><div><small>DATO</small><strong>{prep.children} bambini</strong></div><i>×</i><div><small>REGOLA</small><strong>1 cad. + 10%</strong></div><i>=</i><div><small>RICHIESTO</small><strong>{prep.required}</strong></div></div>
-          <div className="quantity-ledger"><div><small>Approvato</small><strong>{prep.approved}</strong><span>Chef</span></div><div><small>Prodotto</small><strong>{prep.produced}</strong><span>{prep.location}</span></div><div><small>Assegnato</small><strong>{prep.assigned}</strong><span>Domani</span></div><div data-theoretical><small>Extra teoriche</small><strong>{prep.theoretical}</strong><span>Non verificate</span></div></div>
-          <footer><div><CheckCircle aria-hidden="true" /><span><small>STATO</small><strong>OK — verifica fisica consigliata</strong></span></div><button type="button"><Brain aria-hidden="true" /> Chiedi a Qoovex</button></footer>
-        </div>
-      </section>
+    <Stack as="div" className="sirio-direction" gap="0">
+      <Section className="sirio-direction__intro" spacing="lg">
+        <Container>
+          <Grid columns={1} desktopColumns={2} gap="8" align="center">
+            <Stack gap="6">
+              <PageHeader
+                align="start"
+                eyebrow="Qoovex / Pre-Service Brain"
+                title={<>Prima del servizio.<br />Numeri che reggono.</>}
+                description="Qoovex trasforma eventi e regole interne in quantità, briefing e preparazioni verificabili. L’AI comprende la domanda. I dati e le regole producono la risposta."
+                actions={
+                  <div className="sirio-action-row">
+                    <Link className="sirio-action-link" data-variant="primary" href="/components">
+                      Esplora i componenti <ArrowRight aria-hidden="true" />
+                    </Link>
+                    <a className="sirio-action-link" href="#scope">Leggi lo scope</a>
+                  </div>
+                }
+              />
+              <Grid columns={1} tabletColumns={3} gap="3" aria-label="Prove direzione">
+                <MetricCard label="Centro" value="Pre-Service" />
+                <MetricCard label="Autorità" value="Lo chef decide" />
+                <MetricCard label="Vincolo" value="Nessun numero inventato" />
+              </Grid>
+            </Stack>
+            <DataPanel
+              className="sirio-prep-panel"
+              variant="glass"
+              eyebrow={prep.date}
+              title={prep.item}
+              description={`${prep.children} bambini · ${prep.location}`}
+              actions={<StatusBadge status="warning">Da verificare</StatusBadge>}
+              footer={
+                <Stack direction="row" align="center" justify="between" gap="4" wrap>
+                  <Text size="body-sm" tone="muted">
+                    OK — verifica fisica consigliata
+                  </Text>
+                  <Button variant="secondary" disabled startIcon={<Brain aria-hidden="true" />}>
+                    Chiedi a Qoovex
+                  </Button>
+                </Stack>
+              }
+            >
+              <Stack gap="4">
+                <CalculationTrace
+                  title="Cotolette bambini"
+                  input={`${prep.children} bambini`}
+                  rule="1 cad. + 10%"
+                  result={String(prep.required)}
+                  formula={prep.formula}
+                  source="Regola comunioni · arrotonda per eccesso"
+                />
+                <QuantityStatus
+                  items={[
+                    { label: "Approvato", value: prep.approved, detail: "Chef", state: "verified" },
+                    { label: "Prodotto", value: prep.produced, detail: prep.location, state: "default" },
+                    { label: "Assegnato", value: prep.assigned, detail: "Domani", state: "default" },
+                    { label: "Extra teoriche", value: prep.theoretical, detail: "Non verificate", state: "theoretical" }
+                  ]}
+                />
+              </Stack>
+            </DataPanel>
+          </Grid>
+        </Container>
+      </Section>
 
-      <section id="scope" className="content-section scope-section">
-        <div className="section-intro"><p className="eyebrow">Tesi</p><h2>Assistente operativo.<br />Non gestionale live.</h2><p>Il prodotto prepara persone e reparti prima dell’arrivo degli ospiti. Durante il servizio resta una superficie stabile da consultare, non un altro lavoro da aggiornare.</p></div>
-        <div className="scope-grid"><article><span>Dentro</span><h3>Conoscenza applicata</h3><p>Eventi, regole, calcoli, briefing, proposte, approvazioni e verifiche.</p></article><article><span>Fuori</span><h3>Controllo continuo</h3><p>KDS, input live obbligatori, CRM, fatture e magazzino contabile completo.</p></article><article><span>Prova</span><h3>Trenta secondi</h3><p>Futuro, anticipabile, approvato, prodotto, mancante, teorico e verificato.</p></article></div>
-      </section>
+      <Section id="scope" spacing="lg">
+        <Container>
+          <Stack gap="6">
+            <SectionHeader
+              align="split"
+              eyebrow="Tesi"
+              title={<>Assistente operativo.<br />Non gestionale live.</>}
+              description="Il prodotto prepara persone e reparti prima dell’arrivo degli ospiti. Durante il servizio resta una superficie stabile da consultare, non un altro lavoro da aggiornare."
+            />
+            <Grid columns={1} tabletColumns={3} gap="4">
+              {scopeCards.map((card) => (
+                <Card key={card.title} padding="md" radius="lg">
+                  <Stack gap="3">
+                    <Badge tone="warning">{card.eyebrow}</Badge>
+                    <Heading as="h3" size="heading-sm">{card.title}</Heading>
+                    <Text tone="muted">{card.description}</Text>
+                  </Stack>
+                </Card>
+              ))}
+            </Grid>
+          </Stack>
+        </Container>
+      </Section>
 
-      <section className="content-section role-section">
-        <div className="section-intro"><p className="eyebrow">Accesso minimo necessario</p><h2>Una struttura.<br />Quattro viste isolate.</h2><p>Il dato comune resta coerente, ma ogni reparto riceve soltanto campi, azioni e notifiche pertinenti. I controlli sono applicati lato server.</p></div>
-        <div className="role-grid">
-          <article><span>Admin</span><h3>Direttore</h3><p>Accesso completo alla struttura. Invita, revoca e supervisiona sala e cucina.</p></article>
-          <article><span>Sala</span><h3>Capo sala</h3><p>Briefing, coperti, bambini, allergeni pertinenti, orari e note di servizio.</p></article>
-          <article><span>Cucina</span><h3>Capo cucina</h3><p>Fabbisogni, acquisti, piani, approvazioni, produzione e gestione brigata.</p></article>
-          <article><span>Task assegnati</span><h3>Brigata</h3><p>Solo piani approvati. Registra fatto, quantità prodotta, posizione e nota.</p></article>
-          <article><span>Qoovex</span><h3>Super Admin</h3><p>Supporto temporaneo con MFA, motivo, banner persistente e audit completo.</p></article>
-        </div>
-      </section>
+      <Section spacing="lg">
+        <Container>
+          <Stack gap="6">
+            <SectionHeader
+              align="split"
+              eyebrow="Accesso minimo necessario"
+              title={<>Una struttura.<br />Quattro viste isolate.</>}
+              description="Il dato comune resta coerente, ma ogni reparto riceve soltanto campi, azioni e notifiche pertinenti. I controlli sono applicati lato server."
+            />
+            <Grid columns={1} tabletColumns={2} desktopColumns={3} gap="4">
+              {roles.map(([eyebrow, title, description]) => (
+                <Card key={title} padding="md" radius="lg">
+                  <Stack gap="3">
+                    <Badge tone="accent">{eyebrow}</Badge>
+                    <Heading as="h3" size="heading-sm">{title}</Heading>
+                    <Text tone="muted">{description}</Text>
+                  </Stack>
+                </Card>
+              ))}
+            </Grid>
+          </Stack>
+        </Container>
+      </Section>
 
-      <section className="content-section support-section">
-        <div className="section-intro"><p className="eyebrow">Supporto auditato</p><h2>Il codice identifica.<br />Non autentica.</h2><p>Il dipendente Qoovex cerca la struttura, conferma MFA, dichiara il motivo e apre una sessione di trenta minuti. Ogni azione conserva la sua identità.</p></div>
-        <div className="change-contract"><div><small>Ingresso</small><strong>MFA + motivo + codice struttura</strong></div><div><span>Sessione temporanea</span><span>Banner sempre visibile</span><span>Azioni registrate</span><span>Notifica al direttore</span></div></div>
-      </section>
+      <Section spacing="lg">
+        <Container>
+          <Stack gap="6">
+            <SectionHeader
+              align="split"
+              eyebrow="Supporto auditato"
+              title={<>Il codice identifica.<br />Non autentica.</>}
+              description="Il dipendente Qoovex cerca la struttura, conferma MFA, dichiara il motivo e apre una sessione di trenta minuti. Ogni azione conserva la sua identità."
+            />
+            <Surface className="sirio-support-chain" variant="elevated" padding="lg" radius="lg">
+              <Stack direction="row" align="center" justify="between" gap="4" wrap>
+                <MetricCard label="Ingresso" value="MFA + motivo" description="Codice struttura come identificativo" />
+                <Stack direction="row" gap="2" wrap>
+                  <StatusBadge status="info">Sessione temporanea</StatusBadge>
+                  <StatusBadge status="warning">Banner visibile</StatusBadge>
+                  <StatusBadge status="verified">Azioni registrate</StatusBadge>
+                  <StatusBadge status="info">Notifica al direttore</StatusBadge>
+                </Stack>
+              </Stack>
+            </Surface>
+          </Stack>
+        </Container>
+      </Section>
 
-      <section className="content-section cycle-section">
-        <div className="section-intro"><p className="eyebrow">Ciclo operativo</p><h2>Dal linguaggio naturale.<br />Alla prova fisica.</h2><p>Ogni passaggio aggiunge certezza. Nessuna proposta diventa ordine senza la decisione dello chef.</p></div>
-        <ol className="cycle-grid">{cycle.map((step, index) => <li key={step}><span>{String(index + 1).padStart(2, "0")}</span><strong>{step}</strong>{index < cycle.length - 1 ? <ArrowRight aria-hidden="true" /> : <CheckCircle aria-hidden="true" />}</li>)}</ol>
-      </section>
+      <Section spacing="lg">
+        <Container>
+          <Stack gap="6">
+            <SectionHeader
+              align="split"
+              eyebrow="Ciclo operativo"
+              title={<>Dal linguaggio naturale.<br />Alla prova fisica.</>}
+              description="Ogni passaggio aggiunge certezza. Nessuna proposta diventa ordine senza la decisione dello chef."
+            />
+            <Grid as="ol" className="sirio-cycle-list" columns={1} tabletColumns={4} desktopColumns={4} gap="3">
+              {cycle.map((step, index) => (
+                <li key={step}>
+                  <Surface variant="subtle" padding="md" radius="lg">
+                    <Stack gap="3">
+                      <Text size="data" tone="accent" weight="semibold">{String(index + 1).padStart(2, "0")}</Text>
+                      <Text as="strong" size="label" weight="semibold">{step}</Text>
+                      {index < cycle.length - 1 ? <ArrowRight aria-hidden="true" /> : <CheckCircle aria-hidden="true" />}
+                    </Stack>
+                  </Surface>
+                </li>
+              ))}
+            </Grid>
+          </Stack>
+        </Container>
+      </Section>
 
-      <section className="content-section mode-section">
-        <div className="section-intro"><p className="eyebrow">Tre modalità</p><h2>Impara. Prepara.<br />Poi resta essenziale.</h2></div>
-        <div className="mode-grid"><article><span>Setup</span><Calculator aria-hidden="true" /><h3>Insegna le regole</h3><p>Grammature, pezzi, vassoi, rese, margini, formule ed eccezioni.</p><small>Usato quando cambia la conoscenza</small></article><article data-primary><span>Pre-Service</span><Brain aria-hidden="true" /><h3>Decide prima</h3><p>Intake, calcoli, briefing, criticità, piano preparazioni e approvazione chef.</p><small>Cuore del prodotto</small></article><article><span>Service</span><DeviceMobile aria-hidden="true" /><h3>Consulta soltanto</h3><p>Allergeni, evento in corso, prossima portata, note critiche e domanda rapida.</p><small>Nessun input continuo</small></article></div>
-      </section>
+      <Section spacing="lg">
+        <Container>
+          <Stack gap="6">
+            <SectionHeader
+              align="start"
+              eyebrow="Tre modalità"
+              title={<>Impara. Prepara.<br />Poi resta essenziale.</>}
+            />
+            <Grid columns={1} tabletColumns={3} gap="4">
+              {modes.map(([eyebrow, title, description, note, Icon]) => (
+                <Card key={title} className="sirio-mode-card" data-primary={eyebrow === "Pre-Service" || undefined} padding="md" radius="lg">
+                  <Stack gap="4">
+                    <Badge tone={eyebrow === "Pre-Service" ? "warning" : "neutral"}>{eyebrow}</Badge>
+                    <Icon aria-hidden="true" />
+                    <Heading as="h3" size="heading-sm" tone={eyebrow === "Pre-Service" ? "inverse" : "default"}>{title}</Heading>
+                    <Text tone={eyebrow === "Pre-Service" ? "inverse" : "muted"}>{description}</Text>
+                    <Text size="caption" tone={eyebrow === "Pre-Service" ? "warning" : "muted"}>{note}</Text>
+                  </Stack>
+                </Card>
+              ))}
+            </Grid>
+          </Stack>
+        </Container>
+      </Section>
 
-      <section className="content-section principles-section">
-        <div className="section-intro"><p className="eyebrow">Direzione grafica</p><h2>Registro di preparazione.<br />Ogni numero ha una traccia.</h2></div>
-        <div className="principles-grid"><article><strong>01</strong><h3>Event Spine</h3><p>Data, sala e persone mantengono stabile l’identità dell’evento.</p></article><article><strong>02</strong><h3>Calculation Trace</h3><p>Dato, regola, formula, risultato e provenienza formano una catena leggibile.</p></article><article><strong>03</strong><h3>Autorità visibile</h3><p>Richiesto non è approvato. Prodotto non è verificato. Lo scostamento resta esplicito.</p></article><article><strong>04</strong><h3>Teorico dichiarato</h3><p>Ogni rimanenza calcolata porta l’etichetta “teorico” o “da verificare”.</p></article></div>
-      </section>
+      <Section className="sirio-principles" spacing="lg">
+        <Container>
+          <Stack gap="6">
+            <SectionHeader
+              align="start"
+              eyebrow="Direzione grafica"
+              title={<>Registro di preparazione.<br />Ogni numero ha una traccia.</>}
+            />
+            <Grid columns={1} tabletColumns={2} gap="4">
+              {principles.map(([number, title, description]) => (
+                <Card key={number} className="sirio-principle-card" variant="glass" padding="md" radius="lg">
+                  <Stack gap="4">
+                    <Text size="data" tone="warning" weight="semibold">{number}</Text>
+                    <Heading as="h3" size="heading-sm" tone="inverse">{title}</Heading>
+                    <Text tone="inverse">{description}</Text>
+                  </Stack>
+                </Card>
+              ))}
+            </Grid>
+          </Stack>
+        </Container>
+      </Section>
 
-      <section className="content-section architecture-section">
-        <div className="section-intro"><p className="eyebrow">Superfici future</p><h2>Una semantica.<br />Rendering adatto.</h2><p>Token e contratti sono comuni; DOM/CSS e primitive native divergono dove serve.</p></div>
-        <div className="architecture-map"><article><Desktop aria-hidden="true" /><span>qoovex.com</span><h3>Web</h3><p>Marketing.</p></article><article><Desktop aria-hidden="true" /><span>app.qoovex.com</span><h3>Workspace</h3><p>Next.js responsive.</p></article><article><DeviceMobile aria-hidden="true" /><span>iOS · Android</span><h3>Mobile</h3><p>Futura app Expo.</p></article><article><Calculator aria-hidden="true" /><span>sirio.qoovex.com</span><h3>Sirio</h3><p>Scope e design system.</p></article></div>
-      </section>
+      <Section spacing="lg">
+        <Container>
+          <Stack gap="6">
+            <SectionHeader
+              align="split"
+              eyebrow="Superfici future"
+              title={<>Una semantica.<br />Rendering adatto.</>}
+              description="Token e contratti sono comuni; DOM/CSS e primitive native divergono dove serve."
+            />
+            <Grid columns={1} tabletColumns={2} desktopColumns={4} gap="4">
+              {surfaces.map(([Icon, label, title, description]) => (
+                <Card key={label} padding="md" radius="lg">
+                  <Stack gap="4">
+                    <Icon aria-hidden="true" />
+                    <Badge tone="accent">{label}</Badge>
+                    <Heading as="h3" size="heading-sm">{title}</Heading>
+                    <Text tone="muted">{description}</Text>
+                  </Stack>
+                </Card>
+              ))}
+            </Grid>
+          </Stack>
+        </Container>
+      </Section>
 
-      <section className="closing-callout"><p className="eyebrow">Criterio</p><h2>Risposta secca.<br />Calcolo verificabile.</h2><Link className="button light" href="/components">Apri il catalogo <ArrowRight aria-hidden="true" /></Link></section>
-    </>
+      <Section className="sirio-final" spacing="lg">
+        <Container size="reading">
+          <Surface variant="elevated" padding="lg" radius="lg">
+            <Stack gap="5" align="center">
+              <Badge tone="warning">Criterio</Badge>
+              <Heading as="h2" size="display-md" balance>
+                Risposta secca.<br />Calcolo verificabile.
+              </Heading>
+              <Link className="sirio-action-link" data-variant="primary" href="/components">
+                Apri il catalogo <ArrowRight aria-hidden="true" />
+              </Link>
+            </Stack>
+          </Surface>
+        </Container>
+      </Section>
+    </Stack>
   );
 }

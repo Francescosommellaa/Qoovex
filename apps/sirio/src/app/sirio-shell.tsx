@@ -1,47 +1,77 @@
-"use client";
+﻿'use client';
 
-import { List, X } from "@phosphor-icons/react";
-import { QoovexMark } from "@qoovex/brand/qoovex-mark";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import qoovexIcon from '@qoovex/brand/logo-Icon/qoovex-icona-nera-no-sfondo.svg';
 
-const routes = [["/", "Scope e direzione"], ["/components", "Componenti"]] as const;
+/* eslint-disable @next/next/no-img-element -- Qoovex brand SVGs are canonical assets and must be rendered directly. */
+
+import {
+  AppShell,
+  MobileNav,
+  Navbar,
+  type NavigationItem,
+  type NavigationLinkRenderer
+} from '@qoovex/ui/web';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import type { ReactNode } from 'react';
+
+type StaticSvgImport = string | { src: string };
+
+const qoovexIconAsset = qoovexIcon as StaticSvgImport;
+const qoovexIconSrc =
+  typeof qoovexIconAsset === 'string' ? qoovexIconAsset : qoovexIconAsset.src;
+
+const routes: readonly NavigationItem[] = [
+  { id: 'direction', href: '/', label: 'Scope e direzione' },
+  { id: 'components', href: '/components', label: 'Componenti' }
+];
+
+const renderLink: NavigationLinkRenderer = (item, props) => (
+  <Link {...props} href={item.href} />
+);
 
 export function SirioShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-  const closeRef = useRef<HTMLButtonElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (open) closeRef.current?.focus();
-  }, [open]);
-
-  const close = (restore = false) => {
-    setOpen(false);
-    if (restore) requestAnimationFrame(() => triggerRef.current?.focus());
-  };
+  const activeId = pathname === '/components' ? 'components' : 'direction';
 
   return (
-    <>
-      <a className="skip-link" href="#main-content">Vai al contenuto</a>
-      <header className="site-header">
-        <Link className="brand" href="/" aria-label="Sirio, pagina iniziale"><QoovexMark width={30} height={30} /><span><strong>Sirio</strong><small>Pre-Service Brain</small></span></Link>
-        <nav className="desktop-nav" aria-label="Navigazione principale">
-          {routes.map(([href, label]) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined}>{label}</Link>)}
-        </nav>
-        <span className="status"><i /> Direzione candidata</span>
-        <button ref={triggerRef} className="menu-trigger" type="button" aria-label="Apri menu" aria-expanded={open} onClick={() => setOpen(true)}><List aria-hidden="true" /></button>
-      </header>
-      {open ? (
-        <dialog open className="mobile-menu" aria-label="Menu Sirio" onKeyDown={(event) => { if (event.key === "Escape") close(true); }}>
-          <header><span>Vai a</span><button ref={closeRef} type="button" aria-label="Chiudi menu" onClick={() => close(true)}><X aria-hidden="true" /></button></header>
-          <nav aria-label="Navigazione mobile">{routes.map(([href, label]) => <Link key={href} href={href} onClick={() => close()}>{label}</Link>)}</nav>
-        </dialog>
-      ) : null}
-      <main id="main-content" tabIndex={-1}>{children}</main>
-      <footer className="site-footer"><span>Qoovex / Pre-Service Brain</span><span>Setup · Pre-Service · Service</span></footer>
-    </>
+    <AppShell
+      mainId="main-content"
+      header={
+        <Navbar
+          sticky
+          brand={
+            <Link className="sirio-brand" href="/" aria-label="Sirio, pagina iniziale">
+              <img src={qoovexIconSrc} width={30} height={30} alt="" aria-hidden="true" />
+              <span>
+                <strong>Sirio</strong>
+                <small>Pre-Service Brain</small>
+              </span>
+            </Link>
+          }
+          items={routes}
+          activeId={activeId}
+          renderLink={renderLink}
+          status={<span className="sirio-status"><i /> Direzione candidata</span>}
+          mobileNavigation={
+            <MobileNav
+              items={routes}
+              activeId={activeId}
+              renderLink={renderLink}
+              title="Menu Sirio"
+              description="Vai a una sezione"
+            />
+          }
+        />
+      }
+      footer={
+        <footer className="site-footer">
+          <span>Qoovex / Pre-Service Brain</span>
+          <span>Setup · Pre-Service · Service</span>
+        </footer>
+      }
+    >
+      {children}
+    </AppShell>
   );
 }

@@ -2,14 +2,8 @@
   "name": "@qoovex/brand",
   "version": "0.1.0",
   "private": true,
-  "peerDependencies": {
-    "react": "^19.0.0"
-  },
-  "devDependencies": {
-    "@types/react": "^19.0.0"
-  },
+  "sideEffects": false,
   "exports": {
-    "./qoovex-mark": "./src/qoovex-mark.tsx",
     "./logo-Icon/*": "./logo-Icon/*"
   }
 }

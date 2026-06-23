@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Card, Container, Heading, PageHeader, Section, Stack, Text } from "@qoovex/ui/web";
+
 import {
   legalDocuments,
   type LegalDocumentSlug,
@@ -37,32 +39,44 @@ export default async function LegalDocumentPage({ params }: PageProps) {
   if (!content) notFound();
 
   return (
-    <main>
-      <p>
-        <Link href="/legal">Tutti i documenti</Link>
-      </p>
-      <article>
-        <header>
-          <h1>{content.title}</h1>
-          <p>{content.description}</p>
-          <p>Aggiornata il {content.lastUpdated}</p>
-        </header>
-        {content.sections.map((section) => (
-          <section key={section.title}>
-            <h2>{section.title}</h2>
-            {section.paragraphs?.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            {section.items ? (
-              <ul>
-                {section.items.map((item) => (
-                  <li key={item}>{item}</li>
+    <main className="web-page">
+      <Section spacing="lg">
+        <Container size="reading">
+          <Stack gap="6">
+            <PageHeader
+              align="start"
+              eyebrow="Documento legale"
+              title={content.title}
+              description={content.description}
+              metadata={<span>Aggiornata il {content.lastUpdated}</span>}
+              breadcrumbs={<Link className="web-action-link" href="/legal">Tutti i documenti</Link>}
+            />
+            <Card as="article" padding="lg" radius="lg">
+              <Stack gap="6">
+                {content.sections.map((section) => (
+                  <section className="web-legal-section" key={section.title}>
+                    <Heading as="h2" size="heading-sm">
+                      {section.title}
+                    </Heading>
+                    {section.paragraphs?.map((paragraph) => (
+                      <Text key={paragraph} tone="muted">
+                        {paragraph}
+                      </Text>
+                    ))}
+                    {section.items ? (
+                      <ul>
+                        {section.items.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </section>
                 ))}
-              </ul>
-            ) : null}
-          </section>
-        ))}
-      </article>
+              </Stack>
+            </Card>
+          </Stack>
+        </Container>
+      </Section>
     </main>
   );
 }

@@ -1,0 +1,210 @@
+.qv-app-shell {
+  min-width: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--qv-color-background);
+  color: var(--qv-color-foreground);
+}
+
+.qv-app-shell__skip-link {
+  position: fixed;
+  z-index: var(--qv-z-tooltip);
+  top: var(--qv-space-2);
+  left: var(--qv-space-2);
+  transform: translateY(calc(-100% - var(--qv-space-4)));
+  padding: var(--qv-space-3) var(--qv-space-4);
+  border-radius: var(--qv-radius-button);
+  background: var(--qv-color-accent);
+  color: var(--qv-color-accent-foreground);
+  font-weight: var(--qv-font-weight-semibold);
+  text-decoration: none;
+  transition: transform var(--qv-transition-hover);
+}
+
+.qv-app-shell__skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.qv-app-shell__support {
+  position: relative;
+  z-index: var(--qv-z-base);
+}
+
+.qv-app-shell__body {
+  min-width: 0;
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.qv-app-shell__body[data-has-rail="true"] {
+  grid-template-columns: calc(var(--qv-space-24) * 3) minmax(0, 1fr);
+}
+
+.qv-app-shell__rail {
+  min-width: 0;
+  border-right: var(--qv-border-width-default) solid var(--qv-color-border);
+  background: var(--qv-color-surface);
+}
+
+.qv-app-shell__main {
+  min-width: 0;
+  outline: none;
+}
+
+.qv-page-header,
+.qv-section-header {
+  min-width: 0;
+}
+
+.qv-page-header {
+  display: grid;
+  gap: var(--qv-space-4);
+}
+
+.qv-page-header__row,
+.qv-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--qv-space-8);
+}
+
+.qv-page-header[data-align="start"] .qv-page-header__row,
+.qv-section-header[data-align="start"] {
+  justify-content: flex-start;
+}
+
+.qv-page-header__content,
+.qv-section-header__content {
+  min-width: 0;
+  display: grid;
+  gap: var(--qv-space-2);
+}
+
+.qv-page-header__content {
+  max-width: var(--qv-reading-max);
+  gap: var(--qv-space-3);
+}
+
+.qv-page-header__breadcrumbs {
+  min-width: 0;
+}
+
+.qv-header__eyebrow {
+  letter-spacing: var(--qv-letter-spacing-label);
+  text-transform: uppercase;
+}
+
+.qv-header__metadata,
+.qv-header__actions {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--qv-space-2);
+  flex-wrap: wrap;
+}
+
+.qv-header__actions {
+  flex: none;
+  justify-content: flex-end;
+}
+
+.qv-toolbar {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(calc(var(--qv-space-24) * 3), 0.7fr) minmax(0, 1.5fr) auto auto;
+  align-items: center;
+  gap: var(--qv-space-3);
+  padding: var(--qv-space-3);
+  border: var(--qv-border-width-default) solid var(--qv-color-border);
+  border-radius: var(--qv-radius-panel);
+  background: var(--qv-color-surface-glass);
+  box-shadow: var(--qv-elevation-raised);
+  backdrop-filter: blur(var(--qv-blur-md));
+  -webkit-backdrop-filter: blur(var(--qv-blur-md));
+}
+
+.qv-toolbar[data-sticky="true"] {
+  position: sticky;
+  z-index: var(--qv-z-dropdown);
+  top: var(--qv-space-16);
+}
+
+.qv-toolbar__search,
+.qv-toolbar__filters,
+.qv-toolbar__secondary-actions,
+.qv-toolbar__primary-actions {
+  min-width: 0;
+}
+
+.qv-toolbar__filters {
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+}
+
+.qv-toolbar__secondary-actions,
+.qv-toolbar__primary-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--qv-space-2);
+}
+
+@media (max-width: 63.999rem) {
+  .qv-app-shell__body[data-has-rail="true"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .qv-app-shell__rail {
+    display: none;
+  }
+
+  .qv-toolbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .qv-toolbar__filters {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .qv-page-header__row,
+  .qv-section-header {
+    flex-direction: column;
+    gap: var(--qv-space-4);
+  }
+
+  .qv-header__actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .qv-toolbar {
+    position: static;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .qv-toolbar__search,
+  .qv-toolbar__filters,
+  .qv-toolbar__secondary-actions,
+  .qv-toolbar__primary-actions {
+    grid-column: 1;
+  }
+
+  .qv-toolbar__search { grid-row: 1; }
+  .qv-toolbar__filters { grid-row: 2; }
+  .qv-toolbar__secondary-actions { grid-row: 3; }
+  .qv-toolbar__primary-actions { grid-row: 4; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .qv-toolbar {
+    background: var(--qv-color-surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

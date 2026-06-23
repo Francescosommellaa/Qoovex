@@ -1,12 +1,23 @@
-import "@testing-library/jest-dom/vitest";
+import '@testing-library/jest-dom/vitest';
 
-import { afterEach } from "vitest";
+import { afterEach } from 'vitest';
 
-Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
+Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
   configurable: true,
-  value: () => null,
+  value: () => null
+});
+
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+Object.defineProperty(globalThis, 'ResizeObserver', {
+  configurable: true,
+  value: ResizeObserverMock
 });
 
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.innerHTML = '';
 });
