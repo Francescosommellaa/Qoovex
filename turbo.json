@@ -7,10 +7,7 @@
     "GOOGLE_CLIENT_SECRET",
     "RESEND_API_KEY",
     "RESEND_FROM_EMAIL",
-    "RESEND_REPLY_TO_EMAIL",
-    "OLLAMA_BASE_URL",
-    "OLLAMA_MODEL",
-    "FOODDATA_CENTRAL_API_KEY"
+    "RESEND_REPLY_TO_EMAIL"
   ],
   "tasks": {
     "build": {
@@ -20,7 +17,6 @@
         "DATABASE_URL",
         "DATABASE_POSTGRES_URL",
         "DATABASE_PRISMA_DATABASE_URL",
-        "BLOB_READ_WRITE_TOKEN",
         "AUTH_SECRET",
         "AUTH_URL",
         "GOOGLE_CLIENT_ID",
@@ -30,17 +26,11 @@
         "RESEND_REPLY_TO_EMAIL",
         "DEV_AUTH_SECRET",
         "QOOVEX_MFA_ENCRYPTION_KEY",
-        "QOOVEX_MFA_COOKIE_SECRET",
-        "OLLAMA_BASE_URL",
-        "OLLAMA_MODEL",
-        "FOODDATA_CENTRAL_API_KEY"
+        "QOOVEX_MFA_COOKIE_SECRET"
       ]
     },
     "@qoovex/db#build": {
       "cache": false
-    },
-    "@qoovex/brand#build": {
-      "outputs": []
     },
     "db:generate": {
       "cache": false

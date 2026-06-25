@@ -32,7 +32,7 @@
 - `Briefing`: proiezione cucina o sala generata da dati strutturati.
 - `OperationalIssue`: dato o regola mancante, conflitto o quantità insufficiente.
 
-Sono concetti di UX e Sirio, non contratti persistenti.
+Sono concetti prodotto, non contratti persistenti.
 
 ## Regole e autorità
 

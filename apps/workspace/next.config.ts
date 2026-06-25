@@ -4,7 +4,6 @@ const nextConfig: NextConfig = {
   transpilePackages: [
     "@qoovex/db",
     "@qoovex/types",
-    "@qoovex/ui",
   ],
 };
 

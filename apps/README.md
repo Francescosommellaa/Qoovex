@@ -1,7 +1,8 @@
 # Apps
 
-- `web`: superficie pubblica minimale.
 - `workspace`: runtime API-only del prodotto.
-- `sirio`: scaffold vuoto per il futuro sistema UI.
+- `web`: placeholder vuoto per il futuro sito pubblico.
+- `mobile`: placeholder vuoto per la futura app mobile.
+- `sirio`: placeholder vuoto.
 
-Il codice condiviso cross-app appartiene a `packages/*`.
+Il codice condiviso appartiene a `packages/*`.

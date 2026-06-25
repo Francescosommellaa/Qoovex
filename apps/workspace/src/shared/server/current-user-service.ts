@@ -2,7 +2,6 @@ import "server-only";
 
 import { auth } from "@shared/server/auth/config";
 import { bootstrapDevUser } from "@shared/server/dev-auth";
-import { getAccountAvatarProxyUrl } from "@shared/server/account-avatar-storage";
 import { findWorkspaceUserById } from "@shared/server/repositories/user-repository";
 
 interface BootstrapUserOptions {
@@ -12,13 +11,8 @@ interface BootstrapUserOptions {
 }
 
 function getUserAvatarUrl(input: {
-  avatarBlobPathname?: string | null;
   image?: string | null;
 }) {
-  if (input.avatarBlobPathname) {
-    return getAccountAvatarProxyUrl(input.avatarBlobPathname);
-  }
-
   return input.image ?? null;
 }
 

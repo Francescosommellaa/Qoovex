@@ -5,12 +5,10 @@ overrides:
   "@hono/node-server": "1.19.13"
   hono: "4.12.25"
   postcss: "8.5.14"
-  "@vercel/blob>undici": "6.27.0"
 peerDependencyRules:
   ignoreMissing: []
 allowBuilds:
   "@prisma/engines": true
-  better-sqlite3: false
   esbuild: true
   prisma: true
   sharp: true

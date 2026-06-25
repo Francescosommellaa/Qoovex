@@ -11,4 +11,4 @@ Non mettere qui:
 
 Regole:
 - nomi espliciti;
-- niente configurazioni duplicate se esiste gia` una fonte canonica in `packages/config`.
+- niente configurazioni duplicate.

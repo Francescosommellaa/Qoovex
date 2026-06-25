@@ -1,9 +1,0 @@
-{
-  "name": "@qoovex/brand",
-  "version": "0.1.0",
-  "private": true,
-  "sideEffects": false,
-  "exports": {
-    "./logo-Icon/*": "./logo-Icon/*"
-  }
-}

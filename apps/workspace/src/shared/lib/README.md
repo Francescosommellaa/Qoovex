@@ -3,7 +3,7 @@
 Scopo: utility pure app-local della workspace app.
 
 Metti qui:
-- formatter, guard, parser, helper puri non abbastanza shared da stare in `packages/utils`.
+- formatter, guard, parser e helper puri app-local.
 
 Non mettere qui:
 - query DB;
@@ -12,4 +12,4 @@ Non mettere qui:
 
 Regole:
 - una responsabilita` per file;
-- se il riuso esce dall'app, promuovi il codice in `packages/utils`.
+- se il riuso esce dall'app, promuovi solo contratti stabili in `packages/types`.

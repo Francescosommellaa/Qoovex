@@ -1,11 +1,8 @@
 # Domini canonici
 
-| Superficie | Dominio | Responsabilità |
+| Superficie | Dominio | Responsabilita |
 | --- | --- | --- |
-| Web pubblico | `https://qoovex.com` | Presenza pubblica, contatti e documenti legali. |
-| Prodotto | `https://app.qoovex.com` | App desktop web e origine auth; la stessa esperienza sarà distribuita su iOS e Android. |
-| Sirio | `https://sirio.qoovex.com` | Scope, direzione grafica e catalogo componenti. |
+| Web pubblico | `https://qoovex.com` | Placeholder per la futura presenza pubblica. |
+| Prodotto | `https://app.qoovex.com` | Origine auth, tenant, MFA, inviti e supporto. |
 
-`packages/config/src/index.ts` è la fonte eseguibile degli origin. Il repo guard
-blocca metadata o costanti mancanti. DNS, certificati e associazione dei domini
-ai progetti di hosting restano configurazioni infrastrutturali esterne al repo.
+`apps/sirio` e `apps/mobile` sono placeholder vuoti in questo reset. DNS, certificati e hosting restano configurazioni infrastrutturali esterne al repo.

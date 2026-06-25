@@ -1,15 +1,10 @@
 # Workspace App
 
-Runtime API-only di Qoovex. Oltre all’autenticazione conserva strutture,
-membership, inviti, autorizzazioni e sessioni di supporto auditato. Il dominio
-Event e l’AI non sono ancora persistiti.
+Runtime API-only di Qoovex. Conserva autenticazione, strutture, membership, inviti, autorizzazioni e sessioni di supporto auditato. Il dominio Event e l'AI non sono ancora persistiti.
 
-Contiene route API, NextAuth, servizi, repository e regole di dominio. Le
-route frontend, auth UI, viste, widget e componenti sono intenzionalmente
-assenti.
+Contiene route API, NextAuth, servizi, repository e regole di dominio. Route frontend, auth UI, viste, widget e componenti sono intenzionalmente assenti.
 
 Regole:
-- FSD resta il modello di placement per la futura ricostruzione;
 - import sempre verso layer inferiori;
 - ogni cartella manuale in `src` richiede `README.md`;
 - nessun file generico;
@@ -24,4 +19,4 @@ SET "platformRole" = 'SUPER_ADMIN', "authVersion" = "authVersion" + 1
 WHERE "email" = 'account@qoovex.com';
 ```
 
-La promozione non è esposta da alcuna API pubblica.
+La promozione non e esposta da alcuna API pubblica.

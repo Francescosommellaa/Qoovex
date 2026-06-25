@@ -1,23 +1,17 @@
 {
   "name": "qoovex",
   "private": true,
-  "packageManager": "pnpm@11.8.0",
+  "packageManager": "pnpm@11.9.0",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "lint": "turbo run lint",
     "type-check": "turbo run type-check",
-    "check": "pnpm check:repo && pnpm lint && pnpm type-check && pnpm test:unit && pnpm check:build && pnpm check:audit",
-    "check:repo": "node scripts/repo-guard.mjs",
+    "check": "pnpm type-check && pnpm test:unit && pnpm check:build && pnpm check:audit",
     "check:build": "pnpm build",
     "check:audit": "pnpm audit --prod",
-    "check:fast": "pnpm check:repo && pnpm lint && pnpm type-check",
+    "check:fast": "pnpm type-check",
     "check:ci": "pnpm check",
-    "test:e2e": "playwright test",
-    "test:e2e:update": "playwright test --update-snapshots",
     "test:unit": "turbo run test",
-    "changeset": "changeset",
-    "version-packages": "changeset version",
     "db:generate": "turbo run db:generate --filter=@qoovex/db",
     "db:push": "turbo run db:push --filter=@qoovex/db",
     "db:migrate": "turbo run db:migrate --filter=@qoovex/db",
@@ -25,16 +19,6 @@
     "db:workspace": "turbo run db:workspace --filter=@qoovex/db"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.3",
-    "@changesets/cli": "^2.31.0",
-    "@playwright/test": "^1.57.0",
-    "chrome-launcher": "^1.2.1",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "lighthouse": "^13.3.0",
-    "tsx": "^4.22.0",
     "turbo": "^2.9.18"
-  },
-  "dependencies": {
-    "better-sqlite3": "^12.10.0"
   }
 }
