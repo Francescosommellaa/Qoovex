@@ -1,5 +1,5 @@
 /**
- * Variabili Auth.js v5 per Qoovex Workspace.
+ * Variabili Auth.js v5 per Qoovex.
  * In sviluppo, se manca AUTH_SECRET, riusa DEV_AUTH_SECRET (già richiesto per dev-auth).
  */
 export function getAuthSecret(): string | undefined {

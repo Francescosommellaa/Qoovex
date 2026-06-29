@@ -1,4 +1,5 @@
-# Structure API
+# Structure API deprecated
 
-API tenant-aware per membri e inviti. Ogni handler deriva struttura, ruolo e
-permessi dalla sessione server; gli identificativi client non ampliano il perimetro.
+Compatibilita temporanea per le vecchie route tenant-aware.
+
+Usare `/api/organization/*` per nuovo codice. Ogni handler legacy delega ai servizi Organization.

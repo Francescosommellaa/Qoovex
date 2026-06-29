@@ -17,11 +17,13 @@ enum PlatformRole {
   SUPER_ADMIN
 }
 
-enum StructureRole {
+enum OrganizationRole {
+  OWNER
   ADMIN
-  HEAD_OF_HALL
-  HEAD_CHEF
-  KITCHEN_CREW
+  SAFETY_CONSULTANT
+  SITE_MANAGER
+  WORKER
+  VIEWER
 }
 
 enum SupportAuditAction {
@@ -99,69 +101,72 @@ model User {
   usernameChangedAt          DateTime?
   mfaBackupCodes             MfaBackupCode[]
   authDevices                AuthDevice[]
-  structureMemberships       StructureMembership[]
-  createdStructures          Structure[]           @relation("StructureCreator")
-  sentStructureInvitations   StructureInvitation[] @relation("InvitationSender")
+  organizationMemberships    OrganizationMembership[]
+  createdOrganizations       Organization[]           @relation("OrganizationCreator")
+  sentOrganizationInvitations OrganizationInvitation[] @relation("InvitationSender")
   supportSessions            SupportSession[]      @relation("SupportActor")
   supportAuditEvents         SupportAuditEvent[]   @relation("SupportAuditActor")
   createdAt                  DateTime              @default(now())
   updatedAt                  DateTime              @updatedAt
 }
 
-model Structure {
+model Organization {
   id             String                @id @default(cuid())
   name           String
   code           String                @unique
   createdById    String?
   createdAt      DateTime              @default(now())
   updatedAt      DateTime              @updatedAt
-  createdBy      User?                 @relation("StructureCreator", fields: [createdById], references: [id], onDelete: SetNull)
-  memberships    StructureMembership[]
-  invitations    StructureInvitation[]
+  createdBy      User?                 @relation("OrganizationCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  memberships    OrganizationMembership[]
+  invitations    OrganizationInvitation[]
   supportSessions SupportSession[]
   supportEvents  SupportAuditEvent[]
 
   @@index([name])
+  @@map("Structure")
 }
 
-model StructureMembership {
+model OrganizationMembership {
   id          String        @id @default(cuid())
-  structureId String
+  organizationId String    @map("structureId")
   userId      String
-  role        StructureRole
+  role        OrganizationRole
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   revokedAt   DateTime?
-  structure   Structure     @relation(fields: [structureId], references: [id], onDelete: Cascade)
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([structureId, userId])
+  @@unique([organizationId, userId])
   @@index([userId, revokedAt])
-  @@index([structureId, role, revokedAt])
+  @@index([organizationId, role, revokedAt])
+  @@map("StructureMembership")
 }
 
-model StructureInvitation {
+model OrganizationInvitation {
   id          String        @id @default(cuid())
-  structureId String
+  organizationId String    @map("structureId")
   email       String
-  role        StructureRole
+  role        OrganizationRole
   tokenHash   String        @unique
   invitedById String
   expiresAt   DateTime
   acceptedAt  DateTime?
   revokedAt   DateTime?
   createdAt   DateTime      @default(now())
-  structure   Structure     @relation(fields: [structureId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   invitedBy   User          @relation("InvitationSender", fields: [invitedById], references: [id], onDelete: Cascade)
 
-  @@index([structureId, email, createdAt])
+  @@index([organizationId, email, createdAt])
   @@index([email, expiresAt])
+  @@map("StructureInvitation")
 }
 
 model SupportSession {
   id                     String              @id @default(cuid())
   actorId                String
-  structureId            String
+  organizationId         String              @map("structureId")
   tokenHash              String              @unique
   reason                 String
   expiresAt              DateTime
@@ -169,18 +174,18 @@ model SupportSession {
   endedAt                DateTime?
   createdAt              DateTime            @default(now())
   actor                  User                @relation("SupportActor", fields: [actorId], references: [id], onDelete: Cascade)
-  structure              Structure           @relation(fields: [structureId], references: [id], onDelete: Cascade)
+  organization           Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   auditEvents            SupportAuditEvent[]
 
   @@index([actorId, endedAt, expiresAt])
-  @@index([structureId, createdAt])
+  @@index([organizationId, createdAt])
 }
 
 model SupportAuditEvent {
   id               String             @id @default(cuid())
   supportSessionId String
   actorId          String
-  structureId      String
+  organizationId   String             @map("structureId")
   action           SupportAuditAction
   resourceType     String
   resourceId       String?
@@ -188,10 +193,10 @@ model SupportAuditEvent {
   createdAt        DateTime           @default(now())
   supportSession   SupportSession     @relation(fields: [supportSessionId], references: [id], onDelete: Cascade)
   actor            User               @relation("SupportAuditActor", fields: [actorId], references: [id], onDelete: Cascade)
-  structure        Structure          @relation(fields: [structureId], references: [id], onDelete: Cascade)
+  organization     Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([supportSessionId, createdAt])
-  @@index([structureId, createdAt])
+  @@index([organizationId, createdAt])
   @@index([actorId, createdAt])
 }
 

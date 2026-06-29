@@ -1,3 +1,5 @@
-# Structure members
+# Structure members deprecated
 
-Lista e revoca membri nel perimetro della struttura corrente.
+Compatibilita temporanea per membri Organization.
+
+Usare `/api/organization/members` per nuovo codice.

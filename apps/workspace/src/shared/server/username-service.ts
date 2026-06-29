@@ -67,7 +67,7 @@ export async function getAvailableUsernameSuggestions(input: {
   const expanded = [
     ...baseSuggestions,
     ...baseSuggestions.flatMap((base) => [
-      `${base}_chef`,
+      `${base}_utente`,
       `${base}_${Math.floor(10 + Math.random() * 90)}`,
     ]),
   ].filter((value) => validateUsername(value) === undefined);

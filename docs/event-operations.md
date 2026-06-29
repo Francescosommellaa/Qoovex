@@ -1,5 +1,7 @@
 # Pre-Service Operations
 
+> LEGACY: questo documento descrive il vecchio dominio Qoovex legato a eventi, cucina, chef, menu e operazioni pre-service. Non usarlo come fonte prodotto per il nuovo Qoovex. La fonte primaria e il set numerato `00`-`14` in `/docs`.
+
 ## Ciclo operativo
 
 1. Intake descrive un evento in testo libero.

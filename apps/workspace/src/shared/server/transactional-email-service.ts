@@ -9,6 +9,8 @@ export type SecurityEmailEvent =
   | "MFA_DISABLED"
   | "NEW_DEVICE";
 
+type InviteRole = "ADMIN" | "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER" | "VIEWER";
+
 export type TransactionalEmailTemplate =
   | {
       kind: "auth-code";
@@ -22,15 +24,17 @@ export type TransactionalEmailTemplate =
       occurredAt?: Date;
     }
   | {
-      kind: "structure-invitation";
-      structureName: string;
-      role: "HEAD_OF_HALL" | "HEAD_CHEF" | "KITCHEN_CREW";
+      kind: "organization-invitation" | "structure-invitation";
+      organizationName?: string;
+      structureName?: string;
+      role: InviteRole;
       acceptUrl: string;
       expiresAt: Date;
     }
   | {
       kind: "support-opened" | "support-closed";
-      structureName: string;
+      organizationName?: string;
+      structureName?: string;
       employeeEmail: string;
       reason: string;
       occurredAt: Date;
@@ -124,26 +128,36 @@ function getSecurityCopy(template: Extract<TransactionalEmailTemplate, { kind: "
       };
     case "NEW_DEVICE":
       return {
-        subject: "Nuovo accesso al workspace Qoovex",
+        subject: "Nuovo accesso a Qoovex",
         title: "Nuovo dispositivo rilevato",
         intro: `Abbiamo rilevato un accesso da ${deviceLabel} il ${occurredAt}.`,
       };
   }
 }
 
+function getOrganizationName(template: { organizationName?: string; structureName?: string }) {
+  return template.organizationName ?? template.structureName ?? "Qoovex";
+}
+
 function renderEmail(input: { to: string; template: TransactionalEmailTemplate }) {
   const copy = (() => {
     if (input.template.kind === "auth-code") return getAuthCodeCopy(input.template.purpose, input.template.code);
     if (input.template.kind === "security-event") return getSecurityCopy(input.template);
-    if (input.template.kind === "structure-invitation") {
-      const role = { HEAD_OF_HALL: "Capo sala", HEAD_CHEF: "Capo cucina", KITCHEN_CREW: "Brigata" }[input.template.role];
-      return { subject: `Invito a ${input.template.structureName}`, title: "Invito alla struttura", intro: `Sei stato invitato come ${role} in ${input.template.structureName}. Apri ${input.template.acceptUrl} entro ${formatSecurityDate(input.template.expiresAt)}.` };
+    if (input.template.kind === "organization-invitation" || input.template.kind === "structure-invitation") {
+      const organizationName = getOrganizationName(input.template);
+      return {
+        subject: `Invito a ${organizationName}`,
+        title: "Invito all'azienda",
+        intro: `Sei stato invitato a collaborare in ${organizationName}. Apri ${input.template.acceptUrl} entro ${formatSecurityDate(input.template.expiresAt)}.`,
+      };
     }
-    const opened = input.template.kind === "support-opened";
+    const template = input.template as Extract<TransactionalEmailTemplate, { kind: "support-opened" | "support-closed" }>;
+    const opened = template.kind === "support-opened";
+    const organizationName = getOrganizationName(template);
     return {
-      subject: `Supporto Qoovex ${opened ? "avviato" : "terminato"} · ${input.template.structureName}`,
+      subject: `Supporto Qoovex ${opened ? "avviato" : "terminato"} - ${organizationName}`,
       title: `Supporto ${opened ? "attivo" : "terminato"}`,
-      intro: `${input.template.employeeEmail} ha ${opened ? "aperto" : "chiuso"} una sessione di supporto il ${formatSecurityDate(input.template.occurredAt)}. Motivo: ${input.template.reason}`,
+      intro: `${template.employeeEmail} ha ${opened ? "aperto" : "chiuso"} una sessione di supporto il ${formatSecurityDate(template.occurredAt)}. Motivo: ${template.reason}`,
     };
   })();
 
@@ -164,7 +178,7 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
         <td align="center">
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:#101217;overflow:hidden;">
             <tr>
-              <td style="padding:28px 28px 12px;font-size:14px;color:#9ca3af;">Qoovex Workspace</td>
+              <td style="padding:28px 28px 12px;font-size:14px;color:#9ca3af;">Qoovex</td>
             </tr>
             <tr>
               <td style="padding:0 28px 28px;">
@@ -182,7 +196,7 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
 </html>`;
 
   const text = [
-    "Qoovex Workspace",
+    "Qoovex",
     copy.title,
     copy.intro,
     input.template.kind === "auth-code" ? `Codice: ${input.template.code}` : "",

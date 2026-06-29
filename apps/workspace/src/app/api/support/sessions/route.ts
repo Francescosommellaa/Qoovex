@@ -11,8 +11,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const [user, body] = await Promise.all([requireIdentity(), request.json() as Promise<{ structureCode?: string; reason?: string }>]);
-    return Response.json(await openSupportSession(user.id, { structureCode: body.structureCode ?? "", reason: body.reason ?? "" }), { status: 201 });
+    const [user, body] = await Promise.all([requireIdentity(), request.json() as Promise<{ organizationCode?: string; structureCode?: string; reason?: string }>]);
+    return Response.json(await openSupportSession(user.id, { organizationCode: body.organizationCode, structureCode: body.structureCode, reason: body.reason ?? "" }), { status: 201 });
   } catch (error) { return asAccessResponse(error); }
 }
 

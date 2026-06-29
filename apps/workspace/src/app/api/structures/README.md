@@ -1,3 +1,5 @@
-# Structures
+# Structures deprecated
 
-Crea la prima struttura per un utente verificato senza membership attiva.
+Compatibilita temporanea per creare l'azienda iniziale tramite vecchia route.
+
+Usare `/api/organizations` per nuovo codice.

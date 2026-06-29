@@ -1,3 +1,5 @@
-# Accept invitation
+# Accept structure invitation deprecated
 
-Accetta un token monouso per l’account autenticato con la stessa email.
+Compatibilita temporanea per accettare inviti Organization.
+
+Usare `/api/organization/invitations/accept` per nuovo codice.

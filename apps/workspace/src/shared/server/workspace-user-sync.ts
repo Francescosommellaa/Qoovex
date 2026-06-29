@@ -142,13 +142,13 @@ export async function createUserForAuthAdapter(user: {
 }) {
   const email = user.email.trim().toLowerCase();
   const nameParts = user.name?.trim().split(/\s+/).filter(Boolean) ?? [];
-  const firstName = nameParts[0] || email.split("@")[0] || "chef";
+  const firstName = nameParts[0] || email.split("@")[0] || "utente";
   const lastName = nameParts.slice(1).join(" ") || null;
 
   const baseUsername =
     normalizeUsername(email.split("@")[0] ?? "") ||
     normalizeUsername(firstName) ||
-    "chef";
+    "utente";
 
   let username = baseUsername;
   let suffix = 0;
@@ -202,7 +202,7 @@ export async function ensureWorkspaceUserProfile(userId: string) {
     return user;
   }
 
-  const emailLocal = user.email.split("@")[0] ?? "chef";
+  const emailLocal = user.email.split("@")[0] ?? "utente";
   const username =
     user.username && user.username.length >= 3
       ? user.username

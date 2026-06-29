@@ -25,41 +25,41 @@ export async function getActiveSupportSession(userId: string) {
   if (!token) return null;
   return db.supportSession.findFirst({
     where: { actorId: userId, tokenHash: hashToken(token), endedAt: null, expiresAt: { gt: new Date() } },
-    select: { id: true, reason: true, expiresAt: true, sensitiveConfirmedUntil: true, structure: { select: { id: true, name: true, code: true } } },
+    select: { id: true, reason: true, expiresAt: true, sensitiveConfirmedUntil: true, organization: { select: { id: true, name: true, code: true } } },
   });
 }
 
-async function notifyStructureAdmins(structureId: string, template: "support-opened" | "support-closed", input: { employeeEmail: string; reason: string; occurredAt: Date }) {
-  const admins = await db.structureMembership.findMany({ where: { structureId, role: "ADMIN", revokedAt: null }, select: { user: { select: { email: true } }, structure: { select: { name: true } } } });
-  await Promise.allSettled(admins.map((admin) => sendTransactionalEmail({ to: admin.user.email, template: { kind: template, structureName: admin.structure.name, employeeEmail: input.employeeEmail, reason: input.reason, occurredAt: input.occurredAt } })));
+async function notifyOrganizationOwners(organizationId: string, template: "support-opened" | "support-closed", input: { employeeEmail: string; reason: string; occurredAt: Date }) {
+  const owners = await db.organizationMembership.findMany({ where: { organizationId, role: "OWNER", revokedAt: null }, select: { user: { select: { email: true } }, organization: { select: { name: true } } } });
+  await Promise.allSettled(owners.map((owner) => sendTransactionalEmail({ to: owner.user.email, template: { kind: template, organizationName: owner.organization.name, employeeEmail: input.employeeEmail, reason: input.reason, occurredAt: input.occurredAt } })));
 }
 
-export async function findStructureForSupport(userId: string, codeInput: string) {
+export async function findOrganizationForSupport(userId: string, codeInput: string) {
   await getSupportActor(userId);
   const code = codeInput.trim().toUpperCase();
-  const structure = await db.structure.findUnique({ where: { code }, select: { id: true, name: true, code: true } });
-  if (!structure) throw new AccessError("Struttura non trovata.", 404);
-  return structure;
+  const organization = await db.organization.findUnique({ where: { code }, select: { id: true, name: true, code: true } });
+  if (!organization) throw new AccessError("Azienda non trovata.", 404);
+  return organization;
 }
 
-export async function openSupportSession(userId: string, input: { structureCode: string; reason: string }) {
+export async function openSupportSession(userId: string, input: { organizationCode?: string; structureCode?: string; reason: string }) {
   const actor = await getSupportActor(userId);
   const reason = input.reason.trim();
   if (reason.length < 8 || reason.length > 500) throw new AccessError("Indica un motivo di supporto specifico.", 409);
   if (await getActiveSupportSession(userId)) await closeSupportSession(userId);
-  const structure = await findStructureForSupport(userId, input.structureCode);
+  const organization = await findOrganizationForSupport(userId, input.organizationCode ?? input.structureCode ?? "");
   const rawToken = crypto.randomBytes(32).toString("base64url");
   const now = new Date();
 
   const session = await db.$transaction(async (tx) => {
     await tx.supportSession.updateMany({ where: { actorId: actor.id, endedAt: null }, data: { endedAt: now } });
-    const created = await tx.supportSession.create({ data: { actorId: actor.id, structureId: structure.id, tokenHash: hashToken(rawToken), reason, expiresAt: new Date(now.getTime() + SUPPORT_TTL_MS) } });
-    await tx.supportAuditEvent.create({ data: { supportSessionId: created.id, actorId: actor.id, structureId: structure.id, action: "SENSITIVE", resourceType: "support-session", resourceId: created.id, metadata: { event: "opened", reason } } });
+    const created = await tx.supportSession.create({ data: { actorId: actor.id, organizationId: organization.id, tokenHash: hashToken(rawToken), reason, expiresAt: new Date(now.getTime() + SUPPORT_TTL_MS) } });
+    await tx.supportAuditEvent.create({ data: { supportSessionId: created.id, actorId: actor.id, organizationId: organization.id, action: "SENSITIVE", resourceType: "support-session", resourceId: created.id, metadata: { event: "opened", reason } } });
     return created;
   });
   (await cookies()).set(SUPPORT_COOKIE, rawToken, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: SUPPORT_TTL_MS / 1000 });
-  await notifyStructureAdmins(structure.id, "support-opened", { employeeEmail: actor.email, reason, occurredAt: now });
-  return { id: session.id, expiresAt: session.expiresAt, structure };
+  await notifyOrganizationOwners(organization.id, "support-opened", { employeeEmail: actor.email, reason, occurredAt: now });
+  return { id: session.id, expiresAt: session.expiresAt, organization };
 }
 
 export async function closeSupportSession(userId: string) {
@@ -69,10 +69,10 @@ export async function closeSupportSession(userId: string) {
   const now = new Date();
   await db.$transaction([
     db.supportSession.update({ where: { id: session.id }, data: { endedAt: now } }),
-    db.supportAuditEvent.create({ data: { supportSessionId: session.id, actorId: actor.id, structureId: session.structure.id, action: "SENSITIVE", resourceType: "support-session", resourceId: session.id, metadata: { event: "closed" } } }),
+    db.supportAuditEvent.create({ data: { supportSessionId: session.id, actorId: actor.id, organizationId: session.organization.id, action: "SENSITIVE", resourceType: "support-session", resourceId: session.id, metadata: { event: "closed" } } }),
   ]);
   (await cookies()).delete(SUPPORT_COOKIE);
-  await notifyStructureAdmins(session.structure.id, "support-closed", { employeeEmail: actor.email, reason: session.reason, occurredAt: now });
+  await notifyOrganizationOwners(session.organization.id, "support-closed", { employeeEmail: actor.email, reason: session.reason, occurredAt: now });
   return { closed: true };
 }
 
@@ -90,5 +90,8 @@ export async function recordSupportAccess(input: { userId: string; action: "READ
   const session = await getActiveSupportSession(input.userId);
   if (!session) return;
   if ((input.action === "SENSITIVE" || input.action === "EXPORT") && (!session.sensitiveConfirmedUntil || session.sensitiveConfirmedUntil <= new Date())) throw new AccessError("Conferma MFA recente richiesta.", 403);
-  await db.supportAuditEvent.create({ data: { supportSessionId: session.id, actorId: input.userId, structureId: session.structure.id, action: input.action, resourceType: input.resourceType, resourceId: input.resourceId, metadata: input.metadata as Prisma.InputJsonValue | undefined } });
+  await db.supportAuditEvent.create({ data: { supportSessionId: session.id, actorId: input.userId, organizationId: session.organization.id, action: input.action, resourceType: input.resourceType, resourceId: input.resourceId, metadata: input.metadata as Prisma.InputJsonValue | undefined } });
 }
+
+/** @deprecated Use findOrganizationForSupport. */
+export const findStructureForSupport = findOrganizationForSupport;

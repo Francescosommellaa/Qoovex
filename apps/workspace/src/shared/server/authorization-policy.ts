@@ -1,31 +1,116 @@
-import type { Permission, StructureRole } from "@qoovex/types";
+import type { OrganizationPermission, OrganizationRole } from "@qoovex/types";
 
-const ROLE_PERMISSIONS: Record<StructureRole, readonly Permission[]> = {
+const OWNER_PERMISSIONS: readonly OrganizationPermission[] = [
+  "organization:read",
+  "organization:update",
+  "members:read",
+  "members:invite",
+  "members:manage",
+  "workers:read",
+  "workers:create",
+  "workers:update",
+  "workers:archive",
+  "jobSites:read",
+  "jobSites:create",
+  "jobSites:update",
+  "jobSites:archive",
+  "documents:read",
+  "documents:upload",
+  "documents:update",
+  "documents:archive",
+  "deadlines:read",
+  "deadlines:manage",
+  "checklists:read",
+  "checklists:manage",
+  "checklists:complete",
+  "evidence:read",
+  "evidence:upload",
+  "evidence:delete",
+  "documentPackages:read",
+  "documentPackages:create",
+  "documentPackages:share",
+  "auditLog:read",
+  "settings:update",
+];
+
+const ROLE_PERMISSIONS: Record<OrganizationRole, readonly OrganizationPermission[]> = {
+  OWNER: OWNER_PERMISSIONS,
   ADMIN: [
-    "structure:read", "structure:manage", "members:read", "members:invite-head",
-    "members:invite-crew", "members:revoke", "hall:read", "kitchen:read",
-    "kitchen:plan", "crew:tasks:read", "crew:tasks:update",
+    "organization:read",
+    "members:read",
+    "members:invite",
+    "workers:read",
+    "workers:create",
+    "workers:update",
+    "workers:archive",
+    "jobSites:read",
+    "jobSites:create",
+    "jobSites:update",
+    "jobSites:archive",
+    "documents:read",
+    "documents:upload",
+    "documents:update",
+    "documents:archive",
+    "deadlines:read",
+    "deadlines:manage",
+    "checklists:read",
+    "checklists:manage",
+    "checklists:complete",
+    "evidence:read",
+    "evidence:upload",
+    "evidence:delete",
+    "documentPackages:read",
+    "documentPackages:create",
+    "documentPackages:share",
   ],
-  HEAD_OF_HALL: ["structure:read", "hall:read"],
-  HEAD_CHEF: [
-    "structure:read", "members:read", "members:invite-crew", "members:revoke",
-    "kitchen:read", "kitchen:plan", "crew:tasks:read",
+  SAFETY_CONSULTANT: [
+    "organization:read",
+    "workers:read",
+    "jobSites:read",
+    "documents:read",
+    "documents:update",
+    "deadlines:read",
+    "checklists:read",
+    "checklists:manage",
+    "checklists:complete",
+    "evidence:read",
+    "evidence:upload",
+    "documentPackages:read",
+    "documentPackages:create",
   ],
-  KITCHEN_CREW: ["structure:read", "crew:tasks:read", "crew:tasks:update"],
+  SITE_MANAGER: [
+    "organization:read",
+    "workers:read",
+    "jobSites:read",
+    "documents:read",
+    "deadlines:read",
+    "checklists:read",
+    "checklists:complete",
+    "evidence:read",
+    "evidence:upload",
+  ],
+  WORKER: [
+    "organization:read",
+    "documents:read",
+    "documents:upload",
+    "deadlines:read",
+    "checklists:complete",
+    "evidence:upload",
+  ],
+  VIEWER: ["documentPackages:read"],
 };
 
-export function getPermissionsForRole(role: StructureRole | null): Permission[] {
+export function getPermissionsForRole(role: OrganizationRole | null): OrganizationPermission[] {
   return role ? [...ROLE_PERMISSIONS[role]] : [];
 }
 
-export function canInviteRole(actor: StructureRole, target: StructureRole) {
-  if (target === "ADMIN") return false;
-  if (actor === "ADMIN") return true;
-  return actor === "HEAD_CHEF" && target === "KITCHEN_CREW";
+export function canInviteRole(actor: OrganizationRole, target: OrganizationRole) {
+  if (target === "OWNER") return false;
+  if (actor === "OWNER") return true;
+  return actor === "ADMIN" && target !== "ADMIN";
 }
 
-export function canRevokeRole(actor: StructureRole, target: StructureRole) {
-  if (target === "ADMIN") return false;
-  if (actor === "ADMIN") return true;
-  return actor === "HEAD_CHEF" && target === "KITCHEN_CREW";
+export function canRevokeRole(actor: OrganizationRole, target: OrganizationRole) {
+  if (target === "OWNER") return false;
+  return actor === "OWNER";
 }

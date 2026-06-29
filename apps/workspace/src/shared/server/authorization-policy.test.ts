@@ -1,26 +1,35 @@
 import { describe, expect, it } from "vitest";
 import { canInviteRole, canRevokeRole, getPermissionsForRole } from "./authorization-policy";
 
-describe("structure authorization policy", () => {
-  it("gives the director complete structure permissions", () => {
-    expect(getPermissionsForRole("ADMIN")).toEqual(expect.arrayContaining(["structure:manage", "members:invite-head", "members:invite-crew", "hall:read", "kitchen:plan"]));
+describe("organization authorization policy", () => {
+  it("gives the owner complete organization permissions", () => {
+    expect(getPermissionsForRole("OWNER")).toEqual(expect.arrayContaining(["organization:update", "members:manage", "auditLog:read", "settings:update"]));
   });
 
-  it("isolates hall, chef and crew views", () => {
-    expect(getPermissionsForRole("HEAD_OF_HALL")).toEqual(["structure:read", "hall:read"]);
-    expect(getPermissionsForRole("HEAD_CHEF")).not.toContain("hall:read");
-    expect(getPermissionsForRole("KITCHEN_CREW")).toEqual(["structure:read", "crew:tasks:read", "crew:tasks:update"]);
+  it("keeps admin operational but not owner-level", () => {
+    expect(getPermissionsForRole("ADMIN")).toEqual(expect.arrayContaining(["organization:read", "members:invite", "documents:upload", "documentPackages:share"]));
+    expect(getPermissionsForRole("ADMIN")).not.toContain("organization:update");
+    expect(getPermissionsForRole("ADMIN")).not.toContain("auditLog:read");
   });
 
-  it("allows the chef to manage only crew", () => {
-    expect(canInviteRole("HEAD_CHEF", "KITCHEN_CREW")).toBe(true);
-    expect(canInviteRole("HEAD_CHEF", "HEAD_OF_HALL")).toBe(false);
-    expect(canRevokeRole("HEAD_CHEF", "KITCHEN_CREW")).toBe(true);
-    expect(canRevokeRole("HEAD_CHEF", "HEAD_CHEF")).toBe(false);
+  it("scopes limited roles to explicit action gates", () => {
+    expect(getPermissionsForRole("SAFETY_CONSULTANT")).toEqual(expect.arrayContaining(["documents:read", "documents:update", "checklists:manage"]));
+    expect(getPermissionsForRole("SITE_MANAGER")).toEqual(expect.arrayContaining(["jobSites:read", "checklists:complete", "evidence:upload"]));
+    expect(getPermissionsForRole("WORKER")).toEqual(expect.arrayContaining(["documents:upload", "deadlines:read", "evidence:upload"]));
+    expect(getPermissionsForRole("VIEWER")).toEqual(["documentPackages:read"]);
   });
 
-  it("never creates another admin through invitations or revocation", () => {
+  it("allows owner and admin invitations without owner escalation", () => {
+    expect(canInviteRole("OWNER", "ADMIN")).toBe(true);
+    expect(canInviteRole("OWNER", "OWNER")).toBe(false);
+    expect(canInviteRole("ADMIN", "WORKER")).toBe(true);
     expect(canInviteRole("ADMIN", "ADMIN")).toBe(false);
-    expect(canRevokeRole("ADMIN", "ADMIN")).toBe(false);
+    expect(canInviteRole("SAFETY_CONSULTANT", "WORKER")).toBe(false);
+  });
+
+  it("keeps member management owner-only", () => {
+    expect(canRevokeRole("OWNER", "ADMIN")).toBe(true);
+    expect(canRevokeRole("OWNER", "OWNER")).toBe(false);
+    expect(canRevokeRole("ADMIN", "WORKER")).toBe(false);
   });
 });

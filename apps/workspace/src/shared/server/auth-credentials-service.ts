@@ -20,7 +20,7 @@ function normalizeEmail(email: string) {
 }
 
 function getNameFromEmail(email: string) {
-  return email.split("@")[0]?.replace(/[^a-zA-Z0-9]/g, " ").trim() || "Chef";
+  return email.split("@")[0]?.replace(/[^a-zA-Z0-9]/g, " ").trim() || "Utente";
 }
 
 export async function registerCredentialsUser(input: {

@@ -29,7 +29,7 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
     return {
       ...existingUser,
       imageUrl: getUserAvatarUrl(existingUser),
-      isAdmin: existingUser.platformRole === "SUPER_ADMIN" || existingUser.structureMemberships.some(({ role }) => role === "ADMIN"),
+      isAdmin: existingUser.platformRole === "SUPER_ADMIN" || existingUser.organizationMemberships.some(({ role }) => role === "OWNER" || role === "ADMIN"),
     };
   }
 
@@ -57,6 +57,6 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
   return {
     ...workspaceUser,
     imageUrl: getUserAvatarUrl(workspaceUser),
-    isAdmin: workspaceUser.platformRole === "SUPER_ADMIN" || workspaceUser.structureMemberships.some(({ role }) => role === "ADMIN"),
+    isAdmin: workspaceUser.platformRole === "SUPER_ADMIN" || workspaceUser.organizationMemberships.some(({ role }) => role === "OWNER" || role === "ADMIN"),
   };
 }

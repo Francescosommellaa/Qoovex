@@ -1,3 +1,5 @@
-# Structure invitations
+# Structure invitations deprecated
 
-Lista, crea e revoca inviti vincolati a email e ruolo.
+Compatibilita temporanea per inviti Organization.
+
+Usare `/api/organization/invitations` per nuovo codice.

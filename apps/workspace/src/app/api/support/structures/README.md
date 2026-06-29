@@ -1,3 +1,5 @@
-# Support structure lookup
+# Support structure lookup deprecated
 
-Ricerca esatta tramite codice pubblico dopo autenticazione Super Admin e MFA.
+Compatibilita temporanea per lookup supporto Organization.
+
+Usare `/api/support/organizations` per nuovo codice.

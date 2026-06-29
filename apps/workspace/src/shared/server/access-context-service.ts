@@ -23,14 +23,14 @@ export async function requireIdentity() {
 export async function getViewerContext(): Promise<ViewerContext> {
   const user = await requireIdentity();
   const [membership, support] = await Promise.all([
-    db.structureMembership.findFirst({
+    db.organizationMembership.findFirst({
       where: { userId: user.id, revokedAt: null },
-      select: { id: true, role: true, structure: { select: { id: true, name: true, code: true } } },
+      select: { id: true, role: true, organization: { select: { id: true, name: true, code: true } } },
     }),
     user.platformRole === "SUPER_ADMIN" ? getActiveSupportSession(user.id) : Promise.resolve(null),
   ]);
 
-  const effectiveRole = support ? "ADMIN" : membership?.role ?? null;
+  const effectiveRole = support ? "OWNER" : membership?.role ?? null;
   return {
     userId: user.id,
     platformRole: user.platformRole,
@@ -40,7 +40,7 @@ export async function getViewerContext(): Promise<ViewerContext> {
       reason: support.reason,
       expiresAt: support.expiresAt.toISOString(),
       sensitiveConfirmedUntil: support.sensitiveConfirmedUntil?.toISOString() ?? null,
-      structure: support.structure,
+      organization: support.organization,
     } : null,
     permissions: getPermissionsForRole(effectiveRole),
   };
@@ -50,8 +50,11 @@ export function requirePermission(context: ViewerContext, permission: Permission
   if (!context.permissions.includes(permission)) throw new AccessError("Risorsa non disponibile.", 404);
 }
 
-export function getContextStructureId(context: ViewerContext) {
-  const id = context.support?.structure.id ?? context.membership?.structure.id;
-  if (!id) throw new AccessError("Nessuna struttura attiva.", 403);
+export function getContextOrganizationId(context: ViewerContext) {
+  const id = context.support?.organization.id ?? context.membership?.organization.id;
+  if (!id) throw new AccessError("Nessuna azienda attiva.", 403);
   return id;
 }
+
+/** @deprecated Use getContextOrganizationId. */
+export const getContextStructureId = getContextOrganizationId;

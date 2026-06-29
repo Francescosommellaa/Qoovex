@@ -1,6 +1,6 @@
 # Qoovex
 
-Monorepo di Qoovex Pre-Service Brain: il prodotto che trasforma eventi e regole interne in calcoli, briefing e preparazioni verificabili.
+Monorepo di Qoovex: il sistema piu semplice per piccole imprese e subappaltatori che devono tenere pronti documenti, scadenze e prove di cantiere.
 
 ## Stato
 
@@ -11,7 +11,7 @@ Monorepo di Qoovex Pre-Service Brain: il prodotto che trasforma eventi e regole 
 - `packages/db`: schema Prisma e migrazioni auth, tenant e supporto.
 - `packages/types`: ruoli, permessi e DTO platform-neutral per auth/tenant/supporto.
 
-Backend Event, AI e nuovo stile non sono definiti in questo reset.
+Il dominio documenti, scadenze, cantieri e prove operative e in fase di reset documentale. Non sono ancora implementati modello MVP, UI finale o migrazioni di dominio.
 
 ## Regole
 
@@ -20,6 +20,7 @@ Backend Event, AI e nuovo stile non sono definiti in questo reset.
 - Nessun ruolo o permesso proveniente dal client e fonte autorevole.
 - Il codice struttura identifica una struttura, ma non autentica.
 - Le app non importano codice da altre app.
+- Qoovex organizza documenti e stati operativi; non promette conformita o validita legale.
 
 ## Comandi
 

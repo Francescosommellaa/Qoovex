@@ -9,7 +9,8 @@
   "project": {
     "name": "Qoovex",
     "type": "SaaS",
-    "audience": "professional chefs and cooks",
+    "audience": "small construction businesses, subcontractors, craftspeople and safety consultants",
+    "positioning": "The simplest system for small businesses and subcontractors to keep documents, deadlines and construction-site evidence ready.",
     "country": "Italy"
   },
   "notes": [

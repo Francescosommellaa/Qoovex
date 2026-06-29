@@ -55,10 +55,10 @@ export async function findWorkspaceUserById(userId: string) {
       phoneNumber: true,
       mfaEnabled: true,
       platformRole: true,
-      structureMemberships: {
+      organizationMemberships: {
         where: { revokedAt: null },
         take: 1,
-        select: { role: true, structureId: true },
+        select: { role: true, organizationId: true },
       },
       usernameChangedAt: true,
       avatarBlobPathname: true,
