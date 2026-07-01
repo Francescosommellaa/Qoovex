@@ -2,7 +2,7 @@
 
 `apps/workspace` e il runtime API-only per account, autenticazione e sicurezza. Non contiene ancora i moduli definitivi per documenti, scadenze, cantieri, lavoratori o prove di cantiere.
 
-`Organization` e il tenant tecnico canonico. I modelli Prisma runtime sono `Organization*`; le tabelle fisiche `Structure*` restano temporaneamente mappate per compatibilita con la baseline auth/tenant esistente.
+`Organization` e il tenant tecnico canonico. I modelli e le tabelle Prisma usano naming `Organization*`; non esiste piu compatibilita runtime con nomi tenant legacy.
 
 ## Confini
 

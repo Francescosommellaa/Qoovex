@@ -1,57 +1,26 @@
-# Qoovex Product Reset
+# 00 - Product Reset
 
-## Decisione
+## Regola primaria
 
-Qoovex e stato riposizionato completamente.
+Qoovex e il sistema piu semplice per piccole imprese e subappaltatori che devono tenere pronti documenti, scadenze e prove di cantiere.
 
-Da ora Qoovex non e piu un prodotto per cucina, chef, eventi food, menu, ricette o operazioni di sala. Ogni assunzione precedente collegata a quel dominio deve essere considerata non valida, anche se e ancora presente in documenti legacy, codice, nomi di ruoli o test.
+Il vecchio dominio legato a chef, cucina, ricette, menu, allergeni, eventi food, brigata, sala e pre-service non e piu parte del prodotto e non deve guidare decisioni, naming, UI, API, schema o documentazione.
 
-La nuova definizione guida e:
+## Nuovo dominio
 
-> Qoovex e il sistema piu semplice per piccole imprese e subappaltatori che devono tenere pronti documenti, scadenze e prove di cantiere.
+Qoovex organizza:
 
-## Vecchio dominio da abbandonare
-
-Non usare piu come riferimento di prodotto:
-
-- chef, cuochi, brigata, sala, capo cucina, capo sala;
-- ricette, menu, allergeni, valori nutrizionali;
-- cucina professionale, preparazioni, grammature, vassoi, portate;
-- eventi food, servizio, pre-service, service mode;
-- calcoli di quantita, margini food, arrotondamenti per preparazioni;
-- QR menu, HACCP come prodotto centrale, KDS o operations ristorative.
-
-Questi concetti possono comparire solo in audit, documenti legacy marcati come tali o note di bonifica.
-
-## Nuovo dominio prodotto
-
-Qoovex serve piccole imprese edili, subappaltatori, artigiani e consulenti che devono organizzare:
-
-- documenti aziendali;
-- documenti dei lavoratori;
-- attestati;
-- scadenze;
+- aziende;
+- lavoratori;
 - cantieri;
-- checklist operative;
-- foto e prove di cantiere;
-- pacchetti documentali da condividere;
-- stati di completezza;
-- promemoria;
-- documenti mancanti;
-- documenti scaduti;
-- documenti da verificare.
+- documenti;
+- scadenze;
+- checklist configurabili;
+- foto, file, note e prove operative;
+- pacchetti documentali pronti per revisione;
+- link di condivisione controllati.
 
-## Nuova promessa
-
-Qoovex aiuta a ridurre caos, dimenticanze e scambi disordinati di file.
-
-La promessa corretta e:
-
-> Documenti, scadenze e prove di cantiere in ordine, pronti da controllare e condividere.
-
-Qoovex organizza, ricorda, archivia, controlla e condivide informazioni operative. Non sostituisce valutazioni legali, tecniche, di sicurezza o consulenziali.
-
-## Linguaggio obbligatorio e vietato
+## Linguaggio consentito
 
 Usare formule prudenti:
 
@@ -61,33 +30,34 @@ Usare formule prudenti:
 - documenti scaduti;
 - documenti da verificare;
 - checklist configurata;
+- prova di cantiere;
 - pacchetto documentale pronto per revisione;
-- informazioni da confermare con il consulente o responsabile.
+- informazioni da confermare con consulente o responsabile.
 
-Non promettere mai:
+## Linguaggio vietato
 
-- "sei a norma";
-- "conformita garantita";
-- "sicurezza legale assicurata";
-- "il software certifica l'impresa";
-- "il documento e legalmente valido".
+Non promettere:
 
-## Regole anti-confusione per Codex
+- conformita garantita;
+- sicurezza legale assicurata;
+- certificazione dell'impresa;
+- validita legale automatica dei documenti;
+- idoneita o abilitazione automatica di lavoratori;
+- sostituzione di consulenti, RSPP, tecnici o responsabili.
 
-- Parti sempre dal nuovo dominio documenti, scadenze e prove di cantiere.
-- Non riusare nomi, copy, ruoli o workflow del vecchio prodotto food.
-- Non sostituire parole vecchie con parole nuove in modo superficiale: se la logica e ancora food, va segnalata e riprogettata.
-- Non inventare normative, obblighi, scadenze ufficiali o documenti richiesti.
-- Distingui sempre tra dati certi forniti dal progetto, assunzioni operative provvisorie e punti da validare.
-- Se una decisione richiede riferimenti legali, chiedi materiale al proprietario del progetto.
-- Mantieni il prodotto semplice, mobile-first e comprensibile a utenti poco digitali.
+## Regole per Codex
 
-## Cosa non deve piu essere generato
+- Non riutilizzare concetti del vecchio prodotto.
+- Non inventare normative, documenti ufficiali o scadenze legali.
+- Non introdurre provider diversi da Prisma per il database e Blob per file binari.
+- Non introdurre compatibilita `Structure*` o ruoli legacy.
+- Usare `Organization` come tenant tecnico e "Azienda" come label utente.
+- Ogni nuova feature deve essere semplice, mobile-first, prudente e filtrata per `organizationId`.
 
-- Dashboard per chef, cucina, sala o brigata.
-- Fixture food, eventi, menu, allergeni o ricette.
-- Permessi basati su reparto sala/cucina.
-- Calcoli di quantita alimentari o preparazioni.
-- Copy che suggerisce decisioni automatiche di conformita.
-- Funzioni enterprise da general contractor se non richieste esplicitamente.
-- AI autonoma che interpreta norme o decide validita legale.
+## Cosa non generare piu
+
+- Route, tipi o servizi `Structure*`.
+- Ruoli chef/cucina/sala/brigata.
+- Documenti o flussi food.
+- Copy che suggerisce conformita automatica.
+- Template normativi non validati.

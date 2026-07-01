@@ -1,5 +1,5 @@
 {
-  "$schema": "https://v2-10-0.turborepo.dev/schema.json",
+  "$schema": "https://v2-10-1.turborepo.dev/schema.json",
   "globalEnv": [
     "AUTH_SECRET",
     "AUTH_URL",
@@ -7,7 +7,10 @@
     "GOOGLE_CLIENT_SECRET",
     "RESEND_API_KEY",
     "RESEND_FROM_EMAIL",
-    "RESEND_REPLY_TO_EMAIL"
+    "RESEND_REPLY_TO_EMAIL",
+    "BLOB_READ_WRITE_TOKEN",
+    "BLOB_STORE_ID",
+    "VERCEL_OIDC_TOKEN"
   ],
   "tasks": {
     "build": {
@@ -24,6 +27,9 @@
         "RESEND_API_KEY",
         "RESEND_FROM_EMAIL",
         "RESEND_REPLY_TO_EMAIL",
+        "BLOB_READ_WRITE_TOKEN",
+        "BLOB_STORE_ID",
+        "VERCEL_OIDC_TOKEN",
         "DEV_AUTH_SECRET",
         "QOOVEX_MFA_ENCRYPTION_KEY",
         "QOOVEX_MFA_COOKIE_SECRET"

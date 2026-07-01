@@ -11,10 +11,18 @@ Non mettere qui:
 
 Regole:
 - `prisma/` contiene la verita` dello schema;
+- `generated/prisma/` contiene il Prisma Client generato con `provider = "prisma-client"`;
+- `lib/prisma.ts` crea il singleton server-side con `PrismaPg`;
 - `src/` espone client e API del package;
 - ogni cambiamento strutturale qui va allineato a `project_brain.json` se stabilizza una convenzione.
 
-Auth / User:
-- `User.clerkId` e' stato rimosso (`20260522120000_nextauth_remove_clerk`);
-- dopo ogni pull che tocca lo schema: `pnpm db:generate` e, se serve, `pnpm db:migrate:deploy`;
-- se Prisma Studio mostra errori su `clerkId`, chiudi Studio, rigenera il client e riapri.
+Comandi utili:
+
+```bash
+pnpm --filter @qoovex/db db:generate
+pnpm --filter @qoovex/db db:seed
+pnpm --filter @qoovex/db verify:prisma
+pnpm --filter @qoovex/db exec prisma studio
+```
+
+Non importare Prisma Client in componenti browser o client component.

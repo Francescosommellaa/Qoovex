@@ -10,11 +10,10 @@ Questo piano divide il reset in task piccoli. Non richiede implementazione compl
 - Dipendenze: decisione esplicita del proprietario sul nuovo dominio.
 - Serve dal proprietario: conferma che i documenti numerati sono canonici.
 - Output atteso: docs 00-08 e documenti legacy marcati come non canonici.
-- Criteri di completamento: nuovo posizionamento leggibile senza aprire documenti legacy.
 
 ## Blocco 2 - Bonifica naming e ruoli
 
-- Obiettivo: sostituire ruoli e permessi cucina/sala con ruoli coerenti.
+- Obiettivo: mantenere ruoli e permessi coerenti con `Organization`, documenti, cantieri, checklist, prove e pacchetti.
 - File/cartelle coinvolte: `packages/types`, `packages/db`, `apps/workspace/src/shared/server`.
 - Rischi: migrazioni e policy auth possono rompersi se rinominate senza piano DB.
 - Dipendenze: scelta nomi definitivi per azienda/organizzazione e ruoli.

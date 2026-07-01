@@ -55,6 +55,3 @@ export function getContextOrganizationId(context: ViewerContext) {
   if (!id) throw new AccessError("Nessuna azienda attiva.", 403);
   return id;
 }
-
-/** @deprecated Use getContextOrganizationId. */
-export const getContextStructureId = getContextOrganizationId;

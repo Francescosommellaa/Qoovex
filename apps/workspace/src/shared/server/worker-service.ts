@@ -1,0 +1,121 @@
+import "server-only";
+
+import { db } from "@qoovex/db";
+import type { RecordStatus } from "@qoovex/types";
+import { AccessError } from "@shared/server/access-errors";
+import { recordSupportAccess } from "@shared/server/support-access-service";
+import { trimOptionalText, trimRequiredText } from "./document-domain-validation";
+import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { normalizeOptionalEmail, parseEditableRecordStatus, rejectSensitiveFields } from "./worker-jobsite-validation";
+
+const WORKER_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
+const WORKER_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+
+const workerSelect = {
+  id: true,
+  organizationId: true,
+  displayName: true,
+  email: true,
+  phone: true,
+  roleLabel: true,
+  status: true,
+  notes: true,
+  createdAt: true,
+  updatedAt: true,
+  archivedAt: true,
+} as const;
+
+export interface CreateWorkerInput extends Record<string, unknown> {
+  displayName?: unknown;
+  email?: unknown;
+  phone?: unknown;
+  roleLabel?: unknown;
+  status?: unknown;
+  notes?: unknown;
+}
+
+export interface UpdateWorkerInput extends Record<string, unknown> {
+  displayName?: unknown;
+  email?: unknown;
+  phone?: unknown;
+  roleLabel?: unknown;
+  status?: unknown;
+  notes?: unknown;
+}
+
+export async function listWorkers() {
+  const { context, organizationId } = await requireOrganizationDomainAccess("workers:read", WORKER_READ_ROLES);
+  const workers = await db.worker.findMany({
+    where: { organizationId, archivedAt: null },
+    select: workerSelect,
+    orderBy: [{ displayName: "asc" }, { createdAt: "asc" }],
+  });
+  await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "workers" });
+  return workers;
+}
+
+export async function getWorker(workerId: string) {
+  const { context, organizationId } = await requireOrganizationDomainAccess("workers:read", WORKER_READ_ROLES);
+  const worker = await db.worker.findFirst({ where: { id: workerId, organizationId, archivedAt: null }, select: workerSelect });
+  if (!worker) throw new AccessError("Lavoratore non trovato.", 404);
+  await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "worker", resourceId: worker.id });
+  return worker;
+}
+
+export async function createWorker(input: CreateWorkerInput) {
+  rejectSensitiveFields(input);
+  const { context, organizationId } = await requireOrganizationDomainAccess("workers:create", WORKER_MANAGE_ROLES);
+  const displayName = trimRequiredText(input.displayName, "Nome lavoratore", 2, 160);
+  const email = normalizeOptionalEmail(input.email) ?? null;
+  const phone = trimOptionalText(input.phone, "Telefono", 80) ?? null;
+  const roleLabel = trimOptionalText(input.roleLabel, "Ruolo operativo", 120) ?? null;
+  const status = input.status === undefined ? "ACTIVE" : parseEditableRecordStatus(input.status);
+  const notes = trimOptionalText(input.notes, "Note lavoratore", 4000) ?? null;
+
+  const worker = await db.worker.create({
+    data: { organizationId, displayName, email, phone, roleLabel, status, notes },
+    select: workerSelect,
+  });
+  await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "worker", resourceId: worker.id });
+  return worker;
+}
+
+export async function updateWorker(workerId: string, input: UpdateWorkerInput) {
+  rejectSensitiveFields(input);
+  const { context, organizationId } = await requireOrganizationDomainAccess("workers:update", WORKER_MANAGE_ROLES);
+  const existing = await db.worker.findFirst({ where: { id: workerId, organizationId, archivedAt: null }, select: { id: true } });
+  if (!existing) throw new AccessError("Lavoratore non trovato.", 404);
+
+  const data: {
+    displayName?: string;
+    email?: string | null;
+    phone?: string | null;
+    roleLabel?: string | null;
+    status?: RecordStatus;
+    notes?: string | null;
+  } = {};
+  if (input.displayName !== undefined) data.displayName = trimRequiredText(input.displayName, "Nome lavoratore", 2, 160);
+  if (input.email !== undefined) data.email = normalizeOptionalEmail(input.email) ?? null;
+  if (input.phone !== undefined) data.phone = trimOptionalText(input.phone, "Telefono", 80) ?? null;
+  if (input.roleLabel !== undefined) data.roleLabel = trimOptionalText(input.roleLabel, "Ruolo operativo", 120) ?? null;
+  if (input.status !== undefined) data.status = parseEditableRecordStatus(input.status);
+  if (input.notes !== undefined) data.notes = trimOptionalText(input.notes, "Note lavoratore", 4000) ?? null;
+  if (!Object.keys(data).length) throw new AccessError("Nessun dato lavoratore da aggiornare.", 409);
+
+  const worker = await db.worker.update({ where: { id: existing.id }, data, select: workerSelect });
+  await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "worker", resourceId: worker.id });
+  return worker;
+}
+
+export async function archiveWorker(workerId: string) {
+  const { context, organizationId } = await requireOrganizationDomainAccess("workers:archive", WORKER_MANAGE_ROLES);
+  const existing = await db.worker.findFirst({ where: { id: workerId, organizationId, archivedAt: null }, select: { id: true } });
+  if (!existing) throw new AccessError("Lavoratore non trovato.", 404);
+  await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "worker", resourceId: existing.id });
+  const worker = await db.worker.update({
+    where: { id: existing.id },
+    data: { archivedAt: new Date(), status: "ARCHIVED" },
+    select: workerSelect,
+  });
+  return worker;
+}

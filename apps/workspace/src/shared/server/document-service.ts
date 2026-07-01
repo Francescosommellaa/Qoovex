@@ -1,0 +1,220 @@
+import "server-only";
+
+import { db } from "@qoovex/db";
+import type { DocumentOwnerType, DocumentStatus } from "@qoovex/types";
+import { documentOwnerTypes, documentStatuses } from "@qoovex/types";
+import { AccessError } from "@shared/server/access-errors";
+import { recordSupportAccess } from "@shared/server/support-access-service";
+import { isEnumValue, parseOptionalDate, rejectBinaryPayload, trimOptionalId, trimOptionalText, trimRequiredText } from "./document-domain-validation";
+import { requireOrganizationDomainAccess } from "./domain-access-service";
+
+const FULL_DOCUMENT_ROLES = ["OWNER", "ADMIN"] as const;
+const DOCUMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const DOCUMENT_UPDATE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+
+const documentSelect = {
+  id: true,
+  organizationId: true,
+  documentTypeId: true,
+  ownerType: true,
+  workerId: true,
+  jobSiteId: true,
+  title: true,
+  status: true,
+  expiryDate: true,
+  reviewedAt: true,
+  reviewedById: true,
+  notes: true,
+  createdAt: true,
+  updatedAt: true,
+  archivedAt: true,
+} as const;
+
+export interface ListDocumentsInput {
+  ownerType?: unknown;
+  workerId?: unknown;
+  jobSiteId?: unknown;
+  status?: unknown;
+}
+
+export interface CreateDocumentInput extends Record<string, unknown> {
+  title?: unknown;
+  documentTypeId?: unknown;
+  ownerType?: unknown;
+  workerId?: unknown;
+  jobSiteId?: unknown;
+  status?: unknown;
+  expiryDate?: unknown;
+  notes?: unknown;
+}
+
+export interface UpdateDocumentInput extends Record<string, unknown> {
+  title?: unknown;
+  documentTypeId?: unknown;
+  ownerType?: unknown;
+  workerId?: unknown;
+  jobSiteId?: unknown;
+  status?: unknown;
+  expiryDate?: unknown;
+  notes?: unknown;
+}
+
+function parseOwnerType(value: unknown): DocumentOwnerType {
+  if (!isEnumValue(documentOwnerTypes, value)) throw new AccessError("Titolare documento non valido.", 409);
+  return value;
+}
+
+function parseDocumentStatus(value: unknown): DocumentStatus {
+  if (!isEnumValue(documentStatuses, value)) throw new AccessError("Stato documento non valido.", 409);
+  return value;
+}
+
+async function assertDocumentType(organizationId: string, documentTypeId: string | null | undefined) {
+  if (!documentTypeId) return null;
+  const documentType = await db.documentType.findFirst({ where: { id: documentTypeId, organizationId, archivedAt: null }, select: { id: true } });
+  if (!documentType) throw new AccessError("Tipo documento non trovato.", 404);
+  return documentType.id;
+}
+
+async function assertWorker(organizationId: string, workerId: string | null | undefined) {
+  if (!workerId) return null;
+  const worker = await db.worker.findFirst({ where: { id: workerId, organizationId, archivedAt: null }, select: { id: true } });
+  if (!worker) throw new AccessError("Lavoratore non trovato.", 404);
+  return worker.id;
+}
+
+async function assertJobSite(organizationId: string, jobSiteId: string | null | undefined) {
+  if (!jobSiteId) return null;
+  const jobSite = await db.jobSite.findFirst({ where: { id: jobSiteId, organizationId, archivedAt: null }, select: { id: true } });
+  if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
+  return jobSite.id;
+}
+
+async function normalizeDocumentOwner(input: {
+  organizationId: string;
+  ownerType: DocumentOwnerType;
+  workerId: string | null | undefined;
+  jobSiteId: string | null | undefined;
+}) {
+  if (input.ownerType === "ORGANIZATION") {
+    if (input.workerId || input.jobSiteId) throw new AccessError("Un documento azienda non deve indicare lavoratore o cantiere.", 409);
+    return { workerId: null, jobSiteId: null };
+  }
+  if (input.ownerType === "WORKER") {
+    if (!input.workerId) throw new AccessError("Il documento lavoratore richiede un lavoratore.", 409);
+    if (input.jobSiteId) throw new AccessError("Il documento lavoratore non deve indicare un cantiere.", 409);
+    return { workerId: await assertWorker(input.organizationId, input.workerId), jobSiteId: null };
+  }
+  if (!input.jobSiteId) throw new AccessError("Il documento cantiere richiede un cantiere.", 409);
+  if (input.workerId) throw new AccessError("Il documento cantiere non deve indicare un lavoratore.", 409);
+  return { workerId: null, jobSiteId: await assertJobSite(input.organizationId, input.jobSiteId) };
+}
+
+export async function listDocuments(input: ListDocumentsInput = {}) {
+  const { context, organizationId } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_READ_ROLES);
+  const where: {
+    organizationId: string;
+    archivedAt: null;
+    ownerType?: DocumentOwnerType;
+    workerId?: string;
+    jobSiteId?: string;
+    status?: DocumentStatus;
+  } = { organizationId, archivedAt: null };
+  if (input.ownerType !== undefined) where.ownerType = parseOwnerType(input.ownerType);
+  const workerId = trimOptionalId(input.workerId, "Lavoratore");
+  const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
+  if (workerId) where.workerId = workerId;
+  if (jobSiteId) where.jobSiteId = jobSiteId;
+  if (input.status !== undefined) where.status = parseDocumentStatus(input.status);
+
+  const documents = await db.document.findMany({ where, select: documentSelect, orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }] });
+  await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "documents" });
+  return documents;
+}
+
+export async function getDocument(documentId: string) {
+  const { context, organizationId } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_READ_ROLES);
+  const document = await db.document.findFirst({ where: { id: documentId, organizationId, archivedAt: null }, select: documentSelect });
+  if (!document) throw new AccessError("Documento non trovato.", 404);
+  await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document", resourceId: document.id });
+  return document;
+}
+
+export async function createDocument(input: CreateDocumentInput) {
+  rejectBinaryPayload(input);
+  const { context, organizationId } = await requireOrganizationDomainAccess("documents:update", FULL_DOCUMENT_ROLES);
+  const title = trimRequiredText(input.title, "Titolo documento", 2, 160);
+  const ownerType = parseOwnerType(input.ownerType);
+  const documentTypeId = await assertDocumentType(organizationId, trimOptionalId(input.documentTypeId, "Tipo documento"));
+  const workerIdInput = trimOptionalId(input.workerId, "Lavoratore");
+  const jobSiteIdInput = trimOptionalId(input.jobSiteId, "Cantiere");
+  const owner = await normalizeDocumentOwner({ organizationId, ownerType, workerId: workerIdInput, jobSiteId: jobSiteIdInput });
+  const status = input.status === undefined ? "TO_REVIEW" : parseDocumentStatus(input.status);
+  if (status === "ARCHIVED") throw new AccessError("Usa l'archiviazione per archiviare un documento.", 409);
+  const expiryDate = parseOptionalDate(input.expiryDate, "Data scadenza") ?? null;
+  const notes = trimOptionalText(input.notes, "Note documento", 4000) ?? null;
+
+  const document = await db.document.create({
+    data: { organizationId, documentTypeId, ownerType, ...owner, title, status, expiryDate, notes },
+    select: documentSelect,
+  });
+  await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document", resourceId: document.id });
+  return document;
+}
+
+export async function updateDocument(documentId: string, input: UpdateDocumentInput) {
+  rejectBinaryPayload(input);
+  const { context, organizationId } = await requireOrganizationDomainAccess("documents:update", DOCUMENT_UPDATE_ROLES);
+  const existing = await db.document.findFirst({
+    where: { id: documentId, organizationId, archivedAt: null },
+    select: { id: true, ownerType: true, workerId: true, jobSiteId: true },
+  });
+  if (!existing) throw new AccessError("Documento non trovato.", 404);
+
+  const data: {
+    title?: string;
+    documentTypeId?: string | null;
+    ownerType?: DocumentOwnerType;
+    workerId?: string | null;
+    jobSiteId?: string | null;
+    status?: DocumentStatus;
+    expiryDate?: Date | null;
+    notes?: string | null;
+  } = {};
+  if (input.title !== undefined) data.title = trimRequiredText(input.title, "Titolo documento", 2, 160);
+  if (input.documentTypeId !== undefined) data.documentTypeId = await assertDocumentType(organizationId, trimOptionalId(input.documentTypeId, "Tipo documento"));
+  const ownerType = input.ownerType === undefined ? existing.ownerType : parseOwnerType(input.ownerType);
+  const workerIdInput = input.workerId === undefined ? existing.workerId : trimOptionalId(input.workerId, "Lavoratore");
+  const jobSiteIdInput = input.jobSiteId === undefined ? existing.jobSiteId : trimOptionalId(input.jobSiteId, "Cantiere");
+  if (input.ownerType !== undefined || input.workerId !== undefined || input.jobSiteId !== undefined) {
+    const owner = await normalizeDocumentOwner({ organizationId, ownerType, workerId: workerIdInput, jobSiteId: jobSiteIdInput });
+    data.ownerType = ownerType;
+    data.workerId = owner.workerId;
+    data.jobSiteId = owner.jobSiteId;
+  }
+  if (input.status !== undefined) {
+    const status = parseDocumentStatus(input.status);
+    if (status === "ARCHIVED") throw new AccessError("Usa l'archiviazione per archiviare un documento.", 409);
+    data.status = status;
+  }
+  if (input.expiryDate !== undefined) data.expiryDate = parseOptionalDate(input.expiryDate, "Data scadenza") ?? null;
+  if (input.notes !== undefined) data.notes = trimOptionalText(input.notes, "Note documento", 4000) ?? null;
+  if (!Object.keys(data).length) throw new AccessError("Nessun dato documento da aggiornare.", 409);
+
+  const document = await db.document.update({ where: { id: existing.id }, data, select: documentSelect });
+  await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document", resourceId: document.id });
+  return document;
+}
+
+export async function archiveDocument(documentId: string) {
+  const { context, organizationId } = await requireOrganizationDomainAccess("documents:archive", FULL_DOCUMENT_ROLES);
+  const existing = await db.document.findFirst({ where: { id: documentId, organizationId, archivedAt: null }, select: { id: true } });
+  if (!existing) throw new AccessError("Documento non trovato.", 404);
+  await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "document", resourceId: existing.id });
+  const document = await db.document.update({
+    where: { id: existing.id },
+    data: { archivedAt: new Date(), status: "ARCHIVED" },
+    select: documentSelect,
+  });
+  return document;
+}

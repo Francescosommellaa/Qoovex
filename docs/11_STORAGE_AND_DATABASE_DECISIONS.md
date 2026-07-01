@@ -11,18 +11,20 @@ Non introdurre Supabase, Firebase, S3, storage custom o provider non richiesti.
 
 ## Stato attuale del repo
 
-Il repo contiene solo una traccia Blob collegata al profilo utente:
+Il repo contiene una traccia Blob collegata al profilo utente e, dal modello MVP, campi metadata Blob per documenti e prove:
 
 - `User.avatarBlobPathname` nello schema Prisma;
+- `DocumentVersion.blobKey` per versioni documento;
+- `Evidence.blobKey` opzionale per prove operative;
 - README account che indica che le immagini profilo sono salvate come Blob.
 
-Non esiste ancora una pipeline documenti/prove basata su Blob. In questa fase non va implementata una integrazione completa.
+Non esiste ancora una pipeline upload documenti/prove basata su Blob. I nuovi record salvano solo metadati e chiavi Blob.
 
 ## Cosa salva Prisma
 
 Prisma deve salvare:
 
-- record `Organization`, `Worker`, `JobSite`, `Document`, `DocumentVersion`, `Deadline`, `Checklist`, `Evidence`, `DocumentPackage`, `ShareLink` quando saranno introdotti;
+- record `Organization`, `Worker`, `JobSite`, `Document`, `DocumentVersion`, `Deadline`, `Checklist`, `Evidence`, `DocumentPackage`, `ShareLink`;
 - metadati file;
 - relazioni tra file, utenti, organizzazione, cantieri e lavoratori;
 - stati documentali;
@@ -77,7 +79,7 @@ Il record Prisma futuro `DocumentVersion` deve contenere almeno:
 
 - Upload completo documenti/prove.
 - Provider Blob nuovo o credenziali nuove.
-- Modelli Prisma definitivi per documenti/cantieri/lavoratori.
+- API complete per documenti/cantieri/lavoratori.
 - Anteprime, OCR, AI o classificazione automatica.
 - Liste normative precompilate.
 

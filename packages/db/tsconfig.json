@@ -12,6 +12,6 @@
     "isolatedModules": true,
     "types": ["node"]
   },
-  "include": ["src", "prisma.config.ts"],
+  "include": ["src", "lib", "generated", "prisma.config.ts", "prisma/seed.ts", "scripts"],
   "exclude": ["node_modules"]
 }

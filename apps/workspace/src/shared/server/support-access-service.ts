@@ -42,12 +42,12 @@ export async function findOrganizationForSupport(userId: string, codeInput: stri
   return organization;
 }
 
-export async function openSupportSession(userId: string, input: { organizationCode?: string; structureCode?: string; reason: string }) {
+export async function openSupportSession(userId: string, input: { organizationCode?: string; reason: string }) {
   const actor = await getSupportActor(userId);
   const reason = input.reason.trim();
   if (reason.length < 8 || reason.length > 500) throw new AccessError("Indica un motivo di supporto specifico.", 409);
   if (await getActiveSupportSession(userId)) await closeSupportSession(userId);
-  const organization = await findOrganizationForSupport(userId, input.organizationCode ?? input.structureCode ?? "");
+  const organization = await findOrganizationForSupport(userId, input.organizationCode ?? "");
   const rawToken = crypto.randomBytes(32).toString("base64url");
   const now = new Date();
 
@@ -92,6 +92,3 @@ export async function recordSupportAccess(input: { userId: string; action: "READ
   if ((input.action === "SENSITIVE" || input.action === "EXPORT") && (!session.sensitiveConfirmedUntil || session.sensitiveConfirmedUntil <= new Date())) throw new AccessError("Conferma MFA recente richiesta.", 403);
   await db.supportAuditEvent.create({ data: { supportSessionId: session.id, actorId: input.userId, organizationId: session.organization.id, action: input.action, resourceType: input.resourceType, resourceId: input.resourceId, metadata: input.metadata as Prisma.InputJsonValue | undefined } });
 }
-
-/** @deprecated Use findOrganizationForSupport. */
-export const findStructureForSupport = findOrganizationForSupport;

@@ -106,15 +106,15 @@ I permessi sono sempre default-deny e verificati server-side. I permessi sono ac
 ## Note di implementazione
 
 - I ruoli runtime attivi sono `OrganizationRole`. La migration dedicata mappa i valori legacy senza rinominare fisicamente le tabelle.
-- Le route `/api/structure*` restano compatibili come wrapper deprecati fino alla rimozione concordata.
-- Il nuovo codice dominio deve usare `Organization` e non introdurre nuovi concetti `Structure`.
+- Le route tenant legacy sono state rimosse dal reset definitivo.
+- Il codice dominio deve usare `Organization` e non introdurre naming tenant legacy.
 - `VIEWER` non deve ottenere `documents:read`: i servizi di condivisione devono esporre solo i documenti inclusi nel pacchetto.
 - `SITE_MANAGER` e `WORKER` richiedono filtri per assegnazione oltre ai permessi.
 
 ## Cosa non implementare ancora
 
-- Rinomina fisica delle tabelle legacy `Structure*`.
-- Modelli definitivi per documenti, cantieri e lavoratori.
+- Rinomine conservative del vecchio tenant: il reset definitivo usa gia una baseline pulita.
+- API complete per documenti, cantieri e lavoratori.
 - Upload Blob completo.
 - Liste documentali o scadenze normative precompilate non validate.
 - AI normativa autonoma.
@@ -124,5 +124,5 @@ I permessi sono sempre default-deny e verificati server-side. I permessi sono ac
 
 - Nome tecnico: `Organization`.
 - Nome prodotto: "Azienda".
-- Database attuale: `Structure*` e un nome legacy temporaneo.
+- Database attuale: baseline pulita con naming fisico `Organization*`.
 - Ogni nuovo documento, API o modello deve indicare se usa il dominio nuovo o se e compatibilita legacy.

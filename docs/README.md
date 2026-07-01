@@ -2,7 +2,7 @@
 
 Questa cartella contiene la documentazione di prodotto e lavoro del nuovo Qoovex.
 
-La fonte primaria e il set numerato `00`-`14`. I documenti precedenti non vanno usati come direzione prodotto se contengono riferimenti a chef, cucina, eventi food, menu, allergeni, pre-service o brigata.
+La fonte primaria e il set numerato `00`-`28`.
 
 ## Ordine di lettura
 
@@ -17,14 +17,24 @@ La fonte primaria e il set numerato `00`-`14`. I documenti precedenti non vanno 
 9. `09_DOMAIN_NAMING_AND_PERMISSIONS.md`: naming tecnico, ruoli MVP e matrice permessi.
 10. `10_LEGACY_REFACTOR_PLAN.md`: ordine controllato di bonifica legacy.
 11. `11_STORAGE_AND_DATABASE_DECISIONS.md`: decisioni Prisma e Blob.
-12. `12_ORGANIZATION_MIGRATION_PLAN.md`: strategia e stato della migrazione `Structure*` -> `Organization*`.
+12. `12_ORGANIZATION_MIGRATION_PLAN.md`: piano storico superato dal reset definitivo.
 13. `13_RUNTIME_AUTH_AND_PERMISSIONS.md`: ruoli runtime, permessi e regole default-deny.
-14. `14_API_RENAME_REPORT.md`: route legacy, route nuove e compatibilita temporanee.
+14. `14_API_RENAME_REPORT.md`: report storico superato dal reset definitivo.
+15. `15_MVP_DOMAIN_MODEL.md`: modello dominio MVP generico e configurabile.
+16. `16_DOCUMENT_STATUS_AND_DEADLINES.md`: stati documentali, scadenze e copy prudente.
+17. `17_DOCUMENT_PACKAGE_AND_SHARING.md`: pacchetti documentali, viewer e share link.
+18. `18_MVP_API_AND_SERVICE_PLAN.md`: API/service futuri e criteri di sicurezza.
+19. `19_DOCUMENTS_AND_DEADLINES_IMPLEMENTATION.md`: implementazione API minime per tipi documento, documenti e scadenze.
+20. `20_DOCUMENT_VERSION_UPLOAD.md`: upload Blob privato e versioni documento.
+21. `21_WORKERS_AND_JOBSITES_IMPLEMENTATION.md`: implementazione API minime per lavoratori e cantieri.
+22. `22_MONOREPO_BOUNDARIES_AND_PLACEMENT.md`: confini app/package e regole di placement.
+23. `23_SHARED_PACKAGES_ROADMAP.md`: roadmap per package condivisi futuri.
+24. `24_APP_BOUNDARY_AUDIT.md`: audit specifico delle app del monorepo.
+25. `25_CHECKLISTS_AND_EVIDENCE_IMPLEMENTATION.md`: implementazione API minime per checklist e prove operative.
+26. `26_DOCUMENT_PACKAGES_AND_SHARE_LINKS_IMPLEMENTATION.md`: implementazione pacchetti documentali, share link e accesso viewer controllato.
+27. `27_LEGACY_RESET_AND_DB_BASELINE.md`: reset legacy definitivo e baseline Prisma pulita.
+28. `28_MOBILE_FIRST_DASHBOARD_IMPLEMENTATION.md`: prima dashboard operativa mobile-first del workspace.
 
-## Legacy da non usare come fonte prodotto
+## Documenti rimossi
 
-- `ProductContext.md`: descrive il vecchio Qoovex per strutture eventi e cucina.
-- `event-operations.md`: descrive flussi pre-service del vecchio dominio.
-- `OperationalProtocol.md`: aggiornato per il nuovo dominio, ma il brain MCP puo ancora restituire note legacy storiche.
-
-Il design system, Sirio, token, font, icone e stile visuale sono stati rimossi dal reset. Nessun documento deve trattarli come vincoli canonici.
+I documenti prodotto legacy `ProductContext.md` ed `event-operations.md` sono stati eliminati definitivamente e non devono essere ricreati.

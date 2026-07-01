@@ -1,23 +1,29 @@
 # Operational Protocol
 
+## Posizionamento invariabile
+
 Qoovex e il sistema piu semplice per piccole imprese e subappaltatori che devono tenere pronti documenti, scadenze e prove di cantiere.
 
-## Fonti
+## Fonti di verita
 
-1. `/docs/00_PRODUCT_RESET.md`.
-2. `/docs/09_DOMAIN_NAMING_AND_PERMISSIONS.md`.
-3. `/docs/11_STORAGE_AND_DATABASE_DECISIONS.md`.
-4. Codice reale.
+1. `docs/00_PRODUCT_RESET.md`;
+2. documenti numerati in `docs/`;
+3. codice reale del repo;
+4. Qoovex Brain tramite MCP.
 
-## Regole
+## Regole operative
 
-- `Organization` e il tenant tecnico canonico futuro; "Azienda" e la label prodotto.
-- `apps/workspace` resta nome tecnico dell'app, non concetto prodotto principale.
-- Auth, MFA, membership, inviti, audit e supporto restano confinati in `apps/workspace`.
-- Query DB solo in moduli server autorizzati.
-- Prisma resta il database layer vincolante.
-- Blob resta lo storage vincolante per file, documenti, foto e prove.
-- Non inventare normative, documenti ufficiali o scadenze.
+- Usare sempre il nuovo dominio: `Organization`, `Worker`, `JobSite`, `Document`, `Deadline`, `Checklist`, `Evidence`, `DocumentPackage`, `ShareLink`.
+- Non reintrodurre compatibilita `Structure*`.
+- Non inventare normative, obblighi, scadenze ufficiali o documenti legali.
 - Non promettere conformita, certificazione o validita legale.
-- Nessun reset di dominio puo cancellare dati auth o migrazioni Prisma.
-- Non rinominare valori Prisma persistiti senza migrazione conservativa dedicata.
+- Preservare auth, MFA, audit, support session, membership e inviti.
+- Applicare default-deny server-side.
+- Filtrare le query di dominio per `organizationId`.
+- Usare Prisma per database e metadati.
+- Usare Blob per PDF, immagini, documenti caricati, allegati e prove operative.
+- Non introdurre Supabase, Firebase, S3 o provider non richiesti.
+
+## Fine sessione
+
+Aggiornare `00_System/session-log.md` tramite MCP `qoovex_brain.append_file` con data, task e file principali modificati.

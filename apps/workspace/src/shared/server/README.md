@@ -21,3 +21,15 @@ Regole:
 ## Rate limit (`rate-limit.ts`)
 
 Limiter in-memory per route API costose. Non e' distribuito tra piu' istanze serverless: in produzione ad alto traffico valutare Upstash Redis.
+
+## Domain services
+
+I servizi dominio MVP restano app-specific finche dipendono da auth, policy workspace, support access o provider runtime:
+
+- documenti, versioni documento e scadenze;
+- lavoratori e cantieri;
+- checklist, voci checklist ed evidence.
+- pacchetti documentali, link di condivisione e accesso viewer tokenizzato.
+- dashboard operativa read-only, come aggregazione sintetica filtrata per Organization.
+
+I file Evidence usano l'adapter Blob esistente; le response pubbliche non espongono URL permanenti.

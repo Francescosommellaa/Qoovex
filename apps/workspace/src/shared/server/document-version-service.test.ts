@@ -1,0 +1,240 @@
+import type { OrganizationRole } from "@qoovex/types";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const mocks = vi.hoisted(() => ({
+  db: {
+    $transaction: vi.fn(),
+    document: { findFirst: vi.fn(), update: vi.fn() },
+    documentVersion: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
+  },
+  getViewerContext: vi.fn(),
+  getContextOrganizationId: vi.fn(),
+  requirePermission: vi.fn(),
+  recordSupportAccess: vi.fn(),
+  putPrivateBlob: vi.fn(),
+  getPrivateBlob: vi.fn(),
+  deletePrivateBlob: vi.fn(),
+}));
+
+vi.mock("server-only", () => ({}));
+vi.mock("@qoovex/db", () => ({ db: mocks.db }));
+vi.mock("@shared/server/access-errors", () => ({
+  AccessError: class AccessError extends Error {
+    constructor(message: string, public readonly status: 401 | 403 | 404 | 409 | 410) {
+      super(message);
+      this.name = "AccessError";
+    }
+  },
+}));
+vi.mock("@shared/server/access-context-service", () => ({
+  getViewerContext: mocks.getViewerContext,
+  getContextOrganizationId: mocks.getContextOrganizationId,
+  requirePermission: mocks.requirePermission,
+}));
+vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
+vi.mock("./blob-storage-service", () => ({
+  putPrivateBlob: mocks.putPrivateBlob,
+  getPrivateBlob: mocks.getPrivateBlob,
+  deletePrivateBlob: mocks.deletePrivateBlob,
+}));
+
+import {
+  DOCUMENT_VERSION_MAX_SIZE_BYTES,
+  archiveDocumentVersion,
+  getDocumentVersionDownload,
+  listDocumentVersions,
+  uploadDocumentVersion,
+} from "./document-version-service";
+
+const now = new Date("2026-06-30T12:00:00.000Z");
+
+const documentRecord = {
+  id: "doc-1",
+  organizationId: "org-1",
+  status: "MISSING",
+};
+
+const versionRecord = {
+  id: "version-1",
+  organizationId: "org-1",
+  documentId: "doc-1",
+  blobKey: "organizations/org-1/documents/doc-1/versions/version-1/documento.pdf",
+  originalFileName: "documento.pdf",
+  mimeType: "application/pdf",
+  size: 4,
+  checksum: "checksum",
+  uploadedById: "user-1",
+  createdAt: now,
+  archivedAt: null,
+};
+
+function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
+  for (const method of Object.values(model)) method.mockReset();
+}
+
+function setRole(role: OrganizationRole) {
+  mocks.getViewerContext.mockResolvedValue({
+    userId: "user-1",
+    platformRole: "USER",
+    membership: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
+    support: null,
+    permissions: [],
+  });
+}
+
+function makeFile(input: { name?: string; type?: string; bytes?: number[]; sizeBytes?: number } = {}) {
+  const bytes = input.sizeBytes === undefined
+    ? new Uint8Array(input.bytes ?? [1, 2, 3, 4])
+    : new Uint8Array(input.sizeBytes);
+  return new File([bytes], input.name ?? "documento.pdf", { type: input.type ?? "application/pdf" });
+}
+
+beforeEach(() => {
+  mocks.db.$transaction.mockReset();
+  resetModel(mocks.db.document);
+  resetModel(mocks.db.documentVersion);
+  mocks.getViewerContext.mockReset();
+  mocks.getContextOrganizationId.mockReset();
+  mocks.requirePermission.mockReset();
+  mocks.recordSupportAccess.mockReset();
+  mocks.putPrivateBlob.mockReset();
+  mocks.getPrivateBlob.mockReset();
+  mocks.deletePrivateBlob.mockReset();
+  mocks.getContextOrganizationId.mockReturnValue("org-1");
+  mocks.requirePermission.mockImplementation(() => undefined);
+  mocks.recordSupportAccess.mockResolvedValue(undefined);
+  mocks.putPrivateBlob.mockResolvedValue({ pathname: versionRecord.blobKey, etag: "etag", contentType: "application/pdf" });
+  mocks.deletePrivateBlob.mockResolvedValue(undefined);
+  mocks.db.$transaction.mockImplementation(async (callback) => callback(mocks.db));
+  mocks.db.document.findFirst.mockResolvedValue(documentRecord);
+  mocks.db.document.update.mockResolvedValue({ id: "doc-1" });
+  mocks.db.documentVersion.create.mockImplementation(async ({ data }) => ({
+    ...versionRecord,
+    ...data,
+    createdAt: now,
+    archivedAt: null,
+  }));
+  setRole("OWNER");
+});
+
+describe("document version service", () => {
+  it("lets owners upload a private Blob and saves only metadata in Prisma", async () => {
+    const version = await uploadDocumentVersion("doc-1", [makeFile()]);
+
+    expect(mocks.requirePermission).toHaveBeenCalledWith(expect.anything(), "documents:upload");
+    expect(mocks.putPrivateBlob).toHaveBeenCalledWith(expect.objectContaining({
+      contentType: "application/pdf",
+      maximumSizeInBytes: DOCUMENT_VERSION_MAX_SIZE_BYTES,
+      pathname: expect.stringContaining("organizations/org-1/documents/doc-1/versions/"),
+    }));
+    expect(mocks.db.documentVersion.create).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({
+        organizationId: "org-1",
+        documentId: "doc-1",
+        originalFileName: "documento.pdf",
+        mimeType: "application/pdf",
+        size: 4,
+        uploadedById: "user-1",
+        checksum: expect.any(String),
+      }),
+    }));
+    expect(mocks.db.document.update).toHaveBeenCalledWith(expect.objectContaining({
+      where: { id: "doc-1" },
+      data: { status: "TO_REVIEW" },
+    }));
+    expect(version).not.toHaveProperty("blobKey");
+    expect(version).not.toHaveProperty("url");
+    expect(version).not.toHaveProperty("downloadUrl");
+  });
+
+  it("lets admins upload but denies safety consultants, site managers, workers and viewers", async () => {
+    setRole("ADMIN");
+    await expect(uploadDocumentVersion("doc-1", [makeFile()])).resolves.toMatchObject({ documentId: "doc-1" });
+
+    for (const role of ["SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER", "VIEWER"] as const) {
+      setRole(role);
+      await expect(uploadDocumentVersion("doc-1", [makeFile()])).rejects.toMatchObject({ status: 404 });
+    }
+  });
+
+  it("lets safety consultants list and download versions but not archive", async () => {
+    setRole("SAFETY_CONSULTANT");
+    mocks.db.documentVersion.findMany.mockResolvedValue([versionRecord]);
+    mocks.db.documentVersion.findFirst.mockResolvedValue(versionRecord);
+    const stream = new ReadableStream<Uint8Array>();
+    mocks.getPrivateBlob.mockResolvedValue({ stream, contentType: "application/pdf", size: 4 });
+
+    await expect(listDocumentVersions("doc-1")).resolves.toEqual([expect.not.objectContaining({ blobKey: expect.any(String) })]);
+    await expect(getDocumentVersionDownload("doc-1", "version-1")).resolves.toMatchObject({ stream, originalFileName: "documento.pdf" });
+    await expect(archiveDocumentVersion("doc-1", "version-1")).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("denies broad read/download access to site managers, workers and viewers", async () => {
+    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
+      setRole(role);
+      await expect(listDocumentVersions("doc-1")).rejects.toMatchObject({ status: 404 });
+      await expect(getDocumentVersionDownload("doc-1", "version-1")).rejects.toMatchObject({ status: 404 });
+    }
+    expect(mocks.db.documentVersion.findMany).not.toHaveBeenCalled();
+  });
+
+  it("filters document and version access by organization", async () => {
+    mocks.db.document.findFirst.mockResolvedValue(null);
+
+    await expect(uploadDocumentVersion("doc-foreign", [makeFile()])).rejects.toMatchObject({ status: 404 });
+    await expect(listDocumentVersions("doc-foreign")).rejects.toMatchObject({ status: 404 });
+
+    expect(mocks.db.document.findFirst).toHaveBeenCalledWith(expect.objectContaining({
+      where: { id: "doc-foreign", organizationId: "org-1", archivedAt: null },
+    }));
+  });
+
+  it("rejects invalid upload payloads before Blob upload", async () => {
+    await expect(uploadDocumentVersion("doc-1", [])).rejects.toMatchObject({ status: 409 });
+    await expect(uploadDocumentVersion("doc-1", [makeFile(), makeFile()])).rejects.toMatchObject({ status: 409 });
+    await expect(uploadDocumentVersion("doc-1", [makeFile({ bytes: [] })])).rejects.toMatchObject({ status: 409 });
+    await expect(uploadDocumentVersion("doc-1", [makeFile({ type: "text/html" })])).rejects.toMatchObject({ status: 409 });
+    await expect(uploadDocumentVersion("doc-1", [makeFile({ sizeBytes: DOCUMENT_VERSION_MAX_SIZE_BYTES + 1 })])).rejects.toMatchObject({ status: 409 });
+    expect(mocks.putPrivateBlob).not.toHaveBeenCalled();
+  });
+
+  it("lists only active versions for the document and omits Blob keys", async () => {
+    mocks.db.documentVersion.findMany.mockResolvedValue([versionRecord]);
+
+    const versions = await listDocumentVersions("doc-1");
+
+    expect(mocks.db.documentVersion.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: { documentId: "doc-1", organizationId: "org-1", archivedAt: null },
+    }));
+    expect(versions[0]).not.toHaveProperty("blobKey");
+  });
+
+  it("soft archives a version without deleting the Blob", async () => {
+    mocks.db.documentVersion.findFirst.mockResolvedValue(versionRecord);
+    mocks.db.documentVersion.update.mockResolvedValue({ ...versionRecord, archivedAt: now });
+
+    await expect(archiveDocumentVersion("doc-1", "version-1")).resolves.toMatchObject({ archivedAt: now });
+
+    expect(mocks.db.documentVersion.update).toHaveBeenCalledWith(expect.objectContaining({
+      where: { id: "version-1" },
+      data: expect.objectContaining({ archivedAt: expect.any(Date) }),
+    }));
+    expect(mocks.deletePrivateBlob).not.toHaveBeenCalled();
+  });
+
+  it("denies download for missing or archived versions", async () => {
+    mocks.db.documentVersion.findFirst.mockResolvedValue(null);
+
+    await expect(getDocumentVersionDownload("doc-1", "version-archived")).rejects.toMatchObject({ status: 404 });
+    expect(mocks.getPrivateBlob).not.toHaveBeenCalled();
+  });
+
+  it("cleans up the uploaded Blob if Prisma metadata persistence fails", async () => {
+    const failure = new Error("db down");
+    mocks.db.$transaction.mockRejectedValue(failure);
+
+    await expect(uploadDocumentVersion("doc-1", [makeFile()])).rejects.toThrow("db down");
+
+    expect(mocks.deletePrivateBlob).toHaveBeenCalledWith(expect.stringContaining("organizations/org-1/documents/doc-1/versions/"));
+  });
+});

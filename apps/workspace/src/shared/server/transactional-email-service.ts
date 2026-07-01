@@ -24,9 +24,8 @@ export type TransactionalEmailTemplate =
       occurredAt?: Date;
     }
   | {
-      kind: "organization-invitation" | "structure-invitation";
+      kind: "organization-invitation";
       organizationName?: string;
-      structureName?: string;
       role: InviteRole;
       acceptUrl: string;
       expiresAt: Date;
@@ -34,7 +33,6 @@ export type TransactionalEmailTemplate =
   | {
       kind: "support-opened" | "support-closed";
       organizationName?: string;
-      structureName?: string;
       employeeEmail: string;
       reason: string;
       occurredAt: Date;
@@ -135,15 +133,15 @@ function getSecurityCopy(template: Extract<TransactionalEmailTemplate, { kind: "
   }
 }
 
-function getOrganizationName(template: { organizationName?: string; structureName?: string }) {
-  return template.organizationName ?? template.structureName ?? "Qoovex";
+function getOrganizationName(template: { organizationName?: string }) {
+  return template.organizationName ?? "Qoovex";
 }
 
 function renderEmail(input: { to: string; template: TransactionalEmailTemplate }) {
   const copy = (() => {
     if (input.template.kind === "auth-code") return getAuthCodeCopy(input.template.purpose, input.template.code);
     if (input.template.kind === "security-event") return getSecurityCopy(input.template);
-    if (input.template.kind === "organization-invitation" || input.template.kind === "structure-invitation") {
+    if (input.template.kind === "organization-invitation") {
       const organizationName = getOrganizationName(input.template);
       return {
         subject: `Invito a ${organizationName}`,
