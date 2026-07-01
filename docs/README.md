@@ -2,7 +2,7 @@
 
 Questa cartella contiene la documentazione di prodotto e lavoro del nuovo Qoovex.
 
-La fonte primaria e il set numerato `00`-`28`.
+La fonte primaria e il set numerato `00`-`30`.
 
 ## Ordine di lettura
 
@@ -34,6 +34,8 @@ La fonte primaria e il set numerato `00`-`28`.
 26. `26_DOCUMENT_PACKAGES_AND_SHARE_LINKS_IMPLEMENTATION.md`: implementazione pacchetti documentali, share link e accesso viewer controllato.
 27. `27_LEGACY_RESET_AND_DB_BASELINE.md`: reset legacy definitivo e baseline Prisma pulita.
 28. `28_MOBILE_FIRST_DASHBOARD_IMPLEMENTATION.md`: prima dashboard operativa mobile-first del workspace.
+29. `29_WORKSPACE_ADMIN_CORE_IMPLEMENTATION.md`: shell admin e prime schermate operative per documenti, scadenze, lavoratori e cantieri.
+30. `30_WORKSPACE_ADMIN_EXTENDED_IMPLEMENTATION.md`: UI admin per checklist, prove, pacchetti documentali e share link.
 
 ## Documenti rimossi
 

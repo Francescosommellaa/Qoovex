@@ -115,7 +115,7 @@ function DashboardDocumentsList({ documents }: { documents: DashboardDocumentAtt
         <article className={styles.rowItem} key={document.id}>
           <div>
             <strong>{document.title}</strong>
-            <span>{document.ownerLabel} · {document.expiryDate ? `Scadenza ${formatDate(document.expiryDate)}` : "Scadenza non registrata"}</span>
+            <span>{document.ownerLabel} - {document.expiryDate ? `Scadenza ${formatDate(document.expiryDate)}` : "Scadenza non registrata"}</span>
             <small>{document.nextAction}</small>
           </div>
           <span className={`${styles.statusPill} ${attentionTone(document.status)}`}>{documentStatusLabels[document.status]}</span>
@@ -163,7 +163,7 @@ function DashboardPackagesList({ packages }: { packages: DashboardPackageItem[] 
         <article className={styles.rowItem} key={documentPackage.id}>
           <div>
             <strong>{documentPackage.title}</strong>
-            <span>{documentPackage.itemCount} elementi inclusi · aggiornato {formatDate(documentPackage.updatedAt)}</span>
+            <span>{documentPackage.itemCount} elementi inclusi - aggiornato {formatDate(documentPackage.updatedAt)}</span>
           </div>
           <span className={`${styles.statusPill} ${attentionTone(documentPackage.status)}`}>
             {documentPackage.hasActiveShareLink ? "Link attivo" : packageStatusLabels[documentPackage.status]}

@@ -1,8 +1,5 @@
 .page {
   width: 100%;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 24px 16px 42px;
 }
 
 .header {
@@ -249,10 +246,6 @@
 }
 
 @media (min-width: 700px) {
-  .page {
-    padding: 34px 28px 56px;
-  }
-
   .header {
     flex-direction: row;
     align-items: end;

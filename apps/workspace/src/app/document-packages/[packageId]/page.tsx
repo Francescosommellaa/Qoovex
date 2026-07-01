@@ -1,0 +1,57 @@
+import { getChecklist, listChecklists } from "@shared/server/checklist-service";
+import { getDocumentPackage } from "@shared/server/document-package-service";
+import { listDocuments } from "@shared/server/document-service";
+import { listDocumentVersions } from "@shared/server/document-version-service";
+import { listEvidence } from "@shared/server/evidence-service";
+import { listJobSites } from "@shared/server/job-site-service";
+import { listShareLinks } from "@shared/server/share-link-service";
+import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
+import { DocumentPackageDetailView } from "@/views/admin-core/document-packages/DocumentPackageDetailView";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import type {
+  WorkspaceChecklistRecord,
+  WorkspaceDocumentPackageRecord,
+  WorkspaceDocumentRecord,
+  WorkspaceDocumentVersionRecord,
+  WorkspaceEvidenceRecord,
+  WorkspaceJobSiteRecord,
+  WorkspaceShareLinkRecord,
+} from "@/views/workspace/workspace-records";
+
+interface DocumentPackageDetailPageProps {
+  params: Promise<{ packageId: string }>;
+}
+
+export default async function DocumentPackageDetailPage({ params }: DocumentPackageDetailPageProps) {
+  try {
+    const { packageId } = await params;
+    const [documentPackage, jobSites, documents, evidence, checklists, capabilities] = await Promise.all([
+      getDocumentPackage(packageId),
+      listJobSites(),
+      listDocuments(),
+      listEvidence(),
+      listChecklists(),
+      getWorkspaceCapabilities(),
+    ]);
+    const [documentVersionsByDocument, detailedChecklists, shareLinks] = await Promise.all([
+      Promise.all(documents.map((document) => listDocumentVersions(document.id))),
+      Promise.all(checklists.map((checklist) => getChecklist(checklist.id))),
+      capabilities.canSharePackages ? listShareLinks(packageId) : Promise.resolve([]),
+    ]);
+    const documentVersions = documentVersionsByDocument.flat();
+    return (
+      <DocumentPackageDetailView
+        capabilities={capabilities}
+        documentPackage={serializeForClient<WorkspaceDocumentPackageRecord>(documentPackage)}
+        documents={serializeForClient<WorkspaceDocumentRecord[]>(documents)}
+        documentVersions={serializeForClient<WorkspaceDocumentVersionRecord[]>(documentVersions)}
+        evidence={serializeForClient<WorkspaceEvidenceRecord[]>(evidence)}
+        checklists={serializeForClient<WorkspaceChecklistRecord[]>(detailedChecklists)}
+        jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
+        shareLinks={serializeForClient<WorkspaceShareLinkRecord[]>(shareLinks)}
+      />
+    );
+  } catch {
+    return <WorkspaceAccessState title="Pacchetto non disponibile" description="Verifica accesso, azienda attiva o stato archiviazione." />;
+  }
+}

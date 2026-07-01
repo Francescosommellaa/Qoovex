@@ -4,9 +4,11 @@ Runtime API-only di Qoovex. Conserva autenticazione, tenant `Organization`, memb
 
 Il dominio prodotto usa `Organization` come tenant canonico e "Azienda" come label utente. La baseline Prisma pulita usa tabelle fisiche `Organization*` e colonne `organizationId`.
 
-Contiene route API, NextAuth, servizi, repository, regole di dominio e la prima dashboard operativa mobile-first.
+Contiene route API, NextAuth, servizi, repository, regole di dominio, dashboard operativa e workspace admin core mobile-first.
 
 La route `/dashboard` e la prima esperienza prodotto reale. La root `/` reindirizza alla dashboard. La dashboard legge un payload sintetico da service server-side e non espone `blobKey`, `tokenHash`, token raw o URL permanenti.
+
+Il workspace admin core espone pagine prodotto per `/documents`, `/deadlines`, `/workers` e `/job-sites`, con dettaglio documento/lavoratore/cantiere. L'estensione admin aggiunge `/checklists`, `/evidence` e `/document-packages`, inclusa gestione voci checklist, prove e share link. Le mutation usano endpoint API gia protetti e la UI non invia `organizationId` dal client.
 
 Il primo modulo dominio attivo espone API server-side per `DocumentType`, `Document` e `Deadline`. I documenti sono record logici e le scadenze sono date registrate dall'utente.
 

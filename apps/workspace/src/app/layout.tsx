@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { WorkspaceShell } from "@/views/workspace/WorkspaceShell";
 import "./globals.css";
 
 export const metadata = {
@@ -9,7 +10,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="it">
-      <body>{children}</body>
+      <body><WorkspaceShell>{children}</WorkspaceShell></body>
     </html>
   );
 }
