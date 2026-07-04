@@ -52,16 +52,30 @@
   align-items: center;
 }
 
+.actions form {
+  min-width: min(100%, 280px);
+}
+
 .linkButton,
 .button,
 .dangerButton,
 .ghostButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 40px;
   border-radius: 8px;
   padding: 9px 12px;
   font-size: 0.86rem;
   font-weight: 760;
+  line-height: 1.15;
   text-decoration: none;
+}
+
+.button,
+.dangerButton,
+.ghostButton {
+  cursor: pointer;
 }
 
 .linkButton,
@@ -106,6 +120,22 @@
   gap: 6px;
 }
 
+.checkboxField {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: var(--qvx-text);
+  font-size: 0.86rem;
+  font-weight: 760;
+}
+
+.checkboxField input {
+  min-width: 18px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--qvx-accent);
+}
+
 .field label,
 .field span {
   color: var(--qvx-text);
@@ -115,8 +145,10 @@
 
 .field input,
 .field select,
-.field textarea {
+.field textarea,
+.recordMain input {
   width: 100%;
+  min-width: 0;
   min-height: 42px;
   border: 1px solid var(--qvx-border);
   border-radius: 8px;
@@ -149,6 +181,36 @@
   padding: 10px;
   font-size: 0.84rem;
   font-weight: 680;
+}
+
+.formSuccess {
+  border: 1px solid rgba(31, 122, 92, 0.28);
+  border-radius: 8px;
+  background: #e4f4ed;
+  color: var(--qvx-accent-strong);
+  padding: 10px;
+  font-size: 0.84rem;
+  font-weight: 680;
+}
+
+.actions .formError,
+.actions .formSuccess {
+  flex-basis: 100%;
+}
+
+.compactList {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.compactList li {
+  display: grid;
+  gap: 3px;
+  border-left: 3px solid rgba(31, 122, 92, 0.28);
+  padding-left: 10px;
 }
 
 .details {

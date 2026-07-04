@@ -10,6 +10,8 @@ const mocks = vi.hoisted(() => ({
     documentPackage: { count: vi.fn(), findMany: vi.fn() },
     evidence: { findMany: vi.fn() },
     checklist: { groupBy: vi.fn() },
+    shareLink: { findMany: vi.fn() },
+    notification: { findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), findMany: vi.fn(), count: vi.fn() },
   },
   getViewerContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
@@ -92,6 +94,22 @@ function primeDashboardMocks() {
   mocks.db.evidence.findMany.mockResolvedValue([
     { id: "evidence-1", type: "PHOTO", title: "Foto collegata", blobKey: "private/blob/key", createdAt: now, jobSiteId: "jobsite-1" },
   ]);
+  mocks.db.shareLink.findMany.mockResolvedValue([]);
+  mocks.db.notification.findUnique.mockResolvedValue(null);
+  mocks.db.notification.create.mockResolvedValue({ id: "notification-created" });
+  mocks.db.notification.update.mockResolvedValue({ id: "notification-updated" });
+  mocks.db.notification.findMany.mockResolvedValue([
+    {
+      id: "notification-1",
+      type: "DOCUMENT_TO_REVIEW",
+      severity: "ATTENTION",
+      title: "Documento da verificare",
+      message: "Documento da controllare.",
+      actionHref: "/documents/document-1",
+      createdAt: now,
+    },
+  ]);
+  mocks.db.notification.count.mockResolvedValue(1);
 }
 
 beforeEach(() => {
@@ -102,6 +120,8 @@ beforeEach(() => {
   resetModel(mocks.db.documentPackage);
   resetModel(mocks.db.evidence);
   resetModel(mocks.db.checklist);
+  resetModel(mocks.db.shareLink);
+  resetModel(mocks.db.notification);
   mocks.getViewerContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
@@ -153,6 +173,9 @@ describe("dashboard service", () => {
     expect(mocks.db.evidence.findMany).toHaveBeenCalledWith(expect.objectContaining({
       where: { organizationId: "org-1", archivedAt: null },
     }));
+    expect(mocks.db.notification.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: expect.objectContaining({ organizationId: "org-1", dismissedAt: null, readAt: null }),
+    }));
   });
 
   it("returns document status counts and attention lists without sensitive fields", async () => {
@@ -175,6 +198,7 @@ describe("dashboard service", () => {
     expect(serialized).not.toContain("tokenHash");
     expect(serialized).not.toContain("private/blob/key");
     expect(serialized).not.toContain("downloadUrl");
+    expect(serialized).not.toContain("dedupeKey");
   });
 
   it("summarizes job sites, workers, packages and recent evidence", async () => {
@@ -184,5 +208,7 @@ describe("dashboard service", () => {
     expect(dashboard.workers).toEqual([{ id: "worker-1", displayName: "Mario Rossi", status: "ACTIVE", documentsToReview: 1, openDeadlines: 1 }]);
     expect(dashboard.packages[0]).toMatchObject({ title: "Pacchetto revisione", itemCount: 2, hasActiveShareLink: true });
     expect(dashboard.recentEvidence).toEqual([{ id: "evidence-1", type: "PHOTO", title: "Foto collegata", hasFile: true, createdAt: now.toISOString(), jobSiteId: "jobsite-1" }]);
+    expect(dashboard.summary.unreadNotifications).toBe(1);
+    expect(dashboard.notifications[0]).toMatchObject({ title: "Documento da verificare", actionHref: "/documents/document-1" });
   });
 });

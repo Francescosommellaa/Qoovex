@@ -3,12 +3,14 @@ import type {
   DashboardDocumentAttentionItem,
   DashboardEvidenceItem,
   DashboardJobSiteItem,
+  DashboardNotificationItem,
   DashboardPackageItem,
   DashboardResponse,
   DashboardWorkerItem,
   DocumentPackageStatus,
   DocumentStatus,
 } from "@qoovex/types";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import styles from "./DashboardView.module.css";
 
@@ -63,6 +65,7 @@ function DashboardSummaryCards({ data }: { data: DashboardResponse }) {
     { label: "Da verificare", value: data.summary.documents.toReview, tone: "info" },
     { label: "Pacchetti pronti", value: data.summary.packagesReadyForReview, tone: "good" },
     { label: "Prove recenti", value: data.summary.recentEvidence, tone: "neutral" },
+    { label: "Notifiche non lette", value: data.summary.unreadNotifications, tone: "warning" },
   ];
 
   return (
@@ -71,6 +74,23 @@ function DashboardSummaryCards({ data }: { data: DashboardResponse }) {
         <article className={`${styles.summaryCard} ${styles[`summary_${card.tone}`]}`} key={card.label}>
           <span>{card.label}</span>
           <strong>{card.value}</strong>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function DashboardNotificationsList({ notifications }: { notifications: DashboardNotificationItem[] }) {
+  if (!notifications.length) return <EmptyList label="Nessuna notifica da controllare." />;
+  return (
+    <div className={styles.itemList}>
+      {notifications.map((notification) => (
+        <article className={styles.rowItem} key={notification.id}>
+          <div>
+            <strong>{notification.title}</strong>
+            <span>{notification.message}</span>
+          </div>
+          {notification.actionHref ? <Link className={styles.inlineLink} href={notification.actionHref}>Apri</Link> : null}
         </article>
       ))}
     </div>
@@ -234,6 +254,11 @@ export function DashboardView({ data }: { data: DashboardResponse }) {
       <div className={styles.mainGrid}>
         <Section title="Azioni rapide">
           <DashboardQuickActions data={data} />
+        </Section>
+
+        <Section title="Notifiche interne" action={`${data.summary.unreadNotifications} non lette`}>
+          <DashboardNotificationsList notifications={data.notifications} />
+          <Link className={styles.sectionLink} href="/notifications">Vai alle notifiche</Link>
         </Section>
 
         <Section title="Scadenze registrate" action={`${data.summary.openDeadlines} aperte`}>

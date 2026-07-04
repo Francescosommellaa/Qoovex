@@ -6,6 +6,7 @@ import styles from "./WorkspaceShell.module.css";
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard" },
+  { label: "Notifiche", href: "/notifications" },
   { label: "Documenti", href: "/documents" },
   { label: "Scadenze", href: "/deadlines" },
   { label: "Lavoratori", href: "/workers" },

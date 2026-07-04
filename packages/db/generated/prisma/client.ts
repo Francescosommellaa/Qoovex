@@ -132,6 +132,21 @@ export type DocumentPackageItem = Prisma.DocumentPackageItemModel
  */
 export type ShareLink = Prisma.ShareLinkModel
 /**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model NotificationPreference
+ * 
+ */
+export type NotificationPreference = Prisma.NotificationPreferenceModel
+/**
+ * Model NotificationEmailDelivery
+ * 
+ */
+export type NotificationEmailDelivery = Prisma.NotificationEmailDeliveryModel
+/**
  * Model OrganizationMembership
  * 
  */

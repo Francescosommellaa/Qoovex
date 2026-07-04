@@ -8,7 +8,7 @@ Contiene route API, NextAuth, servizi, repository, regole di dominio, dashboard 
 
 La route `/dashboard` e la prima esperienza prodotto reale. La root `/` reindirizza alla dashboard. La dashboard legge un payload sintetico da service server-side e non espone `blobKey`, `tokenHash`, token raw o URL permanenti.
 
-Il workspace admin core espone pagine prodotto per `/documents`, `/deadlines`, `/workers` e `/job-sites`, con dettaglio documento/lavoratore/cantiere. L'estensione admin aggiunge `/checklists`, `/evidence` e `/document-packages`, inclusa gestione voci checklist, prove e share link. Le mutation usano endpoint API gia protetti e la UI non invia `organizationId` dal client.
+Il workspace admin core espone pagine prodotto per `/documents`, `/deadlines`, `/workers` e `/job-sites`, con dettaglio documento/lavoratore/cantiere. L'estensione admin aggiunge `/checklists`, `/evidence` e `/document-packages`, inclusa gestione voci checklist, prove e share link. La pagina `/notifications` mostra promemoria interni derivati da scadenze registrate, stati documentali, pacchetti e share link. La rifinitura UX mantiene nav completa, layout mobile-first, empty state, error/loading states e controlli statici su copy e dati sensibili. Le mutation usano endpoint API gia protetti e la UI non invia `organizationId` dal client.
 
 Il primo modulo dominio attivo espone API server-side per `DocumentType`, `Document` e `Deadline`. I documenti sono record logici e le scadenze sono date registrate dall'utente.
 
@@ -19,6 +19,8 @@ Le API Worker e JobSite gestiscono solo metadati operativi minimi, filtrati per 
 Le API Checklist ed Evidence gestiscono checklist configurabili, voci operative e prove di cantiere. Evidence `PHOTO` e `FILE` salvano file su Vercel Blob privato e metadata su Prisma; le response non espongono URL permanenti.
 
 Le API DocumentPackage e ShareLink permettono di preparare pacchetti documentali pronti per revisione e link revocabili in sola lettura. Il token raw viene restituito solo alla creazione, il database salva solo `tokenHash`, e il viewer vede solo gli item inclusi senza URL Blob permanenti.
+
+Le API Notifications e Reminders generano notifiche interne idempotenti da dati gia registrati. Il primo livello email consente solo anteprima e invio manuale a se stessi di digest o singola notifica, riusando Resend gia configurato e senza allegati, link download, SMS, WhatsApp o push native. Le preferenze email sono opt-in, registrano un delivery log minimale e possono essere usate da `/api/reminders/email-digest/run`, protetta da `QOOVEX_CRON_SECRET`; il workspace non configura cron provider esterni in autonomia.
 
 Boundary:
 - i servizi server-specifici restano in `src/shared/server`;

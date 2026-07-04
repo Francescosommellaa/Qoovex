@@ -69,6 +69,9 @@ export const ModelName = {
   DocumentPackage: 'DocumentPackage',
   DocumentPackageItem: 'DocumentPackageItem',
   ShareLink: 'ShareLink',
+  Notification: 'Notification',
+  NotificationPreference: 'NotificationPreference',
+  NotificationEmailDelivery: 'NotificationEmailDelivery',
   OrganizationMembership: 'OrganizationMembership',
   OrganizationInvitation: 'OrganizationInvitation',
   SupportSession: 'SupportSession',
@@ -398,6 +401,60 @@ export const ShareLinkScalarFieldEnum = {
 } as const
 
 export type ShareLinkScalarFieldEnum = (typeof ShareLinkScalarFieldEnum)[keyof typeof ShareLinkScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  type: 'type',
+  severity: 'severity',
+  title: 'title',
+  message: 'message',
+  sourceType: 'sourceType',
+  sourceId: 'sourceId',
+  dedupeKey: 'dedupeKey',
+  actionHref: 'actionHref',
+  readAt: 'readAt',
+  dismissedAt: 'dismissedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const NotificationPreferenceScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  emailDigestEnabled: 'emailDigestEnabled',
+  emailDigestFrequency: 'emailDigestFrequency',
+  emailDigestHour: 'emailDigestHour',
+  lastDigestSentAt: 'lastDigestSentAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationPreferenceScalarFieldEnum = (typeof NotificationPreferenceScalarFieldEnum)[keyof typeof NotificationPreferenceScalarFieldEnum]
+
+
+export const NotificationEmailDeliveryScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  notificationId: 'notificationId',
+  type: 'type',
+  recipientEmail: 'recipientEmail',
+  notificationCount: 'notificationCount',
+  status: 'status',
+  providerMessageId: 'providerMessageId',
+  errorCode: 'errorCode',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationEmailDeliveryScalarFieldEnum = (typeof NotificationEmailDeliveryScalarFieldEnum)[keyof typeof NotificationEmailDeliveryScalarFieldEnum]
 
 
 export const OrganizationMembershipScalarFieldEnum = {

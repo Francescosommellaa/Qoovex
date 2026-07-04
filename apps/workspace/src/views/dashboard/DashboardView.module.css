@@ -203,6 +203,37 @@
   font-weight: 760;
 }
 
+.inlineLink,
+.sectionLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 36px;
+  border: 1px solid rgba(31, 122, 92, 0.36);
+  border-radius: 8px;
+  color: var(--qvx-accent-strong);
+  font-size: 0.8rem;
+  font-weight: 760;
+  line-height: 1.15;
+  text-decoration: none;
+}
+
+.inlineLink {
+  padding: 7px 10px;
+}
+
+.sectionLink {
+  margin-top: 12px;
+  padding: 8px 12px;
+}
+
+.inlineLink:focus-visible,
+.sectionLink:focus-visible {
+  outline: 3px solid rgba(31, 122, 92, 0.24);
+  outline-offset: 2px;
+}
+
 .toneDanger {
   background: #fbe8e4;
   color: var(--qvx-danger);

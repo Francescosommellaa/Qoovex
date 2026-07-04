@@ -6,6 +6,7 @@ Route frontend attive:
 
 - `/`: redirect a `/dashboard`;
 - `/dashboard`: dashboard interna mobile-first per stato documentale, scadenze, cantieri, lavoratori, prove e pacchetti.
+- `/notifications`: notifiche interne e promemoria derivati da dati registrati;
 - `/documents`: lista e creazione documenti logici;
 - `/documents/[documentId]`: dettaglio documento, versioni file e upload protetto;
 - `/deadlines`: lista e gestione scadenze registrate;

@@ -7,6 +7,7 @@ import type {
   DashboardEmptyState,
   DashboardEvidenceItem,
   DashboardJobSiteItem,
+  DashboardNotificationItem,
   DashboardPackageItem,
   DashboardQuickAction,
   DashboardResponse,
@@ -15,6 +16,7 @@ import type {
 } from "@qoovex/types";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { syncOrganizationReminderRecords } from "./reminder-service";
 
 const DASHBOARD_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
 const ATTENTION_DOCUMENT_STATUSES: DocumentStatus[] = ["MISSING", "EXPIRED", "EXPIRING_SOON", "TO_REVIEW"];
@@ -81,6 +83,7 @@ function buildEmptyStates(input: {
 export async function getDashboardData(): Promise<DashboardResponse> {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("organization:read", DASHBOARD_ROLES);
   const now = new Date();
+  await syncOrganizationReminderRecords(organizationId, now);
 
   const [
     documentStatusRows,
@@ -95,6 +98,8 @@ export async function getDashboardData(): Promise<DashboardResponse> {
     workers,
     packages,
     recentEvidenceRows,
+    notificationRows,
+    unreadNotifications,
   ] = await Promise.all([
     db.document.groupBy({
       by: ["status"],
@@ -161,6 +166,15 @@ export async function getDashboardData(): Promise<DashboardResponse> {
       select: { id: true, type: true, title: true, blobKey: true, createdAt: true, jobSiteId: true },
       orderBy: [{ createdAt: "desc" }],
       take: DASHBOARD_LIMIT,
+    }),
+    db.notification.findMany({
+      where: { organizationId, dismissedAt: null, readAt: null, OR: [{ userId: null }, { userId: context.userId }] },
+      select: { id: true, type: true, severity: true, title: true, message: true, actionHref: true, createdAt: true },
+      orderBy: [{ severity: "desc" }, { createdAt: "desc" }],
+      take: 3,
+    }),
+    db.notification.count({
+      where: { organizationId, dismissedAt: null, readAt: null, OR: [{ userId: null }, { userId: context.userId }] },
     }),
   ]);
 
@@ -234,6 +248,16 @@ export async function getDashboardData(): Promise<DashboardResponse> {
     jobSiteId: evidence.jobSiteId,
   }));
 
+  const mappedNotifications: DashboardNotificationItem[] = notificationRows.map((notification) => ({
+    id: notification.id,
+    type: notification.type,
+    severity: notification.severity,
+    title: notification.title,
+    message: notification.message,
+    actionHref: notification.actionHref,
+    createdAt: notification.createdAt.toISOString(),
+  }));
+
   const totalDocuments = Object.values(documents).reduce((total, value) => total + value, 0);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "dashboard" });
 
@@ -251,6 +275,7 @@ export async function getDashboardData(): Promise<DashboardResponse> {
       packagesReadyForReview,
       sharedPackages,
       recentEvidence: mappedEvidence.length,
+      unreadNotifications,
     },
     deadlines: deadlines.map((deadline) => ({
       id: deadline.id,
@@ -276,6 +301,7 @@ export async function getDashboardData(): Promise<DashboardResponse> {
     workers: mappedWorkers,
     packages: mappedPackages,
     recentEvidence: mappedEvidence,
+    notifications: mappedNotifications,
     quickActions,
     emptyStates: buildEmptyStates({ activeJobSites, activeWorkers, totalDocuments, packageCount: mappedPackages.length }),
   };

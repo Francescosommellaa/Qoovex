@@ -12,6 +12,9 @@ Non mettere qui:
 Regole:
 - `prisma/` contiene la verita` dello schema;
 - `generated/prisma/` contiene il Prisma Client generato con `provider = "prisma-client"`;
+- `Notification` contiene promemoria interni e non salva file, token o URL privati;
+- `NotificationPreference` contiene opt-in email per utente/azienda, disattivato di default;
+- `NotificationEmailDelivery` contiene log minimo degli invii email e non salva body, token, blob key o URL privati;
 - `lib/prisma.ts` crea il singleton server-side con `PrismaPg`;
 - `src/` espone client e API del package;
 - ogni cambiamento strutturale qui va allineato a `project_brain.json` se stabilizza una convenzione.

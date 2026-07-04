@@ -26,3 +26,10 @@ Endpoint dominio MVP attivi:
 - `evidence`: note, foto e file operativi con Blob privato e download autorizzato;
 - `document-packages`: pacchetti documentali, item inclusi e share link revocabili;
 - `shared/document-packages`: accesso viewer tokenizzato e limitato al singolo pacchetto.
+- `notifications`: notifiche interne filtrate per azienda, lettura e dismiss;
+- `notifications/preferences`: preferenze email dell'utente corrente, opt-in e filtrate per azienda;
+- `notifications/email-deliveries`: ultimi invii email dell'utente corrente senza body o dettagli sensibili;
+- `notifications/email-digest`: anteprima digest email e invio manuale a se stessi, senza destinatari client-side;
+- `notifications/[notificationId]/send-to-me`: invio manuale di una singola notifica all'utente corrente;
+- `reminders/sync`: sync idempotente dei promemoria interni da dati registrati.
+- `reminders/email-digest/run`: endpoint schedulabile protetto da `QOOVEX_CRON_SECRET`, senza cron provider configurato qui.

@@ -10,6 +10,9 @@ Metti qui:
 - DTO pubblici per Checklist, ChecklistItem ed Evidence senza URL Blob permanenti.
 - DTO pubblici per DocumentPackage e ShareLink senza token hash, blob key o URL permanenti.
 - DTO pubblici per Dashboard senza dati sensibili, blob key, token o URL permanenti.
+- DTO pubblici per Notification e Reminder senza dedupe key, token, blob key o URL permanenti.
+- DTO pubblici per digest email notifiche senza destinatari arbitrari, provider internals, token, blob key o URL permanenti.
+- DTO pubblici per preferenze email, delivery log e scheduling senza body email, provider internals sensibili o destinatari client-side.
 
 Non mettere qui:
 - codice runtime;

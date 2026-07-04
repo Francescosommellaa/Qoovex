@@ -156,3 +156,68 @@ export const DocumentPackageItemType = {
 } as const
 
 export type DocumentPackageItemType = (typeof DocumentPackageItemType)[keyof typeof DocumentPackageItemType]
+
+
+export const NotificationType = {
+  DEADLINE_OVERDUE: 'DEADLINE_OVERDUE',
+  DEADLINE_UPCOMING: 'DEADLINE_UPCOMING',
+  DOCUMENT_TO_REVIEW: 'DOCUMENT_TO_REVIEW',
+  DOCUMENT_EXPIRED: 'DOCUMENT_EXPIRED',
+  DOCUMENT_EXPIRING_SOON: 'DOCUMENT_EXPIRING_SOON',
+  PACKAGE_READY_FOR_REVIEW: 'PACKAGE_READY_FOR_REVIEW',
+  SHARE_LINK_EXPIRING: 'SHARE_LINK_EXPIRING',
+  SHARE_LINK_REVOKED: 'SHARE_LINK_REVOKED',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const NotificationSeverity = {
+  INFO: 'INFO',
+  ATTENTION: 'ATTENTION',
+  WARNING: 'WARNING'
+} as const
+
+export type NotificationSeverity = (typeof NotificationSeverity)[keyof typeof NotificationSeverity]
+
+
+export const NotificationSourceType = {
+  DOCUMENT: 'DOCUMENT',
+  DEADLINE: 'DEADLINE',
+  WORKER: 'WORKER',
+  JOB_SITE: 'JOB_SITE',
+  CHECKLIST: 'CHECKLIST',
+  EVIDENCE: 'EVIDENCE',
+  DOCUMENT_PACKAGE: 'DOCUMENT_PACKAGE',
+  SHARE_LINK: 'SHARE_LINK',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type NotificationSourceType = (typeof NotificationSourceType)[keyof typeof NotificationSourceType]
+
+
+export const EmailDigestFrequency = {
+  OFF: 'OFF',
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY'
+} as const
+
+export type EmailDigestFrequency = (typeof EmailDigestFrequency)[keyof typeof EmailDigestFrequency]
+
+
+export const NotificationEmailDeliveryType = {
+  DIGEST: 'DIGEST',
+  SINGLE_NOTIFICATION: 'SINGLE_NOTIFICATION'
+} as const
+
+export type NotificationEmailDeliveryType = (typeof NotificationEmailDeliveryType)[keyof typeof NotificationEmailDeliveryType]
+
+
+export const NotificationEmailDeliveryStatus = {
+  SENT: 'SENT',
+  FAILED: 'FAILED',
+  SKIPPED: 'SKIPPED'
+} as const
+
+export type NotificationEmailDeliveryStatus = (typeof NotificationEmailDeliveryStatus)[keyof typeof NotificationEmailDeliveryStatus]

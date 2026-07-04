@@ -11,6 +11,13 @@ export type SecurityEmailEvent =
 
 type InviteRole = "ADMIN" | "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER" | "VIEWER";
 
+export interface NotificationEmailItem {
+  title: string;
+  message: string;
+  severity: "INFO" | "ATTENTION" | "WARNING";
+  createdAt: Date;
+}
+
 export type TransactionalEmailTemplate =
   | {
       kind: "auth-code";
@@ -36,6 +43,17 @@ export type TransactionalEmailTemplate =
       employeeEmail: string;
       reason: string;
       occurredAt: Date;
+    }
+  | {
+      kind: "notification-digest";
+      unreadCount: number;
+      items: NotificationEmailItem[];
+      notificationsUrl?: string | null;
+    }
+  | {
+      kind: "notification-single";
+      item: NotificationEmailItem;
+      notificationsUrl?: string | null;
     };
 
 export class TransactionalEmailError extends Error {
@@ -137,6 +155,34 @@ function getOrganizationName(template: { organizationName?: string }) {
   return template.organizationName ?? "Qoovex";
 }
 
+function getNotificationSeverityLabel(severity: NotificationEmailItem["severity"]) {
+  if (severity === "WARNING") return "Priorita alta";
+  if (severity === "ATTENTION") return "Attenzione";
+  return "Informazione";
+}
+
+function formatNotificationDate(value: Date) {
+  return new Intl.DateTimeFormat("it-IT", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "Europe/Rome",
+  }).format(value);
+}
+
+function renderNotificationItems(items: NotificationEmailItem[]) {
+  const html = items.length
+    ? `<ul style="margin:20px 0 0;padding:0;list-style:none;">${items.map((item) => `
+                  <li style="margin:0 0 12px;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:#171a21;">
+                    <div style="font-size:12px;color:#9ca3af;margin-bottom:6px;">${escapeHtml(getNotificationSeverityLabel(item.severity))} - ${escapeHtml(formatNotificationDate(item.createdAt))}</div>
+                    <div style="font-size:15px;color:#ffffff;font-weight:700;margin-bottom:4px;">${escapeHtml(item.title)}</div>
+                    <div style="font-size:14px;color:#cbd5e1;line-height:1.5;">${escapeHtml(item.message)}</div>
+                  </li>`).join("")}
+                </ul>`
+    : "";
+  const text = items.map((item) => `${getNotificationSeverityLabel(item.severity)} - ${formatNotificationDate(item.createdAt)}\n${item.title}\n${item.message}`).join("\n\n");
+  return { html, text };
+}
+
 function renderEmail(input: { to: string; template: TransactionalEmailTemplate }) {
   const copy = (() => {
     if (input.template.kind === "auth-code") return getAuthCodeCopy(input.template.purpose, input.template.code);
@@ -147,6 +193,20 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
         subject: `Invito a ${organizationName}`,
         title: "Invito all'azienda",
         intro: `Sei stato invitato a collaborare in ${organizationName}. Apri ${input.template.acceptUrl} entro ${formatSecurityDate(input.template.expiresAt)}.`,
+      };
+    }
+    if (input.template.kind === "notification-digest") {
+      return {
+        subject: "Qoovex - Promemoria documenti e scadenze",
+        title: "Elementi da controllare",
+        intro: `${input.template.unreadCount} notifiche non lette da controllare nel workspace Qoovex.`,
+      };
+    }
+    if (input.template.kind === "notification-single") {
+      return {
+        subject: "Qoovex - Elementi da controllare",
+        title: input.template.item.title,
+        intro: input.template.item.message,
       };
     }
     const template = input.template as Extract<TransactionalEmailTemplate, { kind: "support-opened" | "support-closed" }>;
@@ -163,10 +223,23 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
     input.template.kind === "auth-code"
       ? `<div style="font-size:32px;letter-spacing:8px;font-weight:700;margin:24px 0;color:#ffffff;">${escapeHtml(input.template.code)}</div>`
       : "";
-  const secondary =
-    input.template.kind === "auth-code"
-      ? "Scade tra 10 minuti e puo essere usato una sola volta."
-      : "Se non riconosci questa attivita, cambia password e controlla la sicurezza del tuo account.";
+  const notificationDetails =
+    input.template.kind === "notification-digest"
+      ? renderNotificationItems(input.template.items)
+      : input.template.kind === "notification-single"
+        ? renderNotificationItems([input.template.item])
+        : null;
+  const notificationsLink =
+    (input.template.kind === "notification-digest" || input.template.kind === "notification-single") && input.template.notificationsUrl
+      ? `<p style="margin:20px 0 0;"><a style="color:#7dd3fc;" href="${escapeHtml(input.template.notificationsUrl)}">Apri le notifiche nel workspace</a></p>`
+      : "";
+  const secondary = (() => {
+    if (input.template.kind === "auth-code") return "Scade tra 10 minuti e puo essere usato una sola volta.";
+    if (input.template.kind === "notification-digest" || input.template.kind === "notification-single") {
+      return "Le informazioni dipendono dai dati registrati in Qoovex e vanno confermate con il responsabile o consulente. L'email non include file o link di download.";
+    }
+    return "Se non riconosci questa attivita, cambia password e controlla la sicurezza del tuo account.";
+  })();
 
   const html = `<!doctype html>
 <html lang="it">
@@ -183,6 +256,8 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
                 <h1 style="margin:0 0 12px;font-size:28px;line-height:1.15;color:#ffffff;">${escapeHtml(copy.title)}</h1>
                 <p style="margin:0;color:#cbd5e1;font-size:16px;line-height:1.6;">${escapeHtml(copy.intro)}</p>
                 ${codeBlock}
+                ${notificationDetails?.html ?? ""}
+                ${notificationsLink}
                 <p style="margin:0;color:#94a3b8;font-size:14px;line-height:1.6;">${escapeHtml(secondary)}</p>
               </td>
             </tr>
@@ -198,6 +273,10 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
     copy.title,
     copy.intro,
     input.template.kind === "auth-code" ? `Codice: ${input.template.code}` : "",
+    notificationDetails?.text ?? "",
+    (input.template.kind === "notification-digest" || input.template.kind === "notification-single") && input.template.notificationsUrl
+      ? `Notifiche: ${input.template.notificationsUrl}`
+      : "",
     secondary,
   ]
     .filter(Boolean)
@@ -209,7 +288,8 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
 export async function sendTransactionalEmail(input: {
   to: string;
   template: TransactionalEmailTemplate;
-}) {
+  idempotencyKey?: string;
+}): Promise<{ providerMessageId: string | null }> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const from = process.env.RESEND_FROM_EMAIL?.trim();
   const replyTo = process.env.RESEND_REPLY_TO_EMAIL?.trim();
@@ -218,7 +298,7 @@ export async function sendTransactionalEmail(input: {
   if (!apiKey || !from) {
     if (process.env.NODE_ENV !== "production") {
       console.info(`[email] ${rendered.subject} -> ${input.to}\n${rendered.text}`);
-      return;
+      return { providerMessageId: null };
     }
 
     throw new TransactionalEmailError("Email transazionali non configurate.");
@@ -229,6 +309,7 @@ export async function sendTransactionalEmail(input: {
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
+      ...(input.idempotencyKey ? { "Idempotency-Key": input.idempotencyKey } : {}),
     },
     body: JSON.stringify({
       from,
@@ -243,4 +324,7 @@ export async function sendTransactionalEmail(input: {
   if (!response.ok) {
     throw new TransactionalEmailError("Invio email non riuscito.");
   }
+
+  const payload = await response.json().catch(() => null) as { id?: unknown } | null;
+  return { providerMessageId: typeof payload?.id === "string" ? payload.id : null };
 }

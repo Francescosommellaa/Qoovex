@@ -77,6 +77,44 @@ export type EvidenceType = (typeof evidenceTypes)[number];
 export const documentPackageItemTypes = ["DOCUMENT", "DOCUMENT_VERSION", "EVIDENCE", "CHECKLIST", "NOTE"] as const;
 export type DocumentPackageItemType = (typeof documentPackageItemTypes)[number];
 
+export const notificationTypes = [
+  "DEADLINE_OVERDUE",
+  "DEADLINE_UPCOMING",
+  "DOCUMENT_TO_REVIEW",
+  "DOCUMENT_EXPIRED",
+  "DOCUMENT_EXPIRING_SOON",
+  "PACKAGE_READY_FOR_REVIEW",
+  "SHARE_LINK_EXPIRING",
+  "SHARE_LINK_REVOKED",
+  "SYSTEM",
+] as const;
+export type NotificationType = (typeof notificationTypes)[number];
+
+export const notificationSeverities = ["INFO", "ATTENTION", "WARNING"] as const;
+export type NotificationSeverity = (typeof notificationSeverities)[number];
+
+export const notificationSourceTypes = [
+  "DOCUMENT",
+  "DEADLINE",
+  "WORKER",
+  "JOB_SITE",
+  "CHECKLIST",
+  "EVIDENCE",
+  "DOCUMENT_PACKAGE",
+  "SHARE_LINK",
+  "SYSTEM",
+] as const;
+export type NotificationSourceType = (typeof notificationSourceTypes)[number];
+
+export const emailDigestFrequencies = ["OFF", "DAILY", "WEEKLY"] as const;
+export type EmailDigestFrequency = (typeof emailDigestFrequencies)[number];
+
+export const notificationEmailDeliveryTypes = ["DIGEST", "SINGLE_NOTIFICATION"] as const;
+export type NotificationEmailDeliveryType = (typeof notificationEmailDeliveryTypes)[number];
+
+export const notificationEmailDeliveryStatuses = ["SENT", "FAILED", "SKIPPED"] as const;
+export type NotificationEmailDeliveryStatus = (typeof notificationEmailDeliveryStatuses)[number];
+
 export interface OrganizationSummary {
   id: EntityId;
   name: string;
@@ -569,6 +607,122 @@ export interface SharedDocumentPackageItemResponse {
   size?: number | null;
 }
 
+export interface NotificationResponse {
+  id: EntityId;
+  userId?: EntityId | null;
+  type: NotificationType;
+  severity: NotificationSeverity;
+  title: string;
+  message: string;
+  sourceType: NotificationSourceType;
+  sourceId?: EntityId | null;
+  actionHref?: string | null;
+  readAt?: string | null;
+  dismissedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NotificationListResponse {
+  notifications: NotificationResponse[];
+  unreadCount: number;
+  generatedAt: string;
+}
+
+export interface MarkNotificationReadResponse {
+  notification: NotificationResponse;
+  read: true;
+}
+
+export interface DismissNotificationResponse {
+  notification: NotificationResponse;
+  dismissed: true;
+}
+
+export interface ReminderSyncResponse {
+  created: number;
+  updated: number;
+  skipped: number;
+  generatedAt: string;
+}
+
+export interface EmailDigestPreviewItem {
+  id: EntityId;
+  type: NotificationType;
+  severity: NotificationSeverity;
+  title: string;
+  message: string;
+  actionHref?: string | null;
+  createdAt: string;
+}
+
+export interface EmailDigestPreviewResponse {
+  subject: string;
+  intro: string;
+  unreadCount: number;
+  items: EmailDigestPreviewItem[];
+  workspaceHref: string;
+  footer: string;
+  generatedAt: string;
+}
+
+export interface SendEmailDigestResponse {
+  sent: true;
+  notificationCount: number;
+  generatedAt: string;
+}
+
+export interface SendNotificationEmailResponse {
+  sent: true;
+  notification: NotificationResponse;
+  generatedAt: string;
+}
+
+export interface NotificationPreferenceResponse {
+  id: EntityId;
+  emailDigestEnabled: boolean;
+  emailDigestFrequency: EmailDigestFrequency;
+  emailDigestHour: number;
+  lastDigestSentAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpdateNotificationPreferenceInput {
+  emailDigestEnabled?: boolean;
+  emailDigestFrequency?: EmailDigestFrequency;
+  emailDigestHour?: number;
+}
+
+export interface UpdateNotificationPreferenceResponse {
+  preference: NotificationPreferenceResponse;
+  updated: true;
+}
+
+export interface NotificationEmailDeliveryResponse {
+  id: EntityId;
+  type: NotificationEmailDeliveryType;
+  notificationId?: EntityId | null;
+  notificationCount: number;
+  status: NotificationEmailDeliveryStatus;
+  errorCode?: string | null;
+  sentAt?: string | null;
+  createdAt: string;
+}
+
+export interface NotificationEmailDeliveryListResponse {
+  deliveries: NotificationEmailDeliveryResponse[];
+  generatedAt: string;
+}
+
+export interface ScheduledEmailDigestRunResponse {
+  scanned: number;
+  sent: number;
+  failed: number;
+  skipped: number;
+  generatedAt: string;
+}
+
 export interface DashboardOrganizationSummary {
   name: string;
   role: OrganizationRole;
@@ -590,6 +744,7 @@ export interface DashboardSummary {
   packagesReadyForReview: number;
   sharedPackages: number;
   recentEvidence: number;
+  unreadNotifications: number;
 }
 
 export interface DashboardDeadlineItem {
@@ -661,6 +816,16 @@ export interface DashboardEmptyState {
   actionLabel: string;
 }
 
+export interface DashboardNotificationItem {
+  id: EntityId;
+  type: NotificationType;
+  severity: NotificationSeverity;
+  title: string;
+  message: string;
+  actionHref?: string | null;
+  createdAt: string;
+}
+
 export interface DashboardResponse {
   generatedAt: string;
   organization: DashboardOrganizationSummary;
@@ -671,6 +836,7 @@ export interface DashboardResponse {
   workers: DashboardWorkerItem[];
   packages: DashboardPackageItem[];
   recentEvidence: DashboardEvidenceItem[];
+  notifications: DashboardNotificationItem[];
   quickActions: DashboardQuickAction[];
   emptyStates: DashboardEmptyState[];
 }

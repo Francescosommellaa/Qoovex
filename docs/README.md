@@ -2,7 +2,7 @@
 
 Questa cartella contiene la documentazione di prodotto e lavoro del nuovo Qoovex.
 
-La fonte primaria e il set numerato `00`-`30`.
+La fonte primaria e il set numerato `00`-`34`.
 
 ## Ordine di lettura
 
@@ -36,6 +36,10 @@ La fonte primaria e il set numerato `00`-`30`.
 28. `28_MOBILE_FIRST_DASHBOARD_IMPLEMENTATION.md`: prima dashboard operativa mobile-first del workspace.
 29. `29_WORKSPACE_ADMIN_CORE_IMPLEMENTATION.md`: shell admin e prime schermate operative per documenti, scadenze, lavoratori e cantieri.
 30. `30_WORKSPACE_ADMIN_EXTENDED_IMPLEMENTATION.md`: UI admin per checklist, prove, pacchetti documentali e share link.
+31. `31_WORKSPACE_ADMIN_UX_REFINEMENT.md`: rifinitura UX, responsive, accessibilita e QA dell'admin MVP.
+32. `32_NOTIFICATIONS_AND_REMINDERS_IMPLEMENTATION.md`: notifiche interne e promemoria operativi su scadenze, documenti, pacchetti e share link.
+33. `33_EMAIL_REMINDERS_AND_DIGEST_IMPLEMENTATION.md`: digest email manuale e reminder singola notifica, senza invii massivi o scheduler.
+34. `34_NOTIFICATION_PREFERENCES_AND_SCHEDULING.md`: preferenze email, delivery log minimale e endpoint scheduling protetto da secret.
 
 ## Documenti rimossi
 
