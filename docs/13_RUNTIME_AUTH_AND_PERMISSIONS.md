@@ -44,6 +44,8 @@ Il sistema non deve rappresentare nessun ruolo come figura che certifica automat
 - `documentPackages:create`
 - `documentPackages:share`
 - `auditLog:read`
+- `assignments:read`
+- `assignments:manage`
 - `settings:update`
 
 ## Mapping ruolo -> permessi
@@ -56,7 +58,7 @@ Il sistema non deve rappresentare nessun ruolo come figura che certifica automat
 
 `SITE_MANAGER` puo leggere organizzazione, lavoratori assegnati, cantieri assegnati, documenti necessari, scadenze, checklist e prove; puo completare checklist e caricare prove.
 
-`WORKER` puo leggere organizzazione, documenti assegnati o personali e scadenze personali; puo caricare documenti/prove se abilitato e completare checklist assegnate.
+`WORKER` puo leggere organizzazione, documenti personali, cantieri assegnati e scadenze personali; puo caricare documenti/prove solo nel proprio scope. Checklist worker resta rimandata a una policy piu specifica.
 
 `VIEWER` riceve solo `documentPackages:read`.
 

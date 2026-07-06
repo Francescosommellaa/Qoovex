@@ -7,6 +7,7 @@ import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { isEnumValue, trimOptionalId, trimOptionalText, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 
 const PACKAGE_ACCESS_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
 const PACKAGE_WRITE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
@@ -233,7 +234,7 @@ export async function getDocumentPackage(packageId: string) {
 }
 
 export async function createDocumentPackage(input: CreateDocumentPackageInput) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("documentPackages:create", PACKAGE_WRITE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:create", PACKAGE_WRITE_ROLES);
   const title = trimRequiredText(input.title, "Titolo pacchetto", 2, 160);
   const description = trimOptionalText(input.description, "Descrizione pacchetto", 4000) ?? null;
   const jobSiteId = await assertActiveJobSite(organizationId, trimOptionalId(input.jobSiteId, "Cantiere"));
@@ -244,11 +245,19 @@ export async function createDocumentPackage(input: CreateDocumentPackageInput) {
     select: documentPackageSelect,
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document-package", resourceId: documentPackage.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DOCUMENT_PACKAGE_CREATED",
+    entityType: "DOCUMENT_PACKAGE",
+    entityId: documentPackage.id,
+    metadata: { nextStatus: documentPackage.status },
+  });
   return documentPackage;
 }
 
 export async function updateDocumentPackage(packageId: string, input: UpdateDocumentPackageInput) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("documentPackages:create", PACKAGE_WRITE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:create", PACKAGE_WRITE_ROLES);
   const existing = await findActivePackage(organizationId, packageId);
   const data: { title?: string; description?: string | null; jobSiteId?: string | null; status?: DocumentPackageStatus } = {};
   if (input.title !== undefined) data.title = trimRequiredText(input.title, "Titolo pacchetto", 2, 160);
@@ -259,18 +268,35 @@ export async function updateDocumentPackage(packageId: string, input: UpdateDocu
 
   const documentPackage = await db.documentPackage.update({ where: { id: existing.id }, data, select: documentPackageSelect });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document-package", resourceId: documentPackage.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DOCUMENT_PACKAGE_UPDATED",
+    entityType: "DOCUMENT_PACKAGE",
+    entityId: documentPackage.id,
+    metadata: { nextStatus: documentPackage.status },
+  });
   return documentPackage;
 }
 
 export async function archiveDocumentPackage(packageId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("documentPackages:create", PACKAGE_WRITE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:create", PACKAGE_WRITE_ROLES);
   const existing = await findActivePackage(organizationId, packageId);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "document-package", resourceId: existing.id });
-  return db.documentPackage.update({
+  const documentPackage = await db.documentPackage.update({
     where: { id: existing.id },
     data: { archivedAt: new Date(), status: "ARCHIVED" },
     select: documentPackageSelect,
   });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DOCUMENT_PACKAGE_ARCHIVED",
+    entityType: "DOCUMENT_PACKAGE",
+    entityId: documentPackage.id,
+    metadata: { nextStatus: documentPackage.status },
+  });
+  return documentPackage;
 }
 
 export async function listDocumentPackageItems(packageId: string) {
@@ -286,7 +312,7 @@ export async function listDocumentPackageItems(packageId: string) {
 }
 
 export async function addDocumentPackageItem(packageId: string, input: AddDocumentPackageItemInput) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("documentPackages:create", PACKAGE_WRITE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:create", PACKAGE_WRITE_ROLES);
   const documentPackage = await findActivePackage(organizationId, packageId);
   const data = await normalizePackageItem(organizationId, input);
   const duplicate = await db.documentPackageItem.findFirst({
@@ -310,6 +336,14 @@ export async function addDocumentPackageItem(packageId: string, input: AddDocume
     select: packageItemSelect,
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document-package-item", resourceId: item.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DOCUMENT_PACKAGE_ITEM_ADDED",
+    entityType: "DOCUMENT_PACKAGE_ITEM",
+    entityId: item.id,
+    metadata: { itemType: item.itemType },
+  });
   return item;
 }
 
@@ -324,9 +358,18 @@ export async function updateDocumentPackageItem(packageId: string, itemId: strin
 }
 
 export async function removeDocumentPackageItem(packageId: string, itemId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("documentPackages:create", PACKAGE_WRITE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:create", PACKAGE_WRITE_ROLES);
   await findActivePackage(organizationId, packageId);
   const existing = await findPackageItem(organizationId, packageId, itemId);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "document-package-item", resourceId: existing.id });
-  return db.documentPackageItem.delete({ where: { id: existing.id }, select: packageItemSelect });
+  const item = await db.documentPackageItem.delete({ where: { id: existing.id }, select: packageItemSelect });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DOCUMENT_PACKAGE_ITEM_REMOVED",
+    entityType: "DOCUMENT_PACKAGE_ITEM",
+    entityId: item.id,
+    metadata: { itemType: item.itemType },
+  });
+  return item;
 }

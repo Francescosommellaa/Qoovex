@@ -22,6 +22,10 @@ Le API DocumentPackage e ShareLink permettono di preparare pacchetti documentali
 
 Le API Notifications e Reminders generano notifiche interne idempotenti da dati gia registrati. Il primo livello email consente solo anteprima e invio manuale a se stessi di digest o singola notifica, riusando Resend gia configurato e senza allegati, link download, SMS, WhatsApp o push native. Le preferenze email sono opt-in, registrano un delivery log minimale e possono essere usate da `/api/reminders/email-digest/run`, protetta da `QOOVEX_CRON_SECRET`; il workspace non configura cron provider esterni in autonomia.
 
+La route `/audit-log` e l'API `/api/audit-log` espongono al solo `OWNER` un audit prodotto minimizzato. Gli eventi vengono scritti dai service server-side come best-effort e non salvano contenuti file, body email, token o riferimenti privati di storage. `next.config.ts` applica header HTTP base: nosniff, referrer policy, frame deny e permissions policy restrittiva.
+
+La route `/access` permette a `OWNER` e `ADMIN` di creare collegamenti operativi utente-lavoratore e assegnazioni cantiere. `SITE_MANAGER` e `WORKER` leggono solo risorse assegnate tramite filtri server-side; `VIEWER` resta fuori dal workspace admin.
+
 Boundary:
 - i servizi server-specifici restano in `src/shared/server`;
 - le route API validano e delegano ai servizi;

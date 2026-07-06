@@ -30,6 +30,8 @@ const OWNER_PERMISSIONS: readonly OrganizationPermission[] = [
   "documentPackages:create",
   "documentPackages:share",
   "auditLog:read",
+  "assignments:read",
+  "assignments:manage",
   "settings:update",
 ];
 
@@ -62,6 +64,8 @@ const ROLE_PERMISSIONS: Record<OrganizationRole, readonly OrganizationPermission
     "documentPackages:read",
     "documentPackages:create",
     "documentPackages:share",
+    "assignments:read",
+    "assignments:manage",
   ],
   SAFETY_CONSULTANT: [
     "organization:read",
@@ -77,6 +81,7 @@ const ROLE_PERMISSIONS: Record<OrganizationRole, readonly OrganizationPermission
     "evidence:upload",
     "documentPackages:read",
     "documentPackages:create",
+    "assignments:read",
   ],
   SITE_MANAGER: [
     "organization:read",
@@ -91,10 +96,13 @@ const ROLE_PERMISSIONS: Record<OrganizationRole, readonly OrganizationPermission
   ],
   WORKER: [
     "organization:read",
+    "workers:read",
+    "jobSites:read",
     "documents:read",
     "documents:upload",
     "deadlines:read",
     "checklists:complete",
+    "evidence:read",
     "evidence:upload",
   ],
   VIEWER: ["documentPackages:read"],

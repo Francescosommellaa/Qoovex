@@ -25,9 +25,12 @@ describe("workspace admin UI copy", () => {
   const notificationEmailPanelSource = readFileSync(join(root, "admin-core", "notifications", "NotificationEmailDigestPanel.tsx"), "utf8");
   const notificationPreferencesPanelSource = readFileSync(join(root, "admin-core", "notifications", "NotificationEmailPreferencesPanel.tsx"), "utf8");
   const notificationActionsSource = readFileSync(join(root, "admin-core", "notifications", "NotificationActionButtons.tsx"), "utf8");
+  const auditLogSource = readFileSync(join(root, "admin-core", "audit-log", "AuditLogPageView.tsx"), "utf8");
+  const accessSource = readFileSync(join(root, "admin-core", "access", "AccessAssignmentsPageView.tsx"), "utf8");
+  const nextConfigSource = readFileSync(join(root, "..", "..", "next.config.ts"), "utf8");
   const combinedSource = `${source}\n${appSource}`;
 
-  const adminRoutes = ["/dashboard", "/notifications", "/documents", "/deadlines", "/workers", "/job-sites", "/checklists", "/evidence", "/document-packages"] as const;
+  const adminRoutes = ["/dashboard", "/notifications", "/documents", "/deadlines", "/workers", "/job-sites", "/checklists", "/evidence", "/document-packages", "/access", "/audit-log"] as const;
 
   it("does not render forbidden legal or sensitive storage copy", () => {
     expect(combinedSource).not.toMatch(/sei a norma|conformita garantita|validita legale|legalmente valido|abilitato automaticamente|obbligatorio per legge/i);
@@ -39,7 +42,7 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps page titles for the main admin sections", () => {
-    for (const title of ["Notifiche", "Documenti", "Scadenze", "Lavoratori", "Cantieri", "Checklist", "Prove", "Pacchetti documentali"]) {
+    for (const title of ["Notifiche", "Documenti", "Scadenze", "Lavoratori", "Cantieri", "Checklist", "Prove", "Pacchetti documentali", "Accessi operativi", "Audit"]) {
       expect(combinedSource).toContain(title);
     }
   });
@@ -56,6 +59,10 @@ describe("workspace admin UI copy", () => {
     expect(combinedSource).toContain("Aggiungi una foto, un file o una nota");
     expect(combinedSource).toContain("Crea un pacchetto documentale pronto per revisione");
     expect(combinedSource).toContain("Nessuna notifica da controllare");
+    expect(combinedSource).toContain("Nessun evento audit da mostrare");
+    expect(combinedSource).toContain("Nessun collegamento operativo");
+    expect(combinedSource).toContain("Nessun cantiere assegnato");
+    expect(combinedSource).toContain("Nessun lavoratore assegnato");
   });
 
   it("keeps labels for the primary admin forms", () => {
@@ -93,5 +100,24 @@ describe("workspace admin UI copy", () => {
     expect(shareLinksPanelSource).not.toContain("createdToken");
     expect(shareLinksPanelSource).not.toContain("token");
     expect(shareLinkCreateSource).toContain("Link creato. Copialo ora");
+  });
+
+  it("keeps the audit log UI minimized and adds basic security headers", () => {
+    expect(auditLogSource).toContain("Eventi registrati");
+    expect(auditLogSource).toContain("metadata minimizzati");
+    expect(auditLogSource).not.toMatch(/blobKey|tokenHash|downloadUrl|token raw|emailBody|fileContent/i);
+    expect(navigationSource).toContain('roles: ["OWNER"]');
+    expect(nextConfigSource).toContain("X-Content-Type-Options");
+    expect(nextConfigSource).toContain("Referrer-Policy");
+    expect(nextConfigSource).toContain("X-Frame-Options");
+    expect(nextConfigSource).toContain("Permissions-Policy");
+  });
+
+  it("keeps access assignment UI scoped and free of worker contact details in operational scope copy", () => {
+    expect(accessSource).toContain("Accessi operativi");
+    expect(accessSource).toContain("Collega utenti e lavoratori");
+    expect(accessSource).toContain("Assegna capocantiere ai cantieri");
+    expect(accessSource).toContain("Assegna lavoratori ai cantieri");
+    expect(accessSource).not.toMatch(/blobKey|tokenHash|downloadUrl|token raw/i);
   });
 });

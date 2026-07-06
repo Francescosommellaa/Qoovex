@@ -12,6 +12,9 @@ const mocks = vi.hoisted(() => ({
     checklist: { groupBy: vi.fn() },
     shareLink: { findMany: vi.fn() },
     notification: { findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), findMany: vi.fn(), count: vi.fn() },
+    workerUserLink: { findFirst: vi.fn() },
+    jobSiteUserAssignment: { findMany: vi.fn() },
+    jobSiteWorkerAssignment: { findMany: vi.fn() },
   },
   getViewerContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
@@ -122,6 +125,9 @@ beforeEach(() => {
   resetModel(mocks.db.checklist);
   resetModel(mocks.db.shareLink);
   resetModel(mocks.db.notification);
+  resetModel(mocks.db.workerUserLink);
+  resetModel(mocks.db.jobSiteUserAssignment);
+  resetModel(mocks.db.jobSiteWorkerAssignment);
   mocks.getViewerContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
@@ -130,6 +136,9 @@ beforeEach(() => {
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.recordSupportAccess.mockResolvedValue(undefined);
+  mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: { id: "worker-1", displayName: "Mario Rossi", roleLabel: "Operativo", status: "ACTIVE" } });
+  mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
+  mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
   setRole("OWNER");
   primeDashboardMocks();
 });
@@ -143,11 +152,27 @@ describe("dashboard service", () => {
     }
   });
 
-  it("denies broad dashboard access to site managers, workers and viewers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
-      setRole(role);
-      await expect(getDashboardData()).rejects.toMatchObject({ status: 404 });
-    }
+  it("returns scoped dashboard data for operational roles and denies viewers", async () => {
+    setRole("SITE_MANAGER");
+    primeDashboardMocks();
+    mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ worker: { id: "worker-1", displayName: "Mario Rossi", status: "ACTIVE" } }]);
+    const siteManagerDashboard = await getDashboardData();
+    expect(siteManagerDashboard.organization.role).toBe("SITE_MANAGER");
+    expect(siteManagerDashboard.packages).toEqual([]);
+    expect(siteManagerDashboard.notifications).toEqual([]);
+    expect(mocks.db.document.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: expect.objectContaining({ ownerType: "JOB_SITE", jobSiteId: { in: ["jobsite-1"] } }),
+    }));
+
+    setRole("WORKER");
+    primeDashboardMocks();
+    const workerDashboard = await getDashboardData();
+    expect(workerDashboard.organization.role).toBe("WORKER");
+    expect(workerDashboard.workers[0]).toMatchObject({ id: "worker-1", displayName: "Mario Rossi" });
+    expect(workerDashboard.packages).toEqual([]);
+
+    setRole("VIEWER");
+    await expect(getDashboardData()).rejects.toMatchObject({ status: 404 });
   });
 
   it("filters every aggregate by organization and excludes archived records", async () => {

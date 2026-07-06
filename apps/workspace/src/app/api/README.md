@@ -33,3 +33,5 @@ Endpoint dominio MVP attivi:
 - `notifications/[notificationId]/send-to-me`: invio manuale di una singola notifica all'utente corrente;
 - `reminders/sync`: sync idempotente dei promemoria interni da dati registrati.
 - `reminders/email-digest/run`: endpoint schedulabile protetto da `QOOVEX_CRON_SECRET`, senza cron provider configurato qui.
+- `audit-log`: audit prodotto owner-only con metadata redatti e paginazione semplice.
+- `resource-assignments`: collegamenti operativi e assegnazioni risorsa per scope granulare.

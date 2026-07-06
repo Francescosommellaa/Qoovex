@@ -18,6 +18,7 @@ import type { NotificationEmailItem } from "@shared/server/transactional-email-s
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { syncOrganizationReminderRecords } from "./reminder-service";
 import { toNotificationResponse } from "./notification-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 
 const NOTIFICATION_EMAIL_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
 export const EMAIL_DIGEST_LIMIT = 10;
@@ -250,7 +251,7 @@ export async function previewNotificationEmailDigest(): Promise<EmailDigestPrevi
 }
 
 export async function sendNotificationEmailDigestToMe(): Promise<SendEmailDigestResponse> {
-  const { context, organizationId } = await requireNotificationEmailAccess();
+  const { context, organizationId, actorRole } = await requireNotificationEmailAccess();
   const digest = await getDigestNotifications(organizationId, context.userId);
   if (!digest.notifications.length) throw new AccessError("Nessuna notifica da inviare.", 409);
 
@@ -267,25 +268,52 @@ export async function sendNotificationEmailDigestToMe(): Promise<SendEmailDigest
       status: "SKIPPED",
       errorCode: "RATE_LIMIT",
     });
+    await recordProductAuditEventBestEffort({
+      organizationId,
+      ...auditActorFromContext(context, actorRole),
+      action: "EMAIL_DIGEST_FAILED",
+      entityType: "EMAIL_DELIVERY",
+      outcome: "FAILED",
+      metadata: { notificationCount: digest.notifications.length, deliveryStatus: "SKIPPED", reasonCode: "RATE_LIMIT", trigger: "manual-digest" },
+    });
     throw error;
   }
-  await sendTransactionalEmailWithDeliveryLog({
-    organizationId,
-    userId: context.userId,
-    type: "DIGEST",
-    recipientEmail: email,
-    notificationCount: digest.notifications.length,
-    email: {
-      to: email,
-      idempotencyKey: `notification-email-digest:${organizationId}:${context.userId}:${currentRateWindowKey()}`,
-      template: {
-        kind: "notification-digest",
-        unreadCount: digest.unreadCount,
-        items: digest.notifications.map(toEmailItem),
-        notificationsUrl: getNotificationsUrl(),
+  try {
+    await sendTransactionalEmailWithDeliveryLog({
+      organizationId,
+      userId: context.userId,
+      type: "DIGEST",
+      recipientEmail: email,
+      notificationCount: digest.notifications.length,
+      email: {
+        to: email,
+        idempotencyKey: `notification-email-digest:${organizationId}:${context.userId}:${currentRateWindowKey()}`,
+        template: {
+          kind: "notification-digest",
+          unreadCount: digest.unreadCount,
+          items: digest.notifications.map(toEmailItem),
+          notificationsUrl: getNotificationsUrl(),
+        },
       },
-    },
-  });
+    });
+    await recordProductAuditEventBestEffort({
+      organizationId,
+      ...auditActorFromContext(context, actorRole),
+      action: "EMAIL_DIGEST_SENT",
+      entityType: "EMAIL_DELIVERY",
+      metadata: { notificationCount: digest.notifications.length, deliveryStatus: "SENT", trigger: "manual-digest" },
+    });
+  } catch (error) {
+    await recordProductAuditEventBestEffort({
+      organizationId,
+      ...auditActorFromContext(context, actorRole),
+      action: "EMAIL_DIGEST_FAILED",
+      entityType: "EMAIL_DELIVERY",
+      outcome: "FAILED",
+      metadata: { notificationCount: digest.notifications.length, deliveryStatus: "FAILED", trigger: "manual-digest" },
+    });
+    throw error;
+  }
 
   await recordSupportAccess({
     userId: context.userId,
@@ -310,7 +338,7 @@ async function findVisibleNotification(organizationId: string, userId: string, n
 }
 
 export async function sendSingleNotificationEmailToMe(notificationId: string): Promise<SendNotificationEmailResponse> {
-  const { context, organizationId } = await requireNotificationEmailAccess();
+  const { context, organizationId, actorRole } = await requireNotificationEmailAccess();
   const notification = await findVisibleNotification(organizationId, context.userId, notificationId);
   const email = await getCurrentVerifiedEmail(context.userId);
 
@@ -327,25 +355,55 @@ export async function sendSingleNotificationEmailToMe(notificationId: string): P
       status: "SKIPPED",
       errorCode: "RATE_LIMIT",
     });
+    await recordProductAuditEventBestEffort({
+      organizationId,
+      ...auditActorFromContext(context, actorRole),
+      action: "EMAIL_DIGEST_FAILED",
+      entityType: "EMAIL_DELIVERY",
+      entityId: notification.id,
+      outcome: "FAILED",
+      metadata: { notificationCount: 1, deliveryStatus: "SKIPPED", reasonCode: "RATE_LIMIT", trigger: "single-notification" },
+    });
     throw error;
   }
-  await sendTransactionalEmailWithDeliveryLog({
-    organizationId,
-    userId: context.userId,
-    notificationId: notification.id,
-    type: "SINGLE_NOTIFICATION",
-    recipientEmail: email,
-    notificationCount: 1,
-    email: {
-      to: email,
-      idempotencyKey: `notification-email-single:${organizationId}:${context.userId}:${notification.id}:${currentRateWindowKey()}`,
-      template: {
-        kind: "notification-single",
-        item: toEmailItem(notification),
-        notificationsUrl: getNotificationsUrl(),
+  try {
+    await sendTransactionalEmailWithDeliveryLog({
+      organizationId,
+      userId: context.userId,
+      notificationId: notification.id,
+      type: "SINGLE_NOTIFICATION",
+      recipientEmail: email,
+      notificationCount: 1,
+      email: {
+        to: email,
+        idempotencyKey: `notification-email-single:${organizationId}:${context.userId}:${notification.id}:${currentRateWindowKey()}`,
+        template: {
+          kind: "notification-single",
+          item: toEmailItem(notification),
+          notificationsUrl: getNotificationsUrl(),
+        },
       },
-    },
-  });
+    });
+    await recordProductAuditEventBestEffort({
+      organizationId,
+      ...auditActorFromContext(context, actorRole),
+      action: "EMAIL_DIGEST_SENT",
+      entityType: "EMAIL_DELIVERY",
+      entityId: notification.id,
+      metadata: { notificationCount: 1, deliveryStatus: "SENT", trigger: "single-notification" },
+    });
+  } catch (error) {
+    await recordProductAuditEventBestEffort({
+      organizationId,
+      ...auditActorFromContext(context, actorRole),
+      action: "EMAIL_DIGEST_FAILED",
+      entityType: "EMAIL_DELIVERY",
+      entityId: notification.id,
+      outcome: "FAILED",
+      metadata: { notificationCount: 1, deliveryStatus: "FAILED", trigger: "single-notification" },
+    });
+    throw error;
+  }
 
   await recordSupportAccess({
     userId: context.userId,

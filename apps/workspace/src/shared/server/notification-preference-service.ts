@@ -11,6 +11,7 @@ import type {
 import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 
 const NOTIFICATION_PREFERENCE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
 const EMAIL_DIGEST_FREQUENCIES = new Set<EmailDigestFrequency>(["OFF", "DAILY", "WEEKLY"]);
@@ -144,7 +145,7 @@ export async function getNotificationPreference(): Promise<NotificationPreferenc
 }
 
 export async function updateNotificationPreference(input: unknown): Promise<UpdateNotificationPreferenceResponse> {
-  const { context, organizationId } = await requireNotificationPreferenceAccess();
+  const { context, organizationId, actorRole } = await requireNotificationPreferenceAccess();
   await getOrCreatePreferenceRecord(organizationId, context.userId);
   const preference = await db.notificationPreference.update({
     where: { organizationId_userId: { organizationId, userId: context.userId } },
@@ -152,6 +153,14 @@ export async function updateNotificationPreference(input: unknown): Promise<Upda
     select: preferenceSelect,
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "notification-preference" });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "NOTIFICATION_PREFERENCES_UPDATED",
+    entityType: "NOTIFICATION_PREFERENCE",
+    entityId: preference.id,
+    metadata: { emailDigestFrequency: preference.emailDigestFrequency },
+  });
   return { preference: toPreferenceResponse(preference), updated: true };
 }
 

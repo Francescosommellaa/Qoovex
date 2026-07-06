@@ -8,6 +8,9 @@ const mocks = vi.hoisted(() => ({
     worker: { findFirst: vi.fn() },
     jobSite: { findFirst: vi.fn() },
     deadline: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
+    workerUserLink: { findFirst: vi.fn() },
+    jobSiteUserAssignment: { findMany: vi.fn() },
+    jobSiteWorkerAssignment: { findMany: vi.fn() },
   },
   getViewerContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
@@ -104,6 +107,9 @@ beforeEach(() => {
   resetModel(mocks.db.worker);
   resetModel(mocks.db.jobSite);
   resetModel(mocks.db.deadline);
+  resetModel(mocks.db.workerUserLink);
+  resetModel(mocks.db.jobSiteUserAssignment);
+  resetModel(mocks.db.jobSiteWorkerAssignment);
   mocks.getViewerContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
@@ -111,6 +117,9 @@ beforeEach(() => {
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.recordSupportAccess.mockResolvedValue(undefined);
+  mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
+  mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([]);
+  mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
   setRole("OWNER");
 });
 
@@ -198,12 +207,32 @@ describe("document service", () => {
     await expect(archiveDocument("doc-1")).rejects.toMatchObject({ status: 404 });
   });
 
-  it("denies broad document list access to site managers, workers and viewers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
-      setRole(role);
-      await expect(listDocuments()).rejects.toMatchObject({ status: 404 });
-    }
-    expect(mocks.db.document.findMany).not.toHaveBeenCalled();
+  it("scopes document reads for site managers and workers while viewers stay denied", async () => {
+    setRole("SITE_MANAGER");
+    mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
+    mocks.db.document.findMany.mockResolvedValue([{ ...documentRecord, ownerType: "JOB_SITE", jobSiteId: "jobsite-1" }]);
+    await expect(listDocuments()).resolves.toHaveLength(1);
+    expect(mocks.db.document.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: expect.objectContaining({
+        organizationId: "org-1",
+        OR: [{ ownerType: "JOB_SITE", jobSiteId: { in: ["jobsite-1"] } }],
+      }),
+    }));
+
+    setRole("WORKER");
+    mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: { id: "worker-1", displayName: "Mario", roleLabel: null, status: "ACTIVE" } });
+    mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
+    mocks.db.document.findMany.mockResolvedValue([{ ...documentRecord, ownerType: "WORKER", workerId: "worker-1" }]);
+    await expect(listDocuments()).resolves.toHaveLength(1);
+    expect(mocks.db.document.findMany).toHaveBeenLastCalledWith(expect.objectContaining({
+      where: expect.objectContaining({
+        organizationId: "org-1",
+        OR: [{ ownerType: "WORKER", workerId: "worker-1" }],
+      }),
+    }));
+
+    setRole("VIEWER");
+    await expect(listDocuments()).rejects.toMatchObject({ status: 404 });
   });
 
   it("filters document detail by organization", async () => {

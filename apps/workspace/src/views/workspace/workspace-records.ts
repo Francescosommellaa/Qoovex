@@ -24,6 +24,8 @@ export interface WorkspaceCapabilities {
   canDeleteEvidence: boolean;
   canManagePackages: boolean;
   canSharePackages: boolean;
+  canReadAssignments: boolean;
+  canManageAssignments: boolean;
 }
 
 export interface WorkspaceDocumentTypeRecord {

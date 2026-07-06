@@ -5,6 +5,7 @@ import type { EmailDigestFrequency, OrganizationRole, ScheduledEmailDigestRunRes
 import { getDigestNotifications, getNotificationsUrl, recordNotificationEmailDelivery, toEmailItem } from "./notification-email-service";
 import { sendTransactionalEmail, TransactionalEmailError } from "./transactional-email-service";
 import { syncOrganizationReminderRecords } from "./reminder-service";
+import { recordProductAuditEventBestEffort } from "./product-audit-service";
 
 const SCHEDULED_EMAIL_ROLES: OrganizationRole[] = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"];
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -93,6 +94,14 @@ export async function runScheduledEmailDigest(now = new Date()): Promise<Schedul
         status: "SKIPPED",
         errorCode: "NO_NOTIFICATIONS",
       });
+      await recordProductAuditEventBestEffort({
+        organizationId: preference.organizationId,
+        actorUserId: preference.userId,
+        action: "SCHEDULED_EMAIL_DIGEST_RUN",
+        entityType: "EMAIL_DELIVERY",
+        outcome: "SUCCESS",
+        metadata: { notificationCount: 0, deliveryStatus: "SKIPPED", reasonCode: "NO_NOTIFICATIONS", frequency: preference.emailDigestFrequency },
+      });
       result.skipped += 1;
       continue;
     }
@@ -124,6 +133,14 @@ export async function runScheduledEmailDigest(now = new Date()): Promise<Schedul
         data: { lastDigestSentAt: sentAt },
         select: { id: true },
       });
+      await recordProductAuditEventBestEffort({
+        organizationId: preference.organizationId,
+        actorUserId: preference.userId,
+        action: "SCHEDULED_EMAIL_DIGEST_RUN",
+        entityType: "EMAIL_DELIVERY",
+        outcome: "SUCCESS",
+        metadata: { notificationCount: digest.notifications.length, deliveryStatus: "SENT", frequency: preference.emailDigestFrequency },
+      });
       result.sent += 1;
     } catch (error) {
       await recordNotificationEmailDelivery({
@@ -134,6 +151,14 @@ export async function runScheduledEmailDigest(now = new Date()): Promise<Schedul
         notificationCount: digest.notifications.length,
         status: "FAILED",
         errorCode: error instanceof TransactionalEmailError ? "PROVIDER_ERROR" : "EMAIL_ERROR",
+      });
+      await recordProductAuditEventBestEffort({
+        organizationId: preference.organizationId,
+        actorUserId: preference.userId,
+        action: "SCHEDULED_EMAIL_DIGEST_RUN",
+        entityType: "EMAIL_DELIVERY",
+        outcome: "FAILED",
+        metadata: { notificationCount: digest.notifications.length, deliveryStatus: "FAILED", frequency: preference.emailDigestFrequency },
       });
       result.failed += 1;
     }

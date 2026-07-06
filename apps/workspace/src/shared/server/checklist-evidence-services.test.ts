@@ -8,6 +8,9 @@ const mocks = vi.hoisted(() => ({
     jobSite: { findFirst: vi.fn() },
     worker: { findFirst: vi.fn() },
     evidence: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
+    workerUserLink: { findFirst: vi.fn() },
+    jobSiteUserAssignment: { findMany: vi.fn() },
+    jobSiteWorkerAssignment: { findMany: vi.fn() },
   },
   getViewerContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
@@ -138,6 +141,9 @@ beforeEach(() => {
   resetModel(mocks.db.jobSite);
   resetModel(mocks.db.worker);
   resetModel(mocks.db.evidence);
+  resetModel(mocks.db.workerUserLink);
+  resetModel(mocks.db.jobSiteUserAssignment);
+  resetModel(mocks.db.jobSiteWorkerAssignment);
   mocks.getViewerContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
@@ -150,8 +156,11 @@ beforeEach(() => {
   mocks.recordSupportAccess.mockResolvedValue(undefined);
   mocks.db.jobSite.findFirst.mockResolvedValue({ id: "jobsite-1" });
   mocks.db.worker.findFirst.mockResolvedValue({ id: "worker-1" });
-  mocks.db.checklist.findFirst.mockResolvedValue({ id: "checklist-1", organizationId: "org-1" });
-  mocks.db.checklistItem.findFirst.mockResolvedValue(itemRecord);
+  mocks.db.checklist.findFirst.mockResolvedValue({ id: "checklist-1", organizationId: "org-1", jobSiteId: "jobsite-1" });
+  mocks.db.checklistItem.findFirst.mockResolvedValue({ ...itemRecord, checklist: { jobSiteId: "jobsite-1" } });
+  mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
+  mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([]);
+  mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
   mocks.putPrivateBlob.mockResolvedValue({ pathname: fileEvidenceRecord.blobKey, etag: "etag", contentType: "image/png" });
   mocks.deletePrivateBlob.mockResolvedValue(undefined);
   setRole("OWNER");
@@ -176,7 +185,7 @@ describe("checklist service", () => {
     }));
   });
 
-  it("lets safety consultants manage checklist items but denies broad access to site managers, workers and viewers", async () => {
+  it("lets safety consultants manage checklist items and site managers complete assigned items", async () => {
     setRole("SAFETY_CONSULTANT");
     mocks.db.checklistItem.create.mockResolvedValue({ ...itemRecord, status: "DONE", completedAt: now, completedById: "user-1" });
     await expect(createChecklistItem("checklist-1", { label: "Completa voce", status: "DONE" })).resolves.toMatchObject({
@@ -184,11 +193,19 @@ describe("checklist service", () => {
       completedById: "user-1",
     });
 
-    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
-      setRole(role);
-      await expect(listChecklists()).rejects.toMatchObject({ status: 404 });
-      await expect(createChecklistItem("checklist-1", { label: "Voce" })).rejects.toMatchObject({ status: 404 });
-    }
+    setRole("SITE_MANAGER");
+    mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
+    mocks.db.checklist.findMany.mockResolvedValue([checklistRecord]);
+    mocks.db.checklistItem.update.mockResolvedValue({ ...itemRecord, status: "DONE", completedAt: now, completedById: "user-1" });
+    await expect(listChecklists()).resolves.toEqual([checklistRecord]);
+    await expect(updateChecklistItem("checklist-1", "item-1", { status: "DONE" })).resolves.toMatchObject({ status: "DONE" });
+    await expect(createChecklistItem("checklist-1", { label: "Voce" })).rejects.toMatchObject({ status: 404 });
+
+    setRole("WORKER");
+    await expect(listChecklists()).rejects.toMatchObject({ status: 404 });
+
+    setRole("VIEWER");
+    await expect(listChecklists()).rejects.toMatchObject({ status: 404 });
   });
 
   it("completes and reopens checklist items using the server context user", async () => {
@@ -300,14 +317,25 @@ describe("evidence service", () => {
     await expect(archiveEvidence("evidence-1")).rejects.toMatchObject({ status: 404 });
   });
 
-  it("denies evidence endpoints to site managers, workers and viewers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
-      setRole(role);
-      await expect(listEvidence()).rejects.toMatchObject({ status: 404 });
-      await expect(createEvidenceNote({ type: "NOTE", title: "Nota", jobSiteId: "jobsite-1" })).rejects.toMatchObject({ status: 404 });
-      await expect(getEvidenceDownload("evidence-1")).rejects.toMatchObject({ status: 404 });
-    }
-    expect(mocks.db.evidence.findMany).not.toHaveBeenCalled();
+  it("scopes evidence access for operational roles and denies viewers", async () => {
+    setRole("SITE_MANAGER");
+    mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
+    mocks.db.evidence.findMany.mockResolvedValue([evidenceRecord]);
+    mocks.db.evidence.create.mockResolvedValue(evidenceRecord);
+    await expect(listEvidence()).resolves.toHaveLength(1);
+    await expect(createEvidenceNote({ type: "NOTE", title: "Nota", jobSiteId: "jobsite-1" })).resolves.toMatchObject({ type: "NOTE" });
+
+    setRole("WORKER");
+    mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: { id: "worker-1", displayName: "Mario", roleLabel: null, status: "ACTIVE" } });
+    mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
+    mocks.db.evidence.findMany.mockResolvedValue([{ ...evidenceRecord, workerId: "worker-1" }]);
+    mocks.db.evidence.create.mockResolvedValue({ ...evidenceRecord, workerId: "worker-1" });
+    await expect(listEvidence()).resolves.toHaveLength(1);
+    await expect(createEvidenceNote({ type: "NOTE", title: "Nota", workerId: "worker-1" })).resolves.toMatchObject({ type: "NOTE" });
+
+    setRole("VIEWER");
+    await expect(listEvidence()).rejects.toMatchObject({ status: 404 });
+    await expect(createEvidenceNote({ type: "NOTE", title: "Nota", jobSiteId: "jobsite-1" })).rejects.toMatchObject({ status: 404 });
   });
 
   it("filters evidence and references by organization", async () => {

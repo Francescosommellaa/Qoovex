@@ -7,9 +7,13 @@ import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { isEnumValue, trimOptionalId, trimOptionalText, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
+import { getResourceScope, requireAssignedJobSite } from "./resource-scope-service";
 import { parseEditableRecordStatus } from "./worker-jobsite-validation";
 
-const CHECKLIST_ACCESS_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const CHECKLIST_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"] as const;
+const CHECKLIST_MANAGE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const CHECKLIST_COMPLETE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"] as const;
 
 const checklistSelect = {
   id: true,
@@ -88,7 +92,7 @@ async function assertActiveJobSite(organizationId: string, jobSiteId: string | n
 async function findActiveChecklist(organizationId: string, checklistId: string) {
   const checklist = await db.checklist.findFirst({
     where: { id: checklistId, organizationId, archivedAt: null },
-    select: { id: true, organizationId: true },
+    select: { id: true, organizationId: true, jobSiteId: true },
   });
   if (!checklist) throw new AccessError("Checklist non trovata.", 404);
   return checklist;
@@ -109,10 +113,15 @@ function getChecklistItemStatusData(status: ChecklistItemStatus, completedById: 
 }
 
 export async function listChecklists(input: ListChecklistsInput = {}) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:read", CHECKLIST_ACCESS_ROLES);
-  const where: { organizationId: string; archivedAt: null; jobSiteId?: string; status?: RecordStatus } = { organizationId, archivedAt: null };
+  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:read", CHECKLIST_READ_ROLES);
+  const scope = await getResourceScope(context);
+  const where: { organizationId: string; archivedAt: null; jobSiteId?: string | { in: string[] }; status?: RecordStatus } = { organizationId, archivedAt: null };
+  if (!scope.fullAccess) where.jobSiteId = { in: scope.siteManagerJobSiteIds };
   const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
-  if (jobSiteId) where.jobSiteId = jobSiteId;
+  if (jobSiteId) {
+    requireAssignedJobSite(scope, jobSiteId);
+    where.jobSiteId = jobSiteId;
+  }
   if (input.status !== undefined) where.status = parseEditableRecordStatus(input.status);
 
   const checklists = await db.checklist.findMany({ where, select: checklistSelect, orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }] });
@@ -121,7 +130,8 @@ export async function listChecklists(input: ListChecklistsInput = {}) {
 }
 
 export async function getChecklist(checklistId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:read", CHECKLIST_ACCESS_ROLES);
+  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:read", CHECKLIST_READ_ROLES);
+  const scope = await getResourceScope(context);
   const checklist = await db.checklist.findFirst({
     where: { id: checklistId, organizationId, archivedAt: null },
     select: {
@@ -134,12 +144,13 @@ export async function getChecklist(checklistId: string) {
     },
   });
   if (!checklist) throw new AccessError("Checklist non trovata.", 404);
+  requireAssignedJobSite(scope, checklist.jobSiteId);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "checklist", resourceId: checklist.id });
   return checklist;
 }
 
 export async function createChecklist(input: CreateChecklistInput) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:manage", CHECKLIST_ACCESS_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("checklists:manage", CHECKLIST_MANAGE_ROLES);
   const name = trimRequiredText(input.name, "Nome checklist", 2, 160);
   const description = trimOptionalText(input.description, "Descrizione checklist", 4000) ?? null;
   const jobSiteId = await assertActiveJobSite(organizationId, trimOptionalId(input.jobSiteId, "Cantiere"));
@@ -150,11 +161,19 @@ export async function createChecklist(input: CreateChecklistInput) {
     select: checklistSelect,
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "checklist", resourceId: checklist.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "CHECKLIST_CREATED",
+    entityType: "CHECKLIST",
+    entityId: checklist.id,
+    metadata: { nextStatus: checklist.status },
+  });
   return checklist;
 }
 
 export async function updateChecklist(checklistId: string, input: UpdateChecklistInput) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:manage", CHECKLIST_ACCESS_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("checklists:manage", CHECKLIST_MANAGE_ROLES);
   const existing = await db.checklist.findFirst({ where: { id: checklistId, organizationId, archivedAt: null }, select: { id: true } });
   if (!existing) throw new AccessError("Checklist non trovata.", 404);
 
@@ -167,24 +186,43 @@ export async function updateChecklist(checklistId: string, input: UpdateChecklis
 
   const checklist = await db.checklist.update({ where: { id: existing.id }, data, select: checklistSelect });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "checklist", resourceId: checklist.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "CHECKLIST_UPDATED",
+    entityType: "CHECKLIST",
+    entityId: checklist.id,
+    metadata: { nextStatus: checklist.status },
+  });
   return checklist;
 }
 
 export async function archiveChecklist(checklistId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:manage", CHECKLIST_ACCESS_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("checklists:manage", CHECKLIST_MANAGE_ROLES);
   const existing = await db.checklist.findFirst({ where: { id: checklistId, organizationId, archivedAt: null }, select: { id: true } });
   if (!existing) throw new AccessError("Checklist non trovata.", 404);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "checklist", resourceId: existing.id });
-  return db.checklist.update({
+  const checklist = await db.checklist.update({
     where: { id: existing.id },
     data: { archivedAt: new Date(), status: "ARCHIVED" },
     select: checklistSelect,
   });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "CHECKLIST_ARCHIVED",
+    entityType: "CHECKLIST",
+    entityId: checklist.id,
+    metadata: { nextStatus: checklist.status },
+  });
+  return checklist;
 }
 
 export async function listChecklistItems(checklistId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:read", CHECKLIST_ACCESS_ROLES);
-  await findActiveChecklist(organizationId, checklistId);
+  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:read", CHECKLIST_READ_ROLES);
+  const scope = await getResourceScope(context);
+  const checklist = await findActiveChecklist(organizationId, checklistId);
+  requireAssignedJobSite(scope, checklist.jobSiteId);
   const items = await db.checklistItem.findMany({
     where: { checklistId, organizationId, status: { not: "ARCHIVED" } },
     select: checklistItemSelect,
@@ -195,7 +233,7 @@ export async function listChecklistItems(checklistId: string) {
 }
 
 export async function createChecklistItem(checklistId: string, input: CreateChecklistItemInput) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:manage", CHECKLIST_ACCESS_ROLES);
+  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:manage", CHECKLIST_MANAGE_ROLES);
   const checklist = await findActiveChecklist(organizationId, checklistId);
   const label = trimRequiredText(input.label, "Voce checklist", 2, 160);
   const description = trimOptionalText(input.description, "Descrizione voce checklist", 4000) ?? null;
@@ -213,8 +251,11 @@ export async function createChecklistItem(checklistId: string, input: CreateChec
 export async function updateChecklistItem(checklistId: string, itemId: string, input: UpdateChecklistItemInput) {
   const statusOnlyUpdate = input.status !== undefined && input.label === undefined && input.description === undefined;
   const permission = statusOnlyUpdate ? "checklists:complete" : "checklists:manage";
-  const { context, organizationId } = await requireOrganizationDomainAccess(permission, CHECKLIST_ACCESS_ROLES);
-  await findActiveChecklist(organizationId, checklistId);
+  const allowedRoles = statusOnlyUpdate ? CHECKLIST_COMPLETE_ROLES : CHECKLIST_MANAGE_ROLES;
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess(permission, allowedRoles);
+  const scope = await getResourceScope(context);
+  const checklist = await findActiveChecklist(organizationId, checklistId);
+  requireAssignedJobSite(scope, checklist.jobSiteId);
   const existing = await findActiveChecklistItem(organizationId, checklistId, itemId);
 
   const data: { label?: string; description?: string | null; status?: ChecklistItemStatus; completedAt?: Date | null; completedById?: string | null } = {};
@@ -225,11 +266,21 @@ export async function updateChecklistItem(checklistId: string, itemId: string, i
 
   const item = await db.checklistItem.update({ where: { id: existing.id }, data, select: checklistItemSelect });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "checklist-item", resourceId: item.id });
+  if (input.status === "DONE") {
+    await recordProductAuditEventBestEffort({
+      organizationId,
+      ...auditActorFromContext(context, actorRole),
+      action: "CHECKLIST_ITEM_COMPLETED",
+      entityType: "CHECKLIST_ITEM",
+      entityId: item.id,
+      metadata: { nextStatus: item.status },
+    });
+  }
   return item;
 }
 
 export async function archiveChecklistItem(checklistId: string, itemId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:manage", CHECKLIST_ACCESS_ROLES);
+  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:manage", CHECKLIST_MANAGE_ROLES);
   await findActiveChecklist(organizationId, checklistId);
   const existing = await findActiveChecklistItem(organizationId, checklistId, itemId);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "checklist-item", resourceId: existing.id });

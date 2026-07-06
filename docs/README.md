@@ -2,7 +2,7 @@
 
 Questa cartella contiene la documentazione di prodotto e lavoro del nuovo Qoovex.
 
-La fonte primaria e il set numerato `00`-`34`.
+La fonte primaria e il set numerato `00`-`36`.
 
 ## Ordine di lettura
 
@@ -40,6 +40,8 @@ La fonte primaria e il set numerato `00`-`34`.
 32. `32_NOTIFICATIONS_AND_REMINDERS_IMPLEMENTATION.md`: notifiche interne e promemoria operativi su scadenze, documenti, pacchetti e share link.
 33. `33_EMAIL_REMINDERS_AND_DIGEST_IMPLEMENTATION.md`: digest email manuale e reminder singola notifica, senza invii massivi o scheduler.
 34. `34_NOTIFICATION_PREFERENCES_AND_SCHEDULING.md`: preferenze email, delivery log minimale e endpoint scheduling protetto da secret.
+35. `35_PRIVACY_AUDIT_SECURITY_HARDENING.md`: audit log prodotto, metadata redatti e header HTTP di base.
+36. `36_RESOURCE_ASSIGNMENTS_AND_GRANULAR_ACCESS.md`: assegnazioni risorsa e accesso granulare per ruoli operativi.
 
 ## Documenti rimossi
 

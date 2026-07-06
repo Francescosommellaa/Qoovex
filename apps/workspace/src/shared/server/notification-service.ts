@@ -5,6 +5,7 @@ import type { NotificationListResponse, NotificationResponse } from "@qoovex/typ
 import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { syncOrganizationReminderRecords } from "./reminder-service";
 
 const NOTIFICATION_ACCESS_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
@@ -122,7 +123,7 @@ async function findVisibleNotification(organizationId: string, userId: string, n
 }
 
 export async function markNotificationRead(notificationId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("organization:read", NOTIFICATION_ACCESS_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("organization:read", NOTIFICATION_ACCESS_ROLES);
   const id = await findVisibleNotification(organizationId, context.userId, notificationId);
   const notification = await db.notification.update({
     where: { id },
@@ -130,11 +131,18 @@ export async function markNotificationRead(notificationId: string) {
     select: notificationSelect,
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "notification", resourceId: id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "NOTIFICATION_READ",
+    entityType: "NOTIFICATION",
+    entityId: id,
+  });
   return { notification: toNotificationResponse(notification), read: true as const };
 }
 
 export async function dismissNotification(notificationId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("organization:read", NOTIFICATION_ACCESS_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("organization:read", NOTIFICATION_ACCESS_ROLES);
   const id = await findVisibleNotification(organizationId, context.userId, notificationId);
   const notification = await db.notification.update({
     where: { id },
@@ -142,5 +150,12 @@ export async function dismissNotification(notificationId: string) {
     select: notificationSelect,
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "notification", resourceId: id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "NOTIFICATION_DISMISSED",
+    entityType: "NOTIFICATION",
+    entityId: id,
+  });
   return { notification: toNotificationResponse(notification), dismissed: true as const };
 }

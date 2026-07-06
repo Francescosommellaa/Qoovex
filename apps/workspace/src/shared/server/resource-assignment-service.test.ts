@@ -1,0 +1,177 @@
+import type { OrganizationRole } from "@qoovex/types";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const mocks = vi.hoisted(() => ({
+  db: {
+    worker: { findMany: vi.fn(), findFirst: vi.fn() },
+    jobSite: { findMany: vi.fn(), findFirst: vi.fn() },
+    organizationMembership: { findMany: vi.fn(), findFirst: vi.fn() },
+    workerUserLink: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
+    jobSiteUserAssignment: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
+    jobSiteWorkerAssignment: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
+  },
+  getViewerContext: vi.fn(),
+  getContextOrganizationId: vi.fn(),
+  requirePermission: vi.fn(),
+  recordProductAuditEventBestEffort: vi.fn(),
+  auditActorFromContext: vi.fn(),
+}));
+
+vi.mock("server-only", () => ({}));
+vi.mock("@qoovex/db", () => ({ db: mocks.db }));
+vi.mock("@shared/server/access-errors", () => ({
+  AccessError: class AccessError extends Error {
+    constructor(message: string, public readonly status: 401 | 403 | 404 | 409 | 410) {
+      super(message);
+      this.name = "AccessError";
+    }
+  },
+}));
+vi.mock("@shared/server/access-context-service", () => ({
+  getViewerContext: mocks.getViewerContext,
+  getContextOrganizationId: mocks.getContextOrganizationId,
+  requirePermission: mocks.requirePermission,
+}));
+vi.mock("./product-audit-service", () => ({
+  recordProductAuditEventBestEffort: mocks.recordProductAuditEventBestEffort,
+  auditActorFromContext: mocks.auditActorFromContext,
+}));
+
+import {
+  archiveJobSiteUserAssignment,
+  createJobSiteUserAssignment,
+  createJobSiteWorkerAssignment,
+  createWorkerUserLink,
+  listWorkerUserLinks,
+} from "./resource-assignment-service";
+
+const now = new Date("2026-07-08T08:00:00.000Z");
+const user = { id: "user-worker", name: "Mario Utente", email: "mario@example.com" };
+const worker = { id: "worker-1", displayName: "Mario Rossi", roleLabel: "Operativo", status: "ACTIVE" };
+const jobSite = { id: "jobsite-1", name: "Cantiere Centro", status: "ACTIVE" };
+const workerLink = {
+  id: "link-1",
+  workerId: "worker-1",
+  userId: "user-worker",
+  linkedById: "user-owner",
+  createdAt: now,
+  updatedAt: now,
+  archivedAt: null,
+  worker,
+  user,
+};
+const jobSiteUserAssignment = {
+  id: "assignment-1",
+  jobSiteId: "jobsite-1",
+  userId: "user-worker",
+  assignmentRole: "SITE_MANAGER",
+  assignedById: "user-owner",
+  createdAt: now,
+  updatedAt: now,
+  archivedAt: null,
+  jobSite,
+  user,
+};
+const jobSiteWorkerAssignment = {
+  id: "assignment-worker-1",
+  jobSiteId: "jobsite-1",
+  workerId: "worker-1",
+  assignedById: "user-owner",
+  createdAt: now,
+  updatedAt: now,
+  archivedAt: null,
+  jobSite,
+  worker,
+};
+
+function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
+  for (const method of Object.values(model)) method.mockReset();
+}
+
+function setRole(role: OrganizationRole) {
+  mocks.getViewerContext.mockResolvedValue({
+    userId: "user-owner",
+    platformRole: "USER",
+    membership: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
+    support: null,
+    permissions: [],
+  });
+}
+
+beforeEach(() => {
+  for (const model of Object.values(mocks.db)) resetModel(model);
+  vi.clearAllMocks();
+  mocks.getContextOrganizationId.mockReturnValue("org-1");
+  mocks.requirePermission.mockImplementation(() => undefined);
+  mocks.auditActorFromContext.mockReturnValue({ actorUserId: "user-owner", actorRole: "OWNER", supportSessionId: null });
+  mocks.db.worker.findFirst.mockResolvedValue(worker);
+  mocks.db.jobSite.findFirst.mockResolvedValue(jobSite);
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "WORKER", user });
+  mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
+  mocks.db.jobSiteUserAssignment.findFirst.mockResolvedValue(null);
+  mocks.db.jobSiteWorkerAssignment.findFirst.mockResolvedValue(null);
+  mocks.db.workerUserLink.create.mockResolvedValue(workerLink);
+  mocks.db.jobSiteUserAssignment.create.mockResolvedValue(jobSiteUserAssignment);
+  mocks.db.jobSiteWorkerAssignment.create.mockResolvedValue(jobSiteWorkerAssignment);
+  mocks.db.workerUserLink.findMany.mockResolvedValue([workerLink]);
+  mocks.db.jobSiteUserAssignment.update.mockResolvedValue({ ...jobSiteUserAssignment, archivedAt: now });
+  setRole("OWNER");
+});
+
+describe("resource assignment service", () => {
+  it("lets owners create worker-user links and records product audit", async () => {
+    await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).resolves.toMatchObject({
+      workerId: "worker-1",
+      userId: "user-worker",
+      workerDisplayName: "Mario Rossi",
+    });
+    expect(mocks.db.workerUserLink.create).toHaveBeenCalledWith(expect.objectContaining({
+      data: { organizationId: "org-1", workerId: "worker-1", userId: "user-worker", linkedById: "user-owner" },
+    }));
+    expect(mocks.recordProductAuditEventBestEffort).toHaveBeenCalledWith(expect.objectContaining({
+      action: "WORKER_USER_LINK_CREATED",
+      entityType: "WORKER_USER_LINK",
+    }));
+  });
+
+  it("keeps safety consultants read-only for assignments", async () => {
+    setRole("SAFETY_CONSULTANT");
+    await expect(listWorkerUserLinks()).resolves.toHaveLength(1);
+    await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("rejects duplicates and cross-organization missing resources", async () => {
+    mocks.db.workerUserLink.findFirst.mockResolvedValueOnce({ id: "existing" });
+    await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 409 });
+
+    mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
+    mocks.db.worker.findFirst.mockResolvedValueOnce(null);
+    await expect(createWorkerUserLink({ workerId: "foreign-worker", userId: "user-worker" })).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("validates role-specific jobsite assignments and soft archives them", async () => {
+    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "SITE_MANAGER", user });
+    await expect(createJobSiteUserAssignment({ jobSiteId: "jobsite-1", userId: "user-worker" })).resolves.toMatchObject({
+      jobSiteId: "jobsite-1",
+      assignmentRole: "SITE_MANAGER",
+    });
+
+    await expect(createJobSiteWorkerAssignment({ jobSiteId: "jobsite-1", workerId: "worker-1" })).resolves.toMatchObject({
+      jobSiteId: "jobsite-1",
+      workerId: "worker-1",
+    });
+
+    mocks.db.jobSiteUserAssignment.findFirst.mockResolvedValueOnce({ id: "assignment-1" });
+    await expect(archiveJobSiteUserAssignment("assignment-1")).resolves.toMatchObject({ archived: true });
+    expect(mocks.db.jobSiteUserAssignment.update).toHaveBeenCalledWith(expect.objectContaining({
+      data: { archivedAt: expect.any(Date) },
+    }));
+  });
+
+  it("denies assignment management to site managers, workers and viewers", async () => {
+    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
+      setRole(role);
+      await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 404 });
+    }
+  });
+});

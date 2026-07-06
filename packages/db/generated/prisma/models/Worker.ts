@@ -234,6 +234,8 @@ export type WorkerWhereInput = {
   documents?: Prisma.DocumentListRelationFilter
   deadlines?: Prisma.DeadlineListRelationFilter
   evidence?: Prisma.EvidenceListRelationFilter
+  userLinks?: Prisma.WorkerUserLinkListRelationFilter
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentListRelationFilter
 }
 
 export type WorkerOrderByWithRelationInput = {
@@ -252,6 +254,8 @@ export type WorkerOrderByWithRelationInput = {
   documents?: Prisma.DocumentOrderByRelationAggregateInput
   deadlines?: Prisma.DeadlineOrderByRelationAggregateInput
   evidence?: Prisma.EvidenceOrderByRelationAggregateInput
+  userLinks?: Prisma.WorkerUserLinkOrderByRelationAggregateInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentOrderByRelationAggregateInput
 }
 
 export type WorkerWhereUniqueInput = Prisma.AtLeast<{
@@ -273,6 +277,8 @@ export type WorkerWhereUniqueInput = Prisma.AtLeast<{
   documents?: Prisma.DocumentListRelationFilter
   deadlines?: Prisma.DeadlineListRelationFilter
   evidence?: Prisma.EvidenceListRelationFilter
+  userLinks?: Prisma.WorkerUserLinkListRelationFilter
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentListRelationFilter
 }, "id">
 
 export type WorkerOrderByWithAggregationInput = {
@@ -324,6 +330,8 @@ export type WorkerCreateInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutWorkerInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutWorkerInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerUncheckedCreateInput = {
@@ -341,6 +349,8 @@ export type WorkerUncheckedCreateInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutWorkerInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutWorkerInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerUpdateInput = {
@@ -358,6 +368,8 @@ export type WorkerUpdateInput = {
   documents?: Prisma.DocumentUpdateManyWithoutWorkerNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutWorkerNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerUncheckedUpdateInput = {
@@ -375,6 +387,8 @@ export type WorkerUncheckedUpdateInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutWorkerNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutWorkerNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerCreateManyInput = {
@@ -470,6 +484,11 @@ export type WorkerMinOrderByAggregateInput = {
   archivedAt?: Prisma.SortOrder
 }
 
+export type WorkerScalarRelationFilter = {
+  is?: Prisma.WorkerWhereInput
+  isNot?: Prisma.WorkerWhereInput
+}
+
 export type WorkerNullableScalarRelationFilter = {
   is?: Prisma.WorkerWhereInput | null
   isNot?: Prisma.WorkerWhereInput | null
@@ -519,6 +538,34 @@ export type WorkerUncheckedUpdateManyWithoutOrganizationNestedInput = {
 
 export type EnumRecordStatusFieldUpdateOperationsInput = {
   set?: $Enums.RecordStatus
+}
+
+export type WorkerCreateNestedOneWithoutUserLinksInput = {
+  create?: Prisma.XOR<Prisma.WorkerCreateWithoutUserLinksInput, Prisma.WorkerUncheckedCreateWithoutUserLinksInput>
+  connectOrCreate?: Prisma.WorkerCreateOrConnectWithoutUserLinksInput
+  connect?: Prisma.WorkerWhereUniqueInput
+}
+
+export type WorkerUpdateOneRequiredWithoutUserLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkerCreateWithoutUserLinksInput, Prisma.WorkerUncheckedCreateWithoutUserLinksInput>
+  connectOrCreate?: Prisma.WorkerCreateOrConnectWithoutUserLinksInput
+  upsert?: Prisma.WorkerUpsertWithoutUserLinksInput
+  connect?: Prisma.WorkerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkerUpdateToOneWithWhereWithoutUserLinksInput, Prisma.WorkerUpdateWithoutUserLinksInput>, Prisma.WorkerUncheckedUpdateWithoutUserLinksInput>
+}
+
+export type WorkerCreateNestedOneWithoutJobSiteAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.WorkerCreateWithoutJobSiteAssignmentsInput, Prisma.WorkerUncheckedCreateWithoutJobSiteAssignmentsInput>
+  connectOrCreate?: Prisma.WorkerCreateOrConnectWithoutJobSiteAssignmentsInput
+  connect?: Prisma.WorkerWhereUniqueInput
+}
+
+export type WorkerUpdateOneRequiredWithoutJobSiteAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkerCreateWithoutJobSiteAssignmentsInput, Prisma.WorkerUncheckedCreateWithoutJobSiteAssignmentsInput>
+  connectOrCreate?: Prisma.WorkerCreateOrConnectWithoutJobSiteAssignmentsInput
+  upsert?: Prisma.WorkerUpsertWithoutJobSiteAssignmentsInput
+  connect?: Prisma.WorkerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkerUpdateToOneWithWhereWithoutJobSiteAssignmentsInput, Prisma.WorkerUpdateWithoutJobSiteAssignmentsInput>, Prisma.WorkerUncheckedUpdateWithoutJobSiteAssignmentsInput>
 }
 
 export type WorkerCreateNestedOneWithoutDocumentsInput = {
@@ -583,6 +630,8 @@ export type WorkerCreateWithoutOrganizationInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutWorkerInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutWorkerInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerUncheckedCreateWithoutOrganizationInput = {
@@ -599,6 +648,8 @@ export type WorkerUncheckedCreateWithoutOrganizationInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutWorkerInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutWorkerInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerCreateOrConnectWithoutOrganizationInput = {
@@ -644,6 +695,182 @@ export type WorkerScalarWhereInput = {
   archivedAt?: Prisma.DateTimeNullableFilter<"Worker"> | Date | string | null
 }
 
+export type WorkerCreateWithoutUserLinksInput = {
+  id?: string
+  displayName: string
+  email?: string | null
+  phone?: string | null
+  roleLabel?: string | null
+  status?: $Enums.RecordStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutWorkersInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutWorkerInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutWorkerInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutWorkerInput
+}
+
+export type WorkerUncheckedCreateWithoutUserLinksInput = {
+  id?: string
+  organizationId: string
+  displayName: string
+  email?: string | null
+  phone?: string | null
+  roleLabel?: string | null
+  status?: $Enums.RecordStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutWorkerInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutWorkerInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutWorkerInput
+}
+
+export type WorkerCreateOrConnectWithoutUserLinksInput = {
+  where: Prisma.WorkerWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkerCreateWithoutUserLinksInput, Prisma.WorkerUncheckedCreateWithoutUserLinksInput>
+}
+
+export type WorkerUpsertWithoutUserLinksInput = {
+  update: Prisma.XOR<Prisma.WorkerUpdateWithoutUserLinksInput, Prisma.WorkerUncheckedUpdateWithoutUserLinksInput>
+  create: Prisma.XOR<Prisma.WorkerCreateWithoutUserLinksInput, Prisma.WorkerUncheckedCreateWithoutUserLinksInput>
+  where?: Prisma.WorkerWhereInput
+}
+
+export type WorkerUpdateToOneWithWhereWithoutUserLinksInput = {
+  where?: Prisma.WorkerWhereInput
+  data: Prisma.XOR<Prisma.WorkerUpdateWithoutUserLinksInput, Prisma.WorkerUncheckedUpdateWithoutUserLinksInput>
+}
+
+export type WorkerUpdateWithoutUserLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutWorkersNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutWorkerNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutWorkerNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutWorkerNestedInput
+}
+
+export type WorkerUncheckedUpdateWithoutUserLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutWorkerNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutWorkerNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
+}
+
+export type WorkerCreateWithoutJobSiteAssignmentsInput = {
+  id?: string
+  displayName: string
+  email?: string | null
+  phone?: string | null
+  roleLabel?: string | null
+  status?: $Enums.RecordStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutWorkersInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutWorkerInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutWorkerInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutWorkerInput
+}
+
+export type WorkerUncheckedCreateWithoutJobSiteAssignmentsInput = {
+  id?: string
+  organizationId: string
+  displayName: string
+  email?: string | null
+  phone?: string | null
+  roleLabel?: string | null
+  status?: $Enums.RecordStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutWorkerInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutWorkerInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutWorkerInput
+}
+
+export type WorkerCreateOrConnectWithoutJobSiteAssignmentsInput = {
+  where: Prisma.WorkerWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkerCreateWithoutJobSiteAssignmentsInput, Prisma.WorkerUncheckedCreateWithoutJobSiteAssignmentsInput>
+}
+
+export type WorkerUpsertWithoutJobSiteAssignmentsInput = {
+  update: Prisma.XOR<Prisma.WorkerUpdateWithoutJobSiteAssignmentsInput, Prisma.WorkerUncheckedUpdateWithoutJobSiteAssignmentsInput>
+  create: Prisma.XOR<Prisma.WorkerCreateWithoutJobSiteAssignmentsInput, Prisma.WorkerUncheckedCreateWithoutJobSiteAssignmentsInput>
+  where?: Prisma.WorkerWhereInput
+}
+
+export type WorkerUpdateToOneWithWhereWithoutJobSiteAssignmentsInput = {
+  where?: Prisma.WorkerWhereInput
+  data: Prisma.XOR<Prisma.WorkerUpdateWithoutJobSiteAssignmentsInput, Prisma.WorkerUncheckedUpdateWithoutJobSiteAssignmentsInput>
+}
+
+export type WorkerUpdateWithoutJobSiteAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutWorkersNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutWorkerNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutWorkerNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUpdateManyWithoutWorkerNestedInput
+}
+
+export type WorkerUncheckedUpdateWithoutJobSiteAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutWorkerNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutWorkerNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutWorkerNestedInput
+}
+
 export type WorkerCreateWithoutDocumentsInput = {
   id?: string
   displayName: string
@@ -658,6 +885,8 @@ export type WorkerCreateWithoutDocumentsInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutWorkersInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutWorkerInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerUncheckedCreateWithoutDocumentsInput = {
@@ -674,6 +903,8 @@ export type WorkerUncheckedCreateWithoutDocumentsInput = {
   archivedAt?: Date | string | null
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutWorkerInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerCreateOrConnectWithoutDocumentsInput = {
@@ -706,6 +937,8 @@ export type WorkerUpdateWithoutDocumentsInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutWorkersNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutWorkerNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerUncheckedUpdateWithoutDocumentsInput = {
@@ -722,6 +955,8 @@ export type WorkerUncheckedUpdateWithoutDocumentsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutWorkerNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerCreateWithoutDeadlinesInput = {
@@ -738,6 +973,8 @@ export type WorkerCreateWithoutDeadlinesInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutWorkersInput
   documents?: Prisma.DocumentCreateNestedManyWithoutWorkerInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerUncheckedCreateWithoutDeadlinesInput = {
@@ -754,6 +991,8 @@ export type WorkerUncheckedCreateWithoutDeadlinesInput = {
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutWorkerInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerCreateOrConnectWithoutDeadlinesInput = {
@@ -786,6 +1025,8 @@ export type WorkerUpdateWithoutDeadlinesInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutWorkersNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutWorkerNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerUncheckedUpdateWithoutDeadlinesInput = {
@@ -802,6 +1043,8 @@ export type WorkerUncheckedUpdateWithoutDeadlinesInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutWorkerNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerCreateWithoutEvidenceInput = {
@@ -818,6 +1061,8 @@ export type WorkerCreateWithoutEvidenceInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutWorkersInput
   documents?: Prisma.DocumentCreateNestedManyWithoutWorkerInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerUncheckedCreateWithoutEvidenceInput = {
@@ -834,6 +1079,8 @@ export type WorkerUncheckedCreateWithoutEvidenceInput = {
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutWorkerInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutWorkerInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutWorkerInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerCreateOrConnectWithoutEvidenceInput = {
@@ -866,6 +1113,8 @@ export type WorkerUpdateWithoutEvidenceInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutWorkersNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutWorkerNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerUncheckedUpdateWithoutEvidenceInput = {
@@ -882,6 +1131,8 @@ export type WorkerUncheckedUpdateWithoutEvidenceInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutWorkerNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerCreateManyOrganizationInput = {
@@ -911,6 +1162,8 @@ export type WorkerUpdateWithoutOrganizationInput = {
   documents?: Prisma.DocumentUpdateManyWithoutWorkerNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutWorkerNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerUncheckedUpdateWithoutOrganizationInput = {
@@ -927,6 +1180,8 @@ export type WorkerUncheckedUpdateWithoutOrganizationInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutWorkerNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutWorkerNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutWorkerNestedInput
+  userLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutWorkerNestedInput
+  jobSiteAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerUncheckedUpdateManyWithoutOrganizationInput = {
@@ -951,12 +1206,16 @@ export type WorkerCountOutputType = {
   documents: number
   deadlines: number
   evidence: number
+  userLinks: number
+  jobSiteAssignments: number
 }
 
 export type WorkerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documents?: boolean | WorkerCountOutputTypeCountDocumentsArgs
   deadlines?: boolean | WorkerCountOutputTypeCountDeadlinesArgs
   evidence?: boolean | WorkerCountOutputTypeCountEvidenceArgs
+  userLinks?: boolean | WorkerCountOutputTypeCountUserLinksArgs
+  jobSiteAssignments?: boolean | WorkerCountOutputTypeCountJobSiteAssignmentsArgs
 }
 
 /**
@@ -990,6 +1249,20 @@ export type WorkerCountOutputTypeCountEvidenceArgs<ExtArgs extends runtime.Types
   where?: Prisma.EvidenceWhereInput
 }
 
+/**
+ * WorkerCountOutputType without action
+ */
+export type WorkerCountOutputTypeCountUserLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkerUserLinkWhereInput
+}
+
+/**
+ * WorkerCountOutputType without action
+ */
+export type WorkerCountOutputTypeCountJobSiteAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteWorkerAssignmentWhereInput
+}
+
 
 export type WorkerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1007,6 +1280,8 @@ export type WorkerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   documents?: boolean | Prisma.Worker$documentsArgs<ExtArgs>
   deadlines?: boolean | Prisma.Worker$deadlinesArgs<ExtArgs>
   evidence?: boolean | Prisma.Worker$evidenceArgs<ExtArgs>
+  userLinks?: boolean | Prisma.Worker$userLinksArgs<ExtArgs>
+  jobSiteAssignments?: boolean | Prisma.Worker$jobSiteAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.WorkerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["worker"]>
 
@@ -1060,6 +1335,8 @@ export type WorkerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   documents?: boolean | Prisma.Worker$documentsArgs<ExtArgs>
   deadlines?: boolean | Prisma.Worker$deadlinesArgs<ExtArgs>
   evidence?: boolean | Prisma.Worker$evidenceArgs<ExtArgs>
+  userLinks?: boolean | Prisma.Worker$userLinksArgs<ExtArgs>
+  jobSiteAssignments?: boolean | Prisma.Worker$jobSiteAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.WorkerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type WorkerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1076,6 +1353,8 @@ export type $WorkerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     documents: Prisma.$DocumentPayload<ExtArgs>[]
     deadlines: Prisma.$DeadlinePayload<ExtArgs>[]
     evidence: Prisma.$EvidencePayload<ExtArgs>[]
+    userLinks: Prisma.$WorkerUserLinkPayload<ExtArgs>[]
+    jobSiteAssignments: Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1487,6 +1766,8 @@ export interface Prisma__WorkerClient<T, Null = never, ExtArgs extends runtime.T
   documents<T extends Prisma.Worker$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Worker$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deadlines<T extends Prisma.Worker$deadlinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Worker$deadlinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeadlinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   evidence<T extends Prisma.Worker$evidenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Worker$evidenceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userLinks<T extends Prisma.Worker$userLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Worker$userLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkerUserLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobSiteAssignments<T extends Prisma.Worker$jobSiteAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Worker$jobSiteAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1997,6 +2278,54 @@ export type Worker$evidenceArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.EvidenceScalarFieldEnum | Prisma.EvidenceScalarFieldEnum[]
+}
+
+/**
+ * Worker.userLinks
+ */
+export type Worker$userLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkerUserLink
+   */
+  select?: Prisma.WorkerUserLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkerUserLink
+   */
+  omit?: Prisma.WorkerUserLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkerUserLinkInclude<ExtArgs> | null
+  where?: Prisma.WorkerUserLinkWhereInput
+  orderBy?: Prisma.WorkerUserLinkOrderByWithRelationInput | Prisma.WorkerUserLinkOrderByWithRelationInput[]
+  cursor?: Prisma.WorkerUserLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkerUserLinkScalarFieldEnum | Prisma.WorkerUserLinkScalarFieldEnum[]
+}
+
+/**
+ * Worker.jobSiteAssignments
+ */
+export type Worker$jobSiteAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteWorkerAssignment
+   */
+  select?: Prisma.JobSiteWorkerAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteWorkerAssignment
+   */
+  omit?: Prisma.JobSiteWorkerAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteWorkerAssignmentInclude<ExtArgs> | null
+  where?: Prisma.JobSiteWorkerAssignmentWhereInput
+  orderBy?: Prisma.JobSiteWorkerAssignmentOrderByWithRelationInput | Prisma.JobSiteWorkerAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteWorkerAssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteWorkerAssignmentScalarFieldEnum | Prisma.JobSiteWorkerAssignmentScalarFieldEnum[]
 }
 
 /**

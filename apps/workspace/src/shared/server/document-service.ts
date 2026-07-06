@@ -7,9 +7,11 @@ import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { isEnumValue, parseOptionalDate, rejectBinaryPayload, trimOptionalId, trimOptionalText, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
+import { canReadDocument, getResourceScope } from "./resource-scope-service";
 
 const FULL_DOCUMENT_ROLES = ["OWNER", "ADMIN"] as const;
-const DOCUMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const DOCUMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 const DOCUMENT_UPDATE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
 
 const documentSelect = {
@@ -112,6 +114,7 @@ async function normalizeDocumentOwner(input: {
 
 export async function listDocuments(input: ListDocumentsInput = {}) {
   const { context, organizationId } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_READ_ROLES);
+  const scope = await getResourceScope(context);
   const where: {
     organizationId: string;
     archivedAt: null;
@@ -119,7 +122,13 @@ export async function listDocuments(input: ListDocumentsInput = {}) {
     workerId?: string;
     jobSiteId?: string;
     status?: DocumentStatus;
+    OR?: Array<{ ownerType: "JOB_SITE"; jobSiteId: { in: string[] } } | { ownerType: "WORKER"; workerId: string }>;
   } = { organizationId, archivedAt: null };
+  if (!scope.fullAccess) {
+    if (scope.actorRole === "SITE_MANAGER") where.OR = [{ ownerType: "JOB_SITE", jobSiteId: { in: scope.siteManagerJobSiteIds } }];
+    if (scope.actorRole === "WORKER" && scope.linkedWorker) where.OR = [{ ownerType: "WORKER", workerId: scope.linkedWorker.id }];
+    if (!where.OR) return [];
+  }
   if (input.ownerType !== undefined) where.ownerType = parseOwnerType(input.ownerType);
   const workerId = trimOptionalId(input.workerId, "Lavoratore");
   const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
@@ -134,15 +143,16 @@ export async function listDocuments(input: ListDocumentsInput = {}) {
 
 export async function getDocument(documentId: string) {
   const { context, organizationId } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_READ_ROLES);
+  const scope = await getResourceScope(context);
   const document = await db.document.findFirst({ where: { id: documentId, organizationId, archivedAt: null }, select: documentSelect });
-  if (!document) throw new AccessError("Documento non trovato.", 404);
+  if (!document || !canReadDocument(scope, document)) throw new AccessError("Documento non trovato.", 404);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document", resourceId: document.id });
   return document;
 }
 
 export async function createDocument(input: CreateDocumentInput) {
   rejectBinaryPayload(input);
-  const { context, organizationId } = await requireOrganizationDomainAccess("documents:update", FULL_DOCUMENT_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:update", FULL_DOCUMENT_ROLES);
   const title = trimRequiredText(input.title, "Titolo documento", 2, 160);
   const ownerType = parseOwnerType(input.ownerType);
   const documentTypeId = await assertDocumentType(organizationId, trimOptionalId(input.documentTypeId, "Tipo documento"));
@@ -159,12 +169,20 @@ export async function createDocument(input: CreateDocumentInput) {
     select: documentSelect,
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document", resourceId: document.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DOCUMENT_CREATED",
+    entityType: "DOCUMENT",
+    entityId: document.id,
+    metadata: { nextStatus: document.status },
+  });
   return document;
 }
 
 export async function updateDocument(documentId: string, input: UpdateDocumentInput) {
   rejectBinaryPayload(input);
-  const { context, organizationId } = await requireOrganizationDomainAccess("documents:update", DOCUMENT_UPDATE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:update", DOCUMENT_UPDATE_ROLES);
   const existing = await db.document.findFirst({
     where: { id: documentId, organizationId, archivedAt: null },
     select: { id: true, ownerType: true, workerId: true, jobSiteId: true },
@@ -203,11 +221,19 @@ export async function updateDocument(documentId: string, input: UpdateDocumentIn
 
   const document = await db.document.update({ where: { id: existing.id }, data, select: documentSelect });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document", resourceId: document.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DOCUMENT_UPDATED",
+    entityType: "DOCUMENT",
+    entityId: document.id,
+    metadata: { nextStatus: document.status },
+  });
   return document;
 }
 
 export async function archiveDocument(documentId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("documents:archive", FULL_DOCUMENT_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:archive", FULL_DOCUMENT_ROLES);
   const existing = await db.document.findFirst({ where: { id: documentId, organizationId, archivedAt: null }, select: { id: true } });
   if (!existing) throw new AccessError("Documento non trovato.", 404);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "document", resourceId: existing.id });
@@ -215,6 +241,14 @@ export async function archiveDocument(documentId: string) {
     where: { id: existing.id },
     data: { archivedAt: new Date(), status: "ARCHIVED" },
     select: documentSelect,
+  });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DOCUMENT_ARCHIVED",
+    entityType: "DOCUMENT",
+    entityId: document.id,
+    metadata: { nextStatus: document.status },
   });
   return document;
 }

@@ -217,6 +217,7 @@ export type SupportSessionWhereInput = {
   actor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   auditEvents?: Prisma.SupportAuditEventListRelationFilter
+  productAuditEvents?: Prisma.ProductAuditEventListRelationFilter
 }
 
 export type SupportSessionOrderByWithRelationInput = {
@@ -232,6 +233,7 @@ export type SupportSessionOrderByWithRelationInput = {
   actor?: Prisma.UserOrderByWithRelationInput
   organization?: Prisma.OrganizationOrderByWithRelationInput
   auditEvents?: Prisma.SupportAuditEventOrderByRelationAggregateInput
+  productAuditEvents?: Prisma.ProductAuditEventOrderByRelationAggregateInput
 }
 
 export type SupportSessionWhereUniqueInput = Prisma.AtLeast<{
@@ -250,6 +252,7 @@ export type SupportSessionWhereUniqueInput = Prisma.AtLeast<{
   actor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   auditEvents?: Prisma.SupportAuditEventListRelationFilter
+  productAuditEvents?: Prisma.ProductAuditEventListRelationFilter
 }, "id" | "tokenHash">
 
 export type SupportSessionOrderByWithAggregationInput = {
@@ -293,6 +296,7 @@ export type SupportSessionCreateInput = {
   actor: Prisma.UserCreateNestedOneWithoutSupportSessionsInput
   organization: Prisma.OrganizationCreateNestedOneWithoutSupportSessionsInput
   auditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutSupportSessionInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutSupportSessionInput
 }
 
 export type SupportSessionUncheckedCreateInput = {
@@ -306,6 +310,7 @@ export type SupportSessionUncheckedCreateInput = {
   endedAt?: Date | string | null
   createdAt?: Date | string
   auditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutSupportSessionInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutSupportSessionInput
 }
 
 export type SupportSessionUpdateInput = {
@@ -319,6 +324,7 @@ export type SupportSessionUpdateInput = {
   actor?: Prisma.UserUpdateOneRequiredWithoutSupportSessionsNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutSupportSessionsNestedInput
   auditEvents?: Prisma.SupportAuditEventUpdateManyWithoutSupportSessionNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutSupportSessionNestedInput
 }
 
 export type SupportSessionUncheckedUpdateInput = {
@@ -332,6 +338,7 @@ export type SupportSessionUncheckedUpdateInput = {
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutSupportSessionNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutSupportSessionNestedInput
 }
 
 export type SupportSessionCreateManyInput = {
@@ -417,6 +424,11 @@ export type SupportSessionMinOrderByAggregateInput = {
 export type SupportSessionScalarRelationFilter = {
   is?: Prisma.SupportSessionWhereInput
   isNot?: Prisma.SupportSessionWhereInput
+}
+
+export type SupportSessionNullableScalarRelationFilter = {
+  is?: Prisma.SupportSessionWhereInput | null
+  isNot?: Prisma.SupportSessionWhereInput | null
 }
 
 export type SupportSessionCreateNestedManyWithoutActorInput = {
@@ -517,6 +529,22 @@ export type SupportSessionUpdateOneRequiredWithoutAuditEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SupportSessionUpdateToOneWithWhereWithoutAuditEventsInput, Prisma.SupportSessionUpdateWithoutAuditEventsInput>, Prisma.SupportSessionUncheckedUpdateWithoutAuditEventsInput>
 }
 
+export type SupportSessionCreateNestedOneWithoutProductAuditEventsInput = {
+  create?: Prisma.XOR<Prisma.SupportSessionCreateWithoutProductAuditEventsInput, Prisma.SupportSessionUncheckedCreateWithoutProductAuditEventsInput>
+  connectOrCreate?: Prisma.SupportSessionCreateOrConnectWithoutProductAuditEventsInput
+  connect?: Prisma.SupportSessionWhereUniqueInput
+}
+
+export type SupportSessionUpdateOneWithoutProductAuditEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.SupportSessionCreateWithoutProductAuditEventsInput, Prisma.SupportSessionUncheckedCreateWithoutProductAuditEventsInput>
+  connectOrCreate?: Prisma.SupportSessionCreateOrConnectWithoutProductAuditEventsInput
+  upsert?: Prisma.SupportSessionUpsertWithoutProductAuditEventsInput
+  disconnect?: Prisma.SupportSessionWhereInput | boolean
+  delete?: Prisma.SupportSessionWhereInput | boolean
+  connect?: Prisma.SupportSessionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SupportSessionUpdateToOneWithWhereWithoutProductAuditEventsInput, Prisma.SupportSessionUpdateWithoutProductAuditEventsInput>, Prisma.SupportSessionUncheckedUpdateWithoutProductAuditEventsInput>
+}
+
 export type SupportSessionCreateWithoutActorInput = {
   id?: string
   tokenHash: string
@@ -527,6 +555,7 @@ export type SupportSessionCreateWithoutActorInput = {
   createdAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutSupportSessionsInput
   auditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutSupportSessionInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutSupportSessionInput
 }
 
 export type SupportSessionUncheckedCreateWithoutActorInput = {
@@ -539,6 +568,7 @@ export type SupportSessionUncheckedCreateWithoutActorInput = {
   endedAt?: Date | string | null
   createdAt?: Date | string
   auditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutSupportSessionInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutSupportSessionInput
 }
 
 export type SupportSessionCreateOrConnectWithoutActorInput = {
@@ -592,6 +622,7 @@ export type SupportSessionCreateWithoutOrganizationInput = {
   createdAt?: Date | string
   actor: Prisma.UserCreateNestedOneWithoutSupportSessionsInput
   auditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutSupportSessionInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutSupportSessionInput
 }
 
 export type SupportSessionUncheckedCreateWithoutOrganizationInput = {
@@ -604,6 +635,7 @@ export type SupportSessionUncheckedCreateWithoutOrganizationInput = {
   endedAt?: Date | string | null
   createdAt?: Date | string
   auditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutSupportSessionInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutSupportSessionInput
 }
 
 export type SupportSessionCreateOrConnectWithoutOrganizationInput = {
@@ -642,6 +674,7 @@ export type SupportSessionCreateWithoutAuditEventsInput = {
   createdAt?: Date | string
   actor: Prisma.UserCreateNestedOneWithoutSupportSessionsInput
   organization: Prisma.OrganizationCreateNestedOneWithoutSupportSessionsInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutSupportSessionInput
 }
 
 export type SupportSessionUncheckedCreateWithoutAuditEventsInput = {
@@ -654,6 +687,7 @@ export type SupportSessionUncheckedCreateWithoutAuditEventsInput = {
   sensitiveConfirmedUntil?: Date | string | null
   endedAt?: Date | string | null
   createdAt?: Date | string
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutSupportSessionInput
 }
 
 export type SupportSessionCreateOrConnectWithoutAuditEventsInput = {
@@ -682,6 +716,7 @@ export type SupportSessionUpdateWithoutAuditEventsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   actor?: Prisma.UserUpdateOneRequiredWithoutSupportSessionsNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutSupportSessionsNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutSupportSessionNestedInput
 }
 
 export type SupportSessionUncheckedUpdateWithoutAuditEventsInput = {
@@ -694,6 +729,75 @@ export type SupportSessionUncheckedUpdateWithoutAuditEventsInput = {
   sensitiveConfirmedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutSupportSessionNestedInput
+}
+
+export type SupportSessionCreateWithoutProductAuditEventsInput = {
+  id?: string
+  tokenHash: string
+  reason: string
+  expiresAt: Date | string
+  sensitiveConfirmedUntil?: Date | string | null
+  endedAt?: Date | string | null
+  createdAt?: Date | string
+  actor: Prisma.UserCreateNestedOneWithoutSupportSessionsInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutSupportSessionsInput
+  auditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutSupportSessionInput
+}
+
+export type SupportSessionUncheckedCreateWithoutProductAuditEventsInput = {
+  id?: string
+  actorId: string
+  organizationId: string
+  tokenHash: string
+  reason: string
+  expiresAt: Date | string
+  sensitiveConfirmedUntil?: Date | string | null
+  endedAt?: Date | string | null
+  createdAt?: Date | string
+  auditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutSupportSessionInput
+}
+
+export type SupportSessionCreateOrConnectWithoutProductAuditEventsInput = {
+  where: Prisma.SupportSessionWhereUniqueInput
+  create: Prisma.XOR<Prisma.SupportSessionCreateWithoutProductAuditEventsInput, Prisma.SupportSessionUncheckedCreateWithoutProductAuditEventsInput>
+}
+
+export type SupportSessionUpsertWithoutProductAuditEventsInput = {
+  update: Prisma.XOR<Prisma.SupportSessionUpdateWithoutProductAuditEventsInput, Prisma.SupportSessionUncheckedUpdateWithoutProductAuditEventsInput>
+  create: Prisma.XOR<Prisma.SupportSessionCreateWithoutProductAuditEventsInput, Prisma.SupportSessionUncheckedCreateWithoutProductAuditEventsInput>
+  where?: Prisma.SupportSessionWhereInput
+}
+
+export type SupportSessionUpdateToOneWithWhereWithoutProductAuditEventsInput = {
+  where?: Prisma.SupportSessionWhereInput
+  data: Prisma.XOR<Prisma.SupportSessionUpdateWithoutProductAuditEventsInput, Prisma.SupportSessionUncheckedUpdateWithoutProductAuditEventsInput>
+}
+
+export type SupportSessionUpdateWithoutProductAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
+  reason?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sensitiveConfirmedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actor?: Prisma.UserUpdateOneRequiredWithoutSupportSessionsNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutSupportSessionsNestedInput
+  auditEvents?: Prisma.SupportAuditEventUpdateManyWithoutSupportSessionNestedInput
+}
+
+export type SupportSessionUncheckedUpdateWithoutProductAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  actorId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
+  reason?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sensitiveConfirmedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutSupportSessionNestedInput
 }
 
 export type SupportSessionCreateManyActorInput = {
@@ -717,6 +821,7 @@ export type SupportSessionUpdateWithoutActorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutSupportSessionsNestedInput
   auditEvents?: Prisma.SupportAuditEventUpdateManyWithoutSupportSessionNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutSupportSessionNestedInput
 }
 
 export type SupportSessionUncheckedUpdateWithoutActorInput = {
@@ -729,6 +834,7 @@ export type SupportSessionUncheckedUpdateWithoutActorInput = {
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutSupportSessionNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutSupportSessionNestedInput
 }
 
 export type SupportSessionUncheckedUpdateManyWithoutActorInput = {
@@ -763,6 +869,7 @@ export type SupportSessionUpdateWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   actor?: Prisma.UserUpdateOneRequiredWithoutSupportSessionsNestedInput
   auditEvents?: Prisma.SupportAuditEventUpdateManyWithoutSupportSessionNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutSupportSessionNestedInput
 }
 
 export type SupportSessionUncheckedUpdateWithoutOrganizationInput = {
@@ -775,6 +882,7 @@ export type SupportSessionUncheckedUpdateWithoutOrganizationInput = {
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutSupportSessionNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutSupportSessionNestedInput
 }
 
 export type SupportSessionUncheckedUpdateManyWithoutOrganizationInput = {
@@ -795,10 +903,12 @@ export type SupportSessionUncheckedUpdateManyWithoutOrganizationInput = {
 
 export type SupportSessionCountOutputType = {
   auditEvents: number
+  productAuditEvents: number
 }
 
 export type SupportSessionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   auditEvents?: boolean | SupportSessionCountOutputTypeCountAuditEventsArgs
+  productAuditEvents?: boolean | SupportSessionCountOutputTypeCountProductAuditEventsArgs
 }
 
 /**
@@ -818,6 +928,13 @@ export type SupportSessionCountOutputTypeCountAuditEventsArgs<ExtArgs extends ru
   where?: Prisma.SupportAuditEventWhereInput
 }
 
+/**
+ * SupportSessionCountOutputType without action
+ */
+export type SupportSessionCountOutputTypeCountProductAuditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProductAuditEventWhereInput
+}
+
 
 export type SupportSessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -832,6 +949,7 @@ export type SupportSessionSelect<ExtArgs extends runtime.Types.Extensions.Intern
   actor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   auditEvents?: boolean | Prisma.SupportSession$auditEventsArgs<ExtArgs>
+  productAuditEvents?: boolean | Prisma.SupportSession$productAuditEventsArgs<ExtArgs>
   _count?: boolean | Prisma.SupportSessionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["supportSession"]>
 
@@ -880,6 +998,7 @@ export type SupportSessionInclude<ExtArgs extends runtime.Types.Extensions.Inter
   actor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   auditEvents?: boolean | Prisma.SupportSession$auditEventsArgs<ExtArgs>
+  productAuditEvents?: boolean | Prisma.SupportSession$productAuditEventsArgs<ExtArgs>
   _count?: boolean | Prisma.SupportSessionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SupportSessionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -897,6 +1016,7 @@ export type $SupportSessionPayload<ExtArgs extends runtime.Types.Extensions.Inte
     actor: Prisma.$UserPayload<ExtArgs>
     organization: Prisma.$OrganizationPayload<ExtArgs>
     auditEvents: Prisma.$SupportAuditEventPayload<ExtArgs>[]
+    productAuditEvents: Prisma.$ProductAuditEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1305,6 +1425,7 @@ export interface Prisma__SupportSessionClient<T, Null = never, ExtArgs extends r
   actor<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   auditEvents<T extends Prisma.SupportSession$auditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SupportSession$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  productAuditEvents<T extends Prisma.SupportSession$productAuditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SupportSession$productAuditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1765,6 +1886,30 @@ export type SupportSession$auditEventsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.SupportAuditEventScalarFieldEnum | Prisma.SupportAuditEventScalarFieldEnum[]
+}
+
+/**
+ * SupportSession.productAuditEvents
+ */
+export type SupportSession$productAuditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProductAuditEvent
+   */
+  select?: Prisma.ProductAuditEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProductAuditEvent
+   */
+  omit?: Prisma.ProductAuditEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductAuditEventInclude<ExtArgs> | null
+  where?: Prisma.ProductAuditEventWhereInput
+  orderBy?: Prisma.ProductAuditEventOrderByWithRelationInput | Prisma.ProductAuditEventOrderByWithRelationInput[]
+  cursor?: Prisma.ProductAuditEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProductAuditEventScalarFieldEnum | Prisma.ProductAuditEventScalarFieldEnum[]
 }
 
 /**

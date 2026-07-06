@@ -5,6 +5,7 @@ import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { parseOptionalDate } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { createShareToken, hashShareToken } from "./share-token-service";
 
 const SHARE_LINK_ROLES = ["OWNER", "ADMIN"] as const;
@@ -59,7 +60,7 @@ export async function listShareLinks(packageId: string) {
 }
 
 export async function createShareLink(packageId: string, input: CreateShareLinkInput = {}) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("documentPackages:share", SHARE_LINK_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:share", SHARE_LINK_ROLES);
   const documentPackage = await findActivePackage(organizationId, packageId);
   const expiresAt = parseShareExpiresAt(input.expiresAt);
   const token = createShareToken();
@@ -83,11 +84,19 @@ export async function createShareLink(packageId: string, input: CreateShareLinkI
   });
 
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "share-link", resourceId: shareLink.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "SHARE_LINK_CREATED",
+    entityType: "SHARE_LINK",
+    entityId: shareLink.id,
+    metadata: { expiresAt: shareLink.expiresAt?.toISOString() ?? null },
+  });
   return { shareLink, token };
 }
 
 export async function revokeShareLink(packageId: string, shareLinkId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("documentPackages:share", SHARE_LINK_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:share", SHARE_LINK_ROLES);
   await findActivePackage(organizationId, packageId);
   const existing = await db.shareLink.findFirst({
     where: { id: shareLinkId, organizationId, documentPackageId: packageId },
@@ -95,9 +104,18 @@ export async function revokeShareLink(packageId: string, shareLinkId: string) {
   });
   if (!existing) throw new AccessError("Link di condivisione non trovato.", 404);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "share-link", resourceId: existing.id });
-  return db.shareLink.update({
+  const shareLink = await db.shareLink.update({
     where: { id: existing.id },
     data: { revokedAt: new Date() },
     select: shareLinkSelect,
   });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "SHARE_LINK_REVOKED",
+    entityType: "SHARE_LINK",
+    entityId: shareLink.id,
+    metadata: { reasonCode: "manual-revoke" },
+  });
+  return shareLink;
 }

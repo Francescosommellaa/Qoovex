@@ -11,7 +11,7 @@ Monorepo di Qoovex: il sistema piu semplice per piccole imprese e subappaltatori
 - `packages/db`: schema Prisma e migrazioni auth, tenant, supporto e base dominio MVP.
 - `packages/types`: ruoli, permessi e DTO platform-neutral per auth, tenant e dominio MVP.
 
-Il modello MVP per documenti, scadenze, cantieri e prove operative e definito come base tecnica generica. Sono presenti API server-side minime per documenti, scadenze, versioni documento, lavoratori, cantieri, checklist, prove operative, pacchetti documentali e share link. La prima dashboard operativa mobile-first vive in `apps/workspace` su `/dashboard`.
+Il modello MVP per documenti, scadenze, cantieri e prove operative e definito come base tecnica generica. Sono presenti API server-side minime per documenti, scadenze, versioni documento, lavoratori, cantieri, checklist, prove operative, pacchetti documentali, share link e assegnazioni risorsa. La prima dashboard operativa mobile-first vive in `apps/workspace` su `/dashboard`.
 
 ## Regole
 
@@ -23,6 +23,7 @@ Il modello MVP per documenti, scadenze, cantieri e prove operative e definito co
 - Il codice condiviso vive in `packages/*`; il codice specifico di app resta nella rispettiva app.
 - `packages/db` e `packages/types` sono gli unici package condivisi attivi oggi.
 - Qoovex organizza documenti e stati operativi; non promette conformita o validita legale.
+- `SITE_MANAGER` e `WORKER` usano filtri risorsa server-side, non accessi larghi all'azienda.
 - Le decisioni di placement sono documentate in `docs/22_MONOREPO_BOUNDARIES_AND_PLACEMENT.md`.
 
 ## Comandi

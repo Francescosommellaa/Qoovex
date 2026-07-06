@@ -37,6 +37,8 @@ export const organizationPermissions = [
   "documentPackages:create",
   "documentPackages:share",
   "auditLog:read",
+  "assignments:read",
+  "assignments:manage",
   "settings:update",
 ] as const;
 export type OrganizationPermission = (typeof organizationPermissions)[number];
@@ -115,6 +117,86 @@ export type NotificationEmailDeliveryType = (typeof notificationEmailDeliveryTyp
 export const notificationEmailDeliveryStatuses = ["SENT", "FAILED", "SKIPPED"] as const;
 export type NotificationEmailDeliveryStatus = (typeof notificationEmailDeliveryStatuses)[number];
 
+export const jobSiteUserAssignmentRoles = ["SITE_MANAGER"] as const;
+export type JobSiteUserAssignmentRole = (typeof jobSiteUserAssignmentRoles)[number];
+
+export const auditActions = [
+  "DOCUMENT_CREATED",
+  "DOCUMENT_UPDATED",
+  "DOCUMENT_ARCHIVED",
+  "DOCUMENT_VERSION_UPLOADED",
+  "DOCUMENT_VERSION_DOWNLOADED",
+  "DOCUMENT_VERSION_ARCHIVED",
+  "DEADLINE_CREATED",
+  "DEADLINE_UPDATED",
+  "DEADLINE_ARCHIVED",
+  "WORKER_CREATED",
+  "WORKER_UPDATED",
+  "WORKER_ARCHIVED",
+  "JOB_SITE_CREATED",
+  "JOB_SITE_UPDATED",
+  "JOB_SITE_ARCHIVED",
+  "CHECKLIST_CREATED",
+  "CHECKLIST_UPDATED",
+  "CHECKLIST_ARCHIVED",
+  "CHECKLIST_ITEM_COMPLETED",
+  "EVIDENCE_CREATED",
+  "EVIDENCE_DOWNLOADED",
+  "EVIDENCE_ARCHIVED",
+  "DOCUMENT_PACKAGE_CREATED",
+  "DOCUMENT_PACKAGE_UPDATED",
+  "DOCUMENT_PACKAGE_ARCHIVED",
+  "DOCUMENT_PACKAGE_ITEM_ADDED",
+  "DOCUMENT_PACKAGE_ITEM_REMOVED",
+  "SHARE_LINK_CREATED",
+  "SHARE_LINK_REVOKED",
+  "SHARE_LINK_ACCESSED",
+  "NOTIFICATION_READ",
+  "NOTIFICATION_DISMISSED",
+  "EMAIL_DIGEST_SENT",
+  "EMAIL_DIGEST_FAILED",
+  "NOTIFICATION_PREFERENCES_UPDATED",
+  "SCHEDULED_EMAIL_DIGEST_RUN",
+  "WORKER_USER_LINK_CREATED",
+  "WORKER_USER_LINK_ARCHIVED",
+  "JOB_SITE_USER_ASSIGNMENT_CREATED",
+  "JOB_SITE_USER_ASSIGNMENT_ARCHIVED",
+  "JOB_SITE_WORKER_ASSIGNMENT_CREATED",
+  "JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED",
+  "SECURITY_DENIED",
+] as const;
+export type AuditAction = (typeof auditActions)[number];
+
+export const auditEntityTypes = [
+  "DOCUMENT",
+  "DOCUMENT_VERSION",
+  "DEADLINE",
+  "WORKER",
+  "JOB_SITE",
+  "CHECKLIST",
+  "CHECKLIST_ITEM",
+  "EVIDENCE",
+  "DOCUMENT_PACKAGE",
+  "DOCUMENT_PACKAGE_ITEM",
+  "SHARE_LINK",
+  "NOTIFICATION",
+  "EMAIL_DELIVERY",
+  "NOTIFICATION_PREFERENCE",
+  "WORKER_USER_LINK",
+  "JOB_SITE_USER_ASSIGNMENT",
+  "JOB_SITE_WORKER_ASSIGNMENT",
+  "ORGANIZATION",
+  "USER",
+  "SYSTEM",
+] as const;
+export type AuditEntityType = (typeof auditEntityTypes)[number];
+
+export const auditOutcomes = ["SUCCESS", "DENIED", "FAILED"] as const;
+export type AuditOutcome = (typeof auditOutcomes)[number];
+
+export type AuditMetadataValue = string | number | boolean | null;
+export type AuditMetadata = Record<string, AuditMetadataValue>;
+
 export interface OrganizationSummary {
   id: EntityId;
   name: string;
@@ -149,7 +231,6 @@ export interface AcceptInvitationInput { token: string }
 export interface OpenSupportSessionInput { organizationCode: string; reason: string }
 
 export interface BlobMetadata {
-  blobKey: string;
   originalFileName: string;
   mimeType: string;
   size: number;
@@ -250,6 +331,92 @@ export interface UpdateJobSiteInput {
 export interface ArchiveJobSiteResponse {
   jobSite: JobSiteResponse;
   archived: true;
+}
+
+export interface WorkerUserLinkResponse {
+  id: EntityId;
+  workerId: EntityId;
+  userId: EntityId;
+  linkedById: EntityId;
+  workerDisplayName: string;
+  userLabel: string;
+  userEmail: string;
+  createdAt: string;
+  updatedAt: string;
+  archivedAt?: string | null;
+}
+
+export interface CreateWorkerUserLinkInput {
+  workerId: EntityId;
+  userId: EntityId;
+}
+
+export interface ArchiveWorkerUserLinkResponse {
+  link: WorkerUserLinkResponse;
+  archived: true;
+}
+
+export interface JobSiteUserAssignmentResponse {
+  id: EntityId;
+  jobSiteId: EntityId;
+  userId: EntityId;
+  assignmentRole: JobSiteUserAssignmentRole;
+  assignedById: EntityId;
+  jobSiteName: string;
+  userLabel: string;
+  userEmail: string;
+  createdAt: string;
+  updatedAt: string;
+  archivedAt?: string | null;
+}
+
+export interface CreateJobSiteUserAssignmentInput {
+  jobSiteId: EntityId;
+  userId: EntityId;
+}
+
+export interface ArchiveJobSiteUserAssignmentResponse {
+  assignment: JobSiteUserAssignmentResponse;
+  archived: true;
+}
+
+export interface JobSiteWorkerAssignmentResponse {
+  id: EntityId;
+  jobSiteId: EntityId;
+  workerId: EntityId;
+  assignedById: EntityId;
+  jobSiteName: string;
+  workerDisplayName: string;
+  workerRoleLabel?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  archivedAt?: string | null;
+}
+
+export interface CreateJobSiteWorkerAssignmentInput {
+  jobSiteId: EntityId;
+  workerId: EntityId;
+}
+
+export interface ArchiveJobSiteWorkerAssignmentResponse {
+  assignment: JobSiteWorkerAssignmentResponse;
+  archived: true;
+}
+
+export interface MyResourceScopeResponse {
+  role: OrganizationRole;
+  worker?: {
+    id: EntityId;
+    displayName: string;
+    roleLabel?: string | null;
+    status: RecordStatus;
+  } | null;
+  jobSites: Array<{
+    id: EntityId;
+    name: string;
+    status: RecordStatus;
+  }>;
+  generatedAt: string;
 }
 
 export interface DocumentTypeSummary {
@@ -720,6 +887,36 @@ export interface ScheduledEmailDigestRunResponse {
   sent: number;
   failed: number;
   skipped: number;
+  generatedAt: string;
+}
+
+export interface AuditLogEventResponse {
+  id: EntityId;
+  actorUserId?: EntityId | null;
+  actorRole?: OrganizationRole | null;
+  action: AuditAction;
+  entityType: AuditEntityType;
+  entityId?: EntityId | null;
+  outcome: AuditOutcome;
+  metadata?: AuditMetadata | null;
+  requestId?: string | null;
+  supportSessionId?: EntityId | null;
+  createdAt: string;
+}
+
+export interface AuditLogFilters {
+  action?: AuditAction;
+  entityType?: AuditEntityType;
+  outcome?: AuditOutcome;
+  from?: string;
+  to?: string;
+  cursor?: string;
+  limit?: number;
+}
+
+export interface AuditLogListResponse {
+  events: AuditLogEventResponse[];
+  nextCursor?: string | null;
   generatedAt: string;
 }
 

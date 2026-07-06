@@ -4,6 +4,7 @@ import { db } from "@qoovex/db";
 import type { DocumentPackageItemType } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 import { getPrivateBlob } from "./blob-storage-service";
+import { recordProductAuditEventBestEffort } from "./product-audit-service";
 import { hashShareToken } from "./share-token-service";
 
 interface SharedDownloadResult {
@@ -153,6 +154,13 @@ export async function getSharedDocumentPackage(token: string) {
     orderBy: [{ position: "asc" }, { createdAt: "asc" }],
   });
   await db.shareLink.update({ where: { id: shareLink.id }, data: { lastAccessedAt: new Date() }, select: { id: true } });
+  await recordProductAuditEventBestEffort({
+    organizationId: shareLink.organizationId,
+    action: "SHARE_LINK_ACCESSED",
+    entityType: "SHARE_LINK",
+    entityId: shareLink.id,
+    metadata: { reasonCode: "viewer-package-access" },
+  });
   return {
     id: shareLink.documentPackage.id,
     title: shareLink.documentPackage.title,
@@ -185,6 +193,13 @@ export async function getSharedPackageItemDownload(token: string, itemId: string
     const blob = await getPrivateBlob(version.blobKey);
     if (!blob) throw new AccessError("File condiviso non trovato.", 404);
     await db.shareLink.update({ where: { id: shareLink.id }, data: { lastAccessedAt: new Date() }, select: { id: true } });
+    await recordProductAuditEventBestEffort({
+      organizationId: shareLink.organizationId,
+      action: "SHARE_LINK_ACCESSED",
+      entityType: "SHARE_LINK",
+      entityId: shareLink.id,
+      metadata: { reasonCode: "viewer-file-download", itemType: item.itemType, mimeType: version.mimeType, size: version.size, hasFile: true },
+    });
     return { stream: blob.stream, originalFileName: version.originalFileName, mimeType: version.mimeType, size: version.size };
   }
 
@@ -199,6 +214,13 @@ export async function getSharedPackageItemDownload(token: string, itemId: string
     const blob = await getPrivateBlob(evidence.blobKey);
     if (!blob) throw new AccessError("File condiviso non trovato.", 404);
     await db.shareLink.update({ where: { id: shareLink.id }, data: { lastAccessedAt: new Date() }, select: { id: true } });
+    await recordProductAuditEventBestEffort({
+      organizationId: shareLink.organizationId,
+      action: "SHARE_LINK_ACCESSED",
+      entityType: "SHARE_LINK",
+      entityId: shareLink.id,
+      metadata: { reasonCode: "viewer-file-download", itemType: item.itemType, mimeType: evidence.mimeType, size: evidence.size, hasFile: true },
+    });
     return { stream: blob.stream, originalFileName: evidence.originalFileName, mimeType: evidence.mimeType, size: evidence.size };
   }
 

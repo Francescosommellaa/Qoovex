@@ -9,8 +9,11 @@ import { recordSupportAccess } from "@shared/server/support-access-service";
 import { deletePrivateBlob, getPrivateBlob, putPrivateBlob } from "./blob-storage-service";
 import { isEnumValue, trimOptionalId, trimOptionalText, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
+import { canReadEvidence, getResourceScope, type ResourceScope } from "./resource-scope-service";
 
-const EVIDENCE_ACCESS_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const EVIDENCE_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const EVIDENCE_UPLOAD_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 const EVIDENCE_ARCHIVE_ROLES = ["OWNER", "ADMIN"] as const;
 
 export const EVIDENCE_MAX_SIZE_BYTES = 4 * 1024 * 1024;
@@ -35,6 +38,7 @@ const evidenceSelect = {
   createdById: true,
   createdAt: true,
   archivedAt: true,
+  checklistItem: { select: { checklist: { select: { jobSiteId: true } } } },
 } as const;
 
 export interface ListEvidenceInput {
@@ -145,11 +149,39 @@ async function normalizeEvidenceContext(organizationId: string, input: CreateEvi
   if (checklistItemId) {
     const checklistItem = await db.checklistItem.findFirst({
       where: { id: checklistItemId, organizationId, status: { not: "ARCHIVED" }, checklist: { archivedAt: null } },
-      select: { id: true },
+      select: { id: true, checklist: { select: { jobSiteId: true } } },
     });
     if (!checklistItem) throw new AccessError("Voce checklist non trovata.", 404);
   }
   return { jobSiteId, workerId, checklistItemId };
+}
+
+async function assertEvidenceContextAllowed(scope: ResourceScope, context: { jobSiteId: string | null; workerId: string | null; checklistItemId: string | null }) {
+  if (scope.fullAccess) return;
+  let checklistJobSiteId: string | null = null;
+  if (context.checklistItemId) {
+    const checklistItem = await db.checklistItem.findFirst({
+      where: { id: context.checklistItemId, organizationId: scope.organizationId, status: { not: "ARCHIVED" }, checklist: { archivedAt: null } },
+      select: { checklist: { select: { jobSiteId: true } } },
+    });
+    checklistJobSiteId = checklistItem?.checklist.jobSiteId ?? null;
+  }
+
+  if (scope.actorRole === "SITE_MANAGER") {
+    const jobSiteId = context.jobSiteId ?? checklistJobSiteId;
+    if (!jobSiteId || !scope.siteManagerJobSiteIds.includes(jobSiteId)) throw new AccessError("Risorsa non disponibile.", 404);
+    return;
+  }
+
+  if (scope.actorRole === "WORKER") {
+    if (context.workerId && context.workerId !== scope.linkedWorker?.id) throw new AccessError("Risorsa non disponibile.", 404);
+    const jobSiteId = context.jobSiteId ?? checklistJobSiteId;
+    if (jobSiteId && !scope.workerJobSiteIds.includes(jobSiteId)) throw new AccessError("Risorsa non disponibile.", 404);
+    if (!context.workerId && !jobSiteId) throw new AccessError("Risorsa non disponibile.", 404);
+    return;
+  }
+
+  throw new AccessError("Risorsa non disponibile.", 404);
 }
 
 async function findActiveEvidence(organizationId: string, evidenceId: string) {
@@ -159,11 +191,40 @@ async function findActiveEvidence(organizationId: string, evidenceId: string) {
 }
 
 export async function listEvidence(input: ListEvidenceInput = {}) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("evidence:read", EVIDENCE_ACCESS_ROLES);
-  const where: { organizationId: string; archivedAt: null; type?: EvidenceType; jobSiteId?: string; workerId?: string; checklistItemId?: string } = {
+  const { context, organizationId } = await requireOrganizationDomainAccess("evidence:read", EVIDENCE_READ_ROLES);
+  const scope = await getResourceScope(context);
+  const where: {
+    organizationId: string;
+    archivedAt: null;
+    type?: EvidenceType;
+    jobSiteId?: string;
+    workerId?: string;
+    checklistItemId?: string;
+    OR?: Array<
+      | { jobSiteId: { in: string[] } }
+      | { checklistItem: { checklist: { jobSiteId: { in: string[] } } } }
+      | { workerId: string }
+    >;
+  } = {
     organizationId,
     archivedAt: null,
   };
+  if (!scope.fullAccess) {
+    if (scope.actorRole === "SITE_MANAGER") {
+      where.OR = [
+        { jobSiteId: { in: scope.siteManagerJobSiteIds } },
+        { checklistItem: { checklist: { jobSiteId: { in: scope.siteManagerJobSiteIds } } } },
+      ];
+    }
+    if (scope.actorRole === "WORKER" && scope.linkedWorker) {
+      where.OR = [
+        { workerId: scope.linkedWorker.id },
+        { jobSiteId: { in: scope.workerJobSiteIds } },
+        { checklistItem: { checklist: { jobSiteId: { in: scope.workerJobSiteIds } } } },
+      ];
+    }
+    if (!where.OR) return [];
+  }
   if (input.type !== undefined) where.type = parseEvidenceType(input.type);
   const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
   const workerId = trimOptionalId(input.workerId, "Lavoratore");
@@ -178,36 +239,50 @@ export async function listEvidence(input: ListEvidenceInput = {}) {
 }
 
 export async function getEvidence(evidenceId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("evidence:read", EVIDENCE_ACCESS_ROLES);
+  const { context, organizationId } = await requireOrganizationDomainAccess("evidence:read", EVIDENCE_READ_ROLES);
+  const scope = await getResourceScope(context);
   const evidence = await findActiveEvidence(organizationId, evidenceId);
+  if (!canReadEvidence(scope, evidence)) throw new AccessError("Prova non trovata.", 404);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "evidence", resourceId: evidence.id });
   return toEvidenceResponse(evidence);
 }
 
 export async function createEvidenceNote(input: CreateEvidenceInput) {
   rejectBlobFields(input);
-  const { context, organizationId } = await requireOrganizationDomainAccess("evidence:upload", EVIDENCE_ACCESS_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("evidence:upload", EVIDENCE_UPLOAD_ROLES);
+  const scope = await getResourceScope(context);
   const type = parseEvidenceType(input.type);
   if (type !== "NOTE") throw new AccessError("Questo endpoint accetta solo note operative.", 409);
   const title = trimRequiredText(input.title, "Titolo prova", 2, 160);
   const description = trimOptionalText(input.description, "Descrizione prova", 4000) ?? null;
   const evidenceContext = await normalizeEvidenceContext(organizationId, input);
+  await assertEvidenceContextAllowed(scope, evidenceContext);
 
   const evidence = await db.evidence.create({
     data: { organizationId, ...evidenceContext, type, title, description, createdById: context.userId },
     select: evidenceSelect,
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "evidence", resourceId: evidence.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "EVIDENCE_CREATED",
+    entityType: "EVIDENCE",
+    entityId: evidence.id,
+    metadata: { entityType: evidence.type, hasFile: false },
+  });
   return toEvidenceResponse(evidence);
 }
 
 export async function uploadEvidenceFile(input: CreateEvidenceInput, files: unknown[]) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("evidence:upload", EVIDENCE_ACCESS_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("evidence:upload", EVIDENCE_UPLOAD_ROLES);
+  const scope = await getResourceScope(context);
   const type = parseEvidenceType(input.type);
   if (type === "NOTE") throw new AccessError("La nota operativa non accetta file.", 409);
   const title = trimRequiredText(input.title, "Titolo prova", 2, 160);
   const description = trimOptionalText(input.description, "Descrizione prova", 4000) ?? null;
   const evidenceContext = await normalizeEvidenceContext(organizationId, input);
+  await assertEvidenceContextAllowed(scope, evidenceContext);
   const file = assertSingleEvidenceFile(type, files);
   const evidenceId = crypto.randomUUID();
   const originalFileName = file.name.trim() || "prova";
@@ -241,6 +316,14 @@ export async function uploadEvidenceFile(input: CreateEvidenceInput, files: unkn
       select: evidenceSelect,
     });
     await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "evidence", resourceId: evidence.id });
+    await recordProductAuditEventBestEffort({
+      organizationId,
+      ...auditActorFromContext(context, actorRole),
+      action: "EVIDENCE_CREATED",
+      entityType: "EVIDENCE",
+      entityId: evidence.id,
+      metadata: { entityType: evidence.type, mimeType: evidence.mimeType, size: evidence.size, hasFile: true },
+    });
     return toEvidenceResponse(evidence);
   } catch (error) {
     await deletePrivateBlob(storedBlobKey).catch(() => undefined);
@@ -250,8 +333,10 @@ export async function uploadEvidenceFile(input: CreateEvidenceInput, files: unkn
 
 export async function updateEvidence(evidenceId: string, input: UpdateEvidenceInput) {
   rejectBlobFields(input);
-  const { context, organizationId } = await requireOrganizationDomainAccess("evidence:upload", EVIDENCE_ACCESS_ROLES);
+  const { context, organizationId } = await requireOrganizationDomainAccess("evidence:upload", EVIDENCE_UPLOAD_ROLES);
+  const scope = await getResourceScope(context);
   const existing = await findActiveEvidence(organizationId, evidenceId);
+  if (!canReadEvidence(scope, existing)) throw new AccessError("Prova non trovata.", 404);
   const data: { title?: string; description?: string | null } = {};
   if (input.title !== undefined) data.title = trimRequiredText(input.title, "Titolo prova", 2, 160);
   if (input.description !== undefined) data.description = trimOptionalText(input.description, "Descrizione prova", 4000) ?? null;
@@ -263,7 +348,7 @@ export async function updateEvidence(evidenceId: string, input: UpdateEvidenceIn
 }
 
 export async function archiveEvidence(evidenceId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("evidence:delete", EVIDENCE_ARCHIVE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("evidence:delete", EVIDENCE_ARCHIVE_ROLES);
   const existing = await findActiveEvidence(organizationId, evidenceId);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "evidence", resourceId: existing.id });
   const evidence = await db.evidence.update({
@@ -271,18 +356,36 @@ export async function archiveEvidence(evidenceId: string) {
     data: { archivedAt: new Date() },
     select: evidenceSelect,
   });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "EVIDENCE_ARCHIVED",
+    entityType: "EVIDENCE",
+    entityId: evidence.id,
+    metadata: { entityType: evidence.type, mimeType: evidence.mimeType, size: evidence.size, hasFile: Boolean(evidence.blobKey) },
+  });
   return toEvidenceResponse(evidence);
 }
 
 export async function getEvidenceDownload(evidenceId: string): Promise<DownloadEvidenceResult> {
-  const { context, organizationId } = await requireOrganizationDomainAccess("evidence:read", EVIDENCE_ACCESS_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("evidence:read", EVIDENCE_READ_ROLES);
+  const scope = await getResourceScope(context);
   const evidence = await findActiveEvidence(organizationId, evidenceId);
+  if (!canReadEvidence(scope, evidence)) throw new AccessError("Prova non trovata.", 404);
   if (!evidence.blobKey || !evidence.originalFileName || !evidence.mimeType || evidence.size === null) {
     throw new AccessError("File prova non trovato.", 404);
   }
   const blob = await getPrivateBlob(evidence.blobKey);
   if (!blob) throw new AccessError("File prova non trovato.", 404);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "evidence-file", resourceId: evidence.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "EVIDENCE_DOWNLOADED",
+    entityType: "EVIDENCE",
+    entityId: evidence.id,
+    metadata: { entityType: evidence.type, mimeType: evidence.mimeType, size: evidence.size, hasFile: true },
+  });
   return {
     stream: blob.stream,
     originalFileName: evidence.originalFileName,

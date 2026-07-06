@@ -5,6 +5,9 @@ const mocks = vi.hoisted(() => ({
   db: {
     worker: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     jobSite: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
+    workerUserLink: { findFirst: vi.fn() },
+    jobSiteUserAssignment: { findMany: vi.fn() },
+    jobSiteWorkerAssignment: { findMany: vi.fn() },
   },
   getViewerContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
@@ -80,6 +83,9 @@ function setRole(role: OrganizationRole) {
 beforeEach(() => {
   resetModel(mocks.db.worker);
   resetModel(mocks.db.jobSite);
+  resetModel(mocks.db.workerUserLink);
+  resetModel(mocks.db.jobSiteUserAssignment);
+  resetModel(mocks.db.jobSiteWorkerAssignment);
   mocks.getViewerContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
@@ -87,6 +93,9 @@ beforeEach(() => {
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.recordSupportAccess.mockResolvedValue(undefined);
+  mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([]);
+  mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
+  mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   setRole("OWNER");
 });
 
@@ -125,13 +134,22 @@ describe("worker service", () => {
     await expect(archiveWorker("worker-1")).rejects.toMatchObject({ status: 404 });
   });
 
-  it("denies workers endpoint to site managers, workers and viewers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
-      setRole(role);
-      await expect(listWorkers()).rejects.toMatchObject({ status: 404 });
-      await expect(createWorker({ displayName: "Mario Rossi" })).rejects.toMatchObject({ status: 404 });
-    }
-    expect(mocks.db.worker.findMany).not.toHaveBeenCalled();
+  it("limits worker reads for operational roles and keeps management denied", async () => {
+    setRole("SITE_MANAGER");
+    mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
+    mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ worker: { id: "worker-1", organizationId: "org-1", displayName: "Mario Rossi", roleLabel: "Operativo", status: "ACTIVE", createdAt: now, updatedAt: now, archivedAt: null } }]);
+    await expect(listWorkers()).resolves.toEqual([{ id: "worker-1", organizationId: "org-1", displayName: "Mario Rossi", email: null, phone: null, roleLabel: "Operativo", status: "ACTIVE", notes: null, createdAt: now, updatedAt: now, archivedAt: null }]);
+    await expect(createWorker({ displayName: "Mario Rossi" })).rejects.toMatchObject({ status: 404 });
+
+    setRole("WORKER");
+    mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: workerRecord });
+    mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
+    mocks.db.worker.findFirst.mockResolvedValue(workerRecord);
+    await expect(listWorkers()).resolves.toEqual([workerRecord]);
+    await expect(createWorker({ displayName: "Mario Rossi" })).rejects.toMatchObject({ status: 404 });
+
+    setRole("VIEWER");
+    await expect(listWorkers()).rejects.toMatchObject({ status: 404 });
   });
 
   it("filters worker detail, update and archive by organization", async () => {
@@ -191,13 +209,25 @@ describe("job site service", () => {
     await expect(archiveJobSite("jobsite-1")).rejects.toMatchObject({ status: 404 });
   });
 
-  it("denies job site endpoint to site managers, workers and viewers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
-      setRole(role);
-      await expect(listJobSites()).rejects.toMatchObject({ status: 404 });
-      await expect(createJobSite({ name: "Cantiere Centro" })).rejects.toMatchObject({ status: 404 });
-    }
-    expect(mocks.db.jobSite.findMany).not.toHaveBeenCalled();
+  it("limits job site reads for operational roles and keeps management denied", async () => {
+    setRole("SITE_MANAGER");
+    mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
+    mocks.db.jobSite.findMany.mockResolvedValue([jobSiteRecord]);
+    await expect(listJobSites()).resolves.toEqual([jobSiteRecord]);
+    await expect(createJobSite({ name: "Cantiere Centro" })).rejects.toMatchObject({ status: 404 });
+    expect(mocks.db.jobSite.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: { organizationId: "org-1", archivedAt: null, id: { in: ["jobsite-1"] } },
+    }));
+
+    setRole("WORKER");
+    mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: workerRecord });
+    mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
+    mocks.db.jobSite.findMany.mockResolvedValue([jobSiteRecord]);
+    await expect(listJobSites()).resolves.toEqual([jobSiteRecord]);
+    await expect(createJobSite({ name: "Cantiere Centro" })).rejects.toMatchObject({ status: 404 });
+
+    setRole("VIEWER");
+    await expect(listJobSites()).rejects.toMatchObject({ status: 404 });
   });
 
   it("filters job site detail, update and archive by organization", async () => {

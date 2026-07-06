@@ -6,10 +6,12 @@ import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { trimOptionalText, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
+import { canReadSiteManagerWorker, canReadWorker, getResourceScope } from "./resource-scope-service";
 import { normalizeOptionalEmail, parseEditableRecordStatus, rejectSensitiveFields } from "./worker-jobsite-validation";
 
 const WORKER_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
-const WORKER_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const WORKER_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 
 const workerSelect = {
   id: true,
@@ -45,6 +47,31 @@ export interface UpdateWorkerInput extends Record<string, unknown> {
 
 export async function listWorkers() {
   const { context, organizationId } = await requireOrganizationDomainAccess("workers:read", WORKER_READ_ROLES);
+  const scope = await getResourceScope(context);
+  if (scope.actorRole === "WORKER") {
+    if (!scope.linkedWorker) return [];
+    const worker = await db.worker.findFirst({ where: { id: scope.linkedWorker.id, organizationId, archivedAt: null }, select: workerSelect });
+    return worker ? [worker] : [];
+  }
+  if (scope.actorRole === "SITE_MANAGER") {
+    if (!scope.siteManagerJobSiteIds.length) return [];
+    const assignments = await db.jobSiteWorkerAssignment.findMany({
+      where: {
+        organizationId,
+        archivedAt: null,
+        jobSiteId: { in: scope.siteManagerJobSiteIds },
+        worker: { archivedAt: null },
+      },
+      select: { worker: { select: { id: true, organizationId: true, displayName: true, roleLabel: true, status: true, createdAt: true, updatedAt: true, archivedAt: true } } },
+      orderBy: [{ worker: { displayName: "asc" } }],
+    });
+    const seen = new Set<string>();
+    return assignments.flatMap(({ worker }) => {
+      if (seen.has(worker.id)) return [];
+      seen.add(worker.id);
+      return [{ ...worker, email: null, phone: null, notes: null }];
+    });
+  }
   const workers = await db.worker.findMany({
     where: { organizationId, archivedAt: null },
     select: workerSelect,
@@ -56,15 +83,30 @@ export async function listWorkers() {
 
 export async function getWorker(workerId: string) {
   const { context, organizationId } = await requireOrganizationDomainAccess("workers:read", WORKER_READ_ROLES);
+  const scope = await getResourceScope(context);
   const worker = await db.worker.findFirst({ where: { id: workerId, organizationId, archivedAt: null }, select: workerSelect });
   if (!worker) throw new AccessError("Lavoratore non trovato.", 404);
+  if (!canReadWorker(scope, worker.id)) {
+    const assignments = scope.actorRole === "SITE_MANAGER"
+      ? await db.jobSiteWorkerAssignment.findMany({
+        where: { organizationId, workerId: worker.id, archivedAt: null, jobSite: { archivedAt: null } },
+        select: { jobSiteId: true },
+      })
+      : [];
+    if (!canReadSiteManagerWorker(scope, assignments.map((assignment) => assignment.jobSiteId))) {
+      throw new AccessError("Lavoratore non trovato.", 404);
+    }
+    worker.email = null;
+    worker.phone = null;
+    worker.notes = null;
+  }
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "worker", resourceId: worker.id });
   return worker;
 }
 
 export async function createWorker(input: CreateWorkerInput) {
   rejectSensitiveFields(input);
-  const { context, organizationId } = await requireOrganizationDomainAccess("workers:create", WORKER_MANAGE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("workers:create", WORKER_MANAGE_ROLES);
   const displayName = trimRequiredText(input.displayName, "Nome lavoratore", 2, 160);
   const email = normalizeOptionalEmail(input.email) ?? null;
   const phone = trimOptionalText(input.phone, "Telefono", 80) ?? null;
@@ -77,12 +119,20 @@ export async function createWorker(input: CreateWorkerInput) {
     select: workerSelect,
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "worker", resourceId: worker.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "WORKER_CREATED",
+    entityType: "WORKER",
+    entityId: worker.id,
+    metadata: { nextStatus: worker.status },
+  });
   return worker;
 }
 
 export async function updateWorker(workerId: string, input: UpdateWorkerInput) {
   rejectSensitiveFields(input);
-  const { context, organizationId } = await requireOrganizationDomainAccess("workers:update", WORKER_MANAGE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("workers:update", WORKER_MANAGE_ROLES);
   const existing = await db.worker.findFirst({ where: { id: workerId, organizationId, archivedAt: null }, select: { id: true } });
   if (!existing) throw new AccessError("Lavoratore non trovato.", 404);
 
@@ -104,11 +154,19 @@ export async function updateWorker(workerId: string, input: UpdateWorkerInput) {
 
   const worker = await db.worker.update({ where: { id: existing.id }, data, select: workerSelect });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "worker", resourceId: worker.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "WORKER_UPDATED",
+    entityType: "WORKER",
+    entityId: worker.id,
+    metadata: { nextStatus: worker.status },
+  });
   return worker;
 }
 
 export async function archiveWorker(workerId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("workers:archive", WORKER_MANAGE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("workers:archive", WORKER_MANAGE_ROLES);
   const existing = await db.worker.findFirst({ where: { id: workerId, organizationId, archivedAt: null }, select: { id: true } });
   if (!existing) throw new AccessError("Lavoratore non trovato.", 404);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "worker", resourceId: existing.id });
@@ -116,6 +174,14 @@ export async function archiveWorker(workerId: string) {
     where: { id: existing.id },
     data: { archivedAt: new Date(), status: "ARCHIVED" },
     select: workerSelect,
+  });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "WORKER_ARCHIVED",
+    entityType: "WORKER",
+    entityId: worker.id,
+    metadata: { nextStatus: worker.status },
   });
   return worker;
 }

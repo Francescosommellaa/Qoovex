@@ -12,14 +12,17 @@ import type {
   DashboardQuickAction,
   DashboardResponse,
   DashboardWorkerItem,
+  DeadlineStatus,
   DocumentStatus,
 } from "@qoovex/types";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { syncOrganizationReminderRecords } from "./reminder-service";
+import { getResourceScope } from "./resource-scope-service";
 
-const DASHBOARD_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const DASHBOARD_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 const ATTENTION_DOCUMENT_STATUSES: DocumentStatus[] = ["MISSING", "EXPIRED", "EXPIRING_SOON", "TO_REVIEW"];
+const OPEN_DEADLINE_STATUSES: DeadlineStatus[] = ["DONE", "ARCHIVED"];
 const DASHBOARD_LIMIT = 6;
 
 const quickActions: DashboardQuickAction[] = [
@@ -82,8 +85,189 @@ function buildEmptyStates(input: {
 
 export async function getDashboardData(): Promise<DashboardResponse> {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("organization:read", DASHBOARD_ROLES);
+  const scope = await getResourceScope(context);
   const now = new Date();
   await syncOrganizationReminderRecords(organizationId, now);
+
+  if (!scope.fullAccess) {
+    const jobSiteIds = scope.visibleJobSiteIds;
+    const workerId = scope.linkedWorker?.id ?? null;
+    const documentWhere = scope.actorRole === "SITE_MANAGER"
+      ? { organizationId, archivedAt: null, ownerType: "JOB_SITE" as const, jobSiteId: { in: scope.siteManagerJobSiteIds } }
+      : workerId
+        ? { organizationId, archivedAt: null, ownerType: "WORKER" as const, workerId }
+        : { organizationId, archivedAt: null, id: { in: [] as string[] } };
+    const deadlineWhere = scope.actorRole === "SITE_MANAGER"
+      ? { organizationId, archivedAt: null, jobSiteId: { in: scope.siteManagerJobSiteIds }, status: { notIn: OPEN_DEADLINE_STATUSES } }
+      : workerId
+        ? {
+          organizationId,
+          archivedAt: null,
+          status: { notIn: OPEN_DEADLINE_STATUSES },
+          OR: [{ workerId }, { document: { ownerType: "WORKER" as const, workerId } }],
+        }
+        : { organizationId, archivedAt: null, id: { in: [] as string[] } };
+    const evidenceWhere = scope.actorRole === "SITE_MANAGER"
+      ? {
+        organizationId,
+        archivedAt: null,
+        OR: [
+          { jobSiteId: { in: scope.siteManagerJobSiteIds } },
+          { checklistItem: { checklist: { jobSiteId: { in: scope.siteManagerJobSiteIds } } } },
+        ],
+      }
+      : {
+        organizationId,
+        archivedAt: null,
+        OR: [
+          ...(workerId ? [{ workerId }] : []),
+          { jobSiteId: { in: scope.workerJobSiteIds } },
+          { checklistItem: { checklist: { jobSiteId: { in: scope.workerJobSiteIds } } } },
+        ],
+      };
+
+    const [
+      documentStatusRows,
+      openDeadlines,
+      jobSites,
+      deadlines,
+      documentsToReview,
+      recentEvidenceRows,
+      assignedWorkers,
+    ] = await Promise.all([
+      db.document.groupBy({ by: ["status"], where: documentWhere, _count: { _all: true } }),
+      db.deadline.count({ where: deadlineWhere }),
+      jobSiteIds.length
+        ? db.jobSite.findMany({
+          where: { organizationId, id: { in: jobSiteIds }, archivedAt: null },
+          select: { id: true, name: true, status: true },
+          orderBy: [{ name: "asc" }],
+          take: DASHBOARD_LIMIT,
+        })
+        : Promise.resolve([]),
+      db.deadline.findMany({
+        where: deadlineWhere,
+        select: { id: true, title: true, dueDate: true, sourceType: true, status: true, documentId: true, workerId: true, jobSiteId: true },
+        orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
+        take: DASHBOARD_LIMIT,
+      }),
+      db.document.findMany({
+        where: { ...documentWhere, status: { in: ATTENTION_DOCUMENT_STATUSES } },
+        select: {
+          id: true,
+          title: true,
+          status: true,
+          ownerType: true,
+          expiryDate: true,
+          updatedAt: true,
+          worker: { select: { displayName: true } },
+          jobSite: { select: { name: true } },
+        },
+        orderBy: [{ updatedAt: "desc" }],
+        take: DASHBOARD_LIMIT,
+      }),
+      db.evidence.findMany({
+        where: evidenceWhere,
+        select: { id: true, type: true, title: true, blobKey: true, createdAt: true, jobSiteId: true },
+        orderBy: [{ createdAt: "desc" }],
+        take: DASHBOARD_LIMIT,
+      }),
+      scope.actorRole === "SITE_MANAGER" && scope.siteManagerJobSiteIds.length
+        ? db.jobSiteWorkerAssignment.findMany({
+          where: { organizationId, archivedAt: null, jobSiteId: { in: scope.siteManagerJobSiteIds }, worker: { archivedAt: null } },
+          select: { worker: { select: { id: true, displayName: true, status: true } } },
+          take: DASHBOARD_LIMIT,
+        })
+        : Promise.resolve([]),
+    ]);
+
+    const documents = emptyDocumentCounts();
+    for (const row of documentStatusRows) {
+      const key = documentCountKey(row.status);
+      if (key) documents[key] = row._count._all;
+    }
+
+    const jobSiteDocumentRows = jobSites.length ? await db.document.groupBy({
+      by: ["jobSiteId"],
+      where: { organizationId, archivedAt: null, jobSiteId: { in: jobSites.map((jobSite) => jobSite.id) }, status: { in: ATTENTION_DOCUMENT_STATUSES } },
+      _count: { _all: true },
+    }) : [];
+    const jobSiteChecklistRows = jobSites.length ? await db.checklist.groupBy({
+      by: ["jobSiteId"],
+      where: { organizationId, archivedAt: null, jobSiteId: { in: jobSites.map((jobSite) => jobSite.id) } },
+      _count: { _all: true },
+    }) : [];
+    const jobSiteDocumentCounts = countByNullableId(jobSiteDocumentRows, jobSites.map((jobSite) => jobSite.id));
+    const jobSiteChecklistCounts = countByNullableId(jobSiteChecklistRows, jobSites.map((jobSite) => jobSite.id));
+    const seenWorkers = new Set<string>();
+    const mappedWorkers: DashboardWorkerItem[] = scope.actorRole === "WORKER" && scope.linkedWorker
+      ? [{ id: scope.linkedWorker.id, displayName: scope.linkedWorker.displayName, status: scope.linkedWorker.status, documentsToReview: documents.missing + documents.expired + documents.expiringSoon + documents.toReview, openDeadlines }]
+      : assignedWorkers.flatMap(({ worker }) => {
+        if (seenWorkers.has(worker.id)) return [];
+        seenWorkers.add(worker.id);
+        return [{ id: worker.id, displayName: worker.displayName, status: worker.status, documentsToReview: 0, openDeadlines: 0 }];
+      });
+
+    await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "dashboard" });
+    const totalDocuments = Object.values(documents).reduce((total, value) => total + value, 0);
+    return {
+      generatedAt: now.toISOString(),
+      organization: {
+        name: context.support?.organization.name ?? context.membership?.organization.name ?? "Azienda",
+        role: actorRole,
+      },
+      summary: {
+        documents,
+        openDeadlines,
+        activeJobSites: jobSites.length,
+        activeWorkers: mappedWorkers.length,
+        packagesReadyForReview: 0,
+        sharedPackages: 0,
+        recentEvidence: recentEvidenceRows.length,
+        unreadNotifications: 0,
+      },
+      deadlines: deadlines.map((deadline) => ({
+        id: deadline.id,
+        title: deadline.title,
+        dueDate: deadline.dueDate.toISOString(),
+        status: deadline.status,
+        sourceType: deadline.sourceType,
+        documentId: deadline.documentId,
+        workerId: deadline.workerId,
+        jobSiteId: deadline.jobSiteId,
+      })),
+      documentsToReview: documentsToReview.map<DashboardDocumentAttentionItem>((document) => ({
+        id: document.id,
+        title: document.title,
+        status: document.status,
+        ownerType: document.ownerType,
+        ownerLabel: document.worker?.displayName ?? document.jobSite?.name ?? "Azienda",
+        expiryDate: toIso(document.expiryDate),
+        updatedAt: document.updatedAt.toISOString(),
+        nextAction: documentNextAction(document.status),
+      })),
+      jobSites: jobSites.map((jobSite, index) => ({
+        id: jobSite.id,
+        name: jobSite.name,
+        status: jobSite.status,
+        documentsToReview: jobSiteDocumentCounts[index] ?? 0,
+        openChecklists: jobSiteChecklistCounts[index] ?? 0,
+      })),
+      workers: mappedWorkers,
+      packages: [],
+      recentEvidence: recentEvidenceRows.map((evidence) => ({
+        id: evidence.id,
+        type: evidence.type,
+        title: evidence.title,
+        hasFile: Boolean(evidence.blobKey),
+        createdAt: evidence.createdAt.toISOString(),
+        jobSiteId: evidence.jobSiteId,
+      })),
+      notifications: [],
+      quickActions,
+      emptyStates: buildEmptyStates({ activeJobSites: jobSites.length, activeWorkers: mappedWorkers.length, totalDocuments, packageCount: 0 }),
+    };
+  }
 
   const [
     documentStatusRows,

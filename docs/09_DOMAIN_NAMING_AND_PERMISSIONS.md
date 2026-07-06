@@ -60,7 +60,7 @@ Capocantiere, preposto o responsabile operativo di cantiere. Vede solo cantieri 
 
 ### `WORKER`
 
-Lavoratore o collaboratore operativo. Vede solo informazioni personali o assegnate, puo caricare documenti/prove se abilitato e completare azioni semplici.
+Lavoratore o collaboratore operativo. Vede solo informazioni personali o assegnate, puo caricare documenti/prove solo nel proprio scope operativo quando la policy lo consente e completare azioni semplici.
 
 ### `VIEWER`
 
@@ -86,21 +86,23 @@ I permessi sono sempre default-deny e verificati server-side. I permessi sono ac
 | `jobSites:update` | si | si | no | no | no | no |
 | `jobSites:archive` | si | si | no | no | no | no |
 | `documents:read` | si | si | si | assegnati | personale/assegnati | no |
-| `documents:upload` | si | si | no | no | abilitato | no |
+| `documents:upload` | si | si | no | no | scope personale | no |
 | `documents:update` | si | si | si | no | no | no |
 | `documents:archive` | si | si | no | no | no | no |
 | `deadlines:read` | si | si | si | si | personali | no |
 | `deadlines:manage` | si | si | no | no | no | no |
 | `checklists:read` | si | si | si | si | no | no |
 | `checklists:manage` | si | si | si | no | no | no |
-| `checklists:complete` | si | si | si | si | assegnate | no |
+| `checklists:complete` | si | si | si | si | rimandato | no |
 | `evidence:read` | si | si | si | assegnate | assegnate | no |
-| `evidence:upload` | si | si | si | si | abilitato | no |
+| `evidence:upload` | si | si | si | si | scope personale/assegnato | no |
 | `evidence:delete` | si | si | no | no | no | no |
 | `documentPackages:read` | si | si | si | no | no | condivisi |
 | `documentPackages:create` | si | si | si | no | no | no |
 | `documentPackages:share` | si | si | no | no | no | no |
 | `auditLog:read` | si | no | no | no | no | no |
+| `assignments:read` | si | si | si | my-scope | my-scope | no |
+| `assignments:manage` | si | si | no | no | no | no |
 | `settings:update` | si | no | no | no | no | no |
 
 ## Note di implementazione

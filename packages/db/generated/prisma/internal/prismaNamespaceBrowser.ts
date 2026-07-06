@@ -58,6 +58,9 @@ export const ModelName = {
   Organization: 'Organization',
   Worker: 'Worker',
   JobSite: 'JobSite',
+  WorkerUserLink: 'WorkerUserLink',
+  JobSiteUserAssignment: 'JobSiteUserAssignment',
+  JobSiteWorkerAssignment: 'JobSiteWorkerAssignment',
   DocumentType: 'DocumentType',
   Document: 'Document',
   DocumentVersion: 'DocumentVersion',
@@ -76,6 +79,7 @@ export const ModelName = {
   OrganizationInvitation: 'OrganizationInvitation',
   SupportSession: 'SupportSession',
   SupportAuditEvent: 'SupportAuditEvent',
+  ProductAuditEvent: 'ProductAuditEvent',
   UserCredential: 'UserCredential',
   AuthCode: 'AuthCode',
   AuthRateLimit: 'AuthRateLimit',
@@ -212,6 +216,49 @@ export const JobSiteScalarFieldEnum = {
 } as const
 
 export type JobSiteScalarFieldEnum = (typeof JobSiteScalarFieldEnum)[keyof typeof JobSiteScalarFieldEnum]
+
+
+export const WorkerUserLinkScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  workerId: 'workerId',
+  userId: 'userId',
+  linkedById: 'linkedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  archivedAt: 'archivedAt'
+} as const
+
+export type WorkerUserLinkScalarFieldEnum = (typeof WorkerUserLinkScalarFieldEnum)[keyof typeof WorkerUserLinkScalarFieldEnum]
+
+
+export const JobSiteUserAssignmentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  userId: 'userId',
+  assignmentRole: 'assignmentRole',
+  assignedById: 'assignedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  archivedAt: 'archivedAt'
+} as const
+
+export type JobSiteUserAssignmentScalarFieldEnum = (typeof JobSiteUserAssignmentScalarFieldEnum)[keyof typeof JobSiteUserAssignmentScalarFieldEnum]
+
+
+export const JobSiteWorkerAssignmentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  workerId: 'workerId',
+  assignedById: 'assignedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  archivedAt: 'archivedAt'
+} as const
+
+export type JobSiteWorkerAssignmentScalarFieldEnum = (typeof JobSiteWorkerAssignmentScalarFieldEnum)[keyof typeof JobSiteWorkerAssignmentScalarFieldEnum]
 
 
 export const DocumentTypeScalarFieldEnum = {
@@ -514,6 +561,24 @@ export const SupportAuditEventScalarFieldEnum = {
 } as const
 
 export type SupportAuditEventScalarFieldEnum = (typeof SupportAuditEventScalarFieldEnum)[keyof typeof SupportAuditEventScalarFieldEnum]
+
+
+export const ProductAuditEventScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  actorUserId: 'actorUserId',
+  actorRole: 'actorRole',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  outcome: 'outcome',
+  metadata: 'metadata',
+  requestId: 'requestId',
+  supportSessionId: 'supportSessionId',
+  createdAt: 'createdAt'
+} as const
+
+export type ProductAuditEventScalarFieldEnum = (typeof ProductAuditEventScalarFieldEnum)[keyof typeof ProductAuditEventScalarFieldEnum]
 
 
 export const UserCredentialScalarFieldEnum = {

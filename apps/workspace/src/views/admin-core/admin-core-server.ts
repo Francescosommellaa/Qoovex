@@ -12,13 +12,15 @@ export async function getWorkspaceCapabilities(): Promise<WorkspaceCapabilities>
     role,
     canManageCore: role === "OWNER" || role === "ADMIN",
     canUpdateDocuments: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    canUploadDocumentVersions: role === "OWNER" || role === "ADMIN",
+    canUploadDocumentVersions: role === "OWNER" || role === "ADMIN" || role === "WORKER",
     canManageChecklists: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    canCompleteChecklists: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    canUploadEvidence: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
+    canCompleteChecklists: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT" || role === "SITE_MANAGER",
+    canUploadEvidence: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT" || role === "SITE_MANAGER" || role === "WORKER",
     canDeleteEvidence: role === "OWNER" || role === "ADMIN",
     canManagePackages: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
     canSharePackages: role === "OWNER" || role === "ADMIN",
+    canReadAssignments: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
+    canManageAssignments: role === "OWNER" || role === "ADMIN",
   };
 }
 

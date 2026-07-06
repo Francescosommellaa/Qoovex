@@ -6,6 +6,9 @@ const mocks = vi.hoisted(() => ({
     $transaction: vi.fn(),
     document: { findFirst: vi.fn(), update: vi.fn() },
     documentVersion: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
+    workerUserLink: { findFirst: vi.fn() },
+    jobSiteUserAssignment: { findMany: vi.fn() },
+    jobSiteWorkerAssignment: { findMany: vi.fn() },
   },
   getViewerContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
@@ -52,6 +55,9 @@ const documentRecord = {
   id: "doc-1",
   organizationId: "org-1",
   status: "MISSING",
+  ownerType: "WORKER",
+  workerId: "worker-1",
+  jobSiteId: null,
 };
 
 const versionRecord = {
@@ -93,6 +99,9 @@ beforeEach(() => {
   mocks.db.$transaction.mockReset();
   resetModel(mocks.db.document);
   resetModel(mocks.db.documentVersion);
+  resetModel(mocks.db.workerUserLink);
+  resetModel(mocks.db.jobSiteUserAssignment);
+  resetModel(mocks.db.jobSiteWorkerAssignment);
   mocks.getViewerContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
@@ -107,6 +116,9 @@ beforeEach(() => {
   mocks.deletePrivateBlob.mockResolvedValue(undefined);
   mocks.db.$transaction.mockImplementation(async (callback) => callback(mocks.db));
   mocks.db.document.findFirst.mockResolvedValue(documentRecord);
+  mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: { id: "worker-1", displayName: "Mario", roleLabel: null, status: "ACTIVE" } });
+  mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([]);
+  mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
   mocks.db.document.update.mockResolvedValue({ id: "doc-1" });
   mocks.db.documentVersion.create.mockImplementation(async ({ data }) => ({
     ...versionRecord,
@@ -147,11 +159,14 @@ describe("document version service", () => {
     expect(version).not.toHaveProperty("downloadUrl");
   });
 
-  it("lets admins upload but denies safety consultants, site managers, workers and viewers", async () => {
+  it("lets admins and linked workers upload while denying other roles", async () => {
     setRole("ADMIN");
     await expect(uploadDocumentVersion("doc-1", [makeFile()])).resolves.toMatchObject({ documentId: "doc-1" });
 
-    for (const role of ["SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER", "VIEWER"] as const) {
+    setRole("WORKER");
+    await expect(uploadDocumentVersion("doc-1", [makeFile()])).resolves.toMatchObject({ documentId: "doc-1" });
+
+    for (const role of ["SAFETY_CONSULTANT", "SITE_MANAGER", "VIEWER"] as const) {
       setRole(role);
       await expect(uploadDocumentVersion("doc-1", [makeFile()])).rejects.toMatchObject({ status: 404 });
     }
@@ -169,13 +184,21 @@ describe("document version service", () => {
     await expect(archiveDocumentVersion("doc-1", "version-1")).rejects.toMatchObject({ status: 404 });
   });
 
-  it("denies broad read/download access to site managers, workers and viewers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
-      setRole(role);
-      await expect(listDocumentVersions("doc-1")).rejects.toMatchObject({ status: 404 });
-      await expect(getDocumentVersionDownload("doc-1", "version-1")).rejects.toMatchObject({ status: 404 });
-    }
-    expect(mocks.db.documentVersion.findMany).not.toHaveBeenCalled();
+  it("allows worker reads only on own document versions and denies others", async () => {
+    mocks.db.documentVersion.findMany.mockResolvedValue([versionRecord]);
+    mocks.db.documentVersion.findFirst.mockResolvedValue(versionRecord);
+    mocks.getPrivateBlob.mockResolvedValue({ stream: new ReadableStream<Uint8Array>(), contentType: "application/pdf", size: 4 });
+
+    setRole("WORKER");
+    await expect(listDocumentVersions("doc-1")).resolves.toHaveLength(1);
+    await expect(getDocumentVersionDownload("doc-1", "version-1")).resolves.toMatchObject({ originalFileName: "documento.pdf" });
+
+    setRole("SITE_MANAGER");
+    await expect(listDocumentVersions("doc-1")).rejects.toMatchObject({ status: 404 });
+    await expect(getDocumentVersionDownload("doc-1", "version-1")).rejects.toMatchObject({ status: 404 });
+
+    setRole("VIEWER");
+    await expect(listDocumentVersions("doc-1")).rejects.toMatchObject({ status: 404 });
   });
 
   it("filters document and version access by organization", async () => {

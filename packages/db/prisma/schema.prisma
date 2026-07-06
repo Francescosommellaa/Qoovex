@@ -34,6 +34,81 @@ enum SupportAuditAction {
   EXPORT
 }
 
+enum AuditAction {
+  DOCUMENT_CREATED
+  DOCUMENT_UPDATED
+  DOCUMENT_ARCHIVED
+  DOCUMENT_VERSION_UPLOADED
+  DOCUMENT_VERSION_DOWNLOADED
+  DOCUMENT_VERSION_ARCHIVED
+  DEADLINE_CREATED
+  DEADLINE_UPDATED
+  DEADLINE_ARCHIVED
+  WORKER_CREATED
+  WORKER_UPDATED
+  WORKER_ARCHIVED
+  JOB_SITE_CREATED
+  JOB_SITE_UPDATED
+  JOB_SITE_ARCHIVED
+  CHECKLIST_CREATED
+  CHECKLIST_UPDATED
+  CHECKLIST_ARCHIVED
+  CHECKLIST_ITEM_COMPLETED
+  EVIDENCE_CREATED
+  EVIDENCE_DOWNLOADED
+  EVIDENCE_ARCHIVED
+  DOCUMENT_PACKAGE_CREATED
+  DOCUMENT_PACKAGE_UPDATED
+  DOCUMENT_PACKAGE_ARCHIVED
+  DOCUMENT_PACKAGE_ITEM_ADDED
+  DOCUMENT_PACKAGE_ITEM_REMOVED
+  SHARE_LINK_CREATED
+  SHARE_LINK_REVOKED
+  SHARE_LINK_ACCESSED
+  NOTIFICATION_READ
+  NOTIFICATION_DISMISSED
+  EMAIL_DIGEST_SENT
+  EMAIL_DIGEST_FAILED
+  NOTIFICATION_PREFERENCES_UPDATED
+  SCHEDULED_EMAIL_DIGEST_RUN
+  WORKER_USER_LINK_CREATED
+  WORKER_USER_LINK_ARCHIVED
+  JOB_SITE_USER_ASSIGNMENT_CREATED
+  JOB_SITE_USER_ASSIGNMENT_ARCHIVED
+  JOB_SITE_WORKER_ASSIGNMENT_CREATED
+  JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED
+  SECURITY_DENIED
+}
+
+enum AuditEntityType {
+  DOCUMENT
+  DOCUMENT_VERSION
+  DEADLINE
+  WORKER
+  JOB_SITE
+  CHECKLIST
+  CHECKLIST_ITEM
+  EVIDENCE
+  DOCUMENT_PACKAGE
+  DOCUMENT_PACKAGE_ITEM
+  SHARE_LINK
+  NOTIFICATION
+  EMAIL_DELIVERY
+  NOTIFICATION_PREFERENCE
+  WORKER_USER_LINK
+  JOB_SITE_USER_ASSIGNMENT
+  JOB_SITE_WORKER_ASSIGNMENT
+  ORGANIZATION
+  USER
+  SYSTEM
+}
+
+enum AuditOutcome {
+  SUCCESS
+  DENIED
+  FAILED
+}
+
 enum RecordStatus {
   ACTIVE
   ARCHIVED
@@ -158,6 +233,10 @@ enum NotificationEmailDeliveryStatus {
   SKIPPED
 }
 
+enum JobSiteUserAssignmentRole {
+  SITE_MANAGER
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -231,6 +310,7 @@ model User {
   sentOrganizationInvitations OrganizationInvitation[] @relation("InvitationSender")
   supportSessions            SupportSession[]      @relation("SupportActor")
   supportAuditEvents         SupportAuditEvent[]   @relation("SupportAuditActor")
+  productAuditEvents         ProductAuditEvent[]   @relation("ProductAuditActor")
   reviewedDocuments          Document[]            @relation("DocumentReviewer")
   uploadedDocumentVersions   DocumentVersion[]     @relation("DocumentVersionUploader")
   completedChecklistItems    ChecklistItem[]       @relation("ChecklistItemCompleter")
@@ -240,6 +320,11 @@ model User {
   notifications              Notification[]
   notificationPreferences    NotificationPreference[]
   notificationEmailDeliveries NotificationEmailDelivery[]
+  workerUserLinks            WorkerUserLink[]
+  linkedWorkerUserLinks      WorkerUserLink[]       @relation("WorkerUserLinkCreator")
+  jobSiteUserAssignments     JobSiteUserAssignment[]
+  assignedJobSiteUsers       JobSiteUserAssignment[] @relation("JobSiteUserAssignmentCreator")
+  assignedJobSiteWorkers     JobSiteWorkerAssignment[] @relation("JobSiteWorkerAssignmentCreator")
   createdAt                  DateTime              @default(now())
   updatedAt                  DateTime              @updatedAt
 }
@@ -256,6 +341,7 @@ model Organization {
   invitations    OrganizationInvitation[]
   supportSessions SupportSession[]
   supportEvents  SupportAuditEvent[]
+  productAuditEvents ProductAuditEvent[]
   workers        Worker[]
   jobSites       JobSite[]
   documentTypes  DocumentType[]
@@ -272,6 +358,9 @@ model Organization {
   notifications  Notification[]
   notificationPreferences NotificationPreference[]
   notificationEmailDeliveries NotificationEmailDelivery[]
+  workerUserLinks WorkerUserLink[]
+  jobSiteUserAssignments JobSiteUserAssignment[]
+  jobSiteWorkerAssignments JobSiteWorkerAssignment[]
 
   @@index([name])
 }
@@ -292,6 +381,8 @@ model Worker {
   documents      Document[]
   deadlines      Deadline[]
   evidence       Evidence[]
+  userLinks      WorkerUserLink[]
+  jobSiteAssignments JobSiteWorkerAssignment[]
 
   @@index([organizationId, status])
   @@index([organizationId, displayName])
@@ -318,10 +409,73 @@ model JobSite {
   checklists     Checklist[]
   evidence       Evidence[]
   documentPackages DocumentPackage[]
+  userAssignments JobSiteUserAssignment[]
+  workerAssignments JobSiteWorkerAssignment[]
 
   @@index([organizationId, status])
   @@index([organizationId, name])
   @@index([organizationId, clientName])
+}
+
+model WorkerUserLink {
+  id             String       @id @default(cuid())
+  organizationId String
+  workerId       String
+  userId         String
+  linkedById     String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  archivedAt     DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  worker         Worker       @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  linkedBy       User         @relation("WorkerUserLinkCreator", fields: [linkedById], references: [id], onDelete: Restrict)
+
+  @@index([organizationId, workerId, archivedAt])
+  @@index([organizationId, userId, archivedAt])
+  @@index([organizationId, createdAt])
+  @@index([linkedById])
+}
+
+model JobSiteUserAssignment {
+  id             String                    @id @default(cuid())
+  organizationId String
+  jobSiteId      String
+  userId         String
+  assignmentRole JobSiteUserAssignmentRole @default(SITE_MANAGER)
+  assignedById   String
+  createdAt      DateTime                  @default(now())
+  updatedAt      DateTime                  @updatedAt
+  archivedAt     DateTime?
+  organization   Organization              @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  jobSite        JobSite                   @relation(fields: [jobSiteId], references: [id], onDelete: Cascade)
+  user           User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignedBy     User                      @relation("JobSiteUserAssignmentCreator", fields: [assignedById], references: [id], onDelete: Restrict)
+
+  @@index([organizationId, jobSiteId, assignmentRole, archivedAt])
+  @@index([organizationId, userId, assignmentRole, archivedAt])
+  @@index([organizationId, createdAt])
+  @@index([assignedById])
+}
+
+model JobSiteWorkerAssignment {
+  id             String       @id @default(cuid())
+  organizationId String
+  jobSiteId      String
+  workerId       String
+  assignedById   String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  archivedAt     DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  jobSite        JobSite      @relation(fields: [jobSiteId], references: [id], onDelete: Cascade)
+  worker         Worker       @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  assignedBy     User         @relation("JobSiteWorkerAssignmentCreator", fields: [assignedById], references: [id], onDelete: Restrict)
+
+  @@index([organizationId, jobSiteId, archivedAt])
+  @@index([organizationId, workerId, archivedAt])
+  @@index([organizationId, createdAt])
+  @@index([assignedById])
 }
 
 model DocumentType {
@@ -695,6 +849,7 @@ model SupportSession {
   actor                  User                @relation("SupportActor", fields: [actorId], references: [id], onDelete: Cascade)
   organization           Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   auditEvents            SupportAuditEvent[]
+  productAuditEvents     ProductAuditEvent[]
 
   @@index([actorId, endedAt, expiresAt])
   @@index([organizationId, createdAt])
@@ -717,6 +872,31 @@ model SupportAuditEvent {
   @@index([supportSessionId, createdAt])
   @@index([organizationId, createdAt])
   @@index([actorId, createdAt])
+}
+
+model ProductAuditEvent {
+  id               String          @id @default(cuid())
+  organizationId   String
+  actorUserId      String?
+  actorRole        OrganizationRole?
+  action           AuditAction
+  entityType       AuditEntityType
+  entityId         String?
+  outcome          AuditOutcome
+  metadata         Json?
+  requestId        String?
+  supportSessionId String?
+  createdAt        DateTime        @default(now())
+  organization     Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  actor            User?           @relation("ProductAuditActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  supportSession   SupportSession? @relation(fields: [supportSessionId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([organizationId, action, createdAt])
+  @@index([organizationId, entityType, entityId, createdAt])
+  @@index([organizationId, outcome, createdAt])
+  @@index([actorUserId, createdAt])
+  @@index([supportSessionId, createdAt])
 }
 
 model UserCredential {

@@ -7,9 +7,11 @@ import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { isEnumValue, parseOptionalDate, parseRequiredDate, trimOptionalId, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
+import { getResourceScope } from "./resource-scope-service";
 
 const DEADLINE_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
-const DEADLINE_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const DEADLINE_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 const EXPIRING_SOON_DAYS = 30;
 
 const deadlineSelect = {
@@ -117,6 +119,7 @@ async function normalizeDeadlineRelations(input: {
 
 export async function listDeadlines(input: ListDeadlinesInput = {}) {
   const { context, organizationId } = await requireOrganizationDomainAccess("deadlines:read", DEADLINE_READ_ROLES);
+  const scope = await getResourceScope(context);
   const where: {
     organizationId: string;
     archivedAt: null;
@@ -124,7 +127,19 @@ export async function listDeadlines(input: ListDeadlinesInput = {}) {
     workerId?: string;
     jobSiteId?: string;
     status?: DeadlineStatus;
+    OR?: Array<
+      | { jobSiteId: { in: string[] } }
+      | { workerId: string }
+      | { document: { ownerType: "WORKER"; workerId: string } }
+    >;
   } = { organizationId, archivedAt: null };
+  if (!scope.fullAccess) {
+    if (scope.actorRole === "SITE_MANAGER") where.OR = [{ jobSiteId: { in: scope.siteManagerJobSiteIds } }];
+    if (scope.actorRole === "WORKER" && scope.linkedWorker) {
+      where.OR = [{ workerId: scope.linkedWorker.id }, { document: { ownerType: "WORKER", workerId: scope.linkedWorker.id } }];
+    }
+    if (!where.OR) return [];
+  }
   const documentId = trimOptionalId(input.documentId, "Documento");
   const workerId = trimOptionalId(input.workerId, "Lavoratore");
   const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
@@ -139,7 +154,7 @@ export async function listDeadlines(input: ListDeadlinesInput = {}) {
 }
 
 export async function createDeadline(input: CreateDeadlineInput) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("deadlines:manage", DEADLINE_MANAGE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("deadlines:manage", DEADLINE_MANAGE_ROLES);
   const title = trimRequiredText(input.title, "Titolo scadenza", 2, 160);
   const dueDate = parseRequiredDate(input.dueDate, "Data scadenza");
   const sourceType = parseSourceType(input.sourceType);
@@ -157,11 +172,19 @@ export async function createDeadline(input: CreateDeadlineInput) {
     select: deadlineSelect,
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "deadline", resourceId: deadline.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DEADLINE_CREATED",
+    entityType: "DEADLINE",
+    entityId: deadline.id,
+    metadata: { nextStatus: deadline.status },
+  });
   return deadline;
 }
 
 export async function updateDeadline(deadlineId: string, input: UpdateDeadlineInput) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("deadlines:manage", DEADLINE_MANAGE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("deadlines:manage", DEADLINE_MANAGE_ROLES);
   const existing = await db.deadline.findFirst({
     where: { id: deadlineId, organizationId, archivedAt: null },
     select: { id: true, dueDate: true, sourceType: true, documentId: true, workerId: true, jobSiteId: true, remindAt: true },
@@ -207,11 +230,19 @@ export async function updateDeadline(deadlineId: string, input: UpdateDeadlineIn
 
   const deadline = await db.deadline.update({ where: { id: existing.id }, data, select: deadlineSelect });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "deadline", resourceId: deadline.id });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DEADLINE_UPDATED",
+    entityType: "DEADLINE",
+    entityId: deadline.id,
+    metadata: { nextStatus: deadline.status },
+  });
   return deadline;
 }
 
 export async function archiveDeadline(deadlineId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("deadlines:manage", DEADLINE_MANAGE_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("deadlines:manage", DEADLINE_MANAGE_ROLES);
   const existing = await db.deadline.findFirst({ where: { id: deadlineId, organizationId, archivedAt: null }, select: { id: true } });
   if (!existing) throw new AccessError("Scadenza non trovata.", 404);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "deadline", resourceId: existing.id });
@@ -219,6 +250,14 @@ export async function archiveDeadline(deadlineId: string) {
     where: { id: existing.id },
     data: { archivedAt: new Date(), status: "ARCHIVED" },
     select: deadlineSelect,
+  });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DEADLINE_ARCHIVED",
+    entityType: "DEADLINE",
+    entityId: deadline.id,
+    metadata: { nextStatus: deadline.status },
   });
   return deadline;
 }
