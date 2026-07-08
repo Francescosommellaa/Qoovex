@@ -19,6 +19,6 @@
     "db:workspace": "turbo run db:workspace --filter=@qoovex/db"
   },
   "devDependencies": {
-    "turbo": "^2.10.0"
+    "turbo": "^2.10.4"
   }
 }
