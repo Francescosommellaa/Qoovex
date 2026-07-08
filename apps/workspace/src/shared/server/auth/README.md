@@ -6,6 +6,16 @@
 
 Route handler: `src/app/api/auth/[...nextauth]/route.ts`.
 
+Route UI:
+
+- `/sign-in`: login Credentials;
+- `/sign-up`: registrazione Credentials con verifica email.
+
+Route API aggiuntive:
+
+- `/api/auth/credentials/sign-up`;
+- `/api/auth/credentials/verify-email`.
+
 ## Env obbligatorie
 
 | Variabile | Note |

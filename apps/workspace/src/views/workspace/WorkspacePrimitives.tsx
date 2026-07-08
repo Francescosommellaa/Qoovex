@@ -40,7 +40,7 @@ export function WorkspaceEmptyState({ title, description }: { title: string; des
   );
 }
 
-export function WorkspaceAccessState({ title = "Area non disponibile", description = "Verifica accesso e azienda attiva." }) {
+export function WorkspaceAccessState({ title = "Area non disponibile", description = "Questa sezione non e disponibile per il ruolo corrente." }) {
   return (
     <main className={styles.page}>
       <section className={styles.accessState}>

@@ -3,7 +3,7 @@ import { listJobSites } from "@shared/server/job-site-service";
 import { listShareLinks } from "@shared/server/share-link-service";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { DocumentPackagesPageView } from "@/views/admin-core/document-packages/DocumentPackagesPageView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type { WorkspaceDocumentPackageRecord, WorkspaceJobSiteRecord, WorkspaceShareLinkRecord } from "@/views/workspace/workspace-records";
 
 export default async function DocumentPackagesPage() {

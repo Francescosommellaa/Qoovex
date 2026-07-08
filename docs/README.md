@@ -2,7 +2,7 @@
 
 Questa cartella contiene la documentazione di prodotto e lavoro del nuovo Qoovex.
 
-La fonte primaria e il set numerato `00`-`36`.
+La fonte primaria e il set numerato `00`-`38`.
 
 ## Ordine di lettura
 
@@ -42,6 +42,8 @@ La fonte primaria e il set numerato `00`-`36`.
 34. `34_NOTIFICATION_PREFERENCES_AND_SCHEDULING.md`: preferenze email, delivery log minimale e endpoint scheduling protetto da secret.
 35. `35_PRIVACY_AUDIT_SECURITY_HARDENING.md`: audit log prodotto, metadata redatti e header HTTP di base.
 36. `36_RESOURCE_ASSIGNMENTS_AND_GRANULAR_ACCESS.md`: assegnazioni risorsa e accesso granulare per ruoli operativi.
+37. `37_AUTH_ACCESS_AND_WORKSPACE_ENTRY_FIX.md`: hotfix accesso workspace, sign-in/sign-up NextAuth e setup azienda.
+38. `38_DATA_RETENTION_EXPORT_AND_DELETION.md`: inventario dati, export metadata e retention operativa owner-only.
 
 ## Documenti rimossi
 

@@ -27,10 +27,15 @@ describe("workspace admin UI copy", () => {
   const notificationActionsSource = readFileSync(join(root, "admin-core", "notifications", "NotificationActionButtons.tsx"), "utf8");
   const auditLogSource = readFileSync(join(root, "admin-core", "audit-log", "AuditLogPageView.tsx"), "utf8");
   const accessSource = readFileSync(join(root, "admin-core", "access", "AccessAssignmentsPageView.tsx"), "utf8");
+  const dataControlSource = readFileSync(join(root, "admin-core", "data-control", "DataControlPageView.tsx"), "utf8");
+  const authSource = collectCodeFiles(join(root, "auth")).map((file) => readFileSync(file, "utf8")).join("\n");
+  const signInSource = readFileSync(join(appRoot, "sign-in", "page.tsx"), "utf8");
+  const signUpSource = readFileSync(join(appRoot, "sign-up", "page.tsx"), "utf8");
+  const dashboardSource = readFileSync(join(root, "dashboard", "DashboardView.tsx"), "utf8");
   const nextConfigSource = readFileSync(join(root, "..", "..", "next.config.ts"), "utf8");
   const combinedSource = `${source}\n${appSource}`;
 
-  const adminRoutes = ["/dashboard", "/notifications", "/documents", "/deadlines", "/workers", "/job-sites", "/checklists", "/evidence", "/document-packages", "/access", "/audit-log"] as const;
+  const adminRoutes = ["/dashboard", "/notifications", "/documents", "/deadlines", "/workers", "/job-sites", "/checklists", "/evidence", "/document-packages", "/access", "/audit-log", "/data-control"] as const;
 
   it("does not render forbidden legal or sensitive storage copy", () => {
     expect(combinedSource).not.toMatch(/sei a norma|conformita garantita|validita legale|legalmente valido|abilitato automaticamente|obbligatorio per legge/i);
@@ -42,7 +47,7 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps page titles for the main admin sections", () => {
-    for (const title of ["Notifiche", "Documenti", "Scadenze", "Lavoratori", "Cantieri", "Checklist", "Prove", "Pacchetti documentali", "Accessi operativi", "Audit"]) {
+    for (const title of ["Notifiche", "Documenti", "Scadenze", "Lavoratori", "Cantieri", "Checklist", "Prove", "Pacchetti documentali", "Accessi operativi", "Audit", "Controllo dati"]) {
       expect(combinedSource).toContain(title);
     }
   });
@@ -119,5 +124,26 @@ describe("workspace admin UI copy", () => {
     expect(accessSource).toContain("Assegna capocantiere ai cantieri");
     expect(accessSource).toContain("Assegna lavoratori ai cantieri");
     expect(accessSource).not.toMatch(/blobKey|tokenHash|downloadUrl|token raw/i);
+  });
+
+  it("keeps data control metadata-only and owner scoped", () => {
+    expect(navigationSource).toContain("Controllo dati");
+    expect(navigationSource).toContain('href: "/data-control", roles: ["OWNER"]');
+    expect(dataControlSource).toContain("Inventario dati");
+    expect(dataControlSource).toContain("Scarica export metadata");
+    expect(dataControlSource).toContain("Non include file o allegati");
+    expect(dataControlSource).toContain("Le regole di conservazione sono operative, non normative");
+    expect(dataControlSource).not.toMatch(/blobKey|tokenHash|rawToken|downloadUrl|emailBody|fileContent|password|secret/i);
+  });
+
+  it("keeps auth entry routes reachable and avoids the old dead dashboard fallback", () => {
+    expect(signInSource).toContain("SignInPageView");
+    expect(signUpSource).toContain("SignUpPageView");
+    expect(authSource).toContain("Accedi");
+    expect(authSource).toContain("Crea account");
+    expect(authSource).toContain("Configura la tua azienda");
+    expect(authSource).toContain("Crea la tua azienda");
+    expect(dashboardSource).not.toContain("Nessun reset DB eseguito");
+    expect(authSource).not.toMatch(/blobKey|tokenHash|downloadUrl|token raw/i);
   });
 });

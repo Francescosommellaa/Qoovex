@@ -226,17 +226,6 @@ function DashboardEmptyState({ data }: { data: DashboardResponse }) {
   );
 }
 
-export function DashboardAccessState() {
-  return (
-    <main className={styles.page}>
-      <section className={styles.accessState}>
-        <h1>Dashboard non disponibile</h1>
-        <p>Verifica accesso e azienda attiva. Nessun reset DB eseguito.</p>
-      </section>
-    </main>
-  );
-}
-
 export function DashboardView({ data }: { data: DashboardResponse }) {
   return (
     <main className={styles.page}>

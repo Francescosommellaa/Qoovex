@@ -17,6 +17,7 @@ const navItems = [
   { label: "Pacchetti", href: "/document-packages", roles: ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] },
   { label: "Accessi", href: "/access", roles: ["OWNER", "ADMIN"] },
   { label: "Audit", href: "/audit-log", roles: ["OWNER"] },
+  { label: "Controllo dati", href: "/data-control", roles: ["OWNER"] },
 ] as const;
 
 export function WorkspaceNavigation({ role }: { role: WorkspaceRole | null }) {

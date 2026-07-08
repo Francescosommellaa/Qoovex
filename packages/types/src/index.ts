@@ -163,6 +163,8 @@ export const auditActions = [
   "JOB_SITE_USER_ASSIGNMENT_ARCHIVED",
   "JOB_SITE_WORKER_ASSIGNMENT_CREATED",
   "JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED",
+  "DATA_EXPORT_GENERATED",
+  "DATA_EXPORT_FAILED",
   "SECURITY_DENIED",
 ] as const;
 export type AuditAction = (typeof auditActions)[number];
@@ -918,6 +920,100 @@ export interface AuditLogListResponse {
   events: AuditLogEventResponse[];
   nextCursor?: string | null;
   generatedAt: string;
+}
+
+export interface DataRecordCount {
+  total: number;
+  active?: number;
+  archived?: number;
+}
+
+export interface DataShareLinkCounts {
+  total: number;
+  active: number;
+  expired: number;
+  revoked: number;
+}
+
+export interface DataNotificationCounts {
+  total: number;
+  unread: number;
+  read: number;
+  dismissed: number;
+}
+
+export interface DataInventoryResponse {
+  generatedAt: string;
+  counts: {
+    workers: DataRecordCount;
+    jobSites: DataRecordCount;
+    documents: DataRecordCount;
+    documentVersions: DataRecordCount;
+    deadlines: DataRecordCount;
+    checklists: DataRecordCount;
+    checklistItems: DataRecordCount;
+    evidence: DataRecordCount;
+    documentPackages: DataRecordCount;
+    documentPackageItems: DataRecordCount;
+    shareLinks: DataShareLinkCounts;
+    notifications: DataNotificationCounts;
+    notificationPreferences: DataRecordCount;
+    emailDeliveries: DataRecordCount;
+    auditEvents: DataRecordCount;
+    workerUserLinks: DataRecordCount;
+    jobSiteUserAssignments: DataRecordCount;
+    jobSiteWorkerAssignments: DataRecordCount;
+  };
+}
+
+export interface DataExportResponse {
+  exportedAt: string;
+  organization: {
+    id: EntityId;
+    name: string;
+    code: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  counts: DataInventoryResponse["counts"];
+  workers: Array<Record<string, unknown>>;
+  jobSites: Array<Record<string, unknown>>;
+  documents: Array<Record<string, unknown>>;
+  documentVersions: Array<Record<string, unknown>>;
+  deadlines: Array<Record<string, unknown>>;
+  checklists: Array<Record<string, unknown>>;
+  checklistItems: Array<Record<string, unknown>>;
+  evidence: Array<Record<string, unknown>>;
+  documentPackages: Array<Record<string, unknown>>;
+  documentPackageItems: Array<Record<string, unknown>>;
+  shareLinks: Array<Record<string, unknown>>;
+  notifications: Array<Record<string, unknown>>;
+  notificationPreferences: Array<Record<string, unknown>>;
+  emailDeliveries: Array<Record<string, unknown>>;
+  auditEvents: AuditLogEventResponse[];
+  assignments: {
+    workerUserLinks: Array<Record<string, unknown>>;
+    jobSiteUserAssignments: Array<Record<string, unknown>>;
+    jobSiteWorkerAssignments: Array<Record<string, unknown>>;
+  };
+}
+
+export interface DataRetentionCandidate {
+  key: string;
+  title: string;
+  description: string;
+  count: number;
+}
+
+export interface DataRetentionOverviewResponse {
+  generatedAt: string;
+  notice: string;
+  thresholds: {
+    readNotificationDays: number;
+    emailDeliveryDays: number;
+    auditReviewDays: number;
+  };
+  candidates: DataRetentionCandidate[];
 }
 
 export interface DashboardOrganizationSummary {

@@ -2,7 +2,7 @@ import { getChecklist } from "@shared/server/checklist-service";
 import { listJobSites } from "@shared/server/job-site-service";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { ChecklistDetailView } from "@/views/admin-core/checklists/ChecklistDetailView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type { WorkspaceChecklistRecord, WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
 
 interface ChecklistDetailPageProps {

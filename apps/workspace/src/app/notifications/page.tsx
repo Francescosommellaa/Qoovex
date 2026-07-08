@@ -1,6 +1,6 @@
 import { listNotifications } from "@shared/server/notification-service";
 import { NotificationsPageView } from "@/views/admin-core/notifications/NotificationsPageView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 
 interface NotificationsPageProps {
   searchParams: Promise<{ filter?: string }>;

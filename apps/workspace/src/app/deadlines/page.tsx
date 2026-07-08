@@ -4,7 +4,7 @@ import { listJobSites } from "@shared/server/job-site-service";
 import { listWorkers } from "@shared/server/worker-service";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { DeadlinesPageView } from "@/views/admin-core/deadlines/DeadlinesPageView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type { WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
 export default async function DeadlinesPage() {

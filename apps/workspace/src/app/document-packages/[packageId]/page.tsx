@@ -7,7 +7,7 @@ import { listJobSites } from "@shared/server/job-site-service";
 import { listShareLinks } from "@shared/server/share-link-service";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { DocumentPackageDetailView } from "@/views/admin-core/document-packages/DocumentPackageDetailView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type {
   WorkspaceChecklistRecord,
   WorkspaceDocumentPackageRecord,

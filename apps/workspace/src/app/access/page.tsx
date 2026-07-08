@@ -6,7 +6,7 @@ import {
 } from "@shared/server/resource-assignment-service";
 import { AccessAssignmentsPageView } from "@/views/admin-core/access/AccessAssignmentsPageView";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 
 export default async function AccessPage() {
   try {

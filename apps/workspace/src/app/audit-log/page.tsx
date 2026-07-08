@@ -1,7 +1,7 @@
 import type { AuditLogFilters } from "@qoovex/types";
 import { listProductAuditEvents } from "@shared/server/product-audit-service";
 import { AuditLogPageView } from "@/views/admin-core/audit-log/AuditLogPageView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 
 interface AuditLogPageProps {
   searchParams: Promise<{

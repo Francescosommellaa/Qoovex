@@ -4,7 +4,7 @@ import { listJobSites } from "@shared/server/job-site-service";
 import { listWorkers } from "@shared/server/worker-service";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { DocumentsPageView } from "@/views/admin-core/documents/DocumentsPageView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type { WorkspaceDocumentRecord, WorkspaceDocumentTypeRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
 interface DocumentsPageProps {

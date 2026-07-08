@@ -4,7 +4,9 @@ Il workspace espone route API e la prima dashboard operativa.
 
 Route frontend attive:
 
-- `/`: redirect a `/dashboard`;
+- `/`: redirect a `/sign-in` se manca sessione, altrimenti a `/dashboard`;
+- `/sign-in`: accesso Credentials NextAuth;
+- `/sign-up`: registrazione Credentials con verifica email;
 - `/dashboard`: dashboard interna mobile-first per stato documentale, scadenze, cantieri, lavoratori, prove e pacchetti.
 - `/notifications`: notifiche interne e promemoria derivati da dati registrati;
 - `/documents`: lista e creazione documenti logici;
@@ -19,6 +21,9 @@ Route frontend attive:
 - `/evidence`: lista e creazione prove operative;
 - `/document-packages`: lista e creazione pacchetti documentali;
 - `/document-packages/[packageId]`: dettaglio pacchetto, item e share link.
+- `/access`: gestione collegamenti operativi e assegnazioni risorsa per OWNER/ADMIN;
+- `/audit-log`: audit prodotto owner-only;
+- `/data-control`: inventario dati, export metadata e retention operativa owner-only.
 
 Regole:
 

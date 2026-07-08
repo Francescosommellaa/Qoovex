@@ -6,7 +6,9 @@ Il dominio prodotto usa `Organization` come tenant canonico e "Azienda" come lab
 
 Contiene route API, NextAuth, servizi, repository, regole di dominio, dashboard operativa e workspace admin core mobile-first.
 
-La route `/dashboard` e la prima esperienza prodotto reale. La root `/` reindirizza alla dashboard. La dashboard legge un payload sintetico da service server-side e non espone `blobKey`, `tokenHash`, token raw o URL permanenti.
+Le route `/sign-in` e `/sign-up` rendono provabile il workspace con NextAuth Credentials. La root `/` manda utenti non autenticati al login e utenti autenticati alla dashboard. Se un utente autenticato non ha ancora una Organization attiva, la UI mostra il setup minimo azienda e usa `POST /api/organizations`.
+
+La route `/dashboard` e la prima esperienza prodotto reale. La dashboard legge un payload sintetico da service server-side e non espone `blobKey`, `tokenHash`, token raw o URL permanenti.
 
 Il workspace admin core espone pagine prodotto per `/documents`, `/deadlines`, `/workers` e `/job-sites`, con dettaglio documento/lavoratore/cantiere. L'estensione admin aggiunge `/checklists`, `/evidence` e `/document-packages`, inclusa gestione voci checklist, prove e share link. La pagina `/notifications` mostra promemoria interni derivati da scadenze registrate, stati documentali, pacchetti e share link. La rifinitura UX mantiene nav completa, layout mobile-first, empty state, error/loading states e controlli statici su copy e dati sensibili. Le mutation usano endpoint API gia protetti e la UI non invia `organizationId` dal client.
 
@@ -25,6 +27,8 @@ Le API Notifications e Reminders generano notifiche interne idempotenti da dati 
 La route `/audit-log` e l'API `/api/audit-log` espongono al solo `OWNER` un audit prodotto minimizzato. Gli eventi vengono scritti dai service server-side come best-effort e non salvano contenuti file, body email, token o riferimenti privati di storage. `next.config.ts` applica header HTTP base: nosniff, referrer policy, frame deny e permissions policy restrittiva.
 
 La route `/access` permette a `OWNER` e `ADMIN` di creare collegamenti operativi utente-lavoratore e assegnazioni cantiere. `SITE_MANAGER` e `WORKER` leggono solo risorse assegnate tramite filtri server-side; `VIEWER` resta fuori dal workspace admin.
+
+La route `/data-control` e le API `/api/data/*` sono owner-only e mostrano inventario dati, export metadata JSON e retention operativa. L'export non include file, allegati, `blobKey`, token, hash, URL Blob, body email o note libere escluse. La retention non cancella automaticamente nulla e non elimina Blob.
 
 Boundary:
 - i servizi server-specifici restano in `src/shared/server`;

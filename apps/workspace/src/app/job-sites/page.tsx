@@ -1,7 +1,7 @@
 import { listJobSites } from "@shared/server/job-site-service";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { JobSitesPageView } from "@/views/admin-core/job-sites/JobSitesPageView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type { WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
 
 export default async function JobSitesPage() {

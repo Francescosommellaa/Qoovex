@@ -52,7 +52,7 @@ import { hashShareToken } from "./share-token-service";
 import { getSharedDocumentPackage, getSharedPackageItemDownload } from "./shared-package-access-service";
 
 const now = new Date("2026-07-01T10:00:00.000Z");
-const future = new Date("2026-07-08T10:00:00.000Z");
+const future = new Date("2030-07-08T10:00:00.000Z");
 
 const packageRecord = {
   id: "package-1",

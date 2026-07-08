@@ -16,6 +16,7 @@ Regole:
 - ordine file secondo `docs/CodePatterns.md`.
 
 Endpoint dominio MVP attivi:
+- `auth/credentials`: registrazione credentials e verifica email per ingresso workspace;
 - `dashboard`: payload sintetico per la dashboard operativa interna;
 - `document-types`: tipi documento configurabili, senza preset normativi;
 - `documents`: documenti logici e versioni file con Blob privato;
@@ -34,4 +35,5 @@ Endpoint dominio MVP attivi:
 - `reminders/sync`: sync idempotente dei promemoria interni da dati registrati.
 - `reminders/email-digest/run`: endpoint schedulabile protetto da `QOOVEX_CRON_SECRET`, senza cron provider configurato qui.
 - `audit-log`: audit prodotto owner-only con metadata redatti e paginazione semplice.
+- `data`: inventario dati, export metadata JSON e retention operativa owner-only.
 - `resource-assignments`: collegamenti operativi e assegnazioni risorsa per scope granulare.

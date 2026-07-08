@@ -19,3 +19,4 @@ Regole:
 - ogni modello dominio deve riferirsi a `Organization`;
 - non introdurre mapping tenant legacy o colonne tenant con nomi non canonici.
 - `DATABASE_URL` deve restare in `.env` e non va loggato o committato.
+- modifiche enum audit addittive devono avere migration dedicata e non implicano reset DB.

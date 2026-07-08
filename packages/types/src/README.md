@@ -15,6 +15,7 @@ Metti qui:
 - DTO pubblici per preferenze email, delivery log e scheduling senza body email, provider internals sensibili o destinatari client-side.
 - DTO pubblici per audit log prodotto con metadata gia redatti.
 - DTO pubblici per assegnazioni risorsa e `my-scope` senza dati personali non necessari.
+- DTO pubblici per inventory, export metadata e retention senza file, token, blob key, URL permanenti o body email.
 
 Non mettere qui:
 - codice runtime;

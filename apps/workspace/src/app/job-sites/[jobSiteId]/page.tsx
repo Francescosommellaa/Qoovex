@@ -3,7 +3,7 @@ import { listDocuments } from "@shared/server/document-service";
 import { getJobSite } from "@shared/server/job-site-service";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { JobSiteDetailView } from "@/views/admin-core/job-sites/JobSiteDetailView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type { WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
 
 interface JobSiteDetailPageProps {

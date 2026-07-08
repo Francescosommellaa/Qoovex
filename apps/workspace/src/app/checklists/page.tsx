@@ -2,7 +2,7 @@ import { getChecklist, listChecklists } from "@shared/server/checklist-service";
 import { listJobSites } from "@shared/server/job-site-service";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { ChecklistsPageView } from "@/views/admin-core/checklists/ChecklistsPageView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type { WorkspaceChecklistRecord, WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
 
 export default async function ChecklistsPage() {
