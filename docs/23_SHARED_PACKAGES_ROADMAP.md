@@ -20,20 +20,14 @@ Contiene ruoli, permessi, enum e DTO condivisi. E il posto corretto per contratt
 
 Non deve contenere query DB, Prisma client, funzioni server-only o componenti React.
 
-## Package mancanti
-
 ### `packages/ui`
 
-Stato: non esiste.
+Stato: esistente e attivo dalla fase 39.
 
-Non crearlo ora.
+E stato creato perche esistono due consumer reali:
 
-Crearlo quando:
-
-- esistono componenti UI riusabili tra almeno due app;
-- `apps/sirio` deve mostrare il design system reale;
-- `apps/workspace` e `apps/web` iniziano a condividere primitive visuali;
-- token e base styles diventano canonici.
+- `apps/web`;
+- `apps/sirio`.
 
 Deve contenere:
 
@@ -53,13 +47,14 @@ Non deve contenere:
 - Prisma;
 - logica documenti/cantieri/lavoratori.
 
-Ordine consigliato:
+Ordine consigliato aggiornato:
 
-1. Avviare UI workspace reale.
-2. Identificare componenti ripetuti.
-3. Creare `packages/ui`.
-4. Far importare `apps/sirio` da `packages/ui`.
-5. Solo dopo, valutare consumo da `apps/web` e `apps/mobile`.
+1. Mantenere primitive generiche in `packages/ui`.
+2. Non migrare automaticamente la UI workspace finche resta app-specific.
+3. Far evolvere Sirio come showcase, non come sorgente canonica.
+4. Valutare nuovi componenti condivisi solo quando hanno riuso reale.
+
+## Package mancanti
 
 ### `packages/brand`
 
@@ -134,9 +129,7 @@ I server services restano app-local finche dipendono da auth, policy e runtime N
 
 ### `apps/web`
 
-Oggi e placeholder.
-
-In futuro dovrebbe importare solo package necessari per marketing:
+Oggi contiene la base marketing pubblica e importa solo package necessari per marketing:
 
 - `@qoovex/ui` se usa componenti condivisi;
 - `@qoovex/brand` per asset;
@@ -146,9 +139,7 @@ Non deve importare `@qoovex/db`.
 
 ### `apps/sirio`
 
-Oggi e placeholder.
-
-In futuro dovra mostrare, non possedere, il design system:
+Oggi mostra, non possiede, il design system:
 
 - importa da `@qoovex/ui`;
 - importa da `@qoovex/brand`;
@@ -169,9 +160,9 @@ Non deve contenere logica condivisa.
 
 ## Ordine consigliato
 
-1. Mantenere solo `packages/db` e `packages/types` finche il prodotto resta API-first.
-2. Quando parte UI workspace, creare componenti localmente se sono specifici.
-3. Quando un componente serve anche a `apps/sirio` o `apps/web`, creare `packages/ui`.
+1. Mantenere `packages/db`, `packages/types` e `packages/ui` come package attivi.
+2. Quando parte UI workspace, tenere componenti app-local se sono specifici.
+3. Quando un componente serve anche a `apps/sirio` o `apps/web`, valutarne l'ingresso in `packages/ui`.
 4. Quando esistono asset brand canonici, creare `packages/brand`.
 5. Quando due app duplicano config, creare `packages/config`.
 6. Quando utility pure sono duplicate, creare `packages/utils`.

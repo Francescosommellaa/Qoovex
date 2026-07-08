@@ -10,7 +10,8 @@
     "RESEND_REPLY_TO_EMAIL",
     "BLOB_READ_WRITE_TOKEN",
     "BLOB_STORE_ID",
-    "VERCEL_OIDC_TOKEN"
+    "VERCEL_OIDC_TOKEN",
+    "NEXT_PUBLIC_WORKSPACE_URL"
   ],
   "tasks": {
     "build": {
@@ -30,6 +31,7 @@
         "BLOB_READ_WRITE_TOKEN",
         "BLOB_STORE_ID",
         "VERCEL_OIDC_TOKEN",
+        "NEXT_PUBLIC_WORKSPACE_URL",
         "DEV_AUTH_SECRET",
         "QOOVEX_MFA_ENCRYPTION_KEY",
         "QOOVEX_MFA_COOKIE_SECRET"

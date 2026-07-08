@@ -1,22 +1,29 @@
 # Web App
 
-Placeholder per il futuro sito pubblico Qoovex.
+Sito marketing pubblico Qoovex.
 
-Responsabilita previste:
+## Stato
 
-- landing page;
-- marketing;
-- pagine pubbliche;
-- contenuto SEO;
-- eventuali form pubblici;
-- link verso il prodotto.
+Questa app contiene una base provvisoria, non la landing definitiva. Il copy e intenzionalmente prudente e non deriva da ricerca inventata.
 
-Divieti:
+## Responsabilita
 
-- niente Prisma;
-- niente query DB prodotto;
+- homepage pubblica;
+- SEO tecnico base;
+- link configurabile verso il workspace tramite `NEXT_PUBLIC_WORKSPACE_URL`;
+- uso di primitive condivise da `@qoovex/ui`.
+
+## Divieti
+
+- niente Prisma o `@qoovex/db`;
 - niente auth workspace;
-- niente servizi documenti, scadenze, cantieri o lavoratori;
-- niente tipi dominio duplicati.
+- niente servizi prodotto;
+- niente preset documentali, checklist, scadenze o obblighi;
+- niente pricing, testimonianze, casi studio o keyword research inventata.
 
-Quando servira UI condivisa, importare da `packages/ui` solo dopo che il package sara stato creato con un consumer reale.
+## Comandi
+
+```bash
+pnpm --filter @qoovex/web type-check
+pnpm --filter @qoovex/web build
+```

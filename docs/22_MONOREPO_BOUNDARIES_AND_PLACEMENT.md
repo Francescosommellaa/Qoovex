@@ -17,23 +17,23 @@ Questa fase non introduce feature prodotto, non sposta runtime in modo massivo, 
 ```txt
 apps/
   workspace/    # runtime Next.js API-only del prodotto
-  web/          # placeholder con .gitkeep
-  sirio/        # placeholder con .gitkeep
+  web/          # base sito marketing pubblico
+  sirio/        # showcase design system
   mobile/       # placeholder con .gitkeep
 
 packages/
   db/           # Prisma schema, migrations, client e utility DB server-only
   types/        # ruoli, permessi, enum e DTO condivisi
+  ui/           # primitive UI condivise e token CSS
 ```
 
 Package non presenti oggi:
 
-- `packages/ui`;
 - `packages/brand`;
 - `packages/config`;
 - `packages/utils`.
 
-La loro assenza e corretta finche non esiste una seconda app o un consumo reale che richieda estrazione condivisa.
+La loro assenza e corretta finche non esiste una seconda app o un consumo reale che richieda estrazione condivisa. `packages/ui` e stato creato nella fase 39 perche `apps/web` e `apps/sirio` sono diventati consumer reali.
 
 ## Struttura target
 
@@ -82,7 +82,7 @@ Stato attuale: coerente. I servizi `Document*`, `Deadline`, `Worker`, `JobSite`,
 
 Deve contenere solo sito pubblico e marketing.
 
-Stato attuale: placeholder vuoto, corretto.
+Stato attuale: base Next.js pubblica con copy provvisorio e componenti importati da `packages/ui`.
 
 Non deve contenere Prisma, route API prodotto, auth workspace, servizi documentali o tipi dominio duplicati.
 
@@ -90,9 +90,9 @@ Non deve contenere Prisma, route API prodotto, auth workspace, servizi documenta
 
 Deve diventare brandbook, showcase e preview.
 
-Stato attuale: placeholder vuoto, corretto.
+Stato attuale: showcase Next.js dei token e delle primitive importate da `packages/ui`.
 
-Quando verra avviato, dovra importare componenti veri da `packages/ui` e asset da `packages/brand`; non dovra essere la fonte canonica del design system.
+Sirio importa componenti veri da `packages/ui` e non deve diventare la fonte canonica del design system.
 
 ### `apps/mobile`
 
@@ -133,7 +133,7 @@ Stato attuale: coerente.
 
 ### Package futuri
 
-`packages/ui`, `packages/brand`, `packages/config` e `packages/utils` non esistono oggi. Non vanno creati come placeholder senza consumo reale.
+`packages/ui` esiste perche ha due consumer reali. `packages/brand`, `packages/config` e `packages/utils` non esistono oggi. Non vanno creati come placeholder senza consumo reale.
 
 ## Regole import
 
@@ -160,8 +160,8 @@ Ogni nuovo `@qoovex/*` usato da una app deve avere:
 ## Problemi trovati
 
 1. `turbo.json` non dichiarava ancora le variabili Blob nel set env, mentre `@qoovex/workspace` usa Vercel Blob per `DocumentVersion`.
-2. `apps/web`, `apps/sirio` e `apps/mobile` non avevano README dedicato; essendo placeholder, bastano README sintetici di confine.
-3. Le app placeholder non contengono codice, quindi non ci sono componenti, asset o utility da spostare ora.
+2. `apps/mobile` resta placeholder; `apps/web` e `apps/sirio` hanno README dedicati e app Next minime.
+3. La UI workspace resta app-local; non ci sono componenti workspace da spostare ora.
 4. Le occorrenze legacy rimaste devono essere limitate a divieti espliciti, report storici e test di guardrail.
 
 ## Cosa e gia corretto
@@ -185,7 +185,7 @@ Nulla. Questa sessione deve mettere in sicurezza regole e documentazione, non fa
 
 ## Cosa va spostato in futuro
 
-- Componenti UI ripetuti tra `apps/web`, `apps/workspace`, `apps/sirio` o `apps/mobile` verso `packages/ui`.
+- Componenti UI generici ripetuti tra app verso `packages/ui`.
 - Loghi, simboli e asset canonici verso `packages/brand`.
 - Config TypeScript, ESLint, Prettier o Tailwind condivise verso `packages/config`, solo se diventano realmente condivise.
 - Utility pure usate da piu app/package verso `packages/utils`.
@@ -199,8 +199,8 @@ Nulla. Questa sessione deve mettere in sicurezza regole e documentazione, non fa
 
 ## Decisioni consigliate
 
-1. Tenere `packages/db` e `packages/types` come unici package condivisi attivi.
-2. Non creare `packages/ui`, `packages/brand`, `packages/config` o `packages/utils` finche non esiste consumo reale.
+1. Tenere `packages/db`, `packages/types` e `packages/ui` come package condivisi attivi.
+2. Non creare `packages/brand`, `packages/config` o `packages/utils` finche non esiste consumo reale.
 3. Lasciare i servizi dominio in `apps/workspace/src/shared/server` finche sono specifici del runtime workspace.
 4. Usare `packages/types` per ogni nuovo contratto condiviso API/app.
-5. Ripetere questo audit prima di avviare UI, Sirio o app mobile.
+5. Ripetere questo audit prima di avviare app mobile o nuovi package condivisi.

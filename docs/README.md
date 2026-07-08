@@ -2,7 +2,7 @@
 
 Questa cartella contiene la documentazione di prodotto e lavoro del nuovo Qoovex.
 
-La fonte primaria e il set numerato `00`-`38`.
+La fonte primaria e il set numerato `00`-`39`.
 
 ## Ordine di lettura
 
@@ -44,6 +44,7 @@ La fonte primaria e il set numerato `00`-`38`.
 36. `36_RESOURCE_ASSIGNMENTS_AND_GRANULAR_ACCESS.md`: assegnazioni risorsa e accesso granulare per ruoli operativi.
 37. `37_AUTH_ACCESS_AND_WORKSPACE_ENTRY_FIX.md`: hotfix accesso workspace, sign-in/sign-up NextAuth e setup azienda.
 38. `38_DATA_RETENTION_EXPORT_AND_DELETION.md`: inventario dati, export metadata e retention operativa owner-only.
+39. `39_MARKETING_SIRIO_UI_FOUNDATION.md`: foundation marketing pubblico, Sirio e prime primitive `packages/ui`.
 
 ## Documenti rimossi
 

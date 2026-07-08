@@ -1,21 +1,29 @@
 # Sirio App
 
-Placeholder per futuro brandbook, showcase e preview del design system.
+Showcase tecnico del design system Qoovex.
 
-Sirio deve mostrare componenti e asset canonici, non diventarne la fonte.
+## Stato
 
-Responsabilita previste:
+Sirio mostra token e primitive importate da `@qoovex/ui`. Non e la fonte canonica dei componenti e non contiene business logic.
 
-- brandbook;
-- design system showcase;
-- preview componenti;
-- documentazione visiva.
+## Responsabilita
 
-Divieti:
+- mostrare token base;
+- mostrare Button, Card, Badge, Section e Container;
+- documentare esempi di stati operativi generici;
+- separare copy prudente da copy da evitare.
 
-- niente Prisma;
+## Divieti
+
+- niente Prisma o `@qoovex/db`;
 - niente auth workspace;
 - niente servizi prodotto;
-- niente componenti canonici duplicati.
+- niente preset documentali, checklist, scadenze o obblighi;
+- niente brand asset definitivi inventati.
 
-Quando esisteranno, Sirio dovra importare da `packages/ui` e `packages/brand`.
+## Comandi
+
+```bash
+pnpm --filter @qoovex/sirio type-check
+pnpm --filter @qoovex/sirio build
+```
