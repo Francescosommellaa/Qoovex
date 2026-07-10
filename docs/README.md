@@ -2,7 +2,7 @@
 
 Questa cartella contiene la documentazione di prodotto e lavoro del nuovo Qoovex.
 
-La fonte primaria e il set numerato `00`-`41`.
+La fonte primaria e il set numerato `00`-`42`.
 
 ## Ordine di lettura
 
@@ -47,6 +47,7 @@ La fonte primaria e il set numerato `00`-`41`.
 39. `39_MARKETING_SIRIO_UI_FOUNDATION.md`: foundation marketing pubblico, Sirio e prime primitive `packages/ui`.
 40. `40_TESTING_READINESS_PLAN.md`: backlog operativo dei test mancanti per E2E, Blob, share link anonimi, ruoli, env production e drift Prisma.
 41. `41_PRE_COMMERCIAL_OPERATIONS.md`: runbook pre-commerciale per legal draft, domini, Resend, cancellazione dati, backup/restore, monitoraggio Vercel e onboarding piloti.
+42. `42_CUSTOMER_SUPPORT_EXPORT_DELETION_LOGOUT_PROCEDURE.md`: procedura operativa cliente per supporto, export metadata, cancellazione organization e logout/offboarding.
 
 ## Documenti rimossi
 

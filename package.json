@@ -11,6 +11,7 @@
     "check:audit": "pnpm audit --prod",
     "check:fast": "pnpm type-check",
     "check:ci": "pnpm check",
+    "test:e2e": "playwright test",
     "test:unit": "turbo run test",
     "db:generate": "turbo run db:generate --filter=@qoovex/db",
     "db:push": "turbo run db:push --filter=@qoovex/db",
@@ -19,6 +20,7 @@
     "db:workspace": "turbo run db:workspace --filter=@qoovex/db"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "turbo": "^2.10.4"
   }
 }

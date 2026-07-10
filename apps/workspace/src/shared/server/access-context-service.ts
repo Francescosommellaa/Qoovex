@@ -6,8 +6,21 @@ import { auth } from "@shared/server/auth/config";
 import { AccessError } from "@shared/server/access-errors";
 import { getPermissionsForRole } from "@shared/server/authorization-policy";
 import { getActiveSupportSession } from "@shared/server/support-access-service";
+import { bootstrapDevUser } from "@shared/server/dev-auth";
 
 export async function requireIdentity() {
+  const devUser = await bootstrapDevUser();
+  if (devUser) {
+    return {
+      id: devUser.id,
+      email: devUser.email,
+      emailVerified: devUser.emailVerified,
+      platformRole: devUser.platformRole,
+      authVersion: devUser.authVersion,
+      mfaEnabled: devUser.mfaEnabled,
+    };
+  }
+
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) throw new AccessError("Sessione non valida.", 401);

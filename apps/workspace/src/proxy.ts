@@ -6,16 +6,13 @@ import {
   verifyDevAuthCookieValue,
 } from "@shared/lib/dev-auth-cookie";
 import { isDevAuthAllowedForHost } from "@shared/lib/dev-auth-guard";
+import { isPublicApiPath } from "@shared/lib/public-api-routes";
 
 const { auth } = NextAuth(authConfig);
 
-function isPublicApi(pathname: string) {
-  return pathname.startsWith("/api/auth/") || pathname === "/api/dev-auth" || pathname === "/api/data/jobs/run";
-}
-
 export const proxy = auth(async (request) => {
   const { pathname } = request.nextUrl;
-  if (isPublicApi(pathname)) return;
+  if (isPublicApiPath(pathname)) return;
 
   const host = request.headers.get("host") ?? request.nextUrl.host;
   const devAuthCookie = request.cookies.get(DEV_AUTH_COOKIE_NAME)?.value;

@@ -52,9 +52,11 @@ export async function findWorkspaceUserById(userId: string) {
       usernameOnboarded: true,
       profileOnboarded: true,
       email: true,
+      emailVerified: true,
       phoneNumber: true,
       mfaEnabled: true,
       platformRole: true,
+      authVersion: true,
       organizationMemberships: {
         where: { revokedAt: null },
         take: 1,

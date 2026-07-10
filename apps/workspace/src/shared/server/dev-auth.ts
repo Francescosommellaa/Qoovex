@@ -6,6 +6,7 @@ import {
   isDevAuthSecretConfigured,
   verifyDevAuthCookieValue,
 } from "@shared/lib/dev-auth-cookie";
+import { db } from "@qoovex/db";
 import { isDevAuthAllowedForHost } from "@shared/lib/dev-auth-guard";
 import { findWorkspaceUserById } from "@shared/server/repositories/user-repository";
 import { syncWorkspaceUser } from "@shared/server/workspace-user-sync";
@@ -19,6 +20,17 @@ const DEV_USER = {
   firstName: "Mario",
   lastName: "Rossi",
 };
+
+async function ensureDevUserEmailVerified(user: NonNullable<Awaited<ReturnType<typeof findWorkspaceUserById>>>) {
+  if (user.emailVerified) return user;
+  const emailVerified = new Date(0);
+  await db.user.update({
+    where: { id: user.id },
+    data: { emailVerified },
+    select: { id: true },
+  });
+  return { ...user, emailVerified };
+}
 
 export async function isDevAuthAllowed() {
   if (!isDevAuthSecretConfigured()) return false;
@@ -39,8 +51,9 @@ export async function bootstrapDevUser() {
 
   const existingUser = await findWorkspaceUserById(DEV_USER.id);
   if (existingUser) {
+    const verifiedUser = await ensureDevUserEmailVerified(existingUser);
     return {
-      ...existingUser,
+      ...verifiedUser,
       imageUrl: null,
       isAdmin: true,
     };
@@ -48,9 +61,12 @@ export async function bootstrapDevUser() {
 
   const user = await syncWorkspaceUser(DEV_USER);
   if (!user) return null;
+  const syncedUser = await findWorkspaceUserById(user.id);
+  if (!syncedUser) return null;
+  const verifiedUser = await ensureDevUserEmailVerified(syncedUser);
 
   return {
-    ...user,
+    ...verifiedUser,
     imageUrl: null,
     isAdmin: true,
   };
