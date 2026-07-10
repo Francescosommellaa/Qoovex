@@ -454,8 +454,8 @@ model JobSiteUserAssignment {
   user           User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
   assignedBy     User                      @relation("JobSiteUserAssignmentCreator", fields: [assignedById], references: [id], onDelete: Restrict)
 
-  @@index([organizationId, jobSiteId, assignmentRole, archivedAt])
-  @@index([organizationId, userId, assignmentRole, archivedAt])
+  @@index([organizationId, jobSiteId, assignmentRole, archivedAt], map: "JobSiteUserAssignment_org_job_role_archived_idx")
+  @@index([organizationId, userId, assignmentRole, archivedAt], map: "JobSiteUserAssignment_org_user_role_archived_idx")
   @@index([organizationId, createdAt])
   @@index([assignedById])
 }
@@ -474,8 +474,8 @@ model JobSiteWorkerAssignment {
   worker         Worker       @relation(fields: [workerId], references: [id], onDelete: Cascade)
   assignedBy     User         @relation("JobSiteWorkerAssignmentCreator", fields: [assignedById], references: [id], onDelete: Restrict)
 
-  @@index([organizationId, jobSiteId, archivedAt])
-  @@index([organizationId, workerId, archivedAt])
+  @@index([organizationId, jobSiteId, archivedAt], map: "JobSiteWorkerAssignment_org_job_archived_idx")
+  @@index([organizationId, workerId, archivedAt], map: "JobSiteWorkerAssignment_org_worker_archived_idx")
   @@index([organizationId, createdAt])
   @@index([assignedById])
 }
@@ -777,7 +777,7 @@ model NotificationPreference {
   user                 User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([organizationId, userId])
-  @@index([organizationId, emailDigestEnabled, emailDigestFrequency])
+  @@index([organizationId, emailDigestEnabled, emailDigestFrequency], map: "NotificationPreference_organizationId_emailDigestEnabled_emailD")
   @@index([userId, updatedAt])
 }
 
@@ -895,7 +895,7 @@ model ProductAuditEvent {
 
   @@index([organizationId, createdAt])
   @@index([organizationId, action, createdAt])
-  @@index([organizationId, entityType, entityId, createdAt])
+  @@index([organizationId, entityType, entityId, createdAt], map: "ProductAuditEvent_org_entity_entityId_created_idx")
   @@index([organizationId, outcome, createdAt])
   @@index([actorUserId, createdAt])
   @@index([supportSessionId, createdAt])
