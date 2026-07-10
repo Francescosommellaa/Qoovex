@@ -418,6 +418,7 @@ export const ModelName = {
   AuthCode: 'AuthCode',
   AuthRateLimit: 'AuthRateLimit',
   SecurityAuditEvent: 'SecurityAuditEvent',
+  RuntimeErrorEvent: 'RuntimeErrorEvent',
   AuthDevice: 'AuthDevice',
   MfaBackupCode: 'MfaBackupCode'
 } as const
@@ -435,7 +436,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "session" | "verificationToken" | "user" | "organization" | "worker" | "jobSite" | "workerUserLink" | "jobSiteUserAssignment" | "jobSiteWorkerAssignment" | "documentType" | "document" | "documentVersion" | "documentRequirement" | "deadline" | "checklist" | "checklistItem" | "evidence" | "documentPackage" | "documentPackageItem" | "shareLink" | "notification" | "notificationPreference" | "dataControlJob" | "notificationEmailDelivery" | "organizationMembership" | "organizationInvitation" | "supportSession" | "supportAuditEvent" | "productAuditEvent" | "userCredential" | "authCode" | "authRateLimit" | "securityAuditEvent" | "authDevice" | "mfaBackupCode"
+    modelProps: "account" | "session" | "verificationToken" | "user" | "organization" | "worker" | "jobSite" | "workerUserLink" | "jobSiteUserAssignment" | "jobSiteWorkerAssignment" | "documentType" | "document" | "documentVersion" | "documentRequirement" | "deadline" | "checklist" | "checklistItem" | "evidence" | "documentPackage" | "documentPackageItem" | "shareLink" | "notification" | "notificationPreference" | "dataControlJob" | "notificationEmailDelivery" | "organizationMembership" | "organizationInvitation" | "supportSession" | "supportAuditEvent" | "productAuditEvent" | "userCredential" | "authCode" | "authRateLimit" | "securityAuditEvent" | "runtimeErrorEvent" | "authDevice" | "mfaBackupCode"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2955,6 +2956,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RuntimeErrorEvent: {
+      payload: Prisma.$RuntimeErrorEventPayload<ExtArgs>
+      fields: Prisma.RuntimeErrorEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RuntimeErrorEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuntimeErrorEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RuntimeErrorEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuntimeErrorEventPayload>
+        }
+        findFirst: {
+          args: Prisma.RuntimeErrorEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuntimeErrorEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RuntimeErrorEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuntimeErrorEventPayload>
+        }
+        findMany: {
+          args: Prisma.RuntimeErrorEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuntimeErrorEventPayload>[]
+        }
+        create: {
+          args: Prisma.RuntimeErrorEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuntimeErrorEventPayload>
+        }
+        createMany: {
+          args: Prisma.RuntimeErrorEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RuntimeErrorEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuntimeErrorEventPayload>[]
+        }
+        delete: {
+          args: Prisma.RuntimeErrorEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuntimeErrorEventPayload>
+        }
+        update: {
+          args: Prisma.RuntimeErrorEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuntimeErrorEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.RuntimeErrorEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RuntimeErrorEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RuntimeErrorEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuntimeErrorEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.RuntimeErrorEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuntimeErrorEventPayload>
+        }
+        aggregate: {
+          args: Prisma.RuntimeErrorEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRuntimeErrorEvent>
+        }
+        groupBy: {
+          args: Prisma.RuntimeErrorEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RuntimeErrorEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RuntimeErrorEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RuntimeErrorEventCountAggregateOutputType> | number
+        }
+      }
+    }
     AuthDevice: {
       payload: Prisma.$AuthDevicePayload<ExtArgs>
       fields: Prisma.AuthDeviceFieldRefs
@@ -3194,6 +3269,8 @@ export const UserScalarFieldEnum = {
   phoneNumber: 'phoneNumber',
   platformRole: 'platformRole',
   authVersion: 'authVersion',
+  suspendedAt: 'suspendedAt',
+  suspensionReason: 'suspensionReason',
   mfaEnabled: 'mfaEnabled',
   totpSecretEncrypted: 'totpSecretEncrypted',
   totpSecretNonce: 'totpSecretNonce',
@@ -3690,6 +3767,29 @@ export const SecurityAuditEventScalarFieldEnum = {
 } as const
 
 export type SecurityAuditEventScalarFieldEnum = (typeof SecurityAuditEventScalarFieldEnum)[keyof typeof SecurityAuditEventScalarFieldEnum]
+
+
+export const RuntimeErrorEventScalarFieldEnum = {
+  id: 'id',
+  fingerprint: 'fingerprint',
+  status: 'status',
+  source: 'source',
+  routePath: 'routePath',
+  requestMethod: 'requestMethod',
+  errorName: 'errorName',
+  message: 'message',
+  stackPreview: 'stackPreview',
+  digest: 'digest',
+  lastRequestId: 'lastRequestId',
+  occurrenceCount: 'occurrenceCount',
+  firstSeenAt: 'firstSeenAt',
+  lastSeenAt: 'lastSeenAt',
+  resolvedAt: 'resolvedAt',
+  resolvedById: 'resolvedById',
+  resolutionNote: 'resolutionNote'
+} as const
+
+export type RuntimeErrorEventScalarFieldEnum = (typeof RuntimeErrorEventScalarFieldEnum)[keyof typeof RuntimeErrorEventScalarFieldEnum]
 
 
 export const AuthDeviceScalarFieldEnum = {
@@ -4207,6 +4307,20 @@ export type ListEnumAuthCodePurposeFieldRefInput<$PrismaModel> = FieldRefInputTy
 
 
 /**
+ * Reference to a field of type 'RuntimeErrorStatus'
+ */
+export type EnumRuntimeErrorStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuntimeErrorStatus'>
+
+
+
+/**
+ * Reference to a field of type 'RuntimeErrorStatus[]'
+ */
+export type ListEnumRuntimeErrorStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuntimeErrorStatus[]'>
+
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -4363,6 +4477,7 @@ export type GlobalOmitConfig = {
   authCode?: Prisma.AuthCodeOmit
   authRateLimit?: Prisma.AuthRateLimitOmit
   securityAuditEvent?: Prisma.SecurityAuditEventOmit
+  runtimeErrorEvent?: Prisma.RuntimeErrorEventOmit
   authDevice?: Prisma.AuthDeviceOmit
   mfaBackupCode?: Prisma.MfaBackupCodeOmit
 }
@@ -4427,4 +4542,3 @@ export type PrismaAction =
  * `PrismaClient` proxy available in interactive transactions.
  */
 export type TransactionClient = Omit<DefaultPrismaClient, runtime.ITXClientDenyList>
-

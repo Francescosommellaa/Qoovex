@@ -729,6 +729,23 @@ export type EnumAuthCodePurposeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAuthCodePurposeFilter<$PrismaModel>
 }
 
+export type EnumRuntimeErrorStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.RuntimeErrorStatus | Prisma.EnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.RuntimeErrorStatus[] | Prisma.ListEnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RuntimeErrorStatus[] | Prisma.ListEnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRuntimeErrorStatusFilter<$PrismaModel> | $Enums.RuntimeErrorStatus
+}
+
+export type EnumRuntimeErrorStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RuntimeErrorStatus | Prisma.EnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.RuntimeErrorStatus[] | Prisma.ListEnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RuntimeErrorStatus[] | Prisma.ListEnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRuntimeErrorStatusWithAggregatesFilter<$PrismaModel> | $Enums.RuntimeErrorStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRuntimeErrorStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRuntimeErrorStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1428,6 +1445,23 @@ export type NestedEnumAuthCodePurposeWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAuthCodePurposeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAuthCodePurposeFilter<$PrismaModel>
+}
+
+export type NestedEnumRuntimeErrorStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.RuntimeErrorStatus | Prisma.EnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.RuntimeErrorStatus[] | Prisma.ListEnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RuntimeErrorStatus[] | Prisma.ListEnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRuntimeErrorStatusFilter<$PrismaModel> | $Enums.RuntimeErrorStatus
+}
+
+export type NestedEnumRuntimeErrorStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RuntimeErrorStatus | Prisma.EnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.RuntimeErrorStatus[] | Prisma.ListEnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RuntimeErrorStatus[] | Prisma.ListEnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRuntimeErrorStatusWithAggregatesFilter<$PrismaModel> | $Enums.RuntimeErrorStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRuntimeErrorStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRuntimeErrorStatusFilter<$PrismaModel>
 }
 
 

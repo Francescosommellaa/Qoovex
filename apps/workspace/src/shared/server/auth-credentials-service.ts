@@ -285,6 +285,7 @@ export async function authorizeCredentials(input: {
       emailVerified: true,
       name: true,
       image: true,
+      suspendedAt: true,
       credential: {
         select: {
           passwordHash: true,
@@ -295,10 +296,10 @@ export async function authorizeCredentials(input: {
   });
 
   const valid = await verifyPassword(input.password, user?.credential?.passwordHash ?? null);
-  if (!user || !valid || user.credential?.passwordResetRequired) {
+  if (!user || !valid || user.suspendedAt || user.credential?.passwordResetRequired) {
     await recordSecurityEvent({
       email: identifier.includes("@") ? identifier : null,
-      type: "credentials_signin_failed",
+      type: user?.suspendedAt ? "credentials_signin_suspended" : "credentials_signin_failed",
       ipHash: input.ipHash,
     });
     return null;

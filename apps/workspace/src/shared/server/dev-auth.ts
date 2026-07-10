@@ -3,7 +3,6 @@ import "server-only";
 import { cookies, headers } from "next/headers";
 import {
   DEV_AUTH_COOKIE_NAME,
-  isDevAuthSecretConfigured,
   verifyDevAuthCookieValue,
 } from "@shared/lib/dev-auth-cookie";
 import { db } from "@qoovex/db";
@@ -13,8 +12,10 @@ import { syncWorkspaceUser } from "@shared/server/workspace-user-sync";
 
 export { DEV_AUTH_COOKIE_NAME } from "@shared/lib/dev-auth-cookie";
 
+export const DEV_USER_ID = "dev_qoovex_local_user";
+
 const DEV_USER = {
-  id: "dev_qoovex_local_user",
+  id: DEV_USER_ID,
   email: "mario.rossi.dev.profile.email.molto.lunga@qoovex.local",
   username: "dev_mario_rossi",
   firstName: "Mario",
@@ -33,8 +34,6 @@ async function ensureDevUserEmailVerified(user: NonNullable<Awaited<ReturnType<t
 }
 
 export async function isDevAuthAllowed() {
-  if (!isDevAuthSecretConfigured()) return false;
-
   const headerStore = await headers();
   return isDevAuthAllowedForHost(headerStore.get("host"));
 }
@@ -54,6 +53,9 @@ export async function bootstrapDevUser() {
     const verifiedUser = await ensureDevUserEmailVerified(existingUser);
     return {
       ...verifiedUser,
+      platformRole: "SUPER_ADMIN" as const,
+      suspendedAt: null,
+      suspensionReason: null,
       imageUrl: null,
       isAdmin: true,
     };
@@ -67,7 +69,14 @@ export async function bootstrapDevUser() {
 
   return {
     ...verifiedUser,
+    platformRole: "SUPER_ADMIN" as const,
+    suspendedAt: null,
+    suspensionReason: null,
     imageUrl: null,
     isAdmin: true,
   };
+}
+
+export async function isCurrentDevAuthIdentity(userId: string) {
+  return userId === DEV_USER_ID && (await hasDevAuthSession());
 }

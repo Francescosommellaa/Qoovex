@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
-import { auth } from "@shared/server/auth/config";
+import { bootstrapUser } from "@shared/server/current-user-service";
 
 export default async function RootPage() {
-  const session = await auth();
-  if (!session?.user?.id) redirect("/sign-in?callbackUrl=%2Fdashboard");
+  const user = await bootstrapUser();
+  if (!user) redirect("/sign-in?callbackUrl=%2Fdashboard");
+  if (user.platformRole === "SUPER_ADMIN") redirect("/qoovex-admin");
   redirect("/dashboard");
 }

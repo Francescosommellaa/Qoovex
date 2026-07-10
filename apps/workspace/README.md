@@ -6,7 +6,11 @@ Il dominio prodotto usa `Organization` come tenant canonico e "Azienda" come lab
 
 Contiene route API, NextAuth, servizi, repository, regole di dominio, dashboard operativa e workspace admin core mobile-first.
 
+La route privata `/qoovex-admin` e la relativa API `/api/platform-admin/*` formano la Console Qoovex per `SUPER_ADMIN`, visibile come Operatore Qoovex. Include gestione prudente degli account, supporto auditato e registro Prisma aggregato degli errori server; non espone credenziali, token o contenuti documentali.
+
 Le route `/sign-in` e `/sign-up` rendono provabile il workspace con NextAuth Credentials. La root `/` manda utenti non autenticati al login e utenti autenticati alla dashboard. Se un utente autenticato non ha ancora una Organization attiva, la UI mostra il setup minimo azienda e usa `POST /api/organizations`.
+
+In development locale la pagina `/sign-in` mostra `Accedi come dev` soltanto su host loopback. Il cookie firmato richiede `DEV_AUTH_SECRET` e attribuisce `SUPER_ADMIN` solo a runtime all'identita seed, senza modificare il ruolo persistito.
 
 La route `/dashboard` e la prima esperienza prodotto reale. La dashboard legge un payload sintetico da service server-side e non espone `blobKey`, `tokenHash`, token raw o URL permanenti.
 

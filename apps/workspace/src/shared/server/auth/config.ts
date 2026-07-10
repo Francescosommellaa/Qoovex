@@ -51,20 +51,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.sub = user.id;
         const [credential, identity] = await Promise.all([
           db.userCredential.findUnique({ where: { userId: user.id }, select: { passwordUpdatedAt: true } }),
-          db.user.findUnique({ where: { id: user.id }, select: { authVersion: true, platformRole: true } }),
+          db.user.findUnique({ where: { id: user.id }, select: { authVersion: true, platformRole: true, suspendedAt: true } }),
         ]);
         token.passwordUpdatedAt = credential?.passwordUpdatedAt.toISOString() ?? null;
-        token.authVersion = identity?.authVersion ?? 1;
-        token.platformRole = identity?.platformRole ?? "USER";
+        if (!identity || identity.suspendedAt) {
+          token.sub = undefined;
+        } else {
+          token.authVersion = identity.authVersion;
+          token.platformRole = identity.platformRole;
+        }
       } else if (token.sub) {
         const [credential, identity] = await Promise.all([
           db.userCredential.findUnique({ where: { userId: token.sub }, select: { passwordUpdatedAt: true } }),
-          db.user.findUnique({ where: { id: token.sub }, select: { authVersion: true, platformRole: true } }),
+          db.user.findUnique({ where: { id: token.sub }, select: { authVersion: true, platformRole: true, suspendedAt: true } }),
         ]);
         const currentPasswordUpdatedAt =
           credential?.passwordUpdatedAt.toISOString() ?? null;
         if (
-          !identity ||
+          !identity || identity.suspendedAt ||
           (token.passwordUpdatedAt && currentPasswordUpdatedAt !== token.passwordUpdatedAt) ||
           identity.authVersion !== token.authVersion
         ) {
@@ -86,6 +90,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async signIn({ user, account, profile }) {
       if (!user.id) return false;
+      const identity = await db.user.findUnique({ where: { id: user.id }, select: { suspendedAt: true } });
+      if (identity?.suspendedAt) {
+        await recordSecurityEvent({ userId: user.id, email: user.email, type: "signin_suspended" });
+        return false;
+      }
       if (account?.provider === "google") {
         const googleProfile = profile as { email_verified?: boolean } | undefined;
         if (googleProfile?.email_verified === false) {

@@ -343,3 +343,11 @@ export const DataControlJobStatus = {
 } as const
 
 export type DataControlJobStatus = (typeof DataControlJobStatus)[keyof typeof DataControlJobStatus]
+
+
+export const RuntimeErrorStatus = {
+  OPEN: 'OPEN',
+  RESOLVED: 'RESOLVED'
+} as const
+
+export type RuntimeErrorStatus = (typeof RuntimeErrorStatus)[keyof typeof RuntimeErrorStatus]

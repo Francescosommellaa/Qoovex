@@ -49,6 +49,8 @@ export type UserMinAggregateOutputType = {
   phoneNumber: string | null
   platformRole: $Enums.PlatformRole | null
   authVersion: number | null
+  suspendedAt: Date | null
+  suspensionReason: string | null
   mfaEnabled: boolean | null
   totpSecretEncrypted: string | null
   totpSecretNonce: string | null
@@ -76,6 +78,8 @@ export type UserMaxAggregateOutputType = {
   phoneNumber: string | null
   platformRole: $Enums.PlatformRole | null
   authVersion: number | null
+  suspendedAt: Date | null
+  suspensionReason: string | null
   mfaEnabled: boolean | null
   totpSecretEncrypted: string | null
   totpSecretNonce: string | null
@@ -103,6 +107,8 @@ export type UserCountAggregateOutputType = {
   phoneNumber: number
   platformRole: number
   authVersion: number
+  suspendedAt: number
+  suspensionReason: number
   mfaEnabled: number
   totpSecretEncrypted: number
   totpSecretNonce: number
@@ -140,6 +146,8 @@ export type UserMinAggregateInputType = {
   phoneNumber?: true
   platformRole?: true
   authVersion?: true
+  suspendedAt?: true
+  suspensionReason?: true
   mfaEnabled?: true
   totpSecretEncrypted?: true
   totpSecretNonce?: true
@@ -167,6 +175,8 @@ export type UserMaxAggregateInputType = {
   phoneNumber?: true
   platformRole?: true
   authVersion?: true
+  suspendedAt?: true
+  suspensionReason?: true
   mfaEnabled?: true
   totpSecretEncrypted?: true
   totpSecretNonce?: true
@@ -194,6 +204,8 @@ export type UserCountAggregateInputType = {
   phoneNumber?: true
   platformRole?: true
   authVersion?: true
+  suspendedAt?: true
+  suspensionReason?: true
   mfaEnabled?: true
   totpSecretEncrypted?: true
   totpSecretNonce?: true
@@ -308,6 +320,8 @@ export type UserGroupByOutputType = {
   phoneNumber: string | null
   platformRole: $Enums.PlatformRole
   authVersion: number
+  suspendedAt: Date | null
+  suspensionReason: string | null
   mfaEnabled: boolean
   totpSecretEncrypted: string | null
   totpSecretNonce: string | null
@@ -358,6 +372,8 @@ export type UserWhereInput = {
   phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
   platformRole?: Prisma.EnumPlatformRoleFilter<"User"> | $Enums.PlatformRole
   authVersion?: Prisma.IntFilter<"User"> | number
+  suspendedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  suspensionReason?: Prisma.StringNullableFilter<"User"> | string | null
   mfaEnabled?: Prisma.BoolFilter<"User"> | boolean
   totpSecretEncrypted?: Prisma.StringNullableFilter<"User"> | string | null
   totpSecretNonce?: Prisma.StringNullableFilter<"User"> | string | null
@@ -391,6 +407,7 @@ export type UserWhereInput = {
   notificationPreferences?: Prisma.NotificationPreferenceListRelationFilter
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryListRelationFilter
   requestedDataControlJobs?: Prisma.DataControlJobListRelationFilter
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventListRelationFilter
   workerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentListRelationFilter
@@ -413,6 +430,8 @@ export type UserOrderByWithRelationInput = {
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   platformRole?: Prisma.SortOrder
   authVersion?: Prisma.SortOrder
+  suspendedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  suspensionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   mfaEnabled?: Prisma.SortOrder
   totpSecretEncrypted?: Prisma.SortOrderInput | Prisma.SortOrder
   totpSecretNonce?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -446,6 +465,7 @@ export type UserOrderByWithRelationInput = {
   notificationPreferences?: Prisma.NotificationPreferenceOrderByRelationAggregateInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryOrderByRelationAggregateInput
   requestedDataControlJobs?: Prisma.DataControlJobOrderByRelationAggregateInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventOrderByRelationAggregateInput
   workerUserLinks?: Prisma.WorkerUserLinkOrderByRelationAggregateInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkOrderByRelationAggregateInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentOrderByRelationAggregateInput
@@ -471,6 +491,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
   platformRole?: Prisma.EnumPlatformRoleFilter<"User"> | $Enums.PlatformRole
   authVersion?: Prisma.IntFilter<"User"> | number
+  suspendedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  suspensionReason?: Prisma.StringNullableFilter<"User"> | string | null
   mfaEnabled?: Prisma.BoolFilter<"User"> | boolean
   totpSecretEncrypted?: Prisma.StringNullableFilter<"User"> | string | null
   totpSecretNonce?: Prisma.StringNullableFilter<"User"> | string | null
@@ -504,6 +526,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notificationPreferences?: Prisma.NotificationPreferenceListRelationFilter
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryListRelationFilter
   requestedDataControlJobs?: Prisma.DataControlJobListRelationFilter
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventListRelationFilter
   workerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentListRelationFilter
@@ -526,6 +549,8 @@ export type UserOrderByWithAggregationInput = {
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   platformRole?: Prisma.SortOrder
   authVersion?: Prisma.SortOrder
+  suspendedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  suspensionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   mfaEnabled?: Prisma.SortOrder
   totpSecretEncrypted?: Prisma.SortOrderInput | Prisma.SortOrder
   totpSecretNonce?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -561,6 +586,8 @@ export type UserScalarWhereWithAggregatesInput = {
   phoneNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   platformRole?: Prisma.EnumPlatformRoleWithAggregatesFilter<"User"> | $Enums.PlatformRole
   authVersion?: Prisma.IntWithAggregatesFilter<"User"> | number
+  suspendedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  suspensionReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   mfaEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   totpSecretEncrypted?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   totpSecretNonce?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -588,6 +615,8 @@ export type UserCreateInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -621,6 +650,7 @@ export type UserCreateInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -643,6 +673,8 @@ export type UserUncheckedCreateInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -676,6 +708,7 @@ export type UserUncheckedCreateInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -698,6 +731,8 @@ export type UserUpdateInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -731,6 +766,7 @@ export type UserUpdateInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -753,6 +789,8 @@ export type UserUncheckedUpdateInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -786,6 +824,7 @@ export type UserUncheckedUpdateInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -808,6 +847,8 @@ export type UserCreateManyInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -835,6 +876,8 @@ export type UserUpdateManyMutationInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -862,6 +905,8 @@ export type UserUncheckedUpdateManyInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -894,6 +939,8 @@ export type UserCountOrderByAggregateInput = {
   phoneNumber?: Prisma.SortOrder
   platformRole?: Prisma.SortOrder
   authVersion?: Prisma.SortOrder
+  suspendedAt?: Prisma.SortOrder
+  suspensionReason?: Prisma.SortOrder
   mfaEnabled?: Prisma.SortOrder
   totpSecretEncrypted?: Prisma.SortOrder
   totpSecretNonce?: Prisma.SortOrder
@@ -925,6 +972,8 @@ export type UserMaxOrderByAggregateInput = {
   phoneNumber?: Prisma.SortOrder
   platformRole?: Prisma.SortOrder
   authVersion?: Prisma.SortOrder
+  suspendedAt?: Prisma.SortOrder
+  suspensionReason?: Prisma.SortOrder
   mfaEnabled?: Prisma.SortOrder
   totpSecretEncrypted?: Prisma.SortOrder
   totpSecretNonce?: Prisma.SortOrder
@@ -952,6 +1001,8 @@ export type UserMinOrderByAggregateInput = {
   phoneNumber?: Prisma.SortOrder
   platformRole?: Prisma.SortOrder
   authVersion?: Prisma.SortOrder
+  suspendedAt?: Prisma.SortOrder
+  suspensionReason?: Prisma.SortOrder
   mfaEnabled?: Prisma.SortOrder
   totpSecretEncrypted?: Prisma.SortOrder
   totpSecretNonce?: Prisma.SortOrder
@@ -1371,6 +1422,22 @@ export type UserUpdateOneWithoutSecurityEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSecurityEventsInput, Prisma.UserUpdateWithoutSecurityEventsInput>, Prisma.UserUncheckedUpdateWithoutSecurityEventsInput>
 }
 
+export type UserCreateNestedOneWithoutResolvedRuntimeErrorsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutResolvedRuntimeErrorsInput, Prisma.UserUncheckedCreateWithoutResolvedRuntimeErrorsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutResolvedRuntimeErrorsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutResolvedRuntimeErrorsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutResolvedRuntimeErrorsInput, Prisma.UserUncheckedCreateWithoutResolvedRuntimeErrorsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutResolvedRuntimeErrorsInput
+  upsert?: Prisma.UserUpsertWithoutResolvedRuntimeErrorsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutResolvedRuntimeErrorsInput, Prisma.UserUpdateWithoutResolvedRuntimeErrorsInput>, Prisma.UserUncheckedUpdateWithoutResolvedRuntimeErrorsInput>
+}
+
 export type UserCreateNestedOneWithoutAuthDevicesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAuthDevicesInput, Prisma.UserUncheckedCreateWithoutAuthDevicesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthDevicesInput
@@ -1414,6 +1481,8 @@ export type UserCreateWithoutAccountsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -1446,6 +1515,7 @@ export type UserCreateWithoutAccountsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -1468,6 +1538,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -1500,6 +1572,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -1538,6 +1611,8 @@ export type UserUpdateWithoutAccountsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1570,6 +1645,7 @@ export type UserUpdateWithoutAccountsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -1592,6 +1668,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1624,6 +1702,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -1646,6 +1725,8 @@ export type UserCreateWithoutSessionsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -1678,6 +1759,7 @@ export type UserCreateWithoutSessionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -1700,6 +1782,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -1732,6 +1816,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -1770,6 +1855,8 @@ export type UserUpdateWithoutSessionsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1802,6 +1889,7 @@ export type UserUpdateWithoutSessionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -1824,6 +1912,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1856,6 +1946,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -1878,6 +1969,8 @@ export type UserCreateWithoutCreatedOrganizationsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -1910,6 +2003,7 @@ export type UserCreateWithoutCreatedOrganizationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -1932,6 +2026,8 @@ export type UserUncheckedCreateWithoutCreatedOrganizationsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -1964,6 +2060,7 @@ export type UserUncheckedCreateWithoutCreatedOrganizationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -2002,6 +2099,8 @@ export type UserUpdateWithoutCreatedOrganizationsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2034,6 +2133,7 @@ export type UserUpdateWithoutCreatedOrganizationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -2056,6 +2156,8 @@ export type UserUncheckedUpdateWithoutCreatedOrganizationsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2088,6 +2190,7 @@ export type UserUncheckedUpdateWithoutCreatedOrganizationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -2110,6 +2213,8 @@ export type UserCreateWithoutWorkerUserLinksInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2143,6 +2248,7 @@ export type UserCreateWithoutWorkerUserLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
@@ -2164,6 +2270,8 @@ export type UserUncheckedCreateWithoutWorkerUserLinksInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2197,6 +2305,7 @@ export type UserUncheckedCreateWithoutWorkerUserLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
@@ -2223,6 +2332,8 @@ export type UserCreateWithoutLinkedWorkerUserLinksInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2256,6 +2367,7 @@ export type UserCreateWithoutLinkedWorkerUserLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
@@ -2277,6 +2389,8 @@ export type UserUncheckedCreateWithoutLinkedWorkerUserLinksInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2310,6 +2424,7 @@ export type UserUncheckedCreateWithoutLinkedWorkerUserLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
@@ -2347,6 +2462,8 @@ export type UserUpdateWithoutWorkerUserLinksInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2380,6 +2497,7 @@ export type UserUpdateWithoutWorkerUserLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
@@ -2401,6 +2519,8 @@ export type UserUncheckedUpdateWithoutWorkerUserLinksInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2434,6 +2554,7 @@ export type UserUncheckedUpdateWithoutWorkerUserLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
@@ -2466,6 +2587,8 @@ export type UserUpdateWithoutLinkedWorkerUserLinksInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2499,6 +2622,7 @@ export type UserUpdateWithoutLinkedWorkerUserLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
@@ -2520,6 +2644,8 @@ export type UserUncheckedUpdateWithoutLinkedWorkerUserLinksInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2553,6 +2679,7 @@ export type UserUncheckedUpdateWithoutLinkedWorkerUserLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
@@ -2574,6 +2701,8 @@ export type UserCreateWithoutJobSiteUserAssignmentsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2607,6 +2736,7 @@ export type UserCreateWithoutJobSiteUserAssignmentsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
@@ -2628,6 +2758,8 @@ export type UserUncheckedCreateWithoutJobSiteUserAssignmentsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2661,6 +2793,7 @@ export type UserUncheckedCreateWithoutJobSiteUserAssignmentsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
@@ -2687,6 +2820,8 @@ export type UserCreateWithoutAssignedJobSiteUsersInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2720,6 +2855,7 @@ export type UserCreateWithoutAssignedJobSiteUsersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -2741,6 +2877,8 @@ export type UserUncheckedCreateWithoutAssignedJobSiteUsersInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2774,6 +2912,7 @@ export type UserUncheckedCreateWithoutAssignedJobSiteUsersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -2811,6 +2950,8 @@ export type UserUpdateWithoutJobSiteUserAssignmentsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2844,6 +2985,7 @@ export type UserUpdateWithoutJobSiteUserAssignmentsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
@@ -2865,6 +3007,8 @@ export type UserUncheckedUpdateWithoutJobSiteUserAssignmentsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2898,6 +3042,7 @@ export type UserUncheckedUpdateWithoutJobSiteUserAssignmentsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
@@ -2930,6 +3075,8 @@ export type UserUpdateWithoutAssignedJobSiteUsersInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2963,6 +3110,7 @@ export type UserUpdateWithoutAssignedJobSiteUsersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -2984,6 +3132,8 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteUsersInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3017,6 +3167,7 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteUsersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -3038,6 +3189,8 @@ export type UserCreateWithoutAssignedJobSiteWorkersInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3071,6 +3224,7 @@ export type UserCreateWithoutAssignedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -3092,6 +3246,8 @@ export type UserUncheckedCreateWithoutAssignedJobSiteWorkersInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3125,6 +3281,7 @@ export type UserUncheckedCreateWithoutAssignedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -3162,6 +3319,8 @@ export type UserUpdateWithoutAssignedJobSiteWorkersInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3195,6 +3354,7 @@ export type UserUpdateWithoutAssignedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -3216,6 +3376,8 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteWorkersInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3249,6 +3411,7 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -3270,6 +3433,8 @@ export type UserCreateWithoutReviewedDocumentsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3302,6 +3467,7 @@ export type UserCreateWithoutReviewedDocumentsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -3324,6 +3490,8 @@ export type UserUncheckedCreateWithoutReviewedDocumentsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3356,6 +3524,7 @@ export type UserUncheckedCreateWithoutReviewedDocumentsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -3394,6 +3563,8 @@ export type UserUpdateWithoutReviewedDocumentsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3426,6 +3597,7 @@ export type UserUpdateWithoutReviewedDocumentsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -3448,6 +3620,8 @@ export type UserUncheckedUpdateWithoutReviewedDocumentsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3480,6 +3654,7 @@ export type UserUncheckedUpdateWithoutReviewedDocumentsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -3502,6 +3677,8 @@ export type UserCreateWithoutUploadedDocumentVersionsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3534,6 +3711,7 @@ export type UserCreateWithoutUploadedDocumentVersionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -3556,6 +3734,8 @@ export type UserUncheckedCreateWithoutUploadedDocumentVersionsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3588,6 +3768,7 @@ export type UserUncheckedCreateWithoutUploadedDocumentVersionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -3626,6 +3807,8 @@ export type UserUpdateWithoutUploadedDocumentVersionsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3658,6 +3841,7 @@ export type UserUpdateWithoutUploadedDocumentVersionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -3680,6 +3864,8 @@ export type UserUncheckedUpdateWithoutUploadedDocumentVersionsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3712,6 +3898,7 @@ export type UserUncheckedUpdateWithoutUploadedDocumentVersionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -3734,6 +3921,8 @@ export type UserCreateWithoutCompletedChecklistItemsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3766,6 +3955,7 @@ export type UserCreateWithoutCompletedChecklistItemsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -3788,6 +3978,8 @@ export type UserUncheckedCreateWithoutCompletedChecklistItemsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3820,6 +4012,7 @@ export type UserUncheckedCreateWithoutCompletedChecklistItemsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -3858,6 +4051,8 @@ export type UserUpdateWithoutCompletedChecklistItemsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3890,6 +4085,7 @@ export type UserUpdateWithoutCompletedChecklistItemsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -3912,6 +4108,8 @@ export type UserUncheckedUpdateWithoutCompletedChecklistItemsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3944,6 +4142,7 @@ export type UserUncheckedUpdateWithoutCompletedChecklistItemsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -3966,6 +4165,8 @@ export type UserCreateWithoutCreatedEvidenceInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3998,6 +4199,7 @@ export type UserCreateWithoutCreatedEvidenceInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -4020,6 +4222,8 @@ export type UserUncheckedCreateWithoutCreatedEvidenceInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4052,6 +4256,7 @@ export type UserUncheckedCreateWithoutCreatedEvidenceInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -4090,6 +4295,8 @@ export type UserUpdateWithoutCreatedEvidenceInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4122,6 +4329,7 @@ export type UserUpdateWithoutCreatedEvidenceInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -4144,6 +4352,8 @@ export type UserUncheckedUpdateWithoutCreatedEvidenceInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4176,6 +4386,7 @@ export type UserUncheckedUpdateWithoutCreatedEvidenceInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -4198,6 +4409,8 @@ export type UserCreateWithoutCreatedDocumentPackagesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4230,6 +4443,7 @@ export type UserCreateWithoutCreatedDocumentPackagesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -4252,6 +4466,8 @@ export type UserUncheckedCreateWithoutCreatedDocumentPackagesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4284,6 +4500,7 @@ export type UserUncheckedCreateWithoutCreatedDocumentPackagesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -4322,6 +4539,8 @@ export type UserUpdateWithoutCreatedDocumentPackagesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4354,6 +4573,7 @@ export type UserUpdateWithoutCreatedDocumentPackagesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -4376,6 +4596,8 @@ export type UserUncheckedUpdateWithoutCreatedDocumentPackagesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4408,6 +4630,7 @@ export type UserUncheckedUpdateWithoutCreatedDocumentPackagesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -4430,6 +4653,8 @@ export type UserCreateWithoutCreatedShareLinksInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4462,6 +4687,7 @@ export type UserCreateWithoutCreatedShareLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -4484,6 +4710,8 @@ export type UserUncheckedCreateWithoutCreatedShareLinksInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4516,6 +4744,7 @@ export type UserUncheckedCreateWithoutCreatedShareLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -4554,6 +4783,8 @@ export type UserUpdateWithoutCreatedShareLinksInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4586,6 +4817,7 @@ export type UserUpdateWithoutCreatedShareLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -4608,6 +4840,8 @@ export type UserUncheckedUpdateWithoutCreatedShareLinksInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4640,6 +4874,7 @@ export type UserUncheckedUpdateWithoutCreatedShareLinksInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -4662,6 +4897,8 @@ export type UserCreateWithoutNotificationsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4694,6 +4931,7 @@ export type UserCreateWithoutNotificationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -4716,6 +4954,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4748,6 +4988,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -4786,6 +5027,8 @@ export type UserUpdateWithoutNotificationsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4818,6 +5061,7 @@ export type UserUpdateWithoutNotificationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -4840,6 +5084,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4872,6 +5118,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -4894,6 +5141,8 @@ export type UserCreateWithoutNotificationPreferencesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4926,6 +5175,7 @@ export type UserCreateWithoutNotificationPreferencesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -4948,6 +5198,8 @@ export type UserUncheckedCreateWithoutNotificationPreferencesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4980,6 +5232,7 @@ export type UserUncheckedCreateWithoutNotificationPreferencesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -5018,6 +5271,8 @@ export type UserUpdateWithoutNotificationPreferencesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5050,6 +5305,7 @@ export type UserUpdateWithoutNotificationPreferencesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -5072,6 +5328,8 @@ export type UserUncheckedUpdateWithoutNotificationPreferencesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5104,6 +5362,7 @@ export type UserUncheckedUpdateWithoutNotificationPreferencesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -5126,6 +5385,8 @@ export type UserCreateWithoutRequestedDataControlJobsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5158,6 +5419,7 @@ export type UserCreateWithoutRequestedDataControlJobsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -5180,6 +5442,8 @@ export type UserUncheckedCreateWithoutRequestedDataControlJobsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5212,6 +5476,7 @@ export type UserUncheckedCreateWithoutRequestedDataControlJobsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -5250,6 +5515,8 @@ export type UserUpdateWithoutRequestedDataControlJobsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5282,6 +5549,7 @@ export type UserUpdateWithoutRequestedDataControlJobsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -5304,6 +5572,8 @@ export type UserUncheckedUpdateWithoutRequestedDataControlJobsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5336,6 +5606,7 @@ export type UserUncheckedUpdateWithoutRequestedDataControlJobsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -5358,6 +5629,8 @@ export type UserCreateWithoutNotificationEmailDeliveriesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5390,6 +5663,7 @@ export type UserCreateWithoutNotificationEmailDeliveriesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -5412,6 +5686,8 @@ export type UserUncheckedCreateWithoutNotificationEmailDeliveriesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5444,6 +5720,7 @@ export type UserUncheckedCreateWithoutNotificationEmailDeliveriesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -5482,6 +5759,8 @@ export type UserUpdateWithoutNotificationEmailDeliveriesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5514,6 +5793,7 @@ export type UserUpdateWithoutNotificationEmailDeliveriesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -5536,6 +5816,8 @@ export type UserUncheckedUpdateWithoutNotificationEmailDeliveriesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5568,6 +5850,7 @@ export type UserUncheckedUpdateWithoutNotificationEmailDeliveriesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -5590,6 +5873,8 @@ export type UserCreateWithoutOrganizationMembershipsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5622,6 +5907,7 @@ export type UserCreateWithoutOrganizationMembershipsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -5644,6 +5930,8 @@ export type UserUncheckedCreateWithoutOrganizationMembershipsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5676,6 +5964,7 @@ export type UserUncheckedCreateWithoutOrganizationMembershipsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -5714,6 +6003,8 @@ export type UserUpdateWithoutOrganizationMembershipsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5746,6 +6037,7 @@ export type UserUpdateWithoutOrganizationMembershipsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -5768,6 +6060,8 @@ export type UserUncheckedUpdateWithoutOrganizationMembershipsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5800,6 +6094,7 @@ export type UserUncheckedUpdateWithoutOrganizationMembershipsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -5822,6 +6117,8 @@ export type UserCreateWithoutSentOrganizationInvitationsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5854,6 +6151,7 @@ export type UserCreateWithoutSentOrganizationInvitationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -5876,6 +6174,8 @@ export type UserUncheckedCreateWithoutSentOrganizationInvitationsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5908,6 +6208,7 @@ export type UserUncheckedCreateWithoutSentOrganizationInvitationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -5946,6 +6247,8 @@ export type UserUpdateWithoutSentOrganizationInvitationsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5978,6 +6281,7 @@ export type UserUpdateWithoutSentOrganizationInvitationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -6000,6 +6304,8 @@ export type UserUncheckedUpdateWithoutSentOrganizationInvitationsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6032,6 +6338,7 @@ export type UserUncheckedUpdateWithoutSentOrganizationInvitationsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -6054,6 +6361,8 @@ export type UserCreateWithoutSupportSessionsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6086,6 +6395,7 @@ export type UserCreateWithoutSupportSessionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -6108,6 +6418,8 @@ export type UserUncheckedCreateWithoutSupportSessionsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6140,6 +6452,7 @@ export type UserUncheckedCreateWithoutSupportSessionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -6178,6 +6491,8 @@ export type UserUpdateWithoutSupportSessionsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6210,6 +6525,7 @@ export type UserUpdateWithoutSupportSessionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -6232,6 +6548,8 @@ export type UserUncheckedUpdateWithoutSupportSessionsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6264,6 +6582,7 @@ export type UserUncheckedUpdateWithoutSupportSessionsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -6286,6 +6605,8 @@ export type UserCreateWithoutSupportAuditEventsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6318,6 +6639,7 @@ export type UserCreateWithoutSupportAuditEventsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -6340,6 +6662,8 @@ export type UserUncheckedCreateWithoutSupportAuditEventsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6372,6 +6696,7 @@ export type UserUncheckedCreateWithoutSupportAuditEventsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -6410,6 +6735,8 @@ export type UserUpdateWithoutSupportAuditEventsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6442,6 +6769,7 @@ export type UserUpdateWithoutSupportAuditEventsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -6464,6 +6792,8 @@ export type UserUncheckedUpdateWithoutSupportAuditEventsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6496,6 +6826,7 @@ export type UserUncheckedUpdateWithoutSupportAuditEventsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -6518,6 +6849,8 @@ export type UserCreateWithoutProductAuditEventsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6550,6 +6883,7 @@ export type UserCreateWithoutProductAuditEventsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -6572,6 +6906,8 @@ export type UserUncheckedCreateWithoutProductAuditEventsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6604,6 +6940,7 @@ export type UserUncheckedCreateWithoutProductAuditEventsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -6642,6 +6979,8 @@ export type UserUpdateWithoutProductAuditEventsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6674,6 +7013,7 @@ export type UserUpdateWithoutProductAuditEventsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -6696,6 +7036,8 @@ export type UserUncheckedUpdateWithoutProductAuditEventsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6728,6 +7070,7 @@ export type UserUncheckedUpdateWithoutProductAuditEventsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -6750,6 +7093,8 @@ export type UserCreateWithoutCredentialInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6782,6 +7127,7 @@ export type UserCreateWithoutCredentialInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -6804,6 +7150,8 @@ export type UserUncheckedCreateWithoutCredentialInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6836,6 +7184,7 @@ export type UserUncheckedCreateWithoutCredentialInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -6874,6 +7223,8 @@ export type UserUpdateWithoutCredentialInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6906,6 +7257,7 @@ export type UserUpdateWithoutCredentialInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -6928,6 +7280,8 @@ export type UserUncheckedUpdateWithoutCredentialInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6960,6 +7314,7 @@ export type UserUncheckedUpdateWithoutCredentialInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -6982,6 +7337,8 @@ export type UserCreateWithoutAuthCodesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7014,6 +7371,7 @@ export type UserCreateWithoutAuthCodesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -7036,6 +7394,8 @@ export type UserUncheckedCreateWithoutAuthCodesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7068,6 +7428,7 @@ export type UserUncheckedCreateWithoutAuthCodesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -7106,6 +7467,8 @@ export type UserUpdateWithoutAuthCodesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7138,6 +7501,7 @@ export type UserUpdateWithoutAuthCodesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -7160,6 +7524,8 @@ export type UserUncheckedUpdateWithoutAuthCodesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7192,6 +7558,7 @@ export type UserUncheckedUpdateWithoutAuthCodesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -7214,6 +7581,8 @@ export type UserCreateWithoutSecurityEventsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7246,6 +7615,7 @@ export type UserCreateWithoutSecurityEventsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -7268,6 +7638,8 @@ export type UserUncheckedCreateWithoutSecurityEventsInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7300,6 +7672,7 @@ export type UserUncheckedCreateWithoutSecurityEventsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -7338,6 +7711,8 @@ export type UserUpdateWithoutSecurityEventsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7370,6 +7745,7 @@ export type UserUpdateWithoutSecurityEventsInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -7392,6 +7768,8 @@ export type UserUncheckedUpdateWithoutSecurityEventsInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7406,6 +7784,251 @@ export type UserUncheckedUpdateWithoutSecurityEventsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
+  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
+  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUncheckedUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+}
+
+export type UserCreateWithoutResolvedRuntimeErrorsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
+  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
+  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
+}
+
+export type UserUncheckedCreateWithoutResolvedRuntimeErrorsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
+  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
+  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentUncheckedCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+}
+
+export type UserCreateOrConnectWithoutResolvedRuntimeErrorsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutResolvedRuntimeErrorsInput, Prisma.UserUncheckedCreateWithoutResolvedRuntimeErrorsInput>
+}
+
+export type UserUpsertWithoutResolvedRuntimeErrorsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutResolvedRuntimeErrorsInput, Prisma.UserUncheckedUpdateWithoutResolvedRuntimeErrorsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutResolvedRuntimeErrorsInput, Prisma.UserUncheckedCreateWithoutResolvedRuntimeErrorsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutResolvedRuntimeErrorsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutResolvedRuntimeErrorsInput, Prisma.UserUncheckedUpdateWithoutResolvedRuntimeErrorsInput>
+}
+
+export type UserUpdateWithoutResolvedRuntimeErrorsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
+  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
+  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutResolvedRuntimeErrorsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
   organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -7446,6 +8069,8 @@ export type UserCreateWithoutAuthDevicesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7478,6 +8103,7 @@ export type UserCreateWithoutAuthDevicesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -7500,6 +8126,8 @@ export type UserUncheckedCreateWithoutAuthDevicesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7532,6 +8160,7 @@ export type UserUncheckedCreateWithoutAuthDevicesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -7570,6 +8199,8 @@ export type UserUpdateWithoutAuthDevicesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7602,6 +8233,7 @@ export type UserUpdateWithoutAuthDevicesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -7624,6 +8256,8 @@ export type UserUncheckedUpdateWithoutAuthDevicesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7656,6 +8290,7 @@ export type UserUncheckedUpdateWithoutAuthDevicesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -7678,6 +8313,8 @@ export type UserCreateWithoutMfaBackupCodesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7710,6 +8347,7 @@ export type UserCreateWithoutMfaBackupCodesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -7732,6 +8370,8 @@ export type UserUncheckedCreateWithoutMfaBackupCodesInput = {
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
   authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7764,6 +8404,7 @@ export type UserUncheckedCreateWithoutMfaBackupCodesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -7802,6 +8443,8 @@ export type UserUpdateWithoutMfaBackupCodesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7834,6 +8477,7 @@ export type UserUpdateWithoutMfaBackupCodesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -7856,6 +8500,8 @@ export type UserUncheckedUpdateWithoutMfaBackupCodesInput = {
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7888,6 +8534,7 @@ export type UserUncheckedUpdateWithoutMfaBackupCodesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -7923,6 +8570,7 @@ export type UserCountOutputType = {
   notificationPreferences: number
   notificationEmailDeliveries: number
   requestedDataControlJobs: number
+  resolvedRuntimeErrors: number
   workerUserLinks: number
   linkedWorkerUserLinks: number
   jobSiteUserAssignments: number
@@ -7953,6 +8601,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   notificationPreferences?: boolean | UserCountOutputTypeCountNotificationPreferencesArgs
   notificationEmailDeliveries?: boolean | UserCountOutputTypeCountNotificationEmailDeliveriesArgs
   requestedDataControlJobs?: boolean | UserCountOutputTypeCountRequestedDataControlJobsArgs
+  resolvedRuntimeErrors?: boolean | UserCountOutputTypeCountResolvedRuntimeErrorsArgs
   workerUserLinks?: boolean | UserCountOutputTypeCountWorkerUserLinksArgs
   linkedWorkerUserLinks?: boolean | UserCountOutputTypeCountLinkedWorkerUserLinksArgs
   jobSiteUserAssignments?: boolean | UserCountOutputTypeCountJobSiteUserAssignmentsArgs
@@ -8127,6 +8776,13 @@ export type UserCountOutputTypeCountRequestedDataControlJobsArgs<ExtArgs extends
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountResolvedRuntimeErrorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RuntimeErrorEventWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountWorkerUserLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WorkerUserLinkWhereInput
 }
@@ -8175,6 +8831,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   phoneNumber?: boolean
   platformRole?: boolean
   authVersion?: boolean
+  suspendedAt?: boolean
+  suspensionReason?: boolean
   mfaEnabled?: boolean
   totpSecretEncrypted?: boolean
   totpSecretNonce?: boolean
@@ -8208,6 +8866,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   notificationPreferences?: boolean | Prisma.User$notificationPreferencesArgs<ExtArgs>
   notificationEmailDeliveries?: boolean | Prisma.User$notificationEmailDeliveriesArgs<ExtArgs>
   requestedDataControlJobs?: boolean | Prisma.User$requestedDataControlJobsArgs<ExtArgs>
+  resolvedRuntimeErrors?: boolean | Prisma.User$resolvedRuntimeErrorsArgs<ExtArgs>
   workerUserLinks?: boolean | Prisma.User$workerUserLinksArgs<ExtArgs>
   linkedWorkerUserLinks?: boolean | Prisma.User$linkedWorkerUserLinksArgs<ExtArgs>
   jobSiteUserAssignments?: boolean | Prisma.User$jobSiteUserAssignmentsArgs<ExtArgs>
@@ -8231,6 +8890,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   phoneNumber?: boolean
   platformRole?: boolean
   authVersion?: boolean
+  suspendedAt?: boolean
+  suspensionReason?: boolean
   mfaEnabled?: boolean
   totpSecretEncrypted?: boolean
   totpSecretNonce?: boolean
@@ -8258,6 +8919,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   phoneNumber?: boolean
   platformRole?: boolean
   authVersion?: boolean
+  suspendedAt?: boolean
+  suspensionReason?: boolean
   mfaEnabled?: boolean
   totpSecretEncrypted?: boolean
   totpSecretNonce?: boolean
@@ -8285,6 +8948,8 @@ export type UserSelectScalar = {
   phoneNumber?: boolean
   platformRole?: boolean
   authVersion?: boolean
+  suspendedAt?: boolean
+  suspensionReason?: boolean
   mfaEnabled?: boolean
   totpSecretEncrypted?: boolean
   totpSecretNonce?: boolean
@@ -8297,7 +8962,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "firstName" | "lastName" | "username" | "usernameOnboarded" | "profileOnboarded" | "avatarBlobPathname" | "phoneNumber" | "platformRole" | "authVersion" | "mfaEnabled" | "totpSecretEncrypted" | "totpSecretNonce" | "totpPendingSecretEncrypted" | "totpPendingSecretNonce" | "totpPendingCreatedAt" | "totpVerifiedAt" | "usernameChangedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "firstName" | "lastName" | "username" | "usernameOnboarded" | "profileOnboarded" | "avatarBlobPathname" | "phoneNumber" | "platformRole" | "authVersion" | "suspendedAt" | "suspensionReason" | "mfaEnabled" | "totpSecretEncrypted" | "totpSecretNonce" | "totpPendingSecretEncrypted" | "totpPendingSecretNonce" | "totpPendingCreatedAt" | "totpVerifiedAt" | "usernameChangedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -8322,6 +8987,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   notificationPreferences?: boolean | Prisma.User$notificationPreferencesArgs<ExtArgs>
   notificationEmailDeliveries?: boolean | Prisma.User$notificationEmailDeliveriesArgs<ExtArgs>
   requestedDataControlJobs?: boolean | Prisma.User$requestedDataControlJobsArgs<ExtArgs>
+  resolvedRuntimeErrors?: boolean | Prisma.User$resolvedRuntimeErrorsArgs<ExtArgs>
   workerUserLinks?: boolean | Prisma.User$workerUserLinksArgs<ExtArgs>
   linkedWorkerUserLinks?: boolean | Prisma.User$linkedWorkerUserLinksArgs<ExtArgs>
   jobSiteUserAssignments?: boolean | Prisma.User$jobSiteUserAssignmentsArgs<ExtArgs>
@@ -8358,6 +9024,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     notificationPreferences: Prisma.$NotificationPreferencePayload<ExtArgs>[]
     notificationEmailDeliveries: Prisma.$NotificationEmailDeliveryPayload<ExtArgs>[]
     requestedDataControlJobs: Prisma.$DataControlJobPayload<ExtArgs>[]
+    resolvedRuntimeErrors: Prisma.$RuntimeErrorEventPayload<ExtArgs>[]
     workerUserLinks: Prisma.$WorkerUserLinkPayload<ExtArgs>[]
     linkedWorkerUserLinks: Prisma.$WorkerUserLinkPayload<ExtArgs>[]
     jobSiteUserAssignments: Prisma.$JobSiteUserAssignmentPayload<ExtArgs>[]
@@ -8379,6 +9046,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     phoneNumber: string | null
     platformRole: $Enums.PlatformRole
     authVersion: number
+    suspendedAt: Date | null
+    suspensionReason: string | null
     mfaEnabled: boolean
     totpSecretEncrypted: string | null
     totpSecretNonce: string | null
@@ -8806,6 +9475,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   notificationPreferences<T extends Prisma.User$notificationPreferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationPreferencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPreferencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationEmailDeliveries<T extends Prisma.User$notificationEmailDeliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationEmailDeliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationEmailDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   requestedDataControlJobs<T extends Prisma.User$requestedDataControlJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$requestedDataControlJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DataControlJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  resolvedRuntimeErrors<T extends Prisma.User$resolvedRuntimeErrorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$resolvedRuntimeErrorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RuntimeErrorEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   workerUserLinks<T extends Prisma.User$workerUserLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workerUserLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkerUserLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   linkedWorkerUserLinks<T extends Prisma.User$linkedWorkerUserLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$linkedWorkerUserLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkerUserLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   jobSiteUserAssignments<T extends Prisma.User$jobSiteUserAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$jobSiteUserAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteUserAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8854,6 +9524,8 @@ export interface UserFieldRefs {
   readonly phoneNumber: Prisma.FieldRef<"User", 'String'>
   readonly platformRole: Prisma.FieldRef<"User", 'PlatformRole'>
   readonly authVersion: Prisma.FieldRef<"User", 'Int'>
+  readonly suspendedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly suspensionReason: Prisma.FieldRef<"User", 'String'>
   readonly mfaEnabled: Prisma.FieldRef<"User", 'Boolean'>
   readonly totpSecretEncrypted: Prisma.FieldRef<"User", 'String'>
   readonly totpSecretNonce: Prisma.FieldRef<"User", 'String'>
@@ -9801,6 +10473,30 @@ export type User$requestedDataControlJobsArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.DataControlJobScalarFieldEnum | Prisma.DataControlJobScalarFieldEnum[]
+}
+
+/**
+ * User.resolvedRuntimeErrors
+ */
+export type User$resolvedRuntimeErrorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RuntimeErrorEvent
+   */
+  select?: Prisma.RuntimeErrorEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RuntimeErrorEvent
+   */
+  omit?: Prisma.RuntimeErrorEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RuntimeErrorEventInclude<ExtArgs> | null
+  where?: Prisma.RuntimeErrorEventWhereInput
+  orderBy?: Prisma.RuntimeErrorEventOrderByWithRelationInput | Prisma.RuntimeErrorEventOrderByWithRelationInput[]
+  cursor?: Prisma.RuntimeErrorEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RuntimeErrorEventScalarFieldEnum | Prisma.RuntimeErrorEventScalarFieldEnum[]
 }
 
 /**

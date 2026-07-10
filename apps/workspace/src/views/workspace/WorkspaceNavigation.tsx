@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { WorkspaceRole } from "./workspace-records";
+import type { SupportContext } from "@qoovex/types";
+import { WorkspaceLogoutButton } from "./WorkspaceSessionControls";
 import styles from "./WorkspaceShell.module.css";
 
 const navItems = [
@@ -20,11 +22,29 @@ const navItems = [
   { label: "Controllo dati", href: "/data-control", roles: ["OWNER"] },
 ] as const;
 
-export function WorkspaceNavigation({ role }: { role: WorkspaceRole | null }) {
+const platformNavItems = [
+  { label: "Panoramica", href: "/qoovex-admin" },
+  { label: "Utenti", href: "/qoovex-admin/users" },
+  { label: "Aziende", href: "/qoovex-admin/organizations" },
+  { label: "Errori", href: "/qoovex-admin/errors" },
+] as const;
+
+export function WorkspaceNavigation({ role, platformRole, support, authenticated }: { role: WorkspaceRole | null; platformRole: "USER" | "SUPER_ADMIN" | null; support: SupportContext | null; authenticated: boolean }) {
   const pathname = usePathname();
+  const isPlatformConsole = pathname.startsWith("/qoovex-admin");
+  if (isPlatformConsole && platformRole === "SUPER_ADMIN") {
+    return (
+      <nav className={styles.nav} aria-label="Navigazione Console Qoovex">
+        {platformNavItems.map((item) => <Link aria-current={pathname === item.href || (item.href !== "/qoovex-admin" && pathname.startsWith(`${item.href}/`)) ? "page" : undefined} href={item.href} key={item.href}>{item.label}</Link>)}
+        {support ? <Link href="/dashboard">Azienda assistita</Link> : null}
+        <WorkspaceLogoutButton />
+      </nav>
+    );
+  }
   const visibleItems = navItems.filter((item) => role && (item.roles as readonly WorkspaceRole[]).includes(role));
   return (
     <nav className={styles.nav} aria-label="Navigazione workspace">
+      {platformRole === "SUPER_ADMIN" ? <Link href="/qoovex-admin">Console Qoovex</Link> : null}
       {visibleItems.map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
         return (
@@ -33,6 +53,7 @@ export function WorkspaceNavigation({ role }: { role: WorkspaceRole | null }) {
           </Link>
         );
       })}
+      {authenticated ? <WorkspaceLogoutButton /> : null}
     </nav>
   );
 }

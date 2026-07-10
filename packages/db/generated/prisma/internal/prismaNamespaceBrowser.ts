@@ -85,6 +85,7 @@ export const ModelName = {
   AuthCode: 'AuthCode',
   AuthRateLimit: 'AuthRateLimit',
   SecurityAuditEvent: 'SecurityAuditEvent',
+  RuntimeErrorEvent: 'RuntimeErrorEvent',
   AuthDevice: 'AuthDevice',
   MfaBackupCode: 'MfaBackupCode'
 } as const
@@ -157,6 +158,8 @@ export const UserScalarFieldEnum = {
   phoneNumber: 'phoneNumber',
   platformRole: 'platformRole',
   authVersion: 'authVersion',
+  suspendedAt: 'suspendedAt',
+  suspensionReason: 'suspensionReason',
   mfaEnabled: 'mfaEnabled',
   totpSecretEncrypted: 'totpSecretEncrypted',
   totpSecretNonce: 'totpSecretNonce',
@@ -653,6 +656,29 @@ export const SecurityAuditEventScalarFieldEnum = {
 } as const
 
 export type SecurityAuditEventScalarFieldEnum = (typeof SecurityAuditEventScalarFieldEnum)[keyof typeof SecurityAuditEventScalarFieldEnum]
+
+
+export const RuntimeErrorEventScalarFieldEnum = {
+  id: 'id',
+  fingerprint: 'fingerprint',
+  status: 'status',
+  source: 'source',
+  routePath: 'routePath',
+  requestMethod: 'requestMethod',
+  errorName: 'errorName',
+  message: 'message',
+  stackPreview: 'stackPreview',
+  digest: 'digest',
+  lastRequestId: 'lastRequestId',
+  occurrenceCount: 'occurrenceCount',
+  firstSeenAt: 'firstSeenAt',
+  lastSeenAt: 'lastSeenAt',
+  resolvedAt: 'resolvedAt',
+  resolvedById: 'resolvedById',
+  resolutionNote: 'resolutionNote'
+} as const
+
+export type RuntimeErrorEventScalarFieldEnum = (typeof RuntimeErrorEventScalarFieldEnum)[keyof typeof RuntimeErrorEventScalarFieldEnum]
 
 
 export const AuthDeviceScalarFieldEnum = {

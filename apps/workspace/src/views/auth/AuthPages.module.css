@@ -80,6 +80,7 @@
 
 .field input:focus-visible,
 .primaryButton:focus-visible,
+.secondaryButton:focus-visible,
 .secondaryLink:focus-visible,
 .textLink:focus-visible {
   outline: 3px solid rgba(31, 122, 92, 0.24);
@@ -87,6 +88,7 @@
 }
 
 .primaryButton,
+.secondaryButton,
 .secondaryLink {
   min-height: 44px;
   display: inline-flex;
@@ -97,6 +99,20 @@
   font-size: 0.92rem;
   font-weight: 780;
   text-decoration: none;
+}
+
+.secondaryButton {
+  width: 100%;
+  border: 1px solid var(--qvx-border);
+  border-radius: 8px;
+  background: var(--qvx-surface);
+  color: var(--qvx-text);
+  cursor: pointer;
+}
+
+.secondaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
 }
 
 .primaryButton {

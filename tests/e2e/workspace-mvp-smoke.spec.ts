@@ -173,27 +173,19 @@ async function verifyAnonymousShareLink(
   expect(serialized).not.toMatch(/vercel-storage\.com/i);
 }
 
-async function applyDevAuthCookie(page: Page, response: APIResponse, baseURL: string) {
-  const setCookie = response.headers()["set-cookie"];
-  expect(setCookie, "POST /api/dev-auth must set qv-dev-auth").toContain("qv-dev-auth=");
-  const [pair] = setCookie.split(";", 1);
-  const [name, ...valueParts] = pair.split("=");
-  const value = valueParts.join("=");
-  await page.context().addCookies([{ name, value, url: baseURL }]);
-  return `${name}=${value}`;
-}
-
-test("workspace MVP smoke with dev-auth, anonymous share link, and logout", async ({ page, request }, testInfo) => {
-  const baseURL = String(testInfo.project.use.baseURL ?? "http://localhost:3001");
+test("workspace MVP smoke with dev-auth, anonymous share link, and logout", async ({ page, request }) => {
   const runId = `${Date.now()}`;
   const anonymousApi = request;
 
   await expectJson(await anonymousApi.get("/api/context"), 401);
+  await expectJson(await anonymousApi.get("/api/platform-admin/overview"), 401);
 
-  const devAuth = await page.context().request.post("/api/dev-auth");
-  expect(devAuth.status(), await devAuth.text()).toBe(200);
-  await applyDevAuthCookie(page, devAuth, baseURL);
-  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.goto("/sign-in", { waitUntil: "domcontentloaded" });
+  const devButton = page.getByRole("button", { name: "Accedi come dev" });
+  await expect(devButton).toBeVisible();
+  await devButton.click();
+  await page.waitForURL("**/qoovex-admin");
+  await expect(page.getByRole("heading", { name: "Console Qoovex" })).toBeVisible();
 
   await ensureOrganization(page, runId);
   const { documentPackage } = await createDomainData(page, runId);
@@ -213,7 +205,76 @@ test("workspace MVP smoke with dev-auth, anonymous share link, and logout", asyn
   await pageJsonRequest(page, "DELETE", `/api/document-packages/${documentPackage.id}/share-links/${shareLink.id}`);
   await verifyAnonymousShareLink(anonymousApi, token as string, 404, "Link non disponibile.");
 
-  await pageJsonRequest(page, "DELETE", "/api/dev-auth");
-  await page.context().clearCookies({ name: "qv-dev-auth" });
+  await page.getByRole("button", { name: "Esci" }).click();
+  await page.waitForURL("**/sign-in");
   await expectPageJson(page, "/api/context", 401);
+});
+
+test("Qoovex operator manages a customer, support session, and runtime error", async ({ page }) => {
+  const runId = `${Date.now()}`;
+  const email = `platform-e2e-${runId}@example.test`;
+  let targetUserId: string | null = null;
+  let runtimeErrorId: string | null = null;
+
+  try {
+    await page.goto("/sign-in", { waitUntil: "domcontentloaded" });
+    await page.getByRole("button", { name: "Accedi come dev" }).click();
+    await page.waitForURL("**/qoovex-admin");
+    const organization = await ensureOrganization(page, runId);
+
+    const fixtures = await pagePostJson(page, "/api/dev-fixtures/platform-admin", { runId });
+    const target = fixtures.user as JsonRecord;
+    const runtimeError = fixtures.runtimeError as JsonRecord;
+    targetUserId = String(target.id);
+    runtimeErrorId = String(runtimeError.id);
+
+    await page.goto("/qoovex-admin/users");
+    await page.getByLabel("Email, username o azienda").fill(email);
+    await page.getByRole("button", { name: "Cerca" }).click();
+    await page.getByRole("link", { name: "Apri dettaglio" }).click();
+    await page.getByLabel("Motivo operativo").fill("Verifica sospensione account richiesta dal test E2E");
+    await page.getByRole("button", { name: "Sospendi account" }).click();
+    await expect(page.getByText("Operazione completata e registrata nell'audit.")).toBeVisible();
+    await expect.poll(async () => (await pageJsonRequest(page, "GET", `/api/platform-admin/users/${target.id}`)).suspendedAt).not.toBeNull();
+
+    await page.getByLabel("Motivo operativo").fill("Riattivazione account verificata dal test E2E");
+    await page.getByRole("button", { name: "Riattiva account" }).click();
+    await expect.poll(async () => (await pageJsonRequest(page, "GET", `/api/platform-admin/users/${target.id}`)).suspendedAt).toBeNull();
+    await page.getByLabel("Motivo operativo").fill("Revoca sessioni richiesta dal test E2E");
+    await page.getByRole("button", { name: "Revoca sessioni" }).click();
+    await expect(page.getByText("Operazione completata e registrata nell'audit.")).toBeVisible();
+
+    await page.goto("/qoovex-admin/organizations");
+    await page.getByLabel("Nome, codice o email owner").fill(String(organization.code));
+    await page.getByRole("button", { name: "Cerca" }).click();
+    await page.getByLabel("Motivo del supporto").fill("Assistenza controllata avviata dal test E2E");
+    await page.getByRole("button", { name: "Apri supporto" }).click();
+    await page.waitForURL("**/dashboard");
+    await expect(page.getByText(/Supporto:/)).toBeVisible();
+    await page.getByRole("button", { name: "Chiudi supporto" }).click();
+    await page.waitForURL("**/qoovex-admin");
+
+    await page.goto("/qoovex-admin/errors?status=OPEN");
+    const errorRecord = page.getByRole("article").filter({ hasText: runId });
+    await expect(errorRecord).toBeVisible();
+    await errorRecord.getByLabel("Motivo").fill("Errore fixture verificato e risolto dal test E2E");
+    await errorRecord.getByRole("button", { name: "Segna risolto" }).click();
+    await expect.poll(async () => {
+      const body = await pageJsonRequest(page, "GET", "/api/platform-admin/errors?status=RESOLVED");
+      return (body.errors as JsonRecord[]).find((item) => item.id === runtimeError.id)?.status;
+    }).toBe("RESOLVED");
+
+    await pageJsonRequest(page, "DELETE", "/api/dev-fixtures/platform-admin", { userId: targetUserId, runtimeErrorId });
+    targetUserId = null;
+    runtimeErrorId = null;
+
+    await page.getByRole("button", { name: "Esci" }).click();
+    await page.waitForURL("**/sign-in");
+    await expectPageJson(page, "/api/context", 401);
+  } finally {
+    if (runtimeErrorId || targetUserId) {
+      await page.context().request.post("/api/dev-auth");
+      await page.context().request.delete("/api/dev-fixtures/platform-admin", { data: { userId: targetUserId, runtimeErrorId } });
+    }
+  }
 });

@@ -14,12 +14,12 @@ Qoovex aiuta a tenere ordinati documenti, scadenze, checklist, prove e pacchetti
 
 ## 2. Accesso supporto controllato
 
-1. Aprire una sessione supporto solo con account autorizzato e MFA attivo.
+1. Accedere a `/qoovex-admin/organizations` con un account Operatore Qoovex autorizzato e MFA attivo.
 2. Indicare motivo specifico, organization code e durata necessaria.
 3. Limitare l'accesso ai dati strettamente necessari alla richiesta.
 4. Non visualizzare, copiare o condividere password, TOTP, backup code, token, hash, URL Blob permanenti o `blobKey`.
 5. Verificare che gli eventi `SupportAuditEvent` e audit prodotto registrino l'accesso.
-6. Chiudere la sessione supporto appena completata l'operazione.
+6. Chiudere la sessione dal banner persistente appena completata l'operazione.
 
 ## 3. Export metadata cliente
 

@@ -4,8 +4,9 @@ import crypto from "crypto";
 import { cookies } from "next/headers";
 import { db, Prisma } from "@qoovex/db";
 import { AccessError } from "@shared/server/access-errors";
-import { isMfaSatisfiedForUser, verifyMfaChallengeForUser } from "@shared/server/mfa-service";
+import { verifyMfaChallengeForUser } from "@shared/server/mfa-service";
 import { sendTransactionalEmail } from "@shared/server/transactional-email-service";
+import { requireQoovexOperatorById } from "@shared/server/qoovex-operator-access";
 
 const SUPPORT_COOKIE = "qoovex_support_session";
 const SUPPORT_TTL_MS = 30 * 60 * 1000;
@@ -14,10 +15,7 @@ const SENSITIVE_TTL_MS = 5 * 60 * 1000;
 function hashToken(token: string) { return crypto.createHash("sha256").update(token).digest("hex"); }
 
 async function getSupportActor(userId: string) {
-  const user = await db.user.findUnique({ where: { id: userId }, select: { id: true, email: true, platformRole: true, mfaEnabled: true } });
-  if (!user || user.platformRole !== "SUPER_ADMIN") throw new AccessError("Risorsa non disponibile.", 404);
-  if (!user.mfaEnabled || !(await isMfaSatisfiedForUser(user.id))) throw new AccessError("Conferma MFA richiesta.", 403);
-  return user;
+  return requireQoovexOperatorById(userId);
 }
 
 export async function getActiveSupportSession(userId: string) {
@@ -53,12 +51,12 @@ export async function openSupportSession(userId: string, input: { organizationCo
 
   const session = await db.$transaction(async (tx) => {
     await tx.supportSession.updateMany({ where: { actorId: actor.id, endedAt: null }, data: { endedAt: now } });
-    const created = await tx.supportSession.create({ data: { actorId: actor.id, organizationId: organization.id, tokenHash: hashToken(rawToken), reason, expiresAt: new Date(now.getTime() + SUPPORT_TTL_MS) } });
+    const created = await tx.supportSession.create({ data: { actorId: actor.id, organizationId: organization.id, tokenHash: hashToken(rawToken), reason, expiresAt: new Date(now.getTime() + SUPPORT_TTL_MS), sensitiveConfirmedUntil: actor.isDev ? new Date(now.getTime() + SENSITIVE_TTL_MS) : null } });
     await tx.supportAuditEvent.create({ data: { supportSessionId: created.id, actorId: actor.id, organizationId: organization.id, action: "SENSITIVE", resourceType: "support-session", resourceId: created.id, metadata: { event: "opened", reason } } });
     return created;
   });
   (await cookies()).set(SUPPORT_COOKIE, rawToken, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: SUPPORT_TTL_MS / 1000 });
-  await notifyOrganizationOwners(organization.id, "support-opened", { employeeEmail: actor.email, reason, occurredAt: now });
+  if (!actor.isDev) await notifyOrganizationOwners(organization.id, "support-opened", { employeeEmail: actor.email, reason, occurredAt: now });
   return { id: session.id, expiresAt: session.expiresAt, organization };
 }
 
@@ -72,15 +70,15 @@ export async function closeSupportSession(userId: string) {
     db.supportAuditEvent.create({ data: { supportSessionId: session.id, actorId: actor.id, organizationId: session.organization.id, action: "SENSITIVE", resourceType: "support-session", resourceId: session.id, metadata: { event: "closed" } } }),
   ]);
   (await cookies()).delete(SUPPORT_COOKIE);
-  await notifyOrganizationOwners(session.organization.id, "support-closed", { employeeEmail: actor.email, reason: session.reason, occurredAt: now });
+  if (!actor.isDev) await notifyOrganizationOwners(session.organization.id, "support-closed", { employeeEmail: actor.email, reason: session.reason, occurredAt: now });
   return { closed: true };
 }
 
 export async function elevateSupportSession(userId: string, code: string) {
-  await getSupportActor(userId);
+  const actor = await getSupportActor(userId);
   const session = await getActiveSupportSession(userId);
   if (!session) throw new AccessError("Sessione supporto non attiva.", 404);
-  if (!(await verifyMfaChallengeForUser({ userId, code }))) throw new AccessError("Codice MFA non valido.", 403);
+  if (!actor.isDev && !(await verifyMfaChallengeForUser({ userId, code }))) throw new AccessError("Codice MFA non valido.", 403);
   const until = new Date(Date.now() + SENSITIVE_TTL_MS);
   await db.supportSession.update({ where: { id: session.id }, data: { sensitiveConfirmedUntil: until } });
   return { sensitiveConfirmedUntil: until };

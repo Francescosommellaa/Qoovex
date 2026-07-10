@@ -18,6 +18,7 @@ export async function requireIdentity() {
       platformRole: devUser.platformRole,
       authVersion: devUser.authVersion,
       mfaEnabled: devUser.mfaEnabled,
+      suspendedAt: null,
     };
   }
 
@@ -27,9 +28,9 @@ export async function requireIdentity() {
 
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { id: true, email: true, emailVerified: true, platformRole: true, authVersion: true, mfaEnabled: true },
+    select: { id: true, email: true, emailVerified: true, platformRole: true, authVersion: true, mfaEnabled: true, suspendedAt: true },
   });
-  if (!user) throw new AccessError("Sessione non valida.", 401);
+  if (!user || user.suspendedAt) throw new AccessError("Sessione non valida.", 401);
   return user;
 }
 

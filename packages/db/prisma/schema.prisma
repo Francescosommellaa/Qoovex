@@ -262,6 +262,11 @@ enum DataControlJobStatus {
   FAILED
 }
 
+enum RuntimeErrorStatus {
+  OPEN
+  RESOLVED
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -315,6 +320,8 @@ model User {
   phoneNumber                String?
   platformRole               PlatformRole         @default(USER)
   authVersion                Int                  @default(1)
+  suspendedAt                DateTime?
+  suspensionReason           String?
   accounts                   Account[]
   sessions                   Session[]
   credential                 UserCredential?
@@ -346,6 +353,7 @@ model User {
   notificationPreferences    NotificationPreference[]
   notificationEmailDeliveries NotificationEmailDelivery[]
   requestedDataControlJobs   DataControlJob[]      @relation("DataControlJobRequester")
+  resolvedRuntimeErrors      RuntimeErrorEvent[]   @relation("RuntimeErrorResolver")
   workerUserLinks            WorkerUserLink[]
   linkedWorkerUserLinks      WorkerUserLink[]       @relation("WorkerUserLinkCreator")
   jobSiteUserAssignments     JobSiteUserAssignment[]
@@ -1000,6 +1008,31 @@ model SecurityAuditEvent {
   @@index([userId, createdAt])
   @@index([email, createdAt])
   @@index([type, createdAt])
+}
+
+model RuntimeErrorEvent {
+  id              String             @id @default(cuid())
+  fingerprint     String             @unique
+  status          RuntimeErrorStatus @default(OPEN)
+  source          String
+  routePath       String?
+  requestMethod   String?
+  errorName       String
+  message         String
+  stackPreview    String?            @db.Text
+  digest          String?
+  lastRequestId   String?
+  occurrenceCount Int                @default(1)
+  firstSeenAt     DateTime           @default(now())
+  lastSeenAt      DateTime           @default(now())
+  resolvedAt      DateTime?
+  resolvedById    String?
+  resolutionNote  String?
+  resolvedBy      User?              @relation("RuntimeErrorResolver", fields: [resolvedById], references: [id], onDelete: SetNull)
+
+  @@index([status, lastSeenAt])
+  @@index([source, lastSeenAt])
+  @@index([resolvedById, resolvedAt])
 }
 
 model AuthDevice {

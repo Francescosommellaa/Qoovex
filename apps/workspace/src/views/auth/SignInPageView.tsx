@@ -7,10 +7,11 @@ import { useState, type FormEvent } from "react";
 import { getGenericAuthFailureMessage } from "@shared/lib/auth-error";
 import styles from "./AuthPages.module.css";
 
-export function SignInPageView({ callbackUrl }: { callbackUrl: string }) {
+export function SignInPageView({ callbackUrl, showDevAuth }: { callbackUrl: string; showDevAuth: boolean }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [devLoading, setDevLoading] = useState(false);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -37,6 +38,20 @@ export function SignInPageView({ callbackUrl }: { callbackUrl: string }) {
     router.refresh();
   }
 
+  async function signInAsDev() {
+    setDevLoading(true);
+    setError(null);
+    const response = await fetch("/api/dev-auth", { method: "POST" });
+    const body = await response.json().catch(() => null) as { error?: string } | null;
+    if (!response.ok) {
+      setDevLoading(false);
+      setError(body?.error ?? "Accesso dev non disponibile.");
+      return;
+    }
+    router.push("/qoovex-admin");
+    router.refresh();
+  }
+
   return (
     <main className={styles.authPage}>
       <section className={styles.authCard} aria-labelledby="sign-in-title">
@@ -58,6 +73,8 @@ export function SignInPageView({ callbackUrl }: { callbackUrl: string }) {
             {loading ? "Accesso in corso" : "Accedi"}
           </button>
         </form>
+
+        {showDevAuth ? <button className={styles.secondaryButton} disabled={devLoading || loading} onClick={signInAsDev} type="button">{devLoading ? "Accesso dev in corso" : "Accedi come dev"}</button> : null}
 
         <p className={styles.hint}>
           Non hai un account? <Link className={styles.textLink} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link>
