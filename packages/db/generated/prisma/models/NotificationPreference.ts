@@ -41,6 +41,10 @@ export type NotificationPreferenceMinAggregateOutputType = {
   emailDigestEnabled: boolean | null
   emailDigestFrequency: $Enums.EmailDigestFrequency | null
   emailDigestHour: number | null
+  deadlineNotificationsEnabled: boolean | null
+  documentNotificationsEnabled: boolean | null
+  packageNotificationsEnabled: boolean | null
+  systemNotificationsEnabled: boolean | null
   lastDigestSentAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -53,6 +57,10 @@ export type NotificationPreferenceMaxAggregateOutputType = {
   emailDigestEnabled: boolean | null
   emailDigestFrequency: $Enums.EmailDigestFrequency | null
   emailDigestHour: number | null
+  deadlineNotificationsEnabled: boolean | null
+  documentNotificationsEnabled: boolean | null
+  packageNotificationsEnabled: boolean | null
+  systemNotificationsEnabled: boolean | null
   lastDigestSentAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -65,6 +73,10 @@ export type NotificationPreferenceCountAggregateOutputType = {
   emailDigestEnabled: number
   emailDigestFrequency: number
   emailDigestHour: number
+  deadlineNotificationsEnabled: number
+  documentNotificationsEnabled: number
+  packageNotificationsEnabled: number
+  systemNotificationsEnabled: number
   lastDigestSentAt: number
   createdAt: number
   updatedAt: number
@@ -87,6 +99,10 @@ export type NotificationPreferenceMinAggregateInputType = {
   emailDigestEnabled?: true
   emailDigestFrequency?: true
   emailDigestHour?: true
+  deadlineNotificationsEnabled?: true
+  documentNotificationsEnabled?: true
+  packageNotificationsEnabled?: true
+  systemNotificationsEnabled?: true
   lastDigestSentAt?: true
   createdAt?: true
   updatedAt?: true
@@ -99,6 +115,10 @@ export type NotificationPreferenceMaxAggregateInputType = {
   emailDigestEnabled?: true
   emailDigestFrequency?: true
   emailDigestHour?: true
+  deadlineNotificationsEnabled?: true
+  documentNotificationsEnabled?: true
+  packageNotificationsEnabled?: true
+  systemNotificationsEnabled?: true
   lastDigestSentAt?: true
   createdAt?: true
   updatedAt?: true
@@ -111,6 +131,10 @@ export type NotificationPreferenceCountAggregateInputType = {
   emailDigestEnabled?: true
   emailDigestFrequency?: true
   emailDigestHour?: true
+  deadlineNotificationsEnabled?: true
+  documentNotificationsEnabled?: true
+  packageNotificationsEnabled?: true
+  systemNotificationsEnabled?: true
   lastDigestSentAt?: true
   createdAt?: true
   updatedAt?: true
@@ -210,6 +234,10 @@ export type NotificationPreferenceGroupByOutputType = {
   emailDigestEnabled: boolean
   emailDigestFrequency: $Enums.EmailDigestFrequency
   emailDigestHour: number
+  deadlineNotificationsEnabled: boolean
+  documentNotificationsEnabled: boolean
+  packageNotificationsEnabled: boolean
+  systemNotificationsEnabled: boolean
   lastDigestSentAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -245,6 +273,10 @@ export type NotificationPreferenceWhereInput = {
   emailDigestEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFilter<"NotificationPreference"> | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFilter<"NotificationPreference"> | number
+  deadlineNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  documentNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  packageNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  systemNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
   lastDigestSentAt?: Prisma.DateTimeNullableFilter<"NotificationPreference"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"NotificationPreference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NotificationPreference"> | Date | string
@@ -259,6 +291,10 @@ export type NotificationPreferenceOrderByWithRelationInput = {
   emailDigestEnabled?: Prisma.SortOrder
   emailDigestFrequency?: Prisma.SortOrder
   emailDigestHour?: Prisma.SortOrder
+  deadlineNotificationsEnabled?: Prisma.SortOrder
+  documentNotificationsEnabled?: Prisma.SortOrder
+  packageNotificationsEnabled?: Prisma.SortOrder
+  systemNotificationsEnabled?: Prisma.SortOrder
   lastDigestSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -277,6 +313,10 @@ export type NotificationPreferenceWhereUniqueInput = Prisma.AtLeast<{
   emailDigestEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFilter<"NotificationPreference"> | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFilter<"NotificationPreference"> | number
+  deadlineNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  documentNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  packageNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  systemNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
   lastDigestSentAt?: Prisma.DateTimeNullableFilter<"NotificationPreference"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"NotificationPreference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NotificationPreference"> | Date | string
@@ -291,6 +331,10 @@ export type NotificationPreferenceOrderByWithAggregationInput = {
   emailDigestEnabled?: Prisma.SortOrder
   emailDigestFrequency?: Prisma.SortOrder
   emailDigestHour?: Prisma.SortOrder
+  deadlineNotificationsEnabled?: Prisma.SortOrder
+  documentNotificationsEnabled?: Prisma.SortOrder
+  packageNotificationsEnabled?: Prisma.SortOrder
+  systemNotificationsEnabled?: Prisma.SortOrder
   lastDigestSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -311,6 +355,10 @@ export type NotificationPreferenceScalarWhereWithAggregatesInput = {
   emailDigestEnabled?: Prisma.BoolWithAggregatesFilter<"NotificationPreference"> | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyWithAggregatesFilter<"NotificationPreference"> | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntWithAggregatesFilter<"NotificationPreference"> | number
+  deadlineNotificationsEnabled?: Prisma.BoolWithAggregatesFilter<"NotificationPreference"> | boolean
+  documentNotificationsEnabled?: Prisma.BoolWithAggregatesFilter<"NotificationPreference"> | boolean
+  packageNotificationsEnabled?: Prisma.BoolWithAggregatesFilter<"NotificationPreference"> | boolean
+  systemNotificationsEnabled?: Prisma.BoolWithAggregatesFilter<"NotificationPreference"> | boolean
   lastDigestSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"NotificationPreference"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationPreference"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationPreference"> | Date | string
@@ -321,6 +369,10 @@ export type NotificationPreferenceCreateInput = {
   emailDigestEnabled?: boolean
   emailDigestFrequency?: $Enums.EmailDigestFrequency
   emailDigestHour?: number
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -335,6 +387,10 @@ export type NotificationPreferenceUncheckedCreateInput = {
   emailDigestEnabled?: boolean
   emailDigestFrequency?: $Enums.EmailDigestFrequency
   emailDigestHour?: number
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -345,6 +401,10 @@ export type NotificationPreferenceUpdateInput = {
   emailDigestEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFieldUpdateOperationsInput | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFieldUpdateOperationsInput | number
+  deadlineNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  documentNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  packageNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  systemNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastDigestSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -359,6 +419,10 @@ export type NotificationPreferenceUncheckedUpdateInput = {
   emailDigestEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFieldUpdateOperationsInput | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFieldUpdateOperationsInput | number
+  deadlineNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  documentNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  packageNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  systemNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastDigestSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -371,6 +435,10 @@ export type NotificationPreferenceCreateManyInput = {
   emailDigestEnabled?: boolean
   emailDigestFrequency?: $Enums.EmailDigestFrequency
   emailDigestHour?: number
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -381,6 +449,10 @@ export type NotificationPreferenceUpdateManyMutationInput = {
   emailDigestEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFieldUpdateOperationsInput | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFieldUpdateOperationsInput | number
+  deadlineNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  documentNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  packageNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  systemNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastDigestSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -393,6 +465,10 @@ export type NotificationPreferenceUncheckedUpdateManyInput = {
   emailDigestEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFieldUpdateOperationsInput | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFieldUpdateOperationsInput | number
+  deadlineNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  documentNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  packageNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  systemNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastDigestSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -420,6 +496,10 @@ export type NotificationPreferenceCountOrderByAggregateInput = {
   emailDigestEnabled?: Prisma.SortOrder
   emailDigestFrequency?: Prisma.SortOrder
   emailDigestHour?: Prisma.SortOrder
+  deadlineNotificationsEnabled?: Prisma.SortOrder
+  documentNotificationsEnabled?: Prisma.SortOrder
+  packageNotificationsEnabled?: Prisma.SortOrder
+  systemNotificationsEnabled?: Prisma.SortOrder
   lastDigestSentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -436,6 +516,10 @@ export type NotificationPreferenceMaxOrderByAggregateInput = {
   emailDigestEnabled?: Prisma.SortOrder
   emailDigestFrequency?: Prisma.SortOrder
   emailDigestHour?: Prisma.SortOrder
+  deadlineNotificationsEnabled?: Prisma.SortOrder
+  documentNotificationsEnabled?: Prisma.SortOrder
+  packageNotificationsEnabled?: Prisma.SortOrder
+  systemNotificationsEnabled?: Prisma.SortOrder
   lastDigestSentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -448,6 +532,10 @@ export type NotificationPreferenceMinOrderByAggregateInput = {
   emailDigestEnabled?: Prisma.SortOrder
   emailDigestFrequency?: Prisma.SortOrder
   emailDigestHour?: Prisma.SortOrder
+  deadlineNotificationsEnabled?: Prisma.SortOrder
+  documentNotificationsEnabled?: Prisma.SortOrder
+  packageNotificationsEnabled?: Prisma.SortOrder
+  systemNotificationsEnabled?: Prisma.SortOrder
   lastDigestSentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -550,6 +638,10 @@ export type NotificationPreferenceCreateWithoutUserInput = {
   emailDigestEnabled?: boolean
   emailDigestFrequency?: $Enums.EmailDigestFrequency
   emailDigestHour?: number
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -562,6 +654,10 @@ export type NotificationPreferenceUncheckedCreateWithoutUserInput = {
   emailDigestEnabled?: boolean
   emailDigestFrequency?: $Enums.EmailDigestFrequency
   emailDigestHour?: number
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -603,6 +699,10 @@ export type NotificationPreferenceScalarWhereInput = {
   emailDigestEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFilter<"NotificationPreference"> | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFilter<"NotificationPreference"> | number
+  deadlineNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  documentNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  packageNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
+  systemNotificationsEnabled?: Prisma.BoolFilter<"NotificationPreference"> | boolean
   lastDigestSentAt?: Prisma.DateTimeNullableFilter<"NotificationPreference"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"NotificationPreference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NotificationPreference"> | Date | string
@@ -613,6 +713,10 @@ export type NotificationPreferenceCreateWithoutOrganizationInput = {
   emailDigestEnabled?: boolean
   emailDigestFrequency?: $Enums.EmailDigestFrequency
   emailDigestHour?: number
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -625,6 +729,10 @@ export type NotificationPreferenceUncheckedCreateWithoutOrganizationInput = {
   emailDigestEnabled?: boolean
   emailDigestFrequency?: $Enums.EmailDigestFrequency
   emailDigestHour?: number
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -662,6 +770,10 @@ export type NotificationPreferenceCreateManyUserInput = {
   emailDigestEnabled?: boolean
   emailDigestFrequency?: $Enums.EmailDigestFrequency
   emailDigestHour?: number
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -672,6 +784,10 @@ export type NotificationPreferenceUpdateWithoutUserInput = {
   emailDigestEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFieldUpdateOperationsInput | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFieldUpdateOperationsInput | number
+  deadlineNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  documentNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  packageNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  systemNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastDigestSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -684,6 +800,10 @@ export type NotificationPreferenceUncheckedUpdateWithoutUserInput = {
   emailDigestEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFieldUpdateOperationsInput | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFieldUpdateOperationsInput | number
+  deadlineNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  documentNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  packageNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  systemNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastDigestSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -695,6 +815,10 @@ export type NotificationPreferenceUncheckedUpdateManyWithoutUserInput = {
   emailDigestEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFieldUpdateOperationsInput | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFieldUpdateOperationsInput | number
+  deadlineNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  documentNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  packageNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  systemNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastDigestSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -706,6 +830,10 @@ export type NotificationPreferenceCreateManyOrganizationInput = {
   emailDigestEnabled?: boolean
   emailDigestFrequency?: $Enums.EmailDigestFrequency
   emailDigestHour?: number
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -716,6 +844,10 @@ export type NotificationPreferenceUpdateWithoutOrganizationInput = {
   emailDigestEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFieldUpdateOperationsInput | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFieldUpdateOperationsInput | number
+  deadlineNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  documentNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  packageNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  systemNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastDigestSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -728,6 +860,10 @@ export type NotificationPreferenceUncheckedUpdateWithoutOrganizationInput = {
   emailDigestEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFieldUpdateOperationsInput | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFieldUpdateOperationsInput | number
+  deadlineNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  documentNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  packageNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  systemNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastDigestSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -739,6 +875,10 @@ export type NotificationPreferenceUncheckedUpdateManyWithoutOrganizationInput = 
   emailDigestEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailDigestFrequency?: Prisma.EnumEmailDigestFrequencyFieldUpdateOperationsInput | $Enums.EmailDigestFrequency
   emailDigestHour?: Prisma.IntFieldUpdateOperationsInput | number
+  deadlineNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  documentNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  packageNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  systemNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastDigestSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -753,6 +893,10 @@ export type NotificationPreferenceSelect<ExtArgs extends runtime.Types.Extension
   emailDigestEnabled?: boolean
   emailDigestFrequency?: boolean
   emailDigestHour?: boolean
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -767,6 +911,10 @@ export type NotificationPreferenceSelectCreateManyAndReturn<ExtArgs extends runt
   emailDigestEnabled?: boolean
   emailDigestFrequency?: boolean
   emailDigestHour?: boolean
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -781,6 +929,10 @@ export type NotificationPreferenceSelectUpdateManyAndReturn<ExtArgs extends runt
   emailDigestEnabled?: boolean
   emailDigestFrequency?: boolean
   emailDigestHour?: boolean
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -795,12 +947,16 @@ export type NotificationPreferenceSelectScalar = {
   emailDigestEnabled?: boolean
   emailDigestFrequency?: boolean
   emailDigestHour?: boolean
+  deadlineNotificationsEnabled?: boolean
+  documentNotificationsEnabled?: boolean
+  packageNotificationsEnabled?: boolean
+  systemNotificationsEnabled?: boolean
   lastDigestSentAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type NotificationPreferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "userId" | "emailDigestEnabled" | "emailDigestFrequency" | "emailDigestHour" | "lastDigestSentAt" | "createdAt" | "updatedAt", ExtArgs["result"]["notificationPreference"]>
+export type NotificationPreferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "userId" | "emailDigestEnabled" | "emailDigestFrequency" | "emailDigestHour" | "deadlineNotificationsEnabled" | "documentNotificationsEnabled" | "packageNotificationsEnabled" | "systemNotificationsEnabled" | "lastDigestSentAt" | "createdAt" | "updatedAt", ExtArgs["result"]["notificationPreference"]>
 export type NotificationPreferenceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -827,6 +983,10 @@ export type $NotificationPreferencePayload<ExtArgs extends runtime.Types.Extensi
     emailDigestEnabled: boolean
     emailDigestFrequency: $Enums.EmailDigestFrequency
     emailDigestHour: number
+    deadlineNotificationsEnabled: boolean
+    documentNotificationsEnabled: boolean
+    packageNotificationsEnabled: boolean
+    systemNotificationsEnabled: boolean
     lastDigestSentAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1261,6 +1421,10 @@ export interface NotificationPreferenceFieldRefs {
   readonly emailDigestEnabled: Prisma.FieldRef<"NotificationPreference", 'Boolean'>
   readonly emailDigestFrequency: Prisma.FieldRef<"NotificationPreference", 'EmailDigestFrequency'>
   readonly emailDigestHour: Prisma.FieldRef<"NotificationPreference", 'Int'>
+  readonly deadlineNotificationsEnabled: Prisma.FieldRef<"NotificationPreference", 'Boolean'>
+  readonly documentNotificationsEnabled: Prisma.FieldRef<"NotificationPreference", 'Boolean'>
+  readonly packageNotificationsEnabled: Prisma.FieldRef<"NotificationPreference", 'Boolean'>
+  readonly systemNotificationsEnabled: Prisma.FieldRef<"NotificationPreference", 'Boolean'>
   readonly lastDigestSentAt: Prisma.FieldRef<"NotificationPreference", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"NotificationPreference", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"NotificationPreference", 'DateTime'>

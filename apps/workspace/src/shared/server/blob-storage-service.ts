@@ -1,6 +1,6 @@
 import "server-only";
 
-import { del, get, put } from "@vercel/blob";
+import { del, get, list, put } from "@vercel/blob";
 
 export interface StoredPrivateBlob {
   pathname: string;
@@ -42,4 +42,27 @@ export async function getPrivateBlob(pathname: string): Promise<ReadPrivateBlobR
 
 export async function deletePrivateBlob(pathname: string) {
   await del(pathname);
+}
+
+export interface ListedPrivateBlob {
+  pathname: string;
+  size?: number | null;
+  uploadedAt?: Date | null;
+}
+
+export async function listPrivateBlobs(input: { prefix: string; limit?: number; cursor?: string }) {
+  const result = await list({
+    prefix: input.prefix,
+    limit: input.limit ?? 100,
+    cursor: input.cursor,
+  });
+  return {
+    cursor: result.cursor,
+    hasMore: result.hasMore,
+    blobs: result.blobs.map((blob) => ({
+      pathname: blob.pathname,
+      size: blob.size ?? null,
+      uploadedAt: blob.uploadedAt ?? null,
+    })),
+  };
 }

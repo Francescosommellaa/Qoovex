@@ -390,6 +390,7 @@ export type UserWhereInput = {
   notifications?: Prisma.NotificationListRelationFilter
   notificationPreferences?: Prisma.NotificationPreferenceListRelationFilter
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryListRelationFilter
+  requestedDataControlJobs?: Prisma.DataControlJobListRelationFilter
   workerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentListRelationFilter
@@ -444,6 +445,7 @@ export type UserOrderByWithRelationInput = {
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   notificationPreferences?: Prisma.NotificationPreferenceOrderByRelationAggregateInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryOrderByRelationAggregateInput
+  requestedDataControlJobs?: Prisma.DataControlJobOrderByRelationAggregateInput
   workerUserLinks?: Prisma.WorkerUserLinkOrderByRelationAggregateInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkOrderByRelationAggregateInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentOrderByRelationAggregateInput
@@ -501,6 +503,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   notificationPreferences?: Prisma.NotificationPreferenceListRelationFilter
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryListRelationFilter
+  requestedDataControlJobs?: Prisma.DataControlJobListRelationFilter
   workerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentListRelationFilter
@@ -617,6 +620,7 @@ export type UserCreateInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -671,6 +675,7 @@ export type UserUncheckedCreateInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -725,6 +730,7 @@ export type UserUpdateInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -779,6 +785,7 @@ export type UserUncheckedUpdateInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -1218,6 +1225,20 @@ export type UserUpdateOneRequiredWithoutNotificationPreferencesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationPreferencesInput, Prisma.UserUpdateWithoutNotificationPreferencesInput>, Prisma.UserUncheckedUpdateWithoutNotificationPreferencesInput>
 }
 
+export type UserCreateNestedOneWithoutRequestedDataControlJobsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRequestedDataControlJobsInput, Prisma.UserUncheckedCreateWithoutRequestedDataControlJobsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRequestedDataControlJobsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRequestedDataControlJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRequestedDataControlJobsInput, Prisma.UserUncheckedCreateWithoutRequestedDataControlJobsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRequestedDataControlJobsInput
+  upsert?: Prisma.UserUpsertWithoutRequestedDataControlJobsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRequestedDataControlJobsInput, Prisma.UserUpdateWithoutRequestedDataControlJobsInput>, Prisma.UserUncheckedUpdateWithoutRequestedDataControlJobsInput>
+}
+
 export type UserCreateNestedOneWithoutNotificationEmailDeliveriesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationEmailDeliveriesInput, Prisma.UserUncheckedCreateWithoutNotificationEmailDeliveriesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationEmailDeliveriesInput
@@ -1424,6 +1445,7 @@ export type UserCreateWithoutAccountsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -1477,6 +1499,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -1546,6 +1569,7 @@ export type UserUpdateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -1599,6 +1623,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -1652,6 +1677,7 @@ export type UserCreateWithoutSessionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -1705,6 +1731,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -1774,6 +1801,7 @@ export type UserUpdateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -1827,6 +1855,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -1880,6 +1909,7 @@ export type UserCreateWithoutCreatedOrganizationsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -1933,6 +1963,7 @@ export type UserUncheckedCreateWithoutCreatedOrganizationsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -2002,6 +2033,7 @@ export type UserUpdateWithoutCreatedOrganizationsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -2055,6 +2087,7 @@ export type UserUncheckedUpdateWithoutCreatedOrganizationsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -2109,6 +2142,7 @@ export type UserCreateWithoutWorkerUserLinksInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
@@ -2162,6 +2196,7 @@ export type UserUncheckedCreateWithoutWorkerUserLinksInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
@@ -2220,6 +2255,7 @@ export type UserCreateWithoutLinkedWorkerUserLinksInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
@@ -2273,6 +2309,7 @@ export type UserUncheckedCreateWithoutLinkedWorkerUserLinksInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
@@ -2342,6 +2379,7 @@ export type UserUpdateWithoutWorkerUserLinksInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
@@ -2395,6 +2433,7 @@ export type UserUncheckedUpdateWithoutWorkerUserLinksInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
@@ -2459,6 +2498,7 @@ export type UserUpdateWithoutLinkedWorkerUserLinksInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
@@ -2512,6 +2552,7 @@ export type UserUncheckedUpdateWithoutLinkedWorkerUserLinksInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
@@ -2565,6 +2606,7 @@ export type UserCreateWithoutJobSiteUserAssignmentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
@@ -2618,6 +2660,7 @@ export type UserUncheckedCreateWithoutJobSiteUserAssignmentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
@@ -2676,6 +2719,7 @@ export type UserCreateWithoutAssignedJobSiteUsersInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -2729,6 +2773,7 @@ export type UserUncheckedCreateWithoutAssignedJobSiteUsersInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -2798,6 +2843,7 @@ export type UserUpdateWithoutJobSiteUserAssignmentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
@@ -2851,6 +2897,7 @@ export type UserUncheckedUpdateWithoutJobSiteUserAssignmentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
@@ -2915,6 +2962,7 @@ export type UserUpdateWithoutAssignedJobSiteUsersInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -2968,6 +3016,7 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteUsersInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -3021,6 +3070,7 @@ export type UserCreateWithoutAssignedJobSiteWorkersInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -3074,6 +3124,7 @@ export type UserUncheckedCreateWithoutAssignedJobSiteWorkersInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -3143,6 +3194,7 @@ export type UserUpdateWithoutAssignedJobSiteWorkersInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -3196,6 +3248,7 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteWorkersInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -3248,6 +3301,7 @@ export type UserCreateWithoutReviewedDocumentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -3301,6 +3355,7 @@ export type UserUncheckedCreateWithoutReviewedDocumentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -3370,6 +3425,7 @@ export type UserUpdateWithoutReviewedDocumentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -3423,6 +3479,7 @@ export type UserUncheckedUpdateWithoutReviewedDocumentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -3476,6 +3533,7 @@ export type UserCreateWithoutUploadedDocumentVersionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -3529,6 +3587,7 @@ export type UserUncheckedCreateWithoutUploadedDocumentVersionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -3598,6 +3657,7 @@ export type UserUpdateWithoutUploadedDocumentVersionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -3651,6 +3711,7 @@ export type UserUncheckedUpdateWithoutUploadedDocumentVersionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -3704,6 +3765,7 @@ export type UserCreateWithoutCompletedChecklistItemsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -3757,6 +3819,7 @@ export type UserUncheckedCreateWithoutCompletedChecklistItemsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -3826,6 +3889,7 @@ export type UserUpdateWithoutCompletedChecklistItemsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -3879,6 +3943,7 @@ export type UserUncheckedUpdateWithoutCompletedChecklistItemsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -3932,6 +3997,7 @@ export type UserCreateWithoutCreatedEvidenceInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -3985,6 +4051,7 @@ export type UserUncheckedCreateWithoutCreatedEvidenceInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -4054,6 +4121,7 @@ export type UserUpdateWithoutCreatedEvidenceInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -4107,6 +4175,7 @@ export type UserUncheckedUpdateWithoutCreatedEvidenceInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -4160,6 +4229,7 @@ export type UserCreateWithoutCreatedDocumentPackagesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -4213,6 +4283,7 @@ export type UserUncheckedCreateWithoutCreatedDocumentPackagesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -4282,6 +4353,7 @@ export type UserUpdateWithoutCreatedDocumentPackagesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -4335,6 +4407,7 @@ export type UserUncheckedUpdateWithoutCreatedDocumentPackagesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -4388,6 +4461,7 @@ export type UserCreateWithoutCreatedShareLinksInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -4441,6 +4515,7 @@ export type UserUncheckedCreateWithoutCreatedShareLinksInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -4510,6 +4585,7 @@ export type UserUpdateWithoutCreatedShareLinksInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -4563,6 +4639,7 @@ export type UserUncheckedUpdateWithoutCreatedShareLinksInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -4616,6 +4693,7 @@ export type UserCreateWithoutNotificationsInput = {
   createdShareLinks?: Prisma.ShareLinkCreateNestedManyWithoutCreatedByInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -4669,6 +4747,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   createdShareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -4738,6 +4817,7 @@ export type UserUpdateWithoutNotificationsInput = {
   createdShareLinks?: Prisma.ShareLinkUpdateManyWithoutCreatedByNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -4791,6 +4871,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   createdShareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -4844,6 +4925,7 @@ export type UserCreateWithoutNotificationPreferencesInput = {
   createdShareLinks?: Prisma.ShareLinkCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -4897,6 +4979,7 @@ export type UserUncheckedCreateWithoutNotificationPreferencesInput = {
   createdShareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -4966,6 +5049,7 @@ export type UserUpdateWithoutNotificationPreferencesInput = {
   createdShareLinks?: Prisma.ShareLinkUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -5018,6 +5102,239 @@ export type UserUncheckedUpdateWithoutNotificationPreferencesInput = {
   createdDocumentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutCreatedByNestedInput
   createdShareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+}
+
+export type UserCreateWithoutRequestedDataControlJobsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
+  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
+  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
+}
+
+export type UserUncheckedCreateWithoutRequestedDataControlJobsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
+  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
+  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentUncheckedCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+}
+
+export type UserCreateOrConnectWithoutRequestedDataControlJobsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRequestedDataControlJobsInput, Prisma.UserUncheckedCreateWithoutRequestedDataControlJobsInput>
+}
+
+export type UserUpsertWithoutRequestedDataControlJobsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRequestedDataControlJobsInput, Prisma.UserUncheckedUpdateWithoutRequestedDataControlJobsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRequestedDataControlJobsInput, Prisma.UserUncheckedCreateWithoutRequestedDataControlJobsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRequestedDataControlJobsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRequestedDataControlJobsInput, Prisma.UserUncheckedUpdateWithoutRequestedDataControlJobsInput>
+}
+
+export type UserUpdateWithoutRequestedDataControlJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
+  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
+  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRequestedDataControlJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
+  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
+  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUncheckedUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
@@ -5072,6 +5389,7 @@ export type UserCreateWithoutNotificationEmailDeliveriesInput = {
   createdShareLinks?: Prisma.ShareLinkCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -5125,6 +5443,7 @@ export type UserUncheckedCreateWithoutNotificationEmailDeliveriesInput = {
   createdShareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -5194,6 +5513,7 @@ export type UserUpdateWithoutNotificationEmailDeliveriesInput = {
   createdShareLinks?: Prisma.ShareLinkUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -5247,6 +5567,7 @@ export type UserUncheckedUpdateWithoutNotificationEmailDeliveriesInput = {
   createdShareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -5300,6 +5621,7 @@ export type UserCreateWithoutOrganizationMembershipsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -5353,6 +5675,7 @@ export type UserUncheckedCreateWithoutOrganizationMembershipsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -5422,6 +5745,7 @@ export type UserUpdateWithoutOrganizationMembershipsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -5475,6 +5799,7 @@ export type UserUncheckedUpdateWithoutOrganizationMembershipsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -5528,6 +5853,7 @@ export type UserCreateWithoutSentOrganizationInvitationsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -5581,6 +5907,7 @@ export type UserUncheckedCreateWithoutSentOrganizationInvitationsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -5650,6 +5977,7 @@ export type UserUpdateWithoutSentOrganizationInvitationsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -5703,6 +6031,7 @@ export type UserUncheckedUpdateWithoutSentOrganizationInvitationsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -5756,6 +6085,7 @@ export type UserCreateWithoutSupportSessionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -5809,6 +6139,7 @@ export type UserUncheckedCreateWithoutSupportSessionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -5878,6 +6209,7 @@ export type UserUpdateWithoutSupportSessionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -5931,6 +6263,7 @@ export type UserUncheckedUpdateWithoutSupportSessionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -5984,6 +6317,7 @@ export type UserCreateWithoutSupportAuditEventsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -6037,6 +6371,7 @@ export type UserUncheckedCreateWithoutSupportAuditEventsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -6106,6 +6441,7 @@ export type UserUpdateWithoutSupportAuditEventsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -6159,6 +6495,7 @@ export type UserUncheckedUpdateWithoutSupportAuditEventsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -6212,6 +6549,7 @@ export type UserCreateWithoutProductAuditEventsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -6265,6 +6603,7 @@ export type UserUncheckedCreateWithoutProductAuditEventsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -6334,6 +6673,7 @@ export type UserUpdateWithoutProductAuditEventsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -6387,6 +6727,7 @@ export type UserUncheckedUpdateWithoutProductAuditEventsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -6440,6 +6781,7 @@ export type UserCreateWithoutCredentialInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -6493,6 +6835,7 @@ export type UserUncheckedCreateWithoutCredentialInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -6562,6 +6905,7 @@ export type UserUpdateWithoutCredentialInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -6615,6 +6959,7 @@ export type UserUncheckedUpdateWithoutCredentialInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -6668,6 +7013,7 @@ export type UserCreateWithoutAuthCodesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -6721,6 +7067,7 @@ export type UserUncheckedCreateWithoutAuthCodesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -6790,6 +7137,7 @@ export type UserUpdateWithoutAuthCodesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -6843,6 +7191,7 @@ export type UserUncheckedUpdateWithoutAuthCodesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -6896,6 +7245,7 @@ export type UserCreateWithoutSecurityEventsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -6949,6 +7299,7 @@ export type UserUncheckedCreateWithoutSecurityEventsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -7018,6 +7369,7 @@ export type UserUpdateWithoutSecurityEventsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -7071,6 +7423,7 @@ export type UserUncheckedUpdateWithoutSecurityEventsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -7124,6 +7477,7 @@ export type UserCreateWithoutAuthDevicesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -7177,6 +7531,7 @@ export type UserUncheckedCreateWithoutAuthDevicesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -7246,6 +7601,7 @@ export type UserUpdateWithoutAuthDevicesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -7299,6 +7655,7 @@ export type UserUncheckedUpdateWithoutAuthDevicesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -7352,6 +7709,7 @@ export type UserCreateWithoutMfaBackupCodesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
@@ -7405,6 +7763,7 @@ export type UserUncheckedCreateWithoutMfaBackupCodesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
@@ -7474,6 +7833,7 @@ export type UserUpdateWithoutMfaBackupCodesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
@@ -7527,6 +7887,7 @@ export type UserUncheckedUpdateWithoutMfaBackupCodesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
   linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
@@ -7561,6 +7922,7 @@ export type UserCountOutputType = {
   notifications: number
   notificationPreferences: number
   notificationEmailDeliveries: number
+  requestedDataControlJobs: number
   workerUserLinks: number
   linkedWorkerUserLinks: number
   jobSiteUserAssignments: number
@@ -7590,6 +7952,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   notificationPreferences?: boolean | UserCountOutputTypeCountNotificationPreferencesArgs
   notificationEmailDeliveries?: boolean | UserCountOutputTypeCountNotificationEmailDeliveriesArgs
+  requestedDataControlJobs?: boolean | UserCountOutputTypeCountRequestedDataControlJobsArgs
   workerUserLinks?: boolean | UserCountOutputTypeCountWorkerUserLinksArgs
   linkedWorkerUserLinks?: boolean | UserCountOutputTypeCountLinkedWorkerUserLinksArgs
   jobSiteUserAssignments?: boolean | UserCountOutputTypeCountJobSiteUserAssignmentsArgs
@@ -7757,6 +8120,13 @@ export type UserCountOutputTypeCountNotificationEmailDeliveriesArgs<ExtArgs exte
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountRequestedDataControlJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DataControlJobWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountWorkerUserLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WorkerUserLinkWhereInput
 }
@@ -7837,6 +8207,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   notificationPreferences?: boolean | Prisma.User$notificationPreferencesArgs<ExtArgs>
   notificationEmailDeliveries?: boolean | Prisma.User$notificationEmailDeliveriesArgs<ExtArgs>
+  requestedDataControlJobs?: boolean | Prisma.User$requestedDataControlJobsArgs<ExtArgs>
   workerUserLinks?: boolean | Prisma.User$workerUserLinksArgs<ExtArgs>
   linkedWorkerUserLinks?: boolean | Prisma.User$linkedWorkerUserLinksArgs<ExtArgs>
   jobSiteUserAssignments?: boolean | Prisma.User$jobSiteUserAssignmentsArgs<ExtArgs>
@@ -7950,6 +8321,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   notificationPreferences?: boolean | Prisma.User$notificationPreferencesArgs<ExtArgs>
   notificationEmailDeliveries?: boolean | Prisma.User$notificationEmailDeliveriesArgs<ExtArgs>
+  requestedDataControlJobs?: boolean | Prisma.User$requestedDataControlJobsArgs<ExtArgs>
   workerUserLinks?: boolean | Prisma.User$workerUserLinksArgs<ExtArgs>
   linkedWorkerUserLinks?: boolean | Prisma.User$linkedWorkerUserLinksArgs<ExtArgs>
   jobSiteUserAssignments?: boolean | Prisma.User$jobSiteUserAssignmentsArgs<ExtArgs>
@@ -7985,6 +8357,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     notificationPreferences: Prisma.$NotificationPreferencePayload<ExtArgs>[]
     notificationEmailDeliveries: Prisma.$NotificationEmailDeliveryPayload<ExtArgs>[]
+    requestedDataControlJobs: Prisma.$DataControlJobPayload<ExtArgs>[]
     workerUserLinks: Prisma.$WorkerUserLinkPayload<ExtArgs>[]
     linkedWorkerUserLinks: Prisma.$WorkerUserLinkPayload<ExtArgs>[]
     jobSiteUserAssignments: Prisma.$JobSiteUserAssignmentPayload<ExtArgs>[]
@@ -8432,6 +8805,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationPreferences<T extends Prisma.User$notificationPreferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationPreferencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPreferencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationEmailDeliveries<T extends Prisma.User$notificationEmailDeliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationEmailDeliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationEmailDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  requestedDataControlJobs<T extends Prisma.User$requestedDataControlJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$requestedDataControlJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DataControlJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   workerUserLinks<T extends Prisma.User$workerUserLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workerUserLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkerUserLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   linkedWorkerUserLinks<T extends Prisma.User$linkedWorkerUserLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$linkedWorkerUserLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkerUserLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   jobSiteUserAssignments<T extends Prisma.User$jobSiteUserAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$jobSiteUserAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteUserAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9403,6 +9777,30 @@ export type User$notificationEmailDeliveriesArgs<ExtArgs extends runtime.Types.E
   take?: number
   skip?: number
   distinct?: Prisma.NotificationEmailDeliveryScalarFieldEnum | Prisma.NotificationEmailDeliveryScalarFieldEnum[]
+}
+
+/**
+ * User.requestedDataControlJobs
+ */
+export type User$requestedDataControlJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DataControlJob
+   */
+  select?: Prisma.DataControlJobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DataControlJob
+   */
+  omit?: Prisma.DataControlJobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DataControlJobInclude<ExtArgs> | null
+  where?: Prisma.DataControlJobWhereInput
+  orderBy?: Prisma.DataControlJobOrderByWithRelationInput | Prisma.DataControlJobOrderByWithRelationInput[]
+  cursor?: Prisma.DataControlJobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DataControlJobScalarFieldEnum | Prisma.DataControlJobScalarFieldEnum[]
 }
 
 /**

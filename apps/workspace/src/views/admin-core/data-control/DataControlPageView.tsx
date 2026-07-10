@@ -1,6 +1,7 @@
-import type { DataInventoryResponse, DataRecordCount, DataRetentionOverviewResponse } from "@qoovex/types";
+import type { BlobOrphanDryRunResponse, DataControlJobListResponse, DataInventoryResponse, DataRecordCount, DataRetentionOverviewResponse } from "@qoovex/types";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
 import styles from "../AdminCore.module.css";
+import { DataControlActionsPanel } from "./DataControlActionsPanel";
 
 const inventoryLabels: Array<[keyof DataInventoryResponse["counts"], string]> = [
   ["workers", "Lavoratori"],
@@ -28,7 +29,19 @@ function countParts(count: DataRecordCount) {
   return parts.join(" - ");
 }
 
-export function DataControlPageView({ inventory, retention }: { inventory: DataInventoryResponse; retention: DataRetentionOverviewResponse }) {
+export function DataControlPageView({
+  inventory,
+  retention,
+  jobs,
+  orphans,
+  organizationCode,
+}: {
+  inventory: DataInventoryResponse;
+  retention: DataRetentionOverviewResponse;
+  jobs: DataControlJobListResponse;
+  orphans: BlobOrphanDryRunResponse;
+  organizationCode: string;
+}) {
   const hasRetentionCandidates = retention.candidates.some((candidate) => candidate.count > 0);
 
   return (
@@ -67,19 +80,8 @@ export function DataControlPageView({ inventory, retention }: { inventory: DataI
         </div>
       </WorkspacePanel>
 
-      <WorkspacePanel title="Export dati" description="Scarica un export metadata JSON generato al momento.">
-        <div className={styles.record}>
-          <div className={styles.recordMain}>
-            <strong>Scarica export metadata</strong>
-            <span>Non include file o allegati. I file restano gestiti tramite accesso protetto.</span>
-            <small>Non contiene token, hash, chiavi Blob, URL permanenti, body email o note libere escluse.</small>
-          </div>
-          <div className={styles.actions}>
-            <a className={styles.linkButton} href="/api/data/export">
-              Scarica export metadata
-            </a>
-          </div>
-        </div>
+      <WorkspacePanel title="Job Data Control" description="Export asincrono, cleanup Blob e cancellazione definitiva passano da job tracciati.">
+        <DataControlActionsPanel initialJobs={jobs} initialOrphans={orphans} organizationCode={organizationCode} />
       </WorkspacePanel>
 
       <WorkspacePanel title="Retention operativa" description={retention.notice}>
@@ -102,21 +104,11 @@ export function DataControlPageView({ inventory, retention }: { inventory: DataI
         )}
       </WorkspacePanel>
 
-      <WorkspacePanel title="Cancellazioni controllate" description="La cancellazione definitiva richiede conferma e va valutata con il responsabile.">
-        <div className={styles.record}>
-          <div className={styles.recordMain}>
-            <strong>Cancellazione definitiva rimandata</strong>
-            <span>Questa fase non esegue hard delete, non cancella audit e non elimina fisicamente file Blob.</span>
-            <small>Prima di cancellare dati con relazioni o file collegati serve un flusso dedicato, esplicito e testato.</small>
-          </div>
-        </div>
-      </WorkspacePanel>
-
       <WorkspacePanel title="Limiti e verifiche" description="Le regole di conservazione sono operative, non normative.">
         <ul className={styles.compactList}>
           <li>
             <span>Export</span>
-            <strong>Metadata-only, generato on-demand e non salvato in DB o Blob.</strong>
+            <strong>Metadata-only, generato via job e salvato su Blob privato.</strong>
           </li>
           <li>
             <span>Retention</span>

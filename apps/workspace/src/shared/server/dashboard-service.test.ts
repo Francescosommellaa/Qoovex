@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   db: {
     document: { groupBy: vi.fn(), findMany: vi.fn() },
+    documentRequirement: { findMany: vi.fn() },
     deadline: { count: vi.fn(), findMany: vi.fn(), groupBy: vi.fn() },
     jobSite: { count: vi.fn(), findMany: vi.fn() },
     worker: { count: vi.fn(), findMany: vi.fn() },
@@ -38,6 +39,7 @@ vi.mock("@shared/server/access-context-service", () => ({
   requirePermission: mocks.requirePermission,
 }));
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
+vi.mock("./support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
 
 import { getDashboardData } from "./dashboard-service";
 
@@ -113,10 +115,12 @@ function primeDashboardMocks() {
     },
   ]);
   mocks.db.notification.count.mockResolvedValue(1);
+  mocks.db.documentRequirement.findMany.mockResolvedValue([]);
 }
 
 beforeEach(() => {
   resetModel(mocks.db.document);
+  resetModel(mocks.db.documentRequirement);
   resetModel(mocks.db.deadline);
   resetModel(mocks.db.jobSite);
   resetModel(mocks.db.worker);

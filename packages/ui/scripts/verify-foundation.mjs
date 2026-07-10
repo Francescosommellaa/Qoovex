@@ -31,6 +31,25 @@ if (webSources.match(marketingForbidden)) {
   throw new Error("apps/web contiene copy vietata.");
 }
 
+for (const required of [
+  "supporto@qoovex.com",
+  "/privacy",
+  "/terms",
+  "/cookies",
+  "/dpa",
+  "/manuale-operativo",
+  "qoovex-cookie-preference-v1",
+]) {
+  if (!webSources.includes(required)) {
+    throw new Error(`apps/web non contiene elemento pre-commerciale richiesto: ${required}`);
+  }
+}
+
+const trackingScriptPattern = /gtag\s*\(|googletagmanager|plausible\s*\(|posthog|fbq\s*\(/i;
+if (trackingScriptPattern.test(webSources)) {
+  throw new Error("apps/web contiene riferimenti a tracking non previsto.");
+}
+
 if (webSources.includes("@qoovex/db") || sirioSources.includes("@qoovex/db")) {
   throw new Error("apps/web o apps/sirio importano @qoovex/db.");
 }

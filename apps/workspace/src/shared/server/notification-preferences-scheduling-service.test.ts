@@ -76,6 +76,10 @@ const preferenceRecord = {
   emailDigestEnabled: false,
   emailDigestFrequency: "OFF",
   emailDigestHour: 8,
+  deadlineNotificationsEnabled: true,
+  documentNotificationsEnabled: true,
+  packageNotificationsEnabled: true,
+  systemNotificationsEnabled: true,
   lastDigestSentAt: null,
   createdAt: now,
   updatedAt: now,
@@ -129,6 +133,10 @@ describe("notification preferences", () => {
         emailDigestEnabled: false,
         emailDigestFrequency: "OFF",
         emailDigestHour: 8,
+        deadlineNotificationsEnabled: true,
+        documentNotificationsEnabled: true,
+        packageNotificationsEnabled: true,
+        systemNotificationsEnabled: true,
       });
     }
 
@@ -150,6 +158,10 @@ describe("notification preferences", () => {
       emailDigestEnabled: true,
       emailDigestFrequency: "DAILY",
       emailDigestHour: 8,
+      deadlineNotificationsEnabled: false,
+      documentNotificationsEnabled: true,
+      packageNotificationsEnabled: true,
+      systemNotificationsEnabled: true,
     })).resolves.toMatchObject({ updated: true });
 
     await expect(updateNotificationPreference({ emailDigestFrequency: "MONTHLY" })).rejects.toMatchObject({ status: 409 });
@@ -188,6 +200,10 @@ describe("scheduled email digest service", () => {
       userId: "user-1",
       emailDigestFrequency: "DAILY",
       emailDigestHour: 8,
+      deadlineNotificationsEnabled: true,
+      documentNotificationsEnabled: true,
+      packageNotificationsEnabled: true,
+      systemNotificationsEnabled: true,
       lastDigestSentAt: null,
       user: { email: "owner@example.com", emailVerified: now },
     }]);
@@ -211,10 +227,10 @@ describe("scheduled email digest service", () => {
 
   it("skips disallowed members, missing verified email, no notifications and recent windows", async () => {
     mocks.db.notificationPreference.findMany.mockResolvedValue([
-      { id: "role-skip", organizationId: "org-1", userId: "user-role", emailDigestFrequency: "DAILY", emailDigestHour: 8, lastDigestSentAt: null, user: { email: "a@example.com", emailVerified: now } },
-      { id: "email-skip", organizationId: "org-1", userId: "user-email", emailDigestFrequency: "DAILY", emailDigestHour: 8, lastDigestSentAt: null, user: { email: "b@example.com", emailVerified: null } },
-      { id: "recent-skip", organizationId: "org-1", userId: "user-recent", emailDigestFrequency: "DAILY", emailDigestHour: 8, lastDigestSentAt: new Date("2026-07-06T07:00:00.000Z"), user: { email: "c@example.com", emailVerified: now } },
-      { id: "empty-skip", organizationId: "org-1", userId: "user-empty", emailDigestFrequency: "DAILY", emailDigestHour: 8, lastDigestSentAt: null, user: { email: "d@example.com", emailVerified: now } },
+      { id: "role-skip", organizationId: "org-1", userId: "user-role", emailDigestFrequency: "DAILY", emailDigestHour: 8, deadlineNotificationsEnabled: true, documentNotificationsEnabled: true, packageNotificationsEnabled: true, systemNotificationsEnabled: true, lastDigestSentAt: null, user: { email: "a@example.com", emailVerified: now } },
+      { id: "email-skip", organizationId: "org-1", userId: "user-email", emailDigestFrequency: "DAILY", emailDigestHour: 8, deadlineNotificationsEnabled: true, documentNotificationsEnabled: true, packageNotificationsEnabled: true, systemNotificationsEnabled: true, lastDigestSentAt: null, user: { email: "b@example.com", emailVerified: null } },
+      { id: "recent-skip", organizationId: "org-1", userId: "user-recent", emailDigestFrequency: "DAILY", emailDigestHour: 8, deadlineNotificationsEnabled: true, documentNotificationsEnabled: true, packageNotificationsEnabled: true, systemNotificationsEnabled: true, lastDigestSentAt: new Date("2026-07-06T07:00:00.000Z"), user: { email: "c@example.com", emailVerified: now } },
+      { id: "empty-skip", organizationId: "org-1", userId: "user-empty", emailDigestFrequency: "DAILY", emailDigestHour: 8, deadlineNotificationsEnabled: true, documentNotificationsEnabled: true, packageNotificationsEnabled: true, systemNotificationsEnabled: true, lastDigestSentAt: null, user: { email: "d@example.com", emailVerified: now } },
     ]);
     mocks.db.organizationMembership.findFirst
       .mockResolvedValueOnce(null)
@@ -236,6 +252,10 @@ describe("scheduled email digest service", () => {
       userId: "user-1",
       emailDigestFrequency: "WEEKLY",
       emailDigestHour: 8,
+      deadlineNotificationsEnabled: true,
+      documentNotificationsEnabled: true,
+      packageNotificationsEnabled: true,
+      systemNotificationsEnabled: true,
       lastDigestSentAt: null,
       user: { email: "owner@example.com", emailVerified: now },
     }]);
@@ -246,5 +266,27 @@ describe("scheduled email digest service", () => {
       data: expect.objectContaining({ status: "FAILED", errorCode: "PROVIDER_ERROR" }),
     }));
     expect(mocks.db.notificationPreference.update).not.toHaveBeenCalled();
+  });
+
+  it("skips digest when all available notifications are disabled by granular preferences", async () => {
+    mocks.db.notificationPreference.findMany.mockResolvedValue([{
+      id: "preference-1",
+      organizationId: "org-1",
+      userId: "user-1",
+      emailDigestFrequency: "DAILY",
+      emailDigestHour: 8,
+      deadlineNotificationsEnabled: false,
+      documentNotificationsEnabled: true,
+      packageNotificationsEnabled: true,
+      systemNotificationsEnabled: true,
+      lastDigestSentAt: null,
+      user: { email: "owner@example.com", emailVerified: now },
+    }]);
+
+    await expect(runScheduledEmailDigest(now)).resolves.toMatchObject({ scanned: 1, sent: 0, failed: 0, skipped: 1 });
+    expect(mocks.sendTransactionalEmail).not.toHaveBeenCalled();
+    expect(mocks.db.notificationEmailDelivery.create).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ status: "SKIPPED", errorCode: "NO_NOTIFICATIONS", notificationCount: 0 }),
+    }));
   });
 });

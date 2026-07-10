@@ -130,8 +130,8 @@ describe("workspace admin UI copy", () => {
     expect(navigationSource).toContain("Controllo dati");
     expect(navigationSource).toContain('href: "/data-control", roles: ["OWNER"]');
     expect(dataControlSource).toContain("Inventario dati");
-    expect(dataControlSource).toContain("Scarica export metadata");
-    expect(dataControlSource).toContain("Non include file o allegati");
+    expect(dataControlSource).toContain("Job Data Control");
+    expect(dataControlSource).toContain("Metadata-only, generato via job e salvato su Blob privato");
     expect(dataControlSource).toContain("Le regole di conservazione sono operative, non normative");
     expect(dataControlSource).not.toMatch(/blobKey|tokenHash|rawToken|downloadUrl|emailBody|fileContent|password|secret/i);
   });

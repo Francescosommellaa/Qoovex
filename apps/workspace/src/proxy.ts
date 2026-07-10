@@ -10,7 +10,7 @@ import { isDevAuthAllowedForHost } from "@shared/lib/dev-auth-guard";
 const { auth } = NextAuth(authConfig);
 
 function isPublicApi(pathname: string) {
-  return pathname.startsWith("/api/auth/") || pathname === "/api/dev-auth";
+  return pathname.startsWith("/api/auth/") || pathname === "/api/dev-auth" || pathname === "/api/data/jobs/run";
 }
 
 export const proxy = auth(async (request) => {

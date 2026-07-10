@@ -17,6 +17,7 @@ import type {
 } from "@qoovex/types";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
+import { buildMissingDocumentRequirementItemsForScope } from "./document-requirement-service";
 import { syncOrganizationReminderRecords } from "./reminder-service";
 import { getResourceScope } from "./resource-scope-service";
 
@@ -67,6 +68,19 @@ function documentNextAction(status: DocumentStatus) {
   if (status === "EXPIRING_SOON") return "Controlla scadenza";
   if (status === "TO_REVIEW") return "Verifica informazioni";
   return "Controlla documento";
+}
+
+function missingRequirementToDashboardItem(item: { id: string; documentTypeName: string; ownerType: string; ownerLabel: string; requirementName: string }): DashboardDocumentAttentionItem {
+  return {
+    id: `missing:${item.id}`,
+    title: item.documentTypeName,
+    status: "MISSING",
+    ownerType: item.ownerType as DashboardDocumentAttentionItem["ownerType"],
+    ownerLabel: item.ownerLabel,
+    expiryDate: null,
+    updatedAt: new Date(0).toISOString(),
+    nextAction: `Configura documento richiesto: ${item.requirementName}`,
+  };
 }
 
 function buildEmptyStates(input: {
@@ -186,6 +200,8 @@ export async function getDashboardData(): Promise<DashboardResponse> {
       const key = documentCountKey(row.status);
       if (key) documents[key] = row._count._all;
     }
+    const missingRequirementItems = await buildMissingDocumentRequirementItemsForScope({ organizationId, scope });
+    documents.missing += missingRequirementItems.length;
 
     const jobSiteDocumentRows = jobSites.length ? await db.document.groupBy({
       by: ["jobSiteId"],
@@ -236,7 +252,9 @@ export async function getDashboardData(): Promise<DashboardResponse> {
         workerId: deadline.workerId,
         jobSiteId: deadline.jobSiteId,
       })),
-      documentsToReview: documentsToReview.map<DashboardDocumentAttentionItem>((document) => ({
+      documentsToReview: [
+        ...missingRequirementItems.slice(0, DASHBOARD_LIMIT).map(missingRequirementToDashboardItem),
+        ...documentsToReview.map<DashboardDocumentAttentionItem>((document) => ({
         id: document.id,
         title: document.title,
         status: document.status,
@@ -245,7 +263,8 @@ export async function getDashboardData(): Promise<DashboardResponse> {
         expiryDate: toIso(document.expiryDate),
         updatedAt: document.updatedAt.toISOString(),
         nextAction: documentNextAction(document.status),
-      })),
+        })),
+      ].slice(0, DASHBOARD_LIMIT),
       jobSites: jobSites.map((jobSite, index) => ({
         id: jobSite.id,
         name: jobSite.name,
@@ -367,6 +386,8 @@ export async function getDashboardData(): Promise<DashboardResponse> {
     const key = documentCountKey(row.status);
     if (key) documents[key] = row._count._all;
   }
+  const missingRequirementItems = await buildMissingDocumentRequirementItemsForScope({ organizationId, scope });
+  documents.missing += missingRequirementItems.length;
 
   const jobSiteIds = jobSites.map((jobSite) => jobSite.id);
   const workerIds = workers.map((worker) => worker.id);
@@ -471,7 +492,9 @@ export async function getDashboardData(): Promise<DashboardResponse> {
       workerId: deadline.workerId,
       jobSiteId: deadline.jobSiteId,
     })),
-    documentsToReview: documentsToReview.map<DashboardDocumentAttentionItem>((document) => ({
+    documentsToReview: [
+      ...missingRequirementItems.slice(0, DASHBOARD_LIMIT).map(missingRequirementToDashboardItem),
+      ...documentsToReview.map<DashboardDocumentAttentionItem>((document) => ({
       id: document.id,
       title: document.title,
       status: document.status,
@@ -480,7 +503,8 @@ export async function getDashboardData(): Promise<DashboardResponse> {
       expiryDate: toIso(document.expiryDate),
       updatedAt: document.updatedAt.toISOString(),
       nextAction: documentNextAction(document.status),
-    })),
+      })),
+    ].slice(0, DASHBOARD_LIMIT),
     jobSites: mappedJobSites,
     workers: mappedWorkers,
     packages: mappedPackages,

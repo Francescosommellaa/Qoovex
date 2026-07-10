@@ -74,6 +74,7 @@ export const ModelName = {
   ShareLink: 'ShareLink',
   Notification: 'Notification',
   NotificationPreference: 'NotificationPreference',
+  DataControlJob: 'DataControlJob',
   NotificationEmailDelivery: 'NotificationEmailDelivery',
   OrganizationMembership: 'OrganizationMembership',
   OrganizationInvitation: 'OrganizationInvitation',
@@ -478,12 +479,33 @@ export const NotificationPreferenceScalarFieldEnum = {
   emailDigestEnabled: 'emailDigestEnabled',
   emailDigestFrequency: 'emailDigestFrequency',
   emailDigestHour: 'emailDigestHour',
+  deadlineNotificationsEnabled: 'deadlineNotificationsEnabled',
+  documentNotificationsEnabled: 'documentNotificationsEnabled',
+  packageNotificationsEnabled: 'packageNotificationsEnabled',
+  systemNotificationsEnabled: 'systemNotificationsEnabled',
   lastDigestSentAt: 'lastDigestSentAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type NotificationPreferenceScalarFieldEnum = (typeof NotificationPreferenceScalarFieldEnum)[keyof typeof NotificationPreferenceScalarFieldEnum]
+
+
+export const DataControlJobScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  requestedById: 'requestedById',
+  type: 'type',
+  status: 'status',
+  blobKey: 'blobKey',
+  resultSummary: 'resultSummary',
+  errorCode: 'errorCode',
+  createdAt: 'createdAt',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type DataControlJobScalarFieldEnum = (typeof DataControlJobScalarFieldEnum)[keyof typeof DataControlJobScalarFieldEnum]
 
 
 export const NotificationEmailDeliveryScalarFieldEnum = {

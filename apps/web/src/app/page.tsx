@@ -1,28 +1,10 @@
 import { Badge, Button, Card, Container, Section } from "@qoovex/ui";
-
-const workspaceUrl = process.env.NEXT_PUBLIC_WORKSPACE_URL?.trim() || "http://localhost:3001";
+import { contactEmail, contactHref, workspaceUrl } from "./site-config";
+import { SiteShell } from "./site-chrome";
 
 export default function HomePage() {
   return (
-    <main className="site-shell">
-      <header className="site-header">
-        <Container>
-          <nav aria-label="Navigazione principale" className="site-nav">
-            <a className="site-brand" href="/">
-              Qoovex
-            </a>
-            <div className="site-nav__links">
-              <a href="#cosa-fa">Cosa fa</a>
-              <a href="#per-chi">Per chi e</a>
-              <a href="#richiedi-informazioni">Informazioni</a>
-              <Button href={workspaceUrl} variant="secondary">
-                Accedi al workspace
-              </Button>
-            </div>
-          </nav>
-        </Container>
-      </header>
-
+    <SiteShell>
       <section className="hero">
         <Container>
           <div className="hero__grid">
@@ -36,7 +18,7 @@ export default function HomePage() {
                 <Button href={workspaceUrl} size="lg">
                   Accedi al workspace
                 </Button>
-                <Button href="#richiedi-informazioni" size="lg" variant="secondary">
+                <Button href={contactHref} size="lg" variant="secondary">
                   Richiedi informazioni
                 </Button>
               </div>
@@ -143,16 +125,17 @@ export default function HomePage() {
         <Container>
           <Card className="contact-panel">
             <div>
-              <h3>Canale contatto in preparazione</h3>
+              <h3>Contatto Qoovex</h3>
               <p className="muted">
-                Il team Qoovex colleghera qui un recapito verificato. In questa fase non viene
-                creato un provider contatto e non vengono raccolti dati.
+                Per informazioni operative, accesso pilota o richieste sui dati puoi scrivere a{" "}
+                <a href={contactHref}>{contactEmail}</a>. Il mittente transazionale resta separato
+                dal canale di risposta.
               </p>
             </div>
-            <Button href={workspaceUrl}>Accedi al workspace</Button>
+            <Button href={contactHref}>Scrivi a Qoovex</Button>
           </Card>
         </Container>
       </Section>
-    </main>
+    </SiteShell>
   );
 }

@@ -78,6 +78,10 @@ export function NotificationEmailPreferencesPanel() {
         emailDigestEnabled: enabled,
         emailDigestFrequency: frequency,
         emailDigestHour: hour,
+        deadlineNotificationsEnabled: formData.get("deadlineNotificationsEnabled") === "on",
+        documentNotificationsEnabled: formData.get("documentNotificationsEnabled") === "on",
+        packageNotificationsEnabled: formData.get("packageNotificationsEnabled") === "on",
+        systemNotificationsEnabled: formData.get("systemNotificationsEnabled") === "on",
       });
       setPreference(response.preference);
       setMessage("Preferenze email salvate.");
@@ -117,6 +121,25 @@ export function NotificationEmailPreferencesPanel() {
             </label>
           </div>
           <p className={styles.muted}>Ultimo digest inviato: {formatDate(preference.lastDigestSentAt)}.</p>
+          <fieldset className={styles.field}>
+            <span>Tipi inclusi nel digest</span>
+            <label className={styles.checkboxField}>
+              <input defaultChecked={preference.deadlineNotificationsEnabled} name="deadlineNotificationsEnabled" type="checkbox" />
+              <span>Scadenze scadute o in arrivo</span>
+            </label>
+            <label className={styles.checkboxField}>
+              <input defaultChecked={preference.documentNotificationsEnabled} name="documentNotificationsEnabled" type="checkbox" />
+              <span>Documenti da verificare, scaduti o in scadenza</span>
+            </label>
+            <label className={styles.checkboxField}>
+              <input defaultChecked={preference.packageNotificationsEnabled} name="packageNotificationsEnabled" type="checkbox" />
+              <span>Pacchetti e link condivisi</span>
+            </label>
+            <label className={styles.checkboxField}>
+              <input defaultChecked={preference.systemNotificationsEnabled} name="systemNotificationsEnabled" type="checkbox" />
+              <span>Sistema</span>
+            </label>
+          </fieldset>
           <div className={styles.actions}>
             <button className={styles.button} disabled={pending !== null} type="submit">
               {pending === "save" ? "Salvataggio..." : "Salva preferenze email"}

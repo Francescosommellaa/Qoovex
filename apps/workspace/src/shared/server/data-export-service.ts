@@ -38,9 +38,7 @@ function auditEvent(event: {
   };
 }
 
-export async function buildDataExport(): Promise<DataExportResponse> {
-  const { context, organizationId, actorRole } = await requireDataControlAccess();
-  try {
+export async function buildDataExportForOrganization(organizationId: string): Promise<DataExportResponse> {
     const inventory = await buildDataInventoryForOrganization(organizationId);
     const [
       organization,
@@ -110,6 +108,14 @@ export async function buildDataExport(): Promise<DataExportResponse> {
         jobSiteWorkerAssignments: jobSiteWorkerAssignments.map((assignment) => ({ ...assignment, createdAt: assignment.createdAt.toISOString(), updatedAt: assignment.updatedAt.toISOString(), archivedAt: iso(assignment.archivedAt) })),
       },
     };
+
+    return response;
+}
+
+export async function buildDataExport(): Promise<DataExportResponse> {
+  const { context, organizationId, actorRole } = await requireDataControlAccess();
+  try {
+    const response = await buildDataExportForOrganization(organizationId);
 
     await recordProductAuditEventBestEffort({
       organizationId,

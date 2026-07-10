@@ -120,6 +120,12 @@ export type NotificationEmailDeliveryStatus = (typeof notificationEmailDeliveryS
 export const jobSiteUserAssignmentRoles = ["SITE_MANAGER"] as const;
 export type JobSiteUserAssignmentRole = (typeof jobSiteUserAssignmentRoles)[number];
 
+export const dataControlJobTypes = ["METADATA_EXPORT", "ORGANIZATION_DELETE", "ORPHAN_BLOB_CLEANUP"] as const;
+export type DataControlJobType = (typeof dataControlJobTypes)[number];
+
+export const dataControlJobStatuses = ["PENDING", "RUNNING", "COMPLETED", "FAILED"] as const;
+export type DataControlJobStatus = (typeof dataControlJobStatuses)[number];
+
 export const auditActions = [
   "DOCUMENT_CREATED",
   "DOCUMENT_UPDATED",
@@ -165,6 +171,14 @@ export const auditActions = [
   "JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED",
   "DATA_EXPORT_GENERATED",
   "DATA_EXPORT_FAILED",
+  "DATA_CONTROL_JOB_CREATED",
+  "DATA_CONTROL_JOB_RUN",
+  "ORPHAN_BLOB_CLEANUP_RUN",
+  "ORGANIZATION_DELETE_REQUESTED",
+  "ORGANIZATION_DELETE_RUN",
+  "DOCUMENT_REQUIREMENT_CREATED",
+  "DOCUMENT_REQUIREMENT_UPDATED",
+  "DOCUMENT_REQUIREMENT_ARCHIVED",
   "SECURITY_DENIED",
 ] as const;
 export type AuditAction = (typeof auditActions)[number];
@@ -184,6 +198,8 @@ export const auditEntityTypes = [
   "NOTIFICATION",
   "EMAIL_DELIVERY",
   "NOTIFICATION_PREFERENCE",
+  "DATA_CONTROL_JOB",
+  "DOCUMENT_REQUIREMENT",
   "WORKER_USER_LINK",
   "JOB_SITE_USER_ASSIGNMENT",
   "JOB_SITE_WORKER_ASSIGNMENT",
@@ -475,10 +491,59 @@ export interface DocumentRequirementSummary {
   id: EntityId;
   organizationId: EntityId;
   name: string;
+  description?: string | null;
   targetType: RequirementTargetType;
   documentTypeId?: EntityId | null;
+  documentTypeName?: string | null;
   jobSiteId?: EntityId | null;
+  jobSiteName?: string | null;
   isRequired: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  archivedAt?: string | null;
+}
+
+export interface CreateDocumentRequirementInput {
+  name: string;
+  description?: string | null;
+  targetType: RequirementTargetType;
+  documentTypeId: EntityId;
+  jobSiteId?: EntityId | null;
+  isRequired?: boolean;
+}
+
+export interface UpdateDocumentRequirementInput {
+  name?: string;
+  description?: string | null;
+  targetType?: RequirementTargetType;
+  documentTypeId?: EntityId;
+  jobSiteId?: EntityId | null;
+  isRequired?: boolean;
+}
+
+export interface ArchiveDocumentRequirementResponse {
+  requirement: DocumentRequirementSummary;
+  archived: true;
+}
+
+export interface MissingDocumentRequirementItem {
+  id: string;
+  requirementId: EntityId;
+  requirementName: string;
+  documentTypeId: EntityId;
+  documentTypeName: string;
+  targetType: RequirementTargetType;
+  ownerType: DocumentOwnerType;
+  workerId?: EntityId | null;
+  workerName?: string | null;
+  jobSiteId?: EntityId | null;
+  jobSiteName?: string | null;
+  ownerLabel: string;
+}
+
+export interface MissingDocumentRequirementsResponse {
+  items: MissingDocumentRequirementItem[];
+  generatedAt: string;
 }
 
 export interface DeadlineSummary {
@@ -852,6 +917,10 @@ export interface NotificationPreferenceResponse {
   emailDigestEnabled: boolean;
   emailDigestFrequency: EmailDigestFrequency;
   emailDigestHour: number;
+  deadlineNotificationsEnabled: boolean;
+  documentNotificationsEnabled: boolean;
+  packageNotificationsEnabled: boolean;
+  systemNotificationsEnabled: boolean;
   lastDigestSentAt?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -861,6 +930,10 @@ export interface UpdateNotificationPreferenceInput {
   emailDigestEnabled?: boolean;
   emailDigestFrequency?: EmailDigestFrequency;
   emailDigestHour?: number;
+  deadlineNotificationsEnabled?: boolean;
+  documentNotificationsEnabled?: boolean;
+  packageNotificationsEnabled?: boolean;
+  systemNotificationsEnabled?: boolean;
 }
 
 export interface UpdateNotificationPreferenceResponse {
@@ -996,6 +1069,69 @@ export interface DataExportResponse {
     jobSiteUserAssignments: Array<Record<string, unknown>>;
     jobSiteWorkerAssignments: Array<Record<string, unknown>>;
   };
+}
+
+export interface DataControlJobResponse {
+  id: EntityId;
+  organizationId: EntityId;
+  requestedById: EntityId;
+  type: DataControlJobType;
+  status: DataControlJobStatus;
+  blobKey?: string | null;
+  resultSummary?: Record<string, unknown> | null;
+  errorCode?: string | null;
+  createdAt: string;
+  startedAt?: string | null;
+  completedAt?: string | null;
+}
+
+export interface DataControlJobListResponse {
+  jobs: DataControlJobResponse[];
+  generatedAt: string;
+}
+
+export interface CreateDataExportJobResponse {
+  job: DataControlJobResponse;
+  created: true;
+}
+
+export interface RunDataControlJobsResponse {
+  scanned: number;
+  completed: number;
+  failed: number;
+  skipped: number;
+  generatedAt: string;
+}
+
+export interface CreateOrganizationDeletionJobInput {
+  organizationCode: string;
+  confirmation: string;
+}
+
+export interface CreateOrganizationDeletionJobResponse {
+  job: DataControlJobResponse;
+  created: true;
+}
+
+export interface BlobOrphanCandidate {
+  pathname: string;
+  size?: number | null;
+  uploadedAt?: string | null;
+}
+
+export interface BlobOrphanDryRunResponse {
+  prefix: string;
+  scanned: number;
+  referenced: number;
+  orphanCount: number;
+  deletableCount: number;
+  sample: BlobOrphanCandidate[];
+  generatedAt: string;
+}
+
+export interface BlobOrphanCleanupResponse {
+  job: DataControlJobResponse;
+  created: true;
 }
 
 export interface DataRetentionCandidate {

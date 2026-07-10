@@ -15,13 +15,23 @@ import { auditActorFromContext, recordProductAuditEventBestEffort } from "./prod
 
 const NOTIFICATION_PREFERENCE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
 const EMAIL_DIGEST_FREQUENCIES = new Set<EmailDigestFrequency>(["OFF", "DAILY", "WEEKLY"]);
-const ALLOWED_UPDATE_KEYS = new Set(["emailDigestEnabled", "emailDigestFrequency", "emailDigestHour"]);
+const GRANULAR_PREFERENCE_KEYS = [
+  "deadlineNotificationsEnabled",
+  "documentNotificationsEnabled",
+  "packageNotificationsEnabled",
+  "systemNotificationsEnabled",
+] as const;
+const ALLOWED_UPDATE_KEYS = new Set(["emailDigestEnabled", "emailDigestFrequency", "emailDigestHour", ...GRANULAR_PREFERENCE_KEYS]);
 
 const preferenceSelect = {
   id: true,
   emailDigestEnabled: true,
   emailDigestFrequency: true,
   emailDigestHour: true,
+  deadlineNotificationsEnabled: true,
+  documentNotificationsEnabled: true,
+  packageNotificationsEnabled: true,
+  systemNotificationsEnabled: true,
   lastDigestSentAt: true,
   createdAt: true,
   updatedAt: true,
@@ -47,6 +57,10 @@ function toPreferenceResponse(preference: {
   emailDigestEnabled: boolean;
   emailDigestFrequency: EmailDigestFrequency;
   emailDigestHour: number;
+  deadlineNotificationsEnabled: boolean;
+  documentNotificationsEnabled: boolean;
+  packageNotificationsEnabled: boolean;
+  systemNotificationsEnabled: boolean;
   lastDigestSentAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -56,6 +70,10 @@ function toPreferenceResponse(preference: {
     emailDigestEnabled: preference.emailDigestEnabled,
     emailDigestFrequency: preference.emailDigestFrequency,
     emailDigestHour: preference.emailDigestHour,
+    deadlineNotificationsEnabled: preference.deadlineNotificationsEnabled,
+    documentNotificationsEnabled: preference.documentNotificationsEnabled,
+    packageNotificationsEnabled: preference.packageNotificationsEnabled,
+    systemNotificationsEnabled: preference.systemNotificationsEnabled,
     lastDigestSentAt: toIso(preference.lastDigestSentAt),
     createdAt: preference.createdAt.toISOString(),
     updatedAt: preference.updatedAt.toISOString(),
@@ -127,11 +145,18 @@ function parseUpdateInput(input: unknown) {
     emailDigestEnabled?: boolean;
     emailDigestFrequency?: EmailDigestFrequency;
     emailDigestHour?: number;
+    deadlineNotificationsEnabled?: boolean;
+    documentNotificationsEnabled?: boolean;
+    packageNotificationsEnabled?: boolean;
+    systemNotificationsEnabled?: boolean;
   } = {};
 
   if ("emailDigestEnabled" in data) update.emailDigestEnabled = parseBoolean(data.emailDigestEnabled, "emailDigestEnabled");
   if ("emailDigestFrequency" in data) update.emailDigestFrequency = parseFrequency(data.emailDigestFrequency);
   if ("emailDigestHour" in data) update.emailDigestHour = parseDigestHour(data.emailDigestHour);
+  for (const key of GRANULAR_PREFERENCE_KEYS) {
+    if (key in data) update[key] = parseBoolean(data[key], key);
+  }
   if (update.emailDigestFrequency === "OFF") update.emailDigestEnabled = false;
   if (update.emailDigestEnabled === false && !("emailDigestFrequency" in update)) update.emailDigestFrequency = "OFF";
   return update;

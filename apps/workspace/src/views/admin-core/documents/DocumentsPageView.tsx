@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { DocumentForm } from "./DocumentForm";
 import { DocumentArchiveButton } from "./DocumentArchiveButton";
+import { DocumentRequirementsPanel } from "./DocumentRequirementsPanel";
 import styles from "../AdminCore.module.css";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
 import { documentStatusLabels, formatDate, ownerLabel, statusTone } from "@/views/workspace/workspace-format";
+import type { MissingDocumentRequirementItem } from "@qoovex/types";
 import type { WorkspaceCapabilities, WorkspaceDocumentRecord, WorkspaceDocumentTypeRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
 const filters = [
@@ -22,6 +24,7 @@ export function DocumentsPageView({
   jobSites,
   activeStatus,
   capabilities,
+  missingRequirements,
 }: {
   documents: WorkspaceDocumentRecord[];
   documentTypes: WorkspaceDocumentTypeRecord[];
@@ -29,6 +32,7 @@ export function DocumentsPageView({
   jobSites: WorkspaceJobSiteRecord[];
   activeStatus?: string;
   capabilities: WorkspaceCapabilities;
+  missingRequirements: MissingDocumentRequirementItem[];
 }) {
   return (
     <WorkspacePage>
@@ -36,6 +40,29 @@ export function DocumentsPageView({
         title="Documenti"
         description="Gestisci documenti logici, stati documentali e scadenze registrate senza caricare file direttamente nel record."
       />
+      <WorkspacePanel title="Documenti mancanti da requisiti" description="Elementi virtuali derivati dai requisiti attivi. Non vengono creati record documento automaticamente.">
+        {!missingRequirements.length ? (
+          <WorkspaceEmptyState title="Nessun documento mancante derivato dai requisiti." description="Configura requisiti e tipi documento per far emergere automaticamente le mancanze operative." />
+        ) : (
+          <div className={styles.list}>
+            {missingRequirements.slice(0, 12).map((item) => (
+              <article className={styles.record} key={item.id}>
+                <div className={styles.recordMain}>
+                  <strong>{item.documentTypeName}</strong>
+                  <span>{item.ownerLabel} - requisito: {item.requirementName}</span>
+                  <small>Target: {item.targetType === "ORGANIZATION" ? "Azienda" : item.targetType === "WORKER" ? "Lavoratore" : "Cantiere"}</small>
+                </div>
+                <div className={styles.actions}>
+                  <WorkspaceStatusBadge label="Mancante" tone="danger" />
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </WorkspacePanel>
+      <WorkspacePanel title="Requisiti documentali" description="Configura il minimo operativo per far emergere documenti mancanti. Il primo rilascio richiede sempre un tipo documento.">
+        <DocumentRequirementsPanel canManage={capabilities.canManageCore} documentTypes={documentTypes} jobSites={jobSites} />
+      </WorkspacePanel>
       <div className={styles.splitGrid}>
         <WorkspacePanel title="Lista documenti" description="Gli elementi archiviati sono esclusi dalla vista standard.">
           <div className={styles.filterBar} aria-label="Filtra documenti per stato">

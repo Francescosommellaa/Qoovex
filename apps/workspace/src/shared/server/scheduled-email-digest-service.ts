@@ -1,7 +1,7 @@
 import "server-only";
 
 import { db } from "@qoovex/db";
-import type { EmailDigestFrequency, OrganizationRole, ScheduledEmailDigestRunResponse } from "@qoovex/types";
+import type { EmailDigestFrequency, NotificationType, OrganizationRole, ScheduledEmailDigestRunResponse } from "@qoovex/types";
 import { getDigestNotifications, getNotificationsUrl, recordNotificationEmailDelivery, toEmailItem } from "./notification-email-service";
 import { sendTransactionalEmail, TransactionalEmailError } from "./transactional-email-service";
 import { syncOrganizationReminderRecords } from "./reminder-service";
@@ -31,6 +31,19 @@ function scheduleWindowKey(frequency: EmailDigestFrequency, now: Date) {
   return Math.floor(now.getTime() / windowMs);
 }
 
+function notificationCategoryEnabled(type: NotificationType, preference: {
+  deadlineNotificationsEnabled: boolean;
+  documentNotificationsEnabled: boolean;
+  packageNotificationsEnabled: boolean;
+  systemNotificationsEnabled: boolean;
+}) {
+  if (type === "DEADLINE_OVERDUE" || type === "DEADLINE_UPCOMING") return preference.deadlineNotificationsEnabled;
+  if (type === "DOCUMENT_TO_REVIEW" || type === "DOCUMENT_EXPIRED" || type === "DOCUMENT_EXPIRING_SOON") return preference.documentNotificationsEnabled;
+  if (type === "PACKAGE_READY_FOR_REVIEW" || type === "SHARE_LINK_EXPIRING" || type === "SHARE_LINK_REVOKED") return preference.packageNotificationsEnabled;
+  if (type === "SYSTEM") return preference.systemNotificationsEnabled;
+  return true;
+}
+
 async function hasAllowedMembership(input: { organizationId: string; userId: string }) {
   const membership = await db.organizationMembership.findFirst({
     where: {
@@ -56,6 +69,10 @@ export async function runScheduledEmailDigest(now = new Date()): Promise<Schedul
       userId: true,
       emailDigestFrequency: true,
       emailDigestHour: true,
+      deadlineNotificationsEnabled: true,
+      documentNotificationsEnabled: true,
+      packageNotificationsEnabled: true,
+      systemNotificationsEnabled: true,
       lastDigestSentAt: true,
       user: { select: { email: true, emailVerified: true } },
     },
@@ -84,6 +101,7 @@ export async function runScheduledEmailDigest(now = new Date()): Promise<Schedul
 
     await syncOrganizationReminderRecords(preference.organizationId, now);
     const digest = await getDigestNotifications(preference.organizationId, preference.userId);
+    digest.notifications = digest.notifications.filter((notification) => notificationCategoryEnabled(notification.type, preference));
     if (!digest.notifications.length) {
       await recordNotificationEmailDelivery({
         organizationId: preference.organizationId,

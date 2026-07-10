@@ -53,6 +53,7 @@ BLOB_READ_WRITE_TOKEN=<token-blob-valido>
 
 ```dotenv
 NEXT_PUBLIC_WORKSPACE_URL=http://localhost:3001
+NEXT_PUBLIC_CONTACT_EMAIL=supporto@qoovex.com
 ```
 
 ## Generazione secret
@@ -90,7 +91,7 @@ Genera valori diversi per:
 | `DATABASE_POSTGRES_URL` | opzionale | opzionale | Alias supportato dal package DB. |
 | `RESEND_API_KEY` | opzionale | obbligatoria | In locale, se vuota, le email vengono loggate; se invalida, l'invio fallisce. |
 | `RESEND_FROM_EMAIL` | opzionale | obbligatoria | Mittente verificato su Resend. |
-| `RESEND_REPLY_TO_EMAIL` | opzionale | opzionale | Reply-to email transazionali. |
+| `RESEND_REPLY_TO_EMAIL` | opzionale | consigliata | Per Qoovex usare `supporto@qoovex.com` come canale reale di risposta. |
 | `QOOVEX_AUTH_CODE_SECRET` | consigliata | obbligatoria | HMAC codici auth. Fallback possibili nel codice, ma in produzione va dedicata. |
 | `QOOVEX_PASSWORD_PEPPER` | consigliata | obbligatoria | Pepper password. Deve restare stabile. |
 | `QOOVEX_AUDIT_SECRET` | consigliata | obbligatoria | Hash IP/audit. |
@@ -108,6 +109,7 @@ Genera valori diversi per:
 | Variabile | Locale | Produzione | Note |
 | --- | --- | --- | --- |
 | `NEXT_PUBLIC_WORKSPACE_URL` | `http://localhost:3001` | `https://app.qoovex.com` | Pubblica, usata dal sito per link al workspace. |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | `supporto@qoovex.com` | `supporto@qoovex.com` | Pubblica, usata dal sito per link mailto e pagine legal. |
 
 Non mettere segreti in variabili `NEXT_PUBLIC_*`: sono visibili nel browser.
 
@@ -168,8 +170,8 @@ Produzione:
 
 - crea/verifica il dominio mittente in Resend;
 - genera `RESEND_API_KEY`;
-- configura `RESEND_FROM_EMAIL` con un mittente verificato;
-- opzionalmente configura `RESEND_REPLY_TO_EMAIL`.
+- configura `RESEND_FROM_EMAIL` con `noreply@qoovex.com` o altro mittente verificato del dominio;
+- configura `RESEND_REPLY_TO_EMAIL=supporto@qoovex.com` quando vuoi che le risposte vadano al canale reale.
 
 Locale:
 
@@ -201,7 +203,7 @@ AUTH_SECRET=<secret>
 DATABASE_URL=<production-postgres-url>
 RESEND_API_KEY=<resend-api-key>
 RESEND_FROM_EMAIL=<mittente-verificato>
-RESEND_REPLY_TO_EMAIL=<opzionale>
+RESEND_REPLY_TO_EMAIL=supporto@qoovex.com
 QOOVEX_AUTH_CODE_SECRET=<secret>
 QOOVEX_PASSWORD_PEPPER=<secret-stabile>
 QOOVEX_AUDIT_SECRET=<secret>
@@ -226,7 +228,21 @@ Variabili Production:
 
 ```dotenv
 NEXT_PUBLIC_WORKSPACE_URL=https://app.qoovex.com
+NEXT_PUBLIC_CONTACT_EMAIL=supporto@qoovex.com
 ```
+
+Dominio Production previsto:
+
+```text
+https://qoovex.com
+```
+
+Azioni manuali su Vercel Domains:
+
+1. assegna `qoovex.com` al progetto Vercel con root `apps/web`;
+2. assegna `app.qoovex.com` al progetto Vercel con root `apps/workspace`;
+3. verifica che `NEXT_PUBLIC_WORKSPACE_URL` nel progetto web punti a `https://app.qoovex.com`;
+4. verifica che `AUTH_URL` nel progetto workspace punti a `https://app.qoovex.com`.
 
 ## Vercel CLI
 
@@ -304,11 +320,12 @@ pnpm build
 2. Crea/collega Vercel Blob Store privato.
 3. Configura Resend e dominio mittente verificato.
 4. Configura variabili Production su Vercel per `apps/workspace`.
-5. Configura `NEXT_PUBLIC_WORKSPACE_URL` su Vercel per `apps/web`.
+5. Configura `NEXT_PUBLIC_WORKSPACE_URL` e `NEXT_PUBLIC_CONTACT_EMAIL` su Vercel per `apps/web`.
 6. Applica migration production con `pnpm db:migrate:deploy`.
 7. Esegui deploy workspace e web.
-8. Verifica signup/login, upload documento, download documento, invito/email, dashboard e accesso multi-tenant.
-9. Allinea cron digest a Vercel Cron prima di abilitarlo come automazione production.
+8. Verifica domini: `https://qoovex.com` apre il sito pubblico e `https://app.qoovex.com` apre il workspace.
+9. Verifica signup/login, upload documento, download documento, invito/email, dashboard e accesso multi-tenant.
+10. Allinea cron digest a Vercel Cron prima di abilitarlo come automazione production.
 
 ## Riferimenti ufficiali
 

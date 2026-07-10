@@ -79,6 +79,14 @@ enum AuditAction {
   JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED
   DATA_EXPORT_GENERATED
   DATA_EXPORT_FAILED
+  DATA_CONTROL_JOB_CREATED
+  DATA_CONTROL_JOB_RUN
+  ORPHAN_BLOB_CLEANUP_RUN
+  ORGANIZATION_DELETE_REQUESTED
+  ORGANIZATION_DELETE_RUN
+  DOCUMENT_REQUIREMENT_CREATED
+  DOCUMENT_REQUIREMENT_UPDATED
+  DOCUMENT_REQUIREMENT_ARCHIVED
   SECURITY_DENIED
 }
 
@@ -97,6 +105,8 @@ enum AuditEntityType {
   NOTIFICATION
   EMAIL_DELIVERY
   NOTIFICATION_PREFERENCE
+  DATA_CONTROL_JOB
+  DOCUMENT_REQUIREMENT
   WORKER_USER_LINK
   JOB_SITE_USER_ASSIGNMENT
   JOB_SITE_WORKER_ASSIGNMENT
@@ -239,6 +249,19 @@ enum JobSiteUserAssignmentRole {
   SITE_MANAGER
 }
 
+enum DataControlJobType {
+  METADATA_EXPORT
+  ORGANIZATION_DELETE
+  ORPHAN_BLOB_CLEANUP
+}
+
+enum DataControlJobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -322,6 +345,7 @@ model User {
   notifications              Notification[]
   notificationPreferences    NotificationPreference[]
   notificationEmailDeliveries NotificationEmailDelivery[]
+  requestedDataControlJobs   DataControlJob[]      @relation("DataControlJobRequester")
   workerUserLinks            WorkerUserLink[]
   linkedWorkerUserLinks      WorkerUserLink[]       @relation("WorkerUserLinkCreator")
   jobSiteUserAssignments     JobSiteUserAssignment[]
@@ -770,6 +794,10 @@ model NotificationPreference {
   emailDigestEnabled   Boolean              @default(false)
   emailDigestFrequency EmailDigestFrequency @default(OFF)
   emailDigestHour      Int                  @default(8)
+  deadlineNotificationsEnabled Boolean      @default(true)
+  documentNotificationsEnabled Boolean      @default(true)
+  packageNotificationsEnabled Boolean       @default(true)
+  systemNotificationsEnabled Boolean        @default(true)
   lastDigestSentAt     DateTime?
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
@@ -779,6 +807,26 @@ model NotificationPreference {
   @@unique([organizationId, userId])
   @@index([organizationId, emailDigestEnabled, emailDigestFrequency], map: "NotificationPreference_organizationId_emailDigestEnabled_emailD")
   @@index([userId, updatedAt])
+}
+
+model DataControlJob {
+  id             String               @id @default(cuid())
+  organizationId String
+  requestedById  String
+  type           DataControlJobType
+  status         DataControlJobStatus @default(PENDING)
+  blobKey        String?
+  resultSummary  Json?
+  errorCode      String?
+  createdAt      DateTime             @default(now())
+  startedAt      DateTime?
+  completedAt    DateTime?
+  requestedBy    User                 @relation("DataControlJobRequester", fields: [requestedById], references: [id], onDelete: Restrict)
+
+  @@index([organizationId, status, createdAt])
+  @@index([organizationId, type, status])
+  @@index([requestedById, createdAt])
+  @@index([blobKey])
 }
 
 model NotificationEmailDelivery {
