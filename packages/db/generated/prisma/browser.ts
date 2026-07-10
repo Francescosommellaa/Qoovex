@@ -189,7 +189,7 @@ export type AuthRateLimit = Prisma.AuthRateLimitModel
 export type SecurityAuditEvent = Prisma.SecurityAuditEventModel
 /**
  * Model RuntimeErrorEvent
- *
+ * 
  */
 export type RuntimeErrorEvent = Prisma.RuntimeErrorEventModel
 /**

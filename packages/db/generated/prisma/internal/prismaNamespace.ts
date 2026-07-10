@@ -4310,14 +4310,14 @@ export type ListEnumAuthCodePurposeFieldRefInput<$PrismaModel> = FieldRefInputTy
  * Reference to a field of type 'RuntimeErrorStatus'
  */
 export type EnumRuntimeErrorStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuntimeErrorStatus'>
-
+    
 
 
 /**
  * Reference to a field of type 'RuntimeErrorStatus[]'
  */
 export type ListEnumRuntimeErrorStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuntimeErrorStatus[]'>
-
+    
 
 
 /**
@@ -4542,3 +4542,4 @@ export type PrismaAction =
  * `PrismaClient` proxy available in interactive transactions.
  */
 export type TransactionClient = Omit<DefaultPrismaClient, runtime.ITXClientDenyList>
+
