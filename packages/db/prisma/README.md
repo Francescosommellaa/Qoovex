@@ -14,7 +14,7 @@ Non mettere qui:
 - file binari, PDF, immagini o contenuti Blob.
 
 Regole:
-- ordine file e model secondo `docs/CodePatterns.md`;
+- ordine file e model secondo `docs/02_ARCHITECTURE_AND_BOUNDARIES.md`;
 - non duplicare regole business applicative nello schema.
 - ogni modello dominio deve riferirsi a `Organization`;
 - non introdurre mapping tenant legacy o colonne tenant con nomi non canonici.

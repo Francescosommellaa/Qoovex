@@ -13,7 +13,7 @@ Non mettere qui:
 Regole:
 - un endpoint per cartella;
 - nome cartella coerente con la risorsa o il caso d'uso;
-- ordine file secondo `docs/CodePatterns.md`.
+- ordine file secondo `docs/02_ARCHITECTURE_AND_BOUNDARIES.md`.
 
 Endpoint dominio MVP attivi:
 - `auth/credentials`: registrazione credentials e verifica email per ingresso workspace;

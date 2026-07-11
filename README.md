@@ -25,7 +25,7 @@ Il modello MVP per documenti, scadenze, cantieri e prove operative e definito co
 - `packages/db`, `packages/types` e `packages/ui` sono i package condivisi attivi oggi.
 - Qoovex organizza documenti e stati operativi; non promette conformita o validita legale.
 - `SITE_MANAGER` e `WORKER` usano filtri risorsa server-side, non accessi larghi all'azienda.
-- Le decisioni di placement sono documentate in `docs/22_MONOREPO_BOUNDARIES_AND_PLACEMENT.md`.
+- Le decisioni di placement sono documentate in `docs/02_ARCHITECTURE_AND_BOUNDARIES.md`.
 
 ## Comandi
 
