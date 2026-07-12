@@ -1,14 +1,14 @@
 import "server-only";
 
 import { db } from "@qoovex/db";
-import type { MyResourceScopeResponse, OrganizationRole, RecordStatus, ViewerContext } from "@qoovex/types";
+import type { MyResourceScopeResponse, OrganizationRole, RecordStatus, WorkspaceAccessContext } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 
 const FULL_RESOURCE_SCOPE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
 const SCOPED_RESOURCE_ROLES = ["SITE_MANAGER", "WORKER"] as const;
 
 export interface ResourceScope {
-  context: ViewerContext;
+  context: WorkspaceAccessContext;
   organizationId: string;
   actorRole: OrganizationRole;
   fullAccess: boolean;
@@ -31,15 +31,15 @@ export function isFullResourceScopeRole(role: OrganizationRole) {
   return (FULL_RESOURCE_SCOPE_ROLES as readonly OrganizationRole[]).includes(role);
 }
 
-export async function getResourceScope(context?: ViewerContext): Promise<ResourceScope> {
+export async function getResourceScope(context?: WorkspaceAccessContext): Promise<ResourceScope> {
   if (!context) {
-    const { getViewerContext } = await import("./access-context-service");
-    context = await getViewerContext();
+    const { getWorkspaceAccessContext } = await import("./access-context-service");
+    context = await getWorkspaceAccessContext();
   }
-  const actorRole: OrganizationRole | null = context.support ? "OWNER" : context.membership?.role ?? null;
+  const actorRole: OrganizationRole | null = context.support ? "OWNER" : context.company?.role ?? null;
   if (!actorRole) throw new AccessError("Risorsa non disponibile.", 404);
-  const organizationId = context.support?.organization.id ?? context.membership?.organization.id;
-  if (!organizationId) throw new AccessError("Nessuna azienda attiva.", 403);
+  const organizationId = context.support?.organization.id ?? context.company?.organization.id;
+  if (!organizationId) throw new AccessError("Nessuna azienda configurata.", 403);
   const fullAccess = isFullResourceScopeRole(actorRole);
 
   let linkedWorker: ResourceScope["linkedWorker"] = null;

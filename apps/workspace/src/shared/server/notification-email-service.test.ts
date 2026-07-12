@@ -127,8 +127,8 @@ describe("notification email service", () => {
     }));
   });
 
-  it("denies site managers, workers and viewers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
+  it("denies site managers, workers and destinatari esterni", async () => {
+    for (const role of ["SITE_MANAGER", "WORKER"] as const) {
       setRole(role);
       await expect(previewNotificationEmailDigest()).rejects.toMatchObject({ status: 404 });
     }

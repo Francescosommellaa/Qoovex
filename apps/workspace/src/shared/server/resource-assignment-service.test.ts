@@ -5,12 +5,12 @@ const mocks = vi.hoisted(() => ({
   db: {
     worker: { findMany: vi.fn(), findFirst: vi.fn() },
     jobSite: { findMany: vi.fn(), findFirst: vi.fn() },
-    organizationMembership: { findMany: vi.fn(), findFirst: vi.fn() },
+    user: { findMany: vi.fn(), findFirst: vi.fn() },
     workerUserLink: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
     jobSiteUserAssignment: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
     jobSiteWorkerAssignment: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
   },
-  getViewerContext: vi.fn(),
+  getWorkspaceAccessContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
   requirePermission: vi.fn(),
   recordProductAuditEventBestEffort: vi.fn(),
@@ -28,7 +28,7 @@ vi.mock("@shared/server/access-errors", () => ({
   },
 }));
 vi.mock("@shared/server/access-context-service", () => ({
-  getViewerContext: mocks.getViewerContext,
+  getWorkspaceAccessContext: mocks.getWorkspaceAccessContext,
   getContextOrganizationId: mocks.getContextOrganizationId,
   requirePermission: mocks.requirePermission,
 }));
@@ -89,10 +89,10 @@ function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
 }
 
 function setRole(role: OrganizationRole) {
-  mocks.getViewerContext.mockResolvedValue({
+  mocks.getWorkspaceAccessContext.mockResolvedValue({
     userId: "user-owner",
     platformRole: "USER",
-    membership: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
+    company: { role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
     support: null,
     permissions: [],
   });
@@ -106,7 +106,7 @@ beforeEach(() => {
   mocks.auditActorFromContext.mockReturnValue({ actorUserId: "user-owner", actorRole: "OWNER", supportSessionId: null });
   mocks.db.worker.findFirst.mockResolvedValue(worker);
   mocks.db.jobSite.findFirst.mockResolvedValue(jobSite);
-  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "WORKER", user });
+  mocks.db.user.findFirst.mockResolvedValue({ ...user, organizationRole: "WORKER" });
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteUserAssignment.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteWorkerAssignment.findFirst.mockResolvedValue(null);
@@ -150,7 +150,7 @@ describe("resource assignment service", () => {
   });
 
   it("validates role-specific jobsite assignments and soft archives them", async () => {
-    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "SITE_MANAGER", user });
+    mocks.db.user.findFirst.mockResolvedValueOnce({ ...user, organizationRole: "SITE_MANAGER" });
     await expect(createJobSiteUserAssignment({ jobSiteId: "jobsite-1", userId: "user-worker" })).resolves.toMatchObject({
       jobSiteId: "jobsite-1",
       assignmentRole: "SITE_MANAGER",
@@ -168,8 +168,8 @@ describe("resource assignment service", () => {
     }));
   });
 
-  it("denies assignment management to site managers, workers and viewers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
+  it("denies assignment management to site managers, workers and destinatari esterni", async () => {
+    for (const role of ["SITE_MANAGER", "WORKER"] as const) {
       setRole(role);
       await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 404 });
     }

@@ -48,7 +48,7 @@ async function getContext(page: Page): Promise<JsonRecord> {
 
 async function ensureOrganization(page: Page, runId: string): Promise<JsonRecord> {
   let context = await getContext(page);
-  if (!context.membership) {
+  if (!context.company) {
     const response = await page.evaluate(async (name) => {
       const result = await fetch("/api/organizations", {
         method: "POST",
@@ -61,8 +61,8 @@ async function ensureOrganization(page: Page, runId: string): Promise<JsonRecord
     context = await getContext(page);
   }
 
-  const membership = context.membership as JsonRecord | null;
-  const organization = membership?.organization as JsonRecord | undefined;
+  const company = context.company as JsonRecord | null;
+  const organization = company?.organization as JsonRecord | undefined;
   expect(organization?.id).toEqual(expect.any(String));
   expect(organization?.code).toEqual(expect.any(String));
   return organization;

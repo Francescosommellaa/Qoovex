@@ -23,10 +23,11 @@ const ASSIGNMENT_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
 const ASSIGNMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
 const MY_SCOPE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 
-const activeMembershipSelect = {
+const activeCompanyUserSelect = {
   id: true,
-  role: true,
-  user: { select: { id: true, name: true, email: true } },
+  organizationRole: true,
+  name: true,
+  email: true,
 } as const;
 
 function parseRequiredId(value: unknown, label: string) {
@@ -39,7 +40,7 @@ function userLabel(user: { name: string | null; email: string }) {
   return user.name?.trim() || user.email;
 }
 
-function assertExpectedMembershipRole(role: OrganizationRole, expected: OrganizationRole, label: string) {
+function assertExpectedCompanyRole(role: OrganizationRole, expected: OrganizationRole, label: string) {
   if (role !== expected) throw new AccessError(`${label} non disponibile per questa assegnazione.`, 409);
 }
 
@@ -61,13 +62,13 @@ async function assertActiveJobSite(organizationId: string, jobSiteId: string) {
   return jobSite;
 }
 
-async function assertActiveMembership(organizationId: string, userId: string) {
-  const membership = await db.organizationMembership.findFirst({
-    where: { organizationId, userId, revokedAt: null },
-    select: activeMembershipSelect,
+async function assertCompanyUser(organizationId: string, userId: string) {
+  const user = await db.user.findFirst({
+    where: { id: userId, organizationId, organizationRole: { not: null } },
+    select: activeCompanyUserSelect,
   });
-  if (!membership) throw new AccessError("Utente non disponibile per questa azienda.", 404);
-  return membership;
+  if (!user) throw new AccessError("Utente non disponibile per questa azienda.", 404);
+  return user;
 }
 
 function toWorkerUserLinkResponse(link: {
@@ -171,11 +172,11 @@ export async function createWorkerUserLink(input: CreateWorkerUserLinkInput | Re
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("assignments:manage", ASSIGNMENT_MANAGE_ROLES);
   const workerId = parseRequiredId(input.workerId, "Lavoratore");
   const userId = parseRequiredId(input.userId, "Utente");
-  const [worker, membership] = await Promise.all([
+  const [worker, companyUser] = await Promise.all([
     assertActiveWorker(organizationId, workerId),
-    assertActiveMembership(organizationId, userId),
+    assertCompanyUser(organizationId, userId),
   ]);
-  assertExpectedMembershipRole(membership.role, "WORKER", "Utente");
+  assertExpectedCompanyRole(companyUser.organizationRole!, "WORKER", "Utente");
 
   const duplicate = await db.workerUserLink.findFirst({
     where: { organizationId, archivedAt: null, OR: [{ workerId }, { userId }] },
@@ -264,8 +265,8 @@ export async function createJobSiteUserAssignment(input: CreateJobSiteUserAssign
   const jobSiteId = parseRequiredId(input.jobSiteId, "Cantiere");
   const userId = parseRequiredId(input.userId, "Utente");
   await assertActiveJobSite(organizationId, jobSiteId);
-  const membership = await assertActiveMembership(organizationId, userId);
-  assertExpectedMembershipRole(membership.role, "SITE_MANAGER", "Utente");
+  const companyUser = await assertCompanyUser(organizationId, userId);
+  assertExpectedCompanyRole(companyUser.organizationRole!, "SITE_MANAGER", "Utente");
 
   const duplicate = await db.jobSiteUserAssignment.findFirst({
     where: { organizationId, jobSiteId, userId, assignmentRole: "SITE_MANAGER", archivedAt: null },
@@ -425,7 +426,7 @@ export async function getMyResourceScope() {
 
 export async function getResourceAssignmentOptions() {
   const { organizationId } = await requireOrganizationDomainAccess("assignments:read", ASSIGNMENT_READ_ROLES);
-  const [workers, jobSites, memberships] = await Promise.all([
+  const [workers, jobSites, companyUsers] = await Promise.all([
     db.worker.findMany({
       where: { organizationId, archivedAt: null },
       select: { id: true, displayName: true, roleLabel: true, status: true },
@@ -436,20 +437,20 @@ export async function getResourceAssignmentOptions() {
       select: { id: true, name: true, status: true },
       orderBy: [{ name: "asc" }],
     }),
-    db.organizationMembership.findMany({
-      where: { organizationId, revokedAt: null, role: { in: ["SITE_MANAGER", "WORKER"] } },
-      select: activeMembershipSelect,
+    db.user.findMany({
+      where: { organizationId, organizationRole: { in: ["SITE_MANAGER", "WORKER"] } },
+      select: activeCompanyUserSelect,
       orderBy: [{ createdAt: "asc" }],
     }),
   ]);
   return {
     workers,
     jobSites,
-    users: memberships.map((membership) => ({
-      id: membership.user.id,
-      label: userLabel(membership.user),
-      email: membership.user.email,
-      role: membership.role,
+    users: companyUsers.map((user) => ({
+      id: user.id,
+      label: userLabel(user),
+      email: user.email,
+      role: user.organizationRole!,
     })),
   };
 }

@@ -32,7 +32,7 @@ export default async function PlatformUsersPage({ searchParams }: { searchParams
                     <div><h2>{[user.firstName, user.lastName].filter(Boolean).join(" ") || user.username}</h2><p className={styles.meta}>{user.email} · @{user.username}</p></div>
                     <WorkspaceStatusBadge label={user.suspendedAt ? "Sospeso" : user.platformRole === "SUPER_ADMIN" ? "Operatore Qoovex" : "Attivo"} tone={user.suspendedAt ? "danger" : user.platformRole === "SUPER_ADMIN" ? "info" : "good"} />
                   </div>
-                  <p className={styles.muted}>{user.organizationMemberships.map((item) => `${item.organization.name} (${item.role})`).join(", ") || "Nessuna azienda attiva"}</p>
+                  <p className={styles.muted}>{user.organization ? `${user.organization.name} (${user.organizationRole})` : "Nessuna azienda configurata"}</p>
                   <div className={styles.actions}><Link className={styles.linkButton} href={`/qoovex-admin/users/${user.id}`}>Apri dettaglio</Link></div>
                 </article>
               ))}

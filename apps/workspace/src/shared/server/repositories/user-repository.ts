@@ -59,11 +59,8 @@ export async function findWorkspaceUserById(userId: string) {
       authVersion: true,
       suspendedAt: true,
       suspensionReason: true,
-      organizationMemberships: {
-        where: { revokedAt: null },
-        take: 1,
-        select: { role: true, organizationId: true },
-      },
+      organizationId: true,
+      organizationRole: true,
       usernameChangedAt: true,
       avatarBlobPathname: true,
       image: true,

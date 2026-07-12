@@ -13,7 +13,7 @@ const mocks = vi.hoisted(() => ({
     checklist: { findFirst: vi.fn() },
     $transaction: vi.fn(),
   },
-  getViewerContext: vi.fn(),
+  getWorkspaceAccessContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
   requirePermission: vi.fn(),
   recordSupportAccess: vi.fn(),
@@ -31,7 +31,7 @@ vi.mock("@shared/server/access-errors", () => ({
   },
 }));
 vi.mock("@shared/server/access-context-service", () => ({
-  getViewerContext: mocks.getViewerContext,
+  getWorkspaceAccessContext: mocks.getWorkspaceAccessContext,
   getContextOrganizationId: mocks.getContextOrganizationId,
   requirePermission: mocks.requirePermission,
 }));
@@ -97,10 +97,10 @@ function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
 }
 
 function setRole(role: OrganizationRole) {
-  mocks.getViewerContext.mockResolvedValue({
+  mocks.getWorkspaceAccessContext.mockResolvedValue({
     userId: "user-1",
     platformRole: "USER",
-    membership: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
+    company: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
     support: null,
     permissions: [],
   });
@@ -116,7 +116,7 @@ beforeEach(() => {
   resetModel(mocks.db.evidence);
   resetModel(mocks.db.checklist);
   mocks.db.$transaction.mockReset();
-  mocks.getViewerContext.mockReset();
+  mocks.getWorkspaceAccessContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
   mocks.recordSupportAccess.mockReset();
@@ -183,8 +183,8 @@ describe("document package service", () => {
     await expect(createShareLink("package-1")).rejects.toMatchObject({ status: 404 });
   });
 
-  it("denies broad internal package access to site managers, workers and viewers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
+  it("denies broad internal package access to site managers, workers and destinatari esterni", async () => {
+    for (const role of ["SITE_MANAGER", "WORKER"] as const) {
       setRole(role);
       await expect(listDocumentPackages()).rejects.toMatchObject({ status: 404 });
       await expect(createDocumentPackage({ title: "Pacchetto" })).rejects.toMatchObject({ status: 404 });
@@ -217,7 +217,7 @@ describe("document package service", () => {
   });
 });
 
-describe("share link and viewer access", () => {
+describe("share link and destinatario esterno access", () => {
   it("creates share links with hashed token only and default expiry", async () => {
     mocks.db.shareLink.create.mockImplementation(async ({ data }) => ({
       ...shareLinkRecord,
@@ -260,7 +260,7 @@ describe("share link and viewer access", () => {
     expect(links[0]).not.toHaveProperty("tokenHash");
   });
 
-  it("lets a valid token read only included viewer-safe package data", async () => {
+  it("lets a valid token read only included destinatario esterno-safe package data", async () => {
     const token = "raw-token";
     mocks.db.shareLink.findUnique.mockResolvedValue({
       ...shareLinkRecord,
@@ -317,7 +317,7 @@ describe("share link and viewer access", () => {
     expect(evidenceDownload).toMatchObject({ stream, originalFileName: "foto.png", mimeType: "image/png" });
   });
 
-  it("denies viewer download for items not included or archived files", async () => {
+  it("denies destinatario esterno download for items not included or archived files", async () => {
     mocks.db.shareLink.findUnique.mockResolvedValue({ ...shareLinkRecord, documentPackage: packageRecord });
     mocks.db.documentPackageItem.findFirst.mockResolvedValue(null);
     await expect(getSharedPackageItemDownload("token", "missing-item")).rejects.toMatchObject({ status: 404 });

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { getViewerContext } from "@shared/server/access-context-service";
+import { getWorkspaceAccessContext } from "@shared/server/access-context-service";
 import { getEffectiveOrganizationRole } from "@shared/server/domain-access-service";
 import { WorkspaceNavigation } from "./WorkspaceNavigation";
 import { SupportSessionBanner } from "./WorkspaceSessionControls";
@@ -8,7 +8,7 @@ import styles from "./WorkspaceShell.module.css";
 
 async function getNavigationRole() {
   try {
-    const context = await getViewerContext();
+    const context = await getWorkspaceAccessContext();
     return { context, role: getEffectiveOrganizationRole(context) };
   } catch {
     return null;

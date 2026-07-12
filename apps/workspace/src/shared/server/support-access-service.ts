@@ -28,8 +28,8 @@ export async function getActiveSupportSession(userId: string) {
 }
 
 async function notifyOrganizationOwners(organizationId: string, template: "support-opened" | "support-closed", input: { employeeEmail: string; reason: string; occurredAt: Date }) {
-  const owners = await db.organizationMembership.findMany({ where: { organizationId, role: "OWNER", revokedAt: null }, select: { user: { select: { email: true } }, organization: { select: { name: true } } } });
-  await Promise.allSettled(owners.map((owner) => sendTransactionalEmail({ to: owner.user.email, template: { kind: template, organizationName: owner.organization.name, employeeEmail: input.employeeEmail, reason: input.reason, occurredAt: input.occurredAt } })));
+  const owners = await db.user.findMany({ where: { organizationId, organizationRole: "OWNER" }, select: { email: true, organization: { select: { name: true } } } });
+  await Promise.allSettled(owners.map((owner) => sendTransactionalEmail({ to: owner.email, template: { kind: template, organizationName: owner.organization?.name ?? "Azienda", employeeEmail: input.employeeEmail, reason: input.reason, occurredAt: input.occurredAt } })));
 }
 
 export async function findOrganizationForSupport(userId: string, codeInput: string) {

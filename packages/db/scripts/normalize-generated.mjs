@@ -8,3 +8,11 @@ const normalized = source.replace(
 );
 
 if (normalized !== source) await writeFile(generatedModel, normalized, "utf8");
+
+const generatedNamespace = new URL("../generated/prisma/internal/prismaNamespace.ts", import.meta.url);
+const namespaceSource = await readFile(generatedNamespace, "utf8");
+const normalizedNamespace = namespaceSource.replace(/[ \t]+(?=\r?\n)/g, "");
+
+if (normalizedNamespace !== namespaceSource) {
+  await writeFile(generatedNamespace, normalizedNamespace, "utf8");
+}

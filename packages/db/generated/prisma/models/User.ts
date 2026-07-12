@@ -51,6 +51,8 @@ export type UserMinAggregateOutputType = {
   authVersion: number | null
   suspendedAt: Date | null
   suspensionReason: string | null
+  organizationId: string | null
+  organizationRole: $Enums.OrganizationRole | null
   mfaEnabled: boolean | null
   totpSecretEncrypted: string | null
   totpSecretNonce: string | null
@@ -80,6 +82,8 @@ export type UserMaxAggregateOutputType = {
   authVersion: number | null
   suspendedAt: Date | null
   suspensionReason: string | null
+  organizationId: string | null
+  organizationRole: $Enums.OrganizationRole | null
   mfaEnabled: boolean | null
   totpSecretEncrypted: string | null
   totpSecretNonce: string | null
@@ -109,6 +113,8 @@ export type UserCountAggregateOutputType = {
   authVersion: number
   suspendedAt: number
   suspensionReason: number
+  organizationId: number
+  organizationRole: number
   mfaEnabled: number
   totpSecretEncrypted: number
   totpSecretNonce: number
@@ -148,6 +154,8 @@ export type UserMinAggregateInputType = {
   authVersion?: true
   suspendedAt?: true
   suspensionReason?: true
+  organizationId?: true
+  organizationRole?: true
   mfaEnabled?: true
   totpSecretEncrypted?: true
   totpSecretNonce?: true
@@ -177,6 +185,8 @@ export type UserMaxAggregateInputType = {
   authVersion?: true
   suspendedAt?: true
   suspensionReason?: true
+  organizationId?: true
+  organizationRole?: true
   mfaEnabled?: true
   totpSecretEncrypted?: true
   totpSecretNonce?: true
@@ -206,6 +216,8 @@ export type UserCountAggregateInputType = {
   authVersion?: true
   suspendedAt?: true
   suspensionReason?: true
+  organizationId?: true
+  organizationRole?: true
   mfaEnabled?: true
   totpSecretEncrypted?: true
   totpSecretNonce?: true
@@ -322,6 +334,8 @@ export type UserGroupByOutputType = {
   authVersion: number
   suspendedAt: Date | null
   suspensionReason: string | null
+  organizationId: string | null
+  organizationRole: $Enums.OrganizationRole | null
   mfaEnabled: boolean
   totpSecretEncrypted: string | null
   totpSecretNonce: string | null
@@ -374,6 +388,8 @@ export type UserWhereInput = {
   authVersion?: Prisma.IntFilter<"User"> | number
   suspendedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   suspensionReason?: Prisma.StringNullableFilter<"User"> | string | null
+  organizationId?: Prisma.StringNullableFilter<"User"> | string | null
+  organizationRole?: Prisma.EnumOrganizationRoleNullableFilter<"User"> | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFilter<"User"> | boolean
   totpSecretEncrypted?: Prisma.StringNullableFilter<"User"> | string | null
   totpSecretNonce?: Prisma.StringNullableFilter<"User"> | string | null
@@ -391,7 +407,7 @@ export type UserWhereInput = {
   securityEvents?: Prisma.SecurityAuditEventListRelationFilter
   mfaBackupCodes?: Prisma.MfaBackupCodeListRelationFilter
   authDevices?: Prisma.AuthDeviceListRelationFilter
-  organizationMemberships?: Prisma.OrganizationMembershipListRelationFilter
+  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
   createdOrganizations?: Prisma.OrganizationListRelationFilter
   sentOrganizationInvitations?: Prisma.OrganizationInvitationListRelationFilter
   supportSessions?: Prisma.SupportSessionListRelationFilter
@@ -432,6 +448,8 @@ export type UserOrderByWithRelationInput = {
   authVersion?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   suspensionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  organizationRole?: Prisma.SortOrderInput | Prisma.SortOrder
   mfaEnabled?: Prisma.SortOrder
   totpSecretEncrypted?: Prisma.SortOrderInput | Prisma.SortOrder
   totpSecretNonce?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -449,7 +467,7 @@ export type UserOrderByWithRelationInput = {
   securityEvents?: Prisma.SecurityAuditEventOrderByRelationAggregateInput
   mfaBackupCodes?: Prisma.MfaBackupCodeOrderByRelationAggregateInput
   authDevices?: Prisma.AuthDeviceOrderByRelationAggregateInput
-  organizationMemberships?: Prisma.OrganizationMembershipOrderByRelationAggregateInput
+  organization?: Prisma.OrganizationOrderByWithRelationInput
   createdOrganizations?: Prisma.OrganizationOrderByRelationAggregateInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationOrderByRelationAggregateInput
   supportSessions?: Prisma.SupportSessionOrderByRelationAggregateInput
@@ -493,6 +511,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   authVersion?: Prisma.IntFilter<"User"> | number
   suspendedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   suspensionReason?: Prisma.StringNullableFilter<"User"> | string | null
+  organizationId?: Prisma.StringNullableFilter<"User"> | string | null
+  organizationRole?: Prisma.EnumOrganizationRoleNullableFilter<"User"> | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFilter<"User"> | boolean
   totpSecretEncrypted?: Prisma.StringNullableFilter<"User"> | string | null
   totpSecretNonce?: Prisma.StringNullableFilter<"User"> | string | null
@@ -510,7 +530,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   securityEvents?: Prisma.SecurityAuditEventListRelationFilter
   mfaBackupCodes?: Prisma.MfaBackupCodeListRelationFilter
   authDevices?: Prisma.AuthDeviceListRelationFilter
-  organizationMemberships?: Prisma.OrganizationMembershipListRelationFilter
+  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
   createdOrganizations?: Prisma.OrganizationListRelationFilter
   sentOrganizationInvitations?: Prisma.OrganizationInvitationListRelationFilter
   supportSessions?: Prisma.SupportSessionListRelationFilter
@@ -551,6 +571,8 @@ export type UserOrderByWithAggregationInput = {
   authVersion?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   suspensionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  organizationRole?: Prisma.SortOrderInput | Prisma.SortOrder
   mfaEnabled?: Prisma.SortOrder
   totpSecretEncrypted?: Prisma.SortOrderInput | Prisma.SortOrder
   totpSecretNonce?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -588,6 +610,8 @@ export type UserScalarWhereWithAggregatesInput = {
   authVersion?: Prisma.IntWithAggregatesFilter<"User"> | number
   suspendedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   suspensionReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  organizationId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  organizationRole?: Prisma.EnumOrganizationRoleNullableWithAggregatesFilter<"User"> | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   totpSecretEncrypted?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   totpSecretNonce?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -617,6 +641,7 @@ export type UserCreateInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -634,7 +659,7 @@ export type UserCreateInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -675,6 +700,8 @@ export type UserUncheckedCreateInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -692,7 +719,6 @@ export type UserUncheckedCreateInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -733,6 +759,7 @@ export type UserUpdateInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -750,7 +777,7 @@ export type UserUpdateInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -791,6 +818,8 @@ export type UserUncheckedUpdateInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -808,7 +837,6 @@ export type UserUncheckedUpdateInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -849,6 +877,8 @@ export type UserCreateManyInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -878,6 +908,7 @@ export type UserUpdateManyMutationInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -907,6 +938,8 @@ export type UserUncheckedUpdateManyInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -941,6 +974,8 @@ export type UserCountOrderByAggregateInput = {
   authVersion?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrder
   suspensionReason?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  organizationRole?: Prisma.SortOrder
   mfaEnabled?: Prisma.SortOrder
   totpSecretEncrypted?: Prisma.SortOrder
   totpSecretNonce?: Prisma.SortOrder
@@ -974,6 +1009,8 @@ export type UserMaxOrderByAggregateInput = {
   authVersion?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrder
   suspensionReason?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  organizationRole?: Prisma.SortOrder
   mfaEnabled?: Prisma.SortOrder
   totpSecretEncrypted?: Prisma.SortOrder
   totpSecretNonce?: Prisma.SortOrder
@@ -1003,6 +1040,8 @@ export type UserMinOrderByAggregateInput = {
   authVersion?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrder
   suspensionReason?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  organizationRole?: Prisma.SortOrder
   mfaEnabled?: Prisma.SortOrder
   totpSecretEncrypted?: Prisma.SortOrder
   totpSecretNonce?: Prisma.SortOrder
@@ -1022,6 +1061,16 @@ export type UserSumOrderByAggregateInput = {
 export type UserNullableScalarRelationFilter = {
   is?: Prisma.UserWhereInput | null
   isNot?: Prisma.UserWhereInput | null
+}
+
+export type UserListRelationFilter = {
+  every?: Prisma.UserWhereInput
+  some?: Prisma.UserWhereInput
+  none?: Prisma.UserWhereInput
+}
+
+export type UserOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type UserCreateNestedOneWithoutAccountsInput = {
@@ -1072,10 +1121,28 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableEnumOrganizationRoleFieldUpdateOperationsInput = {
+  set?: $Enums.OrganizationRole | null
+}
+
 export type UserCreateNestedOneWithoutCreatedOrganizationsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedOrganizationsInput, Prisma.UserUncheckedCreateWithoutCreatedOrganizationsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedOrganizationsInput
   connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationInput, Prisma.UserUncheckedCreateWithoutOrganizationInput> | Prisma.UserCreateWithoutOrganizationInput[] | Prisma.UserUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationInput | Prisma.UserCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.UserCreateManyOrganizationInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationInput, Prisma.UserUncheckedCreateWithoutOrganizationInput> | Prisma.UserCreateWithoutOrganizationInput[] | Prisma.UserUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationInput | Prisma.UserCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.UserCreateManyOrganizationInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
 }
 
 export type UserUpdateOneWithoutCreatedOrganizationsNestedInput = {
@@ -1086,6 +1153,34 @@ export type UserUpdateOneWithoutCreatedOrganizationsNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedOrganizationsInput, Prisma.UserUpdateWithoutCreatedOrganizationsInput>, Prisma.UserUncheckedUpdateWithoutCreatedOrganizationsInput>
+}
+
+export type UserUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationInput, Prisma.UserUncheckedCreateWithoutOrganizationInput> | Prisma.UserCreateWithoutOrganizationInput[] | Prisma.UserUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationInput | Prisma.UserCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.UserUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.UserCreateManyOrganizationInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.UserUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutOrganizationInput | Prisma.UserUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationInput, Prisma.UserUncheckedCreateWithoutOrganizationInput> | Prisma.UserCreateWithoutOrganizationInput[] | Prisma.UserUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationInput | Prisma.UserCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.UserUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.UserCreateManyOrganizationInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.UserUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutOrganizationInput | Prisma.UserUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
 export type UserCreateNestedOneWithoutWorkerUserLinksInput = {
@@ -1304,20 +1399,6 @@ export type UserUpdateOneRequiredWithoutNotificationEmailDeliveriesNestedInput =
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationEmailDeliveriesInput, Prisma.UserUpdateWithoutNotificationEmailDeliveriesInput>, Prisma.UserUncheckedUpdateWithoutNotificationEmailDeliveriesInput>
 }
 
-export type UserCreateNestedOneWithoutOrganizationMembershipsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedCreateWithoutOrganizationMembershipsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationMembershipsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutOrganizationMembershipsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedCreateWithoutOrganizationMembershipsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationMembershipsInput
-  upsert?: Prisma.UserUpsertWithoutOrganizationMembershipsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrganizationMembershipsInput, Prisma.UserUpdateWithoutOrganizationMembershipsInput>, Prisma.UserUncheckedUpdateWithoutOrganizationMembershipsInput>
-}
-
 export type UserCreateNestedOneWithoutSentOrganizationInvitationsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSentOrganizationInvitationsInput, Prisma.UserUncheckedCreateWithoutSentOrganizationInvitationsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSentOrganizationInvitationsInput
@@ -1483,6 +1564,7 @@ export type UserCreateWithoutAccountsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -1499,7 +1581,7 @@ export type UserCreateWithoutAccountsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -1540,6 +1622,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -1556,7 +1640,6 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -1613,6 +1696,7 @@ export type UserUpdateWithoutAccountsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1629,7 +1713,7 @@ export type UserUpdateWithoutAccountsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -1670,6 +1754,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1686,7 +1772,6 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -1727,6 +1812,7 @@ export type UserCreateWithoutSessionsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -1743,7 +1829,7 @@ export type UserCreateWithoutSessionsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -1784,6 +1870,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -1800,7 +1888,6 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -1857,6 +1944,7 @@ export type UserUpdateWithoutSessionsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1873,7 +1961,7 @@ export type UserUpdateWithoutSessionsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -1914,6 +2002,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1930,7 +2020,6 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -1971,6 +2060,7 @@ export type UserCreateWithoutCreatedOrganizationsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -1988,7 +2078,7 @@ export type UserCreateWithoutCreatedOrganizationsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
@@ -2028,6 +2118,8 @@ export type UserUncheckedCreateWithoutCreatedOrganizationsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2045,7 +2137,6 @@ export type UserUncheckedCreateWithoutCreatedOrganizationsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -2071,6 +2162,132 @@ export type UserUncheckedCreateWithoutCreatedOrganizationsInput = {
 export type UserCreateOrConnectWithoutCreatedOrganizationsInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutCreatedOrganizationsInput, Prisma.UserUncheckedCreateWithoutCreatedOrganizationsInput>
+}
+
+export type UserCreateWithoutOrganizationInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
+  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
+}
+
+export type UserUncheckedCreateWithoutOrganizationInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
+  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentUncheckedCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+}
+
+export type UserCreateOrConnectWithoutOrganizationInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrganizationInput, Prisma.UserUncheckedCreateWithoutOrganizationInput>
+}
+
+export type UserCreateManyOrganizationInputEnvelope = {
+  data: Prisma.UserCreateManyOrganizationInput | Prisma.UserCreateManyOrganizationInput[]
+  skipDuplicates?: boolean
 }
 
 export type UserUpsertWithoutCreatedOrganizationsInput = {
@@ -2101,6 +2318,7 @@ export type UserUpdateWithoutCreatedOrganizationsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2118,7 +2336,7 @@ export type UserUpdateWithoutCreatedOrganizationsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
@@ -2158,6 +2376,8 @@ export type UserUncheckedUpdateWithoutCreatedOrganizationsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2175,7 +2395,6 @@ export type UserUncheckedUpdateWithoutCreatedOrganizationsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -2198,6 +2417,56 @@ export type UserUncheckedUpdateWithoutCreatedOrganizationsInput = {
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
+export type UserUpsertWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOrganizationInput, Prisma.UserUncheckedUpdateWithoutOrganizationInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrganizationInput, Prisma.UserUncheckedCreateWithoutOrganizationInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOrganizationInput, Prisma.UserUncheckedUpdateWithoutOrganizationInput>
+}
+
+export type UserUpdateManyWithWhereWithoutOrganizationInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutOrganizationInput>
+}
+
+export type UserScalarWhereInput = {
+  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  OR?: Prisma.UserScalarWhereInput[]
+  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  id?: Prisma.StringFilter<"User"> | string
+  name?: Prisma.StringNullableFilter<"User"> | string | null
+  email?: Prisma.StringFilter<"User"> | string
+  emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  image?: Prisma.StringNullableFilter<"User"> | string | null
+  firstName?: Prisma.StringFilter<"User"> | string
+  lastName?: Prisma.StringNullableFilter<"User"> | string | null
+  username?: Prisma.StringFilter<"User"> | string
+  usernameOnboarded?: Prisma.BoolFilter<"User"> | boolean
+  profileOnboarded?: Prisma.BoolFilter<"User"> | boolean
+  avatarBlobPathname?: Prisma.StringNullableFilter<"User"> | string | null
+  phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
+  platformRole?: Prisma.EnumPlatformRoleFilter<"User"> | $Enums.PlatformRole
+  authVersion?: Prisma.IntFilter<"User"> | number
+  suspendedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  suspensionReason?: Prisma.StringNullableFilter<"User"> | string | null
+  organizationId?: Prisma.StringNullableFilter<"User"> | string | null
+  organizationRole?: Prisma.EnumOrganizationRoleNullableFilter<"User"> | $Enums.OrganizationRole | null
+  mfaEnabled?: Prisma.BoolFilter<"User"> | boolean
+  totpSecretEncrypted?: Prisma.StringNullableFilter<"User"> | string | null
+  totpSecretNonce?: Prisma.StringNullableFilter<"User"> | string | null
+  totpPendingSecretEncrypted?: Prisma.StringNullableFilter<"User"> | string | null
+  totpPendingSecretNonce?: Prisma.StringNullableFilter<"User"> | string | null
+  totpPendingCreatedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  totpVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  usernameChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+}
+
 export type UserCreateWithoutWorkerUserLinksInput = {
   id?: string
   name?: string | null
@@ -2215,6 +2484,7 @@ export type UserCreateWithoutWorkerUserLinksInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2232,7 +2502,7 @@ export type UserCreateWithoutWorkerUserLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -2272,6 +2542,8 @@ export type UserUncheckedCreateWithoutWorkerUserLinksInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2289,7 +2561,6 @@ export type UserUncheckedCreateWithoutWorkerUserLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -2334,6 +2605,7 @@ export type UserCreateWithoutLinkedWorkerUserLinksInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2351,7 +2623,7 @@ export type UserCreateWithoutLinkedWorkerUserLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -2391,6 +2663,8 @@ export type UserUncheckedCreateWithoutLinkedWorkerUserLinksInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2408,7 +2682,6 @@ export type UserUncheckedCreateWithoutLinkedWorkerUserLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -2464,6 +2737,7 @@ export type UserUpdateWithoutWorkerUserLinksInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2481,7 +2755,7 @@ export type UserUpdateWithoutWorkerUserLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -2521,6 +2795,8 @@ export type UserUncheckedUpdateWithoutWorkerUserLinksInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2538,7 +2814,6 @@ export type UserUncheckedUpdateWithoutWorkerUserLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -2589,6 +2864,7 @@ export type UserUpdateWithoutLinkedWorkerUserLinksInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2606,7 +2882,7 @@ export type UserUpdateWithoutLinkedWorkerUserLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -2646,6 +2922,8 @@ export type UserUncheckedUpdateWithoutLinkedWorkerUserLinksInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2663,7 +2941,6 @@ export type UserUncheckedUpdateWithoutLinkedWorkerUserLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -2703,6 +2980,7 @@ export type UserCreateWithoutJobSiteUserAssignmentsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2720,7 +2998,7 @@ export type UserCreateWithoutJobSiteUserAssignmentsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -2760,6 +3038,8 @@ export type UserUncheckedCreateWithoutJobSiteUserAssignmentsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2777,7 +3057,6 @@ export type UserUncheckedCreateWithoutJobSiteUserAssignmentsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -2822,6 +3101,7 @@ export type UserCreateWithoutAssignedJobSiteUsersInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2839,7 +3119,7 @@ export type UserCreateWithoutAssignedJobSiteUsersInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -2879,6 +3159,8 @@ export type UserUncheckedCreateWithoutAssignedJobSiteUsersInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -2896,7 +3178,6 @@ export type UserUncheckedCreateWithoutAssignedJobSiteUsersInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -2952,6 +3233,7 @@ export type UserUpdateWithoutJobSiteUserAssignmentsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2969,7 +3251,7 @@ export type UserUpdateWithoutJobSiteUserAssignmentsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -3009,6 +3291,8 @@ export type UserUncheckedUpdateWithoutJobSiteUserAssignmentsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3026,7 +3310,6 @@ export type UserUncheckedUpdateWithoutJobSiteUserAssignmentsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -3077,6 +3360,7 @@ export type UserUpdateWithoutAssignedJobSiteUsersInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3094,7 +3378,7 @@ export type UserUpdateWithoutAssignedJobSiteUsersInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -3134,6 +3418,8 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteUsersInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3151,7 +3437,6 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteUsersInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -3191,6 +3476,7 @@ export type UserCreateWithoutAssignedJobSiteWorkersInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3208,7 +3494,7 @@ export type UserCreateWithoutAssignedJobSiteWorkersInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -3248,6 +3534,8 @@ export type UserUncheckedCreateWithoutAssignedJobSiteWorkersInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3265,7 +3553,6 @@ export type UserUncheckedCreateWithoutAssignedJobSiteWorkersInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -3321,6 +3608,7 @@ export type UserUpdateWithoutAssignedJobSiteWorkersInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3338,7 +3626,7 @@ export type UserUpdateWithoutAssignedJobSiteWorkersInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -3378,6 +3666,8 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteWorkersInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3395,7 +3685,6 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteWorkersInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -3435,6 +3724,7 @@ export type UserCreateWithoutReviewedDocumentsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3452,7 +3742,7 @@ export type UserCreateWithoutReviewedDocumentsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -3492,6 +3782,8 @@ export type UserUncheckedCreateWithoutReviewedDocumentsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3509,7 +3801,6 @@ export type UserUncheckedCreateWithoutReviewedDocumentsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -3565,6 +3856,7 @@ export type UserUpdateWithoutReviewedDocumentsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3582,7 +3874,7 @@ export type UserUpdateWithoutReviewedDocumentsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -3622,6 +3914,8 @@ export type UserUncheckedUpdateWithoutReviewedDocumentsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3639,7 +3933,6 @@ export type UserUncheckedUpdateWithoutReviewedDocumentsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -3679,6 +3972,7 @@ export type UserCreateWithoutUploadedDocumentVersionsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3696,7 +3990,7 @@ export type UserCreateWithoutUploadedDocumentVersionsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -3736,6 +4030,8 @@ export type UserUncheckedCreateWithoutUploadedDocumentVersionsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3753,7 +4049,6 @@ export type UserUncheckedCreateWithoutUploadedDocumentVersionsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -3809,6 +4104,7 @@ export type UserUpdateWithoutUploadedDocumentVersionsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3826,7 +4122,7 @@ export type UserUpdateWithoutUploadedDocumentVersionsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -3866,6 +4162,8 @@ export type UserUncheckedUpdateWithoutUploadedDocumentVersionsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3883,7 +4181,6 @@ export type UserUncheckedUpdateWithoutUploadedDocumentVersionsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -3923,6 +4220,7 @@ export type UserCreateWithoutCompletedChecklistItemsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3940,7 +4238,7 @@ export type UserCreateWithoutCompletedChecklistItemsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -3980,6 +4278,8 @@ export type UserUncheckedCreateWithoutCompletedChecklistItemsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -3997,7 +4297,6 @@ export type UserUncheckedCreateWithoutCompletedChecklistItemsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -4053,6 +4352,7 @@ export type UserUpdateWithoutCompletedChecklistItemsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4070,7 +4370,7 @@ export type UserUpdateWithoutCompletedChecklistItemsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -4110,6 +4410,8 @@ export type UserUncheckedUpdateWithoutCompletedChecklistItemsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4127,7 +4429,6 @@ export type UserUncheckedUpdateWithoutCompletedChecklistItemsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -4167,6 +4468,7 @@ export type UserCreateWithoutCreatedEvidenceInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4184,7 +4486,7 @@ export type UserCreateWithoutCreatedEvidenceInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -4224,6 +4526,8 @@ export type UserUncheckedCreateWithoutCreatedEvidenceInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4241,7 +4545,6 @@ export type UserUncheckedCreateWithoutCreatedEvidenceInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -4297,6 +4600,7 @@ export type UserUpdateWithoutCreatedEvidenceInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4314,7 +4618,7 @@ export type UserUpdateWithoutCreatedEvidenceInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -4354,6 +4658,8 @@ export type UserUncheckedUpdateWithoutCreatedEvidenceInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4371,7 +4677,6 @@ export type UserUncheckedUpdateWithoutCreatedEvidenceInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -4411,6 +4716,7 @@ export type UserCreateWithoutCreatedDocumentPackagesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4428,7 +4734,7 @@ export type UserCreateWithoutCreatedDocumentPackagesInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -4468,6 +4774,8 @@ export type UserUncheckedCreateWithoutCreatedDocumentPackagesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4485,7 +4793,6 @@ export type UserUncheckedCreateWithoutCreatedDocumentPackagesInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -4541,6 +4848,7 @@ export type UserUpdateWithoutCreatedDocumentPackagesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4558,7 +4866,7 @@ export type UserUpdateWithoutCreatedDocumentPackagesInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -4598,6 +4906,8 @@ export type UserUncheckedUpdateWithoutCreatedDocumentPackagesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4615,7 +4925,6 @@ export type UserUncheckedUpdateWithoutCreatedDocumentPackagesInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -4655,6 +4964,7 @@ export type UserCreateWithoutCreatedShareLinksInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4672,7 +4982,7 @@ export type UserCreateWithoutCreatedShareLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -4712,6 +5022,8 @@ export type UserUncheckedCreateWithoutCreatedShareLinksInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4729,7 +5041,6 @@ export type UserUncheckedCreateWithoutCreatedShareLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -4785,6 +5096,7 @@ export type UserUpdateWithoutCreatedShareLinksInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4802,7 +5114,7 @@ export type UserUpdateWithoutCreatedShareLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -4842,6 +5154,8 @@ export type UserUncheckedUpdateWithoutCreatedShareLinksInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4859,7 +5173,6 @@ export type UserUncheckedUpdateWithoutCreatedShareLinksInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -4899,6 +5212,7 @@ export type UserCreateWithoutNotificationsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4916,7 +5230,7 @@ export type UserCreateWithoutNotificationsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -4956,6 +5270,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -4973,7 +5289,6 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -5029,6 +5344,7 @@ export type UserUpdateWithoutNotificationsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5046,7 +5362,7 @@ export type UserUpdateWithoutNotificationsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -5086,6 +5402,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5103,7 +5421,6 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -5143,6 +5460,7 @@ export type UserCreateWithoutNotificationPreferencesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5160,7 +5478,7 @@ export type UserCreateWithoutNotificationPreferencesInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -5200,6 +5518,8 @@ export type UserUncheckedCreateWithoutNotificationPreferencesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5217,7 +5537,6 @@ export type UserUncheckedCreateWithoutNotificationPreferencesInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -5273,6 +5592,7 @@ export type UserUpdateWithoutNotificationPreferencesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5290,7 +5610,7 @@ export type UserUpdateWithoutNotificationPreferencesInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -5330,6 +5650,8 @@ export type UserUncheckedUpdateWithoutNotificationPreferencesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5347,7 +5669,6 @@ export type UserUncheckedUpdateWithoutNotificationPreferencesInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -5387,6 +5708,7 @@ export type UserCreateWithoutRequestedDataControlJobsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5404,7 +5726,7 @@ export type UserCreateWithoutRequestedDataControlJobsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -5444,6 +5766,8 @@ export type UserUncheckedCreateWithoutRequestedDataControlJobsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5461,7 +5785,6 @@ export type UserUncheckedCreateWithoutRequestedDataControlJobsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -5517,6 +5840,7 @@ export type UserUpdateWithoutRequestedDataControlJobsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5534,7 +5858,7 @@ export type UserUpdateWithoutRequestedDataControlJobsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -5574,6 +5898,8 @@ export type UserUncheckedUpdateWithoutRequestedDataControlJobsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5591,7 +5917,6 @@ export type UserUncheckedUpdateWithoutRequestedDataControlJobsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -5631,6 +5956,7 @@ export type UserCreateWithoutNotificationEmailDeliveriesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5648,7 +5974,7 @@ export type UserCreateWithoutNotificationEmailDeliveriesInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -5688,6 +6014,8 @@ export type UserUncheckedCreateWithoutNotificationEmailDeliveriesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -5705,7 +6033,6 @@ export type UserUncheckedCreateWithoutNotificationEmailDeliveriesInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -5761,6 +6088,7 @@ export type UserUpdateWithoutNotificationEmailDeliveriesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5778,7 +6106,7 @@ export type UserUpdateWithoutNotificationEmailDeliveriesInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -5818,250 +6146,8 @@ export type UserUncheckedUpdateWithoutNotificationEmailDeliveriesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
-  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
-  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  reviewedDocuments?: Prisma.DocumentUncheckedUpdateManyWithoutReviewedByNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  completedChecklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutCompletedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdDocumentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdShareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
-  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
-}
-
-export type UserCreateWithoutOrganizationMembershipsInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
-  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
-  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  reviewedDocuments?: Prisma.DocumentCreateNestedManyWithoutReviewedByInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  completedChecklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutCompletedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  createdDocumentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutCreatedByInput
-  createdShareLinks?: Prisma.ShareLinkCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
-  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
-  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
-}
-
-export type UserUncheckedCreateWithoutOrganizationMembershipsInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
-  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
-  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  reviewedDocuments?: Prisma.DocumentUncheckedCreateNestedManyWithoutReviewedByInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  completedChecklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutCompletedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  createdDocumentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutCreatedByInput
-  createdShareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
-  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
-  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
-}
-
-export type UserCreateOrConnectWithoutOrganizationMembershipsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedCreateWithoutOrganizationMembershipsInput>
-}
-
-export type UserUpsertWithoutOrganizationMembershipsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedUpdateWithoutOrganizationMembershipsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedCreateWithoutOrganizationMembershipsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutOrganizationMembershipsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedUpdateWithoutOrganizationMembershipsInput>
-}
-
-export type UserUpdateWithoutOrganizationMembershipsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
-  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
-  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  reviewedDocuments?: Prisma.DocumentUpdateManyWithoutReviewedByNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  completedChecklistItems?: Prisma.ChecklistItemUpdateManyWithoutCompletedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  createdDocumentPackages?: Prisma.DocumentPackageUpdateManyWithoutCreatedByNestedInput
-  createdShareLinks?: Prisma.ShareLinkUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
-  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
-  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutOrganizationMembershipsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6092,7 +6178,6 @@ export type UserUncheckedUpdateWithoutOrganizationMembershipsInput = {
   createdShareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
-  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
@@ -6119,6 +6204,7 @@ export type UserCreateWithoutSentOrganizationInvitationsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6136,7 +6222,7 @@ export type UserCreateWithoutSentOrganizationInvitationsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
@@ -6176,6 +6262,8 @@ export type UserUncheckedCreateWithoutSentOrganizationInvitationsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6193,7 +6281,6 @@ export type UserUncheckedCreateWithoutSentOrganizationInvitationsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -6249,6 +6336,7 @@ export type UserUpdateWithoutSentOrganizationInvitationsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6266,7 +6354,7 @@ export type UserUpdateWithoutSentOrganizationInvitationsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
@@ -6306,6 +6394,8 @@ export type UserUncheckedUpdateWithoutSentOrganizationInvitationsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6323,7 +6413,6 @@ export type UserUncheckedUpdateWithoutSentOrganizationInvitationsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -6363,6 +6452,7 @@ export type UserCreateWithoutSupportSessionsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6380,7 +6470,7 @@ export type UserCreateWithoutSupportSessionsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
@@ -6420,6 +6510,8 @@ export type UserUncheckedCreateWithoutSupportSessionsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6437,7 +6529,6 @@ export type UserUncheckedCreateWithoutSupportSessionsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -6493,6 +6584,7 @@ export type UserUpdateWithoutSupportSessionsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6510,7 +6602,7 @@ export type UserUpdateWithoutSupportSessionsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
@@ -6550,6 +6642,8 @@ export type UserUncheckedUpdateWithoutSupportSessionsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6567,7 +6661,6 @@ export type UserUncheckedUpdateWithoutSupportSessionsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -6607,6 +6700,7 @@ export type UserCreateWithoutSupportAuditEventsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6624,7 +6718,7 @@ export type UserCreateWithoutSupportAuditEventsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -6664,6 +6758,8 @@ export type UserUncheckedCreateWithoutSupportAuditEventsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6681,7 +6777,6 @@ export type UserUncheckedCreateWithoutSupportAuditEventsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -6737,6 +6832,7 @@ export type UserUpdateWithoutSupportAuditEventsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6754,7 +6850,7 @@ export type UserUpdateWithoutSupportAuditEventsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -6794,6 +6890,8 @@ export type UserUncheckedUpdateWithoutSupportAuditEventsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6811,7 +6909,6 @@ export type UserUncheckedUpdateWithoutSupportAuditEventsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -6851,6 +6948,7 @@ export type UserCreateWithoutProductAuditEventsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6868,7 +6966,7 @@ export type UserCreateWithoutProductAuditEventsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -6908,6 +7006,8 @@ export type UserUncheckedCreateWithoutProductAuditEventsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -6925,7 +7025,6 @@ export type UserUncheckedCreateWithoutProductAuditEventsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -6981,6 +7080,7 @@ export type UserUpdateWithoutProductAuditEventsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6998,7 +7098,7 @@ export type UserUpdateWithoutProductAuditEventsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -7038,6 +7138,8 @@ export type UserUncheckedUpdateWithoutProductAuditEventsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7055,7 +7157,6 @@ export type UserUncheckedUpdateWithoutProductAuditEventsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -7095,6 +7196,7 @@ export type UserCreateWithoutCredentialInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7111,7 +7213,7 @@ export type UserCreateWithoutCredentialInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -7152,6 +7254,8 @@ export type UserUncheckedCreateWithoutCredentialInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7168,7 +7272,6 @@ export type UserUncheckedCreateWithoutCredentialInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -7225,6 +7328,7 @@ export type UserUpdateWithoutCredentialInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7241,7 +7345,7 @@ export type UserUpdateWithoutCredentialInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -7282,6 +7386,8 @@ export type UserUncheckedUpdateWithoutCredentialInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7298,7 +7404,6 @@ export type UserUncheckedUpdateWithoutCredentialInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -7339,6 +7444,7 @@ export type UserCreateWithoutAuthCodesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7355,7 +7461,7 @@ export type UserCreateWithoutAuthCodesInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -7396,6 +7502,8 @@ export type UserUncheckedCreateWithoutAuthCodesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7412,7 +7520,6 @@ export type UserUncheckedCreateWithoutAuthCodesInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -7469,6 +7576,7 @@ export type UserUpdateWithoutAuthCodesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7485,7 +7593,7 @@ export type UserUpdateWithoutAuthCodesInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -7526,6 +7634,8 @@ export type UserUncheckedUpdateWithoutAuthCodesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7542,7 +7652,6 @@ export type UserUncheckedUpdateWithoutAuthCodesInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -7583,6 +7692,7 @@ export type UserCreateWithoutSecurityEventsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7599,7 +7709,7 @@ export type UserCreateWithoutSecurityEventsInput = {
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -7640,6 +7750,8 @@ export type UserUncheckedCreateWithoutSecurityEventsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7656,7 +7768,6 @@ export type UserUncheckedCreateWithoutSecurityEventsInput = {
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -7713,6 +7824,7 @@ export type UserUpdateWithoutSecurityEventsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7729,7 +7841,7 @@ export type UserUpdateWithoutSecurityEventsInput = {
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -7770,6 +7882,8 @@ export type UserUncheckedUpdateWithoutSecurityEventsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7786,7 +7900,6 @@ export type UserUncheckedUpdateWithoutSecurityEventsInput = {
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -7827,6 +7940,7 @@ export type UserCreateWithoutResolvedRuntimeErrorsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7844,7 +7958,7 @@ export type UserCreateWithoutResolvedRuntimeErrorsInput = {
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -7884,6 +7998,8 @@ export type UserUncheckedCreateWithoutResolvedRuntimeErrorsInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -7901,7 +8017,6 @@ export type UserUncheckedCreateWithoutResolvedRuntimeErrorsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -7957,6 +8072,7 @@ export type UserUpdateWithoutResolvedRuntimeErrorsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7974,7 +8090,7 @@ export type UserUpdateWithoutResolvedRuntimeErrorsInput = {
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -8014,6 +8130,8 @@ export type UserUncheckedUpdateWithoutResolvedRuntimeErrorsInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8031,7 +8149,6 @@ export type UserUncheckedUpdateWithoutResolvedRuntimeErrorsInput = {
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -8071,6 +8188,7 @@ export type UserCreateWithoutAuthDevicesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -8087,7 +8205,7 @@ export type UserCreateWithoutAuthDevicesInput = {
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -8128,6 +8246,8 @@ export type UserUncheckedCreateWithoutAuthDevicesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -8144,7 +8264,6 @@ export type UserUncheckedCreateWithoutAuthDevicesInput = {
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -8201,6 +8320,7 @@ export type UserUpdateWithoutAuthDevicesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8217,7 +8337,7 @@ export type UserUpdateWithoutAuthDevicesInput = {
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -8258,6 +8378,8 @@ export type UserUncheckedUpdateWithoutAuthDevicesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8274,7 +8396,6 @@ export type UserUncheckedUpdateWithoutAuthDevicesInput = {
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -8315,6 +8436,7 @@ export type UserCreateWithoutMfaBackupCodesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -8331,7 +8453,7 @@ export type UserCreateWithoutMfaBackupCodesInput = {
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutUsersInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
@@ -8372,6 +8494,8 @@ export type UserUncheckedCreateWithoutMfaBackupCodesInput = {
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  organizationId?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
   mfaEnabled?: boolean
   totpSecretEncrypted?: string | null
   totpSecretNonce?: string | null
@@ -8388,7 +8512,6 @@ export type UserUncheckedCreateWithoutMfaBackupCodesInput = {
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
@@ -8445,6 +8568,7 @@ export type UserUpdateWithoutMfaBackupCodesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8461,7 +8585,7 @@ export type UserUpdateWithoutMfaBackupCodesInput = {
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutUsersNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
@@ -8502,6 +8626,8 @@ export type UserUncheckedUpdateWithoutMfaBackupCodesInput = {
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
   mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8518,7 +8644,6 @@ export type UserUncheckedUpdateWithoutMfaBackupCodesInput = {
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
@@ -8542,6 +8667,182 @@ export type UserUncheckedUpdateWithoutMfaBackupCodesInput = {
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
+export type UserCreateManyOrganizationInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  organizationRole?: $Enums.OrganizationRole | null
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
+  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
+  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUncheckedUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 /**
  * Count Type UserCountOutputType
@@ -8554,7 +8855,6 @@ export type UserCountOutputType = {
   securityEvents: number
   mfaBackupCodes: number
   authDevices: number
-  organizationMemberships: number
   createdOrganizations: number
   sentOrganizationInvitations: number
   supportSessions: number
@@ -8585,7 +8885,6 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   securityEvents?: boolean | UserCountOutputTypeCountSecurityEventsArgs
   mfaBackupCodes?: boolean | UserCountOutputTypeCountMfaBackupCodesArgs
   authDevices?: boolean | UserCountOutputTypeCountAuthDevicesArgs
-  organizationMemberships?: boolean | UserCountOutputTypeCountOrganizationMembershipsArgs
   createdOrganizations?: boolean | UserCountOutputTypeCountCreatedOrganizationsArgs
   sentOrganizationInvitations?: boolean | UserCountOutputTypeCountSentOrganizationInvitationsArgs
   supportSessions?: boolean | UserCountOutputTypeCountSupportSessionsArgs
@@ -8659,13 +8958,6 @@ export type UserCountOutputTypeCountMfaBackupCodesArgs<ExtArgs extends runtime.T
  */
 export type UserCountOutputTypeCountAuthDevicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuthDeviceWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountOrganizationMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.OrganizationMembershipWhereInput
 }
 
 /**
@@ -8833,6 +9125,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   authVersion?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
+  organizationId?: boolean
+  organizationRole?: boolean
   mfaEnabled?: boolean
   totpSecretEncrypted?: boolean
   totpSecretNonce?: boolean
@@ -8850,7 +9144,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   securityEvents?: boolean | Prisma.User$securityEventsArgs<ExtArgs>
   mfaBackupCodes?: boolean | Prisma.User$mfaBackupCodesArgs<ExtArgs>
   authDevices?: boolean | Prisma.User$authDevicesArgs<ExtArgs>
-  organizationMemberships?: boolean | Prisma.User$organizationMembershipsArgs<ExtArgs>
+  organization?: boolean | Prisma.User$organizationArgs<ExtArgs>
   createdOrganizations?: boolean | Prisma.User$createdOrganizationsArgs<ExtArgs>
   sentOrganizationInvitations?: boolean | Prisma.User$sentOrganizationInvitationsArgs<ExtArgs>
   supportSessions?: boolean | Prisma.User$supportSessionsArgs<ExtArgs>
@@ -8892,6 +9186,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   authVersion?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
+  organizationId?: boolean
+  organizationRole?: boolean
   mfaEnabled?: boolean
   totpSecretEncrypted?: boolean
   totpSecretNonce?: boolean
@@ -8902,6 +9198,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   usernameChangedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organization?: boolean | Prisma.User$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -8921,6 +9218,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   authVersion?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
+  organizationId?: boolean
+  organizationRole?: boolean
   mfaEnabled?: boolean
   totpSecretEncrypted?: boolean
   totpSecretNonce?: boolean
@@ -8931,6 +9230,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   usernameChangedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organization?: boolean | Prisma.User$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -8950,6 +9250,8 @@ export type UserSelectScalar = {
   authVersion?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
+  organizationId?: boolean
+  organizationRole?: boolean
   mfaEnabled?: boolean
   totpSecretEncrypted?: boolean
   totpSecretNonce?: boolean
@@ -8962,7 +9264,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "firstName" | "lastName" | "username" | "usernameOnboarded" | "profileOnboarded" | "avatarBlobPathname" | "phoneNumber" | "platformRole" | "authVersion" | "suspendedAt" | "suspensionReason" | "mfaEnabled" | "totpSecretEncrypted" | "totpSecretNonce" | "totpPendingSecretEncrypted" | "totpPendingSecretNonce" | "totpPendingCreatedAt" | "totpVerifiedAt" | "usernameChangedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "firstName" | "lastName" | "username" | "usernameOnboarded" | "profileOnboarded" | "avatarBlobPathname" | "phoneNumber" | "platformRole" | "authVersion" | "suspendedAt" | "suspensionReason" | "organizationId" | "organizationRole" | "mfaEnabled" | "totpSecretEncrypted" | "totpSecretNonce" | "totpPendingSecretEncrypted" | "totpPendingSecretNonce" | "totpPendingCreatedAt" | "totpVerifiedAt" | "usernameChangedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -8971,7 +9273,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   securityEvents?: boolean | Prisma.User$securityEventsArgs<ExtArgs>
   mfaBackupCodes?: boolean | Prisma.User$mfaBackupCodesArgs<ExtArgs>
   authDevices?: boolean | Prisma.User$authDevicesArgs<ExtArgs>
-  organizationMemberships?: boolean | Prisma.User$organizationMembershipsArgs<ExtArgs>
+  organization?: boolean | Prisma.User$organizationArgs<ExtArgs>
   createdOrganizations?: boolean | Prisma.User$createdOrganizationsArgs<ExtArgs>
   sentOrganizationInvitations?: boolean | Prisma.User$sentOrganizationInvitationsArgs<ExtArgs>
   supportSessions?: boolean | Prisma.User$supportSessionsArgs<ExtArgs>
@@ -8995,8 +9297,12 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   assignedJobSiteWorkers?: boolean | Prisma.User$assignedJobSiteWorkersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  organization?: boolean | Prisma.User$organizationArgs<ExtArgs>
+}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  organization?: boolean | Prisma.User$organizationArgs<ExtArgs>
+}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
@@ -9008,7 +9314,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     securityEvents: Prisma.$SecurityAuditEventPayload<ExtArgs>[]
     mfaBackupCodes: Prisma.$MfaBackupCodePayload<ExtArgs>[]
     authDevices: Prisma.$AuthDevicePayload<ExtArgs>[]
-    organizationMemberships: Prisma.$OrganizationMembershipPayload<ExtArgs>[]
+    organization: Prisma.$OrganizationPayload<ExtArgs> | null
     createdOrganizations: Prisma.$OrganizationPayload<ExtArgs>[]
     sentOrganizationInvitations: Prisma.$OrganizationInvitationPayload<ExtArgs>[]
     supportSessions: Prisma.$SupportSessionPayload<ExtArgs>[]
@@ -9048,6 +9354,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     authVersion: number
     suspendedAt: Date | null
     suspensionReason: string | null
+    organizationId: string | null
+    organizationRole: $Enums.OrganizationRole | null
     mfaEnabled: boolean
     totpSecretEncrypted: string | null
     totpSecretNonce: string | null
@@ -9459,7 +9767,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   securityEvents<T extends Prisma.User$securityEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$securityEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mfaBackupCodes<T extends Prisma.User$mfaBackupCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mfaBackupCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MfaBackupCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   authDevices<T extends Prisma.User$authDevicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authDevicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthDevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  organizationMemberships<T extends Prisma.User$organizationMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$organizationMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationMembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  organization<T extends Prisma.User$organizationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$organizationArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   createdOrganizations<T extends Prisma.User$createdOrganizationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdOrganizationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sentOrganizationInvitations<T extends Prisma.User$sentOrganizationInvitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentOrganizationInvitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   supportSessions<T extends Prisma.User$supportSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9526,6 +9834,8 @@ export interface UserFieldRefs {
   readonly authVersion: Prisma.FieldRef<"User", 'Int'>
   readonly suspendedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly suspensionReason: Prisma.FieldRef<"User", 'String'>
+  readonly organizationId: Prisma.FieldRef<"User", 'String'>
+  readonly organizationRole: Prisma.FieldRef<"User", 'OrganizationRole'>
   readonly mfaEnabled: Prisma.FieldRef<"User", 'Boolean'>
   readonly totpSecretEncrypted: Prisma.FieldRef<"User", 'String'>
   readonly totpSecretNonce: Prisma.FieldRef<"User", 'String'>
@@ -9790,6 +10100,10 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -9860,6 +10174,10 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Users to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -10092,27 +10410,22 @@ export type User$authDevicesArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * User.organizationMemberships
+ * User.organization
  */
-export type User$organizationMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$organizationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the OrganizationMembership
+   * Select specific fields to fetch from the Organization
    */
-  select?: Prisma.OrganizationMembershipSelect<ExtArgs> | null
+  select?: Prisma.OrganizationSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the OrganizationMembership
+   * Omit specific fields from the Organization
    */
-  omit?: Prisma.OrganizationMembershipOmit<ExtArgs> | null
+  omit?: Prisma.OrganizationOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.OrganizationMembershipInclude<ExtArgs> | null
-  where?: Prisma.OrganizationMembershipWhereInput
-  orderBy?: Prisma.OrganizationMembershipOrderByWithRelationInput | Prisma.OrganizationMembershipOrderByWithRelationInput[]
-  cursor?: Prisma.OrganizationMembershipWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.OrganizationMembershipScalarFieldEnum | Prisma.OrganizationMembershipScalarFieldEnum[]
+  include?: Prisma.OrganizationInclude<ExtArgs> | null
+  where?: Prisma.OrganizationWhereInput
 }
 
 /**

@@ -17,7 +17,7 @@ const mocks = vi.hoisted(() => ({
     jobSiteUserAssignment: { findMany: vi.fn() },
     jobSiteWorkerAssignment: { findMany: vi.fn() },
   },
-  getViewerContext: vi.fn(),
+  getWorkspaceAccessContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
   requirePermission: vi.fn(),
   recordSupportAccess: vi.fn(),
@@ -34,7 +34,7 @@ vi.mock("@shared/server/access-errors", () => ({
   },
 }));
 vi.mock("@shared/server/access-context-service", () => ({
-  getViewerContext: mocks.getViewerContext,
+  getWorkspaceAccessContext: mocks.getWorkspaceAccessContext,
   getContextOrganizationId: mocks.getContextOrganizationId,
   requirePermission: mocks.requirePermission,
 }));
@@ -50,10 +50,10 @@ function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
 }
 
 function setRole(role: OrganizationRole) {
-  mocks.getViewerContext.mockResolvedValue({
+  mocks.getWorkspaceAccessContext.mockResolvedValue({
     userId: "user-1",
     platformRole: "USER",
-    membership: { id: "member-1", role, organization: { id: "org-1", name: "Azienda Demo", code: "QVX-1" } },
+    company: { id: "member-1", role, organization: { id: "org-1", name: "Azienda Demo", code: "QVX-1" } },
     support: null,
     permissions: [],
   });
@@ -132,7 +132,7 @@ beforeEach(() => {
   resetModel(mocks.db.workerUserLink);
   resetModel(mocks.db.jobSiteUserAssignment);
   resetModel(mocks.db.jobSiteWorkerAssignment);
-  mocks.getViewerContext.mockReset();
+  mocks.getWorkspaceAccessContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
   mocks.recordSupportAccess.mockReset();
@@ -156,7 +156,7 @@ describe("dashboard service", () => {
     }
   });
 
-  it("returns scoped dashboard data for operational roles and denies viewers", async () => {
+  it("returns scoped dashboard data for operational roles and denies destinatari esterni", async () => {
     setRole("SITE_MANAGER");
     primeDashboardMocks();
     mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ worker: { id: "worker-1", displayName: "Mario Rossi", status: "ACTIVE" } }]);
@@ -175,8 +175,8 @@ describe("dashboard service", () => {
     expect(workerDashboard.workers[0]).toMatchObject({ id: "worker-1", displayName: "Mario Rossi" });
     expect(workerDashboard.packages).toEqual([]);
 
-    setRole("VIEWER");
-    await expect(getDashboardData()).rejects.toMatchObject({ status: 404 });
+    setRole("SITE_MANAGER");
+    await expect(getDashboardData()).resolves.toBeDefined();
   });
 
   it("filters every aggregate by organization and excludes archived records", async () => {

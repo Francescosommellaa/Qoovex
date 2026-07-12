@@ -12,6 +12,6 @@ export default async function NotificationsPage({ searchParams }: NotificationsP
     const data = await listNotifications({ filter: params.filter });
     return <NotificationsPageView data={data} activeFilter={params.filter === "unread" ? "unread" : "all"} />;
   } catch {
-    return <WorkspaceAccessState title="Notifiche non disponibili" description="Verifica accesso e azienda attiva." />;
+    return <WorkspaceAccessState title="Notifiche non disponibili" description="Verifica accesso e azienda configurata." />;
   }
 }

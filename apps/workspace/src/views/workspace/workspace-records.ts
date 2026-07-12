@@ -11,7 +11,7 @@ import type {
   RecordStatus,
 } from "@qoovex/types";
 
-export type WorkspaceRole = "OWNER" | "ADMIN" | "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER" | "VIEWER";
+export type WorkspaceRole = "OWNER" | "ADMIN" | "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER";
 
 export interface WorkspaceCapabilities {
   role: WorkspaceRole | null;

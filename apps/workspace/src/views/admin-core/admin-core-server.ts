@@ -1,18 +1,18 @@
 import "server-only";
 
 import type { OrganizationRole } from "@qoovex/types";
-import { getViewerContext } from "@shared/server/access-context-service";
+import { getWorkspaceAccessContext } from "@shared/server/access-context-service";
 import { getEffectiveOrganizationRole } from "@shared/server/domain-access-service";
 import type { WorkspaceCapabilities } from "@/views/workspace/workspace-records";
 
 export async function getWorkspaceCapabilities(): Promise<WorkspaceCapabilities> {
-  const context = await getViewerContext();
+  const context = await getWorkspaceAccessContext();
   const role = getEffectiveOrganizationRole(context);
   return {
     role,
     canManageCore: role === "OWNER" || role === "ADMIN",
     canUpdateDocuments: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    canUploadDocumentVersions: role === "OWNER" || role === "ADMIN" || role === "WORKER",
+    canUploadDocumentVersions: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT" || role === "WORKER",
     canManageChecklists: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
     canCompleteChecklists: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT" || role === "SITE_MANAGER",
     canUploadEvidence: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT" || role === "SITE_MANAGER" || role === "WORKER",

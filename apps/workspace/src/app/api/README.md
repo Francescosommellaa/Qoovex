@@ -26,7 +26,7 @@ Endpoint dominio MVP attivi:
 - `checklists`: checklist operative configurabili e voci completabili;
 - `evidence`: note, foto e file operativi con Blob privato e download autorizzato;
 - `document-packages`: pacchetti documentali, item inclusi e share link revocabili;
-- `shared/document-packages`: accesso viewer tokenizzato e limitato al singolo pacchetto.
+- `shared/document-packages`: accesso destinatario esterno tokenizzato e limitato al singolo pacchetto.
 - `notifications`: notifiche interne filtrate per azienda, lettura e dismiss;
 - `notifications/preferences`: preferenze email dell'utente corrente, opt-in e filtrate per azienda;
 - `notifications/email-deliveries`: ultimi invii email dell'utente corrente senza body o dettagli sensibili;

@@ -16,7 +16,7 @@ const mocks = vi.hoisted(() => ({
     documentPackage: { findMany: vi.fn() },
     shareLink: { findMany: vi.fn() },
   },
-  getViewerContext: vi.fn(),
+  getWorkspaceAccessContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
   requirePermission: vi.fn(),
   recordSupportAccess: vi.fn(),
@@ -33,7 +33,7 @@ vi.mock("@shared/server/access-errors", () => ({
   },
 }));
 vi.mock("@shared/server/access-context-service", () => ({
-  getViewerContext: mocks.getViewerContext,
+  getWorkspaceAccessContext: mocks.getWorkspaceAccessContext,
   getContextOrganizationId: mocks.getContextOrganizationId,
   requirePermission: mocks.requirePermission,
 }));
@@ -65,10 +65,10 @@ function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
 }
 
 function setRole(role: OrganizationRole) {
-  mocks.getViewerContext.mockResolvedValue({
+  mocks.getWorkspaceAccessContext.mockResolvedValue({
     userId: "user-1",
     platformRole: "USER",
-    membership: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
+    company: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
     support: null,
     permissions: [],
   });
@@ -87,7 +87,7 @@ beforeEach(() => {
   resetModel(mocks.db.document);
   resetModel(mocks.db.documentPackage);
   resetModel(mocks.db.shareLink);
-  mocks.getViewerContext.mockReset();
+  mocks.getWorkspaceAccessContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
   mocks.recordSupportAccess.mockReset();
@@ -116,8 +116,8 @@ describe("notification service", () => {
     }));
   });
 
-  it("denies notifications to site managers, workers and viewers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER", "VIEWER"] as const) {
+  it("denies notifications to site managers, workers and destinatari esterni", async () => {
+    for (const role of ["SITE_MANAGER", "WORKER"] as const) {
       setRole(role);
       await expect(listNotifications()).rejects.toMatchObject({ status: 404 });
     }

@@ -4,4 +4,4 @@ Revoca di un link di condivisione.
 
 - `DELETE`: imposta `revokedAt`.
 
-Il link resta registrato ma non e piu valido per l'accesso viewer.
+Il link resta registrato ma non e piu valido per l'accesso destinatario esterno.

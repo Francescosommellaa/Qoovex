@@ -27,6 +27,6 @@ export default async function DocumentPackagesPage() {
       />
     );
   } catch {
-    return <WorkspaceAccessState title="Pacchetti non disponibili" description="Verifica accesso e azienda attiva." />;
+    return <WorkspaceAccessState title="Pacchetti non disponibili" description="Verifica accesso e azienda configurata." />;
   }
 }

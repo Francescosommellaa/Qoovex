@@ -44,17 +44,16 @@ function notificationCategoryEnabled(type: NotificationType, preference: {
   return true;
 }
 
-async function hasAllowedMembership(input: { organizationId: string; userId: string }) {
-  const membership = await db.organizationMembership.findFirst({
+async function hasAllowedCompanyRole(input: { organizationId: string; userId: string }) {
+  const user = await db.user.findFirst({
     where: {
+      id: input.userId,
       organizationId: input.organizationId,
-      userId: input.userId,
-      revokedAt: null,
-      role: { in: SCHEDULED_EMAIL_ROLES },
+      organizationRole: { in: SCHEDULED_EMAIL_ROLES },
     },
     select: { id: true },
   });
-  return Boolean(membership);
+  return Boolean(user);
 }
 
 export async function runScheduledEmailDigest(now = new Date()): Promise<ScheduledEmailDigestRunResponse> {
@@ -89,7 +88,7 @@ export async function runScheduledEmailDigest(now = new Date()): Promise<Schedul
       continue;
     }
 
-    if (!(await hasAllowedMembership({ organizationId: preference.organizationId, userId: preference.userId }))) {
+    if (!(await hasAllowedCompanyRole({ organizationId: preference.organizationId, userId: preference.userId }))) {
       result.skipped += 1;
       continue;
     }

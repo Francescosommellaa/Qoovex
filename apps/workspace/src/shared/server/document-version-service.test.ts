@@ -10,7 +10,7 @@ const mocks = vi.hoisted(() => ({
     jobSiteUserAssignment: { findMany: vi.fn() },
     jobSiteWorkerAssignment: { findMany: vi.fn() },
   },
-  getViewerContext: vi.fn(),
+  getWorkspaceAccessContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
   requirePermission: vi.fn(),
   recordSupportAccess: vi.fn(),
@@ -30,7 +30,7 @@ vi.mock("@shared/server/access-errors", () => ({
   },
 }));
 vi.mock("@shared/server/access-context-service", () => ({
-  getViewerContext: mocks.getViewerContext,
+  getWorkspaceAccessContext: mocks.getWorkspaceAccessContext,
   getContextOrganizationId: mocks.getContextOrganizationId,
   requirePermission: mocks.requirePermission,
 }));
@@ -79,10 +79,10 @@ function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
 }
 
 function setRole(role: OrganizationRole) {
-  mocks.getViewerContext.mockResolvedValue({
+  mocks.getWorkspaceAccessContext.mockResolvedValue({
     userId: "user-1",
     platformRole: "USER",
-    membership: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
+    company: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
     support: null,
     permissions: [],
   });
@@ -102,7 +102,7 @@ beforeEach(() => {
   resetModel(mocks.db.workerUserLink);
   resetModel(mocks.db.jobSiteUserAssignment);
   resetModel(mocks.db.jobSiteWorkerAssignment);
-  mocks.getViewerContext.mockReset();
+  mocks.getWorkspaceAccessContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
   mocks.recordSupportAccess.mockReset();
@@ -166,7 +166,7 @@ describe("document version service", () => {
     setRole("WORKER");
     await expect(uploadDocumentVersion("doc-1", [makeFile()])).resolves.toMatchObject({ documentId: "doc-1" });
 
-    for (const role of ["SAFETY_CONSULTANT", "SITE_MANAGER", "VIEWER"] as const) {
+    for (const role of ["SAFETY_CONSULTANT", "SITE_MANAGER"] as const) {
       setRole(role);
       await expect(uploadDocumentVersion("doc-1", [makeFile()])).rejects.toMatchObject({ status: 404 });
     }
@@ -197,7 +197,7 @@ describe("document version service", () => {
     await expect(listDocumentVersions("doc-1")).rejects.toMatchObject({ status: 404 });
     await expect(getDocumentVersionDownload("doc-1", "version-1")).rejects.toMatchObject({ status: 404 });
 
-    setRole("VIEWER");
+    setRole("SITE_MANAGER");
     await expect(listDocumentVersions("doc-1")).rejects.toMatchObject({ status: 404 });
   });
 

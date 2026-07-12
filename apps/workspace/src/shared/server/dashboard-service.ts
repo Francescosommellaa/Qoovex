@@ -229,7 +229,7 @@ export async function getDashboardData(): Promise<DashboardResponse> {
     return {
       generatedAt: now.toISOString(),
       organization: {
-        name: context.support?.organization.name ?? context.membership?.organization.name ?? "Azienda",
+        name: context.support?.organization.name ?? context.company?.organization.name ?? "Azienda",
         role: actorRole,
       },
       summary: {
@@ -469,7 +469,7 @@ export async function getDashboardData(): Promise<DashboardResponse> {
   return {
     generatedAt: now.toISOString(),
     organization: {
-      name: context.support?.organization.name ?? context.membership?.organization.name ?? "Azienda",
+      name: context.support?.organization.name ?? context.company?.organization.name ?? "Azienda",
       role: actorRole,
     },
     summary: {

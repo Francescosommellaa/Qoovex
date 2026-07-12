@@ -1,24 +1,24 @@
 import "server-only";
 
-import type { OrganizationPermission, OrganizationRole, ViewerContext } from "@qoovex/types";
+import type { OrganizationPermission, OrganizationRole, WorkspaceAccessContext } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
-import { getContextOrganizationId, getViewerContext, requirePermission } from "@shared/server/access-context-service";
+import { getContextOrganizationId, getWorkspaceAccessContext, requirePermission } from "@shared/server/access-context-service";
 
 export interface DomainAccessContext {
-  context: ViewerContext;
+  context: WorkspaceAccessContext;
   organizationId: string;
   actorRole: OrganizationRole;
 }
 
-export function getEffectiveOrganizationRole(context: ViewerContext): OrganizationRole | null {
-  return context.support ? "OWNER" : context.membership?.role ?? null;
+export function getEffectiveOrganizationRole(context: WorkspaceAccessContext): OrganizationRole | null {
+  return context.support ? "OWNER" : context.company?.role ?? null;
 }
 
 export async function requireOrganizationDomainAccess(
   permission: OrganizationPermission,
   allowedRoles: readonly OrganizationRole[],
 ): Promise<DomainAccessContext> {
-  const context = await getViewerContext();
+  const context = await getWorkspaceAccessContext();
   requirePermission(context, permission);
   const actorRole = getEffectiveOrganizationRole(context);
   if (!actorRole || !allowedRoles.includes(actorRole)) throw new AccessError("Risorsa non disponibile.", 404);

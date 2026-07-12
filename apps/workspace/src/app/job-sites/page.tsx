@@ -9,6 +9,6 @@ export default async function JobSitesPage() {
     const [jobSites, capabilities] = await Promise.all([listJobSites(), getWorkspaceCapabilities()]);
     return <JobSitesPageView capabilities={capabilities} jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)} />;
   } catch {
-    return <WorkspaceAccessState title="Cantieri non disponibili" description="Verifica accesso e azienda attiva." />;
+    return <WorkspaceAccessState title="Cantieri non disponibili" description="Verifica accesso e azienda configurata." />;
   }
 }

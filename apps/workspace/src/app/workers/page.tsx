@@ -9,6 +9,6 @@ export default async function WorkersPage() {
     const [workers, capabilities] = await Promise.all([listWorkers(), getWorkspaceCapabilities()]);
     return <WorkersPageView capabilities={capabilities} workers={serializeForClient<WorkspaceWorkerRecord[]>(workers)} />;
   } catch {
-    return <WorkspaceAccessState title="Lavoratori non disponibili" description="Verifica accesso e azienda attiva." />;
+    return <WorkspaceAccessState title="Lavoratori non disponibili" description="Verifica accesso e azienda configurata." />;
   }
 }

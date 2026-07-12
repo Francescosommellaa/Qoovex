@@ -1,12 +1,12 @@
 import { AccessError } from "@shared/server/access-errors";
-import { getViewerContext } from "@shared/server/access-context-service";
+import { getWorkspaceAccessContext } from "@shared/server/access-context-service";
 import { DataConfigurationState, OrganizationRequiredState, SignInRequiredState } from "@/views/auth/AuthAccessStates";
 import { WorkspaceAccessState as WorkspaceDeniedState } from "./WorkspacePrimitives";
 
 async function getWorkspaceAccessFallback() {
   try {
-    const context = await getViewerContext();
-    if (!context.membership && !context.support) return "no-organization" as const;
+    const context = await getWorkspaceAccessContext();
+    if (!context.company && !context.support) return "no-organization" as const;
     return "denied" as const;
   } catch (error) {
     if (error instanceof AccessError && error.status === 401) return "unauthenticated" as const;

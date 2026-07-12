@@ -26,6 +26,6 @@ export default async function DeadlinesPage() {
       />
     );
   } catch {
-    return <WorkspaceAccessState title="Scadenze non disponibili" description="Verifica accesso e azienda attiva." />;
+    return <WorkspaceAccessState title="Scadenze non disponibili" description="Verifica accesso e azienda configurata." />;
   }
 }

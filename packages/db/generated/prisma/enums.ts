@@ -31,8 +31,7 @@ export const OrganizationRole = {
   ADMIN: 'ADMIN',
   SAFETY_CONSULTANT: 'SAFETY_CONSULTANT',
   SITE_MANAGER: 'SITE_MANAGER',
-  WORKER: 'WORKER',
-  VIEWER: 'VIEWER'
+  WORKER: 'WORKER'
 } as const
 
 export type OrganizationRole = (typeof OrganizationRole)[keyof typeof OrganizationRole]

@@ -8,10 +8,19 @@ CREATE TYPE "AuthCodePurpose" AS ENUM ('EMAIL_VERIFICATION', 'PASSWORD_RESET', '
 CREATE TYPE "PlatformRole" AS ENUM ('USER', 'SUPER_ADMIN');
 
 -- CreateEnum
-CREATE TYPE "OrganizationRole" AS ENUM ('OWNER', 'ADMIN', 'SAFETY_CONSULTANT', 'SITE_MANAGER', 'WORKER', 'VIEWER');
+CREATE TYPE "OrganizationRole" AS ENUM ('OWNER', 'ADMIN', 'SAFETY_CONSULTANT', 'SITE_MANAGER', 'WORKER');
 
 -- CreateEnum
 CREATE TYPE "SupportAuditAction" AS ENUM ('READ', 'WRITE', 'SENSITIVE', 'EXPORT');
+
+-- CreateEnum
+CREATE TYPE "AuditAction" AS ENUM ('DOCUMENT_CREATED', 'DOCUMENT_UPDATED', 'DOCUMENT_ARCHIVED', 'DOCUMENT_VERSION_UPLOADED', 'DOCUMENT_VERSION_DOWNLOADED', 'DOCUMENT_VERSION_ARCHIVED', 'DEADLINE_CREATED', 'DEADLINE_UPDATED', 'DEADLINE_ARCHIVED', 'WORKER_CREATED', 'WORKER_UPDATED', 'WORKER_ARCHIVED', 'JOB_SITE_CREATED', 'JOB_SITE_UPDATED', 'JOB_SITE_ARCHIVED', 'CHECKLIST_CREATED', 'CHECKLIST_UPDATED', 'CHECKLIST_ARCHIVED', 'CHECKLIST_ITEM_COMPLETED', 'EVIDENCE_CREATED', 'EVIDENCE_DOWNLOADED', 'EVIDENCE_ARCHIVED', 'DOCUMENT_PACKAGE_CREATED', 'DOCUMENT_PACKAGE_UPDATED', 'DOCUMENT_PACKAGE_ARCHIVED', 'DOCUMENT_PACKAGE_ITEM_ADDED', 'DOCUMENT_PACKAGE_ITEM_REMOVED', 'SHARE_LINK_CREATED', 'SHARE_LINK_REVOKED', 'SHARE_LINK_ACCESSED', 'NOTIFICATION_READ', 'NOTIFICATION_DISMISSED', 'EMAIL_DIGEST_SENT', 'EMAIL_DIGEST_FAILED', 'NOTIFICATION_PREFERENCES_UPDATED', 'SCHEDULED_EMAIL_DIGEST_RUN', 'WORKER_USER_LINK_CREATED', 'WORKER_USER_LINK_ARCHIVED', 'JOB_SITE_USER_ASSIGNMENT_CREATED', 'JOB_SITE_USER_ASSIGNMENT_ARCHIVED', 'JOB_SITE_WORKER_ASSIGNMENT_CREATED', 'JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED', 'DATA_EXPORT_GENERATED', 'DATA_EXPORT_FAILED', 'DATA_CONTROL_JOB_CREATED', 'DATA_CONTROL_JOB_RUN', 'ORPHAN_BLOB_CLEANUP_RUN', 'ORGANIZATION_DELETE_REQUESTED', 'ORGANIZATION_DELETE_RUN', 'DOCUMENT_REQUIREMENT_CREATED', 'DOCUMENT_REQUIREMENT_UPDATED', 'DOCUMENT_REQUIREMENT_ARCHIVED', 'SECURITY_DENIED');
+
+-- CreateEnum
+CREATE TYPE "AuditEntityType" AS ENUM ('DOCUMENT', 'DOCUMENT_VERSION', 'DEADLINE', 'WORKER', 'JOB_SITE', 'CHECKLIST', 'CHECKLIST_ITEM', 'EVIDENCE', 'DOCUMENT_PACKAGE', 'DOCUMENT_PACKAGE_ITEM', 'SHARE_LINK', 'NOTIFICATION', 'EMAIL_DELIVERY', 'NOTIFICATION_PREFERENCE', 'DATA_CONTROL_JOB', 'DOCUMENT_REQUIREMENT', 'WORKER_USER_LINK', 'JOB_SITE_USER_ASSIGNMENT', 'JOB_SITE_WORKER_ASSIGNMENT', 'ORGANIZATION', 'USER', 'SYSTEM');
+
+-- CreateEnum
+CREATE TYPE "AuditOutcome" AS ENUM ('SUCCESS', 'DENIED', 'FAILED');
 
 -- CreateEnum
 CREATE TYPE "RecordStatus" AS ENUM ('ACTIVE', 'ARCHIVED');
@@ -45,6 +54,36 @@ CREATE TYPE "EvidenceType" AS ENUM ('PHOTO', 'FILE', 'NOTE');
 
 -- CreateEnum
 CREATE TYPE "DocumentPackageItemType" AS ENUM ('DOCUMENT', 'DOCUMENT_VERSION', 'EVIDENCE', 'CHECKLIST', 'NOTE');
+
+-- CreateEnum
+CREATE TYPE "NotificationType" AS ENUM ('DEADLINE_OVERDUE', 'DEADLINE_UPCOMING', 'DOCUMENT_TO_REVIEW', 'DOCUMENT_EXPIRED', 'DOCUMENT_EXPIRING_SOON', 'PACKAGE_READY_FOR_REVIEW', 'SHARE_LINK_EXPIRING', 'SHARE_LINK_REVOKED', 'SYSTEM');
+
+-- CreateEnum
+CREATE TYPE "NotificationSeverity" AS ENUM ('INFO', 'ATTENTION', 'WARNING');
+
+-- CreateEnum
+CREATE TYPE "NotificationSourceType" AS ENUM ('DOCUMENT', 'DEADLINE', 'WORKER', 'JOB_SITE', 'CHECKLIST', 'EVIDENCE', 'DOCUMENT_PACKAGE', 'SHARE_LINK', 'SYSTEM');
+
+-- CreateEnum
+CREATE TYPE "EmailDigestFrequency" AS ENUM ('OFF', 'DAILY', 'WEEKLY');
+
+-- CreateEnum
+CREATE TYPE "NotificationEmailDeliveryType" AS ENUM ('DIGEST', 'SINGLE_NOTIFICATION');
+
+-- CreateEnum
+CREATE TYPE "NotificationEmailDeliveryStatus" AS ENUM ('SENT', 'FAILED', 'SKIPPED');
+
+-- CreateEnum
+CREATE TYPE "JobSiteUserAssignmentRole" AS ENUM ('SITE_MANAGER');
+
+-- CreateEnum
+CREATE TYPE "DataControlJobType" AS ENUM ('METADATA_EXPORT', 'ORGANIZATION_DELETE', 'ORPHAN_BLOB_CLEANUP');
+
+-- CreateEnum
+CREATE TYPE "DataControlJobStatus" AS ENUM ('PENDING', 'RUNNING', 'COMPLETED', 'FAILED');
+
+-- CreateEnum
+CREATE TYPE "RuntimeErrorStatus" AS ENUM ('OPEN', 'RESOLVED');
 
 -- CreateTable
 CREATE TABLE "accounts" (
@@ -97,6 +136,10 @@ CREATE TABLE "User" (
     "phoneNumber" TEXT,
     "platformRole" "PlatformRole" NOT NULL DEFAULT 'USER',
     "authVersion" INTEGER NOT NULL DEFAULT 1,
+    "suspendedAt" TIMESTAMP(3),
+    "suspensionReason" TEXT,
+    "organizationId" TEXT,
+    "organizationRole" "OrganizationRole",
     "mfaEnabled" BOOLEAN NOT NULL DEFAULT false,
     "totpSecretEncrypted" TEXT,
     "totpSecretNonce" TEXT,
@@ -156,6 +199,49 @@ CREATE TABLE "JobSite" (
     "archivedAt" TIMESTAMP(3),
 
     CONSTRAINT "JobSite_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "WorkerUserLink" (
+    "id" TEXT NOT NULL,
+    "organizationId" TEXT NOT NULL,
+    "workerId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "linkedById" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "archivedAt" TIMESTAMP(3),
+
+    CONSTRAINT "WorkerUserLink_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "JobSiteUserAssignment" (
+    "id" TEXT NOT NULL,
+    "organizationId" TEXT NOT NULL,
+    "jobSiteId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "assignmentRole" "JobSiteUserAssignmentRole" NOT NULL DEFAULT 'SITE_MANAGER',
+    "assignedById" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "archivedAt" TIMESTAMP(3),
+
+    CONSTRAINT "JobSiteUserAssignment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "JobSiteWorkerAssignment" (
+    "id" TEXT NOT NULL,
+    "organizationId" TEXT NOT NULL,
+    "jobSiteId" TEXT NOT NULL,
+    "workerId" TEXT NOT NULL,
+    "assignedById" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "archivedAt" TIMESTAMP(3),
+
+    CONSTRAINT "JobSiteWorkerAssignment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -348,16 +434,81 @@ CREATE TABLE "ShareLink" (
 );
 
 -- CreateTable
-CREATE TABLE "OrganizationMembership" (
+CREATE TABLE "Notification" (
+    "id" TEXT NOT NULL,
+    "organizationId" TEXT NOT NULL,
+    "userId" TEXT,
+    "type" "NotificationType" NOT NULL,
+    "severity" "NotificationSeverity" NOT NULL,
+    "title" TEXT NOT NULL,
+    "message" TEXT NOT NULL,
+    "sourceType" "NotificationSourceType" NOT NULL,
+    "sourceId" TEXT,
+    "dedupeKey" TEXT NOT NULL,
+    "actionHref" TEXT,
+    "readAt" TIMESTAMP(3),
+    "dismissedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "NotificationPreference" (
     "id" TEXT NOT NULL,
     "organizationId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "role" "OrganizationRole" NOT NULL,
+    "emailDigestEnabled" BOOLEAN NOT NULL DEFAULT false,
+    "emailDigestFrequency" "EmailDigestFrequency" NOT NULL DEFAULT 'OFF',
+    "emailDigestHour" INTEGER NOT NULL DEFAULT 8,
+    "deadlineNotificationsEnabled" BOOLEAN NOT NULL DEFAULT true,
+    "documentNotificationsEnabled" BOOLEAN NOT NULL DEFAULT true,
+    "packageNotificationsEnabled" BOOLEAN NOT NULL DEFAULT true,
+    "systemNotificationsEnabled" BOOLEAN NOT NULL DEFAULT true,
+    "lastDigestSentAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "revokedAt" TIMESTAMP(3),
 
-    CONSTRAINT "OrganizationMembership_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "NotificationPreference_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "DataControlJob" (
+    "id" TEXT NOT NULL,
+    "organizationId" TEXT NOT NULL,
+    "requestedById" TEXT NOT NULL,
+    "type" "DataControlJobType" NOT NULL,
+    "status" "DataControlJobStatus" NOT NULL DEFAULT 'PENDING',
+    "attemptCount" INTEGER NOT NULL DEFAULT 0,
+    "nextAttemptAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "activeKey" TEXT,
+    "blobKey" TEXT,
+    "resultSummary" JSONB,
+    "errorCode" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "startedAt" TIMESTAMP(3),
+    "completedAt" TIMESTAMP(3),
+
+    CONSTRAINT "DataControlJob_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "NotificationEmailDelivery" (
+    "id" TEXT NOT NULL,
+    "organizationId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "notificationId" TEXT,
+    "type" "NotificationEmailDeliveryType" NOT NULL,
+    "recipientEmail" TEXT NOT NULL,
+    "notificationCount" INTEGER NOT NULL DEFAULT 0,
+    "status" "NotificationEmailDeliveryStatus" NOT NULL,
+    "providerMessageId" TEXT,
+    "errorCode" TEXT,
+    "sentAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "NotificationEmailDelivery_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -404,6 +555,24 @@ CREATE TABLE "SupportAuditEvent" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "SupportAuditEvent_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ProductAuditEvent" (
+    "id" TEXT NOT NULL,
+    "organizationId" TEXT NOT NULL,
+    "actorUserId" TEXT,
+    "actorRole" "OrganizationRole",
+    "action" "AuditAction" NOT NULL,
+    "entityType" "AuditEntityType" NOT NULL,
+    "entityId" TEXT,
+    "outcome" "AuditOutcome" NOT NULL,
+    "metadata" JSONB,
+    "requestId" TEXT,
+    "supportSessionId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ProductAuditEvent_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -459,6 +628,29 @@ CREATE TABLE "SecurityAuditEvent" (
 );
 
 -- CreateTable
+CREATE TABLE "RuntimeErrorEvent" (
+    "id" TEXT NOT NULL,
+    "fingerprint" TEXT NOT NULL,
+    "status" "RuntimeErrorStatus" NOT NULL DEFAULT 'OPEN',
+    "source" TEXT NOT NULL,
+    "routePath" TEXT,
+    "requestMethod" TEXT,
+    "errorName" TEXT NOT NULL,
+    "message" TEXT NOT NULL,
+    "stackPreview" TEXT,
+    "digest" TEXT,
+    "lastRequestId" TEXT,
+    "occurrenceCount" INTEGER NOT NULL DEFAULT 1,
+    "firstSeenAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "lastSeenAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "resolvedAt" TIMESTAMP(3),
+    "resolvedById" TEXT,
+    "resolutionNote" TEXT,
+
+    CONSTRAINT "RuntimeErrorEvent_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "AuthDevice" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
@@ -503,6 +695,9 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
+CREATE INDEX "User_organizationId_organizationRole_idx" ON "User"("organizationId", "organizationRole");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Organization_code_key" ON "Organization"("code");
 
 -- CreateIndex
@@ -525,6 +720,42 @@ CREATE INDEX "JobSite_organizationId_name_idx" ON "JobSite"("organizationId", "n
 
 -- CreateIndex
 CREATE INDEX "JobSite_organizationId_clientName_idx" ON "JobSite"("organizationId", "clientName");
+
+-- CreateIndex
+CREATE INDEX "WorkerUserLink_organizationId_workerId_archivedAt_idx" ON "WorkerUserLink"("organizationId", "workerId", "archivedAt");
+
+-- CreateIndex
+CREATE INDEX "WorkerUserLink_organizationId_userId_archivedAt_idx" ON "WorkerUserLink"("organizationId", "userId", "archivedAt");
+
+-- CreateIndex
+CREATE INDEX "WorkerUserLink_organizationId_createdAt_idx" ON "WorkerUserLink"("organizationId", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "WorkerUserLink_linkedById_idx" ON "WorkerUserLink"("linkedById");
+
+-- CreateIndex
+CREATE INDEX "JobSiteUserAssignment_org_job_role_archived_idx" ON "JobSiteUserAssignment"("organizationId", "jobSiteId", "assignmentRole", "archivedAt");
+
+-- CreateIndex
+CREATE INDEX "JobSiteUserAssignment_org_user_role_archived_idx" ON "JobSiteUserAssignment"("organizationId", "userId", "assignmentRole", "archivedAt");
+
+-- CreateIndex
+CREATE INDEX "JobSiteUserAssignment_organizationId_createdAt_idx" ON "JobSiteUserAssignment"("organizationId", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "JobSiteUserAssignment_assignedById_idx" ON "JobSiteUserAssignment"("assignedById");
+
+-- CreateIndex
+CREATE INDEX "JobSiteWorkerAssignment_org_job_archived_idx" ON "JobSiteWorkerAssignment"("organizationId", "jobSiteId", "archivedAt");
+
+-- CreateIndex
+CREATE INDEX "JobSiteWorkerAssignment_org_worker_archived_idx" ON "JobSiteWorkerAssignment"("organizationId", "workerId", "archivedAt");
+
+-- CreateIndex
+CREATE INDEX "JobSiteWorkerAssignment_organizationId_createdAt_idx" ON "JobSiteWorkerAssignment"("organizationId", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "JobSiteWorkerAssignment_assignedById_idx" ON "JobSiteWorkerAssignment"("assignedById");
 
 -- CreateIndex
 CREATE INDEX "DocumentType_organizationId_appliesTo_idx" ON "DocumentType"("organizationId", "appliesTo");
@@ -650,13 +881,55 @@ CREATE INDEX "ShareLink_organizationId_revokedAt_expiresAt_idx" ON "ShareLink"("
 CREATE INDEX "ShareLink_organizationId_createdById_idx" ON "ShareLink"("organizationId", "createdById");
 
 -- CreateIndex
-CREATE INDEX "OrganizationMembership_userId_revokedAt_idx" ON "OrganizationMembership"("userId", "revokedAt");
+CREATE INDEX "Notification_organizationId_userId_dismissedAt_readAt_idx" ON "Notification"("organizationId", "userId", "dismissedAt", "readAt");
 
 -- CreateIndex
-CREATE INDEX "OrganizationMembership_organizationId_role_revokedAt_idx" ON "OrganizationMembership"("organizationId", "role", "revokedAt");
+CREATE INDEX "Notification_organizationId_type_sourceType_sourceId_idx" ON "Notification"("organizationId", "type", "sourceType", "sourceId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "OrganizationMembership_organizationId_userId_key" ON "OrganizationMembership"("organizationId", "userId");
+CREATE INDEX "Notification_organizationId_severity_createdAt_idx" ON "Notification"("organizationId", "severity", "createdAt");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Notification_organizationId_dedupeKey_key" ON "Notification"("organizationId", "dedupeKey");
+
+-- CreateIndex
+CREATE INDEX "NotificationPreference_organizationId_emailDigestEnabled_emailD" ON "NotificationPreference"("organizationId", "emailDigestEnabled", "emailDigestFrequency");
+
+-- CreateIndex
+CREATE INDEX "NotificationPreference_userId_updatedAt_idx" ON "NotificationPreference"("userId", "updatedAt");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "NotificationPreference_organizationId_userId_key" ON "NotificationPreference"("organizationId", "userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "DataControlJob_activeKey_key" ON "DataControlJob"("activeKey");
+
+-- CreateIndex
+CREATE INDEX "DataControlJob_organizationId_status_createdAt_idx" ON "DataControlJob"("organizationId", "status", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "DataControlJob_organizationId_type_status_idx" ON "DataControlJob"("organizationId", "type", "status");
+
+-- CreateIndex
+CREATE INDEX "DataControlJob_status_nextAttemptAt_createdAt_idx" ON "DataControlJob"("status", "nextAttemptAt", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "DataControlJob_requestedById_createdAt_idx" ON "DataControlJob"("requestedById", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "DataControlJob_blobKey_idx" ON "DataControlJob"("blobKey");
+
+-- CreateIndex
+CREATE INDEX "NotificationEmailDelivery_organizationId_userId_createdAt_idx" ON "NotificationEmailDelivery"("organizationId", "userId", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "NotificationEmailDelivery_organizationId_status_createdAt_idx" ON "NotificationEmailDelivery"("organizationId", "status", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "NotificationEmailDelivery_organizationId_type_createdAt_idx" ON "NotificationEmailDelivery"("organizationId", "type", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "NotificationEmailDelivery_notificationId_idx" ON "NotificationEmailDelivery"("notificationId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "OrganizationInvitation_tokenHash_key" ON "OrganizationInvitation"("tokenHash");
@@ -686,6 +959,24 @@ CREATE INDEX "SupportAuditEvent_organizationId_createdAt_idx" ON "SupportAuditEv
 CREATE INDEX "SupportAuditEvent_actorId_createdAt_idx" ON "SupportAuditEvent"("actorId", "createdAt");
 
 -- CreateIndex
+CREATE INDEX "ProductAuditEvent_organizationId_createdAt_idx" ON "ProductAuditEvent"("organizationId", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "ProductAuditEvent_organizationId_action_createdAt_idx" ON "ProductAuditEvent"("organizationId", "action", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "ProductAuditEvent_org_entity_entityId_created_idx" ON "ProductAuditEvent"("organizationId", "entityType", "entityId", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "ProductAuditEvent_organizationId_outcome_createdAt_idx" ON "ProductAuditEvent"("organizationId", "outcome", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "ProductAuditEvent_actorUserId_createdAt_idx" ON "ProductAuditEvent"("actorUserId", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "ProductAuditEvent_supportSessionId_createdAt_idx" ON "ProductAuditEvent"("supportSessionId", "createdAt");
+
+-- CreateIndex
 CREATE INDEX "AuthCode_email_purpose_createdAt_idx" ON "AuthCode"("email", "purpose", "createdAt");
 
 -- CreateIndex
@@ -707,6 +998,18 @@ CREATE INDEX "SecurityAuditEvent_email_createdAt_idx" ON "SecurityAuditEvent"("e
 CREATE INDEX "SecurityAuditEvent_type_createdAt_idx" ON "SecurityAuditEvent"("type", "createdAt");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "RuntimeErrorEvent_fingerprint_key" ON "RuntimeErrorEvent"("fingerprint");
+
+-- CreateIndex
+CREATE INDEX "RuntimeErrorEvent_status_lastSeenAt_idx" ON "RuntimeErrorEvent"("status", "lastSeenAt");
+
+-- CreateIndex
+CREATE INDEX "RuntimeErrorEvent_source_lastSeenAt_idx" ON "RuntimeErrorEvent"("source", "lastSeenAt");
+
+-- CreateIndex
+CREATE INDEX "RuntimeErrorEvent_resolvedById_resolvedAt_idx" ON "RuntimeErrorEvent"("resolvedById", "resolvedAt");
+
+-- CreateIndex
 CREATE INDEX "AuthDevice_userId_lastSeenAt_idx" ON "AuthDevice"("userId", "lastSeenAt");
 
 -- CreateIndex
@@ -722,6 +1025,9 @@ ALTER TABLE "accounts" ADD CONSTRAINT "accounts_userId_fkey" FOREIGN KEY ("userI
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Organization" ADD CONSTRAINT "Organization_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -729,6 +1035,42 @@ ALTER TABLE "Worker" ADD CONSTRAINT "Worker_organizationId_fkey" FOREIGN KEY ("o
 
 -- AddForeignKey
 ALTER TABLE "JobSite" ADD CONSTRAINT "JobSite_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "WorkerUserLink" ADD CONSTRAINT "WorkerUserLink_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "WorkerUserLink" ADD CONSTRAINT "WorkerUserLink_workerId_fkey" FOREIGN KEY ("workerId") REFERENCES "Worker"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "WorkerUserLink" ADD CONSTRAINT "WorkerUserLink_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "WorkerUserLink" ADD CONSTRAINT "WorkerUserLink_linkedById_fkey" FOREIGN KEY ("linkedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "JobSiteUserAssignment" ADD CONSTRAINT "JobSiteUserAssignment_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "JobSiteUserAssignment" ADD CONSTRAINT "JobSiteUserAssignment_jobSiteId_fkey" FOREIGN KEY ("jobSiteId") REFERENCES "JobSite"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "JobSiteUserAssignment" ADD CONSTRAINT "JobSiteUserAssignment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "JobSiteUserAssignment" ADD CONSTRAINT "JobSiteUserAssignment_assignedById_fkey" FOREIGN KEY ("assignedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "JobSiteWorkerAssignment" ADD CONSTRAINT "JobSiteWorkerAssignment_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "JobSiteWorkerAssignment" ADD CONSTRAINT "JobSiteWorkerAssignment_jobSiteId_fkey" FOREIGN KEY ("jobSiteId") REFERENCES "JobSite"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "JobSiteWorkerAssignment" ADD CONSTRAINT "JobSiteWorkerAssignment_workerId_fkey" FOREIGN KEY ("workerId") REFERENCES "Worker"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "JobSiteWorkerAssignment" ADD CONSTRAINT "JobSiteWorkerAssignment_assignedById_fkey" FOREIGN KEY ("assignedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "DocumentType" ADD CONSTRAINT "DocumentType_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -845,10 +1187,28 @@ ALTER TABLE "ShareLink" ADD CONSTRAINT "ShareLink_documentPackageId_fkey" FOREIG
 ALTER TABLE "ShareLink" ADD CONSTRAINT "ShareLink_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OrganizationMembership" ADD CONSTRAINT "OrganizationMembership_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OrganizationMembership" ADD CONSTRAINT "OrganizationMembership_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotificationPreference" ADD CONSTRAINT "NotificationPreference_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotificationPreference" ADD CONSTRAINT "NotificationPreference_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DataControlJob" ADD CONSTRAINT "DataControlJob_requestedById_fkey" FOREIGN KEY ("requestedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotificationEmailDelivery" ADD CONSTRAINT "NotificationEmailDelivery_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotificationEmailDelivery" ADD CONSTRAINT "NotificationEmailDelivery_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotificationEmailDelivery" ADD CONSTRAINT "NotificationEmailDelivery_notificationId_fkey" FOREIGN KEY ("notificationId") REFERENCES "Notification"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "OrganizationInvitation" ADD CONSTRAINT "OrganizationInvitation_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -872,6 +1232,15 @@ ALTER TABLE "SupportAuditEvent" ADD CONSTRAINT "SupportAuditEvent_actorId_fkey" 
 ALTER TABLE "SupportAuditEvent" ADD CONSTRAINT "SupportAuditEvent_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "ProductAuditEvent" ADD CONSTRAINT "ProductAuditEvent_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ProductAuditEvent" ADD CONSTRAINT "ProductAuditEvent_actorUserId_fkey" FOREIGN KEY ("actorUserId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ProductAuditEvent" ADD CONSTRAINT "ProductAuditEvent_supportSessionId_fkey" FOREIGN KEY ("supportSessionId") REFERENCES "SupportSession"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "UserCredential" ADD CONSTRAINT "UserCredential_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -881,7 +1250,11 @@ ALTER TABLE "AuthCode" ADD CONSTRAINT "AuthCode_userId_fkey" FOREIGN KEY ("userI
 ALTER TABLE "SecurityAuditEvent" ADD CONSTRAINT "SecurityAuditEvent_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "RuntimeErrorEvent" ADD CONSTRAINT "RuntimeErrorEvent_resolvedById_fkey" FOREIGN KEY ("resolvedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "AuthDevice" ADD CONSTRAINT "AuthDevice_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MfaBackupCode" ADD CONSTRAINT "MfaBackupCode_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
