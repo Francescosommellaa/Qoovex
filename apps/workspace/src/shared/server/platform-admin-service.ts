@@ -85,10 +85,10 @@ export async function listPlatformUsers(input: { q?: string | null; status?: str
       { username: { contains: q, mode: "insensitive" } },
       { firstName: { contains: q, mode: "insensitive" } },
       { lastName: { contains: q, mode: "insensitive" } },
-      { organization: { is: { OR: [
+      { organizationMembership: { is: { revokedAt: null, organization: { OR: [
         { name: { contains: q, mode: "insensitive" } },
         { code: { contains: q, mode: "insensitive" } },
-      ] } } },
+      ] } } } },
     ];
   }
   const users = await db.user.findMany({
@@ -96,8 +96,9 @@ export async function listPlatformUsers(input: { q?: string | null; status?: str
     select: {
       id: true, email: true, username: true, firstName: true, lastName: true, platformRole: true,
       emailVerified: true, mfaEnabled: true, suspendedAt: true, suspensionReason: true, createdAt: true,
-      organizationRole: true,
-      organization: { select: { id: true, name: true, code: true } },
+      organizationMembership: {
+        select: { role: true, revokedAt: true, organization: { select: { id: true, name: true, code: true } } },
+      },
     },
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     cursor: input.cursor ? { id: input.cursor } : undefined,
@@ -116,8 +117,9 @@ export async function getPlatformUserDetail(userId: string) {
       id: true, email: true, username: true, firstName: true, lastName: true, platformRole: true,
       emailVerified: true, mfaEnabled: true, suspendedAt: true, suspensionReason: true, createdAt: true, updatedAt: true,
       _count: { select: { sessions: true } },
-      organizationRole: true,
-      organization: { select: { id: true, name: true, code: true } },
+      organizationMembership: {
+        select: { id: true, role: true, revokedAt: true, createdAt: true, organization: { select: { id: true, name: true, code: true } } },
+      },
       securityEvents: {
         select: { id: true, type: true, metadata: true, createdAt: true },
         orderBy: { createdAt: "desc" },
@@ -175,15 +177,15 @@ export async function listPlatformOrganizations(input: { q?: string | null; curs
     where: q ? { OR: [
       { name: { contains: q, mode: "insensitive" } },
       { code: { contains: q, mode: "insensitive" } },
-      { users: { some: { email: { contains: q, mode: "insensitive" } } } },
+      { memberships: { some: { revokedAt: null, user: { email: { contains: q, mode: "insensitive" } } } } },
     ] } : undefined,
     select: {
       id: true, name: true, code: true, createdAt: true,
-      _count: { select: { users: true, workers: true, jobSites: true, documents: true } },
-      users: {
-        where: { organizationRole: "OWNER" },
+      _count: { select: { memberships: true, workers: true, jobSites: true, documents: true } },
+      memberships: {
+        where: { role: "OWNER", revokedAt: null },
         take: 3,
-        select: { id: true, email: true, firstName: true, lastName: true },
+        select: { user: { select: { id: true, email: true, firstName: true, lastName: true } } },
       },
     },
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],

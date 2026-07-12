@@ -1,0 +1,10 @@
+.git
+.turbo
+node_modules
+**/node_modules
+**/.next
+**/.turbo
+**/tsconfig.tsbuildinfo
+playwright-report
+test-results
+coverage

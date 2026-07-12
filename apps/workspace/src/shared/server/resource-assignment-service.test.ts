@@ -5,7 +5,7 @@ const mocks = vi.hoisted(() => ({
   db: {
     worker: { findMany: vi.fn(), findFirst: vi.fn() },
     jobSite: { findMany: vi.fn(), findFirst: vi.fn() },
-    user: { findMany: vi.fn(), findFirst: vi.fn() },
+    organizationMembership: { findMany: vi.fn(), findFirst: vi.fn() },
     workerUserLink: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
     jobSiteUserAssignment: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
     jobSiteWorkerAssignment: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
@@ -106,7 +106,7 @@ beforeEach(() => {
   mocks.auditActorFromContext.mockReturnValue({ actorUserId: "user-owner", actorRole: "OWNER", supportSessionId: null });
   mocks.db.worker.findFirst.mockResolvedValue(worker);
   mocks.db.jobSite.findFirst.mockResolvedValue(jobSite);
-  mocks.db.user.findFirst.mockResolvedValue({ ...user, organizationRole: "WORKER" });
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "WORKER", user });
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteUserAssignment.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteWorkerAssignment.findFirst.mockResolvedValue(null);
@@ -150,7 +150,7 @@ describe("resource assignment service", () => {
   });
 
   it("validates role-specific jobsite assignments and soft archives them", async () => {
-    mocks.db.user.findFirst.mockResolvedValueOnce({ ...user, organizationRole: "SITE_MANAGER" });
+    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "SITE_MANAGER", user });
     await expect(createJobSiteUserAssignment({ jobSiteId: "jobsite-1", userId: "user-worker" })).resolves.toMatchObject({
       jobSiteId: "jobsite-1",
       assignmentRole: "SITE_MANAGER",
@@ -168,7 +168,7 @@ describe("resource assignment service", () => {
     }));
   });
 
-  it("denies assignment management to site managers, workers and destinatari esterni", async () => {
+  it("denies assignment management to site managers and workers", async () => {
     for (const role of ["SITE_MANAGER", "WORKER"] as const) {
       setRole(role);
       await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 404 });

@@ -76,6 +76,7 @@ export const ModelName = {
   NotificationPreference: 'NotificationPreference',
   DataControlJob: 'DataControlJob',
   NotificationEmailDelivery: 'NotificationEmailDelivery',
+  OrganizationMembership: 'OrganizationMembership',
   OrganizationInvitation: 'OrganizationInvitation',
   SupportSession: 'SupportSession',
   SupportAuditEvent: 'SupportAuditEvent',
@@ -159,8 +160,6 @@ export const UserScalarFieldEnum = {
   authVersion: 'authVersion',
   suspendedAt: 'suspendedAt',
   suspensionReason: 'suspensionReason',
-  organizationId: 'organizationId',
-  organizationRole: 'organizationRole',
   mfaEnabled: 'mfaEnabled',
   totpSecretEncrypted: 'totpSecretEncrypted',
   totpSecretNonce: 'totpSecretNonce',
@@ -531,6 +530,19 @@ export const NotificationEmailDeliveryScalarFieldEnum = {
 } as const
 
 export type NotificationEmailDeliveryScalarFieldEnum = (typeof NotificationEmailDeliveryScalarFieldEnum)[keyof typeof NotificationEmailDeliveryScalarFieldEnum]
+
+
+export const OrganizationMembershipScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  revokedAt: 'revokedAt'
+} as const
+
+export type OrganizationMembershipScalarFieldEnum = (typeof OrganizationMembershipScalarFieldEnum)[keyof typeof OrganizationMembershipScalarFieldEnum]
 
 
 export const OrganizationInvitationScalarFieldEnum = {

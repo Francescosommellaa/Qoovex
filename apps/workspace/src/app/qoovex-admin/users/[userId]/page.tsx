@@ -24,8 +24,8 @@ export default async function PlatformUserDetailPage({ params }: { params: Promi
             <PlatformUserActions userId={user.id} suspended={Boolean(user.suspendedAt)} protectedAccount={user.id === actor.id || user.platformRole === "SUPER_ADMIN"} />
           </div>
         </WorkspacePanel>
-        <WorkspacePanel title="Azienda associata">
-          {user.organization ? <div className={styles.recordList}><div className={styles.record}><strong>{user.organization.name}</strong><span className={styles.meta}>{user.organization.code} · {user.organizationRole}</span></div></div> : <p className={styles.muted}>Nessuna azienda configurata.</p>}
+        <WorkspacePanel title="Membership attive">
+          <div className={styles.recordList}>{user.organizationMembership?.revokedAt === null ? <div className={styles.record}><strong>{user.organizationMembership.organization.name}</strong><span className={styles.meta}>{user.organizationMembership.organization.code} · {user.organizationMembership.role}</span></div> : <p className={styles.muted}>Nessuna azienda attiva</p>}</div>
         </WorkspacePanel>
         <WorkspacePanel title="Eventi sicurezza recenti">
           <div className={styles.recordList}>{user.securityEvents.map((event) => <div className={styles.record} key={event.id}><strong>{event.type}</strong><span className={styles.meta}>{event.createdAt.toLocaleString("it-IT")}</span></div>)}</div>

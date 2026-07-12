@@ -24,8 +24,8 @@ export default async function PlatformOrganizationsPage({ searchParams }: { sear
             <div className={styles.recordList}>{data.organizations.map((organization) => (
               <article className={styles.record} key={organization.id}>
                 <div className={styles.recordHeader}><div><h2>{organization.name}</h2><p className={styles.meta}>{organization.code}</p></div></div>
-                <p className={styles.muted}>{organization._count.users} membri · {organization._count.workers} lavoratori · {organization._count.jobSites} cantieri · {organization._count.documents} documenti</p>
-                <p className={styles.muted}>Owner: {organization.users.map((user) => user.email).join(", ") || "non disponibile"}</p>
+                <p className={styles.muted}>{organization._count.memberships} membri · {organization._count.workers} lavoratori · {organization._count.jobSites} cantieri · {organization._count.documents} documenti</p>
+                <p className={styles.muted}>Owner: {organization.memberships.map((membership) => membership.user.email).join(", ") || "non disponibile"}</p>
                 <SupportSessionForm organizationCode={organization.code} />
               </article>
             ))}</div>

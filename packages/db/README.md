@@ -17,6 +17,7 @@ Regole:
 - `NotificationEmailDelivery` contiene log minimo degli invii email e non salva body, token, blob key o URL privati;
 - `ProductAuditEvent` contiene audit prodotto minimizzato e separato da support/auth audit;
 - `WorkerUserLink`, `JobSiteUserAssignment` e `JobSiteWorkerAssignment` contengono assegnazioni operative addittive per scope risorsa;
+- `OrganizationMembership` e singolare per utente; la lettura esterna usa share link e non un ruolo interno dedicato;
 - `lib/prisma.ts` crea il singleton server-side con `PrismaPg`;
 - `src/` espone client e API del package;
 - ogni cambiamento strutturale qui va allineato a `project_brain.json` se stabilizza una convenzione.
@@ -27,6 +28,7 @@ Comandi utili:
 pnpm --filter @qoovex/db db:generate
 pnpm --filter @qoovex/db db:seed
 pnpm --filter @qoovex/db verify:prisma
+pnpm --filter @qoovex/db test
 pnpm --filter @qoovex/db exec prisma studio
 ```
 

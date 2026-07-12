@@ -10,12 +10,24 @@ import { bootstrapDevUser } from "@shared/server/dev-auth";
 
 export async function requireIdentity() {
   const devUser = await bootstrapDevUser();
-  if (devUser) return { ...devUser, suspendedAt: null };
+  if (devUser) {
+    return {
+      id: devUser.id,
+      email: devUser.email,
+      emailVerified: devUser.emailVerified,
+      platformRole: devUser.platformRole,
+      authVersion: devUser.authVersion,
+      mfaEnabled: devUser.mfaEnabled,
+      suspendedAt: null,
+    };
+  }
 
   const session = await auth();
-  if (!session?.user?.id) throw new AccessError("Sessione non valida.", 401);
+  const userId = session?.user?.id;
+  if (!userId) throw new AccessError("Sessione non valida.", 401);
+
   const user = await db.user.findUnique({
-    where: { id: session.user.id },
+    where: { id: userId },
     select: { id: true, email: true, emailVerified: true, platformRole: true, authVersion: true, mfaEnabled: true, suspendedAt: true },
   });
   if (!user || user.suspendedAt) throw new AccessError("Sessione non valida.", 401);
@@ -24,21 +36,19 @@ export async function requireIdentity() {
 
 export async function getWorkspaceAccessContext(): Promise<WorkspaceAccessContext> {
   const user = await requireIdentity();
-  const [account, support] = await Promise.all([
-    db.user.findUnique({
-      where: { id: user.id },
-      select: { organizationRole: true, organization: { select: { id: true, name: true, code: true } } },
+  const [membership, support] = await Promise.all([
+    db.organizationMembership.findUnique({
+      where: { userId: user.id, revokedAt: null },
+      select: { id: true, role: true, organization: { select: { id: true, name: true, code: true } } },
     }),
     user.platformRole === "SUPER_ADMIN" ? getActiveSupportSession(user.id) : Promise.resolve(null),
   ]);
-  const company = account?.organization && account.organizationRole
-    ? { role: account.organizationRole, organization: account.organization }
-    : null;
-  const effectiveRole = support ? "OWNER" : company?.role ?? null;
+
+  const effectiveRole = support ? "OWNER" : membership?.role ?? null;
   return {
     userId: user.id,
     platformRole: user.platformRole,
-    company,
+    company: membership ? { role: membership.role, organization: membership.organization } : null,
     support: support ? {
       sessionId: support.id,
       reason: support.reason,
