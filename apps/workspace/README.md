@@ -8,7 +8,7 @@ Contiene route API, NextAuth, servizi, repository, regole di dominio, dashboard 
 
 La route privata `/qoovex-admin` e la relativa API `/api/platform-admin/*` formano la Console Qoovex per `SUPER_ADMIN`, visibile come Operatore Qoovex. Include gestione prudente degli account, supporto auditato e registro Prisma aggregato degli errori server; non espone credenziali, token o contenuti documentali.
 
-Le route `/sign-in` e `/sign-up` rendono provabile il workspace con NextAuth Credentials. La root `/` manda utenti non autenticati al login e utenti autenticati alla dashboard. Se un utente autenticato non ha ancora una Organization attiva, la UI mostra il setup minimo azienda e usa `POST /api/organizations`.
+Le route `/sign-in` e `/sign-up` rendono provabile il workspace con NextAuth Credentials. La root `/` manda utenti non autenticati al login e utenti autenticati alla dashboard. Se un utente autenticato non ha ancora un'Azienda associata, la UI mostra il setup minimo azienda e usa `POST /api/organizations`.
 
 In development locale la pagina `/sign-in` mostra `Accedi come dev` soltanto su host loopback. Il cookie firmato richiede `DEV_AUTH_SECRET` e attribuisce `SUPER_ADMIN` solo a runtime all'identita seed, senza modificare il ruolo persistito.
 
@@ -42,6 +42,11 @@ Boundary:
 - Prisma schema, migrations e client vivono in `packages/db`;
 - componenti UI generici futuri dovranno uscire verso `packages/ui` solo quando riusabili;
 - asset brand canonici futuri dovranno uscire verso `packages/brand`.
+
+Architettura frontend:
+- Tailwind CSS v4 e Fontshare sono configurati come foundation; la UI esistente non e ancora migrata.
+- gli alias FSD `@shared`, `@entities`, `@features`, `@widgets`, `@views` e `@content` sono disponibili;
+- la migrazione delle pagine avviene per flusso dopo l'approvazione in Sirio, senza spostamento big-bang.
 
 Regole:
 - import sempre verso layer inferiori;

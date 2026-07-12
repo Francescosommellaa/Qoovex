@@ -16,5 +16,12 @@
   "notes": [
     "This file is intentionally minimal to avoid duplicated operational memory in the repo.",
     "Detailed rules, decisions, feature constraints and failure modes are canonical in Qoovex-Brain."
-  ]
+  ],
+  "technical_state": {
+    "authentication": "Auth.js/NextAuth remains confined to apps/workspace.",
+    "styling": "Tailwind CSS v4 is installed with CSS-first configuration in the Next.js apps.",
+    "typography": "Fontshare is centralized in @qoovex/brand-resources; consumers do not duplicate provider imports.",
+    "design_system": "@qoovex/ui owns generic tokens, base styles and reusable primitives; Sirio is the approval showcase.",
+    "workspace_architecture": "FSD aliases are configured. Flow-by-flow migration has not started."
+  }
 }
