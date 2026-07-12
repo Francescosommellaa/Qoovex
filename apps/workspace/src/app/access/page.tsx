@@ -29,6 +29,6 @@ export default async function AccessPage() {
       />
     );
   } catch {
-    return <WorkspaceAccessState title="Accessi non disponibili" description="Verifica accesso e azienda attiva." />;
+    return <WorkspaceAccessState title="Accessi non disponibili" description="Verifica accesso e azienda configurata." />;
   }
 }

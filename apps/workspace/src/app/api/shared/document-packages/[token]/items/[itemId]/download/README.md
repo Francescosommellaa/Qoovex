@@ -1,6 +1,6 @@
 # /api/shared/document-packages/[token]/items/[itemId]/download
 
-Download viewer controllato per file inclusi in un pacchetto condiviso.
+Download destinatario esterno controllato per file inclusi in un pacchetto condiviso.
 
 - `GET`: stream server-side di `DocumentVersion` o `Evidence` inclusi.
 

@@ -159,7 +159,7 @@ export async function getSharedDocumentPackage(token: string) {
     action: "SHARE_LINK_ACCESSED",
     entityType: "SHARE_LINK",
     entityId: shareLink.id,
-    metadata: { reasonCode: "viewer-package-access" },
+    metadata: { reasonCode: "destinatario esterno-package-access" },
   });
   return {
     id: shareLink.documentPackage.id,
@@ -198,7 +198,7 @@ export async function getSharedPackageItemDownload(token: string, itemId: string
       action: "SHARE_LINK_ACCESSED",
       entityType: "SHARE_LINK",
       entityId: shareLink.id,
-      metadata: { reasonCode: "viewer-file-download", itemType: item.itemType, mimeType: version.mimeType, size: version.size, hasFile: true },
+      metadata: { reasonCode: "destinatario esterno-file-download", itemType: item.itemType, mimeType: version.mimeType, size: version.size, hasFile: true },
     });
     return { stream: blob.stream, originalFileName: version.originalFileName, mimeType: version.mimeType, size: version.size };
   }
@@ -219,7 +219,7 @@ export async function getSharedPackageItemDownload(token: string, itemId: string
       action: "SHARE_LINK_ACCESSED",
       entityType: "SHARE_LINK",
       entityId: shareLink.id,
-      metadata: { reasonCode: "viewer-file-download", itemType: item.itemType, mimeType: evidence.mimeType, size: evidence.size, hasFile: true },
+      metadata: { reasonCode: "destinatario esterno-file-download", itemType: item.itemType, mimeType: evidence.mimeType, size: evidence.size, hasFile: true },
     });
     return { stream: blob.stream, originalFileName: evidence.originalFileName, mimeType: evidence.mimeType, size: evidence.size };
   }

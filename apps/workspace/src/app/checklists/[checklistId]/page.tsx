@@ -25,6 +25,6 @@ export default async function ChecklistDetailPage({ params }: ChecklistDetailPag
       />
     );
   } catch {
-    return <WorkspaceAccessState title="Checklist non disponibile" description="Verifica accesso, azienda attiva o stato archiviazione." />;
+    return <WorkspaceAccessState title="Checklist non disponibile" description="Verifica accesso, azienda configurata o stato archiviazione." />;
   }
 }

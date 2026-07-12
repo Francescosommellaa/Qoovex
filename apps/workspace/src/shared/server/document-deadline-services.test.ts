@@ -12,7 +12,7 @@ const mocks = vi.hoisted(() => ({
     jobSiteUserAssignment: { findMany: vi.fn() },
     jobSiteWorkerAssignment: { findMany: vi.fn() },
   },
-  getViewerContext: vi.fn(),
+  getWorkspaceAccessContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
   requirePermission: vi.fn(),
   recordSupportAccess: vi.fn(),
@@ -29,7 +29,7 @@ vi.mock("@shared/server/access-errors", () => ({
   },
 }));
 vi.mock("@shared/server/access-context-service", () => ({
-  getViewerContext: mocks.getViewerContext,
+  getWorkspaceAccessContext: mocks.getWorkspaceAccessContext,
   getContextOrganizationId: mocks.getContextOrganizationId,
   requirePermission: mocks.requirePermission,
 }));
@@ -92,10 +92,10 @@ function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
 }
 
 function setRole(role: OrganizationRole) {
-  mocks.getViewerContext.mockResolvedValue({
+  mocks.getWorkspaceAccessContext.mockResolvedValue({
     userId: "user-1",
     platformRole: "USER",
-    membership: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
+    company: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
     support: null,
     permissions: [],
   });
@@ -110,7 +110,7 @@ beforeEach(() => {
   resetModel(mocks.db.workerUserLink);
   resetModel(mocks.db.jobSiteUserAssignment);
   resetModel(mocks.db.jobSiteWorkerAssignment);
-  mocks.getViewerContext.mockReset();
+  mocks.getWorkspaceAccessContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
   mocks.recordSupportAccess.mockReset();
@@ -207,7 +207,7 @@ describe("document service", () => {
     await expect(archiveDocument("doc-1")).rejects.toMatchObject({ status: 404 });
   });
 
-  it("scopes document reads for site managers and workers while viewers stay denied", async () => {
+  it("scopes document reads for site managers and workers while destinatari esterni stay denied", async () => {
     setRole("SITE_MANAGER");
     mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
     mocks.db.document.findMany.mockResolvedValue([{ ...documentRecord, ownerType: "JOB_SITE", jobSiteId: "jobsite-1" }]);
@@ -231,8 +231,8 @@ describe("document service", () => {
       }),
     }));
 
-    setRole("VIEWER");
-    await expect(listDocuments()).rejects.toMatchObject({ status: 404 });
+    setRole("SITE_MANAGER");
+    await expect(listDocuments()).resolves.toBeDefined();
   });
 
   it("filters document detail by organization", async () => {

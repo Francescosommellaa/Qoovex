@@ -9,7 +9,7 @@ export type SecurityEmailEvent =
   | "MFA_DISABLED"
   | "NEW_DEVICE";
 
-type InviteRole = "ADMIN" | "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER" | "VIEWER";
+type InviteRole = "ADMIN" | "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER";
 
 export interface NotificationEmailItem {
   title: string;

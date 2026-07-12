@@ -72,6 +72,7 @@ const ROLE_PERMISSIONS: Record<OrganizationRole, readonly OrganizationPermission
     "workers:read",
     "jobSites:read",
     "documents:read",
+    "documents:upload",
     "documents:update",
     "deadlines:read",
     "checklists:read",
@@ -105,7 +106,6 @@ const ROLE_PERMISSIONS: Record<OrganizationRole, readonly OrganizationPermission
     "evidence:read",
     "evidence:upload",
   ],
-  VIEWER: ["documentPackages:read"],
 };
 
 export function getPermissionsForRole(role: OrganizationRole | null): OrganizationPermission[] {

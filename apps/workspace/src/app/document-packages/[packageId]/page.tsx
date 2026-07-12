@@ -52,6 +52,6 @@ export default async function DocumentPackageDetailPage({ params }: DocumentPack
       />
     );
   } catch {
-    return <WorkspaceAccessState title="Pacchetto non disponibile" description="Verifica accesso, azienda attiva o stato archiviazione." />;
+    return <WorkspaceAccessState title="Pacchetto non disponibile" description="Verifica accesso, azienda configurata o stato archiviazione." />;
   }
 }

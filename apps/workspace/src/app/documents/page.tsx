@@ -36,6 +36,6 @@ export default async function DocumentsPage({ searchParams }: DocumentsPageProps
       />
     );
   } catch {
-    return <WorkspaceAccessState title="Documenti non disponibili" description="Verifica accesso e azienda attiva." />;
+    return <WorkspaceAccessState title="Documenti non disponibili" description="Verifica accesso e azienda configurata." />;
   }
 }

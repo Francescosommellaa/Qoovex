@@ -24,7 +24,7 @@ export function OrganizationRequiredState() {
       <section className={styles.setupCard} aria-labelledby="organization-required-title">
         <p className={styles.brand}>Qoovex</p>
         <h1 id="organization-required-title">Configura la tua azienda</h1>
-        <p>Per usare Qoovex serve un'azienda attiva dove organizzare documenti, scadenze e prove di cantiere.</p>
+        <p>Per usare Qoovex serve un'azienda configurata dove organizzare documenti, scadenze e prove di cantiere.</p>
         <OrganizationSetupForm />
       </section>
     </main>

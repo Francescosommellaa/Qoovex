@@ -24,7 +24,6 @@ enum OrganizationRole {
   SAFETY_CONSULTANT
   SITE_MANAGER
   WORKER
-  VIEWER
 }
 
 enum SupportAuditAction {
@@ -322,6 +321,8 @@ model User {
   authVersion                Int                  @default(1)
   suspendedAt                DateTime?
   suspensionReason           String?
+  organizationId             String?
+  organizationRole           OrganizationRole?
   accounts                   Account[]
   sessions                   Session[]
   credential                 UserCredential?
@@ -337,7 +338,7 @@ model User {
   usernameChangedAt          DateTime?
   mfaBackupCodes             MfaBackupCode[]
   authDevices                AuthDevice[]
-  organizationMemberships    OrganizationMembership[]
+  organization               Organization?          @relation("OrganizationUsers", fields: [organizationId], references: [id], onDelete: SetNull)
   createdOrganizations       Organization[]           @relation("OrganizationCreator")
   sentOrganizationInvitations OrganizationInvitation[] @relation("InvitationSender")
   supportSessions            SupportSession[]      @relation("SupportActor")
@@ -361,6 +362,8 @@ model User {
   assignedJobSiteWorkers     JobSiteWorkerAssignment[] @relation("JobSiteWorkerAssignmentCreator")
   createdAt                  DateTime              @default(now())
   updatedAt                  DateTime              @updatedAt
+
+  @@index([organizationId, organizationRole])
 }
 
 model Organization {
@@ -371,7 +374,7 @@ model Organization {
   createdAt      DateTime              @default(now())
   updatedAt      DateTime              @updatedAt
   createdBy      User?                 @relation("OrganizationCreator", fields: [createdById], references: [id], onDelete: SetNull)
-  memberships    OrganizationMembership[]
+  users          User[]                 @relation("OrganizationUsers")
   invitations    OrganizationInvitation[]
   supportSessions SupportSession[]
   supportEvents  SupportAuditEvent[]
@@ -862,22 +865,6 @@ model NotificationEmailDelivery {
   @@index([organizationId, status, createdAt])
   @@index([organizationId, type, createdAt])
   @@index([notificationId])
-}
-
-model OrganizationMembership {
-  id          String        @id @default(cuid())
-  organizationId String
-  userId      String
-  role        OrganizationRole
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  revokedAt   DateTime?
-  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([organizationId, userId])
-  @@index([userId, revokedAt])
-  @@index([organizationId, role, revokedAt])
 }
 
 model OrganizationInvitation {

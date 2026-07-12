@@ -513,6 +513,10 @@ export type OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedIn
   deleteMany?: Prisma.OrganizationInvitationScalarWhereInput | Prisma.OrganizationInvitationScalarWhereInput[]
 }
 
+export type EnumOrganizationRoleFieldUpdateOperationsInput = {
+  set?: $Enums.OrganizationRole
+}
+
 export type OrganizationInvitationCreateWithoutInvitedByInput = {
   id?: string
   email: string

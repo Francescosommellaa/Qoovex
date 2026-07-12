@@ -7,4 +7,4 @@ Pacchetti documentali interni dell'organizzazione.
 
 Permessi: `documentPackages:read` per lettura, `documentPackages:create` per creazione.
 
-Non espone viewer, token, file Blob o URL permanenti.
+Non espone destinatario esterno, token, file Blob o URL permanenti.

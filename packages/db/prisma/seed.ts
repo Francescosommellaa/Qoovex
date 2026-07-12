@@ -28,19 +28,9 @@ async function main() {
     },
   });
 
-  await prisma.organizationMembership.upsert({
-    where: {
-      organizationId_userId: {
-        organizationId: organization.id,
-        userId: owner.id,
-      },
-    },
-    update: { role: "OWNER", revokedAt: null },
-    create: {
-      organizationId: organization.id,
-      userId: owner.id,
-      role: "OWNER",
-    },
+  await prisma.user.update({
+    where: { id: owner.id },
+    data: { organizationId: organization.id, organizationRole: "OWNER" },
   });
 
   const worker = await prisma.worker.findFirst({

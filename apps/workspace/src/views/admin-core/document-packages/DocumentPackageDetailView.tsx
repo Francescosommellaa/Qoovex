@@ -65,7 +65,7 @@ export function DocumentPackageDetailView({
               </div>
             </article>
           </WorkspacePanel>
-          <WorkspacePanel title="Item inclusi" description="Il viewer vede solo gli elementi inclusi nel pacchetto.">
+          <WorkspacePanel title="Item inclusi" description="Il destinatario esterno vede solo gli elementi inclusi nel pacchetto.">
             <DocumentPackageItemsList
               packageId={documentPackage.id}
               items={items}

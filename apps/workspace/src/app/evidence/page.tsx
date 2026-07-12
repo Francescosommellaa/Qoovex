@@ -29,6 +29,6 @@ export default async function EvidencePage() {
       />
     );
   } catch {
-    return <WorkspaceAccessState title="Prove non disponibili" description="Verifica accesso e azienda attiva." />;
+    return <WorkspaceAccessState title="Prove non disponibili" description="Verifica accesso e azienda configurata." />;
   }
 }

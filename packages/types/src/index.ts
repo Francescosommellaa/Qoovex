@@ -4,7 +4,7 @@ export type EntityId = string;
 export const platformRoles = ["USER", "SUPER_ADMIN"] as const;
 export type PlatformRole = (typeof platformRoles)[number];
 
-export const organizationRoles = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER", "VIEWER"] as const;
+export const organizationRoles = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 export type OrganizationRole = (typeof organizationRoles)[number];
 
 export const organizationPermissions = [
@@ -221,8 +221,7 @@ export interface OrganizationSummary {
   code: string;
 }
 
-export interface MembershipSummary {
-  id: EntityId;
+export interface WorkspaceCompanyContext {
   role: OrganizationRole;
   organization: OrganizationSummary;
 }
@@ -235,10 +234,10 @@ export interface SupportContext {
   organization: OrganizationSummary;
 }
 
-export interface ViewerContext {
+export interface WorkspaceAccessContext {
   userId: EntityId;
   platformRole: PlatformRole;
-  membership: MembershipSummary | null;
+  company: WorkspaceCompanyContext | null;
   support: SupportContext | null;
   permissions: Permission[];
 }

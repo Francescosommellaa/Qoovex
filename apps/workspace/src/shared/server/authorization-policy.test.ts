@@ -16,7 +16,6 @@ describe("organization authorization policy", () => {
     expect(getPermissionsForRole("SAFETY_CONSULTANT")).toEqual(expect.arrayContaining(["documents:read", "documents:update", "checklists:manage"]));
     expect(getPermissionsForRole("SITE_MANAGER")).toEqual(expect.arrayContaining(["jobSites:read", "checklists:complete", "evidence:upload"]));
     expect(getPermissionsForRole("WORKER")).toEqual(expect.arrayContaining(["documents:upload", "deadlines:read", "evidence:upload"]));
-    expect(getPermissionsForRole("VIEWER")).toEqual(["documentPackages:read"]);
   });
 
   it("allows owner and admin invitations without owner escalation", () => {

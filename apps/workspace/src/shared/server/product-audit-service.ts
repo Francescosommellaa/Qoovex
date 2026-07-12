@@ -10,7 +10,7 @@ import type {
   AuditMetadataValue,
   AuditOutcome,
   OrganizationRole,
-  ViewerContext,
+  WorkspaceAccessContext,
 } from "@qoovex/types";
 import { auditActions, auditEntityTypes, auditOutcomes } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
@@ -227,7 +227,7 @@ export async function recordProductAuditEventBestEffort(input: Parameters<typeof
   }
 }
 
-export function auditActorFromContext(context: ViewerContext, actorRole: OrganizationRole | null) {
+export function auditActorFromContext(context: WorkspaceAccessContext, actorRole: OrganizationRole | null) {
   return {
     actorUserId: context.userId,
     actorRole,
