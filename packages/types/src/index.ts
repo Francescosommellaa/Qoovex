@@ -1077,7 +1077,6 @@ export interface DataControlJobResponse {
   requestedById: EntityId;
   type: DataControlJobType;
   status: DataControlJobStatus;
-  blobKey?: string | null;
   resultSummary?: Record<string, unknown> | null;
   errorCode?: string | null;
   createdAt: string;
@@ -1092,7 +1091,7 @@ export interface DataControlJobListResponse {
 
 export interface CreateDataExportJobResponse {
   job: DataControlJobResponse;
-  created: true;
+  created: boolean;
 }
 
 export interface RunDataControlJobsResponse {
@@ -1110,28 +1109,20 @@ export interface CreateOrganizationDeletionJobInput {
 
 export interface CreateOrganizationDeletionJobResponse {
   job: DataControlJobResponse;
-  created: true;
-}
-
-export interface BlobOrphanCandidate {
-  pathname: string;
-  size?: number | null;
-  uploadedAt?: string | null;
+  created: boolean;
 }
 
 export interface BlobOrphanDryRunResponse {
-  prefix: string;
   scanned: number;
   referenced: number;
   orphanCount: number;
   deletableCount: number;
-  sample: BlobOrphanCandidate[];
   generatedAt: string;
 }
 
 export interface BlobOrphanCleanupResponse {
   job: DataControlJobResponse;
-  created: true;
+  created: boolean;
 }
 
 export interface DataRetentionCandidate {

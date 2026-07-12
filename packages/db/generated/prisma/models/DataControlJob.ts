@@ -20,8 +20,18 @@ export type DataControlJobModel = runtime.Types.Result.DefaultSelection<Prisma.$
 
 export type AggregateDataControlJob = {
   _count: DataControlJobCountAggregateOutputType | null
+  _avg: DataControlJobAvgAggregateOutputType | null
+  _sum: DataControlJobSumAggregateOutputType | null
   _min: DataControlJobMinAggregateOutputType | null
   _max: DataControlJobMaxAggregateOutputType | null
+}
+
+export type DataControlJobAvgAggregateOutputType = {
+  attemptCount: number | null
+}
+
+export type DataControlJobSumAggregateOutputType = {
+  attemptCount: number | null
 }
 
 export type DataControlJobMinAggregateOutputType = {
@@ -30,6 +40,9 @@ export type DataControlJobMinAggregateOutputType = {
   requestedById: string | null
   type: $Enums.DataControlJobType | null
   status: $Enums.DataControlJobStatus | null
+  attemptCount: number | null
+  nextAttemptAt: Date | null
+  activeKey: string | null
   blobKey: string | null
   errorCode: string | null
   createdAt: Date | null
@@ -43,6 +56,9 @@ export type DataControlJobMaxAggregateOutputType = {
   requestedById: string | null
   type: $Enums.DataControlJobType | null
   status: $Enums.DataControlJobStatus | null
+  attemptCount: number | null
+  nextAttemptAt: Date | null
+  activeKey: string | null
   blobKey: string | null
   errorCode: string | null
   createdAt: Date | null
@@ -56,6 +72,9 @@ export type DataControlJobCountAggregateOutputType = {
   requestedById: number
   type: number
   status: number
+  attemptCount: number
+  nextAttemptAt: number
+  activeKey: number
   blobKey: number
   resultSummary: number
   errorCode: number
@@ -66,12 +85,23 @@ export type DataControlJobCountAggregateOutputType = {
 }
 
 
+export type DataControlJobAvgAggregateInputType = {
+  attemptCount?: true
+}
+
+export type DataControlJobSumAggregateInputType = {
+  attemptCount?: true
+}
+
 export type DataControlJobMinAggregateInputType = {
   id?: true
   organizationId?: true
   requestedById?: true
   type?: true
   status?: true
+  attemptCount?: true
+  nextAttemptAt?: true
+  activeKey?: true
   blobKey?: true
   errorCode?: true
   createdAt?: true
@@ -85,6 +115,9 @@ export type DataControlJobMaxAggregateInputType = {
   requestedById?: true
   type?: true
   status?: true
+  attemptCount?: true
+  nextAttemptAt?: true
+  activeKey?: true
   blobKey?: true
   errorCode?: true
   createdAt?: true
@@ -98,6 +131,9 @@ export type DataControlJobCountAggregateInputType = {
   requestedById?: true
   type?: true
   status?: true
+  attemptCount?: true
+  nextAttemptAt?: true
+  activeKey?: true
   blobKey?: true
   resultSummary?: true
   errorCode?: true
@@ -144,6 +180,18 @@ export type DataControlJobAggregateArgs<ExtArgs extends runtime.Types.Extensions
   _count?: true | DataControlJobCountAggregateInputType
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   *
+   * Select which fields to average
+  **/
+  _avg?: DataControlJobAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   *
+   * Select which fields to sum
+  **/
+  _sum?: DataControlJobSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
    * Select which fields to find the minimum value
   **/
@@ -175,6 +223,8 @@ export type DataControlJobGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   _count?: DataControlJobCountAggregateInputType | true
+  _avg?: DataControlJobAvgAggregateInputType
+  _sum?: DataControlJobSumAggregateInputType
   _min?: DataControlJobMinAggregateInputType
   _max?: DataControlJobMaxAggregateInputType
 }
@@ -185,6 +235,9 @@ export type DataControlJobGroupByOutputType = {
   requestedById: string
   type: $Enums.DataControlJobType
   status: $Enums.DataControlJobStatus
+  attemptCount: number
+  nextAttemptAt: Date
+  activeKey: string | null
   blobKey: string | null
   resultSummary: runtime.JsonValue | null
   errorCode: string | null
@@ -192,6 +245,8 @@ export type DataControlJobGroupByOutputType = {
   startedAt: Date | null
   completedAt: Date | null
   _count: DataControlJobCountAggregateOutputType | null
+  _avg: DataControlJobAvgAggregateOutputType | null
+  _sum: DataControlJobSumAggregateOutputType | null
   _min: DataControlJobMinAggregateOutputType | null
   _max: DataControlJobMaxAggregateOutputType | null
 }
@@ -220,6 +275,9 @@ export type DataControlJobWhereInput = {
   requestedById?: Prisma.StringFilter<"DataControlJob"> | string
   type?: Prisma.EnumDataControlJobTypeFilter<"DataControlJob"> | $Enums.DataControlJobType
   status?: Prisma.EnumDataControlJobStatusFilter<"DataControlJob"> | $Enums.DataControlJobStatus
+  attemptCount?: Prisma.IntFilter<"DataControlJob"> | number
+  nextAttemptAt?: Prisma.DateTimeFilter<"DataControlJob"> | Date | string
+  activeKey?: Prisma.StringNullableFilter<"DataControlJob"> | string | null
   blobKey?: Prisma.StringNullableFilter<"DataControlJob"> | string | null
   resultSummary?: Prisma.JsonNullableFilter<"DataControlJob">
   errorCode?: Prisma.StringNullableFilter<"DataControlJob"> | string | null
@@ -235,6 +293,9 @@ export type DataControlJobOrderByWithRelationInput = {
   requestedById?: Prisma.SortOrder
   type?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  nextAttemptAt?: Prisma.SortOrder
+  activeKey?: Prisma.SortOrderInput | Prisma.SortOrder
   blobKey?: Prisma.SortOrderInput | Prisma.SortOrder
   resultSummary?: Prisma.SortOrderInput | Prisma.SortOrder
   errorCode?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -246,6 +307,7 @@ export type DataControlJobOrderByWithRelationInput = {
 
 export type DataControlJobWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  activeKey?: string
   AND?: Prisma.DataControlJobWhereInput | Prisma.DataControlJobWhereInput[]
   OR?: Prisma.DataControlJobWhereInput[]
   NOT?: Prisma.DataControlJobWhereInput | Prisma.DataControlJobWhereInput[]
@@ -253,6 +315,8 @@ export type DataControlJobWhereUniqueInput = Prisma.AtLeast<{
   requestedById?: Prisma.StringFilter<"DataControlJob"> | string
   type?: Prisma.EnumDataControlJobTypeFilter<"DataControlJob"> | $Enums.DataControlJobType
   status?: Prisma.EnumDataControlJobStatusFilter<"DataControlJob"> | $Enums.DataControlJobStatus
+  attemptCount?: Prisma.IntFilter<"DataControlJob"> | number
+  nextAttemptAt?: Prisma.DateTimeFilter<"DataControlJob"> | Date | string
   blobKey?: Prisma.StringNullableFilter<"DataControlJob"> | string | null
   resultSummary?: Prisma.JsonNullableFilter<"DataControlJob">
   errorCode?: Prisma.StringNullableFilter<"DataControlJob"> | string | null
@@ -260,7 +324,7 @@ export type DataControlJobWhereUniqueInput = Prisma.AtLeast<{
   startedAt?: Prisma.DateTimeNullableFilter<"DataControlJob"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"DataControlJob"> | Date | string | null
   requestedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id">
+}, "id" | "activeKey">
 
 export type DataControlJobOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -268,6 +332,9 @@ export type DataControlJobOrderByWithAggregationInput = {
   requestedById?: Prisma.SortOrder
   type?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  nextAttemptAt?: Prisma.SortOrder
+  activeKey?: Prisma.SortOrderInput | Prisma.SortOrder
   blobKey?: Prisma.SortOrderInput | Prisma.SortOrder
   resultSummary?: Prisma.SortOrderInput | Prisma.SortOrder
   errorCode?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -275,8 +342,10 @@ export type DataControlJobOrderByWithAggregationInput = {
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.DataControlJobCountOrderByAggregateInput
+  _avg?: Prisma.DataControlJobAvgOrderByAggregateInput
   _max?: Prisma.DataControlJobMaxOrderByAggregateInput
   _min?: Prisma.DataControlJobMinOrderByAggregateInput
+  _sum?: Prisma.DataControlJobSumOrderByAggregateInput
 }
 
 export type DataControlJobScalarWhereWithAggregatesInput = {
@@ -288,6 +357,9 @@ export type DataControlJobScalarWhereWithAggregatesInput = {
   requestedById?: Prisma.StringWithAggregatesFilter<"DataControlJob"> | string
   type?: Prisma.EnumDataControlJobTypeWithAggregatesFilter<"DataControlJob"> | $Enums.DataControlJobType
   status?: Prisma.EnumDataControlJobStatusWithAggregatesFilter<"DataControlJob"> | $Enums.DataControlJobStatus
+  attemptCount?: Prisma.IntWithAggregatesFilter<"DataControlJob"> | number
+  nextAttemptAt?: Prisma.DateTimeWithAggregatesFilter<"DataControlJob"> | Date | string
+  activeKey?: Prisma.StringNullableWithAggregatesFilter<"DataControlJob"> | string | null
   blobKey?: Prisma.StringNullableWithAggregatesFilter<"DataControlJob"> | string | null
   resultSummary?: Prisma.JsonNullableWithAggregatesFilter<"DataControlJob">
   errorCode?: Prisma.StringNullableWithAggregatesFilter<"DataControlJob"> | string | null
@@ -301,6 +373,9 @@ export type DataControlJobCreateInput = {
   organizationId: string
   type: $Enums.DataControlJobType
   status?: $Enums.DataControlJobStatus
+  attemptCount?: number
+  nextAttemptAt?: Date | string
+  activeKey?: string | null
   blobKey?: string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: string | null
@@ -316,6 +391,9 @@ export type DataControlJobUncheckedCreateInput = {
   requestedById: string
   type: $Enums.DataControlJobType
   status?: $Enums.DataControlJobStatus
+  attemptCount?: number
+  nextAttemptAt?: Date | string
+  activeKey?: string | null
   blobKey?: string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: string | null
@@ -329,6 +407,9 @@ export type DataControlJobUpdateInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumDataControlJobTypeFieldUpdateOperationsInput | $Enums.DataControlJobType
   status?: Prisma.EnumDataControlJobStatusFieldUpdateOperationsInput | $Enums.DataControlJobStatus
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  nextAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -344,6 +425,9 @@ export type DataControlJobUncheckedUpdateInput = {
   requestedById?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumDataControlJobTypeFieldUpdateOperationsInput | $Enums.DataControlJobType
   status?: Prisma.EnumDataControlJobStatusFieldUpdateOperationsInput | $Enums.DataControlJobStatus
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  nextAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -358,6 +442,9 @@ export type DataControlJobCreateManyInput = {
   requestedById: string
   type: $Enums.DataControlJobType
   status?: $Enums.DataControlJobStatus
+  attemptCount?: number
+  nextAttemptAt?: Date | string
+  activeKey?: string | null
   blobKey?: string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: string | null
@@ -371,6 +458,9 @@ export type DataControlJobUpdateManyMutationInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumDataControlJobTypeFieldUpdateOperationsInput | $Enums.DataControlJobType
   status?: Prisma.EnumDataControlJobStatusFieldUpdateOperationsInput | $Enums.DataControlJobStatus
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  nextAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -385,6 +475,9 @@ export type DataControlJobUncheckedUpdateManyInput = {
   requestedById?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumDataControlJobTypeFieldUpdateOperationsInput | $Enums.DataControlJobType
   status?: Prisma.EnumDataControlJobStatusFieldUpdateOperationsInput | $Enums.DataControlJobStatus
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  nextAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -409,6 +502,9 @@ export type DataControlJobCountOrderByAggregateInput = {
   requestedById?: Prisma.SortOrder
   type?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  nextAttemptAt?: Prisma.SortOrder
+  activeKey?: Prisma.SortOrder
   blobKey?: Prisma.SortOrder
   resultSummary?: Prisma.SortOrder
   errorCode?: Prisma.SortOrder
@@ -417,12 +513,19 @@ export type DataControlJobCountOrderByAggregateInput = {
   completedAt?: Prisma.SortOrder
 }
 
+export type DataControlJobAvgOrderByAggregateInput = {
+  attemptCount?: Prisma.SortOrder
+}
+
 export type DataControlJobMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   requestedById?: Prisma.SortOrder
   type?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  nextAttemptAt?: Prisma.SortOrder
+  activeKey?: Prisma.SortOrder
   blobKey?: Prisma.SortOrder
   errorCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -436,11 +539,18 @@ export type DataControlJobMinOrderByAggregateInput = {
   requestedById?: Prisma.SortOrder
   type?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  nextAttemptAt?: Prisma.SortOrder
+  activeKey?: Prisma.SortOrder
   blobKey?: Prisma.SortOrder
   errorCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
+}
+
+export type DataControlJobSumOrderByAggregateInput = {
+  attemptCount?: Prisma.SortOrder
 }
 
 export type DataControlJobCreateNestedManyWithoutRequestedByInput = {
@@ -498,6 +608,9 @@ export type DataControlJobCreateWithoutRequestedByInput = {
   organizationId: string
   type: $Enums.DataControlJobType
   status?: $Enums.DataControlJobStatus
+  attemptCount?: number
+  nextAttemptAt?: Date | string
+  activeKey?: string | null
   blobKey?: string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: string | null
@@ -511,6 +624,9 @@ export type DataControlJobUncheckedCreateWithoutRequestedByInput = {
   organizationId: string
   type: $Enums.DataControlJobType
   status?: $Enums.DataControlJobStatus
+  attemptCount?: number
+  nextAttemptAt?: Date | string
+  activeKey?: string | null
   blobKey?: string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: string | null
@@ -554,6 +670,9 @@ export type DataControlJobScalarWhereInput = {
   requestedById?: Prisma.StringFilter<"DataControlJob"> | string
   type?: Prisma.EnumDataControlJobTypeFilter<"DataControlJob"> | $Enums.DataControlJobType
   status?: Prisma.EnumDataControlJobStatusFilter<"DataControlJob"> | $Enums.DataControlJobStatus
+  attemptCount?: Prisma.IntFilter<"DataControlJob"> | number
+  nextAttemptAt?: Prisma.DateTimeFilter<"DataControlJob"> | Date | string
+  activeKey?: Prisma.StringNullableFilter<"DataControlJob"> | string | null
   blobKey?: Prisma.StringNullableFilter<"DataControlJob"> | string | null
   resultSummary?: Prisma.JsonNullableFilter<"DataControlJob">
   errorCode?: Prisma.StringNullableFilter<"DataControlJob"> | string | null
@@ -567,6 +686,9 @@ export type DataControlJobCreateManyRequestedByInput = {
   organizationId: string
   type: $Enums.DataControlJobType
   status?: $Enums.DataControlJobStatus
+  attemptCount?: number
+  nextAttemptAt?: Date | string
+  activeKey?: string | null
   blobKey?: string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: string | null
@@ -580,6 +702,9 @@ export type DataControlJobUpdateWithoutRequestedByInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumDataControlJobTypeFieldUpdateOperationsInput | $Enums.DataControlJobType
   status?: Prisma.EnumDataControlJobStatusFieldUpdateOperationsInput | $Enums.DataControlJobStatus
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  nextAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -593,6 +718,9 @@ export type DataControlJobUncheckedUpdateWithoutRequestedByInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumDataControlJobTypeFieldUpdateOperationsInput | $Enums.DataControlJobType
   status?: Prisma.EnumDataControlJobStatusFieldUpdateOperationsInput | $Enums.DataControlJobStatus
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  nextAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -606,6 +734,9 @@ export type DataControlJobUncheckedUpdateManyWithoutRequestedByInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumDataControlJobTypeFieldUpdateOperationsInput | $Enums.DataControlJobType
   status?: Prisma.EnumDataControlJobStatusFieldUpdateOperationsInput | $Enums.DataControlJobStatus
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  nextAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resultSummary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -622,6 +753,9 @@ export type DataControlJobSelect<ExtArgs extends runtime.Types.Extensions.Intern
   requestedById?: boolean
   type?: boolean
   status?: boolean
+  attemptCount?: boolean
+  nextAttemptAt?: boolean
+  activeKey?: boolean
   blobKey?: boolean
   resultSummary?: boolean
   errorCode?: boolean
@@ -637,6 +771,9 @@ export type DataControlJobSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   requestedById?: boolean
   type?: boolean
   status?: boolean
+  attemptCount?: boolean
+  nextAttemptAt?: boolean
+  activeKey?: boolean
   blobKey?: boolean
   resultSummary?: boolean
   errorCode?: boolean
@@ -652,6 +789,9 @@ export type DataControlJobSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   requestedById?: boolean
   type?: boolean
   status?: boolean
+  attemptCount?: boolean
+  nextAttemptAt?: boolean
+  activeKey?: boolean
   blobKey?: boolean
   resultSummary?: boolean
   errorCode?: boolean
@@ -667,6 +807,9 @@ export type DataControlJobSelectScalar = {
   requestedById?: boolean
   type?: boolean
   status?: boolean
+  attemptCount?: boolean
+  nextAttemptAt?: boolean
+  activeKey?: boolean
   blobKey?: boolean
   resultSummary?: boolean
   errorCode?: boolean
@@ -675,7 +818,7 @@ export type DataControlJobSelectScalar = {
   completedAt?: boolean
 }
 
-export type DataControlJobOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "requestedById" | "type" | "status" | "blobKey" | "resultSummary" | "errorCode" | "createdAt" | "startedAt" | "completedAt", ExtArgs["result"]["dataControlJob"]>
+export type DataControlJobOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "requestedById" | "type" | "status" | "attemptCount" | "nextAttemptAt" | "activeKey" | "blobKey" | "resultSummary" | "errorCode" | "createdAt" | "startedAt" | "completedAt", ExtArgs["result"]["dataControlJob"]>
 export type DataControlJobInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   requestedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -697,6 +840,9 @@ export type $DataControlJobPayload<ExtArgs extends runtime.Types.Extensions.Inte
     requestedById: string
     type: $Enums.DataControlJobType
     status: $Enums.DataControlJobStatus
+    attemptCount: number
+    nextAttemptAt: Date
+    activeKey: string | null
     blobKey: string | null
     resultSummary: runtime.JsonValue | null
     errorCode: string | null
@@ -1132,6 +1278,9 @@ export interface DataControlJobFieldRefs {
   readonly requestedById: Prisma.FieldRef<"DataControlJob", 'String'>
   readonly type: Prisma.FieldRef<"DataControlJob", 'DataControlJobType'>
   readonly status: Prisma.FieldRef<"DataControlJob", 'DataControlJobStatus'>
+  readonly attemptCount: Prisma.FieldRef<"DataControlJob", 'Int'>
+  readonly nextAttemptAt: Prisma.FieldRef<"DataControlJob", 'DateTime'>
+  readonly activeKey: Prisma.FieldRef<"DataControlJob", 'String'>
   readonly blobKey: Prisma.FieldRef<"DataControlJob", 'String'>
   readonly resultSummary: Prisma.FieldRef<"DataControlJob", 'Json'>
   readonly errorCode: Prisma.FieldRef<"DataControlJob", 'String'>

@@ -129,10 +129,14 @@ function setRole(role: OrganizationRole) {
 }
 
 function makeFile(input: { name?: string; type?: string; bytes?: number[]; sizeBytes?: number } = {}) {
+  const type = input.type ?? "image/png";
+  const defaultBytes = type === "application/pdf"
+    ? [0x25, 0x50, 0x44, 0x46]
+    : Array.from(Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2nWQAAAAASUVORK5CYII=", "base64"));
   const bytes = input.sizeBytes === undefined
-    ? new Uint8Array(input.bytes ?? [1, 2, 3, 4])
+    ? new Uint8Array(input.bytes ?? defaultBytes)
     : new Uint8Array(input.sizeBytes);
-  return new File([bytes], input.name ?? "foto.png", { type: input.type ?? "image/png" });
+  return new File([bytes], input.name ?? "foto.png", { type });
 }
 
 beforeEach(() => {
@@ -295,7 +299,7 @@ describe("evidence service", () => {
         blobKey: fileEvidenceRecord.blobKey,
         originalFileName: "foto.png",
         mimeType: "image/png",
-        size: 4,
+        size: 68,
         createdById: "user-1",
       }),
     }));
@@ -364,6 +368,7 @@ describe("evidence service", () => {
     await expect(uploadEvidenceFile({ type: "PHOTO", title: "Foto", jobSiteId: "jobsite-1" }, [makeFile({ bytes: [] })])).rejects.toMatchObject({ status: 409 });
     await expect(uploadEvidenceFile({ type: "PHOTO", title: "Foto", jobSiteId: "jobsite-1" }, [makeFile({ type: "application/pdf" })])).rejects.toMatchObject({ status: 409 });
     await expect(uploadEvidenceFile({ type: "FILE", title: "File", jobSiteId: "jobsite-1" }, [makeFile({ type: "text/html" })])).rejects.toMatchObject({ status: 409 });
+    await expect(uploadEvidenceFile({ type: "PHOTO", title: "Foto", jobSiteId: "jobsite-1" }, [makeFile({ type: "image/jpeg" })])).rejects.toMatchObject({ status: 409 });
     await expect(uploadEvidenceFile({ type: "FILE", title: "File", jobSiteId: "jobsite-1" }, [makeFile({ sizeBytes: EVIDENCE_MAX_SIZE_BYTES + 1 })])).rejects.toMatchObject({ status: 409 });
     await expect(uploadEvidenceFile({ type: "NOTE", title: "Nota", jobSiteId: "jobsite-1" }, [makeFile()])).rejects.toMatchObject({ status: 409 });
   });

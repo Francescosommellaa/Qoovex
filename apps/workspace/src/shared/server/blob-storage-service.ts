@@ -19,11 +19,12 @@ export async function putPrivateBlob(input: {
   body: Buffer;
   contentType: string;
   maximumSizeInBytes: number;
+  allowOverwrite?: boolean;
 }): Promise<StoredPrivateBlob> {
   const blob = await put(input.pathname, input.body, {
     access: "private",
     addRandomSuffix: false,
-    allowOverwrite: false,
+    allowOverwrite: input.allowOverwrite ?? false,
     contentType: input.contentType,
     maximumSizeInBytes: input.maximumSizeInBytes,
   });
@@ -42,6 +43,11 @@ export async function getPrivateBlob(pathname: string): Promise<ReadPrivateBlobR
 
 export async function deletePrivateBlob(pathname: string) {
   await del(pathname);
+}
+
+export async function deletePrivateBlobs(pathnames: string[]) {
+  if (!pathnames.length) return;
+  await del(pathnames);
 }
 
 export interface ListedPrivateBlob {

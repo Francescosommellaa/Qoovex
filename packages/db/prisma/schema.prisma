@@ -823,6 +823,9 @@ model DataControlJob {
   requestedById  String
   type           DataControlJobType
   status         DataControlJobStatus @default(PENDING)
+  attemptCount   Int                  @default(0)
+  nextAttemptAt  DateTime             @default(now())
+  activeKey      String?              @unique
   blobKey        String?
   resultSummary  Json?
   errorCode      String?
@@ -833,6 +836,7 @@ model DataControlJob {
 
   @@index([organizationId, status, createdAt])
   @@index([organizationId, type, status])
+  @@index([status, nextAttemptAt, createdAt])
   @@index([requestedById, createdAt])
   @@index([blobKey])
 }

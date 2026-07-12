@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/qoovex_ci
+  AUTH_URL: http://localhost:3001
+  AUTH_SECRET: ci-auth-secret-at-least-32-characters
+  DEV_AUTH_SECRET: ci-dev-auth-secret-at-least-32-characters
+  QOOVEX_AUTH_CODE_SECRET: ci-auth-code-secret-at-least-32-characters
+  QOOVEX_PASSWORD_PEPPER: ci-password-pepper-at-least-32-characters
+  QOOVEX_AUDIT_SECRET: ci-audit-secret-at-least-32-characters
+  QOOVEX_MFA_ENCRYPTION_KEY: ci-mfa-encryption-key-at-least-32-chars
+  QOOVEX_MFA_COOKIE_SECRET: ci-mfa-cookie-secret-at-least-32-chars
+
+jobs:
+  quality-gate:
+    name: CI / quality-gate
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: qoovex_ci
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.10.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @qoovex/db db:migrate:deploy
+      - run: pnpm check
+
+  workspace-e2e:
+    name: CI / workspace-e2e
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: qoovex_ci
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.10.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @qoovex/db db:migrate:deploy
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7

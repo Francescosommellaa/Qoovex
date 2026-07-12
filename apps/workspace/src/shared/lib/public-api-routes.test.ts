@@ -7,6 +7,7 @@ describe("public API route allowlist", () => {
       "/api/auth/session",
       "/api/dev-auth",
       "/api/data/jobs/run",
+      "/api/reminders/email-digest/run",
       "/api/shared/document-packages/raw-token",
       "/api/shared/document-packages/raw-token/items/item-1/download",
     ];

@@ -11,6 +11,7 @@ import { isEnumValue, trimOptionalId, trimOptionalText, trimRequiredText } from 
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { canReadEvidence, getResourceScope, type ResourceScope } from "./resource-scope-service";
+import { validateBinaryFileContent } from "./file-content-validation";
 
 const EVIDENCE_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 const EVIDENCE_UPLOAD_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
@@ -120,6 +121,10 @@ function sanitizeFileName(name: string) {
   return normalized.slice(0, 120) || "prova";
 }
 
+function allowedTypesForEvidence(type: EvidenceType): readonly string[] {
+  return type === "PHOTO" ? EVIDENCE_PHOTO_MIME_TYPES : EVIDENCE_FILE_MIME_TYPES;
+}
+
 function assertSingleEvidenceFile(type: EvidenceType, files: unknown[]): File {
   if (files.length === 0) throw new AccessError("File mancante.", 409);
   if (files.length > 1) throw new AccessError("Carica un solo file alla volta.", 409);
@@ -127,7 +132,7 @@ function assertSingleEvidenceFile(type: EvidenceType, files: unknown[]): File {
   if (!(file instanceof File)) throw new AccessError("File mancante.", 409);
   if (file.size <= 0) throw new AccessError("File vuoto.", 409);
   if (file.size > EVIDENCE_MAX_SIZE_BYTES) throw new AccessError("File troppo grande.", 409);
-  const allowedTypes = type === "PHOTO" ? EVIDENCE_PHOTO_MIME_TYPES : EVIDENCE_FILE_MIME_TYPES;
+  const allowedTypes = allowedTypesForEvidence(type);
   if (!allowedTypes.includes(file.type as never)) throw new AccessError("Formato file non supportato.", 409);
   return file;
 }
@@ -289,11 +294,12 @@ export async function uploadEvidenceFile(input: CreateEvidenceInput, files: unkn
   const safeFileName = sanitizeFileName(originalFileName);
   const blobKey = `organizations/${organizationId}/evidence/${evidenceId}/${safeFileName}`;
   const buffer = Buffer.from(await file.arrayBuffer());
+  const detectedMimeType = await validateBinaryFileContent(buffer, file.type, allowedTypesForEvidence(type));
 
   const uploadedBlob = await putPrivateBlob({
     pathname: blobKey,
     body: buffer,
-    contentType: file.type,
+    contentType: detectedMimeType,
     maximumSizeInBytes: EVIDENCE_MAX_SIZE_BYTES,
   });
   const storedBlobKey = uploadedBlob.pathname;
@@ -309,7 +315,7 @@ export async function uploadEvidenceFile(input: CreateEvidenceInput, files: unkn
         description,
         blobKey: storedBlobKey,
         originalFileName,
-        mimeType: file.type,
+        mimeType: detectedMimeType,
         size: file.size,
         createdById: context.userId,
       },

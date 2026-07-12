@@ -90,7 +90,7 @@ function setRole(role: OrganizationRole) {
 
 function makeFile(input: { name?: string; type?: string; bytes?: number[]; sizeBytes?: number } = {}) {
   const bytes = input.sizeBytes === undefined
-    ? new Uint8Array(input.bytes ?? [1, 2, 3, 4])
+    ? new Uint8Array(input.bytes ?? [0x25, 0x50, 0x44, 0x46])
     : new Uint8Array(input.sizeBytes);
   return new File([bytes], input.name ?? "documento.pdf", { type: input.type ?? "application/pdf" });
 }
@@ -217,6 +217,7 @@ describe("document version service", () => {
     await expect(uploadDocumentVersion("doc-1", [makeFile(), makeFile()])).rejects.toMatchObject({ status: 409 });
     await expect(uploadDocumentVersion("doc-1", [makeFile({ bytes: [] })])).rejects.toMatchObject({ status: 409 });
     await expect(uploadDocumentVersion("doc-1", [makeFile({ type: "text/html" })])).rejects.toMatchObject({ status: 409 });
+    await expect(uploadDocumentVersion("doc-1", [makeFile({ bytes: [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a] })])).rejects.toMatchObject({ status: 409 });
     await expect(uploadDocumentVersion("doc-1", [makeFile({ sizeBytes: DOCUMENT_VERSION_MAX_SIZE_BYTES + 1 })])).rejects.toMatchObject({ status: 409 });
     expect(mocks.putPrivateBlob).not.toHaveBeenCalled();
   });

@@ -8,6 +8,7 @@ import { deletePrivateBlob, getPrivateBlob, putPrivateBlob } from "./blob-storag
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { canReadDocument, getResourceScope } from "./resource-scope-service";
+import { validateBinaryFileContent } from "./file-content-validation";
 
 const DOCUMENT_VERSION_UPLOAD_ROLES = ["OWNER", "ADMIN", "WORKER"] as const;
 const DOCUMENT_VERSION_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
@@ -143,12 +144,13 @@ export async function uploadDocumentVersion(documentId: string, files: unknown[]
   const safeFileName = sanitizeFileName(originalFileName);
   const blobKey = `organizations/${organizationId}/documents/${document.id}/versions/${versionId}/${safeFileName}`;
   const buffer = Buffer.from(await file.arrayBuffer());
+  const detectedMimeType = await validateBinaryFileContent(buffer, file.type, DOCUMENT_VERSION_ALLOWED_MIME_TYPES);
   const checksum = crypto.createHash("sha256").update(buffer).digest("hex");
 
   const uploadedBlob = await putPrivateBlob({
     pathname: blobKey,
     body: buffer,
-    contentType: file.type,
+    contentType: detectedMimeType,
     maximumSizeInBytes: DOCUMENT_VERSION_MAX_SIZE_BYTES,
   });
   const storedBlobKey = uploadedBlob.pathname;
@@ -162,7 +164,7 @@ export async function uploadDocumentVersion(documentId: string, files: unknown[]
           documentId: document.id,
           blobKey: storedBlobKey,
           originalFileName,
-          mimeType: file.type,
+          mimeType: detectedMimeType,
           size: file.size,
           checksum,
           uploadedById: context.userId,
