@@ -151,7 +151,7 @@ async function collectReferencedBlobPathnames(organizationId: string) {
     db.evidence.findMany({ where: { organizationId, blobKey: { not: null } }, select: { blobKey: true } }),
     db.dataControlJob.findMany({ where: { organizationId, blobKey: { not: null } }, select: { blobKey: true } }),
     db.user.findMany({
-      where: { organizationId, organizationRole: { not: null }, avatarBlobPathname: { not: null } },
+      where: { organizationMembership: { is: { organizationId, revokedAt: null } }, avatarBlobPathname: { not: null } },
       select: { avatarBlobPathname: true },
     }),
   ]);

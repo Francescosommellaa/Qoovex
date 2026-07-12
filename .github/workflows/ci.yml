@@ -51,7 +51,7 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @qoovex/db db:migrate:deploy
+      - run: pnpm --filter @qoovex/db db:migrate:deploy -- --ci-ephemeral
       - run: pnpm check
 
   workspace-e2e:
@@ -81,7 +81,7 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @qoovex/db db:migrate:deploy
+      - run: pnpm --filter @qoovex/db db:migrate:deploy -- --ci-ephemeral
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:e2e
       - name: Upload Playwright report

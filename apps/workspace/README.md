@@ -1,14 +1,14 @@
 # Workspace App
 
-Runtime API-only di Qoovex. Conserva autenticazione, Azienda `Organization`, associazione aziendale unica, inviti, autorizzazioni e sessioni di supporto auditato.
+Runtime API-only di Qoovex. Conserva autenticazione, tenant `Organization`, membership, inviti, autorizzazioni e sessioni di supporto auditato.
 
-Il dominio prodotto usa `Organization` come record tecnico dell'Azienda unica. La baseline Prisma usa `organizationId` come confine server-side dei dati, senza selezione o cambio Azienda.
+Il dominio prodotto usa `Organization` come tenant canonico e "Azienda" come label utente. La baseline Prisma pulita usa tabelle fisiche `Organization*` e colonne `organizationId`.
 
 Contiene route API, NextAuth, servizi, repository, regole di dominio, dashboard operativa e workspace admin core mobile-first.
 
 La route privata `/qoovex-admin` e la relativa API `/api/platform-admin/*` formano la Console Qoovex per `SUPER_ADMIN`, visibile come Operatore Qoovex. Include gestione prudente degli account, supporto auditato e registro Prisma aggregato degli errori server; non espone credenziali, token o contenuti documentali.
 
-Le route `/sign-in` e `/sign-up` rendono provabile il workspace con NextAuth Credentials. La root `/` manda utenti non autenticati al login e utenti autenticati alla dashboard. Se un utente autenticato non ha ancora un'Azienda associata, la UI mostra il setup minimo azienda e usa `POST /api/organizations`.
+Le route `/sign-in` e `/sign-up` rendono provabile il workspace con NextAuth Credentials. La root `/` manda utenti non autenticati al login e utenti autenticati alla dashboard. Se un utente autenticato non ha ancora una Organization attiva, la UI mostra il setup minimo azienda e usa `POST /api/organizations`.
 
 In development locale la pagina `/sign-in` mostra `Accedi come dev` soltanto su host loopback. Il cookie firmato richiede `DEV_AUTH_SECRET` e attribuisce `SUPER_ADMIN` solo a runtime all'identita seed, senza modificare il ruolo persistito.
 
@@ -24,13 +24,13 @@ Le API Worker e JobSite gestiscono solo metadati operativi minimi, filtrati per 
 
 Le API Checklist ed Evidence gestiscono checklist configurabili, voci operative e prove di cantiere. Evidence `PHOTO` e `FILE` salvano file su Vercel Blob privato e metadata su Prisma; le response non espongono URL permanenti.
 
-Le API DocumentPackage e ShareLink permettono di preparare pacchetti documentali pronti per revisione e link revocabili in sola lettura. Il token raw viene restituito solo alla creazione, il database salva solo `tokenHash`, e il destinatario esterno vede solo gli item inclusi senza URL Blob permanenti.
+Le API DocumentPackage e ShareLink permettono di preparare pacchetti documentali pronti per revisione e link revocabili in sola lettura. Il token raw viene restituito solo alla creazione, il database salva solo `tokenHash`, e il viewer vede solo gli item inclusi senza URL Blob permanenti.
 
 Le API Notifications e Reminders generano notifiche interne idempotenti da dati gia registrati. Il primo livello email consente solo anteprima e invio manuale a se stessi di digest o singola notifica, riusando Resend gia configurato e senza allegati, link download, SMS, WhatsApp o push native. Le preferenze email sono opt-in, registrano un delivery log minimale e possono essere usate da `GET /api/reminders/email-digest/run`, protetta da `CRON_SECRET` tramite header Bearer. Lo scheduler vive in GitHub Actions.
 
 La route `/audit-log` e l'API `/api/audit-log` espongono al solo `OWNER` un audit prodotto minimizzato. Gli eventi vengono scritti dai service server-side come best-effort e non salvano contenuti file, body email, token o riferimenti privati di storage. `next.config.ts` applica header HTTP base: nosniff, referrer policy, frame deny e permissions policy restrittiva.
 
-La route `/access` permette a `OWNER` e `ADMIN` di creare collegamenti operativi utente-lavoratore e assegnazioni cantiere. `SITE_MANAGER` e `WORKER` leggono solo risorse assegnate tramite filtri server-side; `DESTINATARIO_ESTERNO` resta fuori dal workspace admin.
+La route `/access` permette a `OWNER` e `ADMIN` di creare collegamenti operativi utente-lavoratore e assegnazioni cantiere. `SITE_MANAGER` e `WORKER` leggono solo risorse assegnate tramite filtri server-side; la lettura esterna resta confinata agli share link.
 
 La route `/data-control` e le API `/api/data/*` sono owner-only e mostrano inventario dati, export metadata JSON e retention operativa. L'export e i DTO non includono file, allegati, `blobKey`, pathname, token, hash, URL Blob, body email o note libere escluse. La retention non cancella automaticamente nulla e non elimina Blob.
 
@@ -42,11 +42,6 @@ Boundary:
 - Prisma schema, migrations e client vivono in `packages/db`;
 - componenti UI generici futuri dovranno uscire verso `packages/ui` solo quando riusabili;
 - asset brand canonici futuri dovranno uscire verso `packages/brand`.
-
-Architettura frontend:
-- Tailwind CSS v4 e Fontshare sono configurati come foundation; la UI esistente non e ancora migrata.
-- gli alias FSD `@shared`, `@entities`, `@features`, `@widgets`, `@views` e `@content` sono disponibili;
-- la migrazione delle pagine avviene per flusso dopo l'approvazione in Sirio, senza spostamento big-bang.
 
 Regole:
 - import sempre verso layer inferiori;

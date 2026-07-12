@@ -409,6 +409,7 @@ export const ModelName = {
   NotificationPreference: 'NotificationPreference',
   DataControlJob: 'DataControlJob',
   NotificationEmailDelivery: 'NotificationEmailDelivery',
+  OrganizationMembership: 'OrganizationMembership',
   OrganizationInvitation: 'OrganizationInvitation',
   SupportSession: 'SupportSession',
   SupportAuditEvent: 'SupportAuditEvent',
@@ -435,7 +436,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "session" | "verificationToken" | "user" | "organization" | "worker" | "jobSite" | "workerUserLink" | "jobSiteUserAssignment" | "jobSiteWorkerAssignment" | "documentType" | "document" | "documentVersion" | "documentRequirement" | "deadline" | "checklist" | "checklistItem" | "evidence" | "documentPackage" | "documentPackageItem" | "shareLink" | "notification" | "notificationPreference" | "dataControlJob" | "notificationEmailDelivery" | "organizationInvitation" | "supportSession" | "supportAuditEvent" | "productAuditEvent" | "userCredential" | "authCode" | "authRateLimit" | "securityAuditEvent" | "runtimeErrorEvent" | "authDevice" | "mfaBackupCode"
+    modelProps: "account" | "session" | "verificationToken" | "user" | "organization" | "worker" | "jobSite" | "workerUserLink" | "jobSiteUserAssignment" | "jobSiteWorkerAssignment" | "documentType" | "document" | "documentVersion" | "documentRequirement" | "deadline" | "checklist" | "checklistItem" | "evidence" | "documentPackage" | "documentPackageItem" | "shareLink" | "notification" | "notificationPreference" | "dataControlJob" | "notificationEmailDelivery" | "organizationMembership" | "organizationInvitation" | "supportSession" | "supportAuditEvent" | "productAuditEvent" | "userCredential" | "authCode" | "authRateLimit" | "securityAuditEvent" | "runtimeErrorEvent" | "authDevice" | "mfaBackupCode"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2289,6 +2290,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OrganizationMembership: {
+      payload: Prisma.$OrganizationMembershipPayload<ExtArgs>
+      fields: Prisma.OrganizationMembershipFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrganizationMembershipFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMembershipPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrganizationMembershipFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMembershipPayload>
+        }
+        findFirst: {
+          args: Prisma.OrganizationMembershipFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMembershipPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrganizationMembershipFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMembershipPayload>
+        }
+        findMany: {
+          args: Prisma.OrganizationMembershipFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMembershipPayload>[]
+        }
+        create: {
+          args: Prisma.OrganizationMembershipCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMembershipPayload>
+        }
+        createMany: {
+          args: Prisma.OrganizationMembershipCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrganizationMembershipCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMembershipPayload>[]
+        }
+        delete: {
+          args: Prisma.OrganizationMembershipDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMembershipPayload>
+        }
+        update: {
+          args: Prisma.OrganizationMembershipUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMembershipPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrganizationMembershipDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrganizationMembershipUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrganizationMembershipUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMembershipPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrganizationMembershipUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMembershipPayload>
+        }
+        aggregate: {
+          args: Prisma.OrganizationMembershipAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrganizationMembership>
+        }
+        groupBy: {
+          args: Prisma.OrganizationMembershipGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrganizationMembershipGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrganizationMembershipCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrganizationMembershipCountAggregateOutputType> | number
+        }
+      }
+    }
     OrganizationInvitation: {
       payload: Prisma.$OrganizationInvitationPayload<ExtArgs>
       fields: Prisma.OrganizationInvitationFieldRefs
@@ -3196,8 +3271,6 @@ export const UserScalarFieldEnum = {
   authVersion: 'authVersion',
   suspendedAt: 'suspendedAt',
   suspensionReason: 'suspensionReason',
-  organizationId: 'organizationId',
-  organizationRole: 'organizationRole',
   mfaEnabled: 'mfaEnabled',
   totpSecretEncrypted: 'totpSecretEncrypted',
   totpSecretNonce: 'totpSecretNonce',
@@ -3570,6 +3643,19 @@ export const NotificationEmailDeliveryScalarFieldEnum = {
 export type NotificationEmailDeliveryScalarFieldEnum = (typeof NotificationEmailDeliveryScalarFieldEnum)[keyof typeof NotificationEmailDeliveryScalarFieldEnum]
 
 
+export const OrganizationMembershipScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  revokedAt: 'revokedAt'
+} as const
+
+export type OrganizationMembershipScalarFieldEnum = (typeof OrganizationMembershipScalarFieldEnum)[keyof typeof OrganizationMembershipScalarFieldEnum]
+
+
 export const OrganizationInvitationScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -3842,20 +3928,6 @@ export type EnumPlatformRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'PlatformRole[]'
  */
 export type ListEnumPlatformRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlatformRole[]'>
-
-
-
-/**
- * Reference to a field of type 'OrganizationRole'
- */
-export type EnumOrganizationRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrganizationRole'>
-
-
-
-/**
- * Reference to a field of type 'OrganizationRole[]'
- */
-export type ListEnumOrganizationRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrganizationRole[]'>
 
 
 
@@ -4154,6 +4226,20 @@ export type ListEnumNotificationEmailDeliveryStatusFieldRefInput<$PrismaModel> =
 
 
 /**
+ * Reference to a field of type 'OrganizationRole'
+ */
+export type EnumOrganizationRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrganizationRole'>
+
+
+
+/**
+ * Reference to a field of type 'OrganizationRole[]'
+ */
+export type ListEnumOrganizationRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrganizationRole[]'>
+
+
+
+/**
  * Reference to a field of type 'SupportAuditAction'
  */
 export type EnumSupportAuditActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportAuditAction'>
@@ -4385,6 +4471,7 @@ export type GlobalOmitConfig = {
   notificationPreference?: Prisma.NotificationPreferenceOmit
   dataControlJob?: Prisma.DataControlJobOmit
   notificationEmailDelivery?: Prisma.NotificationEmailDeliveryOmit
+  organizationMembership?: Prisma.OrganizationMembershipOmit
   organizationInvitation?: Prisma.OrganizationInvitationOmit
   supportSession?: Prisma.SupportSessionOmit
   supportAuditEvent?: Prisma.SupportAuditEventOmit

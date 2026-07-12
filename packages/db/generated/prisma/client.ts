@@ -167,6 +167,11 @@ export type DataControlJob = Prisma.DataControlJobModel
  */
 export type NotificationEmailDelivery = Prisma.NotificationEmailDeliveryModel
 /**
+ * Model OrganizationMembership
+ * 
+ */
+export type OrganizationMembership = Prisma.OrganizationMembershipModel
+/**
  * Model OrganizationInvitation
  * 
  */

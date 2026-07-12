@@ -24,7 +24,7 @@ const mocks = vi.hoisted(() => ({
       findMany: vi.fn(),
       create: vi.fn(),
     },
-    user: {
+    organizationMembership: {
       findFirst: vi.fn(),
     },
     notification: {
@@ -118,7 +118,7 @@ beforeEach(() => {
   mocks.db.notificationPreference.findMany.mockResolvedValue([]);
   mocks.db.notificationEmailDelivery.findMany.mockResolvedValue([]);
   mocks.db.notificationEmailDelivery.create.mockResolvedValue({ id: "delivery-1" });
-  mocks.db.user.findFirst.mockResolvedValue({ id: "user-1" });
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "membership-1" });
   mocks.db.notification.findMany.mockResolvedValue([notificationRecord]);
   mocks.db.notification.count.mockResolvedValue(1);
   mocks.sendTransactionalEmail.mockResolvedValue({ providerMessageId: "email-1" });
@@ -209,8 +209,13 @@ describe("scheduled email digest service", () => {
     }]);
 
     await expect(runScheduledEmailDigest(now)).resolves.toMatchObject({ scanned: 1, sent: 1, failed: 0, skipped: 0 });
-    expect(mocks.db.user.findFirst).toHaveBeenCalledWith(expect.objectContaining({
-      where: expect.objectContaining({ id: "user-1", organizationId: "org-1", organizationRole: { in: ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] } }),
+    expect(mocks.db.organizationMembership.findFirst).toHaveBeenCalledWith(expect.objectContaining({
+      where: {
+        organizationId: "org-1",
+        userId: "user-1",
+        revokedAt: null,
+        role: { in: ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] },
+      },
     }));
     expect(mocks.sendTransactionalEmail).toHaveBeenCalledWith(expect.objectContaining({
       to: "owner@example.com",
@@ -232,9 +237,9 @@ describe("scheduled email digest service", () => {
       { id: "recent-skip", organizationId: "org-1", userId: "user-recent", emailDigestFrequency: "DAILY", emailDigestHour: 8, deadlineNotificationsEnabled: true, documentNotificationsEnabled: true, packageNotificationsEnabled: true, systemNotificationsEnabled: true, lastDigestSentAt: new Date("2026-07-06T07:00:00.000Z"), user: { email: "c@example.com", emailVerified: now } },
       { id: "empty-skip", organizationId: "org-1", userId: "user-empty", emailDigestFrequency: "DAILY", emailDigestHour: 8, deadlineNotificationsEnabled: true, documentNotificationsEnabled: true, packageNotificationsEnabled: true, systemNotificationsEnabled: true, lastDigestSentAt: null, user: { email: "d@example.com", emailVerified: now } },
     ]);
-    mocks.db.user.findFirst
+    mocks.db.organizationMembership.findFirst
       .mockResolvedValueOnce(null)
-      .mockResolvedValueOnce({ id: "user-empty" });
+      .mockResolvedValueOnce({ id: "membership-empty" });
     mocks.db.notification.findMany.mockResolvedValue([]);
     mocks.db.notification.count.mockResolvedValue(0);
 
