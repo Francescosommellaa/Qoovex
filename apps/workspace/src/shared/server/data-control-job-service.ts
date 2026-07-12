@@ -2,19 +2,18 @@ import "server-only";
 
 import { db, Prisma } from "@qoovex/db";
 import type {
-  BlobOrphanCandidate,
   BlobOrphanCleanupResponse,
   BlobOrphanDryRunResponse,
   CreateDataExportJobResponse,
   CreateOrganizationDeletionJobInput,
   CreateOrganizationDeletionJobResponse,
+  DataControlJobListResponse,
   DataControlJobResponse,
   DataControlJobType,
-  DataControlJobListResponse,
   RunDataControlJobsResponse,
 } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
-import { deletePrivateBlob, getPrivateBlob, listPrivateBlobs, putPrivateBlob } from "./blob-storage-service";
+import { deletePrivateBlobs, getPrivateBlob, listPrivateBlobs, putPrivateBlob } from "./blob-storage-service";
 import { requireDataControlAccess } from "./data-control-access";
 import { buildDataExportForOrganization } from "./data-export-service";
 import { trimRequiredText } from "./document-domain-validation";
@@ -26,6 +25,9 @@ const BLOB_CLEANUP_MIN_AGE_MS = 24 * 60 * 60 * 1000;
 const DEFAULT_ORPHAN_SCAN_LIMIT = 500;
 const DEFAULT_CLEANUP_LIMIT = 50;
 const DELETE_CONFIRMATION = "ELIMINA DEFINITIVAMENTE";
+const STALE_JOB_AFTER_MS = 30 * 60 * 1000;
+const MAX_JOB_ATTEMPTS = 5;
+const RETRY_DELAYS_MS = [60_000, 5 * 60_000, 15 * 60_000, 60 * 60_000] as const;
 
 const jobSelect = {
   id: true,
@@ -33,6 +35,9 @@ const jobSelect = {
   requestedById: true,
   type: true,
   status: true,
+  attemptCount: true,
+  nextAttemptAt: true,
+  activeKey: true,
   blobKey: true,
   resultSummary: true,
   errorCode: true,
@@ -41,31 +46,39 @@ const jobSelect = {
   completedAt: true,
 } as const;
 
-function iso(value: Date | null | undefined) {
-  return value ? value.toISOString() : null;
-}
-
-function toJobResponse(job: {
+type JobRecord = {
   id: string;
   organizationId: string;
   requestedById: string;
   type: DataControlJobType;
   status: DataControlJobResponse["status"];
+  attemptCount: number;
+  nextAttemptAt: Date;
+  activeKey: string | null;
   blobKey: string | null;
   resultSummary: unknown;
   errorCode: string | null;
   createdAt: Date;
   startedAt: Date | null;
   completedAt: Date | null;
-}): DataControlJobResponse {
+};
+
+type JobResult = { blobKey?: string | null; resultSummary?: Record<string, unknown> };
+
+function iso(value: Date | null | undefined) {
+  return value ? value.toISOString() : null;
+}
+
+function toJobResponse(job: JobRecord): DataControlJobResponse {
   return {
     id: job.id,
     organizationId: job.organizationId,
     requestedById: job.requestedById,
     type: job.type,
     status: job.status,
-    blobKey: job.blobKey,
-    resultSummary: job.resultSummary && typeof job.resultSummary === "object" && !Array.isArray(job.resultSummary) ? job.resultSummary as Record<string, unknown> : null,
+    resultSummary: job.resultSummary && typeof job.resultSummary === "object" && !Array.isArray(job.resultSummary)
+      ? job.resultSummary as Record<string, unknown>
+      : null,
     errorCode: job.errorCode,
     createdAt: job.createdAt.toISOString(),
     startedAt: iso(job.startedAt),
@@ -73,12 +86,19 @@ function toJobResponse(job: {
   };
 }
 
-async function createJob(input: { organizationId: string; requestedById: string; type: DataControlJobType; resultSummary?: Record<string, unknown> }) {
+async function createJob(input: {
+  organizationId: string;
+  requestedById: string;
+  type: DataControlJobType;
+  activeKey?: string;
+  resultSummary?: Record<string, unknown>;
+}) {
   return db.dataControlJob.create({
     data: {
       organizationId: input.organizationId,
       requestedById: input.requestedById,
       type: input.type,
+      activeKey: input.activeKey,
       resultSummary: input.resultSummary as Prisma.InputJsonValue | undefined,
     },
     select: jobSelect,
@@ -148,15 +168,8 @@ async function scanOrganizationBlobOrphans(organizationId: string, now = new Dat
   const referenced = await collectReferencedBlobPathnames(organizationId);
   const listed = await listPrivateBlobs({ prefix, limit });
   const orphans = listed.blobs.filter((blob) => blob.pathname.startsWith(prefix) && !referenced.has(blob.pathname));
-  const deletable = orphans.filter((blob) => {
-    if (!blob.uploadedAt) return false;
-    return now.getTime() - blob.uploadedAt.getTime() >= BLOB_CLEANUP_MIN_AGE_MS;
-  });
-  return { prefix, listed: listed.blobs, referenced, orphans, deletable };
-}
-
-function toCandidate(blob: { pathname: string; size?: number | null; uploadedAt?: Date | null }): BlobOrphanCandidate {
-  return { pathname: blob.pathname, size: blob.size ?? null, uploadedAt: iso(blob.uploadedAt) };
+  const deletable = orphans.filter((blob) => blob.uploadedAt && now.getTime() - blob.uploadedAt.getTime() >= BLOB_CLEANUP_MIN_AGE_MS);
+  return { listed: listed.blobs, referenced, orphans, deletable };
 }
 
 export async function getBlobOrphanDryRun(): Promise<BlobOrphanDryRunResponse> {
@@ -164,12 +177,10 @@ export async function getBlobOrphanDryRun(): Promise<BlobOrphanDryRunResponse> {
   const scan = await scanOrganizationBlobOrphans(organizationId);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "blob-orphans" });
   return {
-    prefix: scan.prefix,
     scanned: scan.listed.length,
     referenced: scan.referenced.size,
     orphanCount: scan.orphans.length,
     deletableCount: scan.deletable.length,
-    sample: scan.orphans.slice(0, 20).map(toCandidate),
     generatedAt: new Date().toISOString(),
   };
 }
@@ -194,7 +205,13 @@ export async function createBlobOrphanCleanupJob(): Promise<BlobOrphanCleanupRes
   return { job: toJobResponse(job), created: true };
 }
 
-export async function createOrganizationDeletionJob(input: CreateOrganizationDeletionJobInput | Record<string, unknown>): Promise<CreateOrganizationDeletionJobResponse> {
+function isUniqueConstraintError(error: unknown) {
+  return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
+}
+
+export async function createOrganizationDeletionJob(
+  input: CreateOrganizationDeletionJobInput | Record<string, unknown>,
+): Promise<CreateOrganizationDeletionJobResponse> {
   const { context, organizationId, actorRole } = await requireDataControlAccess();
   const organization = await db.organization.findUnique({ where: { id: organizationId }, select: { code: true } });
   if (!organization) throw new AccessError("Azienda non trovata.", 404);
@@ -203,7 +220,24 @@ export async function createOrganizationDeletionJob(input: CreateOrganizationDel
   if (organizationCode !== organization.code || confirmation !== DELETE_CONFIRMATION) {
     throw new AccessError("Conferma cancellazione non valida.", 409);
   }
-  const job = await createJob({ organizationId, requestedById: context.userId, type: "ORGANIZATION_DELETE", resultSummary: { organizationCode } });
+
+  const activeKey = `organization-delete:${organizationId}`;
+  let job: JobRecord;
+  try {
+    job = await createJob({
+      organizationId,
+      requestedById: context.userId,
+      type: "ORGANIZATION_DELETE",
+      activeKey,
+      resultSummary: { organizationCode },
+    });
+  } catch (error) {
+    if (!isUniqueConstraintError(error)) throw error;
+    const existing = await db.dataControlJob.findUnique({ where: { activeKey }, select: jobSelect });
+    if (!existing) throw error;
+    return { job: toJobResponse(existing), created: false };
+  }
+
   await recordProductAuditEventBestEffort({
     organizationId,
     ...auditActorFromContext(context, actorRole),
@@ -215,102 +249,155 @@ export async function createOrganizationDeletionJob(input: CreateOrganizationDel
   return { job: toJobResponse(job), created: true };
 }
 
-async function markJobRunning(jobId: string) {
-  return db.dataControlJob.update({
-    where: { id: jobId },
-    data: { status: "RUNNING", startedAt: new Date(), errorCode: null },
-    select: jobSelect,
+async function claimNextJob(now = new Date()): Promise<JobRecord | null> {
+  const staleBefore = new Date(now.getTime() - STALE_JOB_AFTER_MS);
+  const claimable = {
+    OR: [
+      { status: "PENDING" as const, nextAttemptAt: { lte: now } },
+      { status: "RUNNING" as const, OR: [{ startedAt: null }, { startedAt: { lte: staleBefore } }] },
+    ],
+  };
+  const candidates = await db.dataControlJob.findMany({
+    where: claimable,
+    select: { id: true },
+    orderBy: [{ nextAttemptAt: "asc" }, { createdAt: "asc" }],
+    take: 5,
   });
+
+  for (const candidate of candidates) {
+    const claimed = await db.dataControlJob.updateMany({
+      where: { id: candidate.id, ...claimable },
+      data: {
+        status: "RUNNING",
+        startedAt: now,
+        completedAt: null,
+        errorCode: null,
+        attemptCount: { increment: 1 },
+      },
+    });
+    if (claimed.count !== 1) continue;
+    return db.dataControlJob.findUnique({ where: { id: candidate.id }, select: jobSelect });
+  }
+  return null;
 }
 
-async function completeJob(jobId: string, data: { blobKey?: string | null; resultSummary?: Record<string, unknown> }) {
-  return db.dataControlJob.update({
-    where: { id: jobId },
-    data: { status: "COMPLETED", completedAt: new Date(), blobKey: data.blobKey, resultSummary: data.resultSummary as Prisma.InputJsonValue | undefined },
-    select: jobSelect,
+async function completeJob(job: JobRecord, data: JobResult) {
+  if (!job.startedAt) return false;
+  const completed = await db.dataControlJob.updateMany({
+    where: { id: job.id, status: "RUNNING", startedAt: job.startedAt },
+    data: {
+      status: "COMPLETED",
+      completedAt: new Date(),
+      errorCode: null,
+      blobKey: data.blobKey,
+      resultSummary: data.resultSummary as Prisma.InputJsonValue | undefined,
+    },
   });
+  return completed.count === 1;
 }
 
-async function failJob(jobId: string, errorCode: string) {
-  return db.dataControlJob.update({
-    where: { id: jobId },
-    data: { status: "FAILED", completedAt: new Date(), errorCode },
-    select: jobSelect,
+async function retryOrFailJob(job: JobRecord) {
+  if (!job.startedAt) return false;
+  const terminal = job.attemptCount >= MAX_JOB_ATTEMPTS;
+  const delayIndex = Math.min(Math.max(job.attemptCount - 1, 0), RETRY_DELAYS_MS.length - 1);
+  const errorCode = `${job.type}_FAILED`;
+  const transitioned = await db.dataControlJob.updateMany({
+    where: { id: job.id, status: "RUNNING", startedAt: job.startedAt },
+    data: terminal
+      ? { status: "FAILED", completedAt: new Date(), errorCode, activeKey: null }
+      : {
+          status: "PENDING",
+          startedAt: null,
+          completedAt: null,
+          nextAttemptAt: new Date(Date.now() + RETRY_DELAYS_MS[delayIndex]),
+          errorCode,
+        },
   });
+  return transitioned.count === 1;
 }
 
-async function runMetadataExportJob(job: DataControlJobResponse) {
+async function runMetadataExportJob(job: JobRecord): Promise<JobResult> {
   const exportPayload = await buildDataExportForOrganization(job.organizationId);
   const body = Buffer.from(JSON.stringify(exportPayload, null, 2), "utf8");
   const blobKey = `organizations/${job.organizationId}/exports/${job.id}/metadata.json`;
-  await putPrivateBlob({ pathname: blobKey, body, contentType: "application/json", maximumSizeInBytes: MAX_EXPORT_SIZE_BYTES });
-  return completeJob(job.id, { blobKey, resultSummary: { byteLength: body.byteLength, exportedAt: exportPayload.exportedAt } });
+  await putPrivateBlob({
+    pathname: blobKey,
+    body,
+    contentType: "application/json",
+    maximumSizeInBytes: MAX_EXPORT_SIZE_BYTES,
+    allowOverwrite: true,
+  });
+  return { blobKey, resultSummary: { byteLength: body.byteLength, exportedAt: exportPayload.exportedAt } };
 }
 
-async function runOrphanBlobCleanupJob(job: DataControlJobResponse) {
+async function runOrphanBlobCleanupJob(job: JobRecord): Promise<JobResult> {
   const scan = await scanOrganizationBlobOrphans(job.organizationId);
   const targets = scan.deletable.slice(0, DEFAULT_CLEANUP_LIMIT);
-  for (const blob of targets) {
-    await deletePrivateBlob(blob.pathname);
-  }
-  return completeJob(job.id, {
+  await deletePrivateBlobs(targets.map((blob) => blob.pathname));
+  return {
     resultSummary: {
       scanned: scan.listed.length,
       orphanCount: scan.orphans.length,
       deleted: targets.length,
       limit: DEFAULT_CLEANUP_LIMIT,
     },
-  });
+  };
 }
 
-async function runOrganizationDeleteJob(job: DataControlJobResponse) {
+async function runOrganizationDeleteJob(job: JobRecord): Promise<JobResult> {
   const prefix = `organizations/${job.organizationId}/`;
-  let cursor: string | undefined;
+  await db.organization.deleteMany({ where: { id: job.organizationId } });
   let deletedBlobs = 0;
-  do {
-    const page = await listPrivateBlobs({ prefix, limit: 100, cursor });
-    for (const blob of page.blobs) {
-      if (blob.pathname.startsWith(prefix)) {
-        await deletePrivateBlob(blob.pathname);
-        deletedBlobs += 1;
-      }
-    }
-    cursor = page.hasMore ? page.cursor : undefined;
-  } while (cursor);
-  await db.organization.delete({ where: { id: job.organizationId } });
-  return completeJob(job.id, { resultSummary: { deletedBlobs, organizationDeleted: true } });
+
+  while (true) {
+    const page = await listPrivateBlobs({ prefix, limit: 100 });
+    const pathnames = page.blobs
+      .filter((blob) => blob.pathname.startsWith(prefix))
+      .map((blob) => blob.pathname);
+    if (!pathnames.length) break;
+    await deletePrivateBlobs(pathnames);
+    deletedBlobs += pathnames.length;
+  }
+
+  return { resultSummary: { deletedBlobs, organizationDeleted: true } };
+}
+
+async function executeJob(job: JobRecord): Promise<JobResult> {
+  if (job.type === "METADATA_EXPORT") return runMetadataExportJob(job);
+  if (job.type === "ORPHAN_BLOB_CLEANUP") return runOrphanBlobCleanupJob(job);
+  if (job.type === "ORGANIZATION_DELETE") return runOrganizationDeleteJob(job);
+  throw new Error("UNSUPPORTED_DATA_CONTROL_JOB");
 }
 
 export async function runDataControlJobs(): Promise<RunDataControlJobsResponse> {
-  const pending = await db.dataControlJob.findMany({
-    where: { status: "PENDING" },
-    select: jobSelect,
-    orderBy: { createdAt: "asc" },
-    take: 1,
-  });
-  const result = { scanned: pending.length, completed: 0, failed: 0, skipped: 0 };
-  for (const pendingJob of pending) {
-    const runningJob = toJobResponse(await markJobRunning(pendingJob.id));
-    try {
-      if (runningJob.type === "METADATA_EXPORT") await runMetadataExportJob(runningJob);
-      else if (runningJob.type === "ORPHAN_BLOB_CLEANUP") await runOrphanBlobCleanupJob(runningJob);
-      else if (runningJob.type === "ORGANIZATION_DELETE") await runOrganizationDeleteJob(runningJob);
-      else {
-        result.skipped += 1;
-        continue;
-      }
+  const runningJob = await claimNextJob();
+  const result = { scanned: runningJob ? 1 : 0, completed: 0, failed: 0, skipped: 0 };
+  if (!runningJob) return { ...result, generatedAt: new Date().toISOString() };
+
+  try {
+    const jobResult = await executeJob(runningJob);
+    if (!(await completeJob(runningJob, jobResult))) {
+      result.skipped += 1;
+      return { ...result, generatedAt: new Date().toISOString() };
+    }
+    if (runningJob.type !== "ORGANIZATION_DELETE") {
       await recordProductAuditEventBestEffort({
         organizationId: runningJob.organizationId,
         actorUserId: runningJob.requestedById,
-        action: runningJob.type === "ORPHAN_BLOB_CLEANUP" ? "ORPHAN_BLOB_CLEANUP_RUN" : runningJob.type === "ORGANIZATION_DELETE" ? "ORGANIZATION_DELETE_RUN" : "DATA_CONTROL_JOB_RUN",
+        action: runningJob.type === "ORPHAN_BLOB_CLEANUP" ? "ORPHAN_BLOB_CLEANUP_RUN" : "DATA_CONTROL_JOB_RUN",
         entityType: "DATA_CONTROL_JOB",
         entityId: runningJob.id,
         outcome: "SUCCESS",
         metadata: { type: runningJob.type },
       });
-      result.completed += 1;
-    } catch (error) {
-      await failJob(runningJob.id, error instanceof Error ? error.name : "DATA_CONTROL_JOB_ERROR");
+    }
+    result.completed += 1;
+  } catch {
+    if (!(await retryOrFailJob(runningJob))) {
+      result.skipped += 1;
+      return { ...result, generatedAt: new Date().toISOString() };
+    }
+    if (runningJob.type !== "ORGANIZATION_DELETE") {
       await recordProductAuditEventBestEffort({
         organizationId: runningJob.organizationId,
         actorUserId: runningJob.requestedById,
@@ -320,8 +407,9 @@ export async function runDataControlJobs(): Promise<RunDataControlJobsResponse> 
         outcome: "FAILED",
         metadata: { type: runningJob.type },
       });
-      result.failed += 1;
     }
+    result.failed += 1;
   }
+
   return { ...result, generatedAt: new Date().toISOString() };
 }

@@ -69,7 +69,7 @@ export function DataControlActionsPanel({
       <article className={styles.record}>
         <div className={styles.recordMain}>
           <strong>Blob orfani</strong>
-          <span>Prefisso: {initialOrphans.prefix}</span>
+          <span>Verifica riferimenti storage completata.</span>
           <small>Scansionati {initialOrphans.scanned}. Orfani {initialOrphans.orphanCount}. Eliminabili dopo 24h: {initialOrphans.deletableCount}.</small>
         </div>
         <div className={styles.actions}>

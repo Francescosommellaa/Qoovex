@@ -1,0 +1,59 @@
+name: Scheduled jobs
+
+on:
+  schedule:
+    - cron: "3-58/5 * * * *"
+    - cron: "11 * * * *"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Job da eseguire
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - data-control
+          - digest
+
+permissions:
+  contents: read
+
+jobs:
+  data-control:
+    if: github.event.schedule == '3-58/5 * * * *' || inputs.target == 'all' || inputs.target == 'data-control'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: scheduled-data-control
+      cancel-in-progress: false
+    steps:
+      - name: Run data-control queue
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          WORKSPACE_BASE_URL: ${{ vars.WORKSPACE_BASE_URL }}
+        run: |
+          test -n "$CRON_SECRET"
+          test -n "$WORKSPACE_BASE_URL"
+          curl --fail-with-body --silent --show-error \
+            --retry 2 --retry-all-errors --connect-timeout 10 --max-time 240 \
+            --header "Authorization: Bearer $CRON_SECRET" \
+            "$WORKSPACE_BASE_URL/api/data/jobs/run"
+
+  digest:
+    if: github.event.schedule == '11 * * * *' || inputs.target == 'all' || inputs.target == 'digest'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: scheduled-digest
+      cancel-in-progress: false
+    steps:
+      - name: Run scheduled digest
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          WORKSPACE_BASE_URL: ${{ vars.WORKSPACE_BASE_URL }}
+        run: |
+          test -n "$CRON_SECRET"
+          test -n "$WORKSPACE_BASE_URL"
+          curl --fail-with-body --silent --show-error \
+            --retry 2 --retry-all-errors --connect-timeout 10 --max-time 240 \
+            --header "Authorization: Bearer $CRON_SECRET" \
+            "$WORKSPACE_BASE_URL/api/reminders/email-digest/run"

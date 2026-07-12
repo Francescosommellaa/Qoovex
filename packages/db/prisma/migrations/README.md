@@ -26,6 +26,7 @@ Prisma salva metadati, relazioni, stati, scadenze, permessi e audit. I file bina
 - `20260707000000_product_audit_log`: audit prodotto minimizzato.
 - `20260708000000_resource_assignments`: collegamenti utente-lavoratore e assegnazioni cantiere.
 - `20260709000000_data_control`: azioni audit per export dati.
+- `20260712000000_harden_data_control_jobs`: claim atomico, retry/backoff e deduplicazione dei job di cancellazione azienda.
 
 ## Regole operative
 

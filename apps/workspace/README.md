@@ -26,13 +26,13 @@ Le API Checklist ed Evidence gestiscono checklist configurabili, voci operative 
 
 Le API DocumentPackage e ShareLink permettono di preparare pacchetti documentali pronti per revisione e link revocabili in sola lettura. Il token raw viene restituito solo alla creazione, il database salva solo `tokenHash`, e il viewer vede solo gli item inclusi senza URL Blob permanenti.
 
-Le API Notifications e Reminders generano notifiche interne idempotenti da dati gia registrati. Il primo livello email consente solo anteprima e invio manuale a se stessi di digest o singola notifica, riusando Resend gia configurato e senza allegati, link download, SMS, WhatsApp o push native. Le preferenze email sono opt-in, registrano un delivery log minimale e possono essere usate da `/api/reminders/email-digest/run`, protetta da `QOOVEX_CRON_SECRET`; il workspace non configura cron provider esterni in autonomia.
+Le API Notifications e Reminders generano notifiche interne idempotenti da dati gia registrati. Il primo livello email consente solo anteprima e invio manuale a se stessi di digest o singola notifica, riusando Resend gia configurato e senza allegati, link download, SMS, WhatsApp o push native. Le preferenze email sono opt-in, registrano un delivery log minimale e possono essere usate da `GET /api/reminders/email-digest/run`, protetta da `CRON_SECRET` tramite header Bearer. Lo scheduler vive in GitHub Actions.
 
 La route `/audit-log` e l'API `/api/audit-log` espongono al solo `OWNER` un audit prodotto minimizzato. Gli eventi vengono scritti dai service server-side come best-effort e non salvano contenuti file, body email, token o riferimenti privati di storage. `next.config.ts` applica header HTTP base: nosniff, referrer policy, frame deny e permissions policy restrittiva.
 
 La route `/access` permette a `OWNER` e `ADMIN` di creare collegamenti operativi utente-lavoratore e assegnazioni cantiere. `SITE_MANAGER` e `WORKER` leggono solo risorse assegnate tramite filtri server-side; `VIEWER` resta fuori dal workspace admin.
 
-La route `/data-control` e le API `/api/data/*` sono owner-only e mostrano inventario dati, export metadata JSON e retention operativa. L'export non include file, allegati, `blobKey`, token, hash, URL Blob, body email o note libere escluse. La retention non cancella automaticamente nulla e non elimina Blob.
+La route `/data-control` e le API `/api/data/*` sono owner-only e mostrano inventario dati, export metadata JSON e retention operativa. L'export e i DTO non includono file, allegati, `blobKey`, pathname, token, hash, URL Blob, body email o note libere escluse. La retention non cancella automaticamente nulla e non elimina Blob.
 
 Boundary:
 - i servizi server-specifici restano in `src/shared/server`;

@@ -1,14 +1,11 @@
-import { asAccessResponse, AccessError } from "@shared/server/access-errors";
+import { asAccessResponse } from "@shared/server/access-errors";
+import { isAuthorizedCronRequest } from "@shared/server/cron-auth";
 import { runScheduledEmailDigest } from "@shared/server/scheduled-email-digest-service";
 
-const CRON_SECRET_HEADER = "x-qoovex-cron-secret";
-
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   try {
-    const configuredSecret = process.env.QOOVEX_CRON_SECRET?.trim();
-    const providedSecret = request.headers.get(CRON_SECRET_HEADER)?.trim();
-    if (!configuredSecret || !providedSecret || providedSecret !== configuredSecret) {
-      throw new AccessError("Job non disponibile.", 403);
+    if (!isAuthorizedCronRequest(request)) {
+      return Response.json({ message: "Job non disponibile." }, { status: 404 });
     }
     return Response.json(await runScheduledEmailDigest());
   } catch (error) {
