@@ -84,7 +84,7 @@ export function LegalPage({ children, eyebrow = "Bozza da validare", intro, titl
         </Container>
       </section>
       <Container>
-        <Card className="legal-notice" tone="attention">
+        <Card className="legal-notice" tone="warning">
           <p>
             Questo contenuto e una traccia operativa per la fase pilota. Deve essere verificato e
             approvato da un consulente qualificato prima dell'uso commerciale.

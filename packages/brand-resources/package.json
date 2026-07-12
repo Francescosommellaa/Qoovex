@@ -1,0 +1,9 @@
+{
+  "name": "@qoovex/brand-resources",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./styles/fontshare.css": "./styles/fontshare.css"
+  }
+}

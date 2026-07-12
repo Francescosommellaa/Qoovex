@@ -31,6 +31,24 @@
       "@shared/*": [
         "./src/shared/*"
       ],
+      "@entities/*": [
+        "./src/entities/*"
+      ],
+      "@features/*": [
+        "./src/features/*"
+      ],
+      "@widgets/*": [
+        "./src/widgets/*"
+      ],
+      "@views/*": [
+        "./src/views/*"
+      ],
+      "@content": [
+        "./src/content/index.ts"
+      ],
+      "@content/*": [
+        "./src/content/*"
+      ],
       "@qoovex/db": [
         "../../packages/db/src/index.ts"
       ],

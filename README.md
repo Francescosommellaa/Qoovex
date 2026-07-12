@@ -10,7 +10,8 @@ Monorepo di Qoovex: il sistema piu semplice per piccole imprese e subappaltatori
 - `apps/sirio`: showcase Next.js del design system Sirio, importato da `packages/ui`.
 - `packages/db`: schema Prisma e migrazioni auth, Azienda, supporto e base dominio MVP.
 - `packages/types`: ruoli, permessi e DTO platform-neutral per auth, Azienda e dominio MVP.
-- `packages/ui`: primitive UI condivise e token CSS per `apps/web` e `apps/sirio`.
+- `packages/ui`: primitive UI generiche, token Tailwind CSS v4 e stili base condivisi.
+- `packages/brand-resources`: package runtime per risorse brand e unica integrazione Fontshare.
 
 Il modello MVP per documenti, scadenze, cantieri e prove operative e definito come base tecnica generica. Sono presenti API server-side minime per documenti, scadenze, versioni documento, lavoratori, cantieri, checklist, prove operative, pacchetti documentali, share link e assegnazioni risorsa. La prima dashboard operativa mobile-first vive in `apps/workspace` su `/dashboard`.
 
@@ -22,7 +23,7 @@ Il modello MVP per documenti, scadenze, cantieri e prove operative e definito co
 - Il codice azienda identifica una Organization, ma non autentica.
 - Le app non importano codice da altre app.
 - Il codice condiviso vive in `packages/*`; il codice specifico di app resta nella rispettiva app.
-- `packages/db`, `packages/types` e `packages/ui` sono i package condivisi attivi oggi.
+- Auth.js/NextAuth resta confinato in `apps/workspace`; `packages/ui` non conosce sessioni, ruoli o permessi.
 - Qoovex organizza documenti e stati operativi; non promette conformita o validita legale.
 - `SITE_MANAGER` e `WORKER` usano filtri risorsa server-side, non accessi larghi all'azienda.
 - Le decisioni di placement sono documentate in `docs/02_ARCHITECTURE_AND_BOUNDARIES.md`.

@@ -58,6 +58,19 @@ if (/from\s+["']\.\.\/\.\.\/apps|from\s+["']apps\//.test(uiSources)) {
   throw new Error("packages/ui importa da apps/*.");
 }
 
+const uiForbiddenImports = ["@qoovex/db", "next-auth", "@auth/", "@shared/", "@entities/", "@features/", "@widgets/", "@views/"];
+for (const forbiddenImport of uiForbiddenImports) {
+  if (uiSources.includes(forbiddenImport)) {
+    throw new Error(`packages/ui importa una dipendenza proibita: ${forbiddenImport}`);
+  }
+}
+
+for (const forbiddenDomainName of ["DocumentStatus", "OrganizationRole", "Permission", "organizationId"]) {
+  if (uiSources.includes(forbiddenDomainName)) {
+    throw new Error(`packages/ui contiene un riferimento di dominio: ${forbiddenDomainName}`);
+  }
+}
+
 if (existsSync(join(root, "docs", "research")) || existsSync(join(root, "docs", "presets"))) {
   throw new Error("Sono state create cartelle research/presets non consentite.");
 }

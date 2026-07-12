@@ -10,7 +10,7 @@ function contentSecurityPolicy() {
     "frame-ancestors 'none'",
     "form-action 'self'",
     "img-src 'self' data: blob:",
-    "font-src 'self' data:",
+    "font-src 'self' data: https://cdn.fontshare.com",
     "style-src 'self' 'unsafe-inline'",
     `script-src 'self' 'unsafe-inline'${isProduction ? "" : " 'unsafe-eval'"}`,
     "connect-src 'self'",
@@ -21,8 +21,10 @@ function contentSecurityPolicy() {
 
 const nextConfig: NextConfig = {
   transpilePackages: [
+    "@qoovex/brand-resources",
     "@qoovex/db",
     "@qoovex/types",
+    "@qoovex/ui",
   ],
   async headers() {
     return [

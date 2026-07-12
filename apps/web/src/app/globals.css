@@ -1,5 +1,8 @@
+@import "@qoovex/brand-resources/styles/fontshare.css";
+@import "tailwindcss";
 @import "@qoovex/ui/styles/tokens.css";
 @import "@qoovex/ui/styles/base.css";
+@source "../../../../packages/ui/src";
 
 .site-shell {
   min-height: 100vh;

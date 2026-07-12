@@ -1,17 +1,23 @@
+@import "@qoovex/brand-resources/styles/fontshare.css";
+@import "tailwindcss";
+@import "@qoovex/ui/styles/tokens.css";
+@import "@qoovex/ui/styles/base.css";
+@source "../../../../packages/ui/src";
+
 :root {
   color-scheme: light;
-  --qvx-bg: #f6f7f4;
-  --qvx-surface: #ffffff;
-  --qvx-surface-muted: #eef2ee;
-  --qvx-text: #151a17;
-  --qvx-muted: #667168;
-  --qvx-border: #d8ded7;
-  --qvx-accent: #1f7a5c;
-  --qvx-accent-strong: #14533f;
-  --qvx-warning: #9b5b12;
-  --qvx-danger: #a33b2f;
-  --qvx-info: #315f8f;
-  --qvx-shadow: 0 18px 45px rgba(28, 40, 31, 0.08);
+  --qvx-bg: var(--color-qv-canvas);
+  --qvx-surface: var(--color-qv-surface);
+  --qvx-surface-muted: var(--color-qv-surface-muted);
+  --qvx-text: var(--color-qv-content);
+  --qvx-muted: var(--color-qv-content-muted);
+  --qvx-border: var(--color-qv-border);
+  --qvx-accent: var(--color-qv-accent);
+  --qvx-accent-strong: var(--color-qv-accent-strong);
+  --qvx-warning: var(--color-qv-warning);
+  --qvx-danger: var(--color-qv-danger);
+  --qvx-info: var(--color-qv-info);
+  --qvx-shadow: var(--shadow-qv-md);
 }
 
 * {
@@ -29,9 +35,7 @@ body {
   margin: 0;
   background: var(--qvx-bg);
   color: var(--qvx-text);
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.5;
   overflow-x: hidden;
 }

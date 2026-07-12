@@ -23,18 +23,18 @@ export default function HomePage() {
                 </Button>
               </div>
             </div>
-            <Card className="product-panel" tone="accent">
+            <Card className="product-panel" tone="info">
               <div className="product-row">
                 <strong>Stato documentale</strong>
-                <Badge variant="review">Da verificare</Badge>
+                <Badge variant="warning">Da verificare</Badge>
               </div>
               <div className="product-row">
                 <strong>Scadenze registrate</strong>
-                <Badge variant="expired">Scaduto</Badge>
+                <Badge variant="danger">Scaduto</Badge>
               </div>
               <div className="product-row">
                 <strong>Pacchetto documentale</strong>
-                <Badge variant="ready">Pronto per revisione</Badge>
+                <Badge variant="positive">Pronto per revisione</Badge>
               </div>
               <p className="muted">
                 Esempio dimostrativo di stati operativi. Non contiene preset documentali o regole
@@ -101,7 +101,7 @@ export default function HomePage() {
       <Section title="Come funziona" tone="muted">
         <Container>
           <ul className="flow-list">
-            <li>Crea o seleziona l'azienda nel workspace.</li>
+            <li>Configura la tua azienda nel workspace.</li>
             <li>Aggiungi lavoratori, cantieri, documenti e scadenze registrate.</li>
             <li>Carica versioni documento e prove operative quando servono.</li>
             <li>Prepara un pacchetto documentale pronto per revisione.</li>
@@ -111,7 +111,7 @@ export default function HomePage() {
 
       <Section title="Cosa non promette">
         <Container>
-          <Card tone="attention">
+          <Card tone="warning">
             <p>
               Qoovex non decide obblighi, requisiti o valutazioni al posto di responsabili,
               consulenti o utenti competenti. Il sistema organizza dati registrati e li rende piu
