@@ -115,7 +115,7 @@
   justify-self: center;
   border: 0;
   background: transparent;
-  color: var(--qvx-accent-strong);
+  color: var(--color-qv-accent-strong);
   cursor: pointer;
   font: inherit;
   font-size: 0.88rem;
