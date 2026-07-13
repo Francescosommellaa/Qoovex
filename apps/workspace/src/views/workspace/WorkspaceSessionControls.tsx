@@ -11,6 +11,7 @@ export function WorkspaceLogoutButton() {
   async function logout() {
     setLoading(true);
     await fetch("/api/dev-auth", { method: "DELETE" }).catch(() => null);
+    await fetch("/api/account/mfa/session", { method: "DELETE" }).catch(() => null);
     await signOut({ redirect: false });
     window.location.assign("/sign-in");
   }

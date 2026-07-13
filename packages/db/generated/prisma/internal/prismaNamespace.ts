@@ -416,6 +416,7 @@ export const ModelName = {
   ProductAuditEvent: 'ProductAuditEvent',
   UserCredential: 'UserCredential',
   AuthCode: 'AuthCode',
+  MfaRecoveryRequest: 'MfaRecoveryRequest',
   AuthRateLimit: 'AuthRateLimit',
   SecurityAuditEvent: 'SecurityAuditEvent',
   RuntimeErrorEvent: 'RuntimeErrorEvent',
@@ -436,7 +437,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "session" | "verificationToken" | "user" | "organization" | "worker" | "jobSite" | "workerUserLink" | "jobSiteUserAssignment" | "jobSiteWorkerAssignment" | "documentType" | "document" | "documentVersion" | "documentRequirement" | "deadline" | "checklist" | "checklistItem" | "evidence" | "documentPackage" | "documentPackageItem" | "shareLink" | "notification" | "notificationPreference" | "dataControlJob" | "notificationEmailDelivery" | "organizationMembership" | "organizationInvitation" | "supportSession" | "supportAuditEvent" | "productAuditEvent" | "userCredential" | "authCode" | "authRateLimit" | "securityAuditEvent" | "runtimeErrorEvent" | "authDevice" | "mfaBackupCode"
+    modelProps: "account" | "session" | "verificationToken" | "user" | "organization" | "worker" | "jobSite" | "workerUserLink" | "jobSiteUserAssignment" | "jobSiteWorkerAssignment" | "documentType" | "document" | "documentVersion" | "documentRequirement" | "deadline" | "checklist" | "checklistItem" | "evidence" | "documentPackage" | "documentPackageItem" | "shareLink" | "notification" | "notificationPreference" | "dataControlJob" | "notificationEmailDelivery" | "organizationMembership" | "organizationInvitation" | "supportSession" | "supportAuditEvent" | "productAuditEvent" | "userCredential" | "authCode" | "mfaRecoveryRequest" | "authRateLimit" | "securityAuditEvent" | "runtimeErrorEvent" | "authDevice" | "mfaBackupCode"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2808,6 +2809,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MfaRecoveryRequest: {
+      payload: Prisma.$MfaRecoveryRequestPayload<ExtArgs>
+      fields: Prisma.MfaRecoveryRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MfaRecoveryRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MfaRecoveryRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MfaRecoveryRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MfaRecoveryRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.MfaRecoveryRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MfaRecoveryRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MfaRecoveryRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MfaRecoveryRequestPayload>
+        }
+        findMany: {
+          args: Prisma.MfaRecoveryRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MfaRecoveryRequestPayload>[]
+        }
+        create: {
+          args: Prisma.MfaRecoveryRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MfaRecoveryRequestPayload>
+        }
+        createMany: {
+          args: Prisma.MfaRecoveryRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MfaRecoveryRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MfaRecoveryRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.MfaRecoveryRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MfaRecoveryRequestPayload>
+        }
+        update: {
+          args: Prisma.MfaRecoveryRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MfaRecoveryRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.MfaRecoveryRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MfaRecoveryRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MfaRecoveryRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MfaRecoveryRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.MfaRecoveryRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MfaRecoveryRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.MfaRecoveryRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMfaRecoveryRequest>
+        }
+        groupBy: {
+          args: Prisma.MfaRecoveryRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MfaRecoveryRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MfaRecoveryRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MfaRecoveryRequestCountAggregateOutputType> | number
+        }
+      }
+    }
     AuthRateLimit: {
       payload: Prisma.$AuthRateLimitPayload<ExtArgs>
       fields: Prisma.AuthRateLimitFieldRefs
@@ -3749,6 +3824,28 @@ export const AuthCodeScalarFieldEnum = {
 export type AuthCodeScalarFieldEnum = (typeof AuthCodeScalarFieldEnum)[keyof typeof AuthCodeScalarFieldEnum]
 
 
+export const MfaRecoveryRequestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  organizationId: 'organizationId',
+  mode: 'mode',
+  status: 'status',
+  activeKey: 'activeKey',
+  emailVerifiedAt: 'emailVerifiedAt',
+  expiresAt: 'expiresAt',
+  approvedById: 'approvedById',
+  approvedAt: 'approvedAt',
+  deniedById: 'deniedById',
+  deniedAt: 'deniedAt',
+  setupStartedAt: 'setupStartedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MfaRecoveryRequestScalarFieldEnum = (typeof MfaRecoveryRequestScalarFieldEnum)[keyof typeof MfaRecoveryRequestScalarFieldEnum]
+
+
 export const AuthRateLimitScalarFieldEnum = {
   key: 'key',
   bucket: 'bucket',
@@ -4310,6 +4407,34 @@ export type ListEnumAuthCodePurposeFieldRefInput<$PrismaModel> = FieldRefInputTy
 
 
 /**
+ * Reference to a field of type 'MfaRecoveryMode'
+ */
+export type EnumMfaRecoveryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MfaRecoveryMode'>
+
+
+
+/**
+ * Reference to a field of type 'MfaRecoveryMode[]'
+ */
+export type ListEnumMfaRecoveryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MfaRecoveryMode[]'>
+
+
+
+/**
+ * Reference to a field of type 'MfaRecoveryStatus'
+ */
+export type EnumMfaRecoveryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MfaRecoveryStatus'>
+
+
+
+/**
+ * Reference to a field of type 'MfaRecoveryStatus[]'
+ */
+export type ListEnumMfaRecoveryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MfaRecoveryStatus[]'>
+
+
+
+/**
  * Reference to a field of type 'RuntimeErrorStatus'
  */
 export type EnumRuntimeErrorStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuntimeErrorStatus'>
@@ -4478,6 +4603,7 @@ export type GlobalOmitConfig = {
   productAuditEvent?: Prisma.ProductAuditEventOmit
   userCredential?: Prisma.UserCredentialOmit
   authCode?: Prisma.AuthCodeOmit
+  mfaRecoveryRequest?: Prisma.MfaRecoveryRequestOmit
   authRateLimit?: Prisma.AuthRateLimitOmit
   securityAuditEvent?: Prisma.SecurityAuditEventOmit
   runtimeErrorEvent?: Prisma.RuntimeErrorEventOmit

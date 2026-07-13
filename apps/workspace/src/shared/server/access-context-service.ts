@@ -7,8 +7,9 @@ import { AccessError } from "@shared/server/access-errors";
 import { getPermissionsForRole } from "@shared/server/authorization-policy";
 import { getActiveSupportSession } from "@shared/server/support-access-service";
 import { bootstrapDevUser } from "@shared/server/dev-auth";
+import { isMfaSatisfiedForUser } from "@shared/server/mfa-service";
 
-export async function requireIdentity() {
+export async function requirePrimaryIdentity() {
   const devUser = await bootstrapDevUser();
   if (devUser) {
     return {
@@ -19,18 +20,37 @@ export async function requireIdentity() {
       authVersion: devUser.authVersion,
       mfaEnabled: devUser.mfaEnabled,
       suspendedAt: null,
+      authSessionId: `dev:${devUser.id}`,
+      isDev: true,
     };
   }
 
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) throw new AccessError("Sessione non valida.", 401);
+  const authSessionId = session?.user?.authSessionId;
+  if (!userId || !authSessionId) throw new AccessError("Sessione non valida.", 401);
 
   const user = await db.user.findUnique({
     where: { id: userId },
     select: { id: true, email: true, emailVerified: true, platformRole: true, authVersion: true, mfaEnabled: true, suspendedAt: true },
   });
   if (!user || user.suspendedAt) throw new AccessError("Sessione non valida.", 401);
+  return { ...user, authSessionId, isDev: false };
+}
+
+export async function requireIdentity() {
+  const user = await requirePrimaryIdentity();
+  if (
+    !user.isDev &&
+    user.mfaEnabled &&
+    !(await isMfaSatisfiedForUser({
+      userId: user.id,
+      authVersion: user.authVersion,
+      authSessionId: user.authSessionId,
+    }))
+  ) {
+    throw new AccessError("Conferma MFA richiesta.", 403, "MFA_REQUIRED");
+  }
   return user;
 }
 

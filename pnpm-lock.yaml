@@ -102,6 +102,9 @@ importers:
       '@qoovex/types':
         specifier: workspace:*
         version: link:../../packages/types
+      '@qoovex/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@vercel/blob':
         specifier: ^2.5.0
         version: 2.5.0

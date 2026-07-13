@@ -1,11 +1,7 @@
 import Link from "next/link";
-import { AccessError } from "@shared/server/access-errors";
-import { requireIdentity } from "@shared/server/access-context-service";
-import { getMfaStatusByUserId } from "@shared/server/mfa-service";
 import { getPlatformAdminOverview } from "@shared/server/platform-admin-service";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
 import { PlatformAdminAccessState } from "@/views/platform-admin/PlatformAdminAccessState";
-import { OperatorMfaGate } from "@/views/platform-admin/OperatorMfaGate";
 import styles from "@/views/platform-admin/PlatformAdmin.module.css";
 
 export default async function QoovexAdminPage() {
@@ -38,17 +34,6 @@ export default async function QoovexAdminPage() {
       </WorkspacePage>
     );
   } catch (error) {
-    if (error instanceof AccessError && error.status === 403) {
-      const identity = await requireIdentity();
-      if (identity.platformRole !== "SUPER_ADMIN") return <PlatformAdminAccessState />;
-      const status = await getMfaStatusByUserId(identity.id);
-      return (
-        <WorkspacePage>
-          <WorkspacePageHeader title="Proteggi la Console Qoovex" description="Gli operatori reali devono usare l'autenticazione a due fattori." />
-          <WorkspacePanel><OperatorMfaGate enabled={status?.enabled ?? false} /></WorkspacePanel>
-        </WorkspacePage>
-      );
-    }
     return <PlatformAdminAccessState />;
   }
 }

@@ -19,6 +19,7 @@ import {
   Switch,
   Textarea,
 } from "@qoovex/ui";
+import { MfaSecurityPattern } from "./MfaSecurityPattern";
 
 const prudentCopy = [
   "Stato documentale aggiornato",
@@ -152,6 +153,15 @@ export default function SirioPage() {
               {prudentCopy.map((copy) => <li key={copy}>{copy}</li>)}
             </ul>
           </Panel>
+        </Container>
+      </Section>
+
+      <Section
+        description="Pattern isolato per challenge, enrollment, recupero autonomo e decisione OWNER. Nessuna integrazione workspace prima dell'approvazione."
+        title="Sicurezza account e recupero MFA"
+      >
+        <Container>
+          <MfaSecurityPattern />
         </Container>
       </Section>
     </main>

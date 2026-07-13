@@ -12,10 +12,32 @@
 export const AuthCodePurpose = {
   EMAIL_VERIFICATION: 'EMAIL_VERIFICATION',
   PASSWORD_RESET: 'PASSWORD_RESET',
-  EMAIL_CHANGE: 'EMAIL_CHANGE'
+  EMAIL_CHANGE: 'EMAIL_CHANGE',
+  MFA_ENROLLMENT: 'MFA_ENROLLMENT',
+  MFA_RECOVERY: 'MFA_RECOVERY'
 } as const
 
 export type AuthCodePurpose = (typeof AuthCodePurpose)[keyof typeof AuthCodePurpose]
+
+
+export const MfaRecoveryMode = {
+  SELF_EMAIL: 'SELF_EMAIL',
+  OWNER_APPROVAL: 'OWNER_APPROVAL'
+} as const
+
+export type MfaRecoveryMode = (typeof MfaRecoveryMode)[keyof typeof MfaRecoveryMode]
+
+
+export const MfaRecoveryStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  DENIED: 'DENIED',
+  SETUP_STARTED: 'SETUP_STARTED',
+  COMPLETED: 'COMPLETED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type MfaRecoveryStatus = (typeof MfaRecoveryStatus)[keyof typeof MfaRecoveryStatus]
 
 
 export const PlatformRole = {

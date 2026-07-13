@@ -6,8 +6,15 @@ import type { OrganizationRole } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 import { getContextOrganizationId, getWorkspaceAccessContext, requireIdentity } from "@shared/server/access-context-service";
 import { canInviteRole } from "@shared/server/authorization-policy";
+import { buildOrganizationInvitationPath } from "../lib/workspace-link-routes";
 import { sendTransactionalEmail } from "@shared/server/transactional-email-service";
 import { recordSupportAccess } from "@shared/server/support-access-service";
+import { buildAbsoluteWorkspaceUrl } from "./workspace-url-service";
+import {
+  isPrismaKnownRequestError,
+  runSerializableTransaction,
+  SerializableTransactionConflictError,
+} from "./serializable-transaction";
 
 const INVITATION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const INVITABLE_ROLES = new Set<OrganizationRole>(["ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"]);
@@ -59,12 +66,37 @@ export async function createInvitation(input: { email: string; role: Organizatio
     });
   });
 
-  const baseUrl = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL ?? "https://app.qoovex.com";
   await sendTransactionalEmail({
     to: email,
-    template: { kind: "organization-invitation", organizationName: invitation.organization.name, role, acceptUrl: `${baseUrl}/invite?token=${encodeURIComponent(rawToken)}`, expiresAt: invitation.expiresAt },
+    template: {
+      kind: "organization-invitation",
+      organizationName: invitation.organization.name,
+      role,
+      acceptUrl: buildAbsoluteWorkspaceUrl(buildOrganizationInvitationPath(rawToken)),
+      expiresAt: invitation.expiresAt,
+    },
   });
   return { id: invitation.id, email: invitation.email, role: invitation.role, expiresAt: invitation.expiresAt };
+}
+
+export async function getInvitationPreview(rawToken: string) {
+  if (!rawToken) return null;
+  const invitation = await db.organizationInvitation.findUnique({
+    where: { tokenHash: hashToken(rawToken) },
+    select: {
+      role: true,
+      expiresAt: true,
+      acceptedAt: true,
+      revokedAt: true,
+      organization: { select: { name: true } },
+    },
+  });
+  if (!invitation || invitation.revokedAt || invitation.acceptedAt || invitation.expiresAt <= new Date()) return null;
+  return {
+    organizationName: invitation.organization.name,
+    role: invitation.role,
+    expiresAt: invitation.expiresAt,
+  };
 }
 
 export async function revokeInvitation(invitationId: string) {
@@ -80,21 +112,30 @@ export async function revokeInvitation(invitationId: string) {
 export async function acceptInvitation(rawToken: string) {
   const user = await requireIdentity();
   if (!user.emailVerified) throw new AccessError("Verifica la tua email prima di accettare l'invito.", 403);
-  const invitation = await db.organizationInvitation.findUnique({
-    where: { tokenHash: hashToken(rawToken) },
-    select: { id: true, email: true, role: true, organizationId: true, expiresAt: true, acceptedAt: true, revokedAt: true },
-  });
-  if (!invitation) throw new AccessError("Invito non trovato.", 404);
-  if (invitation.revokedAt || invitation.acceptedAt || invitation.expiresAt <= new Date()) throw new AccessError("Invito scaduto o non piu valido.", 410);
-  if (normalizeEmail(user.email) !== invitation.email) throw new AccessError("L'invito appartiene a un'altra email.", 403);
-  const membership = await db.organizationMembership.findUnique({ where: { userId: user.id }, select: { revokedAt: true } });
-  if (membership?.revokedAt === null) throw new AccessError("Appartieni gia a una azienda.", 409);
+  const tokenHash = hashToken(rawToken);
 
   try {
-    await db.$transaction(async (tx) => {
+    await runSerializableTransaction(async (tx) => {
+      const now = new Date();
+      const invitation = await tx.organizationInvitation.findUnique({
+        where: { tokenHash },
+        select: { id: true, email: true, role: true, organizationId: true, expiresAt: true, acceptedAt: true, revokedAt: true },
+      });
+      if (!invitation) throw new AccessError("Invito non trovato.", 404);
+      if (invitation.revokedAt || invitation.acceptedAt || invitation.expiresAt <= now) {
+        throw new AccessError("Invito scaduto o non piu valido.", 410);
+      }
+      if (normalizeEmail(user.email) !== invitation.email) throw new AccessError("L'invito appartiene a un'altra email.", 403);
+
+      const membership = await tx.organizationMembership.findUnique({
+        where: { userId: user.id },
+        select: { id: true, revokedAt: true },
+      });
+      if (membership?.revokedAt === null) throw new AccessError("Appartieni gia a una azienda.", 409);
+
       if (membership) {
         const claimed = await tx.organizationMembership.updateMany({
-          where: { userId: user.id, revokedAt: { not: null } },
+          where: { id: membership.id, userId: user.id, revokedAt: { not: null } },
           data: { organizationId: invitation.organizationId, role: invitation.role, revokedAt: null },
         });
         if (claimed.count !== 1) throw new AccessError("Appartieni gia a una azienda.", 409);
@@ -103,14 +144,22 @@ export async function acceptInvitation(rawToken: string) {
           data: { organizationId: invitation.organizationId, userId: user.id, role: invitation.role },
         });
       }
-      await tx.organizationInvitation.update({ where: { id: invitation.id }, data: { acceptedAt: new Date() } });
+      const consumed = await tx.organizationInvitation.updateMany({
+        where: { id: invitation.id, acceptedAt: null, revokedAt: null, expiresAt: { gt: now } },
+        data: { acceptedAt: now },
+      });
+      if (consumed.count !== 1) throw new AccessError("Invito scaduto o non piu valido.", 410);
       await tx.user.update({ where: { id: user.id }, data: { authVersion: { increment: 1 } } });
     });
   } catch (error) {
     if (error instanceof AccessError) throw error;
+    if (error instanceof SerializableTransactionConflictError) {
+      throw new AccessError("Operazione concorrente. Riprova.", 409);
+    }
+    if (!isPrismaKnownRequestError(error, "P2002")) throw error;
     const active = await db.organizationMembership.findUnique({ where: { userId: user.id }, select: { revokedAt: true } });
     if (active?.revokedAt === null) throw new AccessError("Appartieni gia a una azienda.", 409);
-    throw error;
+    throw new AccessError("Operazione concorrente. Riprova.", 409);
   }
   return { accepted: true };
 }

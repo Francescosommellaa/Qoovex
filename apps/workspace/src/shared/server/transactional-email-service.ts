@@ -1,12 +1,16 @@
 import "server-only";
 
-type AuthCodePurpose = "EMAIL_VERIFICATION" | "PASSWORD_RESET" | "EMAIL_CHANGE";
+type AuthCodePurpose = "EMAIL_VERIFICATION" | "PASSWORD_RESET" | "EMAIL_CHANGE" | "MFA_ENROLLMENT" | "MFA_RECOVERY";
 export type SecurityEmailEvent =
   | "EMAIL_CHANGED"
   | "PASSWORD_CHANGED"
   | "USERNAME_CHANGED"
   | "MFA_ENABLED"
   | "MFA_DISABLED"
+  | "MFA_REPLACED"
+  | "MFA_BACKUP_CODES_REGENERATED"
+  | "MFA_RECOVERY_APPROVED"
+  | "MFA_RECOVERY_DENIED"
   | "NEW_DEVICE";
 
 type InviteRole = "ADMIN" | "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER";
@@ -45,6 +49,19 @@ export type TransactionalEmailTemplate =
       occurredAt: Date;
     }
   | {
+      kind: "mfa-recovery-request";
+      requesterEmail: string;
+      organizationName: string;
+      actionUrl: string;
+      expiresAt: Date;
+    }
+  | {
+      kind: "mfa-recovery-decision";
+      requesterEmail: string;
+      organizationName: string;
+      decision: "approved" | "denied";
+    }
+  | {
       kind: "notification-digest";
       unreadCount: number;
       items: NotificationEmailItem[];
@@ -73,6 +90,24 @@ function escapeHtml(value: string) {
 }
 
 function getAuthCodeCopy(purpose: AuthCodePurpose, code: string) {
+  if (purpose === "MFA_ENROLLMENT") {
+    return {
+      subject: "Codice attivazione MFA Qoovex",
+      title: "Attiva MFA",
+      intro: "Usa questo codice per iniziare la configurazione MFA del tuo account Qoovex.",
+      code,
+    };
+  }
+
+  if (purpose === "MFA_RECOVERY") {
+    return {
+      subject: "Codice recupero MFA Qoovex",
+      title: "Recupera MFA",
+      intro: "Usa questo codice per avviare il recupero MFA del tuo account Qoovex.",
+      code,
+    };
+  }
+
   if (purpose === "PASSWORD_RESET") {
     return {
       subject: "Codice reset password Qoovex",
@@ -142,6 +177,30 @@ function getSecurityCopy(template: Extract<TransactionalEmailTemplate, { kind: "
         title: "A2F disattivata",
         intro: `L'autenticazione a due fattori e stata disattivata il ${occurredAt}.`,
       };
+    case "MFA_REPLACED":
+      return {
+        subject: "MFA Qoovex sostituita",
+        title: "MFA sostituita",
+        intro: `Il fattore MFA del tuo account Qoovex e stato sostituito il ${occurredAt}.`,
+      };
+    case "MFA_BACKUP_CODES_REGENERATED":
+      return {
+        subject: "Nuovi codici di recupero MFA Qoovex",
+        title: "Codici di recupero rigenerati",
+        intro: `I codici di recupero MFA sono stati rigenerati il ${occurredAt}.`,
+      };
+    case "MFA_RECOVERY_APPROVED":
+      return {
+        subject: "Recupero MFA Qoovex approvato",
+        title: "Recupero MFA approvato",
+        intro: `La richiesta di recupero MFA e stata approvata il ${occurredAt}. Accedi per configurare un nuovo fattore.`,
+      };
+    case "MFA_RECOVERY_DENIED":
+      return {
+        subject: "Recupero MFA Qoovex rifiutato",
+        title: "Recupero MFA rifiutato",
+        intro: `La richiesta di recupero MFA e stata rifiutata il ${occurredAt}.`,
+      };
     case "NEW_DEVICE":
       return {
         subject: "Nuovo accesso a Qoovex",
@@ -209,6 +268,21 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
         intro: input.template.item.message,
       };
     }
+    if (input.template.kind === "mfa-recovery-request") {
+      return {
+        subject: `Richiesta recupero MFA - ${input.template.organizationName}`,
+        title: "Recupero MFA da approvare",
+        intro: `${input.template.requesterEmail} ha verificato la propria email e chiede di sostituire il fattore MFA. Apri ${input.template.actionUrl} entro ${formatSecurityDate(input.template.expiresAt)}.`,
+      };
+    }
+    if (input.template.kind === "mfa-recovery-decision") {
+      const approved = input.template.decision === "approved";
+      return {
+        subject: `Recupero MFA ${approved ? "approvato" : "rifiutato"} - ${input.template.organizationName}`,
+        title: `Recupero MFA ${approved ? "approvato" : "rifiutato"}`,
+        intro: `La richiesta di ${input.template.requesterEmail} e stata ${approved ? "approvata" : "rifiutata"}.`,
+      };
+    }
     const template = input.template as Extract<TransactionalEmailTemplate, { kind: "support-opened" | "support-closed" }>;
     const opened = template.kind === "support-opened";
     const organizationName = getOrganizationName(template);
@@ -238,6 +312,8 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
     if (input.template.kind === "notification-digest" || input.template.kind === "notification-single") {
       return "Le informazioni dipendono dai dati registrati in Qoovex e vanno confermate con il responsabile o consulente. L'email non include file o link di download.";
     }
+    if (input.template.kind === "mfa-recovery-request") return "Approva solo se riconosci la richiesta. La decisione richiede il tuo fattore MFA corrente.";
+    if (input.template.kind === "mfa-recovery-decision") return "La prima decisione valida chiude la richiesta per tutti gli OWNER.";
     return "Se non riconosci questa attivita, cambia password e controlla la sicurezza del tuo account.";
   })();
 

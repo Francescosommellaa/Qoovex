@@ -202,6 +202,11 @@ export type UserCredential = Prisma.UserCredentialModel
  */
 export type AuthCode = Prisma.AuthCodeModel
 /**
+ * Model MfaRecoveryRequest
+ * 
+ */
+export type MfaRecoveryRequest = Prisma.MfaRecoveryRequestModel
+/**
  * Model AuthRateLimit
  * 
  */

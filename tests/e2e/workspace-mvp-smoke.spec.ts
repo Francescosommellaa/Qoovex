@@ -1,6 +1,36 @@
+import crypto from "crypto";
 import { expect, test, type APIRequestContext, type APIResponse, type Page } from "@playwright/test";
 
 type JsonRecord = Record<string, unknown>;
+
+const BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+
+function decodeBase32(value: string) {
+  let bits = 0;
+  let current = 0;
+  const bytes: number[] = [];
+  for (const char of value.replace(/=+$/g, "").toUpperCase()) {
+    const index = BASE32_ALPHABET.indexOf(char);
+    if (index < 0) continue;
+    current = (current << 5) | index;
+    bits += 5;
+    if (bits >= 8) {
+      bytes.push((current >>> (bits - 8)) & 255);
+      bits -= 8;
+    }
+  }
+  return Buffer.from(bytes);
+}
+
+function currentTotp(secret: string) {
+  const counter = Math.floor(Date.now() / 1000 / 30);
+  const counterBuffer = Buffer.alloc(8);
+  counterBuffer.writeBigUInt64BE(BigInt(counter));
+  const hmac = crypto.createHmac("sha1", decodeBase32(secret)).update(counterBuffer).digest();
+  const offset = hmac[hmac.length - 1] & 0xf;
+  const binary = ((hmac[offset] & 0x7f) << 24) | ((hmac[offset + 1] & 0xff) << 16) | ((hmac[offset + 2] & 0xff) << 8) | (hmac[offset + 3] & 0xff);
+  return String(binary % 1_000_000).padStart(6, "0");
+}
 
 const workspacePages = [
   "/dashboard",
@@ -44,6 +74,21 @@ async function pagePostJson(page: Page, url: string, data?: JsonRecord): Promise
 
 async function getContext(page: Page): Promise<JsonRecord> {
   return pageJsonRequest(page, "GET", "/api/context");
+}
+
+async function signInWithCredentials(page: Page, email: string, password: string) {
+  await page.goto("/sign-in?callbackUrl=%2Fdashboard", { waitUntil: "domcontentloaded" });
+  await page.getByLabel("Email o username").fill(email);
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Accedi", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+}
+
+async function satisfyMfaGate(page: Page, secret: string) {
+  await expect(page.getByRole("heading", { name: "Conferma MFA" })).toBeVisible();
+  await page.locator("#mfa-gate-code").fill(currentTotp(secret));
+  await page.getByRole("button", { name: "Apri il workspace" }).click();
+  await expect(page.getByRole("heading", { name: "Stato documentale" })).toBeVisible();
 }
 
 async function ensureOrganization(page: Page, runId: string): Promise<JsonRecord> {
@@ -276,5 +321,88 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
       await page.context().request.post("/api/dev-auth");
       await page.context().request.delete("/api/dev-fixtures/platform-admin", { data: { userId: targetUserId, runtimeErrorId } });
     }
+  }
+});
+
+test("ordinary MFA gates workspace, replaces the factor, logs out, and recovers with OWNER approval", async ({ browser, playwright, baseURL }) => {
+  const runId = `${Date.now()}`;
+  const adminApi = await playwright.request.newContext({ baseURL });
+  let fixture: JsonRecord | null = null;
+  const ownerContext = await browser.newContext({ baseURL });
+  const workerContext = await browser.newContext({ baseURL });
+
+  try {
+    expect((await adminApi.post("/api/dev-auth")).status()).toBe(200);
+    const fixtureResponse = await adminApi.post("/api/dev-fixtures/platform-admin", { data: { kind: "mfa-suite", runId } });
+    fixture = await expectJson(fixtureResponse, 201);
+    const password = String(fixture.password);
+    const owner = fixture.owner as JsonRecord;
+    const worker = fixture.worker as JsonRecord;
+
+    const ownerPage = await ownerContext.newPage();
+    await signInWithCredentials(ownerPage, String(owner.email), password);
+    const blockedContext = await pageJsonRequest(ownerPage, "GET", "/api/context", undefined, 403);
+    expect(blockedContext.code).toBe("MFA_REQUIRED");
+    await satisfyMfaGate(ownerPage, String(owner.secret));
+    await expectPageJson(ownerPage, "/api/context", 200);
+
+    await ownerPage.goto("/account/security", { waitUntil: "domcontentloaded" });
+    await ownerPage.locator("#mfa-replace-code").fill(currentTotp(String(owner.secret)));
+    await ownerPage.getByRole("button", { name: "Avvia sostituzione" }).click();
+    await expect(ownerPage.getByRole("heading", { name: "Configura l'app Authenticator" })).toBeVisible();
+    const replacementSecret = (await ownerPage.locator("code").textContent())?.trim() ?? "";
+    expect(replacementSecret).toMatch(/^[A-Z2-7]+$/);
+    await ownerPage.locator("#mfa-new-code").fill(currentTotp(replacementSecret));
+    await ownerPage.getByRole("button", { name: "Conferma nuovo fattore" }).click();
+    await expect(ownerPage.getByRole("heading", { name: "Conserva i codici di recupero" })).toBeVisible();
+    await ownerPage.getByRole("button", { name: "Ho salvato i codici, accedi di nuovo" }).click();
+    await ownerPage.waitForURL("**/sign-in");
+
+    await signInWithCredentials(ownerPage, String(owner.email), password);
+    await satisfyMfaGate(ownerPage, replacementSecret);
+
+    const workerPage = await workerContext.newPage();
+    await signInWithCredentials(workerPage, String(worker.email), password);
+    await expect(workerPage.getByRole("heading", { name: "Conferma MFA" })).toBeVisible();
+    await pageJsonRequest(workerPage, "POST", "/api/account/mfa", {}, 403);
+    await pageJsonRequest(workerPage, "DELETE", "/api/account/mfa", {}, 403);
+    await pageJsonRequest(workerPage, "POST", "/api/account/mfa/confirm", { code: currentTotp(String(worker.secret)) }, 409);
+
+    const recoveryCodeResponse = await adminApi.post("/api/dev-fixtures/platform-admin", {
+      data: { kind: "mfa-recovery-code", runId, userId: worker.id },
+    });
+    const recoveryCode = await expectJson(recoveryCodeResponse, 201);
+    const recovery = await pageJsonRequest(workerPage, "POST", "/api/account/mfa/recovery", { emailCode: recoveryCode.code as string });
+    expect(recovery.status).toBe("PENDING");
+    await workerPage.reload({ waitUntil: "domcontentloaded" });
+    await expect(workerPage.getByRole("heading", { name: "Recupero MFA" })).toBeVisible();
+    await expect(workerPage.getByText("In attesa dell'OWNER")).toBeVisible();
+
+    await ownerPage.goto("/account/security", { waitUntil: "domcontentloaded" });
+    await expect(ownerPage.getByText(String(worker.email))).toBeVisible();
+    await ownerPage.getByLabel("Il tuo fattore MFA").fill(currentTotp(replacementSecret));
+    await ownerPage.getByRole("button", { name: "Approva" }).click();
+    await expect(ownerPage.getByText("Recupero approvato e notificato.")).toBeVisible();
+
+    await ownerPage.getByRole("button", { name: "Esci" }).click();
+    await ownerPage.waitForURL("**/sign-in");
+    await expectPageJson(ownerPage, "/api/context", 401);
+
+    await workerPage.getByRole("button", { name: "Aggiorna stato" }).click();
+    await expect(workerPage.getByText("Richiesta approvata")).toBeVisible();
+    await workerPage.getByRole("button", { name: "Configura nuovo fattore" }).click();
+    const workerReplacementSecret = (await workerPage.locator("code").textContent())?.trim() ?? "";
+    await workerPage.locator("#mfa-new-code").fill(currentTotp(workerReplacementSecret));
+    await workerPage.getByRole("button", { name: "Conferma nuovo fattore" }).click();
+    await expect(workerPage.getByRole("heading", { name: "Conserva i codici di recupero" })).toBeVisible();
+  } finally {
+    if (fixture) {
+      const owner = fixture.owner as JsonRecord;
+      const worker = fixture.worker as JsonRecord;
+      await adminApi.delete("/api/dev-fixtures/platform-admin", {
+        data: { organizationId: fixture.organizationId, userIds: [owner.id, worker.id] },
+      });
+    }
+    await Promise.all([ownerContext.close(), workerContext.close(), adminApi.dispose()]);
   }
 });

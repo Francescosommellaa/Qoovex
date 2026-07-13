@@ -729,6 +729,40 @@ export type EnumAuthCodePurposeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAuthCodePurposeFilter<$PrismaModel>
 }
 
+export type EnumMfaRecoveryModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaRecoveryMode | Prisma.EnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  in?: $Enums.MfaRecoveryMode[] | Prisma.ListEnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MfaRecoveryMode[] | Prisma.ListEnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMfaRecoveryModeFilter<$PrismaModel> | $Enums.MfaRecoveryMode
+}
+
+export type EnumMfaRecoveryStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaRecoveryStatus | Prisma.EnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MfaRecoveryStatus[] | Prisma.ListEnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MfaRecoveryStatus[] | Prisma.ListEnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMfaRecoveryStatusFilter<$PrismaModel> | $Enums.MfaRecoveryStatus
+}
+
+export type EnumMfaRecoveryModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaRecoveryMode | Prisma.EnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  in?: $Enums.MfaRecoveryMode[] | Prisma.ListEnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MfaRecoveryMode[] | Prisma.ListEnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMfaRecoveryModeWithAggregatesFilter<$PrismaModel> | $Enums.MfaRecoveryMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMfaRecoveryModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMfaRecoveryModeFilter<$PrismaModel>
+}
+
+export type EnumMfaRecoveryStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaRecoveryStatus | Prisma.EnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MfaRecoveryStatus[] | Prisma.ListEnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MfaRecoveryStatus[] | Prisma.ListEnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMfaRecoveryStatusWithAggregatesFilter<$PrismaModel> | $Enums.MfaRecoveryStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMfaRecoveryStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMfaRecoveryStatusFilter<$PrismaModel>
+}
+
 export type EnumRuntimeErrorStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.RuntimeErrorStatus | Prisma.EnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
   in?: $Enums.RuntimeErrorStatus[] | Prisma.ListEnumRuntimeErrorStatusFieldRefInput<$PrismaModel>
@@ -1445,6 +1479,40 @@ export type NestedEnumAuthCodePurposeWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAuthCodePurposeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAuthCodePurposeFilter<$PrismaModel>
+}
+
+export type NestedEnumMfaRecoveryModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaRecoveryMode | Prisma.EnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  in?: $Enums.MfaRecoveryMode[] | Prisma.ListEnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MfaRecoveryMode[] | Prisma.ListEnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMfaRecoveryModeFilter<$PrismaModel> | $Enums.MfaRecoveryMode
+}
+
+export type NestedEnumMfaRecoveryStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaRecoveryStatus | Prisma.EnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MfaRecoveryStatus[] | Prisma.ListEnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MfaRecoveryStatus[] | Prisma.ListEnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMfaRecoveryStatusFilter<$PrismaModel> | $Enums.MfaRecoveryStatus
+}
+
+export type NestedEnumMfaRecoveryModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaRecoveryMode | Prisma.EnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  in?: $Enums.MfaRecoveryMode[] | Prisma.ListEnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MfaRecoveryMode[] | Prisma.ListEnumMfaRecoveryModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMfaRecoveryModeWithAggregatesFilter<$PrismaModel> | $Enums.MfaRecoveryMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMfaRecoveryModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMfaRecoveryModeFilter<$PrismaModel>
+}
+
+export type NestedEnumMfaRecoveryStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaRecoveryStatus | Prisma.EnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MfaRecoveryStatus[] | Prisma.ListEnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MfaRecoveryStatus[] | Prisma.ListEnumMfaRecoveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMfaRecoveryStatusWithAggregatesFilter<$PrismaModel> | $Enums.MfaRecoveryStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMfaRecoveryStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMfaRecoveryStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumRuntimeErrorStatusFilter<$PrismaModel = never> = {

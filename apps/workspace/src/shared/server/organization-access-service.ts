@@ -6,6 +6,11 @@ import { AccessError } from "@shared/server/access-errors";
 import { getContextOrganizationId, getWorkspaceAccessContext, requireIdentity, requirePermission } from "@shared/server/access-context-service";
 import { canRevokeRole } from "@shared/server/authorization-policy";
 import { recordSupportAccess } from "@shared/server/support-access-service";
+import {
+  isPrismaKnownRequestError,
+  runSerializableTransaction,
+  SerializableTransactionConflictError,
+} from "./serializable-transaction";
 
 const CODE_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 
@@ -20,31 +25,54 @@ export async function createOrganization(nameInput: string) {
   const name = nameInput.trim();
   if (name.length < 2 || name.length > 120) throw new AccessError("Inserisci un nome azienda valido.", 409);
 
-  const existing = await db.organizationMembership.findUnique({ where: { userId: user.id }, select: { id: true, revokedAt: true } });
-  if (existing?.revokedAt === null) throw new AccessError("Appartieni gia a una azienda.", 409);
-
-  for (let attempt = 0; attempt < 5; attempt += 1) {
-    try {
-      return await db.$transaction(async (tx) => {
-        const organization = await tx.organization.create({ data: { name, code: generateOrganizationCode(), createdById: user.id } });
-        if (existing) {
-          const claimed = await tx.organizationMembership.updateMany({
-            where: { userId: user.id, revokedAt: { not: null } },
-            data: { organizationId: organization.id, role: "OWNER", revokedAt: null },
-          });
-          if (claimed.count !== 1) throw new AccessError("Appartieni gia a una azienda.", 409);
-        } else {
-          await tx.organizationMembership.create({ data: { organizationId: organization.id, userId: user.id, role: "OWNER" } });
-        }
-        return organization;
+  try {
+    return await runSerializableTransaction(async (tx) => {
+      const existing = await tx.organizationMembership.findUnique({
+        where: { userId: user.id },
+        select: { id: true, revokedAt: true },
       });
-    } catch (error) {
-      const active = await db.organizationMembership.findUnique({ where: { userId: user.id }, select: { revokedAt: true } });
-      if (active?.revokedAt === null) throw new AccessError("Appartieni gia a una azienda.", 409);
-      if (attempt === 4) throw error;
+      if (existing?.revokedAt === null) throw new AccessError("Appartieni gia a una azienda.", 409);
+
+      const organization = await tx.organization.create({
+        data: { name, code: generateOrganizationCode(), createdById: user.id },
+      });
+      if (existing) {
+        const claimed = await tx.organizationMembership.updateMany({
+          where: { id: existing.id, userId: user.id, revokedAt: { not: null } },
+          data: { organizationId: organization.id, role: "OWNER", revokedAt: null },
+        });
+        if (claimed.count !== 1) throw new AccessError("Appartieni gia a una azienda.", 409);
+      } else {
+        await tx.organizationMembership.create({
+          data: { organizationId: organization.id, userId: user.id, role: "OWNER" },
+        });
+      }
+      return organization;
+    }, {
+      shouldRetry: async (error) => {
+        if (!isPrismaKnownRequestError(error, "P2002")) return false;
+        const active = await db.organizationMembership.findUnique({
+          where: { userId: user.id },
+          select: { revokedAt: true },
+        });
+        if (active?.revokedAt === null) throw new AccessError("Appartieni gia a una azienda.", 409);
+        return true;
+      },
+    });
+  } catch (error) {
+    if (error instanceof SerializableTransactionConflictError) {
+      throw new AccessError("Operazione concorrente. Riprova.", 409);
     }
+    if (isPrismaKnownRequestError(error, "P2002")) {
+      const active = await db.organizationMembership.findUnique({
+        where: { userId: user.id },
+        select: { revokedAt: true },
+      });
+      if (active?.revokedAt === null) throw new AccessError("Appartieni gia a una azienda.", 409);
+      throw new AccessError("Creazione azienda non riuscita.", 409);
+    }
+    throw error;
   }
-  throw new AccessError("Creazione azienda non riuscita.", 409);
 }
 
 export async function listMembers() {
