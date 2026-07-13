@@ -2,12 +2,32 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { assertCiEphemeralDatabase, assertProductionApproval } from "./migration-deploy-guard";
-import { validateMigrationHistory } from "./migration-history";
+import { calculateMigrationChecksum, calculateMigrationChecksums, validateMigrationHistory } from "./migration-history";
 
 const baseline = { name: "20260712010000_single_company_baseline", checksum: "baseline" };
 const forward = { name: "20260712020000_single_membership_forward", checksum: "forward" };
 const mfa = { name: "20260713010000_mfa_hardening", checksum: "mfa" };
 const privacy = { name: "20260713020000_rate_limit_privacy_atomicity", checksum: "privacy" };
+
+test("calcola lo stesso checksum per migration LF e CRLF", () => {
+  const lf = "CREATE TYPE \"Example\" AS ENUM ('ONE');\nSELECT 1;\n";
+  const crlf = lf.replace(/\n/g, "\r\n");
+
+  assert.equal(calculateMigrationChecksum(crlf), calculateMigrationChecksum(lf));
+  assert.notEqual(calculateMigrationChecksum(`${lf}SELECT 2;\n`), calculateMigrationChecksum(lf));
+});
+
+test("accetta checksum Prisma LF o CRLF dello stesso SQL", () => {
+  const sql = "CREATE TABLE \"Example\" (\"id\" TEXT NOT NULL);\n";
+  const [lfChecksum, crlfChecksum] = calculateMigrationChecksums(sql);
+  const local = { name: baseline.name, checksum: lfChecksum, compatibleChecksums: [crlfChecksum] };
+
+  assert.doesNotThrow(() => validateMigrationHistory({
+    applied: [{ name: baseline.name, checksum: crlfChecksum, finished: true, rolledBack: false }],
+    local: [local],
+    allowPending: false,
+  }));
+});
 
 test("accetta un prefisso canonico con una migration pendente", () => {
   const result = validateMigrationHistory({

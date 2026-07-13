@@ -8,6 +8,7 @@ import type { PrismaClient } from "../generated/prisma/client";
 export interface LocalMigration {
   name: string;
   checksum: string;
+  compatibleChecksums?: readonly string[];
 }
 
 export interface AppliedMigration {
@@ -26,6 +27,21 @@ export interface MigrationHistoryResult {
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const MIGRATIONS_DIRECTORY = path.join(PACKAGE_ROOT, "prisma", "migrations");
 
+function sha256(text: string) {
+  return createHash("sha256").update(text, "utf8").digest("hex");
+}
+
+export function calculateMigrationChecksums(sql: Uint8Array | string) {
+  const text = typeof sql === "string" ? sql : Buffer.from(sql).toString("utf8");
+  const lf = text.replace(/\r\n?/g, "\n");
+  const crlf = lf.replace(/\n/g, "\r\n");
+  return [...new Set([sha256(lf), sha256(crlf)])];
+}
+
+export function calculateMigrationChecksum(sql: Uint8Array | string) {
+  return calculateMigrationChecksums(sql)[0];
+}
+
 export async function readLocalMigrations(directory = MIGRATIONS_DIRECTORY) {
   const entries = await readdir(directory, { withFileTypes: true });
   const names = entries
@@ -36,9 +52,11 @@ export async function readLocalMigrations(directory = MIGRATIONS_DIRECTORY) {
   return await Promise.all(
     names.map(async (name): Promise<LocalMigration> => {
       const sql = await readFile(path.join(directory, name, "migration.sql"));
+      const [checksum, ...compatibleChecksums] = calculateMigrationChecksums(sql);
       return {
         name,
-        checksum: createHash("sha256").update(sql).digest("hex"),
+        checksum,
+        compatibleChecksums,
       };
     }),
   );
@@ -65,7 +83,8 @@ export function validateMigrationHistory(input: {
         `[prisma-history] Cronologia divergente alla posizione ${index + 1}: database=${databaseMigration.name}, locale=${localMigration?.name ?? "mancante"}.`,
       );
     }
-    if (localMigration.checksum !== databaseMigration.checksum) {
+    const compatibleChecksums = [localMigration.checksum, ...(localMigration.compatibleChecksums ?? [])];
+    if (!compatibleChecksums.includes(databaseMigration.checksum)) {
       throw new Error(`[prisma-history] Checksum divergente per ${databaseMigration.name}.`);
     }
   }
