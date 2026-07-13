@@ -664,8 +664,11 @@ export type MfaRecoveryRequestScalarFieldEnum = (typeof MfaRecoveryRequestScalar
 export const AuthRateLimitScalarFieldEnum = {
   key: 'key',
   bucket: 'bucket',
+  userId: 'userId',
   count: 'count',
-  resetAt: 'resetAt'
+  resetAt: 'resetAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type AuthRateLimitScalarFieldEnum = (typeof AuthRateLimitScalarFieldEnum)[keyof typeof AuthRateLimitScalarFieldEnum]

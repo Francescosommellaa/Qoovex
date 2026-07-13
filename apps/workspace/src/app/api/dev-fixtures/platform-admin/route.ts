@@ -3,9 +3,11 @@ import { db } from "@qoovex/db";
 import { AccessError, asAccessResponse } from "@shared/server/access-errors";
 import { requireIdentity } from "@shared/server/access-context-service";
 import { hashPassword } from "@shared/server/auth-password";
+import { deletePrivateBlobs, listPrivateBlobs } from "@shared/server/blob-storage-service";
 import { isCurrentDevAuthIdentity } from "@shared/server/dev-auth";
 
 async function requireDevFixtureAccess() {
+  if (process.env.QOOVEX_E2E_MODE !== "1" || process.env.NODE_ENV === "production") throw new AccessError("Risorsa non disponibile.", 404);
   const identity = await requireIdentity();
   if (!(await isCurrentDevAuthIdentity(identity.id))) throw new AccessError("Risorsa non disponibile.", 404);
   return identity;
@@ -150,23 +152,48 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   try {
     await requireDevFixtureAccess();
-    const body = await request.json() as { userId?: string; userIds?: string[]; organizationId?: string; runtimeErrorId?: string };
+    const body = await request.json() as { userId?: string; userIds?: string[]; fixtureEmails?: string[]; organizationId?: string; runtimeErrorId?: string };
     const userIds = [body.userId, ...(body.userIds ?? [])].filter((value): value is string => Boolean(value));
+    const fixtureEmails = (body.fixtureEmails ?? []).filter((value) => /^signup-e2e-\d{8,20}@example\.test$/.test(value));
+    const fixtureOrganization = body.organizationId
+      ? await db.organization.findFirst({ where: { id: body.organizationId, code: { startsWith: "MFA-" } }, select: { id: true } })
+      : null;
     await db.$transaction([
       db.runtimeErrorEvent.deleteMany({ where: { id: body.runtimeErrorId ?? "", source: "e2e", fingerprint: { startsWith: "e2e-" } } }),
-      db.organization.deleteMany({ where: { id: body.organizationId ?? "", code: { startsWith: "MFA-" } } }),
+      db.organization.deleteMany({ where: { id: fixtureOrganization?.id ?? "" } }),
       db.user.deleteMany({
         where: {
-          id: { in: userIds },
           email: { endsWith: "@example.test" },
-          OR: [
-            { username: { startsWith: "platform_e2e_" } },
-            { username: { startsWith: "mfa_owner_" } },
-            { username: { startsWith: "mfa_worker_" } },
+          AND: [
+            { OR: [{ id: { in: userIds } }, { email: { in: fixtureEmails } }] },
+            { OR: [
+              { username: { startsWith: "platform_e2e_" } },
+              { username: { startsWith: "mfa_owner_" } },
+              { username: { startsWith: "mfa_worker_" } },
+              { username: { startsWith: "signup_e2e_" } },
+            ] },
           ],
         },
       }),
     ]);
-    return Response.json({ deleted: true });
+    let deletedBlobs = 0;
+    if (fixtureOrganization) {
+      const prefix = `organizations/${fixtureOrganization.id}/`;
+      while (true) {
+        const page = await listPrivateBlobs({ prefix, limit: 100 });
+        const pathnames = page.blobs.filter((blob) => blob.pathname.startsWith(prefix)).map((blob) => blob.pathname);
+        if (!pathnames.length) break;
+        await deletePrivateBlobs(pathnames);
+        deletedBlobs += pathnames.length;
+      }
+    }
+    const [remainingUsers, organizationExists, remainingBlobPage] = await Promise.all([
+      db.user.count({ where: { OR: [{ id: { in: userIds } }, { email: { in: fixtureEmails } }] } }),
+      fixtureOrganization ? db.organization.count({ where: { id: fixtureOrganization.id } }) : Promise.resolve(0),
+      fixtureOrganization
+        ? listPrivateBlobs({ prefix: `organizations/${fixtureOrganization.id}/`, limit: 1 })
+        : Promise.resolve({ blobs: [] }),
+    ]);
+    return Response.json({ deleted: true, deletedBlobs, remainingUsers, organizationExists, remainingBlobs: remainingBlobPage.blobs.length });
   } catch (error) { return asAccessResponse(error); }
 }

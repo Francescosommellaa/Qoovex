@@ -4,8 +4,22 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => {
   const modelNames = [
     "organization",
+    "organizationMembership",
+    "organizationInvitation",
+    "user",
+    "account",
+    "session",
+    "userCredential",
+    "authCode",
+    "mfaRecoveryRequest",
+    "authDevice",
+    "mfaBackupCode",
+    "securityAuditEvent",
+    "authRateLimit",
     "worker",
     "jobSite",
+    "documentType",
+    "documentRequirement",
     "document",
     "documentVersion",
     "deadline",
@@ -19,6 +33,9 @@ const mocks = vi.hoisted(() => {
     "notificationPreference",
     "notificationEmailDelivery",
     "productAuditEvent",
+    "dataControlJob",
+    "supportSession",
+    "supportAuditEvent",
     "workerUserLink",
     "jobSiteUserAssignment",
     "jobSiteWorkerAssignment",
@@ -96,10 +113,13 @@ describe("data control services", () => {
   });
 
   it("exports metadata without Blob keys, token hashes, raw tokens or email bodies", async () => {
-    mocks.db.documentVersion.findMany.mockResolvedValue([{ id: "version-1", documentId: "doc-1", originalFileName: "doc.pdf", mimeType: "application/pdf", size: 1200, checksum: "sum", uploadedById: "user-1", createdAt: now, archivedAt: null }]);
-    mocks.db.evidence.findMany.mockResolvedValue([{ id: "evidence-1", jobSiteId: "jobsite-1", workerId: null, checklistItemId: null, type: "FILE", title: "Foto collegata", originalFileName: "photo.jpg", mimeType: "image/jpeg", size: 200, createdById: "user-1", createdAt: now, archivedAt: null }]);
-    mocks.db.shareLink.findMany.mockResolvedValue([{ id: "share-1", documentPackageId: "package-1", expiresAt: now, revokedAt: null, createdById: "user-1", createdAt: now, lastAccessedAt: null }]);
+    mocks.db.user.findMany.mockResolvedValue([{ id: "user-1", name: "Mario", email: "mario@example.test", emailVerified: now, firstName: "Mario", lastName: "Rossi", username: "mario", usernameOnboarded: true, profileOnboarded: true, avatarBlobPathname: "organizations/org-1/avatars/private.png", phoneNumber: null, platformRole: "USER", authVersion: 1, suspendedAt: null, suspensionReason: null, mfaEnabled: true, totpPendingCreatedAt: null, totpVerifiedAt: now, usernameChangedAt: null, createdAt: now, updatedAt: now }]);
+    mocks.db.documentVersion.findMany.mockResolvedValue([{ id: "version-1", organizationId: "org-1", documentId: "doc-1", originalFileName: "doc.pdf", mimeType: "application/pdf", size: 1200, checksum: "sum", uploadedById: "user-1", createdAt: now, archivedAt: null }]);
+    mocks.db.evidence.findMany.mockResolvedValue([{ id: "evidence-1", organizationId: "org-1", jobSiteId: "jobsite-1", workerId: null, checklistItemId: null, type: "FILE", title: "Foto collegata", description: null, originalFileName: "photo.jpg", mimeType: "image/jpeg", size: 200, createdById: "user-1", createdAt: now, archivedAt: null }]);
+    mocks.db.shareLink.findMany.mockResolvedValue([{ id: "share-1", organizationId: "org-1", documentPackageId: "package-1", expiresAt: now, revokedAt: null, createdById: "user-1", createdAt: now, lastAccessedAt: null }]);
     mocks.db.productAuditEvent.findMany.mockResolvedValue([{ id: "audit-1", actorUserId: "user-1", actorRole: "OWNER", action: "DOCUMENT_VERSION_DOWNLOADED", entityType: "DOCUMENT_VERSION", entityId: "version-1", outcome: "SUCCESS", metadata: { mimeType: "application/pdf", blobKey: "private", tokenHash: "hash", emailBody: "body" }, requestId: null, supportSessionId: null, createdAt: now }]);
+    mocks.db.authCode.findMany.mockResolvedValue([{ id: "code-1", userId: "user-1", email: "mario@example.test", purpose: "MFA_ENROLLMENT", attempts: 1, maxAttempts: 5, expiresAt: now, consumedAt: now, metadata: { token: "private", reasonCode: "verified" }, createdAt: now }]);
+    mocks.db.authRateLimit.findMany.mockResolvedValue([{ userId: "user-1", bucket: "signin", count: 2, resetAt: now, createdAt: now, updatedAt: now }]);
 
     const result = await buildDataExport();
     const serialized = JSON.stringify(result);
@@ -107,6 +127,10 @@ describe("data control services", () => {
     expect(mocks.db.documentVersion.findMany.mock.calls[0][0].select).not.toHaveProperty("blobKey");
     expect(mocks.db.evidence.findMany.mock.calls[0][0].select).not.toHaveProperty("blobKey");
     expect(mocks.db.shareLink.findMany.mock.calls[0][0].select).not.toHaveProperty("tokenHash");
+    expect(mocks.db.user.findMany.mock.calls[1][0].select).not.toHaveProperty("totpSecretEncrypted");
+    expect(mocks.db.authCode.findMany.mock.calls[0][0].select).not.toHaveProperty("codeHash");
+    expect(mocks.db.authRateLimit.findMany.mock.calls[0][0].select).not.toHaveProperty("key");
+    expect(result).toMatchObject({ memberProfiles: [{ id: "user-1", hasAvatar: true }], auth: { rateLimits: [{ bucket: "signin", count: 2 }] } });
     expect(serialized).not.toMatch(/blobKey|tokenHash|rawToken|downloadUrl|emailBody|fileContent|password|secret|private|hash|body/);
     expect(mocks.recordProductAuditEventBestEffort).toHaveBeenCalledWith(expect.objectContaining({ action: "DATA_EXPORT_GENERATED" }));
   });

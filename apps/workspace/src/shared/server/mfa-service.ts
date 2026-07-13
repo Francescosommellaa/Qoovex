@@ -165,14 +165,14 @@ function signMfaCookiePayload(payload: string) {
 }
 
 async function assertMfaAttemptLimits(userId: string, ipHash?: string | null) {
-  await assertPersistentRateLimit({ identifier: userId, bucket: "mfa-factor", limit: 5, windowMs: 15 * 60 * 1000 });
+  await assertPersistentRateLimit({ identifier: userId, bucket: "mfa-factor", limit: 5, windowMs: 15 * 60 * 1000, userId });
   if (ipHash) {
     await assertPersistentRateLimit({ identifier: ipHash, bucket: "mfa-factor-ip", limit: 20, windowMs: 15 * 60 * 1000 });
   }
 }
 
 async function assertMfaMutationLimit(userId: string) {
-  await assertPersistentRateLimit({ identifier: userId, bucket: "mfa-mutation", limit: 3, windowMs: 60 * 60 * 1000 });
+  await assertPersistentRateLimit({ identifier: userId, bucket: "mfa-mutation", limit: 3, windowMs: 60 * 60 * 1000, userId });
 }
 
 async function notifySecurityEventBestEffort(input: {

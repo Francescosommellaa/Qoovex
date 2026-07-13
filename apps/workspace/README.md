@@ -34,7 +34,7 @@ La route `/audit-log` e l'API `/api/audit-log` espongono al solo `OWNER` un audi
 
 La route `/access` permette a `OWNER` e `ADMIN` di creare collegamenti operativi utente-lavoratore e assegnazioni cantiere. `SITE_MANAGER` e `WORKER` leggono solo risorse assegnate tramite filtri server-side; la lettura esterna resta confinata agli share link.
 
-La route `/data-control` e le API `/api/data/*` sono owner-only e mostrano inventario dati, export metadata JSON e retention operativa. L'export e i DTO non includono file, allegati, `blobKey`, pathname, token, hash, URL Blob, body email o note libere escluse. La retention non cancella automaticamente nulla e non elimina Blob.
+La route `/data-control` e le API `/api/data/*` sono owner-only e mostrano inventario dati, export metadata JSON e retention operativa. L'inventario e l'export coprono anche tipi/requisiti documento, membership e inviti, job data-control, supporto e metadata auth attribuibili. L'export usa DTO allow-list e non include file, allegati, `blobKey`, pathname, token, hash, URL Blob, body email o segreti provider. La retention non cancella automaticamente nulla e non elimina Blob.
 
 Boundary:
 - i servizi server-specifici restano in `src/shared/server`;

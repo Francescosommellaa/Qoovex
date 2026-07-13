@@ -116,6 +116,33 @@ describe("data-control job service", () => {
     expect(JSON.stringify(response)).not.toMatch(/blobKey|pathname|organizations\//i);
   });
 
+  it("scans every Blob page and finds an orphan beyond the first 500 objects", async () => {
+    const referenced = Array.from({ length: 500 }, (_, index) => ({ blobKey: `organizations/org-1/referenced-${index}.pdf` }));
+    mocks.db.documentVersion.findMany.mockResolvedValue(referenced);
+    mocks.db.dataControlJob.findMany.mockResolvedValue([]);
+    mocks.listPrivateBlobs
+      .mockResolvedValueOnce({
+        cursor: "page-2",
+        hasMore: true,
+        blobs: referenced.map(({ blobKey }) => ({ pathname: blobKey, uploadedAt: new Date(0) })),
+      })
+      .mockResolvedValueOnce({
+        cursor: undefined,
+        hasMore: false,
+        blobs: [{ pathname: "organizations/org-1/orphan-501.pdf", uploadedAt: new Date(0) }],
+      });
+
+    await expect(getBlobOrphanDryRun()).resolves.toMatchObject({ scanned: 501, referenced: 500, orphanCount: 1, deletableCount: 1 });
+    expect(mocks.listPrivateBlobs).toHaveBeenNthCalledWith(2, expect.objectContaining({ cursor: "page-2" }));
+  });
+
+  it("fails closed when Blob reports another page without a cursor", async () => {
+    mocks.db.dataControlJob.findMany.mockResolvedValue([]);
+    mocks.listPrivateBlobs.mockResolvedValue({ cursor: undefined, hasMore: true, blobs: [] });
+
+    await expect(getBlobOrphanDryRun()).rejects.toThrow("BLOB_LIST_CURSOR_MISSING");
+  });
+
   it("returns the existing deletion job when the active key races", async () => {
     const existing = job("ORGANIZATION_DELETE");
     mocks.db.dataControlJob.create.mockRejectedValue(new mocks.PrismaClientKnownRequestError("P2002"));

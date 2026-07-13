@@ -1,6 +1,6 @@
 import "server-only";
 
-import { db } from "@qoovex/db";
+import { db, type Prisma } from "@qoovex/db";
 import type { EmailDigestFrequency, NotificationType, OrganizationRole, ScheduledEmailDigestRunResponse } from "@qoovex/types";
 import { getDigestNotifications, getNotificationsUrl, recordNotificationEmailDelivery, toEmailItem } from "./notification-email-service";
 import { sendTransactionalEmail, TransactionalEmailError } from "./transactional-email-service";
@@ -10,6 +10,23 @@ import { recordProductAuditEventBestEffort } from "./product-audit-service";
 const SCHEDULED_EMAIL_ROLES: OrganizationRole[] = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"];
 const DAY_MS = 24 * 60 * 60 * 1000;
 const WEEK_MS = 7 * DAY_MS;
+const DIGEST_PAGE_SIZE = 100;
+
+const digestPreferenceSelect = {
+  id: true,
+  organizationId: true,
+  userId: true,
+  emailDigestFrequency: true,
+  emailDigestHour: true,
+  deadlineNotificationsEnabled: true,
+  documentNotificationsEnabled: true,
+  packageNotificationsEnabled: true,
+  systemNotificationsEnabled: true,
+  lastDigestSentAt: true,
+  user: { select: { email: true, emailVerified: true } },
+} as const;
+
+type DigestPreference = Prisma.NotificationPreferenceGetPayload<{ select: typeof digestPreferenceSelect }>;
 
 function getRomeHour(now: Date) {
   const hourPart = new Intl.DateTimeFormat("en-GB", {
@@ -58,30 +75,28 @@ async function hasAllowedMembership(input: { organizationId: string; userId: str
 }
 
 export async function runScheduledEmailDigest(now = new Date()): Promise<ScheduledEmailDigestRunResponse> {
-  const preferences = await db.notificationPreference.findMany({
-    where: {
-      emailDigestEnabled: true,
-      emailDigestFrequency: { in: ["DAILY", "WEEKLY"] },
-    },
-    select: {
-      id: true,
-      organizationId: true,
-      userId: true,
-      emailDigestFrequency: true,
-      emailDigestHour: true,
-      deadlineNotificationsEnabled: true,
-      documentNotificationsEnabled: true,
-      packageNotificationsEnabled: true,
-      systemNotificationsEnabled: true,
-      lastDigestSentAt: true,
-      user: { select: { email: true, emailVerified: true } },
-    },
-    orderBy: { updatedAt: "asc" },
-    take: 100,
-  });
+  const preferences: DigestPreference[] = [];
+  let cursor: string | undefined;
+  do {
+    const page = await db.notificationPreference.findMany({
+      where: {
+        emailDigestEnabled: true,
+        emailDigestFrequency: { in: ["DAILY", "WEEKLY"] },
+      },
+      select: digestPreferenceSelect,
+      orderBy: { id: "asc" },
+      take: DIGEST_PAGE_SIZE,
+      ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+    });
+    preferences.push(...page);
+    if (page.length < DIGEST_PAGE_SIZE) break;
+    cursor = page.at(-1)?.id;
+    if (!cursor) throw new Error("DIGEST_CURSOR_MISSING");
+  } while (true);
 
   const result = { scanned: preferences.length, sent: 0, failed: 0, skipped: 0 };
   const currentHour = getRomeHour(now);
+  const reminderSyncs = new Map<string, Promise<unknown>>();
 
   for (const preference of preferences) {
     if (currentHour < preference.emailDigestHour || isTooRecent(preference.emailDigestFrequency, preference.lastDigestSentAt, now)) {
@@ -89,42 +104,50 @@ export async function runScheduledEmailDigest(now = new Date()): Promise<Schedul
       continue;
     }
 
-    if (!(await hasAllowedMembership({ organizationId: preference.organizationId, userId: preference.userId }))) {
-      result.skipped += 1;
-      continue;
-    }
-
-    if (!preference.user.email || !preference.user.emailVerified) {
-      result.skipped += 1;
-      continue;
-    }
-
-    await syncOrganizationReminderRecords(preference.organizationId, now);
-    const digest = await getDigestNotifications(preference.organizationId, preference.userId);
-    digest.notifications = digest.notifications.filter((notification) => notificationCategoryEnabled(notification.type, preference));
-    if (!digest.notifications.length) {
-      await recordNotificationEmailDelivery({
-        organizationId: preference.organizationId,
-        userId: preference.userId,
-        type: "DIGEST",
-        recipientEmail: preference.user.email,
-        notificationCount: 0,
-        status: "SKIPPED",
-        errorCode: "NO_NOTIFICATIONS",
-      });
-      await recordProductAuditEventBestEffort({
-        organizationId: preference.organizationId,
-        actorUserId: preference.userId,
-        action: "SCHEDULED_EMAIL_DIGEST_RUN",
-        entityType: "EMAIL_DELIVERY",
-        outcome: "SUCCESS",
-        metadata: { notificationCount: 0, deliveryStatus: "SKIPPED", reasonCode: "NO_NOTIFICATIONS", frequency: preference.emailDigestFrequency },
-      });
-      result.skipped += 1;
-      continue;
-    }
-
+    let notificationCount = 0;
     try {
+      if (!(await hasAllowedMembership({ organizationId: preference.organizationId, userId: preference.userId }))) {
+        result.skipped += 1;
+        continue;
+      }
+
+      if (!preference.user.email || !preference.user.emailVerified) {
+        result.skipped += 1;
+        continue;
+      }
+
+      let reminderSync = reminderSyncs.get(preference.organizationId);
+      if (!reminderSync) {
+        reminderSync = syncOrganizationReminderRecords(preference.organizationId, now);
+        reminderSyncs.set(preference.organizationId, reminderSync);
+      }
+      await reminderSync;
+
+      const digest = await getDigestNotifications(preference.organizationId, preference.userId);
+      digest.notifications = digest.notifications.filter((notification) => notificationCategoryEnabled(notification.type, preference));
+      notificationCount = digest.notifications.length;
+      if (!notificationCount) {
+        await recordNotificationEmailDelivery({
+          organizationId: preference.organizationId,
+          userId: preference.userId,
+          type: "DIGEST",
+          recipientEmail: preference.user.email,
+          notificationCount: 0,
+          status: "SKIPPED",
+          errorCode: "NO_NOTIFICATIONS",
+        });
+        await recordProductAuditEventBestEffort({
+          organizationId: preference.organizationId,
+          actorUserId: preference.userId,
+          action: "SCHEDULED_EMAIL_DIGEST_RUN",
+          entityType: "EMAIL_DELIVERY",
+          outcome: "SUCCESS",
+          metadata: { notificationCount: 0, deliveryStatus: "SKIPPED", reasonCode: "NO_NOTIFICATIONS", frequency: preference.emailDigestFrequency },
+        });
+        result.skipped += 1;
+        continue;
+      }
+
       const sentAt = new Date();
       const delivery = await sendTransactionalEmail({
         to: preference.user.email,
@@ -141,7 +164,7 @@ export async function runScheduledEmailDigest(now = new Date()): Promise<Schedul
         userId: preference.userId,
         type: "DIGEST",
         recipientEmail: preference.user.email,
-        notificationCount: digest.notifications.length,
+        notificationCount,
         status: "SENT",
         providerMessageId: delivery.providerMessageId,
         sentAt,
@@ -157,26 +180,32 @@ export async function runScheduledEmailDigest(now = new Date()): Promise<Schedul
         action: "SCHEDULED_EMAIL_DIGEST_RUN",
         entityType: "EMAIL_DELIVERY",
         outcome: "SUCCESS",
-        metadata: { notificationCount: digest.notifications.length, deliveryStatus: "SENT", frequency: preference.emailDigestFrequency },
+        metadata: { notificationCount, deliveryStatus: "SENT", frequency: preference.emailDigestFrequency },
       });
       result.sent += 1;
     } catch (error) {
-      await recordNotificationEmailDelivery({
-        organizationId: preference.organizationId,
-        userId: preference.userId,
-        type: "DIGEST",
-        recipientEmail: preference.user.email,
-        notificationCount: digest.notifications.length,
-        status: "FAILED",
-        errorCode: error instanceof TransactionalEmailError ? "PROVIDER_ERROR" : "EMAIL_ERROR",
-      });
+      if (preference.user.email) {
+        try {
+          await recordNotificationEmailDelivery({
+            organizationId: preference.organizationId,
+            userId: preference.userId,
+            type: "DIGEST",
+            recipientEmail: preference.user.email,
+            notificationCount,
+            status: "FAILED",
+            errorCode: error instanceof TransactionalEmailError ? "PROVIDER_ERROR" : "EMAIL_ERROR",
+          });
+        } catch {
+          // The runner must continue with the remaining organizations and users.
+        }
+      }
       await recordProductAuditEventBestEffort({
         organizationId: preference.organizationId,
         actorUserId: preference.userId,
         action: "SCHEDULED_EMAIL_DIGEST_RUN",
         entityType: "EMAIL_DELIVERY",
         outcome: "FAILED",
-        metadata: { notificationCount: digest.notifications.length, deliveryStatus: "FAILED", frequency: preference.emailDigestFrequency },
+        metadata: { notificationCount, deliveryStatus: "FAILED", frequency: preference.emailDigestFrequency },
       });
       result.failed += 1;
     }

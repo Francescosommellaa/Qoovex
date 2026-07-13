@@ -24,6 +24,7 @@ export async function GET(request: Request) {
       bucket: "auth:username-availability",
       limit: 90,
       windowMs: 60_000,
+      userId,
     });
 
     const currentUser = userId ? await findUserIdentityById(userId) : null;

@@ -7,6 +7,11 @@ export type PlatformRole = (typeof platformRoles)[number];
 export const organizationRoles = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 export type OrganizationRole = (typeof organizationRoles)[number];
 
+export type SupportAuditAction = "READ" | "WRITE" | "SENSITIVE" | "EXPORT";
+export type AuthCodePurpose = "EMAIL_VERIFICATION" | "PASSWORD_RESET" | "EMAIL_CHANGE" | "MFA_ENROLLMENT" | "MFA_RECOVERY";
+export type MfaRecoveryMode = "SELF_EMAIL" | "OWNER_APPROVAL";
+export type MfaRecoveryStatus = "PENDING" | "APPROVED" | "DENIED" | "SETUP_STARTED" | "COMPLETED" | "EXPIRED";
+
 export const organizationPermissions = [
   "organization:read",
   "organization:update",
@@ -1019,6 +1024,8 @@ export interface DataInventoryResponse {
   counts: {
     workers: DataRecordCount;
     jobSites: DataRecordCount;
+    documentTypes: DataRecordCount;
+    documentRequirements: DataRecordCount;
     documents: DataRecordCount;
     documentVersions: DataRecordCount;
     deadlines: DataRecordCount;
@@ -1035,7 +1042,116 @@ export interface DataInventoryResponse {
     workerUserLinks: DataRecordCount;
     jobSiteUserAssignments: DataRecordCount;
     jobSiteWorkerAssignments: DataRecordCount;
+    memberProfiles: DataRecordCount;
+    memberships: DataRecordCount;
+    invitations: DataRecordCount;
+    dataControlJobs: DataRecordCount;
+    supportSessions: DataRecordCount;
+    supportEvents: DataRecordCount;
+    authProviders: DataRecordCount;
+    authSessions: DataRecordCount;
+    authCredentials: DataRecordCount;
+    authCodes: DataRecordCount;
+    mfaRecoveryRequests: DataRecordCount;
+    authDevices: DataRecordCount;
+    mfaBackupCodes: DataRecordCount;
+    securityAuditEvents: DataRecordCount;
+    authRateLimits: DataRecordCount;
   };
+}
+
+export interface DataExportMemberProfile {
+  id: EntityId;
+  name?: string | null;
+  email: string;
+  emailVerified?: string | null;
+  firstName: string;
+  lastName?: string | null;
+  username: string;
+  usernameOnboarded: boolean;
+  profileOnboarded: boolean;
+  phoneNumber?: string | null;
+  platformRole: PlatformRole;
+  authVersion: number;
+  suspendedAt?: string | null;
+  suspensionReason?: string | null;
+  mfaEnabled: boolean;
+  totpPendingCreatedAt?: string | null;
+  totpVerifiedAt?: string | null;
+  usernameChangedAt?: string | null;
+  hasAvatar: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DataExportOrganizationMembership {
+  id: EntityId;
+  userId: EntityId;
+  role: OrganizationRole;
+  createdAt: string;
+  updatedAt: string;
+  revokedAt?: string | null;
+}
+
+export interface DataExportOrganizationInvitation {
+  id: EntityId;
+  email: string;
+  role: OrganizationRole;
+  invitedById: EntityId;
+  expiresAt: string;
+  acceptedAt?: string | null;
+  revokedAt?: string | null;
+  createdAt: string;
+}
+
+export interface DataExportDocumentType extends DocumentTypeSummary {
+  description?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  archivedAt?: string | null;
+}
+
+export interface DataExportDocumentRequirement extends Omit<DocumentRequirementSummary, "documentTypeName" | "jobSiteName"> {
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DataExportDataControlJob extends DataControlJobResponse {
+  attemptCount: number;
+  nextAttemptAt: string;
+}
+
+export interface DataExportSupportSession {
+  id: EntityId;
+  actorId: EntityId;
+  reason: string;
+  expiresAt: string;
+  sensitiveConfirmedUntil?: string | null;
+  endedAt?: string | null;
+  createdAt: string;
+}
+
+export interface DataExportSupportEvent {
+  id: EntityId;
+  supportSessionId: EntityId;
+  actorId: EntityId;
+  action: SupportAuditAction;
+  resourceType: string;
+  resourceId?: EntityId | null;
+  metadata?: AuditMetadata | null;
+  createdAt: string;
+}
+
+export interface DataExportAuthData {
+  providers: Array<{ userId: EntityId; type: string; provider: string }>;
+  sessions: Array<{ userId: EntityId; expiresAt: string }>;
+  credentials: Array<{ userId: EntityId; passwordUpdatedAt: string; passwordResetRequired: boolean; createdAt: string; updatedAt: string }>;
+  codes: Array<{ id: EntityId; userId?: EntityId | null; email: string; purpose: AuthCodePurpose; attempts: number; maxAttempts: number; expiresAt: string; consumedAt?: string | null; metadata?: AuditMetadata | null; createdAt: string }>;
+  mfaRecoveryRequests: Array<{ id: EntityId; userId: EntityId; mode: MfaRecoveryMode; status: MfaRecoveryStatus; emailVerifiedAt: string; expiresAt: string; approvedById?: EntityId | null; approvedAt?: string | null; deniedById?: EntityId | null; deniedAt?: string | null; setupStartedAt?: string | null; completedAt?: string | null; createdAt: string; updatedAt: string }>;
+  devices: Array<{ id: EntityId; userId: EntityId; label?: string | null; firstSeenAt: string; lastSeenAt: string; createdAt: string; updatedAt: string }>;
+  backupCodes: Array<{ id: EntityId; userId: EntityId; usedAt?: string | null; createdAt: string }>;
+  securityEvents: Array<{ id: EntityId; userId?: EntityId | null; email?: string | null; type: string; metadata?: AuditMetadata | null; createdAt: string }>;
+  rateLimits: Array<{ userId: EntityId; bucket: string; count: number; resetAt: string; createdAt: string; updatedAt: string }>;
 }
 
 export interface DataExportResponse {
@@ -1044,29 +1160,39 @@ export interface DataExportResponse {
     id: EntityId;
     name: string;
     code: string;
+    createdById?: EntityId | null;
     createdAt: string;
     updatedAt: string;
   };
   counts: DataInventoryResponse["counts"];
-  workers: Array<Record<string, unknown>>;
-  jobSites: Array<Record<string, unknown>>;
-  documents: Array<Record<string, unknown>>;
-  documentVersions: Array<Record<string, unknown>>;
-  deadlines: Array<Record<string, unknown>>;
-  checklists: Array<Record<string, unknown>>;
-  checklistItems: Array<Record<string, unknown>>;
-  evidence: Array<Record<string, unknown>>;
-  documentPackages: Array<Record<string, unknown>>;
-  documentPackageItems: Array<Record<string, unknown>>;
-  shareLinks: Array<Record<string, unknown>>;
-  notifications: Array<Record<string, unknown>>;
-  notificationPreferences: Array<Record<string, unknown>>;
-  emailDeliveries: Array<Record<string, unknown>>;
+  memberProfiles: DataExportMemberProfile[];
+  memberships: DataExportOrganizationMembership[];
+  invitations: DataExportOrganizationInvitation[];
+  documentTypes: DataExportDocumentType[];
+  documentRequirements: DataExportDocumentRequirement[];
+  workers: WorkerResponse[];
+  jobSites: JobSiteResponse[];
+  documents: Array<DocumentSummary & { notes?: string | null; reviewedAt?: string | null; reviewedById?: EntityId | null; createdAt: string; updatedAt: string; archivedAt?: string | null }>;
+  documentVersions: DocumentVersionResponse[];
+  deadlines: Array<DeadlineSummary & { notes?: string | null; createdAt: string; updatedAt: string; archivedAt?: string | null }>;
+  checklists: ChecklistResponse[];
+  checklistItems: ChecklistItemResponse[];
+  evidence: EvidenceResponse[];
+  documentPackages: DocumentPackageResponse[];
+  documentPackageItems: DocumentPackageItemResponse[];
+  shareLinks: ShareLinkResponse[];
+  notifications: NotificationResponse[];
+  notificationPreferences: Array<NotificationPreferenceResponse & { userId: EntityId }>;
+  emailDeliveries: Array<NotificationEmailDeliveryResponse & { userId: EntityId; recipientEmail: string }>;
   auditEvents: AuditLogEventResponse[];
+  dataControlJobs: DataExportDataControlJob[];
+  supportSessions: DataExportSupportSession[];
+  supportEvents: DataExportSupportEvent[];
+  auth: DataExportAuthData;
   assignments: {
-    workerUserLinks: Array<Record<string, unknown>>;
-    jobSiteUserAssignments: Array<Record<string, unknown>>;
-    jobSiteWorkerAssignments: Array<Record<string, unknown>>;
+    workerUserLinks: Array<{ id: EntityId; workerId: EntityId; userId: EntityId; linkedById: EntityId; createdAt: string; updatedAt: string; archivedAt?: string | null }>;
+    jobSiteUserAssignments: Array<{ id: EntityId; jobSiteId: EntityId; userId: EntityId; assignmentRole: JobSiteUserAssignmentRole; assignedById: EntityId; createdAt: string; updatedAt: string; archivedAt?: string | null }>;
+    jobSiteWorkerAssignments: Array<{ id: EntityId; jobSiteId: EntityId; workerId: EntityId; assignedById: EntityId; createdAt: string; updatedAt: string; archivedAt?: string | null }>;
   };
 }
 

@@ -6,14 +6,16 @@ import { validateMigrationHistory } from "./migration-history";
 
 const baseline = { name: "20260712010000_single_company_baseline", checksum: "baseline" };
 const forward = { name: "20260712020000_single_membership_forward", checksum: "forward" };
+const mfa = { name: "20260713010000_mfa_hardening", checksum: "mfa" };
+const privacy = { name: "20260713020000_rate_limit_privacy_atomicity", checksum: "privacy" };
 
 test("accetta un prefisso canonico con una migration pendente", () => {
   const result = validateMigrationHistory({
     applied: [{ ...baseline, finished: true, rolledBack: false }],
-    local: [baseline, forward],
+    local: [baseline, forward, mfa, privacy],
     allowPending: true,
   });
-  assert.deepEqual(result.pending, [forward]);
+  assert.deepEqual(result.pending, [forward, mfa, privacy]);
 });
 
 test("rifiuta checksum divergenti", () => {
@@ -67,18 +69,18 @@ test("limita la modalita CI al database locale qoovex_ci", () => {
 
 test("richiede approvazione, backup e target esatto in produzione", () => {
   assert.throws(
-    () => assertProductionApproval({ approved: undefined, backupRef: undefined, expectedLastMigration: undefined, lastMigration: forward.name }),
+    () => assertProductionApproval({ approved: undefined, backupRef: undefined, expectedLastMigration: undefined, lastMigration: privacy.name }),
     /APPROVED/,
   );
   assert.throws(
-    () => assertProductionApproval({ approved: "1", backupRef: undefined, expectedLastMigration: forward.name, lastMigration: forward.name }),
+    () => assertProductionApproval({ approved: "1", backupRef: undefined, expectedLastMigration: privacy.name, lastMigration: privacy.name }),
     /BACKUP_REF/,
   );
   assert.throws(
-    () => assertProductionApproval({ approved: "1", backupRef: "dump-sha256", expectedLastMigration: baseline.name, lastMigration: forward.name }),
+    () => assertProductionApproval({ approved: "1", backupRef: "dump-sha256", expectedLastMigration: baseline.name, lastMigration: privacy.name }),
     /Target inatteso/,
   );
   assert.doesNotThrow(
-    () => assertProductionApproval({ approved: "1", backupRef: "dump-sha256", expectedLastMigration: forward.name, lastMigration: forward.name }),
+    () => assertProductionApproval({ approved: "1", backupRef: "dump-sha256", expectedLastMigration: privacy.name, lastMigration: privacy.name }),
   );
 });
