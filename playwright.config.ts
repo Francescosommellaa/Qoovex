@@ -3,7 +3,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 const workspaceUrl = process.env.E2E_WORKSPACE_URL ?? "http://localhost:3001";
 const sinkPort = 43119;
-const sinkSecret = crypto.randomBytes(32).toString("hex");
+const sinkSecret = process.env.QOOVEX_E2E_EMAIL_SINK_SECRET?.trim() || crypto.randomBytes(32).toString("hex");
 const sinkUrl = `http://127.0.0.1:${sinkPort}/messages`;
 process.env.QOOVEX_E2E_EMAIL_SINK_URL = sinkUrl;
 process.env.QOOVEX_E2E_EMAIL_SINK_SECRET = sinkSecret;

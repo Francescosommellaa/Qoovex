@@ -25,4 +25,13 @@ describe("GitHub workflow contracts", () => {
     expect(workflow).toContain("QOOVEX_E2E_BLOB_TARGET: ${{ vars.QOOVEX_E2E_BLOB_STORE_ID }}");
     expect(workflow).toContain("QOOVEX_E2E_RUN_ATTESTATION: I_ACKNOWLEDGE_FIXTURE_SCOPED_CLEANUP");
   });
+
+  it("keeps the authenticated E2E email sink secret stable across Playwright config loads", () => {
+    const config = readFileSync(resolve(process.cwd(), "../../playwright.config.ts"), "utf8");
+
+    expect(config).toContain(
+      'process.env.QOOVEX_E2E_EMAIL_SINK_SECRET?.trim() || crypto.randomBytes(32).toString("hex")',
+    );
+    expect(config).not.toContain('const sinkSecret = crypto.randomBytes(32).toString("hex")');
+  });
 });
