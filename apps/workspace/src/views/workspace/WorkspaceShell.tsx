@@ -1,40 +1,60 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { getWorkspaceAccessContext } from "@shared/server/access-context-service";
+import { AccessError } from "@shared/server/access-errors";
+import { getWorkspaceAccessContext, requirePrimaryIdentity } from "@shared/server/access-context-service";
 import { getEffectiveOrganizationRole } from "@shared/server/domain-access-service";
+import { getMfaStatusByUserId } from "@shared/server/mfa-service";
+import { AccountSecurityFlow } from "@/views/account-security/AccountSecurityFlow";
 import { WorkspaceNavigation } from "./WorkspaceNavigation";
-import { SupportSessionBanner } from "./WorkspaceSessionControls";
+import { SupportSessionBanner, WorkspaceLogoutButton } from "./WorkspaceSessionControls";
 import styles from "./WorkspaceShell.module.css";
 
-async function getNavigationRole() {
+async function getShellState() {
   try {
     const context = await getWorkspaceAccessContext();
-    return { context, role: getEffectiveOrganizationRole(context) };
-  } catch {
-    return null;
+    return { kind: "workspace" as const, context, role: getEffectiveOrganizationRole(context) };
+  } catch (error) {
+    if (error instanceof AccessError && error.code === "MFA_REQUIRED") {
+      const identity = await requirePrimaryIdentity();
+      const status = await getMfaStatusByUserId(identity.id);
+      if (status?.enabled) {
+        return {
+          kind: "mfa-required" as const,
+          platformRole: identity.platformRole,
+          status: { ...status, satisfied: false },
+        };
+      }
+    }
+    return { kind: "public" as const };
   }
 }
 
 export async function WorkspaceShell({ children }: { children: ReactNode }) {
-  const shellContext = await getNavigationRole();
+  const shellState = await getShellState();
+  const isWorkspace = shellState.kind === "workspace";
+  const isMfaRequired = shellState.kind === "mfa-required";
   return (
     <div className={styles.shell}>
       <header className={styles.topbar}>
         <div className={styles.topbarInner}>
           <div className={styles.brand}>
             <Link href="/dashboard">Qoovex</Link>
-            <span>{shellContext?.context.platformRole === "SUPER_ADMIN" ? "Operatore Qoovex" : "Workspace admin"}</span>
+            <span>{(isWorkspace ? shellState.context.platformRole : isMfaRequired ? shellState.platformRole : null) === "SUPER_ADMIN" ? "Operatore Qoovex" : "Workspace admin"}</span>
           </div>
-          <WorkspaceNavigation
-            authenticated={Boolean(shellContext)}
-            platformRole={shellContext?.context.platformRole ?? null}
-            role={shellContext?.role ?? null}
-            support={shellContext?.context.support ?? null}
-          />
+          {isMfaRequired ? <nav className={styles.nav} aria-label="Sessione"><WorkspaceLogoutButton /></nav> : (
+            <WorkspaceNavigation
+              authenticated={isWorkspace}
+              platformRole={isWorkspace ? shellState.context.platformRole : null}
+              role={isWorkspace ? shellState.role : null}
+              support={isWorkspace ? shellState.context.support : null}
+            />
+          )}
         </div>
       </header>
-      {shellContext?.context.support ? <SupportSessionBanner support={shellContext.context.support} /> : null}
-      <div className={styles.content}>{children}</div>
+      {isWorkspace && shellState.context.support ? <SupportSessionBanner support={shellState.context.support} /> : null}
+      <main className={styles.content}>
+        {isMfaRequired ? <AccountSecurityFlow initialStatus={shellState.status} mode="gate" /> : children}
+      </main>
     </div>
   );
 }

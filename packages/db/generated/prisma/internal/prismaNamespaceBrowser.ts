@@ -83,6 +83,7 @@ export const ModelName = {
   ProductAuditEvent: 'ProductAuditEvent',
   UserCredential: 'UserCredential',
   AuthCode: 'AuthCode',
+  MfaRecoveryRequest: 'MfaRecoveryRequest',
   AuthRateLimit: 'AuthRateLimit',
   SecurityAuditEvent: 'SecurityAuditEvent',
   RuntimeErrorEvent: 'RuntimeErrorEvent',
@@ -636,6 +637,28 @@ export const AuthCodeScalarFieldEnum = {
 } as const
 
 export type AuthCodeScalarFieldEnum = (typeof AuthCodeScalarFieldEnum)[keyof typeof AuthCodeScalarFieldEnum]
+
+
+export const MfaRecoveryRequestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  organizationId: 'organizationId',
+  mode: 'mode',
+  status: 'status',
+  activeKey: 'activeKey',
+  emailVerifiedAt: 'emailVerifiedAt',
+  expiresAt: 'expiresAt',
+  approvedById: 'approvedById',
+  approvedAt: 'approvedAt',
+  deniedById: 'deniedById',
+  deniedAt: 'deniedAt',
+  setupStartedAt: 'setupStartedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MfaRecoveryRequestScalarFieldEnum = (typeof MfaRecoveryRequestScalarFieldEnum)[keyof typeof MfaRecoveryRequestScalarFieldEnum]
 
 
 export const AuthRateLimitScalarFieldEnum = {

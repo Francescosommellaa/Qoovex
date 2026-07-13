@@ -1,5 +1,6 @@
 import "server-only";
 
+import crypto from "crypto";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@qoovex/db";
 import NextAuth from "next-auth";
@@ -49,6 +50,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user?.id) {
         token.sub = user.id;
+        token.authSessionId = crypto.randomUUID();
         const [credential, identity] = await Promise.all([
           db.userCredential.findUnique({ where: { userId: user.id }, select: { passwordUpdatedAt: true } }),
           db.user.findUnique({ where: { id: user.id }, select: { authVersion: true, platformRole: true, suspendedAt: true } }),
@@ -61,6 +63,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           token.platformRole = identity.platformRole;
         }
       } else if (token.sub) {
+        token.authSessionId ??= crypto.randomUUID();
         const [credential, identity] = await Promise.all([
           db.userCredential.findUnique({ where: { userId: token.sub }, select: { passwordUpdatedAt: true } }),
           db.user.findUnique({ where: { id: token.sub }, select: { authVersion: true, platformRole: true, suspendedAt: true } }),
@@ -84,6 +87,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.sub ?? "";
         session.user.platformRole = token.platformRole === "SUPER_ADMIN" ? "SUPER_ADMIN" : "USER";
+        session.user.authSessionId = typeof token.authSessionId === "string" ? token.authSessionId : "";
       }
 
       return session;

@@ -11,6 +11,22 @@ enum AuthCodePurpose {
   EMAIL_VERIFICATION
   PASSWORD_RESET
   EMAIL_CHANGE
+  MFA_ENROLLMENT
+  MFA_RECOVERY
+}
+
+enum MfaRecoveryMode {
+  SELF_EMAIL
+  OWNER_APPROVAL
+}
+
+enum MfaRecoveryStatus {
+  PENDING
+  APPROVED
+  DENIED
+  SETUP_STARTED
+  COMPLETED
+  EXPIRED
 }
 
 enum PlatformRole {
@@ -270,16 +286,16 @@ model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
-  provider           String
+  provider          String
   providerAccountId String
-  refresh_token      String? @db.Text
-  access_token       String? @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String? @db.Text
-  session_state      String?
-  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -305,116 +321,120 @@ model VerificationToken {
 }
 
 model User {
-  id                         String               @id @default(cuid())
-  name                       String?
-  email                      String               @unique
-  emailVerified              DateTime?
-  image                      String?
-  firstName                  String               @default("")
-  lastName                   String?
-  username                   String               @unique
-  usernameOnboarded          Boolean              @default(true)
-  profileOnboarded           Boolean              @default(true)
-  avatarBlobPathname         String?
-  phoneNumber                String?
-  platformRole               PlatformRole         @default(USER)
-  authVersion                Int                  @default(1)
-  suspendedAt                DateTime?
-  suspensionReason           String?
-  accounts                   Account[]
-  sessions                   Session[]
-  credential                 UserCredential?
-  authCodes                  AuthCode[]
-  securityEvents             SecurityAuditEvent[]
-  mfaEnabled                 Boolean              @default(false)
-  totpSecretEncrypted        String?
-  totpSecretNonce            String?
-  totpPendingSecretEncrypted String?
-  totpPendingSecretNonce     String?
-  totpPendingCreatedAt       DateTime?
-  totpVerifiedAt             DateTime?
-  usernameChangedAt          DateTime?
-  mfaBackupCodes             MfaBackupCode[]
-  authDevices                AuthDevice[]
-  organizationMembership     OrganizationMembership?
-  createdOrganizations       Organization[]           @relation("OrganizationCreator")
-  sentOrganizationInvitations OrganizationInvitation[] @relation("InvitationSender")
-  supportSessions            SupportSession[]      @relation("SupportActor")
-  supportAuditEvents         SupportAuditEvent[]   @relation("SupportAuditActor")
-  productAuditEvents         ProductAuditEvent[]   @relation("ProductAuditActor")
-  reviewedDocuments          Document[]            @relation("DocumentReviewer")
-  uploadedDocumentVersions   DocumentVersion[]     @relation("DocumentVersionUploader")
-  completedChecklistItems    ChecklistItem[]       @relation("ChecklistItemCompleter")
-  createdEvidence            Evidence[]            @relation("EvidenceCreator")
-  createdDocumentPackages    DocumentPackage[]     @relation("DocumentPackageCreator")
-  createdShareLinks          ShareLink[]           @relation("ShareLinkCreator")
-  notifications              Notification[]
-  notificationPreferences    NotificationPreference[]
+  id                          String                      @id @default(cuid())
+  name                        String?
+  email                       String                      @unique
+  emailVerified               DateTime?
+  image                       String?
+  firstName                   String                      @default("")
+  lastName                    String?
+  username                    String                      @unique
+  usernameOnboarded           Boolean                     @default(true)
+  profileOnboarded            Boolean                     @default(true)
+  avatarBlobPathname          String?
+  phoneNumber                 String?
+  platformRole                PlatformRole                @default(USER)
+  authVersion                 Int                         @default(1)
+  suspendedAt                 DateTime?
+  suspensionReason            String?
+  accounts                    Account[]
+  sessions                    Session[]
+  credential                  UserCredential?
+  authCodes                   AuthCode[]
+  securityEvents              SecurityAuditEvent[]
+  mfaEnabled                  Boolean                     @default(false)
+  totpSecretEncrypted         String?
+  totpSecretNonce             String?
+  totpPendingSecretEncrypted  String?
+  totpPendingSecretNonce      String?
+  totpPendingCreatedAt        DateTime?
+  totpVerifiedAt              DateTime?
+  usernameChangedAt           DateTime?
+  mfaBackupCodes              MfaBackupCode[]
+  mfaRecoveryRequests         MfaRecoveryRequest[]        @relation("MfaRecoverySubject")
+  approvedMfaRecoveries       MfaRecoveryRequest[]        @relation("MfaRecoveryApprover")
+  deniedMfaRecoveries         MfaRecoveryRequest[]        @relation("MfaRecoveryDenier")
+  authDevices                 AuthDevice[]
+  organizationMembership      OrganizationMembership?
+  createdOrganizations        Organization[]              @relation("OrganizationCreator")
+  sentOrganizationInvitations OrganizationInvitation[]    @relation("InvitationSender")
+  supportSessions             SupportSession[]            @relation("SupportActor")
+  supportAuditEvents          SupportAuditEvent[]         @relation("SupportAuditActor")
+  productAuditEvents          ProductAuditEvent[]         @relation("ProductAuditActor")
+  reviewedDocuments           Document[]                  @relation("DocumentReviewer")
+  uploadedDocumentVersions    DocumentVersion[]           @relation("DocumentVersionUploader")
+  completedChecklistItems     ChecklistItem[]             @relation("ChecklistItemCompleter")
+  createdEvidence             Evidence[]                  @relation("EvidenceCreator")
+  createdDocumentPackages     DocumentPackage[]           @relation("DocumentPackageCreator")
+  createdShareLinks           ShareLink[]                 @relation("ShareLinkCreator")
+  notifications               Notification[]
+  notificationPreferences     NotificationPreference[]
   notificationEmailDeliveries NotificationEmailDelivery[]
-  requestedDataControlJobs   DataControlJob[]      @relation("DataControlJobRequester")
-  resolvedRuntimeErrors      RuntimeErrorEvent[]   @relation("RuntimeErrorResolver")
-  workerUserLinks            WorkerUserLink[]
-  linkedWorkerUserLinks      WorkerUserLink[]       @relation("WorkerUserLinkCreator")
-  jobSiteUserAssignments     JobSiteUserAssignment[]
-  assignedJobSiteUsers       JobSiteUserAssignment[] @relation("JobSiteUserAssignmentCreator")
-  assignedJobSiteWorkers     JobSiteWorkerAssignment[] @relation("JobSiteWorkerAssignmentCreator")
-  createdAt                  DateTime              @default(now())
-  updatedAt                  DateTime              @updatedAt
+  requestedDataControlJobs    DataControlJob[]            @relation("DataControlJobRequester")
+  resolvedRuntimeErrors       RuntimeErrorEvent[]         @relation("RuntimeErrorResolver")
+  workerUserLinks             WorkerUserLink[]
+  linkedWorkerUserLinks       WorkerUserLink[]            @relation("WorkerUserLinkCreator")
+  jobSiteUserAssignments      JobSiteUserAssignment[]
+  assignedJobSiteUsers        JobSiteUserAssignment[]     @relation("JobSiteUserAssignmentCreator")
+  assignedJobSiteWorkers      JobSiteWorkerAssignment[]   @relation("JobSiteWorkerAssignmentCreator")
+  createdAt                   DateTime                    @default(now())
+  updatedAt                   DateTime                    @updatedAt
 }
 
 model Organization {
-  id             String                @id @default(cuid())
-  name           String
-  code           String                @unique
-  createdById    String?
-  createdAt      DateTime              @default(now())
-  updatedAt      DateTime              @updatedAt
-  createdBy      User?                 @relation("OrganizationCreator", fields: [createdById], references: [id], onDelete: SetNull)
-  memberships    OrganizationMembership[]
-  invitations    OrganizationInvitation[]
-  supportSessions SupportSession[]
-  supportEvents  SupportAuditEvent[]
-  productAuditEvents ProductAuditEvent[]
-  workers        Worker[]
-  jobSites       JobSite[]
-  documentTypes  DocumentType[]
-  documents      Document[]
-  documentVersions DocumentVersion[]
-  documentRequirements DocumentRequirement[]
-  deadlines      Deadline[]
-  checklists     Checklist[]
-  checklistItems ChecklistItem[]
-  evidence       Evidence[]
-  documentPackages DocumentPackage[]
-  documentPackageItems DocumentPackageItem[]
-  shareLinks     ShareLink[]
-  notifications  Notification[]
-  notificationPreferences NotificationPreference[]
+  id                          String                      @id @default(cuid())
+  name                        String
+  code                        String                      @unique
+  createdById                 String?
+  createdAt                   DateTime                    @default(now())
+  updatedAt                   DateTime                    @updatedAt
+  createdBy                   User?                       @relation("OrganizationCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  memberships                 OrganizationMembership[]
+  invitations                 OrganizationInvitation[]
+  supportSessions             SupportSession[]
+  supportEvents               SupportAuditEvent[]
+  productAuditEvents          ProductAuditEvent[]
+  mfaRecoveryRequests         MfaRecoveryRequest[]
+  workers                     Worker[]
+  jobSites                    JobSite[]
+  documentTypes               DocumentType[]
+  documents                   Document[]
+  documentVersions            DocumentVersion[]
+  documentRequirements        DocumentRequirement[]
+  deadlines                   Deadline[]
+  checklists                  Checklist[]
+  checklistItems              ChecklistItem[]
+  evidence                    Evidence[]
+  documentPackages            DocumentPackage[]
+  documentPackageItems        DocumentPackageItem[]
+  shareLinks                  ShareLink[]
+  notifications               Notification[]
+  notificationPreferences     NotificationPreference[]
   notificationEmailDeliveries NotificationEmailDelivery[]
-  workerUserLinks WorkerUserLink[]
-  jobSiteUserAssignments JobSiteUserAssignment[]
-  jobSiteWorkerAssignments JobSiteWorkerAssignment[]
+  workerUserLinks             WorkerUserLink[]
+  jobSiteUserAssignments      JobSiteUserAssignment[]
+  jobSiteWorkerAssignments    JobSiteWorkerAssignment[]
 
   @@index([name])
 }
 
 model Worker {
-  id             String       @id @default(cuid())
-  organizationId String
-  displayName    String
-  email          String?
-  phone          String?
-  roleLabel      String?
-  status         RecordStatus @default(ACTIVE)
-  notes          String?      @db.Text
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  archivedAt     DateTime?
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  documents      Document[]
-  deadlines      Deadline[]
-  evidence       Evidence[]
-  userLinks      WorkerUserLink[]
+  id                 String                    @id @default(cuid())
+  organizationId     String
+  displayName        String
+  email              String?
+  phone              String?
+  roleLabel          String?
+  status             RecordStatus              @default(ACTIVE)
+  notes              String?                   @db.Text
+  createdAt          DateTime                  @default(now())
+  updatedAt          DateTime                  @updatedAt
+  archivedAt         DateTime?
+  organization       Organization              @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  documents          Document[]
+  deadlines          Deadline[]
+  evidence           Evidence[]
+  userLinks          WorkerUserLink[]
   jobSiteAssignments JobSiteWorkerAssignment[]
 
   @@index([organizationId, status])
@@ -423,26 +443,26 @@ model Worker {
 }
 
 model JobSite {
-  id             String       @id @default(cuid())
-  organizationId String
-  name           String
-  address        String?
-  clientName     String?
-  status         RecordStatus @default(ACTIVE)
-  startDate      DateTime?
-  endDate        DateTime?
-  notes          String?      @db.Text
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  archivedAt     DateTime?
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  documents      Document[]
-  requirements   DocumentRequirement[]
-  deadlines      Deadline[]
-  checklists     Checklist[]
-  evidence       Evidence[]
-  documentPackages DocumentPackage[]
-  userAssignments JobSiteUserAssignment[]
+  id                String                    @id @default(cuid())
+  organizationId    String
+  name              String
+  address           String?
+  clientName        String?
+  status            RecordStatus              @default(ACTIVE)
+  startDate         DateTime?
+  endDate           DateTime?
+  notes             String?                   @db.Text
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+  archivedAt        DateTime?
+  organization      Organization              @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  documents         Document[]
+  requirements      DocumentRequirement[]
+  deadlines         Deadline[]
+  checklists        Checklist[]
+  evidence          Evidence[]
+  documentPackages  DocumentPackage[]
+  userAssignments   JobSiteUserAssignment[]
   workerAssignments JobSiteWorkerAssignment[]
 
   @@index([organizationId, status])
@@ -530,26 +550,26 @@ model DocumentType {
 }
 
 model Document {
-  id             String            @id @default(cuid())
+  id             String                @id @default(cuid())
   organizationId String
   documentTypeId String?
   ownerType      DocumentOwnerType
   workerId       String?
   jobSiteId      String?
   title          String
-  status         DocumentStatus    @default(TO_REVIEW)
+  status         DocumentStatus        @default(TO_REVIEW)
   expiryDate     DateTime?
   reviewedAt     DateTime?
   reviewedById   String?
-  notes          String?           @db.Text
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
+  notes          String?               @db.Text
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
   archivedAt     DateTime?
-  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  documentType   DocumentType?     @relation(fields: [documentTypeId], references: [id], onDelete: SetNull)
-  worker         Worker?           @relation(fields: [workerId], references: [id], onDelete: SetNull)
-  jobSite        JobSite?          @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
-  reviewedBy     User?             @relation("DocumentReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  documentType   DocumentType?         @relation(fields: [documentTypeId], references: [id], onDelete: SetNull)
+  worker         Worker?               @relation(fields: [workerId], references: [id], onDelete: SetNull)
+  jobSite        JobSite?              @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
+  reviewedBy     User?                 @relation("DocumentReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
   versions       DocumentVersion[]
   deadlines      Deadline[]
   packageItems   DocumentPackageItem[]
@@ -563,7 +583,7 @@ model Document {
 }
 
 model DocumentVersion {
-  id               String        @id @default(cuid())
+  id               String                @id @default(cuid())
   organizationId   String
   documentId       String
   blobKey          String
@@ -572,11 +592,11 @@ model DocumentVersion {
   size             Int
   checksum         String?
   uploadedById     String
-  createdAt        DateTime      @default(now())
+  createdAt        DateTime              @default(now())
   archivedAt       DateTime?
-  organization     Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  document         Document      @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  uploadedBy       User          @relation("DocumentVersionUploader", fields: [uploadedById], references: [id], onDelete: Restrict)
+  organization     Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  document         Document              @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  uploadedBy       User                  @relation("DocumentVersionUploader", fields: [uploadedById], references: [id], onDelete: Restrict)
   packageItems     DocumentPackageItem[]
 
   @@index([organizationId, documentId, createdAt])
@@ -632,17 +652,17 @@ model Deadline {
 }
 
 model Checklist {
-  id             String       @id @default(cuid())
+  id             String                @id @default(cuid())
   organizationId String
   jobSiteId      String?
   name           String
-  description    String?      @db.Text
-  status         RecordStatus @default(ACTIVE)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  description    String?               @db.Text
+  status         RecordStatus          @default(ACTIVE)
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
   archivedAt     DateTime?
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  jobSite        JobSite?     @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
+  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  jobSite        JobSite?              @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
   items          ChecklistItem[]
   packageItems   DocumentPackageItem[]
 
@@ -656,7 +676,7 @@ model ChecklistItem {
   checklistId    String
   label          String
   description    String?             @db.Text
-  status         ChecklistItemStatus  @default(OPEN)
+  status         ChecklistItemStatus @default(OPEN)
   completedAt    DateTime?
   completedById  String?
   createdAt      DateTime            @default(now())
@@ -672,26 +692,26 @@ model ChecklistItem {
 }
 
 model Evidence {
-  id               String        @id @default(cuid())
+  id               String                @id @default(cuid())
   organizationId   String
   jobSiteId        String?
   workerId         String?
   checklistItemId  String?
   type             EvidenceType
   title            String
-  description      String?       @db.Text
+  description      String?               @db.Text
   blobKey          String?
   originalFileName String?
   mimeType         String?
   size             Int?
   createdById      String
-  createdAt        DateTime      @default(now())
+  createdAt        DateTime              @default(now())
   archivedAt       DateTime?
-  organization     Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  jobSite          JobSite?      @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
-  worker           Worker?       @relation(fields: [workerId], references: [id], onDelete: SetNull)
-  checklistItem    ChecklistItem? @relation(fields: [checklistItemId], references: [id], onDelete: SetNull)
-  createdBy        User          @relation("EvidenceCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  organization     Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  jobSite          JobSite?              @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
+  worker           Worker?               @relation(fields: [workerId], references: [id], onDelete: SetNull)
+  checklistItem    ChecklistItem?        @relation(fields: [checklistItemId], references: [id], onDelete: SetNull)
+  createdBy        User                  @relation("EvidenceCreator", fields: [createdById], references: [id], onDelete: Restrict)
   packageItems     DocumentPackageItem[]
 
   @@index([organizationId, type])
@@ -769,23 +789,23 @@ model ShareLink {
 }
 
 model Notification {
-  id             String                 @id @default(cuid())
-  organizationId String
-  userId         String?
-  type           NotificationType
-  severity       NotificationSeverity
-  title          String
-  message        String                 @db.Text
-  sourceType     NotificationSourceType
-  sourceId       String?
-  dedupeKey      String
-  actionHref     String?
-  readAt         DateTime?
-  dismissedAt    DateTime?
-  createdAt      DateTime               @default(now())
-  updatedAt      DateTime               @updatedAt
-  organization   Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user           User?                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              String                      @id @default(cuid())
+  organizationId  String
+  userId          String?
+  type            NotificationType
+  severity        NotificationSeverity
+  title           String
+  message         String                      @db.Text
+  sourceType      NotificationSourceType
+  sourceId        String?
+  dedupeKey       String
+  actionHref      String?
+  readAt          DateTime?
+  dismissedAt     DateTime?
+  createdAt       DateTime                    @default(now())
+  updatedAt       DateTime                    @updatedAt
+  organization    Organization                @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user            User?                       @relation(fields: [userId], references: [id], onDelete: Cascade)
   emailDeliveries NotificationEmailDelivery[]
 
   @@unique([organizationId, dedupeKey])
@@ -795,21 +815,21 @@ model Notification {
 }
 
 model NotificationPreference {
-  id                   String               @id @default(cuid())
-  organizationId       String
-  userId               String
-  emailDigestEnabled   Boolean              @default(false)
-  emailDigestFrequency EmailDigestFrequency @default(OFF)
-  emailDigestHour      Int                  @default(8)
-  deadlineNotificationsEnabled Boolean      @default(true)
-  documentNotificationsEnabled Boolean      @default(true)
-  packageNotificationsEnabled Boolean       @default(true)
-  systemNotificationsEnabled Boolean        @default(true)
-  lastDigestSentAt     DateTime?
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt
-  organization         Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user                 User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                           String               @id @default(cuid())
+  organizationId               String
+  userId                       String
+  emailDigestEnabled           Boolean              @default(false)
+  emailDigestFrequency         EmailDigestFrequency @default(OFF)
+  emailDigestHour              Int                  @default(8)
+  deadlineNotificationsEnabled Boolean              @default(true)
+  documentNotificationsEnabled Boolean              @default(true)
+  packageNotificationsEnabled  Boolean              @default(true)
+  systemNotificationsEnabled   Boolean              @default(true)
+  lastDigestSentAt             DateTime?
+  createdAt                    DateTime             @default(now())
+  updatedAt                    DateTime             @updatedAt
+  organization                 Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user                         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([organizationId, userId])
   @@index([organizationId, emailDigestEnabled, emailDigestFrequency], map: "NotificationPreference_organizationId_emailDigestEnabled_emailD")
@@ -864,51 +884,51 @@ model NotificationEmailDelivery {
 }
 
 model OrganizationMembership {
-  id          String        @id @default(cuid())
+  id             String           @id @default(cuid())
   organizationId String
-  userId      String        @unique
-  role        OrganizationRole
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  revokedAt   DateTime?
-  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String           @unique
+  role           OrganizationRole
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  revokedAt      DateTime?
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([organizationId, role, revokedAt])
 }
 
 model OrganizationInvitation {
-  id          String        @id @default(cuid())
+  id             String           @id @default(cuid())
   organizationId String
-  email       String
-  role        OrganizationRole
-  tokenHash   String        @unique
-  invitedById String
-  expiresAt   DateTime
-  acceptedAt  DateTime?
-  revokedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  invitedBy   User          @relation("InvitationSender", fields: [invitedById], references: [id], onDelete: Cascade)
+  email          String
+  role           OrganizationRole
+  tokenHash      String           @unique
+  invitedById    String
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  revokedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invitedBy      User             @relation("InvitationSender", fields: [invitedById], references: [id], onDelete: Cascade)
 
   @@index([organizationId, email, createdAt])
   @@index([email, expiresAt])
 }
 
 model SupportSession {
-  id                     String              @id @default(cuid())
-  actorId                String
-  organizationId         String
-  tokenHash              String              @unique
-  reason                 String
-  expiresAt              DateTime
+  id                      String              @id @default(cuid())
+  actorId                 String
+  organizationId          String
+  tokenHash               String              @unique
+  reason                  String
+  expiresAt               DateTime
   sensitiveConfirmedUntil DateTime?
-  endedAt                DateTime?
-  createdAt              DateTime            @default(now())
-  actor                  User                @relation("SupportActor", fields: [actorId], references: [id], onDelete: Cascade)
-  organization           Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  auditEvents            SupportAuditEvent[]
-  productAuditEvents     ProductAuditEvent[]
+  endedAt                 DateTime?
+  createdAt               DateTime            @default(now())
+  actor                   User                @relation("SupportActor", fields: [actorId], references: [id], onDelete: Cascade)
+  organization            Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  auditEvents             SupportAuditEvent[]
+  productAuditEvents      ProductAuditEvent[]
 
   @@index([actorId, endedAt, expiresAt])
   @@index([organizationId, createdAt])
@@ -934,7 +954,7 @@ model SupportAuditEvent {
 }
 
 model ProductAuditEvent {
-  id               String          @id @default(cuid())
+  id               String            @id @default(cuid())
   organizationId   String
   actorUserId      String?
   actorRole        OrganizationRole?
@@ -945,10 +965,10 @@ model ProductAuditEvent {
   metadata         Json?
   requestId        String?
   supportSessionId String?
-  createdAt        DateTime        @default(now())
-  organization     Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  actor            User?           @relation("ProductAuditActor", fields: [actorUserId], references: [id], onDelete: SetNull)
-  supportSession   SupportSession? @relation(fields: [supportSessionId], references: [id], onDelete: SetNull)
+  createdAt        DateTime          @default(now())
+  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  actor            User?             @relation("ProductAuditActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  supportSession   SupportSession?   @relation(fields: [supportSessionId], references: [id], onDelete: SetNull)
 
   @@index([organizationId, createdAt])
   @@index([organizationId, action, createdAt])
@@ -984,6 +1004,35 @@ model AuthCode {
 
   @@index([email, purpose, createdAt])
   @@index([userId, purpose, createdAt])
+  @@index([expiresAt])
+}
+
+model MfaRecoveryRequest {
+  id              String            @id @default(cuid())
+  userId          String
+  organizationId  String?
+  mode            MfaRecoveryMode
+  status          MfaRecoveryStatus @default(PENDING)
+  activeKey       String?           @unique
+  emailVerifiedAt DateTime
+  expiresAt       DateTime
+  approvedById    String?
+  approvedAt      DateTime?
+  deniedById      String?
+  deniedAt        DateTime?
+  setupStartedAt  DateTime?
+  completedAt     DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  user            User              @relation("MfaRecoverySubject", fields: [userId], references: [id], onDelete: Cascade)
+  organization    Organization?     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  approvedBy      User?             @relation("MfaRecoveryApprover", fields: [approvedById], references: [id], onDelete: SetNull)
+  deniedBy        User?             @relation("MfaRecoveryDenier", fields: [deniedById], references: [id], onDelete: SetNull)
+
+  @@index([userId, status, createdAt])
+  @@index([organizationId, status, createdAt])
+  @@index([approvedById, approvedAt])
+  @@index([deniedById, deniedAt])
   @@index([expiresAt])
 }
 

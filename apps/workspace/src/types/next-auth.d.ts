@@ -5,6 +5,7 @@ declare module "next-auth" {
     user?: DefaultSession["user"] & {
       id: string;
       platformRole: "USER" | "SUPER_ADMIN";
+      authSessionId: string;
     };
   }
 }
@@ -14,5 +15,6 @@ declare module "next-auth/jwt" {
     passwordUpdatedAt?: string | null;
     authVersion?: number;
     platformRole?: "USER" | "SUPER_ADMIN";
+    authSessionId?: string;
   }
 }

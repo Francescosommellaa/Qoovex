@@ -7,6 +7,8 @@ Route frontend attive:
 - `/`: redirect a `/sign-in` se manca sessione, altrimenti a `/dashboard`;
 - `/sign-in`: accesso Credentials NextAuth;
 - `/sign-up`: registrazione Credentials con verifica email;
+- `/invite?token=...`: ingresso destinatario per validare e accettare un invito Azienda;
+- `/shared/document-packages/[token]`: viewer pubblico in sola lettura per un pacchetto condiviso;
 - `/dashboard`: dashboard interna mobile-first per stato documentale, scadenze, cantieri, lavoratori, prove e pacchetti.
 - `/notifications`: notifiche interne e promemoria derivati da dati registrati;
 - `/documents`: lista e creazione documenti logici;

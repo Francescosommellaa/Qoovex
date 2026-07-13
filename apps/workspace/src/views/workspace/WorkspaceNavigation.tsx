@@ -27,6 +27,7 @@ const platformNavItems = [
   { label: "Utenti", href: "/qoovex-admin/users" },
   { label: "Aziende", href: "/qoovex-admin/organizations" },
   { label: "Errori", href: "/qoovex-admin/errors" },
+  { label: "Sicurezza", href: "/account/security" },
 ] as const;
 
 export function WorkspaceNavigation({ role, platformRole, support, authenticated }: { role: WorkspaceRole | null; platformRole: "USER" | "SUPER_ADMIN" | null; support: SupportContext | null; authenticated: boolean }) {
@@ -53,6 +54,7 @@ export function WorkspaceNavigation({ role, platformRole, support, authenticated
           </Link>
         );
       })}
+      {authenticated ? <Link aria-current={pathname === "/account/security" ? "page" : undefined} href="/account/security">Sicurezza</Link> : null}
       {authenticated ? <WorkspaceLogoutButton /> : null}
     </nav>
   );

@@ -11,8 +11,8 @@ describe("canonical single-membership history", () => {
     expect(schema).toContain("model Organization");
     expect(schema).toContain("model OrganizationMembership");
     expect(schema).toContain("model OrganizationInvitation");
-    expect(schema).toContain("organizationMembership     OrganizationMembership?");
-    expect(schema).toContain("userId      String        @unique");
+    expect(schema).toMatch(/organizationMembership\s+OrganizationMembership\?/);
+    expect(schema).toMatch(/userId\s+String\s+@unique/);
     expect(schema).not.toContain("@@map(\"Structure");
     expect(schema).not.toContain("@map(\"structureId\")");
     expect(schema).not.toMatch(/\bStructureRole\b/);

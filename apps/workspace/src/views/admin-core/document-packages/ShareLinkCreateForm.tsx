@@ -6,6 +6,7 @@ import { formValue, submitJson } from "../admin-api-client";
 import styles from "../AdminCore.module.css";
 import { formatDateTimeInput } from "@/views/workspace/workspace-format";
 import type { WorkspaceShareLinkRecord } from "@/views/workspace/workspace-records";
+import { buildSharedDocumentPackagePath } from "@shared/lib/workspace-link-routes";
 
 interface CreateShareLinkResponse {
   shareLink: WorkspaceShareLinkRecord;
@@ -24,7 +25,7 @@ export function ShareLinkCreateForm({ packageId, disabled }: { packageId: string
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const defaultExpiry = useMemo(defaultShareExpiry, []);
-  const sharePath = createdToken ? `/api/shared/document-packages/${createdToken}` : "";
+  const sharePath = createdToken ? buildSharedDocumentPackagePath(createdToken) : "";
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

@@ -4,7 +4,7 @@ import crypto from "crypto";
 import { cookies } from "next/headers";
 import { db, Prisma } from "@qoovex/db";
 import { AccessError } from "@shared/server/access-errors";
-import { verifyMfaChallengeForUser } from "@shared/server/mfa-service";
+import { verifyCurrentFactorForUser } from "@shared/server/mfa-service";
 import { sendTransactionalEmail } from "@shared/server/transactional-email-service";
 import { requireQoovexOperatorById } from "@shared/server/qoovex-operator-access";
 
@@ -78,7 +78,7 @@ export async function elevateSupportSession(userId: string, code: string) {
   const actor = await getSupportActor(userId);
   const session = await getActiveSupportSession(userId);
   if (!session) throw new AccessError("Sessione supporto non attiva.", 404);
-  if (!actor.isDev && !(await verifyMfaChallengeForUser({ userId, code }))) throw new AccessError("Codice MFA non valido.", 403);
+  if (!actor.isDev && !(await verifyCurrentFactorForUser({ userId, code, purpose: "support-elevation" }))) throw new AccessError("Codice MFA non valido.", 403);
   const until = new Date(Date.now() + SENSITIVE_TTL_MS);
   await db.supportSession.update({ where: { id: session.id }, data: { sensitiveConfirmedUntil: until } });
   return { sensitiveConfirmedUntil: until };
