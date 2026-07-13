@@ -4,6 +4,7 @@ import { expect, test, type APIRequestContext, type APIResponse, type Page } fro
 type JsonRecord = Record<string, unknown>;
 
 const BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+const E2E_PNG_BYTES = Array.from(Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64"));
 
 function decodeBase32(value: string) {
   let bits = 0;
@@ -151,21 +152,21 @@ async function createDomainData(page: Page, runId: string) {
 }
 
 async function uploadAndDownloadDocument(page: Page, documentId: unknown) {
-  const uploaded = await page.evaluate(async (id) => {
+  const uploaded = await page.evaluate(async ({ bytes, id }) => {
     const form = new FormData();
-    form.set("file", new File(["qoovex-e2e-blob"], "e2e-document.txt", { type: "text/plain" }));
+    form.set("file", new File([new Uint8Array(bytes)], "e2e-document.png", { type: "image/png" }));
     const response = await fetch(`/api/documents/${id}/versions`, { method: "POST", body: form });
     return { status: response.status, body: await response.json().catch(() => null) };
-  }, String(documentId));
+  }, { bytes: E2E_PNG_BYTES, id: String(documentId) });
   expect(uploaded.status, JSON.stringify(uploaded.body)).toBe(201);
   const version = (uploaded.body as JsonRecord).version as JsonRecord;
   expect(version.id).toEqual(expect.any(String));
 
   const downloaded = await page.evaluate(async ({ id, versionId }) => {
     const response = await fetch(`/api/documents/${id}/versions/${versionId}/download`);
-    return { status: response.status, text: await response.text() };
+    return { status: response.status, bytes: Array.from(new Uint8Array(await response.arrayBuffer())) };
   }, { id: String(documentId), versionId: String(version.id) });
-  expect(downloaded).toEqual({ status: 200, text: "qoovex-e2e-blob" });
+  expect(downloaded).toEqual({ status: 200, bytes: E2E_PNG_BYTES });
 }
 
 async function verifyWorkspacePages(page: Page) {
