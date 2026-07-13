@@ -9,8 +9,8 @@
   gap: 4px;
   min-height: 96px;
   border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: #fbfcfa;
+  border-radius: var(--radius-qv-md);
+  background: var(--qvx-surface-muted);
   padding: 14px;
 }
 
@@ -37,8 +37,8 @@
   display: grid;
   gap: 10px;
   border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: #fbfcfa;
+  border-radius: var(--radius-qv-md);
+  background: var(--qvx-surface-muted);
   padding: 14px;
 }
 
@@ -80,9 +80,9 @@
 .field select,
 .field textarea {
   width: 100%;
-  min-height: 42px;
+  min-height: var(--qv-touch-target);
   border: 1px solid var(--qvx-border);
-  border-radius: 8px;
+  border-radius: var(--radius-qv-md);
   background: var(--qvx-surface);
   color: var(--qvx-text);
   padding: 9px 10px;
@@ -98,10 +98,10 @@
 .dangerButton,
 .linkButton {
   display: inline-flex;
-  min-height: 40px;
+  min-height: var(--qv-touch-target);
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: var(--radius-qv-md);
   padding: 9px 12px;
   font-size: 0.86rem;
   font-weight: 760;
@@ -111,9 +111,9 @@
 
 .button,
 .linkButton {
-  border: 1px solid rgba(31, 122, 92, 0.36);
+  border: 1px solid color-mix(in oklch, var(--qvx-accent) 36%, var(--qvx-border));
   background: var(--qvx-accent);
-  color: #fff;
+  color: var(--qvx-surface);
 }
 
 .ghostButton {
@@ -123,8 +123,8 @@
 }
 
 .dangerButton {
-  border: 1px solid rgba(163, 59, 47, 0.34);
-  background: #fbe8e4;
+  border: 1px solid color-mix(in oklch, var(--qvx-danger) 34%, var(--qvx-border));
+  background: var(--color-qv-danger-soft);
   color: var(--qvx-danger);
 }
 
@@ -138,35 +138,35 @@
 .error,
 .success,
 .notice {
-  border-radius: 8px;
+  border-radius: var(--radius-qv-md);
   padding: 10px;
   font-size: 0.84rem;
   font-weight: 680;
 }
 
 .error {
-  border: 1px solid rgba(163, 59, 47, 0.32);
-  background: #fbe8e4;
+  border: 1px solid color-mix(in oklch, var(--qvx-danger) 32%, var(--qvx-border));
+  background: var(--color-qv-danger-soft);
   color: var(--qvx-danger);
 }
 
 .success {
-  border: 1px solid rgba(31, 122, 92, 0.28);
-  background: #e4f4ed;
+  border: 1px solid color-mix(in oklch, var(--qvx-accent) 28%, var(--qvx-border));
+  background: var(--color-qv-positive-soft);
   color: var(--qvx-accent-strong);
 }
 
 .notice {
-  border: 1px solid rgba(49, 95, 143, 0.28);
-  background: #e8f0f8;
+  border: 1px solid color-mix(in oklch, var(--qvx-info) 28%, var(--qvx-border));
+  background: var(--color-qv-info-soft);
   color: var(--qvx-info);
 }
 
 .codeBlock {
   overflow-wrap: anywhere;
   border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: #eef2ee;
+  border-radius: var(--radius-qv-md);
+  background: var(--qvx-surface-muted);
   padding: 10px;
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: 0.78rem;

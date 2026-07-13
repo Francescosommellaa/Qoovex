@@ -10,6 +10,7 @@
     color: var(--color-qv-content);
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
+    text-size-adjust: 100%;
   }
 
   body {
@@ -29,14 +30,36 @@
     color: inherit;
   }
 
+  :where(p, li, dd) > a:not([class]),
+  .qv-text-link {
+    color: var(--color-qv-accent-strong);
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--qv-link-underline-thickness);
+    text-underline-offset: var(--qv-link-underline-offset);
+    text-decoration-skip-ink: auto;
+  }
+
+  :where(p, li, dd) > a:not([class]):visited,
+  .qv-text-link:visited {
+    color: color-mix(in oklch, var(--color-qv-accent-strong) 78%, var(--color-qv-content));
+  }
+
   button,
   [role="button"] {
     touch-action: manipulation;
   }
 
+  :where(a[href], button:not(:disabled), summary, select:not(:disabled), label[for]) {
+    cursor: pointer;
+  }
+
+  :where(button:disabled, input:disabled, select:disabled, textarea:disabled) {
+    cursor: not-allowed;
+  }
+
   :focus-visible {
-    outline: 0.1875rem solid var(--color-qv-accent);
-    outline-offset: 0.1875rem;
+    outline: var(--qv-focus-width) solid var(--qv-focus-color);
+    outline-offset: var(--qv-focus-offset);
   }
 
   ::selection {
@@ -80,6 +103,20 @@
   .qv-switch:disabled {
     cursor: not-allowed;
     opacity: 0.6;
+  }
+}
+
+@media (pointer: coarse) {
+  :where(a[href], button, input, select, textarea, summary) {
+    -webkit-tap-highlight-color: color-mix(in oklch, var(--color-qv-accent) 18%, transparent);
+  }
+
+  @keyframes qv-loading-spin {
+    to { transform: rotate(1turn); }
+  }
+
+  .qv-button__loading-icon {
+    animation: qv-loading-spin 800ms linear infinite;
   }
 }
 

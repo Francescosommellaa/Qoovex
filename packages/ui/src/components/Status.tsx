@@ -14,7 +14,7 @@ const toneClassNames: Record<StatusTone, string> = {
 
 export function Status({ children, className, tone = "neutral", ...props }: StatusProps) {
   return (
-    <span {...props} className={classNames("inline-flex items-center gap-qv-2 text-sm font-medium", toneClassNames[tone], className)} role="status">
+    <span {...props} className={classNames("inline-flex items-center gap-qv-2 text-sm font-medium", toneClassNames[tone], className)}>
       <span aria-hidden="true" className="size-qv-2 rounded-qv-pill bg-current" />
       {children}
     </span>

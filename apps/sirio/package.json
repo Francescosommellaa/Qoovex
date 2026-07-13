@@ -9,6 +9,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
     "@qoovex/brand-resources": "workspace:*",
     "@qoovex/ui": "workspace:*",
     "next": "16.2.6",

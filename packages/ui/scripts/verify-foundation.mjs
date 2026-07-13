@@ -18,17 +18,23 @@ function readSources(paths) {
   return paths.map((file) => readFileSync(file, "utf8")).join("\n");
 }
 
-const codeFile = (file) => /\.(ts|tsx|css)$/.test(file);
+const codeFile = (file) => /\.(ts|tsx|css)$/.test(file) && !/\.(test|spec)\.(ts|tsx)$/.test(file);
 const webSources = readSources(collectFiles(join(root, "apps", "web", "src"), codeFile));
 const sirioSources = readSources(collectFiles(join(root, "apps", "sirio", "src"), codeFile));
+const workspaceSources = readSources(collectFiles(join(root, "apps", "workspace", "src"), codeFile));
 const uiSources = readSources([
   ...collectFiles(join(root, "packages", "ui", "src"), codeFile),
   ...collectFiles(join(root, "packages", "ui", "styles"), codeFile),
 ]);
 const marketingForbidden = /sei a norma|conformita garantita|validita legale|legalmente valido|abilitato automaticamente|obbligatorio per legge|GDPR compliant|privacy garantita|cancellazione legale/i;
+const allUiSources = [webSources, sirioSources, workspaceSources, uiSources].join("\n");
 
 if (webSources.match(marketingForbidden)) {
   throw new Error("apps/web contiene copy vietata.");
+}
+
+if (allUiSources.match(/conformita garantita|documento certificato|cantiere conforme|lavoratore automaticamente abilitato|sicurezza legale assicurata/i)) {
+  throw new Error("Le superfici UI contengono una promessa normativa vietata.");
 }
 
 for (const required of [
@@ -63,6 +69,32 @@ for (const forbiddenImport of uiForbiddenImports) {
   if (uiSources.includes(forbiddenImport)) {
     throw new Error(`packages/ui importa una dipendenza proibita: ${forbiddenImport}`);
   }
+}
+
+if (/<svg\b/i.test(allUiSources)) {
+  throw new Error("Le superfici UI contengono SVG inline invece di icone Phosphor.");
+}
+
+if (/lucide|@heroicons|react-icons|@tabler|hugeicons/i.test(allUiSources)) {
+  throw new Error("Le superfici UI importano una libreria icone diversa da Phosphor.");
+}
+
+for (const packagePath of [
+  ["packages", "ui", "package.json"],
+  ["apps", "sirio", "package.json"],
+  ["apps", "web", "package.json"],
+  ["apps", "workspace", "package.json"],
+]) {
+  const packageSource = readFileSync(join(root, ...packagePath), "utf8");
+  if (!packageSource.includes('"@phosphor-icons/react"')) {
+    throw new Error(`${packagePath.join("/")} non dichiara @phosphor-icons/react.`);
+  }
+}
+
+const tokenDeclarations = new Set([...allUiSources.matchAll(/(--(?:qv|qvx|color-qv|spacing-qv|radius-qv|shadow-qv|z-index-qv|text-qv|font-(?:sans|display))[a-z0-9-]*)\s*:/gi)].map((match) => match[1]));
+const tokenReferences = new Set([...allUiSources.matchAll(/var\((--(?:qv|qvx|color-qv|spacing-qv|radius-qv|shadow-qv|z-index-qv|text-qv|font-(?:sans|display))[a-z0-9-]*)/gi)].map((match) => match[1]));
+for (const token of tokenReferences) {
+  if (!tokenDeclarations.has(token)) throw new Error(`Token CSS non definito: ${token}`);
 }
 
 for (const forbiddenDomainName of ["DocumentStatus", "OrganizationRole", "Permission", "organizationId"]) {

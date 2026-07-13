@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { Button, Card, Container } from "@qoovex/ui";
+import { List } from "@phosphor-icons/react/ssr";
+import { Button, Card, Container, Icon } from "@qoovex/ui";
 import { contactEmail, contactHref, legalLinks, workspaceUrl } from "./site-config";
 
 type SiteShellProps = {
@@ -14,6 +15,15 @@ type LegalPageProps = {
 };
 
 export function SiteHeader() {
+  const links = (
+    <>
+      <a href="/#cosa-fa">Cosa fa</a>
+      <a href="/#per-chi">Per chi e</a>
+      <a href="/manuale-operativo">Manuale</a>
+      <a href={contactHref}>Contatto</a>
+      <Button href={workspaceUrl} variant="secondary">Accedi al workspace</Button>
+    </>
+  );
   return (
     <header className="site-header">
       <Container>
@@ -21,15 +31,11 @@ export function SiteHeader() {
           <a className="site-brand" href="/">
             Qoovex
           </a>
-          <div className="site-nav__links">
-            <a href="/#cosa-fa">Cosa fa</a>
-            <a href="/#per-chi">Per chi e</a>
-            <a href="/manuale-operativo">Manuale</a>
-            <a href={contactHref}>Contatto</a>
-            <Button href={workspaceUrl} variant="secondary">
-              Accedi al workspace
-            </Button>
-          </div>
+          <div className="site-nav__links site-nav__links--desktop">{links}</div>
+          <details className="site-menu">
+            <summary><Icon decorative icon={List} weight="bold" /> Menu</summary>
+            <div className="site-nav__links site-nav__links--mobile">{links}</div>
+          </details>
         </nav>
       </Container>
     </header>
@@ -65,11 +71,11 @@ export function SiteFooter() {
 
 export function SiteShell({ children }: SiteShellProps) {
   return (
-    <main className="site-shell">
+    <>
       <SiteHeader />
-      {children}
+      <main className="site-shell">{children}</main>
       <SiteFooter />
-    </main>
+    </>
   );
 }
 

@@ -13,7 +13,7 @@ const toneClassNames: Record<AlertTone, string> = {
 
 export function Alert({ children, className, title, tone = "info", ...props }: AlertProps) {
   return (
-    <div {...props} className={classNames("rounded-qv-md border p-qv-4", toneClassNames[tone], className)} role={tone === "danger" ? "alert" : "status"}>
+    <div {...props} className={classNames("rounded-qv-md border p-qv-4", toneClassNames[tone], className)}>
       {title ? <p className="m-0 font-semibold">{title}</p> : null}
       <div className={classNames(title && "mt-qv-2")}>{children}</div>
     </div>

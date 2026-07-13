@@ -9,6 +9,7 @@ Contiene solo componenti generici, token Tailwind CSS v4 e stili base. Non conti
 ## Componenti
 
 - `Button`
+- `Icon`
 - `IconButton`
 - `Card`
 - `Panel`
@@ -18,6 +19,8 @@ Contiene solo componenti generici, token Tailwind CSS v4 e stili base. Non conti
 - `Alert`, `LoadingState`, `EmptyState`, `ErrorState`
 - `Section`
 - `Container`
+
+`Icon` accetta esclusivamente componenti Phosphor tipizzati. `Button` supporta icone e loading nel ramo button; `Field` collega automaticamente label, descrizione, errore e attributi ARIA al controllo. `Alert` e `Status` restano statici finche il consumer non richiede esplicitamente un annuncio live.
 
 ## Stili
 
@@ -31,6 +34,8 @@ Importare i CSS globali nell'app consumer:
 ```
 
 I token sono semantici e sono definiti con `@theme`, senza configurazione Tailwind JavaScript. Il provider font resta confinato in `@qoovex/brand-resources`.
+
+I link inseriti nel testo usano una sottolineatura persistente. Focus, touch target, cursor, ombre, livelli e dimensioni dei container sono definiti centralmente.
 
 ## Regole
 

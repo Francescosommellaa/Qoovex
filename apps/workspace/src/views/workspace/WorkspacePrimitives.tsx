@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
+import { Badge, EmptyState, Panel } from "@qoovex/ui";
 import styles from "./WorkspacePrimitives.module.css";
 
 export function WorkspacePage({ children }: { children: ReactNode }) {
-  return <main className={styles.page}>{children}</main>;
+  return <div className={styles.page}>{children}</div>;
 }
 
 export function WorkspacePageHeader({ title, description, action }: { title: string; description: string; action?: ReactNode }) {
@@ -19,7 +20,7 @@ export function WorkspacePageHeader({ title, description, action }: { title: str
 
 export function WorkspacePanel({ title, description, children }: { title?: string; description?: string; children: ReactNode }) {
   return (
-    <section className={styles.panel}>
+    <Panel as="section" className={styles.panel}>
       {title ? (
         <div className={styles.panelHeader}>
           <h2>{title}</h2>
@@ -27,30 +28,28 @@ export function WorkspacePanel({ title, description, children }: { title?: strin
         </div>
       ) : null}
       {children}
-    </section>
+    </Panel>
   );
 }
 
 export function WorkspaceEmptyState({ title, description }: { title: string; description: string }) {
   return (
-    <section className={styles.emptyState}>
-      <strong>{title}</strong>
-      <p>{description}</p>
-    </section>
+    <EmptyState className={styles.emptyState} description={description} headingLevel={3} title={title} />
   );
 }
 
 export function WorkspaceAccessState({ title = "Area non disponibile", description = "Questa sezione non e disponibile per il ruolo corrente." }) {
   return (
-    <main className={styles.page}>
-      <section className={styles.accessState}>
+    <div className={styles.page}>
+      <Panel as="section" className={styles.accessState}>
         <h1>{title}</h1>
         <p>{description}</p>
-      </section>
-    </main>
+      </Panel>
+    </div>
   );
 }
 
 export function WorkspaceStatusBadge({ label, tone = "neutral" }: { label: string; tone?: "danger" | "warning" | "info" | "good" | "neutral" }) {
-  return <span className={`${styles.badge} ${styles[`tone${tone[0].toUpperCase()}${tone.slice(1)}`]}`}>{label}</span>;
+  const variant = tone === "good" ? "positive" : tone;
+  return <Badge variant={variant}>{label}</Badge>;
 }

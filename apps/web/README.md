@@ -4,7 +4,7 @@ Sito marketing pubblico Qoovex.
 
 ## Stato
 
-Questa app contiene una base provvisoria, non la landing definitiva. Il copy e intenzionalmente prudente e non deriva da ricerca inventata.
+Questa app contiene il sistema marketing pubblico responsive. Il copy resta intenzionalmente prudente e non deriva da ricerca inventata.
 
 ## Responsabilita
 
@@ -12,6 +12,7 @@ Questa app contiene una base provvisoria, non la landing definitiva. Il copy e i
 - SEO tecnico base;
 - link configurabile verso il workspace tramite `NEXT_PUBLIC_WORKSPACE_URL`;
 - uso di primitive condivise da `@qoovex/ui`.
+- menu mobile nativo, hero contenuto, link testuali accessibili e banner cookie non sovrapposto ai contenuti.
 
 ## Divieti
 

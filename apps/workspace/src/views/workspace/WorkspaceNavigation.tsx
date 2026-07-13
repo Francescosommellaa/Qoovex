@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
+import { List } from "@phosphor-icons/react/dist/icons/List";
+import { Icon } from "@qoovex/ui";
 import type { WorkspaceRole } from "./workspace-records";
 import type { SupportContext } from "@qoovex/types";
 import { WorkspaceLogoutButton } from "./WorkspaceSessionControls";
@@ -30,21 +33,34 @@ const platformNavItems = [
   { label: "Sicurezza", href: "/account/security" },
 ] as const;
 
+function NavigationLayout({ children, label }: { children: ReactNode; label: string }) {
+  return (
+    <div className={styles.navigation}>
+      <nav aria-label={label} className={`${styles.nav} ${styles.navDesktop}`}>{children}</nav>
+      <details className={styles.navMenu}>
+        <summary><Icon decorative icon={List} weight="bold" /> Menu</summary>
+        <nav aria-label={label} className={`${styles.nav} ${styles.navMobile}`}>{children}</nav>
+      </details>
+    </div>
+  );
+}
+
 export function WorkspaceNavigation({ role, platformRole, support, authenticated }: { role: WorkspaceRole | null; platformRole: "USER" | "SUPER_ADMIN" | null; support: SupportContext | null; authenticated: boolean }) {
   const pathname = usePathname();
   const isPlatformConsole = pathname.startsWith("/qoovex-admin");
   if (isPlatformConsole && platformRole === "SUPER_ADMIN") {
     return (
-      <nav className={styles.nav} aria-label="Navigazione Console Qoovex">
+      <NavigationLayout label="Navigazione Console Qoovex">
         {platformNavItems.map((item) => <Link aria-current={pathname === item.href || (item.href !== "/qoovex-admin" && pathname.startsWith(`${item.href}/`)) ? "page" : undefined} href={item.href} key={item.href}>{item.label}</Link>)}
         {support ? <Link href="/dashboard">Azienda assistita</Link> : null}
         <WorkspaceLogoutButton />
-      </nav>
+      </NavigationLayout>
     );
   }
   const visibleItems = navItems.filter((item) => role && (item.roles as readonly WorkspaceRole[]).includes(role));
+  if (!authenticated && platformRole !== "SUPER_ADMIN" && visibleItems.length === 0) return null;
   return (
-    <nav className={styles.nav} aria-label="Navigazione workspace">
+    <NavigationLayout label="Navigazione workspace">
       {platformRole === "SUPER_ADMIN" ? <Link href="/qoovex-admin">Console Qoovex</Link> : null}
       {visibleItems.map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -56,6 +72,6 @@ export function WorkspaceNavigation({ role, platformRole, support, authenticated
       })}
       {authenticated ? <Link aria-current={pathname === "/account/security" ? "page" : undefined} href="/account/security">Sicurezza</Link> : null}
       {authenticated ? <WorkspaceLogoutButton /> : null}
-    </nav>
+    </NavigationLayout>
   );
 }

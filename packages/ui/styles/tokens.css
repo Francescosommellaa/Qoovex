@@ -33,6 +33,7 @@
   --spacing-qv-12: 3.25rem;
   --spacing-qv-24: 6rem;
   --spacing-qv-control: 2.75rem;
+  --spacing-qv-touch: 2.75rem;
   --spacing-qv-icon: 1.25rem;
   --spacing-qv-switch-thumb: 1.25rem;
   --radius-qv-sm: 0.375rem;
@@ -41,15 +42,21 @@
   --radius-qv-pill: 999px;
   --text-qv-body: 1rem;
   --text-qv-body--line-height: 1.5;
+  --text-qv-label: 0.875rem;
+  --text-qv-label--line-height: 1.35;
   --text-qv-title: 2rem;
   --text-qv-title--line-height: 1.15;
+  --text-qv-display: clamp(2.5rem, 6vw, 4.75rem);
+  --text-qv-display--line-height: 0.98;
   --shadow-qv-sm: 0 1px 2px oklch(0.24 0.025 145 / 0.08);
   --shadow-qv-md: 0 12px 32px oklch(0.24 0.025 145 / 0.12);
+  --shadow-qv-lg: 0 24px 64px oklch(0.24 0.025 145 / 0.16);
   --ease-qv-standard: cubic-bezier(0.2, 0, 0, 1);
   --breakpoint-qv-sm: 40rem;
   --breakpoint-qv-md: 52rem;
   --breakpoint-qv-lg: 70rem;
   --z-index-qv-raised: 10;
+  --z-index-qv-sticky: 20;
   --z-index-qv-overlay: 50;
 }
 
@@ -59,6 +66,7 @@
   --qv-color-surface: var(--color-qv-surface);
   --qv-color-surface-muted: var(--color-qv-surface-muted);
   --qv-color-border: var(--color-qv-border);
+  --qv-color-border-strong: var(--color-qv-border-strong);
   --qv-color-text: var(--color-qv-content);
   --qv-color-text-muted: var(--color-qv-content-muted);
   --qv-color-accent: var(--color-qv-accent);
@@ -81,7 +89,15 @@
   --qv-space-8: var(--spacing-qv-8);
   --qv-shadow-sm: var(--shadow-qv-sm);
   --qv-shadow-md: var(--shadow-qv-md);
+  --qv-shadow-lg: var(--shadow-qv-lg);
   --qv-font-sans: var(--font-sans);
   --qv-layout-md: 55rem;
   --qv-layout-lg: 70rem;
+  --qv-layout-xl: 76rem;
+  --qv-focus-color: var(--color-qv-accent);
+  --qv-focus-width: 0.1875rem;
+  --qv-focus-offset: 0.1875rem;
+  --qv-link-underline-thickness: 0.09em;
+  --qv-link-underline-offset: 0.18em;
+  --qv-touch-target: var(--spacing-qv-touch);
 }

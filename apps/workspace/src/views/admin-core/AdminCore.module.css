@@ -20,8 +20,8 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: #fbfcfa;
+  border-radius: var(--radius-qv-md);
+  background: var(--qvx-surface-muted);
   padding: 12px;
 }
 
@@ -63,8 +63,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
-  border-radius: 8px;
+  min-height: var(--qv-touch-target);
+  border-radius: var(--radius-qv-md);
   padding: 9px 12px;
   font-size: 0.86rem;
   font-weight: 760;
@@ -80,9 +80,9 @@
 
 .linkButton,
 .button {
-  border: 1px solid rgba(31, 122, 92, 0.36);
+  border: 1px solid color-mix(in oklch, var(--qvx-accent) 36%, var(--qvx-border));
   background: var(--qvx-accent);
-  color: #ffffff;
+  color: var(--qvx-surface);
 }
 
 .ghostButton {
@@ -92,8 +92,8 @@
 }
 
 .dangerButton {
-  border: 1px solid rgba(163, 59, 47, 0.34);
-  background: #fbe8e4;
+  border: 1px solid color-mix(in oklch, var(--qvx-danger) 34%, var(--qvx-border));
+  background: var(--color-qv-danger-soft);
   color: var(--qvx-danger);
 }
 
@@ -152,9 +152,9 @@
 .recordMain input {
   width: 100%;
   min-width: 0;
-  min-height: 42px;
+  min-height: var(--qv-touch-target);
   border: 1px solid var(--qvx-border);
-  border-radius: 8px;
+  border-radius: var(--radius-qv-md);
   background: var(--qvx-surface);
   color: var(--qvx-text);
   padding: 9px 10px;
@@ -165,21 +165,10 @@
   resize: vertical;
 }
 
-.field input:focus,
-.field select:focus,
-.field textarea:focus,
-.button:focus-visible,
-.dangerButton:focus-visible,
-.ghostButton:focus-visible,
-.linkButton:focus-visible {
-  outline: 3px solid rgba(31, 122, 92, 0.24);
-  outline-offset: 2px;
-}
-
 .formError {
-  border: 1px solid rgba(163, 59, 47, 0.32);
-  border-radius: 8px;
-  background: #fbe8e4;
+  border: 1px solid color-mix(in oklch, var(--qvx-danger) 32%, var(--qvx-border));
+  border-radius: var(--radius-qv-md);
+  background: var(--color-qv-danger-soft);
   color: var(--qvx-danger);
   padding: 10px;
   font-size: 0.84rem;
@@ -187,9 +176,9 @@
 }
 
 .formSuccess {
-  border: 1px solid rgba(31, 122, 92, 0.28);
-  border-radius: 8px;
-  background: #e4f4ed;
+  border: 1px solid color-mix(in oklch, var(--qvx-accent) 28%, var(--qvx-border));
+  border-radius: var(--radius-qv-md);
+  background: var(--color-qv-positive-soft);
   color: var(--qvx-accent-strong);
   padding: 10px;
   font-size: 0.84rem;
@@ -212,7 +201,7 @@
 .compactList li {
   display: grid;
   gap: 3px;
-  border-left: 3px solid rgba(31, 122, 92, 0.28);
+  border-left: 3px solid color-mix(in oklch, var(--qvx-accent) 28%, var(--qvx-border));
   padding-left: 10px;
 }
 
@@ -243,7 +232,7 @@
   flex: 0 0 auto;
   min-height: 36px;
   border: 1px solid var(--qvx-border);
-  border-radius: 999px;
+  border-radius: var(--radius-qv-pill);
   background: var(--qvx-surface);
   color: var(--qvx-text);
   padding: 7px 11px;
@@ -253,8 +242,8 @@
 }
 
 .filterBar a[aria-current="page"] {
-  border-color: rgba(31, 122, 92, 0.42);
-  background: #e4f4ed;
+  border-color: color-mix(in oklch, var(--qvx-accent) 42%, var(--qvx-border));
+  background: var(--color-qv-accent-soft);
   color: var(--qvx-accent-strong);
 }
 

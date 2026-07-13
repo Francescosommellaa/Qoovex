@@ -1,9 +1,11 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
+import type { ButtonHTMLAttributes } from "react";
 import { classNames } from "./class-names";
+import { Icon } from "./Icon";
 
 export type IconButtonProps = {
   "aria-label": string;
-  children: ReactNode;
+  icon: PhosphorIcon;
   tone?: "neutral" | "accent" | "danger";
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children">;
 
@@ -13,7 +15,7 @@ const toneClassNames = {
   danger: "border-qv-danger bg-qv-danger text-qv-surface hover:bg-qv-danger/90",
 } as const;
 
-export function IconButton({ children, className, tone = "neutral", type = "button", ...props }: IconButtonProps) {
+export function IconButton({ className, icon, tone = "neutral", type = "button", ...props }: IconButtonProps) {
   return (
     <button
       {...props}
@@ -24,7 +26,7 @@ export function IconButton({ children, className, tone = "neutral", type = "butt
       )}
       type={type}
     >
-      {children}
+      <Icon decorative icon={icon} weight="bold" />
     </button>
   );
 }

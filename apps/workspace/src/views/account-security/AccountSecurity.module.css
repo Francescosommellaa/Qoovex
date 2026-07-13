@@ -64,7 +64,7 @@
 .codeBlock {
   overflow-wrap: anywhere;
   border: 1px solid var(--qvx-border);
-  border-radius: 8px;
+  border-radius: var(--radius-qv-md);
   background: var(--qvx-surface-muted);
   padding: 12px;
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;

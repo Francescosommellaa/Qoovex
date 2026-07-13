@@ -67,11 +67,11 @@ export function MfaSecurityPattern() {
           <div className="mfa-pattern__request-list">
             <article className="mfa-pattern__request">
               <strong className="mfa-pattern__email">capocantiere.con.nome.molto.lungo@example-construction.test</strong>
-              <span>Ruolo SITE_MANAGER · scade tra 18 minuti</span>
+              <span>Ruolo SITE_MANAGER, scade tra 18 minuti</span>
             </article>
             <article className="mfa-pattern__request">
               <strong>consulente@example.test</strong>
-              <span>Ruolo SAFETY_CONSULTANT · scade tra 24 minuti</span>
+              <span>Ruolo SAFETY_CONSULTANT, scade tra 24 minuti</span>
             </article>
           </div>
           <Field htmlFor="owner-current-factor" label="Il tuo fattore MFA" description="La decisione richiede il fattore corrente dell'OWNER.">

@@ -39,10 +39,10 @@ La route `/data-control` e le API `/api/data/*` sono owner-only e mostrano inven
 Boundary:
 - i servizi server-specifici restano in `src/shared/server`;
 - le route API validano e delegano ai servizi;
-- la UI specifica del prodotto resta app-local finche non esiste riuso cross-app;
+- la UI specifica del prodotto resta app-local e compone le primitive generiche di `@qoovex/ui`; page header, record, filtri e gruppi azione non vengono promossi senza riuso cross-app;
 - i DTO condivisi vivono in `packages/types`;
 - Prisma schema, migrations e client vivono in `packages/db`;
-- componenti UI generici futuri dovranno uscire verso `packages/ui` solo quando riusabili;
+- componenti UI generici futuri dovranno uscire verso `packages/ui` solo quando riusabili e rappresentati in Sirio;
 - asset brand canonici futuri dovranno uscire verso `packages/brand`.
 
 Regole:

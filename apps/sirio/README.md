@@ -4,12 +4,12 @@ Showcase tecnico del design system Qoovex.
 
 ## Stato
 
-Sirio mostra token Tailwind CSS v4 e primitive importate da `@qoovex/ui`. Non e la fonte canonica dei componenti e non contiene business logic.
+Sirio mostra token Tailwind CSS v4 e primitive importate da `@qoovex/ui`. Il catalogo usa ID stabili, indice sticky, scrollspy, hash e `aria-current`. Non e la fonte canonica dei componenti e non contiene business logic.
 
 ## Responsabilita
 
 - mostrare token base;
-- mostrare Button, Card, Badge, Section e Container;
+- mostrare tutte le primitive condivise, inclusi Icon, Button, Card, Badge, Section e Container;
 - mostrare input, controlli, stati generici e casi loading/empty/error prima dell'integrazione workspace;
 - documentare esempi di stati operativi generici;
 - separare copy prudente da copy da evitare.

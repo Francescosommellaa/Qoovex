@@ -8,4 +8,6 @@ Il gate standard e: `pnpm type-check`, `pnpm test:unit`, `pnpm build`, `pnpm che
 
 Ogni modifica a schema, API, autorizzazioni, storage, UI condivisa o operazioni deve verificare i confini interessati e aggiornare questa documentazione, Qoovex-Brain e il session log nello stesso task. La memoria Codex si aggiorna solo su richiesta esplicita.
 
+Le modifiche UI condivise richiedono inoltre `pnpm check`, build dei consumer, verifica browser di Sirio e delle superfici reali, console pulita e controlli responsive almeno a 320, 375, 768, 1024 e 1440 px. I test E2E non si eseguono senza database e Blob dedicati e attestati.
+
 Un deploy non e verificato solo da build locale: le configurazioni Vercel e i flussi sensibili richiedono smoke check nel rispettivo ambiente.

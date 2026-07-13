@@ -2,13 +2,14 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { classNames } from "./class-names";
 
 export type PanelProps = {
+  as?: "article" | "div" | "section";
   children: ReactNode;
   tone?: "default" | "muted";
 } & HTMLAttributes<HTMLElement>;
 
-export function Panel({ children, className, tone = "default", ...props }: PanelProps) {
+export function Panel({ as: Component = "div", children, className, tone = "default", ...props }: PanelProps) {
   return (
-    <section
+    <Component
       {...props}
       className={classNames(
         "rounded-qv-lg border p-qv-5",
@@ -17,6 +18,6 @@ export function Panel({ children, className, tone = "default", ...props }: Panel
       )}
     >
       {children}
-    </section>
+    </Component>
   );
 }

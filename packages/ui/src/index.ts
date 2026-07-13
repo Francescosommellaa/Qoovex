@@ -18,6 +18,8 @@ export { Field } from "./components/Field";
 export type { FieldProps } from "./components/Field";
 export { IconButton } from "./components/IconButton";
 export type { IconButtonProps } from "./components/IconButton";
+export { Icon } from "./components/Icon";
+export type { IconProps, IconSize } from "./components/Icon";
 export { Input } from "./components/Input";
 export type { InputProps } from "./components/Input";
 export { LoadingState } from "./components/LoadingState";

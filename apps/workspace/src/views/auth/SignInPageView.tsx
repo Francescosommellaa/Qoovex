@@ -85,7 +85,7 @@ export function SignInPageView({
 
         <p className={styles.hint}>
           <Link className={styles.textLink} href={`/reset-password?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Password dimenticata?</Link>
-          {" · "}
+          <span aria-hidden="true"> / </span>
           <Link className={styles.textLink} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Verifica o reinvia il codice email</Link>
         </p>
 
