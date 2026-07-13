@@ -51,7 +51,14 @@
     },
     "test": {
       "dependsOn": ["^test"],
-      "outputs": ["coverage/**"]
+      "outputs": ["coverage/**"],
+      "env": [
+        "CI",
+        "DATABASE_URL",
+        "DATABASE_POSTGRES_URL",
+        "DATABASE_PRISMA_DATABASE_URL",
+        "QOOVEX_AUDIT_SECRET"
+      ]
     },
     "dev": {
       "cache": false,

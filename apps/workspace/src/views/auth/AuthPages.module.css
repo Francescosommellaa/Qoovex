@@ -81,6 +81,7 @@
 .field input:focus-visible,
 .primaryButton:focus-visible,
 .secondaryButton:focus-visible,
+.textButton:focus-visible,
 .secondaryLink:focus-visible,
 .textLink:focus-visible {
   outline: 3px solid var(--color-qv-accent-soft);
@@ -108,6 +109,23 @@
   background: var(--color-qv-surface);
   color: var(--color-qv-content);
   cursor: pointer;
+}
+
+.textButton {
+  justify-self: center;
+  border: 0;
+  background: transparent;
+  color: var(--qvx-accent-strong);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 760;
+  text-decoration: underline;
+}
+
+.textButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
 }
 
 .secondaryButton:disabled {

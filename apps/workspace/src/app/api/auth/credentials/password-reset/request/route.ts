@@ -1,19 +1,17 @@
 import { NextResponse } from "next/server";
-import { AuthCredentialsError, requestCredentialsSignupEmail } from "@shared/server/auth-credentials-service";
+import { AuthCredentialsError, requestPasswordReset } from "@shared/server/auth-credentials-service";
 import { getRequestIpHash } from "@shared/server/security-audit-service";
-import { clearVerifiedSignupEmailCookie } from "@shared/server/signup-session-service";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json() as { email?: string };
-    await requestCredentialsSignupEmail({
+    await requestPasswordReset({
       email: body.email ?? "",
       ipHash: getRequestIpHash(request.headers),
     });
-    await clearVerifiedSignupEmailCookie();
     return NextResponse.json({ requested: true });
   } catch (error) {
-    const message = error instanceof AuthCredentialsError ? error.message : "Registrazione non riuscita.";
+    const message = error instanceof AuthCredentialsError ? error.message : "Richiesta reset non riuscita.";
     return NextResponse.json({ message }, { status: 409 });
   }
 }
