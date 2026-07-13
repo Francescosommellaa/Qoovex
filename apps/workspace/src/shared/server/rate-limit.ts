@@ -1,6 +1,7 @@
 import "server-only";
 
-import { db } from "@qoovex/db";
+import crypto from "crypto";
+import { db, Prisma } from "@qoovex/db";
 
 interface RateLimitEntry {
   count: number;
@@ -43,37 +44,54 @@ export async function assertPersistentRateLimit(input: {
   bucket: string;
   limit: number;
   windowMs: number;
+  userId?: string | null;
 }) {
   const normalizedIdentifier = input.identifier.trim().toLowerCase() || "anonymous";
-  const key = `${input.bucket}:${normalizedIdentifier}`;
+  const key = createPersistentRateLimitKey(input.bucket, normalizedIdentifier);
   const now = new Date();
   const resetAt = new Date(now.getTime() + input.windowMs);
 
-  const current = await db.authRateLimit.findUnique({ where: { key } });
-  if (!current || current.resetAt <= now) {
-    await db.authRateLimit.upsert({
-      where: { key },
-      create: {
-        key,
-        bucket: input.bucket,
-        count: 1,
-        resetAt,
-      },
-      update: {
-        bucket: input.bucket,
-        count: 1,
-        resetAt,
-      },
-    });
-    return;
-  }
+  const rows = await db.$queryRaw<Array<{ count: number }>>(Prisma.sql`
+    INSERT INTO "AuthRateLimit" (
+      "key", "bucket", "userId", "count", "resetAt", "createdAt", "updatedAt"
+    ) VALUES (
+      ${key}, ${input.bucket}, ${input.userId ?? null}, 1, ${resetAt}, ${now}, ${now}
+    )
+    ON CONFLICT ("key") DO UPDATE SET
+      "bucket" = EXCLUDED."bucket",
+      "userId" = COALESCE(EXCLUDED."userId", "AuthRateLimit"."userId"),
+      "count" = CASE
+        WHEN "AuthRateLimit"."resetAt" <= ${now} THEN 1
+        ELSE "AuthRateLimit"."count" + 1
+      END,
+      "resetAt" = CASE
+        WHEN "AuthRateLimit"."resetAt" <= ${now} THEN EXCLUDED."resetAt"
+        ELSE "AuthRateLimit"."resetAt"
+      END,
+      "updatedAt" = ${now}
+    WHERE "AuthRateLimit"."resetAt" <= ${now}
+       OR "AuthRateLimit"."count" < ${input.limit}
+    RETURNING "count"
+  `);
 
-  if (current.count >= input.limit) {
-    throw new RateLimitExceededError();
-  }
+  await db.authRateLimit.deleteMany({
+    where: { resetAt: { lte: now }, key: { not: key } },
+  }).catch(() => undefined);
 
-  await db.authRateLimit.update({
-    where: { key },
-    data: { count: { increment: 1 } },
-  });
+  if (!rows.length) throw new RateLimitExceededError();
+  return key;
+}
+
+function getRateLimitSecret() {
+  const secret = process.env.QOOVEX_AUDIT_SECRET?.trim();
+  if (!secret || secret.length < 32) throw new Error("QOOVEX_AUDIT_SECRET non configurato.");
+  return secret;
+}
+
+export function createPersistentRateLimitKey(bucket: string, normalizedIdentifier: string) {
+  const digest = crypto
+    .createHmac("sha256", getRateLimitSecret())
+    .update(`rate-limit:v1\0${bucket}\0${normalizedIdentifier}`)
+    .digest("hex");
+  return `v1:${digest}`;
 }

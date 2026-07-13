@@ -130,6 +130,7 @@ async function assertNotificationEmailRateLimit(input: { organizationId: string;
       bucket: input.bucket,
       limit: 1,
       windowMs: EMAIL_RATE_LIMIT_WINDOW_MS,
+      userId: input.userId,
     });
   } catch (error) {
     if (error instanceof RateLimitExceededError) throw new AccessError(error.message, 409);

@@ -4,6 +4,7 @@ import { expect, test, type APIRequestContext, type APIResponse, type Page } fro
 type JsonRecord = Record<string, unknown>;
 
 const BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+const E2E_PNG_BYTES = Array.from(Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64"));
 
 function decodeBase32(value: string) {
   let bits = 0;
@@ -72,10 +73,6 @@ async function pagePostJson(page: Page, url: string, data?: JsonRecord): Promise
   return pageJsonRequest(page, "POST", url, data, 201);
 }
 
-async function getContext(page: Page): Promise<JsonRecord> {
-  return pageJsonRequest(page, "GET", "/api/context");
-}
-
 async function signInWithCredentials(page: Page, email: string, password: string) {
   await page.goto("/sign-in?callbackUrl=%2Fdashboard", { waitUntil: "domcontentloaded" });
   await page.getByLabel("Email o username").fill(email);
@@ -89,28 +86,6 @@ async function satisfyMfaGate(page: Page, secret: string) {
   await page.locator("#mfa-gate-code").fill(currentTotp(secret));
   await page.getByRole("button", { name: "Apri il workspace" }).click();
   await expect(page.getByRole("heading", { name: "Stato documentale" })).toBeVisible();
-}
-
-async function ensureOrganization(page: Page, runId: string): Promise<JsonRecord> {
-  let context = await getContext(page);
-  if (!context.company) {
-    const response = await page.evaluate(async (name) => {
-      const result = await fetch("/api/organizations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
-      });
-      return { status: result.status, body: await result.json().catch(() => null) };
-    }, `Qoovex E2E ${runId}`);
-    expect([201, 409], JSON.stringify(response.body)).toContain(response.status);
-    context = await getContext(page);
-  }
-
-  const company = context.company as JsonRecord | null;
-  const organization = company?.organization as JsonRecord | undefined;
-  expect(organization?.id).toEqual(expect.any(String));
-  expect(organization?.code).toEqual(expect.any(String));
-  return organization;
 }
 
 async function createDomainData(page: Page, runId: string) {
@@ -173,7 +148,25 @@ async function createDomainData(page: Page, runId: string) {
     expect(created.id).toEqual(expect.any(String));
   }
 
-  return { documentPackage };
+  return { document, documentPackage };
+}
+
+async function uploadAndDownloadDocument(page: Page, documentId: unknown) {
+  const uploaded = await page.evaluate(async ({ bytes, id }) => {
+    const form = new FormData();
+    form.set("file", new File([new Uint8Array(bytes)], "e2e-document.png", { type: "image/png" }));
+    const response = await fetch(`/api/documents/${id}/versions`, { method: "POST", body: form });
+    return { status: response.status, body: await response.json().catch(() => null) };
+  }, { bytes: E2E_PNG_BYTES, id: String(documentId) });
+  expect(uploaded.status, JSON.stringify(uploaded.body)).toBe(201);
+  const version = (uploaded.body as JsonRecord).version as JsonRecord;
+  expect(version.id).toEqual(expect.any(String));
+
+  const downloaded = await page.evaluate(async ({ id, versionId }) => {
+    const response = await fetch(`/api/documents/${id}/versions/${versionId}/download`);
+    return { status: response.status, bytes: Array.from(new Uint8Array(await response.arrayBuffer())) };
+  }, { id: String(documentId), versionId: String(version.id) });
+  expect(downloaded).toEqual({ status: 200, bytes: E2E_PNG_BYTES });
 }
 
 async function verifyWorkspacePages(page: Page) {
@@ -218,41 +211,177 @@ async function verifyAnonymousShareLink(
   expect(serialized).not.toMatch(/vercel-storage\.com/i);
 }
 
-test("workspace MVP smoke with dev-auth, anonymous share link, and logout", async ({ page, request }) => {
+async function waitForSinkTemplate(api: APIRequestContext, sinkUrl: string, email: string, kind: string): Promise<JsonRecord> {
+  let template: JsonRecord | null = null;
+  await expect.poll(async () => {
+    const response = await api.get(`${sinkUrl}?to=${encodeURIComponent(email)}`);
+    if (!response.ok()) return null;
+    const body = await response.json() as { messages?: Array<{ template?: JsonRecord }> };
+    template = body.messages?.find((message) => message.template?.kind === kind)?.template ?? null;
+    return template?.kind ?? null;
+  }).toBe(kind);
+  return template!;
+}
+
+test("credentials signup verifies the real OTP through the authenticated E2E email sink", async ({ page, playwright, baseURL }) => {
+  const runId = `${Date.now()}`;
+  const email = `signup-e2e-${runId}@example.test`;
+  const username = `signup_e2e_${runId}`;
+  const password = `Qoovex-Signup-${runId}!`;
+  const sinkUrl = process.env.QOOVEX_E2E_EMAIL_SINK_URL!;
+  const sinkApi = await playwright.request.newContext({
+    extraHTTPHeaders: { Authorization: `Bearer ${process.env.QOOVEX_E2E_EMAIL_SINK_SECRET}` },
+  });
+  const adminApi = await playwright.request.newContext({ baseURL });
+
+  try {
+    expect((await sinkApi.delete(sinkUrl)).status()).toBe(200);
+    await page.goto("/sign-up", { waitUntil: "domcontentloaded" });
+    await page.getByLabel("Email").fill(email);
+    await page.getByLabel("Username").fill(username);
+    await page.getByLabel("Password").fill(password);
+    await page.getByRole("button", { name: "Crea account" }).click();
+    await expect(page.getByText("Codice inviato. Controlla la tua email e completa la verifica.")).toBeVisible();
+
+    let code: string | null = null;
+    await expect.poll(async () => {
+      const response = await sinkApi.get(`${sinkUrl}?to=${encodeURIComponent(email)}`);
+      if (!response.ok()) return null;
+      const body = await response.json() as { messages?: Array<{ template?: { kind?: string; code?: string } }> };
+      code = body.messages?.find((message) => message.template?.kind === "auth-code")?.template?.code ?? null;
+      return code;
+    }).toMatch(/^\d{6}$/);
+    await page.getByLabel("Codice email").fill(String(code));
+    await page.getByRole("button", { name: "Completa verifica" }).click();
+    await expect.poll(async () => (await page.context().request.get("/api/context")).status()).toBe(200);
+  } finally {
+    expect((await adminApi.post("/api/dev-auth")).status()).toBe(200);
+    const cleanup = await adminApi.delete("/api/dev-fixtures/platform-admin", { data: { fixtureEmails: [email] } });
+    expect(cleanup.status()).toBe(200);
+    expect(await cleanup.json()).toMatchObject({ remainingUsers: 0, organizationExists: 0, remainingBlobs: 0 });
+    await Promise.all([sinkApi.dispose(), adminApi.dispose()]);
+  }
+});
+
+test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous share link, and cleanup", async ({ page, request, playwright, baseURL }) => {
   const runId = `${Date.now()}`;
   const anonymousApi = request;
+  const adminApi = await playwright.request.newContext({ baseURL });
+  let fixture: JsonRecord | null = null;
 
-  await expectJson(await anonymousApi.get("/api/context"), 401);
-  await expectJson(await anonymousApi.get("/api/platform-admin/overview"), 401);
+  try {
+    await expectJson(await anonymousApi.get("/api/context"), 401);
+    await expectJson(await anonymousApi.get("/api/platform-admin/overview"), 401);
+    expect((await adminApi.post("/api/dev-auth")).status()).toBe(200);
+    fixture = await expectJson(await adminApi.post("/api/dev-fixtures/platform-admin", { data: { kind: "mfa-suite", runId } }), 201);
+    const owner = fixture.owner as JsonRecord;
+    await signInWithCredentials(page, String(owner.email), String(fixture.password));
+    await satisfyMfaGate(page, String(owner.secret));
 
-  await page.goto("/sign-in", { waitUntil: "domcontentloaded" });
-  const devButton = page.getByRole("button", { name: "Accedi come dev" });
-  await expect(devButton).toBeVisible();
-  await devButton.click();
-  await page.waitForURL("**/qoovex-admin");
-  await expect(page.getByRole("heading", { name: "Console Qoovex" })).toBeVisible();
+    const { document, documentPackage } = await createDomainData(page, runId);
+    await uploadAndDownloadDocument(page, document.id);
+    await verifyWorkspacePages(page);
 
-  await ensureOrganization(page, runId);
-  const { documentPackage } = await createDomainData(page, runId);
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    const shareLinkResponse = await pagePostJson(page, `/api/document-packages/${documentPackage.id}/share-links`, { expiresAt });
+    const shareLink = shareLinkResponse.shareLink as JsonRecord;
+    const token = shareLinkResponse.token;
+    expect(token).toEqual(expect.any(String));
+    await verifyAnonymousShareLink(anonymousApi, token as string, 200);
+    await pageJsonRequest(page, "DELETE", `/api/document-packages/${documentPackage.id}/share-links/${shareLink.id}`);
+    await verifyAnonymousShareLink(anonymousApi, token as string, 404, "Link non disponibile.");
 
-  await verifyWorkspacePages(page);
+    await page.getByRole("button", { name: "Esci" }).click();
+    await page.waitForURL("**/sign-in");
+    await expectPageJson(page, "/api/context", 401);
+  } finally {
+    if (fixture) {
+      const owner = fixture.owner as JsonRecord;
+      const worker = fixture.worker as JsonRecord;
+      const cleanup = await adminApi.delete("/api/dev-fixtures/platform-admin", { data: { organizationId: fixture.organizationId, userIds: [owner.id, worker.id] } });
+      expect(cleanup.status()).toBe(200);
+      expect(await cleanup.json()).toMatchObject({ remainingUsers: 0, organizationExists: 0, remainingBlobs: 0 });
+    }
+    await adminApi.dispose();
+  }
+});
 
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
-  const shareLinkResponse = await pagePostJson(page, `/api/document-packages/${documentPackage.id}/share-links`, { expiresAt });
-  const shareLink = shareLinkResponse.shareLink as JsonRecord;
-  const token = shareLinkResponse.token;
+test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", async ({ browser, playwright, baseURL }) => {
+  const runId = `${Date.now()}`;
+  const siteManagerEmail = `signup-e2e-${runId}@example.test`;
+  const siteManagerUsername = `signup_e2e_${runId}`;
+  const siteManagerPassword = `Qoovex-Invite-${runId}!`;
+  const sinkUrl = process.env.QOOVEX_E2E_EMAIL_SINK_URL!;
+  const sinkApi = await playwright.request.newContext({ extraHTTPHeaders: { Authorization: `Bearer ${process.env.QOOVEX_E2E_EMAIL_SINK_SECRET}` } });
+  const adminApi = await playwright.request.newContext({ baseURL });
+  const ownerContext = await browser.newContext({ baseURL });
+  const inviteeContext = await browser.newContext({ baseURL });
+  const scopedSiteManagerContext = await browser.newContext({ baseURL });
+  const workerContext = await browser.newContext({ baseURL });
+  let fixture: JsonRecord | null = null;
 
-  expect(token).toEqual(expect.any(String));
-  expect(shareLink.id).toEqual(expect.any(String));
+  try {
+    expect((await adminApi.post("/api/dev-auth")).status()).toBe(200);
+    fixture = await expectJson(await adminApi.post("/api/dev-fixtures/platform-admin", { data: { kind: "mfa-suite", runId } }), 201);
+    const owner = fixture.owner as JsonRecord;
+    const worker = fixture.worker as JsonRecord;
+    const ownerPage = await ownerContext.newPage();
+    await signInWithCredentials(ownerPage, String(owner.email), String(fixture.password));
+    await satisfyMfaGate(ownerPage, String(owner.secret));
 
-  await verifyAnonymousShareLink(anonymousApi, token as string, 200);
+    expect((await sinkApi.delete(sinkUrl)).status()).toBe(200);
+    await expectJson(await ownerPage.request.post("/api/organization/invitations", { data: { email: siteManagerEmail, role: "SITE_MANAGER" } }), 201);
+    const invitationTemplate = await waitForSinkTemplate(sinkApi, sinkUrl, siteManagerEmail, "organization-invitation");
+    const invitationToken = new URL(String(invitationTemplate.acceptUrl)).searchParams.get("token");
+    expect(invitationToken).toEqual(expect.any(String));
 
-  await pageJsonRequest(page, "DELETE", `/api/document-packages/${documentPackage.id}/share-links/${shareLink.id}`);
-  await verifyAnonymousShareLink(anonymousApi, token as string, 404, "Link non disponibile.");
+    const inviteePage = await inviteeContext.newPage();
+    await inviteePage.goto("/sign-up", { waitUntil: "domcontentloaded" });
+    await inviteePage.getByLabel("Email").fill(siteManagerEmail);
+    await inviteePage.getByLabel("Username").fill(siteManagerUsername);
+    await inviteePage.getByLabel("Password").fill(siteManagerPassword);
+    await inviteePage.getByRole("button", { name: "Crea account" }).click();
+    const signupTemplate = await waitForSinkTemplate(sinkApi, sinkUrl, siteManagerEmail, "auth-code");
+    await inviteePage.getByLabel("Codice email").fill(String(signupTemplate.code));
+    await inviteePage.getByRole("button", { name: "Completa verifica" }).click();
+    await expect.poll(async () => (await inviteePage.request.get("/api/context")).status()).toBe(200);
+    await expectJson(await inviteePage.request.post("/api/organization/invitations/accept", { data: { token: invitationToken } }), 200);
 
-  await page.getByRole("button", { name: "Esci" }).click();
-  await page.waitForURL("**/sign-in");
-  await expectPageJson(page, "/api/context", 401);
+    const members = await expectJson(await ownerPage.request.get("/api/organization/members"), 200) as unknown as JsonRecord[];
+    const siteManager = members.find((member) => (member.user as JsonRecord).email === siteManagerEmail)!;
+    const assignedJobSite = await pagePostJson(ownerPage, "/api/job-sites", { name: `Cantiere assegnato ${runId}` });
+    await pagePostJson(ownerPage, "/api/job-sites", { name: `Cantiere non assegnato ${runId}` });
+    await pagePostJson(ownerPage, "/api/resource-assignments/job-site-user-assignments", {
+      jobSiteId: assignedJobSite.id,
+      userId: (siteManager.user as JsonRecord).id,
+    });
+    const linkedWorker = await pagePostJson(ownerPage, "/api/workers", { displayName: `Worker assegnato ${runId}` });
+    await pagePostJson(ownerPage, "/api/resource-assignments/worker-user-links", { workerId: linkedWorker.id, userId: worker.id });
+
+    const siteManagerPage = await scopedSiteManagerContext.newPage();
+    await signInWithCredentials(siteManagerPage, siteManagerEmail, siteManagerPassword);
+    const siteManagerJobSites = await expectJson(await siteManagerPage.request.get("/api/job-sites"), 200) as unknown as JsonRecord[];
+    expect(siteManagerJobSites.map((jobSite) => jobSite.id)).toEqual([assignedJobSite.id]);
+    await expectJson(await siteManagerPage.request.post("/api/job-sites", { data: { name: "Vietato" } }), 404);
+
+    const workerPage = await workerContext.newPage();
+    await signInWithCredentials(workerPage, String(worker.email), String(fixture.password));
+    await satisfyMfaGate(workerPage, String(worker.secret));
+    const workerRecords = await expectJson(await workerPage.request.get("/api/workers"), 200) as unknown as JsonRecord[];
+    expect(workerRecords.map((record) => record.id)).toEqual([linkedWorker.id]);
+    await expectJson(await workerPage.request.post("/api/workers", { data: { displayName: "Vietato" } }), 404);
+  } finally {
+    if (fixture) {
+      const owner = fixture.owner as JsonRecord;
+      const worker = fixture.worker as JsonRecord;
+      const cleanup = await adminApi.delete("/api/dev-fixtures/platform-admin", {
+        data: { organizationId: fixture.organizationId, userIds: [owner.id, worker.id], fixtureEmails: [siteManagerEmail] },
+      });
+      expect(cleanup.status()).toBe(200);
+      expect(await cleanup.json()).toMatchObject({ remainingUsers: 0, organizationExists: 0, remainingBlobs: 0 });
+    }
+    await Promise.all([sinkApi.dispose(), adminApi.dispose(), ownerContext.close(), inviteeContext.close(), scopedSiteManagerContext.close(), workerContext.close()]);
+  }
 });
 
 test("Qoovex operator manages a customer, support session, and runtime error", async ({ page }) => {
@@ -260,12 +389,14 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
   const email = `platform-e2e-${runId}@example.test`;
   let targetUserId: string | null = null;
   let runtimeErrorId: string | null = null;
+  let organizationFixture: JsonRecord | null = null;
 
   try {
     await page.goto("/sign-in", { waitUntil: "domcontentloaded" });
     await page.getByRole("button", { name: "Accedi come dev" }).click();
     await page.waitForURL("**/qoovex-admin");
-    const organization = await ensureOrganization(page, runId);
+    organizationFixture = await pagePostJson(page, "/api/dev-fixtures/platform-admin", { kind: "mfa-suite", runId });
+    const organization = { id: organizationFixture.organizationId, code: `MFA-${runId}` };
 
     const fixtures = await pagePostJson(page, "/api/dev-fixtures/platform-admin", { runId });
     const target = fixtures.user as JsonRecord;
@@ -317,9 +448,18 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
     await page.waitForURL("**/sign-in");
     await expectPageJson(page, "/api/context", 401);
   } finally {
-    if (runtimeErrorId || targetUserId) {
+    if (runtimeErrorId || targetUserId || organizationFixture) {
       await page.context().request.post("/api/dev-auth");
-      await page.context().request.delete("/api/dev-fixtures/platform-admin", { data: { userId: targetUserId, runtimeErrorId } });
+      if (runtimeErrorId || targetUserId) {
+        await page.context().request.delete("/api/dev-fixtures/platform-admin", { data: { userId: targetUserId, runtimeErrorId } });
+      }
+      if (organizationFixture) {
+        const owner = organizationFixture.owner as JsonRecord;
+        const worker = organizationFixture.worker as JsonRecord;
+        await page.context().request.delete("/api/dev-fixtures/platform-admin", {
+          data: { organizationId: organizationFixture.organizationId, userIds: [owner.id, worker.id] },
+        });
+      }
     }
   }
 });

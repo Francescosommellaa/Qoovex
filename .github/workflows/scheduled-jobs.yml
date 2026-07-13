@@ -34,10 +34,11 @@ jobs:
         run: |
           test -n "$CRON_SECRET"
           test -n "$WORKSPACE_BASE_URL"
-          curl --fail-with-body --silent --show-error \
+          response="$(curl --fail-with-body --silent --show-error \
             --retry 2 --retry-all-errors --connect-timeout 10 --max-time 240 \
             --header "Authorization: Bearer $CRON_SECRET" \
-            "$WORKSPACE_BASE_URL/api/data/jobs/run"
+            "$WORKSPACE_BASE_URL/api/data/jobs/run")"
+          jq -e 'type == "object" and ((.failed | type) == "number") and .failed == 0' <<<"$response" >/dev/null
 
   digest:
     if: github.event.schedule == '11 * * * *' || inputs.target == 'all' || inputs.target == 'digest'
@@ -53,7 +54,8 @@ jobs:
         run: |
           test -n "$CRON_SECRET"
           test -n "$WORKSPACE_BASE_URL"
-          curl --fail-with-body --silent --show-error \
+          response="$(curl --fail-with-body --silent --show-error \
             --retry 2 --retry-all-errors --connect-timeout 10 --max-time 240 \
             --header "Authorization: Bearer $CRON_SECRET" \
-            "$WORKSPACE_BASE_URL/api/reminders/email-digest/run"
+            "$WORKSPACE_BASE_URL/api/reminders/email-digest/run")"
+          jq -e 'type == "object" and ((.failed | type) == "number") and .failed == 0' <<<"$response" >/dev/null

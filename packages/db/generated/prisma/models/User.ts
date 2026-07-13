@@ -388,6 +388,7 @@ export type UserWhereInput = {
   sessions?: Prisma.SessionListRelationFilter
   credential?: Prisma.XOR<Prisma.UserCredentialNullableScalarRelationFilter, Prisma.UserCredentialWhereInput> | null
   authCodes?: Prisma.AuthCodeListRelationFilter
+  authRateLimits?: Prisma.AuthRateLimitListRelationFilter
   securityEvents?: Prisma.SecurityAuditEventListRelationFilter
   mfaBackupCodes?: Prisma.MfaBackupCodeListRelationFilter
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestListRelationFilter
@@ -449,6 +450,7 @@ export type UserOrderByWithRelationInput = {
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   credential?: Prisma.UserCredentialOrderByWithRelationInput
   authCodes?: Prisma.AuthCodeOrderByRelationAggregateInput
+  authRateLimits?: Prisma.AuthRateLimitOrderByRelationAggregateInput
   securityEvents?: Prisma.SecurityAuditEventOrderByRelationAggregateInput
   mfaBackupCodes?: Prisma.MfaBackupCodeOrderByRelationAggregateInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestOrderByRelationAggregateInput
@@ -513,6 +515,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sessions?: Prisma.SessionListRelationFilter
   credential?: Prisma.XOR<Prisma.UserCredentialNullableScalarRelationFilter, Prisma.UserCredentialWhereInput> | null
   authCodes?: Prisma.AuthCodeListRelationFilter
+  authRateLimits?: Prisma.AuthRateLimitListRelationFilter
   securityEvents?: Prisma.SecurityAuditEventListRelationFilter
   mfaBackupCodes?: Prisma.MfaBackupCodeListRelationFilter
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestListRelationFilter
@@ -640,6 +643,7 @@ export type UserCreateInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -701,6 +705,7 @@ export type UserUncheckedCreateInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -762,6 +767,7 @@ export type UserUpdateInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -823,6 +829,7 @@ export type UserUncheckedUpdateInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -1473,6 +1480,22 @@ export type UserUpdateOneWithoutDeniedMfaRecoveriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeniedMfaRecoveriesInput, Prisma.UserUpdateWithoutDeniedMfaRecoveriesInput>, Prisma.UserUncheckedUpdateWithoutDeniedMfaRecoveriesInput>
 }
 
+export type UserCreateNestedOneWithoutAuthRateLimitsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthRateLimitsInput, Prisma.UserUncheckedCreateWithoutAuthRateLimitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthRateLimitsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutAuthRateLimitsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthRateLimitsInput, Prisma.UserUncheckedCreateWithoutAuthRateLimitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthRateLimitsInput
+  upsert?: Prisma.UserUpsertWithoutAuthRateLimitsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthRateLimitsInput, Prisma.UserUpdateWithoutAuthRateLimitsInput>, Prisma.UserUncheckedUpdateWithoutAuthRateLimitsInput>
+}
+
 export type UserCreateNestedOneWithoutSecurityEventsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSecurityEventsInput, Prisma.UserUncheckedCreateWithoutSecurityEventsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSecurityEventsInput
@@ -1563,6 +1586,7 @@ export type UserCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -1623,6 +1647,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -1699,6 +1724,7 @@ export type UserUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -1759,6 +1785,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -1819,6 +1846,7 @@ export type UserCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -1879,6 +1907,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -1955,6 +1984,7 @@ export type UserUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -2015,6 +2045,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -2076,6 +2107,7 @@ export type UserCreateWithoutCreatedOrganizationsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -2136,6 +2168,7 @@ export type UserUncheckedCreateWithoutCreatedOrganizationsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -2212,6 +2245,7 @@ export type UserUpdateWithoutCreatedOrganizationsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -2272,6 +2306,7 @@ export type UserUncheckedUpdateWithoutCreatedOrganizationsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -2332,6 +2367,7 @@ export type UserCreateWithoutWorkerUserLinksInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -2392,6 +2428,7 @@ export type UserUncheckedCreateWithoutWorkerUserLinksInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -2457,6 +2494,7 @@ export type UserCreateWithoutLinkedWorkerUserLinksInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -2517,6 +2555,7 @@ export type UserUncheckedCreateWithoutLinkedWorkerUserLinksInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -2593,6 +2632,7 @@ export type UserUpdateWithoutWorkerUserLinksInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -2653,6 +2693,7 @@ export type UserUncheckedUpdateWithoutWorkerUserLinksInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -2724,6 +2765,7 @@ export type UserUpdateWithoutLinkedWorkerUserLinksInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -2784,6 +2826,7 @@ export type UserUncheckedUpdateWithoutLinkedWorkerUserLinksInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -2844,6 +2887,7 @@ export type UserCreateWithoutJobSiteUserAssignmentsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -2904,6 +2948,7 @@ export type UserUncheckedCreateWithoutJobSiteUserAssignmentsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -2969,6 +3014,7 @@ export type UserCreateWithoutAssignedJobSiteUsersInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -3029,6 +3075,7 @@ export type UserUncheckedCreateWithoutAssignedJobSiteUsersInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -3105,6 +3152,7 @@ export type UserUpdateWithoutJobSiteUserAssignmentsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -3165,6 +3213,7 @@ export type UserUncheckedUpdateWithoutJobSiteUserAssignmentsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -3236,6 +3285,7 @@ export type UserUpdateWithoutAssignedJobSiteUsersInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -3296,6 +3346,7 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteUsersInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -3356,6 +3407,7 @@ export type UserCreateWithoutAssignedJobSiteWorkersInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -3416,6 +3468,7 @@ export type UserUncheckedCreateWithoutAssignedJobSiteWorkersInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -3492,6 +3545,7 @@ export type UserUpdateWithoutAssignedJobSiteWorkersInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -3552,6 +3606,7 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteWorkersInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -3612,6 +3667,7 @@ export type UserCreateWithoutReviewedDocumentsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -3672,6 +3728,7 @@ export type UserUncheckedCreateWithoutReviewedDocumentsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -3748,6 +3805,7 @@ export type UserUpdateWithoutReviewedDocumentsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -3808,6 +3866,7 @@ export type UserUncheckedUpdateWithoutReviewedDocumentsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -3868,6 +3927,7 @@ export type UserCreateWithoutUploadedDocumentVersionsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -3928,6 +3988,7 @@ export type UserUncheckedCreateWithoutUploadedDocumentVersionsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -4004,6 +4065,7 @@ export type UserUpdateWithoutUploadedDocumentVersionsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -4064,6 +4126,7 @@ export type UserUncheckedUpdateWithoutUploadedDocumentVersionsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -4124,6 +4187,7 @@ export type UserCreateWithoutCompletedChecklistItemsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -4184,6 +4248,7 @@ export type UserUncheckedCreateWithoutCompletedChecklistItemsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -4260,6 +4325,7 @@ export type UserUpdateWithoutCompletedChecklistItemsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -4320,6 +4386,7 @@ export type UserUncheckedUpdateWithoutCompletedChecklistItemsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -4380,6 +4447,7 @@ export type UserCreateWithoutCreatedEvidenceInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -4440,6 +4508,7 @@ export type UserUncheckedCreateWithoutCreatedEvidenceInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -4516,6 +4585,7 @@ export type UserUpdateWithoutCreatedEvidenceInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -4576,6 +4646,7 @@ export type UserUncheckedUpdateWithoutCreatedEvidenceInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -4636,6 +4707,7 @@ export type UserCreateWithoutCreatedDocumentPackagesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -4696,6 +4768,7 @@ export type UserUncheckedCreateWithoutCreatedDocumentPackagesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -4772,6 +4845,7 @@ export type UserUpdateWithoutCreatedDocumentPackagesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -4832,6 +4906,7 @@ export type UserUncheckedUpdateWithoutCreatedDocumentPackagesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -4892,6 +4967,7 @@ export type UserCreateWithoutCreatedShareLinksInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -4952,6 +5028,7 @@ export type UserUncheckedCreateWithoutCreatedShareLinksInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -5028,6 +5105,7 @@ export type UserUpdateWithoutCreatedShareLinksInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -5088,6 +5166,7 @@ export type UserUncheckedUpdateWithoutCreatedShareLinksInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -5148,6 +5227,7 @@ export type UserCreateWithoutNotificationsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -5208,6 +5288,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -5284,6 +5365,7 @@ export type UserUpdateWithoutNotificationsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -5344,6 +5426,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -5404,6 +5487,7 @@ export type UserCreateWithoutNotificationPreferencesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -5464,6 +5548,7 @@ export type UserUncheckedCreateWithoutNotificationPreferencesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -5540,6 +5625,7 @@ export type UserUpdateWithoutNotificationPreferencesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -5600,6 +5686,7 @@ export type UserUncheckedUpdateWithoutNotificationPreferencesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -5660,6 +5747,7 @@ export type UserCreateWithoutRequestedDataControlJobsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -5720,6 +5808,7 @@ export type UserUncheckedCreateWithoutRequestedDataControlJobsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -5796,6 +5885,7 @@ export type UserUpdateWithoutRequestedDataControlJobsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -5856,6 +5946,7 @@ export type UserUncheckedUpdateWithoutRequestedDataControlJobsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -5916,6 +6007,7 @@ export type UserCreateWithoutNotificationEmailDeliveriesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -5976,6 +6068,7 @@ export type UserUncheckedCreateWithoutNotificationEmailDeliveriesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -6052,6 +6145,7 @@ export type UserUpdateWithoutNotificationEmailDeliveriesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -6112,6 +6206,7 @@ export type UserUncheckedUpdateWithoutNotificationEmailDeliveriesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -6172,6 +6267,7 @@ export type UserCreateWithoutOrganizationMembershipInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -6232,6 +6328,7 @@ export type UserUncheckedCreateWithoutOrganizationMembershipInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -6308,6 +6405,7 @@ export type UserUpdateWithoutOrganizationMembershipInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -6368,6 +6466,7 @@ export type UserUncheckedUpdateWithoutOrganizationMembershipInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -6428,6 +6527,7 @@ export type UserCreateWithoutSentOrganizationInvitationsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -6488,6 +6588,7 @@ export type UserUncheckedCreateWithoutSentOrganizationInvitationsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -6564,6 +6665,7 @@ export type UserUpdateWithoutSentOrganizationInvitationsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -6624,6 +6726,7 @@ export type UserUncheckedUpdateWithoutSentOrganizationInvitationsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -6684,6 +6787,7 @@ export type UserCreateWithoutSupportSessionsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -6744,6 +6848,7 @@ export type UserUncheckedCreateWithoutSupportSessionsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -6820,6 +6925,7 @@ export type UserUpdateWithoutSupportSessionsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -6880,6 +6986,7 @@ export type UserUncheckedUpdateWithoutSupportSessionsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -6940,6 +7047,7 @@ export type UserCreateWithoutSupportAuditEventsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -7000,6 +7108,7 @@ export type UserUncheckedCreateWithoutSupportAuditEventsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -7076,6 +7185,7 @@ export type UserUpdateWithoutSupportAuditEventsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -7136,6 +7246,7 @@ export type UserUncheckedUpdateWithoutSupportAuditEventsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -7196,6 +7307,7 @@ export type UserCreateWithoutProductAuditEventsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -7256,6 +7368,7 @@ export type UserUncheckedCreateWithoutProductAuditEventsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -7332,6 +7445,7 @@ export type UserUpdateWithoutProductAuditEventsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -7392,6 +7506,7 @@ export type UserUncheckedUpdateWithoutProductAuditEventsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -7451,6 +7566,7 @@ export type UserCreateWithoutCredentialInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -7511,6 +7627,7 @@ export type UserUncheckedCreateWithoutCredentialInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -7587,6 +7704,7 @@ export type UserUpdateWithoutCredentialInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -7647,6 +7765,7 @@ export type UserUncheckedUpdateWithoutCredentialInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -7707,6 +7826,7 @@ export type UserCreateWithoutAuthCodesInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -7767,6 +7887,7 @@ export type UserUncheckedCreateWithoutAuthCodesInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -7843,6 +7964,7 @@ export type UserUpdateWithoutAuthCodesInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -7903,6 +8025,7 @@ export type UserUncheckedUpdateWithoutAuthCodesInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -7964,6 +8087,7 @@ export type UserCreateWithoutMfaRecoveryRequestsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutApprovedByInput
@@ -8024,6 +8148,7 @@ export type UserUncheckedCreateWithoutMfaRecoveryRequestsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutApprovedByInput
@@ -8089,6 +8214,7 @@ export type UserCreateWithoutApprovedMfaRecoveriesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -8149,6 +8275,7 @@ export type UserUncheckedCreateWithoutApprovedMfaRecoveriesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -8214,6 +8341,7 @@ export type UserCreateWithoutDeniedMfaRecoveriesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -8274,6 +8402,7 @@ export type UserUncheckedCreateWithoutDeniedMfaRecoveriesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -8350,6 +8479,7 @@ export type UserUpdateWithoutMfaRecoveryRequestsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutApprovedByNestedInput
@@ -8410,6 +8540,7 @@ export type UserUncheckedUpdateWithoutMfaRecoveryRequestsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
@@ -8481,6 +8612,7 @@ export type UserUpdateWithoutApprovedMfaRecoveriesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -8541,6 +8673,7 @@ export type UserUncheckedUpdateWithoutApprovedMfaRecoveriesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -8612,6 +8745,7 @@ export type UserUpdateWithoutDeniedMfaRecoveriesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -8672,10 +8806,271 @@ export type UserUncheckedUpdateWithoutDeniedMfaRecoveriesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
+  organizationMembership?: Prisma.OrganizationMembershipUncheckedUpdateOneWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUncheckedUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+}
+
+export type UserCreateWithoutAuthRateLimitsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutApprovedByInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutDeniedByInput
+  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
+  organizationMembership?: Prisma.OrganizationMembershipCreateNestedOneWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
+}
+
+export type UserUncheckedCreateWithoutAuthRateLimitsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutDeniedByInput
+  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
+  organizationMembership?: Prisma.OrganizationMembershipUncheckedCreateNestedOneWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentUncheckedCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutCreatedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+}
+
+export type UserCreateOrConnectWithoutAuthRateLimitsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthRateLimitsInput, Prisma.UserUncheckedCreateWithoutAuthRateLimitsInput>
+}
+
+export type UserUpsertWithoutAuthRateLimitsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuthRateLimitsInput, Prisma.UserUncheckedUpdateWithoutAuthRateLimitsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthRateLimitsInput, Prisma.UserUncheckedCreateWithoutAuthRateLimitsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAuthRateLimitsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuthRateLimitsInput, Prisma.UserUncheckedUpdateWithoutAuthRateLimitsInput>
+}
+
+export type UserUpdateWithoutAuthRateLimitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutApprovedByNestedInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutDeniedByNestedInput
+  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
+  organizationMembership?: Prisma.OrganizationMembershipUpdateOneWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUpdateManyWithoutCreatedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAuthRateLimitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutDeniedByNestedInput
   authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
   organizationMembership?: Prisma.OrganizationMembershipUncheckedUpdateOneWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -8732,6 +9127,7 @@ export type UserCreateWithoutSecurityEventsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutApprovedByInput
@@ -8792,6 +9188,7 @@ export type UserUncheckedCreateWithoutSecurityEventsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutApprovedByInput
@@ -8868,6 +9265,7 @@ export type UserUpdateWithoutSecurityEventsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutApprovedByNestedInput
@@ -8928,6 +9326,7 @@ export type UserUncheckedUpdateWithoutSecurityEventsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
@@ -8988,6 +9387,7 @@ export type UserCreateWithoutResolvedRuntimeErrorsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -9048,6 +9448,7 @@ export type UserUncheckedCreateWithoutResolvedRuntimeErrorsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -9124,6 +9525,7 @@ export type UserUpdateWithoutResolvedRuntimeErrorsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -9184,6 +9586,7 @@ export type UserUncheckedUpdateWithoutResolvedRuntimeErrorsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -9244,6 +9647,7 @@ export type UserCreateWithoutAuthDevicesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
@@ -9304,6 +9708,7 @@ export type UserUncheckedCreateWithoutAuthDevicesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
@@ -9380,6 +9785,7 @@ export type UserUpdateWithoutAuthDevicesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
@@ -9440,6 +9846,7 @@ export type UserUncheckedUpdateWithoutAuthDevicesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -9500,6 +9907,7 @@ export type UserCreateWithoutMfaBackupCodesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutApprovedByInput
@@ -9560,6 +9968,7 @@ export type UserUncheckedCreateWithoutMfaBackupCodesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
   authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutApprovedByInput
@@ -9636,6 +10045,7 @@ export type UserUpdateWithoutMfaBackupCodesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutApprovedByNestedInput
@@ -9696,6 +10106,7 @@ export type UserUncheckedUpdateWithoutMfaBackupCodesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
   authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
   securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
   mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
   approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
@@ -9734,6 +10145,7 @@ export type UserCountOutputType = {
   accounts: number
   sessions: number
   authCodes: number
+  authRateLimits: number
   securityEvents: number
   mfaBackupCodes: number
   mfaRecoveryRequests: number
@@ -9767,6 +10179,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   authCodes?: boolean | UserCountOutputTypeCountAuthCodesArgs
+  authRateLimits?: boolean | UserCountOutputTypeCountAuthRateLimitsArgs
   securityEvents?: boolean | UserCountOutputTypeCountSecurityEventsArgs
   mfaBackupCodes?: boolean | UserCountOutputTypeCountMfaBackupCodesArgs
   mfaRecoveryRequests?: boolean | UserCountOutputTypeCountMfaRecoveryRequestsArgs
@@ -9825,6 +10238,13 @@ export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.E
  */
 export type UserCountOutputTypeCountAuthCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuthCodeWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAuthRateLimitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuthRateLimitWhereInput
 }
 
 /**
@@ -10048,6 +10468,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   credential?: boolean | Prisma.User$credentialArgs<ExtArgs>
   authCodes?: boolean | Prisma.User$authCodesArgs<ExtArgs>
+  authRateLimits?: boolean | Prisma.User$authRateLimitsArgs<ExtArgs>
   securityEvents?: boolean | Prisma.User$securityEventsArgs<ExtArgs>
   mfaBackupCodes?: boolean | Prisma.User$mfaBackupCodesArgs<ExtArgs>
   mfaRecoveryRequests?: boolean | Prisma.User$mfaRecoveryRequestsArgs<ExtArgs>
@@ -10172,6 +10593,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   credential?: boolean | Prisma.User$credentialArgs<ExtArgs>
   authCodes?: boolean | Prisma.User$authCodesArgs<ExtArgs>
+  authRateLimits?: boolean | Prisma.User$authRateLimitsArgs<ExtArgs>
   securityEvents?: boolean | Prisma.User$securityEventsArgs<ExtArgs>
   mfaBackupCodes?: boolean | Prisma.User$mfaBackupCodesArgs<ExtArgs>
   mfaRecoveryRequests?: boolean | Prisma.User$mfaRecoveryRequestsArgs<ExtArgs>
@@ -10212,6 +10634,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     credential: Prisma.$UserCredentialPayload<ExtArgs> | null
     authCodes: Prisma.$AuthCodePayload<ExtArgs>[]
+    authRateLimits: Prisma.$AuthRateLimitPayload<ExtArgs>[]
     securityEvents: Prisma.$SecurityAuditEventPayload<ExtArgs>[]
     mfaBackupCodes: Prisma.$MfaBackupCodePayload<ExtArgs>[]
     mfaRecoveryRequests: Prisma.$MfaRecoveryRequestPayload<ExtArgs>[]
@@ -10666,6 +11089,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   credential<T extends Prisma.User$credentialArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$credentialArgs<ExtArgs>>): Prisma.Prisma__UserCredentialClient<runtime.Types.Result.GetResult<Prisma.$UserCredentialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   authCodes<T extends Prisma.User$authCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  authRateLimits<T extends Prisma.User$authRateLimitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authRateLimitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthRateLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   securityEvents<T extends Prisma.User$securityEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$securityEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mfaBackupCodes<T extends Prisma.User$mfaBackupCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mfaBackupCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MfaBackupCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mfaRecoveryRequests<T extends Prisma.User$mfaRecoveryRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mfaRecoveryRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MfaRecoveryRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -11230,6 +11654,30 @@ export type User$authCodesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.AuthCodeScalarFieldEnum | Prisma.AuthCodeScalarFieldEnum[]
+}
+
+/**
+ * User.authRateLimits
+ */
+export type User$authRateLimitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuthRateLimit
+   */
+  select?: Prisma.AuthRateLimitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuthRateLimit
+   */
+  omit?: Prisma.AuthRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitInclude<ExtArgs> | null
+  where?: Prisma.AuthRateLimitWhereInput
+  orderBy?: Prisma.AuthRateLimitOrderByWithRelationInput | Prisma.AuthRateLimitOrderByWithRelationInput[]
+  cursor?: Prisma.AuthRateLimitWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuthRateLimitScalarFieldEnum | Prisma.AuthRateLimitScalarFieldEnum[]
 }
 
 /**

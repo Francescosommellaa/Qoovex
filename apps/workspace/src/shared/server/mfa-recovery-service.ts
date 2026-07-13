@@ -75,7 +75,7 @@ export async function issueMfaRecoveryCode(input: { userId: string; ipHash?: str
 }
 
 export async function createMfaRecoveryRequest(input: { userId: string; emailCode: string; ipHash?: string | null }) {
-  await assertPersistentRateLimit({ identifier: input.userId, bucket: "mfa-recovery", limit: 3, windowMs: 24 * 60 * 60 * 1000 });
+  await assertPersistentRateLimit({ identifier: input.userId, bucket: "mfa-recovery", limit: 3, windowMs: 24 * 60 * 60 * 1000, userId: input.userId });
   await expireStaleRequests(input.userId);
   const user = await db.user.findUnique({
     where: { id: input.userId },

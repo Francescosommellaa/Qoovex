@@ -37,22 +37,31 @@ export type AuthRateLimitSumAggregateOutputType = {
 export type AuthRateLimitMinAggregateOutputType = {
   key: string | null
   bucket: string | null
+  userId: string | null
   count: number | null
   resetAt: Date | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type AuthRateLimitMaxAggregateOutputType = {
   key: string | null
   bucket: string | null
+  userId: string | null
   count: number | null
   resetAt: Date | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type AuthRateLimitCountAggregateOutputType = {
   key: number
   bucket: number
+  userId: number
   count: number
   resetAt: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -68,22 +77,31 @@ export type AuthRateLimitSumAggregateInputType = {
 export type AuthRateLimitMinAggregateInputType = {
   key?: true
   bucket?: true
+  userId?: true
   count?: true
   resetAt?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type AuthRateLimitMaxAggregateInputType = {
   key?: true
   bucket?: true
+  userId?: true
   count?: true
   resetAt?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type AuthRateLimitCountAggregateInputType = {
   key?: true
   bucket?: true
+  userId?: true
   count?: true
   resetAt?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -176,8 +194,11 @@ export type AuthRateLimitGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 export type AuthRateLimitGroupByOutputType = {
   key: string
   bucket: string
+  userId: string | null
   count: number
   resetAt: Date
+  createdAt: Date
+  updatedAt: Date
   _count: AuthRateLimitCountAggregateOutputType | null
   _avg: AuthRateLimitAvgAggregateOutputType | null
   _sum: AuthRateLimitSumAggregateOutputType | null
@@ -206,15 +227,23 @@ export type AuthRateLimitWhereInput = {
   NOT?: Prisma.AuthRateLimitWhereInput | Prisma.AuthRateLimitWhereInput[]
   key?: Prisma.StringFilter<"AuthRateLimit"> | string
   bucket?: Prisma.StringFilter<"AuthRateLimit"> | string
+  userId?: Prisma.StringNullableFilter<"AuthRateLimit"> | string | null
   count?: Prisma.IntFilter<"AuthRateLimit"> | number
   resetAt?: Prisma.DateTimeFilter<"AuthRateLimit"> | Date | string
+  createdAt?: Prisma.DateTimeFilter<"AuthRateLimit"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AuthRateLimit"> | Date | string
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type AuthRateLimitOrderByWithRelationInput = {
   key?: Prisma.SortOrder
   bucket?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   count?: Prisma.SortOrder
   resetAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type AuthRateLimitWhereUniqueInput = Prisma.AtLeast<{
@@ -223,15 +252,22 @@ export type AuthRateLimitWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.AuthRateLimitWhereInput[]
   NOT?: Prisma.AuthRateLimitWhereInput | Prisma.AuthRateLimitWhereInput[]
   bucket?: Prisma.StringFilter<"AuthRateLimit"> | string
+  userId?: Prisma.StringNullableFilter<"AuthRateLimit"> | string | null
   count?: Prisma.IntFilter<"AuthRateLimit"> | number
   resetAt?: Prisma.DateTimeFilter<"AuthRateLimit"> | Date | string
+  createdAt?: Prisma.DateTimeFilter<"AuthRateLimit"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AuthRateLimit"> | Date | string
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "key">
 
 export type AuthRateLimitOrderByWithAggregationInput = {
   key?: Prisma.SortOrder
   bucket?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   count?: Prisma.SortOrder
   resetAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.AuthRateLimitCountOrderByAggregateInput
   _avg?: Prisma.AuthRateLimitAvgOrderByAggregateInput
   _max?: Prisma.AuthRateLimitMaxOrderByAggregateInput
@@ -245,8 +281,11 @@ export type AuthRateLimitScalarWhereWithAggregatesInput = {
   NOT?: Prisma.AuthRateLimitScalarWhereWithAggregatesInput | Prisma.AuthRateLimitScalarWhereWithAggregatesInput[]
   key?: Prisma.StringWithAggregatesFilter<"AuthRateLimit"> | string
   bucket?: Prisma.StringWithAggregatesFilter<"AuthRateLimit"> | string
+  userId?: Prisma.StringNullableWithAggregatesFilter<"AuthRateLimit"> | string | null
   count?: Prisma.IntWithAggregatesFilter<"AuthRateLimit"> | number
   resetAt?: Prisma.DateTimeWithAggregatesFilter<"AuthRateLimit"> | Date | string
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"AuthRateLimit"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AuthRateLimit"> | Date | string
 }
 
 export type AuthRateLimitCreateInput = {
@@ -254,13 +293,19 @@ export type AuthRateLimitCreateInput = {
   bucket: string
   count?: number
   resetAt: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutAuthRateLimitsInput
 }
 
 export type AuthRateLimitUncheckedCreateInput = {
   key: string
   bucket: string
+  userId?: string | null
   count?: number
   resetAt: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AuthRateLimitUpdateInput = {
@@ -268,20 +313,29 @@ export type AuthRateLimitUpdateInput = {
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   count?: Prisma.IntFieldUpdateOperationsInput | number
   resetAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutAuthRateLimitsNestedInput
 }
 
 export type AuthRateLimitUncheckedUpdateInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   count?: Prisma.IntFieldUpdateOperationsInput | number
   resetAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AuthRateLimitCreateManyInput = {
   key: string
   bucket: string
+  userId?: string | null
   count?: number
   resetAt: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AuthRateLimitUpdateManyMutationInput = {
@@ -289,20 +343,38 @@ export type AuthRateLimitUpdateManyMutationInput = {
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   count?: Prisma.IntFieldUpdateOperationsInput | number
   resetAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AuthRateLimitUncheckedUpdateManyInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   count?: Prisma.IntFieldUpdateOperationsInput | number
   resetAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AuthRateLimitListRelationFilter = {
+  every?: Prisma.AuthRateLimitWhereInput
+  some?: Prisma.AuthRateLimitWhereInput
+  none?: Prisma.AuthRateLimitWhereInput
+}
+
+export type AuthRateLimitOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type AuthRateLimitCountOrderByAggregateInput = {
   key?: Prisma.SortOrder
   bucket?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   count?: Prisma.SortOrder
   resetAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type AuthRateLimitAvgOrderByAggregateInput = {
@@ -312,19 +384,160 @@ export type AuthRateLimitAvgOrderByAggregateInput = {
 export type AuthRateLimitMaxOrderByAggregateInput = {
   key?: Prisma.SortOrder
   bucket?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   count?: Prisma.SortOrder
   resetAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type AuthRateLimitMinOrderByAggregateInput = {
   key?: Prisma.SortOrder
   bucket?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   count?: Prisma.SortOrder
   resetAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type AuthRateLimitSumOrderByAggregateInput = {
   count?: Prisma.SortOrder
+}
+
+export type AuthRateLimitCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.AuthRateLimitCreateWithoutUserInput, Prisma.AuthRateLimitUncheckedCreateWithoutUserInput> | Prisma.AuthRateLimitCreateWithoutUserInput[] | Prisma.AuthRateLimitUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AuthRateLimitCreateOrConnectWithoutUserInput | Prisma.AuthRateLimitCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.AuthRateLimitCreateManyUserInputEnvelope
+  connect?: Prisma.AuthRateLimitWhereUniqueInput | Prisma.AuthRateLimitWhereUniqueInput[]
+}
+
+export type AuthRateLimitUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.AuthRateLimitCreateWithoutUserInput, Prisma.AuthRateLimitUncheckedCreateWithoutUserInput> | Prisma.AuthRateLimitCreateWithoutUserInput[] | Prisma.AuthRateLimitUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AuthRateLimitCreateOrConnectWithoutUserInput | Prisma.AuthRateLimitCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.AuthRateLimitCreateManyUserInputEnvelope
+  connect?: Prisma.AuthRateLimitWhereUniqueInput | Prisma.AuthRateLimitWhereUniqueInput[]
+}
+
+export type AuthRateLimitUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AuthRateLimitCreateWithoutUserInput, Prisma.AuthRateLimitUncheckedCreateWithoutUserInput> | Prisma.AuthRateLimitCreateWithoutUserInput[] | Prisma.AuthRateLimitUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AuthRateLimitCreateOrConnectWithoutUserInput | Prisma.AuthRateLimitCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.AuthRateLimitUpsertWithWhereUniqueWithoutUserInput | Prisma.AuthRateLimitUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.AuthRateLimitCreateManyUserInputEnvelope
+  set?: Prisma.AuthRateLimitWhereUniqueInput | Prisma.AuthRateLimitWhereUniqueInput[]
+  disconnect?: Prisma.AuthRateLimitWhereUniqueInput | Prisma.AuthRateLimitWhereUniqueInput[]
+  delete?: Prisma.AuthRateLimitWhereUniqueInput | Prisma.AuthRateLimitWhereUniqueInput[]
+  connect?: Prisma.AuthRateLimitWhereUniqueInput | Prisma.AuthRateLimitWhereUniqueInput[]
+  update?: Prisma.AuthRateLimitUpdateWithWhereUniqueWithoutUserInput | Prisma.AuthRateLimitUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.AuthRateLimitUpdateManyWithWhereWithoutUserInput | Prisma.AuthRateLimitUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.AuthRateLimitScalarWhereInput | Prisma.AuthRateLimitScalarWhereInput[]
+}
+
+export type AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AuthRateLimitCreateWithoutUserInput, Prisma.AuthRateLimitUncheckedCreateWithoutUserInput> | Prisma.AuthRateLimitCreateWithoutUserInput[] | Prisma.AuthRateLimitUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AuthRateLimitCreateOrConnectWithoutUserInput | Prisma.AuthRateLimitCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.AuthRateLimitUpsertWithWhereUniqueWithoutUserInput | Prisma.AuthRateLimitUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.AuthRateLimitCreateManyUserInputEnvelope
+  set?: Prisma.AuthRateLimitWhereUniqueInput | Prisma.AuthRateLimitWhereUniqueInput[]
+  disconnect?: Prisma.AuthRateLimitWhereUniqueInput | Prisma.AuthRateLimitWhereUniqueInput[]
+  delete?: Prisma.AuthRateLimitWhereUniqueInput | Prisma.AuthRateLimitWhereUniqueInput[]
+  connect?: Prisma.AuthRateLimitWhereUniqueInput | Prisma.AuthRateLimitWhereUniqueInput[]
+  update?: Prisma.AuthRateLimitUpdateWithWhereUniqueWithoutUserInput | Prisma.AuthRateLimitUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.AuthRateLimitUpdateManyWithWhereWithoutUserInput | Prisma.AuthRateLimitUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.AuthRateLimitScalarWhereInput | Prisma.AuthRateLimitScalarWhereInput[]
+}
+
+export type AuthRateLimitCreateWithoutUserInput = {
+  key: string
+  bucket: string
+  count?: number
+  resetAt: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AuthRateLimitUncheckedCreateWithoutUserInput = {
+  key: string
+  bucket: string
+  count?: number
+  resetAt: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AuthRateLimitCreateOrConnectWithoutUserInput = {
+  where: Prisma.AuthRateLimitWhereUniqueInput
+  create: Prisma.XOR<Prisma.AuthRateLimitCreateWithoutUserInput, Prisma.AuthRateLimitUncheckedCreateWithoutUserInput>
+}
+
+export type AuthRateLimitCreateManyUserInputEnvelope = {
+  data: Prisma.AuthRateLimitCreateManyUserInput | Prisma.AuthRateLimitCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type AuthRateLimitUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.AuthRateLimitWhereUniqueInput
+  update: Prisma.XOR<Prisma.AuthRateLimitUpdateWithoutUserInput, Prisma.AuthRateLimitUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.AuthRateLimitCreateWithoutUserInput, Prisma.AuthRateLimitUncheckedCreateWithoutUserInput>
+}
+
+export type AuthRateLimitUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.AuthRateLimitWhereUniqueInput
+  data: Prisma.XOR<Prisma.AuthRateLimitUpdateWithoutUserInput, Prisma.AuthRateLimitUncheckedUpdateWithoutUserInput>
+}
+
+export type AuthRateLimitUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.AuthRateLimitScalarWhereInput
+  data: Prisma.XOR<Prisma.AuthRateLimitUpdateManyMutationInput, Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserInput>
+}
+
+export type AuthRateLimitScalarWhereInput = {
+  AND?: Prisma.AuthRateLimitScalarWhereInput | Prisma.AuthRateLimitScalarWhereInput[]
+  OR?: Prisma.AuthRateLimitScalarWhereInput[]
+  NOT?: Prisma.AuthRateLimitScalarWhereInput | Prisma.AuthRateLimitScalarWhereInput[]
+  key?: Prisma.StringFilter<"AuthRateLimit"> | string
+  bucket?: Prisma.StringFilter<"AuthRateLimit"> | string
+  userId?: Prisma.StringNullableFilter<"AuthRateLimit"> | string | null
+  count?: Prisma.IntFilter<"AuthRateLimit"> | number
+  resetAt?: Prisma.DateTimeFilter<"AuthRateLimit"> | Date | string
+  createdAt?: Prisma.DateTimeFilter<"AuthRateLimit"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AuthRateLimit"> | Date | string
+}
+
+export type AuthRateLimitCreateManyUserInput = {
+  key: string
+  bucket: string
+  count?: number
+  resetAt: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AuthRateLimitUpdateWithoutUserInput = {
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.StringFieldUpdateOperationsInput | string
+  count?: Prisma.IntFieldUpdateOperationsInput | number
+  resetAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AuthRateLimitUncheckedUpdateWithoutUserInput = {
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.StringFieldUpdateOperationsInput | string
+  count?: Prisma.IntFieldUpdateOperationsInput | number
+  resetAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AuthRateLimitUncheckedUpdateManyWithoutUserInput = {
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.StringFieldUpdateOperationsInput | string
+  count?: Prisma.IntFieldUpdateOperationsInput | number
+  resetAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -332,41 +545,70 @@ export type AuthRateLimitSumOrderByAggregateInput = {
 export type AuthRateLimitSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   key?: boolean
   bucket?: boolean
+  userId?: boolean
   count?: boolean
   resetAt?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  user?: boolean | Prisma.AuthRateLimit$userArgs<ExtArgs>
 }, ExtArgs["result"]["authRateLimit"]>
 
 export type AuthRateLimitSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   key?: boolean
   bucket?: boolean
+  userId?: boolean
   count?: boolean
   resetAt?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  user?: boolean | Prisma.AuthRateLimit$userArgs<ExtArgs>
 }, ExtArgs["result"]["authRateLimit"]>
 
 export type AuthRateLimitSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   key?: boolean
   bucket?: boolean
+  userId?: boolean
   count?: boolean
   resetAt?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  user?: boolean | Prisma.AuthRateLimit$userArgs<ExtArgs>
 }, ExtArgs["result"]["authRateLimit"]>
 
 export type AuthRateLimitSelectScalar = {
   key?: boolean
   bucket?: boolean
+  userId?: boolean
   count?: boolean
   resetAt?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type AuthRateLimitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"key" | "bucket" | "count" | "resetAt", ExtArgs["result"]["authRateLimit"]>
+export type AuthRateLimitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"key" | "bucket" | "userId" | "count" | "resetAt" | "createdAt" | "updatedAt", ExtArgs["result"]["authRateLimit"]>
+export type AuthRateLimitInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.AuthRateLimit$userArgs<ExtArgs>
+}
+export type AuthRateLimitIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.AuthRateLimit$userArgs<ExtArgs>
+}
+export type AuthRateLimitIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.AuthRateLimit$userArgs<ExtArgs>
+}
 
 export type $AuthRateLimitPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AuthRateLimit"
-  objects: {}
+  objects: {
+    user: Prisma.$UserPayload<ExtArgs> | null
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     key: string
     bucket: string
+    userId: string | null
     count: number
     resetAt: Date
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["authRateLimit"]>
   composites: {}
 }
@@ -761,6 +1003,7 @@ readonly fields: AuthRateLimitFieldRefs;
  */
 export interface Prisma__AuthRateLimitClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.AuthRateLimit$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuthRateLimit$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -792,8 +1035,11 @@ export interface Prisma__AuthRateLimitClient<T, Null = never, ExtArgs extends ru
 export interface AuthRateLimitFieldRefs {
   readonly key: Prisma.FieldRef<"AuthRateLimit", 'String'>
   readonly bucket: Prisma.FieldRef<"AuthRateLimit", 'String'>
+  readonly userId: Prisma.FieldRef<"AuthRateLimit", 'String'>
   readonly count: Prisma.FieldRef<"AuthRateLimit", 'Int'>
   readonly resetAt: Prisma.FieldRef<"AuthRateLimit", 'DateTime'>
+  readonly createdAt: Prisma.FieldRef<"AuthRateLimit", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"AuthRateLimit", 'DateTime'>
 }
     
 
@@ -810,6 +1056,10 @@ export type AuthRateLimitFindUniqueArgs<ExtArgs extends runtime.Types.Extensions
    * Omit specific fields from the AuthRateLimit
    */
   omit?: Prisma.AuthRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitInclude<ExtArgs> | null
   /**
    * Filter, which AuthRateLimit to fetch.
    */
@@ -829,6 +1079,10 @@ export type AuthRateLimitFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ext
    */
   omit?: Prisma.AuthRateLimitOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitInclude<ExtArgs> | null
+  /**
    * Filter, which AuthRateLimit to fetch.
    */
   where: Prisma.AuthRateLimitWhereUniqueInput
@@ -846,6 +1100,10 @@ export type AuthRateLimitFindFirstArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the AuthRateLimit
    */
   omit?: Prisma.AuthRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitInclude<ExtArgs> | null
   /**
    * Filter, which AuthRateLimit to fetch.
    */
@@ -895,6 +1153,10 @@ export type AuthRateLimitFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.AuthRateLimitOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitInclude<ExtArgs> | null
+  /**
    * Filter, which AuthRateLimit to fetch.
    */
   where?: Prisma.AuthRateLimitWhereInput
@@ -942,6 +1204,10 @@ export type AuthRateLimitFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the AuthRateLimit
    */
   omit?: Prisma.AuthRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitInclude<ExtArgs> | null
   /**
    * Filter, which AuthRateLimits to fetch.
    */
@@ -991,6 +1257,10 @@ export type AuthRateLimitCreateArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.AuthRateLimitOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitInclude<ExtArgs> | null
+  /**
    * The data needed to create a AuthRateLimit.
    */
   data: Prisma.XOR<Prisma.AuthRateLimitCreateInput, Prisma.AuthRateLimitUncheckedCreateInput>
@@ -1024,6 +1294,10 @@ export type AuthRateLimitCreateManyAndReturnArgs<ExtArgs extends runtime.Types.E
    */
   data: Prisma.AuthRateLimitCreateManyInput | Prisma.AuthRateLimitCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1038,6 +1312,10 @@ export type AuthRateLimitUpdateArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the AuthRateLimit
    */
   omit?: Prisma.AuthRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitInclude<ExtArgs> | null
   /**
    * The data needed to update a AuthRateLimit.
    */
@@ -1090,6 +1368,10 @@ export type AuthRateLimitUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.E
    * Limit how many AuthRateLimits to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1104,6 +1386,10 @@ export type AuthRateLimitUpsertArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the AuthRateLimit
    */
   omit?: Prisma.AuthRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitInclude<ExtArgs> | null
   /**
    * The filter to search for the AuthRateLimit to update in case it exists.
    */
@@ -1131,6 +1417,10 @@ export type AuthRateLimitDeleteArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.AuthRateLimitOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitInclude<ExtArgs> | null
+  /**
    * Filter which AuthRateLimit to delete.
    */
   where: Prisma.AuthRateLimitWhereUniqueInput
@@ -1151,6 +1441,25 @@ export type AuthRateLimitDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
+ * AuthRateLimit.user
+ */
+export type AuthRateLimit$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
  * AuthRateLimit without action
  */
 export type AuthRateLimitDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1162,4 +1471,8 @@ export type AuthRateLimitDefaultArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the AuthRateLimit
    */
   omit?: Prisma.AuthRateLimitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthRateLimitInclude<ExtArgs> | null
 }

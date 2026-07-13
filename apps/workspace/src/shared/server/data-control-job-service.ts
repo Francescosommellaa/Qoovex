@@ -166,10 +166,20 @@ async function collectReferencedBlobPathnames(organizationId: string) {
 async function scanOrganizationBlobOrphans(organizationId: string, now = new Date(), limit = DEFAULT_ORPHAN_SCAN_LIMIT) {
   const prefix = `organizations/${organizationId}/`;
   const referenced = await collectReferencedBlobPathnames(organizationId);
-  const listed = await listPrivateBlobs({ prefix, limit });
-  const orphans = listed.blobs.filter((blob) => blob.pathname.startsWith(prefix) && !referenced.has(blob.pathname));
+  const listed: Awaited<ReturnType<typeof listPrivateBlobs>>["blobs"] = [];
+  const seenCursors = new Set<string>();
+  let cursor: string | undefined;
+  do {
+    const page = await listPrivateBlobs({ prefix, limit, cursor });
+    listed.push(...page.blobs);
+    if (!page.hasMore) break;
+    if (!page.cursor || seenCursors.has(page.cursor)) throw new Error("BLOB_LIST_CURSOR_MISSING");
+    seenCursors.add(page.cursor);
+    cursor = page.cursor;
+  } while (true);
+  const orphans = listed.filter((blob) => blob.pathname.startsWith(prefix) && !referenced.has(blob.pathname));
   const deletable = orphans.filter((blob) => blob.uploadedAt && now.getTime() - blob.uploadedAt.getTime() >= BLOB_CLEANUP_MIN_AGE_MS);
-  return { listed: listed.blobs, referenced, orphans, deletable };
+  return { listed, referenced, orphans, deletable };
 }
 
 export async function getBlobOrphanDryRun(): Promise<BlobOrphanDryRunResponse> {

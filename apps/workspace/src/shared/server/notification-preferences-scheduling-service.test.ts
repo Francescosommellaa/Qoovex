@@ -193,6 +193,34 @@ describe("notification preferences", () => {
 });
 
 describe("scheduled email digest service", () => {
+  it("paginates more than 200 preferences and synchronizes reminders once per organization", async () => {
+    const preferences = Array.from({ length: 201 }, (_, index) => ({
+      id: `preference-${String(index).padStart(3, "0")}`,
+      organizationId: "org-1",
+      userId: `user-${index}`,
+      emailDigestFrequency: "DAILY",
+      emailDigestHour: 8,
+      deadlineNotificationsEnabled: true,
+      documentNotificationsEnabled: true,
+      packageNotificationsEnabled: true,
+      systemNotificationsEnabled: true,
+      lastDigestSentAt: null,
+      user: { email: `user-${index}@example.test`, emailVerified: now },
+    }));
+    mocks.db.notificationPreference.findMany
+      .mockResolvedValueOnce(preferences.slice(0, 100))
+      .mockResolvedValueOnce(preferences.slice(100, 200))
+      .mockResolvedValueOnce(preferences.slice(200));
+    mocks.db.notification.findMany.mockResolvedValue([]);
+    mocks.db.notification.count.mockResolvedValue(0);
+
+    await expect(runScheduledEmailDigest(now)).resolves.toMatchObject({ scanned: 201, sent: 0, failed: 0, skipped: 201 });
+
+    expect(mocks.db.notificationPreference.findMany).toHaveBeenCalledTimes(3);
+    expect(mocks.db.notificationPreference.findMany).toHaveBeenNthCalledWith(2, expect.objectContaining({ cursor: { id: preferences[99].id }, skip: 1 }));
+    expect(mocks.syncOrganizationReminderRecords).toHaveBeenCalledTimes(1);
+  });
+
   it("sends only enabled preferences for allowed members and updates lastDigestSentAt", async () => {
     mocks.db.notificationPreference.findMany.mockResolvedValue([{
       id: "preference-1",

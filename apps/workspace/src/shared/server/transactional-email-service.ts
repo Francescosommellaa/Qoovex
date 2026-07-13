@@ -361,6 +361,51 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
   return { subject: copy.subject, html, text };
 }
 
+function getE2eEmailSink() {
+  if (process.env.QOOVEX_E2E_MODE !== "1" || process.env.NODE_ENV === "production") return null;
+  const rawUrl = process.env.QOOVEX_E2E_EMAIL_SINK_URL?.trim();
+  const secret = process.env.QOOVEX_E2E_EMAIL_SINK_SECRET?.trim();
+  if (!rawUrl || !secret) throw new TransactionalEmailError("Email sink E2E non configurato.");
+
+  let url: URL;
+  try {
+    url = new URL(rawUrl);
+  } catch {
+    throw new TransactionalEmailError("Email sink E2E non valido.");
+  }
+  if (url.protocol !== "http:" || !["127.0.0.1", "localhost", "::1"].includes(url.hostname)) {
+    throw new TransactionalEmailError("Email sink E2E non consentito.");
+  }
+  return { url: url.toString(), secret };
+}
+
+async function sendToE2eEmailSink(input: {
+  sink: { url: string; secret: string };
+  to: string;
+  template: TransactionalEmailTemplate;
+  rendered: { subject: string; html: string; text: string };
+  idempotencyKey?: string;
+}) {
+  const response = await fetch(input.sink.url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${input.sink.secret}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      to: input.to,
+      template: input.template,
+      subject: input.rendered.subject,
+      html: input.rendered.html,
+      text: input.rendered.text,
+      idempotencyKey: input.idempotencyKey ?? null,
+    }),
+  });
+  if (!response.ok) throw new TransactionalEmailError("Email sink E2E non raggiungibile.");
+  const payload = await response.json().catch(() => null) as { id?: unknown } | null;
+  return { providerMessageId: typeof payload?.id === "string" ? payload.id : null };
+}
+
 export async function sendTransactionalEmail(input: {
   to: string;
   template: TransactionalEmailTemplate;
@@ -372,11 +417,8 @@ export async function sendTransactionalEmail(input: {
   const rendered = renderEmail(input);
 
   if (!apiKey || !from) {
-    if (process.env.NODE_ENV !== "production") {
-      console.info(`[email] ${rendered.subject} -> ${input.to}\n${rendered.text}`);
-      return { providerMessageId: null };
-    }
-
+    const sink = getE2eEmailSink();
+    if (sink) return sendToE2eEmailSink({ sink, ...input, rendered });
     throw new TransactionalEmailError("Email transazionali non configurate.");
   }
 

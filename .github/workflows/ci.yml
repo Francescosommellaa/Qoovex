@@ -43,7 +43,7 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 11.10.0
       - uses: actions/setup-node@v6
@@ -73,7 +73,7 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 11.10.0
       - uses: actions/setup-node@v6
@@ -83,10 +83,25 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @qoovex/db db:migrate:deploy -- --ci-ephemeral
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm test:e2e
+      - name: Verify isolated E2E targets
+        env:
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.QOOVEX_E2E_BLOB_READ_WRITE_TOKEN }}
+          BLOB_STORE_ID: ${{ vars.QOOVEX_E2E_BLOB_STORE_ID }}
+        run: |
+          test -n "$BLOB_READ_WRITE_TOKEN"
+          test -n "$BLOB_STORE_ID"
+      - name: Run Playwright E2E
+        env:
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.QOOVEX_E2E_BLOB_READ_WRITE_TOKEN }}
+          BLOB_STORE_ID: ${{ vars.QOOVEX_E2E_BLOB_STORE_ID }}
+          QOOVEX_E2E_MODE: "1"
+          QOOVEX_E2E_DATABASE_TARGET: ${{ env.DATABASE_URL }}
+          QOOVEX_E2E_BLOB_TARGET: ${{ vars.QOOVEX_E2E_BLOB_STORE_ID }}
+          QOOVEX_E2E_RUN_ATTESTATION: I_ACKNOWLEDGE_FIXTURE_SCOPED_CLEANUP
+        run: pnpm test:e2e
       - name: Upload Playwright report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: playwright-report
           path: playwright-report/

@@ -65,6 +65,7 @@ export async function issueAuthCode(input: {
     bucket: `auth-code:${input.purpose}`,
     limit: 4,
     windowMs: 15 * 60 * 1000,
+    userId: input.userId,
   });
 
   const code = generateCode();
@@ -116,13 +117,6 @@ export async function verifyAuthCode(input: {
     throw new AuthCodeError("Codice non valido.");
   }
 
-  await assertPersistentRateLimit({
-    identifier: email,
-    bucket: `auth-code-verify:${input.purpose}`,
-    limit: 8,
-    windowMs: 15 * 60 * 1000,
-  });
-
   const candidate = await db.authCode.findFirst({
     where: {
       email,
@@ -130,6 +124,14 @@ export async function verifyAuthCode(input: {
       consumedAt: null,
     },
     orderBy: { createdAt: "desc" },
+  });
+
+  await assertPersistentRateLimit({
+    identifier: email,
+    bucket: `auth-code-verify:${input.purpose}`,
+    limit: 8,
+    windowMs: 15 * 60 * 1000,
+    userId: candidate?.userId,
   });
 
   if (!candidate || candidate.expiresAt <= new Date()) {

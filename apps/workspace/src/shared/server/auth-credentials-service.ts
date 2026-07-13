@@ -40,7 +40,7 @@ export async function registerCredentialsUser(input: {
   if (usernameError) throw new AuthCredentialsError(usernameError);
   validatePasswordPolicy(input.password);
 
-  await assertPersistentRateLimit({
+  const signupRateLimitKey = await assertPersistentRateLimit({
     identifier: email,
     bucket: "auth:signup",
     limit: 5,
@@ -95,6 +95,8 @@ export async function registerCredentialsUser(input: {
       },
     });
 
+    await tx.authRateLimit.updateMany({ where: { key: signupRateLimitKey }, data: { userId: record.id } });
+
     return record;
   });
 
@@ -123,16 +125,17 @@ export async function requestCredentialsSignupEmail(input: {
     throw new AuthCredentialsError("Inserisci una email valida.");
   }
 
+  const existing = await db.user.findUnique({
+    where: { email },
+    select: { id: true },
+  });
+
   await assertPersistentRateLimit({
     identifier: email,
     bucket: "auth:signup-email",
     limit: 5,
     windowMs: 60 * 60 * 1000,
-  });
-
-  const existing = await db.user.findUnique({
-    where: { email },
-    select: { id: true },
+    userId: existing?.id,
   });
 
   if (existing) {
@@ -176,7 +179,7 @@ export async function completeCredentialsSignup(input: {
   if (usernameError) throw new AuthCredentialsError(usernameError);
   validatePasswordPolicy(input.password);
 
-  await assertPersistentRateLimit({
+  const signupRateLimitKey = await assertPersistentRateLimit({
     identifier: email,
     bucket: "auth:signup-complete",
     limit: 5,
@@ -217,6 +220,8 @@ export async function completeCredentialsSignup(input: {
         passwordHash,
       },
     });
+
+    await tx.authRateLimit.updateMany({ where: { key: signupRateLimitKey }, data: { userId: record.id } });
 
     return record;
   });
@@ -268,13 +273,6 @@ export async function authorizeCredentials(input: {
   ipHash?: string | null;
 }) {
   const identifier = input.identifier.trim().toLowerCase().replace(/^@/, "");
-  await assertPersistentRateLimit({
-    identifier,
-    bucket: "auth:signin",
-    limit: 8,
-    windowMs: 15 * 60 * 1000,
-  });
-
   const user = await db.user.findFirst({
     where: {
       OR: [{ email: identifier }, { username: identifier }],
@@ -293,6 +291,14 @@ export async function authorizeCredentials(input: {
         },
       },
     },
+  });
+
+  await assertPersistentRateLimit({
+    identifier,
+    bucket: "auth:signin",
+    limit: 8,
+    windowMs: 15 * 60 * 1000,
+    userId: user?.id,
   });
 
   const valid = await verifyPassword(input.password, user?.credential?.passwordHash ?? null);
@@ -342,16 +348,17 @@ export async function requestPasswordReset(input: {
   ipHash?: string | null;
 }) {
   const email = normalizeEmail(input.email);
+  const user = await db.user.findUnique({
+    where: { email },
+    select: { id: true, credential: { select: { userId: true } } },
+  });
+
   await assertPersistentRateLimit({
     identifier: email,
     bucket: "auth:password-reset-request",
     limit: 5,
     windowMs: 60 * 60 * 1000,
-  });
-
-  const user = await db.user.findUnique({
-    where: { email },
-    select: { id: true, credential: { select: { userId: true } } },
+    userId: user?.id,
   });
 
   if (user?.credential) {
