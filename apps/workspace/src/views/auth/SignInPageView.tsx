@@ -7,7 +7,15 @@ import { useState, type FormEvent } from "react";
 import { getGenericAuthFailureMessage } from "@shared/lib/auth-error";
 import styles from "./AuthPages.module.css";
 
-export function SignInPageView({ callbackUrl, showDevAuth }: { callbackUrl: string; showDevAuth: boolean }) {
+export function SignInPageView({
+  callbackUrl,
+  showDevAuth,
+  statusMessage,
+}: {
+  callbackUrl: string;
+  showDevAuth: boolean;
+  statusMessage: string | null;
+}) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -58,6 +66,7 @@ export function SignInPageView({ callbackUrl, showDevAuth }: { callbackUrl: stri
         <p className={styles.brand}>Qoovex</p>
         <h1 id="sign-in-title">Accedi</h1>
         <p>Organizza documenti, scadenze e prove di cantiere nel tuo workspace.</p>
+        {statusMessage ? <p className={styles.success} role="status">{statusMessage}</p> : null}
 
         <form className={styles.form} onSubmit={onSubmit}>
           <div className={styles.field}>
@@ -73,6 +82,12 @@ export function SignInPageView({ callbackUrl, showDevAuth }: { callbackUrl: stri
             {loading ? "Accesso in corso" : "Accedi"}
           </button>
         </form>
+
+        <p className={styles.hint}>
+          <Link className={styles.textLink} href={`/reset-password?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Password dimenticata?</Link>
+          {" · "}
+          <Link className={styles.textLink} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Verifica o reinvia il codice email</Link>
+        </p>
 
         {showDevAuth ? <button className={styles.secondaryButton} disabled={devLoading || loading} onClick={signInAsDev} type="button">{devLoading ? "Accesso dev in corso" : "Accedi come dev"}</button> : null}
 

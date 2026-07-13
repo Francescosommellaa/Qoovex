@@ -15,6 +15,10 @@ const environment = vi.hoisted(() => {
   }
 });
 
+if (process.env.CI && !environment.isLocalCiDatabase) {
+  throw new Error("CI must run rate-limit concurrency tests against the local qoovex_ci PostgreSQL database.");
+}
+
 vi.mock("server-only", () => ({}));
 vi.mock("@qoovex/db", async (importOriginal) => {
   if (environment.isLocalCiDatabase) return importOriginal();

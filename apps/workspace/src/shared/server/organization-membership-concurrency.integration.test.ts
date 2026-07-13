@@ -18,6 +18,10 @@ const environment = vi.hoisted(() => {
   }
 });
 
+if (process.env.CI && !environment.isLocalCiDatabase) {
+  throw new Error("CI must run membership concurrency tests against the local qoovex_ci PostgreSQL database.");
+}
+
 vi.mock("server-only", () => ({}));
 vi.mock("@shared/server/access-errors", () => ({
   AccessError: class AccessError extends Error {

@@ -2,10 +2,16 @@ import "server-only";
 
 import { db } from "@qoovex/db";
 import { normalizeUsernameInput, validateUsername } from "@shared/lib/username";
-import { hashPassword, validatePasswordPolicy, verifyPassword } from "@shared/server/auth-password";
-import { issueAuthCode } from "@shared/server/auth-code-service";
+import {
+  hashPassword,
+  PasswordValidationError,
+  validatePasswordPolicy,
+  verifyPassword,
+} from "@shared/server/auth-password";
+import { issueAuthCode, verifyAuthCode } from "@shared/server/auth-code-service";
 import { assertPersistentRateLimit } from "@shared/server/rate-limit";
 import { recordSecurityEvent } from "@shared/server/security-audit-service";
+import { TransactionalEmailError } from "@shared/server/transactional-email-service";
 import { getUsernameAvailability } from "@shared/server/username-service";
 
 export class AuthCredentialsError extends Error {
@@ -19,101 +25,13 @@ function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
 }
 
-function getNameFromEmail(email: string) {
-  return email.split("@")[0]?.replace(/[^a-zA-Z0-9]/g, " ").trim() || "Utente";
-}
-
-export async function registerCredentialsUser(input: {
-  email: string;
-  username: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-  ipHash?: string | null;
-}) {
-  const email = normalizeEmail(input.email);
-  const username = normalizeUsernameInput(input.username);
-  const usernameError = validateUsername(username);
-  if (!email || !email.includes("@")) {
-    throw new AuthCredentialsError("Inserisci una email valida.");
+function assertPasswordPolicy(password: string) {
+  try {
+    validatePasswordPolicy(password);
+  } catch (error) {
+    if (error instanceof PasswordValidationError) throw new AuthCredentialsError(error.message);
+    throw error;
   }
-  if (usernameError) throw new AuthCredentialsError(usernameError);
-  validatePasswordPolicy(input.password);
-
-  const signupRateLimitKey = await assertPersistentRateLimit({
-    identifier: email,
-    bucket: "auth:signup",
-    limit: 5,
-    windowMs: 60 * 60 * 1000,
-  });
-
-  const availability = await getUsernameAvailability({ username });
-  if (!availability.available) {
-    throw new AuthCredentialsError("Username gia in uso.");
-  }
-
-  const existing = await db.user.findUnique({
-    where: { email },
-    select: { id: true, credential: { select: { userId: true } } },
-  });
-  if (existing?.credential) {
-    throw new AuthCredentialsError("Account gia esistente. Accedi o recupera la password.");
-  }
-
-  const passwordHash = await hashPassword(input.password);
-  const firstName = input.firstName?.trim() || getNameFromEmail(email);
-  const lastName = input.lastName?.trim() || null;
-
-  const user = await db.$transaction(async (tx) => {
-    const record = existing
-      ? await tx.user.update({
-          where: { id: existing.id },
-          data: {
-            username,
-            usernameOnboarded: true,
-            firstName,
-            lastName,
-            name: [firstName, lastName].filter(Boolean).join(" "),
-          },
-        })
-      : await tx.user.create({
-          data: {
-            email,
-            emailVerified: null,
-            username,
-            usernameOnboarded: true,
-            firstName,
-            lastName,
-            name: [firstName, lastName].filter(Boolean).join(" "),
-          },
-        });
-
-    await tx.userCredential.create({
-      data: {
-        userId: record.id,
-        passwordHash,
-      },
-    });
-
-    await tx.authRateLimit.updateMany({ where: { key: signupRateLimitKey }, data: { userId: record.id } });
-
-    return record;
-  });
-
-  await issueAuthCode({
-    email,
-    userId: user.id,
-    purpose: "EMAIL_VERIFICATION",
-    ipHash: input.ipHash,
-  });
-  await recordSecurityEvent({
-    userId: user.id,
-    email,
-    type: "credentials_signup_created",
-    ipHash: input.ipHash,
-  });
-
-  return { userId: user.id, email };
 }
 
 export async function requestCredentialsSignupEmail(input: {
@@ -127,40 +45,56 @@ export async function requestCredentialsSignupEmail(input: {
 
   const existing = await db.user.findUnique({
     where: { email },
-    select: { id: true },
+    select: {
+      id: true,
+      emailVerified: true,
+      credential: { select: { userId: true } },
+    },
   });
 
   await assertPersistentRateLimit({
     identifier: email,
     bucket: "auth:signup-email",
-    limit: 5,
+    limit: 4,
     windowMs: 60 * 60 * 1000,
     userId: existing?.id,
   });
 
-  if (existing) {
+  const canRecoverUnverifiedCredentials = Boolean(existing?.credential && !existing.emailVerified);
+  if (existing && !canRecoverUnverifiedCredentials) {
     await recordSecurityEvent({
       userId: existing.id,
       email,
       type: "credentials_signup_existing_email",
       ipHash: input.ipHash,
     });
-    return { email, existing: true };
+    return { email };
   }
 
-  await issueAuthCode({
-    email,
-    purpose: "EMAIL_VERIFICATION",
-    ipHash: input.ipHash,
-    metadata: { flow: "email_signup" },
-  });
+  try {
+    await issueAuthCode({
+      email,
+      userId: existing?.id,
+      purpose: "EMAIL_VERIFICATION",
+      ipHash: input.ipHash,
+      metadata: { flow: existing ? "credentials_verification" : "credentials_signup" },
+    });
+  } catch (error) {
+    if (!(error instanceof TransactionalEmailError)) throw error;
+    await recordSecurityEvent({
+      userId: existing?.id,
+      email,
+      type: "credentials_verification_delivery_failed",
+      ipHash: input.ipHash,
+    });
+  }
   await recordSecurityEvent({
     email,
-    type: "credentials_signup_email_requested",
+    type: existing ? "credentials_verification_requested" : "credentials_signup_email_requested",
     ipHash: input.ipHash,
   });
 
-  return { email, existing: false };
+  return { email };
 }
 
 export async function completeCredentialsSignup(input: {
@@ -177,7 +111,7 @@ export async function completeCredentialsSignup(input: {
     throw new AuthCredentialsError("Sessione registrazione non valida.");
   }
   if (usernameError) throw new AuthCredentialsError(usernameError);
-  validatePasswordPolicy(input.password);
+  assertPasswordPolicy(input.password);
 
   const signupRateLimitKey = await assertPersistentRateLimit({
     identifier: email,
@@ -236,35 +170,59 @@ export async function completeCredentialsSignup(input: {
   return { userId: user.id, email };
 }
 
-export async function verifyCredentialsEmail(input: {
+export async function verifyCredentialsSignupEmail(input: {
   email: string;
   code: string;
   ipHash?: string | null;
 }) {
   const email = normalizeEmail(input.email);
-  const codeRecord = await import("@shared/server/auth-code-service").then((module) =>
-    module.verifyAuthCode({
-      email,
-      code: input.code,
-      purpose: "EMAIL_VERIFICATION",
-      ipHash: input.ipHash,
-    }),
-  );
+  const codeRecord = await verifyAuthCode({
+    email,
+    code: input.code,
+    purpose: "EMAIL_VERIFICATION",
+    ipHash: input.ipHash,
+  });
 
-  const user = await db.user.update({
+  const user = await db.user.findUnique({
     where: { email },
+    select: {
+      id: true,
+      email: true,
+      emailVerified: true,
+      credential: { select: { userId: true } },
+    },
+  });
+
+  if (!user) {
+    const metadata = codeRecord.metadata as { flow?: unknown } | null;
+    if (codeRecord.userId || metadata?.flow !== "credentials_signup") {
+      throw new AuthCredentialsError("Verifica email non valida. Richiedi un nuovo codice.");
+    }
+    await recordSecurityEvent({
+      email,
+      type: "credentials_signup_email_verified",
+      ipHash: input.ipHash,
+    });
+    return { email, next: "complete" as const };
+  }
+
+  if (user.id !== codeRecord.userId || user.emailVerified || !user.credential) {
+    throw new AuthCredentialsError("Account gia esistente. Accedi o recupera la password.");
+  }
+
+  await db.user.update({
+    where: { id: user.id },
     data: { emailVerified: new Date() },
-    select: { id: true, email: true },
   });
 
   await recordSecurityEvent({
-    userId: codeRecord.userId ?? user.id,
+    userId: user.id,
     email,
     type: "email_verified",
     ipHash: input.ipHash,
   });
 
-  return user;
+  return { email, next: "sign-in" as const };
 }
 
 export async function authorizeCredentials(input: {
@@ -312,12 +270,6 @@ export async function authorizeCredentials(input: {
   }
 
   if (!user.emailVerified) {
-    await issueAuthCode({
-      email: user.email,
-      userId: user.id,
-      purpose: "EMAIL_VERIFICATION",
-      ipHash: input.ipHash,
-    });
     await recordSecurityEvent({
       userId: user.id,
       email: user.email,
@@ -348,6 +300,9 @@ export async function requestPasswordReset(input: {
   ipHash?: string | null;
 }) {
   const email = normalizeEmail(input.email);
+  if (!email || !email.includes("@")) {
+    throw new AuthCredentialsError("Inserisci una email valida.");
+  }
   const user = await db.user.findUnique({
     where: { email },
     select: { id: true, credential: { select: { userId: true } } },
@@ -356,18 +311,28 @@ export async function requestPasswordReset(input: {
   await assertPersistentRateLimit({
     identifier: email,
     bucket: "auth:password-reset-request",
-    limit: 5,
+    limit: 4,
     windowMs: 60 * 60 * 1000,
     userId: user?.id,
   });
 
   if (user?.credential) {
-    await issueAuthCode({
-      email,
-      userId: user.id,
-      purpose: "PASSWORD_RESET",
-      ipHash: input.ipHash,
-    });
+    try {
+      await issueAuthCode({
+        email,
+        userId: user.id,
+        purpose: "PASSWORD_RESET",
+        ipHash: input.ipHash,
+      });
+    } catch (error) {
+      if (!(error instanceof TransactionalEmailError)) throw error;
+      await recordSecurityEvent({
+        userId: user.id,
+        email,
+        type: "password_reset_delivery_failed",
+        ipHash: input.ipHash,
+      });
+    }
   }
 
   await recordSecurityEvent({
@@ -385,16 +350,14 @@ export async function resetPasswordWithCode(input: {
   ipHash?: string | null;
 }) {
   const email = normalizeEmail(input.email);
-  validatePasswordPolicy(input.password);
+  assertPasswordPolicy(input.password);
 
-  await import("@shared/server/auth-code-service").then((module) =>
-    module.verifyAuthCode({
-      email,
-      code: input.code,
-      purpose: "PASSWORD_RESET",
-      ipHash: input.ipHash,
-    }),
-  );
+  await verifyAuthCode({
+    email,
+    code: input.code,
+    purpose: "PASSWORD_RESET",
+    ipHash: input.ipHash,
+  });
 
   const user = await db.user.findUnique({
     where: { email },
@@ -413,6 +376,10 @@ export async function resetPasswordWithCode(input: {
         passwordUpdatedAt: new Date(),
         passwordResetRequired: false,
       },
+    }),
+    db.user.update({
+      where: { id: user.id },
+      data: { authVersion: { increment: 1 } },
     }),
     db.session.deleteMany({ where: { userId: user.id } }),
   ]);
