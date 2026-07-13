@@ -26,6 +26,17 @@ describe("GitHub workflow contracts", () => {
     expect(workflow).toContain("QOOVEX_E2E_RUN_ATTESTATION: I_ACKNOWLEDGE_FIXTURE_SCOPED_CLEANUP");
   });
 
+  it("forwards the isolated PostgreSQL database to Turbo tests", () => {
+    const turbo = JSON.parse(readFileSync(resolve(process.cwd(), "../../turbo.json"), "utf8")) as {
+      tasks?: { test?: { env?: string[] } };
+    };
+    const testEnv = turbo.tasks?.test?.env ?? [];
+
+    expect(testEnv).toContain("CI");
+    expect(testEnv).toContain("DATABASE_URL");
+    expect(testEnv).toContain("QOOVEX_AUDIT_SECRET");
+  });
+
   it("keeps the authenticated E2E email sink secret stable across Playwright config loads", () => {
     const config = readFileSync(resolve(process.cwd(), "../../playwright.config.ts"), "utf8");
 

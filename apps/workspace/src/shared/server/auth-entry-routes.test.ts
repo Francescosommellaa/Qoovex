@@ -1,9 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  registerCredentialsUser: vi.fn(),
-  verifyCredentialsEmail: vi.fn(),
+  requestCredentialsSignupEmail: vi.fn(),
+  verifyCredentialsSignupEmail: vi.fn(),
+  completeCredentialsSignup: vi.fn(),
+  requestPasswordReset: vi.fn(),
+  resetPasswordWithCode: vi.fn(),
   getRequestIpHash: vi.fn(() => "ip-hash"),
+  getVerifiedSignupEmailFromCookie: vi.fn(),
+  setVerifiedSignupEmailCookie: vi.fn(),
+  clearVerifiedSignupEmailCookie: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -15,8 +21,11 @@ vi.mock("@shared/server/auth-credentials-service", () => ({
       this.name = "AuthCredentialsError";
     }
   },
-  registerCredentialsUser: mocks.registerCredentialsUser,
-  verifyCredentialsEmail: mocks.verifyCredentialsEmail,
+  requestCredentialsSignupEmail: mocks.requestCredentialsSignupEmail,
+  verifyCredentialsSignupEmail: mocks.verifyCredentialsSignupEmail,
+  completeCredentialsSignup: mocks.completeCredentialsSignup,
+  requestPasswordReset: mocks.requestPasswordReset,
+  resetPasswordWithCode: mocks.resetPasswordWithCode,
 }));
 vi.mock("@shared/server/auth-code-service", () => ({
   AuthCodeError: class AuthCodeError extends Error {
@@ -25,6 +34,17 @@ vi.mock("@shared/server/auth-code-service", () => ({
       this.name = "AuthCodeError";
     }
   },
+}));
+vi.mock("@shared/server/signup-session-service", () => ({
+  SignupSessionError: class SignupSessionError extends Error {
+    constructor(message: string) {
+      super(message);
+      this.name = "SignupSessionError";
+    }
+  },
+  getVerifiedSignupEmailFromCookie: mocks.getVerifiedSignupEmailFromCookie,
+  setVerifiedSignupEmailCookie: mocks.setVerifiedSignupEmailCookie,
+  clearVerifiedSignupEmailCookie: mocks.clearVerifiedSignupEmailCookie,
 }));
 
 function jsonRequest(payload: Record<string, unknown>) {
@@ -36,70 +56,122 @@ function jsonRequest(payload: Record<string, unknown>) {
 }
 
 beforeEach(() => {
-  mocks.registerCredentialsUser.mockReset();
-  mocks.verifyCredentialsEmail.mockReset();
-  mocks.getRequestIpHash.mockClear();
+  for (const mock of Object.values(mocks)) mock.mockReset();
   mocks.getRequestIpHash.mockReturnValue("ip-hash");
+  mocks.getVerifiedSignupEmailFromCookie.mockResolvedValue(null);
 });
 
 describe("auth entry route handlers", () => {
-  it("creates a credentials signup without returning password data", async () => {
+  it("requests email verification before accepting account credentials", async () => {
     const { POST } = await import("../../app/api/auth/credentials/sign-up/route");
-    mocks.registerCredentialsUser.mockResolvedValue({ userId: "user-1", email: "mario@example.com" });
-
-    const response = await POST(jsonRequest({ email: "mario@example.com", username: "mario", password: "Password123!" }));
-    const body = await response.json();
+    const response = await POST(jsonRequest({
+      email: "mario@example.com",
+      username: "ignored",
+      password: "NeverForwardThis123!",
+    }));
 
     expect(response.status).toBe(200);
-    expect(body).toEqual({ created: true });
-    expect(mocks.registerCredentialsUser).toHaveBeenCalledWith({
+    expect(await response.json()).toEqual({ requested: true });
+    expect(mocks.requestCredentialsSignupEmail).toHaveBeenCalledWith({
       email: "mario@example.com",
-      username: "mario",
+      ipHash: "ip-hash",
+    });
+    expect(mocks.completeCredentialsSignup).not.toHaveBeenCalled();
+    expect(mocks.clearVerifiedSignupEmailCookie).toHaveBeenCalledOnce();
+  });
+
+  it("returns safe signup request errors", async () => {
+    const { AuthCredentialsError } = await import("@shared/server/auth-credentials-service");
+    const { POST } = await import("../../app/api/auth/credentials/sign-up/route");
+    mocks.requestCredentialsSignupEmail.mockRejectedValue(new AuthCredentialsError("Inserisci una email valida."));
+
+    const response = await POST(jsonRequest({ email: "" }));
+    expect(response.status).toBe(409);
+    expect(await response.json()).toEqual({ message: "Inserisci una email valida." });
+  });
+
+  it("sets a signed signup session only for a new verified email", async () => {
+    const { POST } = await import("../../app/api/auth/credentials/verify-email/route");
+    mocks.verifyCredentialsSignupEmail.mockResolvedValue({ email: "mario@example.com", next: "complete" });
+
+    const response = await POST(jsonRequest({ email: "mario@example.com", code: "123456" }));
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ verified: true, next: "complete" });
+    expect(mocks.setVerifiedSignupEmailCookie).toHaveBeenCalledWith("mario@example.com");
+    expect(mocks.clearVerifiedSignupEmailCookie).not.toHaveBeenCalled();
+  });
+
+  it("routes a verified legacy credentials account to sign-in without a signup session", async () => {
+    const { POST } = await import("../../app/api/auth/credentials/verify-email/route");
+    mocks.verifyCredentialsSignupEmail.mockResolvedValue({ email: "mario@example.com", next: "sign-in" });
+
+    const response = await POST(jsonRequest({ email: "mario@example.com", code: "123456" }));
+
+    expect(await response.json()).toEqual({ verified: true, next: "sign-in" });
+    expect(mocks.clearVerifiedSignupEmailCookie).toHaveBeenCalledOnce();
+    expect(mocks.setVerifiedSignupEmailCookie).not.toHaveBeenCalled();
+  });
+
+  it("does not create a credential without the signed verified-email session", async () => {
+    const { POST } = await import("../../app/api/auth/credentials/sign-up/complete/route");
+    const response = await POST(jsonRequest({ username: "mario", password: "Password123!" }));
+
+    expect(response.status).toBe(409);
+    expect(await response.json()).toEqual({ message: "Verifica email scaduta. Richiedi un nuovo codice." });
+    expect(mocks.completeCredentialsSignup).not.toHaveBeenCalled();
+  });
+
+  it("creates credentials only for the email bound to the signed signup session", async () => {
+    const { POST } = await import("../../app/api/auth/credentials/sign-up/complete/route");
+    mocks.getVerifiedSignupEmailFromCookie.mockResolvedValue("owner@example.com");
+
+    const response = await POST(jsonRequest({
+      email: "attacker@example.com",
+      username: "owner",
+      password: "Password123!",
+    }));
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ created: true, email: "owner@example.com" });
+    expect(mocks.completeCredentialsSignup).toHaveBeenCalledWith({
+      email: "owner@example.com",
+      username: "owner",
       password: "Password123!",
       ipHash: "ip-hash",
     });
-    expect(JSON.stringify(body)).not.toContain("Password123");
+    expect(mocks.clearVerifiedSignupEmailCookie).toHaveBeenCalledOnce();
   });
 
-  it("returns safe signup errors", async () => {
-    const { AuthCredentialsError } = await import("@shared/server/auth-credentials-service");
-    const { POST } = await import("../../app/api/auth/credentials/sign-up/route");
-    mocks.registerCredentialsUser.mockRejectedValue(new AuthCredentialsError("Inserisci una email valida."));
-
-    const response = await POST(jsonRequest({ email: "", username: "", password: "" }));
-    const body = await response.json();
-
-    expect(response.status).toBe(409);
-    expect(body).toEqual({ message: "Inserisci una email valida." });
-    expect(JSON.stringify(body)).not.toMatch(/passwordHash|stack|blobKey|tokenHash/);
-  });
-
-  it("verifies a credentials email code through the auth service", async () => {
-    const { POST } = await import("../../app/api/auth/credentials/verify-email/route");
-    mocks.verifyCredentialsEmail.mockResolvedValue({ id: "user-1", email: "mario@example.com" });
-
-    const response = await POST(jsonRequest({ email: "mario@example.com", code: "123456" }));
-    const body = await response.json();
+  it("keeps password-reset requests enumeration-safe", async () => {
+    const { POST } = await import("../../app/api/auth/credentials/password-reset/request/route");
+    const response = await POST(jsonRequest({ email: "unknown@example.com" }));
 
     expect(response.status).toBe(200);
-    expect(body).toEqual({ verified: true });
-    expect(mocks.verifyCredentialsEmail).toHaveBeenCalledWith({
-      email: "mario@example.com",
-      code: "123456",
+    expect(await response.json()).toEqual({ requested: true });
+    expect(mocks.requestPasswordReset).toHaveBeenCalledWith({
+      email: "unknown@example.com",
       ipHash: "ip-hash",
     });
   });
 
-  it("returns safe verification errors", async () => {
-    const { AuthCodeError } = await import("@shared/server/auth-code-service");
-    const { POST } = await import("../../app/api/auth/credentials/verify-email/route");
-    mocks.verifyCredentialsEmail.mockRejectedValue(new AuthCodeError("Codice scaduto o non valido."));
+  it("confirms password reset without returning credential data", async () => {
+    const { POST } = await import("../../app/api/auth/credentials/password-reset/confirm/route");
+    const response = await POST(jsonRequest({
+      email: "mario@example.com",
+      code: "123456",
+      password: "Password123!",
+    }));
 
-    const response = await POST(jsonRequest({ email: "mario@example.com", code: "000000" }));
+    expect(response.status).toBe(200);
     const body = await response.json();
-
-    expect(response.status).toBe(409);
-    expect(body).toEqual({ message: "Codice scaduto o non valido." });
-    expect(JSON.stringify(body)).not.toMatch(/stack|blobKey|tokenHash|passwordHash/);
+    expect(body).toEqual({ reset: true });
+    expect(JSON.stringify(body)).not.toMatch(/password|token|hash/i);
+    expect(mocks.resetPasswordWithCode).toHaveBeenCalledWith({
+      email: "mario@example.com",
+      code: "123456",
+      password: "Password123!",
+      ipHash: "ip-hash",
+    });
   });
 });

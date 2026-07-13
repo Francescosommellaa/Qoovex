@@ -16,7 +16,7 @@ Regole:
 - ordine file secondo `docs/02_ARCHITECTURE_AND_BOUNDARIES.md`.
 
 Endpoint dominio MVP attivi:
-- `auth/credentials`: registrazione credentials e verifica email per ingresso workspace;
+- `auth/credentials`: registrazione credentials verify-first, verifica email e reset password;
 - `dashboard`: payload sintetico per la dashboard operativa interna;
 - `document-types`: tipi documento configurabili, senza preset normativi;
 - `documents`: documenti logici e versioni file con Blob privato;

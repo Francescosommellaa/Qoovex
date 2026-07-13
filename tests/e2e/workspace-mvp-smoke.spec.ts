@@ -238,10 +238,8 @@ test("credentials signup verifies the real OTP through the authenticated E2E ema
     expect((await sinkApi.delete(sinkUrl)).status()).toBe(200);
     await page.goto("/sign-up", { waitUntil: "domcontentloaded" });
     await page.getByLabel("Email").fill(email);
-    await page.getByLabel("Username").fill(username);
-    await page.getByLabel("Password").fill(password);
-    await page.getByRole("button", { name: "Crea account" }).click();
-    await expect(page.getByText("Codice inviato. Controlla la tua email e completa la verifica.")).toBeVisible();
+    await page.getByRole("button", { name: "Invia codice" }).click();
+    await expect(page.getByText("Se l'indirizzo puo essere verificato, riceverai un codice. Controlla la tua email.")).toBeVisible();
 
     let code: string | null = null;
     await expect.poll(async () => {
@@ -252,7 +250,10 @@ test("credentials signup verifies the real OTP through the authenticated E2E ema
       return code;
     }).toMatch(/^\d{6}$/);
     await page.getByLabel("Codice email").fill(String(code));
-    await page.getByRole("button", { name: "Completa verifica" }).click();
+    await page.getByRole("button", { name: "Verifica email" }).click();
+    await page.getByLabel("Username").fill(username);
+    await page.getByLabel("Password").fill(password);
+    await page.getByRole("button", { name: "Crea account" }).click();
     await expect.poll(async () => (await page.context().request.get("/api/context")).status()).toBe(200);
   } finally {
     expect((await adminApi.post("/api/dev-auth")).status()).toBe(200);
@@ -338,12 +339,13 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     const inviteePage = await inviteeContext.newPage();
     await inviteePage.goto("/sign-up", { waitUntil: "domcontentloaded" });
     await inviteePage.getByLabel("Email").fill(siteManagerEmail);
+    await inviteePage.getByRole("button", { name: "Invia codice" }).click();
+    const signupTemplate = await waitForSinkTemplate(sinkApi, sinkUrl, siteManagerEmail, "auth-code");
+    await inviteePage.getByLabel("Codice email").fill(String(signupTemplate.code));
+    await inviteePage.getByRole("button", { name: "Verifica email" }).click();
     await inviteePage.getByLabel("Username").fill(siteManagerUsername);
     await inviteePage.getByLabel("Password").fill(siteManagerPassword);
     await inviteePage.getByRole("button", { name: "Crea account" }).click();
-    const signupTemplate = await waitForSinkTemplate(sinkApi, sinkUrl, siteManagerEmail, "auth-code");
-    await inviteePage.getByLabel("Codice email").fill(String(signupTemplate.code));
-    await inviteePage.getByRole("button", { name: "Completa verifica" }).click();
     await expect.poll(async () => (await inviteePage.request.get("/api/context")).status()).toBe(200);
     await expectJson(await inviteePage.request.post("/api/organization/invitations/accept", { data: { token: invitationToken } }), 200);
 
