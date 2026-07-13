@@ -85,7 +85,7 @@ export function DocumentPackageDetailView({
             {capabilities.canManagePackages ? (
               <DocumentPackageForm mode="update" documentPackage={documentPackage} jobSites={jobSites} />
             ) : (
-              <p className={styles.muted}>Il tuo ruolo puo leggere il pacchetto, ma non modificarlo.</p>
+              <p className="qv-text-muted">Il tuo ruolo puo leggere il pacchetto, ma non modificarlo.</p>
             )}
           </WorkspacePanel>
           <WorkspacePanel title="Aggiungi item">
@@ -98,14 +98,14 @@ export function DocumentPackageDetailView({
                 checklists={checklists}
               />
             ) : (
-              <p className={styles.muted}>Non puoi aggiungere item con il ruolo corrente.</p>
+              <p className="qv-text-muted">Non puoi aggiungere item con il ruolo corrente.</p>
             )}
           </WorkspacePanel>
           <WorkspacePanel title="Crea link di condivisione">
             {capabilities.canSharePackages ? (
               <ShareLinkCreateForm packageId={documentPackage.id} />
             ) : (
-              <p className={styles.muted}>Solo Owner e Admin possono creare o revocare link di condivisione.</p>
+              <p className="qv-text-muted">Solo Owner e Admin possono creare o revocare link di condivisione.</p>
             )}
           </WorkspacePanel>
         </div>

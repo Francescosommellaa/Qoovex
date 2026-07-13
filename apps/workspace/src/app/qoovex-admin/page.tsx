@@ -29,7 +29,7 @@ export default async function QoovexAdminPage() {
           </div>
         </WorkspacePanel>
         <WorkspacePanel title="Confini operativi">
-          <p className={styles.muted}>Le azioni sugli account richiedono un motivo e sono auditabili. La console non mostra password, token, segreti MFA, riferimenti storage privati o contenuti documentali.</p>
+          <p className="qv-text-muted">Le azioni sugli account richiedono un motivo e sono auditabili. La console non mostra password, token, segreti MFA, riferimenti storage privati o contenuti documentali.</p>
         </WorkspacePanel>
       </WorkspacePage>
     );

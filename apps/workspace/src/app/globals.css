@@ -1,52 +1,5 @@
-@import "@qoovex/brand-resources/styles/fontshare.css";
 @import "tailwindcss";
+@import "@qoovex/brand-resources/styles/fontshare.css";
 @import "@qoovex/ui/styles/tokens.css";
 @import "@qoovex/ui/styles/base.css";
 @source "../../../../packages/ui/src";
-
-:root {
-  color-scheme: light;
-  --qvx-bg: var(--color-qv-canvas);
-  --qvx-surface: var(--color-qv-surface);
-  --qvx-surface-muted: var(--color-qv-surface-muted);
-  --qvx-text: var(--color-qv-content);
-  --qvx-muted: var(--color-qv-content-muted);
-  --qvx-border: var(--color-qv-border);
-  --qvx-accent: var(--color-qv-accent);
-  --qvx-accent-strong: var(--color-qv-accent-strong);
-  --qvx-warning: var(--color-qv-warning);
-  --qvx-danger: var(--color-qv-danger);
-  --qvx-info: var(--color-qv-info);
-  --qvx-shadow: var(--shadow-qv-md);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  min-height: 100%;
-  background: var(--qvx-bg);
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
-  margin: 0;
-  background: var(--qvx-bg);
-  color: var(--qvx-text);
-  font-family: var(--font-sans);
-  line-height: 1.5;
-  overflow-x: hidden;
-}
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
-a {
-  color: inherit;
-}

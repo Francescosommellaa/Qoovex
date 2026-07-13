@@ -51,7 +51,7 @@ export function DocumentDetailView({
             <DocumentVersionList documentId={document.id} versions={versions} canArchive={capabilities.canManageCore} />
           </WorkspacePanel>
           <WorkspacePanel title="Scadenze collegate">
-            {!deadlines.length ? <p className={styles.muted}>Nessuna scadenza collegata a questo documento.</p> : (
+            {!deadlines.length ? <p className="qv-text-muted">Nessuna scadenza collegata a questo documento.</p> : (
               <div className={styles.list}>
                 {deadlines.map((deadline) => (
                   <article className={styles.record} key={deadline.id}>
@@ -70,11 +70,11 @@ export function DocumentDetailView({
             {capabilities.canUpdateDocuments ? (
               <DocumentForm mode="update" document={document} documentTypes={documentTypes} workers={workers} jobSites={jobSites} />
             ) : (
-              <p className={styles.muted}>Il tuo ruolo non puo modificare questo documento.</p>
+              <p className="qv-text-muted">Il tuo ruolo non puo modificare questo documento.</p>
             )}
           </WorkspacePanel>
           <WorkspacePanel title="Carica versione" description="Il file viene salvato su Blob e collegato come metadato al documento.">
-            {capabilities.canUploadDocumentVersions ? <DocumentVersionUploadForm documentId={document.id} /> : <p className={styles.muted}>Upload disponibile solo per ruoli di gestione.</p>}
+            {capabilities.canUploadDocumentVersions ? <DocumentVersionUploadForm documentId={document.id} /> : <p className="qv-text-muted">Upload disponibile solo per ruoli di gestione.</p>}
           </WorkspacePanel>
         </div>
       </div>

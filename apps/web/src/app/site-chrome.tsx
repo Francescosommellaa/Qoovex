@@ -45,8 +45,8 @@ export function SiteFooter() {
             <a className="site-brand" href="/">
               Qoovex
             </a>
-            <p className="muted">Qoovex organizza, non certifica.</p>
-            <p className="muted">
+            <p className="qv-text-muted">Qoovex organizza, non certifica.</p>
+            <p className="qv-text-muted">
               Contatto operativo: <a href={contactHref}>{contactEmail}</a>
             </p>
           </div>

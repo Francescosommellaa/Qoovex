@@ -95,7 +95,7 @@ export function DocumentsPageView({
           {capabilities.canManageCore ? (
             <DocumentForm mode="create" documentTypes={documentTypes} workers={workers} jobSites={jobSites} />
           ) : (
-            <p className={styles.muted}>Il tuo ruolo puo leggere i documenti, ma non creare nuovi record da questa schermata.</p>
+            <p className="qv-text-muted">Il tuo ruolo puo leggere i documenti, ma non creare nuovi record da questa schermata.</p>
           )}
         </WorkspacePanel>
       </div>

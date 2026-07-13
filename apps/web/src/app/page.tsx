@@ -36,7 +36,7 @@ export default function HomePage() {
                 <strong>Pacchetto documentale</strong>
                 <Badge variant="positive">Pronto per revisione</Badge>
               </div>
-              <p className="muted">
+              <p className="qv-text-muted">
                 Esempio dimostrativo di stati operativi. Non contiene preset documentali o regole
                 normative.
               </p>
@@ -47,18 +47,18 @@ export default function HomePage() {
 
       <Section title="Il problema" tone="muted">
         <Container>
-          <div className="grid">
+          <div className="site-card-grid">
             <Card>
               <h3>File sparsi</h3>
-              <p className="muted">PDF, foto e richieste finiscono spesso tra chat, email e cartelle diverse.</p>
+              <p className="qv-text-muted">PDF, foto e richieste finiscono spesso tra chat, email e cartelle diverse.</p>
             </Card>
             <Card>
               <h3>Date da controllare</h3>
-              <p className="muted">Le scadenze registrate devono restare visibili prima di diventare urgenti.</p>
+              <p className="qv-text-muted">Le scadenze registrate devono restare visibili prima di diventare urgenti.</p>
             </Card>
             <Card>
               <h3>Pacchetti da preparare</h3>
-              <p className="muted">Quando serve una revisione, e utile raccogliere solo gli elementi necessari.</p>
+              <p className="qv-text-muted">Quando serve una revisione, e utile raccogliere solo gli elementi necessari.</p>
             </Card>
           </div>
         </Container>
@@ -81,18 +81,18 @@ export default function HomePage() {
 
       <Section id="per-chi" title="Per chi e">
         <Container>
-          <div className="grid">
+          <div className="site-card-grid">
             <Card>
               <h3>Piccole imprese</h3>
-              <p className="muted">Per tenere ordinati documenti aziendali, lavoratori e cantieri attivi.</p>
+              <p className="qv-text-muted">Per tenere ordinati documenti aziendali, lavoratori e cantieri attivi.</p>
             </Card>
             <Card>
               <h3>Subappaltatori</h3>
-              <p className="muted">Per rispondere con meno confusione alle richieste di documenti e prove.</p>
+              <p className="qv-text-muted">Per rispondere con meno confusione alle richieste di documenti e prove.</p>
             </Card>
             <Card>
               <h3>Consulenti</h3>
-              <p className="muted">Per vedere stati operativi e segnalare cosa richiede una revisione.</p>
+              <p className="qv-text-muted">Per vedere stati operativi e segnalare cosa richiede una revisione.</p>
             </Card>
           </div>
         </Container>
@@ -126,7 +126,7 @@ export default function HomePage() {
           <Card className="contact-panel">
             <div>
               <h3>Contatto Qoovex</h3>
-              <p className="muted">
+              <p className="qv-text-muted">
                 Per informazioni operative, accesso pilota o richieste sui dati puoi scrivere a{" "}
                 <a href={contactHref}>{contactEmail}</a>. Il mittente transazionale resta separato
                 dal canale di risposta.

@@ -9,10 +9,10 @@
 .authCard,
 .setupCard {
   width: min(100%, 520px);
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: var(--qvx-surface);
-  box-shadow: var(--qvx-shadow);
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface);
+  box-shadow: var(--shadow-qv-md);
   padding: 20px;
 }
 
@@ -22,7 +22,7 @@
 
 .brand {
   margin: 0 0 6px;
-  color: var(--qvx-accent-strong);
+  color: var(--color-qv-accent-strong);
   font-size: 0.84rem;
   font-weight: 820;
   letter-spacing: 0;
@@ -32,7 +32,7 @@
 .authCard h1,
 .setupCard h1 {
   margin: 0;
-  color: var(--qvx-text);
+  color: var(--color-qv-content);
   font-size: 1.7rem;
   line-height: 1.08;
   letter-spacing: 0;
@@ -43,7 +43,7 @@
 .hint,
 .error,
 .success {
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.9rem;
 }
 
@@ -64,17 +64,17 @@
 }
 
 .field label {
-  color: var(--qvx-text);
+  color: var(--color-qv-content);
   font-size: 0.84rem;
   font-weight: 760;
 }
 
 .field input {
   min-height: 44px;
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: #fbfcfa;
-  color: var(--qvx-text);
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface);
+  color: var(--color-qv-content);
   padding: 10px 12px;
 }
 
@@ -83,7 +83,7 @@
 .secondaryButton:focus-visible,
 .secondaryLink:focus-visible,
 .textLink:focus-visible {
-  outline: 3px solid rgba(31, 122, 92, 0.24);
+  outline: 3px solid var(--color-qv-accent-soft);
   outline-offset: 2px;
 }
 
@@ -94,7 +94,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: var(--radius-qv-sm);
   padding: 10px 14px;
   font-size: 0.92rem;
   font-weight: 780;
@@ -103,10 +103,10 @@
 
 .secondaryButton {
   width: 100%;
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: var(--qvx-surface);
-  color: var(--qvx-text);
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface);
+  color: var(--color-qv-content);
   cursor: pointer;
 }
 
@@ -116,9 +116,9 @@
 }
 
 .primaryButton {
-  border: 1px solid var(--qvx-accent);
-  background: var(--qvx-accent);
-  color: #fff;
+  border: 1px solid var(--color-qv-accent);
+  background: var(--color-qv-accent);
+  color: var(--color-qv-on-accent);
 }
 
 .primaryButton:disabled {
@@ -127,9 +127,9 @@
 }
 
 .secondaryLink {
-  border: 1px solid var(--qvx-border);
-  background: var(--qvx-surface-muted);
-  color: var(--qvx-text);
+  border: 1px solid var(--color-qv-border);
+  background: var(--color-qv-surface-muted);
+  color: var(--color-qv-content);
 }
 
 .actions {
@@ -139,19 +139,19 @@
 }
 
 .textLink {
-  color: var(--qvx-accent-strong);
+  color: var(--color-qv-accent-strong);
   font-weight: 760;
 }
 
 .error {
   margin: 0;
-  color: var(--qvx-danger);
+  color: var(--color-qv-danger);
   font-weight: 700;
 }
 
 .success {
   margin: 0;
-  color: var(--qvx-accent-strong);
+  color: var(--color-qv-accent-strong);
   font-weight: 700;
 }
 

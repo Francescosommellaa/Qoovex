@@ -27,7 +27,7 @@ export function JobSiteDetailView({ jobSite, documents, deadlines, capabilities 
             </article>
           </WorkspacePanel>
           <WorkspacePanel title="Documenti collegati">
-            {!documents.length ? <p className={styles.muted}>Nessun documento collegato al cantiere.</p> : (
+            {!documents.length ? <p className="qv-text-muted">Nessun documento collegato al cantiere.</p> : (
               <div className={styles.list}>
                 {documents.map((document) => (
                   <article className={styles.record} key={document.id}>
@@ -45,7 +45,7 @@ export function JobSiteDetailView({ jobSite, documents, deadlines, capabilities 
             )}
           </WorkspacePanel>
           <WorkspacePanel title="Scadenze registrate">
-            {!deadlines.length ? <p className={styles.muted}>Nessuna scadenza collegata al cantiere.</p> : (
+            {!deadlines.length ? <p className="qv-text-muted">Nessuna scadenza collegata al cantiere.</p> : (
               <div className={styles.list}>
                 {deadlines.map((deadline) => (
                   <article className={styles.record} key={deadline.id}>
@@ -61,7 +61,7 @@ export function JobSiteDetailView({ jobSite, documents, deadlines, capabilities 
           </WorkspacePanel>
         </div>
         <WorkspacePanel title="Aggiorna cantiere">
-          {capabilities.canManageCore ? <JobSiteForm mode="update" jobSite={jobSite} /> : <p className={styles.muted}>Il tuo ruolo non puo modificare questo cantiere.</p>}
+          {capabilities.canManageCore ? <JobSiteForm mode="update" jobSite={jobSite} /> : <p className="qv-text-muted">Il tuo ruolo non puo modificare questo cantiere.</p>}
         </WorkspacePanel>
       </div>
     </WorkspacePage>

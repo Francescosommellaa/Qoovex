@@ -1,14 +1,14 @@
 .shell {
   min-height: 100vh;
-  background: var(--qvx-bg);
+  background: var(--color-qv-canvas);
 }
 
 .topbar {
   position: sticky;
   top: 0;
   z-index: 10;
-  border-bottom: 1px solid var(--qvx-border);
-  background: rgba(246, 247, 244, 0.94);
+  border-bottom: 1px solid var(--color-qv-border);
+  background: color-mix(in oklab, var(--color-qv-surface-raised) 94%, transparent);
   backdrop-filter: blur(14px);
 }
 
@@ -29,14 +29,14 @@
 }
 
 .brand a {
-  color: var(--qvx-text);
+  color: var(--color-qv-content);
   font-size: 1.05rem;
   font-weight: 820;
   text-decoration: none;
 }
 
 .brand span {
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.78rem;
   font-weight: 700;
 }
@@ -62,11 +62,11 @@
   min-height: 40px;
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
   padding: 9px 12px;
-  background: var(--qvx-surface);
-  color: var(--qvx-text);
+  background: var(--color-qv-surface);
+  color: var(--color-qv-content);
   font-size: 0.86rem;
   font-weight: 760;
   text-decoration: none;
@@ -82,13 +82,13 @@
 }
 
 .nav a[aria-current="page"] {
-  border-color: rgba(31, 122, 92, 0.42);
-  background: #e4f4ed;
-  color: var(--qvx-accent-strong);
+  border-color: color-mix(in oklab, var(--color-qv-accent) 42%, var(--color-qv-border));
+  background: var(--color-qv-positive-soft);
+  color: var(--color-qv-accent-strong);
 }
 
 .disabled {
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   opacity: 0.62;
 }
 
@@ -102,10 +102,10 @@
 .supportBanner {
   display: grid;
   gap: 10px;
-  border-bottom: 1px solid rgba(155, 91, 18, 0.35);
-  background: #fff4df;
+  border-bottom: 1px solid color-mix(in oklab, var(--color-qv-warning) 35%, var(--color-qv-border));
+  background: var(--color-qv-warning-soft);
   padding: 12px 16px;
-  color: var(--qvx-text);
+  color: var(--color-qv-content);
 }
 
 .supportBanner div {
@@ -115,16 +115,16 @@
 
 .supportBanner span,
 .supportBanner small {
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   overflow-wrap: anywhere;
 }
 
 .supportBanner button {
   min-height: 40px;
-  border: 1px solid rgba(155, 91, 18, 0.4);
-  border-radius: 8px;
-  background: #fff;
-  color: var(--qvx-warning);
+  border: 1px solid color-mix(in oklab, var(--color-qv-warning) 40%, var(--color-qv-border));
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface-raised);
+  color: var(--color-qv-warning);
   padding: 9px 12px;
   font-weight: 760;
   cursor: pointer;
@@ -139,7 +139,7 @@
 }
 
 .supportActions label {
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.76rem;
   font-weight: 700;
 }
@@ -147,15 +147,15 @@
 .supportActions input {
   width: 112px;
   min-height: 40px;
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: #fff;
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface-raised);
   padding: 8px 10px;
 }
 
 .supportBanner p {
   margin: 0;
-  color: var(--qvx-danger);
+  color: var(--color-qv-danger);
 }
 
 @media (min-width: 760px) {

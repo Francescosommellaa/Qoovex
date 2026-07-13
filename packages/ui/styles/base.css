@@ -6,80 +6,222 @@
   }
 
   html {
+    min-block-size: 100%;
     background: var(--color-qv-canvas);
     color: var(--color-qv-content);
     font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
   }
 
   body {
-    min-height: 100%;
+    min-block-size: 100dvh;
     margin: 0;
+    overflow-x: hidden;
     background: var(--color-qv-canvas);
+    color: var(--color-qv-content);
+    font-size: var(--text-qv-body);
+    line-height: var(--text-qv-body--line-height);
   }
 
-  button,
-  input,
-  select,
-  textarea {
+  :where(h1, h2, h3, h4, h5, h6) {
+    color: var(--color-qv-content);
+    font-family: var(--font-display);
+    letter-spacing: var(--tracking-qv-tight);
+    text-wrap: balance;
+  }
+
+  :where(p, li, dd, figcaption) {
+    text-wrap: pretty;
+  }
+
+  :where(p, li, dd, dt, td, th, label, small, code) {
+    overflow-wrap: anywhere;
+  }
+
+  :where(img, picture, video, canvas, svg) {
+    display: block;
+    max-inline-size: 100%;
+  }
+
+  :where(img, picture, video, canvas) {
+    block-size: auto;
+  }
+
+  :where(button, input, select, textarea) {
+    color: inherit;
     font: inherit;
   }
 
-  a {
-    color: inherit;
-  }
-
-  button,
-  [role="button"] {
+  :where(button, [role="button"], input, select, summary, textarea) {
     touch-action: manipulation;
   }
 
+  :where(button, input, select, textarea):disabled,
+  :where([aria-disabled="true"]) {
+    cursor: not-allowed;
+  }
+
+  :where(a) {
+    color: inherit;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 0.08em;
+  }
+
+  :where(hr) {
+    block-size: 1px;
+    margin: var(--spacing-qv-6) 0;
+    border: 0;
+    background: var(--color-qv-border);
+  }
+
+  :where(fieldset) {
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  :where(::placeholder) {
+    color: var(--color-qv-content-subtle);
+    opacity: 1;
+  }
+
   :focus-visible {
-    outline: 0.1875rem solid var(--color-qv-accent);
+    outline: 0.1875rem solid var(--color-qv-focus);
     outline-offset: 0.1875rem;
+    box-shadow: 0 0 0 0.25rem var(--color-qv-accent-soft);
+  }
+
+  :target {
+    scroll-margin-block: var(--spacing-qv-section-compact);
   }
 
   ::selection {
     background: var(--color-qv-accent-soft);
     color: var(--color-qv-content);
   }
+}
+
+@layer components {
+  .qv-surface,
+  .qv-surface-raised,
+  .qv-surface-sunken {
+    border: 1px solid var(--color-qv-border-highlight);
+    background-clip: padding-box;
+  }
+
+  .qv-surface {
+    background: var(--color-qv-surface);
+    box-shadow: var(--shadow-qv-sm);
+  }
+
+  .qv-surface-raised {
+    background: var(--color-qv-surface-raised);
+    box-shadow: var(--shadow-qv-md);
+  }
+
+  .qv-surface-sunken {
+    background: var(--color-qv-surface-sunken);
+    box-shadow: var(--shadow-qv-pressed);
+  }
+
+  .qv-text-muted {
+    color: var(--color-qv-content-muted);
+  }
+
+  .qv-text-subtle {
+    color: var(--color-qv-content-subtle);
+  }
+
+  .qv-card {
+    background-image: linear-gradient(145deg, color-mix(in oklab, var(--color-qv-surface-raised) 72%, transparent), transparent 62%);
+  }
+
+  .qv-button {
+    position: relative;
+    isolation: isolate;
+    box-shadow: var(--shadow-qv-control);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .qv-button::after {
+    position: absolute;
+    inset: 1px;
+    z-index: -1;
+    border-radius: calc(var(--radius-qv-md) - 1px);
+    background: linear-gradient(145deg, color-mix(in oklab, white 18%, transparent), transparent 52%);
+    content: "";
+    pointer-events: none;
+  }
+
+  .qv-button:hover:not(:disabled, [aria-disabled="true"]) {
+    transform: translateY(-1px);
+  }
+
+  .qv-button:active:not(:disabled, [aria-disabled="true"]) {
+    transform: translateY(1px);
+    box-shadow: var(--shadow-qv-pressed);
+  }
 
   .qv-switch {
     position: relative;
-    width: var(--spacing-qv-10);
-    height: var(--spacing-qv-6);
+    inline-size: var(--spacing-qv-switch-track);
+    block-size: var(--spacing-qv-switch-height);
     appearance: none;
-    border: 0;
+    border: 1px solid var(--color-qv-border);
     border-radius: var(--radius-qv-pill);
-    background: var(--color-qv-border);
+    background: var(--color-qv-surface-sunken);
+    box-shadow: var(--shadow-qv-pressed);
     cursor: pointer;
-    transition: background-color 150ms var(--ease-qv-standard);
+    transition:
+      background-color var(--duration-qv-standard) var(--ease-qv-standard),
+      border-color var(--duration-qv-standard) var(--ease-qv-standard);
   }
 
   .qv-switch::after {
     position: absolute;
-    top: var(--spacing-qv-1);
-    left: var(--spacing-qv-1);
-    width: var(--spacing-qv-switch-thumb);
-    height: var(--spacing-qv-switch-thumb);
+    inset-block-start: 50%;
+    inset-inline-start: var(--spacing-qv-1);
+    inline-size: var(--spacing-qv-switch-thumb);
+    block-size: var(--spacing-qv-switch-thumb);
+    border: 1px solid var(--color-qv-border-highlight);
     border-radius: var(--radius-qv-pill);
-    background: var(--color-qv-surface);
+    background: var(--color-qv-surface-raised);
+    box-shadow: var(--shadow-qv-xs);
     content: "";
-    box-shadow: var(--shadow-qv-sm);
-    transition: transform 150ms var(--ease-qv-standard);
+    transform: translateY(-50%);
+    transition: transform var(--duration-qv-standard) var(--ease-qv-emphasized);
   }
 
   .qv-switch:checked {
+    border-color: color-mix(in oklab, var(--color-qv-accent) 72%, var(--color-qv-border));
     background: var(--color-qv-accent);
   }
 
   .qv-switch:checked::after {
-    transform: translateX(var(--spacing-qv-4));
+    transform: translate(calc(var(--spacing-qv-switch-track) - var(--spacing-qv-switch-thumb) - (var(--spacing-qv-1) * 2)), -50%);
   }
 
   .qv-switch:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.56;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :focus-visible {
+    outline-width: 0.25rem;
+    box-shadow: none;
+  }
+
+  .qv-surface,
+  .qv-surface-raised,
+  .qv-surface-sunken,
+  .qv-card,
+  .qv-button,
+  .qv-switch {
+    border-color: var(--color-qv-border-strong);
   }
 }
 
@@ -91,5 +233,24 @@
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  .qv-button:hover:not(:disabled, [aria-disabled="true"]),
+  .qv-button:active:not(:disabled, [aria-disabled="true"]) {
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+    box-shadow: none;
+  }
+
+  .qv-switch,
+  .qv-button,
+  .qv-card {
+    border: 1px solid ButtonText;
+    box-shadow: none;
   }
 }

@@ -12,7 +12,7 @@ export function MfaSecurityPattern() {
             </div>
             <Status tone="warning">Conferma richiesta</Status>
           </div>
-          <p className="muted">Inserisci il codice dell&apos;app Authenticator oppure un codice di recupero.</p>
+          <p className="qv-text-muted">Inserisci il codice dell&apos;app Authenticator oppure un codice di recupero.</p>
           <Field htmlFor="mfa-gate-code" label="Codice MFA" description="Sei cifre oppure un codice di recupero monouso.">
             <Input autoComplete="one-time-code" id="mfa-gate-code" inputMode="numeric" placeholder="123456" />
           </Field>

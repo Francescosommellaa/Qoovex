@@ -32,7 +32,7 @@ export function JobSitesPageView({ jobSites, capabilities }: { jobSites: Workspa
           </div>
         </WorkspacePanel>
         <WorkspacePanel title="Aggiungi cantiere" description="Usa solo dati operativi minimi. Coordinate e presenze restano fuori scope.">
-          {capabilities.canManageCore ? <JobSiteForm mode="create" /> : <p className={styles.muted}>Il tuo ruolo puo leggere i cantieri, ma non gestirli da questa schermata.</p>}
+          {capabilities.canManageCore ? <JobSiteForm mode="create" /> : <p className="qv-text-muted">Il tuo ruolo puo leggere i cantieri, ma non gestirli da questa schermata.</p>}
         </WorkspacePanel>
       </div>
     </WorkspacePage>

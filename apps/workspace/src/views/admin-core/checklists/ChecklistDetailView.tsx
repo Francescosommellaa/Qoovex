@@ -45,7 +45,7 @@ export function ChecklistDetailView({
             </article>
           </WorkspacePanel>
           <WorkspacePanel title="Voci checklist" description="Completare una voce registra un'attivita, non una verifica normativa.">
-            {!items.length ? <p className={styles.muted}>Nessuna voce checklist registrata.</p> : (
+            {!items.length ? <p className="qv-text-muted">Nessuna voce checklist registrata.</p> : (
               <div className={styles.list}>
                 {items.map((item) => (
                   <article className={styles.record} key={item.id}>
@@ -81,14 +81,14 @@ export function ChecklistDetailView({
             {capabilities.canManageChecklists ? (
               <ChecklistForm mode="update" checklist={checklist} jobSites={jobSites} />
             ) : (
-              <p className={styles.muted}>Il tuo ruolo puo leggere la checklist, ma non modificarla.</p>
+              <p className="qv-text-muted">Il tuo ruolo puo leggere la checklist, ma non modificarla.</p>
             )}
           </WorkspacePanel>
           <WorkspacePanel title="Aggiungi voce">
             {capabilities.canManageChecklists ? (
               <ChecklistItemForm checklistId={checklist.id} mode="create" />
             ) : (
-              <p className={styles.muted}>Non puoi aggiungere voci con il ruolo corrente.</p>
+              <p className="qv-text-muted">Non puoi aggiungere voci con il ruolo corrente.</p>
             )}
           </WorkspacePanel>
         </div>

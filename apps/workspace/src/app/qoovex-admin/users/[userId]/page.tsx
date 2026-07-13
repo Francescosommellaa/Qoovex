@@ -25,7 +25,7 @@ export default async function PlatformUserDetailPage({ params }: { params: Promi
           </div>
         </WorkspacePanel>
         <WorkspacePanel title="Membership attive">
-          <div className={styles.recordList}>{user.organizationMembership?.revokedAt === null ? <div className={styles.record}><strong>{user.organizationMembership.organization.name}</strong><span className={styles.meta}>{user.organizationMembership.organization.code} · {user.organizationMembership.role}</span></div> : <p className={styles.muted}>Nessuna azienda attiva</p>}</div>
+          <div className={styles.recordList}>{user.organizationMembership?.revokedAt === null ? <div className={styles.record}><strong>{user.organizationMembership.organization.name}</strong><span className={styles.meta}>{user.organizationMembership.organization.code} · {user.organizationMembership.role}</span></div> : <p className="qv-text-muted">Nessuna azienda attiva</p>}</div>
         </WorkspacePanel>
         <WorkspacePanel title="Eventi sicurezza recenti">
           <div className={styles.recordList}>{user.securityEvents.map((event) => <div className={styles.record} key={event.id}><strong>{event.type}</strong><span className={styles.meta}>{event.createdAt.toLocaleString("it-IT")}</span></div>)}</div>

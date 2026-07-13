@@ -26,7 +26,7 @@ export default async function PlatformErrorsPage({ searchParams }: { searchParam
               <article className={styles.record} key={error.id}>
                 <div className={styles.recordHeader}><div><h2>{error.errorName}</h2><p className={styles.meta}>{error.source} · {error.requestMethod ?? "-"} {error.routePath ?? "route non disponibile"}</p></div><WorkspaceStatusBadge label={error.status === "OPEN" ? "Aperto" : "Risolto"} tone={error.status === "OPEN" ? "danger" : "good"} /></div>
                 <p>{error.message}</p>
-                <p className={styles.muted}>{error.occurrenceCount} occorrenze · ultima {error.lastSeenAt.toLocaleString("it-IT")}</p>
+                <p className="qv-text-muted">{error.occurrenceCount} occorrenze · ultima {error.lastSeenAt.toLocaleString("it-IT")}</p>
                 {error.stackPreview ? <details><summary>Stack sanitizzato</summary><pre className={styles.codeBlock}>{error.stackPreview}</pre></details> : null}
                 {error.resolutionNote ? <p className={styles.success}>{error.resolutionNote}</p> : null}
                 <RuntimeErrorAction errorId={error.id} status={error.status} />

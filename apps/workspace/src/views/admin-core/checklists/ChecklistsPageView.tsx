@@ -54,7 +54,7 @@ export function ChecklistsPageView({
           {capabilities.canManageChecklists ? (
             <ChecklistForm mode="create" jobSites={jobSites} />
           ) : (
-            <p className={styles.muted}>Il tuo ruolo puo leggere le checklist, ma non crearne una da questa schermata.</p>
+            <p className="qv-text-muted">Il tuo ruolo puo leggere le checklist, ma non crearne una da questa schermata.</p>
           )}
         </WorkspacePanel>
       </div>

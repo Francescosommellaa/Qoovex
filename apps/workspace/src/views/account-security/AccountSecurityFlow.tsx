@@ -207,7 +207,7 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
           <div className={styles.section}>
             <Status tone="warning">Nuovo fattore da confermare</Status>
             <h1>Configura l&apos;app Authenticator</h1>
-            <p className={styles.muted}>Inserisci manualmente il secret oppure apri il link sul dispositivo compatibile.</p>
+            <p className="qv-text-muted">Inserisci manualmente il secret oppure apri il link sul dispositivo compatibile.</p>
             <code className={styles.codeBlock}>{setup.secret}</code>
             <Button href={setup.otpauthUrl} variant="secondary">Apri nell&apos;app Authenticator</Button>
             <form className={styles.form} onSubmit={confirmSetup}>
@@ -302,7 +302,7 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
           <Card>
             <form className={styles.form} onSubmit={(event) => currentFactorAction(event, "replace")}>
               <h2>Sostituisci il fattore</h2>
-              <p className={styles.muted}>Richiede il fattore corrente. La conferma del nuovo TOTP revocherà tutte le sessioni.</p>
+              <p className="qv-text-muted">Richiede il fattore corrente. La conferma del nuovo TOTP revocherà tutte le sessioni.</p>
               <Field htmlFor="mfa-replace-code" label="Fattore corrente"><Input autoComplete="one-time-code" id="mfa-replace-code" name="currentCode" required /></Field>
               <Button disabled={loading === "replace"} type="submit">Avvia sostituzione</Button>
             </form>
@@ -310,7 +310,7 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
           <Card>
             <form className={styles.form} onSubmit={(event) => currentFactorAction(event, "backup")}>
               <h2>Rigenera backup code</h2>
-              <p className={styles.muted}>{status.backupCodesRemaining} codici non utilizzati. I precedenti verranno revocati.</p>
+              <p className="qv-text-muted">{status.backupCodesRemaining} codici non utilizzati. I precedenti verranno revocati.</p>
               <Field htmlFor="mfa-backup-code" label="Fattore corrente"><Input autoComplete="one-time-code" id="mfa-backup-code" name="currentCode" required /></Field>
               <Button disabled={loading === "backup"} type="submit" variant="secondary">Rigenera codici</Button>
             </form>
@@ -322,7 +322,7 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
         <Card>
           <div className={styles.section}>
             <div className={styles.statusRow}><h2>Richieste recupero da approvare</h2><Status tone={inbox.length ? "warning" : "neutral"}>{inbox.length ? `${inbox.length} in attesa` : "Nessuna richiesta"}</Status></div>
-            {inbox.length === 0 ? <p className={styles.muted}>Non ci sono richieste attive per questa Azienda.</p> : (
+            {inbox.length === 0 ? <p className="qv-text-muted">Non ci sono richieste attive per questa Azienda.</p> : (
               <div className={styles.requestList}>
                 {inbox.map((request) => (
                   <form className={styles.request} key={request.id} onSubmit={(event) => { event.preventDefault(); void decideRecovery(event.currentTarget, request.id, "approve"); }}>

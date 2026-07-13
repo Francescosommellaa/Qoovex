@@ -79,7 +79,7 @@ export function EvidencePageView({
           {capabilities.canUploadEvidence ? (
             <EvidenceForm checklists={checklists} checklistItems={checklistItems} jobSites={jobSites} workers={workers} />
           ) : (
-            <p className={styles.muted}>Il tuo ruolo puo leggere le prove, ma non caricarne una da questa schermata.</p>
+            <p className="qv-text-muted">Il tuo ruolo puo leggere le prove, ma non caricarne una da questa schermata.</p>
           )}
         </WorkspacePanel>
       </div>
