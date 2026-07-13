@@ -14,6 +14,10 @@ Sirio mostra token Tailwind CSS v4 e primitive importate da `@qoovex/ui`. Non e 
 - documentare esempi di stati operativi generici;
 - separare copy prudente da copy da evitare.
 
+## Unita in approvazione
+
+`/foundations` isola la proposta mobile-first per token, tipografia, spacing e layout. La route serve per la revisione Sirio e non autorizza integrazioni nel workspace.
+
 ## Divieti
 
 - niente Prisma o `@qoovex/db`;

@@ -27,7 +27,7 @@ export function WorkerDetailView({ worker, documents, deadlines, capabilities }:
             </article>
           </WorkspacePanel>
           <WorkspacePanel title="Documenti collegati">
-            {!documents.length ? <p className={styles.muted}>Nessun documento collegato al lavoratore.</p> : (
+            {!documents.length ? <p className="qv-text-muted">Nessun documento collegato al lavoratore.</p> : (
               <div className={styles.list}>
                 {documents.map((document) => (
                   <article className={styles.record} key={document.id}>
@@ -45,7 +45,7 @@ export function WorkerDetailView({ worker, documents, deadlines, capabilities }:
             )}
           </WorkspacePanel>
           <WorkspacePanel title="Scadenze collegate">
-            {!deadlines.length ? <p className={styles.muted}>Nessuna scadenza collegata al lavoratore.</p> : (
+            {!deadlines.length ? <p className="qv-text-muted">Nessuna scadenza collegata al lavoratore.</p> : (
               <div className={styles.list}>
                 {deadlines.map((deadline) => (
                   <article className={styles.record} key={deadline.id}>
@@ -61,7 +61,7 @@ export function WorkerDetailView({ worker, documents, deadlines, capabilities }:
           </WorkspacePanel>
         </div>
         <WorkspacePanel title="Aggiorna lavoratore">
-          {capabilities.canManageCore ? <WorkerForm mode="update" worker={worker} /> : <p className={styles.muted}>Il tuo ruolo non puo modificare questo lavoratore.</p>}
+          {capabilities.canManageCore ? <WorkerForm mode="update" worker={worker} /> : <p className="qv-text-muted">Il tuo ruolo non puo modificare questo lavoratore.</p>}
         </WorkspacePanel>
       </div>
     </WorkspacePage>

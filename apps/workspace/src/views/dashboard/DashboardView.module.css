@@ -12,14 +12,14 @@
 .header p,
 .header span {
   margin: 0;
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.92rem;
   font-weight: 650;
 }
 
 .header h1 {
   margin: 0;
-  color: var(--qvx-text);
+  color: var(--color-qv-content);
   font-size: clamp(2rem, 8vw, 3.4rem);
   line-height: 0.95;
   letter-spacing: 0;
@@ -34,17 +34,17 @@
 
 .summaryCard {
   min-height: 112px;
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: var(--qvx-surface);
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface);
   padding: 16px;
-  box-shadow: var(--qvx-shadow);
+  box-shadow: var(--shadow-qv-md);
 }
 
 .summaryCard span {
   display: block;
   min-height: 36px;
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.82rem;
   font-weight: 700;
 }
@@ -57,23 +57,23 @@
 }
 
 .summary_danger {
-  border-top: 4px solid var(--qvx-danger);
+  border-top: 4px solid var(--color-qv-danger);
 }
 
 .summary_warning {
-  border-top: 4px solid var(--qvx-warning);
+  border-top: 4px solid var(--color-qv-warning);
 }
 
 .summary_info {
-  border-top: 4px solid var(--qvx-info);
+  border-top: 4px solid var(--color-qv-info);
 }
 
 .summary_good {
-  border-top: 4px solid var(--qvx-accent);
+  border-top: 4px solid var(--color-qv-accent);
 }
 
 .summary_neutral {
-  border-top: 4px solid var(--qvx-muted);
+  border-top: 4px solid var(--color-qv-content-muted);
 }
 
 .mainGrid {
@@ -85,11 +85,11 @@
 .section,
 .emptyState,
 .accessState {
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: var(--qvx-surface);
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface);
   padding: 16px;
-  box-shadow: var(--qvx-shadow);
+  box-shadow: var(--shadow-qv-md);
 }
 
 .sectionHeader {
@@ -110,7 +110,7 @@
 }
 
 .sectionHeader span {
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.78rem;
   font-weight: 700;
   white-space: nowrap;
@@ -130,10 +130,10 @@
 
 .actionButton {
   min-height: 64px;
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: var(--qvx-surface-muted);
-  color: var(--qvx-text);
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface-muted);
+  color: var(--color-qv-content);
   padding: 12px 14px;
   text-align: left;
 }
@@ -147,7 +147,7 @@
 .actionButton small {
   display: block;
   margin-top: 4px;
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.78rem;
   font-weight: 650;
 }
@@ -160,9 +160,9 @@
 .rowItem,
 .compactItem,
 .emptyStateGrid article {
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: #fbfcfa;
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface);
   padding: 12px;
 }
 
@@ -176,7 +176,7 @@
 .compactItem strong,
 .emptyStateGrid strong {
   display: block;
-  color: var(--qvx-text);
+  color: var(--color-qv-content);
   font-size: 0.94rem;
   line-height: 1.25;
 }
@@ -189,16 +189,16 @@
 .accessState p {
   display: block;
   margin: 4px 0 0;
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.82rem;
 }
 
 .statusPill {
   width: fit-content;
   min-height: 28px;
-  border-radius: 999px;
+  border-radius: var(--radius-qv-pill);
   padding: 6px 10px;
-  color: var(--qvx-text);
+  color: var(--color-qv-content);
   font-size: 0.76rem;
   font-weight: 760;
 }
@@ -210,9 +210,9 @@
   justify-content: center;
   width: fit-content;
   min-height: 36px;
-  border: 1px solid rgba(31, 122, 92, 0.36);
-  border-radius: 8px;
-  color: var(--qvx-accent-strong);
+  border: 1px solid color-mix(in oklab, var(--color-qv-accent) 36%, var(--color-qv-border));
+  border-radius: var(--radius-qv-sm);
+  color: var(--color-qv-accent-strong);
   font-size: 0.8rem;
   font-weight: 760;
   line-height: 1.15;
@@ -230,33 +230,33 @@
 
 .inlineLink:focus-visible,
 .sectionLink:focus-visible {
-  outline: 3px solid rgba(31, 122, 92, 0.24);
+  outline: 3px solid var(--color-qv-accent-soft);
   outline-offset: 2px;
 }
 
 .toneDanger {
-  background: #fbe8e4;
-  color: var(--qvx-danger);
+  background: var(--color-qv-danger-soft);
+  color: var(--color-qv-danger);
 }
 
 .toneWarning {
-  background: #fff2d9;
-  color: var(--qvx-warning);
+  background: var(--color-qv-warning-soft);
+  color: var(--color-qv-warning);
 }
 
 .toneInfo {
-  background: #e7f0fb;
-  color: var(--qvx-info);
+  background: var(--color-qv-info-soft);
+  color: var(--color-qv-info);
 }
 
 .toneGood {
-  background: #e4f4ed;
-  color: var(--qvx-accent-strong);
+  background: var(--color-qv-positive-soft);
+  color: var(--color-qv-accent-strong);
 }
 
 .emptyState {
   margin-bottom: 18px;
-  background: #fafdff;
+  background: var(--color-qv-surface-raised);
 }
 
 .emptyStateGrid {
@@ -272,7 +272,7 @@
 
 .disclaimer {
   margin: 22px 0 0;
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.82rem;
 }
 

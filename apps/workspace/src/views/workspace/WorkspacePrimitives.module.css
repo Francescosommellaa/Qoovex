@@ -11,7 +11,7 @@
 
 .pageHeader h1 {
   margin: 0;
-  color: var(--qvx-text);
+  color: var(--color-qv-content);
   font-size: 2rem;
   line-height: 1.02;
   letter-spacing: 0;
@@ -20,7 +20,7 @@
 .pageHeader p {
   max-width: 720px;
   margin: 0;
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.94rem;
   font-weight: 620;
 }
@@ -28,10 +28,10 @@
 .panel,
 .emptyState,
 .accessState {
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: var(--qvx-surface);
-  box-shadow: var(--qvx-shadow);
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface);
+  box-shadow: var(--shadow-qv-md);
 }
 
 .panel {
@@ -54,7 +54,7 @@
 
 .panelHeader p {
   margin: 0;
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.84rem;
 }
 
@@ -74,7 +74,7 @@
 .emptyState p,
 .accessState p {
   margin: 8px 0 0;
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.9rem;
 }
 
@@ -83,35 +83,35 @@
   width: fit-content;
   min-height: 28px;
   align-items: center;
-  border-radius: 999px;
+  border-radius: var(--radius-qv-pill);
   padding: 5px 10px;
   font-size: 0.76rem;
   font-weight: 760;
 }
 
 .toneDanger {
-  background: #fbe8e4;
-  color: var(--qvx-danger);
+  background: var(--color-qv-danger-soft);
+  color: var(--color-qv-danger);
 }
 
 .toneWarning {
-  background: #fff2d9;
-  color: var(--qvx-warning);
+  background: var(--color-qv-warning-soft);
+  color: var(--color-qv-warning);
 }
 
 .toneInfo {
-  background: #e7f0fb;
-  color: var(--qvx-info);
+  background: var(--color-qv-info-soft);
+  color: var(--color-qv-info);
 }
 
 .toneGood {
-  background: #e4f4ed;
-  color: var(--qvx-accent-strong);
+  background: var(--color-qv-positive-soft);
+  color: var(--color-qv-accent-strong);
 }
 
 .toneNeutral {
-  background: var(--qvx-surface-muted);
-  color: var(--qvx-muted);
+  background: var(--color-qv-surface-muted);
+  color: var(--color-qv-content-muted);
 }
 
 @media (min-width: 760px) {

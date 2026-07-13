@@ -19,9 +19,9 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 12px;
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: #fbfcfa;
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface);
   padding: 12px;
 }
 
@@ -32,7 +32,7 @@
 }
 
 .recordMain strong {
-  color: var(--qvx-text);
+  color: var(--color-qv-content);
   font-size: 0.98rem;
   line-height: 1.25;
   overflow-wrap: anywhere;
@@ -41,7 +41,7 @@
 .meta,
 .recordMain span,
 .recordMain small {
-  color: var(--qvx-muted);
+  color: var(--color-qv-content-muted);
   font-size: 0.82rem;
 }
 
@@ -64,7 +64,7 @@
   align-items: center;
   justify-content: center;
   min-height: 40px;
-  border-radius: 8px;
+  border-radius: var(--radius-qv-sm);
   padding: 9px 12px;
   font-size: 0.86rem;
   font-weight: 760;
@@ -80,21 +80,21 @@
 
 .linkButton,
 .button {
-  border: 1px solid rgba(31, 122, 92, 0.36);
-  background: var(--qvx-accent);
-  color: #ffffff;
+  border: 1px solid color-mix(in oklab, var(--color-qv-accent) 36%, var(--color-qv-border));
+  background: var(--color-qv-accent);
+  color: var(--color-qv-on-accent);
 }
 
 .ghostButton {
-  border: 1px solid var(--qvx-border);
-  background: var(--qvx-surface);
-  color: var(--qvx-text);
+  border: 1px solid var(--color-qv-border);
+  background: var(--color-qv-surface);
+  color: var(--color-qv-content);
 }
 
 .dangerButton {
-  border: 1px solid rgba(163, 59, 47, 0.34);
-  background: #fbe8e4;
-  color: var(--qvx-danger);
+  border: 1px solid color-mix(in oklab, var(--color-qv-danger) 34%, var(--color-qv-border));
+  background: var(--color-qv-danger-soft);
+  color: var(--color-qv-danger);
 }
 
 .button:disabled,
@@ -127,7 +127,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  color: var(--qvx-text);
+  color: var(--color-qv-content);
   font-size: 0.86rem;
   font-weight: 760;
 }
@@ -136,12 +136,12 @@
   min-width: 18px;
   width: 18px;
   height: 18px;
-  accent-color: var(--qvx-accent);
+  accent-color: var(--color-qv-accent);
 }
 
 .field label,
 .field span {
-  color: var(--qvx-text);
+  color: var(--color-qv-content);
   font-size: 0.8rem;
   font-weight: 760;
 }
@@ -153,10 +153,10 @@
   width: 100%;
   min-width: 0;
   min-height: 42px;
-  border: 1px solid var(--qvx-border);
-  border-radius: 8px;
-  background: var(--qvx-surface);
-  color: var(--qvx-text);
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-surface);
+  color: var(--color-qv-content);
   padding: 9px 10px;
 }
 
@@ -172,25 +172,25 @@
 .dangerButton:focus-visible,
 .ghostButton:focus-visible,
 .linkButton:focus-visible {
-  outline: 3px solid rgba(31, 122, 92, 0.24);
+  outline: 3px solid var(--color-qv-accent-soft);
   outline-offset: 2px;
 }
 
 .formError {
-  border: 1px solid rgba(163, 59, 47, 0.32);
-  border-radius: 8px;
-  background: #fbe8e4;
-  color: var(--qvx-danger);
+  border: 1px solid color-mix(in oklab, var(--color-qv-danger) 32%, var(--color-qv-border));
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-danger-soft);
+  color: var(--color-qv-danger);
   padding: 10px;
   font-size: 0.84rem;
   font-weight: 680;
 }
 
 .formSuccess {
-  border: 1px solid rgba(31, 122, 92, 0.28);
-  border-radius: 8px;
-  background: #e4f4ed;
-  color: var(--qvx-accent-strong);
+  border: 1px solid color-mix(in oklab, var(--color-qv-accent) 28%, var(--color-qv-border));
+  border-radius: var(--radius-qv-sm);
+  background: var(--color-qv-positive-soft);
+  color: var(--color-qv-accent-strong);
   padding: 10px;
   font-size: 0.84rem;
   font-weight: 680;
@@ -212,18 +212,18 @@
 .compactList li {
   display: grid;
   gap: 3px;
-  border-left: 3px solid rgba(31, 122, 92, 0.28);
+  border-left: 3px solid color-mix(in oklab, var(--color-qv-accent) 28%, var(--color-qv-border));
   padding-left: 10px;
 }
 
 .details {
-  border-top: 1px solid var(--qvx-border);
+  border-top: 1px solid var(--color-qv-border);
   padding-top: 10px;
 }
 
 .details summary {
   cursor: pointer;
-  color: var(--qvx-accent-strong);
+  color: var(--color-qv-accent-strong);
   font-size: 0.84rem;
   font-weight: 760;
 }
@@ -242,10 +242,10 @@
 .filterBar a {
   flex: 0 0 auto;
   min-height: 36px;
-  border: 1px solid var(--qvx-border);
-  border-radius: 999px;
-  background: var(--qvx-surface);
-  color: var(--qvx-text);
+  border: 1px solid var(--color-qv-border);
+  border-radius: var(--radius-qv-pill);
+  background: var(--color-qv-surface);
+  color: var(--color-qv-content);
   padding: 7px 11px;
   font-size: 0.8rem;
   font-weight: 760;
@@ -253,19 +253,14 @@
 }
 
 .filterBar a[aria-current="page"] {
-  border-color: rgba(31, 122, 92, 0.42);
-  background: #e4f4ed;
-  color: var(--qvx-accent-strong);
+  border-color: color-mix(in oklab, var(--color-qv-accent) 42%, var(--color-qv-border));
+  background: var(--color-qv-positive-soft);
+  color: var(--color-qv-accent-strong);
 }
 
 .versionList {
   display: grid;
   gap: 10px;
-}
-
-.muted {
-  color: var(--qvx-muted);
-  font-size: 0.84rem;
 }
 
 @media (min-width: 820px) {

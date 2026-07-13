@@ -41,7 +41,7 @@ export default function SirioPage() {
         </Container>
       </header>
 
-      <Section description="Satoshi per testo operativo e Chillax per titoli, con fallback di sistema." title="Token e tipografia">
+      <Section description="General Sans per testo operativo e Cabinet Grotesk per titoli, con fallback di sistema." title="Token e tipografia">
         <Container>
           <div className="token-grid">
             {[
@@ -55,7 +55,7 @@ export default function SirioPage() {
               <Card key={label}>
                 <div className={`token-swatch token-swatch--${token}`} />
                 <h2 className="font-display text-qv-title">{label}</h2>
-                <p className="muted">Token semantico riusabile.</p>
+                <p className="qv-text-muted">Token semantico riusabile.</p>
               </Card>
             ))}
           </div>

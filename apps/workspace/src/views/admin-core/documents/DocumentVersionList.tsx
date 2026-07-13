@@ -25,7 +25,7 @@ export function DocumentVersionList({ documentId, versions, canArchive }: { docu
     }
   }
 
-  if (!versions.length) return <p className={styles.muted}>Nessuna versione caricata.</p>;
+  if (!versions.length) return <p className="qv-text-muted">Nessuna versione caricata.</p>;
 
   return (
     <div className={styles.versionList}>

@@ -46,7 +46,7 @@ export function NotificationEmailDigestPanel() {
 
   return (
     <div className={styles.list}>
-      <p className={styles.muted}>
+      <p className="qv-text-muted">
         L'email contiene solo un riepilogo dei dati registrati. Non include file o link di download.
       </p>
       {error ? <p className={styles.formError}>{error}</p> : null}

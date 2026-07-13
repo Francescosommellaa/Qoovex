@@ -21,19 +21,19 @@ type ButtonElementProps = ButtonBaseProps & {
 
 export type ButtonProps = ButtonLinkProps | ButtonElementProps;
 
-const baseClassName = "qv-button inline-flex min-h-qv-control items-center justify-center gap-qv-2 rounded-qv-md border border-transparent px-qv-4 font-semibold no-underline transition-colors duration-150 ease-qv-standard disabled:pointer-events-none disabled:opacity-60";
+const baseClassName = "qv-button inline-flex min-h-qv-control items-center justify-center gap-qv-2 whitespace-nowrap rounded-qv-md border border-transparent px-qv-4 font-semibold no-underline transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease-qv-standard active:translate-y-px motion-reduce:transition-none disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-60";
 
 const variantClassNames: Record<ButtonVariant, string> = {
-  primary: "bg-qv-accent text-qv-surface hover:bg-qv-accent-strong",
+  primary: "bg-qv-accent text-qv-on-accent hover:bg-qv-accent-strong",
   secondary: "bg-qv-surface text-qv-content shadow-qv-sm hover:bg-qv-surface-muted border-qv-border",
   ghost: "bg-transparent text-qv-accent-strong hover:bg-qv-accent-soft",
-  danger: "bg-qv-danger text-qv-surface hover:bg-qv-danger/90",
+  danger: "bg-qv-danger text-qv-on-accent hover:bg-qv-danger/90",
 };
 
 const sizeClassNames: Record<ButtonSize, string> = {
-  sm: "min-h-qv-9 px-qv-3 text-sm",
+  sm: "min-h-qv-control-sm px-qv-3 text-sm",
   md: "px-qv-4 text-sm",
-  lg: "min-h-qv-12 px-qv-5 text-base",
+  lg: "min-h-qv-control-lg px-qv-5 text-base",
 };
 
 export function Button(props: ButtonProps) {

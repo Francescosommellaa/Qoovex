@@ -32,7 +32,7 @@ export function WorkersPageView({ workers, capabilities }: { workers: WorkspaceW
           </div>
         </WorkspacePanel>
         <WorkspacePanel title="Aggiungi lavoratore" description="Il ruolo operativo e testo libero, non un permesso o una qualifica legale.">
-          {capabilities.canManageCore ? <WorkerForm mode="create" /> : <p className={styles.muted}>Il tuo ruolo puo leggere i lavoratori, ma non gestirli da questa schermata.</p>}
+          {capabilities.canManageCore ? <WorkerForm mode="create" /> : <p className="qv-text-muted">Il tuo ruolo puo leggere i lavoratori, ma non gestirli da questa schermata.</p>}
         </WorkspacePanel>
       </div>
     </WorkspacePage>

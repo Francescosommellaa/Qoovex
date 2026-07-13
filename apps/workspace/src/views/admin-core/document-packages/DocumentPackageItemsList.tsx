@@ -83,7 +83,7 @@ export function DocumentPackageItemsList({
     }
   }
 
-  if (!items.length) return <p className={styles.muted}>Nessun elemento incluso nel pacchetto.</p>;
+  if (!items.length) return <p className="qv-text-muted">Nessun elemento incluso nel pacchetto.</p>;
 
   return (
     <div className={styles.list}>

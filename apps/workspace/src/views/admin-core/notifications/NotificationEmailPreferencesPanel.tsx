@@ -94,12 +94,12 @@ export function NotificationEmailPreferencesPanel() {
 
   return (
     <div className={styles.list}>
-      <p className={styles.muted}>
+      <p className="qv-text-muted">
         Le email riepilogano solo dati registrati in Qoovex. Non includono file, allegati o link di download.
       </p>
       {error ? <p className={styles.formError}>{error}</p> : null}
       {message ? <p className={styles.formSuccess}>{message}</p> : null}
-      {pending === "load" && !preference ? <p className={styles.muted}>Caricamento preferenze...</p> : null}
+      {pending === "load" && !preference ? <p className="qv-text-muted">Caricamento preferenze...</p> : null}
       {preference ? (
         <form className={styles.form} onSubmit={submit}>
           <label className={styles.checkboxField}>
@@ -120,7 +120,7 @@ export function NotificationEmailPreferencesPanel() {
               <input defaultValue={preference.emailDigestHour} max={23} min={0} name="emailDigestHour" type="number" />
             </label>
           </div>
-          <p className={styles.muted}>Ultimo digest inviato: {formatDate(preference.lastDigestSentAt)}.</p>
+          <p className="qv-text-muted">Ultimo digest inviato: {formatDate(preference.lastDigestSentAt)}.</p>
           <fieldset className={styles.field}>
             <span>Tipi inclusi nel digest</span>
             <label className={styles.checkboxField}>
@@ -151,7 +151,7 @@ export function NotificationEmailPreferencesPanel() {
         <strong>Invii recenti</strong>
         <div className={styles.list}>
           {!deliveries.length ? (
-            <p className={styles.muted}>Nessun invio email registrato per il tuo account.</p>
+            <p className="qv-text-muted">Nessun invio email registrato per il tuo account.</p>
           ) : deliveries.map((delivery) => (
             <article className={styles.record} key={delivery.id}>
               <div className={styles.recordMain}>

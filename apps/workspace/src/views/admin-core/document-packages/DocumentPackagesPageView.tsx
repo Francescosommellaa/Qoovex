@@ -57,7 +57,7 @@ export function DocumentPackagesPageView({
           {capabilities.canManagePackages ? (
             <DocumentPackageForm mode="create" jobSites={jobSites} />
           ) : (
-            <p className={styles.muted}>Il tuo ruolo puo leggere i pacchetti, ma non crearne uno da questa schermata.</p>
+            <p className="qv-text-muted">Il tuo ruolo puo leggere i pacchetti, ma non crearne uno da questa schermata.</p>
           )}
         </WorkspacePanel>
       </div>

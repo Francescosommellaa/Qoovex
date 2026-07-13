@@ -61,7 +61,7 @@ export function DeadlinesPageView({
           {capabilities.canManageCore ? (
             <DeadlineForm mode="create" documents={documents} workers={workers} jobSites={jobSites} />
           ) : (
-            <p className={styles.muted}>Il tuo ruolo puo leggere le scadenze, ma non gestirle da questa schermata.</p>
+            <p className="qv-text-muted">Il tuo ruolo puo leggere le scadenze, ma non gestirle da questa schermata.</p>
           )}
         </WorkspacePanel>
       </div>

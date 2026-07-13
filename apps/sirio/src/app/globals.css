@@ -1,11 +1,11 @@
-@import "@qoovex/brand-resources/styles/fontshare.css";
 @import "tailwindcss";
+@import "@qoovex/brand-resources/styles/fontshare.css";
 @import "@qoovex/ui/styles/tokens.css";
 @import "@qoovex/ui/styles/base.css";
 @source "../../../../packages/ui/src";
 
 .sirio-page {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .sirio-hero {
@@ -63,10 +63,6 @@
 
 .copy-list li {
   list-style: none;
-}
-
-.muted {
-  color: var(--color-qv-content-muted);
 }
 
 .mfa-pattern,
