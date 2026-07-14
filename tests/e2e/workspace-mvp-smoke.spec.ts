@@ -396,7 +396,11 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
   try {
     await page.goto("/sign-in", { waitUntil: "domcontentloaded" });
     await page.getByRole("button", { name: "Accedi come dev" }).click();
-    await page.waitForURL("**/qoovex-admin");
+    await expect(page).toHaveURL(/\/dashboard$/);
+    const qoovexConsoleLink = page.getByRole("link", { name: "Console Qoovex" });
+    await expect(qoovexConsoleLink).toBeVisible();
+    await qoovexConsoleLink.click();
+    await expect(page).toHaveURL(/\/qoovex-admin$/);
     organizationFixture = await pagePostJson(page, "/api/dev-fixtures/platform-admin", { kind: "mfa-suite", runId });
     const organization = { id: organizationFixture.organizationId, code: `MFA-${runId}` };
 

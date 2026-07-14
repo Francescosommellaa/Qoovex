@@ -1,7 +1,7 @@
 {
   "name": "qoovex",
   "private": true,
-  "packageManager": "pnpm@11.10.0",
+  "packageManager": "pnpm@11.13.0",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
@@ -23,6 +23,6 @@
     "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4.3.2",
     "tailwindcss": "^4.3.2",
-    "turbo": "^2.10.4"
+    "turbo": "^2.10.5"
   }
 }
