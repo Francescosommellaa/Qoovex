@@ -7,8 +7,9 @@ import { DeadlinesPageView } from "@/views/admin-core/deadlines/DeadlinesPageVie
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type { WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
-export default async function DeadlinesPage() {
+export default async function DeadlinesPage({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
   try {
+    const { from } = await searchParams;
     const [deadlines, documents, workers, jobSites, capabilities] = await Promise.all([
       listDeadlines(),
       listDocuments(),
@@ -23,6 +24,7 @@ export default async function DeadlinesPage() {
         documents={serializeForClient<WorkspaceDocumentRecord[]>(documents)}
         workers={serializeForClient<WorkspaceWorkerRecord[]>(workers)}
         jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
+        returnToDashboard={from === "dashboard"}
       />
     );
   } catch {

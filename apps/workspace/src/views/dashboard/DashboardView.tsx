@@ -1,281 +1,232 @@
 import type {
-  DashboardDeadlineItem,
-  DashboardDocumentAttentionItem,
-  DashboardEvidenceItem,
-  DashboardJobSiteItem,
-  DashboardNotificationItem,
+  DashboardContextItem,
   DashboardPackageItem,
   DashboardResponse,
-  DashboardWorkerItem,
-  DocumentPackageStatus,
-  DocumentStatus,
+  DashboardSituation,
+  DashboardSituationKind,
 } from "@qoovex/types";
+import {
+  Button,
+  ClockCountdown,
+  FileDashed,
+  Icon,
+  MagnifyingGlass,
+  ShareNetwork,
+  WarningCircle,
+} from "@qoovex/ui";
 import Link from "next/link";
-import type { ReactNode } from "react";
 import styles from "./DashboardView.module.css";
 
-const documentStatusLabels: Record<DocumentStatus, string> = {
-  PRESENT: "Presente",
-  MISSING: "Mancante",
-  EXPIRED: "Scaduto",
-  EXPIRING_SOON: "In scadenza",
-  TO_REVIEW: "Da verificare",
-  ARCHIVED: "Archiviato",
+const situationIcons: Record<DashboardSituationKind, typeof WarningCircle> = {
+  EXPIRED: WarningCircle,
+  EXPIRING_SOON: ClockCountdown,
+  MISSING: FileDashed,
+  TO_REVIEW: MagnifyingGlass,
 };
 
-const packageStatusLabels: Record<DocumentPackageStatus, string> = {
-  DRAFT: "Bozza",
-  READY_FOR_REVIEW: "Pronto per revisione",
-  SHARED: "Condiviso in lettura",
-  ARCHIVED: "Archiviato",
-};
+const summaryLinks = [
+  { key: "expired", label: "scadute", href: "/documents?status=EXPIRED&from=dashboard" },
+  { key: "expiringSoon", label: "in scadenza", href: "/documents?status=EXPIRING_SOON&from=dashboard" },
+  { key: "missing", label: "mancanti", href: "/documents?status=MISSING&from=dashboard" },
+  { key: "toReview", label: "da verificare", href: "/documents?status=TO_REVIEW&from=dashboard" },
+] as const;
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("it-IT", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(value));
 }
 
-function attentionTone(status: string) {
-  if (status === "EXPIRED" || status === "MISSING") return styles.toneDanger;
-  if (status === "EXPIRING_SOON") return styles.toneWarning;
-  if (status === "READY_FOR_REVIEW" || status === "SHARED" || status === "PRESENT") return styles.toneGood;
-  return styles.toneInfo;
+function formatTime(value: string) {
+  return new Intl.DateTimeFormat("it-IT", { hour: "2-digit", minute: "2-digit" }).format(new Date(value));
 }
 
-function Section({ title, children, action }: { title: string; children: ReactNode; action?: string }) {
+function SectionError({ message }: { message: string }) {
   return (
-    <section className={styles.section} aria-labelledby={`${title.replace(/\s+/g, "-").toLowerCase()}-title`}>
-      <div className={styles.sectionHeader}>
-        <h2 id={`${title.replace(/\s+/g, "-").toLowerCase()}-title`}>{title}</h2>
-        {action ? <span>{action}</span> : null}
+    <div className={styles.sectionError} role="status">
+      <strong>Sezione non disponibile</strong>
+      <p>{message}</p>
+      <Button href="/dashboard" size="sm" variant="secondary">Riprova</Button>
+    </div>
+  );
+}
+
+function SituationItem({ item, updated }: { item: DashboardSituation; updated: boolean }) {
+  const assignmentAction = item.responsibility.assignmentHref ? (
+    <Link className={styles.assignmentLink} href={item.responsibility.assignmentHref}>Assegna responsabile</Link>
+  ) : null;
+
+  return (
+    <article className={styles.situation} data-kind={item.kind} data-updated={updated || undefined}>
+      <div aria-hidden="true" className={styles.traceMarker}>
+        <Icon glyph={situationIcons[item.kind]} size={20} weight="bold" />
       </div>
-      {children}
-    </section>
-  );
-}
-
-function EmptyList({ label }: { label: string }) {
-  return <p className={styles.emptyList}>{label}</p>;
-}
-
-function DashboardSummaryCards({ data }: { data: DashboardResponse }) {
-  const cards = [
-    { label: "Documenti mancanti", value: data.summary.documents.missing, tone: "danger" },
-    { label: "Documenti scaduti", value: data.summary.documents.expired, tone: "danger" },
-    { label: "In scadenza", value: data.summary.documents.expiringSoon, tone: "warning" },
-    { label: "Da verificare", value: data.summary.documents.toReview, tone: "info" },
-    { label: "Pacchetti pronti", value: data.summary.packagesReadyForReview, tone: "good" },
-    { label: "Prove recenti", value: data.summary.recentEvidence, tone: "neutral" },
-    { label: "Notifiche non lette", value: data.summary.unreadNotifications, tone: "warning" },
-  ];
-
-  return (
-    <div className={styles.summaryGrid}>
-      {cards.map((card) => (
-        <article className={`${styles.summaryCard} ${styles[`summary_${card.tone}`]}`} key={card.label}>
-          <span>{card.label}</span>
-          <strong>{card.value}</strong>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function DashboardNotificationsList({ notifications }: { notifications: DashboardNotificationItem[] }) {
-  if (!notifications.length) return <EmptyList label="Nessuna notifica da controllare." />;
-  return (
-    <div className={styles.itemList}>
-      {notifications.map((notification) => (
-        <article className={styles.rowItem} key={notification.id}>
-          <div>
-            <strong>{notification.title}</strong>
-            <span>{notification.message}</span>
-          </div>
-          {notification.actionHref ? <Link className={styles.inlineLink} href={notification.actionHref}>Apri</Link> : null}
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function DashboardQuickActions({ data }: { data: DashboardResponse }) {
-  return (
-    <div className={styles.actionsGrid}>
-      {data.quickActions.map((action) => (
-        <button className={styles.actionButton} disabled={action.disabled} key={action.label} type="button">
-          <span>{action.label}</span>
-          <small>{action.disabledReason ?? action.description}</small>
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function DashboardDeadlinesList({ deadlines }: { deadlines: DashboardDeadlineItem[] }) {
-  if (!deadlines.length) return <EmptyList label="Nessuna scadenza registrata da mostrare." />;
-  return (
-    <div className={styles.itemList}>
-      {deadlines.map((deadline) => (
-        <article className={styles.rowItem} key={deadline.id}>
-          <div>
-            <strong>{deadline.title}</strong>
-            <span>Scadenza registrata: {formatDate(deadline.dueDate)}</span>
-          </div>
-          <span className={`${styles.stateText} ${attentionTone(deadline.status)}`}>{deadline.status === "EXPIRED" ? "Scaduto" : deadline.status === "EXPIRING_SOON" ? "In scadenza" : "Futura"}</span>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function DashboardDocumentsList({ documents }: { documents: DashboardDocumentAttentionItem[] }) {
-  if (!documents.length) return <EmptyList label="Nessun documento richiede attenzione immediata." />;
-  return (
-    <div className={styles.itemList}>
-      {documents.map((document) => (
-        <article className={styles.rowItem} key={document.id}>
-          <div>
-            <strong>{document.title}</strong>
-            <span>{document.ownerLabel} - {document.expiryDate ? `Scadenza ${formatDate(document.expiryDate)}` : "Scadenza non registrata"}</span>
-            <small>{document.nextAction}</small>
-          </div>
-          <span className={`${styles.stateText} ${attentionTone(document.status)}`}>{documentStatusLabels[document.status]}</span>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function DashboardJobSitesList({ jobSites }: { jobSites: DashboardJobSiteItem[] }) {
-  if (!jobSites.length) return <EmptyList label="Nessun cantiere attivo registrato." />;
-  return (
-    <div className={styles.compactList}>
-      {jobSites.map((jobSite) => (
-        <article className={styles.compactItem} key={jobSite.id}>
-          <strong>{jobSite.name}</strong>
-          <span>{jobSite.documentsToReview} documenti da verificare</span>
-          <span>{jobSite.openChecklists} checklist configurate</span>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function DashboardWorkersOverview({ workers }: { workers: DashboardWorkerItem[] }) {
-  if (!workers.length) return <EmptyList label="Nessun lavoratore registrato." />;
-  return (
-    <div className={styles.compactList}>
-      {workers.map((worker) => (
-        <article className={styles.compactItem} key={worker.id}>
-          <strong>{worker.displayName}</strong>
-          <span>{worker.documentsToReview} documenti da verificare</span>
-          <span>{worker.openDeadlines} scadenze registrate</span>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function DashboardPackagesList({ packages }: { packages: DashboardPackageItem[] }) {
-  if (!packages.length) return <EmptyList label="Nessun pacchetto documentale attivo." />;
-  return (
-    <div className={styles.itemList}>
-      {packages.map((documentPackage) => (
-        <article className={styles.rowItem} key={documentPackage.id}>
-          <div>
-            <strong>{documentPackage.title}</strong>
-            <span>{documentPackage.itemCount} elementi inclusi - aggiornato {formatDate(documentPackage.updatedAt)}</span>
-          </div>
-          <span className={`${styles.stateText} ${attentionTone(documentPackage.status)}`}>
-            {documentPackage.hasActiveShareLink ? "Link attivo" : packageStatusLabels[documentPackage.status]}
-          </span>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function DashboardEvidenceList({ evidence }: { evidence: DashboardEvidenceItem[] }) {
-  if (!evidence.length) return <EmptyList label="Nessuna prova operativa caricata." />;
-  return (
-    <div className={styles.compactList}>
-      {evidence.map((item) => (
-        <article className={styles.compactItem} key={item.id}>
-          <strong>{item.title}</strong>
-          <span>{item.type === "NOTE" ? "Nota operativa" : item.type === "PHOTO" ? "Foto collegata" : "File archiviato"}</span>
-          <span>{formatDate(item.createdAt)}</span>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function DashboardEmptyState({ data }: { data: DashboardResponse }) {
-  if (!data.emptyStates.length) return null;
-  return (
-    <section className={styles.emptyState} aria-label="Primi passi consigliati">
-      <h2>Prossima azione utile</h2>
-      <div className={styles.emptyStateGrid}>
-        {data.emptyStates.map((state) => (
-          <article key={state.title}>
-            <strong>{state.title}</strong>
-            <span>{state.actionLabel}</span>
-          </article>
-        ))}
+      <div className={styles.situationBody}>
+        <header className={styles.situationHeading}>
+          <p className={styles.stateLabel}>{item.statusLabel}</p>
+          {item.date ? <time dateTime={item.date}>{formatDate(item.date)}</time> : null}
+        </header>
+        <h3>{item.title}</h3>
+        <p className={styles.reason}>{item.reason}</p>
+        <p className={styles.consequence}>{item.consequence}</p>
+        <dl className={styles.situationMeta}>
+          <div><dt>Contesto</dt><dd>{item.contextLabel}</dd></div>
+          <div><dt>Responsabile</dt><dd>{item.responsibility.label}{assignmentAction}</dd></div>
+        </dl>
+        <div className={styles.terminal}>
+          <Button href={item.action.href} size="sm">{item.action.label}</Button>
+          {updated ? <span className={styles.updatedLabel}>Aggiornato ora</span> : null}
+        </div>
       </div>
-    </section>
+    </article>
   );
 }
 
-export function DashboardView({ data }: { data: DashboardResponse }) {
+function PackageItem({ item }: { item: DashboardPackageItem }) {
   return (
-    <main className={styles.page}>
+    <article className={styles.packageItem}>
+      <div aria-hidden="true" className={styles.packageIcon}><Icon glyph={ShareNetwork} size={20} /></div>
+      <div>
+        <p className={styles.stateLabel}>{item.statusLabel}</p>
+        <h3>{item.title}</h3>
+        <p>{item.itemCount} {item.itemCount === 1 ? "elemento" : "elementi"} · {item.shareLabel}</p>
+        <Button href={item.action.href} size="sm" variant="secondary">{item.action.label}</Button>
+      </div>
+    </article>
+  );
+}
+
+function ContextItem({ item }: { item: DashboardContextItem }) {
+  return (
+    <li>
+      <div><strong>{item.label}</strong><span>{item.situationCount} {item.situationCount === 1 ? "situazione" : "situazioni"}</span></div>
+      <Link href={item.action.href}>{item.action.label}</Link>
+    </li>
+  );
+}
+
+export function DashboardView({ data, updatedId }: { data: DashboardResponse; updatedId?: string | null }) {
+  const errorFor = (section: DashboardResponse["errors"][number]["section"]) => data.errors.find((error) => error.section === section);
+  const attentionError = errorFor("attention");
+  const sharingError = errorFor("sharing");
+  const deadlinesError = errorFor("deadlines");
+  const contextsError = errorFor("contexts");
+  const fullError = Boolean(attentionError && deadlinesError && (!data.availability.sharing || sharingError));
+
+  if (fullError) {
+    return (
+      <div className={styles.page}>
+        <header className={styles.header}>
+          <div><p className={styles.company}>{data.organization.name}</p><h1>Da fare</h1></div>
+        </header>
+        <section className={styles.fullError}>
+          <strong>Non riusciamo a caricare la situazione operativa.</strong>
+          <p>I dati non sono stati modificati. Riprova tra poco.</p>
+          <Button href="/dashboard" variant="secondary">Riprova</Button>
+        </section>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.page}>
       <header className={styles.header}>
         <div>
-          <p>{data.organization.name}</p>
-          <h1>Stato documentale</h1>
+          <p className={styles.company}>{data.organization.name}</p>
+          <h1>Da fare</h1>
         </div>
-        <span>Ruolo: {data.organization.role}</span>
+        <div className={styles.headerContext}>
+          <p>Vista: {data.organization.viewLabel}</p>
+          <p>{data.organization.roleLabel}</p>
+          <p>Aggiornato alle <time dateTime={data.generatedAt}>{formatTime(data.generatedAt)}</time></p>
+        </div>
       </header>
 
-      <DashboardSummaryCards data={data} />
-      <DashboardEmptyState data={data} />
+      {!attentionError ? (
+        <section aria-labelledby="operational-summary" className={styles.summary}>
+          <p id="operational-summary"><strong>{data.attention.total}</strong> {data.attention.total === 1 ? "situazione richiede" : "situazioni richiedono"} attenzione</p>
+          {data.attention.total > 0 ? (
+            <nav aria-label="Filtra le situazioni per stato" className={styles.summaryIndex}>
+              {summaryLinks.flatMap((item) => {
+                const count = data.attention.counts[item.key];
+                return count ? [<Link href={item.href} key={item.key}>{count} {item.label}</Link>] : [];
+              })}
+            </nav>
+          ) : null}
+        </section>
+      ) : null}
 
-      <div className={styles.mainGrid}>
-        <Section title="Azioni rapide">
-          <DashboardQuickActions data={data} />
-        </Section>
+      {data.firstUse ? (
+        <section className={styles.firstUse}>
+          <p className={styles.stateLabel}>Primo passo</p>
+          <h2>Inizia dal primo documento</h2>
+          <p>Aggiungi un documento logico per rendere visibili presenza, scadenza e prossima azione. Potrai collegare il file dal dettaglio.</p>
+          <Button href="/documents?from=dashboard">Aggiungi documento</Button>
+          <div className={styles.secondaryStarts}>
+            <Link href="/workers?from=dashboard">Aggiungi un lavoratore</Link>
+            <Link href="/job-sites?from=dashboard">Aggiungi un cantiere</Link>
+          </div>
+        </section>
+      ) : (
+        <div className={styles.dashboardGrid}>
+          <section aria-labelledby="attention-title" className={styles.attentionSection}>
+            <div className={styles.sectionHeading}>
+              <div><p className={styles.sectionIndex}>01</p><h2 id="attention-title">Da fare ora</h2></div>
+              {data.attention.total > data.attention.situations.length ? <Link href="/documents?from=dashboard">Vedi tutte le situazioni</Link> : null}
+            </div>
+            {attentionError ? <SectionError message={attentionError.message} /> : data.attention.situations.length ? (
+              <div className={styles.situationList}>
+                {data.attention.situations.map((item) => <SituationItem item={item} key={item.id} updated={Boolean(updatedId && (item.id === updatedId || item.id.endsWith(updatedId)))} />)}
+              </div>
+            ) : (
+              <div className={styles.regularState}>
+                <strong>Nessuna azione immediata in base ai dati registrati.</strong>
+                <p>Le prossime scadenze e i pacchetti restano disponibili nelle sezioni vicine.</p>
+              </div>
+            )}
+          </section>
 
-        <Section title="Notifiche interne" action={`${data.summary.unreadNotifications} non lette`}>
-          <DashboardNotificationsList notifications={data.notifications} />
-          <Link className={styles.sectionLink} href="/notifications">Vai alle notifiche</Link>
-        </Section>
+          <aside className={styles.secondaryColumn}>
+            {data.availability.sharing ? (
+              <section aria-labelledby="sharing-title" className={styles.secondarySection}>
+                <div className={styles.sectionHeading}><div><p className={styles.sectionIndex}>02</p><h2 id="sharing-title">Pronto da condividere</h2></div></div>
+                {sharingError ? <SectionError message={sharingError.message} /> : data.readyPackages.length ? (
+                  <div className={styles.packageList}>{data.readyPackages.map((item) => <PackageItem item={item} key={item.id} />)}</div>
+                ) : (
+                  <p className={styles.compactEmpty}>Nessun pacchetto pronto per revisione.</p>
+                )}
+                <Link className={styles.sectionLink} href="/document-packages?from=dashboard">Vedi tutti i pacchetti</Link>
+              </section>
+            ) : null}
 
-        <Section title="Scadenze registrate" action={`${data.summary.openDeadlines} aperte`}>
-          <DashboardDeadlinesList deadlines={data.deadlines} />
-        </Section>
+            <section aria-labelledby="deadlines-title" className={styles.secondarySection}>
+              <div className={styles.sectionHeading}><div><p className={styles.sectionIndex}>{data.availability.sharing ? "03" : "02"}</p><h2 id="deadlines-title">Prossime scadenze</h2></div></div>
+              {deadlinesError ? <SectionError message={deadlinesError.message} /> : data.upcomingDeadlines.length ? (
+                <ol className={styles.deadlineList}>
+                  {data.upcomingDeadlines.map((deadline) => (
+                    <li key={deadline.id}>
+                      <time dateTime={deadline.dueDate}>{formatDate(deadline.dueDate)}</time>
+                      <div><strong>{deadline.title}</strong><span>{deadline.timingLabel} · {deadline.contextLabel}</span></div>
+                      <Link href={deadline.action.href}>Apri</Link>
+                    </li>
+                  ))}
+                </ol>
+              ) : <p className={styles.compactEmpty}>Nessuna scadenza registrata da mostrare.</p>}
+              <Link className={styles.sectionLink} href="/deadlines?from=dashboard">Vedi tutte le scadenze</Link>
+            </section>
+          </aside>
+        </div>
+      )}
 
-        <Section title="Documenti da verificare">
-          <DashboardDocumentsList documents={data.documentsToReview} />
-        </Section>
-
-        <Section title="Cantieri attivi">
-          <DashboardJobSitesList jobSites={data.jobSites} />
-        </Section>
-
-        <Section title="Lavoratori">
-          <DashboardWorkersOverview workers={data.workers} />
-        </Section>
-
-        <Section title="Pacchetti pronti per revisione" action={`${data.summary.sharedPackages} condivisi`}>
-          <DashboardPackagesList packages={data.packages} />
-        </Section>
-
-        <Section title="Prove recenti">
-          <DashboardEvidenceList evidence={data.recentEvidence} />
-        </Section>
-      </div>
-
-      <p className={styles.disclaimer}>Le informazioni devono essere confermate dal responsabile o consulente.</p>
-    </main>
+      {!data.firstUse && data.availability.contexts ? (
+        <section aria-labelledby="contexts-title" className={styles.contextSection}>
+          <div className={styles.sectionHeading}>
+            <div><p className={styles.sectionIndex}>{data.availability.sharing ? "04" : "03"}</p><h2 id="contexts-title">Dove intervenire</h2></div>
+            {data.organization.role === "OWNER" || data.organization.role === "ADMIN" ? <Link href="/access?from=dashboard">Accessi operativi</Link> : null}
+          </div>
+          {contextsError ? <SectionError message={contextsError.message} /> : data.contexts.length ? (
+            <ul className={styles.contextList}>{data.contexts.map((item) => <ContextItem item={item} key={item.id} />)}</ul>
+          ) : <p className={styles.compactEmpty}>Nessuna risorsa assegnata alle situazioni visibili.</p>}
+        </section>
+      ) : null}
+    </div>
   );
 }

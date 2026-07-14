@@ -10,12 +10,12 @@ import type { MissingDocumentRequirementItem } from "@qoovex/types";
 import type { WorkspaceDocumentRecord, WorkspaceDocumentTypeRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
 interface DocumentsPageProps {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; from?: string }>;
 }
 
 export default async function DocumentsPage({ searchParams }: DocumentsPageProps) {
   try {
-    const { status } = await searchParams;
+    const { status, from } = await searchParams;
     const [documents, documentTypes, workers, jobSites, capabilities, missingRequirements] = await Promise.all([
       listDocuments({ status }),
       listDocumentTypes(),
@@ -33,6 +33,7 @@ export default async function DocumentsPage({ searchParams }: DocumentsPageProps
         workers={serializeForClient<WorkspaceWorkerRecord[]>(workers)}
         jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
         missingRequirements={serializeForClient<MissingDocumentRequirementItem[]>(missingRequirements.items)}
+        returnToDashboard={from === "dashboard"}
       />
     );
   } catch {

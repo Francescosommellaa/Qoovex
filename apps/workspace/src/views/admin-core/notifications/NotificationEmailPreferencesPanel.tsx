@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { Alert, Button, Checkbox, Field, Input, LoadingState, Select } from "@qoovex/ui";
 import type {
   EmailDigestFrequency,
   NotificationEmailDeliveryListResponse,
@@ -8,33 +9,64 @@ import type {
   UpdateNotificationPreferenceResponse,
 } from "@qoovex/types";
 import { submitJson } from "../admin-api-client";
-import styles from "../AdminCore.module.css";
+import styles from "./NotificationEmailPreferencesPanel.module.css";
 
 const frequencyLabels: Record<EmailDigestFrequency, string> = {
   OFF: "Disattivato",
-  DAILY: "Giornaliero",
-  WEEKLY: "Settimanale",
+  DAILY: "Ogni giorno",
+  WEEKLY: "Ogni settimana",
 };
 
 const deliveryTypeLabels = {
-  DIGEST: "Digest",
-  SINGLE_NOTIFICATION: "Notifica singola",
+  DIGEST: "Riepilogo automatico",
+  SINGLE_NOTIFICATION: "Promemoria singolo",
 } as const;
 
 const deliveryStatusLabels = {
   SENT: "Inviato",
   FAILED: "Non inviato",
-  SKIPPED: "Saltato",
+  SKIPPED: "Non necessario",
 } as const;
+
+const digestOptions = [
+  {
+    name: "deadlineNotificationsEnabled",
+    title: "Scadenze",
+    description: "Date registrate che sono trascorse o si stanno avvicinando.",
+  },
+  {
+    name: "documentNotificationsEnabled",
+    title: "Documenti",
+    description: "Documenti da verificare, scaduti o con una data vicina.",
+  },
+  {
+    name: "packageNotificationsEnabled",
+    title: "Pacchetti e condivisioni",
+    description: "Pacchetti pronti e aggiornamenti sui link condivisi.",
+  },
+  {
+    name: "systemNotificationsEnabled",
+    title: "Aggiornamenti di sistema",
+    description: "Informazioni operative sul funzionamento del servizio.",
+  },
+] as const;
 
 function formatDate(value?: string | null) {
   if (!value) return "Mai";
-  return new Intl.DateTimeFormat("it-IT", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(value));
+  return new Intl.DateTimeFormat("it-IT", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(value));
 }
 
 export function NotificationEmailPreferencesPanel() {
   const [preference, setPreference] = useState<NotificationPreferenceResponse | null>(null);
   const [deliveries, setDeliveries] = useState<NotificationEmailDeliveryListResponse["deliveries"]>([]);
+  const [digestEnabled, setDigestEnabled] = useState(false);
+  const [digestFrequency, setDigestFrequency] = useState<EmailDigestFrequency>("OFF");
   const [pending, setPending] = useState<"load" | "save" | null>("load");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -49,8 +81,12 @@ export function NotificationEmailPreferencesPanel() {
       ]);
       if (!preferenceResponse.ok) throw new Error(await preferenceResponse.text());
       if (!deliveriesResponse.ok) throw new Error(await deliveriesResponse.text());
-      setPreference(await preferenceResponse.json() as NotificationPreferenceResponse);
+
+      const nextPreference = await preferenceResponse.json() as NotificationPreferenceResponse;
       const deliveryData = await deliveriesResponse.json() as NotificationEmailDeliveryListResponse;
+      setPreference(nextPreference);
+      setDigestEnabled(nextPreference.emailDigestEnabled && nextPreference.emailDigestFrequency !== "OFF");
+      setDigestFrequency(nextPreference.emailDigestFrequency);
       setDeliveries(deliveryData.deliveries);
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : "Preferenze email non disponibili.");
@@ -62,6 +98,16 @@ export function NotificationEmailPreferencesPanel() {
   useEffect(() => {
     void loadData();
   }, []);
+
+  function updateDigestEnabled(enabled: boolean) {
+    setDigestEnabled(enabled);
+    setDigestFrequency((current) => enabled && current === "OFF" ? "DAILY" : enabled ? current : "OFF");
+  }
+
+  function updateDigestFrequency(frequency: EmailDigestFrequency) {
+    setDigestFrequency(frequency);
+    setDigestEnabled(frequency !== "OFF");
+  }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -84,6 +130,8 @@ export function NotificationEmailPreferencesPanel() {
         systemNotificationsEnabled: formData.get("systemNotificationsEnabled") === "on",
       });
       setPreference(response.preference);
+      setDigestEnabled(response.preference.emailDigestEnabled && response.preference.emailDigestFrequency !== "OFF");
+      setDigestFrequency(response.preference.emailDigestFrequency);
       setMessage("Preferenze email salvate.");
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "Salvataggio preferenze non riuscito.");
@@ -93,76 +141,117 @@ export function NotificationEmailPreferencesPanel() {
   }
 
   return (
-    <div className={styles.list}>
-      <p className="qv-text-muted">
+    <div className={styles.root}>
+      <p className={styles.dataBoundary}>
         Le email riepilogano solo dati registrati in Qoovex. Non includono file, allegati o link di download.
       </p>
-      {error ? <p className={styles.formError}>{error}</p> : null}
-      {message ? <p className={styles.formSuccess}>{message}</p> : null}
-      {pending === "load" && !preference ? <p className="qv-text-muted">Caricamento preferenze...</p> : null}
+
+      {error ? <Alert tone="danger">{error}</Alert> : null}
+      {message ? <Alert tone="positive">{message}</Alert> : null}
+      {pending === "load" && !preference ? <LoadingState label="Caricamento preferenze email" /> : null}
+
       {preference ? (
         <form className={styles.form} onSubmit={submit}>
-          <label className={styles.checkboxField}>
-            <input defaultChecked={preference.emailDigestEnabled} name="emailDigestEnabled" type="checkbox" />
-            <span>Digest email attivo</span>
+          <label className={styles.activationRow}>
+            <Checkbox
+              checked={digestEnabled}
+              disabled={pending !== null}
+              name="emailDigestEnabled"
+              onChange={(event) => updateDigestEnabled(event.currentTarget.checked)}
+            />
+            <span className={styles.optionCopy}>
+              <strong>Digest email attivo</strong>
+              <span>Ricevi un unico riepilogo secondo la frequenza scelta.</span>
+            </span>
           </label>
-          <div className={styles.fieldGrid}>
-            <label className={styles.field}>
-              <span>Frequenza digest</span>
-              <select defaultValue={preference.emailDigestFrequency} name="emailDigestFrequency">
-                {(Object.keys(frequencyLabels) as EmailDigestFrequency[]).map((frequency) => (
-                  <option key={frequency} value={frequency}>{frequencyLabels[frequency]}</option>
-                ))}
-              </select>
-            </label>
-            <label className={styles.field}>
-              <span>Ora digest</span>
-              <input defaultValue={preference.emailDigestHour} max={23} min={0} name="emailDigestHour" type="number" />
-            </label>
-          </div>
-          <p className="qv-text-muted">Ultimo digest inviato: {formatDate(preference.lastDigestSentAt)}.</p>
-          <fieldset className={styles.field}>
-            <span>Tipi inclusi nel digest</span>
-            <label className={styles.checkboxField}>
-              <input defaultChecked={preference.deadlineNotificationsEnabled} name="deadlineNotificationsEnabled" type="checkbox" />
-              <span>Scadenze scadute o in arrivo</span>
-            </label>
-            <label className={styles.checkboxField}>
-              <input defaultChecked={preference.documentNotificationsEnabled} name="documentNotificationsEnabled" type="checkbox" />
-              <span>Documenti da verificare, scaduti o in scadenza</span>
-            </label>
-            <label className={styles.checkboxField}>
-              <input defaultChecked={preference.packageNotificationsEnabled} name="packageNotificationsEnabled" type="checkbox" />
-              <span>Pacchetti e link condivisi</span>
-            </label>
-            <label className={styles.checkboxField}>
-              <input defaultChecked={preference.systemNotificationsEnabled} name="systemNotificationsEnabled" type="checkbox" />
-              <span>Sistema</span>
-            </label>
+
+          <fieldset className={styles.scheduleGroup}>
+            <legend>Programmazione</legend>
+            <div className={styles.scheduleGrid}>
+              <Field htmlFor="email-digest-frequency" label="Frequenza digest">
+                <Select
+                  disabled={pending !== null}
+                  id="email-digest-frequency"
+                  name="emailDigestFrequency"
+                  onChange={(event) => updateDigestFrequency(event.currentTarget.value as EmailDigestFrequency)}
+                  value={digestFrequency}
+                >
+                  {(Object.keys(frequencyLabels) as EmailDigestFrequency[]).map((frequency) => (
+                    <option key={frequency} value={frequency}>{frequencyLabels[frequency]}</option>
+                  ))}
+                </Select>
+              </Field>
+              <Field
+                description="Ora locale, da 0 a 23."
+                htmlFor="email-digest-hour"
+                label="Ora digest"
+              >
+                <Input
+                  defaultValue={preference.emailDigestHour}
+                  disabled={pending !== null || !digestEnabled}
+                  id="email-digest-hour"
+                  inputMode="numeric"
+                  max={23}
+                  min={0}
+                  name="emailDigestHour"
+                  type="number"
+                />
+              </Field>
+            </div>
+            <p className={styles.lastDelivery}>Ultimo digest inviato: <strong>{formatDate(preference.lastDigestSentAt)}</strong></p>
           </fieldset>
-          <div className={styles.actions}>
-            <button className={styles.button} disabled={pending !== null} type="submit">
-              {pending === "save" ? "Salvataggio..." : "Salva preferenze email"}
-            </button>
+
+          <fieldset className={styles.includedGroup}>
+            <legend>Contenuti del digest</legend>
+            <p className={styles.groupDescription}>Scegli quali aggiornamenti includere nel prossimo riepilogo.</p>
+            <div className={styles.optionList}>
+              {digestOptions.map((option) => (
+                <label className={styles.optionRow} key={option.name}>
+                  <Checkbox
+                    defaultChecked={preference[option.name]}
+                    disabled={pending !== null}
+                    name={option.name}
+                  />
+                  <span className={styles.optionCopy}>
+                    <strong>{option.title}</strong>
+                    <span>{option.description}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <div className={styles.formTerminal}>
+            <Button disabled={pending !== null} type="submit">
+              {pending === "save" ? "Salvataggio in corso..." : "Salva preferenze email"}
+            </Button>
           </div>
         </form>
       ) : null}
-      <div className={styles.details}>
-        <strong>Invii recenti</strong>
-        <div className={styles.list}>
+
+      {preference ? (
+        <section aria-labelledby="recent-email-deliveries" className={styles.recentDeliveries}>
+          <div className={styles.sectionHeading}>
+            <h3 id="recent-email-deliveries">Invii recenti</h3>
+            <p>Esito e momento degli ultimi riepiloghi inviati al tuo account.</p>
+          </div>
           {!deliveries.length ? (
-            <p className="qv-text-muted">Nessun invio email registrato per il tuo account.</p>
-          ) : deliveries.map((delivery) => (
-            <article className={styles.record} key={delivery.id}>
-              <div className={styles.recordMain}>
-                <strong>{deliveryTypeLabels[delivery.type]}</strong>
-                <span>{deliveryStatusLabels[delivery.status]} - {delivery.notificationCount} notifiche</span>
-                <small>{formatDate(delivery.sentAt ?? delivery.createdAt)}{delivery.errorCode ? ` - ${delivery.errorCode}` : ""}</small>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
+            <p className={styles.emptyDeliveries}>Nessun invio email registrato per il tuo account.</p>
+          ) : (
+            <ul className={styles.deliveryList}>
+              {deliveries.map((delivery) => (
+                <li className={styles.deliveryRow} key={delivery.id}>
+                  <div>
+                    <strong>{deliveryTypeLabels[delivery.type]}</strong>
+                    <span>{deliveryStatusLabels[delivery.status]} · {delivery.notificationCount} notifiche</span>
+                  </div>
+                  <small>{formatDate(delivery.sentAt ?? delivery.createdAt)}{delivery.errorCode ? ` · ${delivery.errorCode}` : ""}</small>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ) : null}
     </div>
   );
 }

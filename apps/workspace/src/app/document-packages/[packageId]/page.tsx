@@ -20,11 +20,12 @@ import type {
 
 interface DocumentPackageDetailPageProps {
   params: Promise<{ packageId: string }>;
+  searchParams: Promise<{ from?: string }>;
 }
 
-export default async function DocumentPackageDetailPage({ params }: DocumentPackageDetailPageProps) {
+export default async function DocumentPackageDetailPage({ params, searchParams }: DocumentPackageDetailPageProps) {
   try {
-    const { packageId } = await params;
+    const [{ packageId }, { from }] = await Promise.all([params, searchParams]);
     const [documentPackage, jobSites, documents, evidence, checklists, capabilities] = await Promise.all([
       getDocumentPackage(packageId),
       listJobSites(),
@@ -49,6 +50,7 @@ export default async function DocumentPackageDetailPage({ params }: DocumentPack
         checklists={serializeForClient<WorkspaceChecklistRecord[]>(detailedChecklists)}
         jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
         shareLinks={serializeForClient<WorkspaceShareLinkRecord[]>(shareLinks)}
+        returnToDashboard={from === "dashboard"}
       />
     );
   } catch {

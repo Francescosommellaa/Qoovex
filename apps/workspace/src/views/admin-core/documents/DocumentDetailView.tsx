@@ -16,6 +16,7 @@ export function DocumentDetailView({
   workers,
   jobSites,
   capabilities,
+  returnToDashboard = false,
 }: {
   document: WorkspaceDocumentRecord;
   versions: WorkspaceDocumentVersionRecord[];
@@ -24,13 +25,14 @@ export function DocumentDetailView({
   workers: WorkspaceWorkerRecord[];
   jobSites: WorkspaceJobSiteRecord[];
   capabilities: WorkspaceCapabilities;
+  returnToDashboard?: boolean;
 }) {
   return (
     <WorkspacePage>
       <WorkspacePageHeader
         title={document.title}
         description={`${ownerLabel(document.ownerType, document.workerId, document.jobSiteId, workers, jobSites)} - Scadenza registrata: ${formatDate(document.expiryDate)}`}
-        action={<Link className={styles.ghostButton} href="/documents">Torna ai documenti</Link>}
+        action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/documents"}>{returnToDashboard ? "Torna alla dashboard" : "Torna ai documenti"}</Link>}
       />
       <div className={styles.splitGrid}>
         <div className={styles.grid}>
@@ -74,7 +76,7 @@ export function DocumentDetailView({
             )}
           </WorkspacePanel>
           <WorkspacePanel title="Carica versione" description="Il file viene salvato su Blob e collegato come metadato al documento.">
-            {capabilities.canUploadDocumentVersions ? <DocumentVersionUploadForm documentId={document.id} /> : <p className="qv-text-muted">Upload disponibile solo per ruoli di gestione.</p>}
+            {capabilities.canUploadDocumentVersions ? <DocumentVersionUploadForm documentId={document.id} returnToDashboard={returnToDashboard} /> : <p className="qv-text-muted">Upload disponibile solo per ruoli di gestione.</p>}
           </WorkspacePanel>
         </div>
       </div>

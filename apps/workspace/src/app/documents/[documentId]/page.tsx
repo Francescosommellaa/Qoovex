@@ -11,11 +11,12 @@ import type { WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceDocumen
 
 interface DocumentDetailPageProps {
   params: Promise<{ documentId: string }>;
+  searchParams: Promise<{ from?: string }>;
 }
 
-export default async function DocumentDetailPage({ params }: DocumentDetailPageProps) {
+export default async function DocumentDetailPage({ params, searchParams }: DocumentDetailPageProps) {
   try {
-    const { documentId } = await params;
+    const [{ documentId }, { from }] = await Promise.all([params, searchParams]);
     const [document, versions, deadlines, documentTypes, workers, jobSites, capabilities] = await Promise.all([
       getDocument(documentId),
       listDocumentVersions(documentId),
@@ -34,6 +35,7 @@ export default async function DocumentDetailPage({ params }: DocumentDetailPageP
         documentTypes={serializeForClient<WorkspaceDocumentTypeRecord[]>(documentTypes)}
         workers={serializeForClient<WorkspaceWorkerRecord[]>(workers)}
         jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
+        returnToDashboard={from === "dashboard"}
       />
     );
   } catch {

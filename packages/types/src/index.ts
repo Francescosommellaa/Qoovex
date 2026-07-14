@@ -1271,117 +1271,95 @@ export interface DataRetentionOverviewResponse {
 export interface DashboardOrganizationSummary {
   name: string;
   role: OrganizationRole;
+  roleLabel: string;
+  viewLabel: string;
 }
 
-export interface DashboardDocumentStatusCounts {
-  present: number;
+export interface DashboardAttentionCounts {
   missing: number;
   expired: number;
   expiringSoon: number;
   toReview: number;
 }
 
-export interface DashboardSummary {
-  documents: DashboardDocumentStatusCounts;
-  openDeadlines: number;
-  activeJobSites: number;
-  activeWorkers: number;
-  packagesReadyForReview: number;
-  sharedPackages: number;
-  recentEvidence: number;
-  unreadNotifications: number;
+export type DashboardSituationKind = "EXPIRED" | "EXPIRING_SOON" | "MISSING" | "TO_REVIEW";
+export type DashboardContextKind = "ORGANIZATION" | "WORKER" | "JOB_SITE" | "DEADLINE";
+export type DashboardSection = "attention" | "sharing" | "deadlines" | "contexts";
+
+export interface DashboardAction {
+  label: string;
+  href: string;
+}
+
+export interface DashboardResponsibility {
+  label: string;
+  assignmentHref?: string | null;
+}
+
+export interface DashboardSituation {
+  id: EntityId;
+  kind: DashboardSituationKind;
+  statusLabel: string;
+  title: string;
+  reason: string;
+  consequence: string;
+  contextKind: DashboardContextKind;
+  contextId?: EntityId | null;
+  contextLabel: string;
+  responsibility: DashboardResponsibility;
+  action: DashboardAction;
+  date?: string | null;
+  updatedAt: string;
 }
 
 export interface DashboardDeadlineItem {
   id: EntityId;
   title: string;
   dueDate: string;
-  status: DeadlineStatus;
-  sourceType: DeadlineSourceType;
-  documentId?: EntityId | null;
-  workerId?: EntityId | null;
-  jobSiteId?: EntityId | null;
-}
-
-export interface DashboardDocumentAttentionItem {
-  id: EntityId;
-  title: string;
-  status: DocumentStatus;
-  ownerType: DocumentOwnerType;
-  ownerLabel: string;
-  expiryDate?: string | null;
-  updatedAt: string;
-  nextAction: string;
-}
-
-export interface DashboardJobSiteItem {
-  id: EntityId;
-  name: string;
-  status: RecordStatus;
-  documentsToReview: number;
-  openChecklists: number;
-}
-
-export interface DashboardWorkerItem {
-  id: EntityId;
-  displayName: string;
-  status: RecordStatus;
-  documentsToReview: number;
-  openDeadlines: number;
+  timingLabel: string;
+  contextLabel: string;
+  action: DashboardAction;
 }
 
 export interface DashboardPackageItem {
   id: EntityId;
   title: string;
-  status: DocumentPackageStatus;
+  statusLabel: string;
   itemCount: number;
   hasActiveShareLink: boolean;
+  shareLabel: string;
   updatedAt: string;
+  action: DashboardAction;
 }
 
-export interface DashboardEvidenceItem {
+export interface DashboardContextItem {
   id: EntityId;
-  type: EvidenceType;
-  title: string;
-  hasFile: boolean;
-  createdAt: string;
-  jobSiteId?: EntityId | null;
-}
-
-export interface DashboardQuickAction {
+  kind: Exclude<DashboardContextKind, "DEADLINE">;
   label: string;
-  description: string;
-  href?: string | null;
-  disabled: boolean;
-  disabledReason?: string | null;
+  situationCount: number;
+  action: DashboardAction;
 }
 
-export interface DashboardEmptyState {
-  title: string;
-  actionLabel: string;
-}
-
-export interface DashboardNotificationItem {
-  id: EntityId;
-  type: NotificationType;
-  severity: NotificationSeverity;
-  title: string;
+export interface DashboardSectionError {
+  section: DashboardSection;
   message: string;
-  actionHref?: string | null;
-  createdAt: string;
 }
 
 export interface DashboardResponse {
   generatedAt: string;
   organization: DashboardOrganizationSummary;
-  summary: DashboardSummary;
-  deadlines: DashboardDeadlineItem[];
-  documentsToReview: DashboardDocumentAttentionItem[];
-  jobSites: DashboardJobSiteItem[];
-  workers: DashboardWorkerItem[];
-  packages: DashboardPackageItem[];
-  recentEvidence: DashboardEvidenceItem[];
-  notifications: DashboardNotificationItem[];
-  quickActions: DashboardQuickAction[];
-  emptyStates: DashboardEmptyState[];
+  attention: {
+    total: number;
+    counts: DashboardAttentionCounts;
+    situations: DashboardSituation[];
+  };
+  readyPackages: DashboardPackageItem[];
+  upcomingDeadlines: DashboardDeadlineItem[];
+  contexts: DashboardContextItem[];
+  availability: {
+    sharing: boolean;
+    contexts: boolean;
+  };
+  firstUse: boolean;
+  errors: DashboardSectionError[];
 }

@@ -1,243 +1,229 @@
-import type { OrganizationRole } from "@qoovex/types";
+import type { OrganizationRole, WorkspaceAccessContext } from "@qoovex/types";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   db: {
     document: { groupBy: vi.fn(), findMany: vi.fn() },
-    documentRequirement: { findMany: vi.fn() },
-    deadline: { count: vi.fn(), findMany: vi.fn(), groupBy: vi.fn() },
-    jobSite: { count: vi.fn(), findMany: vi.fn() },
-    worker: { count: vi.fn(), findMany: vi.fn() },
-    documentPackage: { count: vi.fn(), findMany: vi.fn() },
-    evidence: { findMany: vi.fn() },
-    checklist: { groupBy: vi.fn() },
-    shareLink: { findMany: vi.fn() },
-    notification: { findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), findMany: vi.fn(), count: vi.fn() },
-    workerUserLink: { findFirst: vi.fn() },
+    deadline: { groupBy: vi.fn(), findMany: vi.fn() },
+    documentPackage: { findMany: vi.fn() },
+    workerUserLink: { findMany: vi.fn() },
     jobSiteUserAssignment: { findMany: vi.fn() },
-    jobSiteWorkerAssignment: { findMany: vi.fn() },
   },
-  getWorkspaceAccessContext: vi.fn(),
-  getContextOrganizationId: vi.fn(),
-  requirePermission: vi.fn(),
+  requireOrganizationDomainAccess: vi.fn(),
+  getResourceScope: vi.fn(),
+  buildMissingDocumentRequirementItemsForScope: vi.fn(),
   recordSupportAccess: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
 vi.mock("@qoovex/db", () => ({ db: mocks.db }));
-vi.mock("@shared/server/access-errors", () => ({
-  AccessError: class AccessError extends Error {
-    constructor(message: string, public readonly status: 401 | 403 | 404 | 409 | 410) {
-      super(message);
-      this.name = "AccessError";
-    }
-  },
-}));
-vi.mock("@shared/server/access-context-service", () => ({
-  getWorkspaceAccessContext: mocks.getWorkspaceAccessContext,
-  getContextOrganizationId: mocks.getContextOrganizationId,
-  requirePermission: mocks.requirePermission,
-}));
+vi.mock("./domain-access-service", () => ({ requireOrganizationDomainAccess: mocks.requireOrganizationDomainAccess }));
+vi.mock("./resource-scope-service", () => ({ getResourceScope: mocks.getResourceScope }));
+vi.mock("./document-requirement-service", () => ({ buildMissingDocumentRequirementItemsForScope: mocks.buildMissingDocumentRequirementItemsForScope }));
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
-vi.mock("./support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
 
 import { getDashboardData } from "./dashboard-service";
 
-const now = new Date("2026-07-01T10:00:00.000Z");
+const now = new Date("2026-07-14T10:42:00.000Z");
+const future = new Date("2026-07-18T10:42:00.000Z");
+const past = new Date("2026-07-01T10:42:00.000Z");
 
-function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
-  for (const method of Object.values(model)) method.mockReset();
+function context(role: OrganizationRole): WorkspaceAccessContext {
+  return {
+    userId: "user-1",
+    platformRole: "USER",
+    company: { role, organization: { id: "org-1", name: "Azienda Demo", code: "QVX-1" } },
+    support: null,
+    permissions: [],
+  };
 }
 
 function setRole(role: OrganizationRole) {
-  mocks.getWorkspaceAccessContext.mockResolvedValue({
-    userId: "user-1",
-    platformRole: "USER",
-    company: { id: "member-1", role, organization: { id: "org-1", name: "Azienda Demo", code: "QVX-1" } },
-    support: null,
-    permissions: [],
+  const accessContext = context(role);
+  mocks.requireOrganizationDomainAccess.mockResolvedValue({ context: accessContext, organizationId: "org-1", actorRole: role });
+  mocks.getResourceScope.mockResolvedValue({
+    context: accessContext,
+    organizationId: "org-1",
+    actorRole: role,
+    fullAccess: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
+    linkedWorker: role === "WORKER" ? { id: "worker-1", displayName: "Mario Rossi", roleLabel: null, status: "ACTIVE" } : null,
+    siteManagerJobSiteIds: role === "SITE_MANAGER" ? ["jobsite-1"] : [],
+    workerJobSiteIds: role === "WORKER" ? ["jobsite-1"] : [],
+    visibleJobSiteIds: role === "SITE_MANAGER" || role === "WORKER" ? ["jobsite-1"] : [],
   });
 }
 
+function document(overrides: Record<string, unknown> = {}) {
+  return {
+    id: "document-review",
+    title: "Documento da verificare",
+    status: "TO_REVIEW",
+    ownerType: "WORKER",
+    workerId: "worker-1",
+    jobSiteId: null,
+    expiryDate: null,
+    updatedAt: now,
+    worker: { displayName: "Mario Rossi" },
+    jobSite: null,
+    ...overrides,
+  };
+}
+
+function deadline(overrides: Record<string, unknown> = {}) {
+  return {
+    id: "deadline-1",
+    title: "Revisione periodica",
+    dueDate: future,
+    status: "EXPIRING_SOON",
+    documentId: null,
+    workerId: null,
+    jobSiteId: "jobsite-1",
+    worker: null,
+    jobSite: { name: "Cantiere Centro" },
+    document: null,
+    ...overrides,
+  };
+}
+
 function primeDashboardMocks() {
-  mocks.db.document.groupBy
-    .mockResolvedValueOnce([
-      { status: "MISSING", _count: { _all: 2 } },
-      { status: "EXPIRED", _count: { _all: 1 } },
-      { status: "EXPIRING_SOON", _count: { _all: 3 } },
-      { status: "TO_REVIEW", _count: { _all: 4 } },
-      { status: "PRESENT", _count: { _all: 5 } },
-    ])
-    .mockResolvedValueOnce([{ jobSiteId: "jobsite-1", _count: { _all: 2 } }])
-    .mockResolvedValueOnce([{ workerId: "worker-1", _count: { _all: 1 } }]);
-  mocks.db.deadline.groupBy.mockResolvedValue([{ workerId: "worker-1", _count: { _all: 1 } }]);
-  mocks.db.checklist.groupBy.mockResolvedValue([{ jobSiteId: "jobsite-1", _count: { _all: 3 } }]);
-  mocks.db.deadline.count.mockResolvedValue(2);
-  mocks.db.jobSite.count.mockResolvedValue(1);
-  mocks.db.worker.count.mockResolvedValue(1);
-  mocks.db.documentPackage.count.mockResolvedValueOnce(1).mockResolvedValueOnce(1);
-  mocks.db.deadline.findMany.mockResolvedValue([
-    { id: "deadline-1", title: "Scadenza registrata", dueDate: now, sourceType: "MANUAL", status: "EXPIRING_SOON", documentId: null, workerId: "worker-1", jobSiteId: null },
+  mocks.db.document.groupBy.mockResolvedValue([
+    { status: "MISSING", _count: { _all: 1 } },
+    { status: "EXPIRED", _count: { _all: 1 } },
+    { status: "EXPIRING_SOON", _count: { _all: 1 } },
+    { status: "TO_REVIEW", _count: { _all: 1 } },
+    { status: "PRESENT", _count: { _all: 5 } },
   ]);
   mocks.db.document.findMany.mockResolvedValue([
-    {
-      id: "document-1",
-      title: "Documento da verificare",
-      status: "TO_REVIEW",
-      ownerType: "WORKER",
-      expiryDate: null,
-      updatedAt: now,
-      worker: { displayName: "Mario Rossi" },
-      jobSite: null,
-    },
+    document(),
+    document({ id: "document-expired", title: "Attestazione assicurativa", status: "EXPIRED", ownerType: "JOB_SITE", workerId: null, jobSiteId: "jobsite-1", expiryDate: past, worker: null, jobSite: { name: "Cantiere Centro" } }),
+    document({ id: "document-expiring", title: "Documento in scadenza", status: "EXPIRING_SOON", expiryDate: future }),
+    document({ id: "document-missing", title: "Documento mancante", status: "MISSING", updatedAt: past }),
   ]);
-  mocks.db.jobSite.findMany.mockResolvedValue([{ id: "jobsite-1", name: "Cantiere Centro", status: "ACTIVE" }]);
-  mocks.db.worker.findMany.mockResolvedValue([{ id: "worker-1", displayName: "Mario Rossi", status: "ACTIVE" }]);
+  mocks.db.deadline.groupBy.mockResolvedValue([{ status: "EXPIRING_SOON", _count: { _all: 1 } }]);
+  mocks.db.deadline.findMany.mockResolvedValue([deadline()]);
   mocks.db.documentPackage.findMany.mockResolvedValue([
-    { id: "package-1", title: "Pacchetto revisione", status: "READY_FOR_REVIEW", updatedAt: now, _count: { items: 2 }, shareLinks: [{ id: "share-1" }] },
-  ]);
-  mocks.db.evidence.findMany.mockResolvedValue([
-    { id: "evidence-1", type: "PHOTO", title: "Foto collegata", blobKey: "private/blob/key", createdAt: now, jobSiteId: "jobsite-1" },
-  ]);
-  mocks.db.shareLink.findMany.mockResolvedValue([]);
-  mocks.db.notification.findUnique.mockResolvedValue(null);
-  mocks.db.notification.create.mockResolvedValue({ id: "notification-created" });
-  mocks.db.notification.update.mockResolvedValue({ id: "notification-updated" });
-  mocks.db.notification.findMany.mockResolvedValue([
     {
-      id: "notification-1",
-      type: "DOCUMENT_TO_REVIEW",
-      severity: "ATTENTION",
-      title: "Documento da verificare",
-      message: "Documento da controllare.",
-      actionHref: "/documents/document-1",
-      createdAt: now,
+      id: "package-1",
+      title: "Pacchetto revisione",
+      status: "READY_FOR_REVIEW",
+      updatedAt: now,
+      _count: { items: 2 },
+      shareLinks: [],
     },
   ]);
-  mocks.db.notification.count.mockResolvedValue(1);
-  mocks.db.documentRequirement.findMany.mockResolvedValue([]);
+  mocks.db.workerUserLink.findMany.mockResolvedValue([
+    { workerId: "worker-1", userId: "user-1", user: { name: "Mario Rossi", firstName: "Mario", lastName: "Rossi", email: "mario@example.test" } },
+  ]);
+  mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([
+    { jobSiteId: "jobsite-1", userId: "manager-1", user: { name: "Elena Mariani", firstName: "Elena", lastName: "Mariani", email: "elena@example.test" } },
+  ]);
+  mocks.buildMissingDocumentRequirementItemsForScope.mockResolvedValue([]);
 }
 
 beforeEach(() => {
-  resetModel(mocks.db.document);
-  resetModel(mocks.db.documentRequirement);
-  resetModel(mocks.db.deadline);
-  resetModel(mocks.db.jobSite);
-  resetModel(mocks.db.worker);
-  resetModel(mocks.db.documentPackage);
-  resetModel(mocks.db.evidence);
-  resetModel(mocks.db.checklist);
-  resetModel(mocks.db.shareLink);
-  resetModel(mocks.db.notification);
-  resetModel(mocks.db.workerUserLink);
-  resetModel(mocks.db.jobSiteUserAssignment);
-  resetModel(mocks.db.jobSiteWorkerAssignment);
-  mocks.getWorkspaceAccessContext.mockReset();
-  mocks.getContextOrganizationId.mockReset();
-  mocks.requirePermission.mockReset();
-  mocks.recordSupportAccess.mockReset();
-
-  mocks.getContextOrganizationId.mockReturnValue("org-1");
-  mocks.requirePermission.mockImplementation(() => undefined);
-  mocks.recordSupportAccess.mockResolvedValue(undefined);
-  mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: { id: "worker-1", displayName: "Mario Rossi", roleLabel: "Operativo", status: "ACTIVE" } });
-  mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
-  mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
+  for (const model of Object.values(mocks.db)) for (const method of Object.values(model)) method.mockReset();
+  mocks.requireOrganizationDomainAccess.mockReset();
+  mocks.getResourceScope.mockReset();
+  mocks.buildMissingDocumentRequirementItemsForScope.mockReset();
+  mocks.recordSupportAccess.mockReset().mockResolvedValue(undefined);
   setRole("OWNER");
   primeDashboardMocks();
 });
 
 describe("dashboard service", () => {
-  it("lets owners, admins and safety consultants read the dashboard", async () => {
-    for (const role of ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const) {
+  it("lets every internal role read a situation-centric dashboard", async () => {
+    for (const role of ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const) {
       setRole(role);
       primeDashboardMocks();
       await expect(getDashboardData()).resolves.toMatchObject({ organization: { role } });
     }
   });
 
-  it("returns scoped dashboard data for operational roles and denies destinatari esterni", async () => {
+  it("orders attention deterministically and exposes cause, responsibility and action", async () => {
+    const dashboard = await getDashboardData();
+
+    expect(dashboard.attention.counts).toEqual({ expired: 1, expiringSoon: 2, missing: 1, toReview: 1 });
+    expect(dashboard.attention.total).toBe(5);
+    expect(dashboard.attention.situations.map((item) => item.kind)).toEqual(["EXPIRED", "EXPIRING_SOON", "EXPIRING_SOON", "MISSING", "TO_REVIEW"]);
+    expect(dashboard.attention.situations[0]).toMatchObject({
+      title: "Attestazione assicurativa",
+      contextLabel: "Cantiere Centro",
+      responsibility: { label: "Interviene: Elena Mariani" },
+      action: { label: "Controlla il documento", href: "/documents/document-expired?from=dashboard" },
+    });
+    expect(dashboard.attention.situations.at(-1)).toMatchObject({ responsibility: { label: "Intervieni tu" } });
+  });
+
+  it("adds indexed missing requirements without inventing a document record", async () => {
+    mocks.buildMissingDocumentRequirementItemsForScope.mockResolvedValue([
+      {
+        id: "requirement-1:worker:worker-1",
+        requirementId: "requirement-1",
+        requirementName: "Documento identificativo",
+        documentTypeId: "type-1",
+        documentTypeName: "Documento di identita",
+        targetType: "WORKER",
+        ownerType: "WORKER",
+        workerId: "worker-1",
+        workerName: "Mario Rossi",
+        ownerLabel: "Mario Rossi",
+      },
+    ]);
+
+    const dashboard = await getDashboardData();
+    expect(dashboard.attention.counts.missing).toBe(2);
+    expect(dashboard.attention.total).toBe(6);
+    expect(dashboard.attention.situations).toContainEqual(expect.objectContaining({
+      id: "missing:requirement-1:worker:worker-1",
+      reason: expect.stringContaining("Documento identificativo"),
+      action: { label: "Aggiungi documento", href: "/documents?status=MISSING&from=dashboard" },
+    }));
+  });
+
+  it("hides sharing for scoped roles and filters attention by assigned resources", async () => {
     setRole("SITE_MANAGER");
     primeDashboardMocks();
-    mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ worker: { id: "worker-1", displayName: "Mario Rossi", status: "ACTIVE" } }]);
-    const siteManagerDashboard = await getDashboardData();
-    expect(siteManagerDashboard.organization.role).toBe("SITE_MANAGER");
-    expect(siteManagerDashboard.packages).toEqual([]);
-    expect(siteManagerDashboard.notifications).toEqual([]);
+    const dashboard = await getDashboardData();
+
+    expect(dashboard.availability.sharing).toBe(false);
+    expect(dashboard.readyPackages).toEqual([]);
+    expect(mocks.db.documentPackage.findMany).not.toHaveBeenCalled();
     expect(mocks.db.document.findMany).toHaveBeenCalledWith(expect.objectContaining({
       where: expect.objectContaining({ ownerType: "JOB_SITE", jobSiteId: { in: ["jobsite-1"] } }),
     }));
+  });
 
-    setRole("WORKER");
+  it("keeps packages reviewable by safety consultants without exposing share creation", async () => {
+    setRole("SAFETY_CONSULTANT");
     primeDashboardMocks();
-    const workerDashboard = await getDashboardData();
-    expect(workerDashboard.organization.role).toBe("WORKER");
-    expect(workerDashboard.workers[0]).toMatchObject({ id: "worker-1", displayName: "Mario Rossi" });
-    expect(workerDashboard.packages).toEqual([]);
-
-    setRole("SITE_MANAGER");
-    await expect(getDashboardData()).resolves.toBeDefined();
-  });
-
-  it("filters every aggregate by organization and excludes archived records", async () => {
-    await getDashboardData();
-
-    expect(mocks.requirePermission).toHaveBeenCalledWith(expect.anything(), "organization:read");
-    expect(mocks.db.document.groupBy).toHaveBeenCalledWith(expect.objectContaining({
-      where: expect.objectContaining({ organizationId: "org-1", archivedAt: null }),
-    }));
-    expect(mocks.db.deadline.findMany).toHaveBeenCalledWith(expect.objectContaining({
-      where: expect.objectContaining({ organizationId: "org-1", archivedAt: null }),
-      orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
-    }));
-    expect(mocks.db.jobSite.findMany).toHaveBeenCalledWith(expect.objectContaining({
-      where: { organizationId: "org-1", archivedAt: null },
-    }));
-    expect(mocks.db.worker.findMany).toHaveBeenCalledWith(expect.objectContaining({
-      where: { organizationId: "org-1", archivedAt: null },
-    }));
-    expect(mocks.db.documentPackage.findMany).toHaveBeenCalledWith(expect.objectContaining({
-      where: { organizationId: "org-1", archivedAt: null },
-    }));
-    expect(mocks.db.evidence.findMany).toHaveBeenCalledWith(expect.objectContaining({
-      where: { organizationId: "org-1", archivedAt: null },
-    }));
-    expect(mocks.db.notification.findMany).toHaveBeenCalledWith(expect.objectContaining({
-      where: expect.objectContaining({ organizationId: "org-1", dismissedAt: null, readAt: null }),
-    }));
-  });
-
-  it("returns document status counts and attention lists without sensitive fields", async () => {
     const dashboard = await getDashboardData();
-    const serialized = JSON.stringify(dashboard);
 
-    expect(dashboard.summary.documents).toEqual({
-      present: 5,
-      missing: 2,
-      expired: 1,
-      expiringSoon: 3,
-      toReview: 4,
+    expect(dashboard.availability.sharing).toBe(true);
+    expect(dashboard.readyPackages[0]).toMatchObject({
+      title: "Pacchetto revisione",
+      action: { label: "Apri il pacchetto", href: "/document-packages/package-1?from=dashboard" },
+      shareLabel: expect.stringContaining("Owner o Admin"),
     });
-    expect(dashboard.documentsToReview[0]).toMatchObject({
-      title: "Documento da verificare",
-      ownerLabel: "Mario Rossi",
-      nextAction: "Verifica informazioni",
-    });
+  });
+
+  it("returns section errors while preserving the sections that loaded", async () => {
+    mocks.db.document.groupBy.mockRejectedValue(new Error("database unavailable"));
+    const dashboard = await getDashboardData();
+
+    expect(dashboard.errors).toEqual(expect.arrayContaining([
+      expect.objectContaining({ section: "attention" }),
+      expect.objectContaining({ section: "contexts" }),
+    ]));
+    expect(dashboard.readyPackages).toHaveLength(1);
+    expect(dashboard.upcomingDeadlines).toHaveLength(1);
+    expect(dashboard.firstUse).toBe(false);
+  });
+
+  it("does not expose storage or share secrets", async () => {
+    const serialized = JSON.stringify(await getDashboardData());
     expect(serialized).not.toContain("blobKey");
     expect(serialized).not.toContain("tokenHash");
-    expect(serialized).not.toContain("private/blob/key");
     expect(serialized).not.toContain("downloadUrl");
-    expect(serialized).not.toContain("dedupeKey");
-  });
-
-  it("summarizes job sites, workers, packages and recent evidence", async () => {
-    const dashboard = await getDashboardData();
-
-    expect(dashboard.jobSites).toEqual([{ id: "jobsite-1", name: "Cantiere Centro", status: "ACTIVE", documentsToReview: 2, openChecklists: 3 }]);
-    expect(dashboard.workers).toEqual([{ id: "worker-1", displayName: "Mario Rossi", status: "ACTIVE", documentsToReview: 1, openDeadlines: 1 }]);
-    expect(dashboard.packages[0]).toMatchObject({ title: "Pacchetto revisione", itemCount: 2, hasActiveShareLink: true });
-    expect(dashboard.recentEvidence).toEqual([{ id: "evidence-1", type: "PHOTO", title: "Foto collegata", hasFile: true, createdAt: now.toISOString(), jobSiteId: "jobsite-1" }]);
-    expect(dashboard.summary.unreadNotifications).toBe(1);
-    expect(dashboard.notifications[0]).toMatchObject({ title: "Documento da verificare", actionHref: "/documents/document-1" });
+    expect(serialized).not.toContain("private/blob/key");
   });
 });

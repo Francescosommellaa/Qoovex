@@ -159,17 +159,18 @@ describe("document version service", () => {
     expect(version).not.toHaveProperty("downloadUrl");
   });
 
-  it("lets admins and linked workers upload while denying other roles", async () => {
+  it("lets admins, safety consultants and linked workers upload while denying site managers", async () => {
     setRole("ADMIN");
+    await expect(uploadDocumentVersion("doc-1", [makeFile()])).resolves.toMatchObject({ documentId: "doc-1" });
+
+    setRole("SAFETY_CONSULTANT");
     await expect(uploadDocumentVersion("doc-1", [makeFile()])).resolves.toMatchObject({ documentId: "doc-1" });
 
     setRole("WORKER");
     await expect(uploadDocumentVersion("doc-1", [makeFile()])).resolves.toMatchObject({ documentId: "doc-1" });
 
-    for (const role of ["SAFETY_CONSULTANT", "SITE_MANAGER"] as const) {
-      setRole(role);
-      await expect(uploadDocumentVersion("doc-1", [makeFile()])).rejects.toMatchObject({ status: 404 });
-    }
+    setRole("SITE_MANAGER");
+    await expect(uploadDocumentVersion("doc-1", [makeFile()])).rejects.toMatchObject({ status: 404 });
   });
 
   it("lets safety consultants list and download versions but not archive", async () => {

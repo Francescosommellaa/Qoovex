@@ -8,8 +8,9 @@ import { AccessAssignmentsPageView } from "@/views/admin-core/access/AccessAssig
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 
-export default async function AccessPage() {
+export default async function AccessPage({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
   try {
+    const { from } = await searchParams;
     const capabilities = await getWorkspaceCapabilities();
     if (!capabilities.canManageAssignments) {
       return <WorkspaceAccessState title="Accessi non disponibili" description="Questa sezione e riservata alla gestione operativa dell'azienda." />;
@@ -26,6 +27,7 @@ export default async function AccessPage() {
         jobSiteWorkerAssignments={serializeForClient(workerAssignments)}
         options={serializeForClient(options)}
         workerUserLinks={serializeForClient(workerLinks)}
+        returnToDashboard={from === "dashboard"}
       />
     );
   } catch {

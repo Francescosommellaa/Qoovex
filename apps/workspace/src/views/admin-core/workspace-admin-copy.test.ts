@@ -92,6 +92,10 @@ describe("workspace admin UI copy", () => {
     expect(notificationPreferencesPanelSource).toContain("Ora digest");
     expect(notificationPreferencesPanelSource).toContain("Invii recenti");
     expect(notificationPreferencesPanelSource).toContain("Non includono file, allegati o link di download");
+    expect(notificationPreferencesPanelSource).toContain("<Checkbox");
+    expect(notificationPreferencesPanelSource).toContain("NotificationEmailPreferencesPanel.module.css");
+    expect(notificationPreferencesPanelSource).not.toContain("AdminCore.module.css");
+    expect(notificationPreferencesPanelSource).not.toContain('className={styles.field}');
     expect(notificationPreferencesPanelSource).not.toMatch(/recipientEmail|providerMessageId|blobKey|tokenHash|downloadUrl|token raw/i);
   });
 

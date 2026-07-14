@@ -1,4 +1,5 @@
 import { DeadlineArchiveButton } from "./DeadlineArchiveButton";
+import Link from "next/link";
 import { DeadlineForm } from "./DeadlineForm";
 import styles from "../AdminCore.module.css";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
@@ -18,18 +19,21 @@ export function DeadlinesPageView({
   workers,
   jobSites,
   capabilities,
+  returnToDashboard = false,
 }: {
   deadlines: WorkspaceDeadlineRecord[];
   documents: WorkspaceDocumentRecord[];
   workers: WorkspaceWorkerRecord[];
   jobSites: WorkspaceJobSiteRecord[];
   capabilities: WorkspaceCapabilities;
+  returnToDashboard?: boolean;
 }) {
   return (
     <WorkspacePage>
       <WorkspacePageHeader
         title="Scadenze"
         description="Registra date inserite o confermate dall'utente. Non vengono calcolate scadenze normative."
+        action={returnToDashboard ? <Link className={styles.ghostButton} href="/dashboard">Torna alla dashboard</Link> : undefined}
       />
       <div className={styles.splitGrid}>
         <WorkspacePanel title="Scadenze registrate" description="Le scadenze sono ordinate per data. La soglia in scadenza e operativa, non normativa.">
