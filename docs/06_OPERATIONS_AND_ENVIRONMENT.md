@@ -6,6 +6,8 @@ Resend invia email: mittente, reply-to e casella che riceve risposte sono respon
 
 Non eseguire reset, seed distruttivi, `db push`, cancellazioni organization o cleanup Blob senza classificare database e storage: un ambiente locale puo condividere risorse con produzione.
 
+Il dev-auth richiede `DEV_AUTH_SECRET` di almeno 32 caratteri ed e disponibile solo in development su host loopback, mai su Vercel, build o runtime production. Il selettore ruolo non esegue seed e opera sull'Azienda gia associata all'identita dev: prima di testare mutation resta quindi necessario classificare il database collegato.
+
 ## Deploy migration protetto
 
 Il comando canonico e `pnpm --filter @qoovex/db db:migrate:deploy`. Fuori dalla CI locale rifiuta l'esecuzione finche non sono presenti:

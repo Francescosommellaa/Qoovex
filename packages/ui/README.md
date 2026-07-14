@@ -27,6 +27,14 @@ Primitive pubbliche:
 - nessuna elevazione statica; l'unica ombra pubblica appartiene agli overlay;
 - supporto a `forced-colors`, contrasto aumentato e `prefers-reduced-motion`.
 
+## Contratto token
+
+- `:root` contiene reference token privati `--qv-ref-*` e ruoli semantici pubblici `--qv-*`;
+- base styles e consumer usano soltanto i ruoli semantici pubblici;
+- `@theme inline` collega i ruoli all'API utility Tailwind v4 esistente;
+- i nomi del bridge (`--color-qv-*`, `--spacing-qv-*` e analoghi) non sono API CSS da usare con `var()`;
+- `@theme static`, alias di compatibilità e reference token usati dai consumer sono bloccati dal checker.
+
 Import canonico:
 
 ```css

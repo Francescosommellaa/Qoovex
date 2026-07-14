@@ -31,6 +31,25 @@ export function isFullResourceScopeRole(role: OrganizationRole) {
   return (FULL_RESOURCE_SCOPE_ROLES as readonly OrganizationRole[]).includes(role);
 }
 
+async function getScopeUserId(context: WorkspaceAccessContext, organizationId: string, actorRole: OrganizationRole) {
+  if (!(actorRole === "SITE_MANAGER" || actorRole === "WORKER")) return context.userId;
+  if (context.platformRole !== "SUPER_ADMIN") return context.userId;
+  const { isCurrentDevAuthIdentity } = await import("./dev-auth");
+  if (!(await isCurrentDevAuthIdentity(context.userId))) return context.userId;
+
+  const scopedMembership = await db.organizationMembership.findFirst({
+    where: {
+      organizationId,
+      role: actorRole,
+      revokedAt: null,
+      user: { suspendedAt: null },
+    },
+    select: { userId: true },
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+  });
+  return scopedMembership?.userId ?? context.userId;
+}
+
 export async function getResourceScope(context?: WorkspaceAccessContext): Promise<ResourceScope> {
   if (!context) {
     const { getWorkspaceAccessContext } = await import("./access-context-service");
@@ -41,6 +60,7 @@ export async function getResourceScope(context?: WorkspaceAccessContext): Promis
   const organizationId = context.support?.organization.id ?? context.company?.organization.id;
   if (!organizationId) throw new AccessError("Nessuna azienda configurata.", 403);
   const fullAccess = isFullResourceScopeRole(actorRole);
+  const scopeUserId = await getScopeUserId(context, organizationId, actorRole);
 
   let linkedWorker: ResourceScope["linkedWorker"] = null;
   let siteManagerJobSiteIds: string[] = [];
@@ -50,7 +70,7 @@ export async function getResourceScope(context?: WorkspaceAccessContext): Promis
     const assignments = await db.jobSiteUserAssignment.findMany({
       where: {
         organizationId,
-        userId: context.userId,
+        userId: scopeUserId,
         assignmentRole: "SITE_MANAGER",
         archivedAt: null,
         jobSite: { archivedAt: null },
@@ -62,7 +82,7 @@ export async function getResourceScope(context?: WorkspaceAccessContext): Promis
 
   if (actorRole === "WORKER") {
     const link = await db.workerUserLink.findFirst({
-      where: { organizationId, userId: context.userId, archivedAt: null, worker: { archivedAt: null } },
+      where: { organizationId, userId: scopeUserId, archivedAt: null, worker: { archivedAt: null } },
       select: { worker: { select: { id: true, displayName: true, roleLabel: true, status: true } } },
       orderBy: { createdAt: "desc" },
     });

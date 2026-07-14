@@ -56,7 +56,7 @@ export function SignInPageView({
       setError(body?.error ?? "Accesso dev non disponibile.");
       return;
     }
-    router.push("/qoovex-admin");
+    router.push("/dashboard");
     router.refresh();
   }
 

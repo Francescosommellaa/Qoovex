@@ -12,7 +12,7 @@ Le route `/sign-in` e `/sign-up` rendono provabile il workspace con NextAuth Cre
 
 La route `/invite?token=...` mantiene il token durante accesso o registrazione e delega l'accettazione all'API protetta. La route `/shared/document-packages/[token]` rende invece il viewer esterno in sola lettura; l'API `/api/shared/*` resta il confine dati e download, non il link da consegnare al destinatario.
 
-In development locale la pagina `/sign-in` mostra `Accedi come dev` soltanto su host loopback. Il cookie firmato richiede `DEV_AUTH_SECRET` e attribuisce `SUPER_ADMIN` solo a runtime all'identita seed, senza modificare il ruolo persistito.
+In development locale la pagina `/sign-in` mostra `Accedi come dev` soltanto su host loopback. Il cookie firmato richiede `DEV_AUTH_SECRET`, attribuisce `SUPER_ADMIN` solo a runtime all'identita seed e conserva anche il ruolo Azienda simulato. Il selettore visibile nel workspace permette di passare tra OWNER, ADMIN, SAFETY_CONSULTANT, SITE_MANAGER e WORKER senza modificare la membership persistita. Navigazione, permessi, API e dashboard derivano il ruolo simulato lato server; per SITE_MANAGER e WORKER lo scope usa la prima membership attiva dello stesso ruolo nell'Azienda, oppure una vista senza assegnazioni se non esiste. L'accesso dev non crea automaticamente Aziende, membership o fixture.
 
 La route `/dashboard` e la prima esperienza prodotto reale. La dashboard legge un payload sintetico da service server-side e non espone `blobKey`, `tokenHash`, token raw o URL permanenti.
 

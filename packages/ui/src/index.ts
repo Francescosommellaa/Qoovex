@@ -18,11 +18,18 @@ export { Icon } from "./components/Icon";
 export type { IconProps, IconSize } from "./components/Icon";
 export {
   ArrowRight,
+  Archive,
   CaretDown,
   Check,
+  CheckSquare,
+  ClockCountdown,
   DownloadSimple,
+  FileDashed,
   List,
+  MagnifyingGlass,
   Plus,
+  Prohibit,
+  ShareNetwork,
   SignOut,
   UploadSimple,
   WarningCircle,

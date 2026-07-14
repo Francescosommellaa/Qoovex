@@ -3,7 +3,7 @@ import "server-only";
 import { cookies, headers } from "next/headers";
 import {
   DEV_AUTH_COOKIE_NAME,
-  verifyDevAuthCookieValue,
+  readDevAuthCookieValue,
 } from "@shared/lib/dev-auth-cookie";
 import { db } from "@qoovex/db";
 import { isDevAuthAllowedForHost } from "@shared/lib/dev-auth-guard";
@@ -39,14 +39,19 @@ export async function isDevAuthAllowed() {
 }
 
 export async function hasDevAuthSession() {
-  if (!(await isDevAuthAllowed())) return false;
+  return Boolean(await getDevAuthSession());
+}
+
+export async function getDevAuthSession() {
+  if (!(await isDevAuthAllowed())) return null;
 
   const cookieStore = await cookies();
-  return verifyDevAuthCookieValue(cookieStore.get(DEV_AUTH_COOKIE_NAME)?.value);
+  return readDevAuthCookieValue(cookieStore.get(DEV_AUTH_COOKIE_NAME)?.value);
 }
 
 export async function bootstrapDevUser() {
-  if (!(await hasDevAuthSession())) return null;
+  const devSession = await getDevAuthSession();
+  if (!devSession) return null;
 
   const existingUser = await findWorkspaceUserById(DEV_USER.id);
   if (existingUser) {
@@ -58,6 +63,7 @@ export async function bootstrapDevUser() {
       suspensionReason: null,
       imageUrl: null,
       isAdmin: true,
+      devRole: devSession.role,
     };
   }
 
@@ -74,6 +80,7 @@ export async function bootstrapDevUser() {
     suspensionReason: null,
     imageUrl: null,
     isAdmin: true,
+    devRole: devSession.role,
   };
 }
 

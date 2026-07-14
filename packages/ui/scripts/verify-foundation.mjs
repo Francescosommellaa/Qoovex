@@ -37,6 +37,24 @@ const brandFontSource = readFileSync(join(root, "packages", "brand-resources", "
 const marketingLayoutSource = readFileSync(join(root, "apps", "web", "src", "app", "layout.tsx"), "utf8");
 const marketingForbidden = /sei a norma|conformita garantita|validita legale|legalmente valido|abilitato automaticamente|obbligatorio per legge|GDPR compliant|privacy garantita|cancellazione legale/i;
 
+function readHexToken(source, name) {
+  const match = source.match(new RegExp(`${name}:\\s*(#[0-9a-f]{6})`, "i"));
+  if (!match) throw new Error(`Token colore non leggibile: ${name}`);
+  return match[1];
+}
+
+function relativeLuminance(hex) {
+  const channels = hex.slice(1).match(/.{2}/g).map((channel) => Number.parseInt(channel, 16) / 255);
+  const linear = channels.map((channel) => channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+}
+
+function contrastRatio(foreground, background) {
+  const lighter = Math.max(relativeLuminance(foreground), relativeLuminance(background));
+  const darker = Math.min(relativeLuminance(foreground), relativeLuminance(background));
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
 if (webSources.match(marketingForbidden)) {
   throw new Error("apps/web contiene copy vietata.");
 }
@@ -90,20 +108,26 @@ for (const forbiddenDomainName of ["DocumentStatus", "OrganizationRole", "Permis
 }
 
 for (const requiredToken of [
-  "@theme static",
-  "--spacing-qv-page",
-  "--spacing-qv-section",
-  "--spacing-qv-control",
-  "--container-qv-reading",
-  "--container-qv-content",
-  "--container-qv-wide",
-  "--text-qv-display",
-  "--color-qv-focus",
-  "--color-qv-canvas-deep",
-  "--color-qv-surface-muted",
-  "--color-qv-border-strong",
-  "--color-qv-accent-strong",
-  "--shadow-qv-overlay",
+  "@theme inline",
+  "--qv-ref-color-field",
+  "--qv-bg-canvas",
+  "--qv-surface-content",
+  "--qv-fg-primary",
+  "--qv-border-default",
+  "--qv-action-primary",
+  "--qv-state-info",
+  "--qv-focus-ring",
+  "--qv-font-family-sans",
+  "--qv-font-size-display",
+  "--qv-space-page",
+  "--qv-space-section",
+  "--qv-size-control",
+  "--qv-radius-control",
+  "--qv-elevation-overlay",
+  "--qv-motion-duration-standard",
+  "--qv-container-content",
+  "--qv-z-overlay",
+  "--breakpoint-qv-md",
   "--qv-trace-color",
   "--qv-terminal-width",
   '"General Sans"',
@@ -111,6 +135,47 @@ for (const requiredToken of [
 ]) {
   if (!tokenSource.includes(requiredToken)) {
     throw new Error(`Token foundation mancante: ${requiredToken}`);
+  }
+}
+
+const subtleOnCanvas = contrastRatio(
+  readHexToken(tokenSource, "--qv-ref-color-ink-subtle"),
+  readHexToken(tokenSource, "--qv-ref-color-field"),
+);
+
+if (subtleOnCanvas < 4.5) {
+  throw new Error(`Il testo sottile sul Campo non raggiunge WCAG AA: ${subtleOnCanvas.toFixed(2)}:1`);
+}
+
+if (!tokenSource.includes("--qv-overlay-scrim: rgb(32 35 31 / 0.58)")) {
+  throw new Error("Il ruolo overlay deve usare Inchiostro al 58%.");
+}
+
+if (/@theme\s+static/.test(tokenSource)) {
+  throw new Error("Il bridge Tailwind non deve forzare l'emissione con @theme static.");
+}
+
+const publicCssSources = `${baseSource}\n${consumerCssSources}`;
+const tailwindBridgeReference = /var\(--(?:color|font|text|tracking|spacing|radius|shadow|ease|duration|container|z-index)-qv-/;
+
+if (tailwindBridgeReference.test(publicCssSources)) {
+  throw new Error("Base o consumer usano direttamente il bridge Tailwind invece dei token semantici.");
+}
+
+if (/var\(--qv-ref-/.test(publicCssSources)) {
+  throw new Error("Base o consumer usano direttamente un reference token privato.");
+}
+
+const definedQvTokens = new Set(
+  [...tokenSource.matchAll(/(--qv-[a-z0-9-]+)\s*:/g)].map((match) => match[1]),
+);
+const referencedQvTokens = new Set(
+  [...publicCssSources.matchAll(/var\((--qv-[a-z0-9-]+)/g)].map((match) => match[1]),
+);
+
+for (const referencedToken of referencedQvTokens) {
+  if (!definedQvTokens.has(referencedToken)) {
+    throw new Error(`Token semantico non definito: ${referencedToken}`);
   }
 }
 

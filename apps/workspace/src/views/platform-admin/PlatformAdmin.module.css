@@ -8,7 +8,7 @@
   display: grid;
   gap: 4px;
   min-height: 96px;
-  border-top: 1px solid var(--color-qv-border-strong);
+  border-top: 1px solid var(--qv-border-strong);
   background: transparent;
   padding: 14px 0;
 }
@@ -20,7 +20,7 @@
 
 .summaryItem span,
 .meta {
-  color: var(--color-qv-content-muted);
+  color: var(--qv-fg-secondary);
   font-size: 0.84rem;
 }
 
@@ -35,8 +35,8 @@
   position: relative;
   display: grid;
   gap: 10px;
-  border-top: 1px solid var(--color-qv-border);
-  border-left: 1px solid var(--color-qv-border-strong);
+  border-top: 1px solid var(--qv-border-default);
+  border-left: 1px solid var(--qv-border-strong);
   background: transparent;
   padding: 14px 0 14px 16px;
 }
@@ -80,10 +80,10 @@
 .field textarea {
   width: 100%;
   min-height: 42px;
-  border: 1px solid var(--color-qv-border-strong);
-  border-radius: var(--radius-qv-sm);
-  background: var(--color-qv-surface);
-  color: var(--color-qv-content);
+  border: 1px solid var(--qv-border-strong);
+  border-radius: var(--qv-radius-control);
+  background: var(--qv-surface-content);
+  color: var(--qv-fg-primary);
   padding: 9px 10px;
 }
 
@@ -100,7 +100,7 @@
   min-height: 40px;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-qv-sm);
+  border-radius: var(--qv-radius-control);
   padding: 9px 12px;
   font-size: 0.86rem;
   font-weight: 760;
@@ -110,21 +110,21 @@
 
 .button,
 .linkButton {
-  border: 1px solid color-mix(in oklab, var(--color-qv-accent) 36%, var(--color-qv-border));
-  background: var(--color-qv-accent);
-  color: var(--color-qv-on-accent);
+  border: 1px solid color-mix(in oklab, var(--qv-action-primary) 36%, var(--qv-border-default));
+  background: var(--qv-action-primary);
+  color: var(--qv-action-on-primary);
 }
 
 .ghostButton {
-  border: 1px solid var(--color-qv-border);
-  background: var(--color-qv-surface);
-  color: var(--color-qv-content);
+  border: 1px solid var(--qv-border-default);
+  background: var(--qv-surface-content);
+  color: var(--qv-fg-primary);
 }
 
 .dangerButton {
-  border: 1px solid color-mix(in oklab, var(--color-qv-danger) 34%, var(--color-qv-border));
-  background: var(--color-qv-danger-soft);
-  color: var(--color-qv-danger);
+  border: 1px solid color-mix(in oklab, var(--qv-state-danger) 34%, var(--qv-border-default));
+  background: var(--qv-state-danger-surface);
+  color: var(--qv-state-danger);
 }
 
 .button:disabled,
@@ -144,27 +144,27 @@
 }
 
 .error {
-  border: 1px solid color-mix(in oklab, var(--color-qv-danger) 32%, var(--color-qv-border));
-  background: var(--color-qv-danger-soft);
-  color: var(--color-qv-danger);
+  border: 1px solid color-mix(in oklab, var(--qv-state-danger) 32%, var(--qv-border-default));
+  background: var(--qv-state-danger-surface);
+  color: var(--qv-state-danger);
 }
 
 .success {
-  border: 1px solid color-mix(in oklab, var(--color-qv-accent) 28%, var(--color-qv-border));
-  background: var(--color-qv-positive-soft);
-  color: var(--color-qv-accent-strong);
+  border: 1px solid color-mix(in oklab, var(--qv-action-primary) 28%, var(--qv-border-default));
+  background: var(--qv-state-positive-surface);
+  color: var(--qv-action-strong);
 }
 
 .notice {
-  border: 1px solid color-mix(in oklab, var(--color-qv-info) 28%, var(--color-qv-border));
-  background: var(--color-qv-info-soft);
-  color: var(--color-qv-info);
+  border: 1px solid color-mix(in oklab, var(--qv-state-info) 28%, var(--qv-border-default));
+  background: var(--qv-state-info-surface);
+  color: var(--qv-state-info);
 }
 
 .codeBlock {
   overflow-wrap: anywhere;
-  border: 1px solid var(--color-qv-border);
-  background: var(--color-qv-surface-muted);
+  border: 1px solid var(--qv-border-default);
+  background: var(--qv-surface-muted);
   padding: 10px;
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: 0.78rem;

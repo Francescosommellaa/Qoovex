@@ -1,18 +1,18 @@
 .page {
-  --trace-ink: var(--color-qv-content);
-  --trace-muted: var(--color-qv-content-muted);
-  --trace-field: var(--color-qv-canvas);
-  --trace-paper: var(--color-qv-surface);
-  --trace-fog: var(--color-qv-canvas-deep);
-  --trace-line: var(--color-qv-border);
-  --trace-cobalt: var(--color-qv-accent);
-  --trace-cobalt-deep: var(--color-qv-accent-strong);
-  --trace-on-cobalt: var(--color-qv-on-accent);
+  --trace-ink: var(--qv-fg-primary);
+  --trace-muted: var(--qv-fg-secondary);
+  --trace-field: var(--qv-bg-canvas);
+  --trace-paper: var(--qv-surface-content);
+  --trace-fog: var(--qv-bg-subtle);
+  --trace-line: var(--qv-border-default);
+  --trace-cobalt: var(--qv-action-primary);
+  --trace-cobalt-deep: var(--qv-action-strong);
+  --trace-on-cobalt: var(--qv-action-on-primary);
   min-height: 100dvh;
   overflow-x: clip;
   background: var(--trace-field);
   color: var(--trace-ink);
-  font-family: var(--font-sans);
+  font-family: var(--qv-font-family-sans);
 }
 
 .page,
@@ -72,7 +72,7 @@
 }
 
 .masthead strong {
-  font-family: var(--font-display);
+  font-family: var(--qv-font-family-display);
   font-size: 1.125rem;
   letter-spacing: -0.02em;
 }
@@ -106,7 +106,7 @@
 
 .heroCopy h1 {
   max-width: 11ch;
-  font-family: var(--font-display);
+  font-family: var(--qv-font-family-display);
   font-size: clamp(3.5rem, 6.2vw, 6.75rem);
   font-weight: 500;
   letter-spacing: -0.065em;
@@ -159,7 +159,7 @@
   bottom: -0.2em;
   z-index: -1;
   color: color-mix(in srgb, var(--trace-on-cobalt) 8%, transparent);
-  font-family: var(--font-display);
+  font-family: var(--qv-font-family-display);
   font-size: clamp(22rem, 41vw, 38rem);
   font-weight: 700;
   letter-spacing: -0.12em;
@@ -202,7 +202,7 @@
 
 .heroFragment strong,
 .heroTerminal strong {
-  font-family: var(--font-display);
+  font-family: var(--qv-font-family-display);
   font-size: clamp(1.45rem, 2.5vw, 2.2rem);
   font-weight: 600;
   letter-spacing: -0.035em;
@@ -305,7 +305,7 @@
 
 .sectionHeader h2,
 .boundaryStatement h2 {
-  font-family: var(--font-display);
+  font-family: var(--qv-font-family-display);
   font-size: clamp(2.75rem, 5.2vw, 5.5rem);
   font-weight: 500;
   letter-spacing: -0.06em;
@@ -412,6 +412,93 @@
   color: var(--trace-ink);
 }
 
+.tokenSection {
+  background: var(--qv-surface-content);
+}
+
+.tokenContract {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.tokenLayers {
+  border-top: 1px solid var(--qv-fg-primary);
+  list-style: none;
+}
+
+.tokenLayers li {
+  display: grid;
+  grid-template-columns: 5rem minmax(8rem, 0.55fr) minmax(10rem, 0.8fr) minmax(0, 1.35fr);
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--qv-border-default);
+}
+
+.tokenLayers span,
+.tokenLayers code,
+.tokenRoles code,
+.tokenRoles figcaption {
+  color: var(--qv-fg-secondary);
+  font-size: 0.75rem;
+}
+
+.tokenLayers strong {
+  font-size: 0.875rem;
+}
+
+.tokenLayers code,
+.tokenRoles code {
+  font-family: var(--qv-font-family-mono);
+}
+
+.tokenLayers p {
+  color: var(--qv-fg-secondary);
+  line-height: 1.5;
+}
+
+.tokenRoles {
+  margin: 0;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-inline-start: 1px solid var(--qv-border-strong);
+  background: var(--qv-bg-canvas);
+}
+
+.tokenRoleGrid {
+  display: grid;
+  gap: 0;
+}
+
+.tokenRoleGrid > div {
+  display: grid;
+  grid-template-columns: 3rem minmax(6rem, 0.65fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+  min-height: 4.5rem;
+  border-bottom: 1px solid var(--qv-border-default);
+}
+
+.tokenRoleGrid i {
+  display: block;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border: 1px solid var(--qv-border-strong);
+}
+
+.tokenCanvas { background: var(--qv-bg-canvas); }
+.tokenSurface { background: var(--qv-surface-content); }
+.tokenInk { background: var(--qv-fg-primary); }
+.tokenLine { background: var(--qv-border-default); }
+.tokenAction { background: var(--qv-action-primary); }
+
+.tokenRoles figcaption {
+  max-width: 38rem;
+  padding-top: 1.5rem;
+  line-height: 1.5;
+}
+
 .grammarSection,
 .stateSection {
   background: var(--trace-paper);
@@ -485,7 +572,7 @@
 }
 
 .gapCopy strong {
-  font-family: var(--font-display);
+  font-family: var(--qv-font-family-display);
   font-size: clamp(2.5rem, 5vw, 5rem);
   font-weight: 500;
   letter-spacing: -0.055em;
@@ -577,7 +664,7 @@
 }
 
 .marketingStatement h3 {
-  font-family: var(--font-display);
+  font-family: var(--qv-font-family-display);
   font-size: clamp(3rem, 6vw, 6.5rem);
   font-weight: 500;
   letter-spacing: -0.065em;
@@ -652,7 +739,7 @@
 }
 
 .mobileContext h3 {
-  font-family: var(--font-display);
+  font-family: var(--qv-font-family-display);
   font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: -0.035em;
@@ -756,7 +843,7 @@
 }
 
 .workspaceHeader h3 {
-  font-family: var(--font-display);
+  font-family: var(--qv-font-family-display);
   font-size: 2.25rem;
   font-weight: 600;
   letter-spacing: -0.04em;
@@ -894,7 +981,7 @@
 }
 
 .stateMatrix h3 {
-  font-family: var(--font-display);
+  font-family: var(--qv-font-family-display);
   font-size: 1.65rem;
   font-weight: 600;
   letter-spacing: -0.035em;
@@ -956,7 +1043,7 @@
 }
 
 .typeVoice > strong {
-  font-family: var(--font-display);
+  font-family: var(--qv-font-family-display);
   font-size: clamp(3.25rem, 6vw, 6.5rem);
   font-weight: 500;
   letter-spacing: -0.065em;
@@ -1190,8 +1277,17 @@
 
   .heroGrid,
   .grammarLayout,
-  .boundaryGrid {
+  .boundaryGrid,
+  .tokenContract {
     grid-template-columns: 1fr;
+  }
+
+  .tokenLayers li {
+    grid-template-columns: 5rem minmax(8rem, 0.7fr) minmax(0, 1.3fr);
+  }
+
+  .tokenLayers p {
+    grid-column: 2 / 4;
   }
 
   .heroGrid {
@@ -1394,6 +1490,24 @@
   .sequenceField .sequenceAction {
     grid-template-columns: 1fr;
     gap: 0.35rem;
+  }
+
+  .tokenLayers li {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  .tokenLayers p {
+    grid-column: 1;
+  }
+
+  .tokenRoles {
+    padding: 1.25rem;
+  }
+
+  .tokenRoleGrid > div {
+    grid-template-columns: 2.5rem minmax(5rem, 0.7fr) minmax(0, 1.3fr);
+    gap: 0.75rem;
   }
 
   .gapSpecimen {

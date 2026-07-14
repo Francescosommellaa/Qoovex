@@ -69,6 +69,35 @@ const sequence = [
   ["Prossima azione", "Richiedi"],
 ] as const;
 
+const tokenLayers = [
+  {
+    example: "--qv-ref-color-ink",
+    name: "Reference",
+    scope: "Privato",
+    purpose: "Conserva il valore canonico. Non viene consumato da componenti o app.",
+  },
+  {
+    example: "--qv-fg-primary",
+    name: "Semantic",
+    scope: "Pubblico",
+    purpose: "Descrive il ruolo nell'interfaccia e governa base, primitive e composizioni.",
+  },
+  {
+    example: "--color-qv-content",
+    name: "Tailwind bridge",
+    scope: "Utility",
+    purpose: "Mantiene l'API delle utility esistenti senza diventare un riferimento CSS diretto.",
+  },
+] as const;
+
+const semanticRoles = [
+  { className: "tokenCanvas", label: "Canvas", token: "--qv-bg-canvas" },
+  { className: "tokenSurface", label: "Contenuto", token: "--qv-surface-content" },
+  { className: "tokenInk", label: "Testo", token: "--qv-fg-primary" },
+  { className: "tokenLine", label: "Separazione", token: "--qv-border-default" },
+  { className: "tokenAction", label: "Azione", token: "--qv-action-primary" },
+] as const;
+
 export default function FoundationsPage() {
   return (
     <main className={styles.page} id="top">
@@ -80,7 +109,7 @@ export default function FoundationsPage() {
         <Container size="wide">
           <div className={styles.masthead}>
             <strong>Qoovex</strong>
-            <span>Fondazione identitaria in revisione</span>
+            <span>Contratto token in revisione</span>
           </div>
 
           <div className={styles.heroGrid}>
@@ -124,6 +153,7 @@ export default function FoundationsPage() {
 
           <nav className={styles.index} aria-label="Indice della direzione Traccia Operativa">
             <a href="#idea">Idea</a>
+            <a href="#token">Token</a>
             <a href="#grammatica">Grammatica</a>
             <a href="#superfici">Tre superfici</a>
             <a href="#stati">Stati</a>
@@ -158,6 +188,45 @@ export default function FoundationsPage() {
             <p><strong>Continuità</strong> per ciò che esiste e ha un&apos;origine leggibile.</p>
             <p><strong>Interruzione</strong> per ciò che manca o non è ancora pronto.</p>
             <p><strong>Terminale</strong> per una sola prossima azione chiaramente collocata.</p>
+          </div>
+        </Container>
+      </section>
+
+      <section className={`${styles.section} ${styles.tokenSection}`} id="token">
+        <Container size="wide">
+          <header className={styles.sectionHeader}>
+            <h2>Un valore, un ruolo, una sola via d&apos;uso.</h2>
+            <p>
+              Il colore minerale resta invariato. Cambia il contratto: i valori sono privati, i consumer parlano per funzione e Tailwind espone soltanto le utility necessarie.
+            </p>
+          </header>
+
+          <div className={styles.tokenContract}>
+            <ol className={styles.tokenLayers} aria-label="Livelli del contratto token">
+              {tokenLayers.map(({ example, name, purpose, scope }) => (
+                <li key={name}>
+                  <span>{scope}</span>
+                  <strong>{name}</strong>
+                  <code>{example}</code>
+                  <p>{purpose}</p>
+                </li>
+              ))}
+            </ol>
+
+            <figure className={styles.tokenRoles}>
+              <div className={styles.tokenRoleGrid}>
+                {semanticRoles.map(({ className, label, token }) => (
+                  <div key={token}>
+                    <i className={styles[className]} aria-hidden="true" />
+                    <span>{label}</span>
+                    <code>{token}</code>
+                  </div>
+                ))}
+              </div>
+              <figcaption>
+                I nomi descrivono una responsabilità visiva, non un colore. La tavola resta leggibile anche senza cobalto.
+              </figcaption>
+            </figure>
           </div>
         </Container>
       </section>
@@ -394,23 +463,23 @@ export default function FoundationsPage() {
           <div className={styles.boundaryGrid}>
             <div className={styles.boundaryStatement}>
               <span>In approvazione</span>
-              <h2>Traccia Operativa come sistema generativo.</h2>
+              <h2>Il contratto token come fondazione condivisa.</h2>
               <p>
-                La direzione passa se può produrre marketing, workspace e mobile senza dipendere da card generiche, logo o decorazione.
+                La struttura passa se mantiene invariata la resa e rende impossibile confondere valori privati, ruoli pubblici e utility Tailwind.
               </p>
             </div>
             <dl className={styles.boundaryRules}>
               <div>
                 <dt>Incluso ora</dt>
-                <dd>Idea proprietaria, grammatica, stati, densità, voce, materia provvisoria e traduzione cross-surface.</dd>
+                <dd>Reference token privati, ruoli semantici pubblici, bridge Tailwind inline e guardrail statici.</dd>
               </div>
               <div>
                 <dt>Non integrato</dt>
-                <dd>Nessuna modifica a token condivisi, primitive, sito marketing, workspace o app mobile.</dd>
+                <dd>Nessuna nuova primitiva, composizione workspace, revisione tipografica o modifica di densità.</dd>
               </div>
               <div>
                 <dt>Unità successiva</dt>
-                <dd>Palette e token strutturali, soltanto dopo approvazione esplicita.</dd>
+                <dd>Tipografia, layout e densità, soltanto dopo approvazione esplicita.</dd>
               </div>
             </dl>
           </div>

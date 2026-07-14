@@ -22,6 +22,7 @@ export async function requirePrimaryIdentity() {
       suspendedAt: null,
       authSessionId: `dev:${devUser.id}`,
       isDev: true,
+      devRole: devUser.devRole,
     };
   }
 
@@ -35,7 +36,7 @@ export async function requirePrimaryIdentity() {
     select: { id: true, email: true, emailVerified: true, platformRole: true, authVersion: true, mfaEnabled: true, suspendedAt: true },
   });
   if (!user || user.suspendedAt) throw new AccessError("Sessione non valida.", 401);
-  return { ...user, authSessionId, isDev: false };
+  return { ...user, authSessionId, isDev: false, devRole: null };
 }
 
 export async function requireIdentity() {
@@ -64,11 +65,12 @@ export async function getWorkspaceAccessContext(): Promise<WorkspaceAccessContex
     user.platformRole === "SUPER_ADMIN" ? getActiveSupportSession(user.id) : Promise.resolve(null),
   ]);
 
-  const effectiveRole = support ? "OWNER" : membership?.role ?? null;
+  const companyRole = membership ? user.devRole ?? membership.role : null;
+  const effectiveRole = support ? "OWNER" : companyRole;
   return {
     userId: user.id,
     platformRole: user.platformRole,
-    company: membership ? { role: membership.role, organization: membership.organization } : null,
+    company: membership ? { role: companyRole ?? membership.role, organization: membership.organization } : null,
     support: support ? {
       sessionId: support.id,
       reason: support.reason,

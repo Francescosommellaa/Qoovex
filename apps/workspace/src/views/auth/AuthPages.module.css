@@ -10,9 +10,9 @@
 .setupCard {
   width: min(100%, 520px);
   border: 0;
-  border-top: 1px solid var(--color-qv-border-strong);
-  border-left: 3px solid var(--color-qv-content);
-  background: var(--color-qv-surface);
+  border-top: 1px solid var(--qv-border-strong);
+  border-left: 3px solid var(--qv-fg-primary);
+  background: var(--qv-surface-content);
   padding: 20px;
 }
 
@@ -22,7 +22,7 @@
 
 .brand {
   margin: 0 0 6px;
-  color: var(--color-qv-accent-strong);
+  color: var(--qv-action-strong);
   font-size: 0.84rem;
   font-weight: 820;
   letter-spacing: 0;
@@ -32,7 +32,7 @@
 .authCard h1,
 .setupCard h1 {
   margin: 0;
-  color: var(--color-qv-content);
+  color: var(--qv-fg-primary);
   font-size: 1.7rem;
   line-height: 1.08;
   letter-spacing: 0;
@@ -43,7 +43,7 @@
 .hint,
 .error,
 .success {
-  color: var(--color-qv-content-muted);
+  color: var(--qv-fg-secondary);
   font-size: 0.9rem;
 }
 
@@ -64,17 +64,17 @@
 }
 
 .field label {
-  color: var(--color-qv-content);
+  color: var(--qv-fg-primary);
   font-size: 0.84rem;
   font-weight: 760;
 }
 
 .field input {
   min-height: 44px;
-  border: 1px solid var(--color-qv-border-strong);
-  border-radius: var(--radius-qv-sm);
-  background: var(--color-qv-surface);
-  color: var(--color-qv-content);
+  border: 1px solid var(--qv-border-strong);
+  border-radius: var(--qv-radius-control);
+  background: var(--qv-surface-content);
+  color: var(--qv-fg-primary);
   padding: 10px 12px;
 }
 
@@ -84,7 +84,7 @@
 .textButton:focus-visible,
 .secondaryLink:focus-visible,
 .textLink:focus-visible {
-  outline: 3px solid var(--color-qv-accent-soft);
+  outline: 3px solid var(--qv-action-soft);
   outline-offset: 2px;
 }
 
@@ -95,7 +95,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-qv-sm);
+  border-radius: var(--qv-radius-control);
   padding: 10px 14px;
   font-size: 0.92rem;
   font-weight: 780;
@@ -104,10 +104,10 @@
 
 .secondaryButton {
   width: 100%;
-  border: 1px solid var(--color-qv-border);
-  border-radius: var(--radius-qv-sm);
-  background: var(--color-qv-surface);
-  color: var(--color-qv-content);
+  border: 1px solid var(--qv-border-default);
+  border-radius: var(--qv-radius-control);
+  background: var(--qv-surface-content);
+  color: var(--qv-fg-primary);
   cursor: pointer;
 }
 
@@ -115,7 +115,7 @@
   justify-self: center;
   border: 0;
   background: transparent;
-  color: var(--color-qv-accent-strong);
+  color: var(--qv-action-strong);
   cursor: pointer;
   font: inherit;
   font-size: 0.88rem;
@@ -134,9 +134,9 @@
 }
 
 .primaryButton {
-  border: 1px solid var(--color-qv-accent);
-  background: var(--color-qv-accent);
-  color: var(--color-qv-on-accent);
+  border: 1px solid var(--qv-action-primary);
+  background: var(--qv-action-primary);
+  color: var(--qv-action-on-primary);
 }
 
 .primaryButton:disabled {
@@ -145,9 +145,9 @@
 }
 
 .secondaryLink {
-  border: 1px solid var(--color-qv-border);
-  background: var(--color-qv-surface-muted);
-  color: var(--color-qv-content);
+  border: 1px solid var(--qv-border-default);
+  background: var(--qv-surface-muted);
+  color: var(--qv-fg-primary);
 }
 
 .actions {
@@ -157,19 +157,19 @@
 }
 
 .textLink {
-  color: var(--color-qv-accent-strong);
+  color: var(--qv-action-strong);
   font-weight: 760;
 }
 
 .error {
   margin: 0;
-  color: var(--color-qv-danger);
+  color: var(--qv-state-danger);
   font-weight: 700;
 }
 
 .success {
   margin: 0;
-  color: var(--color-qv-accent-strong);
+  color: var(--qv-action-strong);
   font-weight: 700;
 }
 
