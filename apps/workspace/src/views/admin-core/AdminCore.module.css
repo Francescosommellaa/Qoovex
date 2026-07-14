@@ -13,7 +13,7 @@
 .list {
   display: grid;
   gap: 0;
-  border-top: 1px solid var(--color-qv-border-strong);
+  border-top: 1px solid var(--qv-border-strong);
 }
 
 .record {
@@ -22,7 +22,7 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   padding: 14px 0 14px 18px;
-  border-bottom: 1px solid var(--color-qv-border);
+  border-bottom: 1px solid var(--qv-border-default);
   background: transparent;
 }
 
@@ -31,7 +31,7 @@
   inset-block: -1px 0;
   inset-inline-start: 0;
   width: 1px;
-  background: var(--color-qv-border-strong);
+  background: var(--qv-border-strong);
   content: "";
 }
 
@@ -42,7 +42,7 @@
 }
 
 .recordMain strong {
-  color: var(--color-qv-content);
+  color: var(--qv-fg-primary);
   font-size: 0.98rem;
   line-height: 1.25;
   overflow-wrap: anywhere;
@@ -51,7 +51,7 @@
 .meta,
 .recordMain span,
 .recordMain small {
-  color: var(--color-qv-content-muted);
+  color: var(--qv-fg-secondary);
   font-size: 0.82rem;
 }
 
@@ -61,7 +61,7 @@
   gap: 8px;
   align-items: center;
   padding-inline-start: 10px;
-  border-inline-start: 3px solid var(--color-qv-accent);
+  border-inline-start: 3px solid var(--qv-action-primary);
 }
 
 .actions form {
@@ -76,7 +76,7 @@
   align-items: center;
   justify-content: center;
   min-height: 40px;
-  border-radius: var(--radius-qv-sm);
+  border-radius: var(--qv-radius-control);
   padding: 9px 12px;
   font-size: 0.86rem;
   font-weight: 760;
@@ -92,21 +92,21 @@
 
 .linkButton,
 .button {
-  border: 1px solid color-mix(in oklab, var(--color-qv-accent) 36%, var(--color-qv-border));
-  background: var(--color-qv-accent);
-  color: var(--color-qv-on-accent);
+  border: 1px solid color-mix(in oklab, var(--qv-action-primary) 36%, var(--qv-border-default));
+  background: var(--qv-action-primary);
+  color: var(--qv-action-on-primary);
 }
 
 .ghostButton {
-  border: 1px solid var(--color-qv-border-strong);
+  border: 1px solid var(--qv-border-strong);
   background: transparent;
-  color: var(--color-qv-content);
+  color: var(--qv-fg-primary);
 }
 
 .dangerButton {
-  border: 1px solid color-mix(in oklab, var(--color-qv-danger) 34%, var(--color-qv-border));
-  background: var(--color-qv-danger-soft);
-  color: var(--color-qv-danger);
+  border: 1px solid color-mix(in oklab, var(--qv-state-danger) 34%, var(--qv-border-default));
+  background: var(--qv-state-danger-surface);
+  color: var(--qv-state-danger);
 }
 
 .button:disabled,
@@ -139,7 +139,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  color: var(--color-qv-content);
+  color: var(--qv-fg-primary);
   font-size: 0.86rem;
   font-weight: 760;
 }
@@ -148,12 +148,12 @@
   min-width: 18px;
   width: 18px;
   height: 18px;
-  accent-color: var(--color-qv-accent);
+  accent-color: var(--qv-action-primary);
 }
 
 .field label,
 .field span {
-  color: var(--color-qv-content);
+  color: var(--qv-fg-primary);
   font-size: 0.8rem;
   font-weight: 760;
 }
@@ -165,10 +165,10 @@
   width: 100%;
   min-width: 0;
   min-height: 42px;
-  border: 1px solid var(--color-qv-border-strong);
-  border-radius: var(--radius-qv-sm);
-  background: var(--color-qv-surface);
-  color: var(--color-qv-content);
+  border: 1px solid var(--qv-border-strong);
+  border-radius: var(--qv-radius-control);
+  background: var(--qv-surface-content);
+  color: var(--qv-fg-primary);
   padding: 9px 10px;
 }
 
@@ -184,15 +184,15 @@
 .dangerButton:focus-visible,
 .ghostButton:focus-visible,
 .linkButton:focus-visible {
-  outline: 3px solid var(--color-qv-accent-soft);
+  outline: 3px solid var(--qv-action-soft);
   outline-offset: 2px;
 }
 
 .formError {
   border: 0;
-  border-left: 3px solid var(--color-qv-danger);
-  background: var(--color-qv-danger-soft);
-  color: var(--color-qv-danger);
+  border-left: 3px solid var(--qv-state-danger);
+  background: var(--qv-state-danger-surface);
+  color: var(--qv-state-danger);
   padding: 10px;
   font-size: 0.84rem;
   font-weight: 680;
@@ -200,9 +200,9 @@
 
 .formSuccess {
   border: 0;
-  border-left: 3px solid var(--color-qv-positive);
-  background: var(--color-qv-positive-soft);
-  color: var(--color-qv-accent-strong);
+  border-left: 3px solid var(--qv-state-positive);
+  background: var(--qv-state-positive-surface);
+  color: var(--qv-action-strong);
   padding: 10px;
   font-size: 0.84rem;
   font-weight: 680;
@@ -224,18 +224,18 @@
 .compactList li {
   display: grid;
   gap: 3px;
-  border-left: 3px solid color-mix(in oklab, var(--color-qv-accent) 28%, var(--color-qv-border));
+  border-left: 3px solid color-mix(in oklab, var(--qv-action-primary) 28%, var(--qv-border-default));
   padding-left: 10px;
 }
 
 .details {
-  border-top: 1px solid var(--color-qv-border);
+  border-top: 1px solid var(--qv-border-default);
   padding-top: 10px;
 }
 
 .details summary {
   cursor: pointer;
-  color: var(--color-qv-accent-strong);
+  color: var(--qv-action-strong);
   font-size: 0.84rem;
   font-weight: 760;
 }
@@ -255,9 +255,9 @@
   flex: 0 0 auto;
   min-height: 36px;
   border: 0;
-  border-bottom: 1px solid var(--color-qv-border);
+  border-bottom: 1px solid var(--qv-border-default);
   background: transparent;
-  color: var(--color-qv-content);
+  color: var(--qv-fg-primary);
   padding: 7px 11px;
   font-size: 0.8rem;
   font-weight: 760;
@@ -265,9 +265,9 @@
 }
 
 .filterBar a[aria-current="page"] {
-  border-bottom: 3px solid var(--color-qv-accent);
+  border-bottom: 3px solid var(--qv-action-primary);
   background: transparent;
-  color: var(--color-qv-accent-strong);
+  color: var(--qv-action-strong);
 }
 
 .versionList {

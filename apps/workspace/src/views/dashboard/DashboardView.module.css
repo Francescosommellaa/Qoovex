@@ -12,14 +12,14 @@
 .header p,
 .header span {
   margin: 0;
-  color: var(--color-qv-content-muted);
+  color: var(--qv-fg-secondary);
   font-size: 0.92rem;
   font-weight: 650;
 }
 
 .header h1 {
   margin: 0;
-  color: var(--color-qv-content);
+  color: var(--qv-fg-primary);
   font-size: clamp(2rem, 8vw, 3.4rem);
   line-height: 0.95;
   letter-spacing: 0;
@@ -35,7 +35,7 @@
 .summaryCard {
   min-height: 112px;
   border: 0;
-  border-top: 1px solid var(--color-qv-border-strong);
+  border-top: 1px solid var(--qv-border-strong);
   background: transparent;
   padding: 16px 0;
 }
@@ -43,7 +43,7 @@
 .summaryCard span {
   display: block;
   min-height: 36px;
-  color: var(--color-qv-content-muted);
+  color: var(--qv-fg-secondary);
   font-size: 0.82rem;
   font-weight: 700;
 }
@@ -56,23 +56,23 @@
 }
 
 .summary_danger {
-  border-top: 4px solid var(--color-qv-danger);
+  border-top: 4px solid var(--qv-state-danger);
 }
 
 .summary_warning {
-  border-top: 4px solid var(--color-qv-warning);
+  border-top: 4px solid var(--qv-state-warning);
 }
 
 .summary_info {
-  border-top: 4px solid var(--color-qv-info);
+  border-top: 4px solid var(--qv-state-info);
 }
 
 .summary_good {
-  border-top: 4px solid var(--color-qv-accent);
+  border-top: 4px solid var(--qv-action-primary);
 }
 
 .summary_neutral {
-  border-top: 4px solid var(--color-qv-content-muted);
+  border-top: 4px solid var(--qv-fg-secondary);
 }
 
 .mainGrid {
@@ -84,7 +84,7 @@
 .section,
 .emptyState,
 .accessState {
-  border-top: 1px solid var(--color-qv-border-strong);
+  border-top: 1px solid var(--qv-border-strong);
   background: transparent;
   padding: 16px 0;
 }
@@ -107,7 +107,7 @@
 }
 
 .sectionHeader span {
-  color: var(--color-qv-content-muted);
+  color: var(--qv-fg-secondary);
   font-size: 0.78rem;
   font-weight: 700;
   white-space: nowrap;
@@ -127,10 +127,10 @@
 
 .actionButton {
   min-height: 64px;
-  border: 1px solid var(--color-qv-border);
-  border-radius: var(--radius-qv-sm);
-  background: var(--color-qv-surface-muted);
-  color: var(--color-qv-content);
+  border: 1px solid var(--qv-border-default);
+  border-radius: var(--qv-radius-control);
+  background: var(--qv-surface-muted);
+  color: var(--qv-fg-primary);
   padding: 12px 14px;
   text-align: left;
 }
@@ -144,7 +144,7 @@
 .actionButton small {
   display: block;
   margin-top: 4px;
-  color: var(--color-qv-content-muted);
+  color: var(--qv-fg-secondary);
   font-size: 0.78rem;
   font-weight: 650;
 }
@@ -157,8 +157,8 @@
 .rowItem,
 .compactItem,
 .emptyStateGrid article {
-  border-bottom: 1px solid var(--color-qv-border);
-  border-left: 1px solid var(--color-qv-border-strong);
+  border-bottom: 1px solid var(--qv-border-default);
+  border-left: 1px solid var(--qv-border-strong);
   background: transparent;
   padding: 12px 0 12px 14px;
 }
@@ -173,7 +173,7 @@
 .compactItem strong,
 .emptyStateGrid strong {
   display: block;
-  color: var(--color-qv-content);
+  color: var(--qv-fg-primary);
   font-size: 0.94rem;
   line-height: 1.25;
 }
@@ -186,7 +186,7 @@
 .accessState p {
   display: block;
   margin: 4px 0 0;
-  color: var(--color-qv-content-muted);
+  color: var(--qv-fg-secondary);
   font-size: 0.82rem;
 }
 
@@ -195,7 +195,7 @@
   min-height: 28px;
   padding: 6px 0 6px 10px;
   border-left: 3px solid currentColor;
-  color: var(--color-qv-content);
+  color: var(--qv-fg-primary);
   font-size: 0.76rem;
   font-weight: 760;
 }
@@ -207,9 +207,9 @@
   justify-content: center;
   width: fit-content;
   min-height: 36px;
-  border: 1px solid color-mix(in oklab, var(--color-qv-accent) 36%, var(--color-qv-border));
-  border-radius: var(--radius-qv-sm);
-  color: var(--color-qv-accent-strong);
+  border: 1px solid color-mix(in oklab, var(--qv-action-primary) 36%, var(--qv-border-default));
+  border-radius: var(--qv-radius-control);
+  color: var(--qv-action-strong);
   font-size: 0.8rem;
   font-weight: 760;
   line-height: 1.15;
@@ -227,33 +227,33 @@
 
 .inlineLink:focus-visible,
 .sectionLink:focus-visible {
-  outline: 3px solid var(--color-qv-accent-soft);
+  outline: 3px solid var(--qv-action-soft);
   outline-offset: 2px;
 }
 
 .toneDanger {
-  background: var(--color-qv-danger-soft);
-  color: var(--color-qv-danger);
+  background: var(--qv-state-danger-surface);
+  color: var(--qv-state-danger);
 }
 
 .toneWarning {
-  background: var(--color-qv-warning-soft);
-  color: var(--color-qv-warning);
+  background: var(--qv-state-warning-surface);
+  color: var(--qv-state-warning);
 }
 
 .toneInfo {
-  background: var(--color-qv-info-soft);
-  color: var(--color-qv-info);
+  background: var(--qv-state-info-surface);
+  color: var(--qv-state-info);
 }
 
 .toneGood {
-  background: var(--color-qv-positive-soft);
-  color: var(--color-qv-accent-strong);
+  background: var(--qv-state-positive-surface);
+  color: var(--qv-action-strong);
 }
 
 .emptyState {
   margin-bottom: 18px;
-  background: var(--color-qv-surface-muted);
+  background: var(--qv-surface-muted);
 }
 
 .emptyStateGrid {
@@ -269,7 +269,7 @@
 
 .disclaimer {
   margin: 22px 0 0;
-  color: var(--color-qv-content-muted);
+  color: var(--qv-fg-secondary);
   font-size: 0.82rem;
 }
 

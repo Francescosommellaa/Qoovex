@@ -5,3 +5,5 @@
 I ruoli interni sono OWNER, ADMIN, SAFETY_CONSULTANT, SITE_MANAGER e WORKER. Ogni utente ha al massimo una `OrganizationMembership`, riutilizzata dopo una revoca, e quindi zero o una sola Azienda. Ogni accesso nasce dal server: autenticazione, membership o support session valida, permesso esplicito e filtro per risorsa. SITE_MANAGER e WORKER operano solo nel proprio scope; gli esterni leggono esclusivamente tramite share link tokenizzati.
 
 Le route non accettano `organizationId` dal client come fonte autorevole. Ogni query e mutazione dominio deve essere filtrata per organizzazione e applicare default-deny.
+
+L'unica simulazione di ruolo e confinata al dev-auth locale: il ruolo selezionato viene validato e firmato dal server, modifica solo il contesto effettivo della sessione e non aggiorna `OrganizationMembership`. SITE_MANAGER e WORKER continuano ad applicare scope di risorsa; in dev usano una membership attiva dello stesso ruolo nell'Azienda quando disponibile.

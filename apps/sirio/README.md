@@ -12,6 +12,8 @@ La direzione Traccia Operativa è approvata e integrata. Sirio documenta la fond
 - provare controlli, feedback e grammatica `Trace` in tutti gli stati;
 - verificare contenuto lungo, loading, errore, assenza dati e responsive;
 - conservare `/foundations` come tavola narrativa della direzione approvata;
+- documentare in `/foundations#token` i tre livelli del contratto token prima dell'approvazione;
+- ospitare `/situazione-aperta` come specimen identitario in attesa di approvazione;
 - separare copy prudente da copy da evitare.
 
 ## Divieti

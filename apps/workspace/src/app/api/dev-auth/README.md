@@ -25,10 +25,15 @@ Senza secret valido, `POST` risponde `503`.
 ## Cookie
 
 - nome: `qv-dev-auth`
-- formato: `v1.<expUnix>.<hmac-sha256-base64url>`
+- formato corrente: `v2.<expUnix>.<organizationRole>.<hmac-sha256-base64url>`
+- il formato legacy `v1.<expUnix>.<hmac-sha256-base64url>` resta valido fino alla scadenza e usa OWNER
 - TTL: 8 ore
 - redirect `redirect_url` limitato allo stesso origin
 
+`POST /api/dev-auth` senza body crea la sessione con ruolo OWNER. Un body JSON `{ "role": "WORKER" }` rigenera il cookie con uno dei cinque ruoli Azienda canonici; input diversi ricevono `400`. Il valore client diventa attivo solo dopo validazione e firma server-side.
+
 ## Sicurezza
+
+Lo switch non modifica `OrganizationMembership`, non crea fixture e non cambia il ruolo persistito.
 
 Non usare in preview o produzione. Il bypass NextAuth è solo per sviluppo locale controllato (cookie `qv-dev-auth`, utente seed `dev_qoovex_local_user`).
