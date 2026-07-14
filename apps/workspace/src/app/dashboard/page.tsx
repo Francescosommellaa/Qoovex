@@ -4,10 +4,11 @@ import { DashboardView } from "@/views/dashboard/DashboardView";
 import { DataConfigurationState, OrganizationRequiredState, SignInRequiredState } from "@/views/auth/AuthAccessStates";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ updated?: string }> }) {
   try {
+    const { updated } = await searchParams;
     const data = await getDashboardData();
-    return <DashboardView data={data} />;
+    return <DashboardView data={data} updatedId={updated} />;
   } catch (error) {
     const state = await resolveWorkspaceAccessKind(error);
     if (state === "unauthenticated") return <SignInRequiredState callbackUrl="/dashboard" />;

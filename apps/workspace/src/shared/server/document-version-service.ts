@@ -10,7 +10,7 @@ import { auditActorFromContext, recordProductAuditEventBestEffort } from "./prod
 import { canReadDocument, getResourceScope } from "./resource-scope-service";
 import { validateBinaryFileContent } from "./file-content-validation";
 
-const DOCUMENT_VERSION_UPLOAD_ROLES = ["OWNER", "ADMIN", "WORKER"] as const;
+const DOCUMENT_VERSION_UPLOAD_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "WORKER"] as const;
 const DOCUMENT_VERSION_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 const DOCUMENT_VERSION_ARCHIVE_ROLES = ["OWNER", "ADMIN"] as const;
 

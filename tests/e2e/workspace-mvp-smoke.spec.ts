@@ -85,7 +85,7 @@ async function satisfyMfaGate(page: Page, secret: string) {
   await expect(page.getByRole("heading", { name: "Conferma MFA" })).toBeVisible();
   await page.locator("#mfa-gate-code").fill(currentTotp(secret));
   await page.getByRole("button", { name: "Apri il workspace" }).click();
-  await expect(page.getByRole("heading", { name: "Stato documentale" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Da fare" })).toBeVisible();
 }
 
 async function createDomainData(page: Page, runId: string) {

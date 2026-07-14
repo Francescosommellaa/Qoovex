@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState } from "react";
 import { submitJson } from "../admin-api-client";
 import styles from "../AdminCore.module.css";
@@ -22,6 +23,7 @@ interface AccessAssignmentsPageViewProps {
   jobSiteUserAssignments: JobSiteUserAssignmentResponse[];
   jobSiteWorkerAssignments: JobSiteWorkerAssignmentResponse[];
   options: AssignmentOptions;
+  returnToDashboard?: boolean;
 }
 
 function roleLabel(role: string) {
@@ -201,12 +203,14 @@ export function AccessAssignmentsPageView({
   jobSiteUserAssignments,
   jobSiteWorkerAssignments,
   options,
+  returnToDashboard = false,
 }: AccessAssignmentsPageViewProps) {
   return (
     <WorkspacePage>
       <WorkspacePageHeader
         title="Accessi operativi"
         description="Collega utenti, lavoratori e cantieri per limitare la vista alle risorse assegnate."
+        action={returnToDashboard ? <Link className={styles.ghostButton} href="/dashboard">Torna alla dashboard</Link> : undefined}
       />
       <div className={styles.grid}>
         <WorkspacePanel title="Collega utenti e lavoratori" description="Collegamento operativo per mostrare al lavoratore solo i propri dati.">

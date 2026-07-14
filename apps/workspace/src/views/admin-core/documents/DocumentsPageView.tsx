@@ -25,6 +25,7 @@ export function DocumentsPageView({
   activeStatus,
   capabilities,
   missingRequirements,
+  returnToDashboard = false,
 }: {
   documents: WorkspaceDocumentRecord[];
   documentTypes: WorkspaceDocumentTypeRecord[];
@@ -33,12 +34,14 @@ export function DocumentsPageView({
   activeStatus?: string;
   capabilities: WorkspaceCapabilities;
   missingRequirements: MissingDocumentRequirementItem[];
+  returnToDashboard?: boolean;
 }) {
   return (
     <WorkspacePage>
       <WorkspacePageHeader
         title="Documenti"
         description="Gestisci documenti logici, stati documentali e scadenze registrate senza caricare file direttamente nel record."
+        action={returnToDashboard ? <Link className={styles.ghostButton} href="/dashboard">Torna alla dashboard</Link> : undefined}
       />
       <WorkspacePanel title="Documenti mancanti da requisiti" description="Elementi virtuali derivati dai requisiti attivi. Non vengono creati record documento automaticamente.">
         {!missingRequirements.length ? (

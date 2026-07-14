@@ -2,46 +2,71 @@ import "server-only";
 
 import { db } from "@qoovex/db";
 import type {
-  DashboardDocumentAttentionItem,
-  DashboardDocumentStatusCounts,
-  DashboardEmptyState,
-  DashboardEvidenceItem,
-  DashboardJobSiteItem,
-  DashboardNotificationItem,
+  DashboardAttentionCounts,
+  DashboardContextItem,
+  DashboardDeadlineItem,
   DashboardPackageItem,
-  DashboardQuickAction,
   DashboardResponse,
-  DashboardWorkerItem,
-  DeadlineStatus,
+  DashboardSituation,
+  DashboardSituationKind,
+  DocumentOwnerType,
   DocumentStatus,
+  MissingDocumentRequirementItem,
+  OrganizationRole,
 } from "@qoovex/types";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { buildMissingDocumentRequirementItemsForScope } from "./document-requirement-service";
-import { syncOrganizationReminderRecords } from "./reminder-service";
-import { getResourceScope } from "./resource-scope-service";
+import { getResourceScope, type ResourceScope } from "./resource-scope-service";
 
 const DASHBOARD_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 const ATTENTION_DOCUMENT_STATUSES: DocumentStatus[] = ["MISSING", "EXPIRED", "EXPIRING_SOON", "TO_REVIEW"];
-const OPEN_DEADLINE_STATUSES: DeadlineStatus[] = ["DONE", "ARCHIVED"];
-const DASHBOARD_LIMIT = 6;
+const CLOSED_DEADLINE_STATUSES = ["DONE", "ARCHIVED"] as const;
+const DASHBOARD_SITUATION_LIMIT = 5;
+const DASHBOARD_QUERY_LIMIT = 20;
 
-const quickActions: DashboardQuickAction[] = [
-  { label: "Aggiungi documento", description: "Crea un record documento logico.", href: null, disabled: true, disabledReason: "Schermata in preparazione" },
-  { label: "Carica una versione", description: "Aggiungi un file a un documento.", href: null, disabled: true, disabledReason: "Schermata in preparazione" },
-  { label: "Aggiungi lavoratore", description: "Registra una persona operativa.", href: null, disabled: true, disabledReason: "Schermata in preparazione" },
-  { label: "Aggiungi cantiere", description: "Crea un contesto operativo.", href: null, disabled: true, disabledReason: "Schermata in preparazione" },
-  { label: "Crea checklist", description: "Prepara controlli configurati.", href: null, disabled: true, disabledReason: "Schermata in preparazione" },
-  { label: "Aggiungi prova", description: "Collega una nota, foto o file.", href: null, disabled: true, disabledReason: "Schermata in preparazione" },
-  { label: "Crea pacchetto", description: "Prepara documenti per revisione.", href: null, disabled: true, disabledReason: "Schermata in preparazione" },
-];
+const roleLabels: Record<OrganizationRole, string> = {
+  OWNER: "Titolare",
+  ADMIN: "Amministratore",
+  SAFETY_CONSULTANT: "Consulente sicurezza",
+  SITE_MANAGER: "Responsabile cantiere",
+  WORKER: "Lavoratore",
+};
 
-function emptyDocumentCounts(): DashboardDocumentStatusCounts {
-  return { present: 0, missing: 0, expired: 0, expiringSoon: 0, toReview: 0 };
+type AssignmentRow = {
+  userId: string;
+  user: { name: string | null; firstName: string; lastName: string | null; email: string };
+};
+
+type DocumentRow = {
+  id: string;
+  title: string;
+  status: DocumentStatus;
+  ownerType: DocumentOwnerType;
+  workerId: string | null;
+  jobSiteId: string | null;
+  expiryDate: Date | null;
+  updatedAt: Date;
+  worker: { displayName: string } | null;
+  jobSite: { name: string } | null;
+};
+
+type DeadlineRow = {
+  id: string;
+  title: string;
+  dueDate: Date;
+  status: "SCHEDULED" | "EXPIRING_SOON" | "EXPIRED" | "DONE" | "ARCHIVED";
+  workerId: string | null;
+  jobSiteId: string | null;
+  worker: { displayName: string } | null;
+  jobSite: { name: string } | null;
+};
+
+function emptyCounts(): DashboardAttentionCounts {
+  return { missing: 0, expired: 0, expiringSoon: 0, toReview: 0 };
 }
 
-function documentCountKey(status: DocumentStatus): keyof DashboardDocumentStatusCounts | null {
-  if (status === "PRESENT") return "present";
+function documentCountKey(status: DocumentStatus): keyof DashboardAttentionCounts | null {
   if (status === "MISSING") return "missing";
   if (status === "EXPIRED") return "expired";
   if (status === "EXPIRING_SOON") return "expiringSoon";
@@ -49,421 +74,457 @@ function documentCountKey(status: DocumentStatus): keyof DashboardDocumentStatus
   return null;
 }
 
-function toIso(value: Date | null | undefined) {
-  return value ? value.toISOString() : null;
+function situationKind(status: DocumentStatus | DeadlineRow["status"]): DashboardSituationKind {
+  if (status === "EXPIRED") return "EXPIRED";
+  if (status === "EXPIRING_SOON") return "EXPIRING_SOON";
+  if (status === "MISSING") return "MISSING";
+  return "TO_REVIEW";
 }
 
-function countByNullableId(rows: Array<{ _count: { _all: number } }>, ids: string[]) {
-  const counts = new Map<string, number>();
-  for (const row of rows as Array<{ workerId?: string | null; jobSiteId?: string | null; _count: { _all: number } }>) {
-    const id = row.workerId ?? row.jobSiteId;
-    if (id) counts.set(id, row._count._all);
+function statusLabel(kind: DashboardSituationKind) {
+  if (kind === "EXPIRED") return "Scaduto";
+  if (kind === "EXPIRING_SOON") return "In scadenza";
+  if (kind === "MISSING") return "Mancante";
+  return "Da verificare";
+}
+
+function statusReason(kind: DashboardSituationKind, date?: Date | null) {
+  if (kind === "EXPIRED") return date ? "La data registrata e trascorsa." : "Lo stato registrato risulta scaduto.";
+  if (kind === "EXPIRING_SOON") return date ? "La data registrata e vicina." : "Lo stato registrato richiede attenzione a breve.";
+  if (kind === "MISSING") return "Il documento richiesto non e ancora disponibile.";
+  return "Il file e presente, ma le informazioni devono essere confermate.";
+}
+
+function statusConsequence(kind: DashboardSituationKind) {
+  if (kind === "EXPIRED") return "Controlla il documento e aggiorna la data registrata quando hai nuove informazioni.";
+  if (kind === "EXPIRING_SOON") return "Valuta se il documento deve essere aggiornato prima della data registrata.";
+  if (kind === "MISSING") return "Il relativo insieme di informazioni resta incompleto finche il documento non viene aggiunto.";
+  return "Lo stato resta aperto finche una persona non completa la verifica.";
+}
+
+function documentActionLabel(kind: DashboardSituationKind, actorRole: OrganizationRole) {
+  if (kind === "EXPIRED") return "Controlla il documento";
+  if (kind === "EXPIRING_SOON") return "Apri la scadenza";
+  if (kind === "MISSING") return actorRole === "SITE_MANAGER" ? "Apri il documento" : "Carica versione";
+  return actorRole === "OWNER" || actorRole === "ADMIN" || actorRole === "SAFETY_CONSULTANT" ? "Verifica informazioni" : "Apri il documento";
+}
+
+function userLabel(row: AssignmentRow) {
+  const profileName = [row.user.firstName, row.user.lastName].filter(Boolean).join(" ").trim();
+  return row.user.name?.trim() || profileName || row.user.email;
+}
+
+function responsibility(input: {
+  actorRole: OrganizationRole;
+  currentUserId: string;
+  scope: ResourceScope;
+  ownerType: DocumentOwnerType | "DEADLINE";
+  workerId?: string | null;
+  workerLabel?: string | null;
+  jobSiteId?: string | null;
+  workerAssignments: Map<string, AssignmentRow[]>;
+  jobSiteAssignments: Map<string, AssignmentRow[]>;
+}) {
+  const canAssign = input.actorRole === "OWNER" || input.actorRole === "ADMIN";
+  const assignmentHref = canAssign ? "/access?from=dashboard" : null;
+
+  if (input.ownerType === "ORGANIZATION") {
+    return {
+      label: canAssign ? "Intervieni tu" : "Intervengono Owner o Admin",
+      assignmentHref: null,
+    };
   }
-  return ids.map((id) => counts.get(id) ?? 0);
+
+  if (input.workerId) {
+    if (input.scope.linkedWorker?.id === input.workerId) return { label: "Intervieni tu", assignmentHref: null };
+    const assignments = input.workerAssignments.get(input.workerId) ?? [];
+    if (assignments.some((assignment) => assignment.userId === input.currentUserId)) return { label: "Intervieni tu", assignmentHref: null };
+    if (assignments.length === 1) return { label: `Interviene: ${userLabel(assignments[0])}`, assignmentHref };
+    if (assignments.length > 1) return { label: `${assignments.length} responsabili assegnati`, assignmentHref };
+    if (input.workerLabel) return { label: `Interviene: ${input.workerLabel}`, assignmentHref };
+  }
+
+  if (input.jobSiteId) {
+    const assignments = input.jobSiteAssignments.get(input.jobSiteId) ?? [];
+    if (assignments.some((assignment) => assignment.userId === input.currentUserId)) return { label: "Intervieni tu", assignmentHref: null };
+    if (assignments.length === 1) return { label: `Interviene: ${userLabel(assignments[0])}`, assignmentHref };
+    if (assignments.length > 1) return { label: `${assignments.length} responsabili assegnati`, assignmentHref };
+  }
+
+  return { label: "Responsabile non assegnato", assignmentHref };
 }
 
-function documentNextAction(status: DocumentStatus) {
-  if (status === "MISSING") return "Aggiungi documento";
-  if (status === "EXPIRED") return "Aggiorna scadenza registrata";
-  if (status === "EXPIRING_SOON") return "Controlla scadenza";
-  if (status === "TO_REVIEW") return "Verifica informazioni";
-  return "Controlla documento";
+function priority(item: DashboardSituation) {
+  const rank: Record<DashboardSituationKind, number> = { EXPIRED: 0, EXPIRING_SOON: 1, MISSING: 2, TO_REVIEW: 3 };
+  return rank[item.kind];
 }
 
-function missingRequirementToDashboardItem(item: { id: string; documentTypeName: string; ownerType: string; ownerLabel: string; requirementName: string }): DashboardDocumentAttentionItem {
+function sortSituations(items: DashboardSituation[]) {
+  return [...items].sort((a, b) => {
+    const rank = priority(a) - priority(b);
+    if (rank) return rank;
+    const aDate = a.date ? new Date(a.date).getTime() : new Date(a.updatedAt).getTime();
+    const bDate = b.date ? new Date(b.date).getTime() : new Date(b.updatedAt).getTime();
+    return aDate - bDate || a.title.localeCompare(b.title, "it");
+  });
+}
+
+function contextForDocument(document: Pick<DocumentRow, "ownerType" | "workerId" | "jobSiteId" | "worker" | "jobSite">) {
+  if (document.ownerType === "WORKER") return { kind: "WORKER" as const, id: document.workerId, label: document.worker?.displayName ?? "Lavoratore" };
+  if (document.ownerType === "JOB_SITE") return { kind: "JOB_SITE" as const, id: document.jobSiteId, label: document.jobSite?.name ?? "Cantiere" };
+  return { kind: "ORGANIZATION" as const, id: null, label: "Azienda" };
+}
+
+function contextsFromSituations(situations: DashboardSituation[]): DashboardContextItem[] {
+  const grouped = new Map<string, DashboardContextItem>();
+  for (const situation of situations) {
+    if (situation.contextKind === "DEADLINE") continue;
+    const key = `${situation.contextKind}:${situation.contextId ?? "organization"}`;
+    const existing = grouped.get(key);
+    if (existing) {
+      existing.situationCount += 1;
+      continue;
+    }
+    const href = situation.contextKind === "WORKER" && situation.contextId
+      ? `/workers/${situation.contextId}?from=dashboard`
+      : situation.contextKind === "JOB_SITE" && situation.contextId
+        ? `/job-sites/${situation.contextId}?from=dashboard`
+        : "/documents?from=dashboard";
+    grouped.set(key, {
+      id: key,
+      kind: situation.contextKind,
+      label: situation.contextLabel,
+      situationCount: 1,
+      action: { label: "Apri contesto", href },
+    });
+  }
+  return [...grouped.values()]
+    .sort((a, b) => b.situationCount - a.situationCount || a.label.localeCompare(b.label, "it"))
+    .slice(0, 5);
+}
+
+function documentWhere(organizationId: string, scope: ResourceScope) {
+  if (scope.fullAccess) return { organizationId, archivedAt: null };
+  if (scope.actorRole === "SITE_MANAGER") {
+    return { organizationId, archivedAt: null, ownerType: "JOB_SITE" as const, jobSiteId: { in: scope.siteManagerJobSiteIds } };
+  }
+  if (scope.linkedWorker) {
+    return { organizationId, archivedAt: null, ownerType: "WORKER" as const, workerId: scope.linkedWorker.id };
+  }
+  return { organizationId, archivedAt: null, id: { in: [] as string[] } };
+}
+
+function deadlineWhere(organizationId: string, scope: ResourceScope) {
+  const open = { notIn: [...CLOSED_DEADLINE_STATUSES] };
+  if (scope.fullAccess) return { organizationId, archivedAt: null, status: open };
+  if (scope.actorRole === "SITE_MANAGER") {
+    return { organizationId, archivedAt: null, status: open, jobSiteId: { in: scope.siteManagerJobSiteIds } };
+  }
+  if (scope.linkedWorker) {
+    return {
+      organizationId,
+      archivedAt: null,
+      status: open,
+      OR: [{ workerId: scope.linkedWorker.id }, { document: { ownerType: "WORKER" as const, workerId: scope.linkedWorker.id } }],
+    };
+  }
+  return { organizationId, archivedAt: null, id: { in: [] as string[] } };
+}
+
+async function loadAttention(input: {
+  organizationId: string;
+  scope: ResourceScope;
+  actorRole: OrganizationRole;
+  currentUserId: string;
+}) {
+  const baseDocumentWhere = documentWhere(input.organizationId, input.scope);
+  const baseDeadlineWhere = deadlineWhere(input.organizationId, input.scope);
+  const [documentStatusRows, documents, standaloneDeadlineStatusRows, standaloneDeadlines, missingRequirements] = await Promise.all([
+    db.document.groupBy({ by: ["status"], where: baseDocumentWhere, _count: { _all: true } }),
+    db.document.findMany({
+      where: { ...baseDocumentWhere, status: { in: ATTENTION_DOCUMENT_STATUSES } },
+      select: {
+        id: true,
+        title: true,
+        status: true,
+        ownerType: true,
+        workerId: true,
+        jobSiteId: true,
+        expiryDate: true,
+        updatedAt: true,
+        worker: { select: { displayName: true } },
+        jobSite: { select: { name: true } },
+      },
+      orderBy: [{ expiryDate: "asc" }, { updatedAt: "asc" }, { id: "asc" }],
+      take: DASHBOARD_QUERY_LIMIT,
+    }),
+    db.deadline.groupBy({
+      by: ["status"],
+      where: { ...baseDeadlineWhere, documentId: null, status: { in: ["EXPIRED", "EXPIRING_SOON"] } },
+      _count: { _all: true },
+    }),
+    db.deadline.findMany({
+      where: { ...baseDeadlineWhere, documentId: null, status: { in: ["EXPIRED", "EXPIRING_SOON"] } },
+      select: {
+        id: true,
+        title: true,
+        dueDate: true,
+        status: true,
+        workerId: true,
+        jobSiteId: true,
+        worker: { select: { displayName: true } },
+        jobSite: { select: { name: true } },
+      },
+      orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
+      take: DASHBOARD_QUERY_LIMIT,
+    }),
+    buildMissingDocumentRequirementItemsForScope({ organizationId: input.organizationId, scope: input.scope }),
+  ]);
+
+  const workerIds = new Set<string>();
+  const jobSiteIds = new Set<string>();
+  for (const document of documents) {
+    if (document.workerId) workerIds.add(document.workerId);
+    if (document.jobSiteId) jobSiteIds.add(document.jobSiteId);
+  }
+  for (const deadline of standaloneDeadlines) {
+    if (deadline.workerId) workerIds.add(deadline.workerId);
+    if (deadline.jobSiteId) jobSiteIds.add(deadline.jobSiteId);
+  }
+  for (const requirement of missingRequirements) {
+    if (requirement.workerId) workerIds.add(requirement.workerId);
+    if (requirement.jobSiteId) jobSiteIds.add(requirement.jobSiteId);
+  }
+
+  const [workerAssignmentRows, jobSiteAssignmentRows] = await Promise.all([
+    workerIds.size
+      ? db.workerUserLink.findMany({
+        where: { organizationId: input.organizationId, workerId: { in: [...workerIds] }, archivedAt: null, user: { suspendedAt: null } },
+        select: { workerId: true, userId: true, user: { select: { name: true, firstName: true, lastName: true, email: true } } },
+        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+      })
+      : Promise.resolve([]),
+    jobSiteIds.size
+      ? db.jobSiteUserAssignment.findMany({
+        where: { organizationId: input.organizationId, jobSiteId: { in: [...jobSiteIds] }, assignmentRole: "SITE_MANAGER", archivedAt: null, user: { suspendedAt: null } },
+        select: { jobSiteId: true, userId: true, user: { select: { name: true, firstName: true, lastName: true, email: true } } },
+        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+      })
+      : Promise.resolve([]),
+  ]);
+
+  const workerAssignments = new Map<string, AssignmentRow[]>();
+  for (const row of workerAssignmentRows) workerAssignments.set(row.workerId, [...(workerAssignments.get(row.workerId) ?? []), row]);
+  const jobSiteAssignments = new Map<string, AssignmentRow[]>();
+  for (const row of jobSiteAssignmentRows) jobSiteAssignments.set(row.jobSiteId, [...(jobSiteAssignments.get(row.jobSiteId) ?? []), row]);
+
+  const situations: DashboardSituation[] = documents.map((document: DocumentRow) => {
+    const kind = situationKind(document.status);
+    const context = contextForDocument(document);
+    return {
+      id: document.id,
+      kind,
+      statusLabel: statusLabel(kind),
+      title: document.title,
+      reason: statusReason(kind, document.expiryDate),
+      consequence: statusConsequence(kind),
+      contextKind: context.kind,
+      contextId: context.id,
+      contextLabel: context.label,
+      responsibility: responsibility({
+        actorRole: input.actorRole,
+        currentUserId: input.currentUserId,
+        scope: input.scope,
+        ownerType: document.ownerType,
+        workerId: document.workerId,
+        workerLabel: document.worker?.displayName,
+        jobSiteId: document.jobSiteId,
+        workerAssignments,
+        jobSiteAssignments,
+      }),
+      action: { label: documentActionLabel(kind, input.actorRole), href: `/documents/${document.id}?from=dashboard` },
+      date: document.expiryDate?.toISOString() ?? null,
+      updatedAt: document.updatedAt.toISOString(),
+    };
+  });
+
+  for (const requirement of missingRequirements as MissingDocumentRequirementItem[]) {
+    situations.push({
+      id: `missing:${requirement.id}`,
+      kind: "MISSING",
+      statusLabel: "Mancante",
+      title: requirement.documentTypeName,
+      reason: `Il requisito configurato "${requirement.requirementName}" non ha ancora un documento collegato.`,
+      consequence: statusConsequence("MISSING"),
+      contextKind: requirement.ownerType,
+      contextId: requirement.workerId ?? requirement.jobSiteId ?? null,
+      contextLabel: requirement.ownerLabel,
+      responsibility: responsibility({
+        actorRole: input.actorRole,
+        currentUserId: input.currentUserId,
+        scope: input.scope,
+        ownerType: requirement.ownerType,
+        workerId: requirement.workerId,
+        workerLabel: requirement.workerName,
+        jobSiteId: requirement.jobSiteId,
+        workerAssignments,
+        jobSiteAssignments,
+      }),
+      action: {
+        label: input.actorRole === "OWNER" || input.actorRole === "ADMIN" ? "Aggiungi documento" : "Apri documenti",
+        href: "/documents?status=MISSING&from=dashboard",
+      },
+      date: null,
+      updatedAt: new Date(0).toISOString(),
+    });
+  }
+
+  for (const deadline of standaloneDeadlines as DeadlineRow[]) {
+    const kind = situationKind(deadline.status);
+    const contextKind = deadline.workerId ? "WORKER" : deadline.jobSiteId ? "JOB_SITE" : "DEADLINE";
+    const contextLabel = deadline.worker?.displayName ?? deadline.jobSite?.name ?? "Scadenza manuale";
+    situations.push({
+      id: `deadline:${deadline.id}`,
+      kind,
+      statusLabel: statusLabel(kind),
+      title: deadline.title,
+      reason: "La scadenza inserita dall'utente richiede attenzione.",
+      consequence: kind === "EXPIRED" ? "Controlla la data registrata e aggiorna le informazioni disponibili." : "Controlla cosa deve essere preparato prima della data registrata.",
+      contextKind,
+      contextId: deadline.workerId ?? deadline.jobSiteId,
+      contextLabel,
+      responsibility: responsibility({
+        actorRole: input.actorRole,
+        currentUserId: input.currentUserId,
+        scope: input.scope,
+        ownerType: "DEADLINE",
+        workerId: deadline.workerId,
+        workerLabel: deadline.worker?.displayName,
+        jobSiteId: deadline.jobSiteId,
+        workerAssignments,
+        jobSiteAssignments,
+      }),
+      action: { label: "Apri la scadenza", href: "/deadlines?from=dashboard" },
+      date: deadline.dueDate.toISOString(),
+      updatedAt: deadline.dueDate.toISOString(),
+    });
+  }
+
+  const counts = emptyCounts();
+  for (const row of documentStatusRows) {
+    const key = documentCountKey(row.status);
+    if (key) counts[key] += row._count._all;
+  }
+  counts.missing += missingRequirements.length;
+  for (const row of standaloneDeadlineStatusRows) {
+    if (row.status === "EXPIRED") counts.expired += row._count._all;
+    if (row.status === "EXPIRING_SOON") counts.expiringSoon += row._count._all;
+  }
+  const sorted = sortSituations(situations);
   return {
-    id: `missing:${item.id}`,
-    title: item.documentTypeName,
-    status: "MISSING",
-    ownerType: item.ownerType as DashboardDocumentAttentionItem["ownerType"],
-    ownerLabel: item.ownerLabel,
-    expiryDate: null,
-    updatedAt: new Date(0).toISOString(),
-    nextAction: `Configura documento richiesto: ${item.requirementName}`,
+    counts,
+    total: Object.values(counts).reduce((total, count) => total + count, 0),
+    situations: sorted.slice(0, DASHBOARD_SITUATION_LIMIT),
+    contexts: contextsFromSituations(sorted),
   };
 }
 
-function buildEmptyStates(input: {
-  activeJobSites: number;
-  activeWorkers: number;
-  totalDocuments: number;
-  packageCount: number;
-}): DashboardEmptyState[] {
-  const emptyStates: DashboardEmptyState[] = [];
-  if (!input.activeJobSites) emptyStates.push({ title: "Crea il primo cantiere", actionLabel: "Aggiungi cantiere" });
-  if (!input.activeWorkers) emptyStates.push({ title: "Aggiungi un lavoratore", actionLabel: "Aggiungi lavoratore" });
-  if (!input.totalDocuments) emptyStates.push({ title: "Configura un tipo documento", actionLabel: "Aggiungi documento" });
-  if (!input.packageCount) emptyStates.push({ title: "Crea un pacchetto per revisione", actionLabel: "Crea pacchetto" });
-  return emptyStates;
+async function loadPackages(organizationId: string, actorRole: OrganizationRole, now: Date): Promise<DashboardPackageItem[]> {
+  const canShare = actorRole === "OWNER" || actorRole === "ADMIN";
+  const packages = await db.documentPackage.findMany({
+    where: { organizationId, archivedAt: null, status: { in: ["READY_FOR_REVIEW", "SHARED"] } },
+    select: {
+      id: true,
+      title: true,
+      status: true,
+      updatedAt: true,
+      _count: { select: { items: true } },
+      shareLinks: {
+        where: { revokedAt: null, OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] },
+        select: { id: true, expiresAt: true },
+        orderBy: [{ createdAt: "desc" }],
+        take: 1,
+      },
+    },
+    orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
+    take: 3,
+  });
+  return packages.map((documentPackage) => {
+    const activeShare = documentPackage.shareLinks[0];
+    const hasActiveShareLink = Boolean(activeShare);
+    const shareLabel = activeShare
+      ? activeShare.expiresAt
+        ? `Link attivo fino al ${activeShare.expiresAt.toISOString()}`
+        : "Link attivo senza scadenza registrata"
+      : canShare
+        ? "Pronto per creare un link"
+        : "Pronto per revisione; Owner o Admin possono condividerlo";
+    return {
+      id: documentPackage.id,
+      title: documentPackage.title,
+      statusLabel: hasActiveShareLink ? "Condiviso" : "Pronto per revisione",
+      itemCount: documentPackage._count.items,
+      hasActiveShareLink,
+      shareLabel,
+      updatedAt: documentPackage.updatedAt.toISOString(),
+      action: {
+        label: hasActiveShareLink ? "Controlla il link" : canShare ? "Condividi pacchetto" : "Apri il pacchetto",
+        href: `/document-packages/${documentPackage.id}?from=dashboard`,
+      },
+    };
+  });
+}
+
+async function loadDeadlines(organizationId: string, scope: ResourceScope): Promise<DashboardDeadlineItem[]> {
+  const deadlines = await db.deadline.findMany({
+    where: { ...deadlineWhere(organizationId, scope), status: { in: ["SCHEDULED", "EXPIRING_SOON"] } },
+    select: {
+      id: true,
+      title: true,
+      dueDate: true,
+      status: true,
+      worker: { select: { displayName: true } },
+      jobSite: { select: { name: true } },
+      document: { select: { title: true } },
+    },
+    orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
+    take: 3,
+  });
+  return deadlines.map((deadline) => ({
+    id: deadline.id,
+    title: deadline.title,
+    dueDate: deadline.dueDate.toISOString(),
+    timingLabel: deadline.status === "EXPIRING_SOON" ? "In scadenza" : "Data registrata",
+    contextLabel: deadline.document?.title ?? deadline.worker?.displayName ?? deadline.jobSite?.name ?? "Scadenza manuale",
+    action: { label: "Apri la scadenza", href: "/deadlines?from=dashboard" },
+  }));
 }
 
 export async function getDashboardData(): Promise<DashboardResponse> {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("organization:read", DASHBOARD_ROLES);
   const scope = await getResourceScope(context);
   const now = new Date();
-  await syncOrganizationReminderRecords(organizationId, now);
+  const canSeePackages = scope.fullAccess;
 
-  if (!scope.fullAccess) {
-    const jobSiteIds = scope.visibleJobSiteIds;
-    const workerId = scope.linkedWorker?.id ?? null;
-    const documentWhere = scope.actorRole === "SITE_MANAGER"
-      ? { organizationId, archivedAt: null, ownerType: "JOB_SITE" as const, jobSiteId: { in: scope.siteManagerJobSiteIds } }
-      : workerId
-        ? { organizationId, archivedAt: null, ownerType: "WORKER" as const, workerId }
-        : { organizationId, archivedAt: null, id: { in: [] as string[] } };
-    const deadlineWhere = scope.actorRole === "SITE_MANAGER"
-      ? { organizationId, archivedAt: null, jobSiteId: { in: scope.siteManagerJobSiteIds }, status: { notIn: OPEN_DEADLINE_STATUSES } }
-      : workerId
-        ? {
-          organizationId,
-          archivedAt: null,
-          status: { notIn: OPEN_DEADLINE_STATUSES },
-          OR: [{ workerId }, { document: { ownerType: "WORKER" as const, workerId } }],
-        }
-        : { organizationId, archivedAt: null, id: { in: [] as string[] } };
-    const evidenceWhere = scope.actorRole === "SITE_MANAGER"
-      ? {
-        organizationId,
-        archivedAt: null,
-        OR: [
-          { jobSiteId: { in: scope.siteManagerJobSiteIds } },
-          { checklistItem: { checklist: { jobSiteId: { in: scope.siteManagerJobSiteIds } } } },
-        ],
-      }
-      : {
-        organizationId,
-        archivedAt: null,
-        OR: [
-          ...(workerId ? [{ workerId }] : []),
-          { jobSiteId: { in: scope.workerJobSiteIds } },
-          { checklistItem: { checklist: { jobSiteId: { in: scope.workerJobSiteIds } } } },
-        ],
-      };
-
-    const [
-      documentStatusRows,
-      openDeadlines,
-      jobSites,
-      deadlines,
-      documentsToReview,
-      recentEvidenceRows,
-      assignedWorkers,
-    ] = await Promise.all([
-      db.document.groupBy({ by: ["status"], where: documentWhere, _count: { _all: true } }),
-      db.deadline.count({ where: deadlineWhere }),
-      jobSiteIds.length
-        ? db.jobSite.findMany({
-          where: { organizationId, id: { in: jobSiteIds }, archivedAt: null },
-          select: { id: true, name: true, status: true },
-          orderBy: [{ name: "asc" }],
-          take: DASHBOARD_LIMIT,
-        })
-        : Promise.resolve([]),
-      db.deadline.findMany({
-        where: deadlineWhere,
-        select: { id: true, title: true, dueDate: true, sourceType: true, status: true, documentId: true, workerId: true, jobSiteId: true },
-        orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
-        take: DASHBOARD_LIMIT,
-      }),
-      db.document.findMany({
-        where: { ...documentWhere, status: { in: ATTENTION_DOCUMENT_STATUSES } },
-        select: {
-          id: true,
-          title: true,
-          status: true,
-          ownerType: true,
-          expiryDate: true,
-          updatedAt: true,
-          worker: { select: { displayName: true } },
-          jobSite: { select: { name: true } },
-        },
-        orderBy: [{ updatedAt: "desc" }],
-        take: DASHBOARD_LIMIT,
-      }),
-      db.evidence.findMany({
-        where: evidenceWhere,
-        select: { id: true, type: true, title: true, blobKey: true, createdAt: true, jobSiteId: true },
-        orderBy: [{ createdAt: "desc" }],
-        take: DASHBOARD_LIMIT,
-      }),
-      scope.actorRole === "SITE_MANAGER" && scope.siteManagerJobSiteIds.length
-        ? db.jobSiteWorkerAssignment.findMany({
-          where: { organizationId, archivedAt: null, jobSiteId: { in: scope.siteManagerJobSiteIds }, worker: { archivedAt: null } },
-          select: { worker: { select: { id: true, displayName: true, status: true } } },
-          take: DASHBOARD_LIMIT,
-        })
-        : Promise.resolve([]),
-    ]);
-
-    const documents = emptyDocumentCounts();
-    for (const row of documentStatusRows) {
-      const key = documentCountKey(row.status);
-      if (key) documents[key] = row._count._all;
-    }
-    const missingRequirementItems = await buildMissingDocumentRequirementItemsForScope({ organizationId, scope });
-    documents.missing += missingRequirementItems.length;
-
-    const jobSiteDocumentRows = jobSites.length ? await db.document.groupBy({
-      by: ["jobSiteId"],
-      where: { organizationId, archivedAt: null, jobSiteId: { in: jobSites.map((jobSite) => jobSite.id) }, status: { in: ATTENTION_DOCUMENT_STATUSES } },
-      _count: { _all: true },
-    }) : [];
-    const jobSiteChecklistRows = jobSites.length ? await db.checklist.groupBy({
-      by: ["jobSiteId"],
-      where: { organizationId, archivedAt: null, jobSiteId: { in: jobSites.map((jobSite) => jobSite.id) } },
-      _count: { _all: true },
-    }) : [];
-    const jobSiteDocumentCounts = countByNullableId(jobSiteDocumentRows, jobSites.map((jobSite) => jobSite.id));
-    const jobSiteChecklistCounts = countByNullableId(jobSiteChecklistRows, jobSites.map((jobSite) => jobSite.id));
-    const seenWorkers = new Set<string>();
-    const mappedWorkers: DashboardWorkerItem[] = scope.actorRole === "WORKER" && scope.linkedWorker
-      ? [{ id: scope.linkedWorker.id, displayName: scope.linkedWorker.displayName, status: scope.linkedWorker.status, documentsToReview: documents.missing + documents.expired + documents.expiringSoon + documents.toReview, openDeadlines }]
-      : assignedWorkers.flatMap(({ worker }) => {
-        if (seenWorkers.has(worker.id)) return [];
-        seenWorkers.add(worker.id);
-        return [{ id: worker.id, displayName: worker.displayName, status: worker.status, documentsToReview: 0, openDeadlines: 0 }];
-      });
-
-    await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "dashboard" });
-    const totalDocuments = Object.values(documents).reduce((total, value) => total + value, 0);
-    return {
-      generatedAt: now.toISOString(),
-      organization: {
-        name: context.support?.organization.name ?? context.company?.organization.name ?? "Azienda",
-        role: actorRole,
-      },
-      summary: {
-        documents,
-        openDeadlines,
-        activeJobSites: jobSites.length,
-        activeWorkers: mappedWorkers.length,
-        packagesReadyForReview: 0,
-        sharedPackages: 0,
-        recentEvidence: recentEvidenceRows.length,
-        unreadNotifications: 0,
-      },
-      deadlines: deadlines.map((deadline) => ({
-        id: deadline.id,
-        title: deadline.title,
-        dueDate: deadline.dueDate.toISOString(),
-        status: deadline.status,
-        sourceType: deadline.sourceType,
-        documentId: deadline.documentId,
-        workerId: deadline.workerId,
-        jobSiteId: deadline.jobSiteId,
-      })),
-      documentsToReview: [
-        ...missingRequirementItems.slice(0, DASHBOARD_LIMIT).map(missingRequirementToDashboardItem),
-        ...documentsToReview.map<DashboardDocumentAttentionItem>((document) => ({
-        id: document.id,
-        title: document.title,
-        status: document.status,
-        ownerType: document.ownerType,
-        ownerLabel: document.worker?.displayName ?? document.jobSite?.name ?? "Azienda",
-        expiryDate: toIso(document.expiryDate),
-        updatedAt: document.updatedAt.toISOString(),
-        nextAction: documentNextAction(document.status),
-        })),
-      ].slice(0, DASHBOARD_LIMIT),
-      jobSites: jobSites.map((jobSite, index) => ({
-        id: jobSite.id,
-        name: jobSite.name,
-        status: jobSite.status,
-        documentsToReview: jobSiteDocumentCounts[index] ?? 0,
-        openChecklists: jobSiteChecklistCounts[index] ?? 0,
-      })),
-      workers: mappedWorkers,
-      packages: [],
-      recentEvidence: recentEvidenceRows.map((evidence) => ({
-        id: evidence.id,
-        type: evidence.type,
-        title: evidence.title,
-        hasFile: Boolean(evidence.blobKey),
-        createdAt: evidence.createdAt.toISOString(),
-        jobSiteId: evidence.jobSiteId,
-      })),
-      notifications: [],
-      quickActions,
-      emptyStates: buildEmptyStates({ activeJobSites: jobSites.length, activeWorkers: mappedWorkers.length, totalDocuments, packageCount: 0 }),
-    };
-  }
-
-  const [
-    documentStatusRows,
-    openDeadlines,
-    activeJobSites,
-    activeWorkers,
-    packagesReadyForReview,
-    sharedPackages,
-    deadlines,
-    documentsToReview,
-    jobSites,
-    workers,
-    packages,
-    recentEvidenceRows,
-    notificationRows,
-    unreadNotifications,
-  ] = await Promise.all([
-    db.document.groupBy({
-      by: ["status"],
-      where: { organizationId, archivedAt: null },
-      _count: { _all: true },
-    }),
-    db.deadline.count({ where: { organizationId, archivedAt: null, status: { notIn: ["DONE", "ARCHIVED"] } } }),
-    db.jobSite.count({ where: { organizationId, archivedAt: null } }),
-    db.worker.count({ where: { organizationId, archivedAt: null } }),
-    db.documentPackage.count({ where: { organizationId, archivedAt: null, status: "READY_FOR_REVIEW" } }),
-    db.documentPackage.count({ where: { organizationId, archivedAt: null, status: "SHARED" } }),
-    db.deadline.findMany({
-      where: { organizationId, archivedAt: null, status: { notIn: ["DONE", "ARCHIVED"] } },
-      select: { id: true, title: true, dueDate: true, sourceType: true, status: true, documentId: true, workerId: true, jobSiteId: true },
-      orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
-      take: DASHBOARD_LIMIT,
-    }),
-    db.document.findMany({
-      where: { organizationId, archivedAt: null, status: { in: ATTENTION_DOCUMENT_STATUSES } },
-      select: {
-        id: true,
-        title: true,
-        status: true,
-        ownerType: true,
-        expiryDate: true,
-        updatedAt: true,
-        worker: { select: { displayName: true } },
-        jobSite: { select: { name: true } },
-      },
-      orderBy: [{ updatedAt: "desc" }],
-      take: DASHBOARD_LIMIT,
-    }),
-    db.jobSite.findMany({
-      where: { organizationId, archivedAt: null },
-      select: { id: true, name: true, status: true },
-      orderBy: [{ updatedAt: "desc" }, { name: "asc" }],
-      take: DASHBOARD_LIMIT,
-    }),
-    db.worker.findMany({
-      where: { organizationId, archivedAt: null },
-      select: { id: true, displayName: true, status: true },
-      orderBy: [{ displayName: "asc" }],
-      take: DASHBOARD_LIMIT,
-    }),
-    db.documentPackage.findMany({
-      where: { organizationId, archivedAt: null },
-      select: {
-        id: true,
-        title: true,
-        status: true,
-        updatedAt: true,
-        _count: { select: { items: true } },
-        shareLinks: {
-          where: { revokedAt: null, OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] },
-          select: { id: true },
-          take: 1,
-        },
-      },
-      orderBy: [{ updatedAt: "desc" }],
-      take: DASHBOARD_LIMIT,
-    }),
-    db.evidence.findMany({
-      where: { organizationId, archivedAt: null },
-      select: { id: true, type: true, title: true, blobKey: true, createdAt: true, jobSiteId: true },
-      orderBy: [{ createdAt: "desc" }],
-      take: DASHBOARD_LIMIT,
-    }),
-    db.notification.findMany({
-      where: { organizationId, dismissedAt: null, readAt: null, OR: [{ userId: null }, { userId: context.userId }] },
-      select: { id: true, type: true, severity: true, title: true, message: true, actionHref: true, createdAt: true },
-      orderBy: [{ severity: "desc" }, { createdAt: "desc" }],
-      take: 3,
-    }),
-    db.notification.count({
-      where: { organizationId, dismissedAt: null, readAt: null, OR: [{ userId: null }, { userId: context.userId }] },
-    }),
+  const [attentionResult, packageResult, deadlineResult] = await Promise.allSettled([
+    loadAttention({ organizationId, scope, actorRole, currentUserId: context.userId }),
+    canSeePackages ? loadPackages(organizationId, actorRole, now) : Promise.resolve([]),
+    loadDeadlines(organizationId, scope),
   ]);
 
-  const documents = emptyDocumentCounts();
-  for (const row of documentStatusRows) {
-    const key = documentCountKey(row.status);
-    if (key) documents[key] = row._count._all;
+  const errors: DashboardResponse["errors"] = [];
+  const attention = attentionResult.status === "fulfilled"
+    ? attentionResult.value
+    : { counts: emptyCounts(), total: 0, situations: [], contexts: [] };
+  if (attentionResult.status === "rejected") {
+    errors.push({ section: "attention", message: "Non riusciamo a caricare le situazioni operative. Riprova." });
+    errors.push({ section: "contexts", message: "I contesti non sono disponibili finche le situazioni non vengono ricaricate." });
   }
-  const missingRequirementItems = await buildMissingDocumentRequirementItemsForScope({ organizationId, scope });
-  documents.missing += missingRequirementItems.length;
+  const readyPackages = packageResult.status === "fulfilled" ? packageResult.value : [];
+  if (packageResult.status === "rejected") errors.push({ section: "sharing", message: "Non riusciamo a caricare i pacchetti. Riprova." });
+  const upcomingDeadlines = deadlineResult.status === "fulfilled" ? deadlineResult.value : [];
+  if (deadlineResult.status === "rejected") errors.push({ section: "deadlines", message: "Non riusciamo a caricare le prossime scadenze. Riprova." });
 
-  const jobSiteIds = jobSites.map((jobSite) => jobSite.id);
-  const workerIds = workers.map((worker) => worker.id);
-  const [jobSiteDocumentRows, jobSiteChecklistRows, workerDocumentRows, workerDeadlineRows] = await Promise.all([
-    jobSiteIds.length ? db.document.groupBy({
-      by: ["jobSiteId"],
-      where: { organizationId, archivedAt: null, jobSiteId: { in: jobSiteIds }, status: { in: ATTENTION_DOCUMENT_STATUSES } },
-      _count: { _all: true },
-    }) : Promise.resolve([]),
-    jobSiteIds.length ? db.checklist.groupBy({
-      by: ["jobSiteId"],
-      where: { organizationId, archivedAt: null, jobSiteId: { in: jobSiteIds } },
-      _count: { _all: true },
-    }) : Promise.resolve([]),
-    workerIds.length ? db.document.groupBy({
-      by: ["workerId"],
-      where: { organizationId, archivedAt: null, workerId: { in: workerIds }, status: { in: ATTENTION_DOCUMENT_STATUSES } },
-      _count: { _all: true },
-    }) : Promise.resolve([]),
-    workerIds.length ? db.deadline.groupBy({
-      by: ["workerId"],
-      where: { organizationId, archivedAt: null, workerId: { in: workerIds }, status: { notIn: ["DONE", "ARCHIVED"] } },
-      _count: { _all: true },
-    }) : Promise.resolve([]),
-  ]);
-
-  const jobSiteDocumentCounts = countByNullableId(jobSiteDocumentRows, jobSiteIds);
-  const jobSiteChecklistCounts = countByNullableId(jobSiteChecklistRows, jobSiteIds);
-  const workerDocumentCounts = countByNullableId(workerDocumentRows, workerIds);
-  const workerDeadlineCounts = countByNullableId(workerDeadlineRows, workerIds);
-
-  const mappedJobSites: DashboardJobSiteItem[] = jobSites.map((jobSite, index) => ({
-    id: jobSite.id,
-    name: jobSite.name,
-    status: jobSite.status,
-    documentsToReview: jobSiteDocumentCounts[index] ?? 0,
-    openChecklists: jobSiteChecklistCounts[index] ?? 0,
-  }));
-
-  const mappedWorkers: DashboardWorkerItem[] = workers.map((worker, index) => ({
-    id: worker.id,
-    displayName: worker.displayName,
-    status: worker.status,
-    documentsToReview: workerDocumentCounts[index] ?? 0,
-    openDeadlines: workerDeadlineCounts[index] ?? 0,
-  }));
-
-  const mappedPackages: DashboardPackageItem[] = packages.map((documentPackage) => ({
-    id: documentPackage.id,
-    title: documentPackage.title,
-    status: documentPackage.status,
-    itemCount: documentPackage._count.items,
-    hasActiveShareLink: documentPackage.shareLinks.length > 0,
-    updatedAt: documentPackage.updatedAt.toISOString(),
-  }));
-
-  const mappedEvidence: DashboardEvidenceItem[] = recentEvidenceRows.map((evidence) => ({
-    id: evidence.id,
-    type: evidence.type,
-    title: evidence.title,
-    hasFile: Boolean(evidence.blobKey),
-    createdAt: evidence.createdAt.toISOString(),
-    jobSiteId: evidence.jobSiteId,
-  }));
-
-  const mappedNotifications: DashboardNotificationItem[] = notificationRows.map((notification) => ({
-    id: notification.id,
-    type: notification.type,
-    severity: notification.severity,
-    title: notification.title,
-    message: notification.message,
-    actionHref: notification.actionHref,
-    createdAt: notification.createdAt.toISOString(),
-  }));
-
-  const totalDocuments = Object.values(documents).reduce((total, value) => total + value, 0);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "dashboard" });
 
   return {
@@ -471,46 +532,26 @@ export async function getDashboardData(): Promise<DashboardResponse> {
     organization: {
       name: context.support?.organization.name ?? context.company?.organization.name ?? "Azienda",
       role: actorRole,
+      roleLabel: roleLabels[actorRole],
+      viewLabel: scope.fullAccess ? "Tutta l'azienda" : actorRole === "SITE_MANAGER" ? "Cantieri assegnati" : "I miei dati",
     },
-    summary: {
-      documents,
-      openDeadlines,
-      activeJobSites,
-      activeWorkers,
-      packagesReadyForReview,
-      sharedPackages,
-      recentEvidence: mappedEvidence.length,
-      unreadNotifications,
+    attention: {
+      total: attention.total,
+      counts: attention.counts,
+      situations: attention.situations,
     },
-    deadlines: deadlines.map((deadline) => ({
-      id: deadline.id,
-      title: deadline.title,
-      dueDate: deadline.dueDate.toISOString(),
-      status: deadline.status,
-      sourceType: deadline.sourceType,
-      documentId: deadline.documentId,
-      workerId: deadline.workerId,
-      jobSiteId: deadline.jobSiteId,
-    })),
-    documentsToReview: [
-      ...missingRequirementItems.slice(0, DASHBOARD_LIMIT).map(missingRequirementToDashboardItem),
-      ...documentsToReview.map<DashboardDocumentAttentionItem>((document) => ({
-      id: document.id,
-      title: document.title,
-      status: document.status,
-      ownerType: document.ownerType,
-      ownerLabel: document.worker?.displayName ?? document.jobSite?.name ?? "Azienda",
-      expiryDate: toIso(document.expiryDate),
-      updatedAt: document.updatedAt.toISOString(),
-      nextAction: documentNextAction(document.status),
-      })),
-    ].slice(0, DASHBOARD_LIMIT),
-    jobSites: mappedJobSites,
-    workers: mappedWorkers,
-    packages: mappedPackages,
-    recentEvidence: mappedEvidence,
-    notifications: mappedNotifications,
-    quickActions,
-    emptyStates: buildEmptyStates({ activeJobSites, activeWorkers, totalDocuments, packageCount: mappedPackages.length }),
+    readyPackages,
+    upcomingDeadlines,
+    contexts: attention.contexts,
+    availability: {
+      sharing: canSeePackages,
+      contexts: true,
+    },
+    firstUse: errors.length === 0
+      && (actorRole === "OWNER" || actorRole === "ADMIN")
+      && attention.total === 0
+      && readyPackages.length === 0
+      && upcomingDeadlines.length === 0,
+    errors,
   };
 }

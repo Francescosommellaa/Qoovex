@@ -17,6 +17,7 @@ import {
   WarningCircle,
 } from "@qoovex/ui";
 import styles from "./situazione-aperta.module.css";
+import { DashboardOperativaSpecimen } from "./DashboardOperativaSpecimen";
 
 const stateGroups = [
   {
@@ -188,6 +189,8 @@ export default function OpenSituationPage() {
         </ol>
         <p className={styles.motionNote}>Con movimento ridotto, i cinque passaggi restano statici e completamente leggibili.</p>
       </section>
+
+      <DashboardOperativaSpecimen />
     </main>
   );
 }

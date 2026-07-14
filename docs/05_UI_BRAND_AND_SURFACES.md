@@ -116,6 +116,12 @@ Il marketing non deve sembrare il workspace ingrandito. È il luogo in cui la Tr
 
 Il workspace non usa la traccia su ogni elemento. La applica quando più informazioni devono essere lette come una situazione unica.
 
+### Dashboard operativa
+
+La dashboard traduce la Traccia Operativa in una coda decisionale. Il primo viewport mostra il numero di situazioni aperte, la priorità più alta, il motivo, la responsabilità derivata e il terminale d'azione. La coda visualizza al massimo cinque situazioni; pacchetti pronti, scadenze future e distribuzione per contesto restano separati per non duplicare lo stesso problema.
+
+Le sette summary card, le quick action disabilitate, le notifiche autonome, le prove recenti e le liste generiche di lavoratori e cantieri non appartengono più alla dashboard. Su mobile l'azione segue immediatamente la conseguenza; su desktop la coda principale governa una colonna e condivisione/scadenze formano il solo livello secondario. Gli stati di caricamento, errore parziale, errore completo, primo accesso, accesso limitato e contenuto lungo sono provati in Sirio.
+
 ### Mobile
 
 - Varianza 3/10, densità 6/10.

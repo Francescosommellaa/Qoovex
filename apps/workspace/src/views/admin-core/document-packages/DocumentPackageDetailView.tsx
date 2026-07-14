@@ -32,6 +32,7 @@ export function DocumentPackageDetailView({
   checklists,
   shareLinks,
   capabilities,
+  returnToDashboard = false,
 }: {
   documentPackage: WorkspaceDocumentPackageRecord;
   jobSites: WorkspaceJobSiteRecord[];
@@ -41,6 +42,7 @@ export function DocumentPackageDetailView({
   checklists: WorkspaceChecklistRecord[];
   shareLinks: WorkspaceShareLinkRecord[];
   capabilities: WorkspaceCapabilities;
+  returnToDashboard?: boolean;
 }) {
   const items = documentPackage.items ?? [];
   return (
@@ -48,7 +50,7 @@ export function DocumentPackageDetailView({
       <WorkspacePageHeader
         title={documentPackage.title}
         description={`${jobSiteLabel(documentPackage.jobSiteId, jobSites)} - Pacchetto pronto per revisione quando hai incluso gli elementi necessari.`}
-        action={<Link className={styles.ghostButton} href="/document-packages">Torna ai pacchetti</Link>}
+        action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/document-packages"}>{returnToDashboard ? "Torna alla dashboard" : "Torna ai pacchetti"}</Link>}
       />
       <div className={styles.splitGrid}>
         <div className={styles.grid}>
