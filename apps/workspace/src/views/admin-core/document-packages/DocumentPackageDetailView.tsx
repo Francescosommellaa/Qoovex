@@ -6,7 +6,7 @@ import { DocumentPackageItemsList } from "./DocumentPackageItemsList";
 import { ShareLinkCreateForm } from "./ShareLinkCreateForm";
 import { ShareLinksPanel } from "./ShareLinksPanel";
 import styles from "../AdminCore.module.css";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { documentPackageStatusLabels, formatDate, statusTone } from "@/views/workspace/workspace-format";
 import type {
   WorkspaceCapabilities,
@@ -60,7 +60,7 @@ export function DocumentPackageDetailView({
                 <small>Aggiornato: {formatDate(documentPackage.updatedAt)}</small>
               </div>
               <div className={styles.actions}>
-                <WorkspaceStatusBadge label={documentPackageStatusLabels[documentPackage.status]} tone={statusTone(documentPackage.status)} />
+                <WorkspaceState label={documentPackageStatusLabels[documentPackage.status]} tone={statusTone(documentPackage.status)} />
                 {capabilities.canManagePackages ? <DocumentPackageArchiveButton packageId={documentPackage.id} redirectToList /> : null}
               </div>
             </article>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { WorkerArchiveButton } from "./WorkerArchiveButton";
 import { WorkerForm } from "./WorkerForm";
 import styles from "../AdminCore.module.css";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { deadlineStatusLabels, documentStatusLabels, formatDate, recordStatusLabels, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
@@ -21,7 +21,7 @@ export function WorkerDetailView({ worker, documents, deadlines, capabilities }:
                 <small>{worker.notes || "Nessuna nota operativa registrata."}</small>
               </div>
               <div className={styles.actions}>
-                <WorkspaceStatusBadge label={recordStatusLabels[worker.status]} tone={statusTone(worker.status)} />
+                <WorkspaceState label={recordStatusLabels[worker.status]} tone={statusTone(worker.status)} />
                 {capabilities.canManageCore ? <WorkerArchiveButton workerId={worker.id} redirectToList /> : null}
               </div>
             </article>
@@ -36,7 +36,7 @@ export function WorkerDetailView({ worker, documents, deadlines, capabilities }:
                       <span>Scadenza: {formatDate(document.expiryDate)}</span>
                     </div>
                     <div className={styles.actions}>
-                      <WorkspaceStatusBadge label={documentStatusLabels[document.status]} tone={statusTone(document.status)} />
+                      <WorkspaceState label={documentStatusLabels[document.status]} tone={statusTone(document.status)} />
                       <Link className={styles.linkButton} href={`/documents/${document.id}`}>Apri</Link>
                     </div>
                   </article>
@@ -53,7 +53,7 @@ export function WorkerDetailView({ worker, documents, deadlines, capabilities }:
                       <strong>{deadline.title}</strong>
                       <span>{formatDate(deadline.dueDate)}</span>
                     </div>
-                    <WorkspaceStatusBadge label={deadlineStatusLabels[deadline.status]} tone={statusTone(deadline.status)} />
+                    <WorkspaceState label={deadlineStatusLabels[deadline.status]} tone={statusTone(deadline.status)} />
                   </article>
                 ))}
               </div>

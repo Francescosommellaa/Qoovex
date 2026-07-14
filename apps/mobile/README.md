@@ -1,19 +1,18 @@
 # Mobile App
 
-Placeholder per la futura app mobile nativa Qoovex.
+Contratto architetturale per una futura app nativa. Nessuno stack nativo viene introdotto in questa fase: l'esperienza mobile corrente appartiene alle superfici responsive di `apps/web` e `apps/workspace`.
 
-Responsabilita previste:
+## Contratto futuro
 
-- esperienza mobile nativa, quando avviata;
-- consumo di contratti condivisi;
-- flussi operativi coerenti con il prodotto.
+- riusare i ruoli cromatici e tipografici di Traccia Operativa senza copiare CSS web;
+- preservare la sequenza `stato → oggetto → conseguenza → responsabile → prossima azione`;
+- rendere il mobile sequenziale, non una compressione del desktop;
+- mantenere vuoto indicizzato, traccia e terminale come grammatica, adattandoli alle convenzioni native;
+- importare contratti condivisi da `packages/types` e utility condivise solo quando esistono.
 
-Divieti:
+## Confini
 
-- niente logica condivisa locale;
-- niente Prisma;
-- niente servizi server workspace;
-- niente geolocalizzazione continua non approvata;
-- niente duplicazione di tipi dominio.
-
-Quando verra avviata, dovra importare da `packages/types` e, se esistera, da `packages/utils`.
+- niente Prisma o servizi server workspace;
+- niente duplicazione di tipi dominio;
+- niente geolocalizzazione continua, sorveglianza o funzionalità non approvate;
+- nessuna promessa di parità nativa finché l'app non viene realmente avviata.

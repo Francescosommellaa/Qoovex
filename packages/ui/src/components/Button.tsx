@@ -21,11 +21,11 @@ type ButtonElementProps = ButtonBaseProps & {
 
 export type ButtonProps = ButtonLinkProps | ButtonElementProps;
 
-const baseClassName = "qv-button inline-flex min-h-qv-control items-center justify-center gap-qv-2 whitespace-nowrap rounded-qv-md border border-transparent px-qv-4 font-semibold no-underline transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease-qv-standard active:translate-y-px motion-reduce:transition-none disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-60";
+const baseClassName = "qv-button inline-flex min-h-qv-control items-center justify-center gap-qv-2 whitespace-nowrap rounded-qv-sm border border-transparent px-qv-4 font-semibold no-underline transition-[background-color,border-color,color,transform] duration-150 ease-qv-standard motion-reduce:transition-none disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-60";
 
 const variantClassNames: Record<ButtonVariant, string> = {
   primary: "bg-qv-accent text-qv-on-accent hover:bg-qv-accent-strong",
-  secondary: "bg-qv-surface text-qv-content shadow-qv-sm hover:bg-qv-surface-muted border-qv-border",
+  secondary: "bg-qv-surface text-qv-content hover:bg-qv-surface-muted border-qv-border-strong",
   ghost: "bg-transparent text-qv-accent-strong hover:bg-qv-accent-soft",
   danger: "bg-qv-danger text-qv-on-accent hover:bg-qv-danger/90",
 };

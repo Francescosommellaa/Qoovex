@@ -56,6 +56,38 @@
   gap: 16px;
 }
 
+.surface {
+  display: grid;
+  gap: 14px;
+  padding: 18px 0 2px;
+  border-top: 1px solid var(--color-qv-border-strong);
+}
+
+.surfaceInfo {
+  border-top-color: var(--color-qv-info);
+}
+
+.surfaceWarning {
+  border-top-color: var(--color-qv-warning);
+}
+
+.surfaceDefault {
+  border-top-color: var(--color-qv-border-strong);
+}
+
+.state {
+  width: fit-content;
+  padding: 4px 0 4px 10px;
+  border-left: 3px solid currentColor;
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.statePositive { color: var(--color-qv-positive); }
+.stateWarning { color: var(--color-qv-warning); }
+.stateDanger { color: var(--color-qv-danger); }
+.stateNeutral { color: var(--color-qv-content-muted); }
+
 .actions > * {
   flex: 1 1 170px;
 }
@@ -63,7 +95,6 @@
 .codeBlock {
   overflow-wrap: anywhere;
   border: 1px solid var(--color-qv-border);
-  border-radius: var(--radius-qv-sm);
   background: var(--color-qv-surface-muted);
   padding: 12px;
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
@@ -86,7 +117,7 @@
 }
 
 .dangerZone {
-  border-color: color-mix(in srgb, var(--color-qv-danger) 28%, var(--color-qv-border));
+  border-top-color: var(--color-qv-danger);
 }
 
 @media (min-width: 760px) {

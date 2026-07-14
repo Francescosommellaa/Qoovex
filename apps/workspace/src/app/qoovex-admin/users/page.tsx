@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AccessError } from "@shared/server/access-errors";
 import { listPlatformUsers } from "@shared/server/platform-admin-service";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceEmptyState, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceEmptyState, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { PlatformAdminAccessState } from "@/views/platform-admin/PlatformAdminAccessState";
 import styles from "@/views/platform-admin/PlatformAdmin.module.css";
 
@@ -30,7 +30,7 @@ export default async function PlatformUsersPage({ searchParams }: { searchParams
                 <article className={styles.record} key={user.id}>
                   <div className={styles.recordHeader}>
                     <div><h2>{[user.firstName, user.lastName].filter(Boolean).join(" ") || user.username}</h2><p className={styles.meta}>{user.email} · @{user.username}</p></div>
-                    <WorkspaceStatusBadge label={user.suspendedAt ? "Sospeso" : user.platformRole === "SUPER_ADMIN" ? "Operatore Qoovex" : "Attivo"} tone={user.suspendedAt ? "danger" : user.platformRole === "SUPER_ADMIN" ? "info" : "good"} />
+                    <WorkspaceState label={user.suspendedAt ? "Sospeso" : user.platformRole === "SUPER_ADMIN" ? "Operatore Qoovex" : "Attivo"} tone={user.suspendedAt ? "danger" : user.platformRole === "SUPER_ADMIN" ? "info" : "good"} />
                   </div>
                   <p className="qv-text-muted">{user.organizationMembership?.revokedAt === null ? `${user.organizationMembership.organization.name} (${user.organizationMembership.role})` : "Nessuna azienda attiva"}</p>
                   <div className={styles.actions}><Link className={styles.linkButton} href={`/qoovex-admin/users/${user.id}`}>Apri dettaglio</Link></div>

@@ -1,20 +1,25 @@
 .page {
   display: grid;
-  gap: 18px;
+  gap: 20px;
 }
 
 .pageHeader {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  padding: 4px 0 18px 18px;
+  border-left: 3px solid var(--color-qv-content);
+  border-bottom: 1px solid var(--color-qv-border);
 }
 
 .pageHeader h1 {
   margin: 0;
   color: var(--color-qv-content);
-  font-size: 2rem;
-  line-height: 1.02;
-  letter-spacing: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 8vw, 3.4rem);
+  font-weight: 720;
+  line-height: 0.96;
+  letter-spacing: -0.045em;
 }
 
 .pageHeader p {
@@ -22,37 +27,37 @@
   margin: 0;
   color: var(--color-qv-content-muted);
   font-size: 0.94rem;
-  font-weight: 620;
+  font-weight: 560;
 }
 
 .panel,
 .emptyState,
 .accessState {
-  border: 1px solid var(--color-qv-border);
-  border-radius: var(--radius-qv-sm);
-  background: var(--color-qv-surface);
-  box-shadow: var(--shadow-qv-md);
+  background: transparent;
 }
 
 .panel {
-  padding: 16px;
+  padding: 18px 0 2px;
+  border-top: 1px solid var(--color-qv-border-strong);
 }
 
 .panelHeader {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 14px;
+  display: grid;
+  gap: 6px;
+  margin-bottom: 16px;
 }
 
 .panelHeader h2 {
   margin: 0;
-  font-size: 1.08rem;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 720;
   line-height: 1.2;
-  letter-spacing: 0;
+  letter-spacing: -0.015em;
 }
 
 .panelHeader p {
+  max-width: 62rem;
   margin: 0;
   color: var(--color-qv-content-muted);
   font-size: 0.84rem;
@@ -60,13 +65,16 @@
 
 .emptyState,
 .accessState {
-  padding: 18px;
+  padding: 18px 18px 18px 22px;
+  border-left: 3px dashed var(--color-qv-border-strong);
+  background: var(--color-qv-surface-muted);
 }
 
 .emptyState strong,
 .accessState h1 {
   display: block;
   margin: 0;
+  font-family: var(--font-sans);
   font-size: 1.08rem;
   line-height: 1.2;
 }
@@ -78,54 +86,29 @@
   font-size: 0.9rem;
 }
 
-.badge {
+.state {
   display: inline-flex;
   width: fit-content;
   min-height: 28px;
   align-items: center;
-  border-radius: var(--radius-qv-pill);
-  padding: 5px 10px;
+  padding: 4px 0 4px 10px;
+  border-left: 3px solid currentColor;
   font-size: 0.76rem;
   font-weight: 760;
+  line-height: 1.25;
 }
 
-.toneDanger {
-  background: var(--color-qv-danger-soft);
-  color: var(--color-qv-danger);
-}
-
-.toneWarning {
-  background: var(--color-qv-warning-soft);
-  color: var(--color-qv-warning);
-}
-
-.toneInfo {
-  background: var(--color-qv-info-soft);
-  color: var(--color-qv-info);
-}
-
-.toneGood {
-  background: var(--color-qv-positive-soft);
-  color: var(--color-qv-accent-strong);
-}
-
-.toneNeutral {
-  background: var(--color-qv-surface-muted);
-  color: var(--color-qv-content-muted);
-}
+.toneDanger { color: var(--color-qv-danger); }
+.toneWarning { color: var(--color-qv-warning); }
+.toneInfo { color: var(--color-qv-info); }
+.toneGood { color: var(--color-qv-positive); }
+.toneNeutral { color: var(--color-qv-content-muted); }
 
 @media (min-width: 760px) {
   .pageHeader {
     flex-direction: row;
     align-items: end;
     justify-content: space-between;
-  }
-
-  .pageHeader h1 {
-    font-size: 2.7rem;
-  }
-
-  .panel {
-    padding: 18px;
+    padding-left: 22px;
   }
 }

@@ -4,7 +4,7 @@ import { ChecklistForm } from "./ChecklistForm";
 import { ChecklistItemActions } from "./ChecklistItemActions";
 import { ChecklistItemForm } from "./ChecklistItemForm";
 import styles from "../AdminCore.module.css";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { checklistItemStatusLabels, formatDate, recordStatusLabels, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceChecklistRecord, WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
 
@@ -39,7 +39,7 @@ export function ChecklistDetailView({
                 <small>Aggiornata: {formatDate(checklist.updatedAt)}</small>
               </div>
               <div className={styles.actions}>
-                <WorkspaceStatusBadge label={recordStatusLabels[checklist.status]} tone={statusTone(checklist.status)} />
+                <WorkspaceState label={recordStatusLabels[checklist.status]} tone={statusTone(checklist.status)} />
                 {capabilities.canManageChecklists ? <ChecklistArchiveButton checklistId={checklist.id} redirectToList /> : null}
               </div>
             </article>
@@ -55,7 +55,7 @@ export function ChecklistDetailView({
                       <small>Completata: {formatDate(item.completedAt)}{item.completedById ? ` - Da: ${item.completedById}` : ""}</small>
                     </div>
                     <div className={styles.actions}>
-                      <WorkspaceStatusBadge label={checklistItemStatusLabels[item.status]} tone={statusTone(item.status)} />
+                      <WorkspaceState label={checklistItemStatusLabels[item.status]} tone={statusTone(item.status)} />
                       <ChecklistItemActions
                         checklistId={checklist.id}
                         itemId={item.id}

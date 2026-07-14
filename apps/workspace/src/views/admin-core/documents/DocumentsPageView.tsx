@@ -3,7 +3,7 @@ import { DocumentForm } from "./DocumentForm";
 import { DocumentArchiveButton } from "./DocumentArchiveButton";
 import { DocumentRequirementsPanel } from "./DocumentRequirementsPanel";
 import styles from "../AdminCore.module.css";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { documentStatusLabels, formatDate, ownerLabel, statusTone } from "@/views/workspace/workspace-format";
 import type { MissingDocumentRequirementItem } from "@qoovex/types";
 import type { WorkspaceCapabilities, WorkspaceDocumentRecord, WorkspaceDocumentTypeRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
@@ -53,7 +53,7 @@ export function DocumentsPageView({
                   <small>Target: {item.targetType === "ORGANIZATION" ? "Azienda" : item.targetType === "WORKER" ? "Lavoratore" : "Cantiere"}</small>
                 </div>
                 <div className={styles.actions}>
-                  <WorkspaceStatusBadge label="Mancante" tone="danger" />
+                  <WorkspaceState label="Mancante" tone="danger" />
                 </div>
               </article>
             ))}
@@ -83,7 +83,7 @@ export function DocumentsPageView({
                   <small>Aggiornato: {formatDate(document.updatedAt)}</small>
                 </div>
                 <div className={styles.actions}>
-                  <WorkspaceStatusBadge label={documentStatusLabels[document.status]} tone={statusTone(document.status)} />
+                  <WorkspaceState label={documentStatusLabels[document.status]} tone={statusTone(document.status)} />
                   <Link className={styles.linkButton} href={`/documents/${document.id}`}>Apri</Link>
                   {capabilities.canManageCore ? <DocumentArchiveButton documentId={document.id} /> : null}
                 </div>

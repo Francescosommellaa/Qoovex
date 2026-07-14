@@ -2,7 +2,7 @@ import Link from "next/link";
 import { WorkerArchiveButton } from "./WorkerArchiveButton";
 import { WorkerForm } from "./WorkerForm";
 import styles from "../AdminCore.module.css";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { recordStatusLabels, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
@@ -23,7 +23,7 @@ export function WorkersPageView({ workers, capabilities }: { workers: WorkspaceW
                   <small>{worker.email || worker.phone || "Contatto non registrato"}</small>
                 </div>
                 <div className={styles.actions}>
-                  <WorkspaceStatusBadge label={recordStatusLabels[worker.status]} tone={statusTone(worker.status)} />
+                  <WorkspaceState label={recordStatusLabels[worker.status]} tone={statusTone(worker.status)} />
                   <Link className={styles.linkButton} href={`/workers/${worker.id}`}>Apri</Link>
                   {capabilities.canManageCore ? <WorkerArchiveButton workerId={worker.id} /> : null}
                 </div>

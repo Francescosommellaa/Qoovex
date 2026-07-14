@@ -10,7 +10,7 @@ import {
   WorkspacePage,
   WorkspacePageHeader,
   WorkspacePanel,
-  WorkspaceStatusBadge,
+  WorkspaceState,
 } from "@/views/workspace/WorkspacePrimitives";
 import {
   documentPackageItemTypeLabels,
@@ -61,7 +61,7 @@ export function SharedDocumentPackagePageView({ token, documentPackage }: { toke
                     {item.originalFileName ? <span>{item.originalFileName}{item.size != null ? ` - ${fileSizeLabel(item.size)}` : ""}</span> : null}
                   </div>
                   <div className={styles.actions}>
-                    {label ? <WorkspaceStatusBadge label={label} tone={statusTone(item.status ?? "")} /> : null}
+                    {label ? <WorkspaceState label={label} tone={statusTone(item.status ?? "")} /> : null}
                     {item.hasFile ? (
                       <a className={styles.linkButton} href={buildSharedDocumentPackageDownloadPath(token, item.id)}>
                         Scarica file

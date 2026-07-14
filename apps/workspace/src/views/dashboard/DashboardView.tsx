@@ -120,7 +120,7 @@ function DashboardDeadlinesList({ deadlines }: { deadlines: DashboardDeadlineIte
             <strong>{deadline.title}</strong>
             <span>Scadenza registrata: {formatDate(deadline.dueDate)}</span>
           </div>
-          <span className={`${styles.statusPill} ${attentionTone(deadline.status)}`}>{deadline.status === "EXPIRED" ? "Scaduto" : deadline.status === "EXPIRING_SOON" ? "In scadenza" : "Futura"}</span>
+          <span className={`${styles.stateText} ${attentionTone(deadline.status)}`}>{deadline.status === "EXPIRED" ? "Scaduto" : deadline.status === "EXPIRING_SOON" ? "In scadenza" : "Futura"}</span>
         </article>
       ))}
     </div>
@@ -138,7 +138,7 @@ function DashboardDocumentsList({ documents }: { documents: DashboardDocumentAtt
             <span>{document.ownerLabel} - {document.expiryDate ? `Scadenza ${formatDate(document.expiryDate)}` : "Scadenza non registrata"}</span>
             <small>{document.nextAction}</small>
           </div>
-          <span className={`${styles.statusPill} ${attentionTone(document.status)}`}>{documentStatusLabels[document.status]}</span>
+          <span className={`${styles.stateText} ${attentionTone(document.status)}`}>{documentStatusLabels[document.status]}</span>
         </article>
       ))}
     </div>
@@ -185,7 +185,7 @@ function DashboardPackagesList({ packages }: { packages: DashboardPackageItem[] 
             <strong>{documentPackage.title}</strong>
             <span>{documentPackage.itemCount} elementi inclusi - aggiornato {formatDate(documentPackage.updatedAt)}</span>
           </div>
-          <span className={`${styles.statusPill} ${attentionTone(documentPackage.status)}`}>
+          <span className={`${styles.stateText} ${attentionTone(documentPackage.status)}`}>
             {documentPackage.hasActiveShareLink ? "Link attivo" : packageStatusLabels[documentPackage.status]}
           </span>
         </article>

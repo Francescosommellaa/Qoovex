@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AccessError } from "@shared/server/access-errors";
 import { listRuntimeErrors } from "@shared/server/platform-admin-service";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceEmptyState, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceEmptyState, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { PlatformAdminAccessState } from "@/views/platform-admin/PlatformAdminAccessState";
 import { RuntimeErrorAction } from "@/views/platform-admin/RuntimeErrorAction";
 import styles from "@/views/platform-admin/PlatformAdmin.module.css";
@@ -24,7 +24,7 @@ export default async function PlatformErrorsPage({ searchParams }: { searchParam
           {data.errors.length === 0 ? <WorkspaceEmptyState title="Nessun errore" description="Non risultano eventi per il filtro selezionato." /> : (
             <div className={styles.recordList}>{data.errors.map((error) => (
               <article className={styles.record} key={error.id}>
-                <div className={styles.recordHeader}><div><h2>{error.errorName}</h2><p className={styles.meta}>{error.source} · {error.requestMethod ?? "-"} {error.routePath ?? "route non disponibile"}</p></div><WorkspaceStatusBadge label={error.status === "OPEN" ? "Aperto" : "Risolto"} tone={error.status === "OPEN" ? "danger" : "good"} /></div>
+                <div className={styles.recordHeader}><div><h2>{error.errorName}</h2><p className={styles.meta}>{error.source} · {error.requestMethod ?? "-"} {error.routePath ?? "route non disponibile"}</p></div><WorkspaceState label={error.status === "OPEN" ? "Aperto" : "Risolto"} tone={error.status === "OPEN" ? "danger" : "good"} /></div>
                 <p>{error.message}</p>
                 <p className="qv-text-muted">{error.occurrenceCount} occorrenze · ultima {error.lastSeenAt.toLocaleString("it-IT")}</p>
                 {error.stackPreview ? <details><summary>Stack sanitizzato</summary><pre className={styles.codeBlock}>{error.stackPreview}</pre></details> : null}

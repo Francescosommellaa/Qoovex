@@ -18,7 +18,7 @@ export function IconButton({ children, className, tone = "neutral", type = "butt
     <button
       {...props}
       className={classNames(
-        "inline-flex size-qv-control items-center justify-center rounded-qv-md border transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease-qv-standard active:translate-y-px motion-reduce:transition-none disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-60",
+        "inline-flex size-qv-control items-center justify-center rounded-qv-sm border transition-[background-color,border-color,color,transform] duration-150 ease-qv-standard active:translate-y-px motion-reduce:transition-none disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-60",
         toneClassNames[tone],
         className,
       )}

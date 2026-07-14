@@ -60,12 +60,12 @@ if (trackingScriptPattern.test(webSources)) {
   throw new Error("apps/web contiene riferimenti a tracking non previsto.");
 }
 
-if (!marketingLayoutSource.includes('<html lang="it" data-theme="light">')) {
-  throw new Error("apps/web deve bloccare esplicitamente il sito marketing sul tema light.");
+if (!marketingLayoutSource.includes('<html lang="it">')) {
+  throw new Error("apps/web deve dichiarare la lingua italiana sul documento.");
 }
 
-if (webSources.includes('data-theme="dark"') || webSources.includes("prefers-color-scheme")) {
-  throw new Error("apps/web non puo contenere un tema dark o dipendere dal tema di sistema.");
+if (webSources.includes("data-theme") || webSources.includes("prefers-color-scheme")) {
+  throw new Error("apps/web deve restare light-first senza selettori o dipendenze di tema.");
 }
 
 if (webSources.includes("@qoovex/db") || sirioSources.includes("@qoovex/db")) {
@@ -99,11 +99,13 @@ for (const requiredToken of [
   "--container-qv-wide",
   "--text-qv-display",
   "--color-qv-focus",
-  "--color-qv-surface-raised",
-  "--color-qv-surface-sunken",
-  "--shadow-qv-control",
-  "--shadow-qv-pressed",
-  "[data-theme=\"dark\"]",
+  "--color-qv-canvas-deep",
+  "--color-qv-surface-muted",
+  "--color-qv-border-strong",
+  "--color-qv-accent-strong",
+  "--shadow-qv-overlay",
+  "--qv-trace-color",
+  "--qv-terminal-width",
   '"General Sans"',
   '"Cabinet Grotesk"',
 ]) {
@@ -118,8 +120,22 @@ for (const obsoleteSizeToken of ["--spacing-qv-9:", "--spacing-qv-10:", "--spaci
   }
 }
 
-if (tokenSource.includes("prefers-color-scheme")) {
-  throw new Error("La fondazione deve usare light come default; il dark richiede data-theme esplicito.");
+for (const retiredToken of [
+  "surface-raised",
+  "surface-sunken",
+  "shadow-qv-control",
+  "shadow-qv-pressed",
+  "radius-qv-pill",
+  "z-index-qv-raised",
+  "[data-theme=\"dark\"]",
+]) {
+  if (tokenSource.includes(retiredToken) || baseSource.includes(retiredToken)) {
+    throw new Error(`Fondazione legacy ancora presente: ${retiredToken}`);
+  }
+}
+
+if (tokenSource.includes("prefers-color-scheme") || uiSources.includes("data-theme")) {
+  throw new Error("La fondazione deve essere esclusivamente light-first.");
 }
 
 for (const requiredBaseRule of [
@@ -127,8 +143,10 @@ for (const requiredBaseRule of [
   "text-size-adjust: 100%",
   "prefers-reduced-motion",
   "forced-colors: active",
-  ".qv-surface-raised",
-  ".qv-surface-sunken",
+  ".qv-trace",
+  ".qv-trace-node",
+  '[data-kind="gap"]',
+  '[data-kind="terminal"]',
   ".qv-text-muted",
 ]) {
   if (!baseSource.includes(requiredBaseRule)) {
@@ -174,6 +192,25 @@ if (/#[0-9a-f]{3,8}\b|rgba?\(/i.test(consumerCssSources)) {
 
 if (/border-radius:\s*(?:[0-9.]+(?:px|rem)|999px)/i.test(consumerCssSources)) {
   throw new Error("I CSS delle app contengono raggi hardcoded invece della scala condivisa.");
+}
+
+for (const retiredExport of ["Card", "Panel", "Badge", "Status"]) {
+  const retiredFile = join(root, "packages", "ui", "src", "components", `${retiredExport}.tsx`);
+  if (existsSync(retiredFile) || new RegExp(`export\\s+(?:type\\s+)?\\{[^}]*\\b${retiredExport}\\b`).test(uiSources)) {
+    throw new Error(`Primitiva legacy ancora pubblica: ${retiredExport}`);
+  }
+}
+
+for (const retiredConsumerPattern of [
+  "WorkspaceStatusBadge",
+  "statusPill",
+  "qv-card",
+  "surface-raised",
+  "surface-sunken",
+]) {
+  if (webSources.includes(retiredConsumerPattern) || sirioSources.includes(retiredConsumerPattern) || workspaceSources.includes(retiredConsumerPattern)) {
+    throw new Error(`Consumer legacy ancora presente: ${retiredConsumerPattern}`);
+  }
 }
 
 const workspaceGlobalSource = readFileSync(join(root, "apps", "workspace", "src", "app", "globals.css"), "utf8");

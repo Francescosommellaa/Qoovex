@@ -2,7 +2,7 @@ import { EvidenceArchiveButton } from "./EvidenceArchiveButton";
 import { EvidenceForm } from "./EvidenceForm";
 import { EvidenceUpdateForm } from "./EvidenceUpdateForm";
 import styles from "../AdminCore.module.css";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { evidenceTypeLabels, fileSizeLabel, formatDate, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceChecklistItemRecord, WorkspaceChecklistRecord, WorkspaceEvidenceRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
@@ -61,7 +61,7 @@ export function EvidencePageView({
                   <small>{formatDate(item.createdAt)}{item.originalFileName ? ` - ${item.originalFileName} (${item.size ? fileSizeLabel(item.size) : "dimensione non registrata"})` : ""}</small>
                 </div>
                 <div className={styles.actions}>
-                  <WorkspaceStatusBadge label={evidenceTypeLabels[item.type]} tone={item.type === "NOTE" ? "info" : "good"} />
+                  <WorkspaceState label={evidenceTypeLabels[item.type]} tone={item.type === "NOTE" ? "info" : "good"} />
                   {item.hasFile ? <a className={styles.linkButton} href={`/api/evidence/${item.id}/download`}>Scarica</a> : null}
                   {capabilities.canDeleteEvidence ? <EvidenceArchiveButton evidenceId={item.id} /> : null}
                 </div>

@@ -1,5 +1,5 @@
 import type { BlobOrphanDryRunResponse, DataControlJobListResponse, DataInventoryResponse, DataRecordCount, DataRetentionOverviewResponse } from "@qoovex/types";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import styles from "../AdminCore.module.css";
 import { DataControlActionsPanel } from "./DataControlActionsPanel";
 
@@ -113,7 +113,7 @@ export function DataControlPageView({
                   <span>{candidate.description}</span>
                 </div>
                 <div className={styles.actions}>
-                  <WorkspaceStatusBadge label={String(candidate.count)} tone={candidate.count > 0 ? "warning" : "neutral"} />
+                  <WorkspaceState label={String(candidate.count)} tone={candidate.count > 0 ? "warning" : "neutral"} />
                 </div>
               </article>
             ))}

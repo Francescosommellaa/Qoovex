@@ -1,5 +1,5 @@
 .authPage {
-  min-height: calc(100vh - 130px);
+  min-height: calc(100dvh - 130px);
   display: grid;
   align-items: center;
   justify-items: center;
@@ -9,10 +9,10 @@
 .authCard,
 .setupCard {
   width: min(100%, 520px);
-  border: 1px solid var(--color-qv-border);
-  border-radius: var(--radius-qv-sm);
+  border: 0;
+  border-top: 1px solid var(--color-qv-border-strong);
+  border-left: 3px solid var(--color-qv-content);
   background: var(--color-qv-surface);
-  box-shadow: var(--shadow-qv-md);
   padding: 20px;
 }
 
@@ -26,7 +26,7 @@
   font-size: 0.84rem;
   font-weight: 820;
   letter-spacing: 0;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .authCard h1,
@@ -71,7 +71,7 @@
 
 .field input {
   min-height: 44px;
-  border: 1px solid var(--color-qv-border);
+  border: 1px solid var(--color-qv-border-strong);
   border-radius: var(--radius-qv-sm);
   background: var(--color-qv-surface);
   color: var(--color-qv-content);

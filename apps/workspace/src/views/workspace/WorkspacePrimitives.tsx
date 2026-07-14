@@ -51,6 +51,6 @@ export function WorkspaceAccessState({ title = "Area non disponibile", descripti
   );
 }
 
-export function WorkspaceStatusBadge({ label, tone = "neutral" }: { label: string; tone?: "danger" | "warning" | "info" | "good" | "neutral" }) {
-  return <span className={`${styles.badge} ${styles[`tone${tone[0].toUpperCase()}${tone.slice(1)}`]}`}>{label}</span>;
+export function WorkspaceState({ label, tone = "neutral" }: { label: string; tone?: "danger" | "warning" | "info" | "good" | "neutral" }) {
+  return <strong className={`${styles.state} ${styles[`tone${tone[0].toUpperCase()}${tone.slice(1)}`]}`}>{label}</strong>;
 }

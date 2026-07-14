@@ -4,147 +4,105 @@
 @import "@qoovex/ui/styles/base.css";
 @source "../../../../packages/ui/src";
 
-.sirio-page {
-  min-height: 100dvh;
-}
+.sirio-page { min-height: 100dvh; }
 
 .sirio-hero {
+  padding: clamp(2rem, 5vw, 4rem) 0;
   border-bottom: 1px solid var(--color-qv-border);
-  padding: var(--spacing-qv-8) 0 var(--spacing-qv-7);
+}
+
+.sirio-hero__grid {
+  display: grid;
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: end;
+}
+
+.sirio-kicker,
+.mfa-pattern__eyebrow {
+  margin: 0 0 var(--spacing-qv-2);
+  color: var(--color-qv-accent-strong);
+  font-size: var(--text-qv-caption);
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .sirio-hero h1 {
+  max-width: 11ch;
   margin: 0;
-  color: var(--color-qv-content);
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 600;
-  line-height: 1;
+  font-size: var(--text-qv-display);
+  font-weight: 520;
+  line-height: 0.92;
 }
 
-.sirio-hero p {
-  max-width: 45rem;
+.sirio-hero p:not(.sirio-kicker) {
+  max-width: 38rem;
   color: var(--color-qv-content-muted);
   line-height: 1.6;
 }
 
 .token-grid,
-.component-grid,
-.form-grid {
-  display: grid;
-  gap: var(--spacing-qv-4);
-}
-
-.token-swatch {
-  min-height: 6rem;
-  border-radius: var(--radius-qv-md);
-}
-
-.token-swatch--canvas { background: var(--color-qv-canvas); border: 1px solid var(--color-qv-border); }
-.token-swatch--surface { background: var(--color-qv-surface); border: 1px solid var(--color-qv-border); }
-.token-swatch--accent { background: var(--color-qv-accent); }
-.token-swatch--warning { background: var(--color-qv-warning); }
-.token-swatch--danger { background: var(--color-qv-danger); }
-.token-swatch--text { background: var(--color-qv-content); }
-
-.sample-actions,
-.sample-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-qv-3);
-}
-
-.copy-list {
-  display: grid;
-  gap: var(--spacing-qv-3);
-  margin: 0;
-  padding: 0;
-}
-
-.copy-list li {
-  list-style: none;
-}
-
-.mfa-pattern,
-.mfa-pattern__request-list {
-  display: grid;
-  gap: var(--spacing-qv-4);
-}
-
+.state-grid,
+.form-grid,
 .mfa-pattern__grid {
   display: grid;
   gap: var(--spacing-qv-4);
 }
 
-.mfa-pattern__heading,
-.mfa-pattern__actions {
+.token-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.token-proof { margin: 0; }
+.token-swatch { min-height: 7rem; border: 1px solid var(--color-qv-border); }
+.token-swatch--canvas { background: var(--color-qv-canvas); }
+.token-swatch--surface { background: var(--color-qv-surface); }
+.token-swatch--fog { background: var(--color-qv-canvas-deep); }
+.token-swatch--accent { background: var(--color-qv-accent); }
+.token-swatch--text { background: var(--color-qv-content); }
+.token-proof figcaption { display: grid; gap: 0.1rem; padding-top: var(--spacing-qv-2); }
+.token-proof figcaption span { color: var(--color-qv-content-muted); font-size: var(--text-qv-caption); }
+
+.specimen {
+  display: grid;
+  gap: var(--spacing-qv-4);
+  padding: var(--spacing-qv-5);
+  border-top: 1px solid var(--color-qv-border-strong);
+  background: var(--color-qv-surface);
+}
+
+.sample-actions,
+.mfa-pattern__actions,
+.mfa-pattern__heading {
   display: flex;
   flex-wrap: wrap;
+  gap: var(--spacing-qv-3);
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--spacing-qv-3);
 }
 
+.control-stack { display: grid; align-content: start; gap: var(--spacing-qv-3); }
+.control-stack label { display: flex; align-items: center; gap: var(--spacing-qv-2); }
+.state-grid { align-items: start; }
+.language-proof { display: grid; gap: 0; border-top: 1px solid var(--color-qv-border-strong); }
+.language-proof p { margin: 0; padding: var(--spacing-qv-4) 0; border-bottom: 1px solid var(--color-qv-border); font-weight: 650; }
+
+.state-text { padding-inline-start: var(--spacing-qv-3); border-inline-start: 3px solid currentColor; font-size: var(--text-qv-label); }
+.state-text--warning { color: var(--color-qv-warning); }
+.state-text--info { color: var(--color-qv-info); }
+.state-text--danger { color: var(--color-qv-danger); }
+
+.mfa-pattern,
+.mfa-pattern__request-list { display: grid; gap: var(--spacing-qv-4); }
 .mfa-pattern h3,
-.mfa-pattern p {
-  margin-top: 0;
-}
-
-.mfa-pattern h3 {
-  margin-bottom: var(--spacing-qv-2);
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-}
-
-.mfa-pattern__eyebrow {
-  margin-bottom: var(--spacing-qv-1);
-  color: var(--color-qv-accent-strong);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.mfa-pattern__request {
-  display: grid;
-  gap: var(--spacing-qv-1);
-  padding: var(--spacing-qv-3);
-  border: 1px solid var(--color-qv-border);
-  border-radius: var(--radius-qv-md);
-  background: var(--color-qv-surface-muted);
-}
-
-.mfa-pattern__request span {
-  color: var(--color-qv-content-muted);
-  font-size: 0.9rem;
-}
-
-.mfa-pattern__email {
-  overflow-wrap: anywhere;
-}
-
-.mfa-pattern__codes {
-  overflow-x: auto;
-  padding: var(--spacing-qv-4);
-  border: 1px solid var(--color-qv-border-strong);
-  border-radius: var(--radius-qv-md);
-  background: var(--color-qv-surface-muted);
-  color: var(--color-qv-content);
-  font-size: 1rem;
-  line-height: 1.7;
-}
+.mfa-pattern p { margin-top: 0; }
+.mfa-pattern h3 { margin-bottom: var(--spacing-qv-2); font-family: var(--font-sans); font-size: 1.25rem; letter-spacing: -0.02em; }
+.mfa-pattern__request { display: grid; gap: var(--spacing-qv-1); padding: var(--spacing-qv-3) 0; border-bottom: 1px solid var(--color-qv-border); }
+.mfa-pattern__request span { color: var(--color-qv-content-muted); font-size: 0.9rem; }
+.mfa-pattern__email { overflow-wrap: anywhere; }
+.mfa-pattern__codes { overflow-x: auto; padding: var(--spacing-qv-4); border-left: 3px solid var(--color-qv-accent); background: var(--color-qv-surface-muted); color: var(--color-qv-content); font-size: 1rem; line-height: 1.7; }
 
 @media (min-width: 52rem) {
-  .token-grid,
-  .component-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .form-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .mfa-pattern__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  .sirio-hero__grid { grid-template-columns: minmax(0, 1.05fr) minmax(24rem, 0.95fr); }
+  .token-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .state-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .form-grid,
+  .mfa-pattern__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

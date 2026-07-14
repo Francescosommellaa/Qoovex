@@ -35,22 +35,20 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
   const isMfaRequired = shellState.kind === "mfa-required";
   return (
     <div className={styles.shell}>
-      <header className={styles.topbar}>
-        <div className={styles.topbarInner}>
-          <div className={styles.brand}>
-            <Link href="/dashboard">Qoovex</Link>
-            <span>{(isWorkspace ? shellState.context.platformRole : isMfaRequired ? shellState.platformRole : null) === "SUPER_ADMIN" ? "Operatore Qoovex" : "Workspace admin"}</span>
-          </div>
-          {isMfaRequired ? <nav className={styles.nav} aria-label="Sessione"><WorkspaceLogoutButton /></nav> : (
+      <aside className={styles.index}>
+        <div className={styles.brand}>
+          <Link href="/dashboard">Qoovex</Link>
+          <span>{(isWorkspace ? shellState.context.platformRole : isMfaRequired ? shellState.platformRole : null) === "SUPER_ADMIN" ? "Operatore Qoovex" : "Indice operativo"}</span>
+        </div>
+        {isMfaRequired ? <nav className={styles.sessionNav} aria-label="Sessione"><WorkspaceLogoutButton /></nav> : (
             <WorkspaceNavigation
               authenticated={isWorkspace}
               platformRole={isWorkspace ? shellState.context.platformRole : null}
               role={isWorkspace ? shellState.role : null}
               support={isWorkspace ? shellState.context.support : null}
             />
-          )}
-        </div>
-      </header>
+        )}
+      </aside>
       {isWorkspace && shellState.context.support ? <SupportSessionBanner support={shellState.context.support} /> : null}
       <main className={styles.content}>
         {isMfaRequired ? <AccountSecurityFlow initialStatus={shellState.status} mode="gate" /> : children}
