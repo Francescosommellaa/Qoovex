@@ -2,7 +2,7 @@ import Link from "next/link";
 import { JobSiteArchiveButton } from "./JobSiteArchiveButton";
 import { JobSiteForm } from "./JobSiteForm";
 import styles from "../AdminCore.module.css";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { formatDate, recordStatusLabels, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
 
@@ -23,7 +23,7 @@ export function JobSitesPageView({ jobSites, capabilities }: { jobSites: Workspa
                   <small>{jobSite.startDate ? `Inizio ${formatDate(jobSite.startDate)}` : "Data inizio non registrata"}</small>
                 </div>
                 <div className={styles.actions}>
-                  <WorkspaceStatusBadge label={recordStatusLabels[jobSite.status]} tone={statusTone(jobSite.status)} />
+                  <WorkspaceState label={recordStatusLabels[jobSite.status]} tone={statusTone(jobSite.status)} />
                   <Link className={styles.linkButton} href={`/job-sites/${jobSite.id}`}>Apri</Link>
                   {capabilities.canManageCore ? <JobSiteArchiveButton jobSiteId={jobSite.id} /> : null}
                 </div>

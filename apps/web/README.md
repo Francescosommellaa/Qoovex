@@ -1,25 +1,22 @@
 # Web App
 
-Sito marketing pubblico Qoovex.
+Sito marketing pubblico Qoovex, costruito sulla grammatica editoriale Traccia Operativa.
 
-## Stato
+## Responsabilità
 
-Questa app contiene una base provvisoria, non la landing definitiva. Il copy e intenzionalmente prudente e non deriva da ricerca inventata.
+- homepage pubblica e pagine legali/editoriali;
+- narrazione di frammento, traccia, vuoto indicizzato e prossima azione;
+- dimostrazioni di prodotto autentiche e fotografie operative con diritti verificati;
+- SEO tecnico base e collegamento configurabile al workspace;
+- riuso della fondazione `@qoovex/ui` senza simulare il workspace.
 
-## Responsabilita
+## Confini
 
-- homepage pubblica;
-- SEO tecnico base;
-- link configurabile verso il workspace tramite `NEXT_PUBLIC_WORKSPACE_URL`;
-- uso di primitive condivise da `@qoovex/ui`.
-
-## Divieti
-
-- niente Prisma o `@qoovex/db`;
-- niente auth workspace;
-- niente servizi prodotto;
-- niente preset documentali, checklist, scadenze o obblighi;
-- niente pricing, testimonianze, casi studio o keyword research inventata.
+- niente Prisma, auth workspace o servizi prodotto;
+- niente stock, mockup generici, testimonianze, prezzi o ricerche inventate;
+- niente promesse di conformità, certificazione o validità legale;
+- niente dark theme o librerie di animazione;
+- in assenza di immagini approvate si usano prodotto e diagrammi, non riempitivi.
 
 ## Comandi
 

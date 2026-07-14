@@ -1,6 +1,6 @@
 import { AccessError } from "@shared/server/access-errors";
 import { getPlatformUserDetail, requireQoovexOperator } from "@shared/server/platform-admin-service";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { PlatformAdminAccessState } from "@/views/platform-admin/PlatformAdminAccessState";
 import { PlatformUserActions } from "@/views/platform-admin/PlatformUserActions";
 import styles from "@/views/platform-admin/PlatformAdmin.module.css";
@@ -15,10 +15,10 @@ export default async function PlatformUserDetailPage({ params }: { params: Promi
         <WorkspacePanel title="Stato account">
           <div className={styles.stack}>
             <div className={styles.actions}>
-              <WorkspaceStatusBadge label={user.suspendedAt ? "Sospeso" : "Attivo"} tone={user.suspendedAt ? "danger" : "good"} />
-              <WorkspaceStatusBadge label={user.emailVerified ? "Email verificata" : "Email non verificata"} tone={user.emailVerified ? "good" : "warning"} />
-              <WorkspaceStatusBadge label={user.mfaEnabled ? "MFA attiva" : "MFA non attiva"} tone={user.mfaEnabled ? "good" : "neutral"} />
-              <WorkspaceStatusBadge label={`${user._count.sessions} sessioni persistenti`} />
+              <WorkspaceState label={user.suspendedAt ? "Sospeso" : "Attivo"} tone={user.suspendedAt ? "danger" : "good"} />
+              <WorkspaceState label={user.emailVerified ? "Email verificata" : "Email non verificata"} tone={user.emailVerified ? "good" : "warning"} />
+              <WorkspaceState label={user.mfaEnabled ? "MFA attiva" : "MFA non attiva"} tone={user.mfaEnabled ? "good" : "neutral"} />
+              <WorkspaceState label={`${user._count.sessions} sessioni persistenti`} />
             </div>
             {user.suspensionReason ? <p className={styles.error}>{user.suspensionReason}</p> : null}
             <PlatformUserActions userId={user.id} suspended={Boolean(user.suspendedAt)} protectedAccount={user.id === actor.id || user.platformRole === "SUPER_ADMIN"} />

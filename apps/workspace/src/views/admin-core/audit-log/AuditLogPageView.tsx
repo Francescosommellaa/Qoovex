@@ -1,6 +1,6 @@
 import type { AuditLogFilters, AuditLogListResponse, AuditMetadata } from "@qoovex/types";
 import { auditActions, auditEntityTypes, auditOutcomes } from "@qoovex/types";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import styles from "../AdminCore.module.css";
 
 function formatDate(value: string) {
@@ -131,7 +131,7 @@ export function AuditLogPageView({ data, filters }: { data: AuditLogListResponse
                     )}
                   </div>
                   <div className={styles.actions}>
-                    <WorkspaceStatusBadge label={event.outcome} tone={outcomeTone(event.outcome)} />
+                    <WorkspaceState label={event.outcome} tone={outcomeTone(event.outcome)} />
                   </div>
                 </article>
               );

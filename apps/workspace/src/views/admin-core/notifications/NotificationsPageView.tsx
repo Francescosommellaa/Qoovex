@@ -4,7 +4,7 @@ import styles from "../AdminCore.module.css";
 import { NotificationActionButtons } from "./NotificationActionButtons";
 import { NotificationEmailDigestPanel } from "./NotificationEmailDigestPanel";
 import { NotificationEmailPreferencesPanel } from "./NotificationEmailPreferencesPanel";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 
 const severityLabels: Record<NotificationSeverity, string> = {
   INFO: "Informazione",
@@ -37,7 +37,7 @@ function NotificationCard({ notification }: { notification: NotificationResponse
         <small>{read ? `Letta il ${formatDate(notification.readAt ?? notification.updatedAt)}` : `Creata il ${formatDate(notification.createdAt)}`}</small>
       </div>
       <div className={styles.actions}>
-        <WorkspaceStatusBadge label={severityLabels[notification.severity]} tone={severityTone[notification.severity]} />
+        <WorkspaceState label={severityLabels[notification.severity]} tone={severityTone[notification.severity]} />
         {notification.actionHref ? <Link className={styles.linkButton} href={notification.actionHref}>Apri</Link> : null}
         <NotificationActionButtons notificationId={notification.id} read={read} />
       </div>

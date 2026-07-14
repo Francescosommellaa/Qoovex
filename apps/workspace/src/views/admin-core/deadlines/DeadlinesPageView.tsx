@@ -1,7 +1,7 @@
 import { DeadlineArchiveButton } from "./DeadlineArchiveButton";
 import { DeadlineForm } from "./DeadlineForm";
 import styles from "../AdminCore.module.css";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { deadlineStatusLabels, formatDate, ownerLabel, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
@@ -44,7 +44,7 @@ export function DeadlinesPageView({
                   <small>{relationLabel(deadline, documents, workers, jobSites)}</small>
                 </div>
                 <div className={styles.actions}>
-                  <WorkspaceStatusBadge label={deadlineStatusLabels[deadline.status]} tone={statusTone(deadline.status)} />
+                  <WorkspaceState label={deadlineStatusLabels[deadline.status]} tone={statusTone(deadline.status)} />
                   {capabilities.canManageCore ? <DeadlineArchiveButton deadlineId={deadline.id} /> : null}
                 </div>
                 {capabilities.canManageCore ? (

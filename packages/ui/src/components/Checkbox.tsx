@@ -9,7 +9,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
       {...props}
       ref={ref}
       type="checkbox"
-      className={classNames("size-qv-5 rounded-qv-sm border-qv-border text-qv-accent accent-qv-accent disabled:cursor-not-allowed disabled:opacity-60", className)}
+      className={classNames("size-qv-5 rounded-qv-xs border-qv-border-strong text-qv-accent accent-qv-accent disabled:cursor-not-allowed disabled:opacity-60", className)}
     />
   );
 });

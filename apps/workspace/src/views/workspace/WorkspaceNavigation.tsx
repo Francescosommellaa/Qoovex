@@ -33,29 +33,23 @@ const platformNavItems = [
 export function WorkspaceNavigation({ role, platformRole, support, authenticated }: { role: WorkspaceRole | null; platformRole: "USER" | "SUPER_ADMIN" | null; support: SupportContext | null; authenticated: boolean }) {
   const pathname = usePathname();
   const isPlatformConsole = pathname.startsWith("/qoovex-admin");
-  if (isPlatformConsole && platformRole === "SUPER_ADMIN") {
-    return (
-      <nav className={styles.nav} aria-label="Navigazione Console Qoovex">
-        {platformNavItems.map((item) => <Link aria-current={pathname === item.href || (item.href !== "/qoovex-admin" && pathname.startsWith(`${item.href}/`)) ? "page" : undefined} href={item.href} key={item.href}>{item.label}</Link>)}
-        {support ? <Link href="/dashboard">Azienda assistita</Link> : null}
-        <WorkspaceLogoutButton />
-      </nav>
-    );
+
+  function Links() {
+    if (isPlatformConsole && platformRole === "SUPER_ADMIN") {
+      return <>{platformNavItems.map((item) => <Link aria-current={pathname === item.href || (item.href !== "/qoovex-admin" && pathname.startsWith(`${item.href}/`)) ? "page" : undefined} href={item.href} key={item.href}>{item.label}</Link>)}{support ? <Link href="/dashboard">Azienda assistita</Link> : null}<WorkspaceLogoutButton /></>;
+    }
+
+    const visibleItems = navItems.filter((item) => role && (item.roles as readonly WorkspaceRole[]).includes(role));
+    return <>{platformRole === "SUPER_ADMIN" ? <Link href="/qoovex-admin">Console Qoovex</Link> : null}{visibleItems.map((item) => <Link aria-current={pathname === item.href || pathname.startsWith(`${item.href}/`) ? "page" : undefined} href={item.href} key={item.href}>{item.label}</Link>)}{authenticated ? <Link aria-current={pathname === "/account/security" ? "page" : undefined} href="/account/security">Sicurezza</Link> : null}{authenticated ? <WorkspaceLogoutButton /> : null}</>;
   }
-  const visibleItems = navItems.filter((item) => role && (item.roles as readonly WorkspaceRole[]).includes(role));
+
   return (
-    <nav className={styles.nav} aria-label="Navigazione workspace">
-      {platformRole === "SUPER_ADMIN" ? <Link href="/qoovex-admin">Console Qoovex</Link> : null}
-      {visibleItems.map((item) => {
-        const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-        return (
-          <Link aria-current={active ? "page" : undefined} href={item.href} key={item.href}>
-            {item.label}
-          </Link>
-        );
-      })}
-      {authenticated ? <Link aria-current={pathname === "/account/security" ? "page" : undefined} href="/account/security">Sicurezza</Link> : null}
-      {authenticated ? <WorkspaceLogoutButton /> : null}
+    <nav className={styles.navigation} aria-label={isPlatformConsole ? "Navigazione Console Qoovex" : "Navigazione workspace"}>
+      <div className={styles.desktopNav}><Links /></div>
+      <details className={styles.mobileNav}>
+        <summary>Menu</summary>
+        <div className={styles.mobileNavPanel}><Links /></div>
+      </details>
     </nav>
   );
 }

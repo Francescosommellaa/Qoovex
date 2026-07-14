@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ChecklistArchiveButton } from "./ChecklistArchiveButton";
 import { ChecklistForm } from "./ChecklistForm";
 import styles from "../AdminCore.module.css";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { checklistItemStatusLabels, formatDate, recordStatusLabels, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceChecklistRecord, WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
 
@@ -41,7 +41,7 @@ export function ChecklistsPageView({
                     <small>Aggiornata: {formatDate(checklist.updatedAt)}</small>
                   </div>
                   <div className={styles.actions}>
-                    <WorkspaceStatusBadge label={recordStatusLabels[checklist.status]} tone={statusTone(checklist.status)} />
+                    <WorkspaceState label={recordStatusLabels[checklist.status]} tone={statusTone(checklist.status)} />
                     <Link className={styles.linkButton} href={`/checklists/${checklist.id}`}>Apri</Link>
                     {capabilities.canManageChecklists ? <ChecklistArchiveButton checklistId={checklist.id} /> : null}
                   </div>

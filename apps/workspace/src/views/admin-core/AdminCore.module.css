@@ -12,17 +12,27 @@
 
 .list {
   display: grid;
-  gap: 10px;
+  gap: 0;
+  border-top: 1px solid var(--color-qv-border-strong);
 }
 
 .record {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 12px;
-  border: 1px solid var(--color-qv-border);
-  border-radius: var(--radius-qv-sm);
-  background: var(--color-qv-surface);
-  padding: 12px;
+  padding: 14px 0 14px 18px;
+  border-bottom: 1px solid var(--color-qv-border);
+  background: transparent;
+}
+
+.record::before {
+  position: absolute;
+  inset-block: -1px 0;
+  inset-inline-start: 0;
+  width: 1px;
+  background: var(--color-qv-border-strong);
+  content: "";
 }
 
 .recordMain {
@@ -50,6 +60,8 @@
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+  padding-inline-start: 10px;
+  border-inline-start: 3px solid var(--color-qv-accent);
 }
 
 .actions form {
@@ -86,8 +98,8 @@
 }
 
 .ghostButton {
-  border: 1px solid var(--color-qv-border);
-  background: var(--color-qv-surface);
+  border: 1px solid var(--color-qv-border-strong);
+  background: transparent;
   color: var(--color-qv-content);
 }
 
@@ -153,7 +165,7 @@
   width: 100%;
   min-width: 0;
   min-height: 42px;
-  border: 1px solid var(--color-qv-border);
+  border: 1px solid var(--color-qv-border-strong);
   border-radius: var(--radius-qv-sm);
   background: var(--color-qv-surface);
   color: var(--color-qv-content);
@@ -177,8 +189,8 @@
 }
 
 .formError {
-  border: 1px solid color-mix(in oklab, var(--color-qv-danger) 32%, var(--color-qv-border));
-  border-radius: var(--radius-qv-sm);
+  border: 0;
+  border-left: 3px solid var(--color-qv-danger);
   background: var(--color-qv-danger-soft);
   color: var(--color-qv-danger);
   padding: 10px;
@@ -187,8 +199,8 @@
 }
 
 .formSuccess {
-  border: 1px solid color-mix(in oklab, var(--color-qv-accent) 28%, var(--color-qv-border));
-  border-radius: var(--radius-qv-sm);
+  border: 0;
+  border-left: 3px solid var(--color-qv-positive);
   background: var(--color-qv-positive-soft);
   color: var(--color-qv-accent-strong);
   padding: 10px;
@@ -234,7 +246,7 @@
 
 .filterBar {
   display: flex;
-  gap: 8px;
+  gap: 0;
   overflow-x: auto;
   padding-bottom: 2px;
 }
@@ -242,9 +254,9 @@
 .filterBar a {
   flex: 0 0 auto;
   min-height: 36px;
-  border: 1px solid var(--color-qv-border);
-  border-radius: var(--radius-qv-pill);
-  background: var(--color-qv-surface);
+  border: 0;
+  border-bottom: 1px solid var(--color-qv-border);
+  background: transparent;
   color: var(--color-qv-content);
   padding: 7px 11px;
   font-size: 0.8rem;
@@ -253,8 +265,8 @@
 }
 
 .filterBar a[aria-current="page"] {
-  border-color: color-mix(in oklab, var(--color-qv-accent) 42%, var(--color-qv-border));
-  background: var(--color-qv-positive-soft);
+  border-bottom: 3px solid var(--color-qv-accent);
+  background: transparent;
   color: var(--color-qv-accent-strong);
 }
 

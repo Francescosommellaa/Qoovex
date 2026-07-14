@@ -4,7 +4,7 @@ import { DocumentForm } from "./DocumentForm";
 import { DocumentVersionList } from "./DocumentVersionList";
 import { DocumentVersionUploadForm } from "./DocumentVersionUploadForm";
 import styles from "../AdminCore.module.css";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceStatusBadge } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { documentStatusLabels, formatDate, ownerLabel, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceDocumentTypeRecord, WorkspaceDocumentVersionRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
@@ -42,7 +42,7 @@ export function DocumentDetailView({
                 <small>Aggiornato: {formatDate(document.updatedAt)}</small>
               </div>
               <div className={styles.actions}>
-                <WorkspaceStatusBadge label={documentStatusLabels[document.status]} tone={statusTone(document.status)} />
+                <WorkspaceState label={documentStatusLabels[document.status]} tone={statusTone(document.status)} />
                 {capabilities.canManageCore ? <DocumentArchiveButton documentId={document.id} redirectToList /> : null}
               </div>
             </div>

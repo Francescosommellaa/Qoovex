@@ -18,7 +18,7 @@
   body {
     min-block-size: 100dvh;
     margin: 0;
-    overflow-x: hidden;
+    overflow-x: clip;
     background: var(--color-qv-canvas);
     color: var(--color-qv-content);
     font-size: var(--text-qv-body);
@@ -65,8 +65,8 @@
 
   :where(a) {
     color: inherit;
-    text-underline-offset: 0.18em;
     text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.2em;
   }
 
   :where(hr) {
@@ -91,7 +91,6 @@
   :focus-visible {
     outline: 0.1875rem solid var(--color-qv-focus);
     outline-offset: 0.1875rem;
-    box-shadow: 0 0 0 0.25rem var(--color-qv-accent-soft);
   }
 
   :target {
@@ -105,28 +104,6 @@
 }
 
 @layer components {
-  .qv-surface,
-  .qv-surface-raised,
-  .qv-surface-sunken {
-    border: 1px solid var(--color-qv-border-highlight);
-    background-clip: padding-box;
-  }
-
-  .qv-surface {
-    background: var(--color-qv-surface);
-    box-shadow: var(--shadow-qv-sm);
-  }
-
-  .qv-surface-raised {
-    background: var(--color-qv-surface-raised);
-    box-shadow: var(--shadow-qv-md);
-  }
-
-  .qv-surface-sunken {
-    background: var(--color-qv-surface-sunken);
-    box-shadow: var(--shadow-qv-pressed);
-  }
-
   .qv-text-muted {
     color: var(--color-qv-content-muted);
   }
@@ -135,34 +112,30 @@
     color: var(--color-qv-content-subtle);
   }
 
-  .qv-card {
-    background-image: linear-gradient(145deg, color-mix(in oklab, var(--color-qv-surface-raised) 72%, transparent), transparent 62%);
-  }
-
   .qv-button {
     position: relative;
     isolation: isolate;
-    box-shadow: var(--shadow-qv-control);
     -webkit-tap-highlight-color: transparent;
   }
 
-  .qv-button::after {
+  .qv-button::before {
     position: absolute;
-    inset: 1px;
-    z-index: -1;
-    border-radius: calc(var(--radius-qv-md) - 1px);
-    background: linear-gradient(145deg, color-mix(in oklab, white 18%, transparent), transparent 52%);
+    inset-block: 0.5rem;
+    inset-inline-start: 0;
+    inline-size: 2px;
+    background: currentColor;
     content: "";
-    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--duration-qv-fast) var(--ease-qv-standard);
   }
 
-  .qv-button:hover:not(:disabled, [aria-disabled="true"]) {
-    transform: translateY(-1px);
+  .qv-button:hover:not(:disabled, [aria-disabled="true"])::before,
+  .qv-button:focus-visible::before {
+    opacity: 0.55;
   }
 
   .qv-button:active:not(:disabled, [aria-disabled="true"]) {
     transform: translateY(1px);
-    box-shadow: var(--shadow-qv-pressed);
   }
 
   .qv-switch {
@@ -170,10 +143,9 @@
     inline-size: var(--spacing-qv-switch-track);
     block-size: var(--spacing-qv-switch-height);
     appearance: none;
-    border: 1px solid var(--color-qv-border);
-    border-radius: var(--radius-qv-pill);
-    background: var(--color-qv-surface-sunken);
-    box-shadow: var(--shadow-qv-pressed);
+    border: 1px solid var(--color-qv-border-strong);
+    border-radius: 999px;
+    background: var(--color-qv-surface-muted);
     cursor: pointer;
     transition:
       background-color var(--duration-qv-standard) var(--ease-qv-standard),
@@ -186,17 +158,16 @@
     inset-inline-start: var(--spacing-qv-1);
     inline-size: var(--spacing-qv-switch-thumb);
     block-size: var(--spacing-qv-switch-thumb);
-    border: 1px solid var(--color-qv-border-highlight);
-    border-radius: var(--radius-qv-pill);
-    background: var(--color-qv-surface-raised);
-    box-shadow: var(--shadow-qv-xs);
+    border: 1px solid var(--color-qv-border-strong);
+    border-radius: 50%;
+    background: var(--color-qv-surface);
     content: "";
     transform: translateY(-50%);
     transition: transform var(--duration-qv-standard) var(--ease-qv-emphasized);
   }
 
   .qv-switch:checked {
-    border-color: color-mix(in oklab, var(--color-qv-accent) 72%, var(--color-qv-border));
+    border-color: var(--color-qv-accent-strong);
     background: var(--color-qv-accent);
   }
 
@@ -207,21 +178,81 @@
   .qv-switch:disabled {
     opacity: 0.56;
   }
+
+  .qv-trace {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .qv-trace-node {
+    position: relative;
+    display: grid;
+    gap: var(--spacing-qv-2);
+    min-inline-size: 0;
+    padding: var(--spacing-qv-4) var(--spacing-qv-4) var(--spacing-qv-4) calc(var(--spacing-qv-5) + var(--qv-trace-offset));
+    border-block-start: var(--qv-trace-width) solid var(--qv-trace-color);
+  }
+
+  .qv-trace-node::before {
+    position: absolute;
+    inset-block: -1px 0;
+    inset-inline-start: var(--qv-trace-offset);
+    inline-size: var(--qv-trace-width);
+    background: var(--qv-trace-color);
+    content: "";
+  }
+
+  .qv-trace-node[data-kind="gap"] {
+    border-block-start-style: dashed;
+    background: color-mix(in srgb, var(--color-qv-surface-muted) 68%, transparent);
+  }
+
+  .qv-trace-node[data-kind="gap"]::before {
+    background: repeating-linear-gradient(to bottom, var(--qv-trace-color) 0 4px, transparent 4px 8px);
+  }
+
+  .qv-trace-node[data-kind="terminal"] {
+    border-block-start-color: var(--color-qv-accent);
+  }
+
+  .qv-trace-node[data-kind="terminal"]::before {
+    inline-size: var(--qv-terminal-width);
+    background: var(--color-qv-accent);
+  }
+
+  .qv-trace-label {
+    color: var(--color-qv-content-muted);
+    font-size: var(--text-qv-caption);
+    font-weight: 650;
+  }
+
+  .qv-trace-title {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-qv-body);
+    font-weight: 720;
+    letter-spacing: -0.01em;
+  }
+
+  .qv-trace-description {
+    max-inline-size: 65ch;
+    margin: 0;
+    color: var(--color-qv-content-muted);
+    font-size: var(--text-qv-label);
+  }
 }
 
 @media (prefers-contrast: more) {
   :focus-visible {
     outline-width: 0.25rem;
-    box-shadow: none;
   }
 
-  .qv-surface,
-  .qv-surface-raised,
-  .qv-surface-sunken,
-  .qv-card,
-  .qv-button,
+  .qv-trace-node,
   .qv-switch {
-    border-color: var(--color-qv-border-strong);
+    border-color: var(--color-qv-content);
   }
 }
 
@@ -235,7 +266,6 @@
     animation-iteration-count: 1 !important;
   }
 
-  .qv-button:hover:not(:disabled, [aria-disabled="true"]),
   .qv-button:active:not(:disabled, [aria-disabled="true"]) {
     transform: none;
   }
@@ -244,13 +274,14 @@
 @media (forced-colors: active) {
   :focus-visible {
     outline-color: Highlight;
-    box-shadow: none;
   }
 
   .qv-switch,
-  .qv-button,
-  .qv-card {
-    border: 1px solid ButtonText;
-    box-shadow: none;
+  .qv-trace-node {
+    border-color: CanvasText;
+  }
+
+  .qv-trace-node::before {
+    background: CanvasText;
   }
 }

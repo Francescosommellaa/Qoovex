@@ -1,41 +1,29 @@
 @theme static {
-  /* Semantic color roles. Theme values live below so every consumer shares them. */
-  --color-qv-canvas: var(--qv-theme-canvas);
-  --color-qv-canvas-deep: var(--qv-theme-canvas-deep);
-  --color-qv-surface: var(--qv-theme-surface);
-  --color-qv-surface-muted: var(--qv-theme-surface-muted);
-  --color-qv-surface-sunken: var(--qv-theme-surface-sunken);
-  --color-qv-surface-raised: var(--qv-theme-surface-raised);
-  --color-qv-content: var(--qv-theme-content);
-  --color-qv-content-muted: var(--qv-theme-content-muted);
-  --color-qv-content-subtle: var(--qv-theme-content-subtle);
-  --color-qv-content-inverse: var(--qv-theme-content-inverse);
-  --color-qv-border: var(--qv-theme-border);
-  --color-qv-border-strong: var(--qv-theme-border-strong);
-  --color-qv-border-highlight: var(--qv-theme-border-highlight);
-  --color-qv-accent: var(--qv-theme-accent);
-  --color-qv-accent-strong: var(--qv-theme-accent-strong);
-  --color-qv-accent-soft: var(--qv-theme-accent-soft);
-  --color-qv-on-accent: var(--qv-theme-on-accent);
-  --color-qv-emphasis: var(--qv-theme-emphasis);
-  --color-qv-emphasis-strong: var(--qv-theme-emphasis-strong);
-  --color-qv-emphasis-soft: var(--qv-theme-emphasis-soft);
-  --color-qv-on-emphasis: var(--qv-theme-on-emphasis);
-  --color-qv-feature: var(--qv-theme-feature);
-  --color-qv-feature-strong: var(--qv-theme-feature-strong);
-  --color-qv-feature-soft: var(--qv-theme-feature-soft);
-  --color-qv-on-feature: var(--qv-theme-on-feature);
-  --color-qv-focus: var(--qv-theme-focus);
-  --color-qv-info: var(--qv-theme-info);
-  --color-qv-info-soft: var(--qv-theme-info-soft);
-  --color-qv-positive: var(--qv-theme-positive);
-  --color-qv-positive-soft: var(--qv-theme-positive-soft);
-  --color-qv-warning: var(--qv-theme-warning);
-  --color-qv-warning-soft: var(--qv-theme-warning-soft);
-  --color-qv-danger: var(--qv-theme-danger);
-  --color-qv-danger-soft: var(--qv-theme-danger-soft);
+  /* Traccia Operativa: one light-first mineral field and one action accent. */
+  --color-qv-canvas: #f1f2ed;
+  --color-qv-canvas-deep: #dde0d8;
+  --color-qv-surface: #fafbf7;
+  --color-qv-surface-muted: #e7e9e2;
+  --color-qv-content: #20231f;
+  --color-qv-content-muted: #5f635c;
+  --color-qv-content-subtle: #73786f;
+  --color-qv-content-inverse: #f7f8ff;
+  --color-qv-border: #b7bcb2;
+  --color-qv-border-strong: #747a70;
+  --color-qv-accent: #284bd6;
+  --color-qv-accent-strong: #1d399f;
+  --color-qv-accent-soft: #e4e9ff;
+  --color-qv-on-accent: #f7f8ff;
+  --color-qv-focus: #284bd6;
+  --color-qv-info: #3152b8;
+  --color-qv-info-soft: #e5eaff;
+  --color-qv-positive: #2f6a4a;
+  --color-qv-positive-soft: #e2eee6;
+  --color-qv-warning: #795813;
+  --color-qv-warning-soft: #f4ead0;
+  --color-qv-danger: #9a352d;
+  --color-qv-danger-soft: #f6e4e1;
 
-  /* Typography */
   --font-sans: "General Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-display: "Cabinet Grotesk", "General Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
@@ -51,12 +39,11 @@
   --text-qv-heading--line-height: 1.2;
   --text-qv-title: clamp(1.75rem, 1.45rem + 1.15vw, 2.5rem);
   --text-qv-title--line-height: 1.08;
-  --text-qv-display: clamp(2.5rem, 1.85rem + 2.75vw, 4.75rem);
-  --text-qv-display--line-height: 0.98;
-  --tracking-qv-tight: -0.035em;
+  --text-qv-display: clamp(2.75rem, 1.9rem + 3.5vw, 6rem);
+  --text-qv-display--line-height: 0.94;
+  --tracking-qv-tight: -0.045em;
   --tracking-qv-label: 0.01em;
 
-  /* Four-pixel rhythm with fluid page and section spacing */
   --spacing-qv-1: 0.25rem;
   --spacing-qv-2: 0.5rem;
   --spacing-qv-3: 0.75rem;
@@ -65,9 +52,9 @@
   --spacing-qv-6: 2rem;
   --spacing-qv-7: 3rem;
   --spacing-qv-8: 4rem;
-  --spacing-qv-page: clamp(1rem, 0.82rem + 0.8vw, 2rem);
-  --spacing-qv-section-compact: clamp(2rem, 1.55rem + 1.5vw, 3.5rem);
-  --spacing-qv-section: clamp(3.5rem, 2.4rem + 3.4vw, 7rem);
+  --spacing-qv-page: clamp(1rem, 0.8rem + 0.9vw, 2.25rem);
+  --spacing-qv-section-compact: clamp(2.25rem, 1.6rem + 2vw, 4rem);
+  --spacing-qv-section: clamp(4rem, 2.6rem + 4vw, 8rem);
   --spacing-qv-control-sm: 2.5rem;
   --spacing-qv-control: 2.75rem;
   --spacing-qv-control-lg: 3.25rem;
@@ -78,257 +65,38 @@
   --spacing-qv-switch-height: 1.75rem;
   --spacing-qv-switch-thumb: 1.25rem;
 
-  /* A consistent soft geometry: controls, cards, large shells, pills. */
-  --radius-qv-xs: 0.5rem;
-  --radius-qv-sm: 0.75rem;
-  --radius-qv-md: 1rem;
-  --radius-qv-lg: 1.5rem;
-  --radius-qv-xl: 2rem;
-  --radius-qv-pill: 999px;
+  /* Geometry exists for controls and real overlays, never as automatic card styling. */
+  --radius-qv-xs: 0.25rem;
+  --radius-qv-sm: 0.375rem;
+  --radius-qv-md: 0.625rem;
+  --shadow-qv-overlay: 0 1.25rem 3.5rem rgb(32 35 31 / 0.16);
 
-  /* Tinted, layered elevation. No black drop shadows. */
-  --shadow-qv-xs: inset 0 1px 0 var(--qv-theme-shadow-highlight), 0 2px 5px var(--qv-theme-shadow-low);
-  --shadow-qv-sm: inset 0 1px 0 var(--qv-theme-shadow-highlight), -3px -3px 8px var(--qv-theme-shadow-light), 4px 5px 12px var(--qv-theme-shadow-low);
-  --shadow-qv-md: inset 0 1px 0 var(--qv-theme-shadow-highlight), -7px -7px 18px var(--qv-theme-shadow-light), 8px 10px 24px var(--qv-theme-shadow-mid);
-  --shadow-qv-lg: inset 0 1px 0 var(--qv-theme-shadow-highlight), -12px -12px 30px var(--qv-theme-shadow-light), 16px 20px 42px var(--qv-theme-shadow-high);
-  --shadow-qv-control: inset 0 1px 0 var(--qv-theme-shadow-highlight), 0 3px 7px var(--qv-theme-shadow-low), 0 10px 22px var(--qv-theme-shadow-mid);
-  --shadow-qv-pressed: inset 3px 3px 8px var(--qv-theme-shadow-inset-dark), inset -3px -3px 8px var(--qv-theme-shadow-inset-light);
-
-  /* Motion is feedback only. */
   --ease-qv-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-qv-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
   --duration-qv-fast: 120ms;
   --duration-qv-standard: 180ms;
   --duration-qv-slow: 260ms;
 
-  /* Mobile is the default. Breakpoints only add room. */
   --container-qv-reading: 42rem;
   --container-qv-content: 72rem;
-  --container-qv-wide: 84rem;
+  --container-qv-wide: 88rem;
   --breakpoint-qv-sm: 40rem;
   --breakpoint-qv-md: 52rem;
   --breakpoint-qv-lg: 70rem;
   --breakpoint-qv-xl: 84rem;
-  --z-index-qv-raised: 10;
   --z-index-qv-sticky: 30;
   --z-index-qv-overlay: 50;
 }
 
-:root,
-[data-theme="light"] {
+:root {
   color-scheme: light;
-  --qv-theme-canvas: oklch(0.965 0.004 250);
-  --qv-theme-canvas-deep: oklch(0.93 0.006 250);
-  --qv-theme-surface: oklch(0.982 0.003 250);
-  --qv-theme-surface-muted: oklch(0.945 0.005 250);
-  --qv-theme-surface-sunken: oklch(0.915 0.006 250);
-  --qv-theme-surface-raised: oklch(0.995 0.002 250);
-  --qv-theme-content: oklch(0.22 0.012 255);
-  --qv-theme-content-muted: oklch(0.43 0.012 255);
-  --qv-theme-content-subtle: oklch(0.54 0.01 255);
-  --qv-theme-content-inverse: oklch(0.98 0.003 250);
-  --qv-theme-border: oklch(0.84 0.008 250);
-  --qv-theme-border-strong: oklch(0.68 0.012 250);
-  --qv-theme-border-highlight: oklch(1 0 0 / 0.84);
-  --qv-theme-accent: oklch(0.48 0.145 238);
-  --qv-theme-accent-strong: oklch(0.39 0.135 240);
-  --qv-theme-accent-soft: oklch(0.91 0.045 235);
-  --qv-theme-on-accent: oklch(0.985 0.002 250);
-  --qv-theme-emphasis: oklch(0.575 0.195 18);
-  --qv-theme-emphasis-strong: oklch(0.48 0.185 18);
-  --qv-theme-emphasis-soft: oklch(0.92 0.055 18);
-  --qv-theme-on-emphasis: oklch(0.985 0.002 250);
-  --qv-theme-feature: oklch(0.53 0.185 306);
-  --qv-theme-feature-strong: oklch(0.43 0.165 306);
-  --qv-theme-feature-soft: oklch(0.92 0.05 306);
-  --qv-theme-on-feature: oklch(0.985 0.002 250);
-  --qv-theme-focus: oklch(0.46 0.155 238);
-  --qv-theme-info: oklch(0.46 0.13 238);
-  --qv-theme-info-soft: oklch(0.92 0.04 235);
-  --qv-theme-positive: oklch(0.45 0.115 154);
-  --qv-theme-positive-soft: oklch(0.92 0.04 154);
-  --qv-theme-warning: oklch(0.49 0.12 72);
-  --qv-theme-warning-soft: oklch(0.93 0.05 82);
-  --qv-theme-danger: oklch(0.46 0.155 29);
-  --qv-theme-danger-soft: oklch(0.93 0.045 29);
-  --qv-theme-shadow-highlight: oklch(1 0 0 / 0.92);
-  --qv-theme-shadow-light: oklch(1 0 0 / 0.64);
-  --qv-theme-shadow-low: oklch(0.38 0.015 255 / 0.12);
-  --qv-theme-shadow-mid: oklch(0.32 0.016 255 / 0.16);
-  --qv-theme-shadow-high: oklch(0.26 0.018 255 / 0.21);
-  --qv-theme-shadow-inset-dark: oklch(0.38 0.014 255 / 0.18);
-  --qv-theme-shadow-inset-light: oklch(1 0 0 / 0.78);
-
-  /* Stable public aliases for CSS Modules and non-Tailwind consumers. */
-  --qv-color-background: var(--color-qv-canvas);
-  --qv-color-surface: var(--color-qv-surface);
-  --qv-color-surface-muted: var(--color-qv-surface-muted);
-  --qv-color-surface-sunken: var(--color-qv-surface-sunken);
-  --qv-color-surface-raised: var(--color-qv-surface-raised);
-  --qv-color-border: var(--color-qv-border);
-  --qv-color-border-strong: var(--color-qv-border-strong);
-  --qv-color-text: var(--color-qv-content);
-  --qv-color-text-muted: var(--color-qv-content-muted);
-  --qv-color-text-subtle: var(--color-qv-content-subtle);
-  --qv-color-accent: var(--color-qv-accent);
-  --qv-color-accent-strong: var(--color-qv-accent-strong);
-  --qv-color-accent-soft: var(--color-qv-accent-soft);
-  --qv-color-on-accent: var(--color-qv-on-accent);
-  --qv-color-emphasis: var(--color-qv-emphasis);
-  --qv-color-emphasis-strong: var(--color-qv-emphasis-strong);
-  --qv-color-emphasis-soft: var(--color-qv-emphasis-soft);
-  --qv-color-on-emphasis: var(--color-qv-on-emphasis);
-  --qv-color-feature: var(--color-qv-feature);
-  --qv-color-feature-strong: var(--color-qv-feature-strong);
-  --qv-color-feature-soft: var(--color-qv-feature-soft);
-  --qv-color-on-feature: var(--color-qv-on-feature);
-  --qv-color-attention: var(--color-qv-warning);
-  --qv-color-attention-soft: var(--color-qv-warning-soft);
-  --qv-color-success: var(--color-qv-positive);
-  --qv-color-neutral: var(--color-qv-content-muted);
-  --qv-radius-sm: var(--radius-qv-sm);
-  --qv-radius-md: var(--radius-qv-md);
-  --qv-radius-lg: var(--radius-qv-lg);
-  --qv-radius-xl: var(--radius-qv-xl);
-  --qv-space-1: var(--spacing-qv-1);
-  --qv-space-2: var(--spacing-qv-2);
-  --qv-space-3: var(--spacing-qv-3);
-  --qv-space-4: var(--spacing-qv-4);
-  --qv-space-5: var(--spacing-qv-5);
-  --qv-space-6: var(--spacing-qv-6);
-  --qv-space-7: var(--spacing-qv-7);
-  --qv-space-8: var(--spacing-qv-8);
-  --qv-space-page: var(--spacing-qv-page);
-  --qv-space-section: var(--spacing-qv-section);
-  --qv-shadow-xs: var(--shadow-qv-xs);
-  --qv-shadow-sm: var(--shadow-qv-sm);
-  --qv-shadow-md: var(--shadow-qv-md);
-  --qv-shadow-lg: var(--shadow-qv-lg);
-  --qv-shadow-control: var(--shadow-qv-control);
-  --qv-shadow-pressed: var(--shadow-qv-pressed);
-  --qv-font-sans: var(--font-sans);
-  --qv-font-display: var(--font-display);
+  --qv-trace-color: var(--color-qv-border-strong);
+  --qv-trace-width: 1px;
+  --qv-trace-offset: 0.7rem;
+  --qv-terminal-width: 0.25rem;
   --qv-layout-reading: var(--container-qv-reading);
   --qv-layout-content: var(--container-qv-content);
   --qv-layout-wide: var(--container-qv-wide);
   --qv-layout-md: 55rem;
   --qv-layout-lg: var(--container-qv-content);
-}
-
-[data-theme="dark"] {
-  color-scheme: dark;
-  --qv-theme-canvas: oklch(0.16 0.008 255);
-  --qv-theme-canvas-deep: oklch(0.12 0.008 255);
-  --qv-theme-surface: oklch(0.21 0.009 255);
-  --qv-theme-surface-muted: oklch(0.24 0.009 255);
-  --qv-theme-surface-sunken: oklch(0.125 0.008 255);
-  --qv-theme-surface-raised: oklch(0.27 0.01 255);
-  --qv-theme-content: oklch(0.94 0.005 250);
-  --qv-theme-content-muted: oklch(0.75 0.008 250);
-  --qv-theme-content-subtle: oklch(0.62 0.009 250);
-  --qv-theme-content-inverse: oklch(0.16 0.008 255);
-  --qv-theme-border: oklch(0.34 0.012 255);
-  --qv-theme-border-strong: oklch(0.5 0.014 255);
-  --qv-theme-border-highlight: oklch(0.94 0.004 250 / 0.15);
-  --qv-theme-accent: oklch(0.69 0.14 235);
-  --qv-theme-accent-strong: oklch(0.76 0.13 235);
-  --qv-theme-accent-soft: oklch(0.28 0.065 238);
-  --qv-theme-on-accent: oklch(0.145 0.012 255);
-  --qv-theme-emphasis: oklch(0.71 0.18 18);
-  --qv-theme-emphasis-strong: oklch(0.78 0.16 18);
-  --qv-theme-emphasis-soft: oklch(0.29 0.075 18);
-  --qv-theme-on-emphasis: oklch(0.16 0.012 255);
-  --qv-theme-feature: oklch(0.7 0.16 306);
-  --qv-theme-feature-strong: oklch(0.77 0.145 306);
-  --qv-theme-feature-soft: oklch(0.29 0.07 306);
-  --qv-theme-on-feature: oklch(0.15 0.012 255);
-  --qv-theme-focus: oklch(0.74 0.14 235);
-  --qv-theme-info: oklch(0.72 0.12 235);
-  --qv-theme-info-soft: oklch(0.28 0.055 238);
-  --qv-theme-positive: oklch(0.7 0.11 154);
-  --qv-theme-positive-soft: oklch(0.28 0.045 154);
-  --qv-theme-warning: oklch(0.79 0.11 78);
-  --qv-theme-warning-soft: oklch(0.3 0.05 75);
-  --qv-theme-danger: oklch(0.72 0.14 29);
-  --qv-theme-danger-soft: oklch(0.29 0.06 29);
-  --qv-theme-shadow-highlight: oklch(0.96 0.004 250 / 0.12);
-  --qv-theme-shadow-light: oklch(0.94 0.005 250 / 0.055);
-  --qv-theme-shadow-low: oklch(0.03 0.008 255 / 0.4);
-  --qv-theme-shadow-mid: oklch(0.025 0.008 255 / 0.5);
-  --qv-theme-shadow-high: oklch(0.02 0.008 255 / 0.64);
-  --qv-theme-shadow-inset-dark: oklch(0.02 0.008 255 / 0.6);
-  --qv-theme-shadow-inset-light: oklch(0.9 0.006 250 / 0.08);
-}
-
-/* Keep Tailwind utility tokens themeable at runtime, including nested Sirio proofs. */
-:root,
-[data-theme] {
-  --color-qv-canvas: var(--qv-theme-canvas);
-  --color-qv-canvas-deep: var(--qv-theme-canvas-deep);
-  --color-qv-surface: var(--qv-theme-surface);
-  --color-qv-surface-muted: var(--qv-theme-surface-muted);
-  --color-qv-surface-sunken: var(--qv-theme-surface-sunken);
-  --color-qv-surface-raised: var(--qv-theme-surface-raised);
-  --color-qv-content: var(--qv-theme-content);
-  --color-qv-content-muted: var(--qv-theme-content-muted);
-  --color-qv-content-subtle: var(--qv-theme-content-subtle);
-  --color-qv-content-inverse: var(--qv-theme-content-inverse);
-  --color-qv-border: var(--qv-theme-border);
-  --color-qv-border-strong: var(--qv-theme-border-strong);
-  --color-qv-border-highlight: var(--qv-theme-border-highlight);
-  --color-qv-accent: var(--qv-theme-accent);
-  --color-qv-accent-strong: var(--qv-theme-accent-strong);
-  --color-qv-accent-soft: var(--qv-theme-accent-soft);
-  --color-qv-on-accent: var(--qv-theme-on-accent);
-  --color-qv-emphasis: var(--qv-theme-emphasis);
-  --color-qv-emphasis-strong: var(--qv-theme-emphasis-strong);
-  --color-qv-emphasis-soft: var(--qv-theme-emphasis-soft);
-  --color-qv-on-emphasis: var(--qv-theme-on-emphasis);
-  --color-qv-feature: var(--qv-theme-feature);
-  --color-qv-feature-strong: var(--qv-theme-feature-strong);
-  --color-qv-feature-soft: var(--qv-theme-feature-soft);
-  --color-qv-on-feature: var(--qv-theme-on-feature);
-  --color-qv-focus: var(--qv-theme-focus);
-  --color-qv-info: var(--qv-theme-info);
-  --color-qv-info-soft: var(--qv-theme-info-soft);
-  --color-qv-positive: var(--qv-theme-positive);
-  --color-qv-positive-soft: var(--qv-theme-positive-soft);
-  --color-qv-warning: var(--qv-theme-warning);
-  --color-qv-warning-soft: var(--qv-theme-warning-soft);
-  --color-qv-danger: var(--qv-theme-danger);
-  --color-qv-danger-soft: var(--qv-theme-danger-soft);
-  --shadow-qv-xs: inset 0 1px 0 var(--qv-theme-shadow-highlight), 0 2px 5px var(--qv-theme-shadow-low);
-  --shadow-qv-sm: inset 0 1px 0 var(--qv-theme-shadow-highlight), -3px -3px 8px var(--qv-theme-shadow-light), 4px 5px 12px var(--qv-theme-shadow-low);
-  --shadow-qv-md: inset 0 1px 0 var(--qv-theme-shadow-highlight), -7px -7px 18px var(--qv-theme-shadow-light), 8px 10px 24px var(--qv-theme-shadow-mid);
-  --shadow-qv-lg: inset 0 1px 0 var(--qv-theme-shadow-highlight), -12px -12px 30px var(--qv-theme-shadow-light), 16px 20px 42px var(--qv-theme-shadow-high);
-  --shadow-qv-control: inset 0 1px 0 var(--qv-theme-shadow-highlight), 0 3px 7px var(--qv-theme-shadow-low), 0 10px 22px var(--qv-theme-shadow-mid);
-  --shadow-qv-pressed: inset 3px 3px 8px var(--qv-theme-shadow-inset-dark), inset -3px -3px 8px var(--qv-theme-shadow-inset-light);
-  --qv-color-background: var(--color-qv-canvas);
-  --qv-color-surface: var(--color-qv-surface);
-  --qv-color-surface-muted: var(--color-qv-surface-muted);
-  --qv-color-surface-sunken: var(--color-qv-surface-sunken);
-  --qv-color-surface-raised: var(--color-qv-surface-raised);
-  --qv-color-border: var(--color-qv-border);
-  --qv-color-border-strong: var(--color-qv-border-strong);
-  --qv-color-text: var(--color-qv-content);
-  --qv-color-text-muted: var(--color-qv-content-muted);
-  --qv-color-text-subtle: var(--color-qv-content-subtle);
-  --qv-color-accent: var(--color-qv-accent);
-  --qv-color-accent-strong: var(--color-qv-accent-strong);
-  --qv-color-accent-soft: var(--color-qv-accent-soft);
-  --qv-color-on-accent: var(--color-qv-on-accent);
-  --qv-color-emphasis: var(--color-qv-emphasis);
-  --qv-color-emphasis-strong: var(--color-qv-emphasis-strong);
-  --qv-color-emphasis-soft: var(--color-qv-emphasis-soft);
-  --qv-color-on-emphasis: var(--color-qv-on-emphasis);
-  --qv-color-feature: var(--color-qv-feature);
-  --qv-color-feature-strong: var(--color-qv-feature-strong);
-  --qv-color-feature-soft: var(--color-qv-feature-soft);
-  --qv-color-on-feature: var(--color-qv-on-feature);
-  --qv-shadow-xs: var(--shadow-qv-xs);
-  --qv-shadow-sm: var(--shadow-qv-sm);
-  --qv-shadow-md: var(--shadow-qv-md);
-  --qv-shadow-lg: var(--shadow-qv-lg);
-  --qv-shadow-control: var(--shadow-qv-control);
-  --qv-shadow-pressed: var(--shadow-qv-pressed);
 }

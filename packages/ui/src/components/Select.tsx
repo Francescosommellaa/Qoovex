@@ -9,7 +9,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
       {...props}
       ref={ref}
       className={classNames(
-        "min-h-qv-control w-full rounded-qv-md border border-qv-border bg-qv-surface px-qv-3 text-qv-content shadow-qv-sm disabled:cursor-not-allowed disabled:bg-qv-surface-muted disabled:opacity-70 aria-invalid:border-qv-danger",
+        "min-h-qv-control w-full rounded-qv-sm border border-qv-border-strong bg-qv-surface px-qv-3 text-qv-content disabled:cursor-not-allowed disabled:bg-qv-surface-muted disabled:opacity-70 aria-invalid:border-qv-danger",
         className,
       )}
     >

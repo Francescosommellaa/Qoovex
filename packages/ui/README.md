@@ -1,27 +1,33 @@
 # @qoovex/ui
 
-Foundation UI condivisa per le superfici Qoovex.
+Fondazione condivisa di Traccia Operativa per tutte le superfici Qoovex.
 
-## Scopo
+## Contratto
 
-Contiene solo componenti generici, token Tailwind CSS v4 e stili base. Non contiene business logic, auth, Prisma, query DB, ruoli, permessi, copy normativo o componenti specifici del workspace.
+Il package contiene token CSS-first, stili base e primitive esclusivamente presentazionali. Non contiene logica di dominio, auth, Prisma, ruoli, permessi o copy normativo.
 
-## Componenti
+Primitive pubbliche:
 
-- `Button`
-- `IconButton`
-- `Card`
-- `Panel`
-- `Badge`
-- `Status`
-- `Field`, `Input`, `Textarea`, `Select`, `Checkbox`, `Radio`, `Switch`
-- `Alert`, `LoadingState`, `EmptyState`, `ErrorState`
-- `Section`
-- `Container`
+- controlli: `Button`, `IconButton`, `Field`, `Input`, `Textarea`, `Select`, `Checkbox`, `Radio`, `Switch`;
+- layout: `Container`, `Section`;
+- feedback: `Alert`, `LoadingState`, `EmptyState`, `ErrorState`;
+- grammatica: `Trace`, `TraceNode`, `TraceGap`, `TraceTerminal`;
+- iconografia: `Icon` e un insieme curato di glyph Phosphor.
 
-## Stili
+`Card`, `Panel`, `Badge` e `Status` sono stati rimossi. Le situazioni operative appartengono al workspace, non alla libreria generica.
 
-Importare i CSS globali nell'app consumer:
+## Fondazione visiva
+
+- esclusivamente light-first;
+- palette canonica campo, carta, nebbia, inchiostro, linea e cobalto;
+- General Sans per il linguaggio operativo, Cabinet Grotesk per orientamento e marketing;
+- colore di brand separato dai colori semantici;
+- nessuna informazione affidata soltanto al colore;
+- raggi limitati a controlli, focus e overlay reali;
+- nessuna elevazione statica; l'unica ombra pubblica appartiene agli overlay;
+- supporto a `forced-colors`, contrasto aumentato e `prefers-reduced-motion`.
+
+Import canonico:
 
 ```css
 @import "tailwindcss";
@@ -30,23 +36,9 @@ Importare i CSS globali nell'app consumer:
 @import "@qoovex/ui/styles/base.css";
 ```
 
-I token sono semantici e sono definiti con `@theme static`, senza configurazione Tailwind JavaScript. Il provider Fontshare resta confinato in `@qoovex/brand-resources`: General Sans per il testo operativo e Cabinet Grotesk per i titoli.
+## Confini
 
-La fondazione mobile-first espone:
-
-- gutter pagina fluido da `1rem` a `2rem`;
-- spaziatura di sezione fluida da `3.5rem` a `7rem`;
-- contenitori `reading`, `content` e `wide`;
-- scala tipografica fluida per body, heading, title e display;
-- controlli con target base da `2.75rem` (44 px), focus visibile e reduced motion;
-- ruoli semantici per canvas, superfici raised/sunken, contenuto, bordi, azione blu, enfasi corallo, feature violetta e stati;
-- elevazioni skeuomorphiche tinte sul canvas, con feedback raised e pressed;
-- tema light come default indipendente dal sistema e tema dark disponibile solo tramite `data-theme="dark"` esplicito; il marketing forza sempre `data-theme="light"`.
-
-## Regole
-
-- Nessun import da `apps/*`.
-- Nessun import da `@qoovex/db`.
-- Nessun import da Auth.js/NextAuth, API, ruoli o tipi di dominio.
-- Nessun preset documentale, checklist o scadenza.
-- Nessuna promessa di conformita, certificazione o validita legale.
+- nessun import da `apps/*`, `@qoovex/db`, Auth.js o tipi di dominio;
+- nessun alias permanente per token o primitive legacy;
+- nessun preset documentale o promessa di conformità;
+- le prop funzionali dei controlli restano stabili durante la migrazione visuale.
