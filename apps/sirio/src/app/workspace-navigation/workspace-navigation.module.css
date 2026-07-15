@@ -12,7 +12,7 @@
 .tools details summary { cursor: pointer; list-style: none; }
 .tools details summary::-webkit-details-marker { display: none; }
 .notification { display: flex !important; justify-content: space-between; align-items: center; }
-.notification strong { border-radius: var(--qv-radius-pill); background: var(--qv-action-primary); color: var(--qv-action-on-primary); padding: 2px 7px; font-size: .72rem; }
+.notification strong { border-radius: var(--qv-radius-control-compact); background: var(--qv-action-primary); color: var(--qv-action-on-primary); padding: 2px 7px; font-size: .72rem; }
 .shell main { align-self: end; margin: 16px; padding: 20px 0; border-top: 1px solid var(--qv-border-strong); }
 .shell main p { margin: 0; color: var(--qv-fg-secondary); font-size: .78rem; font-weight: 700; }
 .shell main h2 { margin: 5px 0 18px; font-size: 1.35rem; }

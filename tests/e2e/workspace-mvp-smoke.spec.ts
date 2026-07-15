@@ -88,6 +88,21 @@ async function satisfyMfaGate(page: Page, secret: string) {
   await expect(page.getByRole("heading", { name: "Da fare", exact: true })).toBeVisible();
 }
 
+async function openWorkspaceAccountMenu(page: Page) {
+  const navigation = page.getByRole("navigation", { name: "Navigazione workspace" });
+  let accountSummary = navigation.locator("summary:visible").filter({ hasText: /^Azienda e account$/ });
+
+  if (await accountSummary.count() === 0) {
+    const mobileMenuSummary = navigation.locator("summary:visible").filter({ hasText: /^Menu$/ });
+    await expect(mobileMenuSummary).toHaveCount(1);
+    await mobileMenuSummary.click();
+    accountSummary = navigation.locator("summary:visible").filter({ hasText: /^Azienda e account$/ });
+  }
+
+  await expect(accountSummary).toHaveCount(1);
+  await accountSummary.click();
+}
+
 async function createDomainData(page: Page, runId: string) {
   const worker = await pagePostJson(page, "/api/workers", {
     displayName: `Operatore E2E ${runId}`,
@@ -292,6 +307,7 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     await pageJsonRequest(page, "DELETE", `/api/document-packages/${documentPackage.id}/share-links/${shareLink.id}`);
     await verifyAnonymousShareLink(anonymousApi, token as string, 404, "Link non disponibile.");
 
+    await openWorkspaceAccountMenu(page);
     await page.getByRole("button", { name: "Esci" }).click();
     await page.waitForURL("**/sign-in");
     await expectPageJson(page, "/api/context", 401);
@@ -397,6 +413,7 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
     await page.goto("/sign-in", { waitUntil: "domcontentloaded" });
     await page.getByRole("button", { name: "Accedi come dev" }).click();
     await expect(page).toHaveURL(/\/dashboard$/);
+    await openWorkspaceAccountMenu(page);
     const qoovexConsoleLink = page.getByRole("link", { name: "Console Qoovex" });
     await expect(qoovexConsoleLink).toBeVisible();
     await qoovexConsoleLink.click();
@@ -530,6 +547,7 @@ test("ordinary MFA gates workspace, replaces the factor, logs out, and recovers 
     await ownerPage.getByRole("button", { name: "Approva" }).click();
     await expect(ownerPage.getByText("Recupero approvato e notificato.")).toBeVisible();
 
+    await openWorkspaceAccountMenu(ownerPage);
     await ownerPage.getByRole("button", { name: "Esci" }).click();
     await ownerPage.waitForURL("**/sign-in");
     await expectPageJson(ownerPage, "/api/context", 401);
