@@ -1,27 +1,32 @@
 # Sirio App
 
-Showcase tecnico e superficie di prova del design system Qoovex.
+Sandbox di prova e approvazione del nuovo design canonico Qoovex.
 
 ## Stato
 
-La direzione Traccia Operativa è approvata e integrata. Sirio documenta la fondazione canonica importata da `@qoovex/ui`; non possiede un design system parallelo e non contiene business logic.
+Sirio è indipendente da `@qoovex/ui` e ospita una foundation app-local basata sullo starter Kiranism fissato al commit `0edc5cf631ac7a8280112fd2bcb80312597bafdf`.
 
-## Responsabilità
+Usa shadcn `base-nova`, Base UI, Tabler Icons, Tailwind CSS v4, Geist, Geist Mono e il tema Vercel light/dark. Provenienza e avvisi MIT sono in `THIRD_PARTY_NOTICES.md`.
 
-- mostrare palette, scala di grigi, tipografia e densità;
-- provare controlli, feedback e grammatica `Trace` in tutti gli stati;
-- verificare contenuto lungo, loading, errore, assenza dati e responsive;
-- conservare `/foundations` come tavola narrativa della direzione approvata;
-- documentare in `/foundations#token` i tre livelli del contratto token prima dell'approvazione;
-- ospitare `/situazione-aperta` come specimen identitario e prova della dashboard operativa a 390 e 1440 px;
-- separare copy prudente da copy da evitare.
+I marchi non sono ricreati localmente: Sirio consuma gli SVG canonici esposti da `@qoovex/brand-resources` e assegna la stella al catalogo, il marchio nero al marketing e il marchio workspace alla dashboard.
 
-## Divieti
+La motion applicabile dello starter è inclusa: reveal circolare al cambio tema, navbar floating che si restringe durante lo scroll e mostra tag di sezione dinamici, transizioni degli overlay e della sidebar, indicatori collassabili, switch, tab e stati di caricamento. Tutto rispetta `prefers-reduced-motion` e mantiene un fallback senza View Transition API.
 
-- niente Prisma, auth o servizi prodotto;
-- niente token locali alternativi alla foundation condivisa;
-- niente preset, obblighi o promesse normative inventate;
-- niente import Fontshare duplicati.
+## Route
+
+- `/`: catalogo di fondazioni e componenti;
+- `/marketing`: landing Qoovex rappresentativa;
+- `/dashboard`: shell e dashboard Qoovex rappresentativa.
+
+La preview marketing compone il componente dashboard reale di Sirio. I dati sono dimostrativi e non provengono dal runtime prodotto.
+
+## Confini
+
+- niente `@qoovex/ui` o Fontshare; `@qoovex/brand-resources` viene usato esclusivamente per gli asset SVG canonici;
+- niente Prisma, auth, API o servizi prodotto;
+- niente Clerk, billing, Sentry o librerie applicative dello starter;
+- niente preset o promesse normative inventate;
+- nessuna promozione in web, workspace o package condivisi prima dell'approvazione.
 
 ## Comandi
 
