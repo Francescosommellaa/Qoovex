@@ -39,4 +39,20 @@ describe("workspace navigation policy", () => {
     expect(navigation.primary).not.toContainEqual(expect.objectContaining({ href: "/qoovex-admin" }));
     expect(navigation.account[0]).toEqual({ label: "Console Qoovex", href: "/qoovex-admin" });
   });
+
+  it("keeps account destinations available without a company membership", () => {
+    expect(buildWorkspaceNavigation(null, "USER")).toEqual({
+      primary: [],
+      add: [],
+      account: [{ label: "Sicurezza", href: "/account/security" }],
+    });
+    expect(buildWorkspaceNavigation(null, "SUPER_ADMIN")).toEqual({
+      primary: [],
+      add: [],
+      account: [
+        { label: "Console Qoovex", href: "/qoovex-admin" },
+        { label: "Sicurezza", href: "/account/security" },
+      ],
+    });
+  });
 });

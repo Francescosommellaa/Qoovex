@@ -69,18 +69,16 @@ const addNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> =
 };
 
 export function buildWorkspaceNavigation(role: WorkspaceRole | null, platformRole: "USER" | "SUPER_ADMIN" | null): WorkspaceNavigationModel {
-  if (!role) return { primary: [], add: [], account: [] };
-
   const account: WorkspaceNavigationItem[] = [];
   if (role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT") {
     account.push({ label: "Impostazioni", href: "/settings" });
   }
-  account.push({ label: "Sicurezza", href: "/account/security" });
+  if (platformRole) account.push({ label: "Sicurezza", href: "/account/security" });
   if (platformRole === "SUPER_ADMIN") account.unshift({ label: "Console Qoovex", href: "/qoovex-admin" });
 
   return {
-    primary: [...everydayNavigation[role]],
-    add: [...addNavigation[role]],
+    primary: role ? [...everydayNavigation[role]] : [],
+    add: role ? [...addNavigation[role]] : [],
     account,
   };
 }
