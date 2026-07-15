@@ -21,6 +21,7 @@ vi.mock("@shared/server/access-errors", () => ({ AccessError: mocks.AccessError 
 vi.mock("@shared/server/domain-access-service", () => ({ getEffectiveOrganizationRole: () => null }));
 vi.mock("@shared/server/mfa-service", () => ({ getMfaStatusByUserId: mocks.getMfaStatusByUserId }));
 vi.mock("@shared/server/dev-auth", () => ({ getDevAuthSession: mocks.getDevAuthSession }));
+vi.mock("@shared/server/notification-service", () => ({ getUnreadNotificationCount: vi.fn().mockResolvedValue(0) }));
 vi.mock("@/views/account-security/AccountSecurityFlow", () => ({
   AccountSecurityFlow: () => <div>GLOBAL_MFA_GATE</div>,
 }));

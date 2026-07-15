@@ -74,7 +74,7 @@ export function DocumentPackageItemForm({ packageId, documents, documentVersions
           </select>
         </label>
         <label className={styles.field}>
-          <span>Posizione opzionale</span>
+          <span>Ordine opzionale</span>
           <input disabled={disabled || pending} min={0} name="position" type="number" />
         </label>
         {itemType === "DOCUMENT" ? (
@@ -90,9 +90,9 @@ export function DocumentPackageItemForm({ packageId, documents, documentVersions
         ) : null}
         {itemType === "DOCUMENT_VERSION" ? (
           <label className={styles.field}>
-            <span>Versione documento</span>
+            <span>File del documento</span>
             <select disabled={disabled || pending} name="documentVersionId" required>
-              <option value="">Seleziona versione</option>
+              <option value="">Seleziona file</option>
               {documentVersions.map((version) => (
                 <option key={version.id} value={version.id}>{documentTitle(version.documentId, documents)} - {version.originalFileName}</option>
               ))}
@@ -124,12 +124,12 @@ export function DocumentPackageItemForm({ packageId, documents, documentVersions
       </div>
       {itemType === "NOTE" ? (
         <label className={styles.field}>
-          <span>Nota pacchetto</span>
+          <span>Nota da condividere</span>
           <textarea disabled={disabled || pending} maxLength={4000} minLength={2} name="note" required />
         </label>
       ) : null}
       <button className={styles.button} disabled={disabled || pending} type="submit">
-        {pending ? "Salvataggio..." : "Aggiungi item"}
+        {pending ? "Salvataggio..." : "Aggiungi elemento"}
       </button>
     </form>
   );

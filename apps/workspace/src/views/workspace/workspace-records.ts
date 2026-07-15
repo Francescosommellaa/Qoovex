@@ -16,6 +16,10 @@ export type WorkspaceRole = "OWNER" | "ADMIN" | "SAFETY_CONSULTANT" | "SITE_MANA
 export interface WorkspaceCapabilities {
   role: WorkspaceRole | null;
   canManageCore: boolean;
+  canCreateDocuments: boolean;
+  canCreateWorkers: boolean;
+  canCreateJobSites: boolean;
+  canCreateDeadlines: boolean;
   canUpdateDocuments: boolean;
   canUploadDocumentVersions: boolean;
   canManageChecklists: boolean;
@@ -26,6 +30,13 @@ export interface WorkspaceCapabilities {
   canSharePackages: boolean;
   canReadAssignments: boolean;
   canManageAssignments: boolean;
+  canReadMembers: boolean;
+  canManageMembers: boolean;
+  canReadDocumentSettings: boolean;
+  canManageDocumentSettings: boolean;
+  canReadNotifications: boolean;
+  canReadAudit: boolean;
+  canReadDataControl: boolean;
 }
 
 export interface WorkspaceDocumentTypeRecord {

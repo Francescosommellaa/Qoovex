@@ -70,7 +70,7 @@ export function DocumentForm({ mode, document, documentTypes, workers, jobSites,
           </select>
         </label>
         <label className={styles.field}>
-          <span>Proprietario</span>
+          <span>Collegato a</span>
           <select defaultValue={ownerType} disabled={disabled || pending} name="ownerType" onChange={(event) => setOwnerType(event.target.value as typeof ownerType)}>
             <option value="ORGANIZATION">Azienda</option>
             <option value="WORKER">Lavoratore</option>
@@ -99,14 +99,14 @@ export function DocumentForm({ mode, document, documentTypes, workers, jobSites,
             </select>
           </label>
         ) : null}
-        <label className={styles.field}>
+        {mode === "update" ? <label className={styles.field}>
           <span>Stato documentale</span>
           <select defaultValue={document?.status ?? "TO_REVIEW"} disabled={disabled || pending} name="status">
             {documentStatuses.filter((status): status is Exclude<DocumentStatus, "ARCHIVED"> => status !== "ARCHIVED").map((status) => (
               <option key={status} value={status}>{documentStatusLabels[status]}</option>
             ))}
           </select>
-        </label>
+        </label> : null}
         <label className={styles.field}>
           <span>Scadenza registrata</span>
           <input defaultValue={formatDateInput(document?.expiryDate)} disabled={disabled || pending} name="expiryDate" type="date" />

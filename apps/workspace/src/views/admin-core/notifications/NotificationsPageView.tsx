@@ -2,8 +2,6 @@ import Link from "next/link";
 import type { NotificationListResponse, NotificationResponse, NotificationSeverity } from "@qoovex/types";
 import styles from "../AdminCore.module.css";
 import { NotificationActionButtons } from "./NotificationActionButtons";
-import { NotificationEmailDigestPanel } from "./NotificationEmailDigestPanel";
-import { NotificationEmailPreferencesPanel } from "./NotificationEmailPreferencesPanel";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 
 const severityLabels: Record<NotificationSeverity, string> = {
@@ -50,15 +48,10 @@ export function NotificationsPageView({ data, activeFilter }: { data: Notificati
     <WorkspacePage>
       <WorkspacePageHeader
         title="Notifiche"
-        description="Promemoria interni creati da scadenze registrate, stati documentali e pacchetti pronti per revisione."
+        description="Apri ciò che richiede attenzione oppure segna e nascondi le notifiche già gestite."
+        action={<Link className={styles.ghostButton} href="/settings/notifications">Preferenze</Link>}
       />
-      <WorkspacePanel title="Preferenze email" description="Scegli se ricevere un digest email automatico e consulta gli invii recenti.">
-        <NotificationEmailPreferencesPanel />
-      </WorkspacePanel>
-      <WorkspacePanel title="Riepilogo email" description="Anteprima e invio manuale a te stesso, senza allegati o link di download.">
-        <NotificationEmailDigestPanel />
-      </WorkspacePanel>
-      <WorkspacePanel title="Notifiche interne" description={`${data.unreadCount} notifiche non lette. Le notifiche nascoste non appaiono nella vista standard.`}>
+      <WorkspacePanel title="Inbox" description={`${data.unreadCount} notifiche non lette. Le notifiche nascoste non appaiono nella vista standard.`}>
         <div className={styles.filterBar} aria-label="Filtra notifiche">
           {filters.map((filter) => (
             <Link aria-current={activeFilter === filter.key ? "page" : undefined} href={filter.href} key={filter.href}>

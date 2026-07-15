@@ -17,15 +17,15 @@ interface DocumentDetailPageProps {
 export default async function DocumentDetailPage({ params, searchParams }: DocumentDetailPageProps) {
   try {
     const [{ documentId }, { from }] = await Promise.all([params, searchParams]);
-    const [document, versions, deadlines, documentTypes, workers, jobSites, capabilities] = await Promise.all([
+    const capabilities = await getWorkspaceCapabilities();
+    const [document, versions, deadlines, workers, jobSites] = await Promise.all([
       getDocument(documentId),
       listDocumentVersions(documentId),
       listDeadlines({ documentId }),
-      listDocumentTypes(),
       listWorkers(),
       listJobSites(),
-      getWorkspaceCapabilities(),
     ]);
+    const documentTypes = capabilities.canReadDocumentSettings ? await listDocumentTypes() : [];
     return (
       <DocumentDetailView
         capabilities={capabilities}

@@ -9,13 +9,13 @@ import type { WorkspaceChecklistItemRecord, WorkspaceChecklistRecord, WorkspaceE
 
 export default async function EvidencePage() {
   try {
-    const [evidence, checklists, jobSites, workers, capabilities] = await Promise.all([
+    const capabilities = await getWorkspaceCapabilities();
+    const [evidence, jobSites, workers] = await Promise.all([
       listEvidence(),
-      listChecklists(),
       listJobSites(),
       listWorkers(),
-      getWorkspaceCapabilities(),
     ]);
+    const checklists = capabilities.canCompleteChecklists || capabilities.canManageChecklists ? await listChecklists() : [];
     const detailedChecklists = await Promise.all(checklists.map((checklist) => getChecklist(checklist.id)));
     const checklistItems = detailedChecklists.flatMap((checklist) => checklist.items ?? []);
     return (

@@ -13,9 +13,10 @@ interface ChecklistFormProps {
   checklist?: WorkspaceChecklistRecord;
   jobSites: WorkspaceJobSiteRecord[];
   disabled?: boolean;
+  initialJobSiteId?: string;
 }
 
-export function ChecklistForm({ mode, checklist, jobSites, disabled }: ChecklistFormProps) {
+export function ChecklistForm({ mode, checklist, jobSites, disabled, initialJobSiteId }: ChecklistFormProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -53,21 +54,22 @@ export function ChecklistForm({ mode, checklist, jobSites, disabled }: Checklist
         </label>
         <label className={styles.field}>
           <span>Cantiere collegato</span>
-          <select defaultValue={checklist?.jobSiteId ?? ""} disabled={disabled || pending} name="jobSiteId">
+          {initialJobSiteId ? <input name="jobSiteId" type="hidden" value={initialJobSiteId} /> : null}
+          <select defaultValue={checklist?.jobSiteId ?? initialJobSiteId ?? ""} disabled={disabled || pending || Boolean(initialJobSiteId)} name={initialJobSiteId ? undefined : "jobSiteId"}>
             <option value="">Nessun cantiere</option>
             {jobSites.map((jobSite) => (
               <option key={jobSite.id} value={jobSite.id}>{jobSite.name}</option>
             ))}
           </select>
         </label>
-        <label className={styles.field}>
+        {mode === "update" ? <label className={styles.field}>
           <span>Stato</span>
           <select defaultValue={checklist?.status ?? "ACTIVE"} disabled={disabled || pending} name="status">
             {recordStatuses.filter((status) => status !== "ARCHIVED").map((status) => (
               <option key={status} value={status}>{recordStatusLabels[status]}</option>
             ))}
           </select>
-        </label>
+        </label> : null}
       </div>
       <label className={styles.field}>
         <span>Descrizione</span>

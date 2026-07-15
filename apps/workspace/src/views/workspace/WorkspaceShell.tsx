@@ -5,9 +5,11 @@ import { getWorkspaceAccessContext, requirePrimaryIdentity } from "@shared/serve
 import { getEffectiveOrganizationRole } from "@shared/server/domain-access-service";
 import { getMfaStatusByUserId } from "@shared/server/mfa-service";
 import { getDevAuthSession } from "@shared/server/dev-auth";
+import { getUnreadNotificationCount } from "@shared/server/notification-service";
 import { AccountSecurityFlow } from "@/views/account-security/AccountSecurityFlow";
 import { DevRoleSwitcher } from "./DevRoleSwitcher";
 import { WorkspaceNavigation } from "./WorkspaceNavigation";
+import { buildWorkspaceNavigation, canReadWorkspaceNotifications } from "./workspace-navigation-policy";
 import { SupportSessionBanner, WorkspaceLogoutButton } from "./WorkspaceSessionControls";
 import styles from "./WorkspaceShell.module.css";
 
@@ -15,7 +17,18 @@ async function getShellState() {
   try {
     const context = await getWorkspaceAccessContext();
     const devSession = await getDevAuthSession();
-    return { kind: "workspace" as const, context, devRole: devSession?.role ?? null, role: getEffectiveOrganizationRole(context) };
+    const role = getEffectiveOrganizationRole(context);
+    const unreadNotificationCount = canReadWorkspaceNotifications(role)
+      ? await getUnreadNotificationCount().catch(() => 0)
+      : 0;
+    return {
+      kind: "workspace" as const,
+      context,
+      devRole: devSession?.role ?? null,
+      role,
+      navigation: buildWorkspaceNavigation(role, context.platformRole),
+      unreadNotificationCount,
+    };
   } catch (error) {
     if (error instanceof AccessError && error.code === "MFA_REQUIRED") {
       const identity = await requirePrimaryIdentity();
@@ -46,8 +59,9 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
         {isMfaRequired ? <nav className={styles.sessionNav} aria-label="Sessione"><WorkspaceLogoutButton /></nav> : (
             <WorkspaceNavigation
               authenticated={isWorkspace}
+              navigation={isWorkspace ? shellState.navigation : { primary: [], add: [], account: [] }}
+              unreadNotificationCount={isWorkspace ? shellState.unreadNotificationCount : 0}
               platformRole={isWorkspace ? shellState.context.platformRole : null}
-              role={isWorkspace ? shellState.role : null}
               support={isWorkspace ? shellState.context.support : null}
             />
         )}

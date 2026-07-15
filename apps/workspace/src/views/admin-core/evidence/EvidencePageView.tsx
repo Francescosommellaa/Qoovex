@@ -1,6 +1,4 @@
-import { EvidenceArchiveButton } from "./EvidenceArchiveButton";
-import { EvidenceForm } from "./EvidenceForm";
-import { EvidenceUpdateForm } from "./EvidenceUpdateForm";
+import Link from "next/link";
 import styles from "../AdminCore.module.css";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { evidenceTypeLabels, fileSizeLabel, formatDate, statusTone } from "@/views/workspace/workspace-format";
@@ -46,10 +44,10 @@ export function EvidencePageView({
     <WorkspacePage>
       <WorkspacePageHeader
         title="Prove"
-        description="Foto, file e note operative collegate a cantieri, lavoratori o checklist."
+        description="Consulta foto, file e note operative nei contesti in cui sono state registrate."
+        action={capabilities.canUploadEvidence ? <Link className={styles.linkButton} href="/evidence/new">Aggiungi prova</Link> : undefined}
       />
-      <div className={styles.splitGrid}>
-        <WorkspacePanel title="Prove recenti" description="Il download passa sempre da accesso protetto server-side.">
+      <WorkspacePanel title="Prove recenti" description="Il download passa sempre da accesso protetto server-side.">
           <div className={styles.list}>
             {!evidence.length ? (
               <WorkspaceEmptyState title="Nessuna prova" description="Aggiungi una foto, un file o una nota per collegare una prova al cantiere." />
@@ -63,26 +61,11 @@ export function EvidencePageView({
                 <div className={styles.actions}>
                   <WorkspaceState label={evidenceTypeLabels[item.type]} tone={item.type === "NOTE" ? "info" : "good"} />
                   {item.hasFile ? <a className={styles.linkButton} href={`/api/evidence/${item.id}/download`}>Scarica</a> : null}
-                  {capabilities.canDeleteEvidence ? <EvidenceArchiveButton evidenceId={item.id} /> : null}
                 </div>
-                {capabilities.canUploadEvidence ? (
-                  <details className={styles.details}>
-                    <summary>Aggiorna metadata</summary>
-                    <EvidenceUpdateForm evidence={item} />
-                  </details>
-                ) : null}
               </article>
             ))}
           </div>
-        </WorkspacePanel>
-        <WorkspacePanel title="Aggiungi prova" description="Le prove registrano informazioni operative da confermare con il responsabile o consulente.">
-          {capabilities.canUploadEvidence ? (
-            <EvidenceForm checklists={checklists} checklistItems={checklistItems} jobSites={jobSites} workers={workers} />
-          ) : (
-            <p className="qv-text-muted">Il tuo ruolo puo leggere le prove, ma non caricarne una da questa schermata.</p>
-          )}
-        </WorkspacePanel>
-      </div>
+      </WorkspacePanel>
     </WorkspacePage>
   );
 }

@@ -45,7 +45,7 @@ export const documentPackageStatusLabels: Record<DocumentPackageStatus, string> 
 
 export const documentPackageItemTypeLabels: Record<DocumentPackageItemType, string> = {
   DOCUMENT: "Documento",
-  DOCUMENT_VERSION: "Versione documento",
+  DOCUMENT_VERSION: "File del documento",
   EVIDENCE: "Prova",
   CHECKLIST: "Checklist",
   NOTE: "Nota",

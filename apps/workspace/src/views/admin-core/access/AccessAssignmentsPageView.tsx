@@ -24,6 +24,7 @@ interface AccessAssignmentsPageViewProps {
   jobSiteWorkerAssignments: JobSiteWorkerAssignmentResponse[];
   options: AssignmentOptions;
   returnToDashboard?: boolean;
+  canManage: boolean;
 }
 
 function roleLabel(role: string) {
@@ -204,17 +205,18 @@ export function AccessAssignmentsPageView({
   jobSiteWorkerAssignments,
   options,
   returnToDashboard = false,
+  canManage,
 }: AccessAssignmentsPageViewProps) {
   return (
     <WorkspacePage>
       <WorkspacePageHeader
         title="Accessi operativi"
-        description="Collega utenti, lavoratori e cantieri per limitare la vista alle risorse assegnate."
+        description={canManage ? "Collega utenti, lavoratori e cantieri per applicare gli scope operativi." : "Consulta i collegamenti e le assegnazioni operative dell'azienda."}
         action={returnToDashboard ? <Link className={styles.ghostButton} href="/dashboard">Torna alla dashboard</Link> : undefined}
       />
       <div className={styles.grid}>
         <WorkspacePanel title="Collega utenti e lavoratori" description="Collegamento operativo per mostrare al lavoratore solo i propri dati.">
-          <WorkerUserLinkForm options={options} />
+          {canManage ? <WorkerUserLinkForm options={options} /> : null}
           <div className={styles.list}>
             {!workerUserLinks.length ? (
               <WorkspaceEmptyState title="Nessun collegamento operativo" description="Collega un utente a un lavoratore per attivare lo scope personale." />
@@ -226,7 +228,7 @@ export function AccessAssignmentsPageView({
                   <small>{link.userEmail}</small>
                 </div>
                 <div className={styles.actions}>
-                  <AssignmentArchiveButton endpoint={`/api/resource-assignments/worker-user-links/${link.id}`} />
+                  {canManage ? <AssignmentArchiveButton endpoint={`/api/resource-assignments/worker-user-links/${link.id}`} /> : null}
                 </div>
               </article>
             ))}
@@ -234,7 +236,7 @@ export function AccessAssignmentsPageView({
         </WorkspacePanel>
 
         <WorkspacePanel title="Assegna capocantiere ai cantieri" description="Il capocantiere vede solo i cantieri assegnati e risorse collegate.">
-          <JobSiteUserAssignmentForm options={options} />
+          {canManage ? <JobSiteUserAssignmentForm options={options} /> : null}
           <div className={styles.list}>
             {!jobSiteUserAssignments.length ? (
               <WorkspaceEmptyState title="Nessun cantiere assegnato" description="Assegna un cantiere per creare un accesso limitato al contesto operativo." />
@@ -246,7 +248,7 @@ export function AccessAssignmentsPageView({
                   <small>{roleLabel(assignment.assignmentRole)} - {assignment.userEmail}</small>
                 </div>
                 <div className={styles.actions}>
-                  <AssignmentArchiveButton endpoint={`/api/resource-assignments/job-site-user-assignments/${assignment.id}`} />
+                  {canManage ? <AssignmentArchiveButton endpoint={`/api/resource-assignments/job-site-user-assignments/${assignment.id}`} /> : null}
                 </div>
               </article>
             ))}
@@ -254,7 +256,7 @@ export function AccessAssignmentsPageView({
         </WorkspacePanel>
 
         <WorkspacePanel title="Assegna lavoratori ai cantieri" description="Collega lavoratori ai cantieri per limitare dati e prove al contesto assegnato.">
-          <JobSiteWorkerAssignmentForm options={options} />
+          {canManage ? <JobSiteWorkerAssignmentForm options={options} /> : null}
           <div className={styles.list}>
             {!jobSiteWorkerAssignments.length ? (
               <WorkspaceEmptyState title="Nessun lavoratore assegnato" description="Assegna un lavoratore a un cantiere per collegare dati e prossime attivita." />
@@ -266,7 +268,7 @@ export function AccessAssignmentsPageView({
                   <small>{assignment.workerRoleLabel || "Ruolo operativo non indicato"}</small>
                 </div>
                 <div className={styles.actions}>
-                  <AssignmentArchiveButton endpoint={`/api/resource-assignments/job-site-worker-assignments/${assignment.id}`} />
+                  {canManage ? <AssignmentArchiveButton endpoint={`/api/resource-assignments/job-site-worker-assignments/${assignment.id}`} /> : null}
                 </div>
               </article>
             ))}

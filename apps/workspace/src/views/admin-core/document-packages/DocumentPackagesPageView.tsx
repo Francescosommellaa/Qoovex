@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { DocumentPackageArchiveButton } from "./DocumentPackageArchiveButton";
-import { DocumentPackageForm } from "./DocumentPackageForm";
 import styles from "../AdminCore.module.css";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { documentPackageStatusLabels, formatDate, statusTone } from "@/views/workspace/workspace-format";
@@ -29,11 +27,11 @@ export function DocumentPackagesPageView({
   return (
     <WorkspacePage>
       <WorkspacePageHeader
-        title="Pacchetti documentali"
-        description="Prepara documenti, prove e checklist per revisione in lettura."
+        title="Condivisioni"
+        description="Controlla gli elementi preparati e lo stato dei link in sola lettura."
+        action={capabilities.canManagePackages ? <Link className={styles.linkButton} href="/document-packages/new">Prepara condivisione</Link> : undefined}
       />
-      <div className={styles.splitGrid}>
-        <WorkspacePanel title="Lista pacchetti" description="I pacchetti archiviati sono esclusi dalla vista standard.">
+      <WorkspacePanel title="Documenti preparati" description="Le condivisioni archiviate sono escluse dalla vista standard.">
           <div className={styles.list}>
             {!packages.length ? (
               <WorkspaceEmptyState title="Nessun pacchetto" description="Crea un pacchetto documentale pronto per revisione." />
@@ -41,26 +39,17 @@ export function DocumentPackagesPageView({
               <article className={styles.record} key={documentPackage.id}>
                 <div className={styles.recordMain}>
                   <strong>{documentPackage.title}</strong>
-                  <span>{jobSiteLabel(documentPackage.jobSiteId, jobSites)} - Item: {documentPackage.items?.length ?? 0} - Link attivi: {activeLinks(shareLinksByPackage[documentPackage.id])}</span>
+                  <span>{jobSiteLabel(documentPackage.jobSiteId, jobSites)} - Elementi: {documentPackage.items?.length ?? 0} - Link attivi: {activeLinks(shareLinksByPackage[documentPackage.id])}</span>
                   <small>Aggiornato: {formatDate(documentPackage.updatedAt)}</small>
                 </div>
                 <div className={styles.actions}>
                   <WorkspaceState label={documentPackageStatusLabels[documentPackage.status]} tone={statusTone(documentPackage.status)} />
                   <Link className={styles.linkButton} href={`/document-packages/${documentPackage.id}`}>Apri</Link>
-                  {capabilities.canManagePackages ? <DocumentPackageArchiveButton packageId={documentPackage.id} /> : null}
                 </div>
               </article>
             ))}
           </div>
-        </WorkspacePanel>
-        <WorkspacePanel title="Crea pacchetto" description="Raccogli solo elementi scelti esplicitamente per la revisione.">
-          {capabilities.canManagePackages ? (
-            <DocumentPackageForm mode="create" jobSites={jobSites} />
-          ) : (
-            <p className="qv-text-muted">Il tuo ruolo puo leggere i pacchetti, ma non crearne uno da questa schermata.</p>
-          )}
-        </WorkspacePanel>
-      </div>
+      </WorkspacePanel>
     </WorkspacePage>
   );
 }

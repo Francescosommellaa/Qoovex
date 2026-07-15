@@ -49,12 +49,11 @@ export function DocumentPackageDetailView({
     <WorkspacePage>
       <WorkspacePageHeader
         title={documentPackage.title}
-        description={`${jobSiteLabel(documentPackage.jobSiteId, jobSites)} - Pacchetto pronto per revisione quando hai incluso gli elementi necessari.`}
-        action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/document-packages"}>{returnToDashboard ? "Torna alla dashboard" : "Torna ai pacchetti"}</Link>}
+        description={`${jobSiteLabel(documentPackage.jobSiteId, jobSites)} - Controlla ogni elemento prima di creare il link.`}
+        action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/document-packages"}>{returnToDashboard ? "Torna a Da fare" : "Torna alle condivisioni"}</Link>}
       />
-      <div className={styles.splitGrid}>
-        <div className={styles.grid}>
-          <WorkspacePanel title="Dettaglio pacchetto">
+      <div className={styles.grid}>
+          <WorkspacePanel title="Riepilogo condivisione">
             <article className={styles.record}>
               <div className={styles.recordMain}>
                 <strong>{documentPackage.title}</strong>
@@ -63,11 +62,10 @@ export function DocumentPackageDetailView({
               </div>
               <div className={styles.actions}>
                 <WorkspaceState label={documentPackageStatusLabels[documentPackage.status]} tone={statusTone(documentPackage.status)} />
-                {capabilities.canManagePackages ? <DocumentPackageArchiveButton packageId={documentPackage.id} redirectToList /> : null}
               </div>
             </article>
           </WorkspacePanel>
-          <WorkspacePanel title="Item inclusi" description="Il destinatario esterno vede solo gli elementi inclusi nel pacchetto.">
+          <WorkspacePanel title="Elementi selezionati" description="Il destinatario esterno vede soltanto gli elementi presenti in questo riepilogo.">
             <DocumentPackageItemsList
               packageId={documentPackage.id}
               items={items}
@@ -78,40 +76,13 @@ export function DocumentPackageDetailView({
               canManage={capabilities.canManagePackages}
             />
           </WorkspacePanel>
-          <WorkspacePanel title="Link di condivisione" description="Link revocabile con scadenza. I link gia creati non mostrano il codice copiabile.">
+          {capabilities.canManagePackages ? <WorkspacePanel title="Aggiungi elementi" description="Seleziona esplicitamente documenti, file, prove o checklist da includere."><details className={styles.details}><summary>Aggiungi elemento</summary><DocumentPackageItemForm packageId={documentPackage.id} documents={documents} documentVersions={documentVersions} evidence={evidence} checklists={checklists} /></details></WorkspacePanel> : null}
+          {capabilities.canSharePackages ? <WorkspacePanel title="Crea link" description="Crea il link solo dopo aver controllato il riepilogo."><ShareLinkCreateForm packageId={documentPackage.id} /></WorkspacePanel> : null}
+          <WorkspacePanel title="Accessi creati" description="Ogni accesso può avere una scadenza ed essere revocato. Il codice copiabile è mostrato solo alla creazione.">
             <ShareLinksPanel packageId={documentPackage.id} links={shareLinks} canShare={capabilities.canSharePackages} />
           </WorkspacePanel>
-        </div>
-        <div className={styles.grid}>
-          <WorkspacePanel title="Aggiorna pacchetto">
-            {capabilities.canManagePackages ? (
-              <DocumentPackageForm mode="update" documentPackage={documentPackage} jobSites={jobSites} />
-            ) : (
-              <p className="qv-text-muted">Il tuo ruolo puo leggere il pacchetto, ma non modificarlo.</p>
-            )}
-          </WorkspacePanel>
-          <WorkspacePanel title="Aggiungi item">
-            {capabilities.canManagePackages ? (
-              <DocumentPackageItemForm
-                packageId={documentPackage.id}
-                documents={documents}
-                documentVersions={documentVersions}
-                evidence={evidence}
-                checklists={checklists}
-              />
-            ) : (
-              <p className="qv-text-muted">Non puoi aggiungere item con il ruolo corrente.</p>
-            )}
-          </WorkspacePanel>
-          <WorkspacePanel title="Crea link di condivisione">
-            {capabilities.canSharePackages ? (
-              <ShareLinkCreateForm packageId={documentPackage.id} />
-            ) : (
-              <p className="qv-text-muted">Solo Owner e Admin possono creare o revocare link di condivisione.</p>
-            )}
-          </WorkspacePanel>
-        </div>
       </div>
+      {capabilities.canManagePackages ? <WorkspacePanel title="Gestione avanzata" description="Modifica informazioni o archivia la condivisione."><details className={styles.details}><summary>Modifica informazioni</summary><DocumentPackageForm mode="update" documentPackage={documentPackage} jobSites={jobSites} /></details><details className={styles.details}><summary>Zona riservata</summary><DocumentPackageArchiveButton packageId={documentPackage.id} redirectToList /></details></WorkspacePanel> : null}
     </WorkspacePage>
   );
 }

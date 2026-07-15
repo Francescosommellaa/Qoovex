@@ -116,6 +116,16 @@ Il marketing non deve sembrare il workspace ingrandito. È il luogo in cui la Tr
 
 Il workspace non usa la traccia su ogni elemento. La applica quando più informazioni devono essere lette come una situazione unica.
 
+#### Architettura operativa del workspace
+
+- OWNER, ADMIN e SAFETY_CONSULTANT hanno quattro destinazioni primarie: `Da fare`, `Cantieri`, `Lavoratori`, `Documenti`.
+- SITE_MANAGER e WORKER hanno tre destinazioni primarie: `Da fare`, `Cantieri`, `Documenti`.
+- Notifiche, azione globale e azienda/account restano controlli separati dalla navigazione primaria.
+- Scadenze, checklist, prove, condivisioni e assegnazioni sono capacità contestuali o secondarie, non eliminate.
+- Liste e dettagli mostrano stato e prossimo passo; creazione, modifica e gestione avanzata si aprono esplicitamente.
+- Cantiere e lavoratore sono contenitori operativi con al massimo due livelli di progressive disclosure.
+- Tipi e requisiti documento, preferenze email, persone, audit e controllo dati vivono sotto impostazioni secondo capability.
+
 ### Dashboard operativa
 
 La dashboard traduce la Traccia Operativa in una coda decisionale. Il primo viewport mostra il numero di situazioni aperte, la priorità più alta, il motivo, la responsabilità derivata e il terminale d'azione. La coda visualizza al massimo cinque situazioni; pacchetti pronti, scadenze future e distribuzione per contesto restano separati per non duplicare lo stesso problema.
@@ -334,3 +344,29 @@ Ogni futura superficie deve rendere leggibili presenza, assenza, responsabilità
 `apps/web` è il sito pubblico. `apps/workspace` è il prodotto. `apps/sirio` è lo showcase. `packages/ui` esporta token CSS-first, stili base e primitive generiche senza auth, Prisma, API, ruoli o business logic.
 
 Non inventare ricerca, preset, canali di contatto, promesse normative o asset. Ogni task UI passa da `check_ui_task` e dal gate di approvazione Sirio.
+
+## Registro operativo dei componenti
+
+Questa sezione è la memoria canonica, versionata e sintetica delle decisioni sui singoli componenti Qoovex. Viene aggiornata soltanto dopo una lavorazione verificata del componente e non sostituisce codice, token, manifest o test come fonti tecniche primarie.
+
+Per ogni componente conservare un'unica voce con:
+
+- nome, data o sessione, collocazione canonica e obiettivo;
+- problemi verificati e consumer reali;
+- fonti realmente utilizzate, categoria, principio estratto, limiti e aspetti non copiati;
+- API pubblica, varianti, dimensioni, stati e regole di composizione;
+- comportamento mobile, tablet, desktop e touch;
+- semantica, tastiera, focus, screen reader, contrasto e reduced motion;
+- token riutilizzati, aggiunti o modificati;
+- compatibilità, compromessi, limitazioni e decisioni che i componenti successivi non devono contraddire;
+- controlli tecnici e visivi realmente eseguiti.
+
+Etichettare ogni informazione come `Fatto verificato`, `Decisione approvata`, `Assunzione provvisoria` oppure `Da validare`. Non trasformare ipotesi, ispirazioni o verifiche non eseguite in decisioni definitive.
+
+### Fonti dei componenti
+
+Registrare qui soltanto le fonti effettivamente usate per una decisione. Per ciascuna indicare nome, URL o riferimento, categoria, componente, motivo della scelta, principio estratto e limite applicato. Le fonti esterne restano riferimenti da trasformare: non autorizzano copia-incolla di componenti, API, classi, asset o demo.
+
+### Componenti completati
+
+Nessuna voce registrata. Aggiungere la prima voce dopo il completamento e la verifica del relativo componente.

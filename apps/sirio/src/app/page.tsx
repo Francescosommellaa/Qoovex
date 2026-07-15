@@ -42,7 +42,7 @@ export default function SirioPage() {
               <p>
                 Token, primitive e casi limite della nuova grammatica Qoovex. La fonte canonica resta <code>packages/ui</code>.
               </p>
-              <Button href="/situazione-aperta" size="sm" variant="secondary">Visualizza lo specimen</Button>
+              <div className="sample-actions"><Button href="/situazione-aperta" size="sm" variant="secondary">Situazione aperta</Button><Button href="/workspace-navigation" size="sm" variant="secondary">Navigazione workspace</Button></div>
             </div>
             <Trace aria-label="Sequenza di sistema">
               <TraceNode label="Stato" title="Informazione presente" description="La situazione ha un'origine leggibile." />

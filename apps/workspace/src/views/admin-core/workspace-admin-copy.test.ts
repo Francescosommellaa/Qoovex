@@ -19,6 +19,8 @@ describe("workspace admin UI copy", () => {
   const source = collectCodeFiles(root).map((file) => readFileSync(file, "utf8")).join("\n");
   const appSource = collectCodeFiles(appRoot).map((file) => readFileSync(file, "utf8")).join("\n");
   const navigationSource = readFileSync(join(root, "workspace", "WorkspaceNavigation.tsx"), "utf8");
+  const navigationPolicySource = readFileSync(join(root, "workspace", "workspace-navigation-policy.ts"), "utf8");
+  const settingsHubSource = readFileSync(join(root, "settings", "SettingsHubView.tsx"), "utf8");
   const evidenceFormSource = readFileSync(join(root, "admin-core", "evidence", "EvidenceForm.tsx"), "utf8");
   const shareLinksPanelSource = readFileSync(join(root, "admin-core", "document-packages", "ShareLinksPanel.tsx"), "utf8");
   const shareLinkCreateSource = readFileSync(join(root, "admin-core", "document-packages", "ShareLinkCreateForm.tsx"), "utf8");
@@ -32,6 +34,11 @@ describe("workspace admin UI copy", () => {
   const signInSource = readFileSync(join(appRoot, "sign-in", "page.tsx"), "utf8");
   const signUpSource = readFileSync(join(appRoot, "sign-up", "page.tsx"), "utf8");
   const dashboardSource = readFileSync(join(root, "dashboard", "DashboardView.tsx"), "utf8");
+  const documentListPageSource = readFileSync(join(appRoot, "documents", "page.tsx"), "utf8");
+  const documentDetailPageSource = readFileSync(join(appRoot, "documents", "[documentId]", "page.tsx"), "utf8");
+  const evidencePageSource = readFileSync(join(appRoot, "evidence", "page.tsx"), "utf8");
+  const documentCreateFlowSource = readFileSync(join(root, "admin-core", "documents", "DocumentCreateFlow.tsx"), "utf8");
+  const invitePersonSource = readFileSync(join(root, "settings", "InvitePersonView.tsx"), "utf8");
   const nextConfigSource = readFileSync(join(root, "..", "..", "next.config.ts"), "utf8");
   const combinedSource = `${source}\n${appSource}`;
 
@@ -42,8 +49,12 @@ describe("workspace admin UI copy", () => {
     expect(combinedSource).not.toMatch(/blobKey|tokenHash|downloadUrl|token raw/i);
   });
 
-  it("references every main admin route in the workspace navigation", () => {
-    for (const route of adminRoutes) expect(navigationSource).toContain(`href: "${route}"`);
+  it("keeps everyday navigation small and preserves secondary routes", () => {
+    for (const route of ["/dashboard", "/documents", "/workers", "/job-sites"]) expect(navigationPolicySource).toContain(`href: "${route}"`);
+    for (const route of adminRoutes) expect(appSource).toContain(route.slice(1));
+    for (const route of ["/deadlines", "/checklists", "/evidence", "/document-packages", "/access", "/audit-log", "/data-control"]) {
+      expect(navigationPolicySource).not.toContain(`label: "${route}"`);
+    }
   });
 
   it("keeps page titles for the main admin sections", () => {
@@ -71,7 +82,7 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps labels for the primary admin forms", () => {
-    for (const label of ["Titolo documento", "Titolo scadenza", "Nome visualizzato", "Nome cantiere", "Nome checklist", "Titolo prova", "Titolo pacchetto"]) {
+    for (const label of ["Titolo documento", "Titolo scadenza", "Nome visualizzato", "Nome cantiere", "Nome checklist", "Titolo prova", "Titolo condivisione"]) {
       expect(combinedSource).toContain(label);
     }
   });
@@ -115,7 +126,7 @@ describe("workspace admin UI copy", () => {
     expect(auditLogSource).toContain("Eventi registrati");
     expect(auditLogSource).toContain("metadata minimizzati");
     expect(auditLogSource).not.toMatch(/blobKey|tokenHash|downloadUrl|token raw|emailBody|fileContent/i);
-    expect(navigationSource).toContain('roles: ["OWNER"]');
+    expect(settingsHubSource).toContain("capabilities.canReadAudit");
     expect(nextConfigSource).toContain("X-Content-Type-Options");
     expect(nextConfigSource).toContain("Referrer-Policy");
     expect(nextConfigSource).toContain("X-Frame-Options");
@@ -130,9 +141,29 @@ describe("workspace admin UI copy", () => {
     expect(accessSource).not.toMatch(/blobKey|tokenHash|downloadUrl|token raw/i);
   });
 
+  it("does not call role-restricted configuration services from ordinary document and evidence lists", () => {
+    expect(documentListPageSource).not.toContain("listDocumentTypes");
+    expect(documentListPageSource).not.toContain("getMissingDocumentRequirements");
+    expect(documentDetailPageSource).toContain("capabilities.canReadDocumentSettings ? await listDocumentTypes() : []");
+    expect(evidencePageSource).toContain("capabilities.canCompleteChecklists || capabilities.canManageChecklists ? await listChecklists() : []");
+  });
+
+  it("keeps document upload retry on the created record and owner out of invitation choices", () => {
+    expect(documentCreateFlowSource).toContain("setCreatedDocumentId(document.id)");
+    expect(documentCreateFlowSource).toContain("senza creare un duplicato");
+    expect(invitePersonSource).not.toContain('value: "OWNER"');
+    expect(invitePersonSource).toContain("Gestisce l'azienda e il lavoro quotidiano");
+  });
+
+  it("keeps a dedicated mobile navigation surface", () => {
+    expect(navigationSource).toContain("mobileNav");
+    expect(navigationSource).toContain("mobileNavPanel");
+    expect(navigationSource).toContain("Azienda e account");
+  });
+
   it("keeps data control metadata-only and owner scoped", () => {
-    expect(navigationSource).toContain("Controllo dati");
-    expect(navigationSource).toContain('href: "/data-control", roles: ["OWNER"]');
+    expect(settingsHubSource).toContain("Controllo dati");
+    expect(settingsHubSource).toContain("capabilities.canReadDataControl");
     expect(dataControlSource).toContain("Inventario dati");
     expect(dataControlSource).toContain("Job Data Control");
     expect(dataControlSource).toContain("Metadata-only, generato via job e salvato su Blob privato");
