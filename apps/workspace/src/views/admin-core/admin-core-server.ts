@@ -11,6 +11,10 @@ export async function getWorkspaceCapabilities(): Promise<WorkspaceCapabilities>
   return {
     role,
     canManageCore: role === "OWNER" || role === "ADMIN",
+    canCreateDocuments: role === "OWNER" || role === "ADMIN",
+    canCreateWorkers: role === "OWNER" || role === "ADMIN",
+    canCreateJobSites: role === "OWNER" || role === "ADMIN",
+    canCreateDeadlines: role === "OWNER" || role === "ADMIN",
     canUpdateDocuments: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
     canUploadDocumentVersions: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT" || role === "WORKER",
     canManageChecklists: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
@@ -21,6 +25,13 @@ export async function getWorkspaceCapabilities(): Promise<WorkspaceCapabilities>
     canSharePackages: role === "OWNER" || role === "ADMIN",
     canReadAssignments: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
     canManageAssignments: role === "OWNER" || role === "ADMIN",
+    canReadMembers: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
+    canManageMembers: role === "OWNER" || role === "ADMIN",
+    canReadDocumentSettings: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
+    canManageDocumentSettings: role === "OWNER" || role === "ADMIN",
+    canReadNotifications: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
+    canReadAudit: role === "OWNER",
+    canReadDataControl: role === "OWNER",
   };
 }
 

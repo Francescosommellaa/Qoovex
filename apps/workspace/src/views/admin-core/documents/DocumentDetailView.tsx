@@ -34,8 +34,7 @@ export function DocumentDetailView({
         description={`${ownerLabel(document.ownerType, document.workerId, document.jobSiteId, workers, jobSites)} - Scadenza registrata: ${formatDate(document.expiryDate)}`}
         action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/documents"}>{returnToDashboard ? "Torna alla dashboard" : "Torna ai documenti"}</Link>}
       />
-      <div className={styles.splitGrid}>
-        <div className={styles.grid}>
+      <div className={styles.grid}>
           <WorkspacePanel title="Stato documento">
             <div className={styles.record}>
               <div className={styles.recordMain}>
@@ -45,11 +44,11 @@ export function DocumentDetailView({
               </div>
               <div className={styles.actions}>
                 <WorkspaceState label={documentStatusLabels[document.status]} tone={statusTone(document.status)} />
-                {capabilities.canManageCore ? <DocumentArchiveButton documentId={document.id} redirectToList /> : null}
               </div>
             </div>
           </WorkspacePanel>
-          <WorkspacePanel title="Versioni caricate" description="Scarica tramite accesso protetto. Nessun URL permanente viene mostrato.">
+          {capabilities.canUploadDocumentVersions ? <WorkspacePanel title="Aggiungi file" description="Il file viene collegato al documento e resta da verificare."><DocumentVersionUploadForm documentId={document.id} returnToDashboard={returnToDashboard} /></WorkspacePanel> : null}
+          <WorkspacePanel title="File caricati" description="Scarica tramite accesso protetto. Nessun URL permanente viene mostrato.">
             <DocumentVersionList documentId={document.id} versions={versions} canArchive={capabilities.canManageCore} />
           </WorkspacePanel>
           <WorkspacePanel title="Scadenze collegate">
@@ -66,20 +65,8 @@ export function DocumentDetailView({
               </div>
             )}
           </WorkspacePanel>
-        </div>
-        <div className={styles.grid}>
-          <WorkspacePanel title="Aggiorna documento">
-            {capabilities.canUpdateDocuments ? (
-              <DocumentForm mode="update" document={document} documentTypes={documentTypes} workers={workers} jobSites={jobSites} />
-            ) : (
-              <p className="qv-text-muted">Il tuo ruolo non puo modificare questo documento.</p>
-            )}
-          </WorkspacePanel>
-          <WorkspacePanel title="Carica versione" description="Il file viene salvato su Blob e collegato come metadato al documento.">
-            {capabilities.canUploadDocumentVersions ? <DocumentVersionUploadForm documentId={document.id} returnToDashboard={returnToDashboard} /> : <p className="qv-text-muted">Upload disponibile solo per ruoli di gestione.</p>}
-          </WorkspacePanel>
-        </div>
       </div>
+      {capabilities.canUpdateDocuments || capabilities.canManageCore ? <WorkspacePanel title="Gestione avanzata" description="Modifica informazioni o archivia in una zona separata.">{capabilities.canUpdateDocuments ? <details className={styles.details}><summary>Modifica informazioni</summary><DocumentForm mode="update" document={document} documentTypes={documentTypes} workers={workers} jobSites={jobSites} /></details> : null}{capabilities.canManageCore ? <details className={styles.details}><summary>Zona riservata</summary><DocumentArchiveButton documentId={document.id} redirectToList /></details> : null}</WorkspacePanel> : null}
     </WorkspacePage>
   );
 }

@@ -24,7 +24,7 @@ function itemTitle(
   if (item.itemType === "DOCUMENT_VERSION") {
     const version = documentVersions.find((candidate) => candidate.id === item.documentVersionId);
     const document = documents.find((candidate) => candidate.id === version?.documentId);
-    return `${document?.title ?? "Documento"} - ${version?.originalFileName ?? "Versione inclusa"}`;
+    return `${document?.title ?? "Documento"} - ${version?.originalFileName ?? "File incluso"}`;
   }
   if (item.itemType === "EVIDENCE") {
     const includedEvidence = evidence.find((candidate) => candidate.id === item.evidenceId);
@@ -83,7 +83,7 @@ export function DocumentPackageItemsList({
     }
   }
 
-  if (!items.length) return <p className="qv-text-muted">Nessun elemento incluso nel pacchetto.</p>;
+  if (!items.length) return <p className="qv-text-muted">Nessun elemento selezionato.</p>;
 
   return (
     <div className={styles.list}>
@@ -94,7 +94,7 @@ export function DocumentPackageItemsList({
             <strong>{itemTitle(item, documents, documentVersions, evidence, checklists)}</strong>
             <span>{documentPackageItemTypeLabels[item.itemType]} - Posizione {item.position}</span>
           </div>
-          {canManage ? (
+          {canManage ? <details className={styles.details}><summary>Altre azioni</summary>
             <div className={styles.actions}>
               <form
                 className={styles.actions}
@@ -109,9 +109,9 @@ export function DocumentPackageItemsList({
                 </label>
                 <button className={styles.ghostButton} disabled={pending === item.id} type="submit">Aggiorna ordine</button>
               </form>
-              <button className={styles.dangerButton} disabled={pending === item.id} onClick={() => removeItem(item.id)} type="button">Rimuovi item</button>
+              <button className={styles.dangerButton} disabled={pending === item.id} onClick={() => removeItem(item.id)} type="button">Rimuovi elemento</button>
             </div>
-          ) : null}
+          </details> : null}
         </article>
       ))}
     </div>

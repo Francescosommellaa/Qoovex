@@ -15,6 +15,7 @@ import {
   WarningCircle,
 } from "@qoovex/ui";
 import Link from "next/link";
+import type { WorkspaceResult } from "@/views/workspace/workspace-flow-context";
 import styles from "./DashboardView.module.css";
 
 const situationIcons: Record<DashboardSituationKind, typeof WarningCircle> = {
@@ -25,11 +26,24 @@ const situationIcons: Record<DashboardSituationKind, typeof WarningCircle> = {
 };
 
 const summaryLinks = [
-  { key: "expired", label: "scadute", href: "/documents?status=EXPIRED&from=dashboard" },
-  { key: "expiringSoon", label: "in scadenza", href: "/documents?status=EXPIRING_SOON&from=dashboard" },
-  { key: "missing", label: "mancanti", href: "/documents?status=MISSING&from=dashboard" },
-  { key: "toReview", label: "da verificare", href: "/documents?status=TO_REVIEW&from=dashboard" },
+  { key: "expired", label: "scadute", href: "/documents?status=EXPIRED&origin=dashboard" },
+  { key: "expiringSoon", label: "in scadenza", href: "/documents?status=EXPIRING_SOON&origin=dashboard" },
+  { key: "missing", label: "mancanti", href: "/documents?status=MISSING&origin=dashboard" },
+  { key: "toReview", label: "da verificare", href: "/documents?status=TO_REVIEW&origin=dashboard" },
 ] as const;
+
+const resultLabels: Record<WorkspaceResult, string> = {
+  "document-created": "Documento salvato.",
+  "file-uploaded": "File caricato. Il documento resta da verificare.",
+  "evidence-created": "Prova registrata nel contesto scelto.",
+  "share-created": "Condivisione preparata per il controllo.",
+  "invitation-sent": "Invito inviato.",
+};
+
+function withDashboardOrigin(href: string) {
+  if (!href.startsWith("/") || href.startsWith("//")) return "/dashboard";
+  return `${href}${href.includes("?") ? "&" : "?"}origin=dashboard`;
+}
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("it-IT", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(value));
@@ -72,7 +86,7 @@ function SituationItem({ item, updated }: { item: DashboardSituation; updated: b
           <div><dt>Responsabile</dt><dd>{item.responsibility.label}{assignmentAction}</dd></div>
         </dl>
         <div className={styles.terminal}>
-          <Button href={item.action.href} size="sm">{item.action.label}</Button>
+          <Button href={withDashboardOrigin(item.action.href)} size="sm">{item.action.label}</Button>
           {updated ? <span className={styles.updatedLabel}>Aggiornato ora</span> : null}
         </div>
       </div>
@@ -103,7 +117,7 @@ function ContextItem({ item }: { item: DashboardContextItem }) {
   );
 }
 
-export function DashboardView({ data, updatedId }: { data: DashboardResponse; updatedId?: string | null }) {
+export function DashboardView({ data, updatedId, result }: { data: DashboardResponse; updatedId?: string | null; result?: WorkspaceResult | null }) {
   const errorFor = (section: DashboardResponse["errors"][number]["section"]) => data.errors.find((error) => error.section === section);
   const attentionError = errorFor("attention");
   const sharingError = errorFor("sharing");
@@ -133,12 +147,10 @@ export function DashboardView({ data, updatedId }: { data: DashboardResponse; up
           <p className={styles.company}>{data.organization.name}</p>
           <h1>Da fare</h1>
         </div>
-        <div className={styles.headerContext}>
-          <p>Vista: {data.organization.viewLabel}</p>
-          <p>{data.organization.roleLabel}</p>
-          <p>Aggiornato alle <time dateTime={data.generatedAt}>{formatTime(data.generatedAt)}</time></p>
-        </div>
+        <details className={styles.headerContext}><summary>Informazioni vista</summary><div><p>{data.organization.viewLabel}</p><p>{data.organization.roleLabel}</p><p>Aggiornato alle <time dateTime={data.generatedAt}>{formatTime(data.generatedAt)}</time></p></div></details>
       </header>
+
+      {result ? <p className={styles.resultFeedback} role="status">{resultLabels[result]}</p> : null}
 
       {!attentionError ? (
         <section aria-labelledby="operational-summary" className={styles.summary}>
@@ -158,11 +170,11 @@ export function DashboardView({ data, updatedId }: { data: DashboardResponse; up
         <section className={styles.firstUse}>
           <p className={styles.stateLabel}>Primo passo</p>
           <h2>Inizia dal primo documento</h2>
-          <p>Aggiungi un documento logico per rendere visibili presenza, scadenza e prossima azione. Potrai collegare il file dal dettaglio.</p>
-          <Button href="/documents?from=dashboard">Aggiungi documento</Button>
+          <p>Aggiungi il primo documento e, se lo hai già, carica subito il file.</p>
+          <Button href="/documents/new?origin=dashboard">Aggiungi documento</Button>
           <div className={styles.secondaryStarts}>
-            <Link href="/workers?from=dashboard">Aggiungi un lavoratore</Link>
-            <Link href="/job-sites?from=dashboard">Aggiungi un cantiere</Link>
+            <Link href="/workers/new?origin=dashboard">Aggiungi un lavoratore</Link>
+            <Link href="/job-sites/new?origin=dashboard">Aggiungi un cantiere</Link>
           </div>
         </section>
       ) : (

@@ -12,7 +12,7 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
   try {
     const { from } = await searchParams;
     const capabilities = await getWorkspaceCapabilities();
-    if (!capabilities.canManageAssignments) {
+    if (!capabilities.canReadAssignments) {
       return <WorkspaceAccessState title="Accessi non disponibili" description="Questa sezione e riservata alla gestione operativa dell'azienda." />;
     }
     const [workerLinks, userAssignments, workerAssignments, options] = await Promise.all([
@@ -28,6 +28,7 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
         options={serializeForClient(options)}
         workerUserLinks={serializeForClient(workerLinks)}
         returnToDashboard={from === "dashboard"}
+        canManage={capabilities.canManageAssignments}
       />
     );
   } catch {

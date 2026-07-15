@@ -1,6 +1,4 @@
-import { DeadlineArchiveButton } from "./DeadlineArchiveButton";
 import Link from "next/link";
-import { DeadlineForm } from "./DeadlineForm";
 import styles from "../AdminCore.module.css";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { deadlineStatusLabels, formatDate, ownerLabel, statusTone } from "@/views/workspace/workspace-format";
@@ -33,10 +31,9 @@ export function DeadlinesPageView({
       <WorkspacePageHeader
         title="Scadenze"
         description="Registra date inserite o confermate dall'utente. Non vengono calcolate scadenze normative."
-        action={returnToDashboard ? <Link className={styles.ghostButton} href="/dashboard">Torna alla dashboard</Link> : undefined}
+        action={returnToDashboard ? <Link className={styles.ghostButton} href="/dashboard">Torna a Da fare</Link> : capabilities.canCreateDeadlines ? <Link className={styles.linkButton} href="/deadlines/new">Aggiungi scadenza</Link> : undefined}
       />
-      <div className={styles.splitGrid}>
-        <WorkspacePanel title="Scadenze registrate" description="Le scadenze sono ordinate per data. La soglia in scadenza e operativa, non normativa.">
+      <WorkspacePanel title="Scadenze registrate" description="Le scadenze sono ordinate per data. La soglia in scadenza è operativa, non normativa.">
           <div className={styles.list}>
             {!deadlines.length ? (
               <WorkspaceEmptyState title="Nessuna scadenza" description="Registra una scadenza per ricevere una vista chiara delle date da controllare." />
@@ -49,26 +46,11 @@ export function DeadlinesPageView({
                 </div>
                 <div className={styles.actions}>
                   <WorkspaceState label={deadlineStatusLabels[deadline.status]} tone={statusTone(deadline.status)} />
-                  {capabilities.canManageCore ? <DeadlineArchiveButton deadlineId={deadline.id} /> : null}
                 </div>
-                {capabilities.canManageCore ? (
-                  <details className={styles.details}>
-                    <summary>Modifica scadenza</summary>
-                    <DeadlineForm mode="update" deadline={deadline} documents={documents} workers={workers} jobSites={jobSites} />
-                  </details>
-                ) : null}
               </article>
             ))}
           </div>
-        </WorkspacePanel>
-        <WorkspacePanel title="Aggiungi scadenza" description="La data deve essere inserita o confermata dall'utente.">
-          {capabilities.canManageCore ? (
-            <DeadlineForm mode="create" documents={documents} workers={workers} jobSites={jobSites} />
-          ) : (
-            <p className="qv-text-muted">Il tuo ruolo puo leggere le scadenze, ma non gestirle da questa schermata.</p>
-          )}
-        </WorkspacePanel>
-      </div>
+      </WorkspacePanel>
     </WorkspacePage>
   );
 }

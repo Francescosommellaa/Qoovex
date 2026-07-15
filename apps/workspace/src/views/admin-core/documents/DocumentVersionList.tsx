@@ -25,7 +25,7 @@ export function DocumentVersionList({ documentId, versions, canArchive }: { docu
     }
   }
 
-  if (!versions.length) return <p className="qv-text-muted">Nessuna versione caricata.</p>;
+  if (!versions.length) return <p className="qv-text-muted">Nessun file caricato.</p>;
 
   return (
     <div className={styles.versionList}>
@@ -35,15 +35,11 @@ export function DocumentVersionList({ documentId, versions, canArchive }: { docu
           <div className={styles.recordMain}>
             <strong>{version.originalFileName}</strong>
             <span>{version.mimeType} - {fileSizeLabel(version.size)}</span>
-            <small>Versione caricata: {formatDate(version.createdAt)}</small>
+            <small>Caricato: {formatDate(version.createdAt)}</small>
           </div>
           <div className={styles.actions}>
             <a className={styles.linkButton} href={`/api/documents/${documentId}/versions/${version.id}/download`}>Scarica</a>
-            {canArchive ? (
-              <button className={styles.dangerButton} disabled={pendingId === version.id} onClick={() => archive(version.id)} type="button">
-                {pendingId === version.id ? "Archiviazione..." : "Archivia"}
-              </button>
-            ) : null}
+            {canArchive ? <details className={styles.details}><summary>Altre azioni</summary><button className={styles.dangerButton} disabled={pendingId === version.id} onClick={() => archive(version.id)} type="button">{pendingId === version.id ? "Archiviazione..." : "Archivia file"}</button></details> : null}
           </div>
         </article>
       ))}

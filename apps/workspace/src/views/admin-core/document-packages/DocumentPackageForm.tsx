@@ -14,9 +14,10 @@ interface DocumentPackageFormProps {
   documentPackage?: WorkspaceDocumentPackageRecord;
   jobSites: WorkspaceJobSiteRecord[];
   disabled?: boolean;
+  initialJobSiteId?: string;
 }
 
-export function DocumentPackageForm({ mode, documentPackage, jobSites, disabled }: DocumentPackageFormProps) {
+export function DocumentPackageForm({ mode, documentPackage, jobSites, disabled, initialJobSiteId }: DocumentPackageFormProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -36,7 +37,7 @@ export function DocumentPackageForm({ mode, documentPackage, jobSites, disabled 
     try {
       const response = await submitJson<WorkspaceDocumentPackageRecord>(mode === "create" ? "/api/document-packages" : `/api/document-packages/${documentPackage?.id}`, mode === "create" ? "POST" : "PATCH", payload);
       router.refresh();
-      if (mode === "create") router.push(`/document-packages/${response.id}`);
+      if (mode === "create") router.push(`/document-packages/${response.id}?result=share-created`);
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "Operazione non riuscita.");
     } finally {
@@ -49,33 +50,34 @@ export function DocumentPackageForm({ mode, documentPackage, jobSites, disabled 
       {error ? <p className={styles.formError}>{error}</p> : null}
       <div className={styles.fieldGrid}>
         <label className={styles.field}>
-          <span>Titolo pacchetto</span>
+          <span>Titolo condivisione</span>
           <input defaultValue={documentPackage?.title ?? ""} disabled={disabled || pending} maxLength={160} minLength={2} name="title" required />
         </label>
         <label className={styles.field}>
           <span>Cantiere collegato</span>
-          <select defaultValue={documentPackage?.jobSiteId ?? ""} disabled={disabled || pending} name="jobSiteId">
+          {initialJobSiteId ? <input name="jobSiteId" type="hidden" value={initialJobSiteId} /> : null}
+          <select defaultValue={documentPackage?.jobSiteId ?? initialJobSiteId ?? ""} disabled={disabled || pending || Boolean(initialJobSiteId)} name={initialJobSiteId ? undefined : "jobSiteId"}>
             <option value="">Nessun cantiere</option>
             {jobSites.map((jobSite) => (
               <option key={jobSite.id} value={jobSite.id}>{jobSite.name}</option>
             ))}
           </select>
         </label>
-        <label className={styles.field}>
+        {mode === "update" ? <label className={styles.field}>
           <span>Stato pacchetto</span>
           <select defaultValue={documentPackage?.status ?? "DRAFT"} disabled={disabled || pending} name="status">
             {documentPackageStatuses.filter((status): status is Exclude<DocumentPackageStatus, "ARCHIVED"> => status !== "ARCHIVED").map((status) => (
               <option key={status} value={status}>{documentPackageStatusLabels[status]}</option>
             ))}
           </select>
-        </label>
+        </label> : null}
       </div>
       <label className={styles.field}>
         <span>Descrizione</span>
         <textarea defaultValue={documentPackage?.description ?? ""} disabled={disabled || pending} maxLength={4000} name="description" />
       </label>
       <button className={styles.button} disabled={disabled || pending} type="submit">
-        {pending ? "Salvataggio..." : mode === "create" ? "Crea pacchetto" : "Aggiorna pacchetto"}
+        {pending ? "Salvataggio..." : mode === "create" ? "Continua alla selezione" : "Aggiorna condivisione"}
       </button>
     </form>
   );

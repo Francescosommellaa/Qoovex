@@ -47,10 +47,10 @@ export function ChecklistItemForm({ checklistId, mode, item, disabled }: Checkli
     <form className={styles.form} onSubmit={onSubmit}>
       {error ? <p className={styles.formError}>{error}</p> : null}
       <div className={styles.fieldGrid}>
-        <label className={styles.field}>
+        {mode === "update" ? <label className={styles.field}>
           <span>Etichetta voce</span>
           <input defaultValue={item?.label ?? ""} disabled={disabled || pending} maxLength={160} minLength={2} name="label" required />
-        </label>
+        </label> : null}
         <label className={styles.field}>
           <span>Stato voce</span>
           <select defaultValue={item?.status ?? "OPEN"} disabled={disabled || pending} name="status">

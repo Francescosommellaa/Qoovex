@@ -3,12 +3,14 @@ import { resolveWorkspaceAccessKind } from "@shared/server/workspace-access-stat
 import { DashboardView } from "@/views/dashboard/DashboardView";
 import { DataConfigurationState, OrganizationRequiredState, SignInRequiredState } from "@/views/auth/AuthAccessStates";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
+import { parseWorkspaceFlowContext } from "@/views/workspace/workspace-flow-context";
 
-export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ updated?: string }> }) {
+export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ updated?: string; result?: string }> }) {
   try {
-    const { updated } = await searchParams;
+    const params = await searchParams;
+    const { updated } = params;
     const data = await getDashboardData();
-    return <DashboardView data={data} updatedId={updated} />;
+    return <DashboardView data={data} result={parseWorkspaceFlowContext(params).result} updatedId={updated} />;
   } catch (error) {
     const state = await resolveWorkspaceAccessKind(error);
     if (state === "unauthenticated") return <SignInRequiredState callbackUrl="/dashboard" />;

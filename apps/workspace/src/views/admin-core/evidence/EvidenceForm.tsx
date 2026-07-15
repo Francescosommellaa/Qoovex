@@ -8,6 +8,7 @@ import { formValue, nullableFormValue, submitFormData, submitJson } from "../adm
 import styles from "../AdminCore.module.css";
 import { evidenceTypeLabels } from "@/views/workspace/workspace-format";
 import type { WorkspaceChecklistItemRecord, WorkspaceChecklistRecord, WorkspaceEvidenceRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
+import type { WorkspaceCreationContext, WorkspaceOrigin } from "@/views/workspace/workspace-flow-context";
 
 interface EvidenceFormProps {
   jobSites: WorkspaceJobSiteRecord[];
@@ -15,6 +16,8 @@ interface EvidenceFormProps {
   checklistItems: WorkspaceChecklistItemRecord[];
   checklists: WorkspaceChecklistRecord[];
   disabled?: boolean;
+  initialContext?: WorkspaceCreationContext | null;
+  origin?: WorkspaceOrigin | null;
 }
 
 function checklistItemLabel(item: WorkspaceChecklistItemRecord, checklists: WorkspaceChecklistRecord[]) {
@@ -22,9 +25,12 @@ function checklistItemLabel(item: WorkspaceChecklistItemRecord, checklists: Work
   return `${checklist?.name ?? "Checklist"} - ${item.label}`;
 }
 
-export function EvidenceForm({ jobSites, workers, checklistItems, checklists, disabled }: EvidenceFormProps) {
+export function EvidenceForm({ jobSites, workers, checklistItems, checklists, disabled, initialContext = null, origin = null }: EvidenceFormProps) {
   const router = useRouter();
   const [type, setType] = useState<EvidenceType>("NOTE");
+  const availableContextTypes = [jobSites.length ? "job-site" : null, workers.length ? "worker" : null, checklistItems.length ? "checklist-item" : null].filter((value): value is "job-site" | "worker" | "checklist-item" => Boolean(value));
+  const initialContextType = initialContext?.type === "job-site" || initialContext?.type === "worker" || initialContext?.type === "checklist-item" ? initialContext.type : availableContextTypes[0] ?? "job-site";
+  const [contextType, setContextType] = useState<"job-site" | "worker" | "checklist-item">(initialContextType);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -45,13 +51,12 @@ export function EvidenceForm({ jobSites, workers, checklistItems, checklists, di
           workerId: nullableFormValue(formData, "workerId"),
           checklistItemId: nullableFormValue(formData, "checklistItemId"),
         };
-        await submitJson<{ evidence: WorkspaceEvidenceRecord }>("/api/evidence", "POST", payload);
+        const response = await submitJson<{ evidence: WorkspaceEvidenceRecord }>("/api/evidence", "POST", payload);
+        finish(response.evidence.id);
       } else {
-        await submitFormData<{ evidence: WorkspaceEvidenceRecord }>("/api/evidence", formData);
+        const response = await submitFormData<{ evidence: WorkspaceEvidenceRecord }>("/api/evidence", formData);
+        finish(response.evidence.id);
       }
-      router.refresh();
-      event.currentTarget.reset();
-      setType("NOTE");
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "Operazione non riuscita.");
     } finally {
@@ -59,9 +64,19 @@ export function EvidenceForm({ jobSites, workers, checklistItems, checklists, di
     }
   }
 
+  function finish(evidenceId: string) {
+    const result = "result=evidence-created";
+    if (origin === "dashboard") router.push(`/dashboard?${result}&updated=${encodeURIComponent(evidenceId)}`);
+    else if (initialContext?.type === "job-site") router.push(`/job-sites/${encodeURIComponent(initialContext.id)}?${result}`);
+    else if (initialContext?.type === "worker") router.push(`/workers/${encodeURIComponent(initialContext.id)}?${result}`);
+    else router.push(`/evidence?${result}`);
+    router.refresh();
+  }
+
   return (
     <form className={styles.form} onSubmit={onSubmit}>
       {error ? <p className={styles.formError}>{error}</p> : null}
+      {initialContext ? <p className={styles.formSuccess}>La prova sarà registrata nel contesto da cui sei partito.</p> : null}
       <div className={styles.fieldGrid}>
         <label className={styles.field}>
           <span>Tipo prova</span>
@@ -75,33 +90,37 @@ export function EvidenceForm({ jobSites, workers, checklistItems, checklists, di
           <span>Titolo prova</span>
           <input disabled={disabled || pending} maxLength={160} minLength={2} name="title" required />
         </label>
-        <label className={styles.field}>
+        {!initialContext ? <label className={styles.field}><span>Registra per</span><select disabled={disabled || pending} onChange={(event) => setContextType(event.target.value as typeof contextType)} value={contextType}>{availableContextTypes.map((value) => <option key={value} value={value}>{value === "job-site" ? "Cantiere" : value === "worker" ? "Lavoratore" : "Voce checklist"}</option>)}</select></label> : null}
+        {contextType === "job-site" ? <label className={styles.field}>
           <span>Cantiere</span>
-          <select disabled={disabled || pending} name="jobSiteId">
-            <option value="">Nessun cantiere</option>
+          {initialContext?.type === "job-site" ? <input name="jobSiteId" type="hidden" value={initialContext.id} /> : null}
+          <select defaultValue={initialContext?.type === "job-site" ? initialContext.id : ""} disabled={disabled || pending || initialContext?.type === "job-site"} name={initialContext?.type === "job-site" ? undefined : "jobSiteId"} required>
+            <option value="">Seleziona cantiere</option>
             {jobSites.map((jobSite) => (
               <option key={jobSite.id} value={jobSite.id}>{jobSite.name}</option>
             ))}
           </select>
-        </label>
-        <label className={styles.field}>
+        </label> : null}
+        {contextType === "worker" ? <label className={styles.field}>
           <span>Lavoratore</span>
-          <select disabled={disabled || pending} name="workerId">
-            <option value="">Nessun lavoratore</option>
+          {initialContext?.type === "worker" ? <input name="workerId" type="hidden" value={initialContext.id} /> : null}
+          <select defaultValue={initialContext?.type === "worker" ? initialContext.id : ""} disabled={disabled || pending || initialContext?.type === "worker"} name={initialContext?.type === "worker" ? undefined : "workerId"} required>
+            <option value="">Seleziona lavoratore</option>
             {workers.map((worker) => (
               <option key={worker.id} value={worker.id}>{worker.displayName}</option>
             ))}
           </select>
-        </label>
-        <label className={styles.field}>
+        </label> : null}
+        {contextType === "checklist-item" ? <label className={styles.field}>
           <span>Voce checklist</span>
-          <select disabled={disabled || pending} name="checklistItemId">
-            <option value="">Nessuna voce</option>
+          {initialContext?.type === "checklist-item" ? <input name="checklistItemId" type="hidden" value={initialContext.id} /> : null}
+          <select defaultValue={initialContext?.type === "checklist-item" ? initialContext.id : ""} disabled={disabled || pending || initialContext?.type === "checklist-item"} name={initialContext?.type === "checklist-item" ? undefined : "checklistItemId"} required>
+            <option value="">Seleziona voce</option>
             {checklistItems.map((item) => (
               <option key={item.id} value={item.id}>{checklistItemLabel(item, checklists)}</option>
             ))}
           </select>
-        </label>
+        </label> : null}
         {type !== "NOTE" ? (
           <label className={styles.field}>
             <span>File prova</span>
@@ -114,8 +133,8 @@ export function EvidenceForm({ jobSites, workers, checklistItems, checklists, di
         <span>Descrizione</span>
         <textarea disabled={disabled || pending} maxLength={4000} name="description" />
       </label>
-      <button className={styles.button} disabled={disabled || pending} type="submit">
-        {pending ? "Salvataggio..." : type === "NOTE" ? "Aggiungi nota operativa" : "Aggiungi prova"}
+      <button className={styles.button} disabled={disabled || pending || !availableContextTypes.length} type="submit">
+        {pending ? "Salvataggio..." : "Salva prova"}
       </button>
     </form>
   );

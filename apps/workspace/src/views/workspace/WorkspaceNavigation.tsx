@@ -2,25 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { WorkspaceRole } from "./workspace-records";
 import type { SupportContext } from "@qoovex/types";
 import { WorkspaceLogoutButton } from "./WorkspaceSessionControls";
+import type { WorkspaceNavigationModel } from "./workspace-navigation-policy";
 import styles from "./WorkspaceShell.module.css";
-
-const navItems = [
-  { label: "Dashboard", href: "/dashboard", roles: ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] },
-  { label: "Notifiche", href: "/notifications", roles: ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] },
-  { label: "Documenti", href: "/documents", roles: ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] },
-  { label: "Scadenze", href: "/deadlines", roles: ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] },
-  { label: "Lavoratori", href: "/workers", roles: ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] },
-  { label: "Cantieri", href: "/job-sites", roles: ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] },
-  { label: "Checklist", href: "/checklists", roles: ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"] },
-  { label: "Prove", href: "/evidence", roles: ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] },
-  { label: "Pacchetti", href: "/document-packages", roles: ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] },
-  { label: "Accessi", href: "/access", roles: ["OWNER", "ADMIN"] },
-  { label: "Audit", href: "/audit-log", roles: ["OWNER"] },
-  { label: "Controllo dati", href: "/data-control", roles: ["OWNER"] },
-] as const;
 
 const platformNavItems = [
   { label: "Panoramica", href: "/qoovex-admin" },
@@ -30,17 +15,62 @@ const platformNavItems = [
   { label: "Sicurezza", href: "/account/security" },
 ] as const;
 
-export function WorkspaceNavigation({ role, platformRole, support, authenticated }: { role: WorkspaceRole | null; platformRole: "USER" | "SUPER_ADMIN" | null; support: SupportContext | null; authenticated: boolean }) {
+interface WorkspaceNavigationProps {
+  authenticated: boolean;
+  navigation: WorkspaceNavigationModel;
+  unreadNotificationCount: number;
+  platformRole: "USER" | "SUPER_ADMIN" | null;
+  support: SupportContext | null;
+}
+
+export function WorkspaceNavigation({ navigation, unreadNotificationCount, platformRole, support, authenticated }: WorkspaceNavigationProps) {
   const pathname = usePathname();
   const isPlatformConsole = pathname.startsWith("/qoovex-admin");
+
+  const isCurrent = (href: string) => pathname === href || (href !== "/dashboard" && pathname.startsWith(`${href}/`));
+
+  function WorkspaceLinks() {
+    return (
+      <>
+        <div className={styles.primaryNav}>
+          {navigation.primary.map((item) => (
+            <Link aria-current={isCurrent(item.href) ? "page" : undefined} href={item.href} key={item.href}>{item.label}</Link>
+          ))}
+        </div>
+        <div className={styles.navigationTools}>
+          {unreadNotificationCount >= 0 && navigation.primary.length > 0 && navigation.account.some((item) => item.href === "/settings") ? (
+            <Link className={styles.notificationLink} aria-current={isCurrent("/notifications") ? "page" : undefined} href="/notifications">
+              <span>Notifiche</span>
+              {unreadNotificationCount > 0 ? <strong aria-label={`${unreadNotificationCount} notifiche non lette`}>{unreadNotificationCount > 99 ? "99+" : unreadNotificationCount}</strong> : null}
+            </Link>
+          ) : null}
+          {navigation.add.length > 0 ? (
+            <details className={styles.navMenu}>
+              <summary>Aggiungi</summary>
+              <div className={styles.navMenuPanel}>
+                {navigation.add.map((item) => <Link href={item.href} key={`${item.href}-${item.label}`}>{item.label}</Link>)}
+              </div>
+            </details>
+          ) : null}
+          {authenticated ? (
+            <details className={styles.navMenu}>
+              <summary>Azienda e account</summary>
+              <div className={styles.navMenuPanel}>
+                {navigation.account.map((item) => <Link aria-current={isCurrent(item.href) ? "page" : undefined} href={item.href} key={item.href}>{item.label}</Link>)}
+                <WorkspaceLogoutButton />
+              </div>
+            </details>
+          ) : null}
+        </div>
+      </>
+    );
+  }
 
   function Links() {
     if (isPlatformConsole && platformRole === "SUPER_ADMIN") {
       return <>{platformNavItems.map((item) => <Link aria-current={pathname === item.href || (item.href !== "/qoovex-admin" && pathname.startsWith(`${item.href}/`)) ? "page" : undefined} href={item.href} key={item.href}>{item.label}</Link>)}{support ? <Link href="/dashboard">Azienda assistita</Link> : null}<WorkspaceLogoutButton /></>;
     }
-
-    const visibleItems = navItems.filter((item) => role && (item.roles as readonly WorkspaceRole[]).includes(role));
-    return <>{platformRole === "SUPER_ADMIN" ? <Link href="/qoovex-admin">Console Qoovex</Link> : null}{visibleItems.map((item) => <Link aria-current={pathname === item.href || pathname.startsWith(`${item.href}/`) ? "page" : undefined} href={item.href} key={item.href}>{item.label}</Link>)}{authenticated ? <Link aria-current={pathname === "/account/security" ? "page" : undefined} href="/account/security">Sicurezza</Link> : null}{authenticated ? <WorkspaceLogoutButton /> : null}</>;
+    return <WorkspaceLinks />;
   }
 
   return (

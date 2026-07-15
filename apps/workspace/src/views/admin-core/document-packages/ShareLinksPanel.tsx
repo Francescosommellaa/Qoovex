@@ -19,6 +19,7 @@ export function ShareLinksPanel({ packageId, links, canShare }: { packageId: str
   const [error, setError] = useState<string | null>(null);
 
   async function revokeLink(shareLinkId: string) {
+    if (!window.confirm("Revocare questo accesso? Il link non sarà più utilizzabile.")) return;
     setPending(shareLinkId);
     setError(null);
     try {
@@ -44,13 +45,7 @@ export function ShareLinksPanel({ packageId, links, canShare }: { packageId: str
             <span>Scadenza del link: {formatDate(link.expiresAt)}</span>
             <small>Ultimo accesso: {formatDate(link.lastAccessedAt)}</small>
           </div>
-          <div className={styles.actions}>
-            {!link.revokedAt ? (
-              <button className={styles.dangerButton} disabled={pending === link.id} onClick={() => revokeLink(link.id)} type="button">
-                {pending === link.id ? "Revoca..." : "Revoca link"}
-              </button>
-            ) : null}
-          </div>
+          {!link.revokedAt ? <details className={styles.details}><summary>Altre azioni</summary><button className={styles.dangerButton} disabled={pending === link.id} onClick={() => revokeLink(link.id)} type="button">{pending === link.id ? "Revoca..." : "Revoca accesso"}</button></details> : null}
         </article>
       ))}
     </div>

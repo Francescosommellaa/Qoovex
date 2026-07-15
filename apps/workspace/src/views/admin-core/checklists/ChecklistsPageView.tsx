@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { ChecklistArchiveButton } from "./ChecklistArchiveButton";
-import { ChecklistForm } from "./ChecklistForm";
 import styles from "../AdminCore.module.css";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { checklistItemStatusLabels, formatDate, recordStatusLabels, statusTone } from "@/views/workspace/workspace-format";
@@ -23,10 +21,10 @@ export function ChecklistsPageView({
     <WorkspacePage>
       <WorkspacePageHeader
         title="Checklist"
-        description="Checklist configurata per seguire attivita, documenti o prove da controllare."
+        description="Consulta il progresso e apri la prossima voce da completare."
+        action={capabilities.canManageChecklists ? <Link className={styles.linkButton} href="/checklists/new">Crea checklist</Link> : undefined}
       />
-      <div className={styles.splitGrid}>
-        <WorkspacePanel title="Lista checklist" description="Gli elementi archiviati sono esclusi dalla vista standard.">
+      <WorkspacePanel title="Checklist" description="La gestione quotidiana resta nel cantiere collegato.">
           <div className={styles.list}>
             {!checklists.length ? (
               <WorkspaceEmptyState title="Nessuna checklist" description="Crea una checklist configurata per seguire attivita, documenti o prove da controllare." />
@@ -43,21 +41,12 @@ export function ChecklistsPageView({
                   <div className={styles.actions}>
                     <WorkspaceState label={recordStatusLabels[checklist.status]} tone={statusTone(checklist.status)} />
                     <Link className={styles.linkButton} href={`/checklists/${checklist.id}`}>Apri</Link>
-                    {capabilities.canManageChecklists ? <ChecklistArchiveButton checklistId={checklist.id} /> : null}
                   </div>
                 </article>
               );
             })}
           </div>
-        </WorkspacePanel>
-        <WorkspacePanel title="Crea checklist" description="Non vengono creati template normativi o liste precompilate.">
-          {capabilities.canManageChecklists ? (
-            <ChecklistForm mode="create" jobSites={jobSites} />
-          ) : (
-            <p className="qv-text-muted">Il tuo ruolo puo leggere le checklist, ma non crearne una da questa schermata.</p>
-          )}
-        </WorkspacePanel>
-      </div>
+      </WorkspacePanel>
     </WorkspacePage>
   );
 }

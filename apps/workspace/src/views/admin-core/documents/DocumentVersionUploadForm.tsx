@@ -40,7 +40,7 @@ export function DocumentVersionUploadForm({ documentId, disabled, returnToDashbo
       </label>
       <p className="qv-text-muted">Limite 4 MB. Il file viene collegato al documento e resta da verificare.</p>
       <button className={styles.button} disabled={disabled || pending} type="submit">
-        {pending ? "Caricamento..." : "Carica versione"}
+        {pending ? "Caricamento..." : "Carica file"}
       </button>
       {success && returnToDashboard ? <Link className={styles.ghostButton} href={`/dashboard?updated=${encodeURIComponent(documentId)}`}>Torna alla dashboard</Link> : null}
     </form>
