@@ -8,17 +8,30 @@ import { buttonVariants } from "@qoovex/ui/components/button";
 import { FloatingNavigation, type FloatingNavigationSection } from "@qoovex/ui/components/floating-navigation";
 import { Separator } from "@qoovex/ui/components/separator";
 import { BrandMark } from "@/components/brand-mark";
-import { contactEmail, contactHref, legalLinks, workspaceUrl } from "./site-config";
+import {
+  contactEmail,
+  contactHref,
+  legalLinks,
+  primaryCtaLabel,
+  workspaceUrl,
+} from "./site-config";
 
 type SiteShellProps = { children: ReactNode; sections?: FloatingNavigationSection[] };
 type LegalPageProps = { children: ReactNode; eyebrow?: string; intro: string; title: string };
 
 const mainLinks = [
-  { href: "/#panoramica", label: "Panoramica" },
-  { href: "/#prodotto", label: "Prodotto" },
-  { href: "/#metodo", label: "Metodo" },
+  { href: "/#problema", label: "Problema" },
+  { href: "/#cosa", label: "Cosa fa" },
+  { href: "/#faq", label: "FAQ" },
   { href: "/manuale-operativo", label: "Manuale" },
 ];
+
+const audienceLinks = [
+  "Piccole imprese",
+  "Subappaltatori",
+  "Artigiani",
+  "Consulenti sicurezza",
+] as const;
 
 export function SiteHeader({ sections = [] }: { sections?: FloatingNavigationSection[] }) {
   const pathname = usePathname();
@@ -26,9 +39,16 @@ export function SiteHeader({ sections = [] }: { sections?: FloatingNavigationSec
   return (
     <FloatingNavigation
       action={
-        <a className={buttonVariants({ className: "hidden sm:inline-flex" })} href={workspaceUrl}>
-          Accedi <IconArrowRight data-icon="inline-end" />
-        </a>
+        <span className="hidden sm:contents">
+          <a
+            className={buttonVariants()}
+            data-cursor-label="Prova"
+            data-cursor-magnetic="true"
+            href={workspaceUrl}
+          >
+            {primaryCtaLabel} <IconArrowRight data-icon="inline-end" />
+          </a>
+        </span>
       }
       activeHref={pathname}
       brand={(compact) => <BrandMark compact={compact} />}
@@ -43,18 +63,47 @@ export function SiteHeader({ sections = [] }: { sections?: FloatingNavigationSec
 export function SiteFooter() {
   return (
     <footer className="border-t bg-card">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.5fr_0.5fr_0.5fr] lg:px-8">
-        <div className="flex flex-col items-start gap-3">
-          <a className="rounded-md" href="/"><BrandMark /></a>
-          <p className="max-w-sm text-sm leading-6 text-muted-foreground">Ordine operativo per documenti, scadenze e prove.</p>
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid gap-10 border-b pb-10 md:grid-cols-2 lg:grid-cols-[1.35fr_0.7fr_0.7fr_0.7fr]">
+          <div className="flex flex-col items-start gap-4">
+            <a className="rounded-md" data-link="plain" href="/"><BrandMark /></a>
+            <p className="max-w-md text-sm leading-6 text-muted-foreground">
+              Qoovex è un sistema documentale operativo per organizzare
+              documenti, versioni, scadenze, checklist, prove e pacchetti di
+              cantieri e lavoratori. Mostra contenuti presenti, mancanti, in
+              scadenza o da verificare.
+            </p>
+            <a className="text-sm text-muted-foreground hover:text-foreground" data-link="quiet" href={contactHref}>
+              {contactEmail}
+            </a>
+          </div>
+
+          <nav aria-label="Esplora Qoovex" className="flex flex-col gap-2 text-sm">
+            <strong className="mb-1">Esplora</strong>
+            <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/#cosa">Cosa fa</a>
+            <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/#storia">Perché Qoovex</a>
+            <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/#faq">FAQ</a>
+            <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/#faq-piani">Piani e accesso</a>
+            <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/manuale-operativo">Manuale operativo</a>
+          </nav>
+
+          <div aria-labelledby="audience-title" className="flex flex-col gap-2 text-sm">
+            <strong className="mb-1" id="audience-title">Pensato per</strong>
+            {audienceLinks.map((label) => (
+              <span className="text-muted-foreground" key={label}>{label}</span>
+            ))}
+          </div>
+
+          <nav aria-label="Link legali" className="flex flex-col gap-2 text-sm">
+            <strong className="mb-1">Legale</strong>
+            {legalLinks.map((link) => <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href={link.href} key={link.href}>{link.label}</a>)}
+          </nav>
         </div>
-        <div className="flex flex-col gap-2 text-sm">
-          <strong>Contatto</strong>
-          <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href={contactHref}>{contactEmail}</a>
+
+        <div className="flex flex-col gap-3 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <p>© 2026 Qoovex. Sito pubblico informativo.</p>
+          <p>Qoovex non certifica persone o documenti e non sostituisce consulenti o responsabili.</p>
         </div>
-        <nav aria-label="Link legali e operativi" className="flex flex-col gap-2 text-sm">
-          {legalLinks.map((link) => <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href={link.href} key={link.href}>{link.label}</a>)}
-        </nav>
       </div>
     </footer>
   );
