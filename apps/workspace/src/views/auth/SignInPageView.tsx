@@ -84,15 +84,15 @@ export function SignInPageView({
         </form>
 
         <p className={styles.hint}>
-          <Link className={styles.textLink} href={`/reset-password?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Password dimenticata?</Link>
+          <Link className={styles.textLink} data-link="inline" href={`/reset-password?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Password dimenticata?</Link>
           {" · "}
-          <Link className={styles.textLink} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Verifica o reinvia il codice email</Link>
+          <Link className={styles.textLink} data-link="inline" href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Verifica o reinvia il codice email</Link>
         </p>
 
         {showDevAuth ? <button className={styles.secondaryButton} disabled={devLoading || loading} onClick={signInAsDev} type="button">{devLoading ? "Accesso dev in corso" : "Accedi come dev"}</button> : null}
 
         <p className={styles.hint}>
-          Non hai un account? <Link className={styles.textLink} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link>
+          Non hai un account? <Link className={styles.textLink} data-link="inline" href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link>
         </p>
       </section>
     </main>

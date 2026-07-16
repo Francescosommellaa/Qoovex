@@ -150,7 +150,7 @@ export function ResetPasswordPageView({ callbackUrl }: { callbackUrl: string }) 
         )}
 
         <p className={styles.hint}>
-          <Link className={styles.textLink} href={`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Torna all'accesso</Link>
+          <Link className={styles.textLink} data-link="inline" href={`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Torna all'accesso</Link>
         </p>
       </section>
     </main>

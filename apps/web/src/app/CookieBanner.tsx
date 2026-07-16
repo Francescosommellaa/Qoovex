@@ -34,7 +34,7 @@ export function CookieBanner() {
         </CardHeader>
         <CardContent>
           <p className="text-sm leading-6 text-muted-foreground">In questa fase il sito usa solo preferenze tecniche necessarie, come il salvataggio di questa scelta nel browser. Non vengono caricati strumenti opzionali.</p>
-          <a className="mt-2 inline-flex text-sm font-medium underline underline-offset-4" href="/cookies">Leggi la cookie policy</a>
+          <a className="mt-2 inline-flex text-sm font-medium" data-link="inline" href="/cookies">Leggi la cookie policy</a>
         </CardContent>
         <CardFooter className="flex flex-wrap justify-end gap-2">
           <Button onClick={acceptNecessary} variant="outline">Solo necessari</Button>

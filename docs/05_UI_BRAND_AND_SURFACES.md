@@ -35,11 +35,33 @@ Le composizioni di prodotto e la logica di dominio restano nelle app. Componenti
 - Focus visibile, tastiera e touch, forced colors, zoom 200% e contenuti lunghi come requisiti di base.
 - Copy prudente su stato documentale, elementi presenti, mancanti o da verificare. Nessuna promessa di conformita, certificazione o validita legale.
 
+## Sottolineatura e link
+
+La sottolineatura comunica un collegamento nel contenuto, non un generico stato interattivo. I ruoli condivisi sono dichiarativi e valgono in tutte le app:
+
+- `inline`: link dentro testo, help, alert e contenuti legali; la sottolineatura e sempre visibile;
+- `quiet`: link testuali autonomi, azioni secondarie e footer; la sottolineatura compare in hover e focus;
+- `plain`: navigazione, tab, breadcrumb, logo, card, badge e link con aspetto CTA; non viene sottolineato.
+
+I button non usano mai la sottolineatura. Colore, spessore e offset provengono dai token condivisi; skip-ink, focus da tastiera e forced colors restano parte del contratto accessibile. I consumer usano `data-link`, mentre `data-link-scope="inline"` copre contenitori di testo controllati come descrizioni, alert e contenuti legali.
+
+## Selezione del contenuto
+
+Titoli, paragrafi e contenuti editoriali restano selezionabili e copiabili con un highlight neutro derivato dai token foreground, al posto del blu nativo del browser. Immagini, marchio e mockup UI dimostrativi non producono evidenziazioni testuali accidentali: le immagini applicano il comportamento condiviso, `BrandMark` e non selezionabile e i preview dichiarano `data-selection="none"`. Forced colors mantiene `Highlight` e `HighlightText` di sistema. La regola non si applica alle dashboard reali, ai dati operativi o ai campi editabili.
+
 ## Motion
 
 La motion serve orientamento e feedback: reveal circolare del tema, navbar floating che si compatta con lo scroll e aggiorna i tag di sezione, transizioni Base UI per menu/select/tooltip/sheet, collasso sidebar, switch, tab, skeleton e spinner. `prefers-reduced-motion` disabilita le transizioni non essenziali e il cambio tema ha un fallback senza View Transition API.
 
+Le superfici marketing possono attivare il `MarketingCursor` condiviso: punto di precisione immediato, alone con inseguimento elastico e deformazione proporzionale alla velocita, stato interattivo, pressione e micro-label opt-in tramite `data-cursor-label`. Il comportamento non sostituisce focus o semantica e viene disattivato integralmente su touch, penna, `prefers-reduced-motion`, forced colors e dispositivi senza puntatore fine; input, select, textarea e contenuti editabili mantengono il cursore nativo. La home pubblica e `/marketing` di Sirio sono i due consumer approvati; pagine legali, workspace e dashboard restano esclusi.
+
 Non viene introdotta una libreria di animazione separata. Animazioni legate a feature escluse dello starter non fanno parte della foundation.
+
+## Scrollbar
+
+Web, Sirio e workspace montano lo stesso `ScrollbarController` e usano esclusivamente la scrollbar nativa ridisegnata dalla foundation. Su mouse e puntatori fini il canale resta trasparente, lo spessore occupato e 8 px e il thumb visivo e circa 4 px; colore e intensita derivano dai token foreground per light e dark.
+
+La scrollbar principale appare durante lo scroll o quando il puntatore raggiunge gli ultimi 20 px del bordo destro o inferiore. Le scrollbar annidate appaiono durante scroll, hover o focus del relativo contenitore e tornano trasparenti dopo 900 ms di inattivita. Hover e trascinamento aumentano progressivamente il contrasto. Su touch, pointer coarse e forced colors resta il comportamento nativo del sistema. Sidebar, tabelle, menu, select e ogni nuovo contenitore overflow ereditano automaticamente il contratto.
 
 ## Adozione esterna
 

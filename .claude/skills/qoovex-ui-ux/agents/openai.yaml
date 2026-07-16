@@ -1,6 +1,0 @@
-interface:
-  display_name: "Qoovex UI UX Router"
-  short_description: "Route canonical Qoovex UI work safely"
-  default_prompt: "Use $qoovex-ui-ux to route this Qoovex UI or UX task through Brain, the shared package, Sirio proof, and repository verification."
-policy:
-  allow_implicit_invocation: true

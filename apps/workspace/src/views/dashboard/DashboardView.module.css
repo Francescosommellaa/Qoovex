@@ -84,7 +84,6 @@
   color: var(--primary);
   font-size: 0.86rem;
   font-weight: 700;
-  text-underline-offset: 0.18em;
 }
 
 .summaryIndex a,

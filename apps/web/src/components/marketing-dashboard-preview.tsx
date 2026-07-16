@@ -12,7 +12,11 @@ const items = [
 
 export function MarketingDashboardPreview() {
   return (
-    <div className="min-w-0 p-4 sm:p-6" aria-label="Anteprima interattiva della dashboard Qoovex">
+    <div
+      aria-label="Anteprima interattiva della dashboard Qoovex"
+      className="min-w-0 p-4 sm:p-6"
+      data-selection="none"
+    >
       <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
         <div><p className="text-sm text-muted-foreground">Oggi</p><h2 className="text-xl font-semibold tracking-tight">Situazioni operative</h2></div>
         <Badge variant="outline">Dati dimostrativi</Badge>

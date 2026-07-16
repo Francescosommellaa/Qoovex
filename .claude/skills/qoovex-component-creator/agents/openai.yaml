@@ -1,6 +1,0 @@
-interface:
-  display_name: "Qoovex Component Creator"
-  short_description: "Build one shared Qoovex component"
-  default_prompt: "Use $qoovex-component-creator to design and verify one named component in packages/ui with a Sirio proof."
-policy:
-  allow_implicit_invocation: true

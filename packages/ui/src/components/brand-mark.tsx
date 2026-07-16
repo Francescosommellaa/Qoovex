@@ -13,7 +13,7 @@ export function BrandMark({
   mark: React.ReactNode;
 }) {
   return (
-    <span className={cn("inline-flex min-w-0 items-center gap-2 font-semibold tracking-tight", className)}>
+    <span className={cn("inline-flex min-w-0 select-none items-center gap-2 font-semibold tracking-tight", className)}>
       <span className="relative grid size-7 shrink-0 place-items-center overflow-hidden rounded-md">
         {mark}
       </span>

@@ -99,11 +99,75 @@ for (const file of visualFiles) {
 
 const base = read("packages/ui/styles/base.css");
 const tokens = read("packages/ui/styles/tokens.css");
+const marketingCursor = read("packages/ui/src/components/marketing-cursor.tsx");
+const scrollbarController = read("packages/ui/src/components/scrollbar-controller.tsx");
+const alert = read("packages/ui/src/components/alert.tsx");
+const field = read("packages/ui/src/components/field.tsx");
+const empty = read("packages/ui/src/components/empty.tsx");
+const button = read("packages/ui/src/components/button.tsx");
+const badge = read("packages/ui/src/components/badge.tsx");
+const brandMark = read("packages/ui/src/components/brand-mark.tsx");
+const sidebar = read("packages/ui/src/components/sidebar.tsx");
+const webLayout = read("apps/web/src/app/layout.tsx");
+const webChrome = read("apps/web/src/app/site-chrome.tsx");
+const webDashboardPreview = read("apps/web/src/components/marketing-dashboard-preview.tsx");
+const sirioLayout = read("apps/sirio/src/app/layout.tsx");
+const sirioFoundation = read("apps/sirio/src/app/page.tsx");
+const sirioDashboardOverview = read("apps/sirio/src/components/dashboard-overview.tsx");
+const workspaceLayout = read("apps/workspace/src/app/layout.tsx");
+const workspaceDashboard = read("apps/workspace/src/views/dashboard/DashboardView.tsx");
+const authStyles = read("apps/workspace/src/views/auth/AuthPages.module.css");
 for (const required of ["prefers-reduced-motion", "::view-transition-new(root)", "@source", "@custom-variant dark"]) {
   assert(base.includes(required), `base.css non contiene ${required}`);
 }
 for (const required of ["--info", "--success", "--warning", "--destructive", "--sidebar", "--chart-1", "oklch("]) {
   assert(tokens.includes(required), `tokens.css non contiene ${required}`);
+}
+for (const required of ["--link-underline-color", "--link-underline-offset", "--link-underline-thickness", "--link-underline-thickness-active", "--selection-background", "--selection-foreground"]) {
+  assert(tokens.includes(required), `tokens.css non contiene il token link ${required}`);
+}
+for (const required of ["--scrollbar-size", "--scrollbar-thumb", "--scrollbar-thumb-hover", "--scrollbar-thumb-active"]) {
+  assert(tokens.includes(required), `tokens.css non contiene il token scrollbar ${required}`);
+}
+for (const required of ['data-link="inline"', 'data-link="quiet"', 'data-link="plain"', 'data-link-scope="inline"', "text-decoration-skip-ink", "LinkText"]) {
+  assert(base.includes(required), `base.css non contiene il contratto link ${required}`);
+}
+for (const [name, source] of [["Alert", alert], ["Field", field], ["Empty", empty]]) {
+  assert(source.includes('data-link-scope="inline"'), `${name} deve rendere esplicito lo scope dei link inline.`);
+}
+for (const [name, source] of [["Button", button], ["Badge", badge]]) {
+  assert(source.includes("no-underline"), `${name} deve impedire la sottolineatura delle azioni.`);
+  assert(!source.includes("hover:underline"), `${name} non deve usare la sottolineatura come affordance.`);
+}
+assert(sirioFoundation.includes('data-link="inline"') && sirioFoundation.includes('data-link="quiet"') && sirioFoundation.includes('data-link="plain"'), "Sirio deve mostrare tutti i ruoli semantici dei link.");
+assert(webChrome.includes('data-link="quiet"') && webChrome.includes('data-link-scope="inline"'), "Web deve distinguere link quiet e inline.");
+assert(workspaceDashboard.includes('data-link="inline"') && workspaceDashboard.includes('data-link="quiet"') && workspaceDashboard.includes('data-link="plain"'), "Workspace deve distinguere tutti i ruoli semantici dei link.");
+assert(!authStyles.includes("text-decoration: underline"), "Le azioni button delle pagine auth non devono simulare link sottolineati.");
+for (const required of ['data-selection="none"', "-webkit-user-select", "-webkit-user-drag", "::selection", "HighlightText"]) {
+  assert(base.includes(required), `base.css non contiene il contratto di selezione ${required}`);
+}
+assert(brandMark.includes("select-none"), "BrandMark non deve produrre selezione testuale accidentale.");
+assert(webDashboardPreview.includes('data-selection="none"'), "Il preview dashboard Web non deve essere selezionabile.");
+assert(sirioDashboardOverview.includes('data-selection={preview ? "none" : undefined}'), "Solo la modalita preview della dashboard Sirio deve disabilitare la selezione.");
+for (const required of ["scrollbar-width: thin", "::-webkit-scrollbar-thumb", 'data-scrollbar-active="true"', 'data-scrollbar-edge="true"', "scrollbar-color: auto"]) {
+  assert(base.includes(required), `base.css non contiene il contratto scrollbar ${required}`);
+}
+for (const required of ["document.addEventListener(\"scroll\"", "window.addEventListener(\"scroll\"", "pointermove", "data-scrollbar-controller", "data-scrollbar-active", "data-scrollbar-edge", "ACTIVE_TIMEOUT_MS"]) {
+  assert(scrollbarController.includes(required), `ScrollbarController non contiene ${required}`);
+}
+assert(!sidebar.includes("no-scrollbar"), "SidebarContent deve usare la scrollbar condivisa.");
+assert(sirioFoundation.includes('data-scrollbar-proof="vertical"') && sirioFoundation.includes('data-scrollbar-proof="horizontal"'), "Sirio deve mostrare scrollbar verticale e orizzontale.");
+for (const required of ["(hover: hover) and (pointer: fine)", "prefers-reduced-motion", "forced-colors", "data-cursor-label", "requestAnimationFrame", "window.location.pathname", "pageshow", "popstate"]) {
+  assert(marketingCursor.includes(required), `MarketingCursor non contiene ${required}`);
+}
+for (const required of [".marketing-cursor", 'data-marketing-cursor="active"', 'data-cursor-native="text"']) {
+  assert(base.includes(required), `base.css non contiene il contratto cursore ${required}`);
+}
+assert(webLayout.includes('<MarketingCursor pathnames={["/"]} />'), "Web deve attivare MarketingCursor solo sulla home.");
+assert(sirioLayout.includes('<MarketingCursor pathnames={["/marketing"]} />'), "Sirio deve attivare MarketingCursor solo su /marketing.");
+assert(!workspaceLayout.includes("MarketingCursor"), "Workspace non deve attivare MarketingCursor.");
+for (const [name, source] of [["Web", webLayout], ["Sirio", sirioLayout], ["Workspace", workspaceLayout]]) {
+  assert(source.includes("<ScrollbarController />"), `${name} deve montare ScrollbarController.`);
 }
 
 const notice = read("packages/ui/THIRD_PARTY_NOTICES.md");
