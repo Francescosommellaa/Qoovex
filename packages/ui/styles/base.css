@@ -27,6 +27,20 @@
   color: var(--selection-foreground);
 }
 
+.floating-navigation__mobile-sections {
+  container-type: inline-size;
+}
+
+.floating-navigation__mobile-adjacent {
+  display: none;
+}
+
+@container (min-width: 15rem) {
+  .floating-navigation__mobile-adjacent {
+    display: inline-flex;
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   * {
     scrollbar-color: transparent transparent;
@@ -255,6 +269,24 @@
   height: 2.75rem;
   border-color: color-mix(in oklch, var(--cursor-action) 72%, transparent);
   background: color-mix(in oklch, var(--cursor-action) 8%, transparent);
+}
+
+.marketing-cursor[data-magnetic="true"][data-mode="default"] .marketing-cursor__halo {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-color: color-mix(in oklch, var(--cursor-action) 68%, transparent);
+  background: color-mix(in oklch, var(--cursor-action) 6%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, var(--background) 35%, transparent),
+    0 0 0 0.25rem color-mix(in oklch, var(--cursor-action) 6%, transparent);
+}
+
+.marketing-cursor[data-magnetic="true"][data-mode="action"] .marketing-cursor__halo,
+.marketing-cursor[data-magnetic="true"][data-mode="label"] .marketing-cursor__halo {
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, var(--background) 72%, transparent),
+    0 0 0 0.3rem color-mix(in oklch, var(--cursor-action) 12%, transparent),
+    var(--shadow-md);
 }
 
 .marketing-cursor[data-mode="label"] .marketing-cursor__core {

@@ -9,8 +9,19 @@ const interactiveSelector =
   'a[href], button, summary, [role="button"], [data-cursor-label]';
 const nativeCursorSelector =
   'input, textarea, select, option, [contenteditable="true"], [data-cursor-native]';
+const magneticSelector = [
+  '[data-cursor-magnetic="true"]',
+  '[data-slot="button"][data-variant="default"]',
+  "a.bg-primary",
+  "button.bg-primary",
+  '[role="button"].bg-primary',
+].join(", ");
+const magneticDistance = 24;
+const magneticTargetRefreshInterval = 500;
 
 type CursorMode = "action" | "default" | "disabled" | "label" | "native";
+type Point = { x: number; y: number };
+type MagneticPoint = Point & { active: boolean; target: HTMLElement | null };
 
 function setMediaListener(query: MediaQueryList, listener: () => void) {
   query.addEventListener("change", listener);
@@ -27,6 +38,40 @@ function nativeCursorFor(element: Element) {
   }
 
   return "auto";
+}
+
+function resolveMagneticPoint(pointer: Point, targets: readonly HTMLElement[]): MagneticPoint {
+  let nearest: { target: HTMLElement; rect: DOMRect; distance: number } | null = null;
+
+  for (const target of targets) {
+    if (
+      !target.isConnected ||
+      target.getAttribute("data-cursor-magnetic") === "false" ||
+      target.matches(":disabled") ||
+      target.getAttribute("aria-disabled") === "true"
+    ) {
+      continue;
+    }
+
+    const rect = target.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) continue;
+
+    const distanceX = Math.max(rect.left - pointer.x, 0, pointer.x - rect.right);
+    const distanceY = Math.max(rect.top - pointer.y, 0, pointer.y - rect.bottom);
+    const distance = Math.hypot(distanceX, distanceY);
+    if (distance > magneticDistance || (nearest && distance >= nearest.distance)) continue;
+
+    nearest = { target, rect, distance };
+  }
+
+  if (!nearest) return { ...pointer, active: false, target: null };
+
+  return {
+    x: nearest.rect.left + nearest.rect.width / 2,
+    y: nearest.rect.top + nearest.rect.height / 2,
+    active: true,
+    target: nearest.target,
+  };
 }
 
 export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }) {
@@ -52,6 +97,10 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
     const pointer = { x: -80, y: -80 };
     const follower = { x: -80, y: -80 };
     const previousPointer = { x: -80, y: -80 };
+    let magneticPoint: MagneticPoint = { x: -80, y: -80, active: false, target: null };
+    let magneticTargets: HTMLElement[] = [];
+    let magneticPointIsDirty = true;
+    let magneticTargetsRefreshedAt = 0;
     let animationFrame = 0;
     let enabled = false;
     let lastFrame = performance.now();
@@ -92,25 +141,51 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
       setMode(cursorLabel ? "label" : "action", cursorLabel);
     };
 
+    const refreshMagneticTargets = () => {
+      magneticTargets = Array.from(document.querySelectorAll<HTMLElement>(magneticSelector));
+      magneticTargetsRefreshedAt = performance.now();
+      magneticPointIsDirty = true;
+    };
+
+    const markMagneticPointDirty = () => {
+      magneticPointIsDirty = true;
+    };
+
     const render = (time: number) => {
+      if (magneticPointIsDirty) {
+        magneticPoint = resolveMagneticPoint(pointer, magneticTargets);
+        magneticPointIsDirty = false;
+        updateIntent(
+          magneticPoint.target ?? document.elementFromPoint(pointer.x, pointer.y),
+        );
+        const magneticState = magneticPoint.active ? "true" : "false";
+        if (cursor.dataset.magnetic !== magneticState) {
+          follower.x = magneticPoint.x;
+          follower.y = magneticPoint.y;
+          previousPointer.x = magneticPoint.x;
+          previousPointer.y = magneticPoint.y;
+          cursor.dataset.magnetic = magneticState;
+        }
+      }
+
       const delta = Math.min((time - lastFrame) / 1000, 0.05);
       lastFrame = time;
       const follow = 1 - Math.exp(-18 * delta);
-      follower.x += (pointer.x - follower.x) * follow;
-      follower.y += (pointer.y - follower.y) * follow;
+      follower.x += (magneticPoint.x - follower.x) * follow;
+      follower.y += (magneticPoint.y - follower.y) * follow;
 
-      const velocityX = pointer.x - previousPointer.x;
-      const velocityY = pointer.y - previousPointer.y;
+      const velocityX = magneticPoint.x - previousPointer.x;
+      const velocityY = magneticPoint.y - previousPointer.y;
       const speed = Math.min(Math.hypot(velocityX, velocityY), 18);
       const angle = Math.atan2(velocityY, velocityX) * (180 / Math.PI);
       const canDeform = cursor.dataset.mode !== "label";
       const stretch = canDeform ? 1 + speed * 0.009 : 1;
       const squash = 1 / stretch;
 
-      core.style.transform = `translate3d(${pointer.x}px, ${pointer.y}px, 0) translate(-50%, -50%)`;
+      core.style.transform = `translate3d(${magneticPoint.x}px, ${magneticPoint.y}px, 0) translate(-50%, -50%)`;
       halo.style.transform = `translate3d(${follower.x}px, ${follower.y}px, 0) translate(-50%, -50%) rotate(${canDeform ? angle : 0}deg) scale(${stretch}, ${squash})`;
-      previousPointer.x = pointer.x;
-      previousPointer.y = pointer.y;
+      previousPointer.x = magneticPoint.x;
+      previousPointer.y = magneticPoint.y;
       animationFrame = window.requestAnimationFrame(render);
     };
 
@@ -119,11 +194,13 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
       window.cancelAnimationFrame(animationFrame);
       cursor.dataset.enabled = "false";
       cursor.dataset.visible = "false";
+      cursor.dataset.magnetic = "false";
       delete root.dataset.marketingCursor;
       delete root.dataset.cursorNative;
     };
 
     const start = () => {
+      refreshMagneticTargets();
       const shouldEnable =
         routeIsActive() && finePointer.matches && !reducedMotion.matches && !forcedColors.matches;
       if (!shouldEnable) {
@@ -153,6 +230,10 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
       }
       pointer.x = event.clientX;
       pointer.y = event.clientY;
+      if (performance.now() - magneticTargetsRefreshedAt >= magneticTargetRefreshInterval) {
+        refreshMagneticTargets();
+      }
+      magneticPointIsDirty = true;
       if (follower.x < 0 || follower.y < 0) {
         follower.x = event.clientX;
         follower.y = event.clientY;
@@ -160,7 +241,6 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
         previousPointer.y = event.clientY;
       }
       cursor.dataset.visible = "true";
-      updateIntent(event.target);
     };
 
     const handlePointerDown = (event: PointerEvent) => {
@@ -176,6 +256,7 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
     const hide = () => {
       cursor.dataset.visible = "false";
       cursor.dataset.pressed = "false";
+      cursor.dataset.magnetic = "false";
       delete root.dataset.cursorNative;
     };
 
@@ -195,6 +276,8 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
     window.addEventListener("pointerup", handlePointerUp, { passive: true });
     window.addEventListener("pointercancel", handlePointerUp, { passive: true });
     window.addEventListener("pointerout", handlePointerOut, { passive: true });
+    window.addEventListener("scroll", markMagneticPointDirty, { passive: true });
+    window.addEventListener("resize", markMagneticPointDirty, { passive: true });
     window.addEventListener("pageshow", start);
     window.addEventListener("popstate", start);
     window.addEventListener("blur", hide);
@@ -211,6 +294,8 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
       window.removeEventListener("pointerup", handlePointerUp);
       window.removeEventListener("pointercancel", handlePointerUp);
       window.removeEventListener("pointerout", handlePointerOut);
+      window.removeEventListener("scroll", markMagneticPointDirty);
+      window.removeEventListener("resize", markMagneticPointDirty);
       window.removeEventListener("pageshow", start);
       window.removeEventListener("popstate", start);
       window.removeEventListener("blur", hide);
@@ -223,6 +308,7 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
       aria-hidden="true"
       className="marketing-cursor"
       data-enabled="false"
+      data-magnetic="false"
       data-mode="default"
       data-pressed="false"
       data-slot="marketing-cursor"

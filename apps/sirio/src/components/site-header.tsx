@@ -33,11 +33,18 @@ export function SiteHeader({
     <FloatingNavigation
       action={
         action ? (
-          <a className={buttonVariants({ className: "hidden sm:inline-flex" })} href="/dashboard">
-            <span className="hidden lg:inline">Apri la demo</span>
-            <IconArrowRight aria-hidden="true" />
-            <span className="sr-only lg:hidden">Apri la demo</span>
-          </a>
+          <span className="hidden sm:contents">
+            <a
+              className={buttonVariants()}
+              data-cursor-label="Apri"
+              data-cursor-magnetic="true"
+              href="/dashboard"
+            >
+              <span className="hidden lg:inline">Apri la demo</span>
+              <IconArrowRight aria-hidden="true" />
+              <span className="sr-only lg:hidden">Apri la demo</span>
+            </a>
+          </span>
         ) : undefined
       }
       activeHref={pathname}
