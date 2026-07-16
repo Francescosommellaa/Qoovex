@@ -421,13 +421,13 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
   let organizationFixture: JsonRecord | null = null;
 
   try {
-    await page.goto("/sign-in", { waitUntil: "domcontentloaded" });
-    await page.getByRole("button", { name: "Accedi come dev" }).click();
+    expect((await page.context().request.post("/api/dev-auth")).status()).toBe(200);
+    await page.goto("/dashboard", { waitUntil: "domcontentloaded" });
     await expect(page).toHaveURL(/\/dashboard$/);
     await openWorkspaceAccountMenu(page);
-    const qoovexConsoleLink = page.getByRole("link", { name: "Console Qoovex" });
-    await expect(qoovexConsoleLink).toBeVisible();
-    await qoovexConsoleLink.click();
+    const qoovexConsoleItem = page.getByRole("menuitem", { name: "Console Qoovex" });
+    await expect(qoovexConsoleItem).toBeVisible();
+    await qoovexConsoleItem.click();
     await expect(page).toHaveURL(/\/qoovex-admin$/);
     organizationFixture = await pagePostJson(page, "/api/dev-fixtures/platform-admin", { kind: "mfa-suite", runId });
     const organization = { id: organizationFixture.organizationId, code: `MFA-${runId}` };
