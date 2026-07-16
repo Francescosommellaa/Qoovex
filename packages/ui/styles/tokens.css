@@ -69,6 +69,20 @@
   --leading-tight: 1.25;
   --z-sticky: 40;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --link-underline-color: color-mix(in oklch, currentColor 42%, transparent);
+  --link-underline-offset: 0.2em;
+  --link-underline-thickness: max(1px, 0.07em);
+  --link-underline-thickness-active: max(1.5px, 0.1em);
+  --selection-background: color-mix(in oklch, var(--foreground) 18%, transparent);
+  --selection-foreground: var(--foreground);
+  --scrollbar-size: 0.5rem;
+  --scrollbar-thumb: color-mix(in oklch, var(--foreground) 24%, transparent);
+  --scrollbar-thumb-hover: color-mix(in oklch, var(--foreground) 38%, transparent);
+  --scrollbar-thumb-active: color-mix(in oklch, var(--foreground) 52%, transparent);
+  --cursor-core: var(--foreground);
+  --cursor-halo: color-mix(in oklch, var(--foreground) 52%, transparent);
+  --cursor-action: var(--foreground);
+  --cursor-action-foreground: var(--background);
 }
 
 [data-theme="vercel"].dark {

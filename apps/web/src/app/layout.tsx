@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@qoovex/ui/components/theme-provider";
+import { MarketingCursor } from "@qoovex/ui/components/marketing-cursor";
+import { ScrollbarController } from "@qoovex/ui/components/scrollbar-controller";
 import { TooltipProvider } from "@qoovex/ui/components/tooltip";
 import { CookieBanner } from "./CookieBanner";
 import "./globals.css";
@@ -27,6 +29,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
           <TooltipProvider>
+            <ScrollbarController />
+            <MarketingCursor pathnames={["/"]} />
             {children}
             <CookieBanner />
           </TooltipProvider>

@@ -205,7 +205,7 @@ export function SignUpPageView({
         ) : null}
 
         <p className={styles.hint}>
-          Hai gia un account? <Link className={styles.textLink} href={signInHref(callbackUrl)}>Accedi</Link>
+          Hai gia un account? <Link className={styles.textLink} data-link="inline" href={signInHref(callbackUrl)}>Accedi</Link>
         </p>
       </section>
     </main>

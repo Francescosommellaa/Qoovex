@@ -50,10 +50,10 @@ export function SiteFooter() {
         </div>
         <div className="flex flex-col gap-2 text-sm">
           <strong>Contatto</strong>
-          <a className="text-muted-foreground hover:text-foreground" href={contactHref}>{contactEmail}</a>
+          <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href={contactHref}>{contactEmail}</a>
         </div>
         <nav aria-label="Link legali e operativi" className="flex flex-col gap-2 text-sm">
-          {legalLinks.map((link) => <a className="text-muted-foreground hover:text-foreground" href={link.href} key={link.href}>{link.label}</a>)}
+          {legalLinks.map((link) => <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href={link.href} key={link.href}>{link.label}</a>)}
         </nav>
       </div>
     </footer>
@@ -80,7 +80,7 @@ export function LegalPage({ children, eyebrow = "Bozza da validare", intro, titl
           <AlertTitle>Contenuto operativo da validare</AlertTitle>
           <AlertDescription>Questa traccia deve essere verificata da un consulente qualificato prima dell&apos;uso commerciale.</AlertDescription>
         </Alert>
-        <div className="legal-content">{children}</div>
+        <div className="legal-content" data-link-scope="inline">{children}</div>
       </div>
     </SiteShell>
   );

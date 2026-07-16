@@ -26,7 +26,7 @@ export default function MarketingPage() {
             <Badge variant="outline">Sistema documentale operativo</Badge>
             <h1 className="mt-5 text-4xl leading-[1.05] font-semibold tracking-[-0.04em] text-balance sm:text-5xl">Documenti, scadenze e prove di cantiere in un solo spazio.</h1>
             <p className="mt-5 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg">Qoovex mostra cosa è presente, cosa manca e quali contenuti richiedono una verifica. Le decisioni restano alle persone responsabili.</p>
-            <div className="mt-7 flex flex-wrap gap-3"><a className={buttonVariants({ size: "lg" })} href="/dashboard">Esplora la dashboard <IconArrowRight data-icon="inline-end" /></a><a className={buttonVariants({ size: "lg", variant: "outline" })} href="#prodotto">Come funziona</a></div>
+            <div className="mt-7 flex flex-wrap gap-3"><a className={buttonVariants({ size: "lg" })} data-cursor-label="Esplora" href="/dashboard">Esplora la dashboard <IconArrowRight data-icon="inline-end" /></a><a className={buttonVariants({ size: "lg", variant: "outline" })} data-cursor-label="Scopri" href="#prodotto">Come funziona</a></div>
           </div>
           <Card className="min-w-0 overflow-hidden bg-muted/30 p-1 shadow-xl"><div className="rounded-lg border bg-background"><DashboardOverview preview /></div></Card>
         </section>
@@ -51,9 +51,9 @@ export default function MarketingPage() {
           </div>
         </section>
 
-        <section className="scroll-mt-24 border-t" id="valuta"><div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center lg:px-8"><div><h2 className="text-2xl font-semibold tracking-tight">Valuta il nuovo sistema nella dashboard Sirio.</h2><p className="mt-2 text-sm text-muted-foreground">La superficie usa dati dimostrativi e componenti reali.</p></div><a className={buttonVariants({ size: "lg" })} href="/dashboard">Apri la dashboard <IconArrowRight data-icon="inline-end" /></a></div></section>
+        <section className="scroll-mt-24 border-t" id="valuta"><div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center lg:px-8"><div><h2 className="text-2xl font-semibold tracking-tight">Valuta il nuovo sistema nella dashboard Sirio.</h2><p className="mt-2 text-sm text-muted-foreground">La superficie usa dati dimostrativi e componenti reali.</p></div><a className={buttonVariants({ size: "lg" })} data-cursor-label="Apri" href="/dashboard">Apri la dashboard <IconArrowRight data-icon="inline-end" /></a></div></section>
       </main>
-      <footer className="border-t"><div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-muted-foreground sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8"><span>Qoovex</span><div className="flex items-center gap-4"><a className="hover:text-foreground" href="/">Catalogo Sirio</a><Separator orientation="vertical" className="h-4" /><span>Verifica del sistema condiviso</span></div></div></footer>
+      <footer className="border-t"><div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-muted-foreground sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8"><span>Qoovex</span><div className="flex items-center gap-4"><a className="hover:text-foreground" data-link="quiet" href="/">Catalogo Sirio</a><Separator orientation="vertical" className="h-4" /><span>Verifica del sistema condiviso</span></div></div></footer>
     </div>
   );
 }

@@ -41,7 +41,10 @@ const metrics = [
 
 export function DashboardOverview({ preview = false }: { preview?: boolean }) {
   return (
-    <div className={cn("flex min-w-0 flex-1 flex-col gap-4", preview ? "p-4 sm:p-5" : "p-4 md:p-6")}>
+    <div
+      className={cn("flex min-w-0 flex-1 flex-col gap-4", preview ? "p-4 sm:p-5" : "p-4 md:p-6")}
+      data-selection={preview ? "none" : undefined}
+    >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="mb-2 flex flex-wrap items-center gap-2">

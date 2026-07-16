@@ -114,13 +114,21 @@
 .textButton {
   justify-self: center;
   border: 0;
+  border-radius: var(--radius);
   background: transparent;
   color: var(--primary);
   cursor: pointer;
   font: inherit;
   font-size: 0.88rem;
   font-weight: 760;
-  text-decoration: underline;
+  min-height: 36px;
+  padding: 6px 10px;
+  text-decoration: none;
+  transition: background-color 160ms var(--ease-standard), color 160ms var(--ease-standard);
+}
+
+.textButton:hover:not(:disabled) {
+  background: var(--muted);
 }
 
 .textButton:disabled {

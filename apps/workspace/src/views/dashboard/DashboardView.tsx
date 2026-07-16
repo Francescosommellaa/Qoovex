@@ -59,7 +59,7 @@ function SectionError({ message }: { message: string }) {
 function SituationItem({ item, updated }: { item: DashboardSituation; updated: boolean }) {
   const SituationIcon = situationIcons[item.kind];
   const assignmentAction = item.responsibility.assignmentHref ? (
-    <Link className={styles.assignmentLink} href={item.responsibility.assignmentHref}>Assegna responsabile</Link>
+    <Link className={styles.assignmentLink} data-link="inline" href={item.responsibility.assignmentHref}>Assegna responsabile</Link>
   ) : null;
 
   return (
@@ -106,7 +106,7 @@ function ContextItem({ item }: { item: DashboardContextItem }) {
   return (
     <li>
       <div><strong>{item.label}</strong><span>{item.situationCount} {item.situationCount === 1 ? "situazione" : "situazioni"}</span></div>
-      <Link href={item.action.href}>{item.action.label}</Link>
+      <Link data-link="quiet" href={item.action.href}>{item.action.label}</Link>
     </li>
   );
 }
@@ -153,7 +153,7 @@ export function DashboardView({ data, updatedId, result }: { data: DashboardResp
             <nav aria-label="Filtra le situazioni per stato" className={styles.summaryIndex}>
               {summaryLinks.flatMap((item) => {
                 const count = data.attention.counts[item.key];
-                return count ? [<Link href={item.href} key={item.key}>{count} {item.label}</Link>] : [];
+                return count ? [<Link data-link="plain" href={item.href} key={item.key}>{count} {item.label}</Link>] : [];
               })}
             </nav>
           ) : null}
@@ -167,8 +167,8 @@ export function DashboardView({ data, updatedId, result }: { data: DashboardResp
           <p>Aggiungi il primo documento e, se lo hai già, carica subito il file.</p>
           <Link className={buttonVariants()} href="/documents/new?origin=dashboard">Aggiungi documento</Link>
           <div className={styles.secondaryStarts}>
-            <Link href="/workers/new?origin=dashboard">Aggiungi un lavoratore</Link>
-            <Link href="/job-sites/new?origin=dashboard">Aggiungi un cantiere</Link>
+            <Link data-link="quiet" href="/workers/new?origin=dashboard">Aggiungi un lavoratore</Link>
+            <Link data-link="quiet" href="/job-sites/new?origin=dashboard">Aggiungi un cantiere</Link>
           </div>
         </section>
       ) : (
@@ -176,7 +176,7 @@ export function DashboardView({ data, updatedId, result }: { data: DashboardResp
           <section aria-labelledby="attention-title" className={styles.attentionSection}>
             <div className={styles.sectionHeading}>
               <div><p className={styles.sectionIndex}>01</p><h2 id="attention-title">Da fare ora</h2></div>
-              {data.attention.total > data.attention.situations.length ? <Link href="/documents?from=dashboard">Vedi tutte le situazioni</Link> : null}
+              {data.attention.total > data.attention.situations.length ? <Link data-link="quiet" href="/documents?from=dashboard">Vedi tutte le situazioni</Link> : null}
             </div>
             {attentionError ? <SectionError message={attentionError.message} /> : data.attention.situations.length ? (
               <div className={styles.situationList}>
@@ -199,7 +199,7 @@ export function DashboardView({ data, updatedId, result }: { data: DashboardResp
                 ) : (
                   <p className={styles.compactEmpty}>Nessun pacchetto pronto per revisione.</p>
                 )}
-                <Link className={styles.sectionLink} href="/document-packages?from=dashboard">Vedi tutti i pacchetti</Link>
+                <Link className={styles.sectionLink} data-link="quiet" href="/document-packages?from=dashboard">Vedi tutti i pacchetti</Link>
               </section>
             ) : null}
 
@@ -211,12 +211,12 @@ export function DashboardView({ data, updatedId, result }: { data: DashboardResp
                     <li key={deadline.id}>
                       <time dateTime={deadline.dueDate}>{formatDate(deadline.dueDate)}</time>
                       <div><strong>{deadline.title}</strong><span>{deadline.timingLabel} · {deadline.contextLabel}</span></div>
-                      <Link href={deadline.action.href}>Apri</Link>
+                      <Link data-link="quiet" href={deadline.action.href}>Apri</Link>
                     </li>
                   ))}
                 </ol>
               ) : <p className={styles.compactEmpty}>Nessuna scadenza registrata da mostrare.</p>}
-              <Link className={styles.sectionLink} href="/deadlines?from=dashboard">Vedi tutte le scadenze</Link>
+              <Link className={styles.sectionLink} data-link="quiet" href="/deadlines?from=dashboard">Vedi tutte le scadenze</Link>
             </section>
           </aside>
         </div>
@@ -226,7 +226,7 @@ export function DashboardView({ data, updatedId, result }: { data: DashboardResp
         <section aria-labelledby="contexts-title" className={styles.contextSection}>
           <div className={styles.sectionHeading}>
             <div><p className={styles.sectionIndex}>{data.availability.sharing ? "04" : "03"}</p><h2 id="contexts-title">Dove intervenire</h2></div>
-            {data.organization.role === "OWNER" || data.organization.role === "ADMIN" ? <Link href="/access?from=dashboard">Accessi operativi</Link> : null}
+            {data.organization.role === "OWNER" || data.organization.role === "ADMIN" ? <Link data-link="quiet" href="/access?from=dashboard">Accessi operativi</Link> : null}
           </div>
           {contextsError ? <SectionError message={contextsError.message} /> : data.contexts.length ? (
             <ul className={styles.contextList}>{data.contexts.map((item) => <ContextItem item={item} key={item.id} />)}</ul>
