@@ -65,22 +65,24 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon">
-        <SidebarHeader>
-          <Link className="rounded-md px-2 py-1" href={isWorkspace ? "/dashboard" : "/account/security"}>
-            <WorkspaceBrandMark />
-          </Link>
-        </SidebarHeader>
-        {isWorkspace ? (
-          <WorkspaceNavigation
-            authenticated
-            navigation={state.navigation}
-            platformRole={state.context.platformRole}
-            support={state.context.support}
-            unreadNotificationCount={state.unreadNotificationCount}
-          />
-        ) : (
-          <div className="mt-auto p-3"><WorkspaceLogoutButton /></div>
-        )}
+        <nav aria-label="Navigazione workspace" className="contents">
+          <SidebarHeader>
+            <Link className="rounded-md px-2 py-1" href={isWorkspace ? "/dashboard" : "/account/security"}>
+              <WorkspaceBrandMark />
+            </Link>
+          </SidebarHeader>
+          {isWorkspace ? (
+            <WorkspaceNavigation
+              authenticated
+              navigation={state.navigation}
+              platformRole={state.context.platformRole}
+              support={state.context.support}
+              unreadNotificationCount={state.unreadNotificationCount}
+            />
+          ) : (
+            <div className="mt-auto p-3"><WorkspaceLogoutButton /></div>
+          )}
+        </nav>
         <SidebarRail />
       </Sidebar>
 

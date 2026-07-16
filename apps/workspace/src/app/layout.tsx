@@ -15,7 +15,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html data-theme="vercel" lang="it" suppressHydrationWarning>
+    <html data-scroll-behavior="smooth" data-theme="vercel" lang="it" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
           <TooltipProvider><WorkspaceShell>{children}</WorkspaceShell></TooltipProvider>

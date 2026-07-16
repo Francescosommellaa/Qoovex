@@ -90,17 +90,28 @@ async function satisfyMfaGate(page: Page, secret: string) {
 
 async function openWorkspaceAccountMenu(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Navigazione workspace" });
-  let accountSummary = navigation.locator("summary:visible").filter({ hasText: /^Azienda e account$/ });
+  let accountTrigger = navigation.getByRole("button", { name: "Azienda e account", exact: true });
 
-  if (await accountSummary.count() === 0) {
-    const mobileMenuSummary = navigation.locator("summary:visible").filter({ hasText: /^Menu$/ });
-    await expect(mobileMenuSummary).toHaveCount(1);
-    await mobileMenuSummary.click();
-    accountSummary = navigation.locator("summary:visible").filter({ hasText: /^Azienda e account$/ });
+  if (!(await accountTrigger.isVisible())) {
+    const sidebarTriggers = page.getByRole("button", { name: "Toggle Sidebar", exact: true });
+    let openedSidebar = false;
+
+    for (let index = 0; index < (await sidebarTriggers.count()); index += 1) {
+      const candidate = sidebarTriggers.nth(index);
+
+      if (await candidate.isVisible()) {
+        await candidate.click();
+        openedSidebar = true;
+        break;
+      }
+    }
+
+    expect(openedSidebar).toBe(true);
+    accountTrigger = navigation.getByRole("button", { name: "Azienda e account", exact: true });
   }
 
-  await expect(accountSummary).toHaveCount(1);
-  await accountSummary.click();
+  await expect(accountTrigger).toBeVisible();
+  await accountTrigger.click();
 }
 
 async function createDomainData(page: Page, runId: string) {
