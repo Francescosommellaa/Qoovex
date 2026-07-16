@@ -96,7 +96,7 @@ export function FloatingNavigation({
               : "h-14 max-w-7xl rounded-2xl px-3 sm:px-4",
           )}
         >
-          <a className="shrink-0 rounded-md" href={homeHref}>
+          <a className="flex shrink-0 items-center rounded-md" href={homeHref}>
             {brand(compact)}
           </a>
 
