@@ -22,10 +22,14 @@ const codeFile = (file) => /\.(ts|tsx|css)$/.test(file);
 const webSources = readSources(collectFiles(join(root, "apps", "web", "src"), codeFile));
 const sirioSources = readSources(collectFiles(join(root, "apps", "sirio", "src"), codeFile));
 const workspaceSources = readSources(collectFiles(join(root, "apps", "workspace", "src"), codeFile));
-const consumerCssSources = readSources([
+const legacyConsumerCssSources = readSources([
   ...collectFiles(join(root, "apps", "web", "src"), (file) => file.endsWith(".css")),
-  ...collectFiles(join(root, "apps", "sirio", "src"), (file) => file.endsWith(".css")),
   ...collectFiles(join(root, "apps", "workspace", "src"), (file) => file.endsWith(".css")),
+]);
+const sirioBoundarySources = readSources([
+  join(root, "apps", "sirio", "package.json"),
+  join(root, "apps", "sirio", "next.config.ts"),
+  join(root, "apps", "sirio", "tsconfig.json"),
 ]);
 const uiSources = readSources([
   ...collectFiles(join(root, "packages", "ui", "src"), codeFile),
@@ -155,7 +159,7 @@ if (/@theme\s+static/.test(tokenSource)) {
   throw new Error("Il bridge Tailwind non deve forzare l'emissione con @theme static.");
 }
 
-const publicCssSources = `${baseSource}\n${consumerCssSources}`;
+const publicCssSources = `${baseSource}\n${legacyConsumerCssSources}`;
 const tailwindBridgeReference = /var\(--(?:color|font|text|tracking|spacing|radius|shadow|ease|duration|container|z-index)-qv-/;
 
 if (tailwindBridgeReference.test(publicCssSources)) {
@@ -238,7 +242,7 @@ const canonicalStyleImports = [
   '@import "@qoovex/ui/styles/base.css";',
 ];
 
-for (const appName of ["web", "sirio", "workspace"]) {
+for (const appName of ["web", "workspace"]) {
   const globalSource = readFileSync(join(root, "apps", appName, "src", "app", "globals.css"), "utf8");
   for (const requiredImport of canonicalStyleImports) {
     if (!globalSource.includes(requiredImport)) {
@@ -247,15 +251,38 @@ for (const appName of ["web", "sirio", "workspace"]) {
   }
 }
 
+const sirioGlobalSource = readFileSync(join(root, "apps", "sirio", "src", "app", "globals.css"), "utf8");
+
+for (const requiredSirioFoundation of [
+  '@import "tailwindcss";',
+  '@import "tw-animate-css";',
+  "@custom-variant dark",
+  '[data-theme="vercel"]',
+  "@theme inline",
+]) {
+  if (!sirioGlobalSource.includes(requiredSirioFoundation)) {
+    throw new Error(`sirio/globals.css non contiene la foundation app-local richiesta: ${requiredSirioFoundation}`);
+  }
+}
+
+for (const forbiddenSirioDependency of [
+  "@qoovex/ui",
+  "@qoovex/brand-resources/styles/fontshare.css",
+]) {
+  if (sirioSources.includes(forbiddenSirioDependency) || sirioBoundarySources.includes(forbiddenSirioDependency)) {
+    throw new Error(`apps/sirio viola il confine della sandbox app-local: ${forbiddenSirioDependency}`);
+  }
+}
+
 if (workspaceSources.includes("--qvx-") || workspaceSources.includes("styles.muted")) {
   throw new Error("apps/workspace contiene alias o utility generiche locali invece dei token condivisi.");
 }
 
-if (/#[0-9a-f]{3,8}\b|rgba?\(/i.test(consumerCssSources)) {
+if (/#[0-9a-f]{3,8}\b|rgba?\(/i.test(legacyConsumerCssSources)) {
   throw new Error("I CSS delle app contengono colori hardcoded invece dei token semantici condivisi.");
 }
 
-if (/border-radius:\s*(?:[0-9.]+(?:px|rem)|999px)/i.test(consumerCssSources)) {
+if (/border-radius:\s*(?:[0-9.]+(?:px|rem)|999px)/i.test(legacyConsumerCssSources)) {
   throw new Error("I CSS delle app contengono raggi hardcoded invece della scala condivisa.");
 }
 

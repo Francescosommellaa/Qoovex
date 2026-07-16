@@ -4,6 +4,10 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./styles/fontshare.css": "./styles/fontshare.css"
+    "./styles/fontshare.css": "./styles/fontshare.css",
+    "./qoovex-marketing-icon/qoovex-icona-nera-no-sfondo.svg": "./qoovex-marketing-icon/qoovex-icona-nera-no-sfondo.svg",
+    "./qoovex-worckspace-icon/qoovex-icona-bianca-sfondo-arrotondato.svg": "./qoovex-worckspace-icon/qoovex-icona-bianca-sfondo-arrotondato.svg",
+    "./sirio-icon/sirio.svg": "./sirio-icon/sirio.svg",
+    "./sirio-icon/sirio-white.svg": "./sirio-icon/sirio-white.svg"
   }
 }

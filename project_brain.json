@@ -20,8 +20,9 @@
   "technical_state": {
     "authentication": "Auth.js/NextAuth remains confined to apps/workspace.",
     "styling": "Tailwind CSS v4 is installed with CSS-first configuration in the Next.js apps.",
-    "typography": "Fontshare is centralized in @qoovex/brand-resources; consumers do not duplicate provider imports.",
-    "design_system": "@qoovex/ui owns generic tokens, base styles and reusable primitives; Sirio is the approval showcase.",
+    "typography": "Production consumers still use Fontshare through @qoovex/brand-resources; the new canonical Sirio sandbox uses Geist and Geist Mono locally until approval.",
+    "design_system": "The canonical direction is shadcn base-nova with Base UI, Tabler and the Vercel theme. Sirio is isolated for approval; @qoovex/ui remains the temporary legacy production layer.",
+    "motion": "Sirio implements the applicable motion from the pinned Kiranism source, including the circular theme reveal, with reduced-motion and unsupported-browser fallbacks. Motion tied to excluded starter features is not part of the foundation.",
     "workspace_architecture": "FSD aliases are configured. Flow-by-flow migration has not started."
   }
 }

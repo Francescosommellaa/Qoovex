@@ -1,372 +1,87 @@
 # UI, brand and surfaces
 
-## Stato della direzione
+## Decisione canonica
 
-**Traccia Operativa è la direzione approvata e canonica di Qoovex.** La foundation vive in `@qoovex/ui`, Sirio ne prova il contratto, il sito marketing ne usa il registro editoriale e il workspace la traduce in grammatica operativa.
+Il design definitivo di Qoovex adotta la direzione dello starter pubblico [Kiranism/next-shadcn-dashboard-starter](https://github.com/Kiranism/next-shadcn-dashboard-starter), fissata al commit `0edc5cf631ac7a8280112fd2bcb80312597bafdf`.
 
-La migrazione è light-first e intenzionalmente incompatibile con il precedente sistema tattile. Non esistono due design system pubblici, alias permanenti o un tema dark legacy.
+La foundation scelta usa realmente:
 
-La palette canonica è: inchiostro `#20231F`, campo `#F1F2ED`, carta `#FAFBF7`, nebbia `#DDE0D8`, linea `#B7BCB2`, cobalto `#284BD6`, cobalto profondo `#1D399F`. Il cobalto identifica brand e prossima azione; gli stati mantengono ruoli semantici separati e sono sempre espressi anche da testo e struttura.
+- shadcn `base-nova` con componenti open code;
+- Base UI per i comportamenti accessibili;
+- Tabler Icons;
+- Tailwind CSS v4 CSS-first;
+- Geist e Geist Mono;
+- tema Vercel con palette OKLCH, light, dark e preferenza di sistema;
+- raggi, ombre, sidebar e token chart derivati dalla fonte fissata;
+- asset proprietari Sirio, marketing e workspace consumati direttamente da `@qoovex/brand-resources`.
 
-## Creative North Star
+Gli avvisi MIT e la provenienza sono conservati in `apps/sirio/THIRD_PARTY_NOTICES.md`. Ogni futura adozione esterna deve registrare fonte, versione o commit e licenza compatibile.
 
-> Rendere visibile ciò che esiste, ciò che manca e il punto esatto da cui ripartire.
+## Stato della migrazione
 
-## Idea centrale
+La scelta estetica è definitiva. L'approvazione Sirio riguarda la qualità dell'adattamento Qoovex e precede qualunque modifica alle superfici produttive.
 
-Qoovex non è un archivio passivo. È il sistema che collega frammenti operativi e rende leggibile il lavoro ancora aperto.
+- `apps/sirio` è la sandbox indipendente della nuova foundation.
+- `packages/ui` conserva temporaneamente la vecchia implementazione per continuità dei consumer produttivi. Non è più autorità progettuale.
+- `apps/web` e `apps/workspace` continuano a usare la UI esistente fino all'approvazione della sandbox.
+- “Traccia Operativa” è ritirata come direzione canonica e non governa nuovo lavoro.
 
-La firma non è una card, una rail o un raggio. È una **traccia** che attraversa una situazione seguendo sempre lo stesso ordine:
+Questa fase non crea due design pubblici: il sistema precedente è legacy operativo, mentre il nuovo sistema è l'unica direzione destinata alla promozione.
 
-**stato → oggetto → conseguenza → responsabile → prossima azione**
+## Superfici Sirio
 
-Quando l'informazione esiste, la traccia è continua. Quando manca o deve essere verificata, la traccia si interrompe o cambia ritmo. Quando l'utente può proseguire, termina in un'azione riconoscibile.
+- `/`: catalogo di fondazioni e componenti, inclusi tipografia, colori, raggi, ombre, controlli, feedback e stati limite.
+- `/marketing`: landing rappresentativa con contenuti prudenti e preview composta dal componente dashboard reale di Sirio.
+- `/dashboard`: shell applicativa con sidebar desktop/mobile, header, breadcrumb, ricerca, tema, menu utente, metriche, grafico, coda operativa e stati loading, empty, error e overflow.
 
-La conseguenza visiva è precisa: anche il vuoto conserva un posto, una causa e una possibilità di recupero.
+Sirio non importa `@qoovex/ui`, Fontshare, auth, Prisma, API o servizi prodotto. Consuma soltanto gli SVG canonici esposti da `@qoovex/brand-resources`; i dati mostrati sono statici e dichiarati come dimostrativi.
 
-## Personalità
+## Contratto visivo corrente
 
-### Competente
+- Font: Geist per testo e interfaccia, Geist Mono per dati e riferimenti.
+- Tema: Vercel quasi invariato, governato da token semantici OKLCH.
+- Modalità: light, dark e system con persistenza client e prevenzione del flash tramite `next-themes`.
+- Icone funzionali: soltanto Tabler nel nuovo sistema. I marchi proprietari provengono da `@qoovex/brand-resources`: stella Sirio nel catalogo, marchio Qoovex nero nel marketing e marchio workspace bianco su nero nella dashboard.
+- Componenti: sorgenti shadcn `base-nova` possedute localmente da Sirio durante l'approvazione.
+- Semantica delle azioni: `Button` e i trigger Base UI sono riservati alle azioni; la navigazione usa sempre un `<a>` reale e può adottare `buttonVariants` soltanto per l'aspetto.
+- Copy: stato documentale, elementi presenti, mancanti o da verificare e pacchetti pronti per revisione. Nessuna promessa di conformità, certificazione o validità legale.
 
-La competenza si vede nell'ordine costante delle informazioni, non in una densità da software tecnico. Ogni oggetto mostra stato e conseguenza prima dei metadata. Le azioni restano vicine al problema che risolvono.
+## Motion canonica
 
-### Calma
+Sirio include la motion applicabile del commit sorgente fissato, senza introdurre una libreria di animazione aggiuntiva:
 
-La calma deriva dalla proporzione. Il colore di brand non invade gli stati, il rosso non diventa sfondo diffuso e il movimento termina appena ha spiegato il cambiamento.
+- cambio tema con reveal circolare di `0.4s` originato dal controllo, tramite View Transition API;
+- navbar pubblica floating che si restringe dopo `48px` di scroll e sostituisce la navigazione di superficie con tag di sezione sincronizzati alla posizione;
+- fallback immediato quando la View Transition API non è disponibile;
+- nessuna transizione di tema quando l'utente preferisce movimento ridotto;
+- apertura e chiusura di menu, select, tooltip e sheet tramite gli stati Base UI;
+- collasso della sidebar, rotazione degli indicatori collassabili, scorrimento dello switch e stato attivo delle tab;
+- pulse degli skeleton e rotazione dello spinner per i soli stati di caricamento.
 
-### Concreta
+Le animazioni `motion/react` dello starter non sono parte della foundation: appartengono a chat e form multi-step esclusi dal perimetro Sirio e richiederebbero una dipendenza non approvata. Le animazioni promozionali legate a GitHub, Clerk o alle demo dello starter non vengono trasferite a Qoovex.
 
-Ogni segno rappresenta provenienza, continuità, interruzione, responsabilità o azione. Non esistono grafici ornamentali, badge decorativi o precisione numerica inventata.
+## Dipendenze ammesse nella sandbox
 
-### Protettiva
+Oltre a Next.js, React e Tailwind già presenti, Sirio usa soltanto:
 
-Un'assenza non viene presentata come colpa. Il sistema dichiara cosa manca, quale effetto produce, chi può intervenire e come ripartire.
+- `@base-ui/react`;
+- `@qoovex/brand-resources` come dipendenza workspace asset-only;
+- `@tabler/icons-react`;
+- `class-variance-authority`;
+- `clsx`;
+- `tailwind-merge`;
+- `tw-animate-css`;
+- `next-themes`;
+- `recharts`.
 
-### Autorevole
+Non fanno parte della foundation Clerk, billing, organizzazioni Clerk, Sentry, React Query, Zustand, nuqs, kbar, TanStack Form/Table o i dati demo dello starter.
 
-L'autorevolezza nasce da tipografia, allineamento, terminologia e comportamento coerenti. Non da superfici scure, ombre teatrali o linguaggio normativo.
+## Gate di approvazione
 
-## Tono emotivo
+Prima della promozione verificare light e dark, tastiera, touch, focus, contrasto, reduced motion, zoom 200%, hydration, console e overflow a 320, 390, 768, 1024 e 1440 px.
 
-Il tono resta **controllo tranquillo**, ma acquista maggiore carattere.
+L'approvazione non autorizza modifiche implicite a route, auth, ruoli, permessi, API, Prisma, Blob, dati o copy normativo.
 
-L'utente deve percepire che Qoovex:
+## Passo successivo consentito
 
-- ha ricostruito la sequenza della situazione;
-- distingue urgenza da semplice incompletezza;
-- mostra i propri limiti;
-- non prende decisioni al posto dell'utente;
-- rende sempre visibile una via di recupero.
-
-## Grammatica della Traccia Operativa
-
-### Traccia continua
-
-Collega oggetti che appartengono alla stessa situazione. Non è una linea ornamentale e non attraversa sezioni prive di relazione.
-
-### Vuoto indicizzato
-
-Ciò che manca conserva spazio nella composizione. Il vuoto contiene nome, conseguenza e recupero. Non viene sostituito da un pallino rosso o da un badge.
-
-### Passaggio di mano
-
-Quando cambia il responsabile, la traccia compie uno spostamento misurato. Nel motion il passaggio mostra dove si trasferisce l'azione; nella UI statica lo stesso cambio è leggibile attraverso allineamento e raggruppamento.
-
-### Terminale d'azione
-
-Il cobalto e la maggiore intensità tipografica compaiono nel punto in cui l'utente può proseguire. L'accento appartiene a orientamento e azione, non allo stato.
-
-### Campo
-
-Il canvas è continuo. Le superfici vengono introdotte solo quando un oggetto, un livello o un contesto deve avere confini propri. La pagina non viene suddivisa automaticamente in card.
-
-## Firma proprietaria
-
-La firma visiva è la combinazione di tre elementi inseparabili:
-
-1. una traccia che rende visibile la relazione;
-2. un'interruzione che conserva il posto di ciò che manca;
-3. un terminale che ospita la prossima azione.
-
-Usare uno solo di questi elementi come decorazione non produce identità Qoovex.
-
-La precedente **Linea d'Origine** viene ritirata come firma primaria. Una rail può ancora essere usata come parte locale della traccia, ma non costituisce da sola il sistema.
-
-## Composizione
-
-### Marketing
-
-- Varianza 7/10, densità 3/10.
-- Grandi campi tipografici e asimmetria controllata.
-- Una sola traiettoria visiva per sezione.
-- La traccia può diventare scala, ritmo o sequenza narrativa.
-- Le fotografie mostrano prove, origine e contesto. Non sostituiscono la dimostrazione del prodotto.
-- Ogni sezione adotta una composizione diversa, mantenendo la stessa grammatica.
-
-Il marketing non deve sembrare il workspace ingrandito. È il luogo in cui la Traccia Operativa diventa promessa, racconto e orientamento.
-
-### Workspace
-
-- Varianza 4/10, densità 7/10.
-- Allineamenti stabili e colonne ripetibili.
-- Traccia compatta associata a righe, gruppi e responsabilità reali.
-- Stato, conseguenza e azione nello stesso campo visivo.
-- Una sola azione primaria per situazione.
-- Il contenuto lungo aumenta l'altezza del record, non distrugge la gerarchia.
-
-Il workspace non usa la traccia su ogni elemento. La applica quando più informazioni devono essere lette come una situazione unica.
-
-#### Architettura operativa del workspace
-
-- OWNER, ADMIN e SAFETY_CONSULTANT hanno quattro destinazioni primarie: `Da fare`, `Cantieri`, `Lavoratori`, `Documenti`.
-- SITE_MANAGER e WORKER hanno tre destinazioni primarie: `Da fare`, `Cantieri`, `Documenti`.
-- Notifiche, azione globale e azienda/account restano controlli separati dalla navigazione primaria.
-- Scadenze, checklist, prove, condivisioni e assegnazioni sono capacità contestuali o secondarie, non eliminate.
-- Liste e dettagli mostrano stato e prossimo passo; creazione, modifica e gestione avanzata si aprono esplicitamente.
-- Cantiere e lavoratore sono contenitori operativi con al massimo due livelli di progressive disclosure.
-- Tipi e requisiti documento, preferenze email, persone, audit e controllo dati vivono sotto impostazioni secondo capability.
-
-### Dashboard operativa
-
-La dashboard traduce la Traccia Operativa in una coda decisionale. Il primo viewport mostra il numero di situazioni aperte, la priorità più alta, il motivo, la responsabilità derivata e il terminale d'azione. La coda visualizza al massimo cinque situazioni; pacchetti pronti, scadenze future e distribuzione per contesto restano separati per non duplicare lo stesso problema.
-
-Le sette summary card, le quick action disabilitate, le notifiche autonome, le prove recenti e le liste generiche di lavoratori e cantieri non appartengono più alla dashboard. Su mobile l'azione segue immediatamente la conseguenza; su desktop la coda principale governa una colonna e condivisione/scadenze formano il solo livello secondario. Gli stati di caricamento, errore parziale, errore completo, primo accesso, accesso limitato e contenuto lungo sono provati in Sirio.
-
-### Mobile
-
-- Varianza 3/10, densità 6/10.
-- La traccia diventa verticale e segue l'ordine naturale dello scorrimento.
-- L'assenza occupa un blocco aperto e chiaramente leggibile.
-- Responsabile e azione seguono il problema, senza pannelli laterali.
-- Il terminale d'azione resta vicino al contenuto governato e non diventa una barra persistente senza necessità.
-
-Mobile non è un workspace compresso. È la forma sequenziale della stessa grammatica.
-
-## Stati
-
-Ogni stato modifica testo e struttura. Il colore può rinforzare, ma non definire il significato.
-
-| Stato | Struttura | Conseguenza | Azione |
-| --- | --- | --- | --- |
-| Presente | Traccia continua | L'informazione è disponibile | Nessuna azione immediata o apertura |
-| In scadenza | Ritmo temporale della traccia | La data richiede attenzione proporzionata | Apri la scadenza |
-| Da verificare | Traccia sospesa o accorciata | Il contenuto esiste, ma serve controllo | Verifica la versione |
-| Mancante | Vuoto indicizzato | Un'attività o un pacchetto resta incompleto | Richiedi o aggiungi |
-| Condivisibile | Terminale disponibile | Gli elementi selezionati possono essere preparati | Prepara la condivisione |
-
-Non usare mai "conforme", "certificato", "valido legalmente" o formulazioni equivalenti come stato prodotto.
-
-## Tipografia
-
-Il repository carica attualmente:
-
-- **General Sans** come sans operativa;
-- **Cabinet Grotesk** come sans display.
-
-La tavola usa queste famiglie perché sono la fonte tecnica reale. Non introduce una nuova dipendenza tipografica.
-
-### Ruoli
-
-| Ruolo | Famiglia | Comportamento |
-| --- | --- | --- |
-| Manifesto | Cabinet Grotesk | Poche parole, scala ampia, ritmo compatto |
-| Orientamento | Cabinet Grotesk | Titoli marketing, Sirio e momenti di ingresso |
-| Titolo operativo | General Sans | Chiaro e compatto nella UI densa |
-| Testo | General Sans | Misura leggibile e forme aperte |
-| Metadata | General Sans | Contrasto sufficiente, niente tracking decorativo |
-| Numeri e riferimenti | Mono di sistema | Solo per versioni, date e identificatori quando utile |
-
-Cabinet Grotesk non entra nelle tabelle, negli errori o nei metadata per aggiungere carattere artificiale.
-
-## Materia cromatica provvisoria
-
-La direzione mostra una gamma ridotta per dimostrare carattere e gerarchia. I valori non sono ancora token condivisi.
-
-| Ruolo | Sensazione | Uso |
-| --- | --- | --- |
-| Inchiostro | Denso, non nero assoluto | Testo, tracce, confini importanti |
-| Campo minerale | Freddo e non clinico | Canvas principale |
-| Nebbia | Materia secondaria | Zone di supporto e diagrammi |
-| Cobalto | Preciso e riconoscibile | Orientamento, terminali e azioni |
-
-Il cobalto non sostituisce verde, giallo o rosso semantici. La futura unità palette dovrà separare brand, informazione e stato.
-
-## Superfici e forma
-
-- Canvas continuo come default.
-- Nessun raggio sui raggruppamenti che vivono nel flusso.
-- Taglio diagonale su grandi campi identitari, usato raramente.
-- Raggio ampio soltanto sul frammento mobile, perché rappresenta una superficie fisica distinta.
-- Bordo singolo quando serve separazione.
-- Ombra assente sulle superfici statiche.
-- Overlay e menu potranno usare profondità soltanto quando coprono davvero il contesto.
-
-Il taglio diagonale non è la firma primaria. Serve a dare tensione ai grandi campi e non va ripetuto su card o controlli.
-
-## Fotografia
-
-La fotografia non rappresenta "l'edilizia". Documenta provenienza e contesto.
-
-### Soggetti ammessi
-
-- dettagli autentici di documenti e prove;
-- mani durante un'azione reale;
-- margini, annotazioni e segni d'uso;
-- materiali e luoghi quando chiariscono il contesto;
-- relazioni tra oggetto e ambiente.
-
-### Trattamento
-
-- luce naturale o diffusa;
-- colori moderati e coerenti con la materia minerale;
-- tagli ravvicinati e osservazionali;
-- alternanza tra origine, contesto e dettaglio;
-- nessuna posa, sorriso commerciale o scena costruita per sembrare produttiva.
-
-### Esclusioni
-
-- operai stock che guardano in camera;
-- caschi, mezzi e cantiere usati come wallpaper;
-- cemento o polvere come texture decorativa;
-- filtri drammatici, arancio industriale o control room tecnologica.
-
-La tavola non inserisce fotografie generiche. Gli asset fotografici richiederanno produzione o selezione approvata.
-
-## Motion
-
-Intensità 3/10. Il movimento è informativo e termina rapidamente.
-
-### Sequenza proprietaria
-
-1. i frammenti compaiono nella loro origine;
-2. la traccia li allinea nella sequenza operativa;
-3. il vuoto resta visibile;
-4. il terminale d'azione prende posizione;
-5. il sistema torna statico.
-
-### Applicazioni
-
-- riordino dopo un cambio di stato;
-- passaggio di responsabilità;
-- inserimento di una versione documentale;
-- completamento di un elemento mancante;
-- preparazione di un pacchetto per la condivisione.
-
-Niente parallax, marquee, float, glow o movimento perpetuo. Ogni transizione futura deve rispettare `prefers-reduced-motion`.
-
-## Iconografia
-
-Phosphor resta l'unica famiglia prevista dal sistema condiviso.
-
-- `16px` per metadata e UI densa;
-- `20px` per azioni standard;
-- `24px` per orientamento;
-- peso normalizzato per funzione;
-- label testuale mantenuta per le azioni non universali;
-- nessun contenitore circolare decorativo.
-
-La Traccia Operativa non deve essere costruita concatenando icone. Relazioni e assenze richiedono struttura, non pittogrammi.
-
-## Tono dei testi
-
-Qoovex parla in modo prudente e operativo.
-
-- Stato: "Documento mancante".
-- Conseguenza: "Il pacchetto resta incompleto".
-- Responsabilità: "Responsabile cantiere".
-- Azione: "Richiedi il documento".
-- Recupero: "Puoi aggiungerlo in seguito".
-
-Evitare gergo normativo, tono accusatorio, promesse legali, frasi motivazionali e copy da startup AI.
-
-## Cinque principi non negoziabili
-
-1. Ogni situazione segue stato, oggetto, conseguenza, responsabile e azione.
-2. Ciò che manca conserva un posto visibile e un percorso di recupero.
-3. L'accento di brand orienta verso l'azione, non sostituisce gli stati.
-4. La grammatica cambia densità, ma non identità, tra marketing, workspace e mobile.
-5. Se un segno non migliora comprensione, provenienza o azione, non deve esistere.
-
-## Anti-reference
-
-Qoovex non deve sembrare:
-
-- un template SaaS con sidebar, card bianche e badge colorati;
-- un clone di Linear, Notion, Vercel, Stripe o un developer tool;
-- un ERP, un software contabile o un portale amministrativo;
-- una control room scura piena di indicatori;
-- un'app di note con fogli indistinguibili;
-- un prodotto AI con glow, gradienti viola e movimento perpetuo;
-- un sito brutalista che sacrifica leggibilità;
-- un prodotto edile costruito con caschi, cemento, mezzi o nastri;
-- un sistema che usa allarmi e rosso per creare ansia;
-- un prodotto che suggerisce sorveglianza, certificazione o conformità automatica.
-
-## Contratto di integrazione
-
-### Fatti verificati
-
-- `apps/sirio` è la superficie ufficiale di prova.
-- `packages/ui` possiede token e primitive condivise.
-- `apps/web` è il sito pubblico.
-- `apps/workspace` è il prodotto operativo.
-- l'app mobile è ancora un placeholder architetturale.
-- General Sans e Cabinet Grotesk sono i font realmente caricati.
-
-### Integrato
-
-- idea proprietaria;
-- grammatica della traccia;
-- sistema del vuoto e del terminale;
-- traduzione marketing, workspace e mobile;
-- stati strutturali;
-- tipografia, materia, fotografia e motion direction;
-- prova responsive in Sirio;
-- token e primitive condivise;
-- sito marketing editoriale;
-- workspace responsive con indice operativo;
-- contratto architetturale mobile futuro.
-
-### Non incluso
-
-- una app mobile nativa;
-- fotografie di terzi prive di diritti verificati;
-- modifiche ad API, Prisma, route, autorizzazioni o contratti server;
-- nuove promesse legali o normative;
-- motion decorativo o librerie di animazione.
-
-### Criterio permanente
-
-Ogni futura superficie deve rendere leggibili presenza, assenza, responsabilità e azione; mantenere identità in scala di grigi; usare movimento solo per spiegare gerarchia, provenienza, feedback o cambiamento di stato.
-
-## Confini tecnici permanenti
-
-`apps/web` è il sito pubblico. `apps/workspace` è il prodotto. `apps/sirio` è lo showcase. `packages/ui` esporta token CSS-first, stili base e primitive generiche senza auth, Prisma, API, ruoli o business logic.
-
-Non inventare ricerca, preset, canali di contatto, promesse normative o asset. Ogni task UI passa da `check_ui_task` e dal gate di approvazione Sirio.
-
-## Registro operativo dei componenti
-
-Questa sezione è la memoria canonica, versionata e sintetica delle decisioni sui singoli componenti Qoovex. Viene aggiornata soltanto dopo una lavorazione verificata del componente e non sostituisce codice, token, manifest o test come fonti tecniche primarie.
-
-Per ogni componente conservare un'unica voce con:
-
-- nome, data o sessione, collocazione canonica e obiettivo;
-- problemi verificati e consumer reali;
-- fonti realmente utilizzate, categoria, principio estratto, limiti e aspetti non copiati;
-- API pubblica, varianti, dimensioni, stati e regole di composizione;
-- comportamento mobile, tablet, desktop e touch;
-- semantica, tastiera, focus, screen reader, contrasto e reduced motion;
-- token riutilizzati, aggiunti o modificati;
-- compatibilità, compromessi, limitazioni e decisioni che i componenti successivi non devono contraddire;
-- controlli tecnici e visivi realmente eseguiti.
-
-Etichettare ogni informazione come `Fatto verificato`, `Decisione approvata`, `Assunzione provvisoria` oppure `Da validare`. Non trasformare ipotesi, ispirazioni o verifiche non eseguite in decisioni definitive.
-
-### Fonti dei componenti
-
-Registrare qui soltanto le fonti effettivamente usate per una decisione. Per ciascuna indicare nome, URL o riferimento, categoria, componente, motivo della scelta, principio estratto e limite applicato. Le fonti esterne restano riferimenti da trasformare: non autorizzano copia-incolla di componenti, API, classi, asset o demo.
-
-### Componenti completati
-
-Nessuna voce registrata. Aggiungere la prima voce dopo il completamento e la verifica del relativo componente.
+Dopo approvazione esplicita, promuovere la foundation in `packages/ui/styles/tokens.css`, `packages/ui/styles/base.css` e componenti condivisi. Solo in una fase successiva migrare `apps/web` e `apps/workspace` preservando comportamento, accessibilità e contratti prodotto.

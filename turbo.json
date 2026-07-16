@@ -60,6 +60,9 @@
         "QOOVEX_AUDIT_SECRET"
       ]
     },
+    "@qoovex/ui#test": {
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true
