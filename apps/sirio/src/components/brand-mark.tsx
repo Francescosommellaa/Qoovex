@@ -1,4 +1,4 @@
-import Image, { type StaticImageData } from "next/image";
+import Image, { type ImageProps } from "next/image";
 import marketingIcon from "@qoovex/brand-resources/qoovex-marketing-icon/qoovex-icona-nera-no-sfondo.svg";
 import workspaceIcon from "@qoovex/brand-resources/qoovex-worckspace-icon/qoovex-icona-bianca-sfondo-arrotondato.svg";
 import sirioIcon from "@qoovex/brand-resources/sirio-icon/sirio.svg";
@@ -14,7 +14,7 @@ const labels: Record<BrandVariant, string> = {
   workspace: "Qoovex",
 };
 
-function MarkImage({ asset, className = "" }: { asset: StaticImageData; className?: string }) {
+function MarkImage({ asset, className = "" }: { asset: ImageProps["src"]; className?: string }) {
   return <Image alt="" aria-hidden="true" className={cn("size-full object-contain", className)} height={28} src={asset} unoptimized width={28} />;
 }
 
