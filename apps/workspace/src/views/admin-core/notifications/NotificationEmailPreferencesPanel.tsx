@@ -1,7 +1,13 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { Alert, Button, Checkbox, Field, Input, LoadingState, Select } from "@qoovex/ui";
+import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
+import { Button } from "@qoovex/ui/components/button";
+import { Checkbox } from "@qoovex/ui/components/checkbox";
+import { Field, FieldDescription, FieldLabel } from "@qoovex/ui/components/field";
+import { Input } from "@qoovex/ui/components/input";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
+import { Spinner } from "@qoovex/ui/components/spinner";
 import type {
   EmailDigestFrequency,
   NotificationEmailDeliveryListResponse,
@@ -146,9 +152,9 @@ export function NotificationEmailPreferencesPanel() {
         Le email riepilogano solo dati registrati in Qoovex. Non includono file, allegati o link di download.
       </p>
 
-      {error ? <Alert tone="danger">{error}</Alert> : null}
-      {message ? <Alert tone="positive">{message}</Alert> : null}
-      {pending === "load" && !preference ? <LoadingState label="Caricamento preferenze email" /> : null}
+      {error ? <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert> : null}
+      {message ? <Alert variant="success"><AlertDescription>{message}</AlertDescription></Alert> : null}
+      {pending === "load" && !preference ? <div aria-live="polite" className="flex items-center gap-2 text-sm text-muted-foreground"><Spinner /> Caricamento preferenze email</div> : null}
 
       {preference ? (
         <form className={styles.form} onSubmit={submit}>
@@ -157,7 +163,7 @@ export function NotificationEmailPreferencesPanel() {
               checked={digestEnabled}
               disabled={pending !== null}
               name="emailDigestEnabled"
-              onChange={(event) => updateDigestEnabled(event.currentTarget.checked)}
+              onCheckedChange={(checked) => updateDigestEnabled(checked)}
             />
             <span className={styles.optionCopy}>
               <strong>Digest email attivo</strong>
@@ -168,24 +174,13 @@ export function NotificationEmailPreferencesPanel() {
           <fieldset className={styles.scheduleGroup}>
             <legend>Programmazione</legend>
             <div className={styles.scheduleGrid}>
-              <Field htmlFor="email-digest-frequency" label="Frequenza digest">
-                <Select
-                  disabled={pending !== null}
-                  id="email-digest-frequency"
-                  name="emailDigestFrequency"
-                  onChange={(event) => updateDigestFrequency(event.currentTarget.value as EmailDigestFrequency)}
-                  value={digestFrequency}
-                >
-                  {(Object.keys(frequencyLabels) as EmailDigestFrequency[]).map((frequency) => (
-                    <option key={frequency} value={frequency}>{frequencyLabels[frequency]}</option>
-                  ))}
+              <Field><FieldLabel htmlFor="email-digest-frequency">Frequenza digest</FieldLabel>
+                <Select items={Object.entries(frequencyLabels).map(([value, label]) => ({ value: value as EmailDigestFrequency, label }))} name="emailDigestFrequency" onValueChange={(value) => updateDigestFrequency(value as EmailDigestFrequency)} value={digestFrequency}>
+                  <SelectTrigger disabled={pending !== null} id="email-digest-frequency"><SelectValue /></SelectTrigger>
+                  <SelectContent><SelectGroup>{(Object.keys(frequencyLabels) as EmailDigestFrequency[]).map((frequency) => <SelectItem key={frequency} value={frequency}>{frequencyLabels[frequency]}</SelectItem>)}</SelectGroup></SelectContent>
                 </Select>
               </Field>
-              <Field
-                description="Ora locale, da 0 a 23."
-                htmlFor="email-digest-hour"
-                label="Ora digest"
-              >
+              <Field><FieldLabel htmlFor="email-digest-hour">Ora digest</FieldLabel>
                 <Input
                   defaultValue={preference.emailDigestHour}
                   disabled={pending !== null || !digestEnabled}
@@ -196,6 +191,7 @@ export function NotificationEmailPreferencesPanel() {
                   name="emailDigestHour"
                   type="number"
                 />
+                <FieldDescription>Ora locale, da 0 a 23.</FieldDescription>
               </Field>
             </div>
             <p className={styles.lastDelivery}>Ultimo digest inviato: <strong>{formatDate(preference.lastDigestSentAt)}</strong></p>

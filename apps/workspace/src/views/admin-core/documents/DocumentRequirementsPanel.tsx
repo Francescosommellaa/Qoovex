@@ -90,7 +90,7 @@ export function DocumentRequirementsPanel({
   }
 
   if (!canManage) {
-    return <p className="qv-text-muted">I requisiti documentali sono gestiti da proprietario o amministratore. Qui vedi solo gli eventuali documenti mancanti nel tuo scope.</p>;
+    return <p className="text-muted-foreground">I requisiti documentali sono gestiti da proprietario o amministratore. Qui vedi solo gli eventuali documenti mancanti nel tuo scope.</p>;
   }
 
   const compatibleTypes = documentTypes.filter((type) => type.appliesTo === targetType);
@@ -139,8 +139,8 @@ export function DocumentRequirementsPanel({
         </button>
       </form>
       <div className={styles.list}>
-        {pending === "load" ? <p className="qv-text-muted">Caricamento requisiti...</p> : null}
-        {!requirements.length && pending !== "load" ? <p className="qv-text-muted">Nessun requisito configurato.</p> : null}
+        {pending === "load" ? <p className="text-muted-foreground">Caricamento requisiti...</p> : null}
+        {!requirements.length && pending !== "load" ? <p className="text-muted-foreground">Nessun requisito configurato.</p> : null}
         {requirements.map((requirement) => (
           <article className={styles.record} key={requirement.id}>
             <div className={styles.recordMain}>

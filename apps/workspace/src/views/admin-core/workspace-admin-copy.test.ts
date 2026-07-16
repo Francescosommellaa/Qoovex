@@ -155,9 +155,10 @@ describe("workspace admin UI copy", () => {
     expect(invitePersonSource).toContain("Gestisce l'azienda e il lavoro quotidiano");
   });
 
-  it("keeps a dedicated mobile navigation surface", () => {
-    expect(navigationSource).toContain("mobileNav");
-    expect(navigationSource).toContain("mobileNavPanel");
+  it("keeps the shared responsive sidebar navigation surface", () => {
+    expect(navigationSource).toContain("SidebarContent");
+    expect(navigationSource).toContain("SidebarFooter");
+    expect(navigationSource).toContain("SidebarMenu");
     expect(navigationSource).toContain("Azienda e account");
   });
 

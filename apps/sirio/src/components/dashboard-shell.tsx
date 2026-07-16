@@ -1,15 +1,15 @@
 "use client";
 
 import { IconBell, IconBuilding, IconCalendarDue, IconChevronDown, IconClipboardCheck, IconFileDescription, IconLayoutDashboard, IconSearch, IconSettings, IconUsers } from "@tabler/icons-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarRail, SidebarTrigger } from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback } from "@qoovex/ui/components/avatar";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@qoovex/ui/components/breadcrumb";
+import { Button } from "@qoovex/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@qoovex/ui/components/dropdown-menu";
+import { Input } from "@qoovex/ui/components/input";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarRail, SidebarTrigger } from "@qoovex/ui/components/sidebar";
 import { BrandMark } from "@/components/brand-mark";
 import { DashboardOverview } from "@/components/dashboard-overview";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeToggle } from "@qoovex/ui/components/theme-toggle";
 
 const navigation = [
   { label: "Dashboard", icon: IconLayoutDashboard, active: true },

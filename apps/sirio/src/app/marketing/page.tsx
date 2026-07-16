@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { IconArrowRight, IconCheck, IconFileCheck, IconFolder, IconShieldCheck } from "@tabler/icons-react";
 import { DashboardOverview } from "@/components/dashboard-overview";
 import { SiteHeader } from "@/components/site-header";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Badge } from "@qoovex/ui/components/badge";
+import { buttonVariants } from "@qoovex/ui/components/button";
+import { Card } from "@qoovex/ui/components/card";
+import { Separator } from "@qoovex/ui/components/separator";
 
 export const metadata: Metadata = { title: "Marketing" };
 
@@ -53,7 +53,7 @@ export default function MarketingPage() {
 
         <section className="scroll-mt-24 border-t" id="valuta"><div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center lg:px-8"><div><h2 className="text-2xl font-semibold tracking-tight">Valuta il nuovo sistema nella dashboard Sirio.</h2><p className="mt-2 text-sm text-muted-foreground">La superficie usa dati dimostrativi e componenti reali.</p></div><a className={buttonVariants({ size: "lg" })} href="/dashboard">Apri la dashboard <IconArrowRight data-icon="inline-end" /></a></div></section>
       </main>
-      <footer className="border-t"><div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-muted-foreground sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8"><span>Qoovex</span><div className="flex items-center gap-4"><a className="hover:text-foreground" href="/">Catalogo Sirio</a><Separator orientation="vertical" className="h-4" /><span>Sandbox di approvazione</span></div></div></footer>
+      <footer className="border-t"><div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-muted-foreground sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8"><span>Qoovex</span><div className="flex items-center gap-4"><a className="hover:text-foreground" href="/">Catalogo Sirio</a><Separator orientation="vertical" className="h-4" /><span>Verifica del sistema condiviso</span></div></div></footer>
     </div>
   );
 }

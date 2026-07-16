@@ -1,22 +1,22 @@
 # Web App
 
-Sito marketing pubblico Qoovex, costruito sulla grammatica editoriale Traccia Operativa.
+Sito marketing pubblico Qoovex costruito sul design system canonico condiviso.
 
-## Responsabilità
+## Responsabilita
 
 - homepage pubblica e pagine legali/editoriali;
-- narrazione di frammento, traccia, vuoto indicizzato e prossima azione;
-- dimostrazioni di prodotto autentiche e fotografie operative con diritti verificati;
+- contenuti prudenti e dimostrazioni di prodotto composte con primitive reali;
 - SEO tecnico base e collegamento configurabile al workspace;
-- riuso della fondazione `@qoovex/ui` senza simulare il workspace.
+- cookie banner e contatti reali;
+- tema light, dark e system con persistenza e controllo condiviso.
 
 ## Confini
 
+- componenti, hook, utility e CSS di foundation provengono da `@qoovex/ui` tramite subpath espliciti;
+- CSS app-local soltanto per layout e composizioni specifiche;
+- asset proprietari da `@qoovex/brand-resources`;
 - niente Prisma, auth workspace o servizi prodotto;
-- niente stock, mockup generici, testimonianze, prezzi o ricerche inventate;
-- niente promesse di conformità, certificazione o validità legale;
-- niente dark theme o librerie di animazione;
-- in assenza di immagini approvate si usano prodotto e diagrammi, non riempitivi.
+- niente testimonianze, prezzi, ricerche o promesse di conformita inventate.
 
 ## Comandi
 

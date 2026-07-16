@@ -4,10 +4,10 @@ Contratto architetturale per una futura app nativa. Nessuno stack nativo viene i
 
 ## Contratto futuro
 
-- riusare i ruoli cromatici e tipografici di Traccia Operativa senza copiare CSS web;
+- riusare semanticamente i ruoli cromatici e tipografici del design system canonico senza copiare CSS web;
 - preservare la sequenza `stato → oggetto → conseguenza → responsabile → prossima azione`;
 - rendere il mobile sequenziale, non una compressione del desktop;
-- mantenere vuoto indicizzato, traccia e terminale come grammatica, adattandoli alle convenzioni native;
+- adattare gerarchie, stati e prossime azioni alle convenzioni native;
 - importare contratti condivisi da `packages/types` e utility condivise solo quando esistono.
 
 ## Confini

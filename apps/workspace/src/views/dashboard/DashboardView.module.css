@@ -9,8 +9,8 @@
   flex-direction: column;
   gap: 18px;
   padding: 4px 0 20px 18px;
-  border-left: 3px solid var(--qv-fg-primary);
-  border-bottom: 1px solid var(--qv-border-default);
+  border-left: 3px solid var(--foreground);
+  border-bottom: 1px solid var(--border);
 }
 
 .company,
@@ -18,8 +18,8 @@
 .sectionIndex,
 .stateLabel {
   margin: 0;
-  color: var(--qv-fg-secondary);
-  font-size: var(--qv-font-size-caption);
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
   font-weight: 760;
   letter-spacing: 0.045em;
   text-transform: uppercase;
@@ -27,8 +27,8 @@
 
 .header h1 {
   margin: 4px 0 0;
-  color: var(--qv-fg-primary);
-  font-family: var(--qv-font-family-sans);
+  color: var(--foreground);
+  font-family: var(--font-sans);
   font-size: clamp(2.5rem, 11vw, 4.8rem);
   font-weight: 720;
   line-height: 0.9;
@@ -40,9 +40,9 @@
   gap: 4px;
 }
 
-.headerContext summary { cursor: pointer; color: var(--qv-fg-secondary); font-size: 0.78rem; font-weight: 700; }
+.headerContext summary { cursor: pointer; color: var(--muted-foreground); font-size: 0.78rem; font-weight: 700; }
 .headerContext div { display: grid; gap: 2px; margin-top: 6px; }
-.resultFeedback { margin: 0; border-left: 4px solid var(--qv-state-positive); background: var(--qv-state-positive-surface); color: var(--qv-fg-primary); padding: 12px 14px; font-weight: 700; }
+.resultFeedback { margin: 0; border-left: 4px solid var(--success); background: var(--success-surface); color: var(--foreground); padding: 12px 14px; font-weight: 700; }
 
 .headerContext p {
   letter-spacing: 0;
@@ -57,7 +57,7 @@
 
 .summary > p {
   margin: 0;
-  color: var(--qv-fg-primary);
+  color: var(--foreground);
   font-size: clamp(1.25rem, 4vw, 2rem);
   font-weight: 620;
   line-height: 1.16;
@@ -81,7 +81,7 @@
 .contextList a,
 .deadlineList a,
 .secondaryStarts a {
-  color: var(--qv-action-strong);
+  color: var(--primary);
   font-size: 0.86rem;
   font-weight: 700;
   text-underline-offset: 0.18em;
@@ -95,14 +95,14 @@
 .deadlineList a,
 .secondaryStarts a {
   display: inline-flex;
-  min-inline-size: var(--qv-size-control);
-  min-block-size: var(--qv-size-control);
+  min-inline-size: var(--control);
+  min-block-size: var(--control);
   align-items: center;
   justify-content: center;
 }
 
-.page :global(.qv-button) {
-  min-block-size: var(--qv-size-control);
+.page :global([data-slot="button"]) {
+  min-block-size: var(--control);
 }
 
 .dashboardGrid {
@@ -116,7 +116,7 @@
 .firstUse,
 .fullError {
   min-width: 0;
-  border-top: 1px solid var(--qv-border-strong);
+  border-top: 1px solid var(--border);
   padding-top: 18px;
 }
 
@@ -137,8 +137,8 @@
 .sectionHeading h2,
 .firstUse h2 {
   margin: 0;
-  color: var(--qv-fg-primary);
-  font-family: var(--qv-font-family-sans);
+  color: var(--foreground);
+  font-family: var(--font-sans);
   font-size: clamp(1.2rem, 3vw, 1.65rem);
   font-weight: 720;
   letter-spacing: -0.025em;
@@ -164,12 +164,12 @@
   bottom: -2px;
   left: 15px;
   width: 1px;
-  background: var(--qv-border-default);
+  background: var(--border);
   content: "";
 }
 
 .situation[data-kind="MISSING"]::before {
-  background: repeating-linear-gradient(to bottom, var(--qv-border-strong) 0 5px, transparent 5px 10px);
+  background: repeating-linear-gradient(to bottom, var(--border) 0 5px, transparent 5px 10px);
 }
 
 .traceMarker {
@@ -179,14 +179,14 @@
   width: 31px;
   height: 31px;
   place-items: center;
-  border: 1px solid var(--qv-border-strong);
-  background: var(--qv-bg-canvas);
-  color: var(--qv-fg-primary);
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
 }
 
-.situation[data-kind="EXPIRED"] .traceMarker { border-color: var(--qv-state-danger); color: var(--qv-state-danger); }
-.situation[data-kind="EXPIRING_SOON"] .traceMarker { border-color: var(--qv-state-warning); color: var(--qv-state-warning); }
-.situation[data-kind="TO_REVIEW"] .traceMarker { border-color: var(--qv-state-info); color: var(--qv-state-info); }
+.situation[data-kind="EXPIRED"] .traceMarker { border-color: var(--destructive); color: var(--destructive); }
+.situation[data-kind="EXPIRING_SOON"] .traceMarker { border-color: var(--warning); color: var(--warning); }
+.situation[data-kind="TO_REVIEW"] .traceMarker { border-color: var(--info); color: var(--info); }
 .situation[data-kind="MISSING"] .traceMarker { border-style: dashed; }
 
 .situationBody {
@@ -203,8 +203,8 @@
 }
 
 .situationHeading time {
-  color: var(--qv-fg-secondary);
-  font-size: var(--qv-font-size-caption);
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
 }
 
@@ -212,7 +212,7 @@
 .packageItem h3 {
   overflow-wrap: anywhere;
   margin: 5px 0 0;
-  color: var(--qv-fg-primary);
+  color: var(--foreground);
   font-size: 1.04rem;
   font-weight: 720;
   line-height: 1.25;
@@ -227,13 +227,13 @@
 .fullError p {
   max-width: 64ch;
   margin: 7px 0 0;
-  color: var(--qv-fg-secondary);
+  color: var(--muted-foreground);
   font-size: 0.9rem;
   line-height: 1.48;
 }
 
 .consequence {
-  color: var(--qv-fg-primary);
+  color: var(--foreground);
 }
 
 .situationMeta {
@@ -241,8 +241,8 @@
   gap: 8px;
   margin: 16px 0 0;
   padding: 12px 0;
-  border-top: 1px solid var(--qv-border-default);
-  border-bottom: 1px solid var(--qv-border-default);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .situationMeta div {
@@ -251,7 +251,7 @@
 }
 
 .situationMeta dt {
-  color: var(--qv-fg-secondary);
+  color: var(--muted-foreground);
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -262,7 +262,7 @@
   flex-wrap: wrap;
   gap: 8px 14px;
   margin: 0;
-  color: var(--qv-fg-primary);
+  color: var(--foreground);
   font-size: 0.86rem;
   font-weight: 620;
 }
@@ -276,13 +276,13 @@
 }
 
 .updatedLabel {
-  color: var(--qv-action-strong);
-  font-size: var(--qv-font-size-caption);
+  color: var(--primary);
+  font-size: var(--text-xs);
   font-weight: 760;
 }
 
 .situation[data-updated] {
-  animation: updated-situation 180ms var(--qv-motion-ease-standard);
+  animation: updated-situation 180ms var(--ease-standard);
 }
 
 .secondaryColumn {
@@ -295,7 +295,7 @@
   grid-template-columns: 34px minmax(0, 1fr);
   gap: 10px;
   padding: 0 0 20px;
-  border-bottom: 1px solid var(--qv-border-default);
+  border-bottom: 1px solid var(--border);
 }
 
 .packageItem + .packageItem { padding-top: 20px; }
@@ -305,11 +305,11 @@
   width: 30px;
   height: 30px;
   place-items: center;
-  background: var(--qv-action-soft);
-  color: var(--qv-action-strong);
+  background: var(--accent);
+  color: var(--primary);
 }
 
-.packageItem :global(.qv-button) { margin-top: 12px; }
+.packageItem :global([data-slot="button"]) { margin-top: 12px; }
 
 .deadlineList,
 .contextList {
@@ -323,12 +323,12 @@
   display: grid;
   gap: 8px;
   padding: 13px 0;
-  border-bottom: 1px solid var(--qv-border-default);
+  border-bottom: 1px solid var(--border);
 }
 
 .deadlineList time {
-  color: var(--qv-fg-secondary);
-  font-size: var(--qv-font-size-caption);
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
   font-weight: 700;
 }
@@ -343,13 +343,13 @@
 .deadlineList strong,
 .contextList strong {
   overflow-wrap: anywhere;
-  color: var(--qv-fg-primary);
+  color: var(--foreground);
   font-size: 0.9rem;
 }
 
 .deadlineList span,
 .contextList span {
-  color: var(--qv-fg-secondary);
+  color: var(--muted-foreground);
   font-size: 0.8rem;
 }
 
@@ -365,7 +365,7 @@
 .compactEmpty {
   margin: 0;
   padding: 16px 0;
-  color: var(--qv-fg-secondary);
+  color: var(--muted-foreground);
   font-size: 0.88rem;
 }
 
@@ -374,26 +374,26 @@
 .firstUse,
 .fullError {
   padding: 20px 20px 20px 24px;
-  border-left: 3px dashed var(--qv-border-strong);
-  background: var(--qv-surface-muted);
+  border-left: 3px dashed var(--border);
+  background: var(--muted);
 }
 
 .regularState strong,
 .sectionError strong,
 .fullError strong {
-  color: var(--qv-fg-primary);
+  color: var(--foreground);
   font-size: 1rem;
 }
 
-.sectionError :global(.qv-button),
-.fullError :global(.qv-button) { margin-top: 14px; }
+.sectionError :global([data-slot="button"]),
+.fullError :global([data-slot="button"]) { margin-top: 14px; }
 
 .firstUse {
   max-width: 48rem;
 }
 
 .firstUse h2 { margin-top: 6px; }
-.firstUse :global(.qv-button) { margin-top: 18px; }
+.firstUse :global([data-slot="button"]) { margin-top: 18px; }
 
 .secondaryStarts {
   display: flex;
@@ -403,7 +403,7 @@
 }
 
 @keyframes updated-situation {
-  from { background: var(--qv-action-soft); }
+  from { background: var(--accent); }
   to { background: transparent; }
 }
 

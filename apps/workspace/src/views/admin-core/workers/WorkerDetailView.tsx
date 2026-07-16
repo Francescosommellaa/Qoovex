@@ -28,7 +28,7 @@ export function WorkerDetailView({ worker, documents, deadlines, evidence, jobSi
       <WorkspacePanel title="Prossima azione" description="Il lavoratore viene già collegato ai nuovi elementi."><div className={styles.actions}>{capabilities.canCreateDocuments ? <Link className={styles.linkButton} href={`/documents/new?origin=worker&workerId=${worker.id}`}>Aggiungi documento</Link> : null}{capabilities.canUploadEvidence ? <Link className={styles.ghostButton} href={`/evidence/new?origin=worker&workerId=${worker.id}`}>Aggiungi prova</Link> : null}{capabilities.canCreateDeadlines ? <Link className={styles.ghostButton} href={`/deadlines/new?origin=worker&workerId=${worker.id}`}>Aggiungi scadenza</Link> : null}</div></WorkspacePanel>
       <div className={styles.grid}>
           <WorkspacePanel title="Documenti collegati">
-            {!documents.length ? <p className="qv-text-muted">Nessun documento collegato al lavoratore.</p> : (
+            {!documents.length ? <p className="text-muted-foreground">Nessun documento collegato al lavoratore.</p> : (
               <div className={styles.list}>
                 {documents.map((document) => (
                   <article className={styles.record} key={document.id}>
@@ -46,7 +46,7 @@ export function WorkerDetailView({ worker, documents, deadlines, evidence, jobSi
             )}
           </WorkspacePanel>
           <WorkspacePanel title="Scadenze collegate">
-            {!deadlines.length ? <p className="qv-text-muted">Nessuna scadenza collegata al lavoratore.</p> : (
+            {!deadlines.length ? <p className="text-muted-foreground">Nessuna scadenza collegata al lavoratore.</p> : (
               <div className={styles.list}>
                 {deadlines.map((deadline) => (
                   <article className={styles.record} key={deadline.id}>
@@ -60,9 +60,9 @@ export function WorkerDetailView({ worker, documents, deadlines, evidence, jobSi
               </div>
             )}
           </WorkspacePanel>
-        <WorkspacePanel title="Cantieri assegnati">{!jobSites.length ? <p className="qv-text-muted">Nessun cantiere assegnato visibile.</p> : <div className={styles.list}>{jobSites.map((site) => <article className={styles.record} key={site.id}><div className={styles.recordMain}><strong>{site.name}</strong><span>{site.clientName || "Committente non indicato"}</span></div><div className={styles.actions}><Link className={styles.linkButton} href={`/job-sites/${site.id}`}>Apri</Link></div></article>)}</div>}</WorkspacePanel>
-        <WorkspacePanel title="Prove collegate">{!evidence.length ? <p className="qv-text-muted">Nessuna prova collegata al lavoratore.</p> : <div className={styles.list}>{evidence.slice(0, 8).map((item) => <article className={styles.record} key={item.id}><div className={styles.recordMain}><strong>{item.title}</strong><span>{item.type === "NOTE" ? "Nota" : item.originalFileName ?? "File caricato"}</span></div>{item.hasFile ? <div className={styles.actions}><a className={styles.linkButton} href={`/api/evidence/${item.id}/download`}>Scarica</a></div> : null}</article>)}</div>}</WorkspacePanel>
-        {capabilities.canReadAssignments ? <WorkspacePanel title="Accesso utente" description="Collegamento necessario per applicare lo scope personale.">{!userLinks.length ? <p className="qv-text-muted">Nessun accesso utente collegato.</p> : userLinks.map((link) => <article className={styles.record} key={link.id}><div className={styles.recordMain}><strong>{link.userLabel}</strong><span>{link.userEmail}</span></div></article>)}<Link className={styles.ghostButton} href="/access">Gestisci accesso</Link></WorkspacePanel> : null}
+        <WorkspacePanel title="Cantieri assegnati">{!jobSites.length ? <p className="text-muted-foreground">Nessun cantiere assegnato visibile.</p> : <div className={styles.list}>{jobSites.map((site) => <article className={styles.record} key={site.id}><div className={styles.recordMain}><strong>{site.name}</strong><span>{site.clientName || "Committente non indicato"}</span></div><div className={styles.actions}><Link className={styles.linkButton} href={`/job-sites/${site.id}`}>Apri</Link></div></article>)}</div>}</WorkspacePanel>
+        <WorkspacePanel title="Prove collegate">{!evidence.length ? <p className="text-muted-foreground">Nessuna prova collegata al lavoratore.</p> : <div className={styles.list}>{evidence.slice(0, 8).map((item) => <article className={styles.record} key={item.id}><div className={styles.recordMain}><strong>{item.title}</strong><span>{item.type === "NOTE" ? "Nota" : item.originalFileName ?? "File caricato"}</span></div>{item.hasFile ? <div className={styles.actions}><a className={styles.linkButton} href={`/api/evidence/${item.id}/download`}>Scarica</a></div> : null}</article>)}</div>}</WorkspacePanel>
+        {capabilities.canReadAssignments ? <WorkspacePanel title="Accesso utente" description="Collegamento necessario per applicare lo scope personale.">{!userLinks.length ? <p className="text-muted-foreground">Nessun accesso utente collegato.</p> : userLinks.map((link) => <article className={styles.record} key={link.id}><div className={styles.recordMain}><strong>{link.userLabel}</strong><span>{link.userEmail}</span></div></article>)}<Link className={styles.ghostButton} href="/access">Gestisci accesso</Link></WorkspacePanel> : null}
       </div>
       {capabilities.canManageCore ? <WorkspacePanel title="Gestione avanzata" description="Modifica informazioni o archivia il lavoratore in una zona separata."><details className={styles.details}><summary>Modifica informazioni</summary><WorkerForm mode="update" worker={worker} /></details><details className={styles.details}><summary>Zona riservata</summary><WorkerArchiveButton workerId={worker.id} redirectToList /></details></WorkspacePanel> : null}
     </WorkspacePage>

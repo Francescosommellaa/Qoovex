@@ -12,7 +12,7 @@ export default function PrivacyPage() {
           Il titolare indicato per la fase pilota e Qoovex. Per richieste privacy, accesso ai dati
           o cancellazione puoi scrivere a <a href={contactHref}>{contactEmail}</a>.
         </p>
-        <p className="qv-text-muted">
+        <p className="text-muted-foreground">
           Sito pubblico: {publicSiteUrl}. Workspace di produzione previsto: {workspaceProductionUrl}.
         </p>
       </LegalSection>

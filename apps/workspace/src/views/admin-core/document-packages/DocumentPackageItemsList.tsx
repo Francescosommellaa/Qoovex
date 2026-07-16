@@ -83,7 +83,7 @@ export function DocumentPackageItemsList({
     }
   }
 
-  if (!items.length) return <p className="qv-text-muted">Nessun elemento selezionato.</p>;
+  if (!items.length) return <p className="text-muted-foreground">Nessun elemento selezionato.</p>;
 
   return (
     <div className={styles.list}>

@@ -25,7 +25,7 @@ export function DocumentVersionList({ documentId, versions, canArchive }: { docu
     }
   }
 
-  if (!versions.length) return <p className="qv-text-muted">Nessun file caricato.</p>;
+  if (!versions.length) return <p className="text-muted-foreground">Nessun file caricato.</p>;
 
   return (
     <div className={styles.versionList}>

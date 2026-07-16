@@ -2,7 +2,11 @@
 
 import { useEffect, useState, type FormEvent, type HTMLAttributes, type ReactNode } from "react";
 import { signOut } from "next-auth/react";
-import { Alert, Button, Field, Input, LoadingState } from "@qoovex/ui";
+import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
+import { Button, buttonVariants } from "@qoovex/ui/components/button";
+import { Field, FieldDescription, FieldLabel } from "@qoovex/ui/components/field";
+import { Input } from "@qoovex/ui/components/input";
+import { Spinner } from "@qoovex/ui/components/spinner";
 import styles from "./AccountSecurity.module.css";
 
 function SecuritySection({ children, className, tone = "default", ...props }: { children: ReactNode; tone?: "default" | "info" | "warning" } & HTMLAttributes<HTMLElement>) {
@@ -199,7 +203,7 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
           <div className={styles.section}>
             <SecurityState tone="positive">Configurazione completata</SecurityState>
             <h1>Conserva i codici di recupero</h1>
-            <Alert title="Vengono mostrati una sola volta" tone="positive">Salvali in un luogo separato dal dispositivo usato per l&apos;accesso.</Alert>
+            <Alert variant="success"><AlertTitle>Vengono mostrati una sola volta</AlertTitle><AlertDescription>Salvali in un luogo separato dal dispositivo usato per l&apos;accesso.</AlertDescription></Alert>
             <pre className={styles.codeBlock}>{backupCodes.join("\n")}</pre>
             {status.satisfied ? <Button onClick={() => { setBackupCodes([]); window.location.reload(); }}>Ho salvato i codici</Button> : <Button onClick={leaveSession}>Ho salvato i codici, accedi di nuovo</Button>}
           </div>
@@ -215,16 +219,17 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
           <div className={styles.section}>
             <SecurityState tone="warning">Nuovo fattore da confermare</SecurityState>
             <h1>Configura l&apos;app Authenticator</h1>
-            <p className="qv-text-muted">Inserisci manualmente il secret oppure apri il link sul dispositivo compatibile.</p>
+            <p className="text-muted-foreground">Inserisci manualmente il secret oppure apri il link sul dispositivo compatibile.</p>
             <code className={styles.codeBlock}>{setup.secret}</code>
-            <Button href={setup.otpauthUrl} variant="secondary">Apri nell&apos;app Authenticator</Button>
+            <a className={buttonVariants({ variant: "secondary" })} href={setup.otpauthUrl}>Apri nell&apos;app Authenticator</a>
             <form className={styles.form} onSubmit={confirmSetup}>
-              <Field htmlFor="mfa-new-code" label="Codice del nuovo fattore" description="Il nuovo codice conferma solo il nuovo fattore, non sostituisce la verifica precedente.">
+              <Field><FieldLabel htmlFor="mfa-new-code">Codice del nuovo fattore</FieldLabel>
                 <Input autoComplete="one-time-code" id="mfa-new-code" inputMode="numeric" name="newCode" pattern="[0-9]{6}" required />
+                <FieldDescription>Il nuovo codice conferma solo il nuovo fattore, non sostituisce la verifica precedente.</FieldDescription>
               </Field>
               <Button disabled={loading === "confirm-setup"} type="submit">{loading === "confirm-setup" ? "Verifica in corso" : "Conferma nuovo fattore"}</Button>
             </form>
-            {error ? <Alert tone="danger">{error}</Alert> : null}
+            {error ? <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert> : null}
           </div>
         </SecuritySection>
       </div>
@@ -241,7 +246,7 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
         <SecuritySection>
           <form className={styles.form} onSubmit={challenge}>
             <p>Inserisci il codice dell&apos;app Authenticator oppure un codice di recupero monouso.</p>
-            <Field htmlFor="mfa-gate-code" label="Codice MFA">
+            <Field><FieldLabel htmlFor="mfa-gate-code">Codice MFA</FieldLabel>
               <Input autoComplete="one-time-code" autoFocus id="mfa-gate-code" name="code" required />
             </Field>
             <Button disabled={loading === "challenge"} type="submit">{loading === "challenge" ? "Verifica in corso" : "Apri il workspace"}</Button>
@@ -251,10 +256,10 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
           <SecuritySection tone="warning">
             <div className={styles.section}>
               <div className={styles.statusRow}><h2>Recupero MFA</h2><SecurityState tone={recovery.status === "APPROVED" ? "positive" : recovery.status === "DENIED" || recovery.status === "EXPIRED" ? "danger" : "warning"}>{recovery.status}</SecurityState></div>
-              {recovery.status === "PENDING" ? <Alert title="In attesa dell'OWNER" tone="warning">Il workspace resta protetto. La richiesta scade alle {new Date(recovery.expiresAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}.</Alert> : null}
-              {recovery.status === "APPROVED" ? <Alert title="Richiesta approvata" tone="positive">Puoi configurare una sola volta un nuovo fattore.</Alert> : null}
-              {recovery.status === "DENIED" ? <Alert title="Richiesta rifiutata" tone="danger">Contatta un OWNER della tua Azienda e avvia una nuova richiesta se necessario.</Alert> : null}
-              {recovery.status === "EXPIRED" ? <Alert title="Richiesta scaduta" tone="danger">Avvia un nuovo recupero e verifica nuovamente l&apos;email.</Alert> : null}
+              {recovery.status === "PENDING" ? <Alert variant="warning"><AlertTitle>In attesa dell&apos;OWNER</AlertTitle><AlertDescription>Il workspace resta protetto. La richiesta scade alle {new Date(recovery.expiresAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}.</AlertDescription></Alert> : null}
+              {recovery.status === "APPROVED" ? <Alert variant="success"><AlertTitle>Richiesta approvata</AlertTitle><AlertDescription>Puoi configurare una sola volta un nuovo fattore.</AlertDescription></Alert> : null}
+              {recovery.status === "DENIED" ? <Alert variant="destructive"><AlertTitle>Richiesta rifiutata</AlertTitle><AlertDescription>Contatta un OWNER della tua Azienda e avvia una nuova richiesta se necessario.</AlertDescription></Alert> : null}
+              {recovery.status === "EXPIRED" ? <Alert variant="destructive"><AlertTitle>Richiesta scaduta</AlertTitle><AlertDescription>Avvia un nuovo recupero e verifica nuovamente l&apos;email.</AlertDescription></Alert> : null}
               <div className={styles.actions}>
                 {recovery.status === "APPROVED" ? <Button onClick={startRecoverySetup}>Configura nuovo fattore</Button> : null}
                 <Button disabled={loading === "recovery-refresh"} onClick={refreshRecovery} variant="secondary">Aggiorna stato</Button>
@@ -264,8 +269,8 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
         ) : recoveryCodeRequested ? (
           <SecuritySection tone="info">
             <form className={styles.form} onSubmit={createRecovery}>
-              <Alert title="Controlla la posta" tone="info">Il codice verifica la tua email; non disattiva MFA.</Alert>
-              <Field htmlFor="mfa-recovery-email-code" label="Codice ricevuto via email">
+              <Alert variant="info"><AlertTitle>Controlla la posta</AlertTitle><AlertDescription>Il codice verifica la tua email; non disattiva MFA.</AlertDescription></Alert>
+              <Field><FieldLabel htmlFor="mfa-recovery-email-code">Codice ricevuto via email</FieldLabel>
                 <Input autoComplete="one-time-code" id="mfa-recovery-email-code" inputMode="numeric" name="recoveryEmailCode" pattern="[0-9]{6}" required />
               </Field>
               <Button disabled={loading === "recovery-create"} type="submit">Continua il recupero</Button>
@@ -274,9 +279,9 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
         ) : (
           <Button disabled={loading === "recovery-email"} onClick={requestRecoveryCode} variant="ghost">Non hai piu accesso ai codici?</Button>
         )}
-        {notice ? <Alert tone="info">{notice}</Alert> : null}
-        {error ? <Alert tone="danger">{error}</Alert> : null}
-        {loading === "recovery-refresh" ? <LoadingState label="Aggiornamento richiesta MFA" /> : null}
+        {notice ? <Alert variant="info"><AlertDescription>{notice}</AlertDescription></Alert> : null}
+        {error ? <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert> : null}
+        {loading === "recovery-refresh" ? <div aria-live="polite" className="flex items-center gap-2 text-sm text-muted-foreground"><Spinner /> Aggiornamento richiesta MFA</div> : null}
       </div>
     );
   }
@@ -287,8 +292,8 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
         <div><p>Account personale</p><h1>Sicurezza account</h1></div>
         <SecurityState tone={status.enabled ? "positive" : "warning"}>{status.enabled ? "MFA attiva" : "MFA non attiva"}</SecurityState>
       </div>
-      {notice ? <Alert tone="positive">{notice}</Alert> : null}
-      {error ? <Alert tone="danger">{error}</Alert> : null}
+      {notice ? <Alert variant="success"><AlertDescription>{notice}</AlertDescription></Alert> : null}
+      {error ? <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert> : null}
 
       {!status.enabled ? (
         <SecuritySection tone="info">
@@ -297,7 +302,7 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
             <p>Prima di generare il secret verifichiamo l&apos;email associata all&apos;account.</p>
             {!emailCodeRequested ? <Button disabled={loading === "enrollment-email"} onClick={requestEnrollmentCode}>{loading === "enrollment-email" ? "Invio in corso" : "Invia codice via email"}</Button> : (
               <form className={styles.form} onSubmit={authorizeEnrollment}>
-                <Field htmlFor="mfa-enrollment-code" label="Codice ricevuto via email">
+                <Field><FieldLabel htmlFor="mfa-enrollment-code">Codice ricevuto via email</FieldLabel>
                   <Input autoComplete="one-time-code" id="mfa-enrollment-code" inputMode="numeric" name="emailCode" pattern="[0-9]{6}" required />
                 </Field>
                 <Button disabled={loading === "enrollment-authorize"} type="submit">Continua</Button>
@@ -310,16 +315,16 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
           <SecuritySection>
             <form className={styles.form} onSubmit={(event) => currentFactorAction(event, "replace")}>
               <h2>Sostituisci il fattore</h2>
-              <p className="qv-text-muted">Richiede il fattore corrente. La conferma del nuovo TOTP revocherà tutte le sessioni.</p>
-              <Field htmlFor="mfa-replace-code" label="Fattore corrente"><Input autoComplete="one-time-code" id="mfa-replace-code" name="currentCode" required /></Field>
+              <p className="text-muted-foreground">Richiede il fattore corrente. La conferma del nuovo TOTP revocherà tutte le sessioni.</p>
+              <Field><FieldLabel htmlFor="mfa-replace-code">Fattore corrente</FieldLabel><Input autoComplete="one-time-code" id="mfa-replace-code" name="currentCode" required /></Field>
               <Button disabled={loading === "replace"} type="submit">Avvia sostituzione</Button>
             </form>
           </SecuritySection>
           <SecuritySection>
             <form className={styles.form} onSubmit={(event) => currentFactorAction(event, "backup")}>
               <h2>Rigenera backup code</h2>
-              <p className="qv-text-muted">{status.backupCodesRemaining} codici non utilizzati. I precedenti verranno revocati.</p>
-              <Field htmlFor="mfa-backup-code" label="Fattore corrente"><Input autoComplete="one-time-code" id="mfa-backup-code" name="currentCode" required /></Field>
+              <p className="text-muted-foreground">{status.backupCodesRemaining} codici non utilizzati. I precedenti verranno revocati.</p>
+              <Field><FieldLabel htmlFor="mfa-backup-code">Fattore corrente</FieldLabel><Input autoComplete="one-time-code" id="mfa-backup-code" name="currentCode" required /></Field>
               <Button disabled={loading === "backup"} type="submit" variant="secondary">Rigenera codici</Button>
             </form>
           </SecuritySection>
@@ -330,16 +335,16 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
         <SecuritySection>
           <div className={styles.section}>
             <div className={styles.statusRow}><h2>Richieste recupero da approvare</h2><SecurityState tone={inbox.length ? "warning" : "neutral"}>{inbox.length ? `${inbox.length} in attesa` : "Nessuna richiesta"}</SecurityState></div>
-            {inbox.length === 0 ? <p className="qv-text-muted">Non ci sono richieste attive per questa Azienda.</p> : (
+            {inbox.length === 0 ? <p className="text-muted-foreground">Non ci sono richieste attive per questa Azienda.</p> : (
               <div className={styles.requestList}>
                 {inbox.map((request) => (
                   <form className={styles.request} key={request.id} onSubmit={(event) => { event.preventDefault(); void decideRecovery(event.currentTarget, request.id, "approve"); }}>
                     <strong>{request.requester.email}</strong>
                     <span className={styles.requestMeta}>Scade alle {new Date(request.expiresAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}</span>
-                    <Field htmlFor={`owner-code-${request.id}`} label="Il tuo fattore MFA"><Input autoComplete="one-time-code" id={`owner-code-${request.id}`} name="ownerCode" required /></Field>
+                    <Field><FieldLabel htmlFor={`owner-code-${request.id}`}>Il tuo fattore MFA</FieldLabel><Input autoComplete="one-time-code" id={`owner-code-${request.id}`} name="ownerCode" required /></Field>
                     <div className={styles.actions}>
                       <Button disabled={loading === `approve:${request.id}`} type="submit">Approva</Button>
-                      <Button disabled={loading === `deny:${request.id}`} onClick={(event) => { event.preventDefault(); const form = event.currentTarget.form; if (form) void decideRecovery(form, request.id, "deny"); }} variant="danger">Rifiuta</Button>
+                      <Button disabled={loading === `deny:${request.id}`} onClick={(event) => { event.preventDefault(); const form = event.currentTarget.form; if (form) void decideRecovery(form, request.id, "deny"); }} variant="destructive">Rifiuta</Button>
                     </div>
                   </form>
                 ))}
@@ -353,9 +358,9 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
         <SecuritySection className={styles.dangerZone}>
           <form className={styles.form} onSubmit={(event) => currentFactorAction(event, "disable")}>
             <h2>Disattiva MFA</h2>
-            <Alert title="Azione sensibile" tone="warning">Richiede sempre il fattore corrente e revoca tutte le sessioni.</Alert>
-            <Field htmlFor="mfa-disable-code" label="Fattore corrente"><Input autoComplete="one-time-code" id="mfa-disable-code" name="currentCode" required /></Field>
-            <Button disabled={loading === "disable"} type="submit" variant="danger">Disattiva MFA</Button>
+            <Alert variant="warning"><AlertTitle>Azione sensibile</AlertTitle><AlertDescription>Richiede sempre il fattore corrente e revoca tutte le sessioni.</AlertDescription></Alert>
+            <Field><FieldLabel htmlFor="mfa-disable-code">Fattore corrente</FieldLabel><Input autoComplete="one-time-code" id="mfa-disable-code" name="currentCode" required /></Field>
+            <Button disabled={loading === "disable"} type="submit" variant="destructive">Disattiva MFA</Button>
           </form>
         </SecuritySection>
       ) : null}

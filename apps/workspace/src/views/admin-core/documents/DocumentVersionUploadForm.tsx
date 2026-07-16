@@ -38,7 +38,7 @@ export function DocumentVersionUploadForm({ documentId, disabled, returnToDashbo
         <span>File documento</span>
         <input accept="application/pdf,image/jpeg,image/png,image/webp" disabled={disabled || pending} name="file" required type="file" />
       </label>
-      <p className="qv-text-muted">Limite 4 MB. Il file viene collegato al documento e resta da verificare.</p>
+      <p className="text-muted-foreground">Limite 4 MB. Il file viene collegato al documento e resta da verificare.</p>
       <button className={styles.button} disabled={disabled || pending} type="submit">
         {pending ? "Caricamento..." : "Carica file"}
       </button>

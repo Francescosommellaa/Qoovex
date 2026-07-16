@@ -104,7 +104,7 @@ export function DocumentCreateFlow({ documentTypes, workers, jobSites, initialCo
         <label className={styles.field}><span>File</span><input accept="application/pdf,image/jpeg,image/png,image/webp" name="file" type="file" /></label>
         <label className={styles.field}><span>Scadenza {selectedType?.requiresExpiryDate ? "richiesta" : "opzionale"}</span><input name="expiryDate" required={selectedType?.requiresExpiryDate} type="date" /></label>
       </div>
-      <details className={styles.details}><summary>Altre opzioni</summary><label className={styles.field}><span>Note operative</span><textarea name="notes" maxLength={4000} /></label><p className="qv-text-muted">Il documento viene salvato come da verificare. Lo stato può essere aggiornato in seguito.</p></details>
+      <details className={styles.details}><summary>Altre opzioni</summary><label className={styles.field}><span>Note operative</span><textarea name="notes" maxLength={4000} /></label><p className="text-muted-foreground">Il documento viene salvato come da verificare. Lo stato può essere aggiornato in seguito.</p></details>
       <div className={styles.actions}><button className={styles.button} disabled={pending} name="intent" type="submit" value="upload">{pending ? "Salvataggio..." : "Salva documento"}</button><button className={styles.ghostButton} disabled={pending} name="intent" type="submit" value="later">Salva e carica più tardi</button></div>
     </form>
   );
