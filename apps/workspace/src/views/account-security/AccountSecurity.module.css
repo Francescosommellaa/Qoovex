@@ -39,7 +39,7 @@
 
 .heading p,
 .requestMeta {
-  color: var(--qv-fg-secondary);
+  color: var(--muted-foreground);
 }
 
 .section,
@@ -60,19 +60,19 @@
   display: grid;
   gap: 14px;
   padding: 18px 0 2px;
-  border-top: 1px solid var(--qv-border-strong);
+  border-top: 1px solid var(--border);
 }
 
 .surfaceInfo {
-  border-top-color: var(--qv-state-info);
+  border-top-color: var(--info);
 }
 
 .surfaceWarning {
-  border-top-color: var(--qv-state-warning);
+  border-top-color: var(--warning);
 }
 
 .surfaceDefault {
-  border-top-color: var(--qv-border-strong);
+  border-top-color: var(--border);
 }
 
 .state {
@@ -83,10 +83,10 @@
   line-height: 1.3;
 }
 
-.statePositive { color: var(--qv-state-positive); }
-.stateWarning { color: var(--qv-state-warning); }
-.stateDanger { color: var(--qv-state-danger); }
-.stateNeutral { color: var(--qv-fg-secondary); }
+.statePositive { color: var(--success); }
+.stateWarning { color: var(--warning); }
+.stateDanger { color: var(--destructive); }
+.stateNeutral { color: var(--muted-foreground); }
 
 .actions > * {
   flex: 1 1 170px;
@@ -94,8 +94,8 @@
 
 .codeBlock {
   overflow-wrap: anywhere;
-  border: 1px solid var(--qv-border-default);
-  background: var(--qv-surface-muted);
+  border: 1px solid var(--border);
+  background: var(--muted);
   padding: 12px;
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: 0.86rem;
@@ -103,7 +103,7 @@
 }
 
 .request {
-  border-top: 1px solid var(--qv-border-default);
+  border-top: 1px solid var(--border);
   padding-top: 14px;
 }
 
@@ -117,7 +117,7 @@
 }
 
 .dangerZone {
-  border-top-color: var(--qv-state-danger);
+  border-top-color: var(--destructive);
 }
 
 @media (min-width: 760px) {

@@ -8,14 +8,14 @@
   flex-direction: column;
   gap: 14px;
   padding: 4px 0 18px 18px;
-  border-left: 3px solid var(--qv-fg-primary);
-  border-bottom: 1px solid var(--qv-border-default);
+  border-left: 3px solid var(--foreground);
+  border-bottom: 1px solid var(--border);
 }
 
 .pageHeader h1 {
   margin: 0;
-  color: var(--qv-fg-primary);
-  font-family: var(--qv-font-family-sans);
+  color: var(--foreground);
+  font-family: var(--font-sans);
   font-size: clamp(2rem, 8vw, 3.4rem);
   font-weight: 720;
   line-height: 0.96;
@@ -25,7 +25,7 @@
 .pageHeader p {
   max-width: 720px;
   margin: 0;
-  color: var(--qv-fg-secondary);
+  color: var(--muted-foreground);
   font-size: 0.94rem;
   font-weight: 560;
 }
@@ -38,7 +38,7 @@
 
 .panel {
   padding: 18px 0 2px;
-  border-top: 1px solid var(--qv-border-strong);
+  border-top: 1px solid var(--border);
 }
 
 .panelHeader {
@@ -49,7 +49,7 @@
 
 .panelHeader h2 {
   margin: 0;
-  font-family: var(--qv-font-family-sans);
+  font-family: var(--font-sans);
   font-size: 1.05rem;
   font-weight: 720;
   line-height: 1.2;
@@ -59,22 +59,22 @@
 .panelHeader p {
   max-width: 62rem;
   margin: 0;
-  color: var(--qv-fg-secondary);
+  color: var(--muted-foreground);
   font-size: 0.84rem;
 }
 
 .emptyState,
 .accessState {
   padding: 18px 18px 18px 22px;
-  border-left: 3px dashed var(--qv-border-strong);
-  background: var(--qv-surface-muted);
+  border-left: 3px dashed var(--border);
+  background: var(--muted);
 }
 
 .emptyState strong,
 .accessState h1 {
   display: block;
   margin: 0;
-  font-family: var(--qv-font-family-sans);
+  font-family: var(--font-sans);
   font-size: 1.08rem;
   line-height: 1.2;
 }
@@ -82,7 +82,7 @@
 .emptyState p,
 .accessState p {
   margin: 8px 0 0;
-  color: var(--qv-fg-secondary);
+  color: var(--muted-foreground);
   font-size: 0.9rem;
 }
 
@@ -98,11 +98,11 @@
   line-height: 1.25;
 }
 
-.toneDanger { color: var(--qv-state-danger); }
-.toneWarning { color: var(--qv-state-warning); }
-.toneInfo { color: var(--qv-state-info); }
-.toneGood { color: var(--qv-state-positive); }
-.toneNeutral { color: var(--qv-fg-secondary); }
+.toneDanger { color: var(--destructive); }
+.toneWarning { color: var(--warning); }
+.toneInfo { color: var(--info); }
+.toneGood { color: var(--success); }
+.toneNeutral { color: var(--muted-foreground); }
 
 @media (min-width: 760px) {
   .pageHeader {

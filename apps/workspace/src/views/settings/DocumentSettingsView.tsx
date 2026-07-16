@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Checkbox } from "@qoovex/ui";
+import { Checkbox } from "@qoovex/ui/components/checkbox";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
 import { DocumentRequirementsPanel } from "@/views/admin-core/documents/DocumentRequirementsPanel";
 import { submitJson } from "@/views/admin-core/admin-api-client";

@@ -1,52 +1,44 @@
 # @qoovex/ui
 
-Fondazione condivisa di Traccia Operativa per tutte le superfici Qoovex.
+Unica sorgente di verita del design system canonico Qoovex.
 
-## Contratto
+## Foundation
 
-Il package contiene token CSS-first, stili base e primitive esclusivamente presentazionali. Non contiene logica di dominio, auth, Prisma, ruoli, permessi o copy normativo.
+- shadcn `base-nova` con primitive open code;
+- Base UI per comportamenti accessibili;
+- Tabler Icons;
+- Tailwind CSS v4 CSS-first;
+- Geist e Geist Mono caricati dalle app con `next/font`;
+- tema Vercel light/dark/system con token OKLCH;
+- ruoli semantici `info`, `success`, `warning` e `destructive`;
+- supporto a focus visibile, forced colors e reduced motion.
 
-Primitive pubbliche:
+Il package contiene primitive presentazionali, `ThemeProvider`, `ThemeToggle`, `FloatingNavigation`, `BrandMark`, `cn` e `useIsMobile`. Non contiene auth, Prisma, ruoli, permessi, servizi o copy normativo.
 
-- controlli: `Button`, `IconButton`, `Field`, `Input`, `Textarea`, `Select`, `Checkbox`, `Radio`, `Switch`;
-- layout: `Container`, `Section`;
-- feedback: `Alert`, `LoadingState`, `EmptyState`, `ErrorState`;
-- grammatica: `Trace`, `TraceNode`, `TraceGap`, `TraceTerminal`;
-- iconografia: `Icon` e un insieme curato di glyph Phosphor.
+## API pubblica
 
-`Card`, `Panel`, `Badge` e `Status` sono stati rimossi. Le situazioni operative appartengono al workspace, non alla libreria generica.
+Il barrel root `@qoovex/ui` non esiste. I consumer importano esclusivamente subpath espliciti:
 
-## Fondazione visiva
+```ts
+import { Button } from "@qoovex/ui/components/button";
+import { ThemeProvider } from "@qoovex/ui/components/theme-provider";
+import { useIsMobile } from "@qoovex/ui/hooks/use-mobile";
+import { cn } from "@qoovex/ui/lib/utils";
+```
 
-- esclusivamente light-first;
-- palette canonica campo, carta, nebbia, inchiostro, linea e cobalto;
-- General Sans per il linguaggio operativo, Cabinet Grotesk per orientamento e marketing;
-- colore di brand separato dai colori semantici;
-- nessuna informazione affidata soltanto al colore;
-- raggi limitati a controlli, focus e overlay reali;
-- nessuna elevazione statica; l'unica ombra pubblica appartiene agli overlay;
-- supporto a `forced-colors`, contrasto aumentato e `prefers-reduced-motion`.
-
-## Contratto token
-
-- `:root` contiene reference token privati `--qv-ref-*` e ruoli semantici pubblici `--qv-*`;
-- base styles e consumer usano soltanto i ruoli semantici pubblici;
-- `@theme inline` collega i ruoli all'API utility Tailwind v4 esistente;
-- i nomi del bridge (`--color-qv-*`, `--spacing-qv-*` e analoghi) non sono API CSS da usare con `var()`;
-- `@theme static`, alias di compatibilità e reference token usati dai consumer sono bloccati dal checker.
-
-Import canonico:
+Ogni app importa una sola volta:
 
 ```css
-@import "tailwindcss";
-@import "@qoovex/brand-resources/styles/fontshare.css";
-@import "@qoovex/ui/styles/tokens.css";
 @import "@qoovex/ui/styles/base.css";
+@source "../**/*.{ts,tsx}";
 ```
+
+`Button` e riservato alle azioni. Link e navigazione usano `<a>` o `Link` reali, eventualmente con `buttonVariants` per l'aspetto.
 
 ## Confini
 
 - nessun import da `apps/*`, `@qoovex/db`, Auth.js o tipi di dominio;
-- nessun alias permanente per token o primitive legacy;
-- nessun preset documentale o promessa di conformità;
-- le prop funzionali dei controlli restano stabili durante la migrazione visuale.
+- nessun componente condiviso duplicato nelle app;
+- CSS app-local ammesso solo per layout o composizioni specifiche;
+- provenienza e licenze in `THIRD_PARTY_NOTICES.md`;
+- il guardrail `pnpm --filter @qoovex/ui test` controlla package e consumer.

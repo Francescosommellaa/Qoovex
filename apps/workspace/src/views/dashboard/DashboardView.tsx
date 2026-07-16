@@ -5,24 +5,17 @@ import type {
   DashboardSituation,
   DashboardSituationKind,
 } from "@qoovex/types";
-import {
-  Button,
-  ClockCountdown,
-  FileDashed,
-  Icon,
-  MagnifyingGlass,
-  ShareNetwork,
-  WarningCircle,
-} from "@qoovex/ui";
+import { IconAlertCircle, IconClock, IconFileOff, IconSearch, IconShare3 } from "@tabler/icons-react";
+import { buttonVariants } from "@qoovex/ui/components/button";
 import Link from "next/link";
 import type { WorkspaceResult } from "@/views/workspace/workspace-flow-context";
 import styles from "./DashboardView.module.css";
 
-const situationIcons: Record<DashboardSituationKind, typeof WarningCircle> = {
-  EXPIRED: WarningCircle,
-  EXPIRING_SOON: ClockCountdown,
-  MISSING: FileDashed,
-  TO_REVIEW: MagnifyingGlass,
+const situationIcons: Record<DashboardSituationKind, typeof IconAlertCircle> = {
+  EXPIRED: IconAlertCircle,
+  EXPIRING_SOON: IconClock,
+  MISSING: IconFileOff,
+  TO_REVIEW: IconSearch,
 };
 
 const summaryLinks = [
@@ -58,12 +51,13 @@ function SectionError({ message }: { message: string }) {
     <div className={styles.sectionError} role="status">
       <strong>Sezione non disponibile</strong>
       <p>{message}</p>
-      <Button href="/dashboard" size="sm" variant="secondary">Riprova</Button>
+      <Link className={buttonVariants({ size: "sm", variant: "secondary" })} href="/dashboard">Riprova</Link>
     </div>
   );
 }
 
 function SituationItem({ item, updated }: { item: DashboardSituation; updated: boolean }) {
+  const SituationIcon = situationIcons[item.kind];
   const assignmentAction = item.responsibility.assignmentHref ? (
     <Link className={styles.assignmentLink} href={item.responsibility.assignmentHref}>Assegna responsabile</Link>
   ) : null;
@@ -71,7 +65,7 @@ function SituationItem({ item, updated }: { item: DashboardSituation; updated: b
   return (
     <article className={styles.situation} data-kind={item.kind} data-updated={updated || undefined}>
       <div aria-hidden="true" className={styles.traceMarker}>
-        <Icon glyph={situationIcons[item.kind]} size={20} weight="bold" />
+        <SituationIcon />
       </div>
       <div className={styles.situationBody}>
         <header className={styles.situationHeading}>
@@ -86,7 +80,7 @@ function SituationItem({ item, updated }: { item: DashboardSituation; updated: b
           <div><dt>Responsabile</dt><dd>{item.responsibility.label}{assignmentAction}</dd></div>
         </dl>
         <div className={styles.terminal}>
-          <Button href={withDashboardOrigin(item.action.href)} size="sm">{item.action.label}</Button>
+          <Link className={buttonVariants({ size: "sm" })} href={withDashboardOrigin(item.action.href)}>{item.action.label}</Link>
           {updated ? <span className={styles.updatedLabel}>Aggiornato ora</span> : null}
         </div>
       </div>
@@ -97,12 +91,12 @@ function SituationItem({ item, updated }: { item: DashboardSituation; updated: b
 function PackageItem({ item }: { item: DashboardPackageItem }) {
   return (
     <article className={styles.packageItem}>
-      <div aria-hidden="true" className={styles.packageIcon}><Icon glyph={ShareNetwork} size={20} /></div>
+      <div aria-hidden="true" className={styles.packageIcon}><IconShare3 /></div>
       <div>
         <p className={styles.stateLabel}>{item.statusLabel}</p>
         <h3>{item.title}</h3>
         <p>{item.itemCount} {item.itemCount === 1 ? "elemento" : "elementi"} · {item.shareLabel}</p>
-        <Button href={item.action.href} size="sm" variant="secondary">{item.action.label}</Button>
+        <Link className={buttonVariants({ size: "sm", variant: "secondary" })} href={item.action.href}>{item.action.label}</Link>
       </div>
     </article>
   );
@@ -134,7 +128,7 @@ export function DashboardView({ data, updatedId, result }: { data: DashboardResp
         <section className={styles.fullError}>
           <strong>Non riusciamo a caricare la situazione operativa.</strong>
           <p>I dati non sono stati modificati. Riprova tra poco.</p>
-          <Button href="/dashboard" variant="secondary">Riprova</Button>
+          <Link className={buttonVariants({ variant: "secondary" })} href="/dashboard">Riprova</Link>
         </section>
       </div>
     );
@@ -171,7 +165,7 @@ export function DashboardView({ data, updatedId, result }: { data: DashboardResp
           <p className={styles.stateLabel}>Primo passo</p>
           <h2>Inizia dal primo documento</h2>
           <p>Aggiungi il primo documento e, se lo hai già, carica subito il file.</p>
-          <Button href="/documents/new?origin=dashboard">Aggiungi documento</Button>
+          <Link className={buttonVariants()} href="/documents/new?origin=dashboard">Aggiungi documento</Link>
           <div className={styles.secondaryStarts}>
             <Link href="/workers/new?origin=dashboard">Aggiungi un lavoratore</Link>
             <Link href="/job-sites/new?origin=dashboard">Aggiungi un cantiere</Link>

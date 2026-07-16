@@ -1,6 +1,7 @@
 "use client";
 
-import { Field, Select } from "@qoovex/ui";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@qoovex/ui/components/field";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
 import type { OrganizationRole } from "@qoovex/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -49,19 +50,18 @@ export function DevRoleSwitcher({ role }: { role: OrganizationRole }) {
         <span>Il ruolo è simulato solo nella sessione locale. Membership e dati persistiti non cambiano.</span>
         <small>I ruoli con scope usano le assegnazioni della prima identità attiva con lo stesso ruolo; se manca, la vista risulta vuota.</small>
       </div>
-      <Field className={styles.devField} htmlFor="dev-role" label="Vista ruolo" error={error ?? undefined}>
-        <Select
-          aria-describedby="dev-role-status"
-          disabled={pending}
-          id="dev-role"
-          onChange={(event) => void changeRole(event.target.value as OrganizationRole)}
-          value={selectedRole}
-        >
-          {ROLE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+      <Field className={styles.devField} data-invalid={Boolean(error)}>
+        <FieldLabel htmlFor="dev-role">Vista ruolo</FieldLabel>
+        <Select items={ROLE_OPTIONS} onValueChange={(value) => void changeRole(value as OrganizationRole)} value={selectedRole}>
+          <SelectTrigger aria-describedby="dev-role-status" aria-invalid={Boolean(error)} disabled={pending} id="dev-role">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent><SelectGroup>{ROLE_OPTIONS.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectGroup></SelectContent>
         </Select>
-        <span className={styles.devStatus} id="dev-role-status" aria-live="polite">
+        <FieldDescription className={styles.devStatus} id="dev-role-status" aria-live="polite">
           {pending ? "Aggiornamento vista in corso" : "Dashboard, navigazione e permessi seguono questo ruolo."}
-        </span>
+        </FieldDescription>
+        {error ? <FieldError>{error}</FieldError> : null}
       </Field>
     </aside>
   );

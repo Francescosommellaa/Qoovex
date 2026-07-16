@@ -9,7 +9,7 @@ function contentSecurityPolicy() {
     "base-uri 'self'",
     "frame-ancestors 'none'",
     "style-src 'self' 'unsafe-inline'",
-    "font-src 'self' data: https://cdn.fontshare.com",
+    "font-src 'self' data:",
     "img-src 'self' data: blob:",
     `script-src 'self' 'unsafe-inline'${isProduction ? "" : " 'unsafe-eval'"}`,
     "connect-src 'self'",

@@ -2,15 +2,15 @@
 
 import { IconAlertTriangle, IconArrowUpRight, IconCircleCheck, IconClock, IconFileDescription, IconFolderOpen } from "@tabler/icons-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
+import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
+import { Badge } from "@qoovex/ui/components/badge";
+import { Button } from "@qoovex/ui/components/button";
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@qoovex/ui/components/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@qoovex/ui/components/chart";
+import { Skeleton } from "@qoovex/ui/components/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@qoovex/ui/components/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@qoovex/ui/components/tabs";
+import { cn } from "@qoovex/ui/lib/utils";
 
 const chartData = [
   { week: "1 lug", ready: 18, review: 8 },

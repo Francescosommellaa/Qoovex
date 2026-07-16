@@ -1,35 +1,35 @@
 .root {
   display: grid;
-  gap: var(--qv-space-5);
+  gap: var(--space-5);
   min-inline-size: 0;
 }
 
 .dataBoundary {
   max-inline-size: 72ch;
   margin: 0;
-  padding-inline-start: var(--qv-space-4);
-  border-inline-start: 1px solid var(--qv-border-strong);
-  color: var(--qv-fg-secondary);
+  padding-inline-start: var(--space-4);
+  border-inline-start: 1px solid var(--border);
+  color: var(--muted-foreground);
 }
 
 .form {
   display: grid;
-  gap: var(--qv-space-6);
+  gap: var(--space-6);
 }
 
 .activationRow,
 .optionRow {
   display: grid;
-  grid-template-columns: var(--qv-size-icon) minmax(0, 1fr);
-  gap: var(--qv-space-3);
+  grid-template-columns: var(--icon) minmax(0, 1fr);
+  gap: var(--space-3);
   align-items: start;
-  min-block-size: var(--qv-size-control);
+  min-block-size: var(--control);
   cursor: pointer;
 }
 
 .activationRow {
-  padding: var(--qv-space-4) 0;
-  border-block: 1px solid var(--qv-border-strong);
+  padding: var(--space-4) 0;
+  border-block: 1px solid var(--border);
 }
 
 .activationRow > input,
@@ -39,43 +39,43 @@
 
 .optionCopy {
   display: grid;
-  gap: var(--qv-space-1);
+  gap: var(--space-1);
   min-inline-size: 0;
 }
 
 .optionCopy strong {
-  font-size: var(--qv-font-size-label);
-  line-height: var(--qv-line-height-label);
+  font-size: var(--text-xs);
+  line-height: var(--leading-tight);
 }
 
 .optionCopy span {
   max-inline-size: 62ch;
-  color: var(--qv-fg-secondary);
-  font-size: var(--qv-font-size-label);
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
   font-weight: 400;
-  line-height: var(--qv-line-height-label);
+  line-height: var(--leading-tight);
 }
 
 .scheduleGroup,
 .includedGroup {
   display: grid;
-  gap: var(--qv-space-4);
+  gap: var(--space-4);
   min-inline-size: 0;
 }
 
 .scheduleGroup legend,
 .includedGroup legend {
-  margin-block-end: var(--qv-space-2);
+  margin-block-end: var(--space-2);
   padding: 0;
-  color: var(--qv-fg-primary);
-  font-size: var(--qv-font-size-body);
+  color: var(--foreground);
+  font-size: var(--text-sm);
   font-weight: 700;
 }
 
 .scheduleGrid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--qv-space-4);
+  gap: var(--space-4);
 }
 
 .lastDelivery,
@@ -83,67 +83,67 @@
 .sectionHeading p,
 .emptyDeliveries {
   margin: 0;
-  color: var(--qv-fg-secondary);
-  font-size: var(--qv-font-size-label);
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
 }
 
 .optionList,
 .deliveryList {
   margin: 0;
   padding: 0;
-  border-block-start: 1px solid var(--qv-border-default);
+  border-block-start: 1px solid var(--border);
   list-style: none;
 }
 
 .optionRow {
-  padding: var(--qv-space-4) 0;
-  border-block-end: 1px solid var(--qv-border-default);
+  padding: var(--space-4) 0;
+  border-block-end: 1px solid var(--border);
 }
 
 .formTerminal {
   display: flex;
   align-items: center;
-  min-block-size: var(--qv-size-control-lg);
-  padding-inline-start: var(--qv-space-3);
-  border-inline-start: var(--qv-terminal-width) solid var(--qv-action-primary);
+  min-block-size: var(--control-lg);
+  padding-inline-start: var(--space-3);
+  border-inline-start: var(--terminal-width) solid var(--primary);
 }
 
 .recentDeliveries {
   display: grid;
-  gap: var(--qv-space-4);
-  padding-block-start: var(--qv-space-5);
-  border-block-start: 1px solid var(--qv-border-strong);
+  gap: var(--space-4);
+  padding-block-start: var(--space-5);
+  border-block-start: 1px solid var(--border);
 }
 
 .sectionHeading {
   display: grid;
-  gap: var(--qv-space-1);
+  gap: var(--space-1);
 }
 
 .sectionHeading h3 {
   margin: 0;
-  font-family: var(--qv-font-family-sans);
-  font-size: var(--qv-font-size-body);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
   font-weight: 700;
   letter-spacing: -0.01em;
 }
 
 .deliveryRow {
   display: grid;
-  gap: var(--qv-space-2);
-  padding: var(--qv-space-4) 0;
-  border-block-end: 1px solid var(--qv-border-default);
+  gap: var(--space-2);
+  padding: var(--space-4) 0;
+  border-block-end: 1px solid var(--border);
 }
 
 .deliveryRow > div {
   display: grid;
-  gap: var(--qv-space-1);
+  gap: var(--space-1);
 }
 
 .deliveryRow span,
 .deliveryRow small {
-  color: var(--qv-fg-secondary);
-  font-size: var(--qv-font-size-label);
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
 }
 
 @media (min-width: 48rem) {

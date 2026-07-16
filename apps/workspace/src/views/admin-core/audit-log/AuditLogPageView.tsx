@@ -127,7 +127,7 @@ export function AuditLogPageView({ data, filters }: { data: AuditLogListResponse
                         ))}
                       </ul>
                     ) : (
-                      <p className="qv-text-muted">Nessun dettaglio aggiuntivo.</p>
+                      <p className="text-muted-foreground">Nessun dettaglio aggiuntivo.</p>
                     )}
                   </div>
                   <div className={styles.actions}>

@@ -17,6 +17,7 @@ function contentSecurityPolicy() {
 }
 
 const nextConfig: NextConfig = {
+  transpilePackages: ["@qoovex/brand-resources", "@qoovex/ui"],
   async headers() {
     return [
       {

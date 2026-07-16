@@ -4,6 +4,10 @@ import type { SupportContext } from "@qoovex/types";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@qoovex/ui/components/button";
+import { Field, FieldLabel } from "@qoovex/ui/components/field";
+import { Input } from "@qoovex/ui/components/input";
+import { Spinner } from "@qoovex/ui/components/spinner";
 import styles from "./WorkspaceShell.module.css";
 
 export function WorkspaceLogoutButton() {
@@ -15,7 +19,7 @@ export function WorkspaceLogoutButton() {
     await signOut({ redirect: false });
     window.location.assign("/sign-in");
   }
-  return <button className={styles.navButton} disabled={loading} onClick={logout} type="button">{loading ? "Uscita" : "Esci"}</button>;
+  return <Button className="w-full justify-start" disabled={loading} onClick={logout} type="button" variant="ghost">{loading ? <><Spinner data-icon="inline-start" /> Uscita</> : "Esci"}</Button>;
 }
 
 export function SupportSessionBanner({ support }: { support: SupportContext }) {
@@ -57,8 +61,8 @@ export function SupportSessionBanner({ support }: { support: SupportContext }) {
     <aside className={styles.supportBanner} aria-label="Sessione supporto attiva">
       <div><strong>Supporto: {support.organization.name}</strong><span>{support.organization.code} · fino alle {new Date(support.expiresAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}</span><small>{support.reason}</small><small>{sensitiveConfirmed ? "Operazioni sensibili confermate" : "Operazioni sensibili da confermare con MFA"}</small></div>
       <div className={styles.supportActions}>
-        {!sensitiveConfirmed ? <form action={elevateSession}><label htmlFor="support-mfa-code">Codice MFA</label><input autoComplete="one-time-code" id="support-mfa-code" inputMode="numeric" name="code" /><button disabled={loading} type="submit">Conferma</button></form> : null}
-        <button disabled={loading} onClick={closeSession} type="button">{loading ? "Chiusura" : "Chiudi supporto"}</button>
+        {!sensitiveConfirmed ? <form action={elevateSession}><Field><FieldLabel htmlFor="support-mfa-code">Codice MFA</FieldLabel><Input autoComplete="one-time-code" id="support-mfa-code" inputMode="numeric" name="code" /></Field><Button disabled={loading} type="submit">Conferma</Button></form> : null}
+        <Button disabled={loading} onClick={closeSession} type="button" variant="outline">{loading ? <><Spinner data-icon="inline-start" /> Chiusura</> : "Chiudi supporto"}</Button>
       </div>
       {error ? <p role="alert">{error}</p> : null}
     </aside>

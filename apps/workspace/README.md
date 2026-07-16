@@ -43,11 +43,11 @@ La route `/data-control` e le API `/api/data/*` sono owner-only e mostrano inven
 Boundary:
 - i servizi server-specifici restano in `src/shared/server`;
 - le route API validano e delegano ai servizi;
-- la UI specifica del prodotto resta app-local finche non esiste riuso cross-app;
+- primitive, tema, hook e utility condivisi provengono da `@qoovex/ui` tramite subpath espliciti;
+- composizioni e UI specifica del prodotto restano app-locali;
 - i DTO condivisi vivono in `packages/types`;
 - Prisma schema, migrations e client vivono in `packages/db`;
-- componenti UI generici futuri dovranno uscire verso `packages/ui` solo quando riusabili;
-- asset brand canonici futuri dovranno uscire verso `packages/brand`.
+- gli asset brand canonici provengono da `@qoovex/brand-resources`.
 
 Regole:
 - import sempre verso layer inferiori;

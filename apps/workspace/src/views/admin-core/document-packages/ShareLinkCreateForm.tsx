@@ -57,7 +57,7 @@ export function ShareLinkCreateForm({ packageId, disabled }: { packageId: string
         <span>Scadenza del link</span>
         <input defaultValue={defaultExpiry} disabled={disabled || pending} name="expiresAt" type="datetime-local" />
       </label>
-      <p className="qv-text-muted">Default provvisorio: 7 giorni. Il link e revocabile.</p>
+      <p className="text-muted-foreground">Default provvisorio: 7 giorni. Il link e revocabile.</p>
       <button className={styles.button} disabled={disabled || pending} type="submit">
         {pending ? "Creazione..." : "Crea link di condivisione"}
       </button>

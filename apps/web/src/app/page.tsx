@@ -1,119 +1,66 @@
-import Image from "next/image";
-import { ArrowRight, Button, Container, Icon, Trace, TraceGap, TraceNode, TraceTerminal } from "@qoovex/ui";
-import { contactEmail, contactHref, workspaceUrl } from "./site-config";
+import {
+  IconArrowRight,
+  IconCheck,
+  IconFileCheck,
+  IconFolder,
+  IconShieldCheck,
+} from "@tabler/icons-react";
+import { Badge } from "@qoovex/ui/components/badge";
+import { buttonVariants } from "@qoovex/ui/components/button";
+import { Card } from "@qoovex/ui/components/card";
+import { Separator } from "@qoovex/ui/components/separator";
+import { MarketingDashboardPreview } from "@/components/marketing-dashboard-preview";
+import { contactHref, workspaceUrl } from "./site-config";
 import { SiteShell } from "./site-chrome";
+
+const sections = [
+  { id: "panoramica", label: "Panoramica" },
+  { id: "prodotto", label: "Prodotto" },
+  { id: "metodo", label: "Metodo" },
+  { id: "valuta", label: "Valuta" },
+];
 
 export default function HomePage() {
   return (
-    <SiteShell>
-      <section className="hero">
-        <Container size="wide">
-          <div className="hero__grid">
-            <div className="hero__copy">
-              <p className="hero__eyebrow">Documenti, scadenze, prove</p>
-              <h1>Il lavoro aperto, finalmente leggibile.</h1>
-              <p>Qoovex ricostruisce ciò che esiste, ciò che manca e il punto esatto da cui ripartire.</p>
-              <div className="hero__actions">
-                <Button href={workspaceUrl} size="lg">Accedi al workspace <Icon glyph={ArrowRight} /></Button>
-                <Button href={contactHref} size="lg" variant="secondary">Richiedi informazioni</Button>
-              </div>
-            </div>
-            <figure className="hero__media">
-              <Image
-                alt="Documenti, planimetrie e prova fotografica raccolti durante un'attività operativa"
-                fill
-                priority
-                sizes="(max-width: 820px) 100vw, 56vw"
-                src="/brand/qoovex-document-trace.png"
-              />
-            </figure>
+    <SiteShell sections={sections}>
+      <section className="mx-auto grid max-w-7xl scroll-mt-24 items-center gap-10 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:px-8" id="panoramica">
+        <div className="max-w-xl">
+          <Badge variant="outline">Sistema documentale operativo</Badge>
+          <h1 className="mt-5 text-4xl leading-[1.05] font-semibold tracking-[-0.04em] text-balance sm:text-5xl">Documenti, scadenze e prove di cantiere in un solo spazio.</h1>
+          <p className="mt-5 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg">Qoovex mostra cosa è presente, cosa manca e quali contenuti richiedono una verifica. Le decisioni restano alle persone responsabili.</p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a className={buttonVariants({ size: "lg" })} href={workspaceUrl}>Accedi al workspace <IconArrowRight data-icon="inline-end" /></a>
+            <a className={buttonVariants({ size: "lg", variant: "outline" })} href="#prodotto">Come funziona</a>
           </div>
-        </Container>
+        </div>
+        <Card className="min-w-0 overflow-hidden bg-muted/30 p-1 shadow-xl"><div className="rounded-lg border bg-background"><MarketingDashboardPreview /></div></Card>
       </section>
 
-      <section className="fragment-section">
-        <Container size="wide">
-          <div className="fragment-grid">
-            <p>File tra chat, email e cartelle.</p>
-            <p>Date registrate ma difficili da seguire.</p>
-            <p>Prove senza un contesto chiaro.</p>
+      <section className="scroll-mt-24 border-y bg-muted/35" id="prodotto">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+          <div className="max-w-md"><p className="text-sm font-medium text-muted-foreground">Ordine operativo</p><h2 className="mt-3 text-3xl font-semibold tracking-tight">Parti dalla situazione, non dalla cartella.</h2><p className="mt-4 leading-7 text-muted-foreground">La dashboard riunisce stato, contesto e prossima azione senza trasformare un dato in una promessa di conformità.</p></div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <article className="rounded-xl border bg-card p-5 sm:row-span-2"><IconFolder /><h3 className="mt-8 font-medium">Contesti leggibili</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">Cantieri, lavoratori e documenti restano collegati alle attività che li riguardano.</p></article>
+            <article className="rounded-xl border bg-card p-5"><IconFileCheck /><h3 className="mt-8 font-medium">Contenuti da verificare</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">Ciò che esiste ma richiede controllo resta distinto da ciò che manca.</p></article>
+            <article className="rounded-xl border bg-card p-5"><IconShieldCheck /><h3 className="mt-8 font-medium">Accessi circoscritti</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">Le persone vedono soltanto i contesti e le funzioni autorizzate.</p></article>
           </div>
-          <div className="fragment-answer">
-            <span>Qoovex non aggiunge rumore.</span>
-            <h2>Rende visibile la situazione.</h2>
-          </div>
-        </Container>
+        </div>
       </section>
 
-      <section className="mechanism" id="cosa-fa">
-        <Container size="wide">
-          <div className="mechanism__grid">
-            <div className="section-copy">
-              <h2>Ogni situazione conserva la propria traccia.</h2>
-              <p>Stato, conseguenza, responsabilità e azione restano nello stesso campo visivo. Anche quando un elemento manca.</p>
-            </div>
-            <Trace aria-label="Esempio di situazione documentale">
-              <TraceNode label="Presente" title="Documento aziendale" description="L'ultima versione è disponibile nel workspace." />
-              <TraceNode label="Da verificare" title="Scadenza registrata" description="La data richiede un controllo proporzionato." />
-              <TraceGap label="Mancante" title="Prova del cantiere" description="Il pacchetto resta incompleto finché la prova non viene collegata." />
-              <TraceTerminal label="Prossima azione" title="Richiedi la prova" action={<Button size="sm">Prepara richiesta</Button>} />
-            </Trace>
+      <section className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 md:py-24 lg:px-8" id="metodo">
+        <div className="grid gap-12 lg:grid-cols-2">
+          <div><h2 className="max-w-lg text-3xl font-semibold tracking-tight">Prepara contenuti per la revisione, senza automatizzare il giudizio.</h2><p className="mt-4 max-w-xl leading-7 text-muted-foreground">Qoovex organizza il lavoro documentale. Non certifica persone o documenti e non sostituisce consulenti o responsabili.</p></div>
+          <div className="grid gap-4">
+            {["Raccogli versioni e prove nel relativo contesto.", "Distingui contenuti presenti, mancanti o da verificare.", "Prepara pacchetti consultabili dalle persone autorizzate."].map((item) => <div className="flex gap-3 rounded-lg border p-4" key={item}><IconCheck className="mt-0.5 shrink-0" /><p className="text-sm leading-6">{item}</p></div>)}
           </div>
-        </Container>
+        </div>
       </section>
 
-      <section className="evidence-story">
-        <Container size="wide">
-          <div className="evidence-story__grid">
-            <figure className="evidence-story__media">
-              <Image
-                alt="Acquisizione fotografica di un dettaglio installato, collegata a una checklist cartacea"
-                fill
-                loading="eager"
-                sizes="(max-width: 820px) 100vw, 58vw"
-                src="/brand/qoovex-evidence-capture.png"
-              />
-            </figure>
-            <div className="evidence-story__copy">
-              <h2>La prova non è una foto isolata.</h2>
-              <p>Origine, cantiere, data e contesto restano collegati. Chi apre l'elemento capisce cosa documenta e cosa può fare dopo.</p>
-              <a href="/manuale-operativo">Leggi il manuale operativo <Icon glyph={ArrowRight} size={16} /></a>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section className="audience" id="per-chi">
-        <Container size="wide">
-          <div className="section-copy">
-            <h2>Costruito per chi deve intervenire.</h2>
-            <p>Non per chi vuole soltanto registrare dati.</p>
-          </div>
-          <div className="audience__grid">
-            <article><strong>Piccole imprese</strong><p>Per mantenere leggibili azienda, lavoratori e cantieri attivi.</p></article>
-            <article><strong>Subappaltatori</strong><p>Per rispondere alle richieste con elementi raccolti nel contesto corretto.</p></article>
-            <article><strong>Consulenti</strong><p>Per vedere cosa richiede controllo e indicare il passo successivo.</p></article>
-          </div>
-        </Container>
-      </section>
-
-      <section className="boundary">
-        <Container>
-          <div className="boundary__content">
-            <span>Un confine chiaro</span>
-            <h2>Qoovex organizza. Non certifica.</h2>
-            <p>Il sistema non decide obblighi, requisiti o valutazioni al posto di responsabili, consulenti o utenti competenti.</p>
-          </div>
-        </Container>
-      </section>
-
-      <section className="contact" id="richiedi-informazioni">
-        <Container size="wide">
-          <div className="contact__grid">
-            <div><h2>Porta ordine nel prossimo lavoro aperto.</h2><p>Per accesso pilota o informazioni operative scrivi a <a href={contactHref}>{contactEmail}</a>.</p></div>
-            <Button href={contactHref} size="lg">Richiedi informazioni <Icon glyph={ArrowRight} /></Button>
-          </div>
-        </Container>
+      <section className="scroll-mt-24 border-t" id="valuta">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center lg:px-8">
+          <div><h2 className="text-2xl font-semibold tracking-tight">Valuta Qoovex nel tuo flusso operativo.</h2><p className="mt-2 text-sm text-muted-foreground">Il workspace mantiene ruoli e accessi circoscritti ai contesti autorizzati.</p></div>
+          <div className="flex flex-wrap items-center gap-3"><a className={buttonVariants({ size: "lg", variant: "outline" })} href={contactHref}>Richiedi informazioni</a><Separator className="hidden h-8 md:block" orientation="vertical" /><a className={buttonVariants({ size: "lg" })} href={workspaceUrl}>Apri il workspace <IconArrowRight data-icon="inline-end" /></a></div>
+        </div>
       </section>
     </SiteShell>
   );

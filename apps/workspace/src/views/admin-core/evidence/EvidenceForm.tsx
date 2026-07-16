@@ -125,7 +125,7 @@ export function EvidenceForm({ jobSites, workers, checklistItems, checklists, di
           <label className={styles.field}>
             <span>File prova</span>
             <input accept={type === "PHOTO" ? "image/jpeg,image/png,image/webp" : "application/pdf,image/jpeg,image/png,image/webp"} disabled={disabled || pending} name="file" required type="file" />
-            <small className="qv-text-muted">Limite 4 MB. Foto: JPEG, PNG, WebP. File: PDF o immagini.</small>
+            <small className="text-muted-foreground">Limite 4 MB. Foto: JPEG, PNG, WebP. File: PDF o immagini.</small>
           </label>
         ) : null}
       </div>

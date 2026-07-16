@@ -32,8 +32,8 @@ export function ShareLinksPanel({ packageId, links, canShare }: { packageId: str
     }
   }
 
-  if (!canShare) return <p className="qv-text-muted">I link di condivisione sono gestiti da Owner e Admin.</p>;
-  if (!links.length) return <p className="qv-text-muted">Nessun link di condivisione creato.</p>;
+  if (!canShare) return <p className="text-muted-foreground">I link di condivisione sono gestiti da Owner e Admin.</p>;
+  if (!links.length) return <p className="text-muted-foreground">Nessun link di condivisione creato.</p>;
 
   return (
     <div className={styles.list}>

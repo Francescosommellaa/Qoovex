@@ -90,17 +90,28 @@ async function satisfyMfaGate(page: Page, secret: string) {
 
 async function openWorkspaceAccountMenu(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Navigazione workspace" });
-  let accountSummary = navigation.locator("summary:visible").filter({ hasText: /^Azienda e account$/ });
+  let accountTrigger = navigation.getByRole("button", { name: "Azienda e account", exact: true });
 
-  if (await accountSummary.count() === 0) {
-    const mobileMenuSummary = navigation.locator("summary:visible").filter({ hasText: /^Menu$/ });
-    await expect(mobileMenuSummary).toHaveCount(1);
-    await mobileMenuSummary.click();
-    accountSummary = navigation.locator("summary:visible").filter({ hasText: /^Azienda e account$/ });
+  if (!(await accountTrigger.isVisible())) {
+    const sidebarTriggers = page.getByRole("button", { name: "Toggle Sidebar", exact: true });
+    let openedSidebar = false;
+
+    for (let index = 0; index < (await sidebarTriggers.count()); index += 1) {
+      const candidate = sidebarTriggers.nth(index);
+
+      if (await candidate.isVisible()) {
+        await candidate.click();
+        openedSidebar = true;
+        break;
+      }
+    }
+
+    expect(openedSidebar).toBe(true);
+    accountTrigger = navigation.getByRole("button", { name: "Azienda e account", exact: true });
   }
 
-  await expect(accountSummary).toHaveCount(1);
-  await accountSummary.click();
+  await expect(accountTrigger).toBeVisible();
+  await accountTrigger.click();
 }
 
 async function createDomainData(page: Page, runId: string) {
@@ -410,13 +421,13 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
   let organizationFixture: JsonRecord | null = null;
 
   try {
-    await page.goto("/sign-in", { waitUntil: "domcontentloaded" });
-    await page.getByRole("button", { name: "Accedi come dev" }).click();
+    expect((await page.context().request.post("/api/dev-auth")).status()).toBe(200);
+    await page.goto("/dashboard", { waitUntil: "domcontentloaded" });
     await expect(page).toHaveURL(/\/dashboard$/);
     await openWorkspaceAccountMenu(page);
-    const qoovexConsoleLink = page.getByRole("link", { name: "Console Qoovex" });
-    await expect(qoovexConsoleLink).toBeVisible();
-    await qoovexConsoleLink.click();
+    const qoovexConsoleItem = page.getByRole("menuitem", { name: "Console Qoovex" });
+    await expect(qoovexConsoleItem).toBeVisible();
+    await qoovexConsoleItem.click();
     await expect(page).toHaveURL(/\/qoovex-admin$/);
     organizationFixture = await pagePostJson(page, "/api/dev-fixtures/platform-admin", { kind: "mfa-suite", runId });
     const organization = { id: organizationFixture.organizationId, code: `MFA-${runId}` };
@@ -467,6 +478,7 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
     targetUserId = null;
     runtimeErrorId = null;
 
+    await openWorkspaceAccountMenu(page);
     await page.getByRole("button", { name: "Esci" }).click();
     await page.waitForURL("**/sign-in");
     await expectPageJson(page, "/api/context", 401);

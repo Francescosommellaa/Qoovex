@@ -52,7 +52,7 @@ export function DocumentDetailView({
             <DocumentVersionList documentId={document.id} versions={versions} canArchive={capabilities.canManageCore} />
           </WorkspacePanel>
           <WorkspacePanel title="Scadenze collegate">
-            {!deadlines.length ? <p className="qv-text-muted">Nessuna scadenza collegata a questo documento.</p> : (
+            {!deadlines.length ? <p className="text-muted-foreground">Nessuna scadenza collegata a questo documento.</p> : (
               <div className={styles.list}>
                 {deadlines.map((deadline) => (
                   <article className={styles.record} key={deadline.id}>

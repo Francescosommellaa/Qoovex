@@ -1,7 +1,5 @@
 # @qoovex/brand-resources
 
-Risorse di brand condivise. Il package espone gli asset SVG canonici di Qoovex, workspace e Sirio senza richiedere copie nei consumer.
+Package asset-only per i marchi SVG canonici di Qoovex, workspace e Sirio. I consumer importano gli asset dagli export del package e non ne mantengono copie.
 
-Lo stylesheet `styles/fontshare.css` e l'unico punto di integrazione tipografica esterna: carica General Sans e Cabinet Grotesk tramite Fontshare con `font-display: swap`. General Sans e il carattere operativo. Cabinet Grotesk e riservato alla gerarchia display. Le app produttive importano questo stylesheet, mentre `@qoovex/ui` usa soltanto i token tipografici semantici.
-
-Sirio consuma gli SVG tramite gli export del package, ma continua a usare Geist e Geist Mono durante l'approvazione della nuova foundation. Non duplicare gli asset e non importare Fontshare nei consumer che non lo richiedono.
+Tipografia, token, componenti e comportamenti non appartengono a questo package: Geist/Geist Mono vengono caricati dalle app e la foundation vive in `@qoovex/ui`.
