@@ -414,7 +414,6 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
 });
 
 test("Qoovex operator manages a customer, support session, and runtime error", async ({ page }) => {
-  test.setTimeout(120_000);
   const runId = `${Date.now()}`;
   const email = `platform-e2e-${runId}@example.test`;
   let targetUserId: string | null = null;
@@ -479,6 +478,7 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
     targetUserId = null;
     runtimeErrorId = null;
 
+    await openWorkspaceAccountMenu(page);
     await page.getByRole("button", { name: "Esci" }).click();
     await page.waitForURL("**/sign-in");
     await expectPageJson(page, "/api/context", 401);
