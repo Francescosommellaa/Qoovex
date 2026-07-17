@@ -1,7 +1,13 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { IconArrowRight, IconInfoCircle } from "@tabler/icons-react";
+import {
+  IconArrowRight,
+  IconBook2,
+  IconHelpCircle,
+  IconInfoCircle,
+  IconUsersGroup,
+} from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
 import { buttonVariants } from "@qoovex/ui/components/button";
@@ -20,10 +26,30 @@ type SiteShellProps = { children: ReactNode; sections?: FloatingNavigationSectio
 type LegalPageProps = { children: ReactNode; eyebrow?: string; intro: string; title: string };
 
 const mainLinks = [
-  { href: "/#problema", label: "Problema" },
-  { href: "/#cosa", label: "Cosa fa" },
-  { href: "/#faq", label: "FAQ" },
-  { href: "/manuale-operativo", label: "Manuale" },
+  { href: "/#panoramica", label: "Prodotto" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/contattaci", label: "Contattaci" },
+];
+
+const resourceLinks = [
+  {
+    description: "Guide operative passo passo",
+    href: "/manuale-operativo",
+    icon: <IconBook2 aria-hidden="true" className="size-4" />,
+    label: "Manuale utente",
+  },
+  {
+    description: "Aggiornamenti e confronto",
+    href: "/community",
+    icon: <IconUsersGroup aria-hidden="true" className="size-4" />,
+    label: "Community",
+  },
+  {
+    description: "Risposte su uso e accesso",
+    href: "/#faq",
+    icon: <IconHelpCircle aria-hidden="true" className="size-4" />,
+    label: "FAQ",
+  },
 ];
 
 const audienceLinks = [
@@ -53,8 +79,10 @@ export function SiteHeader({ sections = [] }: { sections?: FloatingNavigationSec
       activeHref={pathname}
       brand={(compact) => <BrandMark compact={compact} />}
       homeHref="/"
+      resourceLabel="Risorse"
+      resourceLinks={resourceLinks}
       sections={sections}
-      surfaceLabel="Navigazione"
+      surfaceLabel="Pagine"
       surfaceLinks={mainLinks}
     />
   );

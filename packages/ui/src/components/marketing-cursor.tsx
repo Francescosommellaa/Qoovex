@@ -16,7 +16,15 @@ const magneticSelector = [
   "button.bg-primary",
   '[role="button"].bg-primary',
 ].join(", ");
-const magneticDistance = 24;
+const magneticBlockingSurfaceSelector = [
+  "header",
+  '[role="dialog"]',
+  '[role="menu"]',
+  '[data-slot="dropdown-menu-content"]',
+  '[data-slot="popover-content"]',
+  '[data-slot="sheet-content"]',
+].join(", ");
+const magneticDistance = 16;
 const magneticTargetRefreshInterval = 500;
 
 type CursorMode = "action" | "default" | "disabled" | "label" | "native";
@@ -38,6 +46,39 @@ function nativeCursorFor(element: Element) {
   }
 
   return "auto";
+}
+
+function elementBelongsToTarget(target: HTMLElement, element: Element | null) {
+  return element === target || (element !== null && target.contains(element));
+}
+
+function magneticTargetIsExposed(pointer: Point, target: HTMLElement, rect: DOMRect) {
+  const pointerElement = document.elementFromPoint(pointer.x, pointer.y);
+  if (!pointerElement) return false;
+
+  if (!elementBelongsToTarget(target, pointerElement)) {
+    const blockingSurface = pointerElement.closest(magneticBlockingSurfaceSelector);
+    const competingAction = pointerElement.closest(interactiveSelector);
+    if (
+      (blockingSurface && !blockingSurface.contains(target)) ||
+      (competingAction && !elementBelongsToTarget(target, competingAction))
+    ) {
+      return false;
+    }
+  }
+
+  const samplePoints = [
+    { x: rect.left + rect.width * 0.5, y: rect.top + rect.height * 0.5 },
+    { x: rect.left + rect.width * 0.2, y: rect.top + rect.height * 0.5 },
+    { x: rect.left + rect.width * 0.8, y: rect.top + rect.height * 0.5 },
+    { x: rect.left + rect.width * 0.5, y: rect.top + rect.height * 0.2 },
+    { x: rect.left + rect.width * 0.5, y: rect.top + rect.height * 0.8 },
+  ];
+
+  return samplePoints.every(({ x, y }) => {
+    if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) return false;
+    return elementBelongsToTarget(target, document.elementFromPoint(x, y));
+  });
 }
 
 function resolveMagneticPoint(pointer: Point, targets: readonly HTMLElement[]): MagneticPoint {
@@ -65,6 +106,9 @@ function resolveMagneticPoint(pointer: Point, targets: readonly HTMLElement[]): 
   }
 
   if (!nearest) return { ...pointer, active: false, target: null };
+  if (!magneticTargetIsExposed(pointer, nearest.target, nearest.rect)) {
+    return { ...pointer, active: false, target: null };
+  }
 
   return {
     x: nearest.rect.left + nearest.rect.width / 2,
