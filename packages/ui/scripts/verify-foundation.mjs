@@ -158,14 +158,20 @@ for (const required of ["document.addEventListener(\"scroll\"", "window.addEvent
 }
 assert(!sidebar.includes("no-scrollbar"), "SidebarContent deve usare la scrollbar condivisa.");
 assert(sirioFoundation.includes('data-scrollbar-proof="vertical"') && sirioFoundation.includes('data-scrollbar-proof="horizontal"'), "Sirio deve mostrare scrollbar verticale e orizzontale.");
-for (const required of ["(hover: hover) and (pointer: fine)", "prefers-reduced-motion", "forced-colors", "data-cursor-label", "data-magnetic", "magneticSelector", "magneticDistance = 24", "target: nearest.target", "magneticPoint.target ?? document.elementFromPoint", "nearest.rect.left + nearest.rect.width / 2", "nearest.rect.top + nearest.rect.height / 2", "getBoundingClientRect", "requestAnimationFrame", "window.location.pathname", "pageshow", "popstate"]) {
+for (const required of ["(hover: hover) and (pointer: fine)", "prefers-reduced-motion", "forced-colors", "data-cursor-label", "data-magnetic", "magneticSelector", "magneticDistance = 16", "magneticBlockingSurfaceSelector", "magneticTargetIsExposed", "document.elementFromPoint", "target: nearest.target", "magneticPoint.target ?? document.elementFromPoint", "nearest.rect.left + nearest.rect.width / 2", "nearest.rect.top + nearest.rect.height / 2", "getBoundingClientRect", "requestAnimationFrame", "window.location.pathname", "pageshow", "popstate"]) {
   assert(marketingCursor.includes(required), `MarketingCursor non contiene ${required}`);
 }
-for (const required of [".marketing-cursor", 'data-marketing-cursor="active"', 'data-cursor-native="text"', 'data-magnetic="true"', ".floating-navigation__mobile-sections", "@container (min-width: 15rem)"]) {
+for (const required of [".marketing-cursor", 'data-marketing-cursor="active"', 'data-cursor-native="text"', 'data-magnetic="true"', ".floating-navigation__mobile-sections", ".floating-navigation__focus-indicator", ".floating-navigation__resource-focus", "cubic-bezier(0.16, 1, 0.3, 1)", "@container (min-width: 15rem)"]) {
   assert(base.includes(required), `base.css non contiene il contratto cursore ${required}`);
 }
-for (const required of ["Sezioni vicine", "previousSection", "nextSection", "floating-navigation__mobile-adjacent", "navigationOffset", "animatePageScroll", "History.prototype.pushState", "const duration = 460"]) {
+for (const required of ["Sezioni vicine", "previousSection", "nextSection", "floating-navigation__mobile-adjacent", "navigationOffset", "animatePageScroll", "History.prototype.pushState", "const duration = 460", "directionThreshold = 10", "accumulatedDelta", 'data-navigation-mode', "DropdownMenuContent", "resourceLinks", "moveNavFocus", "moveResourceFocus"]) {
   assert(floatingNavigation.includes(required), `FloatingNavigation non contiene ${required}`);
+}
+for (const required of ['href: "/#panoramica"', 'href: "/pricing"', 'href: "/contattaci"', 'href: "/community"', 'resourceLabel="Risorse"']) {
+  assert(webChrome.includes(required), `La navigazione Web non contiene ${required}`);
+}
+for (const route of ["pricing", "contattaci", "community"]) {
+  assert(existsSync(join(root, `apps/web/src/app/${route}/page.tsx`)), `Pagina marketing mancante: /${route}`);
 }
 assert(webLayout.includes('<MarketingCursor pathnames={["/"]} />'), "Web deve attivare MarketingCursor solo sulla home.");
 assert(sirioLayout.includes('<MarketingCursor pathnames={["/marketing"]} />'), "Sirio deve attivare MarketingCursor solo su /marketing.");
