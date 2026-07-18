@@ -3,8 +3,9 @@
 import type { ReactNode } from "react";
 import {
   IconArrowRight,
+  IconBell,
   IconBook2,
-  IconHelpCircle,
+  IconFileCheck,
   IconInfoCircle,
   IconUsersGroup,
 } from "@tabler/icons-react";
@@ -45,10 +46,16 @@ const resourceLinks = [
     label: "Community",
   },
   {
-    description: "Risposte su uso e accesso",
-    href: "/#faq",
-    icon: <IconHelpCircle aria-hidden="true" className="size-4" />,
-    label: "FAQ",
+    description: "Scenari per profilo e contesto",
+    href: "/storie",
+    icon: <IconFileCheck aria-hidden="true" className="size-4" />,
+    label: "Storie operative",
+  },
+  {
+    description: "Aggiornamenti del prodotto",
+    href: "/novita",
+    icon: <IconBell aria-hidden="true" className="size-4" />,
+    label: "Novità",
   },
 ];
 
@@ -110,6 +117,8 @@ export function SiteFooter() {
             <strong className="mb-1">Esplora</strong>
             <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/#cosa">Cosa fa</a>
             <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/#storia">Perché Qoovex</a>
+            <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/storie">Storie operative</a>
+            <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/novita">Novità</a>
             <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/#faq">FAQ</a>
             <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/#faq-piani">Piani e accesso</a>
             <a className="text-muted-foreground hover:text-foreground" data-link="quiet" href="/manuale-operativo">Manuale operativo</a>

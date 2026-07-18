@@ -29,6 +29,8 @@ const marketingCursorPathnames = [
   "/contattaci",
   "/community",
   "/manuale-operativo",
+  "/storie",
+  "/novita",
 ] as const;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
