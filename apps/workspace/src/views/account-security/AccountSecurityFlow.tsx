@@ -4,17 +4,26 @@ import { useEffect, useState, type FormEvent, type HTMLAttributes, type ReactNod
 import { signOut } from "next-auth/react";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
 import { Button, buttonVariants } from "@qoovex/ui/components/button";
+import { Card, CardContent } from "@qoovex/ui/components/card";
 import { Field, FieldDescription, FieldLabel } from "@qoovex/ui/components/field";
 import { Input } from "@qoovex/ui/components/input";
+import { OtpInput } from "@qoovex/ui/components/otp-input";
 import { Spinner } from "@qoovex/ui/components/spinner";
+import { cn } from "@qoovex/ui/lib/utils";
 import styles from "./AccountSecurity.module.css";
 
 function SecuritySection({ children, className, tone = "default", ...props }: { children: ReactNode; tone?: "default" | "info" | "warning" } & HTMLAttributes<HTMLElement>) {
-  return <section {...props} className={`${styles.surface} ${styles[`surface${tone[0].toUpperCase()}${tone.slice(1)}`]} ${className ?? ""}`}>{children}</section>;
+  return (
+    <section {...props}>
+      <Card className={cn(styles.surface, styles[`surface${tone[0].toUpperCase()}${tone.slice(1)}`], className)}>
+        <CardContent className={styles.surfaceContent}>{children}</CardContent>
+      </Card>
+    </section>
+  );
 }
 
 function SecurityState({ children, tone = "neutral" }: { children: ReactNode; tone?: "positive" | "warning" | "danger" | "neutral" }) {
-  return <strong className={`${styles.state} ${styles[`state${tone[0].toUpperCase()}${tone.slice(1)}`]}`}>{children}</strong>;
+  return <strong className={cn(styles.state, styles[`state${tone[0].toUpperCase()}${tone.slice(1)}`])}>{children}</strong>;
 }
 
 export interface MfaStatus {
@@ -37,6 +46,15 @@ type RecoveryRequest = {
   expiresAt: string;
 };
 type ApiError = { message?: string; code?: string };
+
+const recoveryStatusLabels: Record<Recovery["status"], string> = {
+  PENDING: "In attesa",
+  APPROVED: "Approvata",
+  DENIED: "Rifiutata",
+  SETUP_STARTED: "Configurazione avviata",
+  COMPLETED: "Completata",
+  EXPIRED: "Scaduta",
+};
 
 async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, init);
@@ -104,6 +122,14 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
     } finally {
       setLoading(null);
     }
+  }
+
+  async function copySensitiveValue(value: string, message: string) {
+    const result = await run("copy", async () => {
+      await navigator.clipboard.writeText(value);
+      return true;
+    });
+    if (result) setNotice(message);
   }
 
   async function leaveSession() {
@@ -205,7 +231,12 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
             <h1>Conserva i codici di recupero</h1>
             <Alert variant="success"><AlertTitle>Vengono mostrati una sola volta</AlertTitle><AlertDescription>Salvali in un luogo separato dal dispositivo usato per l&apos;accesso.</AlertDescription></Alert>
             <pre className={styles.codeBlock}>{backupCodes.join("\n")}</pre>
-            {status.satisfied ? <Button onClick={() => { setBackupCodes([]); window.location.reload(); }}>Ho salvato i codici</Button> : <Button onClick={leaveSession}>Ho salvato i codici, accedi di nuovo</Button>}
+            <div className={styles.actions}>
+              <Button disabled={loading === "copy"} onClick={() => copySensitiveValue(backupCodes.join("\n"), "Codici copiati negli appunti.")} variant="outline">{loading === "copy" ? <><Spinner /> Copia in corso</> : "Copia i codici"}</Button>
+              {status.satisfied ? <Button onClick={() => { setBackupCodes([]); window.location.reload(); }}>Ho salvato i codici</Button> : <Button onClick={leaveSession}>Ho salvato i codici, accedi di nuovo</Button>}
+            </div>
+            {notice ? <Alert role="status" variant="info"><AlertDescription>{notice}</AlertDescription></Alert> : null}
+            {error ? <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert> : null}
           </div>
         </SecuritySection>
       </div>
@@ -221,14 +252,18 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
             <h1>Configura l&apos;app Authenticator</h1>
             <p className="text-muted-foreground">Inserisci manualmente il secret oppure apri il link sul dispositivo compatibile.</p>
             <code className={styles.codeBlock}>{setup.secret}</code>
-            <a className={buttonVariants({ variant: "secondary" })} href={setup.otpauthUrl}>Apri nell&apos;app Authenticator</a>
+            <div className={styles.actions}>
+              <a className={buttonVariants({ variant: "secondary" })} href={setup.otpauthUrl}>Apri nell&apos;app Authenticator</a>
+              <Button disabled={loading === "copy"} onClick={() => copySensitiveValue(setup.secret, "Secret copiato negli appunti.")} variant="outline">{loading === "copy" ? <><Spinner /> Copia in corso</> : "Copia il secret"}</Button>
+            </div>
             <form className={styles.form} onSubmit={confirmSetup}>
               <Field><FieldLabel htmlFor="mfa-new-code">Codice del nuovo fattore</FieldLabel>
-                <Input autoComplete="one-time-code" id="mfa-new-code" inputMode="numeric" name="newCode" pattern="[0-9]{6}" required />
+                <OtpInput autoComplete="one-time-code" id="mfa-new-code" inputMode="numeric" name="newCode" required />
                 <FieldDescription>Il nuovo codice conferma solo il nuovo fattore, non sostituisce la verifica precedente.</FieldDescription>
               </Field>
-              <Button disabled={loading === "confirm-setup"} type="submit">{loading === "confirm-setup" ? "Verifica in corso" : "Conferma nuovo fattore"}</Button>
+              <Button disabled={loading === "confirm-setup"} type="submit">{loading === "confirm-setup" ? <><Spinner /> Verifica in corso</> : "Conferma nuovo fattore"}</Button>
             </form>
+            {notice ? <Alert role="status" variant="info"><AlertDescription>{notice}</AlertDescription></Alert> : null}
             {error ? <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert> : null}
           </div>
         </SecuritySection>
@@ -248,14 +283,15 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
             <p>Inserisci il codice dell&apos;app Authenticator oppure un codice di recupero monouso.</p>
             <Field><FieldLabel htmlFor="mfa-gate-code">Codice MFA</FieldLabel>
               <Input autoComplete="one-time-code" autoFocus id="mfa-gate-code" name="code" required />
+              <FieldDescription>Puoi usare il codice dell’app Authenticator oppure un backup code monouso.</FieldDescription>
             </Field>
-            <Button disabled={loading === "challenge"} type="submit">{loading === "challenge" ? "Verifica in corso" : "Apri il workspace"}</Button>
+            <Button disabled={loading === "challenge"} type="submit">{loading === "challenge" ? <><Spinner /> Verifica in corso</> : "Apri il workspace"}</Button>
           </form>
         </SecuritySection>
         {recovery ? (
           <SecuritySection tone="warning">
             <div className={styles.section}>
-              <div className={styles.statusRow}><h2>Recupero MFA</h2><SecurityState tone={recovery.status === "APPROVED" ? "positive" : recovery.status === "DENIED" || recovery.status === "EXPIRED" ? "danger" : "warning"}>{recovery.status}</SecurityState></div>
+              <div className={styles.statusRow}><h2>Recupero MFA</h2><SecurityState tone={recovery.status === "APPROVED" ? "positive" : recovery.status === "DENIED" || recovery.status === "EXPIRED" ? "danger" : "warning"}>{recoveryStatusLabels[recovery.status]}</SecurityState></div>
               {recovery.status === "PENDING" ? <Alert variant="warning"><AlertTitle>In attesa dell&apos;OWNER</AlertTitle><AlertDescription>Il workspace resta protetto. La richiesta scade alle {new Date(recovery.expiresAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}.</AlertDescription></Alert> : null}
               {recovery.status === "APPROVED" ? <Alert variant="success"><AlertTitle>Richiesta approvata</AlertTitle><AlertDescription>Puoi configurare una sola volta un nuovo fattore.</AlertDescription></Alert> : null}
               {recovery.status === "DENIED" ? <Alert variant="destructive"><AlertTitle>Richiesta rifiutata</AlertTitle><AlertDescription>Contatta un OWNER della tua Azienda e avvia una nuova richiesta se necessario.</AlertDescription></Alert> : null}
@@ -271,9 +307,9 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
             <form className={styles.form} onSubmit={createRecovery}>
               <Alert variant="info"><AlertTitle>Controlla la posta</AlertTitle><AlertDescription>Il codice verifica la tua email; non disattiva MFA.</AlertDescription></Alert>
               <Field><FieldLabel htmlFor="mfa-recovery-email-code">Codice ricevuto via email</FieldLabel>
-                <Input autoComplete="one-time-code" id="mfa-recovery-email-code" inputMode="numeric" name="recoveryEmailCode" pattern="[0-9]{6}" required />
+                <OtpInput autoComplete="one-time-code" id="mfa-recovery-email-code" inputMode="numeric" name="recoveryEmailCode" required />
               </Field>
-              <Button disabled={loading === "recovery-create"} type="submit">Continua il recupero</Button>
+              <Button disabled={loading === "recovery-create"} type="submit">{loading === "recovery-create" ? <><Spinner /> Verifica in corso</> : "Continua il recupero"}</Button>
             </form>
           </SecuritySection>
         ) : (
@@ -300,12 +336,12 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
           <div className={styles.section}>
             <h2>Proteggi l&apos;account</h2>
             <p>Prima di generare il secret verifichiamo l&apos;email associata all&apos;account.</p>
-            {!emailCodeRequested ? <Button disabled={loading === "enrollment-email"} onClick={requestEnrollmentCode}>{loading === "enrollment-email" ? "Invio in corso" : "Invia codice via email"}</Button> : (
+            {!emailCodeRequested ? <Button disabled={loading === "enrollment-email"} onClick={requestEnrollmentCode}>{loading === "enrollment-email" ? <><Spinner /> Invio in corso</> : "Invia codice via email"}</Button> : (
               <form className={styles.form} onSubmit={authorizeEnrollment}>
                 <Field><FieldLabel htmlFor="mfa-enrollment-code">Codice ricevuto via email</FieldLabel>
-                  <Input autoComplete="one-time-code" id="mfa-enrollment-code" inputMode="numeric" name="emailCode" pattern="[0-9]{6}" required />
+                  <OtpInput autoComplete="one-time-code" id="mfa-enrollment-code" inputMode="numeric" name="emailCode" required />
                 </Field>
-                <Button disabled={loading === "enrollment-authorize"} type="submit">Continua</Button>
+                <Button disabled={loading === "enrollment-authorize"} type="submit">{loading === "enrollment-authorize" ? <><Spinner /> Verifica in corso</> : "Continua"}</Button>
               </form>
             )}
           </div>
@@ -317,7 +353,7 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
               <h2>Sostituisci il fattore</h2>
               <p className="text-muted-foreground">Richiede il fattore corrente. La conferma del nuovo TOTP revocherà tutte le sessioni.</p>
               <Field><FieldLabel htmlFor="mfa-replace-code">Fattore corrente</FieldLabel><Input autoComplete="one-time-code" id="mfa-replace-code" name="currentCode" required /></Field>
-              <Button disabled={loading === "replace"} type="submit">Avvia sostituzione</Button>
+              <Button disabled={loading === "replace"} type="submit">{loading === "replace" ? <><Spinner /> Verifica in corso</> : "Avvia sostituzione"}</Button>
             </form>
           </SecuritySection>
           <SecuritySection>
@@ -325,7 +361,7 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
               <h2>Rigenera backup code</h2>
               <p className="text-muted-foreground">{status.backupCodesRemaining} codici non utilizzati. I precedenti verranno revocati.</p>
               <Field><FieldLabel htmlFor="mfa-backup-code">Fattore corrente</FieldLabel><Input autoComplete="one-time-code" id="mfa-backup-code" name="currentCode" required /></Field>
-              <Button disabled={loading === "backup"} type="submit" variant="secondary">Rigenera codici</Button>
+              <Button disabled={loading === "backup"} type="submit" variant="secondary">{loading === "backup" ? <><Spinner /> Verifica in corso</> : "Rigenera codici"}</Button>
             </form>
           </SecuritySection>
         </div>
@@ -343,8 +379,8 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
                     <span className={styles.requestMeta}>Scade alle {new Date(request.expiresAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}</span>
                     <Field><FieldLabel htmlFor={`owner-code-${request.id}`}>Il tuo fattore MFA</FieldLabel><Input autoComplete="one-time-code" id={`owner-code-${request.id}`} name="ownerCode" required /></Field>
                     <div className={styles.actions}>
-                      <Button disabled={loading === `approve:${request.id}`} type="submit">Approva</Button>
-                      <Button disabled={loading === `deny:${request.id}`} onClick={(event) => { event.preventDefault(); const form = event.currentTarget.form; if (form) void decideRecovery(form, request.id, "deny"); }} variant="destructive">Rifiuta</Button>
+                      <Button disabled={loading === `approve:${request.id}`} type="submit">{loading === `approve:${request.id}` ? <><Spinner /> Approvazione</> : "Approva"}</Button>
+                      <Button disabled={loading === `deny:${request.id}`} onClick={(event) => { event.preventDefault(); const form = event.currentTarget.form; if (form) void decideRecovery(form, request.id, "deny"); }} variant="destructive">{loading === `deny:${request.id}` ? <><Spinner /> Rifiuto</> : "Rifiuta"}</Button>
                     </div>
                   </form>
                 ))}
@@ -360,7 +396,7 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
             <h2>Disattiva MFA</h2>
             <Alert variant="warning"><AlertTitle>Azione sensibile</AlertTitle><AlertDescription>Richiede sempre il fattore corrente e revoca tutte le sessioni.</AlertDescription></Alert>
             <Field><FieldLabel htmlFor="mfa-disable-code">Fattore corrente</FieldLabel><Input autoComplete="one-time-code" id="mfa-disable-code" name="currentCode" required /></Field>
-            <Button disabled={loading === "disable"} type="submit" variant="destructive">Disattiva MFA</Button>
+            <Button disabled={loading === "disable"} type="submit" variant="destructive">{loading === "disable" ? <><Spinner /> Disattivazione</> : "Disattiva MFA"}</Button>
           </form>
         </SecuritySection>
       ) : null}

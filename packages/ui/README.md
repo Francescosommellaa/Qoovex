@@ -13,7 +13,7 @@ Unica sorgente di verita del design system canonico Qoovex.
 - ruoli semantici `info`, `success`, `warning` e `destructive`;
 - supporto a focus visibile, forced colors e reduced motion.
 
-Il package contiene primitive presentazionali, `ThemeProvider`, `ThemeToggle`, `FloatingNavigation`, `MarketingCursor`, `BrandMark`, `cn` e `useIsMobile`. Non contiene auth, Prisma, ruoli, permessi, servizi o copy normativo.
+Il package contiene primitive presentazionali, `PasswordInput`, `OtpInput`, `ThemeProvider`, `ThemeToggle`, `FloatingNavigation`, `MarketingCursor`, `BrandMark`, `cn` e `useIsMobile`. I controlli password e OTP gestiscono soltanto presentazione, accessibilita e valore form: non contengono auth, Prisma, ruoli, permessi, servizi o copy normativo.
 
 `MarketingCursor` e un enhancement opt-in per le sole superfici marketing. Mantiene il punto di precisione, aggiunge un alone elastico e accetta micro-label dichiarative con `data-cursor-label`. Non viene attivato su touch, penna, reduced motion o forced colors e ripristina il cursore nativo su campi e contenuti editabili.
 

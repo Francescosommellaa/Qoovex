@@ -56,7 +56,7 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
   const state = await getShellState();
 
   if (state.kind === "public") {
-    return <div className="min-h-dvh bg-background"><div className="fixed top-3 right-3 z-40"><ThemeToggle /></div><main>{children}</main></div>;
+    return <div className="min-h-dvh bg-background"><div className="fixed top-3 right-3 z-40"><ThemeToggle /></div>{children}</div>;
   }
 
   const isWorkspace = state.kind === "workspace";
