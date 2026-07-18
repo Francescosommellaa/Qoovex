@@ -193,14 +193,15 @@ for (const required of [".marketing-cursor", 'data-marketing-cursor="active"', '
 for (const required of ["Sezioni vicine", "previousSection", "nextSection", "floating-navigation__mobile-adjacent", "navigationOffset", "animatePageScroll", "History.prototype.pushState", "const duration = 460", "directionThreshold = 10", "accumulatedDelta", 'data-navigation-mode', "DropdownMenuContent", "resourceLinks", "moveNavFocus", "moveResourceFocus"]) {
   assert(floatingNavigation.includes(required), `FloatingNavigation non contiene ${required}`);
 }
-for (const required of ['href: "/#panoramica"', 'href: "/pricing"', 'href: "/contattaci"', 'href: "/community"', 'resourceLabel="Risorse"']) {
+for (const required of ['href: "/#panoramica"', 'href: "/pricing"', 'href: "/contattaci"', 'href: "/community"', 'href: "/storie"', 'href: "/novita"', 'label: "Storie operative"', 'label: "Novità"', 'resourceLabel="Risorse"']) {
   assert(webChrome.includes(required), `La navigazione Web non contiene ${required}`);
 }
-for (const route of ["pricing", "contattaci", "community"]) {
+assert(!webChrome.includes('label: "FAQ"'), "Il menu Risorse Web non deve riproporre FAQ.");
+for (const route of ["pricing", "contattaci", "community", "storie", "novita"]) {
   assert(existsSync(join(root, `apps/web/src/app/${route}/page.tsx`)), `Pagina marketing mancante: /${route}`);
 }
 assert(webLayout.includes('<MarketingCursor pathnames={marketingCursorPathnames} />'), "Web deve usare la allowlist marketing del MarketingCursor.");
-for (const route of ["/", "/pricing", "/contattaci", "/community", "/manuale-operativo"]) {
+for (const route of ["/", "/pricing", "/contattaci", "/community", "/manuale-operativo", "/storie", "/novita"]) {
   assert(webLayout.includes(`"${route}"`), `MarketingCursor Web non include ${route}`);
 }
 for (const route of ["/privacy", "/terms", "/cookies", "/dpa"]) {
