@@ -4,10 +4,21 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
+import { IconAlertCircle, IconArrowLeft, IconArrowRight, IconCircleCheck, IconRefresh } from "@tabler/icons-react";
+import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
+import { Badge } from "@qoovex/ui/components/badge";
+import { Button } from "@qoovex/ui/components/button";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@qoovex/ui/components/field";
+import { Input } from "@qoovex/ui/components/input";
+import { OtpInput } from "@qoovex/ui/components/otp-input";
+import { PasswordInput } from "@qoovex/ui/components/password-input";
+import { Spinner } from "@qoovex/ui/components/spinner";
+import { AuthPageShell, AuthStage, credentialSteps } from "./AuthPageShell";
 import styles from "./AuthPages.module.css";
 
 type Step = "email" | "verify" | "details";
 const PENDING_SIGNUP_EMAIL_KEY = "qv-pending-signup-email";
+const stepNumber: Record<Step, number> = { email: 1, verify: 2, details: 3 };
 
 async function postJson(path: string, payload: Record<string, unknown>) {
   const response = await fetch(path, {
@@ -56,7 +67,7 @@ export function SignUpPageView({
     setEmail(submittedEmail);
     window.sessionStorage.setItem(PENDING_SIGNUP_EMAIL_KEY, submittedEmail);
     setStep("verify");
-    setMessage("Se l'indirizzo puo essere verificato, riceverai un codice. Controlla la tua email.");
+    setMessage("Se l’indirizzo può essere verificato, riceverai un codice. Controlla la tua email.");
   }
 
   async function submitEmail(event: FormEvent<HTMLFormElement>) {
@@ -146,68 +157,97 @@ export function SignUpPageView({
   }
 
   return (
-    <main className={styles.authPage}>
-      <section className={styles.authCard} aria-labelledby="sign-up-title">
-        <p className={styles.brand}>Qoovex</p>
-        <h1 id="sign-up-title">Crea account</h1>
-        <p>Verifica prima la tua email. Username e password vengono salvati solo dopo la verifica.</p>
-
-        {step === "email" ? (
-          <form className={styles.form} onSubmit={submitEmail}>
-            <div className={styles.field}>
-              <label htmlFor="email">Email</label>
-              <input autoComplete="email" id="email" name="email" required type="email" />
-            </div>
-            {error ? <p className={styles.error} role="alert">{error}</p> : null}
-            <button className={styles.primaryButton} disabled={loading} type="submit">
-              {loading ? "Invio in corso" : "Invia codice"}
-            </button>
+    <AuthPageShell
+      currentStep={stepNumber[step]}
+      description={<p>Verifica l’email prima di impostare le credenziali. I dati account vengono salvati solo al termine.</p>}
+      footer={<p>Hai già un account? <Link data-link="inline" href={signInHref(callbackUrl)}>Accedi</Link></p>}
+      steps={credentialSteps}
+      title="Crea il tuo account"
+      titleId="sign-up-title"
+    >
+      {step === "email" ? (
+        <AuthStage>
+          <form aria-busy={loading} className={styles.form} onSubmit={submitEmail}>
+            <Field>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input autoComplete="email" autoFocus className="h-11 px-3" id="email" name="email" required type="email" />
+              <FieldDescription>Usa l’indirizzo sul quale vuoi ricevere il codice di verifica.</FieldDescription>
+            </Field>
+            {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
+            <Button className="h-11 w-full active:scale-[0.985]" disabled={loading} type="submit">
+              {loading ? <><Spinner /> Invio in corso</> : <>Invia codice <IconArrowRight data-icon="inline-end" /></>}
+            </Button>
           </form>
-        ) : null}
+        </AuthStage>
+      ) : null}
 
-        {step === "verify" ? (
-          <form className={styles.form} onSubmit={submitCode}>
-            <p className={styles.success}>{email}</p>
-            <div className={styles.field}>
-              <label htmlFor="code">Codice email</label>
-              <input autoComplete="one-time-code" id="code" inputMode="numeric" name="code" required type="text" />
+      {step === "verify" ? (
+        <AuthStage>
+          <Badge className="w-fit max-w-full truncate font-mono font-normal" variant="secondary">{email}</Badge>
+          {message ? <Alert role="status" variant="info"><AlertDescription>{message}</AlertDescription></Alert> : null}
+          <form aria-busy={loading} className={styles.form} onSubmit={submitCode}>
+            <Field>
+              <FieldLabel htmlFor="code">Codice email</FieldLabel>
+              <OtpInput autoFocus id="code" inputMode="numeric" name="code" required />
+              <FieldDescription>Incolla o digita le sei cifre ricevute. Il codice ha durata limitata.</FieldDescription>
+            </Field>
+            {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
+            <div className={styles.formActions}>
+              <Button className="h-11 active:scale-[0.985]" disabled={loading} type="submit">
+                {loading ? <><Spinner /> Verifica in corso</> : <>Verifica email <IconArrowRight data-icon="inline-end" /></>}
+              </Button>
+              <Button disabled={loading} onClick={resendCode} type="button" variant="outline"><IconRefresh /> Reinvia codice</Button>
+              <Button disabled={loading} onClick={restart} type="button" variant="ghost"><IconArrowLeft /> Usa un’altra email</Button>
             </div>
-            {message ? <p className={styles.success} role="status">{message}</p> : null}
-            {error ? <p className={styles.error} role="alert">{error}</p> : null}
-            <button className={styles.primaryButton} disabled={loading} type="submit">
-              {loading ? "Verifica in corso" : "Verifica email"}
-            </button>
-            <button className={styles.secondaryButton} disabled={loading} onClick={resendCode} type="button">
-              Reinvia codice
-            </button>
-            <button className={styles.textButton} disabled={loading} onClick={restart} type="button">
-              Usa un'altra email
-            </button>
           </form>
-        ) : null}
+        </AuthStage>
+      ) : null}
 
-        {step === "details" ? (
-          <form className={styles.form} onSubmit={submitDetails}>
-            {message ? <p className={styles.success} role="status">{message}</p> : null}
-            <div className={styles.field}>
-              <label htmlFor="username">Username</label>
-              <input autoComplete="username" id="username" name="username" required type="text" />
-            </div>
-            <div className={styles.field}>
-              <label htmlFor="password">Password</label>
-              <input autoComplete="new-password" id="password" name="password" required type="password" />
-            </div>
-            {error ? <p className={styles.error} role="alert">{error}</p> : null}
-            <button className={styles.primaryButton} disabled={loading} type="submit">
-              {loading ? "Creazione in corso" : "Crea account"}
-            </button>
+      {step === "details" ? (
+        <AuthStage>
+          {message ? <Alert role="status" variant="success"><IconCircleCheck /><AlertDescription>{message}</AlertDescription></Alert> : null}
+          <form aria-busy={loading} className={styles.form} onSubmit={submitDetails}>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="username">Username</FieldLabel>
+                <Input
+                  autoComplete="username"
+                  autoFocus
+                  className="h-11 px-3"
+                  id="username"
+                  maxLength={32}
+                  minLength={3}
+                  name="username"
+                  pattern="[a-z0-9](?:[a-z0-9_]{1,30}[a-z0-9])"
+                  required
+                  spellCheck={false}
+                  type="text"
+                />
+                <FieldDescription>3–32 caratteri: lettere minuscole, numeri e underscore.</FieldDescription>
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <PasswordInput
+                  autoComplete="new-password"
+                  id="password"
+                  inputClassName="h-11 px-3"
+                  maxLength={128}
+                  minLength={12}
+                  name="password"
+                  required
+                  revealLabel="Mostra password"
+                  concealLabel="Nascondi password"
+                />
+                <FieldDescription>Almeno 12 caratteri. Evita password comuni o già usate altrove.</FieldDescription>
+              </Field>
+            </FieldGroup>
+            {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
+            <Button className="h-11 w-full active:scale-[0.985]" disabled={loading} type="submit">
+              {loading ? <><Spinner /> Creazione in corso</> : <>Crea account <IconArrowRight data-icon="inline-end" /></>}
+            </Button>
           </form>
-        ) : null}
-
-        <p className={styles.hint}>
-          Hai gia un account? <Link className={styles.textLink} data-link="inline" href={signInHref(callbackUrl)}>Accedi</Link>
-        </p>
-      </section>
-    </main>
+        </AuthStage>
+      ) : null}
+    </AuthPageShell>
   );
 }

@@ -19,3 +19,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ## shadcn/ui
 
 The open-code component sources were generated from and adapted from the shadcn/ui registry: https://github.com/shadcn-ui/ui. shadcn/ui is distributed under the MIT License. Qoovex owns its checked-in adaptations and retains upstream attribution here.
+
+For the authentication redesign, the official `base-nova` `login-04` block was inspected with shadcn CLI `4.13.1`. Its responsive split-card hierarchy was used as a composition reference only: the registry block was not applied because its dry run would overwrite approved Qoovex primitives.
+
+## Base UI
+
+The shared `OtpInput` composes the stable `OTPField` primitive from `@base-ui/react` `1.6.0`: https://base-ui.com/react/components/otp-field. Base UI is distributed under the MIT License and remains an existing approved dependency of `@qoovex/ui`.

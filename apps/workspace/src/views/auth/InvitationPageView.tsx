@@ -3,8 +3,15 @@
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
+import { IconAlertCircle, IconArrowRight, IconCircleCheck, IconClock, IconUserPlus } from "@tabler/icons-react";
 import type { OrganizationRole } from "@qoovex/types";
+import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
+import { Badge } from "@qoovex/ui/components/badge";
+import { Button, buttonVariants } from "@qoovex/ui/components/button";
+import { Spinner } from "@qoovex/ui/components/spinner";
+import { cn } from "@qoovex/ui/lib/utils";
 import { buildOrganizationInvitationPath } from "@shared/lib/workspace-link-routes";
+import { AuthPageShell, AuthStage } from "./AuthPageShell";
 import styles from "./AuthPages.module.css";
 
 const roleLabels: Record<Exclude<OrganizationRole, "OWNER">, string> = {
@@ -20,33 +27,37 @@ function invitationCallbackUrl(token: string) {
 
 export function InvitationUnavailablePageView() {
   return (
-    <main className={styles.authPage}>
-      <section className={styles.authCard} aria-labelledby="invitation-unavailable-title">
-        <p className={styles.brand}>Qoovex</p>
-        <h1 id="invitation-unavailable-title">Invito non disponibile</h1>
-        <p>Il link e scaduto, e gia stato usato oppure non e valido. Chiedi a chi ti ha invitato di generarne uno nuovo.</p>
-        <div className={styles.actions}>
-          <Link className={styles.secondaryLink} href="/sign-in">Vai all&apos;accesso</Link>
-        </div>
-      </section>
-    </main>
+    <AuthPageShell
+      description={<p>Il link è scaduto, è già stato usato oppure non è valido. Chiedi a chi ti ha invitato di generarne uno nuovo.</p>}
+      kicker="Invito al workspace"
+      title="Invito non disponibile"
+      titleId="invitation-unavailable-title"
+    >
+      <AuthStage>
+        <Alert variant="warning"><IconAlertCircle /><AlertDescription>Nessuna modifica è stata applicata al tuo account.</AlertDescription></Alert>
+        <Link className={cn(buttonVariants({ variant: "outline" }), "mt-5 h-11 w-full")} href="/sign-in">Vai all’accesso</Link>
+      </AuthStage>
+    </AuthPageShell>
   );
 }
 
 export function InvitationSignInPageView({ token, organizationName }: { token: string; organizationName: string }) {
   const callbackUrl = invitationCallbackUrl(token);
   return (
-    <main className={styles.authPage}>
-      <section className={styles.authCard} aria-labelledby="invitation-signin-title">
-        <p className={styles.brand}>Qoovex</p>
-        <h1 id="invitation-signin-title">Invito a {organizationName}</h1>
-        <p>Accedi con l&apos;email che ha ricevuto l&apos;invito. Se non hai ancora un account, crealo con la stessa email.</p>
-        <div className={styles.actions}>
-          <Link className={styles.primaryButton} href={`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Accedi</Link>
-          <Link className={styles.secondaryLink} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link>
+    <AuthPageShell
+      description={<p>Accedi con l’email che ha ricevuto l’invito. Se non hai ancora un account, crealo con lo stesso indirizzo.</p>}
+      kicker="Invito al workspace"
+      title={`Invito a ${organizationName}`}
+      titleId="invitation-signin-title"
+    >
+      <AuthStage>
+        <Alert variant="info"><IconUserPlus /><AlertDescription>Il link verrà conservato durante l’accesso o la registrazione.</AlertDescription></Alert>
+        <div className={cn(styles.actions, "mt-5")}>
+          <Link className={cn(buttonVariants(), "h-11")} href={`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Accedi <IconArrowRight data-icon="inline-end" /></Link>
+          <Link className={cn(buttonVariants({ variant: "outline" }), "h-11")} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link>
         </div>
-      </section>
-    </main>
+      </AuthStage>
+    </AuthPageShell>
   );
 }
 
@@ -76,7 +87,7 @@ export function InvitationAcceptancePageView({
     const body = await response.json().catch(() => null) as { message?: string } | null;
     if (!response.ok) {
       setLoading(false);
-      setError(body?.message ?? "Accettazione dell'invito non riuscita.");
+      setError(body?.message ?? "Accettazione dell’invito non riuscita.");
       return;
     }
 
@@ -87,35 +98,41 @@ export function InvitationAcceptancePageView({
 
   if (accepted) {
     return (
-      <main className={styles.authPage}>
-        <section className={styles.authCard} aria-labelledby="invitation-accepted-title">
-          <p className={styles.brand}>Qoovex</p>
-          <h1 id="invitation-accepted-title">Invito accettato</h1>
-          <p className={styles.success} role="status">Ora fai parte di {organizationName}.</p>
-          <p>Per applicare il nuovo accesso in modo sicuro, accedi di nuovo al workspace.</p>
-          <div className={styles.actions}>
-            <Link className={styles.primaryButton} href="/sign-in?callbackUrl=%2Fdashboard">Accedi al workspace</Link>
-          </div>
-        </section>
-      </main>
+      <AuthPageShell
+        description={<p>Ora fai parte di <strong>{organizationName}</strong>. Per applicare il nuovo accesso in modo sicuro, accedi di nuovo.</p>}
+        kicker="Invito completato"
+        title="Invito accettato"
+        titleId="invitation-accepted-title"
+      >
+        <AuthStage>
+          <Alert role="status" variant="success"><IconCircleCheck /><AlertDescription>La tua associazione all’Azienda è stata aggiornata.</AlertDescription></Alert>
+          <Link className={cn(buttonVariants(), "mt-5 h-11 w-full")} href="/sign-in?callbackUrl=%2Fdashboard">Accedi al workspace <IconArrowRight data-icon="inline-end" /></Link>
+        </AuthStage>
+      </AuthPageShell>
     );
   }
 
   return (
-    <main className={styles.authPage}>
-      <section className={styles.authCard} aria-labelledby="invitation-title">
-        <p className={styles.brand}>Qoovex</p>
-        <h1 id="invitation-title">Accetta l&apos;invito</h1>
-        <p>Stai entrando in <strong>{organizationName}</strong> con il ruolo {roleLabels[role]}.</p>
-        <p className={styles.hint}>Il link scade il {new Intl.DateTimeFormat("it-IT", { dateStyle: "medium", timeStyle: "short" }).format(new Date(expiresAt))}.</p>
-        {error ? <p className={styles.error} role="alert">{error}</p> : null}
-        <div className={styles.actions}>
-          <button className={styles.primaryButton} disabled={loading} onClick={accept} type="button">
-            {loading ? "Accettazione in corso" : "Accetta e continua"}
-          </button>
-          <Link className={styles.secondaryLink} href="/dashboard">Non accettare</Link>
+    <AuthPageShell
+      description={<p>Controlla Azienda e ruolo prima di confermare. L’accesso verrà applicato alla tua prossima sessione.</p>}
+      kicker="Invito al workspace"
+      title="Accetta l’invito"
+      titleId="invitation-title"
+    >
+      <AuthStage>
+        <div className="flex flex-wrap gap-2">
+          <Badge variant="secondary">{organizationName}</Badge>
+          <Badge variant="outline">{roleLabels[role]}</Badge>
         </div>
-      </section>
-    </main>
+        <Alert className="mt-4" variant="info"><IconClock /><AlertDescription>Il link scade il {new Intl.DateTimeFormat("it-IT", { dateStyle: "medium", timeStyle: "short" }).format(new Date(expiresAt))}.</AlertDescription></Alert>
+        {error ? <Alert className="mt-4" variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
+        <div className={cn(styles.actions, "mt-5")}>
+          <Button className="h-11 active:scale-[0.985]" disabled={loading} onClick={accept} type="button">
+            {loading ? <><Spinner /> Accettazione in corso</> : <>Accetta e continua <IconArrowRight data-icon="inline-end" /></>}
+          </Button>
+          <Link className={cn(buttonVariants({ variant: "outline" }), "h-11")} href="/dashboard">Non accettare</Link>
+        </div>
+      </AuthStage>
+    </AuthPageShell>
   );
 }

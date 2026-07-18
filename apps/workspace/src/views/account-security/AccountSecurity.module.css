@@ -1,12 +1,13 @@
 .flow {
   display: grid;
-  gap: 18px;
-  width: 100%;
+  gap: 1.25rem;
+  width: min(100%, 72rem);
+  margin-inline: auto;
 }
 
 .gate {
-  max-width: 680px;
-  margin: 28px auto 0;
+  width: min(100%, 44rem);
+  margin-top: clamp(0.5rem, 3vw, 2rem);
 }
 
 .heading,
@@ -15,7 +16,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: 0.75rem;
 }
 
 .heading,
@@ -23,23 +24,38 @@
   justify-content: space-between;
 }
 
+.heading {
+  padding-bottom: 0.25rem;
+}
+
 .heading h1,
 .heading h2,
 .heading p,
+.section h1,
 .section h2,
 .section h3,
-.section p {
+.section p,
+.form h2,
+.form p {
   margin: 0;
 }
 
-.heading h1 {
-  font-size: clamp(1.8rem, 7vw, 2.6rem);
+.heading h1,
+.section h1 {
+  font-size: clamp(1.75rem, 6vw, 2.55rem);
   line-height: 1.05;
+  letter-spacing: -0.04em;
 }
 
 .heading p,
 .requestMeta {
   color: var(--muted-foreground);
+}
+
+.heading p {
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 550;
 }
 
 .section,
@@ -48,85 +64,162 @@
 .requestList,
 .request {
   display: grid;
-  gap: 14px;
+  min-width: 0;
+  gap: 1rem;
+}
+
+.section > p,
+.form > p {
+  line-height: 1.55;
 }
 
 .grid {
   display: grid;
-  gap: 16px;
+  gap: 1rem;
 }
 
 .surface {
-  display: grid;
-  gap: 14px;
-  padding: 18px 0 2px;
-  border-top: 1px solid var(--border);
+  gap: 0;
+  padding: 0;
+  overflow: visible;
+  box-shadow: var(--shadow-sm);
+  animation: security-surface-enter 220ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.surfaceContent {
+  padding: clamp(1rem, 3vw, 1.5rem);
 }
 
 .surfaceInfo {
-  border-top-color: var(--info);
+  box-shadow: inset 3px 0 0 color-mix(in oklch, var(--info) 70%, transparent), var(--shadow-sm);
 }
 
 .surfaceWarning {
-  border-top-color: var(--warning);
+  box-shadow: inset 3px 0 0 color-mix(in oklch, var(--warning) 75%, transparent), var(--shadow-sm);
 }
 
 .surfaceDefault {
-  border-top-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.surface :global([data-slot="button"]),
+.surface .actions > a {
+  min-height: 2.5rem;
+}
+
+.surface :global([data-slot="input"]) {
+  min-height: 2.5rem;
+  padding-inline: 0.75rem;
+}
+
+.surface :global([data-slot="otp-input"]) {
+  max-width: 26rem;
 }
 
 .state {
+  display: inline-flex;
   width: fit-content;
-  padding: 4px 0 4px 10px;
-  border-left: 3px solid currentColor;
-  font-size: 0.78rem;
-  line-height: 1.3;
+  min-height: 1.75rem;
+  align-items: center;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  background: var(--background);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .statePositive { color: var(--success); }
-.stateWarning { color: var(--warning); }
+.stateWarning { color: color-mix(in oklch, var(--warning) 76%, var(--foreground)); }
 .stateDanger { color: var(--destructive); }
 .stateNeutral { color: var(--muted-foreground); }
 
 .actions > * {
-  flex: 1 1 170px;
+  flex: 1 1 11rem;
 }
 
 .codeBlock {
+  overflow-x: auto;
   overflow-wrap: anywhere;
   border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   background: var(--muted);
-  padding: 12px;
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 0.86rem;
+  padding: 0.875rem;
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  line-height: 1.65;
   white-space: pre-wrap;
 }
 
-.request {
-  border-top: 1px solid var(--border);
-  padding-top: 14px;
+.requestList {
+  gap: 0.75rem;
 }
 
-.request:first-child {
-  border-top: 0;
-  padding-top: 0;
+.request {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklch, var(--muted) 55%, transparent);
+  padding: 1rem;
 }
 
 .request strong {
   overflow-wrap: anywhere;
 }
 
-.dangerZone {
-  border-top-color: var(--destructive);
+.requestMeta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
 }
 
-@media (min-width: 760px) {
+.dangerZone {
+  box-shadow: inset 3px 0 0 color-mix(in oklch, var(--destructive) 70%, transparent), var(--shadow-sm);
+}
+
+@media (min-width: 48rem) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
-  .gate {
-    margin-top: 48px;
+@media (max-width: 34rem) {
+  .heading {
+    align-items: flex-start;
+  }
+
+  .heading > div {
+    flex-basis: 100%;
+  }
+
+  .actions {
+    display: grid;
+  }
+
+  .actions > * {
+    width: 100%;
   }
 }
 
+@keyframes security-surface-enter {
+  from { opacity: 0; transform: translateY(0.375rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .surfaceInfo,
+  .surfaceWarning,
+  .dangerZone {
+    box-shadow: none;
+    border-color: CanvasText;
+  }
+
+  .state {
+    color: CanvasText;
+  }
+}

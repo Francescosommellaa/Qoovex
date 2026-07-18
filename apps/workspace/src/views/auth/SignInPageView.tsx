@@ -4,7 +4,15 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { IconAlertCircle, IconArrowRight, IconCircleCheck, IconCode } from "@tabler/icons-react";
+import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
+import { Button } from "@qoovex/ui/components/button";
+import { Field, FieldGroup, FieldLabel, FieldSeparator } from "@qoovex/ui/components/field";
+import { Input } from "@qoovex/ui/components/input";
+import { PasswordInput } from "@qoovex/ui/components/password-input";
+import { Spinner } from "@qoovex/ui/components/spinner";
 import { getGenericAuthFailureMessage } from "@shared/lib/auth-error";
+import { AuthPageShell, AuthStage } from "./AuthPageShell";
 import styles from "./AuthPages.module.css";
 
 export function SignInPageView({
@@ -61,40 +69,61 @@ export function SignInPageView({
   }
 
   return (
-    <main className={styles.authPage}>
-      <section className={styles.authCard} aria-labelledby="sign-in-title">
-        <p className={styles.brand}>Qoovex</p>
-        <h1 id="sign-in-title">Accedi</h1>
-        <p>Organizza documenti, scadenze e prove di cantiere nel tuo workspace.</p>
-        {statusMessage ? <p className={styles.success} role="status">{statusMessage}</p> : null}
+    <AuthPageShell
+      description={<p>Rientra nel workspace per organizzare documenti, scadenze e prove di cantiere.</p>}
+      footer={(
+        <div className="grid gap-2">
+          <p>Non hai un account? <Link data-link="inline" href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link></p>
+          <p>Verifica email non completata? <Link data-link="quiet" href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Riprendi la registrazione</Link></p>
+        </div>
+      )}
+      title="Bentornato"
+      titleId="sign-in-title"
+    >
+      <AuthStage>
+        {statusMessage ? (
+          <Alert role="status" variant="success"><IconCircleCheck /><AlertDescription>{statusMessage}</AlertDescription></Alert>
+        ) : null}
 
-        <form className={styles.form} onSubmit={onSubmit}>
-          <div className={styles.field}>
-            <label htmlFor="identifier">Email o username</label>
-            <input autoComplete="username" id="identifier" name="identifier" required type="text" />
-          </div>
-          <div className={styles.field}>
-            <label htmlFor="password">Password</label>
-            <input autoComplete="current-password" id="password" name="password" required type="password" />
-          </div>
-          {error ? <p className={styles.error} role="alert">{error}</p> : null}
-          <button className={styles.primaryButton} disabled={loading} type="submit">
-            {loading ? "Accesso in corso" : "Accedi"}
-          </button>
+        <form aria-busy={loading} className={styles.form} onSubmit={onSubmit}>
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="identifier">Email o username</FieldLabel>
+              <Input autoComplete="username" className="h-11 px-3" id="identifier" name="identifier" required type="text" />
+            </Field>
+            <Field>
+              <div className="flex items-center justify-between gap-3">
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Link className="text-xs text-muted-foreground hover:text-foreground" data-link="quiet" href={`/reset-password?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Password dimenticata?</Link>
+              </div>
+              <PasswordInput
+                autoComplete="current-password"
+                id="password"
+                inputClassName="h-11 px-3"
+                name="password"
+                required
+                revealLabel="Mostra password"
+                concealLabel="Nascondi password"
+              />
+            </Field>
+          </FieldGroup>
+
+          {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
+
+          <Button className="h-11 w-full active:scale-[0.985]" disabled={loading || devLoading} type="submit">
+            {loading ? <><Spinner /> Accesso in corso</> : <>Accedi <IconArrowRight data-icon="inline-end" /></>}
+          </Button>
         </form>
 
-        <p className={styles.hint}>
-          <Link className={styles.textLink} data-link="inline" href={`/reset-password?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Password dimenticata?</Link>
-          {" · "}
-          <Link className={styles.textLink} data-link="inline" href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Verifica o reinvia il codice email</Link>
-        </p>
-
-        {showDevAuth ? <button className={styles.secondaryButton} disabled={devLoading || loading} onClick={signInAsDev} type="button">{devLoading ? "Accesso dev in corso" : "Accedi come dev"}</button> : null}
-
-        <p className={styles.hint}>
-          Non hai un account? <Link className={styles.textLink} data-link="inline" href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link>
-        </p>
-      </section>
-    </main>
+        {showDevAuth ? (
+          <div className="mt-5 grid gap-4">
+            <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">Ambiente locale</FieldSeparator>
+            <Button className="h-10 w-full" disabled={devLoading || loading} onClick={signInAsDev} type="button" variant="outline">
+              {devLoading ? <><Spinner /> Accesso dev in corso</> : <><IconCode /> Accedi come dev</>}
+            </Button>
+          </div>
+        ) : null}
+      </AuthStage>
+    </AuthPageShell>
   );
 }

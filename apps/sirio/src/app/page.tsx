@@ -1,4 +1,4 @@
-import { IconAlertTriangle, IconChevronDown, IconDots, IconInfoCircle, IconPlus, IconSearch } from "@tabler/icons-react";
+import { IconAlertTriangle, IconChevronDown, IconDots, IconFingerprint, IconInfoCircle, IconPlus, IconSearch } from "@tabler/icons-react";
 import { SiteHeader } from "@/components/site-header";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
 import { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@qoovex/ui/components/avatar";
@@ -11,6 +11,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@qoovex/ui/
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@qoovex/ui/components/dropdown-menu";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@qoovex/ui/components/field";
 import { Input } from "@qoovex/ui/components/input";
+import { OtpInput } from "@qoovex/ui/components/otp-input";
+import { PasswordInput } from "@qoovex/ui/components/password-input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
 import { Separator } from "@qoovex/ui/components/separator";
 import { Skeleton } from "@qoovex/ui/components/skeleton";
@@ -68,6 +70,22 @@ export default function CatalogPage() {
         <section aria-labelledby="components-title" className="scroll-mt-24" id="componenti">
           <p className="text-sm font-medium text-muted-foreground">Componenti</p><h2 id="components-title" className="mt-2 text-2xl font-semibold tracking-tight">Controlli e composizioni</h2>
           <div className="mt-6 grid gap-6 xl:grid-cols-2">
+            <Card className="xl:col-span-2">
+              <CardHeader><CardTitle>Controlli per identità e verifica</CardTitle><CardDescription>Password rivelabile e codice OTP Base UI condivisi da accesso, registrazione, reset e MFA.</CardDescription><CardAction><Badge variant="outline">Auth</Badge></CardAction></CardHeader>
+              <CardContent className="grid gap-6 md:grid-cols-[1fr_0.9fr]">
+                <div className="grid gap-4 rounded-xl border bg-muted/25 p-4">
+                  <div className="flex items-center gap-2"><span className="grid size-9 place-items-center rounded-lg border bg-background"><IconFingerprint className="size-4" /></span><div><p className="text-sm font-medium">Credenziali</p><p className="text-xs text-muted-foreground">Stato dimostrativo, nessun dato viene inviato.</p></div></div>
+                  <Field><FieldLabel htmlFor="catalog-auth-email">Email o username</FieldLabel><Input className="h-11 px-3" id="catalog-auth-email" placeholder="nome@azienda.it" /></Field>
+                  <Field><FieldLabel htmlFor="catalog-auth-password">Password</FieldLabel><PasswordInput id="catalog-auth-password" inputClassName="h-11 px-3" revealLabel="Mostra password" concealLabel="Nascondi password" /></Field>
+                  <Button>Accedi</Button>
+                </div>
+                <div className="grid content-center gap-4">
+                  <Field><FieldLabel htmlFor="catalog-auth-code">Codice email</FieldLabel><OtpInput id="catalog-auth-code" name="catalogAuthCode" /><FieldDescription>Sei slot reali con incolla, tastiera numerica, focus e valore form unico.</FieldDescription></Field>
+                  <Alert variant="info"><IconInfoCircle /><AlertTitle>Motion funzionale</AlertTitle><AlertDescription>Feedback rapido, transizioni sotto 300 ms e nessun movimento con preferenza ridotta.</AlertDescription></Alert>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card><CardHeader><CardTitle>Azioni</CardTitle><CardDescription>Varianti, focus, disabled e loading composto.</CardDescription></CardHeader><CardContent className="flex flex-wrap gap-2"><Button>Salva</Button><Button variant="secondary">Secondaria</Button><Button variant="outline">Contorno</Button><Button variant="ghost">Discreta</Button><Button variant="destructive">Elimina</Button><Button disabled><Spinner />Salvataggio</Button><Button disabled>Non disponibile</Button><Tooltip><TooltipTrigger render={<Button aria-label="Aggiungi elemento" size="icon" variant="outline" />}><IconPlus /></TooltipTrigger><TooltipContent>Aggiungi elemento</TooltipContent></Tooltip></CardContent></Card>
 
             <Card><CardHeader><CardTitle>Stati semantici</CardTitle><CardDescription>Il testo conserva il significato oltre al colore.</CardDescription></CardHeader><CardContent className="grid gap-3"><Alert><IconInfoCircle /><AlertTitle>Informazioni da verificare</AlertTitle><AlertDescription>Il contenuto è presente, ma richiede un controllo.</AlertDescription></Alert><Alert variant="destructive"><IconAlertTriangle /><AlertTitle>Recupero non completato</AlertTitle><AlertDescription>Riprova oppure torna alla sezione precedente.</AlertDescription></Alert><div className="flex flex-wrap gap-2"><Badge>Predefinito</Badge><Badge variant="secondary">Secondario</Badge><Badge variant="outline">Da verificare</Badge><Badge variant="destructive">Mancante</Badge></div></CardContent></Card>

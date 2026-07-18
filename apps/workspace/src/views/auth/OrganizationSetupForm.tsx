@@ -2,6 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { IconAlertCircle, IconArrowRight } from "@tabler/icons-react";
+import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
+import { Button } from "@qoovex/ui/components/button";
+import { Field, FieldDescription, FieldLabel } from "@qoovex/ui/components/field";
+import { Input } from "@qoovex/ui/components/input";
+import { Spinner } from "@qoovex/ui/components/spinner";
 import styles from "./AuthPages.module.css";
 
 export function OrganizationSetupForm() {
@@ -33,15 +39,16 @@ export function OrganizationSetupForm() {
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
-      <div className={styles.field}>
-        <label htmlFor="organization-name">Nome azienda</label>
-        <input autoComplete="organization" id="organization-name" name="name" required type="text" />
-      </div>
-      {error ? <p className={styles.error} role="alert">{error}</p> : null}
-      <button className={styles.primaryButton} disabled={loading} type="submit">
-        {loading ? "Creazione in corso" : "Crea la tua azienda"}
-      </button>
+    <form aria-busy={loading} className={styles.form} onSubmit={onSubmit}>
+      <Field>
+        <FieldLabel htmlFor="organization-name">Nome azienda</FieldLabel>
+        <Input autoComplete="organization" className="h-11 px-3" id="organization-name" name="name" required type="text" />
+        <FieldDescription>Usa la denominazione con cui il team riconosce l’Azienda nel lavoro quotidiano.</FieldDescription>
+      </Field>
+      {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
+      <Button className="h-11 w-full active:scale-[0.985]" disabled={loading} type="submit">
+        {loading ? <><Spinner /> Creazione in corso</> : <>Crea la tua azienda <IconArrowRight data-icon="inline-end" /></>}
+      </Button>
     </form>
   );
 }

@@ -118,6 +118,14 @@ const sirioDashboardOverview = read("apps/sirio/src/components/dashboard-overvie
 const workspaceLayout = read("apps/workspace/src/app/layout.tsx");
 const workspaceDashboard = read("apps/workspace/src/views/dashboard/DashboardView.tsx");
 const authStyles = read("apps/workspace/src/views/auth/AuthPages.module.css");
+const authShell = read("apps/workspace/src/views/auth/AuthPageShell.tsx");
+const signInView = read("apps/workspace/src/views/auth/SignInPageView.tsx");
+const signUpView = read("apps/workspace/src/views/auth/SignUpPageView.tsx");
+const resetPasswordView = read("apps/workspace/src/views/auth/ResetPasswordPageView.tsx");
+const invitationView = read("apps/workspace/src/views/auth/InvitationPageView.tsx");
+const accountSecurityFlow = read("apps/workspace/src/views/account-security/AccountSecurityFlow.tsx");
+const otpInput = read("packages/ui/src/components/otp-input.tsx");
+const passwordInput = read("packages/ui/src/components/password-input.tsx");
 for (const required of ["prefers-reduced-motion", "::view-transition-new(root)", "@source", "@custom-variant dark"]) {
   assert(base.includes(required), `base.css non contiene ${required}`);
 }
@@ -144,6 +152,24 @@ assert(sirioFoundation.includes('data-link="inline"') && sirioFoundation.include
 assert(webChrome.includes('data-link="quiet"') && webChrome.includes('data-link-scope="inline"'), "Web deve distinguere link quiet e inline.");
 assert(workspaceDashboard.includes('data-link="inline"') && workspaceDashboard.includes('data-link="quiet"') && workspaceDashboard.includes('data-link="plain"'), "Workspace deve distinguere tutti i ruoli semantici dei link.");
 assert(!authStyles.includes("text-decoration: underline"), "Le azioni button delle pagine auth non devono simulare link sottolineati.");
+for (const required of ["OTPField", 'data-slot="otp-input"', "autoFocus={autoFocus && index === 0}", "transition-[border-color,box-shadow,background-color]", "ring-inset", "focus-visible:ring-1", "focus-visible:ring-ring/25"]) {
+  assert(otpInput.includes(required), `OtpInput condiviso non contiene ${required}`);
+}
+for (const required of ["PasswordInput", 'data-slot="password-input"', "aria-pressed={revealed}", "IconEyeOff", "#components/input"]) {
+  assert(passwordInput.includes(required), `PasswordInput condiviso non contiene ${required}`);
+}
+for (const required of ["AuthPageShell", "AuthTrustPanel", "AuthSteps", "WorkspaceBrandMark", "CardContent"]) {
+  assert(authShell.includes(required), `Shell auth non contiene ${required}`);
+}
+for (const required of ["prefers-reduced-motion", "forced-colors", "auth-card-enter", "auth-stage-enter", "100dvh"]) {
+  assert(authStyles.includes(required), `AuthPages.module.css non contiene ${required}`);
+}
+assert(signInView.includes("@qoovex/ui/components/password-input"), "Sign-in deve usare PasswordInput condiviso.");
+assert(signUpView.includes("@qoovex/ui/components/otp-input") && signUpView.includes("@qoovex/ui/components/password-input"), "Sign-up deve usare i controlli auth condivisi.");
+assert(resetPasswordView.includes("@qoovex/ui/components/otp-input") && resetPasswordView.includes("@qoovex/ui/components/password-input"), "Reset password deve usare i controlli auth condivisi.");
+assert(invitationView.includes("AuthPageShell") && invitationView.includes("buttonVariants"), "Inviti devono comporre la shell auth e le varianti link condivise.");
+assert(accountSecurityFlow.includes("@qoovex/ui/components/otp-input") && accountSecurityFlow.includes('id="mfa-gate-code"'), "MFA deve usare OTP numerico senza rimuovere il campo libero per i backup code.");
+assert(sirioFoundation.includes("@qoovex/ui/components/otp-input") && sirioFoundation.includes("@qoovex/ui/components/password-input"), "Sirio deve mostrare i controlli auth condivisi.");
 for (const required of ['data-selection="none"', "-webkit-user-select", "-webkit-user-drag", "::selection", "HighlightText"]) {
   assert(base.includes(required), `base.css non contiene il contratto di selezione ${required}`);
 }
@@ -173,7 +199,13 @@ for (const required of ['href: "/#panoramica"', 'href: "/pricing"', 'href: "/con
 for (const route of ["pricing", "contattaci", "community"]) {
   assert(existsSync(join(root, `apps/web/src/app/${route}/page.tsx`)), `Pagina marketing mancante: /${route}`);
 }
-assert(webLayout.includes('<MarketingCursor pathnames={["/"]} />'), "Web deve attivare MarketingCursor solo sulla home.");
+assert(webLayout.includes('<MarketingCursor pathnames={marketingCursorPathnames} />'), "Web deve usare la allowlist marketing del MarketingCursor.");
+for (const route of ["/", "/pricing", "/contattaci", "/community", "/manuale-operativo"]) {
+  assert(webLayout.includes(`"${route}"`), `MarketingCursor Web non include ${route}`);
+}
+for (const route of ["/privacy", "/terms", "/cookies", "/dpa"]) {
+  assert(!webLayout.includes(`"${route}"`), `MarketingCursor Web non deve includere ${route}`);
+}
 assert(sirioLayout.includes('<MarketingCursor pathnames={["/marketing"]} />'), "Sirio deve attivare MarketingCursor solo su /marketing.");
 assert(!workspaceLayout.includes("MarketingCursor"), "Workspace non deve attivare MarketingCursor.");
 for (const [name, source] of [["Web", webLayout], ["Sirio", sirioLayout], ["Workspace", workspaceLayout]]) {

@@ -76,7 +76,7 @@ async function pagePostJson(page: Page, url: string, data?: JsonRecord): Promise
 async function signInWithCredentials(page: Page, email: string, password: string) {
   await page.goto("/sign-in?callbackUrl=%2Fdashboard", { waitUntil: "domcontentloaded" });
   await page.getByLabel("Email o username").fill(email);
-  await page.getByLabel("Password").fill(password);
+  await page.getByRole("textbox", { name: "Password", exact: true }).fill(password);
   await page.getByRole("button", { name: "Accedi", exact: true }).click();
   await page.waitForURL("**/dashboard");
 }
@@ -265,7 +265,7 @@ test("credentials signup verifies the real OTP through the authenticated E2E ema
     await page.goto("/sign-up", { waitUntil: "domcontentloaded" });
     await page.getByLabel("Email").fill(email);
     await page.getByRole("button", { name: "Invia codice" }).click();
-    await expect(page.getByText("Se l'indirizzo puo essere verificato, riceverai un codice. Controlla la tua email.")).toBeVisible();
+    await expect(page.getByRole("textbox", { name: "Codice email", exact: true })).toBeVisible();
 
     let code: string | null = null;
     await expect.poll(async () => {
@@ -275,10 +275,10 @@ test("credentials signup verifies the real OTP through the authenticated E2E ema
       code = body.messages?.find((message) => message.template?.kind === "auth-code")?.template?.code ?? null;
       return code;
     }).toMatch(/^\d{6}$/);
-    await page.getByLabel("Codice email").fill(String(code));
+    await page.getByRole("textbox", { name: "Codice email", exact: true }).fill(String(code));
     await page.getByRole("button", { name: "Verifica email" }).click();
     await page.getByLabel("Username").fill(username);
-    await page.getByLabel("Password").fill(password);
+    await page.getByRole("textbox", { name: "Password", exact: true }).fill(password);
     await page.getByRole("button", { name: "Crea account" }).click();
     await expect.poll(async () => (await page.context().request.get("/api/context")).status()).toBe(200);
   } finally {
@@ -368,10 +368,10 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     await inviteePage.getByLabel("Email").fill(siteManagerEmail);
     await inviteePage.getByRole("button", { name: "Invia codice" }).click();
     const signupTemplate = await waitForSinkTemplate(sinkApi, sinkUrl, siteManagerEmail, "auth-code");
-    await inviteePage.getByLabel("Codice email").fill(String(signupTemplate.code));
+    await inviteePage.getByRole("textbox", { name: "Codice email", exact: true }).fill(String(signupTemplate.code));
     await inviteePage.getByRole("button", { name: "Verifica email" }).click();
     await inviteePage.getByLabel("Username").fill(siteManagerUsername);
-    await inviteePage.getByLabel("Password").fill(siteManagerPassword);
+    await inviteePage.getByRole("textbox", { name: "Password", exact: true }).fill(siteManagerPassword);
     await inviteePage.getByRole("button", { name: "Crea account" }).click();
     await expect.poll(async () => (await inviteePage.request.get("/api/context")).status()).toBe(200);
     await expectJson(await inviteePage.request.post("/api/organization/invitations/accept", { data: { token: invitationToken } }), 200);
