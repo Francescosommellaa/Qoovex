@@ -275,7 +275,7 @@ test("credentials signup verifies the real OTP through the authenticated E2E ema
       code = body.messages?.find((message) => message.template?.kind === "auth-code")?.template?.code ?? null;
       return code;
     }).toMatch(/^\d{6}$/);
-    await page.getByLabel("Codice email").fill(String(code));
+    await page.getByRole("textbox", { name: "Codice email", exact: true }).fill(String(code));
     await page.getByRole("button", { name: "Verifica email" }).click();
     await page.getByLabel("Username").fill(username);
     await page.getByRole("textbox", { name: "Password", exact: true }).fill(password);
@@ -368,7 +368,7 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     await inviteePage.getByLabel("Email").fill(siteManagerEmail);
     await inviteePage.getByRole("button", { name: "Invia codice" }).click();
     const signupTemplate = await waitForSinkTemplate(sinkApi, sinkUrl, siteManagerEmail, "auth-code");
-    await inviteePage.getByLabel("Codice email").fill(String(signupTemplate.code));
+    await inviteePage.getByRole("textbox", { name: "Codice email", exact: true }).fill(String(signupTemplate.code));
     await inviteePage.getByRole("button", { name: "Verifica email" }).click();
     await inviteePage.getByLabel("Username").fill(siteManagerUsername);
     await inviteePage.getByRole("textbox", { name: "Password", exact: true }).fill(siteManagerPassword);
