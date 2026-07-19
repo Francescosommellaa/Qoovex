@@ -8,7 +8,6 @@ import { Button } from "@qoovex/ui/components/button";
 import { Field, FieldLabel } from "@qoovex/ui/components/field";
 import { Input } from "@qoovex/ui/components/input";
 import { Spinner } from "@qoovex/ui/components/spinner";
-import styles from "./WorkspaceShell.module.css";
 
 export function WorkspaceLogoutButton() {
   const [loading, setLoading] = useState(false);
@@ -58,13 +57,13 @@ export function SupportSessionBanner({ support }: { support: SupportContext }) {
     router.refresh();
   }
   return (
-    <aside className={styles.supportBanner} aria-label="Sessione supporto attiva">
-      <div><strong>Supporto: {support.organization.name}</strong><span>{support.organization.code} · fino alle {new Date(support.expiresAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}</span><small>{support.reason}</small><small>{sensitiveConfirmed ? "Operazioni sensibili confermate" : "Operazioni sensibili da confermare con MFA"}</small></div>
-      <div className={styles.supportActions}>
-        {!sensitiveConfirmed ? <form action={elevateSession}><Field><FieldLabel htmlFor="support-mfa-code">Codice MFA</FieldLabel><Input autoComplete="one-time-code" id="support-mfa-code" inputMode="numeric" name="code" /></Field><Button disabled={loading} type="submit">Conferma</Button></form> : null}
+    <aside className="grid gap-3 border-b border-warning/40 bg-warning/15 px-4 py-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center" aria-label="Sessione supporto attiva">
+      <div className="grid gap-0.5"><strong>Supporto: {support.organization.name}</strong><span className="text-sm text-muted-foreground">{support.organization.code} · fino alle {new Date(support.expiresAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}</span><small className="text-muted-foreground">{support.reason}</small><small className="text-muted-foreground">{sensitiveConfirmed ? "Operazioni sensibili confermate" : "Operazioni sensibili da confermare con MFA"}</small></div>
+      <div className="flex flex-wrap items-end gap-2">
+        {!sensitiveConfirmed ? <form action={elevateSession} className="flex flex-wrap items-end gap-2"><Field className="w-28"><FieldLabel htmlFor="support-mfa-code">Codice MFA</FieldLabel><Input autoComplete="one-time-code" id="support-mfa-code" inputMode="numeric" name="code" /></Field><Button disabled={loading} type="submit">Conferma</Button></form> : null}
         <Button disabled={loading} onClick={closeSession} type="button" variant="outline">{loading ? <><Spinner data-icon="inline-start" /> Chiusura</> : "Chiudi supporto"}</Button>
       </div>
-      {error ? <p role="alert">{error}</p> : null}
+      {error ? <p className="text-sm text-destructive lg:col-span-2" role="alert">{error}</p> : null}
     </aside>
   );
 }

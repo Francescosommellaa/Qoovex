@@ -5,21 +5,34 @@ import type { WorkspaceRole } from "./workspace-records";
 const roles: WorkspaceRole[] = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"];
 
 describe("workspace navigation policy", () => {
-  it.each(["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const)("keeps four everyday destinations for %s", (role) => {
+  it.each(roles)("keeps the common workspace destinations for %s", (role) => {
     expect(buildWorkspaceNavigation(role, "USER").primary.map((item) => item.label)).toEqual([
       "Da fare",
-      "Cantieri",
-      "Lavoratori",
       "Documenti",
+      "Calendario",
+      "Cantieri",
     ]);
   });
 
-  it.each(["SITE_MANAGER", "WORKER"] as const)("keeps a narrower everyday workspace for %s", (role) => {
-    expect(buildWorkspaceNavigation(role, "USER").primary.map((item) => item.label)).toEqual([
-      "Da fare",
-      "Cantieri",
-      "Documenti",
+  it("keeps people and role management scoped to permitted roles", () => {
+    expect(buildWorkspaceNavigation("OWNER", "USER").people.map((item) => item.label)).toEqual([
+      "Lavoratori",
+      "Persone e ruoli",
+      "Accessi operativi",
     ]);
+    expect(buildWorkspaceNavigation("SAFETY_CONSULTANT", "USER").people.map((item) => item.label)).toEqual([
+      "Lavoratori",
+      "Accessi operativi",
+    ]);
+    expect(buildWorkspaceNavigation("SITE_MANAGER", "USER").people).toEqual([]);
+    expect(buildWorkspaceNavigation("WORKER", "USER").people).toEqual([]);
+  });
+
+  it("reserves analytics for the higher operational roles", () => {
+    expect(buildWorkspaceNavigation("OWNER", "USER").showAnalytics).toBe(true);
+    expect(buildWorkspaceNavigation("ADMIN", "USER").showAnalytics).toBe(true);
+    expect(buildWorkspaceNavigation("SAFETY_CONSULTANT", "USER").showAnalytics).toBe(false);
+    expect(buildWorkspaceNavigation("SITE_MANAGER", "USER").showAnalytics).toBe(false);
   });
 
   it("derives the add menu deliberately for every role", () => {
@@ -28,6 +41,13 @@ describe("workspace navigation policy", () => {
     expect(buildWorkspaceNavigation("SAFETY_CONSULTANT", "USER").add.map((item) => item.label)).toEqual(["File a un documento", "Checklist", "Prova", "Condivisione"]);
     expect(buildWorkspaceNavigation("SITE_MANAGER", "USER").add.map((item) => item.label)).toEqual(["Prova"]);
     expect(buildWorkspaceNavigation("WORKER", "USER").add.map((item) => item.label)).toEqual(["File a un documento", "Prova"]);
+  });
+
+  it("offers only secondary links permitted for each role", () => {
+    expect(buildWorkspaceNavigation("OWNER", "USER").quickLinks.map((item) => item.label)).toEqual(["Prove", "Checklist", "Condivisioni", "Accessi operativi"]);
+    expect(buildWorkspaceNavigation("SAFETY_CONSULTANT", "USER").quickLinks.map((item) => item.label)).toEqual(["Prove", "Checklist", "Condivisioni", "Accessi operativi"]);
+    expect(buildWorkspaceNavigation("SITE_MANAGER", "USER").quickLinks.map((item) => item.label)).toEqual(["Prove", "Checklist"]);
+    expect(buildWorkspaceNavigation("WORKER", "USER").quickLinks.map((item) => item.label)).toEqual(["Prove"]);
   });
 
   it("keeps notifications limited to the existing permitted roles", () => {
@@ -43,16 +63,22 @@ describe("workspace navigation policy", () => {
   it("keeps account destinations available without a company membership", () => {
     expect(buildWorkspaceNavigation(null, "USER")).toEqual({
       primary: [],
+      people: [],
+      quickLinks: [],
       add: [],
       account: [{ label: "Sicurezza", href: "/account/security" }],
+      showAnalytics: false,
     });
     expect(buildWorkspaceNavigation(null, "SUPER_ADMIN")).toEqual({
       primary: [],
+      people: [],
+      quickLinks: [],
       add: [],
       account: [
         { label: "Console Qoovex", href: "/qoovex-admin" },
         { label: "Sicurezza", href: "/account/security" },
       ],
+      showAnalytics: false,
     });
   });
 });

@@ -5,7 +5,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import type { OrganizationRole } from "@qoovex/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import styles from "./WorkspaceShell.module.css";
 
 const ROLE_OPTIONS: Array<{ label: string; value: OrganizationRole }> = [
   { label: "Proprietario", value: "OWNER" },
@@ -44,13 +43,13 @@ export function DevRoleSwitcher({ role }: { role: OrganizationRole }) {
   }
 
   return (
-    <aside className={styles.devBanner} aria-label="Simulazione ruolo di sviluppo">
-      <div className={styles.devIntro}>
+    <aside className="grid gap-3 border-b border-info/30 bg-info/10 px-4 py-3 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,20rem)] lg:items-center" aria-label="Simulazione ruolo di sviluppo">
+      <div className="grid gap-0.5">
         <strong>Modalità sviluppo</strong>
-        <span>Il ruolo è simulato solo nella sessione locale. Membership e dati persistiti non cambiano.</span>
-        <small>I ruoli con scope usano le assegnazioni della prima identità attiva con lo stesso ruolo; se manca, la vista risulta vuota.</small>
+        <span className="text-sm text-muted-foreground">Il ruolo è simulato solo nella sessione locale. Membership e dati persistiti non cambiano.</span>
+        <small className="text-muted-foreground">I ruoli con scope usano le assegnazioni della prima identità attiva con lo stesso ruolo; se manca, la vista risulta vuota.</small>
       </div>
-      <Field className={styles.devField} data-invalid={Boolean(error)}>
+      <Field className="min-w-0" data-invalid={Boolean(error)}>
         <FieldLabel htmlFor="dev-role">Vista ruolo</FieldLabel>
         <Select items={ROLE_OPTIONS} onValueChange={(value) => void changeRole(value as OrganizationRole)} value={selectedRole}>
           <SelectTrigger aria-describedby="dev-role-status" aria-invalid={Boolean(error)} disabled={pending} id="dev-role">
@@ -58,7 +57,7 @@ export function DevRoleSwitcher({ role }: { role: OrganizationRole }) {
           </SelectTrigger>
           <SelectContent><SelectGroup>{ROLE_OPTIONS.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectGroup></SelectContent>
         </Select>
-        <FieldDescription className={styles.devStatus} id="dev-role-status" aria-live="polite">
+        <FieldDescription id="dev-role-status" aria-live="polite">
           {pending ? "Aggiornamento vista in corso" : "Dashboard, navigazione e permessi seguono questo ruolo."}
         </FieldDescription>
         {error ? <FieldError>{error}</FieldError> : null}

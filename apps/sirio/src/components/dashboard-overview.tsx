@@ -7,6 +7,9 @@ import { Badge } from "@qoovex/ui/components/badge";
 import { Button } from "@qoovex/ui/components/button";
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@qoovex/ui/components/chart";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@qoovex/ui/components/dialog";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@qoovex/ui/components/field";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
 import { Skeleton } from "@qoovex/ui/components/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@qoovex/ui/components/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@qoovex/ui/components/tabs";
@@ -39,6 +42,38 @@ const metrics = [
   { label: "Pacchetti pronti", value: "5", note: "Disponibili per revisione", icon: IconCircleCheck },
 ];
 
+function AssignmentDialogDemo() {
+  const people = [
+    { label: "Elena Conti", value: "elena" },
+    { label: "Marco Rinaldi", value: "marco" },
+  ];
+  return (
+    <Dialog>
+      <DialogTrigger render={<Button variant="outline" />}>Assegna responsabile</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Assegna responsabile</DialogTitle>
+          <DialogDescription>Dimostrazione Sirio: scegli chi deve intervenire senza lasciare la coda di lavoro.</DialogDescription>
+        </DialogHeader>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="sirio-responsible">Responsabile cantiere</FieldLabel>
+            <Select defaultValue="elena" items={people}>
+              <SelectTrigger className="w-full" id="sirio-responsible"><SelectValue /></SelectTrigger>
+              <SelectContent><SelectGroup>{people.map((person) => <SelectItem key={person.value} value={person.value}>{person.label}</SelectItem>)}</SelectGroup></SelectContent>
+            </Select>
+            <FieldDescription>I dati sono dimostrativi e non vengono salvati.</FieldDescription>
+          </Field>
+        </FieldGroup>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" />}>Annulla</DialogClose>
+          <DialogClose render={<Button />}>Assegna</DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export function DashboardOverview({ preview = false }: { preview?: boolean }) {
   return (
     <div
@@ -54,7 +89,7 @@ export function DashboardOverview({ preview = false }: { preview?: boolean }) {
           <h1 className={cn("font-semibold tracking-tight", preview ? "text-xl" : "text-2xl")}>Stato documentale</h1>
           <p className="mt-1 max-w-2xl text-sm text-muted-foreground">Contenuti presenti, mancanti o da verificare nei contesti accessibili.</p>
         </div>
-        {!preview ? <Button><IconArrowUpRight data-icon="inline-start" />Apri la coda</Button> : null}
+        {!preview ? <div className="flex flex-wrap gap-2"><AssignmentDialogDemo /><Button><IconArrowUpRight data-icon="inline-start" />Apri la coda</Button></div> : null}
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">

@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   requirePrimaryIdentity: vi.fn(),
   getMfaStatusByUserId: vi.fn(),
   getDevAuthSession: vi.fn(),
+  cookies: vi.fn(),
   AccessError: class AccessError extends Error {
     constructor(message: string, public readonly status: number, public readonly code?: string) {
       super(message);
@@ -21,6 +22,7 @@ vi.mock("@shared/server/access-errors", () => ({ AccessError: mocks.AccessError 
 vi.mock("@shared/server/domain-access-service", () => ({ getEffectiveOrganizationRole: () => null }));
 vi.mock("@shared/server/mfa-service", () => ({ getMfaStatusByUserId: mocks.getMfaStatusByUserId }));
 vi.mock("@shared/server/dev-auth", () => ({ getDevAuthSession: mocks.getDevAuthSession }));
+vi.mock("next/headers", () => ({ cookies: mocks.cookies }));
 vi.mock("@shared/server/notification-service", () => ({ getUnreadNotificationCount: vi.fn().mockResolvedValue(0) }));
 vi.mock("@/views/account-security/AccountSecurityFlow", () => ({
   AccountSecurityFlow: () => <div>GLOBAL_MFA_GATE</div>,
@@ -40,6 +42,7 @@ describe("WorkspaceShell MFA gate", () => {
     mocks.requirePrimaryIdentity.mockReset();
     mocks.getMfaStatusByUserId.mockReset();
     mocks.getDevAuthSession.mockReset().mockResolvedValue(null);
+    mocks.cookies.mockReset().mockResolvedValue({ get: () => undefined });
   });
 
   it("does not render workspace children for a primary-only MFA session", async () => {
@@ -85,5 +88,20 @@ describe("WorkspaceShell MFA gate", () => {
 
     expect(html).toContain("DEV_ROLE_WORKER");
     expect(html).toContain("WORKSPACE_CHILD");
+  });
+
+  it("restores the collapsed sidebar preference from its cookie", async () => {
+    mocks.getWorkspaceAccessContext.mockResolvedValue({
+      userId: "user-1",
+      platformRole: "USER",
+      company: null,
+      support: null,
+      permissions: [],
+    });
+    mocks.cookies.mockResolvedValue({ get: () => ({ value: "false" }) });
+
+    const html = renderToStaticMarkup(await WorkspaceShell({ children: <div>WORKSPACE_CHILD</div> }));
+
+    expect(html).toContain('data-state="collapsed"');
   });
 });

@@ -12,6 +12,8 @@ const NOTIFICATION_ACCESS_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as con
 
 export interface ListNotificationsInput {
   filter?: unknown;
+  limit?: unknown;
+  sort?: unknown;
 }
 
 const notificationSelect = {
@@ -79,11 +81,28 @@ function parseFilter(filter: unknown): "all" | "unread" {
   throw new AccessError("Filtro notifiche non valido.", 409);
 }
 
+function parseLimit(limit: unknown): number {
+  if (limit === undefined || limit === null || limit === "") return 100;
+  const parsed = typeof limit === "number" ? limit : Number(limit);
+  if (!Number.isInteger(parsed) || parsed < 1 || parsed > 100) {
+    throw new AccessError("Limite notifiche non valido.", 409);
+  }
+  return parsed;
+}
+
+function parseSort(sort: unknown): "priority" | "recent" {
+  if (sort === undefined || sort === null || sort === "" || sort === "priority") return "priority";
+  if (sort === "recent") return "recent";
+  throw new AccessError("Ordinamento notifiche non valido.", 409);
+}
+
 export async function listNotifications(input: ListNotificationsInput = {}): Promise<NotificationListResponse> {
   const { context, organizationId } = await requireOrganizationDomainAccess("organization:read", NOTIFICATION_ACCESS_ROLES);
   await syncOrganizationReminderRecords(organizationId);
 
   const filter = parseFilter(input.filter);
+  const limit = parseLimit(input.limit);
+  const sort = parseSort(input.sort);
   const baseWhere = {
     ...visibleNotificationWhere(organizationId, context.userId),
     dismissedAt: null,
@@ -93,8 +112,10 @@ export async function listNotifications(input: ListNotificationsInput = {}): Pro
     db.notification.findMany({
       where,
       select: notificationSelect,
-      orderBy: [{ readAt: "asc" }, { severity: "desc" }, { createdAt: "desc" }],
-      take: 100,
+      orderBy: sort === "recent"
+        ? [{ createdAt: "desc" }]
+        : [{ readAt: "asc" }, { severity: "desc" }, { createdAt: "desc" }],
+      take: limit,
     }),
     db.notification.count({
       where: { ...baseWhere, readAt: null },

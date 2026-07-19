@@ -126,7 +126,7 @@ function responsibility(input: {
   jobSiteAssignments: Map<string, AssignmentRow[]>;
 }) {
   const canAssign = input.actorRole === "OWNER" || input.actorRole === "ADMIN";
-  const assignmentHref = canAssign ? "/access?from=dashboard" : null;
+  const assignmentHref = canAssign && (input.workerId || input.jobSiteId) ? "/access?from=dashboard" : null;
 
   if (input.ownerType === "ORGANIZATION") {
     return {
@@ -139,16 +139,16 @@ function responsibility(input: {
     if (input.scope.linkedWorker?.id === input.workerId) return { label: "Intervieni tu", assignmentHref: null };
     const assignments = input.workerAssignments.get(input.workerId) ?? [];
     if (assignments.some((assignment) => assignment.userId === input.currentUserId)) return { label: "Intervieni tu", assignmentHref: null };
-    if (assignments.length === 1) return { label: `Interviene: ${userLabel(assignments[0])}`, assignmentHref };
-    if (assignments.length > 1) return { label: `${assignments.length} responsabili assegnati`, assignmentHref };
+    if (assignments.length === 1) return { label: `Interviene: ${userLabel(assignments[0])}`, assignmentHref: null };
+    if (assignments.length > 1) return { label: `${assignments.length} responsabili assegnati`, assignmentHref: null };
     if (input.workerLabel) return { label: `Interviene: ${input.workerLabel}`, assignmentHref };
   }
 
   if (input.jobSiteId) {
     const assignments = input.jobSiteAssignments.get(input.jobSiteId) ?? [];
     if (assignments.some((assignment) => assignment.userId === input.currentUserId)) return { label: "Intervieni tu", assignmentHref: null };
-    if (assignments.length === 1) return { label: `Interviene: ${userLabel(assignments[0])}`, assignmentHref };
-    if (assignments.length > 1) return { label: `${assignments.length} responsabili assegnati`, assignmentHref };
+    if (assignments.length === 1) return { label: `Interviene: ${userLabel(assignments[0])}`, assignmentHref: null };
+    if (assignments.length > 1) return { label: `${assignments.length} responsabili assegnati`, assignmentHref: null };
   }
 
   return { label: "Responsabile non assegnato", assignmentHref };
