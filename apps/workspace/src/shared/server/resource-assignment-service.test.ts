@@ -42,6 +42,7 @@ import {
   createJobSiteUserAssignment,
   createJobSiteWorkerAssignment,
   createWorkerUserLink,
+  getResourceAssignmentOptions,
   listWorkerUserLinks,
 } from "./resource-assignment-service";
 
@@ -119,6 +120,26 @@ beforeEach(() => {
 });
 
 describe("resource assignment service", () => {
+  it("returns only organization-scoped options for contextual assignment", async () => {
+    mocks.db.worker.findMany.mockResolvedValue([worker]);
+    mocks.db.jobSite.findMany.mockResolvedValue([jobSite]);
+    mocks.db.organizationMembership.findMany.mockResolvedValue([
+      { role: "WORKER", user },
+      { role: "SITE_MANAGER", user: { id: "manager-1", name: "Elena Mariani", email: "elena@example.com" } },
+    ]);
+
+    await expect(getResourceAssignmentOptions()).resolves.toEqual({
+      workers: [worker],
+      jobSites: [jobSite],
+      users: [
+        { id: "user-worker", label: "Mario Utente", email: "mario@example.com", role: "WORKER" },
+        { id: "manager-1", label: "Elena Mariani", email: "elena@example.com", role: "SITE_MANAGER" },
+      ],
+    });
+    expect(mocks.db.worker.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { organizationId: "org-1", archivedAt: null } }));
+    expect(mocks.db.jobSite.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { organizationId: "org-1", archivedAt: null } }));
+  });
+
   it("lets owners create worker-user links and records product audit", async () => {
     await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).resolves.toMatchObject({
       workerId: "worker-1",

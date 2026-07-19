@@ -125,7 +125,7 @@ describe("notification service", () => {
   });
 
   it("returns a safe notification payload without internal keys", async () => {
-    const response = await listNotifications({ filter: "unread" });
+    const response = await listNotifications({ filter: "unread", limit: 5, sort: "recent" });
     const serialized = JSON.stringify(response);
 
     expect(response.notifications[0]).toMatchObject({ title: "Scadenza registrata superata", actionHref: "/deadlines" });
@@ -134,6 +134,17 @@ describe("notification service", () => {
     expect(serialized).not.toContain("blobKey");
     expect(serialized).not.toContain("tokenHash");
     expect(serialized).not.toContain("downloadUrl");
+    expect(mocks.db.notification.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      orderBy: [{ createdAt: "desc" }],
+      take: 5,
+    }));
+  });
+
+  it("rejects invalid notification preview limits", async () => {
+    await expect(listNotifications({ limit: 0 })).rejects.toMatchObject({ status: 409 });
+    await expect(listNotifications({ limit: 101 })).rejects.toMatchObject({ status: 409 });
+    await expect(listNotifications({ sort: "oldest" })).rejects.toMatchObject({ status: 409 });
+    expect(mocks.db.notification.findMany).not.toHaveBeenCalled();
   });
 
   it("marks and dismisses only notifications in the current organization", async () => {

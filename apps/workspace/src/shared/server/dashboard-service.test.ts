@@ -154,6 +154,22 @@ describe("dashboard service", () => {
     expect(dashboard.attention.situations.at(-1)).toMatchObject({ responsibility: { label: "Intervieni tu" } });
   });
 
+  it("offers contextual assignment only when the visible resource has no responsible user", async () => {
+    mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([]);
+
+    const dashboard = await getDashboardData();
+    const jobSiteSituation = dashboard.attention.situations.find((item) => item.id === "document-expired");
+
+    expect(jobSiteSituation).toMatchObject({
+      contextKind: "JOB_SITE",
+      contextId: "jobsite-1",
+      responsibility: {
+        label: "Responsabile non assegnato",
+        assignmentHref: "/access?from=dashboard",
+      },
+    });
+  });
+
   it("adds indexed missing requirements without inventing a document record", async () => {
     mocks.buildMissingDocumentRequirementItemsForScope.mockResolvedValue([
       {

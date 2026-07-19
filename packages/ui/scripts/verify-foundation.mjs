@@ -109,14 +109,24 @@ const button = read("packages/ui/src/components/button.tsx");
 const badge = read("packages/ui/src/components/badge.tsx");
 const brandMark = read("packages/ui/src/components/brand-mark.tsx");
 const sidebar = read("packages/ui/src/components/sidebar.tsx");
+const dialog = read("packages/ui/src/components/dialog.tsx");
 const webLayout = read("apps/web/src/app/layout.tsx");
 const webChrome = read("apps/web/src/app/site-chrome.tsx");
 const webDashboardPreview = read("apps/web/src/components/marketing-dashboard-preview.tsx");
 const sirioLayout = read("apps/sirio/src/app/layout.tsx");
 const sirioFoundation = read("apps/sirio/src/app/page.tsx");
 const sirioDashboardOverview = read("apps/sirio/src/components/dashboard-overview.tsx");
+const sirioDashboardShell = read("apps/sirio/src/components/dashboard-shell.tsx");
 const workspaceLayout = read("apps/workspace/src/app/layout.tsx");
 const workspaceDashboard = read("apps/workspace/src/views/dashboard/DashboardView.tsx");
+const workspaceShell = read("apps/workspace/src/views/workspace/WorkspaceShell.tsx");
+const workspaceNavigation = read("apps/workspace/src/views/workspace/WorkspaceNavigation.tsx");
+const workspaceQuickLinks = read("apps/workspace/src/views/workspace/WorkspaceQuickLinks.tsx");
+const workspaceTopbar = read("apps/workspace/src/views/workspace/WorkspaceTopbar.tsx");
+const workspaceNavigationHistory = read("apps/workspace/src/views/workspace/workspace-navigation-history.ts");
+const workspaceNotificationsPanel = read("apps/workspace/src/views/workspace/WorkspaceNotificationsPanel.tsx");
+const workspaceAssignmentDialog = read("apps/workspace/src/views/dashboard/DashboardAssignmentDialog.tsx");
+const resourceAssignmentOptionsRoute = read("apps/workspace/src/app/api/resource-assignments/options/route.ts");
 const authStyles = read("apps/workspace/src/views/auth/AuthPages.module.css");
 const authShell = read("apps/workspace/src/views/auth/AuthPageShell.tsx");
 const signInView = read("apps/workspace/src/views/auth/SignInPageView.tsx");
@@ -150,7 +160,7 @@ for (const [name, source] of [["Button", button], ["Badge", badge]]) {
 }
 assert(sirioFoundation.includes('data-link="inline"') && sirioFoundation.includes('data-link="quiet"') && sirioFoundation.includes('data-link="plain"'), "Sirio deve mostrare tutti i ruoli semantici dei link.");
 assert(webChrome.includes('data-link="quiet"') && webChrome.includes('data-link-scope="inline"'), "Web deve distinguere link quiet e inline.");
-assert(workspaceDashboard.includes('data-link="inline"') && workspaceDashboard.includes('data-link="quiet"') && workspaceDashboard.includes('data-link="plain"'), "Workspace deve distinguere tutti i ruoli semantici dei link.");
+assert(workspaceDashboard.includes('data-link="quiet"') && workspaceDashboard.includes('data-link="plain"'), "Workspace deve distinguere navigazione quiet e plain.");
 assert(!authStyles.includes("text-decoration: underline"), "Le azioni button delle pagine auth non devono simulare link sottolineati.");
 for (const required of ["OTPField", 'data-slot="otp-input"', "autoFocus={autoFocus && index === 0}", "transition-[border-color,box-shadow,background-color]", "ring-inset", "focus-visible:ring-1", "focus-visible:ring-ring/25"]) {
   assert(otpInput.includes(required), `OtpInput condiviso non contiene ${required}`);
@@ -183,6 +193,54 @@ for (const required of ["document.addEventListener(\"scroll\"", "window.addEvent
   assert(scrollbarController.includes(required), `ScrollbarController non contiene ${required}`);
 }
 assert(!sidebar.includes("no-scrollbar"), "SidebarContent deve usare la scrollbar condivisa.");
+assert(!sidebar.includes("after:w-[2px]"), "SidebarRail non deve disegnare una linea nel distacco inset.");
+assert(sidebar.includes('hidden w-4 bg-transparent'), "SidebarRail deve conservare una hit area trasparente da 16 px.");
+for (const required of ["function SidebarCollapseButton", 'data-slot="sidebar-collapse-button"', '"Riduci menu"', '"Espandi menu"', "iconOnly"]) {
+  assert(sidebar.includes(required), `Sidebar condivisa non contiene il controllo esplicito ${required}.`);
+}
+for (const required of ["DialogPrimitive.Root", "DialogPrimitive.Title", "DialogPrimitive.Description", 'data-slot="dialog-content"', "sm:max-w-md"]) {
+  assert(dialog.includes(required), `Dialog condiviso non contiene ${required}.`);
+}
+assert(sirioDashboardOverview.includes("<DialogTitle>Assegna responsabile</DialogTitle>"), "Sirio deve provare il Dialog di assegnazione.");
+for (const required of ["Ricerca rapida, in preparazione", "Analisi, in preparazione", "<PeopleNavigation", "items={navigation.people}", "<CreationActions", "<WorkspaceQuickLinks"]) {
+  assert(workspaceNavigation.includes(required), `Navigazione Workspace non contiene ${required}.`);
+}
+for (const required of ["Azioni rapide", "IconFilePlus", "IconBuildingPlus", "IconUserPlus", "IconPhotoPlus", "grid grid-cols-4", "items.map((item)", "hidden: false", 'data-slot="workspace-quick-actions"', "bg-sidebar-accent/55"]) {
+  assert(workspaceNavigation.includes(required), `Azioni rapide Workspace non contengono ${required}.`);
+}
+assert(!workspaceNavigation.includes("visibleActions") && !workspaceNavigation.includes("Cosa vuoi creare?"), "Tutte le azioni autorizzate devono restare visibili nel dock compatto.");
+assert(workspaceNavigation.indexOf("<CreationActions items={navigation.add} />") > workspaceNavigation.lastIndexOf("<SidebarFooter"), "Azioni rapide Workspace devono vivere nel footer sopra account.");
+assert(workspaceNavigation.includes("setOpenMobile(false)") && workspaceQuickLinks.includes("setOpenMobile(false)"), "Le destinazioni della sidebar devono chiudere il drawer mobile dopo la navigazione.");
+for (const required of ["MAX_PINNED_LINKS = 4", "window.localStorage", "DropdownMenuCheckboxItem", "Personalizza collegamenti rapidi", "Collegamenti rapidi"]) {
+  assert(workspaceQuickLinks.includes(required), `Collegamenti rapidi Workspace non contengono ${required}.`);
+}
+assert(!workspaceShell.includes("SidebarRail"), "Workspace non deve usare il rail ambiguo per ridurre il menu.");
+assert(workspaceShell.includes("SIDEBAR_COOKIE_NAME") && workspaceShell.includes("defaultOpen={sidebarDefaultOpen}"), "Workspace deve ripristinare la preferenza della sidebar dal cookie.");
+for (const required of ['className="h-dvh min-h-0! overflow-hidden bg-sidebar"', "overflow-y-auto", "...state.navigation.people"]) {
+  assert(workspaceShell.includes(required), `Shell Workspace non contiene il contratto fisso ${required}.`);
+}
+assert(workspaceTopbar.includes("<SidebarCollapseButton") && workspaceTopbar.includes("iconOnly"), "La topbar Workspace deve ospitare il toggle desktop iconico.");
+assert(workspaceTopbar.includes("<WorkspaceNotificationsPanel"), "La campanella Workspace deve aprire il pannello notifiche.");
+for (const required of ["Pagine recenti", "Navigazione mobile", "displayedPages", "BreadcrumbSeparator", 'render={<Link href="/dashboard" />}>Da fare</BreadcrumbLink>']) {
+  assert(workspaceTopbar.includes(required), `Topbar Workspace non contiene il breadcrumb ${required}.`);
+}
+for (const required of ["MAX_RECENT_WORKSPACE_PAGES = 3", "window.sessionStorage", "pushRecentWorkspacePage", "parseRecentWorkspacePages", "specificPageLabels"]) {
+  const source = required === "window.sessionStorage" ? workspaceTopbar : workspaceNavigationHistory;
+  assert(source.includes(required), `Cronologia Workspace non contiene ${required}.`);
+}
+assert(!workspaceTopbar.includes("WorkspaceBrandMark"), "La topbar mobile non deve mostrare il logo al posto del breadcrumb Da fare.");
+for (const required of ["Ricerca rapida", "Analisi", "Calendario", "Persone", "Azioni rapide", "Collegamenti rapidi", "IconFilePlus", "IconBuildingPlus", "Pagine recenti", "Navigazione mobile", "iconOnly", "overflow-y-auto"]) {
+  assert(sirioDashboardShell.includes(required), `Sirio deve provare la nuova sidebar con ${required}.`);
+}
+assert(sirioDashboardShell.includes('data-slot="workspace-quick-actions"') && sirioDashboardShell.includes("<DemoQuickActions />"), "Sirio deve provare l'action tray nel footer.");
+assert(sirioDashboardShell.indexOf("<DemoQuickActions />") > sirioDashboardShell.lastIndexOf("<SidebarFooter"), "Sirio deve tenere le azioni rapide nel footer.");
+for (const required of ['fetch("/api/notifications?limit=5&sort=recent"', "<SheetTitle>Notifiche</SheetTitle>", "Vedi tutte le notifiche", "NotificationsLoading", "Nessuna notifica recente", "Impossibile caricare le notifiche"]) {
+  assert(workspaceNotificationsPanel.includes(required), `Pannello notifiche Workspace non contiene ${required}.`);
+}
+for (const required of ["<DialogTitle>Assegna responsabile</DialogTitle>", 'fetch("/api/resource-assignments/options"', "worker-user-links", "job-site-user-assignments", "Responsabile assegnato", "Nessuna persona disponibile"]) {
+  assert(workspaceAssignmentDialog.includes(required), `Dialog assegnazione Workspace non contiene ${required}.`);
+}
+assert(resourceAssignmentOptionsRoute.includes("getResourceAssignmentOptions"), "La dashboard deve caricare opzioni assegnazione tramite una route autorizzata.");
 assert(sirioFoundation.includes('data-scrollbar-proof="vertical"') && sirioFoundation.includes('data-scrollbar-proof="horizontal"'), "Sirio deve mostrare scrollbar verticale e orizzontale.");
 for (const required of ["(hover: hover) and (pointer: fine)", "prefers-reduced-motion", "forced-colors", "data-cursor-label", "data-magnetic", "magneticSelector", "magneticDistance = 16", "magneticBlockingSurfaceSelector", "magneticTargetIsExposed", "document.elementFromPoint", "target: nearest.target", "magneticPoint.target ?? document.elementFromPoint", "nearest.rect.left + nearest.rect.width / 2", "nearest.rect.top + nearest.rect.height / 2", "getBoundingClientRect", "requestAnimationFrame", "window.location.pathname", "pageshow", "popstate"]) {
   assert(marketingCursor.includes(required), `MarketingCursor non contiene ${required}`);
