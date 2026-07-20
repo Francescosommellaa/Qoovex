@@ -9,6 +9,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@fullcalendar/react": "7.0.1",
     "@qoovex/brand-resources": "workspace:*",
     "@qoovex/ui": "workspace:*",
     "@tabler/icons-react": "^3.44.0",

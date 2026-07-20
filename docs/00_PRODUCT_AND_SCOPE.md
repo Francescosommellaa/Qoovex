@@ -4,4 +4,4 @@ Qoovex organizza documenti, scadenze e prove di cantiere per piccole imprese, su
 
 Il prodotto non garantisce conformita, non certifica persone o documenti e non sostituisce consulenti, RSPP o responsabili. Requisiti, liste documentali e scadenze ufficiali devono provenire da configurazione utente o materiale validato.
 
-Il perimetro attivo comprende aziende, lavoratori, cantieri, documenti e versioni, scadenze, checklist, prove, pacchetti condivisibili, notifiche, audit e data-control. Restano fuori ERP, paghe, preventivi, firma qualificata, geolocalizzazione continua, integrazioni pubbliche e AI normativa autonoma.
+Il perimetro attivo comprende aziende, lavoratori, cantieri, documenti e versioni, scadenze, calendario operativo con eventi e task assegnabili, checklist, prove, pacchetti condivisibili, notifiche, audit e data-control. Il calendario importa ed esporta file iCalendar scelti dall'utente; non dichiara sincronizzazione OAuth bidirezionale con provider esterni. Restano fuori ERP, paghe, preventivi, firma qualificata, geolocalizzazione continua, integrazioni pubbliche e AI normativa autonoma.

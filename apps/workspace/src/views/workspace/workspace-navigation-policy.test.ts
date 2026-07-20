@@ -44,10 +44,10 @@ describe("workspace navigation policy", () => {
   });
 
   it("offers only secondary links permitted for each role", () => {
-    expect(buildWorkspaceNavigation("OWNER", "USER").quickLinks.map((item) => item.label)).toEqual(["Prove", "Checklist", "Condivisioni", "Accessi operativi"]);
-    expect(buildWorkspaceNavigation("SAFETY_CONSULTANT", "USER").quickLinks.map((item) => item.label)).toEqual(["Prove", "Checklist", "Condivisioni", "Accessi operativi"]);
-    expect(buildWorkspaceNavigation("SITE_MANAGER", "USER").quickLinks.map((item) => item.label)).toEqual(["Prove", "Checklist"]);
-    expect(buildWorkspaceNavigation("WORKER", "USER").quickLinks.map((item) => item.label)).toEqual(["Prove"]);
+    expect(buildWorkspaceNavigation("OWNER", "USER").quickLinks.map((item) => item.label)).toEqual(["Scadenze", "Prove", "Checklist", "Condivisioni", "Accessi operativi"]);
+    expect(buildWorkspaceNavigation("SAFETY_CONSULTANT", "USER").quickLinks.map((item) => item.label)).toEqual(["Scadenze", "Prove", "Checklist", "Condivisioni", "Accessi operativi"]);
+    expect(buildWorkspaceNavigation("SITE_MANAGER", "USER").quickLinks.map((item) => item.label)).toEqual(["Scadenze", "Prove", "Checklist"]);
+    expect(buildWorkspaceNavigation("WORKER", "USER").quickLinks.map((item) => item.label)).toEqual(["Scadenze", "Prove"]);
   });
 
   it("keeps notifications limited to the existing permitted roles", () => {

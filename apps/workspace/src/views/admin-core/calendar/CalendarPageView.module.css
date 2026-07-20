@@ -1,0 +1,115 @@
+.calendar {
+  position: relative;
+  min-width: 0;
+  padding: 1rem;
+  --fc-border-color: var(--border);
+  --fc-page-bg-color: var(--card);
+  --fc-neutral-bg-color: var(--muted);
+  --fc-neutral-text-color: var(--muted-foreground);
+  --fc-today-bg-color: color-mix(in oklab, var(--primary) 9%, transparent);
+  --fc-now-indicator-color: var(--destructive);
+  --fc-monarch-background: var(--card);
+  --fc-monarch-foreground: var(--foreground);
+  --fc-monarch-faint-foreground: var(--muted-foreground);
+  --fc-monarch-muted-foreground: var(--muted-foreground);
+  --fc-monarch-border: var(--border);
+  --fc-monarch-strong-border: var(--border);
+  --fc-monarch-primary: var(--primary);
+  --fc-monarch-primary-foreground: var(--primary-foreground);
+  --fc-monarch-selected: var(--secondary);
+  --fc-monarch-selected-foreground: var(--secondary-foreground);
+}
+
+.calendar :global(.fc) {
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 0.875rem;
+}
+
+.calendar :global(.fc-toolbar) {
+  gap: 0.75rem;
+}
+
+.calendar :global(.fc-toolbar-title) {
+  font-size: clamp(1rem, 3vw, 1.35rem);
+  font-weight: 650;
+}
+
+.calendar :global(.fc-event) {
+  cursor: pointer;
+}
+
+.calendar :global(.fc-timegrid-slot) {
+  height: 2.75rem;
+}
+
+.calendar :global(.fc-daygrid-day-number),
+.calendar :global(.fc-col-header-cell-cushion) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.calendar :global(.fc-day-today .fc-daygrid-day-number) {
+  font-weight: 750;
+}
+
+.calendar :global(.fc-button:focus-visible),
+.calendar :global(.fc-event:focus-visible),
+.calendar :global(a:focus-visible) {
+  outline: 3px solid color-mix(in oklab, var(--ring) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.emptyOverlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 7rem 1rem auto;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  gap: 0.35rem;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+.emptyOverlay svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+@media (max-width: 760px) {
+  .calendar {
+    padding: 0.75rem;
+  }
+
+  .calendar :global(.fc-header-toolbar) {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .calendar :global(.fc-toolbar-chunk) {
+    display: flex;
+    justify-content: center;
+  }
+
+  .calendar :global(.fc-toolbar-chunk:last-child) {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calendar *,
+  .calendar *::before,
+  .calendar *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .calendar :global(.fc-event) {
+    border: 1px solid CanvasText !important;
+  }
+}

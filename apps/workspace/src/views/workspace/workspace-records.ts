@@ -2,6 +2,10 @@ import type {
   ChecklistItemStatus,
   DeadlineSourceType,
   DeadlineStatus,
+  CalendarEventKind,
+  CalendarEventPriority,
+  CalendarEventSource,
+  CalendarEventStatus,
   DocumentOwnerType,
   DocumentPackageItemType,
   DocumentPackageStatus,
@@ -20,6 +24,7 @@ export interface WorkspaceCapabilities {
   canCreateWorkers: boolean;
   canCreateJobSites: boolean;
   canCreateDeadlines: boolean;
+  canManageCalendar: boolean;
   canUpdateDocuments: boolean;
   canUploadDocumentVersions: boolean;
   canManageChecklists: boolean;
@@ -109,6 +114,34 @@ export interface WorkspaceDeadlineRecord {
   remindAt?: string | null;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface WorkspaceCalendarParticipant {
+  id: string;
+  label: string;
+  email: string;
+  role: WorkspaceRole;
+}
+
+export interface WorkspaceCalendarEventRecord {
+  id: string;
+  title: string;
+  description?: string | null;
+  startAt: string;
+  endAt: string;
+  allDay: boolean;
+  kind: CalendarEventKind;
+  priority: CalendarEventPriority;
+  status: CalendarEventStatus;
+  source: CalendarEventSource;
+  externalUid?: string | null;
+  assignedToId?: string | null;
+  jobSiteId?: string | null;
+  createdById: string;
+  assignedTo?: WorkspaceCalendarParticipant | null;
+  jobSite?: { id: string; name: string } | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface WorkspaceChecklistItemRecord {

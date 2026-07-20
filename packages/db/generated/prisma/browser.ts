@@ -93,6 +93,11 @@ export type DocumentRequirement = Prisma.DocumentRequirementModel
  */
 export type Deadline = Prisma.DeadlineModel
 /**
+ * Model CalendarEvent
+ * 
+ */
+export type CalendarEvent = Prisma.CalendarEventModel
+/**
  * Model Checklist
  * 
  */

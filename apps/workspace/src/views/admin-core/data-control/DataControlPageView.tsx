@@ -11,6 +11,7 @@ const inventoryLabels: Array<[keyof DataInventoryResponse["counts"], string]> = 
   ["documents", "Documenti"],
   ["documentVersions", "Versioni documento"],
   ["deadlines", "Scadenze"],
+  ["calendarEvents", "Eventi calendario"],
   ["checklists", "Checklist"],
   ["checklistItems", "Voci checklist"],
   ["evidence", "Prove"],

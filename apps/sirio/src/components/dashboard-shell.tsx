@@ -6,6 +6,7 @@ import {
   IconBuilding,
   IconBuildingPlus,
   IconCalendar,
+  IconCalendarDue,
   IconChevronDown,
   IconChevronRight,
   IconChecklist,
@@ -53,9 +54,9 @@ import { BrandMark } from "@/components/brand-mark";
 import { DashboardOverview } from "@/components/dashboard-overview";
 
 const workspaceNavigation = [
-  { label: "Documenti", icon: IconFileDescription },
-  { label: "Calendario", icon: IconCalendar },
-  { label: "Cantieri", icon: IconBuilding },
+  { label: "Documenti", icon: IconFileDescription, href: "/dashboard" },
+  { label: "Calendario", icon: IconCalendar, href: "/calendar" },
+  { label: "Cantieri", icon: IconBuilding, href: "/dashboard" },
 ];
 
 const quickActions = [
@@ -114,7 +115,7 @@ export function DashboardShell() {
             <SidebarGroupLabel>Workspace</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {workspaceNavigation.slice(0, 2).map(({ icon: Icon, label }) => <SidebarMenuItem key={label}><SidebarMenuButton tooltip={label}><Icon /><span>{label}</span></SidebarMenuButton></SidebarMenuItem>)}
+                {workspaceNavigation.slice(0, 2).map(({ href, icon: Icon, label }) => <SidebarMenuItem key={label}><SidebarMenuButton render={<a href={href} />} tooltip={label}><Icon /><span>{label}</span></SidebarMenuButton></SidebarMenuItem>)}
                 <SidebarMenuItem>
                   <Collapsible defaultOpen>
                     <CollapsibleTrigger render={<SidebarMenuButton tooltip="Persone" />}><IconUsers /><span>Persone</span><IconChevronRight className="ml-auto transition-transform duration-200 group-data-panel-open/menu-button:rotate-90 motion-reduce:transition-none" /></CollapsibleTrigger>
@@ -126,7 +127,7 @@ export function DashboardShell() {
                     </CollapsibleContent>
                   </Collapsible>
                 </SidebarMenuItem>
-                {workspaceNavigation.slice(2).map(({ icon: Icon, label }) => <SidebarMenuItem key={label}><SidebarMenuButton tooltip={label}><Icon /><span>{label}</span></SidebarMenuButton></SidebarMenuItem>)}
+                {workspaceNavigation.slice(2).map(({ href, icon: Icon, label }) => <SidebarMenuItem key={label}><SidebarMenuButton render={<a href={href} />} tooltip={label}><Icon /><span>{label}</span></SidebarMenuButton></SidebarMenuItem>)}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
@@ -135,6 +136,7 @@ export function DashboardShell() {
             <SidebarGroupLabel>Collegamenti rapidi</SidebarGroupLabel>
             <SidebarGroupAction aria-label="Personalizza collegamenti rapidi" title="Personalizza collegamenti rapidi"><IconPin /></SidebarGroupAction>
             <SidebarGroupContent><SidebarMenu>
+              <SidebarMenuItem><SidebarMenuButton render={<a href="/calendar" />} tooltip="Scadenze"><IconCalendarDue /><span>Scadenze</span></SidebarMenuButton></SidebarMenuItem>
               <SidebarMenuItem><SidebarMenuButton tooltip="Prove"><IconPhoto /><span>Prove</span></SidebarMenuButton></SidebarMenuItem>
               <SidebarMenuItem><SidebarMenuButton tooltip="Checklist"><IconChecklist /><span>Checklist</span></SidebarMenuButton></SidebarMenuItem>
             </SidebarMenu></SidebarGroupContent>

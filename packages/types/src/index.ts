@@ -32,6 +32,8 @@ export const organizationPermissions = [
   "documents:archive",
   "deadlines:read",
   "deadlines:manage",
+  "calendar:read",
+  "calendar:manage",
   "checklists:read",
   "checklists:manage",
   "checklists:complete",
@@ -59,6 +61,18 @@ export type DocumentStatus = (typeof documentStatuses)[number];
 
 export const deadlineStatuses = ["SCHEDULED", "EXPIRING_SOON", "EXPIRED", "DONE", "ARCHIVED"] as const;
 export type DeadlineStatus = (typeof deadlineStatuses)[number];
+
+export const calendarEventKinds = ["EVENT", "TASK"] as const;
+export type CalendarEventKind = (typeof calendarEventKinds)[number];
+
+export const calendarEventPriorities = ["LOW", "MEDIUM", "HIGH", "URGENT"] as const;
+export type CalendarEventPriority = (typeof calendarEventPriorities)[number];
+
+export const calendarEventStatuses = ["PLANNED", "IN_PROGRESS", "DONE", "CANCELLED", "ARCHIVED"] as const;
+export type CalendarEventStatus = (typeof calendarEventStatuses)[number];
+
+export const calendarEventSources = ["QOOVEX", "ICALENDAR_IMPORT"] as const;
+export type CalendarEventSource = (typeof calendarEventSources)[number];
 
 export const checklistItemStatuses = ["OPEN", "DONE", "TO_REVIEW", "ARCHIVED"] as const;
 export type ChecklistItemStatus = (typeof checklistItemStatuses)[number];
@@ -141,6 +155,9 @@ export const auditActions = [
   "DEADLINE_CREATED",
   "DEADLINE_UPDATED",
   "DEADLINE_ARCHIVED",
+  "CALENDAR_EVENT_CREATED",
+  "CALENDAR_EVENT_UPDATED",
+  "CALENDAR_EVENT_ARCHIVED",
   "WORKER_CREATED",
   "WORKER_UPDATED",
   "WORKER_ARCHIVED",
@@ -192,6 +209,7 @@ export const auditEntityTypes = [
   "DOCUMENT",
   "DOCUMENT_VERSION",
   "DEADLINE",
+  "CALENDAR_EVENT",
   "WORKER",
   "JOB_SITE",
   "CHECKLIST",
@@ -1029,6 +1047,7 @@ export interface DataInventoryResponse {
     documents: DataRecordCount;
     documentVersions: DataRecordCount;
     deadlines: DataRecordCount;
+    calendarEvents: DataRecordCount;
     checklists: DataRecordCount;
     checklistItems: DataRecordCount;
     evidence: DataRecordCount;
@@ -1121,6 +1140,27 @@ export interface DataExportDataControlJob extends DataControlJobResponse {
   nextAttemptAt: string;
 }
 
+export interface DataExportCalendarEvent {
+  id: EntityId;
+  organizationId: EntityId;
+  title: string;
+  description?: string | null;
+  startAt: string;
+  endAt: string;
+  allDay: boolean;
+  kind: CalendarEventKind;
+  priority: CalendarEventPriority;
+  status: CalendarEventStatus;
+  source: CalendarEventSource;
+  externalUid?: string | null;
+  assignedToId?: EntityId | null;
+  jobSiteId?: EntityId | null;
+  createdById: EntityId;
+  createdAt: string;
+  updatedAt: string;
+  archivedAt?: string | null;
+}
+
 export interface DataExportSupportSession {
   id: EntityId;
   actorId: EntityId;
@@ -1175,6 +1215,7 @@ export interface DataExportResponse {
   documents: Array<DocumentSummary & { notes?: string | null; reviewedAt?: string | null; reviewedById?: EntityId | null; createdAt: string; updatedAt: string; archivedAt?: string | null }>;
   documentVersions: DocumentVersionResponse[];
   deadlines: Array<DeadlineSummary & { notes?: string | null; createdAt: string; updatedAt: string; archivedAt?: string | null }>;
+  calendarEvents: DataExportCalendarEvent[];
   checklists: ChecklistResponse[];
   checklistItems: ChecklistItemResponse[];
   evidence: EvidenceResponse[];

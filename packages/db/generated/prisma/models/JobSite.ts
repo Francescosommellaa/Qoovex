@@ -242,6 +242,7 @@ export type JobSiteWhereInput = {
   documents?: Prisma.DocumentListRelationFilter
   requirements?: Prisma.DocumentRequirementListRelationFilter
   deadlines?: Prisma.DeadlineListRelationFilter
+  calendarEvents?: Prisma.CalendarEventListRelationFilter
   checklists?: Prisma.ChecklistListRelationFilter
   evidence?: Prisma.EvidenceListRelationFilter
   documentPackages?: Prisma.DocumentPackageListRelationFilter
@@ -266,6 +267,7 @@ export type JobSiteOrderByWithRelationInput = {
   documents?: Prisma.DocumentOrderByRelationAggregateInput
   requirements?: Prisma.DocumentRequirementOrderByRelationAggregateInput
   deadlines?: Prisma.DeadlineOrderByRelationAggregateInput
+  calendarEvents?: Prisma.CalendarEventOrderByRelationAggregateInput
   checklists?: Prisma.ChecklistOrderByRelationAggregateInput
   evidence?: Prisma.EvidenceOrderByRelationAggregateInput
   documentPackages?: Prisma.DocumentPackageOrderByRelationAggregateInput
@@ -293,6 +295,7 @@ export type JobSiteWhereUniqueInput = Prisma.AtLeast<{
   documents?: Prisma.DocumentListRelationFilter
   requirements?: Prisma.DocumentRequirementListRelationFilter
   deadlines?: Prisma.DeadlineListRelationFilter
+  calendarEvents?: Prisma.CalendarEventListRelationFilter
   checklists?: Prisma.ChecklistListRelationFilter
   evidence?: Prisma.EvidenceListRelationFilter
   documentPackages?: Prisma.DocumentPackageListRelationFilter
@@ -352,6 +355,7 @@ export type JobSiteCreateInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
@@ -375,6 +379,7 @@ export type JobSiteUncheckedCreateInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
@@ -398,6 +403,7 @@ export type JobSiteUpdateInput = {
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
@@ -421,6 +427,7 @@ export type JobSiteUncheckedUpdateInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -655,6 +662,22 @@ export type JobSiteUpdateOneWithoutDeadlinesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutDeadlinesInput, Prisma.JobSiteUpdateWithoutDeadlinesInput>, Prisma.JobSiteUncheckedUpdateWithoutDeadlinesInput>
 }
 
+export type JobSiteCreateNestedOneWithoutCalendarEventsInput = {
+  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedCreateWithoutCalendarEventsInput>
+  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutCalendarEventsInput
+  connect?: Prisma.JobSiteWhereUniqueInput
+}
+
+export type JobSiteUpdateOneWithoutCalendarEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedCreateWithoutCalendarEventsInput>
+  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutCalendarEventsInput
+  upsert?: Prisma.JobSiteUpsertWithoutCalendarEventsInput
+  disconnect?: Prisma.JobSiteWhereInput | boolean
+  delete?: Prisma.JobSiteWhereInput | boolean
+  connect?: Prisma.JobSiteWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutCalendarEventsInput, Prisma.JobSiteUpdateWithoutCalendarEventsInput>, Prisma.JobSiteUncheckedUpdateWithoutCalendarEventsInput>
+}
+
 export type JobSiteCreateNestedOneWithoutChecklistsInput = {
   create?: Prisma.XOR<Prisma.JobSiteCreateWithoutChecklistsInput, Prisma.JobSiteUncheckedCreateWithoutChecklistsInput>
   connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutChecklistsInput
@@ -718,6 +741,7 @@ export type JobSiteCreateWithoutOrganizationInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
@@ -740,6 +764,7 @@ export type JobSiteUncheckedCreateWithoutOrganizationInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
@@ -807,6 +832,7 @@ export type JobSiteCreateWithoutUserAssignmentsInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
@@ -829,6 +855,7 @@ export type JobSiteUncheckedCreateWithoutUserAssignmentsInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
@@ -867,6 +894,7 @@ export type JobSiteUpdateWithoutUserAssignmentsInput = {
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
@@ -889,6 +917,7 @@ export type JobSiteUncheckedUpdateWithoutUserAssignmentsInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -911,6 +940,7 @@ export type JobSiteCreateWithoutWorkerAssignmentsInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
@@ -933,6 +963,7 @@ export type JobSiteUncheckedCreateWithoutWorkerAssignmentsInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
@@ -971,6 +1002,7 @@ export type JobSiteUpdateWithoutWorkerAssignmentsInput = {
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
@@ -993,6 +1025,7 @@ export type JobSiteUncheckedUpdateWithoutWorkerAssignmentsInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -1014,6 +1047,7 @@ export type JobSiteCreateWithoutDocumentsInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
@@ -1036,6 +1070,7 @@ export type JobSiteUncheckedCreateWithoutDocumentsInput = {
   archivedAt?: Date | string | null
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
@@ -1074,6 +1109,7 @@ export type JobSiteUpdateWithoutDocumentsInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
@@ -1096,6 +1132,7 @@ export type JobSiteUncheckedUpdateWithoutDocumentsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -1118,6 +1155,7 @@ export type JobSiteCreateWithoutRequirementsInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
@@ -1140,6 +1178,7 @@ export type JobSiteUncheckedCreateWithoutRequirementsInput = {
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
@@ -1178,6 +1217,7 @@ export type JobSiteUpdateWithoutRequirementsInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
@@ -1200,6 +1240,7 @@ export type JobSiteUncheckedUpdateWithoutRequirementsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -1222,6 +1263,7 @@ export type JobSiteCreateWithoutDeadlinesInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
@@ -1244,6 +1286,7 @@ export type JobSiteUncheckedCreateWithoutDeadlinesInput = {
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
@@ -1282,6 +1325,7 @@ export type JobSiteUpdateWithoutDeadlinesInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
@@ -1304,6 +1348,115 @@ export type JobSiteUncheckedUpdateWithoutDeadlinesInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
+  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
+  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
+  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
+  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
+}
+
+export type JobSiteCreateWithoutCalendarEventsInput = {
+  id?: string
+  name: string
+  address?: string | null
+  clientName?: string | null
+  status?: $Enums.RecordStatus
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
+  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
+  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
+  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
+  userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
+  workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
+}
+
+export type JobSiteUncheckedCreateWithoutCalendarEventsInput = {
+  id?: string
+  organizationId: string
+  name: string
+  address?: string | null
+  clientName?: string | null
+  status?: $Enums.RecordStatus
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
+  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
+  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
+  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
+  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
+  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
+}
+
+export type JobSiteCreateOrConnectWithoutCalendarEventsInput = {
+  where: Prisma.JobSiteWhereUniqueInput
+  create: Prisma.XOR<Prisma.JobSiteCreateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedCreateWithoutCalendarEventsInput>
+}
+
+export type JobSiteUpsertWithoutCalendarEventsInput = {
+  update: Prisma.XOR<Prisma.JobSiteUpdateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedUpdateWithoutCalendarEventsInput>
+  create: Prisma.XOR<Prisma.JobSiteCreateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedCreateWithoutCalendarEventsInput>
+  where?: Prisma.JobSiteWhereInput
+}
+
+export type JobSiteUpdateToOneWithWhereWithoutCalendarEventsInput = {
+  where?: Prisma.JobSiteWhereInput
+  data: Prisma.XOR<Prisma.JobSiteUpdateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedUpdateWithoutCalendarEventsInput>
+}
+
+export type JobSiteUpdateWithoutCalendarEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
+  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
+  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
+  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
+  userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
+  workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
+}
+
+export type JobSiteUncheckedUpdateWithoutCalendarEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
+  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -1327,6 +1480,7 @@ export type JobSiteCreateWithoutChecklistsInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
@@ -1349,6 +1503,7 @@ export type JobSiteUncheckedCreateWithoutChecklistsInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
@@ -1387,6 +1542,7 @@ export type JobSiteUpdateWithoutChecklistsInput = {
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
@@ -1409,6 +1565,7 @@ export type JobSiteUncheckedUpdateWithoutChecklistsInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -1431,6 +1588,7 @@ export type JobSiteCreateWithoutEvidenceInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
@@ -1453,6 +1611,7 @@ export type JobSiteUncheckedCreateWithoutEvidenceInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
@@ -1491,6 +1650,7 @@ export type JobSiteUpdateWithoutEvidenceInput = {
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
@@ -1513,6 +1673,7 @@ export type JobSiteUncheckedUpdateWithoutEvidenceInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -1535,6 +1696,7 @@ export type JobSiteCreateWithoutDocumentPackagesInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
@@ -1557,6 +1719,7 @@ export type JobSiteUncheckedCreateWithoutDocumentPackagesInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
@@ -1595,6 +1758,7 @@ export type JobSiteUpdateWithoutDocumentPackagesInput = {
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
@@ -1617,6 +1781,7 @@ export type JobSiteUncheckedUpdateWithoutDocumentPackagesInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -1652,6 +1817,7 @@ export type JobSiteUpdateWithoutOrganizationInput = {
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
@@ -1674,6 +1840,7 @@ export type JobSiteUncheckedUpdateWithoutOrganizationInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -1704,6 +1871,7 @@ export type JobSiteCountOutputType = {
   documents: number
   requirements: number
   deadlines: number
+  calendarEvents: number
   checklists: number
   evidence: number
   documentPackages: number
@@ -1715,6 +1883,7 @@ export type JobSiteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   documents?: boolean | JobSiteCountOutputTypeCountDocumentsArgs
   requirements?: boolean | JobSiteCountOutputTypeCountRequirementsArgs
   deadlines?: boolean | JobSiteCountOutputTypeCountDeadlinesArgs
+  calendarEvents?: boolean | JobSiteCountOutputTypeCountCalendarEventsArgs
   checklists?: boolean | JobSiteCountOutputTypeCountChecklistsArgs
   evidence?: boolean | JobSiteCountOutputTypeCountEvidenceArgs
   documentPackages?: boolean | JobSiteCountOutputTypeCountDocumentPackagesArgs
@@ -1751,6 +1920,13 @@ export type JobSiteCountOutputTypeCountRequirementsArgs<ExtArgs extends runtime.
  */
 export type JobSiteCountOutputTypeCountDeadlinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DeadlineWhereInput
+}
+
+/**
+ * JobSiteCountOutputType without action
+ */
+export type JobSiteCountOutputTypeCountCalendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CalendarEventWhereInput
 }
 
 /**
@@ -1806,6 +1982,7 @@ export type JobSiteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   documents?: boolean | Prisma.JobSite$documentsArgs<ExtArgs>
   requirements?: boolean | Prisma.JobSite$requirementsArgs<ExtArgs>
   deadlines?: boolean | Prisma.JobSite$deadlinesArgs<ExtArgs>
+  calendarEvents?: boolean | Prisma.JobSite$calendarEventsArgs<ExtArgs>
   checklists?: boolean | Prisma.JobSite$checklistsArgs<ExtArgs>
   evidence?: boolean | Prisma.JobSite$evidenceArgs<ExtArgs>
   documentPackages?: boolean | Prisma.JobSite$documentPackagesArgs<ExtArgs>
@@ -1867,6 +2044,7 @@ export type JobSiteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   documents?: boolean | Prisma.JobSite$documentsArgs<ExtArgs>
   requirements?: boolean | Prisma.JobSite$requirementsArgs<ExtArgs>
   deadlines?: boolean | Prisma.JobSite$deadlinesArgs<ExtArgs>
+  calendarEvents?: boolean | Prisma.JobSite$calendarEventsArgs<ExtArgs>
   checklists?: boolean | Prisma.JobSite$checklistsArgs<ExtArgs>
   evidence?: boolean | Prisma.JobSite$evidenceArgs<ExtArgs>
   documentPackages?: boolean | Prisma.JobSite$documentPackagesArgs<ExtArgs>
@@ -1888,6 +2066,7 @@ export type $JobSitePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     documents: Prisma.$DocumentPayload<ExtArgs>[]
     requirements: Prisma.$DocumentRequirementPayload<ExtArgs>[]
     deadlines: Prisma.$DeadlinePayload<ExtArgs>[]
+    calendarEvents: Prisma.$CalendarEventPayload<ExtArgs>[]
     checklists: Prisma.$ChecklistPayload<ExtArgs>[]
     evidence: Prisma.$EvidencePayload<ExtArgs>[]
     documentPackages: Prisma.$DocumentPackagePayload<ExtArgs>[]
@@ -2305,6 +2484,7 @@ export interface Prisma__JobSiteClient<T, Null = never, ExtArgs extends runtime.
   documents<T extends Prisma.JobSite$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   requirements<T extends Prisma.JobSite$requirementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$requirementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deadlines<T extends Prisma.JobSite$deadlinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$deadlinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeadlinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  calendarEvents<T extends Prisma.JobSite$calendarEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$calendarEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   checklists<T extends Prisma.JobSite$checklistsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$checklistsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChecklistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   evidence<T extends Prisma.JobSite$evidenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$evidenceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documentPackages<T extends Prisma.JobSite$documentPackagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$documentPackagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2821,6 +3001,30 @@ export type JobSite$deadlinesArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.DeadlineScalarFieldEnum | Prisma.DeadlineScalarFieldEnum[]
+}
+
+/**
+ * JobSite.calendarEvents
+ */
+export type JobSite$calendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CalendarEvent
+   */
+  select?: Prisma.CalendarEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CalendarEvent
+   */
+  omit?: Prisma.CalendarEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CalendarEventInclude<ExtArgs> | null
+  where?: Prisma.CalendarEventWhereInput
+  orderBy?: Prisma.CalendarEventOrderByWithRelationInput | Prisma.CalendarEventOrderByWithRelationInput[]
+  cursor?: Prisma.CalendarEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CalendarEventScalarFieldEnum | Prisma.CalendarEventScalarFieldEnum[]
 }
 
 /**

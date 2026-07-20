@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   IconChecklist,
+  IconCalendarDue,
   IconFile,
   IconPin,
   IconShare3,
@@ -33,6 +34,7 @@ const STORAGE_KEY = "qoovex.workspace.quick-links.v1";
 const MAX_PINNED_LINKS = 4;
 
 const iconByHref = {
+  "/deadlines?mode=deadlines": IconCalendarDue,
   "/evidence": IconFile,
   "/checklists": IconChecklist,
   "/document-packages": IconShare3,
