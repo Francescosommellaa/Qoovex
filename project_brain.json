@@ -23,6 +23,9 @@
     "typography": "Sirio, web and workspace load Geist and Geist Mono through next/font; @qoovex/brand-resources is asset-only.",
     "design_system": "@qoovex/ui is the canonical shadcn base-nova foundation with Base UI, Tabler and the Vercel light/dark/system theme. Sirio, web and workspace consume explicit package subpaths.",
     "motion": "The shared foundation implements circular theme reveal, floating navigation and Base UI state transitions with reduced-motion and unsupported-browser fallbacks.",
-    "workspace_architecture": "FSD aliases are configured. Flow-by-flow migration has not started."
+    "workspace_architecture": "FSD aliases are configured. Flow-by-flow migration has not started.",
+    "database_environments": "Production and Preview use distinct Prisma Postgres databases; local development and Prisma Studio use qoovex-local; CI uses loopback qoovex_ci. Root pnpm dev starts or reuses qoovex-local before the apps.",
+    "database_operations": "Every database-sensitive task automatically applies docs/OperationalProtocol.md#database-operation-impact, measures or evidences before/after Prisma calls, fixes safe verified waste in-scope, and preserves tenant isolation and authorization.",
+    "database_open_risk": "Prisma Git integration still creates automatic PR database and Compute resources outside the Vercel architecture; unlinking and cleanup require explicit approval."
   }
 }

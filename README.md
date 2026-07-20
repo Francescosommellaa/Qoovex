@@ -31,8 +31,11 @@ Il modello MVP per documenti, scadenze, cantieri e prove operative e definito co
 
 ## Comandi
 
+`pnpm dev` avvia o riusa automaticamente Prisma Postgres locale `qoovex-local` e soltanto dopo avvia le app. Il bootstrap rifiuta target remoti e non consuma Operations dei database cloud.
+
 ```bash
 pnpm install
+pnpm dev
 pnpm --filter @qoovex/db db:generate
 pnpm --filter @qoovex/ui type-check
 pnpm --filter @qoovex/ui test

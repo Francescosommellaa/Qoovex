@@ -12,6 +12,7 @@
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "tsx scripts/migrate-deploy.ts",
     "db:seed": "prisma db seed",
+    "db:start:local": "tsx scripts/start-local-database.ts",
     "verify:prisma": "tsx scripts/verify-prisma.ts",
     "test": "tsx --test scripts/*.test.ts",
     "test:upgrade": "tsx scripts/rate-limit-upgrade.integration.ts",
