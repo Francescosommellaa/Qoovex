@@ -129,6 +129,34 @@ export async function listChecklists(input: ListChecklistsInput = {}) {
   return checklists;
 }
 
+export async function listChecklistsWithItems(input: ListChecklistsInput = {}) {
+  const { context, organizationId } = await requireOrganizationDomainAccess("checklists:read", CHECKLIST_READ_ROLES);
+  const scope = await getResourceScope(context);
+  const where: { organizationId: string; archivedAt: null; jobSiteId?: string | { in: string[] }; status?: RecordStatus } = { organizationId, archivedAt: null };
+  if (!scope.fullAccess) where.jobSiteId = { in: scope.siteManagerJobSiteIds };
+  const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
+  if (jobSiteId) {
+    requireAssignedJobSite(scope, jobSiteId);
+    where.jobSiteId = jobSiteId;
+  }
+  if (input.status !== undefined) where.status = parseEditableRecordStatus(input.status);
+
+  const checklists = await db.checklist.findMany({
+    where,
+    select: {
+      ...checklistSelect,
+      items: {
+        where: { status: { not: "ARCHIVED" } },
+        select: checklistItemSelect,
+        orderBy: [{ createdAt: "asc" }],
+      },
+    },
+    orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+  });
+  await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "checklists" });
+  return checklists;
+}
+
 export async function getChecklist(checklistId: string) {
   const { context, organizationId } = await requireOrganizationDomainAccess("checklists:read", CHECKLIST_READ_ROLES);
   const scope = await getResourceScope(context);

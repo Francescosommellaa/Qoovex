@@ -46,6 +46,7 @@ import {
   archiveDocumentVersion,
   getDocumentVersionDownload,
   listDocumentVersions,
+  listDocumentVersionsByDocumentIds,
   uploadDocumentVersion,
 } from "./document-version-service";
 
@@ -130,6 +131,24 @@ beforeEach(() => {
 });
 
 describe("document version service", () => {
+  it("loads versions for multiple authorized documents with one Prisma operation", async () => {
+    mocks.db.documentVersion.findMany.mockResolvedValue([
+      versionRecord,
+      { ...versionRecord, id: "version-2", documentId: "doc-2" },
+    ]);
+
+    await expect(listDocumentVersionsByDocumentIds(["doc-1", "doc-2", "doc-1"])).resolves.toHaveLength(2);
+    expect(mocks.db.documentVersion.findMany).toHaveBeenCalledTimes(1);
+    expect(mocks.db.documentVersion.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: expect.objectContaining({
+        organizationId: "org-1",
+        documentId: { in: ["doc-1", "doc-2"] },
+        document: { is: expect.objectContaining({ organizationId: "org-1", archivedAt: null }) },
+      }),
+    }));
+    expect(mocks.db.document.findFirst).not.toHaveBeenCalled();
+  });
+
   it("lets owners upload a private Blob and saves only metadata in Prisma", async () => {
     const version = await uploadDocumentVersion("doc-1", [makeFile()]);
 

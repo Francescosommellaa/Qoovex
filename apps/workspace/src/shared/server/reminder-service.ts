@@ -39,56 +39,6 @@ function dedupeKey(candidate: ReminderCandidate) {
   return `${candidate.type}:${candidate.sourceType}:${candidate.sourceId}:organization`;
 }
 
-async function ensureNotification(organizationId: string, candidate: ReminderCandidate): Promise<"created" | "updated" | "skipped"> {
-  const key = dedupeKey(candidate);
-  const existing = await db.notification.findUnique({
-    where: { organizationId_dedupeKey: { organizationId, dedupeKey: key } },
-    select: { id: true, title: true, message: true, severity: true, actionHref: true, dismissedAt: true },
-  });
-
-  if (existing?.dismissedAt) return "skipped";
-
-  if (!existing) {
-    await db.notification.create({
-      data: {
-        organizationId,
-        userId: null,
-        type: candidate.type,
-        severity: candidate.severity,
-        title: candidate.title,
-        message: candidate.message,
-        sourceType: candidate.sourceType,
-        sourceId: candidate.sourceId,
-        dedupeKey: key,
-        actionHref: candidate.actionHref,
-      },
-      select: { id: true },
-    });
-    return "created";
-  }
-
-  if (
-    existing.title === candidate.title &&
-    existing.message === candidate.message &&
-    existing.severity === candidate.severity &&
-    existing.actionHref === candidate.actionHref
-  ) {
-    return "skipped";
-  }
-
-  await db.notification.update({
-    where: { id: existing.id },
-    data: {
-      title: candidate.title,
-      message: candidate.message,
-      severity: candidate.severity,
-      actionHref: candidate.actionHref,
-    },
-    select: { id: true },
-  });
-  return "updated";
-}
-
 async function collectReminderCandidates(organizationId: string, now: Date): Promise<ReminderCandidate[]> {
   const upcomingUntil = addDays(now, UPCOMING_DEADLINE_WINDOW_DAYS);
   const [deadlines, documents, packagesReadyForReview, shareLinks] = await Promise.all([
@@ -225,10 +175,79 @@ async function collectReminderCandidates(organizationId: string, now: Date): Pro
 export async function syncOrganizationReminderRecords(organizationId: string, now = new Date()): Promise<ReminderSyncResult> {
   const candidates = await collectReminderCandidates(organizationId, now);
   const result: ReminderSyncResult = { created: 0, updated: 0, skipped: 0 };
+  if (candidates.length === 0) return result;
 
-  for (const candidate of candidates) {
-    const outcome = await ensureNotification(organizationId, candidate);
-    result[outcome] += 1;
+  const candidatesByKey = new Map(candidates.map((candidate) => [dedupeKey(candidate), candidate]));
+  const existingNotifications = await db.notification.findMany({
+    where: { organizationId, dedupeKey: { in: [...candidatesByKey.keys()] } },
+    select: {
+      id: true,
+      dedupeKey: true,
+      title: true,
+      message: true,
+      severity: true,
+      actionHref: true,
+      dismissedAt: true,
+    },
+  });
+  const existingByKey = new Map(existingNotifications.map((notification) => [notification.dedupeKey, notification]));
+  const missingCandidates: ReminderCandidate[] = [];
+  const changedCandidates: Array<{ id: string; candidate: ReminderCandidate }> = [];
+
+  for (const [key, candidate] of candidatesByKey) {
+    const existing = existingByKey.get(key);
+    if (!existing) {
+      missingCandidates.push(candidate);
+      continue;
+    }
+    if (existing.dismissedAt) {
+      result.skipped += 1;
+      continue;
+    }
+    if (
+      existing.title === candidate.title &&
+      existing.message === candidate.message &&
+      existing.severity === candidate.severity &&
+      existing.actionHref === candidate.actionHref
+    ) {
+      result.skipped += 1;
+      continue;
+    }
+    changedCandidates.push({ id: existing.id, candidate });
+  }
+
+  if (missingCandidates.length > 0) {
+    const created = await db.notification.createMany({
+      data: missingCandidates.map((candidate) => ({
+        organizationId,
+        userId: null,
+        type: candidate.type,
+        severity: candidate.severity,
+        title: candidate.title,
+        message: candidate.message,
+        sourceType: candidate.sourceType,
+        sourceId: candidate.sourceId,
+        dedupeKey: dedupeKey(candidate),
+        actionHref: candidate.actionHref,
+      })),
+      skipDuplicates: true,
+    });
+    result.created += created.count;
+    result.skipped += missingCandidates.length - created.count;
+  }
+
+  for (const { id, candidate } of changedCandidates) {
+    await db.notification.update({
+      where: { id },
+      data: {
+        title: candidate.title,
+        message: candidate.message,
+        severity: candidate.severity,
+        actionHref: candidate.actionHref,
+      },
+      select: { id: true },
+    });
+    result.updated += 1;
   }
 
   return result;

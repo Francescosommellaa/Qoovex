@@ -17,6 +17,13 @@ describe("workspace navigation history", () => {
     ).toBe("Nuovo documento");
   });
 
+  it("keeps calendar and deadlines as separate destinations", () => {
+    const navigation = [{ label: "Calendario", href: "/calendar" }];
+    expect(resolveWorkspacePageLabel("/calendar", navigation, "Area di lavoro")).toBe("Calendario");
+    expect(resolveWorkspacePageLabel("/deadlines", navigation, "Area di lavoro")).toBe("Scadenze");
+    expect(resolveWorkspacePageLabel("/deadlines/new", navigation, "Area di lavoro")).toBe("Nuova scadenza");
+  });
+
   it("keeps the current page and at most the last three distinct destinations", () => {
     const pages = [
       { href: "/dashboard", label: "Da fare" },

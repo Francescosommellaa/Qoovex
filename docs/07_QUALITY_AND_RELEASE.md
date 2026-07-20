@@ -11,3 +11,11 @@ Il gate standard e: `pnpm type-check`, `pnpm test:unit`, `pnpm build`, `pnpm che
 Ogni modifica a schema, API, autorizzazioni, storage, UI condivisa o operazioni deve verificare i confini interessati e aggiornare questa documentazione, Qoovex-Brain e il session log nello stesso task. La memoria Codex si aggiorna solo su richiesta esplicita.
 
 Un deploy non e verificato solo da build locale: le configurazioni Vercel e i flussi sensibili richiedono smoke check nel rispettivo ambiente.
+
+## Database operation impact
+
+Ogni modifica database-sensitive deve includere nel report la sezione prevista da `OperationalProtocol.md` e almeno un test proporzionato al rischio. Per collezioni annidate il test deve dimostrare che il numero di chiamate Prisma non cresce con il numero di record; per memoizzazione o cache deve provare isolamento tra richieste, utenti e Aziende e la corretta invalidazione dopo le mutation.
+
+`QOOVEX_DB_OPERATION_METRICS=1` abilita il contatore locale request/flow-scoped di `@qoovex/db`. Registra solo modello, operazione, durata e conteggio, senza SQL, argomenti, dati personali, token, blob key o identificatori Azienda. L'output e una proxy di chiamate Prisma Client e non sostituisce Usage o Query Insights della Prisma Console. Il flag resta disattivato per default e non va abilitato rumorosamente in produzione.
+
+La review non puo attribuire a `Promise.all`, `select`, paginazione o indici una riduzione del numero di operazioni senza una misurazione che lo dimostri. Questi interventi possono migliorare rispettivamente latenza/concorrenza, payload/egress e tempo di esecuzione.

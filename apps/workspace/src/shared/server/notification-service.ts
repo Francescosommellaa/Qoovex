@@ -132,7 +132,6 @@ export async function listNotifications(input: ListNotificationsInput = {}): Pro
 
 export async function getUnreadNotificationCount(): Promise<number> {
   const { context, organizationId } = await requireOrganizationDomainAccess("organization:read", NOTIFICATION_ACCESS_ROLES);
-  await syncOrganizationReminderRecords(organizationId);
   return db.notification.count({
     where: {
       ...visibleNotificationWhere(organizationId, context.userId),

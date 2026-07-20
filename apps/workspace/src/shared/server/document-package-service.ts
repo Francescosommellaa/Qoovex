@@ -4,6 +4,7 @@ import { db } from "@qoovex/db";
 import type { DocumentPackageItemType, DocumentPackageStatus } from "@qoovex/types";
 import { documentPackageItemTypes, documentPackageStatuses } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
+import { requirePermission } from "@shared/server/access-context-service";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { isEnumValue, trimOptionalId, trimOptionalText, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
@@ -39,9 +40,24 @@ const packageItemSelect = {
   createdAt: true,
 } as const;
 
+const packageShareLinkSelect = {
+  id: true,
+  organizationId: true,
+  documentPackageId: true,
+  expiresAt: true,
+  revokedAt: true,
+  createdById: true,
+  createdAt: true,
+  lastAccessedAt: true,
+} as const;
+
 export interface ListDocumentPackagesInput {
   jobSiteId?: unknown;
   status?: unknown;
+}
+
+export interface ListDocumentPackagesWithDetailsInput extends ListDocumentPackagesInput {
+  includeShareLinks?: boolean;
 }
 
 export interface CreateDocumentPackageInput extends Record<string, unknown> {
@@ -217,6 +233,41 @@ export async function listDocumentPackages(input: ListDocumentPackagesInput = {}
   const packages = await db.documentPackage.findMany({ where, select: documentPackageSelect, orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }] });
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-packages" });
   return packages;
+}
+
+export async function listDocumentPackagesWithDetails(input: ListDocumentPackagesWithDetailsInput = {}) {
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:read", PACKAGE_ACCESS_ROLES);
+  const where: { organizationId: string; archivedAt: null; jobSiteId?: string; status?: DocumentPackageStatus } = { organizationId, archivedAt: null };
+  const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
+  if (jobSiteId) where.jobSiteId = jobSiteId;
+  if (input.status !== undefined) where.status = parsePackageStatus(input.status);
+
+  if (input.includeShareLinks) {
+    requirePermission(context, "documentPackages:share");
+    if (actorRole !== "OWNER" && actorRole !== "ADMIN") throw new AccessError("Risorsa non disponibile.", 404);
+    const packages = await db.documentPackage.findMany({
+      where,
+      select: {
+        ...documentPackageSelect,
+        items: { select: packageItemSelect, orderBy: [{ position: "asc" }, { createdAt: "asc" }] },
+        shareLinks: { select: packageShareLinkSelect, orderBy: { createdAt: "desc" } },
+      },
+      orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+    });
+    await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-packages" });
+    return packages;
+  }
+
+  const packages = await db.documentPackage.findMany({
+    where,
+    select: {
+      ...documentPackageSelect,
+      items: { select: packageItemSelect, orderBy: [{ position: "asc" }, { createdAt: "asc" }] },
+    },
+    orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+  });
+  await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-packages" });
+  return packages.map((documentPackage) => ({ ...documentPackage, shareLinks: [] }));
 }
 
 export async function getDocumentPackage(packageId: string) {

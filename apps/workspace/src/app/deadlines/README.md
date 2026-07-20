@@ -1,5 +1,5 @@
-# Calendario e scadenze
+# Scadenze
 
-Pagina Workspace che unifica eventi, task e scadenze registrate. La route resta `/deadlines` per compatibilita con link, reminder e permessi esistenti.
+Timeline Workspace delle scadenze registrate, ordinata cronologicamente e separata dal calendario operativo.
 
-Usa i service server-side per leggere dati filtrati per Azienda, `/api/calendar` per gli eventi e `/api/deadlines` per le scadenze. I record Deadline vengono rappresentati direttamente nel calendario e non duplicati come CalendarEvent.
+La pagina legge record `Deadline` filtrati server-side per Azienda. Creazione, modifica e archiviazione continuano a usare `/api/deadlines`; il calendario li compone in sola lettura senza duplicarli come `CalendarEvent`.

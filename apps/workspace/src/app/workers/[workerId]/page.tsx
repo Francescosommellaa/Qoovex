@@ -27,10 +27,10 @@ export default async function WorkerDetailPage({ params }: WorkerDetailPageProps
     let jobSites: Awaited<ReturnType<typeof listJobSites>> = [];
     let userLinks: Awaited<ReturnType<typeof listWorkerUserLinks>> = [];
     if (capabilities.canReadAssignments) {
-      const [visibleJobSites, assignments, links] = await Promise.all([listJobSites(), listJobSiteWorkerAssignments(), listWorkerUserLinks()]);
-      const assignedIds = new Set(assignments.filter((item) => item.workerId === workerId).map((item) => item.jobSiteId));
+      const [visibleJobSites, assignments, links] = await Promise.all([listJobSites(), listJobSiteWorkerAssignments({ workerId }), listWorkerUserLinks({ workerId })]);
+      const assignedIds = new Set(assignments.map((item) => item.jobSiteId));
       jobSites = visibleJobSites.filter((item) => assignedIds.has(item.id));
-      userLinks = links.filter((item) => item.workerId === workerId);
+      userLinks = links;
     } else if (capabilities.role === "WORKER") jobSites = await listJobSites();
     return (
       <WorkerDetailView

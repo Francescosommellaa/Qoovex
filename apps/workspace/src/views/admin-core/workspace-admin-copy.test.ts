@@ -42,7 +42,7 @@ describe("workspace admin UI copy", () => {
   const nextConfigSource = readFileSync(join(root, "..", "..", "next.config.ts"), "utf8");
   const combinedSource = `${source}\n${appSource}`;
 
-  const adminRoutes = ["/dashboard", "/notifications", "/documents", "/deadlines", "/workers", "/job-sites", "/checklists", "/evidence", "/document-packages", "/access", "/audit-log", "/data-control"] as const;
+  const adminRoutes = ["/dashboard", "/notifications", "/documents", "/calendar", "/deadlines", "/workers", "/job-sites", "/checklists", "/evidence", "/document-packages", "/access", "/audit-log", "/data-control"] as const;
 
   it("does not render forbidden legal or sensitive storage copy", () => {
     expect(combinedSource).not.toMatch(/sei a norma|conformita garantita|validita legale|legalmente valido|abilitato automaticamente|obbligatorio per legge/i);
@@ -50,7 +50,7 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps everyday navigation small and preserves secondary routes", () => {
-    for (const route of ["/dashboard", "/documents", "/workers", "/job-sites"]) expect(navigationPolicySource).toContain(`href: "${route}"`);
+    for (const route of ["/dashboard", "/documents", "/calendar", "/workers", "/job-sites"]) expect(navigationPolicySource).toContain(`href: "${route}"`);
     for (const route of adminRoutes) expect(appSource).toContain(route.slice(1));
     for (const route of ["/deadlines", "/checklists", "/evidence", "/document-packages", "/access", "/audit-log", "/data-control"]) {
       expect(navigationPolicySource).not.toContain(`label: "${route}"`);
@@ -145,7 +145,7 @@ describe("workspace admin UI copy", () => {
     expect(documentListPageSource).not.toContain("listDocumentTypes");
     expect(documentListPageSource).not.toContain("getMissingDocumentRequirements");
     expect(documentDetailPageSource).toContain("capabilities.canReadDocumentSettings ? await listDocumentTypes() : []");
-    expect(evidencePageSource).toContain("capabilities.canCompleteChecklists || capabilities.canManageChecklists ? await listChecklists() : []");
+    expect(evidencePageSource).toContain("capabilities.canCompleteChecklists || capabilities.canManageChecklists ? await listChecklistsWithItems() : []");
   });
 
   it("keeps document upload retry on the created record and owner out of invitation choices", () => {

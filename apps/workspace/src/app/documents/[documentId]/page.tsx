@@ -1,6 +1,5 @@
-import { getDocument } from "@shared/server/document-service";
+import { getDocumentWithVersions } from "@shared/server/document-service";
 import { listDocumentTypes } from "@shared/server/document-type-service";
-import { listDocumentVersions } from "@shared/server/document-version-service";
 import { listDeadlines } from "@shared/server/deadline-service";
 import { listJobSites } from "@shared/server/job-site-service";
 import { listWorkers } from "@shared/server/worker-service";
@@ -18,13 +17,13 @@ export default async function DocumentDetailPage({ params, searchParams }: Docum
   try {
     const [{ documentId }, { from }] = await Promise.all([params, searchParams]);
     const capabilities = await getWorkspaceCapabilities();
-    const [document, versions, deadlines, workers, jobSites] = await Promise.all([
-      getDocument(documentId),
-      listDocumentVersions(documentId),
+    const [documentReadModel, deadlines, workers, jobSites] = await Promise.all([
+      getDocumentWithVersions(documentId),
       listDeadlines({ documentId }),
       listWorkers(),
       listJobSites(),
     ]);
+    const { document, versions } = documentReadModel;
     const documentTypes = capabilities.canReadDocumentSettings ? await listDocumentTypes() : [];
     return (
       <DocumentDetailView

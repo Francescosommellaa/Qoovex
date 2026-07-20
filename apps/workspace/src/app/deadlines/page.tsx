@@ -1,32 +1,38 @@
-import { listCalendarEvents, listCalendarParticipants } from "@shared/server/calendar-event-service";
 import { listDeadlines } from "@shared/server/deadline-service";
+import { listDocuments } from "@shared/server/document-service";
 import { listJobSites } from "@shared/server/job-site-service";
+import { listWorkers } from "@shared/server/worker-service";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
-import { CalendarPageView } from "@/views/admin-core/calendar/CalendarPageView";
+import { DeadlinesPageView } from "@/views/admin-core/deadlines/DeadlinesPageView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
-import type { WorkspaceCalendarEventRecord, WorkspaceCalendarParticipant, WorkspaceDeadlineRecord, WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
+import type { WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
-export default async function DeadlinesPage({ searchParams }: { searchParams: Promise<{ mode?: string }> }) {
+export default async function DeadlinesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ from?: string; updated?: string }>;
+}) {
   try {
-    const { mode } = await searchParams;
-    const [events, deadlines, participants, jobSites, capabilities] = await Promise.all([
-      listCalendarEvents(),
+    const { from, updated } = await searchParams;
+    const [deadlines, documents, workers, jobSites, capabilities] = await Promise.all([
       listDeadlines(),
-      listCalendarParticipants(),
+      listDocuments(),
+      listWorkers(),
       listJobSites(),
       getWorkspaceCapabilities(),
     ]);
     return (
-      <CalendarPageView
+      <DeadlinesPageView
         capabilities={capabilities}
-        initialEvents={serializeForClient<WorkspaceCalendarEventRecord[]>(events)}
         deadlines={serializeForClient<WorkspaceDeadlineRecord[]>(deadlines)}
-        participants={serializeForClient<WorkspaceCalendarParticipant[]>(participants)}
+        documents={serializeForClient<WorkspaceDocumentRecord[]>(documents)}
+        workers={serializeForClient<WorkspaceWorkerRecord[]>(workers)}
         jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
-        initialFilter={mode === "deadlines" ? "deadlines" : "all"}
+        returnToDashboard={from === "dashboard"}
+        updatedId={updated}
       />
     );
   } catch {
-    return <WorkspaceAccessState title="Calendario non disponibile" description="Verifica accesso, Azienda configurata e stato delle migration." />;
+    return <WorkspaceAccessState title="Scadenze non disponibili" description="Verifica accesso e Azienda configurata." />;
   }
 }

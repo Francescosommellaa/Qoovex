@@ -44,6 +44,7 @@ import {
   createDocumentPackage,
   getDocumentPackage,
   listDocumentPackages,
+  listDocumentPackagesWithDetails,
   removeDocumentPackageItem,
   updateDocumentPackageItem,
 } from "./document-package-service";
@@ -173,6 +174,20 @@ describe("document package service", () => {
     }));
   });
 
+  it("loads package items and authorized share links with one Prisma operation", async () => {
+    mocks.db.documentPackage.findMany.mockResolvedValue([
+      { ...packageRecord, items: [itemRecord], shareLinks: [shareLinkRecord] },
+      { ...packageRecord, id: "package-2", items: [], shareLinks: [] },
+    ]);
+
+    await expect(listDocumentPackagesWithDetails({ includeShareLinks: true })).resolves.toHaveLength(2);
+    expect(mocks.db.documentPackage.findMany).toHaveBeenCalledTimes(1);
+    expect(mocks.db.documentPackage.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      select: expect.objectContaining({ items: expect.any(Object), shareLinks: expect.any(Object) }),
+    }));
+    expect(mocks.requirePermission).toHaveBeenCalledWith(expect.anything(), "documentPackages:share");
+  });
+
   it("lets safety consultants read/create package items but not share links", async () => {
     setRole("SAFETY_CONSULTANT");
     mocks.db.documentPackageItem.findFirst.mockResolvedValueOnce(null).mockResolvedValue({ position: -1 });
@@ -181,6 +196,7 @@ describe("document package service", () => {
     await expect(addDocumentPackageItem("package-1", { itemType: "NOTE", note: "Nota per revisione" })).resolves.toMatchObject({ itemType: "NOTE" });
     await expect(listShareLinks("package-1")).rejects.toMatchObject({ status: 404 });
     await expect(createShareLink("package-1")).rejects.toMatchObject({ status: 404 });
+    await expect(listDocumentPackagesWithDetails({ includeShareLinks: true })).rejects.toMatchObject({ status: 404 });
   });
 
   it("denies broad internal package access to site managers, workers and destinatari esterni", async () => {

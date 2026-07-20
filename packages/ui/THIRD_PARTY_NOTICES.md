@@ -26,6 +26,10 @@ For the authentication redesign, the official `base-nova` `login-04` block was i
 
 The shared `OtpInput` composes the stable `OTPField` primitive from `@base-ui/react` `1.6.0`: https://base-ui.com/react/components/otp-field. Base UI is distributed under the MIT License and remains an existing approved dependency of `@qoovex/ui`.
 
+## next-themes
+
+`@qoovex/ui` uses `next-themes` `0.4.6` under its MIT license. The temporary local patch `patches/next-themes@0.4.6.patch` incorporates the upstream proposal [`pacocoursey/next-themes#386`](https://github.com/pacocoursey/next-themes/pull/386), commit `f7c65bcf88a9a9198640ff658f50abcdd62330fb`, so the theme bootstrap script is emitted only during SSR and not re-rendered by React 19 on the client.
+
 ## FullCalendar Standard
 
 The Workspace calendar and its Sirio proof use FullCalendar React Standard `7.0.1`: https://fullcalendar.io/. Only MIT-licensed standard plugins are used; no Scheduler/Premium package is included.

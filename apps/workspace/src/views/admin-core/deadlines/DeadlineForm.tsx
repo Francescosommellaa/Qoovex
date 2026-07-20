@@ -59,7 +59,9 @@ export function DeadlineForm({
         else if (initialContext?.type === "job-site") router.push(`/job-sites/${initialContext.id}`);
         else if (initialContext?.type === "worker") router.push(`/workers/${initialContext.id}`);
         else if (initialContext?.type === "document") router.push(`/documents/${initialContext.id}`);
-        else router.push("/deadlines");
+        else router.push(`/deadlines?updated=${response.id}`);
+      } else {
+        router.push(`/deadlines?updated=${response.id}`);
       }
       router.refresh();
     } catch (submitError) {

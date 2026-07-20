@@ -9,6 +9,7 @@ const mocks = vi.hoisted(() => ({
       findMany: vi.fn(),
       count: vi.fn(),
       create: vi.fn(),
+      createMany: vi.fn(),
       update: vi.fn(),
     },
     deadline: { findMany: vi.fn() },
@@ -39,7 +40,7 @@ vi.mock("@shared/server/access-context-service", () => ({
 }));
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
 
-import { dismissNotification, listNotifications, markNotificationRead } from "./notification-service";
+import { dismissNotification, getUnreadNotificationCount, listNotifications, markNotificationRead } from "./notification-service";
 import { syncOrganizationReminders } from "./reminder-service";
 
 const now = new Date("2026-07-05T10:00:00.000Z");
@@ -99,9 +100,8 @@ beforeEach(() => {
   mocks.recordSupportAccess.mockResolvedValue(undefined);
   setRole("OWNER");
   primeEmptyReminderSources();
-  mocks.db.notification.findUnique.mockResolvedValue(null);
-  mocks.db.notification.create.mockResolvedValue({ id: "created" });
   mocks.db.notification.findMany.mockResolvedValue([notificationRecord]);
+  mocks.db.notification.createMany.mockImplementation(async ({ data }) => ({ count: data.length }));
   mocks.db.notification.count.mockResolvedValue(1);
 });
 
@@ -153,6 +153,16 @@ describe("notification service", () => {
     expect(mocks.db.notification.findMany).not.toHaveBeenCalled();
   });
 
+  it("reads the shell badge without scanning reminder sources", async () => {
+    await expect(getUnreadNotificationCount()).resolves.toBe(1);
+
+    expect(mocks.db.notification.count).toHaveBeenCalledTimes(1);
+    expect(mocks.db.deadline.findMany).not.toHaveBeenCalled();
+    expect(mocks.db.document.findMany).not.toHaveBeenCalled();
+    expect(mocks.db.documentPackage.findMany).not.toHaveBeenCalled();
+    expect(mocks.db.shareLink.findMany).not.toHaveBeenCalled();
+  });
+
   it("marks and dismisses only notifications in the current organization", async () => {
     mocks.db.notification.findFirst.mockResolvedValue({ id: "notification-1" });
     mocks.db.notification.update.mockResolvedValue({ ...notificationRecord, readAt: now });
@@ -176,6 +186,7 @@ describe("notification service", () => {
 
 describe("reminder service", () => {
   it("generates reminders from registered deadlines, documents, packages and share links", async () => {
+    mocks.db.notification.findMany.mockResolvedValue([]);
     mocks.db.deadline.findMany.mockResolvedValue([
       { id: "deadline-overdue", title: "Scadenza registrata", dueDate: new Date("2026-07-01T00:00:00.000Z") },
       { id: "deadline-upcoming", title: "Scadenza futura", dueDate: new Date("2026-07-20T00:00:00.000Z") },
@@ -193,7 +204,7 @@ describe("reminder service", () => {
 
     await expect(syncOrganizationReminders()).resolves.toMatchObject({ created: 8, updated: 0, skipped: 0 });
 
-    const createdTypes = mocks.db.notification.create.mock.calls.map((call) => call[0].data.type);
+    const createdTypes = mocks.db.notification.createMany.mock.calls[0][0].data.map((item: { type: string }) => item.type);
     expect(createdTypes).toEqual(expect.arrayContaining([
       "DEADLINE_OVERDUE",
       "DEADLINE_UPCOMING",
@@ -204,23 +215,25 @@ describe("reminder service", () => {
       "SHARE_LINK_EXPIRING",
       "SHARE_LINK_REVOKED",
     ]));
-    expect(mocks.db.notification.create.mock.calls[0][0].data).toEqual(expect.objectContaining({
+    expect(mocks.db.notification.createMany.mock.calls[0][0].data[0]).toEqual(expect.objectContaining({
       organizationId: "org-1",
       userId: null,
       dedupeKey: expect.any(String),
     }));
+    expect(mocks.db.notification.findMany).toHaveBeenCalledTimes(1);
+    expect(mocks.db.notification.createMany).toHaveBeenCalledTimes(1);
   });
 
   it("does not recreate dismissed reminders and skips unchanged duplicates", async () => {
     mocks.db.deadline.findMany.mockResolvedValue([
       { id: "deadline-1", title: "Scadenza registrata", dueDate: new Date("2026-07-01T00:00:00.000Z") },
     ]);
-    mocks.db.notification.findUnique.mockResolvedValue({ ...notificationRecord, dismissedAt: now });
+    mocks.db.notification.findMany.mockResolvedValue([{ ...notificationRecord, dedupeKey: "DEADLINE_OVERDUE:DEADLINE:deadline-1:organization", dismissedAt: now }]);
 
     await expect(syncOrganizationReminders()).resolves.toMatchObject({ created: 0, updated: 0, skipped: 1 });
-    expect(mocks.db.notification.create).not.toHaveBeenCalled();
+    expect(mocks.db.notification.createMany).not.toHaveBeenCalled();
 
-    mocks.db.notification.findUnique.mockResolvedValue({ id: "notification-1", title: "Scadenza registrata superata", message: "Scadenza registrata - data registrata 01 lug 2026.", severity: "WARNING", actionHref: "/deadlines", dismissedAt: null });
+    mocks.db.notification.findMany.mockResolvedValue([{ id: "notification-1", dedupeKey: "DEADLINE_OVERDUE:DEADLINE:deadline-1:organization", title: "Scadenza registrata superata", message: "Scadenza registrata - data registrata 01 lug 2026.", severity: "WARNING", actionHref: "/deadlines", dismissedAt: null }]);
     await expect(syncOrganizationReminders()).resolves.toMatchObject({ created: 0, updated: 0, skipped: 1 });
     expect(mocks.db.notification.update).not.toHaveBeenCalled();
   });

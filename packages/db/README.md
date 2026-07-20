@@ -19,6 +19,8 @@ Regole:
 - `WorkerUserLink`, `JobSiteUserAssignment` e `JobSiteWorkerAssignment` contengono assegnazioni operative addittive per scope risorsa;
 - `OrganizationMembership` e singolare per utente; la lettura esterna usa share link e non un ruolo interno dedicato;
 - `lib/prisma.ts` crea il singleton server-side con `PrismaPg`;
+- il singleton applica un contatore opt-in request/flow-scoped che non registra query, argomenti o identificatori tenant;
+- i comandi locali e Prisma Studio devono usare il guardrail loopback; accessi remoti richiedono un'attestazione esplicita;
 - `src/` espone client e API del package;
 - ogni cambiamento strutturale qui va allineato a `project_brain.json` se stabilizza una convenzione.
 
@@ -29,7 +31,13 @@ pnpm --filter @qoovex/db db:generate
 pnpm --filter @qoovex/db db:seed
 pnpm --filter @qoovex/db verify:prisma
 pnpm --filter @qoovex/db test
-pnpm --filter @qoovex/db exec prisma studio
+pnpm --filter @qoovex/db db:studio
 ```
 
 Non importare Prisma Client in componenti browser o client component.
+
+## Database operation impact
+
+Per misure locali impostare `QOOVEX_DB_OPERATION_METRICS=1` e racchiudere il flusso server con `withDatabaseOperationMeasurement(flow, run)`. Il risultato riporta soltanto modello, operazione, conteggio e durata aggregata ed e sempre etichettato come proxy di chiamate Prisma Client, non come metrica ufficiale Prisma Postgres.
+
+Ogni nuova query deve documentare operazioni prima/dopo, rischio N+1, cache e invalidazione, isolamento tenant, ambienti e metodo di misurazione. `include` e `select` vanno verificati sulla versione Prisma reale; non assumere che riducano il numero di operazioni o delle query SQL.

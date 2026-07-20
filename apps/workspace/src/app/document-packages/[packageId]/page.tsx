@@ -1,7 +1,7 @@
-import { getChecklist, listChecklists } from "@shared/server/checklist-service";
+import { listChecklistsWithItems } from "@shared/server/checklist-service";
 import { getDocumentPackage } from "@shared/server/document-package-service";
 import { listDocuments } from "@shared/server/document-service";
-import { listDocumentVersions } from "@shared/server/document-version-service";
+import { listDocumentVersionsByDocumentIds } from "@shared/server/document-version-service";
 import { listEvidence } from "@shared/server/evidence-service";
 import { listJobSites } from "@shared/server/job-site-service";
 import { listShareLinks } from "@shared/server/share-link-service";
@@ -31,15 +31,13 @@ export default async function DocumentPackageDetailPage({ params, searchParams }
       listJobSites(),
       listDocuments(),
       listEvidence(),
-      listChecklists(),
+      listChecklistsWithItems(),
       getWorkspaceCapabilities(),
     ]);
-    const [documentVersionsByDocument, detailedChecklists, shareLinks] = await Promise.all([
-      Promise.all(documents.map((document) => listDocumentVersions(document.id))),
-      Promise.all(checklists.map((checklist) => getChecklist(checklist.id))),
+    const [documentVersions, shareLinks] = await Promise.all([
+      listDocumentVersionsByDocumentIds(documents.map((document) => document.id)),
       capabilities.canSharePackages ? listShareLinks(packageId) : Promise.resolve([]),
     ]);
-    const documentVersions = documentVersionsByDocument.flat();
     return (
       <DocumentPackageDetailView
         capabilities={capabilities}
@@ -47,7 +45,7 @@ export default async function DocumentPackageDetailPage({ params, searchParams }
         documents={serializeForClient<WorkspaceDocumentRecord[]>(documents)}
         documentVersions={serializeForClient<WorkspaceDocumentVersionRecord[]>(documentVersions)}
         evidence={serializeForClient<WorkspaceEvidenceRecord[]>(evidence)}
-        checklists={serializeForClient<WorkspaceChecklistRecord[]>(detailedChecklists)}
+        checklists={serializeForClient<WorkspaceChecklistRecord[]>(checklists)}
         jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
         shareLinks={serializeForClient<WorkspaceShareLinkRecord[]>(shareLinks)}
         returnToDashboard={from === "dashboard"}

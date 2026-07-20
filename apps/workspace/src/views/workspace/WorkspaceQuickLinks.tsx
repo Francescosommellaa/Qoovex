@@ -34,7 +34,7 @@ const STORAGE_KEY = "qoovex.workspace.quick-links.v1";
 const MAX_PINNED_LINKS = 4;
 
 const iconByHref = {
-  "/deadlines?mode=deadlines": IconCalendarDue,
+  "/deadlines": IconCalendarDue,
   "/evidence": IconFile,
   "/checklists": IconChecklist,
   "/document-packages": IconShare3,

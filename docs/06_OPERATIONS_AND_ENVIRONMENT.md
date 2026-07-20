@@ -6,6 +6,14 @@ Resend invia email: mittente, reply-to e casella che riceve risposte sono respon
 
 Non eseguire reset, seed distruttivi, `db push`, cancellazioni organization o cleanup Blob senza classificare database e storage: un ambiente locale puo condividere risorse con produzione.
 
+## Separazione database per ambiente
+
+Production, Preview, sviluppo locale e CI/test devono usare target distinti. Production conserva il database Prisma Postgres di produzione; Preview usa un database Prisma Postgres dedicato; sviluppo e Prisma Studio usano Prisma Postgres locale; CI/test usa esclusivamente PostgreSQL locale `qoovex_ci`.
+
+I comandi locali passano dal guardrail `@qoovex/db`: `pnpm --filter @qoovex/db db:studio`, `verify:prisma` e l'avvio Workspace rifiutano target non-loopback. Una manutenzione remota eccezionale richiede contemporaneamente `QOOVEX_ALLOW_REMOTE_DATABASE=1` e `QOOVEX_REMOTE_DATABASE_ATTESTATION=I_ACKNOWLEDGE_REMOTE_DATABASE`; non usare queste variabili nel normale sviluppo. Su Vercel, `QOOVEX_DATABASE_ENVIRONMENT` deve coincidere con `VERCEL_ENV` per Preview e Production.
+
+La separazione e un'operazione infrastrutturale con hard stop: prima di modificare variabili Vercel o applicare migration esistenti verificare target, backup e cronologia. Non copiare il connection string Production negli scope Development o Preview e non stampare valori o host nei log. Nessuna migration, `db push`, reset o seed fa parte della sola configurazione del guardrail.
+
 Il dev-auth richiede `DEV_AUTH_SECRET` di almeno 32 caratteri ed e disponibile solo in development su host loopback, mai su Vercel, build o runtime production. Il selettore ruolo non esegue seed e opera sull'Azienda gia associata all'identita dev: prima di testare mutation resta quindi necessario classificare il database collegato.
 
 ## Deploy migration protetto

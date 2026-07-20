@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { db } from "@qoovex/db";
 import type { Permission, WorkspaceAccessContext } from "@qoovex/types";
 import { auth } from "@shared/server/auth/config";
@@ -9,7 +10,7 @@ import { getActiveSupportSession } from "@shared/server/support-access-service";
 import { bootstrapDevUser } from "@shared/server/dev-auth";
 import { isMfaSatisfiedForUser } from "@shared/server/mfa-service";
 
-export async function requirePrimaryIdentity() {
+async function requirePrimaryIdentityUncached() {
   const devUser = await bootstrapDevUser();
   if (devUser) {
     return {
@@ -39,6 +40,8 @@ export async function requirePrimaryIdentity() {
   return { ...user, authSessionId, isDev: false, devRole: null };
 }
 
+export const requirePrimaryIdentity = cache(requirePrimaryIdentityUncached);
+
 export async function requireIdentity() {
   const user = await requirePrimaryIdentity();
   if (
@@ -55,7 +58,7 @@ export async function requireIdentity() {
   return user;
 }
 
-export async function getWorkspaceAccessContext(): Promise<WorkspaceAccessContext> {
+async function getWorkspaceAccessContextUncached(): Promise<WorkspaceAccessContext> {
   const user = await requireIdentity();
   const [membership, support] = await Promise.all([
     db.organizationMembership.findUnique({
@@ -81,6 +84,8 @@ export async function getWorkspaceAccessContext(): Promise<WorkspaceAccessContex
     permissions: getPermissionsForRole(effectiveRole),
   };
 }
+
+export const getWorkspaceAccessContext = cache(getWorkspaceAccessContextUncached);
 
 export function requirePermission(context: WorkspaceAccessContext, permission: Permission) {
   if (!context.permissions.includes(permission)) throw new AccessError("Risorsa non disponibile.", 404);

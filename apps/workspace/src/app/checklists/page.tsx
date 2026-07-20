@@ -1,4 +1,4 @@
-import { getChecklist, listChecklists } from "@shared/server/checklist-service";
+import { listChecklistsWithItems } from "@shared/server/checklist-service";
 import { listJobSites } from "@shared/server/job-site-service";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { ChecklistsPageView } from "@/views/admin-core/checklists/ChecklistsPageView";
@@ -8,15 +8,14 @@ import type { WorkspaceChecklistRecord, WorkspaceJobSiteRecord } from "@/views/w
 export default async function ChecklistsPage() {
   try {
     const [checklists, jobSites, capabilities] = await Promise.all([
-      listChecklists(),
+      listChecklistsWithItems(),
       listJobSites(),
       getWorkspaceCapabilities(),
     ]);
-    const detailedChecklists = await Promise.all(checklists.map((checklist) => getChecklist(checklist.id)));
     return (
       <ChecklistsPageView
         capabilities={capabilities}
-        checklists={serializeForClient<WorkspaceChecklistRecord[]>(detailedChecklists)}
+        checklists={serializeForClient<WorkspaceChecklistRecord[]>(checklists)}
         jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
       />
     );

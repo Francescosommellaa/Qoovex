@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3001",
+    "dev": "pnpm --filter @qoovex/db guard:local && next dev --port 3001",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
