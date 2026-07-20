@@ -21,6 +21,8 @@ Regole:
 - `lib/prisma.ts` crea il singleton server-side con `PrismaPg`;
 - il singleton applica un contatore opt-in request/flow-scoped che non registra query, argomenti o identificatori tenant;
 - i comandi locali e Prisma Studio devono usare il guardrail loopback; accessi remoti richiedono un'attestazione esplicita;
+- `db:start:local` riusa o avvia `qoovex-local` sulla porta canonica senza stampare connection string;
+- il comando root `pnpm dev` esegue automaticamente `db:start:local` prima delle app; il database locale non consuma Operations cloud;
 - `src/` espone client e API del package;
 - ogni cambiamento strutturale qui va allineato a `project_brain.json` se stabilizza una convenzione.
 
@@ -29,6 +31,7 @@ Comandi utili:
 ```bash
 pnpm --filter @qoovex/db db:generate
 pnpm --filter @qoovex/db db:seed
+pnpm --filter @qoovex/db db:start:local
 pnpm --filter @qoovex/db verify:prisma
 pnpm --filter @qoovex/db test
 pnpm --filter @qoovex/db db:studio
@@ -41,3 +44,5 @@ Non importare Prisma Client in componenti browser o client component.
 Per misure locali impostare `QOOVEX_DB_OPERATION_METRICS=1` e racchiudere il flusso server con `withDatabaseOperationMeasurement(flow, run)`. Il risultato riporta soltanto modello, operazione, conteggio e durata aggregata ed e sempre etichettato come proxy di chiamate Prisma Client, non come metrica ufficiale Prisma Postgres.
 
 Ogni nuova query deve documentare operazioni prima/dopo, rischio N+1, cache e invalidazione, isolamento tenant, ambienti e metodo di misurazione. `include` e `select` vanno verificati sulla versione Prisma reale; non assumere che riducano il numero di operazioni o delle query SQL.
+
+Questo controllo e automatico per ogni task che tocca flussi database-sensitive. Se emerge uno spreco verificabile, la correzione sicura e i test di regressione devono essere inclusi nello stesso task senza attendere una richiesta separata; hard stop su schema, migration, auth, tenant, audit, job, provider o configurazioni cloud richiedono invece approvazione.

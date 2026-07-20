@@ -12,6 +12,16 @@ Production, Preview, sviluppo locale e CI/test devono usare target distinti. Pro
 
 I comandi locali passano dal guardrail `@qoovex/db`: `pnpm --filter @qoovex/db db:studio`, `verify:prisma` e l'avvio Workspace rifiutano target non-loopback. Una manutenzione remota eccezionale richiede contemporaneamente `QOOVEX_ALLOW_REMOTE_DATABASE=1` e `QOOVEX_REMOTE_DATABASE_ATTESTATION=I_ACKNOWLEDGE_REMOTE_DATABASE`; non usare queste variabili nel normale sviluppo. Su Vercel, `QOOVEX_DATABASE_ENVIRONMENT` deve coincidere con `VERCEL_ENV` per Preview e Production.
 
+Il comando root `pnpm dev` esegue prima `db:start:local`: se `qoovex-local` risponde viene riusato, altrimenti Prisma Postgres locale viene avviato in background e le app partono soltanto dopo una query di readiness. Il bootstrap accetta esclusivamente marker `local`, target loopback e porta canonica `51225`; non stampa connection string e non contatta i database cloud Preview o Production.
+
+### Stato verificato 2026-07-20
+
+- `packages/db/.env` e `apps/workspace/.env.local` puntano a `qoovex-local`; un riavvio viene recuperato automaticamente da `pnpm dev`.
+- Vercel Development non contiene credenziali Prisma Postgres cloud. Preview usa il database dedicato `qoovex-preview` e il marker `QOOVEX_DATABASE_ENVIRONMENT=preview`; Production conserva il proprio database e non e stata riconfigurata.
+- Il database Preview dedicato ha cinque migration canoniche applicate, schema diff nullo e lettura Prisma verificata. Le connection string create soltanto per il deploy sono state revocate e nessun segreto e stato scritto nel repository.
+- Il piano Prisma Starter e associato all'account/installazione: piu database inclusi non moltiplicano il canone base, ma Operations e storage si sommano nel plafond condiviso. Verificare sempre pricing e fattura correnti prima di decisioni economiche.
+- La Git integration Prisma e ancora collegata al repository e crea branch Preview automatici con database e Prisma Compute. Il PR `DB-update-I` ha dimostrato un `prisma migrate deploy` esterno che non scopre `packages/db/prisma.config.ts` e aggira il wrapper Qoovex. Questa automazione non appartiene all'architettura Vercel: scollegamento e cleanup delle risorse richiedono approvazione esplicita e restano un rischio operativo aperto.
+
 La separazione e un'operazione infrastrutturale con hard stop: prima di modificare variabili Vercel o applicare migration esistenti verificare target, backup e cronologia. Non copiare il connection string Production negli scope Development o Preview e non stampare valori o host nei log. Nessuna migration, `db push`, reset o seed fa parte della sola configurazione del guardrail.
 
 Il dev-auth richiede `DEV_AUTH_SECRET` di almeno 32 caratteri ed e disponibile solo in development su host loopback, mai su Vercel, build o runtime production. Il selettore ruolo non esegue seed e opera sull'Azienda gia associata all'identita dev: prima di testare mutation resta quindi necessario classificare il database collegato.

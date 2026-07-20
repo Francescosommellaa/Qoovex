@@ -16,6 +16,10 @@ Un deploy non e verificato solo da build locale: le configurazioni Vercel e i fl
 
 Ogni modifica database-sensitive deve includere nel report la sezione prevista da `OperationalProtocol.md` e almeno un test proporzionato al rischio. Per collezioni annidate il test deve dimostrare che il numero di chiamate Prisma non cresce con il numero di record; per memoizzazione o cache deve provare isolamento tra richieste, utenti e Aziende e la corretta invalidazione dopo le mutation.
 
+Il preflight scatta automaticamente in base ai file e ai flussi toccati, anche se la task non cita esplicitamente database o Prisma. La review deve bloccare una modifica database-sensitive priva del confronto prima/dopo, dell'analisi del caso peggiore, del rischio N+1, della strategia cache/invalidazione, dell'impatto tenant e della classificazione degli ambienti. Quando emerge uno spreco misurabile e la correzione non incontra hard stop, la correzione e i relativi test fanno parte della stessa task; il solo rinvio a un audit futuro non chiude il gate.
+
 `QOOVEX_DB_OPERATION_METRICS=1` abilita il contatore locale request/flow-scoped di `@qoovex/db`. Registra solo modello, operazione, durata e conteggio, senza SQL, argomenti, dati personali, token, blob key o identificatori Azienda. L'output e una proxy di chiamate Prisma Client e non sostituisce Usage o Query Insights della Prisma Console. Il flag resta disattivato per default e non va abilitato rumorosamente in produzione.
 
 La review non puo attribuire a `Promise.all`, `select`, paginazione o indici una riduzione del numero di operazioni senza una misurazione che lo dimostri. Questi interventi possono migliorare rispettivamente latenza/concorrenza, payload/egress e tempo di esecuzione.
+
+I test di query-count e l'instrumentation misurano chiamate Prisma Client come proxy locale. I valori ufficiali di fatturazione e l'attribuzione di picchi devono essere riconciliati con Usage e Query Insights della Console Prisma; non trasformare una proxy in un budget di billing.
