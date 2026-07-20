@@ -36,7 +36,7 @@ vi.mock("@shared/server/access-context-service", () => ({
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
 
 import { archiveDeadline, createDeadline, listDeadlines } from "./deadline-service";
-import { archiveDocument, createDocument, getDocument, listDocuments, updateDocument } from "./document-service";
+import { archiveDocument, createDocument, getDocument, getDocumentWithVersions, listDocuments, updateDocument } from "./document-service";
 import { createDocumentType, listDocumentTypes } from "./document-type-service";
 
 const now = new Date("2026-06-30T10:00:00.000Z");
@@ -68,6 +68,19 @@ const documentRecord = {
   notes: null,
   createdAt: now,
   updatedAt: now,
+  archivedAt: null,
+};
+
+const documentVersionRecord = {
+  id: "version-1",
+  organizationId: "org-1",
+  documentId: "doc-1",
+  originalFileName: "documento.pdf",
+  mimeType: "application/pdf",
+  size: 10,
+  checksum: null,
+  uploadedById: "user-1",
+  createdAt: now,
   archivedAt: null,
 };
 
@@ -153,6 +166,20 @@ describe("document type service", () => {
 });
 
 describe("document service", () => {
+  it("loads document metadata and versions with one Prisma operation", async () => {
+    mocks.db.document.findFirst.mockResolvedValue({ ...documentRecord, versions: [documentVersionRecord] });
+
+    await expect(getDocumentWithVersions("doc-1")).resolves.toMatchObject({
+      document: { id: "doc-1" },
+      versions: [{ id: "version-1" }],
+    });
+    expect(mocks.db.document.findFirst).toHaveBeenCalledTimes(1);
+    expect(mocks.db.document.findFirst).toHaveBeenCalledWith(expect.objectContaining({
+      where: { id: "doc-1", organizationId: "org-1", archivedAt: null },
+      select: expect.objectContaining({ versions: expect.any(Object) }),
+    }));
+  });
+
   it("lets admins create logical organization documents without Blob fields", async () => {
     setRole("ADMIN");
     mocks.db.document.create.mockResolvedValue(documentRecord);

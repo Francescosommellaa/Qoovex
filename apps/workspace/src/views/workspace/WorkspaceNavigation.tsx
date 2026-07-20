@@ -63,7 +63,7 @@ const platformNavItems = [
 const iconByHref = {
   "/dashboard": IconHome,
   "/documents": IconFile,
-  "/deadlines": IconCalendar,
+  "/calendar": IconCalendar,
   "/job-sites": IconBuilding,
   "/workers": IconUsers,
   "/settings": IconSettings,

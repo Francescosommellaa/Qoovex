@@ -43,6 +43,8 @@ import {
   createJobSiteWorkerAssignment,
   createWorkerUserLink,
   getResourceAssignmentOptions,
+  listJobSiteUserAssignments,
+  listJobSiteWorkerAssignments,
   listWorkerUserLinks,
 } from "./resource-assignment-service";
 
@@ -115,6 +117,8 @@ beforeEach(() => {
   mocks.db.jobSiteUserAssignment.create.mockResolvedValue(jobSiteUserAssignment);
   mocks.db.jobSiteWorkerAssignment.create.mockResolvedValue(jobSiteWorkerAssignment);
   mocks.db.workerUserLink.findMany.mockResolvedValue([workerLink]);
+  mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([jobSiteUserAssignment]);
+  mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([jobSiteWorkerAssignment]);
   mocks.db.jobSiteUserAssignment.update.mockResolvedValue({ ...jobSiteUserAssignment, archivedAt: now });
   setRole("OWNER");
 });
@@ -159,6 +163,24 @@ describe("resource assignment service", () => {
     setRole("SAFETY_CONSULTANT");
     await expect(listWorkerUserLinks()).resolves.toHaveLength(1);
     await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("pushes detail-page assignment filters into tenant-scoped Prisma queries", async () => {
+    await Promise.all([
+      listWorkerUserLinks({ workerId: "worker-1" }),
+      listJobSiteUserAssignments({ jobSiteId: "jobsite-1" }),
+      listJobSiteWorkerAssignments({ jobSiteId: "jobsite-1", workerId: "worker-1" }),
+    ]);
+
+    expect(mocks.db.workerUserLink.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: { organizationId: "org-1", archivedAt: null, workerId: "worker-1" },
+    }));
+    expect(mocks.db.jobSiteUserAssignment.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: { organizationId: "org-1", archivedAt: null, jobSiteId: "jobsite-1" },
+    }));
+    expect(mocks.db.jobSiteWorkerAssignment.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: { organizationId: "org-1", archivedAt: null, jobSiteId: "jobsite-1", workerId: "worker-1" },
+    }));
   });
 
   it("rejects duplicates and cross-organization missing resources", async () => {

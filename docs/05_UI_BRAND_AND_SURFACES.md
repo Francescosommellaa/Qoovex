@@ -67,6 +67,8 @@ La scrollbar principale appare durante lo scroll o quando il puntatore raggiunge
 
 ## Adozione esterna
 
+`next-themes` 0.4.6 e mantenuto con il patch locale `patches/next-themes@0.4.6.patch` finche la correzione upstream per React 19 non viene pubblicata. Il patch conserva lo script inline soltanto nell'SSR, dove previene il flash del tema, e non lo rende durante l'hydration client, dove React 19 lo segnala come script non eseguibile.
+
 Codice pubblico esterno puo essere adottato soltanto con licenza compatibile, provenienza, versione o commit fissato e mantenimento degli avvisi. La CLI shadcn e ammessa per componenti approvati dopo `info`, `docs`, `view`, `--dry-run` e `--diff`; non si usa `--overwrite` sulle varianti Qoovex approvate.
 
 Per il dropdown Risorse e stato usato come riferimento visivo [Navbar Menu su 21st.dev](https://21st.dev/@manuarora700/components/navbar-menu), pubblicato il 3 dicembre 2024 e attribuito ad [Aceternity UI](https://ui.aceternity.com/components/navbar-menu). L'implementazione Qoovex e una trasformazione di principio: il sorgente 21st e bloccato e la fonte originale dichiara All Rights Reserved, quindi non e stato copiato codice, non e stata installata la relativa registry entry e non e stata aggiunta Framer Motion. Sono stati riusati esclusivamente Base UI, Tabler e CSS gia approvati nel repository.
@@ -122,6 +124,10 @@ La motion della pagina serve orientamento e feedback: ingresso di 240 ms con sol
 
 ## Calendario operativo
 
-La route Workspace `/deadlines` presenta il calendario operativo con FullCalendar Standard `7.0.1`, licenza MIT e supporto React 19. Sono usati soltanto i plugin standard month, time-grid, list e interaction; nessun modulo Scheduler/Premium. Sirio prova la stessa gerarchia su `/calendar` con dati esplicitamente dimostrativi.
+La route Workspace `/calendar` presenta il calendario operativo con FullCalendar Standard `7.0.1`, licenza MIT e supporto React 19. Sono usati soltanto i plugin standard month, time-grid, list e interaction; nessun modulo Scheduler/Premium. Sirio prova la stessa gerarchia su `/calendar` con dati esplicitamente dimostrativi.
 
-La composizione usa viste mese, settimana, giorno e agenda, slot orari, selezione touch, drag e resize, filtri per scadenze, task, priorita e persona, Dialog accessibili per CRUD e integrazione iCalendar. Le scadenze sono eventi visivi non trascinabili derivati direttamente dai record Deadline. Mobile impila la toolbar e mantiene lo scorrimento orizzontale dei controlli; reduced motion e forced colors conservano fallback leggibili.
+La composizione usa viste mese, settimana, giorno e agenda, slot orari, selezione touch, drag e resize, filtri per scadenze, task, priorita e persona, Dialog accessibili per CRUD e integrazione iCalendar. Lo switcher app-local riprende il linguaggio della navigazione marketing con un indicatore trasformato in 260 ms; il cambio vista aggiunge solo un breve feedback di opacita e posizione. `prefers-reduced-motion` disattiva entrambi. `Oggi` aggiorna il periodo e centra nel viewport la cella corrente. Lo stato vuoto è una barra informativa separata e non si sovrappone alla griglia.
+
+Il flusso impegno segue una disclosure progressiva: titolo e tipo, intervallo, quindi responsabile, cantiere e note opzionali. Tutte le etichette visibili sono italiane; gli enum persistono soltanto nel contratto API. `Giornata intera` sostituisce gli input `datetime-local` con campi data e converte la data finale inclusiva nel limite esclusivo richiesto dal calendario. Le scadenze sono eventi visivi non trascinabili derivati direttamente dai record Deadline. Mobile impila toolbar e campi senza overflow orizzontale; forced colors conserva fallback leggibili.
+
+La route Workspace `/deadlines` e una timeline distinta, ordinata per data e costruita con le primitive canoniche Card, Badge, Alert, Button e Dialog. Ogni scadenza mostra data, stato, contesto, origine, promemoria e le azioni autorizzate per aprire il contesto, modificare o archiviare. La timeline conserva un layout a colonna singola su mobile, focus visibile, conferma distruttiva e highlight di ritorno dopo il salvataggio.

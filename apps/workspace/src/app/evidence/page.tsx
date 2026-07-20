@@ -1,4 +1,4 @@
-import { getChecklist, listChecklists } from "@shared/server/checklist-service";
+import { listChecklistsWithItems } from "@shared/server/checklist-service";
 import { listEvidence } from "@shared/server/evidence-service";
 import { listJobSites } from "@shared/server/job-site-service";
 import { listWorkers } from "@shared/server/worker-service";
@@ -15,14 +15,13 @@ export default async function EvidencePage() {
       listJobSites(),
       listWorkers(),
     ]);
-    const checklists = capabilities.canCompleteChecklists || capabilities.canManageChecklists ? await listChecklists() : [];
-    const detailedChecklists = await Promise.all(checklists.map((checklist) => getChecklist(checklist.id)));
-    const checklistItems = detailedChecklists.flatMap((checklist) => checklist.items ?? []);
+    const checklists = capabilities.canCompleteChecklists || capabilities.canManageChecklists ? await listChecklistsWithItems() : [];
+    const checklistItems = checklists.flatMap((checklist) => checklist.items ?? []);
     return (
       <EvidencePageView
         capabilities={capabilities}
         evidence={serializeForClient<WorkspaceEvidenceRecord[]>(evidence)}
-        checklists={serializeForClient<WorkspaceChecklistRecord[]>(detailedChecklists)}
+        checklists={serializeForClient<WorkspaceChecklistRecord[]>(checklists)}
         checklistItems={serializeForClient<WorkspaceChecklistItemRecord[]>(checklistItems)}
         jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
         workers={serializeForClient<WorkspaceWorkerRecord[]>(workers)}

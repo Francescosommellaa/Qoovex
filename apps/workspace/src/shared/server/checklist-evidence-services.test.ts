@@ -49,6 +49,7 @@ import {
   createChecklist,
   createChecklistItem,
   listChecklists,
+  listChecklistsWithItems,
   updateChecklistItem,
 } from "./checklist-service";
 import {
@@ -186,6 +187,20 @@ describe("checklist service", () => {
     expect(mocks.db.checklist.update).toHaveBeenCalledWith(expect.objectContaining({
       where: { id: "checklist-1" },
       data: expect.objectContaining({ status: "ARCHIVED", archivedAt: expect.any(Date) }),
+    }));
+  });
+
+  it("loads checklist items with one Prisma operation regardless of checklist count", async () => {
+    mocks.db.checklist.findMany.mockResolvedValue([
+      { ...checklistRecord, items: [itemRecord] },
+      { ...checklistRecord, id: "checklist-2", items: [] },
+    ]);
+
+    await expect(listChecklistsWithItems()).resolves.toHaveLength(2);
+    expect(mocks.db.checklist.findMany).toHaveBeenCalledTimes(1);
+    expect(mocks.db.checklist.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: { organizationId: "org-1", archivedAt: null },
+      select: expect.objectContaining({ items: expect.any(Object) }),
     }));
   });
 

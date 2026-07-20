@@ -9,6 +9,7 @@ import { isEnumValue, parseOptionalDate, rejectBinaryPayload, trimOptionalId, tr
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { canReadDocument, getResourceScope } from "./resource-scope-service";
+import { documentVersionListSelect, toDocumentVersionResponse } from "./document-version-service";
 
 const FULL_DOCUMENT_ROLES = ["OWNER", "ADMIN"] as const;
 const DOCUMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
@@ -148,6 +149,26 @@ export async function getDocument(documentId: string) {
   if (!document || !canReadDocument(scope, document)) throw new AccessError("Documento non trovato.", 404);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document", resourceId: document.id });
   return document;
+}
+
+export async function getDocumentWithVersions(documentId: string) {
+  const { context, organizationId } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_READ_ROLES);
+  const scope = await getResourceScope(context);
+  const document = await db.document.findFirst({
+    where: { id: documentId, organizationId, archivedAt: null },
+    select: {
+      ...documentSelect,
+      versions: {
+        where: { archivedAt: null },
+        select: documentVersionListSelect,
+        orderBy: { createdAt: "desc" },
+      },
+    },
+  });
+  if (!document || !canReadDocument(scope, document)) throw new AccessError("Documento non trovato.", 404);
+  await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document", resourceId: document.id });
+  const { versions, ...documentRecord } = document;
+  return { document: documentRecord, versions: versions.map(toDocumentVersionResponse) };
 }
 
 export async function createDocument(input: CreateDocumentInput) {

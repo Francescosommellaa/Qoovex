@@ -6,12 +6,15 @@ const roles: WorkspaceRole[] = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MAN
 
 describe("workspace navigation policy", () => {
   it.each(roles)("keeps the common workspace destinations for %s", (role) => {
-    expect(buildWorkspaceNavigation(role, "USER").primary.map((item) => item.label)).toEqual([
+    const navigation = buildWorkspaceNavigation(role, "USER");
+    expect(navigation.primary.map((item) => item.label)).toEqual([
       "Da fare",
       "Documenti",
       "Calendario",
       "Cantieri",
     ]);
+    expect(navigation.primary).toContainEqual({ label: "Calendario", href: "/calendar" });
+    expect(navigation.quickLinks).toContainEqual({ label: "Scadenze", href: "/deadlines" });
   });
 
   it("keeps people and role management scoped to permitted roles", () => {

@@ -12,6 +12,7 @@ import {
   ensureWorkspaceUserProfile,
 } from "@shared/server/workspace-user-sync";
 import { getRequestIpHash, recordSecurityEvent } from "@shared/server/security-audit-service";
+import { loadAuthJwtIdentity } from "@shared/server/auth-jwt-identity-service";
 
 const prismaAdapter = PrismaAdapter(db);
 
@@ -51,11 +52,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user?.id) {
         token.sub = user.id;
         token.authSessionId = crypto.randomUUID();
-        const [credential, identity] = await Promise.all([
-          db.userCredential.findUnique({ where: { userId: user.id }, select: { passwordUpdatedAt: true } }),
-          db.user.findUnique({ where: { id: user.id }, select: { authVersion: true, platformRole: true, suspendedAt: true } }),
-        ]);
-        token.passwordUpdatedAt = credential?.passwordUpdatedAt.toISOString() ?? null;
+        const identity = await loadAuthJwtIdentity(user.id);
+        token.passwordUpdatedAt = identity?.passwordUpdatedAt?.toISOString() ?? null;
         if (!identity || identity.suspendedAt) {
           token.sub = undefined;
         } else {
@@ -64,12 +62,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
       } else if (token.sub) {
         token.authSessionId ??= crypto.randomUUID();
-        const [credential, identity] = await Promise.all([
-          db.userCredential.findUnique({ where: { userId: token.sub }, select: { passwordUpdatedAt: true } }),
-          db.user.findUnique({ where: { id: token.sub }, select: { authVersion: true, platformRole: true, suspendedAt: true } }),
-        ]);
+        const identity = await loadAuthJwtIdentity(token.sub);
         const currentPasswordUpdatedAt =
-          credential?.passwordUpdatedAt.toISOString() ?? null;
+          identity?.passwordUpdatedAt?.toISOString() ?? null;
         if (
           !identity || identity.suspendedAt ||
           (token.passwordUpdatedAt && currentPasswordUpdatedAt !== token.passwordUpdatedAt) ||

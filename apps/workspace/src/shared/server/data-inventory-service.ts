@@ -5,21 +5,11 @@ import type { DataInventoryResponse, DataRecordCount } from "@qoovex/types";
 import { requireDataControlAccess } from "./data-control-access";
 
 async function archivedCount(model: { count: (args: { where: Record<string, unknown> }) => Promise<number> }, organizationId: string): Promise<DataRecordCount> {
-  const [total, active, archived] = await Promise.all([
+  const [total, active] = await Promise.all([
     model.count({ where: { organizationId } }),
     model.count({ where: { organizationId, archivedAt: null } }),
-    model.count({ where: { organizationId, archivedAt: { not: null } } }),
   ]);
-  return { total, active, archived };
-}
-
-async function statusArchivedCount(model: { count: (args: { where: Record<string, unknown> }) => Promise<number> }, organizationId: string): Promise<DataRecordCount> {
-  const [total, active, archived] = await Promise.all([
-    model.count({ where: { organizationId } }),
-    model.count({ where: { organizationId, status: { not: "ARCHIVED" } } }),
-    model.count({ where: { organizationId, status: "ARCHIVED" } }),
-  ]);
-  return { total, active, archived };
+  return { total, active, archived: total - active };
 }
 
 async function totalCount(model: { count: (args: { where: Record<string, unknown> }) => Promise<number> }, organizationId: string): Promise<DataRecordCount> {
@@ -47,11 +37,9 @@ export async function buildDataInventoryForOrganization(organizationId: string, 
     evidence,
     documentPackages,
     documentPackageItems,
-    shareLinksTotal,
     shareLinksActive,
     shareLinksExpired,
     shareLinksRevoked,
-    notificationsTotal,
     notificationsUnread,
     notificationsRead,
     notificationsDismissed,
@@ -85,15 +73,21 @@ export async function buildDataInventoryForOrganization(organizationId: string, 
     archivedCount(db.deadline, organizationId),
     archivedCount(db.calendarEvent, organizationId),
     archivedCount(db.checklist, organizationId),
-    statusArchivedCount(db.checklistItem, organizationId),
+    db.checklistItem.groupBy({
+      by: ["status"],
+      where: { organizationId },
+      _count: { _all: true },
+    }).then((groups) => {
+      const total = groups.reduce((sum, group) => sum + group._count._all, 0);
+      const archived = groups.find((group) => group.status === "ARCHIVED")?._count._all ?? 0;
+      return { total, active: total - archived, archived };
+    }),
     archivedCount(db.evidence, organizationId),
     archivedCount(db.documentPackage, organizationId),
     totalCount(db.documentPackageItem, organizationId),
-    db.shareLink.count({ where: { organizationId } }),
     db.shareLink.count({ where: { organizationId, revokedAt: null, OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] } }),
     db.shareLink.count({ where: { organizationId, revokedAt: null, expiresAt: { lte: now } } }),
     db.shareLink.count({ where: { organizationId, revokedAt: { not: null } } }),
-    db.notification.count({ where: { organizationId } }),
     db.notification.count({ where: { organizationId, readAt: null, dismissedAt: null } }),
     db.notification.count({ where: { organizationId, readAt: { not: null }, dismissedAt: null } }),
     db.notification.count({ where: { organizationId, dismissedAt: { not: null } } }),
@@ -144,8 +138,8 @@ export async function buildDataInventoryForOrganization(organizationId: string, 
       evidence,
       documentPackages,
       documentPackageItems,
-      shareLinks: { total: shareLinksTotal, active: shareLinksActive, expired: shareLinksExpired, revoked: shareLinksRevoked },
-      notifications: { total: notificationsTotal, unread: notificationsUnread, read: notificationsRead, dismissed: notificationsDismissed },
+      shareLinks: { total: shareLinksActive + shareLinksExpired + shareLinksRevoked, active: shareLinksActive, expired: shareLinksExpired, revoked: shareLinksRevoked },
+      notifications: { total: notificationsUnread + notificationsRead + notificationsDismissed, unread: notificationsUnread, read: notificationsRead, dismissed: notificationsDismissed },
       notificationPreferences,
       emailDeliveries,
       auditEvents,

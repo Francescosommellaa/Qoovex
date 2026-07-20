@@ -3,14 +3,14 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
 import { normalizeDatabaseConnectionString } from "../src/connection-string";
+import { assertVercelDatabaseEnvironmentMarker } from "../src/database-target-guard";
+import { recordDatabaseOperation } from "../src/operation-metrics";
 
 const DATABASE_ENV_NAMES = [
   "DATABASE_URL",
   "DATABASE_PRISMA_DATABASE_URL",
   "DATABASE_POSTGRES_URL",
 ] as const;
-
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
 
 function getDatabaseConnectionString() {
   for (const envName of DATABASE_ENV_NAMES) {
@@ -23,11 +23,26 @@ function getDatabaseConnectionString() {
   );
 }
 
-function createPrismaClient() {
+function createPrismaClient(): PrismaClient {
+  assertVercelDatabaseEnvironmentMarker();
   const connectionString = normalizeDatabaseConnectionString(getDatabaseConnectionString());
   const adapter = new PrismaPg({ connectionString });
-  return new PrismaClient({ adapter });
+  return new PrismaClient({ adapter }).$extends({
+    name: "qoovex-operation-metrics",
+    query: {
+      async $allOperations({ model, operation, args, query }) {
+        const startedAt = performance.now();
+        try {
+          return await query(args);
+        } finally {
+          recordDatabaseOperation({ model, operation, durationMs: performance.now() - startedAt });
+        }
+      },
+    },
+  }) as PrismaClient;
 }
+
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 

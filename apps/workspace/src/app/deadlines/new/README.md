@@ -1,3 +1,3 @@
-# New deadline route
+# Nuova scadenza
 
-Creazione dedicata di una scadenza, con contesto precompilabile.
+Creazione dedicata di una scadenza, con contesto precompilabile e ritorno alla timeline `/deadlines`.

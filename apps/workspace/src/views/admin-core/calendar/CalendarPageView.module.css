@@ -1,7 +1,7 @@
 .calendar {
   position: relative;
   min-width: 0;
-  padding: 1rem;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
   --fc-border-color: var(--border);
   --fc-page-bg-color: var(--card);
   --fc-neutral-bg-color: var(--muted);
@@ -20,6 +20,112 @@
   --fc-monarch-selected-foreground: var(--secondary-foreground);
 }
 
+.emptyState {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem clamp(0.75rem, 2vw, 1.25rem);
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklab, var(--muted) 28%, transparent);
+}
+
+.emptyStateIcon {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 2px);
+  background: var(--background);
+  color: var(--muted-foreground);
+}
+
+.emptyStateIcon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.calendarToolbar {
+  display: grid;
+  grid-template-columns: auto minmax(10rem, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.calendarNavigation {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.calendarTitle {
+  min-width: 0;
+  overflow: hidden;
+  font-size: clamp(1rem, 3vw, 1.35rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+.viewSwitcher {
+  --calendar-view-offset: 0%;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: min(100%, 22rem);
+  padding: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--muted) 72%, transparent);
+}
+
+.viewIndicator {
+  position: absolute;
+  z-index: 0;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  width: calc((100% - 0.5rem) / 4);
+  border-radius: 999px;
+  background: var(--foreground);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--foreground) 18%, transparent);
+  transform: translate3d(var(--calendar-view-offset), 0, 0);
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.viewButton {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  min-height: 2rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: color 160ms ease;
+}
+
+.viewButton:hover {
+  color: var(--foreground);
+}
+
+.viewButton[aria-pressed="true"] {
+  color: var(--background);
+}
+
+.viewButton:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
 .calendar :global(.fc) {
   color: var(--foreground);
   font-family: inherit;
@@ -27,16 +133,53 @@
 }
 
 .calendar :global(.fc-toolbar) {
-  gap: 0.75rem;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .calendar :global(.fc-toolbar-title) {
   font-size: clamp(1rem, 3vw, 1.35rem);
   font-weight: 650;
+  letter-spacing: -0.02em;
 }
 
 .calendar :global(.fc-event) {
   cursor: pointer;
+  border-radius: calc(var(--radius) - 2px);
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--foreground) 8%, transparent);
+  padding: 1px 3px;
+}
+
+.calendar :global(.fc-button) {
+  border-radius: calc(var(--radius) - 2px);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.calendar :global(.fc-scrollgrid) {
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.calendar :global(.fc-col-header-cell) {
+  background: color-mix(in oklab, var(--muted) 55%, transparent);
+}
+
+.calendar :global(.fc-col-header-cell-cushion) {
+  padding-block: 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.calendar :global(.fc-daygrid-day-frame) {
+  min-height: 7.5rem;
+  transition: background-color 150ms ease;
+}
+
+.calendar :global(.fc-daygrid-day-frame:hover) {
+  background: color-mix(in oklab, var(--muted) 35%, transparent);
 }
 
 .calendar :global(.fc-timegrid-slot) {
@@ -49,8 +192,41 @@
   text-decoration: none;
 }
 
+.calendar :global(.fc-daygrid-day-number) {
+  display: inline-flex;
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  margin: 0.35rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
 .calendar :global(.fc-day-today .fc-daygrid-day-number) {
-  font-weight: 750;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 700;
+}
+
+.calendar :global(.fc-list-event:hover td) {
+  background: color-mix(in oklab, var(--muted) 60%, transparent);
+}
+
+.calendar :global(.fc-view-harness-active) {
+  animation: calendar-view-enter 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes calendar-view-enter {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .calendar :global(.fc-button:focus-visible),
@@ -60,42 +236,39 @@
   outline-offset: 2px;
 }
 
-.emptyOverlay {
-  pointer-events: none;
-  position: absolute;
-  inset: 7rem 1rem auto;
-  z-index: 3;
-  display: grid;
-  place-items: center;
-  gap: 0.35rem;
-  color: var(--muted-foreground);
-  text-align: center;
-}
-
-.emptyOverlay svg {
-  width: 2rem;
-  height: 2rem;
-}
-
 @media (max-width: 760px) {
   .calendar {
     padding: 0.75rem;
   }
 
-  .calendar :global(.fc-header-toolbar) {
-    align-items: stretch;
-    flex-direction: column;
+  .emptyState {
+    align-items: flex-start;
+    flex-wrap: wrap;
   }
 
-  .calendar :global(.fc-toolbar-chunk) {
-    display: flex;
-    justify-content: center;
+  .calendarToolbar {
+    grid-template-columns: 1fr auto;
   }
 
-  .calendar :global(.fc-toolbar-chunk:last-child) {
-    overflow-x: auto;
-    justify-content: flex-start;
-    padding-bottom: 0.25rem;
+  .calendarTitle {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    text-align: left;
+  }
+
+  .calendarNavigation {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .viewSwitcher {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    width: 100%;
+  }
+
+  .calendar :global(.fc-daygrid-day-frame) {
+    min-height: 5.5rem;
   }
 }
 
@@ -106,10 +279,27 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+
+  .calendar :global(.fc-daygrid-day-frame) {
+    transition: none;
+  }
+
+  .calendar :global(.fc-view-harness-active) {
+    animation: none;
+  }
 }
 
 @media (forced-colors: active) {
   .calendar :global(.fc-event) {
     border: 1px solid CanvasText !important;
+  }
+
+  .viewIndicator {
+    background: Highlight;
+    box-shadow: none;
+  }
+
+  .viewButton[aria-pressed="true"] {
+    color: HighlightText;
   }
 }

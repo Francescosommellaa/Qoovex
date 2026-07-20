@@ -43,6 +43,7 @@ const mocks = vi.hoisted(() => {
   ] as const;
   const db = Object.fromEntries(modelNames.map((model) => [model, {
     count: vi.fn(),
+    groupBy: vi.fn(),
     findMany: vi.fn(),
     findUniqueOrThrow: vi.fn(),
     deleteMany: vi.fn(),
@@ -50,6 +51,7 @@ const mocks = vi.hoisted(() => {
   return {
     db: db as Record<(typeof modelNames)[number], {
       count: ReturnType<typeof vi.fn>;
+      groupBy: ReturnType<typeof vi.fn>;
       findMany: ReturnType<typeof vi.fn>;
       findUniqueOrThrow: ReturnType<typeof vi.fn>;
       deleteMany: ReturnType<typeof vi.fn>;
@@ -101,6 +103,7 @@ describe("data control services", () => {
     mocks.role = "OWNER";
     for (const model of mocks.modelNames) {
       mocks.db[model].count.mockResolvedValue(0);
+      mocks.db[model].groupBy.mockResolvedValue([]);
       mocks.db[model].findMany.mockResolvedValue([]);
       mocks.db[model].findUniqueOrThrow.mockResolvedValue({ id: "org-1", name: "Qoovex Test", code: "QVX", createdAt: now, updatedAt: now });
     }
@@ -111,6 +114,20 @@ describe("data control services", () => {
 
     mocks.role = "ADMIN";
     await expect(getDataInventory()).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("builds the inventory with the 57-operation proxy budget", async () => {
+    await getDataInventory();
+
+    const countCalls = mocks.modelNames.reduce((total, model) => total + mocks.db[model].count.mock.calls.length, 0);
+    const groupByCalls = mocks.modelNames.reduce((total, model) => total + mocks.db[model].groupBy.mock.calls.length, 0);
+    const identityReads = mocks.db.user.findMany.mock.calls.length;
+    expect({ countCalls, groupByCalls, identityReads, total: countCalls + groupByCalls + identityReads }).toEqual({
+      countCalls: 55,
+      groupByCalls: 1,
+      identityReads: 1,
+      total: 57,
+    });
   });
 
   it("exports metadata without Blob keys, token hashes, raw tokens or email bodies", async () => {

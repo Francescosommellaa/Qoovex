@@ -23,6 +23,19 @@ const ASSIGNMENT_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
 const ASSIGNMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
 const MY_SCOPE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 
+interface ListWorkerUserLinksInput {
+  workerId?: unknown;
+}
+
+interface ListJobSiteUserAssignmentsInput {
+  jobSiteId?: unknown;
+}
+
+interface ListJobSiteWorkerAssignmentsInput {
+  jobSiteId?: unknown;
+  workerId?: unknown;
+}
+
 function parseRequiredId(value: unknown, label: string) {
   const id = trimOptionalId(value, label);
   if (!id) throw new AccessError(`${label} non valido.`, 409);
@@ -141,10 +154,11 @@ function toJobSiteWorkerAssignmentResponse(assignment: {
   };
 }
 
-export async function listWorkerUserLinks() {
+export async function listWorkerUserLinks(input: ListWorkerUserLinksInput = {}) {
   const { organizationId } = await requireOrganizationDomainAccess("assignments:read", ASSIGNMENT_READ_ROLES);
+  const workerId = trimOptionalId(input.workerId, "Lavoratore");
   const links = await db.workerUserLink.findMany({
-    where: { organizationId, archivedAt: null },
+    where: { organizationId, archivedAt: null, ...(workerId ? { workerId } : {}) },
     select: {
       id: true,
       workerId: true,
@@ -232,10 +246,11 @@ export async function archiveWorkerUserLink(linkId: string): Promise<ArchiveWork
   return { link: toWorkerUserLinkResponse(link), archived: true };
 }
 
-export async function listJobSiteUserAssignments() {
+export async function listJobSiteUserAssignments(input: ListJobSiteUserAssignmentsInput = {}) {
   const { organizationId } = await requireOrganizationDomainAccess("assignments:read", ASSIGNMENT_READ_ROLES);
+  const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
   const assignments = await db.jobSiteUserAssignment.findMany({
-    where: { organizationId, archivedAt: null },
+    where: { organizationId, archivedAt: null, ...(jobSiteId ? { jobSiteId } : {}) },
     select: {
       id: true,
       jobSiteId: true,
@@ -324,10 +339,17 @@ export async function archiveJobSiteUserAssignment(assignmentId: string): Promis
   return { assignment: toJobSiteUserAssignmentResponse(assignment), archived: true };
 }
 
-export async function listJobSiteWorkerAssignments() {
+export async function listJobSiteWorkerAssignments(input: ListJobSiteWorkerAssignmentsInput = {}) {
   const { organizationId } = await requireOrganizationDomainAccess("assignments:read", ASSIGNMENT_READ_ROLES);
+  const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
+  const workerId = trimOptionalId(input.workerId, "Lavoratore");
   const assignments = await db.jobSiteWorkerAssignment.findMany({
-    where: { organizationId, archivedAt: null },
+    where: {
+      organizationId,
+      archivedAt: null,
+      ...(jobSiteId ? { jobSiteId } : {}),
+      ...(workerId ? { workerId } : {}),
+    },
     select: {
       id: true,
       jobSiteId: true,

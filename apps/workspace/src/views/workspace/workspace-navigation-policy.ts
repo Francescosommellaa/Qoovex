@@ -18,31 +18,31 @@ const everydayNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem
   OWNER: [
     { label: "Da fare", href: "/dashboard" },
     { label: "Documenti", href: "/documents" },
-    { label: "Calendario", href: "/deadlines" },
+    { label: "Calendario", href: "/calendar" },
     { label: "Cantieri", href: "/job-sites" },
   ],
   ADMIN: [
     { label: "Da fare", href: "/dashboard" },
     { label: "Documenti", href: "/documents" },
-    { label: "Calendario", href: "/deadlines" },
+    { label: "Calendario", href: "/calendar" },
     { label: "Cantieri", href: "/job-sites" },
   ],
   SAFETY_CONSULTANT: [
     { label: "Da fare", href: "/dashboard" },
     { label: "Documenti", href: "/documents" },
-    { label: "Calendario", href: "/deadlines" },
+    { label: "Calendario", href: "/calendar" },
     { label: "Cantieri", href: "/job-sites" },
   ],
   SITE_MANAGER: [
     { label: "Da fare", href: "/dashboard" },
     { label: "Documenti", href: "/documents" },
-    { label: "Calendario", href: "/deadlines" },
+    { label: "Calendario", href: "/calendar" },
     { label: "Cantieri", href: "/job-sites" },
   ],
   WORKER: [
     { label: "Da fare", href: "/dashboard" },
     { label: "Documenti", href: "/documents" },
-    { label: "Calendario", href: "/deadlines" },
+    { label: "Calendario", href: "/calendar" },
     { label: "Cantieri", href: "/job-sites" },
   ],
 };
@@ -94,33 +94,33 @@ const addNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> =
 
 const quickLinkNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> = {
   OWNER: [
-    { label: "Scadenze", href: "/deadlines?mode=deadlines" },
+    { label: "Scadenze", href: "/deadlines" },
     { label: "Prove", href: "/evidence" },
     { label: "Checklist", href: "/checklists" },
     { label: "Condivisioni", href: "/document-packages" },
     { label: "Accessi operativi", href: "/access" },
   ],
   ADMIN: [
-    { label: "Scadenze", href: "/deadlines?mode=deadlines" },
+    { label: "Scadenze", href: "/deadlines" },
     { label: "Prove", href: "/evidence" },
     { label: "Checklist", href: "/checklists" },
     { label: "Condivisioni", href: "/document-packages" },
     { label: "Accessi operativi", href: "/access" },
   ],
   SAFETY_CONSULTANT: [
-    { label: "Scadenze", href: "/deadlines?mode=deadlines" },
+    { label: "Scadenze", href: "/deadlines" },
     { label: "Prove", href: "/evidence" },
     { label: "Checklist", href: "/checklists" },
     { label: "Condivisioni", href: "/document-packages" },
     { label: "Accessi operativi", href: "/access" },
   ],
   SITE_MANAGER: [
-    { label: "Scadenze", href: "/deadlines?mode=deadlines" },
+    { label: "Scadenze", href: "/deadlines" },
     { label: "Prove", href: "/evidence" },
     { label: "Checklist", href: "/checklists" },
   ],
   WORKER: [
-    { label: "Scadenze", href: "/deadlines?mode=deadlines" },
+    { label: "Scadenze", href: "/deadlines" },
     { label: "Prove", href: "/evidence" },
   ],
 };

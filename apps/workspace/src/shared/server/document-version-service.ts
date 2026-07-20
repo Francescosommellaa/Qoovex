@@ -31,6 +31,19 @@ const documentVersionSelect = {
   archivedAt: true,
 } as const;
 
+export const documentVersionListSelect = {
+  id: true,
+  organizationId: true,
+  documentId: true,
+  originalFileName: true,
+  mimeType: true,
+  size: true,
+  checksum: true,
+  uploadedById: true,
+  createdAt: true,
+  archivedAt: true,
+} as const;
+
 export interface DocumentVersionResponse {
   id: string;
   organizationId: string;
@@ -51,7 +64,7 @@ export interface DownloadDocumentVersionResult {
   size: number;
 }
 
-function toDocumentVersionResponse(version: {
+export function toDocumentVersionResponse(version: {
   id: string;
   organizationId: string;
   documentId: string;
@@ -122,10 +135,39 @@ export async function listDocumentVersions(documentId: string) {
   if (!canReadDocument(scope, document)) throw new AccessError("Documento non trovato.", 404);
   const versions = await db.documentVersion.findMany({
     where: { documentId, organizationId, archivedAt: null },
-    select: documentVersionSelect,
+    select: documentVersionListSelect,
     orderBy: { createdAt: "desc" },
   });
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-versions", resourceId: documentId });
+  return versions.map(toDocumentVersionResponse);
+}
+
+export async function listDocumentVersionsByDocumentIds(documentIds: string[]) {
+  const { context, organizationId } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_VERSION_READ_ROLES);
+  const scope = await getResourceScope(context);
+  const uniqueDocumentIds = [...new Set(documentIds.filter(Boolean))];
+  if (uniqueDocumentIds.length === 0) return [];
+
+  const documentScope = scope.fullAccess
+    ? {}
+    : scope.actorRole === "SITE_MANAGER"
+      ? { ownerType: "JOB_SITE" as const, jobSiteId: { in: scope.siteManagerJobSiteIds } }
+      : scope.linkedWorker
+        ? { ownerType: "WORKER" as const, workerId: scope.linkedWorker.id }
+        : null;
+  if (!documentScope) return [];
+
+  const versions = await db.documentVersion.findMany({
+    where: {
+      organizationId,
+      documentId: { in: uniqueDocumentIds },
+      archivedAt: null,
+      document: { is: { organizationId, archivedAt: null, ...documentScope } },
+    },
+    select: documentVersionListSelect,
+    orderBy: [{ documentId: "asc" }, { createdAt: "desc" }],
+  });
+  await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-versions" });
   return versions.map(toDocumentVersionResponse);
 }
 
