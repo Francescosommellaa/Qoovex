@@ -119,3 +119,9 @@ La route `/dashboard` conserva il contratto situation-centric e il titolo prodot
 `Assegna` non porta piu direttamente alla pagina Accessi operativi: per risorse lavoratore o cantiere senza responsabile apre un `Dialog` contestuale con responsabile attuale, scelta della persona, loading, vuoto, errore e conferma. Il salvataggio aggiorna la dashboard; `Gestisci tutti gli accessi` resta una destinazione secondaria esplicita.
 
 La motion della pagina serve orientamento e feedback: ingresso di 240 ms con sole `opacity` e `transform`, lieve sollevamento delle card filtro soltanto su puntatore fine, indicazione direzionale dell'azione e highlight dell'elemento appena aggiornato. `prefers-reduced-motion` e forced colors disattivano gli ingressi e le transizioni non essenziali. La pagina non usa una libreria motion separata e non anima il layout.
+
+## Calendario operativo
+
+La route Workspace `/deadlines` presenta il calendario operativo con FullCalendar Standard `7.0.1`, licenza MIT e supporto React 19. Sono usati soltanto i plugin standard month, time-grid, list e interaction; nessun modulo Scheduler/Premium. Sirio prova la stessa gerarchia su `/calendar` con dati esplicitamente dimostrativi.
+
+La composizione usa viste mese, settimana, giorno e agenda, slot orari, selezione touch, drag e resize, filtri per scadenze, task, priorita e persona, Dialog accessibili per CRUD e integrazione iCalendar. Le scadenze sono eventi visivi non trascinabili derivati direttamente dai record Deadline. Mobile impila la toolbar e mantiene lo scorrimento orizzontale dei controlli; reduced motion e forced colors conservano fallback leggibili.

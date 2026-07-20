@@ -180,13 +180,13 @@ export type DataControlJobAggregateArgs<ExtArgs extends runtime.Types.Extensions
   _count?: true | DataControlJobCountAggregateInputType
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   *
+   * 
    * Select which fields to average
   **/
   _avg?: DataControlJobAvgAggregateInputType
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   *
+   * 
    * Select which fields to sum
   **/
   _sum?: DataControlJobSumAggregateInputType

@@ -74,7 +74,7 @@ export async function buildDataExportForOrganization(organizationId: string): Pr
 
   const [
     organization, memberships, invitations, documentTypes, documentRequirements, workers, jobSites, documents,
-    documentVersions, deadlines, checklists, checklistItems, evidence, documentPackages, documentPackageItems,
+    documentVersions, deadlines, calendarEvents, checklists, checklistItems, evidence, documentPackages, documentPackageItems,
     shareLinks, notifications, notificationPreferences, emailDeliveries, auditEvents, dataControlJobs,
     supportSessions, supportEvents, providers, authSessions, credentials, authCodes, mfaRecoveryRequests,
     authDevices, backupCodes, securityEvents, authRateLimits, workerUserLinks, jobSiteUserAssignments,
@@ -90,6 +90,7 @@ export async function buildDataExportForOrganization(organizationId: string): Pr
     db.document.findMany({ where: { organizationId }, select: { id: true, organizationId: true, documentTypeId: true, ownerType: true, workerId: true, jobSiteId: true, title: true, status: true, expiryDate: true, notes: true, reviewedAt: true, reviewedById: true, createdAt: true, updatedAt: true, archivedAt: true }, orderBy: [{ createdAt: "asc" }, { id: "asc" }] }),
     db.documentVersion.findMany({ where: { organizationId }, select: { id: true, organizationId: true, documentId: true, originalFileName: true, mimeType: true, size: true, checksum: true, uploadedById: true, createdAt: true, archivedAt: true }, orderBy: [{ createdAt: "asc" }, { id: "asc" }] }),
     db.deadline.findMany({ where: { organizationId }, select: { id: true, organizationId: true, title: true, dueDate: true, sourceType: true, documentId: true, workerId: true, jobSiteId: true, status: true, remindAt: true, createdAt: true, updatedAt: true, archivedAt: true }, orderBy: [{ createdAt: "asc" }, { id: "asc" }] }),
+    db.calendarEvent.findMany({ where: { organizationId }, select: { id: true, organizationId: true, title: true, description: true, startAt: true, endAt: true, allDay: true, kind: true, priority: true, status: true, source: true, externalUid: true, assignedToId: true, jobSiteId: true, createdById: true, createdAt: true, updatedAt: true, archivedAt: true }, orderBy: [{ createdAt: "asc" }, { id: "asc" }] }),
     db.checklist.findMany({ where: { organizationId }, select: { id: true, organizationId: true, jobSiteId: true, name: true, description: true, status: true, createdAt: true, updatedAt: true, archivedAt: true }, orderBy: [{ createdAt: "asc" }, { id: "asc" }] }),
     db.checklistItem.findMany({ where: { organizationId }, select: { id: true, organizationId: true, checklistId: true, label: true, description: true, status: true, completedAt: true, completedById: true, createdAt: true, updatedAt: true }, orderBy: [{ createdAt: "asc" }, { id: "asc" }] }),
     db.evidence.findMany({ where: { organizationId }, select: { id: true, organizationId: true, jobSiteId: true, workerId: true, checklistItemId: true, type: true, title: true, description: true, originalFileName: true, mimeType: true, size: true, createdById: true, createdAt: true, archivedAt: true }, orderBy: [{ createdAt: "asc" }, { id: "asc" }] }),
@@ -131,6 +132,7 @@ export async function buildDataExportForOrganization(organizationId: string): Pr
     documents: documents.map((item) => ({ ...item, expiryDate: iso(item.expiryDate), reviewedAt: iso(item.reviewedAt), createdAt: item.createdAt.toISOString(), updatedAt: item.updatedAt.toISOString(), archivedAt: iso(item.archivedAt) })),
     documentVersions: documentVersions.map((item) => ({ ...item, createdAt: item.createdAt.toISOString(), archivedAt: iso(item.archivedAt) })),
     deadlines: deadlines.map((item) => ({ ...item, dueDate: item.dueDate.toISOString(), remindAt: iso(item.remindAt), createdAt: item.createdAt.toISOString(), updatedAt: item.updatedAt.toISOString(), archivedAt: iso(item.archivedAt) })),
+    calendarEvents: calendarEvents.map((item) => ({ ...item, startAt: item.startAt.toISOString(), endAt: item.endAt.toISOString(), createdAt: item.createdAt.toISOString(), updatedAt: item.updatedAt.toISOString(), archivedAt: iso(item.archivedAt) })),
     checklists: checklists.map((item) => ({ ...item, createdAt: item.createdAt.toISOString(), updatedAt: item.updatedAt.toISOString(), archivedAt: iso(item.archivedAt) })),
     checklistItems: checklistItems.map((item) => ({ ...item, completedAt: iso(item.completedAt), createdAt: item.createdAt.toISOString(), updatedAt: item.updatedAt.toISOString() })),
     evidence: evidence.map((item) => ({ ...item, hasFile: Boolean(item.originalFileName || item.mimeType || item.size), createdAt: item.createdAt.toISOString(), archivedAt: iso(item.archivedAt) })),

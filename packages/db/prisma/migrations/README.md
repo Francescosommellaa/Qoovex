@@ -7,7 +7,8 @@ Questa cartella contiene l'unica cronologia Prisma canonica di Qoovex.
 - `20260712010000_single_company_baseline`: baseline completa registrata nel database condiviso. Il file e immutabile e il checksum deve coincidere con `_prisma_migrations`.
 - `20260712020000_single_membership_forward`: migration incrementale e transazionale applicata al database condiviso; ha creato il modello con una sola `OrganizationMembership` per utente e rimosso `User.organizationId` e `User.organizationRole`.
 - `20260713010000_mfa_hardening`: aggiunge recovery MFA, binding sessione, dispositivi e backup code con i relativi vincoli.
-- `20260713020000_rate_limit_privacy_atomicity`: ultima migration locale; elimina le righe rate-limit legacy contenenti PII e aggiunge `userId`, timestamp, indice e FK per atomicita, attribuzione e retention. Non applicarla fuori dal deploy protetto.
+- `20260713020000_rate_limit_privacy_atomicity`: elimina le righe rate-limit legacy contenenti PII e aggiunge `userId`, timestamp, indice e FK per atomicita, attribuzione e retention.
+- `20260720010000_calendar_events`: ultima migration locale; aggiunge `CalendarEvent`, priorita, stato, assegnatario, cantiere, origine iCalendar, indici e azioni audit. Non applicarla fuori dal deploy protetto.
 
 Le nove migration precedenti non appartengono a questa cronologia: non erano applicate all'unico database condiviso e non devono essere eseguite o marcate tramite `migrate resolve`.
 

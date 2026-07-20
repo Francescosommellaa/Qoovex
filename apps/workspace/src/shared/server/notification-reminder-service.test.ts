@@ -1,5 +1,5 @@
 import type { OrganizationRole } from "@qoovex/types";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   db: {
@@ -82,6 +82,8 @@ function primeEmptyReminderSources() {
 }
 
 beforeEach(() => {
+  vi.useFakeTimers();
+  vi.setSystemTime(now);
   resetModel(mocks.db.notification);
   resetModel(mocks.db.deadline);
   resetModel(mocks.db.document);
@@ -101,6 +103,10 @@ beforeEach(() => {
   mocks.db.notification.create.mockResolvedValue({ id: "created" });
   mocks.db.notification.findMany.mockResolvedValue([notificationRecord]);
   mocks.db.notification.count.mockResolvedValue(1);
+});
+
+afterEach(() => {
+  vi.useRealTimers();
 });
 
 describe("notification service", () => {

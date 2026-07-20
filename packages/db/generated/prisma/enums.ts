@@ -79,6 +79,9 @@ export const AuditAction = {
   DEADLINE_CREATED: 'DEADLINE_CREATED',
   DEADLINE_UPDATED: 'DEADLINE_UPDATED',
   DEADLINE_ARCHIVED: 'DEADLINE_ARCHIVED',
+  CALENDAR_EVENT_CREATED: 'CALENDAR_EVENT_CREATED',
+  CALENDAR_EVENT_UPDATED: 'CALENDAR_EVENT_UPDATED',
+  CALENDAR_EVENT_ARCHIVED: 'CALENDAR_EVENT_ARCHIVED',
   WORKER_CREATED: 'WORKER_CREATED',
   WORKER_UPDATED: 'WORKER_UPDATED',
   WORKER_ARCHIVED: 'WORKER_ARCHIVED',
@@ -132,6 +135,7 @@ export const AuditEntityType = {
   DOCUMENT: 'DOCUMENT',
   DOCUMENT_VERSION: 'DOCUMENT_VERSION',
   DEADLINE: 'DEADLINE',
+  CALENDAR_EVENT: 'CALENDAR_EVENT',
   WORKER: 'WORKER',
   JOB_SITE: 'JOB_SITE',
   CHECKLIST: 'CHECKLIST',
@@ -253,6 +257,43 @@ export const DeadlineSourceType = {
 } as const
 
 export type DeadlineSourceType = (typeof DeadlineSourceType)[keyof typeof DeadlineSourceType]
+
+
+export const CalendarEventKind = {
+  EVENT: 'EVENT',
+  TASK: 'TASK'
+} as const
+
+export type CalendarEventKind = (typeof CalendarEventKind)[keyof typeof CalendarEventKind]
+
+
+export const CalendarEventPriority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+} as const
+
+export type CalendarEventPriority = (typeof CalendarEventPriority)[keyof typeof CalendarEventPriority]
+
+
+export const CalendarEventStatus = {
+  PLANNED: 'PLANNED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  DONE: 'DONE',
+  CANCELLED: 'CANCELLED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type CalendarEventStatus = (typeof CalendarEventStatus)[keyof typeof CalendarEventStatus]
+
+
+export const CalendarEventSource = {
+  QOOVEX: 'QOOVEX',
+  ICALENDAR_IMPORT: 'ICALENDAR_IMPORT'
+} as const
+
+export type CalendarEventSource = (typeof CalendarEventSource)[keyof typeof CalendarEventSource]
 
 
 export const EvidenceType = {

@@ -59,6 +59,9 @@ enum AuditAction {
   DEADLINE_CREATED
   DEADLINE_UPDATED
   DEADLINE_ARCHIVED
+  CALENDAR_EVENT_CREATED
+  CALENDAR_EVENT_UPDATED
+  CALENDAR_EVENT_ARCHIVED
   WORKER_CREATED
   WORKER_UPDATED
   WORKER_ARCHIVED
@@ -109,6 +112,7 @@ enum AuditEntityType {
   DOCUMENT
   DOCUMENT_VERSION
   DEADLINE
+  CALENDAR_EVENT
   WORKER
   JOB_SITE
   CHECKLIST
@@ -197,6 +201,31 @@ enum DeadlineSourceType {
   CHECKLIST
   MANUAL
   OTHER
+}
+
+enum CalendarEventKind {
+  EVENT
+  TASK
+}
+
+enum CalendarEventPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum CalendarEventStatus {
+  PLANNED
+  IN_PROGRESS
+  DONE
+  CANCELLED
+  ARCHIVED
+}
+
+enum CalendarEventSource {
+  QOOVEX
+  ICALENDAR_IMPORT
 }
 
 enum EvidenceType {
@@ -378,6 +407,8 @@ model User {
   jobSiteUserAssignments      JobSiteUserAssignment[]
   assignedJobSiteUsers        JobSiteUserAssignment[]     @relation("JobSiteUserAssignmentCreator")
   assignedJobSiteWorkers      JobSiteWorkerAssignment[]   @relation("JobSiteWorkerAssignmentCreator")
+  createdCalendarEvents       CalendarEvent[]              @relation("CalendarEventCreator")
+  assignedCalendarEvents      CalendarEvent[]              @relation("CalendarEventAssignee")
   createdAt                   DateTime                    @default(now())
   updatedAt                   DateTime                    @updatedAt
 }
@@ -403,6 +434,7 @@ model Organization {
   documentVersions            DocumentVersion[]
   documentRequirements        DocumentRequirement[]
   deadlines                   Deadline[]
+  calendarEvents              CalendarEvent[]
   checklists                  Checklist[]
   checklistItems              ChecklistItem[]
   evidence                    Evidence[]
@@ -460,6 +492,7 @@ model JobSite {
   documents         Document[]
   requirements      DocumentRequirement[]
   deadlines         Deadline[]
+  calendarEvents    CalendarEvent[]
   checklists        Checklist[]
   evidence          Evidence[]
   documentPackages  DocumentPackage[]
@@ -650,6 +683,38 @@ model Deadline {
   @@index([organizationId, documentId])
   @@index([organizationId, workerId])
   @@index([organizationId, jobSiteId])
+}
+
+model CalendarEvent {
+  id             String                @id @default(cuid())
+  organizationId String
+  title          String
+  description    String?               @db.Text
+  startAt        DateTime
+  endAt          DateTime
+  allDay         Boolean               @default(false)
+  kind           CalendarEventKind     @default(EVENT)
+  priority       CalendarEventPriority @default(MEDIUM)
+  status         CalendarEventStatus   @default(PLANNED)
+  source         CalendarEventSource   @default(QOOVEX)
+  externalUid    String?
+  assignedToId   String?
+  jobSiteId      String?
+  createdById    String
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  archivedAt     DateTime?
+  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignedTo     User?                 @relation("CalendarEventAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  jobSite        JobSite?              @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
+  createdBy      User                  @relation("CalendarEventCreator", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@unique([organizationId, externalUid])
+  @@index([organizationId, startAt, endAt])
+  @@index([organizationId, assignedToId, archivedAt])
+  @@index([organizationId, jobSiteId, archivedAt])
+  @@index([organizationId, status, archivedAt])
+  @@index([createdById])
 }
 
 model Checklist {

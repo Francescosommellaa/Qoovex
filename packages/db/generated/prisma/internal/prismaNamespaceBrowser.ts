@@ -66,6 +66,7 @@ export const ModelName = {
   DocumentVersion: 'DocumentVersion',
   DocumentRequirement: 'DocumentRequirement',
   Deadline: 'Deadline',
+  CalendarEvent: 'CalendarEvent',
   Checklist: 'Checklist',
   ChecklistItem: 'ChecklistItem',
   Evidence: 'Evidence',
@@ -353,6 +354,30 @@ export const DeadlineScalarFieldEnum = {
 } as const
 
 export type DeadlineScalarFieldEnum = (typeof DeadlineScalarFieldEnum)[keyof typeof DeadlineScalarFieldEnum]
+
+
+export const CalendarEventScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  title: 'title',
+  description: 'description',
+  startAt: 'startAt',
+  endAt: 'endAt',
+  allDay: 'allDay',
+  kind: 'kind',
+  priority: 'priority',
+  status: 'status',
+  source: 'source',
+  externalUid: 'externalUid',
+  assignedToId: 'assignedToId',
+  jobSiteId: 'jobSiteId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  archivedAt: 'archivedAt'
+} as const
+
+export type CalendarEventScalarFieldEnum = (typeof CalendarEventScalarFieldEnum)[keyof typeof CalendarEventScalarFieldEnum]
 
 
 export const ChecklistScalarFieldEnum = {

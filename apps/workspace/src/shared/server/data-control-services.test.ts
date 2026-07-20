@@ -23,6 +23,7 @@ const mocks = vi.hoisted(() => {
     "document",
     "documentVersion",
     "deadline",
+    "calendarEvent",
     "checklist",
     "checklistItem",
     "evidence",

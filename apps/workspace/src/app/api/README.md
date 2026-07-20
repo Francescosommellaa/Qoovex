@@ -21,6 +21,7 @@ Endpoint dominio MVP attivi:
 - `document-types`: tipi documento configurabili, senza preset normativi;
 - `documents`: documenti logici e versioni file con Blob privato;
 - `deadlines`: scadenze registrate dall'utente o collegate a documenti;
+- `calendar`: CRUD di eventi e task, import iCalendar locale ed export autenticato;
 - `workers`: lavoratori con metadati operativi minimi;
 - `job-sites`: cantieri senza geolocalizzazione o presenze;
 - `checklists`: checklist operative configurabili e voci completabili;

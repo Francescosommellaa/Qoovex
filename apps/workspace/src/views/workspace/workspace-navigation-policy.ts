@@ -94,28 +94,33 @@ const addNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> =
 
 const quickLinkNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> = {
   OWNER: [
+    { label: "Scadenze", href: "/deadlines?mode=deadlines" },
     { label: "Prove", href: "/evidence" },
     { label: "Checklist", href: "/checklists" },
     { label: "Condivisioni", href: "/document-packages" },
     { label: "Accessi operativi", href: "/access" },
   ],
   ADMIN: [
+    { label: "Scadenze", href: "/deadlines?mode=deadlines" },
     { label: "Prove", href: "/evidence" },
     { label: "Checklist", href: "/checklists" },
     { label: "Condivisioni", href: "/document-packages" },
     { label: "Accessi operativi", href: "/access" },
   ],
   SAFETY_CONSULTANT: [
+    { label: "Scadenze", href: "/deadlines?mode=deadlines" },
     { label: "Prove", href: "/evidence" },
     { label: "Checklist", href: "/checklists" },
     { label: "Condivisioni", href: "/document-packages" },
     { label: "Accessi operativi", href: "/access" },
   ],
   SITE_MANAGER: [
+    { label: "Scadenze", href: "/deadlines?mode=deadlines" },
     { label: "Prove", href: "/evidence" },
     { label: "Checklist", href: "/checklists" },
   ],
   WORKER: [
+    { label: "Scadenze", href: "/deadlines?mode=deadlines" },
     { label: "Prove", href: "/evidence" },
   ],
 };

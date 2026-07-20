@@ -204,6 +204,7 @@ export type OrganizationWhereInput = {
   documentVersions?: Prisma.DocumentVersionListRelationFilter
   documentRequirements?: Prisma.DocumentRequirementListRelationFilter
   deadlines?: Prisma.DeadlineListRelationFilter
+  calendarEvents?: Prisma.CalendarEventListRelationFilter
   checklists?: Prisma.ChecklistListRelationFilter
   checklistItems?: Prisma.ChecklistItemListRelationFilter
   evidence?: Prisma.EvidenceListRelationFilter
@@ -239,6 +240,7 @@ export type OrganizationOrderByWithRelationInput = {
   documentVersions?: Prisma.DocumentVersionOrderByRelationAggregateInput
   documentRequirements?: Prisma.DocumentRequirementOrderByRelationAggregateInput
   deadlines?: Prisma.DeadlineOrderByRelationAggregateInput
+  calendarEvents?: Prisma.CalendarEventOrderByRelationAggregateInput
   checklists?: Prisma.ChecklistOrderByRelationAggregateInput
   checklistItems?: Prisma.ChecklistItemOrderByRelationAggregateInput
   evidence?: Prisma.EvidenceOrderByRelationAggregateInput
@@ -277,6 +279,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   documentVersions?: Prisma.DocumentVersionListRelationFilter
   documentRequirements?: Prisma.DocumentRequirementListRelationFilter
   deadlines?: Prisma.DeadlineListRelationFilter
+  calendarEvents?: Prisma.CalendarEventListRelationFilter
   checklists?: Prisma.ChecklistListRelationFilter
   checklistItems?: Prisma.ChecklistItemListRelationFilter
   evidence?: Prisma.EvidenceListRelationFilter
@@ -335,6 +338,7 @@ export type OrganizationCreateInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -369,6 +373,7 @@ export type OrganizationUncheckedCreateInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -403,6 +408,7 @@ export type OrganizationUpdateInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -437,6 +443,7 @@ export type OrganizationUncheckedUpdateInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -706,6 +713,20 @@ export type OrganizationUpdateOneRequiredWithoutDeadlinesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutDeadlinesInput, Prisma.OrganizationUpdateWithoutDeadlinesInput>, Prisma.OrganizationUncheckedUpdateWithoutDeadlinesInput>
 }
 
+export type OrganizationCreateNestedOneWithoutCalendarEventsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutCalendarEventsInput, Prisma.OrganizationUncheckedCreateWithoutCalendarEventsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutCalendarEventsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutCalendarEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutCalendarEventsInput, Prisma.OrganizationUncheckedCreateWithoutCalendarEventsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutCalendarEventsInput
+  upsert?: Prisma.OrganizationUpsertWithoutCalendarEventsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutCalendarEventsInput, Prisma.OrganizationUpdateWithoutCalendarEventsInput>, Prisma.OrganizationUncheckedUpdateWithoutCalendarEventsInput>
+}
+
 export type OrganizationCreateNestedOneWithoutChecklistsInput = {
   create?: Prisma.XOR<Prisma.OrganizationCreateWithoutChecklistsInput, Prisma.OrganizationUncheckedCreateWithoutChecklistsInput>
   connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutChecklistsInput
@@ -937,6 +958,7 @@ export type OrganizationCreateWithoutCreatedByInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -970,6 +992,7 @@ export type OrganizationUncheckedCreateWithoutCreatedByInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1041,6 +1064,7 @@ export type OrganizationCreateWithoutWorkersInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -1074,6 +1098,7 @@ export type OrganizationUncheckedCreateWithoutWorkersInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1123,6 +1148,7 @@ export type OrganizationUpdateWithoutWorkersInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -1156,6 +1182,7 @@ export type OrganizationUncheckedUpdateWithoutWorkersInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1189,6 +1216,7 @@ export type OrganizationCreateWithoutJobSitesInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -1222,6 +1250,7 @@ export type OrganizationUncheckedCreateWithoutJobSitesInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1271,6 +1300,7 @@ export type OrganizationUpdateWithoutJobSitesInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -1304,6 +1334,7 @@ export type OrganizationUncheckedUpdateWithoutJobSitesInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1338,6 +1369,7 @@ export type OrganizationCreateWithoutWorkerUserLinksInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -1371,6 +1403,7 @@ export type OrganizationUncheckedCreateWithoutWorkerUserLinksInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1420,6 +1453,7 @@ export type OrganizationUpdateWithoutWorkerUserLinksInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -1453,6 +1487,7 @@ export type OrganizationUncheckedUpdateWithoutWorkerUserLinksInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1486,6 +1521,7 @@ export type OrganizationCreateWithoutJobSiteUserAssignmentsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -1519,6 +1555,7 @@ export type OrganizationUncheckedCreateWithoutJobSiteUserAssignmentsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1568,6 +1605,7 @@ export type OrganizationUpdateWithoutJobSiteUserAssignmentsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -1601,6 +1639,7 @@ export type OrganizationUncheckedUpdateWithoutJobSiteUserAssignmentsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1634,6 +1673,7 @@ export type OrganizationCreateWithoutJobSiteWorkerAssignmentsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -1667,6 +1707,7 @@ export type OrganizationUncheckedCreateWithoutJobSiteWorkerAssignmentsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1716,6 +1757,7 @@ export type OrganizationUpdateWithoutJobSiteWorkerAssignmentsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -1749,6 +1791,7 @@ export type OrganizationUncheckedUpdateWithoutJobSiteWorkerAssignmentsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1781,6 +1824,7 @@ export type OrganizationCreateWithoutDocumentTypesInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -1814,6 +1858,7 @@ export type OrganizationUncheckedCreateWithoutDocumentTypesInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1863,6 +1908,7 @@ export type OrganizationUpdateWithoutDocumentTypesInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -1896,6 +1942,7 @@ export type OrganizationUncheckedUpdateWithoutDocumentTypesInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1929,6 +1976,7 @@ export type OrganizationCreateWithoutDocumentsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -1962,6 +2010,7 @@ export type OrganizationUncheckedCreateWithoutDocumentsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -2011,6 +2060,7 @@ export type OrganizationUpdateWithoutDocumentsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -2044,6 +2094,7 @@ export type OrganizationUncheckedUpdateWithoutDocumentsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -2077,6 +2128,7 @@ export type OrganizationCreateWithoutDocumentVersionsInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -2110,6 +2162,7 @@ export type OrganizationUncheckedCreateWithoutDocumentVersionsInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -2159,6 +2212,7 @@ export type OrganizationUpdateWithoutDocumentVersionsInput = {
   documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -2192,6 +2246,7 @@ export type OrganizationUncheckedUpdateWithoutDocumentVersionsInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -2225,6 +2280,7 @@ export type OrganizationCreateWithoutDocumentRequirementsInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -2258,6 +2314,7 @@ export type OrganizationUncheckedCreateWithoutDocumentRequirementsInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -2307,6 +2364,7 @@ export type OrganizationUpdateWithoutDocumentRequirementsInput = {
   documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -2340,6 +2398,7 @@ export type OrganizationUncheckedUpdateWithoutDocumentRequirementsInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -2373,6 +2432,7 @@ export type OrganizationCreateWithoutDeadlinesInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -2406,6 +2466,7 @@ export type OrganizationUncheckedCreateWithoutDeadlinesInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -2455,6 +2516,7 @@ export type OrganizationUpdateWithoutDeadlinesInput = {
   documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -2488,6 +2550,159 @@ export type OrganizationUncheckedUpdateWithoutDeadlinesInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutCalendarEventsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutCalendarEventsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutCalendarEventsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutCalendarEventsInput, Prisma.OrganizationUncheckedCreateWithoutCalendarEventsInput>
+}
+
+export type OrganizationUpsertWithoutCalendarEventsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutCalendarEventsInput, Prisma.OrganizationUncheckedUpdateWithoutCalendarEventsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutCalendarEventsInput, Prisma.OrganizationUncheckedCreateWithoutCalendarEventsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutCalendarEventsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutCalendarEventsInput, Prisma.OrganizationUncheckedUpdateWithoutCalendarEventsInput>
+}
+
+export type OrganizationUpdateWithoutCalendarEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutCalendarEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -2522,6 +2737,7 @@ export type OrganizationCreateWithoutChecklistsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
@@ -2555,6 +2771,7 @@ export type OrganizationUncheckedCreateWithoutChecklistsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
@@ -2604,6 +2821,7 @@ export type OrganizationUpdateWithoutChecklistsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
@@ -2637,6 +2855,7 @@ export type OrganizationUncheckedUpdateWithoutChecklistsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -2670,6 +2889,7 @@ export type OrganizationCreateWithoutChecklistItemsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
@@ -2703,6 +2923,7 @@ export type OrganizationUncheckedCreateWithoutChecklistItemsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
@@ -2752,6 +2973,7 @@ export type OrganizationUpdateWithoutChecklistItemsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
@@ -2785,6 +3007,7 @@ export type OrganizationUncheckedUpdateWithoutChecklistItemsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -2818,6 +3041,7 @@ export type OrganizationCreateWithoutEvidenceInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
@@ -2851,6 +3075,7 @@ export type OrganizationUncheckedCreateWithoutEvidenceInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
@@ -2900,6 +3125,7 @@ export type OrganizationUpdateWithoutEvidenceInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
@@ -2933,6 +3159,7 @@ export type OrganizationUncheckedUpdateWithoutEvidenceInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -2966,6 +3193,7 @@ export type OrganizationCreateWithoutDocumentPackagesInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -2999,6 +3227,7 @@ export type OrganizationUncheckedCreateWithoutDocumentPackagesInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -3048,6 +3277,7 @@ export type OrganizationUpdateWithoutDocumentPackagesInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -3081,6 +3311,7 @@ export type OrganizationUncheckedUpdateWithoutDocumentPackagesInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -3114,6 +3345,7 @@ export type OrganizationCreateWithoutDocumentPackageItemsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -3147,6 +3379,7 @@ export type OrganizationUncheckedCreateWithoutDocumentPackageItemsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -3196,6 +3429,7 @@ export type OrganizationUpdateWithoutDocumentPackageItemsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -3229,6 +3463,7 @@ export type OrganizationUncheckedUpdateWithoutDocumentPackageItemsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -3262,6 +3497,7 @@ export type OrganizationCreateWithoutShareLinksInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -3295,6 +3531,7 @@ export type OrganizationUncheckedCreateWithoutShareLinksInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -3344,6 +3581,7 @@ export type OrganizationUpdateWithoutShareLinksInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -3377,6 +3615,7 @@ export type OrganizationUncheckedUpdateWithoutShareLinksInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -3410,6 +3649,7 @@ export type OrganizationCreateWithoutNotificationsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -3443,6 +3683,7 @@ export type OrganizationUncheckedCreateWithoutNotificationsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -3492,6 +3733,7 @@ export type OrganizationUpdateWithoutNotificationsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -3525,6 +3767,7 @@ export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -3558,6 +3801,7 @@ export type OrganizationCreateWithoutNotificationPreferencesInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -3591,6 +3835,7 @@ export type OrganizationUncheckedCreateWithoutNotificationPreferencesInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -3640,6 +3885,7 @@ export type OrganizationUpdateWithoutNotificationPreferencesInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -3673,6 +3919,7 @@ export type OrganizationUncheckedUpdateWithoutNotificationPreferencesInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -3706,6 +3953,7 @@ export type OrganizationCreateWithoutNotificationEmailDeliveriesInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -3739,6 +3987,7 @@ export type OrganizationUncheckedCreateWithoutNotificationEmailDeliveriesInput =
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -3788,6 +4037,7 @@ export type OrganizationUpdateWithoutNotificationEmailDeliveriesInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -3821,6 +4071,7 @@ export type OrganizationUncheckedUpdateWithoutNotificationEmailDeliveriesInput =
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -3853,6 +4104,7 @@ export type OrganizationCreateWithoutMembershipsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -3886,6 +4138,7 @@ export type OrganizationUncheckedCreateWithoutMembershipsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -3935,6 +4188,7 @@ export type OrganizationUpdateWithoutMembershipsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -3968,6 +4222,7 @@ export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -4001,6 +4256,7 @@ export type OrganizationCreateWithoutInvitationsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -4034,6 +4290,7 @@ export type OrganizationUncheckedCreateWithoutInvitationsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -4083,6 +4340,7 @@ export type OrganizationUpdateWithoutInvitationsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -4116,6 +4374,7 @@ export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -4149,6 +4408,7 @@ export type OrganizationCreateWithoutSupportSessionsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -4182,6 +4442,7 @@ export type OrganizationUncheckedCreateWithoutSupportSessionsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -4231,6 +4492,7 @@ export type OrganizationUpdateWithoutSupportSessionsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -4264,6 +4526,7 @@ export type OrganizationUncheckedUpdateWithoutSupportSessionsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -4297,6 +4560,7 @@ export type OrganizationCreateWithoutSupportEventsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -4330,6 +4594,7 @@ export type OrganizationUncheckedCreateWithoutSupportEventsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -4379,6 +4644,7 @@ export type OrganizationUpdateWithoutSupportEventsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -4412,6 +4678,7 @@ export type OrganizationUncheckedUpdateWithoutSupportEventsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -4445,6 +4712,7 @@ export type OrganizationCreateWithoutProductAuditEventsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -4478,6 +4746,7 @@ export type OrganizationUncheckedCreateWithoutProductAuditEventsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -4527,6 +4796,7 @@ export type OrganizationUpdateWithoutProductAuditEventsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -4560,6 +4830,7 @@ export type OrganizationUncheckedUpdateWithoutProductAuditEventsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -4593,6 +4864,7 @@ export type OrganizationCreateWithoutMfaRecoveryRequestsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
@@ -4626,6 +4898,7 @@ export type OrganizationUncheckedCreateWithoutMfaRecoveryRequestsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
   deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
   checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
   checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -4675,6 +4948,7 @@ export type OrganizationUpdateWithoutMfaRecoveryRequestsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -4708,6 +4982,7 @@ export type OrganizationUncheckedUpdateWithoutMfaRecoveryRequestsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -4749,6 +5024,7 @@ export type OrganizationUpdateWithoutCreatedByInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
@@ -4782,6 +5058,7 @@ export type OrganizationUncheckedUpdateWithoutCreatedByInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
   deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
   checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
   checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -4823,6 +5100,7 @@ export type OrganizationCountOutputType = {
   documentVersions: number
   documentRequirements: number
   deadlines: number
+  calendarEvents: number
   checklists: number
   checklistItems: number
   evidence: number
@@ -4851,6 +5129,7 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   documentVersions?: boolean | OrganizationCountOutputTypeCountDocumentVersionsArgs
   documentRequirements?: boolean | OrganizationCountOutputTypeCountDocumentRequirementsArgs
   deadlines?: boolean | OrganizationCountOutputTypeCountDeadlinesArgs
+  calendarEvents?: boolean | OrganizationCountOutputTypeCountCalendarEventsArgs
   checklists?: boolean | OrganizationCountOutputTypeCountChecklistsArgs
   checklistItems?: boolean | OrganizationCountOutputTypeCountChecklistItemsArgs
   evidence?: boolean | OrganizationCountOutputTypeCountEvidenceArgs
@@ -4969,6 +5248,13 @@ export type OrganizationCountOutputTypeCountDeadlinesArgs<ExtArgs extends runtim
 /**
  * OrganizationCountOutputType without action
  */
+export type OrganizationCountOutputTypeCountCalendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CalendarEventWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
 export type OrganizationCountOutputTypeCountChecklistsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ChecklistWhereInput
 }
@@ -5072,6 +5358,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   documentVersions?: boolean | Prisma.Organization$documentVersionsArgs<ExtArgs>
   documentRequirements?: boolean | Prisma.Organization$documentRequirementsArgs<ExtArgs>
   deadlines?: boolean | Prisma.Organization$deadlinesArgs<ExtArgs>
+  calendarEvents?: boolean | Prisma.Organization$calendarEventsArgs<ExtArgs>
   checklists?: boolean | Prisma.Organization$checklistsArgs<ExtArgs>
   checklistItems?: boolean | Prisma.Organization$checklistItemsArgs<ExtArgs>
   evidence?: boolean | Prisma.Organization$evidenceArgs<ExtArgs>
@@ -5132,6 +5419,7 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   documentVersions?: boolean | Prisma.Organization$documentVersionsArgs<ExtArgs>
   documentRequirements?: boolean | Prisma.Organization$documentRequirementsArgs<ExtArgs>
   deadlines?: boolean | Prisma.Organization$deadlinesArgs<ExtArgs>
+  calendarEvents?: boolean | Prisma.Organization$calendarEventsArgs<ExtArgs>
   checklists?: boolean | Prisma.Organization$checklistsArgs<ExtArgs>
   checklistItems?: boolean | Prisma.Organization$checklistItemsArgs<ExtArgs>
   evidence?: boolean | Prisma.Organization$evidenceArgs<ExtArgs>
@@ -5170,6 +5458,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     documentVersions: Prisma.$DocumentVersionPayload<ExtArgs>[]
     documentRequirements: Prisma.$DocumentRequirementPayload<ExtArgs>[]
     deadlines: Prisma.$DeadlinePayload<ExtArgs>[]
+    calendarEvents: Prisma.$CalendarEventPayload<ExtArgs>[]
     checklists: Prisma.$ChecklistPayload<ExtArgs>[]
     checklistItems: Prisma.$ChecklistItemPayload<ExtArgs>[]
     evidence: Prisma.$EvidencePayload<ExtArgs>[]
@@ -5598,6 +5887,7 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   documentVersions<T extends Prisma.Organization$documentVersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$documentVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documentRequirements<T extends Prisma.Organization$documentRequirementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$documentRequirementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deadlines<T extends Prisma.Organization$deadlinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$deadlinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeadlinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  calendarEvents<T extends Prisma.Organization$calendarEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$calendarEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   checklists<T extends Prisma.Organization$checklistsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$checklistsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChecklistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   checklistItems<T extends Prisma.Organization$checklistItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$checklistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChecklistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   evidence<T extends Prisma.Organization$evidenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$evidenceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6374,6 +6664,30 @@ export type Organization$deadlinesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.DeadlineScalarFieldEnum | Prisma.DeadlineScalarFieldEnum[]
+}
+
+/**
+ * Organization.calendarEvents
+ */
+export type Organization$calendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CalendarEvent
+   */
+  select?: Prisma.CalendarEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CalendarEvent
+   */
+  omit?: Prisma.CalendarEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CalendarEventInclude<ExtArgs> | null
+  where?: Prisma.CalendarEventWhereInput
+  orderBy?: Prisma.CalendarEventOrderByWithRelationInput | Prisma.CalendarEventOrderByWithRelationInput[]
+  cursor?: Prisma.CalendarEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CalendarEventScalarFieldEnum | Prisma.CalendarEventScalarFieldEnum[]
 }
 
 /**

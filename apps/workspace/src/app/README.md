@@ -14,7 +14,7 @@ Route frontend attive:
 - `/notifications`: notifiche interne e promemoria derivati da dati registrati;
 - `/documents`: lista e creazione documenti logici;
 - `/documents/[documentId]`: dettaglio documento, versioni file e upload protetto;
-- `/deadlines`: lista e gestione scadenze registrate;
+- `/deadlines`: calendario operativo con eventi, task, viste orarie e scadenze registrate;
 - `/workers`: lista e creazione lavoratori;
 - `/workers/[workerId]`: dettaglio lavoratore;
 - `/job-sites`: lista e creazione cantieri;

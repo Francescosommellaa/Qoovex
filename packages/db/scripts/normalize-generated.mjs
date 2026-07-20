@@ -9,10 +9,16 @@ const normalized = source.replace(
 
 if (normalized !== source) await writeFile(generatedModel, normalized, "utf8");
 
-const generatedNamespace = new URL("../generated/prisma/internal/prismaNamespace.ts", import.meta.url);
-const namespaceSource = await readFile(generatedNamespace, "utf8");
-const normalizedNamespace = namespaceSource.replace(/[ \t]+(?=\r?\n)/g, "");
+const generatedFilesWithPrismaWhitespace = [
+  "../generated/prisma/browser.ts",
+  "../generated/prisma/client.ts",
+  "../generated/prisma/internal/prismaNamespace.ts",
+  "../generated/prisma/models/CalendarEvent.ts",
+];
 
-if (normalizedNamespace !== namespaceSource) {
-  await writeFile(generatedNamespace, normalizedNamespace, "utf8");
+for (const relativePath of generatedFilesWithPrismaWhitespace) {
+  const target = new URL(relativePath, import.meta.url);
+  const source = await readFile(target, "utf8");
+  const normalized = source.replace(/[ \t]+(?=\r?\n)/g, "");
+  if (normalized !== source) await writeFile(target, normalized, "utf8");
 }
