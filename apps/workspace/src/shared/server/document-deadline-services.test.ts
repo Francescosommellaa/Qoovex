@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   db: {
     documentType: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
-    document: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
+    document: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn(), deleteMany: vi.fn() },
     worker: { findFirst: vi.fn() },
     jobSite: { findFirst: vi.fn() },
     deadline: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
@@ -16,6 +16,8 @@ const mocks = vi.hoisted(() => ({
   getContextOrganizationId: vi.fn(),
   requirePermission: vi.fn(),
   recordSupportAccess: vi.fn(),
+  deletePrivateBlobs: vi.fn(),
+  recordRuntimeErrorBestEffort: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -34,9 +36,11 @@ vi.mock("@shared/server/access-context-service", () => ({
   requirePermission: mocks.requirePermission,
 }));
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
+vi.mock("@shared/server/blob-storage-service", () => ({ deletePrivateBlobs: mocks.deletePrivateBlobs }));
+vi.mock("@shared/server/runtime-error-service", () => ({ recordRuntimeErrorBestEffort: mocks.recordRuntimeErrorBestEffort }));
 
 import { archiveDeadline, createDeadline, listDeadlines } from "./deadline-service";
-import { archiveDocument, createDocument, getDocument, getDocumentWithVersions, listDocuments, updateDocument } from "./document-service";
+import { archiveDocument, createDocument, getDocument, getDocumentWithVersions, listDocuments, permanentlyDeleteArchivedDocument, restoreDocument, updateDocument } from "./document-service";
 import { createDocumentType, listDocumentTypes } from "./document-type-service";
 
 const now = new Date("2026-06-30T10:00:00.000Z");
@@ -127,9 +131,12 @@ beforeEach(() => {
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
   mocks.recordSupportAccess.mockReset();
+  mocks.deletePrivateBlobs.mockReset().mockResolvedValue(undefined);
+  mocks.recordRuntimeErrorBestEffort.mockReset().mockResolvedValue(undefined);
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.recordSupportAccess.mockResolvedValue(undefined);
+  mocks.db.document.deleteMany.mockResolvedValue({ count: 1 });
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([]);
   mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
@@ -166,6 +173,19 @@ describe("document type service", () => {
 });
 
 describe("document service", () => {
+  it("lists archived documents with one tenant-scoped query for archive managers", async () => {
+    const archivedDocument = { ...documentRecord, status: "ARCHIVED", archivedAt: now };
+    mocks.db.document.findMany.mockResolvedValue([archivedDocument]);
+
+    await expect(listDocuments({ status: "ARCHIVED" })).resolves.toEqual([archivedDocument]);
+
+    expect(mocks.requirePermission).toHaveBeenCalledWith(expect.anything(), "documents:archive");
+    expect(mocks.db.document.findMany).toHaveBeenCalledTimes(1);
+    expect(mocks.db.document.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: expect.objectContaining({ organizationId: "org-1", archivedAt: { not: null }, status: "ARCHIVED" }),
+    }));
+  });
+
   it("loads document metadata and versions with one Prisma operation", async () => {
     mocks.db.document.findFirst.mockResolvedValue({ ...documentRecord, versions: [documentVersionRecord] });
 
@@ -232,6 +252,7 @@ describe("document service", () => {
 
     await expect(updateDocument("doc-1", { status: "PRESENT" })).resolves.toMatchObject({ status: "PRESENT" });
     await expect(archiveDocument("doc-1")).rejects.toMatchObject({ status: 404 });
+    await expect(listDocuments({ status: "ARCHIVED" })).rejects.toMatchObject({ status: 404 });
   });
 
   it("scopes document reads for site managers and workers while destinatari esterni stay denied", async () => {
@@ -269,6 +290,52 @@ describe("document service", () => {
 
     expect(mocks.db.document.findFirst).toHaveBeenCalledWith(expect.objectContaining({
       where: { id: "doc-foreign", organizationId: "org-1", archivedAt: null },
+    }));
+  });
+
+  it("restores only archived documents in the current organization as to review", async () => {
+    mocks.db.document.findFirst.mockResolvedValue({ id: "doc-1" });
+    mocks.db.document.update.mockResolvedValue({ ...documentRecord, status: "TO_REVIEW", archivedAt: null });
+
+    await expect(restoreDocument("doc-1")).resolves.toMatchObject({ status: "TO_REVIEW", archivedAt: null });
+
+    expect(mocks.db.document.findFirst).toHaveBeenCalledWith(expect.objectContaining({
+      where: { id: "doc-1", organizationId: "org-1", archivedAt: { not: null }, status: "ARCHIVED" },
+    }));
+    expect(mocks.db.document.update).toHaveBeenCalledWith(expect.objectContaining({
+      where: { id: "doc-1" },
+      data: { archivedAt: null, status: "TO_REVIEW" },
+    }));
+  });
+
+  it("permanently deletes only the archived document before cleaning private blobs", async () => {
+    mocks.db.document.findFirst.mockResolvedValue({
+      id: "doc-1",
+      versions: [{ id: "version-1", blobKey: "organizations/org-1/documents/doc-1/version-1.pdf" }],
+    });
+
+    await expect(permanentlyDeleteArchivedDocument("doc-1")).resolves.toEqual({ deleted: true, storageCleanupPending: false });
+
+    expect(mocks.db.document.deleteMany).toHaveBeenCalledWith({
+      where: { id: "doc-1", organizationId: "org-1", archivedAt: { not: null }, status: "ARCHIVED" },
+    });
+    expect(mocks.deletePrivateBlobs).toHaveBeenCalledWith(["organizations/org-1/documents/doc-1/version-1.pdf"]);
+    expect(mocks.db.document.deleteMany.mock.invocationCallOrder[0]).toBeLessThan(mocks.deletePrivateBlobs.mock.invocationCallOrder[0]);
+  });
+
+  it("reports pending storage cleanup without hiding a committed document deletion", async () => {
+    mocks.db.document.findFirst.mockResolvedValue({
+      id: "doc-1",
+      versions: [{ id: "version-1", blobKey: "organizations/org-1/documents/doc-1/version-1.pdf" }],
+    });
+    mocks.deletePrivateBlobs.mockRejectedValue(new Error("storage provider detail"));
+
+    await expect(permanentlyDeleteArchivedDocument("doc-1")).resolves.toEqual({ deleted: true, storageCleanupPending: true });
+
+    expect(mocks.recordRuntimeErrorBestEffort).toHaveBeenCalledWith(expect.objectContaining({
+      source: "document-permanent-delete",
+      routePath: "/api/documents/[documentId]/archive",
+      requestMethod: "DELETE",
     }));
   });
 });

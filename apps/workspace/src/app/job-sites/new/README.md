@@ -1,3 +1,3 @@
 # New job site route
 
-Creazione dedicata di un cantiere con dati operativi minimi.
+Route di compatibilita che verifica il permesso di creazione e apre il Dialog sulla lista tramite `/job-sites?intent=create`.

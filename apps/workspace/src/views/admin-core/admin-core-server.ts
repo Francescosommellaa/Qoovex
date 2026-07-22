@@ -17,6 +17,7 @@ export async function getWorkspaceCapabilities(): Promise<WorkspaceCapabilities>
     canCreateDeadlines: role === "OWNER" || role === "ADMIN",
     canManageCalendar: role === "OWNER" || role === "ADMIN",
     canUpdateDocuments: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
+    canManageArchivedDocuments: role === "OWNER" || role === "ADMIN",
     canUploadDocumentVersions: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT" || role === "WORKER",
     canManageChecklists: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
     canCompleteChecklists: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT" || role === "SITE_MANAGER",

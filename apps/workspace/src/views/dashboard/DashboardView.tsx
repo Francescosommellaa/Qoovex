@@ -270,7 +270,7 @@ export function DashboardView({ data, updatedId, result }: { data: DashboardResp
       {!data.firstUse && data.availability.contexts ? (
         <section aria-labelledby="contexts-title" className={styles.contexts}>
           <Card>
-            <CardHeader><CardTitle><h2 id="contexts-title">Dove intervenire</h2></CardTitle><CardDescription>Contesti con situazioni visibili per il tuo ruolo.</CardDescription>{data.organization.role === "OWNER" || data.organization.role === "ADMIN" ? <CardAction><Link className="text-sm font-medium" data-link="quiet" href="/access?from=dashboard">Accessi operativi</Link></CardAction> : null}</CardHeader>
+            <CardHeader><CardTitle><h2 id="contexts-title">Dove intervenire</h2></CardTitle><CardDescription>Contesti con situazioni visibili per il tuo ruolo.</CardDescription>{data.organization.role === "OWNER" || data.organization.role === "ADMIN" ? <CardAction><Link className="text-sm font-medium" data-link="quiet" href="/access?from=dashboard">Assegnazioni cantieri</Link></CardAction> : null}</CardHeader>
             <CardContent>{contextsError ? <SectionError message={contextsError.message} /> : data.contexts.length ? <ul className="m-0 list-none p-0">{data.contexts.map((item) => <ContextItem item={item} key={item.id} />)}</ul> : <p className="text-sm text-muted-foreground">Nessuna risorsa assegnata alle situazioni visibili.</p>}</CardContent>
           </Card>
         </section>

@@ -1,9 +1,9 @@
 import "dotenv/config";
 
-import { spawnSync } from "node:child_process";
 import { setTimeout as delay } from "node:timers/promises";
 import { Client } from "pg";
 import { assertDatabaseTargetForCommand } from "../src/database-target-guard";
+import { spawnPrisma } from "./prisma-cli";
 
 const LOCAL_DATABASE_NAME = "qoovex-local";
 const LOCAL_PROXY_PORT = 51224;
@@ -64,28 +64,23 @@ async function main() {
     return;
   }
 
-  const command = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
-  const result = spawnSync(
-    command,
-    [
-      "exec",
-      "prisma",
-      "dev",
-      "--name",
-      LOCAL_DATABASE_NAME,
-      "--port",
-      String(LOCAL_PROXY_PORT),
-      "--db-port",
-      String(LOCAL_DATABASE_PORT),
-      "--shadow-db-port",
-      String(LOCAL_SHADOW_DATABASE_PORT),
-      "--detach",
-    ],
-    { encoding: "utf8", env: process.env },
-  );
+  const result = spawnPrisma([
+    "dev",
+    "--name",
+    LOCAL_DATABASE_NAME,
+    "--port",
+    String(LOCAL_PROXY_PORT),
+    "--db-port",
+    String(LOCAL_DATABASE_PORT),
+    "--shadow-db-port",
+    String(LOCAL_SHADOW_DATABASE_PORT),
+    "--detach",
+  ]);
 
   if (result.status !== 0) {
-    const details = sanitizePrismaOutput(`${result.stdout ?? ""}\n${result.stderr ?? ""}`);
+    const details = sanitizePrismaOutput(
+      `${result.stdout ?? ""}\n${result.stderr ?? ""}\n${result.error?.message ?? ""}`,
+    );
     throw new Error(`[local-db] Unable to start ${LOCAL_DATABASE_NAME}.${details ? `\n${details}` : ""}`);
   }
 

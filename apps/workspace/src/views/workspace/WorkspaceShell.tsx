@@ -25,6 +25,7 @@ import { WorkspaceNavigation } from "./WorkspaceNavigation";
 import { buildWorkspaceNavigation, canReadWorkspaceNotifications } from "./workspace-navigation-policy";
 import { SupportSessionBanner, WorkspaceLogoutButton } from "./WorkspaceSessionControls";
 import { WorkspaceTopbar } from "./WorkspaceTopbar";
+import { WorkspacePageIdentityProvider } from "./WorkspacePageIdentity";
 
 async function getShellState() {
   try {
@@ -88,19 +89,21 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
       </Sidebar>
 
       <SidebarInset className="h-dvh min-h-0 min-w-0 overflow-hidden">
-        <WorkspaceTopbar
-          fallbackLabel={isWorkspace ? "Area di lavoro" : "Sicurezza account"}
-          isSuperAdmin={isSuperAdmin}
-          navigation={isWorkspace ? [...state.navigation.primary, ...state.navigation.people] : []}
-          showNotifications={isWorkspace && canReadWorkspaceNotifications(state.role)}
-          unreadNotificationCount={isWorkspace ? state.unreadNotificationCount : 0}
-        />
+        <WorkspacePageIdentityProvider>
+          <WorkspaceTopbar
+            fallbackLabel={isWorkspace ? "Area di lavoro" : "Sicurezza account"}
+            isSuperAdmin={isSuperAdmin}
+            navigation={isWorkspace ? [...state.navigation.primary, ...state.navigation.people] : []}
+            showNotifications={isWorkspace && canReadWorkspaceNotifications(state.role)}
+            unreadNotificationCount={isWorkspace ? state.unreadNotificationCount : 0}
+          />
 
-        {isWorkspace && state.devRole && !state.context.support ? <DevRoleSwitcher key={state.devRole} role={state.devRole} /> : null}
-        {isWorkspace && state.context.support ? <SupportSessionBanner support={state.context.support} /> : null}
-        <main className="min-h-0 min-w-0 flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">
-          {isWorkspace ? children : <AccountSecurityFlow initialStatus={state.status} mode="gate" />}
-        </main>
+          {isWorkspace && state.devRole && !state.context.support ? <DevRoleSwitcher key={state.devRole} role={state.devRole} /> : null}
+          {isWorkspace && state.context.support ? <SupportSessionBanner support={state.context.support} /> : null}
+          <main className="min-h-0 min-w-0 flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">
+            {isWorkspace ? children : <AccountSecurityFlow initialStatus={state.status} mode="gate" />}
+          </main>
+        </WorkspacePageIdentityProvider>
       </SidebarInset>
     </SidebarProvider>
   );

@@ -4,6 +4,8 @@ import { db } from "@qoovex/db";
 import type { DocumentOwnerType, DocumentStatus } from "@qoovex/types";
 import { documentOwnerTypes, documentStatuses } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
+import { deletePrivateBlobs } from "@shared/server/blob-storage-service";
+import { recordRuntimeErrorBestEffort } from "@shared/server/runtime-error-service";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { isEnumValue, parseOptionalDate, rejectBinaryPayload, trimOptionalId, trimOptionalText, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
@@ -114,17 +116,22 @@ async function normalizeDocumentOwner(input: {
 }
 
 export async function listDocuments(input: ListDocumentsInput = {}) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_READ_ROLES);
+  const requestedStatus = input.status === undefined ? undefined : parseDocumentStatus(input.status);
+  const archiveMode = requestedStatus === "ARCHIVED";
+  const { context, organizationId } = await requireOrganizationDomainAccess(
+    archiveMode ? "documents:archive" : "documents:read",
+    archiveMode ? FULL_DOCUMENT_ROLES : DOCUMENT_READ_ROLES,
+  );
   const scope = await getResourceScope(context);
   const where: {
     organizationId: string;
-    archivedAt: null;
+    archivedAt: null | { not: null };
     ownerType?: DocumentOwnerType;
     workerId?: string;
     jobSiteId?: string;
     status?: DocumentStatus;
     OR?: Array<{ ownerType: "JOB_SITE"; jobSiteId: { in: string[] } } | { ownerType: "WORKER"; workerId: string }>;
-  } = { organizationId, archivedAt: null };
+  } = { organizationId, archivedAt: archiveMode ? { not: null } : null };
   if (!scope.fullAccess) {
     if (scope.actorRole === "SITE_MANAGER") where.OR = [{ ownerType: "JOB_SITE", jobSiteId: { in: scope.siteManagerJobSiteIds } }];
     if (scope.actorRole === "WORKER" && scope.linkedWorker) where.OR = [{ ownerType: "WORKER", workerId: scope.linkedWorker.id }];
@@ -135,7 +142,7 @@ export async function listDocuments(input: ListDocumentsInput = {}) {
   const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
   if (workerId) where.workerId = workerId;
   if (jobSiteId) where.jobSiteId = jobSiteId;
-  if (input.status !== undefined) where.status = parseDocumentStatus(input.status);
+  if (requestedStatus !== undefined) where.status = requestedStatus;
 
   const documents = await db.document.findMany({ where, select: documentSelect, orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }] });
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "documents" });
@@ -272,4 +279,74 @@ export async function archiveDocument(documentId: string) {
     metadata: { nextStatus: document.status },
   });
   return document;
+}
+
+export async function restoreDocument(documentId: string) {
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:archive", FULL_DOCUMENT_ROLES);
+  const existing = await db.document.findFirst({
+    where: { id: documentId, organizationId, archivedAt: { not: null }, status: "ARCHIVED" },
+    select: { id: true },
+  });
+  if (!existing) throw new AccessError("Documento archiviato non trovato.", 404);
+  await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "document", resourceId: existing.id });
+  const document = await db.document.update({
+    where: { id: existing.id },
+    data: { archivedAt: null, status: "TO_REVIEW" },
+    select: documentSelect,
+  });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DOCUMENT_UPDATED",
+    entityType: "DOCUMENT",
+    entityId: document.id,
+    metadata: { previousStatus: "ARCHIVED", nextStatus: document.status, restored: true },
+  });
+  return document;
+}
+
+export async function permanentlyDeleteArchivedDocument(documentId: string) {
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:archive", FULL_DOCUMENT_ROLES);
+  const existing = await db.document.findFirst({
+    where: { id: documentId, organizationId, archivedAt: { not: null }, status: "ARCHIVED" },
+    select: {
+      id: true,
+      versions: { select: { id: true, blobKey: true } },
+    },
+  });
+  if (!existing) throw new AccessError("Documento archiviato non trovato.", 404);
+
+  await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "document", resourceId: existing.id });
+  const deletion = await db.document.deleteMany({
+    where: { id: existing.id, organizationId, archivedAt: { not: null }, status: "ARCHIVED" },
+  });
+  if (!deletion.count) throw new AccessError("Documento archiviato non trovato.", 404);
+
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DOCUMENT_ARCHIVED",
+    entityType: "DOCUMENT",
+    entityId: existing.id,
+    metadata: {
+      permanentlyDeleted: true,
+      deletedVersions: existing.versions.length,
+      preservedRelatedRecords: true,
+    },
+  });
+
+  let storageCleanupPending = false;
+  try {
+    await deletePrivateBlobs(existing.versions.map((version) => version.blobKey));
+  } catch (error) {
+    storageCleanupPending = true;
+    await recordRuntimeErrorBestEffort({
+      error,
+      source: "document-permanent-delete",
+      routePath: "/api/documents/[documentId]/archive",
+      requestMethod: "DELETE",
+    });
+  }
+
+  return { deleted: true as const, storageCleanupPending };
 }

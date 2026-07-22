@@ -14,9 +14,12 @@ I comandi locali passano dal guardrail `@qoovex/db`: `pnpm --filter @qoovex/db d
 
 Il comando root `pnpm dev` esegue prima `db:start:local`: se `qoovex-local` risponde viene riusato, altrimenti Prisma Postgres locale viene avviato in background e le app partono soltanto dopo una query di readiness. Il bootstrap accetta esclusivamente marker `local`, target loopback e porta canonica `51225`; non stampa connection string e non contatta i database cloud Preview o Production.
 
-### Stato verificato 2026-07-20
+### Stato verificato 2026-07-21
 
 - `packages/db/.env` e `apps/workspace/.env.local` puntano a `qoovex-local`; un riavvio viene recuperato automaticamente da `pnpm dev`.
+- `db:seed` e deny-by-default fuori da `qoovex-local` sulla porta `51225`. La fixture locale ricrea l'Azienda dev con ruoli, lavoratori, cantieri, documenti senza file, scadenze, calendario, checklist, note evidence, pacchetti, notifiche e audit; non crea Blob.
+- Gli inventari fixture Local/Production classificano il target senza esporre URL, token o email complete. Il cleanup Production richiede ID esatto, organizzazione etichettata E2E/demo, tutti i membri su domini fixture, Blob count attestato, backup cifrato e checksum verificato.
+- Il 2026-07-21 l'unica fixture E2E presente in Production, il relativo utente dev e 42 eventi di sicurezza legati ai domini fixture sono stati rimossi con transazioni DB-first dopo backup JSON scoped cifrati EFS; l'inventario finale riporta zero organizzazioni, utenti e residui fixture, mentre il prefisso Blob era e resta vuoto. Un codice di verifica email, i suoi due eventi di sicurezza e un errore runtime non-fixture sono stati preservati. Nessun dato reale e stato individuato o cancellato.
 - Vercel Development non contiene credenziali Prisma Postgres cloud. Preview usa il database dedicato `qoovex-preview` e il marker `QOOVEX_DATABASE_ENVIRONMENT=preview`; Production conserva il proprio database e non e stata riconfigurata.
 - Il database Preview dedicato ha cinque migration canoniche applicate, schema diff nullo e lettura Prisma verificata. Le connection string create soltanto per il deploy sono state revocate e nessun segreto e stato scritto nel repository.
 - Il piano Prisma Starter e associato all'account/installazione: piu database inclusi non moltiplicano il canone base, ma Operations e storage si sommano nel plafond condiviso. Verificare sempre pricing e fattura correnti prima di decisioni economiche.

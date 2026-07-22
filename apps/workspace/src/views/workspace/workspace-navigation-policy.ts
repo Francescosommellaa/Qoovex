@@ -50,19 +50,14 @@ const everydayNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem
 const peopleNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> = {
   OWNER: [
     { label: "Lavoratori", href: "/workers" },
-    { label: "Persone e ruoli", href: "/settings/people" },
-    { label: "Accessi operativi", href: "/access" },
+    { label: "Utenti e inviti", href: "/settings/people" },
   ],
   ADMIN: [
     { label: "Lavoratori", href: "/workers" },
-    { label: "Persone e ruoli", href: "/settings/people" },
-    { label: "Accessi operativi", href: "/access" },
+    { label: "Utenti e inviti", href: "/settings/people" },
   ],
-  SAFETY_CONSULTANT: [
-    { label: "Lavoratori", href: "/workers" },
-    { label: "Accessi operativi", href: "/access" },
-  ],
-  SITE_MANAGER: [],
+  SAFETY_CONSULTANT: [{ label: "Lavoratori", href: "/workers" }],
+  SITE_MANAGER: [{ label: "Lavoratori", href: "/workers" }],
   WORKER: [],
 };
 
@@ -98,21 +93,18 @@ const quickLinkNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationIte
     { label: "Prove", href: "/evidence" },
     { label: "Checklist", href: "/checklists" },
     { label: "Condivisioni", href: "/document-packages" },
-    { label: "Accessi operativi", href: "/access" },
   ],
   ADMIN: [
     { label: "Scadenze", href: "/deadlines" },
     { label: "Prove", href: "/evidence" },
     { label: "Checklist", href: "/checklists" },
     { label: "Condivisioni", href: "/document-packages" },
-    { label: "Accessi operativi", href: "/access" },
   ],
   SAFETY_CONSULTANT: [
     { label: "Scadenze", href: "/deadlines" },
     { label: "Prove", href: "/evidence" },
     { label: "Checklist", href: "/checklists" },
     { label: "Condivisioni", href: "/document-packages" },
-    { label: "Accessi operativi", href: "/access" },
   ],
   SITE_MANAGER: [
     { label: "Scadenze", href: "/deadlines" },

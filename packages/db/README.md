@@ -23,6 +23,9 @@ Regole:
 - i comandi locali e Prisma Studio devono usare il guardrail loopback; accessi remoti richiedono un'attestazione esplicita;
 - `db:start:local` riusa o avvia `qoovex-local` sulla porta canonica senza stampare connection string;
 - il comando root `pnpm dev` esegue automaticamente `db:start:local` prima delle app; il database locale non consuma Operations cloud;
+- `db:seed` accetta soltanto marker `local`, loopback e porta `51225`; ricrea esclusivamente la fixture della dev identity e i codici demo noti, senza creare oggetti Blob;
+- gli inventari fixture mascherano le email e non stampano connection string, token o pathname Blob;
+- backup e cleanup fixture Production richiedono target remoto, classificazione E2E/demo, soli membri su domini fixture, ID esatto, backup cifrato con checksum e attestazioni per singolo run;
 - `src/` espone client e API del package;
 - ogni cambiamento strutturale qui va allineato a `project_brain.json` se stabilizza una convenzione.
 
@@ -31,11 +34,15 @@ Comandi utili:
 ```bash
 pnpm --filter @qoovex/db db:generate
 pnpm --filter @qoovex/db db:seed
+pnpm --filter @qoovex/db db:fixtures:inventory:local
+pnpm --filter @qoovex/db db:fixtures:inventory:production
 pnpm --filter @qoovex/db db:start:local
 pnpm --filter @qoovex/db verify:prisma
 pnpm --filter @qoovex/db test
 pnpm --filter @qoovex/db db:studio
 ```
+
+Il seed locale e ripetibile ma intenzionalmente ricostruisce l'Azienda associata a `dev_qoovex_local_user`. Non usarlo per conservare modifiche manuali dentro la fixture. I comandi Production di backup e cleanup sono strumenti di manutenzione eccezionale: eseguire prima l'inventario, verificare separatamente il prefisso Blob, conservare il backup fuori dal repository e non persistere le attestazioni in file env.
 
 Non importare Prisma Client in componenti browser o client component.
 

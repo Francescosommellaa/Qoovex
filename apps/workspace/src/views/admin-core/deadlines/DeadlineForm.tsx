@@ -3,8 +3,15 @@
 import { deadlineStatuses, deadlineSourceTypes } from "@qoovex/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { IconAlertTriangle, IconCalendarPlus } from "@tabler/icons-react";
+import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
+import { Button } from "@qoovex/ui/components/button";
+import { DialogFooter } from "@qoovex/ui/components/dialog";
+import { Field, FieldGroup, FieldLabel } from "@qoovex/ui/components/field";
+import { Input } from "@qoovex/ui/components/input";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
+import { Spinner } from "@qoovex/ui/components/spinner";
 import { formValue, nullableFormValue, submitJson } from "../admin-api-client";
-import styles from "../AdminCore.module.css";
 import { deadlineStatusLabels, formatDateInput, formatDateTimeInput } from "@/views/workspace/workspace-format";
 import type { WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 import type { WorkspaceCreationContext, WorkspaceOrigin } from "@/views/workspace/workspace-flow-context";
@@ -18,6 +25,7 @@ export function DeadlineForm({
   disabled,
   initialContext = null,
   origin = null,
+  layout = "page",
 }: {
   mode: "create" | "update";
   deadline?: WorkspaceDeadlineRecord;
@@ -27,9 +35,9 @@ export function DeadlineForm({
   disabled?: boolean;
   initialContext?: WorkspaceCreationContext | null;
   origin?: WorkspaceOrigin | null;
+  layout?: "page" | "dialog";
 }) {
   const router = useRouter();
-  const [sourceType, setSourceType] = useState(deadline?.sourceType ?? "MANUAL");
   const initialRelation = initialContext?.type === "document" ? "document" : initialContext?.type === "worker" ? "worker" : initialContext?.type === "job-site" ? "job-site" : deadline?.documentId ? "document" : deadline?.workerId ? "worker" : deadline?.jobSiteId ? "job-site" : "none";
   const [relation, setRelation] = useState<"none" | "document" | "worker" | "job-site">(initialRelation);
   const [pending, setPending] = useState(false);
@@ -71,75 +79,63 @@ export function DeadlineForm({
     }
   }
 
+  const formDisabled = disabled || pending;
+  const contextLocked = layout === "dialog" && Boolean(initialContext);
+  const relationOptions = [
+    { label: "Nessun collegamento", value: "none" },
+    { label: "Documento", value: "document" },
+    { label: "Lavoratore", value: "worker" },
+    { label: "Cantiere", value: "job-site" },
+  ];
+  const sourceTypeOptions = deadlineSourceTypes.map((value) => ({
+    label: value === "DOCUMENT" ? "Documento" : value === "CHECKLIST" ? "Checklist" : value === "MANUAL" ? "Manuale" : "Altro",
+    value,
+  }));
+  const statusOptions = deadlineStatuses
+    .filter((status) => status !== "ARCHIVED")
+    .map((value) => ({ label: deadlineStatusLabels[value], value }));
+  const submitButton = (
+    <Button className="w-full sm:w-auto" disabled={formDisabled} type="submit">
+      {pending ? <><Spinner />Salvataggio…</> : <><IconCalendarPlus aria-hidden="true" />{mode === "create" ? "Aggiungi scadenza" : "Aggiorna scadenza"}</>}
+    </Button>
+  );
+
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
-      {error ? <p className={styles.formError}>{error}</p> : null}
-      <div className={styles.fieldGrid}>
-        <label className={styles.field}>
-          <span>Titolo scadenza</span>
-          <input defaultValue={deadline?.title ?? ""} disabled={disabled || pending} name="title" required minLength={2} maxLength={160} />
-        </label>
-        <label className={styles.field}>
-          <span>Data scadenza</span>
-          <input defaultValue={formatDateInput(deadline?.dueDate)} disabled={disabled || pending} name="dueDate" required type="date" />
-        </label>
-        {mode === "update" ? <label className={styles.field}>
-          <span>Origine</span>
-          <select defaultValue={sourceType} disabled={disabled || pending} name="sourceType" onChange={(event) => setSourceType(event.target.value as typeof sourceType)}>
-            {deadlineSourceTypes.map((type) => (
-              <option key={type} value={type}>{type === "DOCUMENT" ? "Documento" : type === "CHECKLIST" ? "Checklist" : type === "MANUAL" ? "Manuale" : "Altro"}</option>
-            ))}
-          </select>
-        </label> : null}
-        {mode === "create" ? <label className={styles.field}><span>Collegato a</span><select disabled={Boolean(initialContext)} onChange={(event) => setRelation(event.target.value as typeof relation)} value={relation}><option value="none">Nessun collegamento</option><option value="document">Documento</option><option value="worker">Lavoratore</option><option value="job-site">Cantiere</option></select></label> : null}
-        {relation === "document" ? (
-          <label className={styles.field}>
-            <span>Documento collegato</span>
-            {initialContext?.type === "document" ? <input name="documentId" type="hidden" value={initialContext.id} /> : null}
-            <select defaultValue={deadline?.documentId ?? (initialContext?.type === "document" ? initialContext.id : "")} disabled={disabled || pending || initialContext?.type === "document"} name={initialContext?.type === "document" ? undefined : "documentId"} required>
-              <option value="">Seleziona documento</option>
-              {documents.map((document) => (
-                <option key={document.id} value={document.id}>{document.title}</option>
-              ))}
-            </select>
-          </label>
-        ) : null}
-        {relation === "worker" ? <label className={styles.field}>
-          <span>Lavoratore collegato</span>
-          {initialContext?.type === "worker" ? <input name="workerId" type="hidden" value={initialContext.id} /> : null}
-          <select defaultValue={deadline?.workerId ?? (initialContext?.type === "worker" ? initialContext.id : "")} disabled={disabled || pending || initialContext?.type === "worker"} name={initialContext?.type === "worker" ? undefined : "workerId"} required>
-            <option value="">Nessuno</option>
-            {workers.map((worker) => (
-              <option key={worker.id} value={worker.id}>{worker.displayName}</option>
-            ))}
-          </select>
-        </label> : null}
-        {relation === "job-site" ? <label className={styles.field}>
-          <span>Cantiere collegato</span>
-          {initialContext?.type === "job-site" ? <input name="jobSiteId" type="hidden" value={initialContext.id} /> : null}
-          <select defaultValue={deadline?.jobSiteId ?? (initialContext?.type === "job-site" ? initialContext.id : "")} disabled={disabled || pending || initialContext?.type === "job-site"} name={initialContext?.type === "job-site" ? undefined : "jobSiteId"} required>
-            <option value="">Nessuno</option>
-            {jobSites.map((jobSite) => (
-              <option key={jobSite.id} value={jobSite.id}>{jobSite.name}</option>
-            ))}
-          </select>
-        </label> : null}
-        {mode === "update" ? <label className={styles.field}>
-          <span>Stato</span>
-          <select defaultValue={deadline?.status ?? "SCHEDULED"} disabled={disabled || pending} name="status">
-            {deadlineStatuses.filter((status) => status !== "ARCHIVED").map((status) => (
-              <option key={status} value={status}>{deadlineStatusLabels[status]}</option>
-            ))}
-          </select>
-        </label> : null}
-        <label className={styles.field}>
-          <span>Promemoria</span>
-          <input defaultValue={formatDateTimeInput(deadline?.remindAt)} disabled={disabled || pending} name="remindAt" type="datetime-local" />
-        </label>
-      </div>
-      <button className={styles.button} disabled={disabled || pending} type="submit">
-        {pending ? "Salvataggio..." : mode === "create" ? "Aggiungi scadenza" : "Aggiorna scadenza"}
-      </button>
+    <form className="grid gap-4" onSubmit={onSubmit}>
+      {error ? <Alert variant="destructive"><IconAlertTriangle aria-hidden="true" /><AlertTitle>Salvataggio non riuscito</AlertTitle><AlertDescription>{error}</AlertDescription></Alert> : null}
+      {initialContext?.type === "document" ? <input name="documentId" type="hidden" value={initialContext.id} /> : null}
+      {initialContext?.type === "worker" ? <input name="workerId" type="hidden" value={initialContext.id} /> : null}
+      {initialContext?.type === "job-site" ? <input name="jobSiteId" type="hidden" value={initialContext.id} /> : null}
+
+      <FieldGroup className="gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field>
+            <FieldLabel htmlFor={`${mode}-deadline-title`}>Titolo scadenza</FieldLabel>
+            <Input autoFocus defaultValue={deadline?.title ?? ""} disabled={formDisabled} id={`${mode}-deadline-title`} maxLength={160} minLength={2} name="title" required />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor={`${mode}-deadline-date`}>Data scadenza</FieldLabel>
+            <Input defaultValue={formatDateInput(deadline?.dueDate)} disabled={formDisabled} id={`${mode}-deadline-date`} name="dueDate" required type="date" />
+          </Field>
+        </div>
+
+        {mode === "update" ? <Field><FieldLabel htmlFor={`${mode}-deadline-source`}>Origine</FieldLabel><Select defaultValue={deadline?.sourceType ?? "MANUAL"} items={sourceTypeOptions} name="sourceType"><SelectTrigger className="h-10 w-full" disabled={formDisabled} id={`${mode}-deadline-source`}><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{sourceTypeOptions.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectGroup></SelectContent></Select></Field> : null}
+
+        {mode === "create" && !contextLocked ? <Field><FieldLabel htmlFor="create-deadline-relation">Collegato a</FieldLabel><Select disabled={Boolean(initialContext)} items={relationOptions} onValueChange={(value) => value && setRelation(value as typeof relation)} value={relation}><SelectTrigger className="h-10 w-full" id="create-deadline-relation"><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{relationOptions.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectGroup></SelectContent></Select></Field> : null}
+
+        {relation === "document" && !contextLocked ? <Field><FieldLabel htmlFor={`${mode}-deadline-document`}>Documento collegato</FieldLabel><Select defaultValue={deadline?.documentId ?? (initialContext?.type === "document" ? initialContext.id : undefined)} items={documents.map((item) => ({ label: item.title, value: item.id }))} name={initialContext?.type === "document" ? undefined : "documentId"} required><SelectTrigger className="h-10 w-full" disabled={formDisabled || initialContext?.type === "document"} id={`${mode}-deadline-document`}><SelectValue placeholder="Seleziona documento" /></SelectTrigger><SelectContent><SelectGroup>{documents.map((document) => <SelectItem key={document.id} value={document.id}>{document.title}</SelectItem>)}</SelectGroup></SelectContent></Select></Field> : null}
+        {relation === "worker" && !contextLocked ? <Field><FieldLabel htmlFor={`${mode}-deadline-worker`}>Lavoratore collegato</FieldLabel><Select defaultValue={deadline?.workerId ?? (initialContext?.type === "worker" ? initialContext.id : undefined)} items={workers.map((item) => ({ label: item.displayName, value: item.id }))} name={initialContext?.type === "worker" ? undefined : "workerId"} required><SelectTrigger className="h-10 w-full" disabled={formDisabled || initialContext?.type === "worker"} id={`${mode}-deadline-worker`}><SelectValue placeholder="Seleziona lavoratore" /></SelectTrigger><SelectContent><SelectGroup>{workers.map((worker) => <SelectItem key={worker.id} value={worker.id}>{worker.displayName}</SelectItem>)}</SelectGroup></SelectContent></Select></Field> : null}
+        {relation === "job-site" && !contextLocked ? <Field><FieldLabel htmlFor={`${mode}-deadline-job-site`}>Cantiere collegato</FieldLabel><Select defaultValue={deadline?.jobSiteId ?? (initialContext?.type === "job-site" ? initialContext.id : undefined)} items={jobSites.map((item) => ({ label: item.name, value: item.id }))} name={initialContext?.type === "job-site" ? undefined : "jobSiteId"} required><SelectTrigger className="h-10 w-full" disabled={formDisabled || initialContext?.type === "job-site"} id={`${mode}-deadline-job-site`}><SelectValue placeholder="Seleziona cantiere" /></SelectTrigger><SelectContent><SelectGroup>{jobSites.map((jobSite) => <SelectItem key={jobSite.id} value={jobSite.id}>{jobSite.name}</SelectItem>)}</SelectGroup></SelectContent></Select></Field> : null}
+
+        {mode === "update" ? <Field><FieldLabel htmlFor={`${mode}-deadline-status`}>Stato</FieldLabel><Select defaultValue={deadline?.status ?? "SCHEDULED"} items={statusOptions} name="status"><SelectTrigger className="h-10 w-full" disabled={formDisabled} id={`${mode}-deadline-status`}><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{statusOptions.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectGroup></SelectContent></Select></Field> : null}
+
+        <Field>
+          <FieldLabel htmlFor={`${mode}-deadline-reminder`}>Promemoria</FieldLabel>
+          <Input defaultValue={formatDateTimeInput(deadline?.remindAt)} disabled={formDisabled} id={`${mode}-deadline-reminder`} name="remindAt" type="datetime-local" />
+        </Field>
+      </FieldGroup>
+
+      {layout === "dialog" ? <DialogFooter>{submitButton}</DialogFooter> : <div className="flex justify-end">{submitButton}</div>}
     </form>
   );
 }

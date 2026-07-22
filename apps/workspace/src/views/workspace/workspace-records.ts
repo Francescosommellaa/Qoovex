@@ -26,6 +26,7 @@ export interface WorkspaceCapabilities {
   canCreateDeadlines: boolean;
   canManageCalendar: boolean;
   canUpdateDocuments: boolean;
+  canManageArchivedDocuments: boolean;
   canUploadDocumentVersions: boolean;
   canManageChecklists: boolean;
   canCompleteChecklists: boolean;
@@ -88,6 +89,7 @@ export interface WorkspaceDocumentRecord {
   notes?: string | null;
   createdAt?: string;
   updatedAt?: string;
+  archivedAt?: string | null;
 }
 
 export interface WorkspaceDocumentVersionRecord {

@@ -158,6 +158,7 @@ for (const [name, source] of [["Button", button], ["Badge", badge]]) {
   assert(source.includes("no-underline"), `${name} deve impedire la sottolineatura delle azioni.`);
   assert(!source.includes("hover:underline"), `${name} non deve usare la sottolineatura come affordance.`);
 }
+assert(button.includes("cursor-pointer"), "Button e buttonVariants devono comunicare l'azione con il cursore pointer.");
 assert(sirioFoundation.includes('data-link="inline"') && sirioFoundation.includes('data-link="quiet"') && sirioFoundation.includes('data-link="plain"'), "Sirio deve mostrare tutti i ruoli semantici dei link.");
 assert(webChrome.includes('data-link="quiet"') && webChrome.includes('data-link-scope="inline"'), "Web deve distinguere link quiet e inline.");
 assert(workspaceDashboard.includes('data-link="quiet"') && workspaceDashboard.includes('data-link="plain"'), "Workspace deve distinguere navigazione quiet e plain.");
@@ -237,7 +238,7 @@ assert(sirioDashboardShell.indexOf("<DemoQuickActions />") > sirioDashboardShell
 for (const required of ['fetch("/api/notifications?limit=5&sort=recent"', "<SheetTitle>Notifiche</SheetTitle>", "Vedi tutte le notifiche", "NotificationsLoading", "Nessuna notifica recente", "Impossibile caricare le notifiche"]) {
   assert(workspaceNotificationsPanel.includes(required), `Pannello notifiche Workspace non contiene ${required}.`);
 }
-for (const required of ["<DialogTitle>Assegna responsabile</DialogTitle>", 'fetch("/api/resource-assignments/options"', "worker-user-links", "job-site-user-assignments", "Responsabile assegnato", "Nessuna persona disponibile"]) {
+for (const required of ["<DialogTitle>{dialogTitle}</DialogTitle>", "Assegna Responsabile cantiere", "Responsabile cantiere assegnato", "Collega account lavoratore", 'fetch("/api/resource-assignments/options"', "worker-user-links", "job-site-user-assignments", "Nessuna persona disponibile"]) {
   assert(workspaceAssignmentDialog.includes(required), `Dialog assegnazione Workspace non contiene ${required}.`);
 }
 assert(resourceAssignmentOptionsRoute.includes("getResourceAssignmentOptions"), "La dashboard deve caricare opzioni assegnazione tramite una route autorizzata.");

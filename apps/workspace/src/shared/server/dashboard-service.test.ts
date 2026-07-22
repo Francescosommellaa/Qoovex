@@ -149,7 +149,7 @@ describe("dashboard service", () => {
       title: "Attestazione assicurativa",
       contextLabel: "Cantiere Centro",
       responsibility: { label: "Interviene: Elena Mariani" },
-      action: { label: "Controlla il documento", href: "/documents/document-expired?from=dashboard" },
+      action: { label: "Controlla il documento", href: "/documents/attestazione-assicurativa--document-expired?from=dashboard" },
     });
     expect(dashboard.attention.situations.at(-1)).toMatchObject({ responsibility: { label: "Intervieni tu" } });
   });

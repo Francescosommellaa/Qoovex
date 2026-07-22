@@ -10,14 +10,17 @@ import { JobSiteDetailView } from "@/views/admin-core/job-sites/JobSiteDetailVie
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type { JobSiteUserAssignmentResponse, JobSiteWorkerAssignmentResponse } from "@qoovex/types";
 import type { WorkspaceChecklistRecord, WorkspaceDeadlineRecord, WorkspaceDocumentPackageRecord, WorkspaceDocumentRecord, WorkspaceEvidenceRecord, WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
+import { jobSiteRouteId } from "@shared/lib/job-site-routes";
 
 interface JobSiteDetailPageProps {
   params: Promise<{ jobSiteId: string }>;
+  searchParams: Promise<{ from?: string }>;
 }
 
-export default async function JobSiteDetailPage({ params }: JobSiteDetailPageProps) {
+export default async function JobSiteDetailPage({ params, searchParams }: JobSiteDetailPageProps) {
   try {
-    const { jobSiteId } = await params;
+    const [{ jobSiteId: jobSiteRouteParam }, { from }] = await Promise.all([params, searchParams]);
+    const jobSiteId = jobSiteRouteId(jobSiteRouteParam);
     const capabilities = await getWorkspaceCapabilities();
     const [jobSite, documents, deadlines, evidence] = await Promise.all([
       getJobSite(jobSiteId),
@@ -40,6 +43,7 @@ export default async function JobSiteDetailPage({ params }: JobSiteDetailPagePro
         packages={serializeForClient<WorkspaceDocumentPackageRecord[]>(packages)}
         userAssignments={serializeForClient<JobSiteUserAssignmentResponse[]>(userAssignments)}
         workerAssignments={serializeForClient<JobSiteWorkerAssignmentResponse[]>(workerAssignments)}
+        returnToDashboard={from === "dashboard"}
       />
     );
   } catch {

@@ -1,9 +1,11 @@
 "use client";
 
+import { IconArchive } from "@tabler/icons-react";
+import { Button } from "@qoovex/ui/components/button";
+import { FieldError } from "@qoovex/ui/components/field";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { submitJson } from "../admin-api-client";
-import styles from "../AdminCore.module.css";
 
 export function JobSiteArchiveButton({ jobSiteId, redirectToList = false, disabled }: { jobSiteId: string; redirectToList?: boolean; disabled?: boolean }) {
   const router = useRouter();
@@ -25,11 +27,14 @@ export function JobSiteArchiveButton({ jobSiteId, redirectToList = false, disabl
   }
 
   return (
-    <div>
-      {error ? <p className={styles.formError}>{error}</p> : null}
-      <button className={styles.dangerButton} disabled={disabled || pending} onClick={archive} type="button">
-        {pending ? "Archiviazione..." : "Archivia"}
-      </button>
+    <div className="grid gap-3">
+      {error ? <FieldError>{error}</FieldError> : null}
+      <div>
+        <Button disabled={disabled || pending} onClick={archive} type="button" variant="destructive">
+          <IconArchive aria-hidden="true" />
+          {pending ? "Archiviazione..." : "Archivia cantiere"}
+        </Button>
+      </div>
     </div>
   );
 }

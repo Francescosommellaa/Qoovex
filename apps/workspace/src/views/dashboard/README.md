@@ -12,7 +12,7 @@ Questa cartella puo contenere:
 
 Il payload server-side e situation-centric, limita la coda principale a cinque elementi e separa pacchetti pronti, prossime scadenze e contesti. Gli errori non autorizzativi restano circoscritti alla sezione; auth, Azienda e permessi restano gate di pagina.
 
-Per OWNER e ADMIN, una risorsa senza responsabile apre `DashboardAssignmentDialog`: le opzioni vengono caricate da una route protetta e l'assegnazione usa gli endpoint esistenti per collegamenti lavoratore-utente o responsabile-cantiere. Il Dialog conserva la route `/dashboard`, mostra loading, vuoto, errore e successo e rimanda alla pagina completa Accessi operativi soltanto come scelta secondaria.
+Per OWNER e ADMIN, una risorsa senza responsabile apre `DashboardAssignmentDialog`: le opzioni vengono caricate da una route protetta e l'assegnazione usa gli endpoint esistenti per collegamenti lavoratore-utente o responsabile-cantiere. Il Dialog conserva la route `/dashboard`, mostra loading, vuoto, errore e successo e rimanda alla pagina contestuale Assegnazioni cantieri soltanto come scelta secondaria.
 
 Non deve contenere:
 
