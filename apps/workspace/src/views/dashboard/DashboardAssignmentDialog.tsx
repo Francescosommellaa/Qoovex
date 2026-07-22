@@ -53,7 +53,10 @@ interface DashboardAssignmentDialogProps {
   contextId: string;
   contextKind: Extract<DashboardContextKind, "WORKER" | "JOB_SITE">;
   contextLabel: string;
+  excludedUserIds?: string[];
+  primaryAction?: boolean;
   responsibilityLabel: string;
+  triggerLabel?: string;
 }
 
 async function responseError(response: Response) {
@@ -65,7 +68,10 @@ export function DashboardAssignmentDialog({
   contextId,
   contextKind,
   contextLabel,
+  excludedUserIds = [],
+  primaryAction = false,
   responsibilityLabel,
+  triggerLabel = "Assegna",
 }: DashboardAssignmentDialogProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -76,8 +82,11 @@ export function DashboardAssignmentDialog({
   const [error, setError] = useState<string | null>(null);
   const [completed, setCompleted] = useState(false);
   const targetRole = contextKind === "WORKER" ? "WORKER" : "SITE_MANAGER";
-  const assignees = options?.users.filter((user) => user.role === targetRole) ?? [];
+  const excludedUsers = new Set(excludedUserIds);
+  const assignees = options?.users.filter((user) => user.role === targetRole && !excludedUsers.has(user.id)) ?? [];
   const personLabel = contextKind === "WORKER" ? "Utente lavoratore" : "Responsabile cantiere";
+  const dialogTitle = contextKind === "JOB_SITE" ? "Assegna Responsabile cantiere" : "Collega account lavoratore";
+  const completionTitle = contextKind === "JOB_SITE" ? "Responsabile cantiere assegnato" : "Account lavoratore collegato";
 
   async function loadOptions() {
     setLoading(true);
@@ -151,19 +160,20 @@ export function DashboardAssignmentDialog({
 
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
-      <DialogTrigger render={<Button size="sm" variant="outline" />}>Assegna</DialogTrigger>
+      <DialogTrigger render={<Button size="sm" variant={primaryAction ? "default" : "outline"} />}>{triggerLabel}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Assegna responsabile</DialogTitle>
+          <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>
-            Scegli chi deve intervenire su <strong className="font-medium text-foreground">{contextLabel}</strong> senza lasciare la coda di lavoro.
+            {contextKind === "JOB_SITE" ? "Scegli chi avrà l'incarico operativo su " : "Scegli l'account da collegare a "}
+            <strong className="font-medium text-foreground">{contextLabel}</strong>.
           </DialogDescription>
         </DialogHeader>
 
         {completed ? (
           <Alert role="status" variant="success">
             <IconCheck />
-            <AlertTitle>Responsabile assegnato</AlertTitle>
+            <AlertTitle>{completionTitle}</AlertTitle>
             <AlertDescription>La coda viene aggiornata con il nuovo responsabile.</AlertDescription>
           </Alert>
         ) : (
@@ -227,7 +237,7 @@ export function DashboardAssignmentDialog({
             <DialogFooter>
               <DialogClose render={<Button type="button" variant="outline" />}>Annulla</DialogClose>
               <Button disabled={!selectedUserId || submitting || !assignees.length} type="submit">
-                {submitting ? <><Spinner /> Assegnazione…</> : <><IconUserCheck data-icon="inline-start" />Assegna responsabile</>}
+                {submitting ? <><Spinner /> Assegnazione…</> : <><IconUserCheck data-icon="inline-start" />{contextKind === "JOB_SITE" ? "Assegna Responsabile cantiere" : "Collega account"}</>}
               </Button>
             </DialogFooter>
           </form>
@@ -235,7 +245,7 @@ export function DashboardAssignmentDialog({
 
         {completed ? (
           <DialogFooter>
-            <Link className={buttonVariants({ variant: "outline" })} data-link="plain" href="/access?from=dashboard">Gestisci tutti gli accessi</Link>
+            <Link className={buttonVariants({ variant: "outline" })} data-link="plain" href="/access?from=dashboard">Gestisci assegnazioni</Link>
             <DialogClose render={<Button />}>Chiudi</DialogClose>
           </DialogFooter>
         ) : null}

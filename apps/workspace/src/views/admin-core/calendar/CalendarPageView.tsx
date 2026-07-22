@@ -69,9 +69,9 @@ import type {
   WorkspaceDeadlineRecord,
   WorkspaceJobSiteRecord,
 } from "@/views/workspace/workspace-records";
+import { hasActiveCalendarFilters, type CalendarFilter } from "./calendar-filter-state";
 import styles from "./CalendarPageView.module.css";
 
-type CalendarFilter = "all" | "deadlines" | "tasks" | "priority";
 type CalendarView = "dayGridMonth" | "timeGridWeek" | "timeGridDay" | "listWeek";
 
 interface EventDraft {
@@ -91,7 +91,7 @@ interface EventDraft {
 const priorityLabels = { LOW: "Bassa", MEDIUM: "Media", HIGH: "Alta", URGENT: "Urgente" } as const;
 const statusLabels = { PLANNED: "Pianificato", IN_PROGRESS: "In corso", DONE: "Completato", CANCELLED: "Annullato" } as const;
 const kindLabels = { EVENT: "Evento", TASK: "Attività" } as const;
-const roleLabels = { OWNER: "Owner", ADMIN: "Admin", SAFETY_CONSULTANT: "Consulente", SITE_MANAGER: "Capocantiere", WORKER: "Lavoratore" } as const;
+const roleLabels = { OWNER: "Owner", ADMIN: "Admin", SAFETY_CONSULTANT: "Consulente", SITE_MANAGER: "Responsabile cantiere", WORKER: "Lavoratore" } as const;
 const calendarViews: { label: string; value: CalendarView }[] = [
   { label: "Mese", value: "dayGridMonth" },
   { label: "Settimana", value: "timeGridWeek" },
@@ -261,6 +261,7 @@ export function CalendarPageView({
   const urgentCount = events.filter((event) => event.priority === "HIGH" || event.priority === "URGENT").length;
   const taskCount = events.filter((event) => event.kind === "TASK").length;
   const activeViewIndex = calendarViews.findIndex((view) => view.value === activeView);
+  const hasActiveFilters = hasActiveCalendarFilters(filter, participant);
 
   function openCreate(selection?: DateSelectInfo) {
     if (!capabilities.canManageCalendar) return;
@@ -276,6 +277,11 @@ export function CalendarPageView({
   function changeCalendarView(view: CalendarView) {
     calendarRef.current?.getApi().changeView(view);
     setActiveView(view);
+  }
+
+  function resetFilters() {
+    setFilter("all");
+    setParticipant("all");
   }
 
   function moveCalendar(direction: "prev" | "next") {
@@ -458,14 +464,14 @@ export function CalendarPageView({
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          {!calendarEvents.length ? (
+          {hasActiveFilters && !calendarEvents.length ? (
             <div className={styles.emptyState} role="status">
-              <span className={styles.emptyStateIcon}><IconCalendarDue /></span>
+              <span className={styles.emptyStateIcon}><IconFilter /></span>
               <div className="min-w-0">
-                <strong className="block text-sm">Nessun elemento per questo filtro</strong>
-                <span className="text-sm text-muted-foreground">Il calendario resta disponibile: cambia filtro o pianifica un nuovo impegno.</span>
+                <strong className="block text-sm">Nessun risultato con i filtri attivi</strong>
+                <span className="text-sm text-muted-foreground">La selezione corrente non contiene elementi. Azzera i filtri per tornare al calendario completo.</span>
               </div>
-              {capabilities.canManageCalendar ? <Button className="sm:ml-auto" onClick={() => openCreate()} size="sm" variant="outline"><IconCalendarPlus />Pianifica</Button> : null}
+              <Button className={styles.emptyStateAction} onClick={resetFilters} size="sm" variant="outline"><IconFilter />Azzera filtri</Button>
             </div>
           ) : null}
           <div className={styles.calendar} data-empty={calendarEvents.length === 0 ? "true" : "false"} ref={calendarContainerRef}>

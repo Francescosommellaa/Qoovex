@@ -109,7 +109,6 @@ const ROLE_PERMISSIONS: Record<OrganizationRole, readonly OrganizationPermission
     "documents:upload",
     "deadlines:read",
     "calendar:read",
-    "checklists:complete",
     "evidence:read",
     "evidence:upload",
   ],

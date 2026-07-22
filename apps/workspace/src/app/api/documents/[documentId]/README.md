@@ -6,4 +6,6 @@ Gestisce un documento logico dell'azienda corrente.
 - `PATCH /api/documents/[documentId]`: aggiorna metadati o stato prudenziale.
 - `DELETE /api/documents/[documentId]`: archivia soft e imposta `ARCHIVED`.
 
+Ripristino ed eliminazione definitiva di un documento gia archiviato sono separati sotto `documents/[documentId]/archive`.
+
 Questa API non accetta Blob, file binari o URL permanenti.

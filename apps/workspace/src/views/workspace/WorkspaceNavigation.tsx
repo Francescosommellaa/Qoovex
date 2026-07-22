@@ -20,7 +20,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import type { SupportContext } from "@qoovex/types";
 import { Badge } from "@qoovex/ui/components/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@qoovex/ui/components/collapsible";
@@ -108,9 +108,17 @@ function PeopleNavigation({
   items: readonly WorkspaceNavigationItem[];
 }) {
   const { isMobile, setOpenMobile, state } = useSidebar();
-  if (!items.length) return null;
   const active = items.some((item) => current(item.href));
+  const [open, setOpen] = useState(active);
+
+  useEffect(() => {
+    if (active) setOpen(true);
+  }, [active]);
+
+  if (!items.length) return null;
   const firstItem = items[0]!;
+
+  if (items.length === 1) return <NavigationLink current={current} item={firstItem} />;
 
   if (state === "collapsed" && !isMobile) {
     return <NavigationLink current={current} item={firstItem} />;
@@ -118,7 +126,7 @@ function PeopleNavigation({
 
   return (
     <SidebarMenuItem>
-      <Collapsible defaultOpen={active}>
+      <Collapsible onOpenChange={setOpen} open={open}>
         <CollapsibleTrigger
           render={<SidebarMenuButton isActive={active} tooltip="Persone" />}
         >

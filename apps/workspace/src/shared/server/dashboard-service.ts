@@ -15,6 +15,8 @@ import type {
   OrganizationRole,
 } from "@qoovex/types";
 import { recordSupportAccess } from "@shared/server/support-access-service";
+import { documentDetailsHref } from "../lib/document-routes";
+import { workerDetailsHref } from "../lib/worker-routes";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { buildMissingDocumentRequirementItemsForScope } from "./document-requirement-service";
 import { getResourceScope, type ResourceScope } from "./resource-scope-service";
@@ -186,7 +188,10 @@ function contextsFromSituations(situations: DashboardSituation[]): DashboardCont
       continue;
     }
     const href = situation.contextKind === "WORKER" && situation.contextId
-      ? `/workers/${situation.contextId}?from=dashboard`
+      ? workerDetailsHref(
+        { id: situation.contextId, displayName: situation.contextLabel },
+        new URLSearchParams({ from: "dashboard" }),
+      )
       : situation.contextKind === "JOB_SITE" && situation.contextId
         ? `/job-sites/${situation.contextId}?from=dashboard`
         : "/documents?from=dashboard";
@@ -342,7 +347,7 @@ async function loadAttention(input: {
         workerAssignments,
         jobSiteAssignments,
       }),
-      action: { label: documentActionLabel(kind, input.actorRole), href: `/documents/${document.id}?from=dashboard` },
+      action: { label: documentActionLabel(kind, input.actorRole), href: documentDetailsHref(document, new URLSearchParams({ from: "dashboard" })) },
       date: document.expiryDate?.toISOString() ?? null,
       updatedAt: document.updatedAt.toISOString(),
     };

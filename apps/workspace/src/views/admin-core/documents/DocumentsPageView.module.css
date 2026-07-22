@@ -1,0 +1,107 @@
+.intent,
+.filtersCard,
+.results {
+  animation: documents-surface-enter 220ms var(--ease-standard) both;
+}
+
+.filtersCard {
+  animation-delay: 35ms;
+}
+
+.results {
+  animation-delay: 70ms;
+}
+
+.filters {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  flex: none;
+  gap: 0.25rem;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  background: var(--muted);
+  padding: 0.25rem;
+}
+
+.filter {
+  flex: none;
+  min-height: 2.25rem;
+}
+
+.archiveLink {
+  flex: none;
+  border-style: dashed;
+}
+
+.documentCard[data-status="ARCHIVED"] {
+  border-color: color-mix(in oklch, var(--destructive), transparent 58%);
+}
+
+.documentCard {
+  position: relative;
+}
+
+.documentCard::before {
+  position: absolute;
+  inset-block: 0.75rem;
+  inset-inline-start: 0;
+  width: 2px;
+  border-radius: 0 999px 999px 0;
+  background: var(--border);
+  content: "";
+}
+
+.documentCard[data-status="PRESENT"]::before {
+  background: var(--success);
+}
+
+.documentCard[data-status="TO_REVIEW"]::before {
+  background: var(--info);
+}
+
+.documentCard[data-status="EXPIRING_SOON"]::before {
+  background: var(--warning);
+}
+
+.documentCard[data-status="MISSING"]::before,
+.documentCard[data-status="EXPIRED"]::before {
+  background: var(--destructive);
+}
+
+@keyframes documents-surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intent,
+  .filtersCard,
+  .results {
+    animation: none;
+  }
+
+}
+
+@media (forced-colors: active) {
+  .intent,
+  .filtersCard,
+  .results {
+    animation: none;
+  }
+
+  .documentCard::before {
+    background: CanvasText;
+  }
+
+  .documentCard[data-status="ARCHIVED"] {
+    border-color: CanvasText;
+    background: Canvas;
+  }
+}

@@ -9,14 +9,17 @@ import { WorkerDetailView } from "@/views/admin-core/workers/WorkerDetailView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type { WorkerUserLinkResponse } from "@qoovex/types";
 import type { WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceEvidenceRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
+import { workerRouteId } from "@shared/lib/worker-routes";
 
 interface WorkerDetailPageProps {
   params: Promise<{ workerId: string }>;
+  searchParams: Promise<{ from?: string }>;
 }
 
-export default async function WorkerDetailPage({ params }: WorkerDetailPageProps) {
+export default async function WorkerDetailPage({ params, searchParams }: WorkerDetailPageProps) {
   try {
-    const { workerId } = await params;
+    const [{ workerId: workerRouteParam }, { from }] = await Promise.all([params, searchParams]);
+    const workerId = workerRouteId(workerRouteParam);
     const capabilities = await getWorkspaceCapabilities();
     const [worker, documents, deadlines, evidence] = await Promise.all([
       getWorker(workerId),
@@ -41,6 +44,7 @@ export default async function WorkerDetailPage({ params }: WorkerDetailPageProps
         evidence={serializeForClient<WorkspaceEvidenceRecord[]>(evidence)}
         jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
         userLinks={serializeForClient<WorkerUserLinkResponse[]>(userLinks)}
+        returnToDashboard={from === "dashboard"}
       />
     );
   } catch {

@@ -3,6 +3,7 @@ import "server-only";
 import { db } from "@qoovex/db";
 import type { NotificationSeverity, NotificationSourceType, NotificationType } from "@qoovex/types";
 import { recordSupportAccess } from "@shared/server/support-access-service";
+import { documentDetailsHref } from "../lib/document-routes";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 
 const REMINDER_ACCESS_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
@@ -106,7 +107,7 @@ async function collectReminderCandidates(organizationId: string, now: Date): Pro
         message: `${document.title} richiede un controllo operativo.`,
         sourceType: "DOCUMENT",
         sourceId: document.id,
-        actionHref: `/documents/${document.id}`,
+        actionHref: documentDetailsHref(document),
       });
     }
     if (document.status === "EXPIRED") {
@@ -117,7 +118,7 @@ async function collectReminderCandidates(organizationId: string, now: Date): Pro
         message: `${document.title} ha una scadenza registrata superata.`,
         sourceType: "DOCUMENT",
         sourceId: document.id,
-        actionHref: `/documents/${document.id}`,
+        actionHref: documentDetailsHref(document),
       });
     }
     if (document.status === "EXPIRING_SOON") {
@@ -128,7 +129,7 @@ async function collectReminderCandidates(organizationId: string, now: Date): Pro
         message: `${document.title}${document.expiryDate ? ` - scadenza registrata ${formatDate(document.expiryDate)}` : ""}.`,
         sourceType: "DOCUMENT",
         sourceId: document.id,
-        actionHref: `/documents/${document.id}`,
+        actionHref: documentDetailsHref(document),
       });
     }
   }

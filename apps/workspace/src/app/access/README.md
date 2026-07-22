@@ -1,5 +1,5 @@
 # Access Page
 
-Pagina admin per collegamenti operativi e assegnazioni risorsa.
+Pagina contestuale per assegnazioni di responsabili e lavoratori ai cantieri. L'associazione account-profilo WORKER resta disponibile in disclosure avanzata per applicare lo scope personale, ma non assegna o modifica il ruolo.
 
-La route `/access` e riservata a `OWNER` e `ADMIN`. Le API restano la fonte di autorizzazione server-side.
+`OWNER` e `ADMIN` possono gestire le relazioni; `SAFETY_CONSULTANT` conserva la consultazione in sola lettura. Le quattro letture iniziali restano parallele e le API restano la fonte di autorizzazione e tenant scope server-side. La route non e duplicata nella navigazione ordinaria o nei collegamenti rapidi.

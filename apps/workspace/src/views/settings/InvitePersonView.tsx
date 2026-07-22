@@ -12,7 +12,7 @@ const options: Array<{ value: Exclude<OrganizationRole, "OWNER">; label: string;
   { value: "ADMIN", label: "Amministratore", description: "Gestisce l'azienda e il lavoro quotidiano" },
   { value: "SAFETY_CONSULTANT", label: "Consulente", description: "Collabora su documenti, controlli e pacchetti" },
   { value: "SITE_MANAGER", label: "Responsabile cantiere", description: "Vede e aggiorna solo i cantieri assegnati" },
-  { value: "WORKER", label: "Lavoratore", description: "Vede i propri elementi e può caricare documenti o prove" },
+  { value: "WORKER", label: "Lavoratore", description: "Vede i propri elementi dopo l'associazione al profilo lavoratore" },
 ];
 
 export function InvitePersonView({ invitableRoles }: { invitableRoles: Array<Exclude<OrganizationRole, "OWNER">> }) {
@@ -36,7 +36,7 @@ export function InvitePersonView({ invitableRoles }: { invitableRoles: Array<Exc
 
   return (
     <WorkspacePage>
-      <WorkspacePageHeader title="Invita una persona" description="Scegli cosa deve poter fare. Il ruolo proprietario non può essere invitato." action={<Link className={styles.ghostButton} href="/settings/people">Annulla</Link>} />
+      <WorkspacePageHeader title="Invita utente" description="L'account riceverà il ruolo scelto quando accetta l'invito. Il proprietario non può essere invitato." action={<Link className={styles.ghostButton} href="/settings/people">Annulla</Link>} />
       <WorkspacePanel title="Accesso all'azienda" description="L'invito scade dopo sette giorni.">
         <form action={invite} className={styles.form}>
           {error ? <p className={styles.formError}>{error}</p> : null}

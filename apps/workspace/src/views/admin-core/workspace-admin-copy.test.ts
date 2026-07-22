@@ -29,15 +29,43 @@ describe("workspace admin UI copy", () => {
   const notificationActionsSource = readFileSync(join(root, "admin-core", "notifications", "NotificationActionButtons.tsx"), "utf8");
   const auditLogSource = readFileSync(join(root, "admin-core", "audit-log", "AuditLogPageView.tsx"), "utf8");
   const accessSource = readFileSync(join(root, "admin-core", "access", "AccessAssignmentsPageView.tsx"), "utf8");
+  const peopleSettingsSource = readFileSync(join(root, "settings", "PeopleSettingsView.tsx"), "utf8");
   const dataControlSource = readFileSync(join(root, "admin-core", "data-control", "DataControlPageView.tsx"), "utf8");
   const authSource = collectCodeFiles(join(root, "auth")).map((file) => readFileSync(file, "utf8")).join("\n");
   const signInSource = readFileSync(join(appRoot, "sign-in", "page.tsx"), "utf8");
   const signUpSource = readFileSync(join(appRoot, "sign-up", "page.tsx"), "utf8");
   const dashboardSource = readFileSync(join(root, "dashboard", "DashboardView.tsx"), "utf8");
   const documentListPageSource = readFileSync(join(appRoot, "documents", "page.tsx"), "utf8");
+  const documentArchivePageSource = readFileSync(join(appRoot, "documents", "archive", "page.tsx"), "utf8");
   const documentDetailPageSource = readFileSync(join(appRoot, "documents", "[documentId]", "page.tsx"), "utf8");
   const evidencePageSource = readFileSync(join(appRoot, "evidence", "page.tsx"), "utf8");
   const documentCreateFlowSource = readFileSync(join(root, "admin-core", "documents", "DocumentCreateFlow.tsx"), "utf8");
+  const deadlineFormSource = readFileSync(join(root, "admin-core", "deadlines", "DeadlineForm.tsx"), "utf8");
+  const checklistFormSource = readFileSync(join(root, "admin-core", "checklists", "ChecklistForm.tsx"), "utf8");
+  const documentPackageFormSource = readFileSync(join(root, "admin-core", "document-packages", "DocumentPackageForm.tsx"), "utf8");
+  const documentsPageViewSource = readFileSync(join(root, "admin-core", "documents", "DocumentsPageView.tsx"), "utf8");
+  const workersPageViewSource = readFileSync(join(root, "admin-core", "workers", "WorkersPageView.tsx"), "utf8");
+  const workerCreateDialogSource = readFileSync(join(root, "admin-core", "workers", "WorkerCreateDialog.tsx"), "utf8");
+  const workerDetailsDialogSource = readFileSync(join(root, "admin-core", "workers", "WorkerDetailsDialog.tsx"), "utf8");
+  const workerFormSource = readFileSync(join(root, "admin-core", "workers", "WorkerForm.tsx"), "utf8");
+  const workerDetailViewSource = readFileSync(join(root, "admin-core", "workers", "WorkerDetailView.tsx"), "utf8");
+  const workerDetailRouteSource = readFileSync(join(appRoot, "workers", "[workerId]", "page.tsx"), "utf8");
+  const workersRouteSource = readFileSync(join(appRoot, "workers", "page.tsx"), "utf8");
+  const newWorkerRouteSource = readFileSync(join(appRoot, "workers", "new", "page.tsx"), "utf8");
+  const jobSitesPageViewSource = readFileSync(join(root, "admin-core", "job-sites", "JobSitesPageView.tsx"), "utf8");
+  const jobSiteCreateDialogSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteCreateDialog.tsx"), "utf8");
+  const jobSiteDetailsDialogSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteDetailsDialog.tsx"), "utf8");
+  const jobSiteFormSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteForm.tsx"), "utf8");
+  const jobSiteDetailViewSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteDetailView.tsx"), "utf8");
+  const jobSiteQuickActionsSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteQuickActions.tsx"), "utf8");
+  const jobSiteDetailRouteSource = readFileSync(join(appRoot, "job-sites", "[jobSiteId]", "page.tsx"), "utf8");
+  const jobSitesRouteSource = readFileSync(join(appRoot, "job-sites", "page.tsx"), "utf8");
+  const newJobSiteRouteSource = readFileSync(join(appRoot, "job-sites", "new", "page.tsx"), "utf8");
+  const documentsPageViewStyles = readFileSync(join(root, "admin-core", "documents", "DocumentsPageView.module.css"), "utf8");
+  const documentDetailsDialogSource = readFileSync(join(root, "admin-core", "documents", "DocumentDetailsDialog.tsx"), "utf8");
+  const documentCreateDialogSource = readFileSync(join(root, "admin-core", "documents", "DocumentCreateDialog.tsx"), "utf8");
+  const documentDetailViewSource = readFileSync(join(root, "admin-core", "documents", "DocumentDetailView.tsx"), "utf8");
+  const archivedDocumentActionsSource = readFileSync(join(root, "admin-core", "documents", "ArchivedDocumentActions.tsx"), "utf8");
   const invitePersonSource = readFileSync(join(root, "settings", "InvitePersonView.tsx"), "utf8");
   const nextConfigSource = readFileSync(join(root, "..", "..", "next.config.ts"), "utf8");
   const combinedSource = `${source}\n${appSource}`;
@@ -58,7 +86,7 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps page titles for the main admin sections", () => {
-    for (const title of ["Notifiche", "Documenti", "Scadenze", "Lavoratori", "Cantieri", "Checklist", "Prove", "Pacchetti documentali", "Accessi operativi", "Audit", "Controllo dati"]) {
+    for (const title of ["Notifiche", "Documenti", "Scadenze", "Lavoratori", "Cantieri", "Checklist", "Prove", "Pacchetti documentali", "Assegnazioni cantieri", "Audit", "Controllo dati"]) {
       expect(combinedSource).toContain(title);
     }
   });
@@ -82,7 +110,7 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps labels for the primary admin forms", () => {
-    for (const label of ["Titolo documento", "Titolo scadenza", "Nome visualizzato", "Nome cantiere", "Nome checklist", "Titolo prova", "Titolo condivisione"]) {
+    for (const label of ["Titolo documento", "Titolo scadenza", "Nome e cognome", "Nome cantiere", "Nome checklist", "Titolo prova", "Titolo condivisione"]) {
       expect(combinedSource).toContain(label);
     }
   });
@@ -113,7 +141,7 @@ describe("workspace admin UI copy", () => {
   it("keeps evidence upload conditional by evidence type", () => {
     expect(evidenceFormSource).toContain('type !== "NOTE"');
     expect(evidenceFormSource).toContain('name="file"');
-    expect(evidenceFormSource).toContain("Limite 4 MB");
+    expect(evidenceFormSource).toContain("massimo 4 MB");
   });
 
   it("does not keep created share link values in the share link list", () => {
@@ -134,11 +162,26 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps access assignment UI scoped and free of worker contact details in operational scope copy", () => {
-    expect(accessSource).toContain("Accessi operativi");
-    expect(accessSource).toContain("Collega utenti e lavoratori");
-    expect(accessSource).toContain("Assegna capocantiere ai cantieri");
-    expect(accessSource).toContain("Assegna lavoratori ai cantieri");
+    expect(accessSource).toContain("Assegnazioni cantieri");
+    expect(accessSource).toContain("Associazione account al profilo");
+    expect(accessSource).toContain("Non assegna e non modifica il ruolo");
+    expect(accessSource).toContain("Responsabili dei cantieri");
+    expect(accessSource).toContain("Lavoratori nei cantieri");
+    expect(accessSource).toContain('@qoovex/ui/components/select');
+    expect(accessSource).toContain('@qoovex/ui/components/field');
+    expect(accessSource).not.toContain("AdminCore.module.css");
     expect(accessSource).not.toMatch(/blobKey|tokenHash|downloadUrl|token raw/i);
+  });
+
+  it("keeps users and invitations on the canonical workspace foundation", () => {
+    expect(peopleSettingsSource).toContain("Utenti e inviti");
+    expect(peopleSettingsSource).toContain("Utenti con accesso");
+    expect(peopleSettingsSource).toContain("Inviti in attesa");
+    expect(peopleSettingsSource).not.toContain('href="/access"');
+    expect(peopleSettingsSource).toContain('@qoovex/ui/components/avatar');
+    expect(peopleSettingsSource).toContain('@qoovex/ui/components/card');
+    expect(peopleSettingsSource).not.toContain("AdminCore.module.css");
+    expect(peopleSettingsSource).not.toContain(":hover");
   });
 
   it("does not call role-restricted configuration services from ordinary document and evidence lists", () => {
@@ -149,10 +192,152 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps document upload retry on the created record and owner out of invitation choices", () => {
-    expect(documentCreateFlowSource).toContain("setCreatedDocumentId(document.id)");
+    expect(documentCreateFlowSource).toContain("setCreatedDocument(document)");
     expect(documentCreateFlowSource).toContain("senza creare un duplicato");
     expect(invitePersonSource).not.toContain('value: "OWNER"');
     expect(invitePersonSource).toContain("Gestisce l'azienda e il lavoro quotidiano");
+  });
+
+  it("keeps the document list on the canonical UI foundation and preserves task context across filters", () => {
+    expect(documentsPageViewSource).toContain('@qoovex/ui/components/card');
+    expect(documentsPageViewSource).toContain('@qoovex/ui/components/empty');
+    expect(documentsPageViewSource).toContain('@tabler/icons-react');
+    expect(documentsPageViewSource).toContain('params.set("origin", "dashboard")');
+    expect(documentsPageViewSource).toContain('params.set("intent", "upload")');
+    expect(documentsPageViewSource).not.toContain("AdminCore.module.css");
+    expect(documentsPageViewSource).toContain("<DocumentDetailsDialog");
+    expect(documentsPageViewSource).toContain("<DocumentCreateDialog");
+    expect(documentCreateDialogSource).toContain("DialogTrigger");
+    expect(documentCreateDialogSource).toContain('fetch("/api/document-types"');
+    expect(documentCreateDialogSource).toContain('layout="dialog"');
+    expect(documentsPageViewSource).not.toContain('href="/documents/new"');
+    expect(documentsPageViewSource).toContain('variant: active ? "default" : "ghost"');
+    expect(documentsPageViewSource).toContain("<IconFilter");
+    expect(documentDetailsDialogSource).toContain("DialogTitle");
+    expect(documentDetailsDialogSource).toContain("DialogDescription");
+    expect(documentDetailsDialogSource).toContain('cache: "no-store"');
+    expect(documentDetailsDialogSource).toContain("Gestisci documento");
+    expect(documentDetailsDialogSource).toContain("readOnly = false");
+    expect(documentDetailsDialogSource).toContain("!readOnly && fullPageHref");
+    expect(documentDetailsDialogSource).not.toContain("DialogClose");
+    expect(documentDetailsDialogSource).toContain("buttonVariants(),");
+    expect(documentDetailViewSource).toContain("<WorkspacePageIdentity");
+    expect(documentDetailViewSource).toContain('@qoovex/ui/components/card');
+    expect(documentDetailViewSource).not.toContain("AdminCore.module.css");
+    expect(documentsPageViewSource).not.toContain('{ label: "Archivio", status: "ARCHIVED"');
+    expect(documentsPageViewSource).toContain("capabilities.canManageArchivedDocuments");
+    expect(documentsPageViewSource).toContain("Archivio documenti");
+    expect(documentListPageSource).toContain('redirect(`/documents/archive');
+    expect(documentArchivePageSource).toContain('listDocuments({ status: "ARCHIVED", ownerType })');
+    expect(documentArchivePageSource).toContain("archiveMode");
+    expect(documentsPageViewSource).toContain("Filtra documenti archiviati per contesto");
+    expect(documentsPageViewSource).not.toContain("Archivio attivo");
+    expect(documentsPageViewSource).toContain("<ArchivedDocumentActions");
+    expect(documentsPageViewSource).toContain("readOnly");
+    expect(documentsPageViewSource).toContain("includeFiles={false}");
+    expect(documentDetailsDialogSource).toContain("nextOpen && includeFiles");
+    expect(documentDetailsDialogSource).not.toContain("IconArrowRight");
+    expect(documentDetailsDialogSource).toContain('className={readOnly ? "sr-only" : undefined}');
+    expect(documentsPageViewSource).not.toContain("<IconArchive />Archivio</Badge>");
+    expect(documentsPageViewStyles).not.toContain("var(--destructive), var(--card)");
+    expect(documentsPageViewStyles).not.toContain(".documentCard:hover");
+    expect(archivedDocumentActionsSource).toContain("Ripristina");
+    expect(archivedDocumentActionsSource).toContain("Elimina definitivamente");
+    expect(archivedDocumentActionsSource).toContain("confirmation !== documentTitle");
+    expect(archivedDocumentActionsSource).toContain("navigator.clipboard.writeText(documentTitle)");
+    expect(archivedDocumentActionsSource).toContain("Copia titolo documento");
+    expect(archivedDocumentActionsSource).toContain("Per confermare, incolla il titolo esatto");
+    expect(archivedDocumentActionsSource).toContain("border-destructive/50");
+    expect(archivedDocumentActionsSource).not.toContain("Conferma distruttiva");
+    expect(documentsPageViewSource).not.toContain("Zona sensibile");
+  });
+
+  it("keeps the worker list on the canonical UI foundation with explicit actions", () => {
+    expect(workersPageViewSource).toContain('@qoovex/ui/components/avatar');
+    expect(workersPageViewSource).toContain('@qoovex/ui/components/card');
+    expect(workersPageViewSource).toContain('@qoovex/ui/components/empty');
+    expect(workersPageViewSource).toContain('@tabler/icons-react');
+    expect(workersPageViewSource).toContain("<WorkerCreateDialog");
+    expect(workersPageViewSource).toContain("<WorkerDetailsDialog");
+    expect(workersPageViewSource).toContain('data-link="quiet"');
+    expect(workersPageViewSource).not.toContain("AdminCore.module.css");
+    expect(workersPageViewSource).not.toContain(":hover");
+    expect(workerCreateDialogSource).toContain("DialogTrigger");
+    expect(workerCreateDialogSource).not.toContain('href="/workers/new"');
+    expect(workerDetailsDialogSource).toContain("Apri profilo");
+    expect(workerDetailsDialogSource).toContain("Gestisci lavoratore");
+    expect(workerDetailsDialogSource).toContain("workerDetailsHref(worker)");
+    expect(workerDetailsDialogSource).not.toContain("fetch(");
+    expect(workerFormSource).toContain("Mansione");
+    expect(workerFormSource).toContain("Solo profilo operativo");
+    expect(workerFormSource).toContain('value: "WORKER"');
+    for (const role of ["ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"]) expect(workerFormSource).not.toContain(`value: "${role}"`);
+    expect(workersRouteSource).toContain("canInviteRole");
+    expect(workersRouteSource).toContain('params.intent === "create"');
+    expect(newWorkerRouteSource).toContain('redirect("/workers?intent=create")');
+    expect(workerDetailViewSource).toContain("<WorkspacePageIdentity");
+    expect(workerDetailViewSource).toContain('@qoovex/ui/components/card');
+    expect(workerDetailViewSource).toContain('@qoovex/ui/components/empty');
+    expect(workerDetailViewSource).not.toContain("AdminCore.module.css");
+    expect(workerDetailRouteSource).toContain("workerRouteId(workerRouteParam)");
+  });
+
+  it("keeps job sites on the canonical UI foundation with modal entry points", () => {
+    expect(jobSitesPageViewSource).toContain('@qoovex/ui/components/card');
+    expect(jobSitesPageViewSource).toContain('@qoovex/ui/components/empty');
+    expect(jobSitesPageViewSource).toContain('@tabler/icons-react');
+    expect(jobSitesPageViewSource).toContain("<JobSiteCreateDialog");
+    expect(jobSitesPageViewSource).toContain("<JobSiteDetailsDialog");
+    expect(jobSitesPageViewSource).not.toContain("AdminCore.module.css");
+    expect(jobSitesPageViewSource).not.toContain(":hover");
+    expect(jobSiteCreateDialogSource).toContain("DialogTrigger");
+    expect(jobSiteCreateDialogSource).not.toContain('href="/job-sites/new"');
+    expect(jobSiteDetailsDialogSource).toContain("Apri cantiere");
+    expect(jobSiteDetailsDialogSource).toContain("Gestisci cantiere");
+    expect(jobSiteDetailsDialogSource).toContain("jobSiteDetailsHref(jobSite)");
+    expect(jobSiteDetailsDialogSource).not.toContain("fetch(");
+    expect(jobSiteFormSource).toContain("Nome cantiere");
+    expect(jobSiteFormSource).toContain("jobSiteDetailsHref(created)");
+    expect(jobSitesRouteSource).toContain('params.intent === "create"');
+    expect(newJobSiteRouteSource).toContain('redirect("/job-sites?intent=create")');
+    expect(jobSiteDetailViewSource).toContain("<WorkspacePageIdentity");
+    expect(jobSiteDetailViewSource).toContain('@qoovex/ui/components/card');
+    expect(jobSiteDetailViewSource).toContain('@qoovex/ui/components/empty');
+    expect(jobSiteDetailViewSource).not.toContain("AdminCore.module.css");
+    expect(jobSiteDetailViewSource).toContain("Responsabile cantiere");
+    expect(jobSiteDetailViewSource).toContain("Mansione:");
+    expect(jobSiteDetailViewSource).toContain("<JobSiteQuickActions");
+    expect(jobSiteDetailViewSource).not.toContain('href={`/documents/new?origin=job-site');
+    expect(documentCreateDialogSource).toContain("Aggiungi documento");
+    for (const action of ["Aggiungi prova", "Aggiungi scadenza", "Crea checklist", "Prepara condivisione"]) {
+      expect(jobSiteQuickActionsSource).toContain(action);
+    }
+    expect(jobSiteQuickActionsSource).toContain("<DocumentCreateDialog");
+    expect(jobSiteQuickActionsSource).toContain("DialogTrigger");
+    expect(jobSiteQuickActionsSource).toContain('layout="dialog"');
+    for (const formSource of [documentCreateFlowSource, evidenceFormSource, deadlineFormSource, checklistFormSource, documentPackageFormSource]) {
+      expect(formSource).toContain("DialogFooter");
+      expect(formSource).not.toContain("AdminCore.module.css");
+    }
+    expect(documentCreateDialogSource).toContain('fetch("/api/document-types"');
+    expect(jobSiteDetailRouteSource).toContain("jobSiteRouteId(jobSiteRouteParam)");
+    expect(jobSiteDetailRouteSource).not.toContain("listDocumentTypes");
+    expect(jobSiteDetailRouteSource).not.toContain("listWorkers");
+    expect(jobSiteDetailRouteSource).not.toContain("listJobSites");
+  });
+
+  it("offers image upload on desktop and camera capture on mobile for every evidence flow", () => {
+    expect(evidenceFormSource).toContain('useState<EvidenceType>("PHOTO")');
+    expect(evidenceFormSource).toContain('name="file"');
+    expect(evidenceFormSource).toContain('name="cameraFile"');
+    expect(evidenceFormSource).toContain('capture="environment"');
+    expect(evidenceFormSource).toContain('className="md:hidden"');
+    expect(evidenceFormSource).toContain('formData.set("file", cameraFile)');
+  });
+
+  it("uses one product name for the site manager role", () => {
+    expect(combinedSource).not.toMatch(/capocantiere|capo cantiere|caposquadra/i);
+    expect(combinedSource).toContain("Responsabile cantiere");
   });
 
   it("keeps the shared responsive sidebar navigation surface", () => {

@@ -16,6 +16,8 @@ import { DeadlineArchiveButton } from "./DeadlineArchiveButton";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { deadlineStatusLabels, formatDate, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
+import { documentDetailsHref } from "@shared/lib/document-routes";
+import { workerDetailsHref } from "@shared/lib/worker-routes";
 
 const sourceLabels = {
   MANUAL: "Inserita manualmente",
@@ -32,11 +34,11 @@ function relationDetails(
 ) {
   if (deadline.documentId) {
     const document = documents.find((item) => item.id === deadline.documentId);
-    return { type: "Documento", label: document?.title ?? "Documento collegato", href: `/documents/${deadline.documentId}` };
+    return { type: "Documento", label: document?.title ?? "Documento collegato", href: document ? documentDetailsHref(document) : `/documents/${deadline.documentId}` };
   }
   if (deadline.workerId) {
     const worker = workers.find((item) => item.id === deadline.workerId);
-    return { type: "Lavoratore", label: worker?.displayName ?? "Lavoratore collegato", href: `/workers/${deadline.workerId}` };
+    return { type: "Lavoratore", label: worker?.displayName ?? "Lavoratore collegato", href: worker ? workerDetailsHref(worker) : `/workers/${deadline.workerId}` };
   }
   if (deadline.jobSiteId) {
     const jobSite = jobSites.find((item) => item.id === deadline.jobSiteId);

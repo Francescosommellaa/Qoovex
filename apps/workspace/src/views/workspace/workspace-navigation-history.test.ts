@@ -40,10 +40,45 @@ describe("workspace navigation history", () => {
     ]);
   });
 
+  it("keeps the document archive distinct from document details", () => {
+    expect(resolveWorkspacePageLabel("/documents/archive", [{ label: "Documenti", href: "/documents" }], "Area di lavoro")).toBe("Archivio documenti");
+  });
+
+  it("treats readable and legacy document paths as the same recent page", () => {
+    const next = pushRecentWorkspacePage(
+      [{ href: "/documents/documento--doc-1", label: "Documento" }],
+      { href: "/documents/doc-1", label: "Documento aggiornato" },
+    );
+
+    expect(next).toEqual([{ href: "/documents/doc-1", label: "Documento aggiornato" }]);
+  });
+
+  it("treats readable and legacy worker paths as the same recent page", () => {
+    const next = pushRecentWorkspacePage(
+      [{ href: "/workers/luca-verdi--worker-1", label: "Luca Verdi" }],
+      { href: "/workers/worker-1", label: "Luca Verdi aggiornato" },
+    );
+
+    expect(next).toEqual([{ href: "/workers/worker-1", label: "Luca Verdi aggiornato" }]);
+  });
+
+  it("treats readable and legacy job site paths as the same recent page", () => {
+    const next = pushRecentWorkspacePage(
+      [{ href: "/job-sites/ristrutturazione-via-roma--site-1", label: "Ristrutturazione Via Roma" }],
+      { href: "/job-sites/site-1", label: "Ristrutturazione aggiornata" },
+    );
+
+    expect(next).toEqual([{ href: "/job-sites/site-1", label: "Ristrutturazione aggiornata" }]);
+  });
+
   it("ignores malformed session storage entries", () => {
     expect(parseRecentWorkspacePages('[{"href":"https://example.com","label":"Esterno"},{"href":"//example.com","label":"Esterno relativo"},{"href":"/dashboard","label":"Da fare"}]')).toEqual([
       { href: "/dashboard", label: "Da fare" },
     ]);
     expect(parseRecentWorkspacePages("not-json")).toEqual([]);
+  });
+
+  it("keeps malformed encoded paths isolated instead of breaking navigation history", () => {
+    expect(() => pushRecentWorkspacePage([{ href: "/documents/%", label: "Documento" }], { href: "/dashboard", label: "Da fare" })).not.toThrow();
   });
 });

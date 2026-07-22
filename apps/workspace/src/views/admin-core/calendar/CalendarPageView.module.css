@@ -21,12 +21,17 @@
 }
 
 .emptyState {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.75rem;
   padding: 0.875rem clamp(0.75rem, 2vw, 1.25rem);
   border-bottom: 1px solid var(--border);
   background: color-mix(in oklab, var(--muted) 28%, transparent);
+}
+
+.emptyStateAction {
+  justify-self: end;
 }
 
 .emptyStateIcon {
@@ -242,8 +247,13 @@
   }
 
   .emptyState {
+    grid-template-columns: auto minmax(0, 1fr);
     align-items: flex-start;
-    flex-wrap: wrap;
+  }
+
+  .emptyStateAction {
+    grid-column: 2;
+    justify-self: start;
   }
 
   .calendarToolbar {

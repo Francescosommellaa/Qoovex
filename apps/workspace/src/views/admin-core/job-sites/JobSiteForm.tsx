@@ -1,16 +1,36 @@
 "use client";
 
+import { IconCheck } from "@tabler/icons-react";
+import { Button } from "@qoovex/ui/components/button";
+import { DialogFooter } from "@qoovex/ui/components/dialog";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@qoovex/ui/components/field";
+import { Input } from "@qoovex/ui/components/input";
+import { Textarea } from "@qoovex/ui/components/textarea";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { formValue, nullableFormValue, submitJson } from "../admin-api-client";
-import styles from "../AdminCore.module.css";
+import { jobSiteDetailsHref } from "@shared/lib/job-site-routes";
 import { formatDateInput } from "@/views/workspace/workspace-format";
 import type { WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
 
-export function JobSiteForm({ mode, jobSite, disabled }: { mode: "create" | "update"; jobSite?: WorkspaceJobSiteRecord; disabled?: boolean }) {
+interface JobSiteFormProps {
+  mode: "create" | "update";
+  jobSite?: WorkspaceJobSiteRecord;
+  disabled?: boolean;
+  layout?: "page" | "dialog";
+  onCreated?: (jobSite: WorkspaceJobSiteRecord) => void;
+}
+
+export function JobSiteForm({ mode, jobSite, disabled, layout = "page", onCreated }: JobSiteFormProps) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  function completeCreation(created: WorkspaceJobSiteRecord) {
+    router.refresh();
+    if (onCreated) onCreated(created);
+    else router.push(jobSiteDetailsHref(created));
+  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -26,9 +46,13 @@ export function JobSiteForm({ mode, jobSite, disabled }: { mode: "create" | "upd
       notes: nullableFormValue(formData, "notes"),
     };
     try {
-      const response = await submitJson<WorkspaceJobSiteRecord>(mode === "create" ? "/api/job-sites" : `/api/job-sites/${jobSite?.id}`, mode === "create" ? "POST" : "PATCH", payload);
-      router.refresh();
-      if (mode === "create") router.push(`/job-sites/${response.id}`);
+      const response = await submitJson<WorkspaceJobSiteRecord>(
+        mode === "create" ? "/api/job-sites" : `/api/job-sites/${jobSite?.id}`,
+        mode === "create" ? "POST" : "PATCH",
+        payload,
+      );
+      if (mode === "create") completeCreation(response);
+      else router.refresh();
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "Operazione non riuscita.");
     } finally {
@@ -36,38 +60,52 @@ export function JobSiteForm({ mode, jobSite, disabled }: { mode: "create" | "upd
     }
   }
 
+  const submitButton = (
+    <Button className="w-full sm:w-auto" disabled={disabled || pending} type="submit">
+      {mode === "create" ? <IconCheck aria-hidden="true" /> : null}
+      {pending ? "Salvataggio..." : mode === "create" ? "Aggiungi cantiere" : "Aggiorna cantiere"}
+    </Button>
+  );
+
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
-      {error ? <p className={styles.formError}>{error}</p> : null}
-      <div className={styles.fieldGrid}>
-        <label className={styles.field}>
-          <span>Nome cantiere</span>
-          <input defaultValue={jobSite?.name ?? ""} disabled={disabled || pending} name="name" required minLength={2} maxLength={160} />
-        </label>
-        <label className={styles.field}>
-          <span>Committente opzionale</span>
-          <input defaultValue={jobSite?.clientName ?? ""} disabled={disabled || pending} name="clientName" maxLength={160} />
-        </label>
-        <label className={styles.field}>
-          <span>Indirizzo opzionale</span>
-          <input defaultValue={jobSite?.address ?? ""} disabled={disabled || pending} name="address" maxLength={500} />
-        </label>
-        <label className={styles.field}>
-          <span>Data inizio</span>
-          <input defaultValue={formatDateInput(jobSite?.startDate)} disabled={disabled || pending} name="startDate" type="date" />
-        </label>
-        <label className={styles.field}>
-          <span>Data fine</span>
-          <input defaultValue={formatDateInput(jobSite?.endDate)} disabled={disabled || pending} name="endDate" type="date" />
-        </label>
-      </div>
-      <label className={styles.field}>
-        <span>Note operative</span>
-        <textarea defaultValue={jobSite?.notes ?? ""} disabled={disabled || pending} name="notes" maxLength={4000} />
-      </label>
-      <button className={styles.button} disabled={disabled || pending} type="submit">
-        {pending ? "Salvataggio..." : mode === "create" ? "Aggiungi cantiere" : "Aggiorna cantiere"}
-      </button>
+    <form className="grid gap-4" onSubmit={onSubmit}>
+      {error ? <FieldError>{error}</FieldError> : null}
+
+      <FieldGroup className="gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field>
+            <FieldLabel htmlFor={`${mode}-job-site-name`}>Nome cantiere</FieldLabel>
+            <Input autoFocus defaultValue={jobSite?.name ?? ""} disabled={disabled || pending} id={`${mode}-job-site-name`} maxLength={160} minLength={2} name="name" required />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor={`${mode}-job-site-client`}>Committente</FieldLabel>
+            <Input defaultValue={jobSite?.clientName ?? ""} disabled={disabled || pending} id={`${mode}-job-site-client`} maxLength={160} name="clientName" />
+          </Field>
+        </div>
+
+        <Field>
+          <FieldLabel htmlFor={`${mode}-job-site-address`}>Indirizzo</FieldLabel>
+          <Input autoComplete="street-address" defaultValue={jobSite?.address ?? ""} disabled={disabled || pending} id={`${mode}-job-site-address`} maxLength={500} name="address" />
+        </Field>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field>
+            <FieldLabel htmlFor={`${mode}-job-site-start-date`}>Data inizio</FieldLabel>
+            <Input defaultValue={formatDateInput(jobSite?.startDate)} disabled={disabled || pending} id={`${mode}-job-site-start-date`} name="startDate" type="date" />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor={`${mode}-job-site-end-date`}>Data fine</FieldLabel>
+            <Input defaultValue={formatDateInput(jobSite?.endDate)} disabled={disabled || pending} id={`${mode}-job-site-end-date`} name="endDate" type="date" />
+          </Field>
+        </div>
+
+        <Field>
+          <FieldLabel htmlFor={`${mode}-job-site-notes`}>Note operative</FieldLabel>
+          <Textarea defaultValue={jobSite?.notes ?? ""} disabled={disabled || pending} id={`${mode}-job-site-notes`} maxLength={4000} name="notes" rows={3} />
+        </Field>
+      </FieldGroup>
+
+      {layout === "dialog" ? <DialogFooter>{submitButton}</DialogFooter> : <div className="flex justify-end">{submitButton}</div>}
     </form>
   );
 }

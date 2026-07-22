@@ -7,6 +7,7 @@ import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core
 import { DocumentDetailView } from "@/views/admin-core/documents/DocumentDetailView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import type { WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceDocumentTypeRecord, WorkspaceDocumentVersionRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
+import { documentRouteId } from "@shared/lib/document-routes";
 
 interface DocumentDetailPageProps {
   params: Promise<{ documentId: string }>;
@@ -15,7 +16,8 @@ interface DocumentDetailPageProps {
 
 export default async function DocumentDetailPage({ params, searchParams }: DocumentDetailPageProps) {
   try {
-    const [{ documentId }, { from }] = await Promise.all([params, searchParams]);
+    const [{ documentId: documentRouteParam }, { from }] = await Promise.all([params, searchParams]);
+    const documentId = documentRouteId(documentRouteParam);
     const capabilities = await getWorkspaceCapabilities();
     const [documentReadModel, deadlines, workers, jobSites] = await Promise.all([
       getDocumentWithVersions(documentId),

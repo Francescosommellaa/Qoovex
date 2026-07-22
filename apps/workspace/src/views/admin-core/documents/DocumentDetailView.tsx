@@ -1,11 +1,26 @@
 import Link from "next/link";
+import {
+  IconArrowLeft,
+  IconCalendarDue,
+  IconChevronDown,
+  IconClock,
+  IconFileDescription,
+  IconNotes,
+  IconSettings,
+  IconUpload,
+} from "@tabler/icons-react";
+import { Badge } from "@qoovex/ui/components/badge";
+import { buttonVariants } from "@qoovex/ui/components/button";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
+import { cn } from "@qoovex/ui/lib/utils";
 import { DocumentArchiveButton } from "./DocumentArchiveButton";
 import { DocumentForm } from "./DocumentForm";
 import { DocumentVersionList } from "./DocumentVersionList";
 import { DocumentVersionUploadForm } from "./DocumentVersionUploadForm";
-import styles from "../AdminCore.module.css";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
-import { documentStatusLabels, formatDate, ownerLabel, statusTone } from "@/views/workspace/workspace-format";
+import { WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspacePageIdentity } from "@/views/workspace/WorkspacePageIdentity";
+import { deadlineStatusLabels, documentStatusLabels, formatDate, ownerLabel, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceDocumentTypeRecord, WorkspaceDocumentVersionRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
 export function DocumentDetailView({
@@ -27,46 +42,111 @@ export function DocumentDetailView({
   capabilities: WorkspaceCapabilities;
   returnToDashboard?: boolean;
 }) {
+  const contextLabel = ownerLabel(document.ownerType, document.workerId, document.jobSiteId, workers, jobSites);
+  const canManage = capabilities.canUpdateDocuments || capabilities.canManageCore;
+
   return (
     <WorkspacePage>
+      <WorkspacePageIdentity label={document.title} />
       <WorkspacePageHeader
         title={document.title}
-        description={`${ownerLabel(document.ownerType, document.workerId, document.jobSiteId, workers, jobSites)} - Scadenza registrata: ${formatDate(document.expiryDate)}`}
-        action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/documents"}>{returnToDashboard ? "Torna alla dashboard" : "Torna ai documenti"}</Link>}
+        description={`${contextLabel} · Scadenza registrata: ${formatDate(document.expiryDate)}`}
+        action={
+          <Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} data-link="plain" href={returnToDashboard ? "/dashboard" : "/documents"}>
+            <IconArrowLeft />{returnToDashboard ? "Torna a Da fare" : "Torna ai documenti"}
+          </Link>
+        }
       />
-      <div className={styles.grid}>
-          <WorkspacePanel title="Stato documento">
-            <div className={styles.record}>
-              <div className={styles.recordMain}>
-                <strong>{document.title}</strong>
-                <span>{document.notes || "Nessuna nota operativa registrata."}</span>
-                <small>Aggiornato: {formatDate(document.updatedAt)}</small>
-              </div>
-              <div className={styles.actions}>
-                <WorkspaceState label={documentStatusLabels[document.status]} tone={statusTone(document.status)} />
-              </div>
-            </div>
-          </WorkspacePanel>
-          {capabilities.canUploadDocumentVersions ? <WorkspacePanel title="Aggiungi file" description="Il file viene collegato al documento e resta da verificare."><DocumentVersionUploadForm documentId={document.id} returnToDashboard={returnToDashboard} /></WorkspacePanel> : null}
-          <WorkspacePanel title="File caricati" description="Scarica tramite accesso protetto. Nessun URL permanente viene mostrato.">
-            <DocumentVersionList documentId={document.id} versions={versions} canArchive={capabilities.canManageCore} />
-          </WorkspacePanel>
-          <WorkspacePanel title="Scadenze collegate">
-            {!deadlines.length ? <p className="text-muted-foreground">Nessuna scadenza collegata a questo documento.</p> : (
-              <div className={styles.list}>
-                {deadlines.map((deadline) => (
-                  <article className={styles.record} key={deadline.id}>
-                    <div className={styles.recordMain}>
-                      <strong>{deadline.title}</strong>
-                      <span>Scadenza registrata: {formatDate(deadline.dueDate)}</span>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            )}
-          </WorkspacePanel>
+
+      <Card size="sm">
+        <CardHeader className="border-b">
+          <CardTitle><h2>Riepilogo documento</h2></CardTitle>
+          <CardDescription>Informazioni registrate e contesto operativo corrente.</CardDescription>
+          <CardAction><WorkspaceState label={documentStatusLabels[document.status]} tone={statusTone(document.status)} /></CardAction>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          <dl className="grid gap-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
+            <div className="min-w-0"><dt className="text-xs font-medium text-muted-foreground">Contesto</dt><dd className="mt-1 [overflow-wrap:anywhere] font-medium">{contextLabel}</dd></div>
+            <div><dt className="text-xs font-medium text-muted-foreground">Scadenza registrata</dt><dd className="mt-1 font-medium">{document.expiryDate ? <time dateTime={document.expiryDate}>{formatDate(document.expiryDate)}</time> : "Non registrata"}</dd></div>
+            <div><dt className="text-xs font-medium text-muted-foreground">Creato</dt><dd className="mt-1 font-medium">{document.createdAt ? <time dateTime={document.createdAt}>{formatDate(document.createdAt)}</time> : "Non registrato"}</dd></div>
+            <div><dt className="text-xs font-medium text-muted-foreground">Ultimo aggiornamento</dt><dd className="mt-1 font-medium"><time dateTime={document.updatedAt}>{formatDate(document.updatedAt)}</time></dd></div>
+          </dl>
+          <div className="rounded-lg bg-muted/60 p-3">
+            <div className="flex items-center gap-2 text-sm font-medium"><IconNotes className="size-4 text-muted-foreground" />Note operative</div>
+            <p className="mt-2 whitespace-pre-wrap [overflow-wrap:anywhere] text-sm leading-relaxed text-muted-foreground">{document.notes || "Nessuna nota operativa registrata."}</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className={cn("grid gap-6", capabilities.canUploadDocumentVersions && "lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start")}>
+        <div className="grid min-w-0 gap-6">
+          <Card size="sm">
+            <CardHeader className="border-b">
+              <CardTitle><h2>File caricati</h2></CardTitle>
+              <CardDescription>Download protetto e versioni attive del documento.</CardDescription>
+              <CardAction><Badge variant="outline"><IconFileDescription />{versions.length} file</Badge></CardAction>
+            </CardHeader>
+            <CardContent><DocumentVersionList canArchive={capabilities.canManageCore} documentId={document.id} versions={versions} /></CardContent>
+          </Card>
+
+          <Card size="sm">
+            <CardHeader className="border-b">
+              <CardTitle><h2>Scadenze collegate</h2></CardTitle>
+              <CardDescription>Date operative associate a questo documento.</CardDescription>
+              <CardAction><Badge variant="outline"><IconCalendarDue />{deadlines.length}</Badge></CardAction>
+            </CardHeader>
+            <CardContent>
+              {!deadlines.length ? (
+                <Empty className="min-h-40 border">
+                  <EmptyHeader><EmptyMedia variant="icon"><IconClock /></EmptyMedia><EmptyTitle>Nessuna scadenza collegata</EmptyTitle><EmptyDescription>Non risultano date operative associate a questo documento.</EmptyDescription></EmptyHeader>
+                </Empty>
+              ) : (
+                <ul className="m-0 grid list-none gap-2 p-0">
+                  {deadlines.map((deadline) => (
+                    <li className="flex min-w-0 flex-col gap-3 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between" key={deadline.id}>
+                      <div className="min-w-0"><strong className="block [overflow-wrap:anywhere] text-sm font-medium">{deadline.title}</strong><span className="mt-1 block text-xs text-muted-foreground">Scadenza registrata: <time dateTime={deadline.dueDate}>{formatDate(deadline.dueDate)}</time></span></div>
+                      <WorkspaceState label={deadlineStatusLabels[deadline.status]} tone={statusTone(deadline.status)} />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {capabilities.canUploadDocumentVersions ? (
+          <Card className="lg:sticky lg:top-20" size="sm">
+            <CardHeader className="border-b"><CardTitle><h2 className="flex items-center gap-2"><IconUpload className="size-4" />Aggiungi file</h2></CardTitle><CardDescription>Carica una nuova versione. Il documento resterà da verificare.</CardDescription></CardHeader>
+            <CardContent><DocumentVersionUploadForm documentId={document.id} returnToDashboard={returnToDashboard} /></CardContent>
+          </Card>
+        ) : null}
       </div>
-      {capabilities.canUpdateDocuments || capabilities.canManageCore ? <WorkspacePanel title="Gestione avanzata" description="Modifica informazioni o archivia in una zona separata.">{capabilities.canUpdateDocuments ? <details className={styles.details}><summary>Modifica informazioni</summary><DocumentForm mode="update" document={document} documentTypes={documentTypes} workers={workers} jobSites={jobSites} /></details> : null}{capabilities.canManageCore ? <details className={styles.details}><summary>Zona riservata</summary><DocumentArchiveButton documentId={document.id} redirectToList /></details> : null}</WorkspacePanel> : null}
+
+      {canManage ? (
+        <Card size="sm">
+          <CardHeader className="border-b"><CardTitle><h2 className="flex items-center gap-2"><IconSettings className="size-4" />Gestione documento</h2></CardTitle><CardDescription>Modifica le informazioni registrate oppure archivia il documento.</CardDescription></CardHeader>
+          <CardContent className="grid gap-3">
+            {capabilities.canUpdateDocuments ? (
+              <details className="group rounded-lg border bg-background">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-lg px-3 py-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden">
+                  Modifica informazioni
+                  <IconChevronDown className="size-4 text-muted-foreground transition-transform group-open:rotate-180 motion-reduce:transition-none" />
+                </summary>
+                <div className="border-t p-3 sm:p-4"><DocumentForm document={document} documentTypes={documentTypes} jobSites={jobSites} mode="update" workers={workers} /></div>
+              </details>
+            ) : null}
+            {capabilities.canManageCore ? (
+              <details className="group rounded-lg border border-destructive/30 bg-background">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-lg px-3 py-3 text-sm font-medium text-destructive focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-destructive/20 [&::-webkit-details-marker]:hidden">
+                  Zona riservata
+                  <IconChevronDown className="size-4 transition-transform group-open:rotate-180 motion-reduce:transition-none" />
+                </summary>
+                <div className="border-t border-destructive/20 p-3 sm:p-4"><DocumentArchiveButton documentId={document.id} redirectToList /></div>
+              </details>
+            ) : null}
+          </CardContent>
+        </Card>
+      ) : null}
     </WorkspacePage>
   );
 }

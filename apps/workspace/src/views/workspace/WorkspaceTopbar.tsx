@@ -25,6 +25,7 @@ import {
   type WorkspaceRecentPage,
 } from "./workspace-navigation-history";
 import type { WorkspaceNavigationItem } from "./workspace-navigation-policy";
+import { useWorkspacePageIdentity } from "./WorkspacePageIdentity";
 
 export function WorkspaceTopbar({
   fallbackLabel,
@@ -40,7 +41,8 @@ export function WorkspaceTopbar({
   unreadNotificationCount: number;
 }) {
   const pathname = usePathname() ?? "";
-  const pageLabel = resolveWorkspacePageLabel(pathname, navigation, fallbackLabel);
+  const identityLabel = useWorkspacePageIdentity(pathname);
+  const pageLabel = identityLabel ?? resolveWorkspacePageLabel(pathname, navigation, fallbackLabel);
   const currentPage = { href: pathname || "/dashboard", label: pageLabel };
   const [recentPages, setRecentPages] = useState<WorkspaceRecentPage[]>([currentPage]);
   const displayedPages = recentPages.at(-1)?.href === currentPage.href

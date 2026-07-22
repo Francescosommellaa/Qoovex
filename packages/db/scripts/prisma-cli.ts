@@ -7,6 +7,14 @@ const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 
 const require = createRequire(import.meta.url);
 const PRISMA_CLI = require.resolve("prisma/build/index.js");
 
+export function spawnPrisma(args: string[]) {
+  return spawnSync(process.execPath, [PRISMA_CLI, ...args], {
+    cwd: PACKAGE_ROOT,
+    encoding: "utf8",
+    env: process.env,
+  });
+}
+
 export function runPrisma(args: string[]) {
   const result = spawnSync(process.execPath, [PRISMA_CLI, ...args], {
     cwd: PACKAGE_ROOT,
