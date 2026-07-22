@@ -2,9 +2,14 @@ packages:
   - "apps/*"
   - "packages/*"
 overrides:
-  "@hono/node-server": "1.19.13"
-  hono: "4.12.25"
+  # Prisma's AJV range accepts this patched release; covers both fast-uri advisories.
+  fast-uri: "3.1.4"
   postcss: "8.5.14"
+auditConfig:
+  ignoreGhsas:
+    # Temporary: Next 16.2.x supports sharp ^0.34.5, while the patched release is >=0.35.0.
+    # Remove after Next supports sharp 0.35; review no later than 2026-08-22.
+    - GHSA-f88m-g3jw-g9cj
 peerDependencyRules:
   ignoreMissing: []
 allowBuilds:
@@ -17,3 +22,4 @@ minimumReleaseAgeExclude:
   - '@full-ui/headless-calendar@7.0.1'
   - '@fullcalendar/core@7.0.1'
   - '@fullcalendar/react@7.0.1'
+  - fast-uri@3.1.4
