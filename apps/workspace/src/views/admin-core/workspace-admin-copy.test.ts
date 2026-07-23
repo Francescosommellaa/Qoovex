@@ -46,6 +46,7 @@ describe("workspace admin UI copy", () => {
   const documentsPageViewSource = readFileSync(join(root, "admin-core", "documents", "DocumentsPageView.tsx"), "utf8");
   const workersPageViewSource = readFileSync(join(root, "admin-core", "workers", "WorkersPageView.tsx"), "utf8");
   const workerCreateDialogSource = readFileSync(join(root, "admin-core", "workers", "WorkerCreateDialog.tsx"), "utf8");
+  const guidedWorkerCreateSource = readFileSync(join(root, "admin-core", "workers", "GuidedWorkerCreateFlow.tsx"), "utf8");
   const workerDetailsDialogSource = readFileSync(join(root, "admin-core", "workers", "WorkerDetailsDialog.tsx"), "utf8");
   const workerFormSource = readFileSync(join(root, "admin-core", "workers", "WorkerForm.tsx"), "utf8");
   const workerDetailViewSource = readFileSync(join(root, "admin-core", "workers", "WorkerDetailView.tsx"), "utf8");
@@ -53,6 +54,9 @@ describe("workspace admin UI copy", () => {
   const workersRouteSource = readFileSync(join(appRoot, "workers", "page.tsx"), "utf8");
   const newWorkerRouteSource = readFileSync(join(appRoot, "workers", "new", "page.tsx"), "utf8");
   const jobSitesPageViewSource = readFileSync(join(root, "admin-core", "job-sites", "JobSitesPageView.tsx"), "utf8");
+  const jobSitesOverviewSource = readFileSync(join(root, "admin-core", "job-sites", "JobSitesOverviewView.tsx"), "utf8");
+  const jobSiteCreateWizardSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteCreateWizard.tsx"), "utf8");
+  const jobSiteSegmentedViewSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteDetailSegmentedView.tsx"), "utf8");
   const jobSiteCreateDialogSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteCreateDialog.tsx"), "utf8");
   const jobSiteDetailsDialogSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteDetailsDialog.tsx"), "utf8");
   const jobSiteFormSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteForm.tsx"), "utf8");
@@ -94,8 +98,8 @@ describe("workspace admin UI copy", () => {
   it("keeps the required empty states for admin core", () => {
     expect(combinedSource).toContain("Aggiungi il primo documento per iniziare");
     expect(combinedSource).toContain("Registra una scadenza");
-    expect(combinedSource).toContain("Aggiungi un lavoratore per collegare documenti e scadenze");
-    expect(combinedSource).toContain("Crea un cantiere per raccogliere documenti");
+    expect(combinedSource).toContain("Modifica i filtri oppure aggiungi il primo profilo operativo");
+    expect(combinedSource).toContain("Nessun cantiere trovato");
   });
 
   it("keeps the required empty states for extended admin", () => {
@@ -258,8 +262,8 @@ describe("workspace admin UI copy", () => {
     expect(workersPageViewSource).toContain('@qoovex/ui/components/empty');
     expect(workersPageViewSource).toContain('@tabler/icons-react');
     expect(workersPageViewSource).toContain("<WorkerCreateDialog");
-    expect(workersPageViewSource).toContain("<WorkerDetailsDialog");
-    expect(workersPageViewSource).toContain('data-link="quiet"');
+    expect(workersPageViewSource).toContain('worker.nextAction.href');
+    expect(workersPageViewSource).toContain('data-link="plain"');
     expect(workersPageViewSource).not.toContain("AdminCore.module.css");
     expect(workersPageViewSource).not.toContain(":hover");
     expect(workerCreateDialogSource).toContain("DialogTrigger");
@@ -269,10 +273,11 @@ describe("workspace admin UI copy", () => {
     expect(workerDetailsDialogSource).toContain("workerDetailsHref(worker)");
     expect(workerDetailsDialogSource).not.toContain("fetch(");
     expect(workerFormSource).toContain("Mansione");
-    expect(workerFormSource).toContain("Solo profilo operativo");
-    expect(workerFormSource).toContain('value: "WORKER"');
-    for (const role of ["ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"]) expect(workerFormSource).not.toContain(`value: "${role}"`);
-    expect(workersRouteSource).toContain("canInviteRole");
+    expect(guidedWorkerCreateSource).toContain("Solo profilo operativo");
+    expect(guidedWorkerCreateSource).toContain('role: "WORKER"');
+    expect(guidedWorkerCreateSource).toContain("Nomi simili trovati");
+    for (const role of ["ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"]) expect(guidedWorkerCreateSource).not.toContain(`role: "${role}"`);
+    expect(workersRouteSource).toContain("listPeopleWorkers");
     expect(workersRouteSource).toContain('params.intent === "create"');
     expect(newWorkerRouteSource).toContain('redirect("/workers?intent=create")');
     expect(workerDetailViewSource).toContain("<WorkspacePageIdentity");
@@ -284,10 +289,11 @@ describe("workspace admin UI copy", () => {
 
   it("keeps job sites on the canonical UI foundation with modal entry points", () => {
     expect(jobSitesPageViewSource).toContain('@qoovex/ui/components/card');
-    expect(jobSitesPageViewSource).toContain('@qoovex/ui/components/empty');
     expect(jobSitesPageViewSource).toContain('@tabler/icons-react');
     expect(jobSitesPageViewSource).toContain("<JobSiteCreateDialog");
-    expect(jobSitesPageViewSource).toContain("<JobSiteDetailsDialog");
+    expect(jobSitesOverviewSource).toContain("Coda di attenzione");
+    expect(jobSiteCreateWizardSource).toContain("Avanzamento creazione");
+    expect(jobSiteCreateWizardSource).toContain("continueAfterDuplicateWarning");
     expect(jobSitesPageViewSource).not.toContain("AdminCore.module.css");
     expect(jobSitesPageViewSource).not.toContain(":hover");
     expect(jobSiteCreateDialogSource).toContain("DialogTrigger");
@@ -300,14 +306,12 @@ describe("workspace admin UI copy", () => {
     expect(jobSiteFormSource).toContain("jobSiteDetailsHref(created)");
     expect(jobSitesRouteSource).toContain('params.intent === "create"');
     expect(newJobSiteRouteSource).toContain('redirect("/job-sites?intent=create")');
-    expect(jobSiteDetailViewSource).toContain("<WorkspacePageIdentity");
-    expect(jobSiteDetailViewSource).toContain('@qoovex/ui/components/card');
-    expect(jobSiteDetailViewSource).toContain('@qoovex/ui/components/empty');
-    expect(jobSiteDetailViewSource).not.toContain("AdminCore.module.css");
-    expect(jobSiteDetailViewSource).toContain("Responsabile cantiere");
-    expect(jobSiteDetailViewSource).toContain("Mansione:");
-    expect(jobSiteDetailViewSource).toContain("<JobSiteQuickActions");
-    expect(jobSiteDetailViewSource).not.toContain('href={`/documents/new?origin=job-site');
+    expect(jobSiteSegmentedViewSource).toContain("<WorkspacePageIdentity");
+    expect(jobSiteSegmentedViewSource).toContain('@qoovex/ui/components/card');
+    expect(jobSiteSegmentedViewSource).not.toContain("AdminCore.module.css");
+    expect(jobSiteSegmentedViewSource).toContain("Responsabili cantiere");
+    expect(jobSiteSegmentedViewSource).toContain("<JobSiteQuickActions");
+    for (const section of ["overview", "documents", "people", "activities", "evidence", "sharing", "settings"]) expect(jobSiteSegmentedViewSource).toContain(`id: "${section}"`);
     expect(documentCreateDialogSource).toContain("Aggiungi documento");
     for (const action of ["Aggiungi prova", "Aggiungi scadenza", "Crea checklist", "Prepara condivisione"]) {
       expect(jobSiteQuickActionsSource).toContain(action);
@@ -320,8 +324,9 @@ describe("workspace admin UI copy", () => {
       expect(formSource).not.toContain("AdminCore.module.css");
     }
     expect(documentCreateDialogSource).toContain('fetch("/api/document-types"');
-    expect(jobSiteDetailRouteSource).toContain("jobSiteRouteId(jobSiteRouteParam)");
+    expect(jobSiteDetailRouteSource).toContain("jobSiteRouteId(routeParam)");
     expect(jobSiteDetailRouteSource).not.toContain("listDocumentTypes");
+    expect(jobSiteDetailRouteSource).toContain("getMissingDocumentRequirements");
     expect(jobSiteDetailRouteSource).not.toContain("listWorkers");
     expect(jobSiteDetailRouteSource).not.toContain("listJobSites");
   });

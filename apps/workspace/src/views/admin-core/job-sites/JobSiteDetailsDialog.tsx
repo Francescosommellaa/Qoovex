@@ -13,6 +13,7 @@ import {
 } from "@qoovex/ui/components/dialog";
 import { cn } from "@qoovex/ui/lib/utils";
 import Link from "next/link";
+import { jobSiteOperationalPhaseLabels, legacyJobSiteOperationalPhaseLabel } from "@qoovex/types";
 import { jobSiteDetailsHref } from "@shared/lib/job-site-routes";
 import { WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { formatDate, recordStatusLabels, statusTone } from "@/views/workspace/workspace-format";
@@ -45,6 +46,7 @@ export function JobSiteDetailsDialog({ canManage, className, jobSite }: JobSiteD
         <DialogHeader>
           <div className="mb-1 flex flex-wrap items-center gap-2">
             <WorkspaceState label={recordStatusLabels[jobSite.status]} tone={statusTone(jobSite.status)} />
+            <WorkspaceState label={jobSite.operationalPhase ? jobSiteOperationalPhaseLabels[jobSite.operationalPhase] : legacyJobSiteOperationalPhaseLabel} tone="info" />
           </div>
           <DialogTitle className="[overflow-wrap:anywhere] text-lg leading-snug">{jobSite.name}</DialogTitle>
           <DialogDescription>{jobSite.clientName || "Committente non indicato"}</DialogDescription>

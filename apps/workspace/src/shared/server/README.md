@@ -26,10 +26,18 @@ Limiter in-memory per route API costose. Non e' distribuito tra piu' istanze ser
 
 I servizi dominio MVP restano app-specific finche dipendono da auth, policy workspace, support access o provider runtime:
 
-- documenti, versioni documento e scadenze;
+- documenti, tassonomia documentale, panoramica, tipi, requisiti, versioni e scadenze;
 - lavoratori e cantieri;
 - checklist, voci checklist ed evidence.
 - pacchetti documentali, link di condivisione e accesso destinatario esterno tokenizzato.
 - dashboard operativa read-only, come aggregazione sintetica filtrata per Organization.
 
 I file Evidence usano l'adapter Blob esistente; le response pubbliche non espongono URL permanenti.
+
+I servizi documento validano `macroarea -> categoria -> tipo` dal registro condiviso. Le query restano tenant-scoped e role-scoped; pacchetti e share link applicano default-deny ai documenti non classificati o con sensibilita diversa da `STANDARD`.
+
+## Persone
+
+`people-service.ts` costruisce read model server-only per panoramica, rubrica paginata, accessi e assegnazioni. Le operazioni restano costanti rispetto al numero di righe (nessun N+1) e ogni query contiene `organizationId`; SITE_MANAGER e WORKER ricevono inoltre lo scope da `resource-scope-service.ts`. La visibilita documentale non standard resta limitata a OWNER e ADMIN secondo la policy canonica esistente.
+
+`organization-invitation-service.ts` conserva il `workerId` opzionale dell'invito WORKER e crea/riattiva membership e link nella stessa transazione Serializable. Non esegue matching automatico per email sugli inviti legacy.

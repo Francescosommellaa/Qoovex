@@ -9,6 +9,8 @@ Questa cartella contiene l'unica cronologia Prisma canonica di Qoovex.
 - `20260713010000_mfa_hardening`: aggiunge recovery MFA, binding sessione, dispositivi e backup code con i relativi vincoli.
 - `20260713020000_rate_limit_privacy_atomicity`: elimina le righe rate-limit legacy contenenti PII e aggiunge `userId`, timestamp, indice e FK per atomicita, attribuzione e retention.
 - `20260720010000_calendar_events`: ultima migration locale; aggiunge `CalendarEvent`, priorita, stato, assegnatario, cantiere, origine iCalendar, indici e azioni audit. Non applicarla fuori dal deploy protetto.
+- `20260722010000_document_taxonomy`: aggiunge categorie organizzative e sensibilita tipizzate a `DocumentType`; i tipi preesistenti restano `UNCLASSIFIED` senza inferenze automatiche. Non applicarla fuori dal deploy protetto.
+- `20260723010000_people_invitation_worker`: aggiunge la relazione opzionale `OrganizationInvitation.workerId`, indici e azioni audit per inviti/membership. Gli inviti preesistenti restano validi. Applicata e verificata soltanto sul database locale `localhost:51225`; fuori dal locale richiede il deploy protetto.
 
 Le nove migration precedenti non appartengono a questa cronologia: non erano applicate all'unico database condiviso e non devono essere eseguite o marcate tramite `migrate resolve`.
 

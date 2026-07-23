@@ -22,16 +22,16 @@ import { buttonVariants } from "@qoovex/ui/components/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
 import { cn } from "@qoovex/ui/lib/utils";
-import type { WorkerUserLinkResponse } from "@qoovex/types";
+import type { MissingDocumentRequirementItem, WorkerUserLinkResponse } from "@qoovex/types";
 import { WorkerArchiveButton } from "./WorkerArchiveButton";
 import { WorkerForm } from "./WorkerForm";
-import { documentDetailsHref } from "@shared/lib/document-routes";
+import { WorkerAccessPanel } from "./WorkerAccessPanel";
+import { DocumentCategoryList } from "@/views/admin-core/documents/DocumentCategoryList";
 import { jobSiteDetailsHref } from "@shared/lib/job-site-routes";
 import { WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { WorkspacePageIdentity } from "@/views/workspace/WorkspacePageIdentity";
 import {
   deadlineStatusLabels,
-  documentStatusLabels,
   evidenceTypeLabels,
   formatDate,
   recordStatusLabels,
@@ -71,19 +71,25 @@ function RelatedEmpty({ description, icon: Icon, title }: { description: string;
 export function WorkerDetailView({
   worker,
   documents,
+  missingDocuments,
   deadlines,
   evidence,
   jobSites,
   userLinks,
+  userLinkOptions,
+  accessSummary,
   capabilities,
   returnToDashboard = false,
 }: {
   worker: WorkspaceWorkerRecord;
   documents: WorkspaceDocumentRecord[];
+  missingDocuments: MissingDocumentRequirementItem[];
   deadlines: WorkspaceDeadlineRecord[];
   evidence: WorkspaceEvidenceRecord[];
   jobSites: WorkspaceJobSiteRecord[];
   userLinks: WorkerUserLinkResponse[];
+  userLinkOptions: Array<{ id: string; label: string; email: string }>;
+  accessSummary: { state: "NO_ACCESS_REQUIRED" | "INVITATION_PENDING" | "INVITATION_EXPIRED" | "ACCESS_ACTIVE" | "ACCESS_SETUP_REQUIRED" | "ACCESS_REVOKED" } | null;
   capabilities: WorkspaceCapabilities;
   returnToDashboard?: boolean;
 }) {
@@ -107,7 +113,7 @@ export function WorkerDetailView({
         )}
       />
 
-      <Card size="sm">
+      <Card id="summary" size="sm">
         <CardHeader className="border-b">
           <CardTitle><h2>Riepilogo lavoratore</h2></CardTitle>
           <CardDescription>Contatti, mansione e informazioni operative registrate.</CardDescription>
@@ -163,29 +169,18 @@ export function WorkerDetailView({
       ) : null}
 
       <div className="grid min-w-0 gap-6 lg:grid-cols-2 lg:items-start">
-        <Card className="min-w-0" size="sm">
+        <Card className="min-w-0" id="documents" size="sm">
           <CardHeader className="border-b">
-            <CardTitle><h2>Documenti collegati</h2></CardTitle>
-            <CardDescription>Documenti registrati per questo lavoratore.</CardDescription>
-            <CardAction><Badge variant="outline"><IconFileDescription aria-hidden="true" />{documents.length}</Badge></CardAction>
+            <CardTitle><h2>Documenti per categoria</h2></CardTitle>
+            <CardDescription>Documenti presenti, mancanti e da verificare nel contesto del lavoratore.</CardDescription>
+            <CardAction><Badge variant="outline"><IconFileDescription aria-hidden="true" />{documents.length + missingDocuments.length}</Badge></CardAction>
           </CardHeader>
           <CardContent>
-            {!documents.length ? (
-              <RelatedEmpty description="Non risultano documenti associati a questo profilo." icon={IconFileDescription} title="Nessun documento collegato" />
-            ) : (
-              <ul className="m-0 grid list-none gap-2 p-0">
-                {documents.map((document) => (
-                  <li className="flex min-w-0 flex-col gap-3 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between" key={document.id}>
-                    <div className="min-w-0"><strong className="block [overflow-wrap:anywhere] text-sm font-medium">{document.title}</strong><span className="mt-1 block text-xs text-muted-foreground">Scadenza registrata: {formatDate(document.expiryDate)}</span></div>
-                    <div className="flex shrink-0 flex-wrap items-center gap-2"><WorkspaceState label={documentStatusLabels[document.status]} tone={statusTone(document.status)} /><Link className={buttonVariants({ variant: "outline", size: "sm" })} href={documentDetailsHref(document)}>Apri documento</Link></div>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <DocumentCategoryList documents={documents} missing={missingDocuments} />
           </CardContent>
         </Card>
 
-        <Card className="min-w-0" size="sm">
+        <Card className="min-w-0" id="deadlines" size="sm">
           <CardHeader className="border-b">
             <CardTitle><h2>Scadenze collegate</h2></CardTitle>
             <CardDescription>Date operative associate a questo lavoratore.</CardDescription>
@@ -207,7 +202,7 @@ export function WorkerDetailView({
           </CardContent>
         </Card>
 
-        <Card className="min-w-0" size="sm">
+        <Card className="min-w-0" id="sites" size="sm">
           <CardHeader className="border-b">
             <CardTitle><h2>Cantieri assegnati</h2></CardTitle>
             <CardDescription>Cantieri visibili collegati al lavoratore.</CardDescription>
@@ -229,7 +224,7 @@ export function WorkerDetailView({
           </CardContent>
         </Card>
 
-        <Card className="min-w-0" size="sm">
+        <Card className="min-w-0" id="evidence" size="sm">
           <CardHeader className="border-b">
             <CardTitle><h2>Prove collegate</h2></CardTitle>
             <CardDescription>Foto, file e note operative associate al profilo.</CardDescription>
@@ -253,21 +248,15 @@ export function WorkerDetailView({
       </div>
 
       {capabilities.canReadAssignments ? (
-        <Card size="sm">
+        <Card id="access" size="sm">
           <CardHeader className="border-b">
             <CardTitle><h2>Accesso collegato</h2></CardTitle>
             <CardDescription>Account associato al profilo per applicare lo scope personale.</CardDescription>
-            <CardAction><Badge variant="outline"><IconUserCheck aria-hidden="true" />{userLinks.length}</Badge></CardAction>
+            <CardAction><Badge variant="outline"><IconUserCheck aria-hidden="true" />{accessSummary?.state === "ACCESS_ACTIVE" ? "Accesso attivo" : accessSummary?.state === "INVITATION_PENDING" ? "Invito in attesa" : accessSummary?.state === "INVITATION_EXPIRED" ? "Invito scaduto" : accessSummary?.state === "ACCESS_SETUP_REQUIRED" ? "Da completare" : accessSummary?.state === "ACCESS_REVOKED" ? "Revocato" : "Nessun accesso richiesto"}</Badge></CardAction>
           </CardHeader>
           <CardContent className="grid gap-3">
-            {!userLinks.length ? (
-              <RelatedEmpty description="Non risulta un account associato a questo profilo." icon={IconUsers} title="Nessun accesso collegato" />
-            ) : (
-              <ul className="m-0 grid list-none gap-2 p-0">
-                {userLinks.map((link) => <li className="rounded-lg border p-3" key={link.id}><strong className="block text-sm font-medium">{link.userLabel}</strong><span className="mt-1 block [overflow-wrap:anywhere] text-xs text-muted-foreground">{link.userEmail}</span></li>)}
-              </ul>
-            )}
-            <div><Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/access"><IconUsers aria-hidden="true" />Gestisci accesso</Link></div>
+            <WorkerAccessPanel canManage={capabilities.canManageAssignments} links={userLinks} options={userLinkOptions} workerEmail={worker.email} workerId={worker.id} />
+            <div><Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/people/access"><IconUsers aria-hidden="true" />Tutti gli accessi</Link></div>
           </CardContent>
         </Card>
       ) : null}

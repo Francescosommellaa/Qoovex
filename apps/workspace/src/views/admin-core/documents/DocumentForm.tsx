@@ -26,7 +26,6 @@ interface DocumentFormProps {
   disabled?: boolean;
 }
 
-const EMPTY_VALUE = "__none__";
 const ownerTypeOptions = [
   { value: "ORGANIZATION", label: "Azienda" },
   { value: "WORKER", label: "Lavoratore" },
@@ -50,7 +49,7 @@ export function DocumentForm({ mode, document, documentTypes, workers, jobSites,
     const documentTypeId = nullableFormValue(formData, "documentTypeId");
     const payload: Record<string, unknown> = {
       title: formValue(formData, "title"),
-      documentTypeId: documentTypeId === EMPTY_VALUE ? null : documentTypeId,
+      documentTypeId,
       ownerType: selectedOwnerType,
       status: formValue(formData, "status"),
       expiryDate: nullableFormValue(formData, "expiryDate"),
@@ -73,7 +72,8 @@ export function DocumentForm({ mode, document, documentTypes, workers, jobSites,
   }
 
   const formDisabled = disabled || pending;
-  const documentTypeOptions = [{ value: EMPTY_VALUE, label: "Senza tipo" }, ...documentTypes.map((item) => ({ value: item.id, label: item.name }))];
+  const compatibleDocumentTypes = documentTypes.filter((item) => item.appliesTo === ownerType && item.categoryKey !== "UNCLASSIFIED" && item.sensitivity !== "RESTRICTED");
+  const documentTypeOptions = compatibleDocumentTypes.map((item) => ({ value: item.id, label: `${item.categoryLabel} · ${item.name}` }));
   const workerOptions = workers.map((item) => ({ value: item.id, label: item.displayName }));
   const jobSiteOptions = jobSites.map((item) => ({ value: item.id, label: item.name }));
   const statusOptions = documentStatuses.filter((status): status is Exclude<DocumentStatus, "ARCHIVED"> => status !== "ARCHIVED").map((status) => ({ value: status, label: documentStatusLabels[status] }));
@@ -91,10 +91,11 @@ export function DocumentForm({ mode, document, documentTypes, workers, jobSites,
 
         <Field>
           <FieldLabel htmlFor={`document-type-${document?.id ?? "new"}`}>Tipo documento configurato</FieldLabel>
-          <Select defaultValue={document?.documentTypeId ?? EMPTY_VALUE} items={documentTypeOptions} name="documentTypeId">
-            <SelectTrigger className="h-10 w-full" disabled={formDisabled} id={`document-type-${document?.id ?? "new"}`}><SelectValue /></SelectTrigger>
-            <SelectContent><SelectGroup><SelectItem value={EMPTY_VALUE}>Senza tipo</SelectItem>{documentTypes.map((documentType) => <SelectItem key={documentType.id} value={documentType.id}>{documentType.name}</SelectItem>)}</SelectGroup></SelectContent>
+          <Select defaultValue={document?.documentTypeId ?? undefined} items={documentTypeOptions} name="documentTypeId" required>
+            <SelectTrigger className="h-10 w-full" disabled={formDisabled} id={`document-type-${document?.id ?? "new"}`}><SelectValue placeholder="Scegli un tipo classificato" /></SelectTrigger>
+            <SelectContent><SelectGroup>{compatibleDocumentTypes.map((documentType) => <SelectItem key={documentType.id} value={documentType.id}>{documentType.categoryLabel} · {documentType.name}</SelectItem>)}</SelectGroup></SelectContent>
           </Select>
+          {!document?.documentTypeId ? <FieldError>Questo documento legacy richiede un tipo classificato prima dell'aggiornamento.</FieldError> : null}
         </Field>
 
         <Field>

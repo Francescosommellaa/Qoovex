@@ -30,6 +30,8 @@ export type DocumentTypeMinAggregateOutputType = {
   name: string | null
   description: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo | null
+  categoryKey: $Enums.DocumentCategoryKey | null
+  sensitivity: $Enums.DocumentSensitivity | null
   requiresExpiryDate: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -42,6 +44,8 @@ export type DocumentTypeMaxAggregateOutputType = {
   name: string | null
   description: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo | null
+  categoryKey: $Enums.DocumentCategoryKey | null
+  sensitivity: $Enums.DocumentSensitivity | null
   requiresExpiryDate: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -54,6 +58,8 @@ export type DocumentTypeCountAggregateOutputType = {
   name: number
   description: number
   appliesTo: number
+  categoryKey: number
+  sensitivity: number
   requiresExpiryDate: number
   createdAt: number
   updatedAt: number
@@ -68,6 +74,8 @@ export type DocumentTypeMinAggregateInputType = {
   name?: true
   description?: true
   appliesTo?: true
+  categoryKey?: true
+  sensitivity?: true
   requiresExpiryDate?: true
   createdAt?: true
   updatedAt?: true
@@ -80,6 +88,8 @@ export type DocumentTypeMaxAggregateInputType = {
   name?: true
   description?: true
   appliesTo?: true
+  categoryKey?: true
+  sensitivity?: true
   requiresExpiryDate?: true
   createdAt?: true
   updatedAt?: true
@@ -92,6 +102,8 @@ export type DocumentTypeCountAggregateInputType = {
   name?: true
   description?: true
   appliesTo?: true
+  categoryKey?: true
+  sensitivity?: true
   requiresExpiryDate?: true
   createdAt?: true
   updatedAt?: true
@@ -177,6 +189,8 @@ export type DocumentTypeGroupByOutputType = {
   name: string
   description: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey: $Enums.DocumentCategoryKey
+  sensitivity: $Enums.DocumentSensitivity
   requiresExpiryDate: boolean
   createdAt: Date
   updatedAt: Date
@@ -210,6 +224,8 @@ export type DocumentTypeWhereInput = {
   name?: Prisma.StringFilter<"DocumentType"> | string
   description?: Prisma.StringNullableFilter<"DocumentType"> | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFilter<"DocumentType"> | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFilter<"DocumentType"> | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFilter<"DocumentType"> | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFilter<"DocumentType"> | boolean
   createdAt?: Prisma.DateTimeFilter<"DocumentType"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DocumentType"> | Date | string
@@ -225,6 +241,8 @@ export type DocumentTypeOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   appliesTo?: Prisma.SortOrder
+  categoryKey?: Prisma.SortOrder
+  sensitivity?: Prisma.SortOrder
   requiresExpiryDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -243,6 +261,8 @@ export type DocumentTypeWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"DocumentType"> | string
   description?: Prisma.StringNullableFilter<"DocumentType"> | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFilter<"DocumentType"> | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFilter<"DocumentType"> | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFilter<"DocumentType"> | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFilter<"DocumentType"> | boolean
   createdAt?: Prisma.DateTimeFilter<"DocumentType"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DocumentType"> | Date | string
@@ -258,6 +278,8 @@ export type DocumentTypeOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   appliesTo?: Prisma.SortOrder
+  categoryKey?: Prisma.SortOrder
+  sensitivity?: Prisma.SortOrder
   requiresExpiryDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -276,6 +298,8 @@ export type DocumentTypeScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"DocumentType"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"DocumentType"> | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToWithAggregatesFilter<"DocumentType"> | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyWithAggregatesFilter<"DocumentType"> | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityWithAggregatesFilter<"DocumentType"> | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolWithAggregatesFilter<"DocumentType"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"DocumentType"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"DocumentType"> | Date | string
@@ -287,6 +311,8 @@ export type DocumentTypeCreateInput = {
   name: string
   description?: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
   requiresExpiryDate?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -302,6 +328,8 @@ export type DocumentTypeUncheckedCreateInput = {
   name: string
   description?: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
   requiresExpiryDate?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -315,6 +343,8 @@ export type DocumentTypeUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -330,6 +360,8 @@ export type DocumentTypeUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -344,6 +376,8 @@ export type DocumentTypeCreateManyInput = {
   name: string
   description?: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
   requiresExpiryDate?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -355,6 +389,8 @@ export type DocumentTypeUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -367,6 +403,8 @@ export type DocumentTypeUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -389,6 +427,8 @@ export type DocumentTypeCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   appliesTo?: Prisma.SortOrder
+  categoryKey?: Prisma.SortOrder
+  sensitivity?: Prisma.SortOrder
   requiresExpiryDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -401,6 +441,8 @@ export type DocumentTypeMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   appliesTo?: Prisma.SortOrder
+  categoryKey?: Prisma.SortOrder
+  sensitivity?: Prisma.SortOrder
   requiresExpiryDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -413,6 +455,8 @@ export type DocumentTypeMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   appliesTo?: Prisma.SortOrder
+  categoryKey?: Prisma.SortOrder
+  sensitivity?: Prisma.SortOrder
   requiresExpiryDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -470,6 +514,14 @@ export type EnumDocumentTypeAppliesToFieldUpdateOperationsInput = {
   set?: $Enums.DocumentTypeAppliesTo
 }
 
+export type EnumDocumentCategoryKeyFieldUpdateOperationsInput = {
+  set?: $Enums.DocumentCategoryKey
+}
+
+export type EnumDocumentSensitivityFieldUpdateOperationsInput = {
+  set?: $Enums.DocumentSensitivity
+}
+
 export type DocumentTypeCreateNestedOneWithoutDocumentsInput = {
   create?: Prisma.XOR<Prisma.DocumentTypeCreateWithoutDocumentsInput, Prisma.DocumentTypeUncheckedCreateWithoutDocumentsInput>
   connectOrCreate?: Prisma.DocumentTypeCreateOrConnectWithoutDocumentsInput
@@ -507,6 +559,8 @@ export type DocumentTypeCreateWithoutOrganizationInput = {
   name: string
   description?: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
   requiresExpiryDate?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -520,6 +574,8 @@ export type DocumentTypeUncheckedCreateWithoutOrganizationInput = {
   name: string
   description?: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
   requiresExpiryDate?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -563,6 +619,8 @@ export type DocumentTypeScalarWhereInput = {
   name?: Prisma.StringFilter<"DocumentType"> | string
   description?: Prisma.StringNullableFilter<"DocumentType"> | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFilter<"DocumentType"> | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFilter<"DocumentType"> | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFilter<"DocumentType"> | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFilter<"DocumentType"> | boolean
   createdAt?: Prisma.DateTimeFilter<"DocumentType"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DocumentType"> | Date | string
@@ -574,6 +632,8 @@ export type DocumentTypeCreateWithoutDocumentsInput = {
   name: string
   description?: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
   requiresExpiryDate?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -588,6 +648,8 @@ export type DocumentTypeUncheckedCreateWithoutDocumentsInput = {
   name: string
   description?: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
   requiresExpiryDate?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -616,6 +678,8 @@ export type DocumentTypeUpdateWithoutDocumentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -630,6 +694,8 @@ export type DocumentTypeUncheckedUpdateWithoutDocumentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -642,6 +708,8 @@ export type DocumentTypeCreateWithoutRequirementsInput = {
   name: string
   description?: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
   requiresExpiryDate?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -656,6 +724,8 @@ export type DocumentTypeUncheckedCreateWithoutRequirementsInput = {
   name: string
   description?: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
   requiresExpiryDate?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -684,6 +754,8 @@ export type DocumentTypeUpdateWithoutRequirementsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -698,6 +770,8 @@ export type DocumentTypeUncheckedUpdateWithoutRequirementsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -710,6 +784,8 @@ export type DocumentTypeCreateManyOrganizationInput = {
   name: string
   description?: string | null
   appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
   requiresExpiryDate?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -721,6 +797,8 @@ export type DocumentTypeUpdateWithoutOrganizationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -734,6 +812,8 @@ export type DocumentTypeUncheckedUpdateWithoutOrganizationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -747,6 +827,8 @@ export type DocumentTypeUncheckedUpdateManyWithoutOrganizationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
   requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -799,6 +881,8 @@ export type DocumentTypeSelect<ExtArgs extends runtime.Types.Extensions.Internal
   name?: boolean
   description?: boolean
   appliesTo?: boolean
+  categoryKey?: boolean
+  sensitivity?: boolean
   requiresExpiryDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -815,6 +899,8 @@ export type DocumentTypeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   name?: boolean
   description?: boolean
   appliesTo?: boolean
+  categoryKey?: boolean
+  sensitivity?: boolean
   requiresExpiryDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -828,6 +914,8 @@ export type DocumentTypeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   name?: boolean
   description?: boolean
   appliesTo?: boolean
+  categoryKey?: boolean
+  sensitivity?: boolean
   requiresExpiryDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -841,13 +929,15 @@ export type DocumentTypeSelectScalar = {
   name?: boolean
   description?: boolean
   appliesTo?: boolean
+  categoryKey?: boolean
+  sensitivity?: boolean
   requiresExpiryDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   archivedAt?: boolean
 }
 
-export type DocumentTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "name" | "description" | "appliesTo" | "requiresExpiryDate" | "createdAt" | "updatedAt" | "archivedAt", ExtArgs["result"]["documentType"]>
+export type DocumentTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "name" | "description" | "appliesTo" | "categoryKey" | "sensitivity" | "requiresExpiryDate" | "createdAt" | "updatedAt" | "archivedAt", ExtArgs["result"]["documentType"]>
 export type DocumentTypeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.DocumentType$documentsArgs<ExtArgs>
@@ -874,6 +964,8 @@ export type $DocumentTypePayload<ExtArgs extends runtime.Types.Extensions.Intern
     name: string
     description: string | null
     appliesTo: $Enums.DocumentTypeAppliesTo
+    categoryKey: $Enums.DocumentCategoryKey
+    sensitivity: $Enums.DocumentSensitivity
     requiresExpiryDate: boolean
     createdAt: Date
     updatedAt: Date
@@ -1309,6 +1401,8 @@ export interface DocumentTypeFieldRefs {
   readonly name: Prisma.FieldRef<"DocumentType", 'String'>
   readonly description: Prisma.FieldRef<"DocumentType", 'String'>
   readonly appliesTo: Prisma.FieldRef<"DocumentType", 'DocumentTypeAppliesTo'>
+  readonly categoryKey: Prisma.FieldRef<"DocumentType", 'DocumentCategoryKey'>
+  readonly sensitivity: Prisma.FieldRef<"DocumentType", 'DocumentSensitivity'>
   readonly requiresExpiryDate: Prisma.FieldRef<"DocumentType", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"DocumentType", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"DocumentType", 'DateTime'>

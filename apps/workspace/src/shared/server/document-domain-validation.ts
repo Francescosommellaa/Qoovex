@@ -1,5 +1,7 @@
 import "server-only";
 
+import type { DocumentCategoryKey, DocumentOwnerType, DocumentSensitivity, DocumentTypeAppliesTo } from "@qoovex/types";
+import { documentCategoryKeys, documentCategoryRegistry, documentSensitivities } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 
 const BINARY_PAYLOAD_FIELDS = ["blobKey", "blobUrl", "file", "files", "documentVersion", "content", "base64", "binary"] as const;
@@ -49,4 +51,41 @@ export function parseOptionalDate(value: unknown, label: string): Date | null | 
 export function rejectBinaryPayload(input: Record<string, unknown>) {
   const field = BINARY_PAYLOAD_FIELDS.find((key) => key in input);
   if (field) throw new AccessError("Questo endpoint non accetta file o riferimenti Blob.", 409);
+}
+
+export function parseDocumentCategoryKey(value: unknown): DocumentCategoryKey {
+  if (!isEnumValue(documentCategoryKeys, value)) throw new AccessError("Categoria documentale non valida.", 409);
+  return value;
+}
+
+export function parseDocumentSensitivity(value: unknown): DocumentSensitivity {
+  if (!isEnumValue(documentSensitivities, value)) throw new AccessError("Sensibilita documentale non valida.", 409);
+  return value;
+}
+
+export function assertDocumentTaxonomy(input: {
+  appliesTo: DocumentTypeAppliesTo;
+  categoryKey: DocumentCategoryKey;
+  sensitivity: DocumentSensitivity;
+  allowLegacy?: boolean;
+}) {
+  const category = documentCategoryRegistry[input.categoryKey];
+  if (input.allowLegacy && input.categoryKey === "UNCLASSIFIED") return;
+  if (!category.availableForNewDocuments) {
+    throw new AccessError(input.categoryKey === "WORKER_RESTRICTED_ADMINISTRATION"
+      ? "L'amministrazione riservata non e ancora disponibile: permessi ed entitlement devono essere definiti prima dell'uso operativo."
+      : "La categoria Da classificare e riservata ai dati legacy.", 409);
+  }
+  if (input.appliesTo !== category.appliesTo) throw new AccessError("La categoria non e compatibile con la macroarea scelta.", 409);
+  if (input.sensitivity === "RESTRICTED") throw new AccessError("I documenti riservati non sono ancora abilitati.", 409);
+  if (input.sensitivity === "HEALTH_JUDGMENT" && input.categoryKey !== "WORKER_FITNESS_JUDGMENT") {
+    throw new AccessError("Il livello Giudizio di idoneita e disponibile solo nella categoria Idoneita alla mansione.", 409);
+  }
+  if (input.categoryKey === "WORKER_FITNESS_JUDGMENT" && input.sensitivity !== "HEALTH_JUDGMENT") {
+    throw new AccessError("La categoria Idoneita alla mansione richiede il livello Giudizio di idoneita.", 409);
+  }
+}
+
+export function ownerTypeMatchesAppliesTo(ownerType: DocumentOwnerType, appliesTo: DocumentTypeAppliesTo) {
+  return ownerType === appliesTo;
 }

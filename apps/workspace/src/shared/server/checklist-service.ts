@@ -1,6 +1,6 @@
 import "server-only";
 
-import { db } from "@qoovex/db";
+import { db, type Prisma } from "@qoovex/db";
 import type { ChecklistItemStatus, RecordStatus } from "@qoovex/types";
 import { checklistItemStatuses } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
@@ -43,6 +43,9 @@ const checklistItemSelect = {
 export interface ListChecklistsInput {
   jobSiteId?: unknown;
   status?: unknown;
+  itemStatuses?: readonly ChecklistItemStatus[];
+  take?: number;
+  skip?: number;
 }
 
 export interface CreateChecklistInput extends Record<string, unknown> {
@@ -132,7 +135,7 @@ export async function listChecklists(input: ListChecklistsInput = {}) {
 export async function listChecklistsWithItems(input: ListChecklistsInput = {}) {
   const { context, organizationId } = await requireOrganizationDomainAccess("checklists:read", CHECKLIST_READ_ROLES);
   const scope = await getResourceScope(context);
-  const where: { organizationId: string; archivedAt: null; jobSiteId?: string | { in: string[] }; status?: RecordStatus } = { organizationId, archivedAt: null };
+  const where: Prisma.ChecklistWhereInput = { organizationId, archivedAt: null };
   if (!scope.fullAccess) where.jobSiteId = { in: scope.siteManagerJobSiteIds };
   const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
   if (jobSiteId) {
@@ -140,6 +143,12 @@ export async function listChecklistsWithItems(input: ListChecklistsInput = {}) {
     where.jobSiteId = jobSiteId;
   }
   if (input.status !== undefined) where.status = parseEditableRecordStatus(input.status);
+  if (input.itemStatuses !== undefined) {
+    const itemStatuses = input.itemStatuses.map((status) => parseChecklistItemStatus(status));
+    where.items = { some: { status: { in: itemStatuses } } };
+  }
+  if (input.take !== undefined && (!Number.isSafeInteger(input.take) || input.take < 1 || input.take > 101)) throw new AccessError("Dimensione pagina checklist non valida.", 409);
+  if (input.skip !== undefined && (!Number.isSafeInteger(input.skip) || input.skip < 0 || input.skip > 499_950)) throw new AccessError("Pagina checklist non valida.", 409);
 
   const checklists = await db.checklist.findMany({
     where,
@@ -152,6 +161,8 @@ export async function listChecklistsWithItems(input: ListChecklistsInput = {}) {
       },
     },
     orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+    ...(input.take === undefined ? {} : { take: input.take }),
+    ...(input.skip === undefined ? {} : { skip: input.skip }),
   });
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "checklists" });
   return checklists;

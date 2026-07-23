@@ -21,17 +21,16 @@ import { buttonVariants } from "@qoovex/ui/components/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
 import { cn } from "@qoovex/ui/lib/utils";
-import type { JobSiteUserAssignmentResponse, JobSiteWorkerAssignmentResponse } from "@qoovex/types";
+import type { JobSiteUserAssignmentResponse, JobSiteWorkerAssignmentResponse, MissingDocumentRequirementItem } from "@qoovex/types";
 import { JobSiteArchiveButton } from "./JobSiteArchiveButton";
 import { JobSiteForm } from "./JobSiteForm";
 import { JobSiteQuickActions } from "./JobSiteQuickActions";
-import { documentDetailsHref } from "@shared/lib/document-routes";
+import { DocumentCategoryList } from "@/views/admin-core/documents/DocumentCategoryList";
 import { DashboardAssignmentDialog } from "@/views/dashboard/DashboardAssignmentDialog";
 import { WorkspacePageIdentity } from "@/views/workspace/WorkspacePageIdentity";
 import { WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import {
   deadlineStatusLabels,
-  documentStatusLabels,
   evidenceTypeLabels,
   formatDate,
   recordStatusLabels,
@@ -62,6 +61,7 @@ function RelatedEmpty({ description, icon: Icon, title }: { description: string;
 export function JobSiteDetailView({
   jobSite,
   documents,
+  missingDocuments,
   deadlines,
   evidence,
   checklists,
@@ -73,6 +73,7 @@ export function JobSiteDetailView({
 }: {
   jobSite: WorkspaceJobSiteRecord;
   documents: WorkspaceDocumentRecord[];
+  missingDocuments: MissingDocumentRequirementItem[];
   deadlines: WorkspaceDeadlineRecord[];
   evidence: WorkspaceEvidenceRecord[];
   checklists: WorkspaceChecklistRecord[];
@@ -167,9 +168,14 @@ export function JobSiteDetailView({
 
       <div className="grid min-w-0 gap-6 lg:grid-cols-2 lg:items-start">
         <Card className="min-w-0" size="sm">
-          <CardHeader className="border-b"><CardTitle><h2>Documenti collegati</h2></CardTitle><CardDescription>Documenti registrati per questo cantiere.</CardDescription><CardAction><Badge variant="outline"><IconFileDescription aria-hidden="true" />{documents.length}</Badge></CardAction></CardHeader>
-          <CardContent>{!documents.length ? <RelatedEmpty description="Non risultano documenti associati a questo cantiere." icon={IconFileDescription} title="Nessun documento collegato" /> : <ul className="m-0 grid list-none gap-2 p-0">{documents.map((document) => <li className="flex min-w-0 flex-col gap-3 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between" key={document.id}><div className="min-w-0"><strong className="block [overflow-wrap:anywhere] text-sm font-medium">{document.title}</strong><span className="mt-1 block text-xs text-muted-foreground">Scadenza registrata: {formatDate(document.expiryDate)}</span></div><div className="flex shrink-0 flex-wrap items-center gap-2"><WorkspaceState label={documentStatusLabels[document.status]} tone={statusTone(document.status)} /><Link className={buttonVariants({ variant: "outline", size: "sm" })} href={documentDetailsHref(document)}>Apri documento</Link></div></li>)}</ul>}</CardContent>
+          <CardHeader className="border-b">
+            <CardTitle><h2>Documenti per categoria</h2></CardTitle>
+            <CardDescription>Documenti presenti, mancanti e da verificare nel contesto del cantiere.</CardDescription>
+            <CardAction><Badge variant="outline"><IconFileDescription aria-hidden="true" />{documents.length + missingDocuments.length}</Badge></CardAction>
+          </CardHeader>
+          <CardContent><DocumentCategoryList documents={documents} missing={missingDocuments} /></CardContent>
         </Card>
+
 
         <Card className="min-w-0" size="sm">
           <CardHeader className="border-b"><CardTitle><h2>Scadenze collegate</h2></CardTitle><CardDescription>Date operative associate a questo cantiere.</CardDescription><CardAction><Badge variant="outline"><IconCalendarDue aria-hidden="true" />{deadlines.length}</Badge></CardAction></CardHeader>

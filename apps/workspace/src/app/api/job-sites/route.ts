@@ -1,9 +1,11 @@
 import { asAccessResponse } from "@shared/server/access-errors";
-import { createJobSite, listJobSites } from "@shared/server/job-site-service";
+import { createJobSite } from "@shared/server/job-site-service";
+import { listOperationalJobSites } from "@shared/server/job-site-read-model-service";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    return Response.json(await listJobSites());
+    const query = new URL(request.url).searchParams;
+    return Response.json(await listOperationalJobSites({ search: query.get("search"), phase: query.get("phase"), attention: query.get("attention"), page: query.get("page"), pageSize: query.get("pageSize") }));
   } catch (error) { return asAccessResponse(error); }
 }
 

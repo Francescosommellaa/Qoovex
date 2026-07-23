@@ -12,7 +12,7 @@ Route frontend attive:
 - `/shared/document-packages/[token]`: viewer pubblico in sola lettura per un pacchetto condiviso;
 - `/dashboard`: dashboard interna mobile-first per stato documentale, scadenze, cantieri, lavoratori, prove e pacchetti.
 - `/notifications`: notifiche interne e promemoria derivati da dati registrati;
-- `/documents`: lista e creazione documenti logici;
+- `/documents`: panoramica documenti e coda `?view=attention`, con macroaree filtrabili;
 - `/documents/[documentId]`: dettaglio documento, versioni file e upload protetto;
 - `/calendar`: calendario operativo con eventi, task, viste orarie e scadenze registrate in sola lettura;
 - `/deadlines`: timeline cronologica delle scadenze con dettaglio e azioni principali;
@@ -20,10 +20,10 @@ Route frontend attive:
 - `/workers/[workerId]`: dettaglio lavoratore;
 - `/job-sites`: lista e creazione cantieri;
 - `/job-sites/[jobSiteId]`: dettaglio cantiere.
-- `/checklists`: lista e creazione checklist configurabili;
+- `/checklists`: lista e creazione checklist configurabili, inclusa la coda `?view=open`;
 - `/checklists/[checklistId]`: dettaglio checklist e gestione voci;
-- `/evidence`: lista e creazione prove operative;
-- `/document-packages`: lista e creazione pacchetti documentali;
+- `/evidence`: lista e creazione prove operative, inclusa la vista `?sort=recent`;
+- `/document-packages`: lista e creazione pacchetti documentali, inclusa la coda `?view=ready`;
 - `/document-packages/[packageId]`: dettaglio pacchetto, item e share link.
 - `/access`: gestione collegamenti operativi e assegnazioni risorsa per OWNER/ADMIN;
 - `/audit-log`: audit prodotto owner-only;

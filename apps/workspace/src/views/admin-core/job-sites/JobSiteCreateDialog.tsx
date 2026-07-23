@@ -12,7 +12,7 @@ import {
 } from "@qoovex/ui/components/dialog";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { JobSiteForm } from "./JobSiteForm";
+import { JobSiteCreateWizard } from "./JobSiteCreateWizard";
 
 interface JobSiteCreateDialogProps {
   className?: string;
@@ -34,12 +34,12 @@ export function JobSiteCreateDialog({ className, initialOpen = false }: JobSiteC
         <IconBuildingPlus aria-hidden="true" />
         Aggiungi cantiere
       </DialogTrigger>
-      <DialogContent className="max-h-[calc(100dvh-1rem)] sm:max-w-3xl">
+      <DialogContent className="max-h-[calc(100dvh-1rem)] sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>Aggiungi cantiere</DialogTitle>
           <DialogDescription>Registra le informazioni utili per collegare persone, documenti e attività.</DialogDescription>
         </DialogHeader>
-        <JobSiteForm layout="dialog" mode="create" onCreated={() => handleOpenChange(false)} />
+        <JobSiteCreateWizard onCreated={() => handleOpenChange(false)} />
       </DialogContent>
     </Dialog>
   );

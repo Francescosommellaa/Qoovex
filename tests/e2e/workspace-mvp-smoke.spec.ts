@@ -123,25 +123,44 @@ async function createDomainData(page: Page, runId: string) {
     name: `Cantiere E2E ${runId}`,
     address: "Via Test 1",
     clientName: "Cliente E2E",
+    operationalPhase: "IN_PROGRESS",
   });
-  const documentType = await pagePostJson(page, "/api/document-types", {
-    name: `Tipo documento E2E ${runId}`,
+  const jobSiteDocumentType = await pagePostJson(page, "/api/document-types", {
+    name: `Tipo cantiere E2E ${runId}`,
     appliesTo: "JOB_SITE",
+    categoryKey: "JOB_SITE_AUTHORIZATIONS",
+    sensitivity: "STANDARD",
     requiresExpiryDate: true,
   });
-  const document = await pagePostJson(page, "/api/documents", {
-    title: `Documento E2E ${runId}`,
-    documentTypeId: documentType.id,
+  const workerDocumentType = await pagePostJson(page, "/api/document-types", {
+    name: `Tipo lavoratore E2E ${runId}`,
+    appliesTo: "WORKER",
+    categoryKey: "WORKER_TRAINING",
+    sensitivity: "STANDARD",
+    requiresExpiryDate: true,
+  });
+  const dueDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
+  const jobSiteDocument = await pagePostJson(page, "/api/documents", {
+    title: `Documento cantiere E2E ${runId}`,
+    documentTypeId: jobSiteDocumentType.id,
     ownerType: "JOB_SITE",
     jobSiteId: jobSite.id,
     status: "TO_REVIEW",
+    expiryDate: dueDate,
   });
-  const dueDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
+  const workerDocument = await pagePostJson(page, "/api/documents", {
+    title: `Documento lavoratore E2E ${runId}`,
+    documentTypeId: workerDocumentType.id,
+    ownerType: "WORKER",
+    workerId: worker.id,
+    status: "TO_REVIEW",
+    expiryDate: dueDate,
+  });
   const deadline = await pagePostJson(page, "/api/deadlines", {
     title: `Scadenza E2E ${runId}`,
     dueDate,
     sourceType: "DOCUMENT",
-    documentId: document.id,
+    documentId: jobSiteDocument.id,
     jobSiteId: jobSite.id,
   });
   const checklist = await pagePostJson(page, "/api/checklists", {
@@ -170,11 +189,48 @@ async function createDomainData(page: Page, runId: string) {
     note: `Nota pacchetto E2E ${runId}`,
   });
 
-  for (const created of [worker, jobSite, documentType, document, deadline, checklist, checklistItem, evidence, documentPackage]) {
+  for (const created of [worker, jobSite, jobSiteDocumentType, workerDocumentType, jobSiteDocument, workerDocument, deadline, checklist, checklistItem, evidence, documentPackage]) {
     expect(created.id).toEqual(expect.any(String));
   }
 
-  return { document, documentPackage };
+  return { documentPackage, jobSite, jobSiteDocument, jobSiteDocumentType, worker, workerDocument, workerDocumentType };
+}
+
+async function expectFavoriteDefaults(page: Page, labels: string[]) {
+  const navigation = page.getByRole("navigation", { name: "Navigazione workspace" });
+  const favorites = navigation.getByRole("group", { name: "Preferiti" });
+  await expect(favorites).toBeVisible();
+  for (const label of labels) await expect(favorites.getByRole("link", { name: label, exact: true })).toBeVisible();
+  await expect(navigation.getByRole("link", { name: "Notifiche", exact: true })).toHaveCount(0);
+}
+
+async function createGuidedDocument(page: Page, input: {
+  area: "Cantieri" | "Lavoratori";
+  category: string;
+  contextLabel: string;
+  contextPrompt: string;
+  documentTypeName: string;
+}) {
+  await page.goto("/documents", { waitUntil: "domcontentloaded" });
+  await page.getByRole("button", { name: "Aggiungi documento", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Aggiungi documento" });
+  await expect(dialog.getByRole("heading", { name: "Dove va il documento?" })).toBeVisible();
+  await dialog.getByRole("button", { name: new RegExp(`^${input.area}`) }).click();
+  await dialog.getByRole("combobox", { name: input.contextPrompt }).click();
+  await page.getByRole("option", { name: input.contextLabel, exact: true }).click();
+  await dialog.getByRole("button", { name: new RegExp(`^${input.category}`) }).click();
+  await dialog.getByRole("combobox", { name: "Tipo documento" }).click();
+  await page.getByRole("option", { name: input.documentTypeName, exact: true }).click();
+  await dialog.getByLabel(/Scadenza registrata dall'utente/).fill(new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10));
+  await dialog.getByLabel("File", { exact: true }).setInputFiles({
+    name: "e2e-document.png",
+    mimeType: "image/png",
+    buffer: Buffer.from(E2E_PNG_BYTES),
+  });
+  await dialog.getByRole("button", { name: new RegExp("^Salva in ") }).click();
+  await page.waitForURL(/\/documents\/[^/?]+--[^/?]+\?notice=file-uploaded/);
+  const response = await expectJson(await page.context().request.get(`/api/documents/${page.url().match(/--([^/?]+)\?/)?.[1] ?? ""}`), 200);
+  return response;
 }
 
 async function uploadAndDownloadDocument(page: Page, documentId: unknown) {
@@ -304,10 +360,54 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     const owner = fixture.owner as JsonRecord;
     await signInWithCredentials(page, String(owner.email), String(fixture.password));
     await satisfyMfaGate(page, String(owner.secret));
+    await expectFavoriteDefaults(page, ["Documenti da controllare", "Scadenze"]);
+    await expect(page.getByRole("button", { name: "Notifiche", exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
+    await page.getByRole("menuitemcheckbox", { name: "Checklist aperte", exact: true }).click();
+    await page.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
+    await page.getByRole("menuitemcheckbox", { name: "Scadenze", exact: true }).click();
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await expectFavoriteDefaults(page, ["Documenti da controllare", "Checklist aperte"]);
+    await expect(page.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("link", { name: "Scadenze", exact: true })).toHaveCount(0);
 
-    const { document, documentPackage } = await createDomainData(page, runId);
-    await uploadAndDownloadDocument(page, document.id);
+    const { documentPackage, jobSite, jobSiteDocument, jobSiteDocumentType, worker, workerDocument, workerDocumentType } = await createDomainData(page, runId);
+    await uploadAndDownloadDocument(page, jobSiteDocument.id);
+    await uploadAndDownloadDocument(page, workerDocument.id);
+    const guidedWorkerDocument = await createGuidedDocument(page, {
+      area: "Lavoratori",
+      category: "Formazione e abilitazioni",
+      contextLabel: String(worker.displayName),
+      contextPrompt: "2. A quale lavoratore appartiene?",
+      documentTypeName: String(workerDocumentType.name),
+    });
+    expect(guidedWorkerDocument).toMatchObject({ ownerType: "WORKER", workerId: worker.id, categoryKey: "WORKER_TRAINING" });
+    const guidedJobSiteDocument = await createGuidedDocument(page, {
+      area: "Cantieri",
+      category: "Autorizzazioni e titoli",
+      contextLabel: String(jobSite.name),
+      contextPrompt: "2. A quale cantiere appartiene?",
+      documentTypeName: String(jobSiteDocumentType.name),
+    });
+    expect(guidedJobSiteDocument).toMatchObject({ ownerType: "JOB_SITE", jobSiteId: jobSite.id, categoryKey: "JOB_SITE_AUTHORIZATIONS" });
+    await page.goto("/documents/job-sites", { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("heading", { name: String(jobSiteDocumentType.name), exact: true })).toBeVisible();
+    await page.goto("/documents/workers", { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("heading", { name: String(workerDocumentType.name), exact: true })).toBeVisible();
     await verifyWorkspacePages(page);
+
+    await page.goto("/job-sites", { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("heading", { name: "Fasi operative", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Coda di attenzione", exact: true })).toBeVisible();
+    await page.goto(`/job-sites/all?search=${encodeURIComponent(String(jobSite.name))}`, { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("heading", { name: String(jobSite.name), exact: true })).toBeVisible();
+    for (const section of ["overview", "documents", "people", "activities", "evidence", "sharing", "settings"]) {
+      await page.goto(`/job-sites/${jobSite.id}?section=${section}`, { waitUntil: "domcontentloaded" });
+      await expect(page.getByRole("navigation", { name: "Sezioni cantiere" })).toBeVisible();
+    }
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/job-sites/${jobSite.id}?section=overview`, { waitUntil: "domcontentloaded" });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    await page.setViewportSize({ width: 1280, height: 900 });
 
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
     const shareLinkResponse = await pagePostJson(page, `/api/document-packages/${documentPackage.id}/share-links`, { expiresAt });
@@ -325,8 +425,9 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
   } finally {
     if (fixture) {
       const owner = fixture.owner as JsonRecord;
+      const safety = fixture.safety as JsonRecord;
       const worker = fixture.worker as JsonRecord;
-      const cleanup = await adminApi.delete("/api/dev-fixtures/platform-admin", { data: { organizationId: fixture.organizationId, userIds: [owner.id, worker.id] } });
+      const cleanup = await adminApi.delete("/api/dev-fixtures/platform-admin", { data: { organizationId: fixture.organizationId, userIds: [owner.id, safety.id, worker.id] } });
       expect(cleanup.status()).toBe(200);
       expect(await cleanup.json()).toMatchObject({ remainingUsers: 0, organizationExists: 0, remainingBlobs: 0 });
     }
@@ -339,23 +440,38 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
   const siteManagerEmail = `signup-e2e-${runId}@example.test`;
   const siteManagerUsername = `signup_e2e_${runId}`;
   const siteManagerPassword = `Qoovex-Invite-${runId}!`;
+  const invitedWorkerEmail = `worker-invite-e2e-${runId}@example.test`;
+  const invitedWorkerUsername = `worker_invite_e2e_${runId}`;
+  const invitedWorkerPassword = `Qoovex-Worker-${runId}!`;
   const sinkUrl = process.env.QOOVEX_E2E_EMAIL_SINK_URL!;
   const sinkApi = await playwright.request.newContext({ extraHTTPHeaders: { Authorization: `Bearer ${process.env.QOOVEX_E2E_EMAIL_SINK_SECRET}` } });
   const adminApi = await playwright.request.newContext({ baseURL });
   const ownerContext = await browser.newContext({ baseURL });
   const inviteeContext = await browser.newContext({ baseURL });
   const scopedSiteManagerContext = await browser.newContext({ baseURL });
+  const safetyContext = await browser.newContext({ baseURL });
   const workerContext = await browser.newContext({ baseURL });
+  const invitedWorkerContext = await browser.newContext({ baseURL });
   let fixture: JsonRecord | null = null;
 
   try {
     expect((await adminApi.post("/api/dev-auth")).status()).toBe(200);
     fixture = await expectJson(await adminApi.post("/api/dev-fixtures/platform-admin", { data: { kind: "mfa-suite", runId } }), 201);
     const owner = fixture.owner as JsonRecord;
+    const safety = fixture.safety as JsonRecord;
     const worker = fixture.worker as JsonRecord;
     const ownerPage = await ownerContext.newPage();
     await signInWithCredentials(ownerPage, String(owner.email), String(fixture.password));
     await satisfyMfaGate(ownerPage, String(owner.secret));
+
+    const safetyPage = await safetyContext.newPage();
+    await signInWithCredentials(safetyPage, String(safety.email), String(fixture.password));
+    await satisfyMfaGate(safetyPage, String(safety.secret));
+    await expectFavoriteDefaults(safetyPage, ["Checklist aperte", "Documenti da controllare"]);
+    await expect(safetyPage.getByRole("button", { name: "Notifiche", exact: true })).toBeVisible();
+    await safetyPage.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
+    await expect(safetyPage.getByRole("menuitemcheckbox", { name: "Pacchetti pronti", exact: true })).toBeVisible();
+    await expect(safetyPage.getByRole("menuitemcheckbox", { name: "Documenti Azienda", exact: true })).toHaveCount(0);
 
     expect((await sinkApi.delete(sinkUrl)).status()).toBe(200);
     await expectJson(await ownerPage.request.post("/api/organization/invitations", { data: { email: siteManagerEmail, role: "SITE_MANAGER" } }), 201);
@@ -378,38 +494,70 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
 
     const members = await expectJson(await ownerPage.request.get("/api/organization/members"), 200) as unknown as JsonRecord[];
     const siteManager = members.find((member) => (member.user as JsonRecord).email === siteManagerEmail)!;
-    const assignedJobSite = await pagePostJson(ownerPage, "/api/job-sites", { name: `Cantiere assegnato ${runId}` });
-    await pagePostJson(ownerPage, "/api/job-sites", { name: `Cantiere non assegnato ${runId}` });
+    const assignedJobSite = await pagePostJson(ownerPage, "/api/job-sites", { name: `Cantiere assegnato ${runId}`, operationalPhase: "IN_PROGRESS" });
+    await pagePostJson(ownerPage, "/api/job-sites", { name: `Cantiere non assegnato ${runId}`, operationalPhase: "PREPARATION" });
     await pagePostJson(ownerPage, "/api/resource-assignments/job-site-user-assignments", {
       jobSiteId: assignedJobSite.id,
       userId: (siteManager.user as JsonRecord).id,
     });
+    const invitedWorkerProfile = await pagePostJson(ownerPage, "/api/workers", { displayName: `Worker invitato ${runId}`, email: invitedWorkerEmail });
+    await expectJson(await ownerPage.request.post("/api/workers", { data: { displayName: `Duplicato ${runId}`, email: invitedWorkerEmail } }), 409);
+    expect((await sinkApi.delete(sinkUrl)).status()).toBe(200);
+    await expectJson(await ownerPage.request.post("/api/organization/invitations", { data: { email: invitedWorkerEmail, role: "WORKER", workerId: invitedWorkerProfile.id } }), 201);
+    const workerInvitationTemplate = await waitForSinkTemplate(sinkApi, sinkUrl, invitedWorkerEmail, "organization-invitation");
+    const workerInvitationToken = new URL(String(workerInvitationTemplate.acceptUrl)).searchParams.get("token");
+    expect(workerInvitationToken).toEqual(expect.any(String));
+
+    const invitedWorkerPage = await invitedWorkerContext.newPage();
+    await invitedWorkerPage.goto("/sign-up", { waitUntil: "domcontentloaded" });
+    await invitedWorkerPage.getByLabel("Email").fill(invitedWorkerEmail);
+    await invitedWorkerPage.getByRole("button", { name: "Invia codice" }).click();
+    const workerSignupTemplate = await waitForSinkTemplate(sinkApi, sinkUrl, invitedWorkerEmail, "auth-code");
+    await invitedWorkerPage.getByRole("textbox", { name: "Codice email", exact: true }).fill(String(workerSignupTemplate.code));
+    await invitedWorkerPage.getByRole("button", { name: "Verifica email" }).click();
+    await invitedWorkerPage.getByLabel("Username").fill(invitedWorkerUsername);
+    await invitedWorkerPage.getByRole("textbox", { name: "Password", exact: true }).fill(invitedWorkerPassword);
+    await invitedWorkerPage.getByRole("button", { name: "Crea account" }).click();
+    await expect.poll(async () => (await invitedWorkerPage.request.get("/api/context")).status()).toBe(200);
+    await expectJson(await invitedWorkerPage.request.post("/api/organization/invitations/accept", { data: { token: workerInvitationToken } }), 200);
+    const invitedWorkerScope = await expectJson(await invitedWorkerPage.request.get("/api/resource-assignments/my-scope"), 200) as unknown as JsonRecord;
+    expect((invitedWorkerScope.linkedWorker as JsonRecord).id).toBe(invitedWorkerProfile.id);
+    const invitedWorkerRecords = await expectJson(await invitedWorkerPage.request.get("/api/workers"), 200) as unknown as JsonRecord[];
+    expect(invitedWorkerRecords.map((record) => record.id)).toEqual([invitedWorkerProfile.id]);
+
     const linkedWorker = await pagePostJson(ownerPage, "/api/workers", { displayName: `Worker assegnato ${runId}` });
     await pagePostJson(ownerPage, "/api/resource-assignments/worker-user-links", { workerId: linkedWorker.id, userId: worker.id });
 
     const siteManagerPage = await scopedSiteManagerContext.newPage();
     await signInWithCredentials(siteManagerPage, siteManagerEmail, siteManagerPassword);
-    const siteManagerJobSites = await expectJson(await siteManagerPage.request.get("/api/job-sites"), 200) as unknown as JsonRecord[];
-    expect(siteManagerJobSites.map((jobSite) => jobSite.id)).toEqual([assignedJobSite.id]);
+    await expectFavoriteDefaults(siteManagerPage, ["Prove recenti", "Checklist aperte"]);
+    const siteManagerJobSites = await expectJson(await siteManagerPage.request.get("/api/job-sites"), 200) as unknown as JsonRecord;
+    expect((siteManagerJobSites.items as JsonRecord[]).map((jobSite) => jobSite.id)).toEqual([assignedJobSite.id]);
     await expectJson(await siteManagerPage.request.post("/api/job-sites", { data: { name: "Vietato" } }), 404);
 
     const workerPage = await workerContext.newPage();
     await signInWithCredentials(workerPage, String(worker.email), String(fixture.password));
     await satisfyMfaGate(workerPage, String(worker.secret));
+    await expectFavoriteDefaults(workerPage, ["Prove recenti", "Scadenze"]);
+    await workerPage.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
+    await expect(workerPage.getByRole("menuitemcheckbox", { name: "Pacchetti pronti", exact: true })).toHaveCount(0);
+    await expect(workerPage.getByRole("menuitemcheckbox", { name: "Checklist aperte", exact: true })).toHaveCount(0);
+    await expect(workerPage.getByRole("menuitemcheckbox", { name: "I miei documenti da controllare", exact: true })).toBeVisible();
     const workerRecords = await expectJson(await workerPage.request.get("/api/workers"), 200) as unknown as JsonRecord[];
     expect(workerRecords.map((record) => record.id)).toEqual([linkedWorker.id]);
     await expectJson(await workerPage.request.post("/api/workers", { data: { displayName: "Vietato" } }), 404);
   } finally {
     if (fixture) {
       const owner = fixture.owner as JsonRecord;
+      const safety = fixture.safety as JsonRecord;
       const worker = fixture.worker as JsonRecord;
       const cleanup = await adminApi.delete("/api/dev-fixtures/platform-admin", {
-        data: { organizationId: fixture.organizationId, userIds: [owner.id, worker.id], fixtureEmails: [siteManagerEmail] },
+        data: { organizationId: fixture.organizationId, userIds: [owner.id, safety.id, worker.id], fixtureEmails: [siteManagerEmail, invitedWorkerEmail] },
       });
       expect(cleanup.status()).toBe(200);
       expect(await cleanup.json()).toMatchObject({ remainingUsers: 0, organizationExists: 0, remainingBlobs: 0 });
     }
-    await Promise.all([sinkApi.dispose(), adminApi.dispose(), ownerContext.close(), inviteeContext.close(), scopedSiteManagerContext.close(), workerContext.close()]);
+    await Promise.all([sinkApi.dispose(), adminApi.dispose(), ownerContext.close(), inviteeContext.close(), scopedSiteManagerContext.close(), safetyContext.close(), workerContext.close(), invitedWorkerContext.close()]);
   }
 });
 
@@ -490,9 +638,10 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
       }
       if (organizationFixture) {
         const owner = organizationFixture.owner as JsonRecord;
+        const safety = organizationFixture.safety as JsonRecord;
         const worker = organizationFixture.worker as JsonRecord;
         await page.context().request.delete("/api/dev-fixtures/platform-admin", {
-          data: { organizationId: organizationFixture.organizationId, userIds: [owner.id, worker.id] },
+          data: { organizationId: organizationFixture.organizationId, userIds: [owner.id, safety.id, worker.id] },
         });
       }
     }
@@ -574,9 +723,10 @@ test("ordinary MFA gates workspace, replaces the factor, logs out, and recovers 
   } finally {
     if (fixture) {
       const owner = fixture.owner as JsonRecord;
+      const safety = fixture.safety as JsonRecord;
       const worker = fixture.worker as JsonRecord;
       await adminApi.delete("/api/dev-fixtures/platform-admin", {
-        data: { organizationId: fixture.organizationId, userIds: [owner.id, worker.id] },
+        data: { organizationId: fixture.organizationId, userIds: [owner.id, safety.id, worker.id] },
       });
     }
     await Promise.all([ownerContext.close(), workerContext.close(), adminApi.dispose()]);

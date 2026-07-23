@@ -54,6 +54,9 @@ const packageShareLinkSelect = {
 export interface ListDocumentPackagesInput {
   jobSiteId?: unknown;
   status?: unknown;
+  statuses?: readonly DocumentPackageStatus[];
+  take?: number;
+  skip?: number;
 }
 
 export interface ListDocumentPackagesWithDetailsInput extends ListDocumentPackagesInput {
@@ -189,16 +192,19 @@ async function normalizePackageItem(organizationId: string, input: AddDocumentPa
   });
 
   if (itemType === "DOCUMENT") {
-    const document = await db.document.findFirst({ where: { id: documentIdInput ?? "", organizationId, archivedAt: null }, select: { id: true } });
-    if (!document) throw new AccessError("Documento non trovato.", 404);
+    const document = await db.document.findFirst({
+      where: { id: documentIdInput ?? "", organizationId, archivedAt: null, documentType: { is: { sensitivity: "STANDARD", categoryKey: { not: "UNCLASSIFIED" } } } },
+      select: { id: true },
+    });
+    if (!document) throw new AccessError("Il documento non e condivisibile: deve essere classificato e avere sensibilita Standard.", 409);
     return { itemType, documentId: document.id, documentVersionId: null, evidenceId: null, checklistId: null, note: null };
   }
   if (itemType === "DOCUMENT_VERSION") {
     const version = await db.documentVersion.findFirst({
-      where: { id: documentVersionIdInput ?? "", organizationId, archivedAt: null, document: { is: { organizationId, archivedAt: null } } },
+      where: { id: documentVersionIdInput ?? "", organizationId, archivedAt: null, document: { is: { organizationId, archivedAt: null, documentType: { is: { sensitivity: "STANDARD", categoryKey: { not: "UNCLASSIFIED" } } } } } },
       select: { id: true },
     });
-    if (!version) throw new AccessError("Versione documento non trovata.", 404);
+    if (!version) throw new AccessError("Il file non e condivisibile: il documento deve essere classificato e avere sensibilita Standard.", 409);
     return { itemType, documentId: null, documentVersionId: version.id, evidenceId: null, checklistId: null, note: null };
   }
   if (itemType === "EVIDENCE") {
@@ -237,10 +243,14 @@ export async function listDocumentPackages(input: ListDocumentPackagesInput = {}
 
 export async function listDocumentPackagesWithDetails(input: ListDocumentPackagesWithDetailsInput = {}) {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:read", PACKAGE_ACCESS_ROLES);
-  const where: { organizationId: string; archivedAt: null; jobSiteId?: string; status?: DocumentPackageStatus } = { organizationId, archivedAt: null };
+  if (input.status !== undefined && input.statuses !== undefined) throw new AccessError("Filtri stato pacchetti incompatibili.", 409);
+  const where: { organizationId: string; archivedAt: null; jobSiteId?: string; status?: DocumentPackageStatus | { in: DocumentPackageStatus[] } } = { organizationId, archivedAt: null };
   const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
   if (jobSiteId) where.jobSiteId = jobSiteId;
   if (input.status !== undefined) where.status = parsePackageStatus(input.status);
+  if (input.statuses !== undefined) where.status = { in: input.statuses.map((status) => parsePackageStatus(status)) };
+  if (input.take !== undefined && (!Number.isSafeInteger(input.take) || input.take < 1 || input.take > 101)) throw new AccessError("Dimensione pagina pacchetti non valida.", 409);
+  if (input.skip !== undefined && (!Number.isSafeInteger(input.skip) || input.skip < 0 || input.skip > 499_950)) throw new AccessError("Pagina pacchetti non valida.", 409);
 
   if (input.includeShareLinks) {
     requirePermission(context, "documentPackages:share");
@@ -253,6 +263,8 @@ export async function listDocumentPackagesWithDetails(input: ListDocumentPackage
         shareLinks: { select: packageShareLinkSelect, orderBy: { createdAt: "desc" } },
       },
       orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+      ...(input.take === undefined ? {} : { take: input.take }),
+      ...(input.skip === undefined ? {} : { skip: input.skip }),
     });
     await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-packages" });
     return packages;
@@ -265,6 +277,8 @@ export async function listDocumentPackagesWithDetails(input: ListDocumentPackage
       items: { select: packageItemSelect, orderBy: [{ position: "asc" }, { createdAt: "asc" }] },
     },
     orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+    ...(input.take === undefined ? {} : { take: input.take }),
+    ...(input.skip === undefined ? {} : { skip: input.skip }),
   });
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-packages" });
   return packages.map((documentPackage) => ({ ...documentPackage, shareLinks: [] }));

@@ -47,6 +47,29 @@ async function findActivePackage(organizationId: string, packageId: string) {
   return documentPackage;
 }
 
+async function findShareablePackage(organizationId: string, packageId: string) {
+  const documentPackage = await db.documentPackage.findFirst({
+    where: { id: packageId, organizationId, archivedAt: null },
+    select: {
+      id: true,
+      status: true,
+      items: {
+        where: {
+          OR: [
+            { document: { is: { documentType: { is: { OR: [{ sensitivity: { not: "STANDARD" } }, { categoryKey: "UNCLASSIFIED" }] } } } } },
+            { documentVersion: { is: { document: { is: { documentType: { is: { OR: [{ sensitivity: { not: "STANDARD" } }, { categoryKey: "UNCLASSIFIED" }] } } } } } } },
+          ],
+        },
+        select: { id: true },
+        take: 1,
+      },
+    },
+  });
+  if (!documentPackage) throw new AccessError("Pacchetto documentale non trovato.", 404);
+  if (documentPackage.items.length) throw new AccessError("Rimuovi i documenti non classificati o con sensibilita diversa da Standard prima di creare il link.", 409);
+  return documentPackage;
+}
+
 export async function listShareLinks(packageId: string) {
   const { context, organizationId } = await requireOrganizationDomainAccess("documentPackages:share", SHARE_LINK_ROLES);
   await findActivePackage(organizationId, packageId);
@@ -61,7 +84,7 @@ export async function listShareLinks(packageId: string) {
 
 export async function createShareLink(packageId: string, input: CreateShareLinkInput = {}) {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:share", SHARE_LINK_ROLES);
-  const documentPackage = await findActivePackage(organizationId, packageId);
+  const documentPackage = await findShareablePackage(organizationId, packageId);
   const expiresAt = parseShareExpiresAt(input.expiresAt);
   const token = createShareToken();
   const tokenHash = hashShareToken(token);

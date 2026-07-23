@@ -469,3 +469,19 @@ export async function getResourceAssignmentOptions() {
     })),
   };
 }
+
+export async function getWorkerUserLinkOptions(workerId: string) {
+  const { organizationId } = await requireOrganizationDomainAccess("assignments:manage", ASSIGNMENT_MANAGE_ROLES);
+  await assertActiveWorker(organizationId, parseRequiredId(workerId, "Lavoratore"));
+  const memberships = await db.organizationMembership.findMany({
+    where: {
+      organizationId,
+      revokedAt: null,
+      role: "WORKER",
+      user: { workerUserLinks: { none: { organizationId, archivedAt: null } } },
+    },
+    select: { user: { select: { id: true, name: true, email: true } } },
+    orderBy: [{ createdAt: "asc" }],
+  });
+  return memberships.map(({ user }) => ({ id: user.id, label: userLabel(user), email: user.email }));
+}

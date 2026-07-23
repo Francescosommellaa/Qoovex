@@ -3485,6 +3485,7 @@ export const JobSiteScalarFieldEnum = {
   address: 'address',
   clientName: 'clientName',
   status: 'status',
+  operationalPhase: 'operationalPhase',
   startDate: 'startDate',
   endDate: 'endDate',
   notes: 'notes',
@@ -3545,6 +3546,8 @@ export const DocumentTypeScalarFieldEnum = {
   name: 'name',
   description: 'description',
   appliesTo: 'appliesTo',
+  categoryKey: 'categoryKey',
+  sensitivity: 'sensitivity',
   requiresExpiryDate: 'requiresExpiryDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -3846,6 +3849,7 @@ export type OrganizationMembershipScalarFieldEnum = (typeof OrganizationMembersh
 export const OrganizationInvitationScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
+  workerId: 'workerId',
   email: 'email',
   role: 'role',
   tokenHash: 'tokenHash',
@@ -4158,6 +4162,20 @@ export type ListEnumRecordStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'JobSiteOperationalPhase'
+ */
+export type EnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobSiteOperationalPhase'>
+
+
+
+/**
+ * Reference to a field of type 'JobSiteOperationalPhase[]'
+ */
+export type ListEnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobSiteOperationalPhase[]'>
+
+
+
+/**
  * Reference to a field of type 'JobSiteUserAssignmentRole'
  */
 export type EnumJobSiteUserAssignmentRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobSiteUserAssignmentRole'>
@@ -4182,6 +4200,34 @@ export type EnumDocumentTypeAppliesToFieldRefInput<$PrismaModel> = FieldRefInput
  * Reference to a field of type 'DocumentTypeAppliesTo[]'
  */
 export type ListEnumDocumentTypeAppliesToFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentTypeAppliesTo[]'>
+
+
+
+/**
+ * Reference to a field of type 'DocumentCategoryKey'
+ */
+export type EnumDocumentCategoryKeyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentCategoryKey'>
+
+
+
+/**
+ * Reference to a field of type 'DocumentCategoryKey[]'
+ */
+export type ListEnumDocumentCategoryKeyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentCategoryKey[]'>
+
+
+
+/**
+ * Reference to a field of type 'DocumentSensitivity'
+ */
+export type EnumDocumentSensitivityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentSensitivity'>
+
+
+
+/**
+ * Reference to a field of type 'DocumentSensitivity[]'
+ */
+export type ListEnumDocumentSensitivityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentSensitivity[]'>
 
 
 

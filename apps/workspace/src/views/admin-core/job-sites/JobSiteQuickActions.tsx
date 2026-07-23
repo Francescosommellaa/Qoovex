@@ -72,7 +72,7 @@ export function JobSiteQuickActions({ capabilities, jobSite }: { capabilities: W
   return (
     <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
       {capabilities.canCreateDocuments ? (
-        <DocumentCreateDialog className="h-10 sm:h-8" contextLabel={jobSite.name} initialContext={context} jobSites={jobSites} origin="job-site" workers={[]} />
+        <DocumentCreateDialog canManageTypes={capabilities.canManageDocumentSettings} className="h-10 sm:h-8" contextLabel={jobSite.name} initialContext={context} jobSites={jobSites} origin="job-site" workers={[]} />
       ) : null}
 
       {capabilities.canUploadEvidence ? (

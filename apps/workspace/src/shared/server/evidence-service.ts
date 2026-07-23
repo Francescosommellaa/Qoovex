@@ -1,7 +1,7 @@
 import "server-only";
 
 import crypto from "crypto";
-import { db } from "@qoovex/db";
+import { db, type Prisma } from "@qoovex/db";
 import type { EvidenceType } from "@qoovex/types";
 import { evidenceTypes } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
@@ -47,6 +47,8 @@ export interface ListEvidenceInput {
   jobSiteId?: unknown;
   workerId?: unknown;
   checklistItemId?: unknown;
+  take?: number;
+  skip?: number;
 }
 
 export interface CreateEvidenceInput extends Record<string, unknown> {
@@ -198,19 +200,7 @@ async function findActiveEvidence(organizationId: string, evidenceId: string) {
 export async function listEvidence(input: ListEvidenceInput = {}) {
   const { context, organizationId } = await requireOrganizationDomainAccess("evidence:read", EVIDENCE_READ_ROLES);
   const scope = await getResourceScope(context);
-  const where: {
-    organizationId: string;
-    archivedAt: null;
-    type?: EvidenceType;
-    jobSiteId?: string;
-    workerId?: string;
-    checklistItemId?: string;
-    OR?: Array<
-      | { jobSiteId: { in: string[] } }
-      | { checklistItem: { checklist: { jobSiteId: { in: string[] } } } }
-      | { workerId: string }
-    >;
-  } = {
+  const where: Prisma.EvidenceWhereInput = {
     organizationId,
     archivedAt: null,
   };
@@ -237,8 +227,16 @@ export async function listEvidence(input: ListEvidenceInput = {}) {
   if (jobSiteId) where.jobSiteId = jobSiteId;
   if (workerId) where.workerId = workerId;
   if (checklistItemId) where.checklistItemId = checklistItemId;
+  if (input.take !== undefined && (!Number.isSafeInteger(input.take) || input.take < 1 || input.take > 101)) throw new AccessError("Dimensione pagina prove non valida.", 409);
+  if (input.skip !== undefined && (!Number.isSafeInteger(input.skip) || input.skip < 0 || input.skip > 499_950)) throw new AccessError("Pagina prove non valida.", 409);
 
-  const evidence = await db.evidence.findMany({ where, select: evidenceSelect, orderBy: { createdAt: "desc" } });
+  const evidence = await db.evidence.findMany({
+    where,
+    select: evidenceSelect,
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    ...(input.take === undefined ? {} : { take: input.take }),
+    ...(input.skip === undefined ? {} : { skip: input.skip }),
+  });
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "evidence" });
   return evidence.map(toEvidenceResponse);
 }

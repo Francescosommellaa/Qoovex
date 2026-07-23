@@ -11,9 +11,9 @@ import type {
   RequirementTargetType,
   UpdateDocumentRequirementInput,
 } from "@qoovex/types";
-import { documentTypeAppliesToValues, requirementTargetTypes } from "@qoovex/types";
+import { documentCategoryRegistry, documentTypeAppliesToValues, requirementTargetTypes } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
-import { isEnumValue, rejectBinaryPayload, trimOptionalId, trimOptionalText, trimRequiredText } from "./document-domain-validation";
+import { assertDocumentTaxonomy, isEnumValue, rejectBinaryPayload, trimOptionalId, trimOptionalText, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { getResourceScope, type ResourceScope } from "./resource-scope-service";
@@ -35,7 +35,7 @@ const requirementSelect = {
   createdAt: true,
   updatedAt: true,
   archivedAt: true,
-  documentType: { select: { id: true, name: true, appliesTo: true } },
+  documentType: { select: { id: true, name: true, appliesTo: true, categoryKey: true, sensitivity: true } },
   jobSite: { select: { id: true, name: true } },
 } as const;
 
@@ -90,9 +90,10 @@ function assertTargetDocumentTypeMatch(targetType: RequirementTargetType, applie
 async function assertDocumentTypeForRequirement(organizationId: string, documentTypeId: string, targetType: RequirementTargetType) {
   const documentType = await db.documentType.findFirst({
     where: { id: documentTypeId, organizationId, archivedAt: null },
-    select: { id: true, name: true, appliesTo: true },
+    select: { id: true, name: true, appliesTo: true, categoryKey: true, sensitivity: true },
   });
   if (!documentType) throw new AccessError("Tipo documento non trovato.", 404);
+  assertDocumentTaxonomy(documentType);
   assertTargetDocumentTypeMatch(targetType, documentType.appliesTo);
   return documentType;
 }
@@ -244,28 +245,48 @@ async function buildVisibleTargets(organizationId: string, scope: ResourceScope)
 export async function buildMissingDocumentRequirementItemsForScope(input: {
   organizationId: string;
   scope: ResourceScope;
+  visibleTargets?: {
+    workers: ReadonlyArray<{ id: string; displayName: string }>;
+    jobSites: ReadonlyArray<{ id: string; name: string }>;
+  };
 }): Promise<MissingDocumentRequirementItem[]> {
   const requirements = await db.documentRequirement.findMany({
-    where: { organizationId: input.organizationId, archivedAt: null, isRequired: true, documentTypeId: { not: null }, documentType: { archivedAt: null } },
+    where: {
+      organizationId: input.organizationId,
+      archivedAt: null,
+      isRequired: true,
+      documentTypeId: { not: null },
+      documentType: {
+        archivedAt: null,
+        categoryKey: { not: "UNCLASSIFIED" },
+        ...(input.scope.actorRole === "OWNER" || input.scope.actorRole === "ADMIN" ? {} : { sensitivity: "STANDARD" as const }),
+      },
+    },
     select: {
       id: true,
       name: true,
       targetType: true,
       documentTypeId: true,
       jobSiteId: true,
-      documentType: { select: { id: true, name: true } },
+      documentType: { select: { id: true, name: true, categoryKey: true } },
     },
     orderBy: [{ targetType: "asc" }, { name: "asc" }],
   });
   if (!requirements.length) return [];
 
-  const [visible, documents] = await Promise.all([
-    buildVisibleTargets(input.organizationId, input.scope),
-    db.document.findMany({
-      where: { organizationId: input.organizationId, archivedAt: null, documentTypeId: { not: null } },
+  const visible = input.visibleTargets ?? await buildVisibleTargets(input.organizationId, input.scope);
+  const targetFilters = [
+    ...(input.scope.fullAccess && requirements.some((item) => item.targetType === "ORGANIZATION") ? [{ ownerType: "ORGANIZATION" as const }] : []),
+    ...(visible.workers.length ? [{ ownerType: "WORKER" as const, workerId: { in: visible.workers.map((item) => item.id) } }] : []),
+    ...(visible.jobSites.length ? [{ ownerType: "JOB_SITE" as const, jobSiteId: { in: visible.jobSites.map((item) => item.id) } }] : []),
+  ];
+  const relevantDocumentTypeIds = [...new Set(requirements.flatMap((item) => item.documentTypeId ? [item.documentTypeId] : []))];
+  const documents = targetFilters.length && relevantDocumentTypeIds.length
+    ? await db.document.findMany({
+      where: { organizationId: input.organizationId, archivedAt: null, documentTypeId: { in: relevantDocumentTypeIds }, OR: targetFilters },
       select: { documentTypeId: true, ownerType: true, workerId: true, jobSiteId: true },
-    }),
-  ]);
+    })
+    : [];
   const present = new Set(documents.map((document) => targetKey(document.ownerType, document.workerId, document.jobSiteId, document.documentTypeId ?? "")));
   const missing: MissingDocumentRequirementItem[] = [];
 
@@ -281,6 +302,8 @@ export async function buildMissingDocumentRequirementItemsForScope(input: {
           requirementName: requirement.name,
           documentTypeId: requirement.documentTypeId,
           documentTypeName: requirement.documentType.name,
+          categoryKey: requirement.documentType.categoryKey,
+          categoryLabel: documentCategoryRegistry[requirement.documentType.categoryKey].label,
           targetType: requirement.targetType,
           ownerType: "ORGANIZATION",
           ownerLabel: "Azienda",
@@ -297,6 +320,8 @@ export async function buildMissingDocumentRequirementItemsForScope(input: {
             requirementName: requirement.name,
             documentTypeId: requirement.documentTypeId,
             documentTypeName: requirement.documentType.name,
+            categoryKey: requirement.documentType.categoryKey,
+            categoryLabel: documentCategoryRegistry[requirement.documentType.categoryKey].label,
             targetType: requirement.targetType,
             ownerType: "WORKER",
             workerId: worker.id,
@@ -317,6 +342,8 @@ export async function buildMissingDocumentRequirementItemsForScope(input: {
             requirementName: requirement.name,
             documentTypeId: requirement.documentTypeId,
             documentTypeName: requirement.documentType.name,
+            categoryKey: requirement.documentType.categoryKey,
+            categoryLabel: documentCategoryRegistry[requirement.documentType.categoryKey].label,
             targetType: requirement.targetType,
             ownerType: "JOB_SITE",
             jobSiteId: jobSite.id,
@@ -331,10 +358,13 @@ export async function buildMissingDocumentRequirementItemsForScope(input: {
   return missing.sort((a, b) => `${a.ownerLabel}:${a.requirementName}`.localeCompare(`${b.ownerLabel}:${b.requirementName}`, "it"));
 }
 
-export async function getMissingDocumentRequirements(): Promise<MissingDocumentRequirementsResponse> {
+export async function getMissingDocumentRequirements(visibleTargets?: {
+  workers: ReadonlyArray<{ id: string; displayName: string }>;
+  jobSites: ReadonlyArray<{ id: string; name: string }>;
+}): Promise<MissingDocumentRequirementsResponse> {
   const { context, organizationId } = await requireOrganizationDomainAccess("documents:read", REQUIREMENT_MISSING_ROLES);
   const scope = await getResourceScope(context);
-  const items = await buildMissingDocumentRequirementItemsForScope({ organizationId, scope });
+  const items = await buildMissingDocumentRequirementItemsForScope({ organizationId, scope, visibleTargets });
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "missing-document-requirements" });
   return { items, generatedAt: new Date().toISOString() };
 }

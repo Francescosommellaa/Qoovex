@@ -32,6 +32,9 @@ export function EvidencePageView({
   checklists,
   checklistItems,
   capabilities,
+  activeSort,
+  page,
+  hasNextPage,
 }: {
   evidence: WorkspaceEvidenceRecord[];
   jobSites: WorkspaceJobSiteRecord[];
@@ -39,13 +42,17 @@ export function EvidencePageView({
   checklists: WorkspaceChecklistRecord[];
   checklistItems: WorkspaceChecklistItemRecord[];
   capabilities: WorkspaceCapabilities;
+  activeSort?: "recent";
+  page: number;
+  hasNextPage: boolean;
 }) {
+  const pageHref = (nextPage: number) => `/evidence?${new URLSearchParams({ ...(activeSort ? { sort: activeSort } : {}), ...(nextPage > 1 ? { page: String(nextPage) } : {}) }).toString()}`.replace(/\?$/, "");
   return (
     <WorkspacePage>
       <WorkspacePageHeader
         title="Prove"
-        description="Consulta foto, file e note operative nei contesti in cui sono state registrate."
-        action={capabilities.canUploadEvidence ? <Link className={styles.linkButton} href="/evidence/new">Aggiungi prova</Link> : undefined}
+        description={activeSort ? "Foto, file e note operative più recenti, ordinate lato server nello scope autorizzato." : "Consulta foto, file e note operative nei contesti in cui sono state registrate."}
+        action={<div className="flex flex-wrap gap-2">{activeSort ? <Link className={styles.linkButton} href="/evidence">Tutte le prove</Link> : null}{capabilities.canUploadEvidence ? <Link className={styles.linkButton} href="/evidence/new">Aggiungi prova</Link> : null}</div>}
       />
       <WorkspacePanel title="Prove recenti" description="Il download passa sempre da accesso protetto server-side.">
           <div className={styles.list}>
@@ -66,6 +73,7 @@ export function EvidencePageView({
             ))}
           </div>
       </WorkspacePanel>
+      {page > 1 || hasNextPage ? <nav aria-label="Paginazione prove" className="flex items-center justify-between gap-3"><span className="text-sm text-muted-foreground">Pagina {page}</span><div className="flex gap-2">{page > 1 ? <Link className={styles.linkButton} href={pageHref(page - 1)}>Precedente</Link> : null}{hasNextPage ? <Link className={styles.linkButton} href={pageHref(page + 1)}>Successiva</Link> : null}</div></nav> : null}
     </WorkspacePage>
   );
 }

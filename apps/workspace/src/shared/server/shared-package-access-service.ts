@@ -25,7 +25,7 @@ const sharedItemSelect = {
   checklistId: true,
   note: true,
   position: true,
-  document: { select: { id: true, title: true, status: true, archivedAt: true } },
+  document: { select: { id: true, title: true, status: true, archivedAt: true, documentType: { select: { categoryKey: true, sensitivity: true } } } },
   documentVersion: {
     select: {
       id: true,
@@ -33,7 +33,7 @@ const sharedItemSelect = {
       mimeType: true,
       size: true,
       archivedAt: true,
-      document: { select: { id: true, title: true, status: true, archivedAt: true } },
+      document: { select: { id: true, title: true, status: true, archivedAt: true, documentType: { select: { categoryKey: true, sensitivity: true } } } },
     },
   },
   evidence: {
@@ -88,13 +88,13 @@ function toSharedItem(item: {
   itemType: DocumentPackageItemType;
   position: number;
   note: string | null;
-  document: { title: string; status: string; archivedAt: Date | null } | null;
+  document: { title: string; status: string; archivedAt: Date | null; documentType: { categoryKey: string; sensitivity: string } | null } | null;
   documentVersion: {
     originalFileName: string;
     mimeType: string;
     size: number;
     archivedAt: Date | null;
-    document: { title: string; status: string; archivedAt: Date | null };
+    document: { title: string; status: string; archivedAt: Date | null; documentType: { categoryKey: string; sensitivity: string } | null };
   } | null;
   evidence: {
     title: string;
@@ -108,11 +108,11 @@ function toSharedItem(item: {
   checklist: { name: string; status: string; archivedAt: Date | null } | null;
 }) {
   if (item.itemType === "DOCUMENT") {
-    if (!item.document || item.document.archivedAt) return null;
+    if (!item.document || item.document.archivedAt || item.document.documentType?.sensitivity !== "STANDARD" || item.document.documentType.categoryKey === "UNCLASSIFIED") return null;
     return { id: item.id, itemType: item.itemType, position: item.position, title: item.document.title, status: item.document.status, hasFile: false };
   }
   if (item.itemType === "DOCUMENT_VERSION") {
-    if (!item.documentVersion || item.documentVersion.archivedAt || item.documentVersion.document.archivedAt) return null;
+    if (!item.documentVersion || item.documentVersion.archivedAt || item.documentVersion.document.archivedAt || item.documentVersion.document.documentType?.sensitivity !== "STANDARD" || item.documentVersion.document.documentType.categoryKey === "UNCLASSIFIED") return null;
     return {
       id: item.id,
       itemType: item.itemType,
@@ -186,7 +186,7 @@ export async function getSharedPackageItemDownload(token: string, itemId: string
 
   if (item.itemType === "DOCUMENT_VERSION" && item.documentVersionId) {
     const version = await db.documentVersion.findFirst({
-      where: { id: item.documentVersionId, organizationId: shareLink.organizationId, archivedAt: null, document: { is: { archivedAt: null } } },
+      where: { id: item.documentVersionId, organizationId: shareLink.organizationId, archivedAt: null, document: { is: { archivedAt: null, documentType: { is: { sensitivity: "STANDARD", categoryKey: { not: "UNCLASSIFIED" } } } } } },
       select: { blobKey: true, originalFileName: true, mimeType: true, size: true },
     });
     if (!version) throw new AccessError("File condiviso non trovato.", 404);

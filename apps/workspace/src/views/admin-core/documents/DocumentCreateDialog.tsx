@@ -28,6 +28,7 @@ interface DocumentCreateDialogProps {
   jobSites: WorkspaceJobSiteRecord[];
   origin?: WorkspaceOrigin | null;
   workers: WorkspaceWorkerRecord[];
+  canManageTypes?: boolean;
 }
 
 async function responseError(response: Response) {
@@ -42,6 +43,7 @@ export function DocumentCreateDialog({
   jobSites,
   origin = null,
   workers,
+  canManageTypes = false,
 }: DocumentCreateDialogProps) {
   const [open, setOpen] = useState(false);
   const [documentTypes, setDocumentTypes] = useState<WorkspaceDocumentTypeRecord[] | null>(null);
@@ -119,6 +121,7 @@ export function DocumentCreateDialog({
         {documentTypes ? (
           <DocumentCreateFlow
             documentTypes={documentTypes}
+            canManageTypes={canManageTypes}
             initialContext={initialContext}
             jobSites={jobSites}
             layout="dialog"

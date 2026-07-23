@@ -1,8 +1,7 @@
-import { listJobSites } from "@shared/server/job-site-service";
-import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
-import { JobSitesPageView } from "@/views/admin-core/job-sites/JobSitesPageView";
+import { getJobSiteOverview } from "@shared/server/job-site-read-model-service";
+import { getWorkspaceCapabilities } from "@/views/admin-core/admin-core-server";
+import { JobSitesOverviewView } from "@/views/admin-core/job-sites/JobSitesOverviewView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
-import type { WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
 
 interface JobSitesPageProps {
   searchParams: Promise<{ intent?: string }>;
@@ -10,8 +9,8 @@ interface JobSitesPageProps {
 
 export default async function JobSitesPage({ searchParams }: JobSitesPageProps) {
   try {
-    const [jobSites, capabilities, params] = await Promise.all([listJobSites(), getWorkspaceCapabilities(), searchParams]);
-    return <JobSitesPageView capabilities={capabilities} initialCreateOpen={params.intent === "create" && capabilities.canCreateJobSites} jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)} />;
+    const [overview, capabilities, params] = await Promise.all([getJobSiteOverview(), getWorkspaceCapabilities(), searchParams]);
+    return <JobSitesOverviewView capabilities={capabilities} initialCreateOpen={params.intent === "create" && capabilities.canCreateJobSites} overview={overview} />;
   } catch {
     return <WorkspaceAccessState title="Cantieri non disponibili" description="Verifica accesso e azienda configurata." />;
   }

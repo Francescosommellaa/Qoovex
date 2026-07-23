@@ -18,20 +18,27 @@ export function DocumentPackagesPageView({
   jobSites,
   shareLinksByPackage,
   capabilities,
+  activeView,
+  page,
+  hasNextPage,
 }: {
   packages: WorkspaceDocumentPackageRecord[];
   jobSites: WorkspaceJobSiteRecord[];
   shareLinksByPackage: Record<string, WorkspaceShareLinkRecord[]>;
   capabilities: WorkspaceCapabilities;
+  activeView?: "ready";
+  page: number;
+  hasNextPage: boolean;
 }) {
+  const pageHref = (nextPage: number) => `/document-packages?${new URLSearchParams({ ...(activeView ? { view: activeView } : {}), ...(nextPage > 1 ? { page: String(nextPage) } : {}) }).toString()}`.replace(/\?$/, "");
   return (
     <WorkspacePage>
       <WorkspacePageHeader
         title="Condivisioni"
-        description="Controlla gli elementi preparati e lo stato dei link in sola lettura."
-        action={capabilities.canManagePackages ? <Link className={styles.linkButton} href="/document-packages/new">Prepara condivisione</Link> : undefined}
+        description={activeView ? "Pacchetti pronti per revisione o già condivisi nello scope autorizzato." : "Controlla gli elementi preparati e lo stato dei link in sola lettura."}
+        action={<div className="flex flex-wrap gap-2">{activeView ? <Link className={styles.linkButton} href="/document-packages">Tutti i pacchetti</Link> : null}{capabilities.canManagePackages ? <Link className={styles.linkButton} href="/document-packages/new">Prepara condivisione</Link> : null}</div>}
       />
-      <WorkspacePanel title="Documenti preparati" description="Le condivisioni archiviate sono escluse dalla vista standard.">
+      <WorkspacePanel title={activeView ? "Pacchetti pronti" : "Documenti preparati"} description="Le condivisioni archiviate sono escluse dalla vista standard.">
           <div className={styles.list}>
             {!packages.length ? (
               <WorkspaceEmptyState title="Nessun pacchetto" description="Crea un pacchetto documentale pronto per revisione." />
@@ -50,6 +57,7 @@ export function DocumentPackagesPageView({
             ))}
           </div>
       </WorkspacePanel>
+      {page > 1 || hasNextPage ? <nav aria-label="Paginazione pacchetti" className="flex items-center justify-between gap-3"><span className="text-sm text-muted-foreground">Pagina {page}</span><div className="flex gap-2">{page > 1 ? <Link className={styles.linkButton} href={pageHref(page - 1)}>Precedente</Link> : null}{hasNextPage ? <Link className={styles.linkButton} href={pageHref(page + 1)}>Successiva</Link> : null}</div></nav> : null}
     </WorkspacePage>
   );
 }

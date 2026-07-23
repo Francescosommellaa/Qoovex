@@ -3,9 +3,10 @@
 import { IconCheck } from "@tabler/icons-react";
 import { Button } from "@qoovex/ui/components/button";
 import { DialogFooter } from "@qoovex/ui/components/dialog";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@qoovex/ui/components/field";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@qoovex/ui/components/field";
 import { Input } from "@qoovex/ui/components/input";
 import { Textarea } from "@qoovex/ui/components/textarea";
+import { jobSiteOperationalPhaseLabels, jobSiteOperationalPhases } from "@qoovex/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { formValue, nullableFormValue, submitJson } from "../admin-api-client";
@@ -44,6 +45,7 @@ export function JobSiteForm({ mode, jobSite, disabled, layout = "page", onCreate
       startDate: nullableFormValue(formData, "startDate"),
       endDate: nullableFormValue(formData, "endDate"),
       notes: nullableFormValue(formData, "notes"),
+      operationalPhase: formValue(formData, "operationalPhase"),
     };
     try {
       const response = await submitJson<WorkspaceJobSiteRecord>(
@@ -74,6 +76,12 @@ export function JobSiteForm({ mode, jobSite, disabled, layout = "page", onCreate
       <FieldGroup className="gap-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field>
+            <FieldLabel htmlFor={`${mode}-job-site-phase`}>Fase operativa</FieldLabel>
+            <select className="h-10 rounded-md border bg-background px-3 text-sm" defaultValue={jobSite?.operationalPhase ?? "PREPARATION"} disabled={disabled || pending} id={`${mode}-job-site-phase`} name="operationalPhase" required>
+              {jobSiteOperationalPhases.map((phase) => <option key={phase} value={phase}>{jobSiteOperationalPhaseLabels[phase]}</option>)}
+            </select>
+          </Field>
+          <Field>
             <FieldLabel htmlFor={`${mode}-job-site-name`}>Nome cantiere</FieldLabel>
             <Input autoFocus defaultValue={jobSite?.name ?? ""} disabled={disabled || pending} id={`${mode}-job-site-name`} maxLength={160} minLength={2} name="name" required />
           </Field>
@@ -100,8 +108,9 @@ export function JobSiteForm({ mode, jobSite, disabled, layout = "page", onCreate
         </div>
 
         <Field>
-          <FieldLabel htmlFor={`${mode}-job-site-notes`}>Note operative</FieldLabel>
+          <FieldLabel htmlFor={`${mode}-job-site-notes`}>Note operative non sensibili</FieldLabel>
           <Textarea defaultValue={jobSite?.notes ?? ""} disabled={disabled || pending} id={`${mode}-job-site-notes`} maxLength={4000} name="notes" rows={3} />
+          <FieldDescription>Non inserire dati sanitari, fiscali, coordinate o segreti.</FieldDescription>
         </Field>
       </FieldGroup>
 
