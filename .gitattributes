@@ -1,3 +1,6 @@
+# Il repository usa LF su tutte le piattaforme; Git non deve dipendere da core.autocrlf locale.
+* text=auto eol=lf
+
 *.gif filter=lfs diff=lfs merge=lfs -text
 *.jpg filter=lfs diff=lfs merge=lfs -text
 *.jpeg filter=lfs diff=lfs merge=lfs -text

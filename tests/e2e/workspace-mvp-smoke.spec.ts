@@ -1,10 +1,13 @@
 import crypto from "crypto";
 import { expect, test, type APIRequestContext, type APIResponse, type Page } from "@playwright/test";
+import type { DocumentCategoryKey, MyResourceScopeResponse } from "../../packages/types/src/index";
 
 type JsonRecord = Record<string, unknown>;
 
 const BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 const E2E_PNG_BYTES = Array.from(Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64"));
+const JOB_SITE_DOCUMENT_CATEGORY = "SITE_START_AUTHORIZATIONS" satisfies DocumentCategoryKey;
+const WORKER_DOCUMENT_CATEGORY = "WORKER_TRAINING_QUALIFICATIONS" satisfies DocumentCategoryKey;
 
 function decodeBase32(value: string) {
   let bits = 0;
@@ -128,14 +131,14 @@ async function createDomainData(page: Page, runId: string) {
   const jobSiteDocumentType = await pagePostJson(page, "/api/document-types", {
     name: `Tipo cantiere E2E ${runId}`,
     appliesTo: "JOB_SITE",
-    categoryKey: "JOB_SITE_AUTHORIZATIONS",
+    categoryKey: JOB_SITE_DOCUMENT_CATEGORY,
     sensitivity: "STANDARD",
     requiresExpiryDate: true,
   });
   const workerDocumentType = await pagePostJson(page, "/api/document-types", {
     name: `Tipo lavoratore E2E ${runId}`,
     appliesTo: "WORKER",
-    categoryKey: "WORKER_TRAINING",
+    categoryKey: WORKER_DOCUMENT_CATEGORY,
     sensitivity: "STANDARD",
     requiresExpiryDate: true,
   });
@@ -383,15 +386,15 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
       contextPrompt: "2. A quale lavoratore appartiene?",
       documentTypeName: String(workerDocumentType.name),
     });
-    expect(guidedWorkerDocument).toMatchObject({ ownerType: "WORKER", workerId: worker.id, categoryKey: "WORKER_TRAINING" });
+    expect(guidedWorkerDocument).toMatchObject({ ownerType: "WORKER", workerId: worker.id, categoryKey: WORKER_DOCUMENT_CATEGORY });
     const guidedJobSiteDocument = await createGuidedDocument(page, {
       area: "Cantieri",
-      category: "Autorizzazioni e titoli",
+      category: "Avvio e autorizzazioni",
       contextLabel: String(jobSite.name),
       contextPrompt: "2. A quale cantiere appartiene?",
       documentTypeName: String(jobSiteDocumentType.name),
     });
-    expect(guidedJobSiteDocument).toMatchObject({ ownerType: "JOB_SITE", jobSiteId: jobSite.id, categoryKey: "JOB_SITE_AUTHORIZATIONS" });
+    expect(guidedJobSiteDocument).toMatchObject({ ownerType: "JOB_SITE", jobSiteId: jobSite.id, categoryKey: JOB_SITE_DOCUMENT_CATEGORY });
     await page.goto("/documents/job-sites", { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: String(jobSiteDocumentType.name), exact: true })).toBeVisible();
     await page.goto("/documents/workers", { waitUntil: "domcontentloaded" });
@@ -525,8 +528,8 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     await expectJson(await invitedWorkerPage.request.post("/api/organization/invitations/accept", { data: { token: workerInvitationToken } }), 200);
     await expectJson(await invitedWorkerPage.request.get("/api/context"), 401);
     await signInWithCredentials(invitedWorkerPage, invitedWorkerEmail, invitedWorkerPassword);
-    const invitedWorkerScope = await expectJson(await invitedWorkerPage.request.get("/api/resource-assignments/my-scope"), 200) as unknown as JsonRecord;
-    expect((invitedWorkerScope.linkedWorker as JsonRecord).id).toBe(invitedWorkerProfile.id);
+    const invitedWorkerScope = await expectJson(await invitedWorkerPage.request.get("/api/resource-assignments/my-scope"), 200) as unknown as MyResourceScopeResponse;
+    expect(invitedWorkerScope.worker?.id).toBe(invitedWorkerProfile.id);
     const invitedWorkerRecords = await expectJson(await invitedWorkerPage.request.get("/api/workers"), 200) as unknown as JsonRecord[];
     expect(invitedWorkerRecords.map((record) => record.id)).toEqual([invitedWorkerProfile.id]);
 
