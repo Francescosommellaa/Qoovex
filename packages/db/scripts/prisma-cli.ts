@@ -28,7 +28,7 @@ export function runPrisma(args: string[]) {
 }
 
 export function assertNoSchemaDrift() {
-  const result = spawnPrisma([
+  runPrisma([
     "migrate",
     "diff",
     "--from-config-datasource",
@@ -36,23 +36,4 @@ export function assertNoSchemaDrift() {
     "prisma/schema.prisma",
     "--exit-code",
   ]);
-
-  if (result.status === 0) return;
-
-  const output = (result.stdout ?? "") + (result.stderr ?? "");
-  const lines = output.split("\n");
-
-  const hasDestructiveChange = lines.some((line) => {
-    const trimmed = line.trim();
-    return (
-      (trimmed.startsWith("[-]") || trimmed.startsWith("[*]")) &&
-      !trimmed.includes("index") &&
-      !trimmed.includes("Index") &&
-      (trimmed.includes("table") || trimmed.includes("column") || trimmed.includes("constraint") || trimmed.includes("enum") || trimmed.includes("relation"))
-    );
-  });
-
-  if (hasDestructiveChange) {
-    throw new Error(`[prisma-cli] Schema drift detected (destructive changes).\n${output}`);
-  }
 }

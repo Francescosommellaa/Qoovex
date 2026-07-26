@@ -361,7 +361,7 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     await signInWithCredentials(page, String(owner.email), String(fixture.password));
     await satisfyMfaGate(page, String(owner.secret));
     await expectFavoriteDefaults(page, ["Documenti da controllare", "Scadenze"]);
-    await expect(page.getByRole("button", { name: "Notifiche", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Apri notifiche(?:, \d+ non lett[ae])?$/ })).toBeVisible();
     await page.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
     await page.getByRole("menuitemcheckbox", { name: "Checklist aperte", exact: true }).click();
     await page.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
@@ -468,7 +468,7 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     await signInWithCredentials(safetyPage, String(safety.email), String(fixture.password));
     await satisfyMfaGate(safetyPage, String(safety.secret));
     await expectFavoriteDefaults(safetyPage, ["Checklist aperte", "Documenti da controllare"]);
-    await expect(safetyPage.getByRole("button", { name: "Notifiche", exact: true })).toBeVisible();
+    await expect(safetyPage.getByRole("button", { name: /^Apri notifiche(?:, \d+ non lett[ae])?$/ })).toBeVisible();
     await safetyPage.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
     await expect(safetyPage.getByRole("menuitemcheckbox", { name: "Pacchetti pronti", exact: true })).toBeVisible();
     await expect(safetyPage.getByRole("menuitemcheckbox", { name: "Documenti Azienda", exact: true })).toHaveCount(0);
