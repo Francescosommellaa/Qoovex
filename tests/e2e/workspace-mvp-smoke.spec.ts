@@ -397,9 +397,15 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     });
     expect(guidedJobSiteDocument).toMatchObject({ ownerType: "JOB_SITE", jobSiteId: jobSite.id, categoryKey: JOB_SITE_DOCUMENT_CATEGORY });
     await page.goto("/documents/job-sites", { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("heading", { name: String(jobSiteDocumentType.name), exact: true })).toBeVisible();
+    const jobSiteDocumentTypeHeadings = page.getByRole("heading", { name: String(jobSiteDocumentType.name), exact: true });
+    await expect(jobSiteDocumentTypeHeadings).toHaveCount(2);
+    await expect(jobSiteDocumentTypeHeadings.nth(0)).toBeVisible();
+    await expect(jobSiteDocumentTypeHeadings.nth(1)).toBeVisible();
     await page.goto("/documents/workers", { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("heading", { name: String(workerDocumentType.name), exact: true })).toBeVisible();
+    const workerDocumentTypeHeadings = page.getByRole("heading", { name: String(workerDocumentType.name), exact: true });
+    await expect(workerDocumentTypeHeadings).toHaveCount(2);
+    await expect(workerDocumentTypeHeadings.nth(0)).toBeVisible();
+    await expect(workerDocumentTypeHeadings.nth(1)).toBeVisible();
     await verifyWorkspacePages(page);
 
     await page.goto("/job-sites", { waitUntil: "domcontentloaded" });
