@@ -1,9 +1,29 @@
 # Support and data control
 
-Il supporto richiede sessione temporanea, motivo, MFA e audit; non espone password, TOTP, backup code o credenziali. Qoovex Admin gestisce utenti, organizzazioni e errori runtime con accesso server-side.
+## Stato attuale verificato
 
-Gli owner possono consultare inventario, retention ed export metadata completi per dominio, inclusi eventi calendario e assegnatari, membership, inviti, data-control, supporto e auth attribuibile. L'export usa DTO e `select` allow-list: non include password/hash, OTP/TOTP, backup code, token, session token, HMAC, IP hash, Blob key/pathname, URL permanenti, body email o credenziali provider. Le operazioni di cancellazione e pulizia Blob sono job tracciati e soggetti a controlli. I risultati e i download restano limitati all'organizzazione autorizzata.
+Il supporto richiede sessione temporanea, motivo, MFA, notifica e audit; non espone password, TOTP, backup code o credenziali. Qoovex Admin gestisce utenti, Aziende ed errori runtime con accesso server-side.
 
-Il runner usa claim atomico, fencing tramite `startedAt`, recupero dei job fermi e retry con backoff. La scansione orfani percorre tutte le pagine Blob tramite cursor, rifiuta `hasMore=true` senza cursor e seleziona sull'inventario completo; ogni job elimina al massimo 50 oggetti. La cancellazione azienda e DB-first: una failure Prisma non elimina Blob, mentre il cleanup successivo e ripetibile e non usa cursor dopo le cancellazioni.
+Gli OWNER possono consultare inventario, retention ed export metadata per dominio. DTO e `select` allow-list escludono password/hash, OTP/TOTP, backup code, token, session token, HMAC, IP hash, Blob key/pathname, URL permanenti, body email e credenziali provider.
 
-I runbook operativi devono distinguere fatti verificati nel codice da azioni manuali d'ambiente e non devono contenere segreti.
+Il runner data-control usa claim atomico, fencing tramite `startedAt`, recupero dei job fermi e retry con backoff. La scansione Blob percorre tutte le pagine e ogni cleanup elimina al massimo 50 oggetti. La cancellazione Azienda e DB-first; cleanup e retry restano controllati e ripetibili.
+
+`ProductAuditEvent` e un registro tecnico/prodotto minimizzato, owner-only e normalmente best-effort. Non e una timeline operativa di processo.
+
+## Direzione approvata
+
+La timeline futura e funzionale al processo e leggibile dagli attori autorizzati. Deve spiegare avvio, regola, step, proposta, decisione, retry, output, blocco e risultato. L'audit resta separato e orientato alla responsabilita tecnica.
+
+Le entry timeline conservano soltanto riepiloghi e riferimenti necessari. Non duplicano file, testo estratto completo, dati sanitari/fiscali, token, storage key, URL permanenti, email, credenziali o stack trace. Un request ID tecnico puo essere separato dal riepilogo utente.
+
+Le notifiche sono canali di attenzione: chiudere o leggere una notifica non chiude l'eccezione. Quando una condizione viene soddisfatta, il processo riconcilia eccezione, notifica e timeline senza perdere lo storico.
+
+Supporto e data-control non diventano scorciatoie per retry, override, condivisioni o accessi del motore. Ogni intervento conserva i permessi, il motivo e l'audit esistenti.
+
+## Specifiche concettuali non implementate
+
+Non esistono oggi un archivio timeline, una retention dedicata, export di processo, compensazioni o strumenti supporto per run/step. I riferimenti tecnici e i DTO futuri non sono definiti.
+
+## Decisioni aperte e hard stop
+
+Restano da approvare retention e cancellazione di timeline/eventi, accesso del supporto, contenuto degli export, compensazioni parziali, livelli di servizio, notifiche aggiuntive e policy per documenti sensibili. Nessuna di queste decisioni viene dedotta dall'audit corrente.

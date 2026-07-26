@@ -1,17 +1,25 @@
 # Data, storage and security
 
-Prisma salva record, relazioni, stati, permessi, scadenze e audit. Vercel Blob privato salva file binari; DocumentVersion ed Evidence conservano solo metadati e blob key. Download e condivisione passano da endpoint autorizzati, senza esporre blob key, token hash o URL permanenti.
+## Stato attuale verificato
 
-La migration `20260722010000_document_taxonomy` aggiunge gli enum `DocumentCategoryKey` e `DocumentSensitivity`, con default legacy `UNCLASSIFIED` e `STANDARD` su `DocumentType`. Non classifica automaticamente i record esistenti: la classificazione richiede una scelta esplicita da `/settings/documents`. I nuovi documenti richiedono un tipo classificato; la compatibilita tra tipo e destinazione viene verificata dal server.
+Prisma salva record, relazioni, stati, permessi, scadenze e audit. Vercel Blob privato salva file binari; DocumentVersion ed Evidence conservano metadati e blob key. Download e condivisione passano da endpoint autorizzati senza esporre blob key, token hash o URL permanenti.
 
-`CalendarEvent` salva metadati di eventi e task, intervallo, giornata intera, priorita, stato, assegnatario, cantiere, origine e UID iCalendar opzionale. L'importazione accetta solo contenuto `.ics` caricato dall'utente, massimo 512 KB e 200 eventi; non effettua fetch di URL esterni. Export, inventario, cancellazione Azienda e audit includono il calendario senza credenziali provider.
+Il repository contiene nove migration canoniche, da `20260712010000_single_company_baseline` a `20260725010000_add_session_account_user_indexes`. La presenza dei file non prova lo stato applicato di Local, Preview o Production: ogni ambiente deve essere verificato separatamente con i guardrail di `packages/db`. Le migration applicate sono immutabili; non usare `migrate resolve`, `db push` o reset per nascondere divergenze.
 
-La fase operativa di `JobSite` e un enum nullable indicizzato insieme ad Azienda e archiviazione per le liste operative reali. La migrazione non esegue backfill e non modifica lo storico. Le variazioni registrano soltanto fase precedente e successiva nei metadati audit ammessi; non includono note, indirizzi, coordinate, token, chiavi Blob o URL permanenti.
+Il dominio corrente include tassonomia e sensibilita documentale, CalendarEvent, fase operativa dei cantieri e relazione invito-lavoratore. I record legacy non vengono riclassificati o backfillati per deduzione. Auth, MFA, rate limit, support session, audit e protezioni HTTP restano nel workspace.
 
-La migration incrementale `20260720010000_calendar_events` aggiunge il dominio calendario, enum, relazioni, indici e azioni audit. Al 2026-07-20 sviluppo locale e database Preview dedicato risultano allineati alle cinque migration canoniche e senza schema drift. Lo stato Production va verificato separatamente prima di ogni rollout; ogni deploy resta soggetto al wrapper protetto, al backup verificato e al controllo della cronologia.
+## Direzione approvata
 
-La cronologia canonica parte da `20260712010000_single_company_baseline` e prosegue solo con migration incrementali fino a `20260723010000_people_invitation_worker`. Quest'ultima aggiunge esclusivamente la relazione opzionale invito-lavoratore, l'indice relativo e gli eventi audit; non introduce `Person` ne dati HR. Le migration applicate sono immutabili: nome, ordine e checksum devono coincidere con `_prisma_migrations`; non usare `migrate resolve` per nascondere divergenze. Ogni evoluzione schema richiede migration dedicata e verifica Prisma. Non introdurre Supabase, Firebase, S3 o provider storage alternativi.
+Un processo futuro deve essere persistente, riprendibile e idempotente. Evento, processo e step richiedono chiavi idempotenti distinte; claim e completamento devono essere atomici; un worker obsoleto non puo completare dopo una nuova acquisizione. Replay e riconciliazione aggiungono storia e aggiornano lo stato corrente senza riscrivere il passato.
 
-Auth, MFA, inviti, support session, audit e protezioni HTTP vivono in workspace. Se un account abilita MFA, pagine e API prodotto richiedono un'asserzione MFA legata alla specifica sessione Auth.js e alla sua `authVersion`. Enrollment, sostituzione, disattivazione, rigenerazione backup code e recupero richiedono prove separate dalla sola sessione primaria. Il rate limit persistente usa HMAC domain-separated, un unico upsert PostgreSQL atomico e cleanup delle finestre scadute; non salva email, username o IP grezzi.
+Le regole validate devono essere versionate e il processo deve conservare quale versione ha applicato. Gli output restano nelle entita dominio esistenti; la persistenza di processo conserva riferimenti autorizzati, non copie di file o segreti.
 
-Il recupero MFA non disattiva il fattore: autorizza una sostituzione entro una finestra limitata. OWNER, SUPER_ADMIN e account senza membership verificano l'email; i ruoli inferiori verificano l'email e richiedono la prima approvazione valida di un OWNER della stessa Azienda. La conferma del nuovo fattore incrementa `authVersion` e revoca tutte le sessioni. Non loggare segreti, token, contenuti file o metadata sensibili non necessari.
+La timeline operativa deve essere minimizzata. Puo conservare riepiloghi, attori, fonti, affidabilita, impatto, decisioni e riferimenti dominio; non conserva contenuti completi, token, blob key, URL permanenti, credenziali, stack trace, body email o dati sensibili non necessari.
+
+## Specifiche concettuali non implementate
+
+I concetti di definizione, run, step, evento, proposta, decisione, eccezione e riferimento artefatto non corrispondono a modelli Prisma. Stati, indici, vincoli, payload, retention e compensazioni non sono approvati.
+
+## Decisioni aperte e hard stop
+
+Richiedono decisione esplicita: schema e migration, versionamento concreto, idempotency key, fencing token, retention di timeline/eventi, trattamento dei documenti sensibili, indicizzazione, cifratura aggiuntiva, compensazioni, provider OCR/AI e subprocessors. Non introdurre provider DB o storage alternativi.

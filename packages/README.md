@@ -1,22 +1,19 @@
 # Packages
 
-Codice condiviso del monorepo.
+Package condivisi attivi:
 
-Package attivi:
-
-- `db`: schema Prisma, client, migrations e utility DB server-only;
-- `types`: ruoli, permessi, enum e DTO platform-neutral.
-
-Package non ancora creati:
-
-- `ui`: componenti UI, token e base styles quando esisteranno consumer reali;
-- `brand`: loghi e asset canonici quando saranno definiti;
-- `config`: configurazioni condivise quando emergera duplicazione;
-- `utils`: utility pure riusabili tra app/package.
+- `db`: schema Prisma, nove migration canoniche, client, config e guardrail database server-only;
+- `types`: ruoli, permessi, enum e DTO platform-neutral;
+- `ui`: foundation condivisa shadcn `base-nova`, Base UI, Tabler, token, CSS, tema, hook e utility;
+- `brand-resources`: asset SVG proprietari, senza tipografia o comportamento.
 
 Regole:
 
 - i package non importano da `apps/*`;
-- nessun package condiviso deve contenere business logic app-specific;
-- `packages/db` non deve importare UI, routing Next o auth workspace;
-- `packages/types` non deve contenere Prisma client o query DB.
+- nessun package condiviso contiene business logic app-specific;
+- `packages/db` non importa UI, routing Next o auth Workspace;
+- `packages/types` non contiene Prisma Client o query;
+- `packages/ui` non conosce auth, ruoli, API, Prisma o dominio;
+- le composizioni di processo future restano app-locali finche non esiste riuso reale.
+
+I contratti concettuali del motore operativo non autorizzano nuovi tipi, modelli o package prima delle decisioni di Fase 3.

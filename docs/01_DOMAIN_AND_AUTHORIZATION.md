@@ -1,17 +1,36 @@
 # Domain and authorization
 
-`Organization` e il tenant tecnico e `Azienda` la label prodotto. Il dominio persistito include Worker, JobSite, Document, DocumentType, DocumentRequirement, DocumentVersion, Deadline, CalendarEvent, Checklist, ChecklistItem, Evidence, DocumentPackage, ShareLink e audit di prodotto.
+## Stato attuale verificato
 
-`JobSite.operationalPhase` e nullable soltanto per compatibilita legacy ed e indipendente da `RecordStatus`, `archivedAt`, `startDate` ed `endDate`. Ogni nuova creazione richiede una fase esplicita. Responsabili e lavoratori restano relazioni tenant-scoped; la creazione guidata puo registrarli nella stessa write annidata del cantiere, dopo avere validato membership e profili attivi dell'Azienda.
+`Organization` e il tenant tecnico e `Azienda` la label prodotto. Ogni utente ha al massimo una `OrganizationMembership`, riutilizzabile dopo revoca, e quindi zero o una sola Azienda. I ruoli interni sono OWNER, ADMIN, SAFETY_CONSULTANT, SITE_MANAGER e WORKER; gli esterni leggono esclusivamente tramite share link tokenizzati.
 
-I ruoli interni sono OWNER, ADMIN, SAFETY_CONSULTANT, SITE_MANAGER e WORKER. Ogni utente ha al massimo una `OrganizationMembership`, riutilizzata dopo una revoca, e quindi zero o una sola Azienda. Ogni accesso nasce dal server: autenticazione, membership o support session valida, permesso esplicito e filtro per risorsa. SITE_MANAGER e WORKER operano solo nel proprio scope; gli esterni leggono esclusivamente tramite share link tokenizzati.
+Il dominio persistito include Worker, JobSite, DocumentType, DocumentRequirement, Document, DocumentVersion, Deadline, CalendarEvent, Checklist, ChecklistItem, Evidence, DocumentPackage, DocumentPackageItem, ShareLink, Notification e ProductAuditEvent. Non esistono modelli Prisma per processo, step, proposta, decisione, eccezione o timeline operativa.
 
-Le route non accettano `organizationId` dal client come fonte autorevole. Ogni query e mutazione dominio deve essere filtrata per organizzazione e applicare default-deny.
+`Worker`, `User`, `OrganizationMembership`, `WorkerUserLink` e assegnazioni sono concetti distinti. `roleLabel` e una mansione libera, non un ruolo, permesso o abilitazione. Un invito WORKER nuovo riferisce un Worker della stessa Azienda; l'accettazione crea o riattiva membership e link nella stessa transazione Serializable. Gli inviti legacy privi di `workerId` non deducono il profilo dall'email.
 
-`DocumentType.categoryKey` collega il tipo al registro categorie condiviso e `DocumentType.sensitivity` applica la classe `STANDARD`, `RESTRICTED` o `HEALTH_JUDGMENT`. Categoria, macroarea e sensibilita sono validate server-side. I documenti non `STANDARD` sono visibili soltanto a OWNER e ADMIN; documenti non classificati o non `STANDARD` non possono entrare in nuovi pacchetti condivisi o link esterni. `WORKER_RESTRICTED_ADMINISTRATION` resta indisponibile finche non esistono entitlement commerciali e una matrice permessi dedicata.
+`JobSite.operationalPhase` e indipendente da stato, archiviazione e date; e nullable per i legacy e richiesta nelle nuove creazioni. La fase non prova conformita e non viene dedotta automaticamente soltanto dal periodo.
 
-Gli eventi calendario sono sempre filtrati per Azienda. OWNER e ADMIN possono creare, assegnare, spostare, aggiornare e archiviare eventi e task; gli altri ruoli leggono soltanto il proprio calendario o lo scope cantiere gia autorizzato. Una persona assegnata puo aggiornare esclusivamente lo stato del proprio impegno. Il ruolo non viene interpretato come una gerarchia HR inventata.
+Categoria, macroarea e sensibilita documentale sono validate server-side. Documenti non `STANDARD` sono visibili secondo la policy esistente e non entrano in nuovi pacchetti condivisi. Nessuna lista normativa o scadenza ufficiale e incorporata nel dominio.
 
-L'unica simulazione di ruolo e confinata al dev-auth locale: il ruolo selezionato viene validato e firmato dal server, modifica solo il contesto effettivo della sessione e non aggiorna `OrganizationMembership`. SITE_MANAGER e WORKER continuano ad applicare scope di risorsa; in dev usano una membership attiva dello stesso ruolo nell'Azienda quando disponibile.
+## Invarianti autorizzativi
 
-`Worker`, `User`, `OrganizationMembership` e assegnazioni sono concetti distinti. Un invito WORKER nuovo deve riferire un `Worker` della stessa Azienda; l'accettazione crea o riattiva membership e `WorkerUserLink` nella stessa transazione Serializable. Gli inviti legacy senza `workerId` restano validi ma non deducono mai il profilo dall'email: l'account viene segnalato come configurazione incompleta. OWNER e ADMIN gestiscono assegnazioni; SAFETY_CONSULTANT le legge; SITE_MANAGER e WORKER mantengono scope server-side. La visibilita del consulente e la matrice privacy restano quelle della policy canonica esistente; non sono introdotti nuovi permessi granulari.
+- Azienda, attore, ruolo, support session, permesso e resource scope derivano sempre dal server.
+- Route e processi futuri non accettano `organizationId` dal client come fonte autorevole.
+- Ogni query e mutazione applica default-deny e filtro Azienda; SITE_MANAGER e WORKER mantengono lo scope assegnato.
+- Una previsione, un evento o un processo non amplia permessi e non crea scorciatoie autorizzative.
+- Inviti, assegnazioni, ruoli, condivisioni e operazioni sensibili richiedono gli stessi controlli dei servizi dominio esistenti.
+- Supporto resta temporaneo, motivato, MFA-protected, notificato e auditato.
+
+## Direzione approvata
+
+I processi futuri orchestrano il dominio senza sostituirlo. Ogni evento viene acquisito nel contesto autorizzativo corrente; ogni step dichiara risorsa, permesso e impatto. Un'eccezione identifica chi puo risolverla e la condizione per riprendere. Una decisione registra un attore gia autorizzato: non introduce un nuovo ruolo implicito.
+
+Le regole validate diventano input versionati dei processi. Una regola puo descrivere cosa attendersi rispetto a una configurazione approvata, ma non equivale a un obbligo legale e non puo ampliare la visibilita dei dati.
+
+## Specifiche concettuali non implementate
+
+`Process Definition`, `Process Run`, `Process Step`, `Process Event`, `Proposal`, `Decision`, `Exception` e `Artifact Reference` sono nomi provvisori. Nessun tipo, DTO, modello o permission scope corrispondente esiste oggi.
+
+## Decisioni aperte e hard stop
+
+Restano da approvare i ruoli autorizzati per ogni proposta, override e condivisione, il trattamento per sensibilita, l'eventuale delega, la policy di annullamento e qualunque nuovo permesso. Non modificare la matrice attuale per anticipare il motore operativo.
