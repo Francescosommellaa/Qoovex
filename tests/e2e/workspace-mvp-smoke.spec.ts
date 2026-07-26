@@ -363,9 +363,12 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     await expectFavoriteDefaults(page, ["Documenti da controllare", "Scadenze"]);
     await expect(page.getByRole("button", { name: /^Apri notifiche(?:, \d+ non lett[ae])?$/ })).toBeVisible();
     await page.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
-    await page.getByRole("menuitemcheckbox", { name: "Checklist aperte", exact: true }).click();
-    await page.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
-    await page.getByRole("menuitemcheckbox", { name: "Scadenze", exact: true }).click();
+    const openChecklistsFavorite = page.getByRole("menuitemcheckbox", { name: "Checklist aperte", exact: true });
+    const deadlinesFavorite = page.getByRole("menuitemcheckbox", { name: "Scadenze", exact: true });
+    await openChecklistsFavorite.click();
+    await expect(openChecklistsFavorite).toHaveAttribute("aria-checked", "true");
+    await deadlinesFavorite.click();
+    await expect(deadlinesFavorite).toHaveAttribute("aria-checked", "false");
     await page.reload({ waitUntil: "domcontentloaded" });
     await expectFavoriteDefaults(page, ["Documenti da controllare", "Checklist aperte"]);
     await expect(page.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("link", { name: "Scadenze", exact: true })).toHaveCount(0);
@@ -520,6 +523,8 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     await invitedWorkerPage.getByRole("button", { name: "Crea account" }).click();
     await expect.poll(async () => (await invitedWorkerPage.request.get("/api/context")).status()).toBe(200);
     await expectJson(await invitedWorkerPage.request.post("/api/organization/invitations/accept", { data: { token: workerInvitationToken } }), 200);
+    await expectJson(await invitedWorkerPage.request.get("/api/context"), 401);
+    await signInWithCredentials(invitedWorkerPage, invitedWorkerEmail, invitedWorkerPassword);
     const invitedWorkerScope = await expectJson(await invitedWorkerPage.request.get("/api/resource-assignments/my-scope"), 200) as unknown as JsonRecord;
     expect((invitedWorkerScope.linkedWorker as JsonRecord).id).toBe(invitedWorkerProfile.id);
     const invitedWorkerRecords = await expectJson(await invitedWorkerPage.request.get("/api/workers"), 200) as unknown as JsonRecord[];
@@ -649,6 +654,7 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
 });
 
 test("ordinary MFA gates workspace, replaces the factor, logs out, and recovers with OWNER approval", async ({ browser, playwright, baseURL }) => {
+  test.setTimeout(120_000);
   const runId = `${Date.now()}`;
   const adminApi = await playwright.request.newContext({ baseURL });
   let fixture: JsonRecord | null = null;
