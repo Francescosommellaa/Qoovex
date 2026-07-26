@@ -27,7 +27,10 @@ describe("GitHub workflow contracts", () => {
     );
     expect(packageJson.scripts?.["test:e2e:install"]).toBe("playwright install --with-deps chromium");
     expect(packageJson.scripts?.["deps:update"]).toBe(
-      "pnpm --workspace-root update --latest --include-github-actions && pnpm update --recursive --latest",
+      "pnpm --workspace-root update --include-github-actions && pnpm update --recursive",
+    );
+    expect(packageJson.scripts?.["deps:update:major"]).toBe(
+      "pnpm --workspace-root update --latest --interactive --include-github-actions && pnpm update --recursive --latest --interactive",
     );
     expect(workflow.match(/node-version-file: package\.json/g)).toHaveLength(2);
     expect(workflow.match(/run: pnpm ci:install/g)).toHaveLength(2);
