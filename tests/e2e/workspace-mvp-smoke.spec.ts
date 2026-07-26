@@ -208,7 +208,7 @@ async function expectFavoriteDefaults(page: Page, labels: string[]) {
 }
 
 async function createGuidedDocument(page: Page, input: {
-  area: "Cantieri" | "Lavoratori";
+  area: "Cantiere" | "Lavoratore";
   category: string;
   contextLabel: string;
   contextPrompt: string;
@@ -218,7 +218,7 @@ async function createGuidedDocument(page: Page, input: {
   await page.getByRole("button", { name: "Aggiungi documento", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "Aggiungi documento" });
   await expect(dialog.getByRole("heading", { name: "Dove va il documento?" })).toBeVisible();
-  await dialog.getByRole("button", { name: new RegExp(`^${input.area}`) }).click();
+  await dialog.getByRole("button", { name: new RegExp(`^${input.area}\\b`) }).click();
   await dialog.getByRole("combobox", { name: input.contextPrompt }).click();
   await page.getByRole("option", { name: input.contextLabel, exact: true }).click();
   await dialog.getByRole("button", { name: new RegExp(`^${input.category}`) }).click();
@@ -380,7 +380,7 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     await uploadAndDownloadDocument(page, jobSiteDocument.id);
     await uploadAndDownloadDocument(page, workerDocument.id);
     const guidedWorkerDocument = await createGuidedDocument(page, {
-      area: "Lavoratori",
+      area: "Lavoratore",
       category: "Formazione e abilitazioni",
       contextLabel: String(worker.displayName),
       contextPrompt: "2. A quale lavoratore appartiene?",
@@ -388,7 +388,7 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     });
     expect(guidedWorkerDocument).toMatchObject({ ownerType: "WORKER", workerId: worker.id, categoryKey: WORKER_DOCUMENT_CATEGORY });
     const guidedJobSiteDocument = await createGuidedDocument(page, {
-      area: "Cantieri",
+      area: "Cantiere",
       category: "Avvio e autorizzazioni",
       contextLabel: String(jobSite.name),
       contextPrompt: "2. A quale cantiere appartiene?",

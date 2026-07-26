@@ -95,11 +95,13 @@ jobs:
           QOOVEX_E2E_BLOB_TARGET: ${{ vars.QOOVEX_E2E_BLOB_STORE_ID }}
           QOOVEX_E2E_RUN_ATTESTATION: I_ACKNOWLEDGE_FIXTURE_SCOPED_CLEANUP
         run: pnpm test:e2e
-      - name: Upload Playwright report
+      - name: Upload Playwright artifacts
         if: failure()
         uses: actions/upload-artifact@v6
         with:
           name: playwright-report
-          path: playwright-report/
+          path: |
+            playwright-report/
+            test-results/
           if-no-files-found: ignore
           retention-days: 7
