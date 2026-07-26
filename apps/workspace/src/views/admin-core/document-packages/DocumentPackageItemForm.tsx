@@ -33,6 +33,9 @@ export function DocumentPackageItemForm({ packageId, documents, documentVersions
   const [itemType, setItemType] = useState<DocumentPackageItemType>("DOCUMENT");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const shareableDocuments = documents.filter((document) => document.categoryKey !== "UNCLASSIFIED" && document.sensitivity === "STANDARD");
+  const shareableDocumentIds = new Set(shareableDocuments.map((document) => document.id));
+  const shareableVersions = documentVersions.filter((version) => version.documentId && shareableDocumentIds.has(version.documentId));
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -82,8 +85,8 @@ export function DocumentPackageItemForm({ packageId, documents, documentVersions
             <span>Documento</span>
             <select disabled={disabled || pending} name="documentId" required>
               <option value="">Seleziona documento</option>
-              {documents.map((document) => (
-                <option key={document.id} value={document.id}>{document.title}</option>
+              {shareableDocuments.map((document) => (
+                <option key={document.id} value={document.id}>{document.categoryLabel} - {document.documentTypeName} - {document.title}</option>
               ))}
             </select>
           </label>
@@ -93,8 +96,8 @@ export function DocumentPackageItemForm({ packageId, documents, documentVersions
             <span>File del documento</span>
             <select disabled={disabled || pending} name="documentVersionId" required>
               <option value="">Seleziona file</option>
-              {documentVersions.map((version) => (
-                <option key={version.id} value={version.id}>{documentTitle(version.documentId, documents)} - {version.originalFileName}</option>
+              {shareableVersions.map((version) => (
+                <option key={version.id} value={version.id}>{documentTitle(version.documentId, shareableDocuments)} - {version.originalFileName}</option>
               ))}
             </select>
           </label>

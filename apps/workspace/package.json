@@ -10,7 +10,7 @@
     "test": "node scripts/verify-fsd-boundaries.mjs && vitest run"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.7.4",
+    "@auth/prisma-adapter": "^2.11.3",
     "@fullcalendar/react": "7.0.1",
     "@qoovex/brand-resources": "workspace:*",
     "@qoovex/db": "workspace:*",
@@ -19,8 +19,8 @@
     "@tabler/icons-react": "^3.44.0",
     "@vercel/blob": "^2.5.0",
     "file-type": "^22.0.1",
-    "next": "16.2.6",
-    "next-auth": "^5.0.0-beta.25",
+    "next": "16.2.11",
+    "next-auth": "^5.0.0-beta.32",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "resend": "^6.12.0"

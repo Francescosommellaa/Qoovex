@@ -2,6 +2,8 @@
 
 UI app-local per lista documenti, dettaglio documento e versioni file.
 
+`DocumentOverviewView`, `DocumentAreaPageView` e `DocumentCategoryList` presentano stato e categorie senza chart decorativi o query per card. `DocumentCreateFlow` segue macroarea, destinazione, categoria, tipo, file e riepilogo: non ammette `Senza tipo`, consente la creazione inline classificata a OWNER/ADMIN e preserva il documento durante il retry del file. Il dettaglio mostra macroarea, categoria, tipo, sensibilita e contesto prima delle versioni.
+
 Usa solo le API gia protette sotto `/api/documents` e non espone `blobKey`, URL permanenti o contenuto file.
 
 `DocumentsPageView` usa Card, Badge, Alert, Empty, Button e Dialog della foundation Qoovex con icone Tabler. La lista copre filtri URL, contesto/scadenza, modalita selezione file, empty state role-safe, responsive senza overflow e fallback reduced-motion/forced-colors.

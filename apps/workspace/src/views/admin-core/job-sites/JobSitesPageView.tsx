@@ -1,86 +1,70 @@
-import { IconBuilding, IconCalendar, IconMapPin } from "@tabler/icons-react";
+import Link from "next/link";
+import { IconAlertTriangle, IconBuilding, IconChevronLeft, IconChevronRight, IconSearch } from "@tabler/icons-react";
 import { Badge } from "@qoovex/ui/components/badge";
+import { buttonVariants } from "@qoovex/ui/components/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
+import { Input } from "@qoovex/ui/components/input";
+import { cn } from "@qoovex/ui/lib/utils";
+import { jobSiteOperationalPhaseLabels, legacyJobSiteOperationalPhaseLabel } from "@qoovex/types";
+import type { JobSiteListResponse } from "@qoovex/types";
 import { JobSiteCreateDialog } from "./JobSiteCreateDialog";
-import { JobSiteDetailsDialog } from "./JobSiteDetailsDialog";
 import { WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
-import { formatDate, recordStatusLabels, statusTone } from "@/views/workspace/workspace-format";
-import type { WorkspaceCapabilities, WorkspaceJobSiteRecord } from "@/views/workspace/workspace-records";
+import type { WorkspaceCapabilities } from "@/views/workspace/workspace-records";
+import { formatDate } from "@/views/workspace/workspace-format";
 
-export function JobSitesPageView({ jobSites, capabilities, initialCreateOpen = false }: { jobSites: WorkspaceJobSiteRecord[]; capabilities: WorkspaceCapabilities; initialCreateOpen?: boolean }) {
-  const resultLabel = jobSites.length === 1 ? "1 cantiere" : `${jobSites.length} cantieri`;
+const attentionLabels = {
+  MISSING_DOCUMENTS: "Documenti mancanti",
+  EXPIRED_DOCUMENTS: "Documenti scaduti",
+  DOCUMENTS_TO_REVIEW: "Documenti da verificare",
+  OPEN_CHECKLIST_ITEMS: "Checklist aperte",
+  OVERDUE_DEADLINES: "Scadenze superate",
+  UPCOMING_DEADLINES: "Scadenze vicine",
+  NO_MANAGER: "Responsabile assente",
+  NO_WORKERS: "Lavoratori assenti",
+  READY_PACKAGES: "Pacchetto pronto",
+} as const;
 
+function queryHref(basePath: string, query: Record<string, string | number | undefined>) {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) if (value !== undefined && value !== "") params.set(key, String(value));
+  const suffix = params.toString();
+  return suffix ? `${basePath}?${suffix}` : basePath;
+}
+
+export function JobSitesPageView({ response, capabilities, archived = false, filters }: { response: JobSiteListResponse; capabilities: WorkspaceCapabilities; archived?: boolean; filters: { search?: string; phase?: string; attention?: string } }) {
+  const basePath = archived ? "/job-sites/archive" : "/job-sites/all";
   return (
     <WorkspacePage>
       <WorkspacePageHeader
-        title="Cantieri"
-        description="Consulta le informazioni essenziali e apri il cantiere per documenti, attività e persone collegate."
-        action={capabilities.canCreateJobSites ? <JobSiteCreateDialog className="h-10 w-full sm:h-8 sm:w-auto" initialOpen={initialCreateOpen} /> : undefined}
+        title={archived ? "Archivio cantieri" : "Tutti i cantieri"}
+        description={archived ? "Consulta i cantieri archiviati senza modificare relazioni, file o condivisioni." : "Cerca e filtra l'elenco operativo completo per fase e segnali di attenzione."}
+        action={!archived && capabilities.canCreateJobSites ? <JobSiteCreateDialog className="h-10 w-full sm:h-8 sm:w-auto" /> : undefined}
       />
 
-      {!jobSites.length ? (
-        <Card>
-          <CardContent>
-            <Empty className="min-h-64 py-10">
-              <EmptyHeader>
-                <EmptyMedia variant="icon"><IconBuilding aria-hidden="true" /></EmptyMedia>
-                <EmptyTitle>Nessun cantiere</EmptyTitle>
-                <EmptyDescription>Crea un cantiere per raccogliere documenti, scadenze e attività.</EmptyDescription>
-              </EmptyHeader>
-              {capabilities.canCreateJobSites ? <EmptyContent><JobSiteCreateDialog /></EmptyContent> : null}
-            </Empty>
-          </CardContent>
-        </Card>
-      ) : (
-        <Card size="sm">
-          <CardHeader className="border-b">
-            <CardTitle><h2>Elenco cantieri</h2></CardTitle>
-            <CardDescription>Committente, luogo e periodo registrati per ogni cantiere.</CardDescription>
-            <CardAction><Badge variant="outline">{resultLabel}</Badge></CardAction>
-          </CardHeader>
-          <CardContent>
+      <Card size="sm">
+        <CardHeader className="border-b"><CardTitle><h2>Filtri server</h2></CardTitle><CardDescription>Nome, committente e indirizzo vengono cercati sul server.</CardDescription></CardHeader>
+        <CardContent>
+          <form className="grid gap-3 md:grid-cols-[minmax(0,1fr)_13rem_14rem_auto]" method="get">
+            <label className="grid gap-1 text-sm font-medium"><span>Ricerca</span><span className="relative"><IconSearch aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input className="pl-9" defaultValue={filters.search} name="search" placeholder="Nome, committente, indirizzo" /></span></label>
+            <label className="grid gap-1 text-sm font-medium"><span>Fase</span><select className="h-10 rounded-md border bg-background px-3 text-sm" defaultValue={filters.phase ?? ""} name="phase"><option value="">Tutte le fasi</option>{Object.entries(jobSiteOperationalPhaseLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+            <label className="grid gap-1 text-sm font-medium"><span>Attenzione</span><select className="h-10 rounded-md border bg-background px-3 text-sm" defaultValue={filters.attention ?? ""} name="attention"><option value="">Qualsiasi situazione</option>{Object.entries(attentionLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+            <button className={cn(buttonVariants(), "h-10 self-end")} type="submit">Applica</button>
+          </form>
+        </CardContent>
+      </Card>
+
+      <Card size="sm">
+        <CardHeader className="border-b"><CardTitle><h2>{archived ? "Cantieri archiviati" : "Elenco operativo"}</h2></CardTitle><CardDescription>{response.total === 1 ? "1 risultato" : `${response.total} risultati`} · pagina {response.page} di {response.totalPages}</CardDescription><CardAction><Badge variant="outline">{response.total}</Badge></CardAction></CardHeader>
+        <CardContent>
+          {!response.items.length ? <div className="rounded-lg border border-dashed p-8 text-center"><IconBuilding aria-hidden="true" className="mx-auto size-6 text-muted-foreground" /><p className="mt-3 font-medium">Nessun cantiere trovato</p><p className="mt-1 text-sm text-muted-foreground">Modifica i filtri oppure crea il primo cantiere operativo.</p></div> : (
             <ul aria-label="Cantieri disponibili" className="divide-y divide-border">
-              {jobSites.map((jobSite) => (
-                <li className="py-4 first:pt-0 last:pb-0" key={jobSite.id}>
-                  <article className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-start gap-4 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center">
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border bg-muted/40">
-                      <IconBuilding aria-hidden="true" className="size-5 text-muted-foreground" />
-                    </div>
-
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="[overflow-wrap:anywhere] text-base font-medium leading-snug text-foreground">{jobSite.name}</h3>
-                        <WorkspaceState label={recordStatusLabels[jobSite.status]} tone={statusTone(jobSite.status)} />
-                      </div>
-                      <p className="mt-1 text-sm text-muted-foreground">{jobSite.clientName || "Committente non indicato"}</p>
-
-                      <dl className="mt-3 grid min-w-0 gap-2 text-sm md:grid-cols-2">
-                        <div className="flex min-w-0 items-center gap-2">
-                          <dt className="sr-only">Indirizzo</dt>
-                          <IconMapPin aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
-                          <dd className="min-w-0 truncate text-muted-foreground">{jobSite.address || "Indirizzo non registrato"}</dd>
-                        </div>
-                        <div className="flex min-w-0 items-center gap-2">
-                          <dt className="sr-only">Periodo</dt>
-                          <IconCalendar aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
-                          <dd className="min-w-0 truncate text-muted-foreground">{formatDate(jobSite.startDate)} – {formatDate(jobSite.endDate)}</dd>
-                        </div>
-                      </dl>
-                    </div>
-
-                    <JobSiteDetailsDialog
-                      canManage={capabilities.canManageCore}
-                      className="col-span-2 h-10 w-full sm:col-span-1 sm:col-start-2 sm:w-fit lg:col-start-auto lg:h-8 lg:justify-self-end"
-                      jobSite={jobSite}
-                    />
-                  </article>
-                </li>
-              ))}
+              {response.items.map((item) => <li className="py-4 first:pt-0 last:pb-0" key={item.id}><article className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(19rem,1.1fr)_auto] lg:items-center"><div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><h3 className="[overflow-wrap:anywhere] font-medium">{item.name}</h3><WorkspaceState label={item.operationalPhase ? jobSiteOperationalPhaseLabels[item.operationalPhase] : legacyJobSiteOperationalPhaseLabel} tone={item.operationalPhase === "PAUSED" ? "warning" : item.operationalPhase === "COMPLETED" ? "good" : "info"} /></div><p className="mt-1 text-sm text-muted-foreground">{item.clientName || "Committente non indicato"} · {item.address || "Indirizzo non registrato"}</p></div><div className="min-w-0"><dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs sm:grid-cols-4"><div><dt className="text-muted-foreground">Documenti</dt><dd className="font-medium tabular-nums">{item.summary.missingDocuments + item.summary.expiredDocuments + item.summary.documentsToReview} da gestire</dd></div><div><dt className="text-muted-foreground">Checklist</dt><dd className="font-medium tabular-nums">{item.summary.openChecklistItems + item.summary.checklistItemsToReview} aperte</dd></div><div><dt className="text-muted-foreground">Persone</dt><dd className="font-medium tabular-nums">{item.summary.managerCount} resp. · {item.summary.workerCount} lav.</dd></div><div><dt className="text-muted-foreground">Prossima scadenza</dt><dd className="truncate font-medium">{item.summary.nextDeadline ? formatDate(item.summary.nextDeadline.dueDate) : "Nessuna"}</dd></div></dl><div className="mt-2 flex min-w-0 flex-wrap gap-1.5">{item.summary.attentionStates.length ? item.summary.attentionStates.slice(0, 3).map((state) => <Badge key={state} variant={state === "EXPIRED_DOCUMENTS" || state === "OVERDUE_DEADLINES" ? "destructive" : "outline"}>{attentionLabels[state]}</Badge>) : <Badge variant="success">Nessuna criticita rilevata</Badge>}{item.summary.attentionStates.length > 3 ? <Badge variant="outline">+{item.summary.attentionStates.length - 3}</Badge> : null}</div></div><Link className={cn(buttonVariants({ size: "sm", variant: "outline" }), "h-10 lg:h-8")} href={`/job-sites/${item.id}`}>{item.summary.attentionScore > 0 ? <IconAlertTriangle aria-hidden="true" /> : <IconBuilding aria-hidden="true" />}Apri</Link></article></li>)}
             </ul>
-          </CardContent>
-        </Card>
-      )}
+          )}
+        </CardContent>
+      </Card>
+
+      <nav aria-label="Paginazione cantieri" className="flex items-center justify-between gap-3"><Link aria-disabled={response.page <= 1} className={cn(buttonVariants({ variant: "outline" }), response.page <= 1 && "pointer-events-none opacity-50")} href={queryHref(basePath, { ...filters, page: Math.max(1, response.page - 1) })}><IconChevronLeft aria-hidden="true" />Precedente</Link><span className="text-sm text-muted-foreground">Pagina {response.page} di {response.totalPages}</span><Link aria-disabled={response.page >= response.totalPages} className={cn(buttonVariants({ variant: "outline" }), response.page >= response.totalPages && "pointer-events-none opacity-50")} href={queryHref(basePath, { ...filters, page: Math.min(response.totalPages, response.page + 1) })}>Successiva<IconChevronRight aria-hidden="true" /></Link></nav>
     </WorkspacePage>
   );
 }

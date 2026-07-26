@@ -117,7 +117,7 @@ export function DocumentsPageView({
         action={
           <div className="grid w-full grid-cols-1 gap-2 min-[420px]:grid-cols-2 sm:flex sm:w-auto sm:flex-wrap sm:justify-end">
             {archiveMode ? <Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} data-link="plain" href="/documents"><IconArrowLeft />Torna ai documenti</Link> : preserveDashboardOrigin ? <Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} data-link="plain" href="/dashboard"><IconArrowLeft />Torna a Da fare</Link> : null}
-            {!archiveMode && capabilities.canCreateDocuments ? <DocumentCreateDialog className="h-10 sm:h-8" jobSites={jobSites} origin="documents" workers={workers} /> : null}
+            {!archiveMode && capabilities.canCreateDocuments ? <DocumentCreateDialog canManageTypes={capabilities.canManageDocumentSettings} className="h-10 sm:h-8" jobSites={jobSites} origin="documents" workers={workers} /> : null}
           </div>
         }
       />
@@ -205,7 +205,7 @@ export function DocumentsPageView({
               <EmptyContent>
                 <div className="flex flex-wrap justify-center gap-2">
                   {archiveMode ? <Link className={buttonVariants({ variant: "outline" })} data-link="plain" href={archiveOwnerType ? archiveFilterHref(undefined, preserveDashboardOrigin) : "/documents"}>{archiveOwnerType ? "Mostra tutto l’archivio" : "Torna ai documenti"}</Link> : activeFilter.status ? <Link className={buttonVariants({ variant: "outline" })} data-link="plain" href={filterHref(undefined, preserveDashboardOrigin, intentUpload)}>Mostra tutti</Link> : null}
-                  {!archiveMode && capabilities.canCreateDocuments ? <DocumentCreateDialog jobSites={jobSites} origin="documents" workers={workers} /> : null}
+                  {!archiveMode && capabilities.canCreateDocuments ? <DocumentCreateDialog canManageTypes={capabilities.canManageDocumentSettings} jobSites={jobSites} origin="documents" workers={workers} /> : null}
                 </div>
               </EmptyContent>
             </Empty>

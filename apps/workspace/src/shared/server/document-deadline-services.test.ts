@@ -51,16 +51,27 @@ const documentTypeRecord = {
   name: "Documento configurato",
   description: null,
   appliesTo: "WORKER",
+  categoryKey: "WORKER_TRAINING_QUALIFICATIONS",
+  sensitivity: "STANDARD",
   requiresExpiryDate: false,
   createdAt: now,
   updatedAt: now,
   archivedAt: null,
+  _count: { documents: 0 },
+};
+
+const organizationDocumentTypeRecord = {
+  ...documentTypeRecord,
+  id: "dt-company",
+  name: "Visura camerale",
+  appliesTo: "ORGANIZATION",
+  categoryKey: "COMPANY_IDENTITY_REGISTRATIONS",
 };
 
 const documentRecord = {
   id: "doc-1",
   organizationId: "org-1",
-  documentTypeId: null,
+  documentTypeId: "dt-company",
   ownerType: "ORGANIZATION",
   workerId: null,
   jobSiteId: null,
@@ -73,6 +84,9 @@ const documentRecord = {
   createdAt: now,
   updatedAt: now,
   archivedAt: null,
+  documentType: organizationDocumentTypeRecord,
+  worker: null,
+  jobSite: null,
 };
 
 const documentVersionRecord = {
@@ -147,7 +161,7 @@ describe("document type service", () => {
   it("lets owners create configurable document types without presets", async () => {
     mocks.db.documentType.create.mockResolvedValue(documentTypeRecord);
 
-    await expect(createDocumentType({ name: " Documento ", appliesTo: "WORKER", requiresExpiryDate: false })).resolves.toEqual(documentTypeRecord);
+    await expect(createDocumentType({ name: " Documento ", appliesTo: "WORKER", categoryKey: "WORKER_TRAINING_QUALIFICATIONS", sensitivity: "STANDARD", requiresExpiryDate: false })).resolves.toMatchObject({ name: "Documento configurato", categoryKey: "WORKER_TRAINING_QUALIFICATIONS", categoryLabel: "Formazione e abilitazioni" });
 
     expect(mocks.requirePermission).toHaveBeenCalledWith(expect.anything(), "documents:update");
     expect(mocks.db.documentType.create).toHaveBeenCalledWith(expect.objectContaining({
@@ -158,7 +172,7 @@ describe("document type service", () => {
   it("lists only active document types for the current organization", async () => {
     mocks.db.documentType.findMany.mockResolvedValue([documentTypeRecord]);
 
-    await expect(listDocumentTypes()).resolves.toEqual([documentTypeRecord]);
+    await expect(listDocumentTypes()).resolves.toEqual([{ ...documentTypeRecord, categoryLabel: "Formazione e abilitazioni", documentCount: 0, _count: undefined }]);
 
     expect(mocks.db.documentType.findMany).toHaveBeenCalledWith(expect.objectContaining({
       where: { organizationId: "org-1", archivedAt: null },
@@ -177,7 +191,7 @@ describe("document service", () => {
     const archivedDocument = { ...documentRecord, status: "ARCHIVED", archivedAt: now };
     mocks.db.document.findMany.mockResolvedValue([archivedDocument]);
 
-    await expect(listDocuments({ status: "ARCHIVED" })).resolves.toEqual([archivedDocument]);
+    await expect(listDocuments({ status: "ARCHIVED" })).resolves.toMatchObject([{ id: "doc-1", status: "ARCHIVED", categoryKey: "COMPANY_IDENTITY_REGISTRATIONS" }]);
 
     expect(mocks.requirePermission).toHaveBeenCalledWith(expect.anything(), "documents:archive");
     expect(mocks.db.document.findMany).toHaveBeenCalledTimes(1);
@@ -202,9 +216,10 @@ describe("document service", () => {
 
   it("lets admins create logical organization documents without Blob fields", async () => {
     setRole("ADMIN");
+    mocks.db.documentType.findFirst.mockResolvedValue(organizationDocumentTypeRecord);
     mocks.db.document.create.mockResolvedValue(documentRecord);
 
-    await expect(createDocument({ title: " Documento ", ownerType: "ORGANIZATION", status: "TO_REVIEW" })).resolves.toEqual(documentRecord);
+    await expect(createDocument({ title: " Documento ", documentTypeId: "dt-company", ownerType: "ORGANIZATION", status: "TO_REVIEW" })).resolves.toMatchObject({ id: "doc-1", categoryKey: "COMPANY_IDENTITY_REGISTRATIONS" });
 
     expect(mocks.requirePermission).toHaveBeenCalledWith(expect.anything(), "documents:update");
     expect(mocks.db.document.create).toHaveBeenCalledWith(expect.objectContaining({
@@ -213,8 +228,9 @@ describe("document service", () => {
   });
 
   it("rejects inconsistent owners and file payload fields", async () => {
-    await expect(createDocument({ title: "Documento", ownerType: "WORKER" })).rejects.toMatchObject({ status: 409 });
-    await expect(createDocument({ title: "Documento", ownerType: "ORGANIZATION", blobKey: "blob" })).rejects.toMatchObject({ status: 409 });
+    mocks.db.documentType.findFirst.mockResolvedValue(documentTypeRecord);
+    await expect(createDocument({ title: "Documento", documentTypeId: "dt-1", ownerType: "WORKER" })).rejects.toMatchObject({ status: 409 });
+    await expect(createDocument({ title: "Documento", documentTypeId: "dt-1", ownerType: "ORGANIZATION", blobKey: "blob" })).rejects.toMatchObject({ status: 409 });
     expect(mocks.db.document.create).not.toHaveBeenCalled();
   });
 
@@ -230,15 +246,17 @@ describe("document service", () => {
   });
 
   it("rejects worker and job site owners outside the current organization or archived", async () => {
+    mocks.db.documentType.findFirst.mockResolvedValue(documentTypeRecord);
     mocks.db.worker.findFirst.mockResolvedValue(null);
-    await expect(createDocument({ title: "Documento", ownerType: "WORKER", workerId: "worker-other" })).rejects.toMatchObject({ status: 404 });
+    await expect(createDocument({ title: "Documento", documentTypeId: "dt-1", ownerType: "WORKER", workerId: "worker-other" })).rejects.toMatchObject({ status: 404 });
     expect(mocks.db.worker.findFirst).toHaveBeenCalledWith(expect.objectContaining({
       where: { id: "worker-other", organizationId: "org-1", archivedAt: null },
     }));
 
     mocks.db.worker.findFirst.mockReset();
+    mocks.db.documentType.findFirst.mockResolvedValue({ ...documentTypeRecord, appliesTo: "JOB_SITE", categoryKey: "SITE_START_AUTHORIZATIONS" });
     mocks.db.jobSite.findFirst.mockResolvedValue(null);
-    await expect(createDocument({ title: "Documento", ownerType: "JOB_SITE", jobSiteId: "jobsite-other" })).rejects.toMatchObject({ status: 404 });
+    await expect(createDocument({ title: "Documento", documentTypeId: "dt-1", ownerType: "JOB_SITE", jobSiteId: "jobsite-other" })).rejects.toMatchObject({ status: 404 });
     expect(mocks.db.jobSite.findFirst).toHaveBeenCalledWith(expect.objectContaining({
       where: { id: "jobsite-other", organizationId: "org-1", archivedAt: null },
     }));
@@ -281,6 +299,30 @@ describe("document service", () => {
 
     setRole("SITE_MANAGER");
     await expect(listDocuments()).resolves.toBeDefined();
+  });
+
+  it("bounds macroarea document pages without changing tenant and role filters", async () => {
+    mocks.db.document.findMany.mockResolvedValue([]);
+
+    await expect(listDocuments({ ownerType: "WORKER", take: 51, skip: 100 })).resolves.toEqual([]);
+    expect(mocks.db.document.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      take: 51,
+      skip: 100,
+      where: expect.objectContaining({ organizationId: "org-1", ownerType: "WORKER" }),
+    }));
+    await expect(listDocuments({ take: 102 })).rejects.toMatchObject({ status: 409 });
+    await expect(listDocuments({ skip: -1 })).rejects.toMatchObject({ status: 409 });
+  });
+
+  it("applies the attention queue in the existing tenant-scoped document query", async () => {
+    mocks.db.document.findMany.mockResolvedValue([]);
+    await expect(listDocuments({ statuses: ["MISSING", "EXPIRED", "EXPIRING_SOON", "TO_REVIEW"], take: 51, skip: 50 })).resolves.toEqual([]);
+    expect(mocks.db.document.findMany).toHaveBeenCalledTimes(1);
+    expect(mocks.db.document.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      take: 51,
+      skip: 50,
+      where: expect.objectContaining({ organizationId: "org-1", status: { in: ["MISSING", "EXPIRED", "EXPIRING_SOON", "TO_REVIEW"] } }),
+    }));
   });
 
   it("filters document detail by organization", async () => {

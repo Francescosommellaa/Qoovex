@@ -9,8 +9,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json() as { email?: string; role?: OrganizationRole };
-    return Response.json(await createInvitation({ email: body.email ?? "", role: body.role ?? "WORKER" }), { status: 201 });
+    const body = await request.json() as { email?: string; role?: OrganizationRole; workerId?: string | null };
+    return Response.json(await createInvitation({ email: body.email ?? "", role: body.role ?? "WORKER", workerId: body.workerId }), { status: 201 });
   } catch (error) { return asAccessResponse(error); }
 }
 

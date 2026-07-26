@@ -9,11 +9,10 @@ import {
   IconCalendarDue,
   IconChevronDown,
   IconChevronRight,
-  IconChecklist,
+  IconFileAlert,
   IconFileDescription,
   IconFilePlus,
   IconHome,
-  IconPhoto,
   IconPhotoPlus,
   IconPin,
   IconSearch,
@@ -26,7 +25,7 @@ import { Badge } from "@qoovex/ui/components/badge";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@qoovex/ui/components/breadcrumb";
 import { Button } from "@qoovex/ui/components/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@qoovex/ui/components/collapsible";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@qoovex/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@qoovex/ui/components/dropdown-menu";
 import {
   Sidebar,
   SidebarCollapseButton,
@@ -60,9 +59,9 @@ const workspaceNavigation = [
 ];
 
 const quickActions = [
-  { label: "Documento", actionLabel: "Crea documento", icon: IconFilePlus },
+  { label: "Documento", actionLabel: "Aggiungi documento", icon: IconFilePlus },
   { label: "Cantiere", actionLabel: "Crea cantiere", icon: IconBuildingPlus },
-  { label: "Lavoratore", actionLabel: "Crea lavoratore", icon: IconUserPlus },
+  { label: "Lavoratore", actionLabel: "Aggiungi lavoratore", icon: IconUserPlus },
   { label: "Prova", actionLabel: "Aggiungi prova", icon: IconPhotoPlus },
 ] as const;
 
@@ -90,6 +89,24 @@ function DemoQuickActions() {
         ))}
       </SidebarMenu>
     </div>
+  );
+}
+
+function DemoFavorites() {
+  const { isMobile, state } = useSidebar();
+  const collapsed = state === "collapsed" && !isMobile;
+  return (
+    <SidebarGroup aria-label="Preferiti" role="group">
+      <SidebarGroupLabel>Preferiti</SidebarGroupLabel>
+      <DropdownMenu>
+        <DropdownMenuTrigger render={collapsed ? <SidebarMenuButton aria-label="Personalizza Preferiti" tooltip="Personalizza Preferiti" /> : <SidebarGroupAction aria-label="Personalizza Preferiti" title="Personalizza Preferiti" />}><IconPin />{collapsed ? <span className="sr-only">Personalizza Preferiti</span> : null}</DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="min-w-64" side="right"><DropdownMenuGroup><DropdownMenuLabel className="flex flex-col gap-0.5"><span>Preferiti</span><span className="font-normal">Scegli fino a 4 viste da tenere nella sidebar.</span></DropdownMenuLabel><DropdownMenuCheckboxItem checked>Documenti da controllare</DropdownMenuCheckboxItem><DropdownMenuCheckboxItem checked>Scadenze</DropdownMenuCheckboxItem><DropdownMenuCheckboxItem>Checklist aperte</DropdownMenuCheckboxItem><DropdownMenuCheckboxItem>Prove recenti</DropdownMenuCheckboxItem></DropdownMenuGroup></DropdownMenuContent>
+      </DropdownMenu>
+      <SidebarGroupContent><SidebarMenu>
+        <SidebarMenuItem><SidebarMenuButton tooltip="Documenti da controllare"><IconFileAlert /><span>Documenti da controllare</span></SidebarMenuButton></SidebarMenuItem>
+        <SidebarMenuItem><SidebarMenuButton render={<a href="/calendar" />} tooltip="Scadenze"><IconCalendarDue /><span>Scadenze</span></SidebarMenuButton></SidebarMenuItem>
+      </SidebarMenu></SidebarGroupContent>
+    </SidebarGroup>
   );
 }
 
@@ -132,15 +149,7 @@ export function DashboardShell() {
             </SidebarGroupContent>
           </SidebarGroup>
 
-          <SidebarGroup>
-            <SidebarGroupLabel>Collegamenti rapidi</SidebarGroupLabel>
-            <SidebarGroupAction aria-label="Personalizza collegamenti rapidi" title="Personalizza collegamenti rapidi"><IconPin /></SidebarGroupAction>
-            <SidebarGroupContent><SidebarMenu>
-              <SidebarMenuItem><SidebarMenuButton render={<a href="/calendar" />} tooltip="Scadenze"><IconCalendarDue /><span>Scadenze</span></SidebarMenuButton></SidebarMenuItem>
-              <SidebarMenuItem><SidebarMenuButton tooltip="Prove"><IconPhoto /><span>Prove</span></SidebarMenuButton></SidebarMenuItem>
-              <SidebarMenuItem><SidebarMenuButton tooltip="Checklist"><IconChecklist /><span>Checklist</span></SidebarMenuButton></SidebarMenuItem>
-            </SidebarMenu></SidebarGroupContent>
-          </SidebarGroup>
+          <DemoFavorites />
         </SidebarContent>
         <SidebarFooter className="gap-2">
           <DemoQuickActions />

@@ -6,6 +6,7 @@ import { AccessError } from "@shared/server/access-errors";
 import { getContextOrganizationId, getWorkspaceAccessContext, requireIdentity, requirePermission } from "@shared/server/access-context-service";
 import { canRevokeRole } from "@shared/server/authorization-policy";
 import { recordSupportAccess } from "@shared/server/support-access-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import {
   isPrismaKnownRequestError,
   runSerializableTransaction,
@@ -104,5 +105,13 @@ export async function revokeMember(memberId: string) {
     db.user.update({ where: { id: target.userId }, data: { authVersion: { increment: 1 } } }),
     db.session.deleteMany({ where: { userId: target.userId } }),
   ]);
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "ORGANIZATION_MEMBERSHIP_REVOKED",
+    entityType: "ORGANIZATION_MEMBERSHIP",
+    entityId: target.id,
+    metadata: { role: target.role },
+  });
   return { revoked: true };
 }

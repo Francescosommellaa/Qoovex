@@ -56,6 +56,19 @@ export type Permission = OrganizationPermission;
 export const recordStatuses = ["ACTIVE", "ARCHIVED"] as const;
 export type RecordStatus = (typeof recordStatuses)[number];
 
+export const jobSiteOperationalPhases = ["PREPARATION", "IN_PROGRESS", "PAUSED", "CLOSING", "COMPLETED"] as const;
+export type JobSiteOperationalPhase = (typeof jobSiteOperationalPhases)[number];
+
+export const jobSiteOperationalPhaseLabels: Record<JobSiteOperationalPhase, string> = {
+  PREPARATION: "Preparazione",
+  IN_PROGRESS: "In corso",
+  PAUSED: "In pausa",
+  CLOSING: "In chiusura",
+  COMPLETED: "Completato",
+};
+
+export const legacyJobSiteOperationalPhaseLabel = "Fase da impostare";
+
 export const documentStatuses = ["PRESENT", "MISSING", "EXPIRED", "EXPIRING_SOON", "TO_REVIEW", "ARCHIVED"] as const;
 export type DocumentStatus = (typeof documentStatuses)[number];
 
@@ -85,6 +98,68 @@ export type DocumentOwnerType = (typeof documentOwnerTypes)[number];
 
 export const documentTypeAppliesToValues = ["ORGANIZATION", "WORKER", "JOB_SITE", "EVIDENCE", "OTHER"] as const;
 export type DocumentTypeAppliesTo = (typeof documentTypeAppliesToValues)[number];
+
+export const documentCategoryKeys = [
+  "COMPANY_IDENTITY_REGISTRATIONS",
+  "COMPANY_REGULARITY_QUALIFICATIONS",
+  "COMPANY_SAFETY",
+  "COMPANY_INSURANCE",
+  "COMPANY_ROLES_ORGANIZATION",
+  "WORKER_IDENTITY_ACCESS",
+  "WORKER_TRAINING_QUALIFICATIONS",
+  "WORKER_FITNESS_JUDGMENT",
+  "WORKER_PPE_DELIVERIES",
+  "WORKER_ROLES_ASSIGNMENTS",
+  "WORKER_RESTRICTED_ADMINISTRATION",
+  "SITE_START_AUTHORIZATIONS",
+  "SITE_SAFETY_COORDINATION",
+  "SITE_COMPANIES_SUBCONTRACTS",
+  "SITE_WORKERS_ACCESS",
+  "SITE_EQUIPMENT_SYSTEMS",
+  "SITE_REPORTS_INSPECTIONS",
+  "SITE_CLOSURE_HANDOVER",
+  "UNCLASSIFIED",
+] as const;
+export type DocumentCategoryKey = (typeof documentCategoryKeys)[number];
+
+export const documentSensitivities = ["STANDARD", "RESTRICTED", "HEALTH_JUDGMENT"] as const;
+export type DocumentSensitivity = (typeof documentSensitivities)[number];
+
+export interface DocumentCategoryDefinition {
+  key: DocumentCategoryKey;
+  label: string;
+  description: string;
+  appliesTo: DocumentOwnerType | null;
+  availableForNewDocuments: boolean;
+}
+
+export const documentCategoryRegistry: Record<DocumentCategoryKey, DocumentCategoryDefinition> = {
+  COMPANY_IDENTITY_REGISTRATIONS: { key: "COMPANY_IDENTITY_REGISTRATIONS", label: "Identità e iscrizioni", description: "Dati identificativi e registrazioni dell'Azienda.", appliesTo: "ORGANIZATION", availableForNewDocuments: true },
+  COMPANY_REGULARITY_QUALIFICATIONS: { key: "COMPANY_REGULARITY_QUALIFICATIONS", label: "Regolarità e qualifiche", description: "Documenti organizzativi relativi a regolarità e qualifiche registrate.", appliesTo: "ORGANIZATION", availableForNewDocuments: true },
+  COMPANY_SAFETY: { key: "COMPANY_SAFETY", label: "Sicurezza aziendale", description: "Documenti di sicurezza configurati per l'Azienda.", appliesTo: "ORGANIZATION", availableForNewDocuments: true },
+  COMPANY_INSURANCE: { key: "COMPANY_INSURANCE", label: "Assicurazioni", description: "Polizze e documenti assicurativi registrati dall'Azienda.", appliesTo: "ORGANIZATION", availableForNewDocuments: true },
+  COMPANY_ROLES_ORGANIZATION: { key: "COMPANY_ROLES_ORGANIZATION", label: "Incarichi e organizzazione", description: "Incarichi, deleghe e organizzazione aziendale.", appliesTo: "ORGANIZATION", availableForNewDocuments: true },
+  WORKER_IDENTITY_ACCESS: { key: "WORKER_IDENTITY_ACCESS", label: "Identità e accesso", description: "Documenti identificativi e di accesso collegati a una persona.", appliesTo: "WORKER", availableForNewDocuments: true },
+  WORKER_TRAINING_QUALIFICATIONS: { key: "WORKER_TRAINING_QUALIFICATIONS", label: "Formazione e abilitazioni", description: "Attestati e qualifiche operative registrate per una persona.", appliesTo: "WORKER", availableForNewDocuments: true },
+  WORKER_FITNESS_JUDGMENT: { key: "WORKER_FITNESS_JUDGMENT", label: "Idoneità alla mansione", description: "Solo il giudizio necessario a organizzare il lavoro, senza diagnosi o cartelle sanitarie.", appliesTo: "WORKER", availableForNewDocuments: true },
+  WORKER_PPE_DELIVERIES: { key: "WORKER_PPE_DELIVERIES", label: "DPI e consegne", description: "Consegne e registrazioni operative collegate alla persona.", appliesTo: "WORKER", availableForNewDocuments: true },
+  WORKER_ROLES_ASSIGNMENTS: { key: "WORKER_ROLES_ASSIGNMENTS", label: "Incarichi e ruoli", description: "Incarichi operativi registrati per la persona.", appliesTo: "WORKER", availableForNewDocuments: true },
+  WORKER_RESTRICTED_ADMINISTRATION: { key: "WORKER_RESTRICTED_ADMINISTRATION", label: "Amministrazione riservata", description: "Area tecnica riservata, non abilitata finche non esistono permessi ed entitlement canonici.", appliesTo: "WORKER", availableForNewDocuments: false },
+  SITE_START_AUTHORIZATIONS: { key: "SITE_START_AUTHORIZATIONS", label: "Avvio e autorizzazioni", description: "Documenti configurati per l'avvio del cantiere.", appliesTo: "JOB_SITE", availableForNewDocuments: true },
+  SITE_SAFETY_COORDINATION: { key: "SITE_SAFETY_COORDINATION", label: "Sicurezza e coordinamento", description: "Documenti operativi di sicurezza e coordinamento del cantiere.", appliesTo: "JOB_SITE", availableForNewDocuments: true },
+  SITE_COMPANIES_SUBCONTRACTS: { key: "SITE_COMPANIES_SUBCONTRACTS", label: "Imprese e subappalti", description: "Documenti delle imprese e relazioni operative registrate per il cantiere.", appliesTo: "JOB_SITE", availableForNewDocuments: true },
+  SITE_WORKERS_ACCESS: { key: "SITE_WORKERS_ACCESS", label: "Lavoratori e accessi", description: "Documenti collegati all'accesso delle persone al cantiere.", appliesTo: "JOB_SITE", availableForNewDocuments: true },
+  SITE_EQUIPMENT_SYSTEMS: { key: "SITE_EQUIPMENT_SYSTEMS", label: "Mezzi, attrezzature e impianti", description: "Documenti registrati per mezzi, attrezzature e impianti del cantiere.", appliesTo: "JOB_SITE", availableForNewDocuments: true },
+  SITE_REPORTS_INSPECTIONS: { key: "SITE_REPORTS_INSPECTIONS", label: "Verbali e controlli", description: "Verbali, sopralluoghi e controlli registrati per il cantiere.", appliesTo: "JOB_SITE", availableForNewDocuments: true },
+  SITE_CLOSURE_HANDOVER: { key: "SITE_CLOSURE_HANDOVER", label: "Chiusura e consegna", description: "Documenti configurati per chiusura e consegna del cantiere.", appliesTo: "JOB_SITE", availableForNewDocuments: true },
+  UNCLASSIFIED: { key: "UNCLASSIFIED", label: "Da classificare", description: "Dato legacy mantenuto visibile finche OWNER o ADMIN non ne confermano la destinazione.", appliesTo: null, availableForNewDocuments: false },
+};
+
+export const documentSensitivityLabels: Record<DocumentSensitivity, string> = {
+  STANDARD: "Standard",
+  RESTRICTED: "Riservato",
+  HEALTH_JUDGMENT: "Giudizio di idoneità",
+};
 
 export const requirementTargetTypes = ["ORGANIZATION", "WORKER", "JOB_SITE"] as const;
 export type RequirementTargetType = (typeof requirementTargetTypes)[number];
@@ -191,6 +266,10 @@ export const auditActions = [
   "JOB_SITE_USER_ASSIGNMENT_ARCHIVED",
   "JOB_SITE_WORKER_ASSIGNMENT_CREATED",
   "JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED",
+  "ORGANIZATION_INVITATION_CREATED",
+  "ORGANIZATION_INVITATION_REVOKED",
+  "ORGANIZATION_INVITATION_ACCEPTED",
+  "ORGANIZATION_MEMBERSHIP_REVOKED",
   "DATA_EXPORT_GENERATED",
   "DATA_EXPORT_FAILED",
   "DATA_CONTROL_JOB_CREATED",
@@ -226,6 +305,8 @@ export const auditEntityTypes = [
   "WORKER_USER_LINK",
   "JOB_SITE_USER_ASSIGNMENT",
   "JOB_SITE_WORKER_ASSIGNMENT",
+  "ORGANIZATION_INVITATION",
+  "ORGANIZATION_MEMBERSHIP",
   "ORGANIZATION",
   "USER",
   "SYSTEM",
@@ -331,6 +412,7 @@ export interface JobSiteSummary {
   address?: string | null;
   clientName?: string | null;
   status: RecordStatus;
+  operationalPhase?: JobSiteOperationalPhase | null;
 }
 
 export interface JobSiteResponse {
@@ -340,6 +422,7 @@ export interface JobSiteResponse {
   address?: string | null;
   clientName?: string | null;
   status: RecordStatus;
+  operationalPhase?: JobSiteOperationalPhase | null;
   startDate?: string | null;
   endDate?: string | null;
   notes?: string | null;
@@ -353,9 +436,13 @@ export interface CreateJobSiteInput {
   address?: string | null;
   clientName?: string | null;
   status?: RecordStatus;
+  operationalPhase: JobSiteOperationalPhase;
   startDate?: string | null;
   endDate?: string | null;
   notes?: string | null;
+  managerUserIds?: EntityId[];
+  workerIds?: EntityId[];
+  continueAfterDuplicateWarning?: boolean;
 }
 
 export interface UpdateJobSiteInput {
@@ -363,6 +450,7 @@ export interface UpdateJobSiteInput {
   address?: string | null;
   clientName?: string | null;
   status?: RecordStatus;
+  operationalPhase?: JobSiteOperationalPhase | null;
   startDate?: string | null;
   endDate?: string | null;
   notes?: string | null;
@@ -464,19 +552,91 @@ export interface DocumentTypeSummary {
   organizationId: EntityId;
   name: string;
   appliesTo: DocumentTypeAppliesTo;
+  categoryKey: DocumentCategoryKey;
+  categoryLabel: string;
+  sensitivity: DocumentSensitivity;
   requiresExpiryDate: boolean;
 }
+
+export const jobSiteAttentionStates = [
+  "MISSING_DOCUMENTS",
+  "EXPIRED_DOCUMENTS",
+  "DOCUMENTS_TO_REVIEW",
+  "OPEN_CHECKLIST_ITEMS",
+  "OVERDUE_DEADLINES",
+  "UPCOMING_DEADLINES",
+  "NO_MANAGER",
+  "NO_WORKERS",
+  "READY_PACKAGES",
+] as const;
+export type JobSiteAttentionState = (typeof jobSiteAttentionStates)[number];
+
+export interface JobSiteOperationalSummary {
+  missingDocuments: number;
+  expiredDocuments: number;
+  documentsToReview: number;
+  openChecklistItems: number;
+  checklistItemsToReview: number;
+  overdueDeadlines: number;
+  upcomingDeadlines: number;
+  managerCount: number;
+  workerCount: number;
+  readyPackages: number;
+  attentionScore: number;
+  attentionStates: JobSiteAttentionState[];
+  nextDeadline: { title: string; dueDate: string } | null;
+}
+
+export interface JobSiteOperationalListItem extends JobSiteResponse {
+  summary: JobSiteOperationalSummary;
+}
+
+export interface JobSiteListResponse {
+  items: JobSiteOperationalListItem[];
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+  generatedAt: string;
+}
+
+export interface JobSiteRecentActivity {
+  id: EntityId;
+  jobSiteId: EntityId;
+  jobSiteName: string;
+  kind: "DOCUMENT" | "CHECKLIST" | "EVIDENCE" | "DOCUMENT_PACKAGE";
+  label: string;
+  updatedAt: string;
+  href: string;
+}
+
+export interface JobSiteOverviewResponse {
+  phaseCounts: Record<JobSiteOperationalPhase | "UNSET", number>;
+  totals: JobSiteOperationalSummary & { activeJobSites: number };
+  attentionQueue: JobSiteOperationalListItem[];
+  recentActivity: JobSiteRecentActivity[];
+  generatedAt: string;
+}
+
+export const jobSiteDetailSections = ["overview", "documents", "people", "activities", "evidence", "sharing", "settings"] as const;
+export type JobSiteDetailSection = (typeof jobSiteDetailSections)[number];
 
 export interface DocumentSummary {
   id: EntityId;
   organizationId: EntityId;
   documentTypeId?: EntityId | null;
+  documentTypeName?: string | null;
+  categoryKey: DocumentCategoryKey;
+  categoryLabel: string;
+  sensitivity: DocumentSensitivity;
   ownerType: DocumentOwnerType;
   workerId?: EntityId | null;
   jobSiteId?: EntityId | null;
   title: string;
   status: DocumentStatus;
   expiryDate?: string | null;
+  worker?: { id: EntityId; displayName: string } | null;
+  jobSite?: { id: EntityId; name: string } | null;
 }
 
 export interface DocumentVersionSummary extends BlobMetadata {
@@ -554,6 +714,8 @@ export interface MissingDocumentRequirementItem {
   requirementName: string;
   documentTypeId: EntityId;
   documentTypeName: string;
+  categoryKey: DocumentCategoryKey;
+  categoryLabel: string;
   targetType: RequirementTargetType;
   ownerType: DocumentOwnerType;
   workerId?: EntityId | null;
@@ -1114,6 +1276,7 @@ export interface DataExportOrganizationMembership {
 
 export interface DataExportOrganizationInvitation {
   id: EntityId;
+  workerId?: EntityId | null;
   email: string;
   role: OrganizationRole;
   invitedById: EntityId;

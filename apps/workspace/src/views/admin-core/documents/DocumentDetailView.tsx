@@ -10,6 +10,7 @@ import {
   IconUpload,
 } from "@tabler/icons-react";
 import { Badge } from "@qoovex/ui/components/badge";
+import { documentSensitivityLabels } from "@qoovex/types";
 import { buttonVariants } from "@qoovex/ui/components/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
@@ -66,6 +67,10 @@ export function DocumentDetailView({
         </CardHeader>
         <CardContent className="grid gap-4">
           <dl className="grid gap-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
+            <div><dt className="text-xs font-medium text-muted-foreground">Macroarea</dt><dd className="mt-1 font-medium">{document.ownerType === "ORGANIZATION" ? "Azienda" : document.ownerType === "WORKER" ? "Lavoratori" : "Cantieri"}</dd></div>
+            <div><dt className="text-xs font-medium text-muted-foreground">Categoria</dt><dd className="mt-1 font-medium">{document.categoryLabel}</dd></div>
+            <div><dt className="text-xs font-medium text-muted-foreground">Tipo documento</dt><dd className="mt-1 font-medium">{document.documentTypeName ?? "Da classificare"}</dd></div>
+            <div><dt className="text-xs font-medium text-muted-foreground">Sensibilità</dt><dd className="mt-1 font-medium">{documentSensitivityLabels[document.sensitivity]}</dd></div>
             <div className="min-w-0"><dt className="text-xs font-medium text-muted-foreground">Contesto</dt><dd className="mt-1 [overflow-wrap:anywhere] font-medium">{contextLabel}</dd></div>
             <div><dt className="text-xs font-medium text-muted-foreground">Scadenza registrata</dt><dd className="mt-1 font-medium">{document.expiryDate ? <time dateTime={document.expiryDate}>{formatDate(document.expiryDate)}</time> : "Non registrata"}</dd></div>
             <div><dt className="text-xs font-medium text-muted-foreground">Creato</dt><dd className="mt-1 font-medium">{document.createdAt ? <time dateTime={document.createdAt}>{formatDate(document.createdAt)}</time> : "Non registrato"}</dd></div>

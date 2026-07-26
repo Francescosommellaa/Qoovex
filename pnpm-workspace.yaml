@@ -4,7 +4,11 @@ packages:
 overrides:
   # Prisma's AJV range accepts this patched release; covers both fast-uri advisories.
   fast-uri: "3.1.4"
-  postcss: "8.5.14"
+  # Temporary leaf pins until Prisma 7 ships @prisma/dev with the patched releases.
+  # Recheck and remove when upstream catches up; review no later than 2026-08-26.
+  find-my-way: "9.7.0"
+  valibot: "1.4.2"
+  postcss: "8.5.18"
 auditConfig:
   ignoreGhsas:
     # Temporary: Next 16.2.x supports sharp ^0.34.5, while the patched release is >=0.35.0.

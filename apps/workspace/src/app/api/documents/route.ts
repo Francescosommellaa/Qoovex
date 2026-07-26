@@ -9,6 +9,7 @@ export async function GET(request: Request) {
       workerId: searchParams.get("workerId") ?? undefined,
       jobSiteId: searchParams.get("jobSiteId") ?? undefined,
       status: searchParams.get("status") ?? undefined,
+      categoryKey: searchParams.get("categoryKey") ?? undefined,
     }));
   } catch (error) { return asAccessResponse(error); }
 }

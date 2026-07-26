@@ -43,8 +43,10 @@ async function createMfaSuiteFixture(runId: string) {
   const password = `Qoovex-E2E-${runId}!`;
   const passwordHash = await hashPassword(password);
   const ownerSecret = "JBSWY3DPEHPK3PXP";
+  const safetySecret = "MZXW6YTBOI======";
   const workerSecret = "KRSXG5DSNFXGOIDB";
   const ownerEncrypted = encryptMfaFixtureSecret(ownerSecret);
+  const safetyEncrypted = encryptMfaFixtureSecret(safetySecret);
   const workerEncrypted = encryptMfaFixtureSecret(workerSecret);
   const now = new Date();
 
@@ -79,6 +81,21 @@ async function createMfaSuiteFixture(runId: string) {
       },
       select: { id: true, email: true },
     });
+    const safety = await tx.user.create({
+      data: {
+        email: `mfa-safety-${runId}@example.test`,
+        username: `mfa_safety_${runId}`,
+        firstName: "Consulente",
+        lastName: "Sicurezza E2E",
+        emailVerified: now,
+        mfaEnabled: true,
+        totpSecretEncrypted: safetyEncrypted.encrypted,
+        totpSecretNonce: safetyEncrypted.nonce,
+        totpVerifiedAt: now,
+        credential: { create: { passwordHash } },
+      },
+      select: { id: true, email: true },
+    });
     const organization = await tx.organization.create({
       data: {
         name: `Azienda MFA E2E ${runId}`,
@@ -87,19 +104,21 @@ async function createMfaSuiteFixture(runId: string) {
         memberships: {
           create: [
             { userId: owner.id, role: "OWNER" },
+            { userId: safety.id, role: "SAFETY_CONSULTANT" },
             { userId: worker.id, role: "WORKER" },
           ],
         },
       },
       select: { id: true },
     });
-    return { owner, worker, organization };
+    return { owner, safety, worker, organization };
   });
 
   return {
     organizationId: result.organization.id,
     password,
     owner: { ...result.owner, secret: ownerSecret },
+    safety: { ...result.safety, secret: safetySecret },
     worker: { ...result.worker, secret: workerSecret },
   };
 }
@@ -169,6 +188,7 @@ export async function DELETE(request: Request) {
             { OR: [
               { username: { startsWith: "platform_e2e_" } },
               { username: { startsWith: "mfa_owner_" } },
+              { username: { startsWith: "mfa_safety_" } },
               { username: { startsWith: "mfa_worker_" } },
               { username: { startsWith: "signup_e2e_" } },
             ] },

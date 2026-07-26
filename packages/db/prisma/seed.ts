@@ -14,7 +14,9 @@ const FIXTURE_USER_IDS = {
   admin: "local_demo_user_admin",
   consultant: "local_demo_user_consultant",
   manager: "local_demo_user_manager",
+  managerWithoutSite: "local_demo_user_manager_without_site",
   worker: "local_demo_user_worker",
+  workerLegacy: "local_demo_user_worker_legacy",
 } as const;
 
 function getLocalDatabaseConnectionString() {
@@ -147,6 +149,24 @@ async function main() {
           name: "Luca Verdi",
           emailVerified: new Date(0),
         },
+        {
+          id: FIXTURE_USER_IDS.managerWithoutSite,
+          email: "responsabile.senza.cantiere@qoovex.local",
+          username: "local_demo_manager_unscoped",
+          firstName: "Davide",
+          lastName: "Sala",
+          name: "Davide Sala",
+          emailVerified: new Date(0),
+        },
+        {
+          id: FIXTURE_USER_IDS.workerLegacy,
+          email: "worker.legacy.senza.profilo@qoovex.local",
+          username: "local_demo_worker_legacy",
+          firstName: "Nadia",
+          lastName: "Greco",
+          name: "Nadia Greco",
+          emailVerified: new Date(0),
+        },
       ],
     });
 
@@ -165,7 +185,9 @@ async function main() {
         { id: "local_demo_membership_admin", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.admin, role: "ADMIN" },
         { id: "local_demo_membership_consultant", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.consultant, role: "SAFETY_CONSULTANT" },
         { id: "local_demo_membership_manager", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.manager, role: "SITE_MANAGER" },
+        { id: "local_demo_membership_manager_unscoped", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.managerWithoutSite, role: "SITE_MANAGER" },
         { id: "local_demo_membership_worker", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.worker, role: "WORKER" },
+        { id: "local_demo_membership_worker_legacy", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.workerLegacy, role: "WORKER" },
       ],
     });
 
@@ -199,6 +221,14 @@ async function main() {
           archivedAt: atDayOffset(-30),
           notes: "Profilo archiviato dimostrativo.",
         },
+        {
+          id: "local_demo_worker_marta",
+          organizationId: FIXTURE_ORGANIZATION_ID,
+          displayName: "Marta Blu",
+          email: "marta.blu@qoovex.local",
+          roleLabel: "Assistente operativa",
+          notes: "Profilo dimostrativo senza accesso e senza cantiere.",
+        },
       ],
     });
 
@@ -210,6 +240,7 @@ async function main() {
           name: "Ristrutturazione Via Roma",
           address: "Via Roma 24, Milano",
           clientName: "Condominio Aurora",
+          operationalPhase: "IN_PROGRESS",
           startDate: atDayOffset(-45),
           endDate: atDayOffset(90),
           notes: "Scenario dimostrativo: riqualificazione interna.",
@@ -220,9 +251,52 @@ async function main() {
           name: "Nuovo polo logistico",
           address: "Via dell'Industria 8, Monza",
           clientName: "Logistica Nord S.r.l.",
+          operationalPhase: "PREPARATION",
           startDate: atDayOffset(-10),
           endDate: atDayOffset(180),
           notes: "Scenario dimostrativo: opere preliminari.",
+        },
+        {
+          id: "local_demo_site_paused",
+          organizationId: FIXTURE_ORGANIZATION_ID,
+          name: "Recupero Corte Naviglio",
+          address: "Alzaia Naviglio Grande 42, Milano",
+          clientName: "Corte Naviglio S.p.A.",
+          operationalPhase: "PAUSED",
+          startDate: atDayOffset(-60),
+          endDate: atDayOffset(120),
+          notes: "Scenario locale in pausa, senza assegnazioni complete.",
+        },
+        {
+          id: "local_demo_site_closing",
+          organizationId: FIXTURE_ORGANIZATION_ID,
+          name: "Adeguamento scuola Manzoni",
+          address: "Via Manzoni 11, Monza",
+          clientName: "Comune di Monza",
+          operationalPhase: "CLOSING",
+          startDate: atDayOffset(-150),
+          endDate: atDayOffset(12),
+          notes: "Scenario locale in chiusura.",
+        },
+        {
+          id: "local_demo_site_completed",
+          organizationId: FIXTURE_ORGANIZATION_ID,
+          name: "Copertura officina Est",
+          address: "Via Europa 7, Seregno",
+          clientName: "Officine Est S.r.l.",
+          operationalPhase: "COMPLETED",
+          startDate: atDayOffset(-210),
+          endDate: atDayOffset(-5),
+          notes: "Lavori completati, record ancora attivo per il passaggio di consegne.",
+        },
+        {
+          id: "local_demo_site_legacy_phase",
+          organizationId: FIXTURE_ORGANIZATION_ID,
+          name: "Cantiere legacy da classificare",
+          address: "Via delle Betulle 5, Milano",
+          clientName: "Demo Legacy",
+          startDate: atDayOffset(-20),
+          notes: "Record legacy senza fase, mantenuto per verificare l'etichetta dedicata.",
         },
         {
           id: "local_demo_site_archived",
@@ -230,6 +304,7 @@ async function main() {
           name: "Manutenzione Condominio Glicine",
           address: "Via Glicine 3, Sesto San Giovanni",
           clientName: "Condominio Glicine",
+          operationalPhase: "COMPLETED",
           status: "ARCHIVED",
           startDate: atDayOffset(-180),
           endDate: atDayOffset(-35),
@@ -284,6 +359,8 @@ async function main() {
           name: "Documento identificativo",
           description: "Tipologia configurata per lo scenario dimostrativo.",
           appliesTo: "WORKER",
+          categoryKey: "WORKER_IDENTITY_ACCESS",
+          sensitivity: "STANDARD",
           requiresExpiryDate: true,
         },
         {
@@ -292,6 +369,8 @@ async function main() {
           name: "Attestato formativo interno",
           description: "Documento operativo da sottoporre a verifica.",
           appliesTo: "WORKER",
+          categoryKey: "WORKER_TRAINING_QUALIFICATIONS",
+          sensitivity: "STANDARD",
           requiresExpiryDate: true,
         },
         {
@@ -300,6 +379,8 @@ async function main() {
           name: "Verbale di cantiere",
           description: "Documento configurato per il cantiere.",
           appliesTo: "JOB_SITE",
+          categoryKey: "SITE_REPORTS_INSPECTIONS",
+          sensitivity: "STANDARD",
           requiresExpiryDate: false,
         },
         {
@@ -308,6 +389,8 @@ async function main() {
           name: "Documento aziendale",
           description: "Documento configurato per l'Azienda.",
           appliesTo: "ORGANIZATION",
+          categoryKey: "COMPANY_IDENTITY_REGISTRATIONS",
+          sensitivity: "STANDARD",
           requiresExpiryDate: true,
         },
       ],
@@ -722,16 +805,38 @@ async function main() {
       ],
     });
 
-    await tx.organizationInvitation.create({
-      data: {
-        id: "local_demo_invitation",
-        organizationId: FIXTURE_ORGANIZATION_ID,
-        email: "nuova.persona@qoovex.local",
-        role: "WORKER",
-        tokenHash: fixtureTokenHash("local-demo-invitation-not-for-production"),
-        invitedById: owner.id,
-        expiresAt: atDayOffset(7),
-      },
+    await tx.organizationInvitation.createMany({
+      data: [
+        {
+          id: "local_demo_invitation",
+          organizationId: FIXTURE_ORGANIZATION_ID,
+          workerId: "local_demo_worker_elena",
+          email: "elena.ferri@qoovex.local",
+          role: "WORKER",
+          tokenHash: fixtureTokenHash("local-demo-invitation-not-for-production"),
+          invitedById: owner.id,
+          expiresAt: atDayOffset(7),
+        },
+        {
+          id: "local_demo_invitation_expired",
+          organizationId: FIXTURE_ORGANIZATION_ID,
+          email: "responsabile.scaduto@qoovex.local",
+          role: "SITE_MANAGER",
+          tokenHash: fixtureTokenHash("local-demo-expired-invitation-not-for-production"),
+          invitedById: owner.id,
+          expiresAt: atDayOffset(-2),
+        },
+        {
+          id: "local_demo_invitation_revoked",
+          organizationId: FIXTURE_ORGANIZATION_ID,
+          email: "consulente.revocato@qoovex.local",
+          role: "SAFETY_CONSULTANT",
+          tokenHash: fixtureTokenHash("local-demo-revoked-invitation-not-for-production"),
+          invitedById: owner.id,
+          expiresAt: atDayOffset(5),
+          revokedAt: atDayOffset(-1),
+        },
+      ],
     });
 
     await tx.productAuditEvent.createMany({
@@ -778,8 +883,8 @@ async function main() {
     return {
       organizationId: FIXTURE_ORGANIZATION_ID,
       users: Object.keys(FIXTURE_USER_IDS).length,
-      workers: 3,
-      jobSites: 3,
+      workers: 4,
+      jobSites: 7,
       documents: 6,
       deadlines: 4,
       calendarEvents: 3,

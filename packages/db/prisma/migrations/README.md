@@ -8,7 +8,11 @@ Questa cartella contiene l'unica cronologia Prisma canonica di Qoovex.
 - `20260712020000_single_membership_forward`: migration incrementale e transazionale applicata al database condiviso; ha creato il modello con una sola `OrganizationMembership` per utente e rimosso `User.organizationId` e `User.organizationRole`.
 - `20260713010000_mfa_hardening`: aggiunge recovery MFA, binding sessione, dispositivi e backup code con i relativi vincoli.
 - `20260713020000_rate_limit_privacy_atomicity`: elimina le righe rate-limit legacy contenenti PII e aggiunge `userId`, timestamp, indice e FK per atomicita, attribuzione e retention.
-- `20260720010000_calendar_events`: ultima migration locale; aggiunge `CalendarEvent`, priorita, stato, assegnatario, cantiere, origine iCalendar, indici e azioni audit. Non applicarla fuori dal deploy protetto.
+- `20260720010000_calendar_events`: aggiunge `CalendarEvent`, priorita, stato, assegnatario, cantiere, origine iCalendar, indici e azioni audit. Non applicarla fuori dal deploy protetto.
+- `20260722010000_document_taxonomy`: aggiunge categorie organizzative e sensibilita tipizzate a `DocumentType`; i tipi preesistenti restano `UNCLASSIFIED` senza inferenze automatiche. Non applicarla fuori dal deploy protetto.
+- `20260723010000_people_invitation_worker`: aggiunge la relazione opzionale `OrganizationInvitation.workerId`, indici e azioni audit per inviti/membership. Gli inviti preesistenti restano validi. Applicata e verificata soltanto sul database locale `localhost:51225`; fuori dal locale richiede il deploy protetto.
+- `20260723020000_job_site_operational_phase`: aggiunge la fase operativa opzionale dei cantieri e il relativo indice; i record legacy restano senza fase. Non applicarla fuori dal deploy protetto.
+- `20260725010000_add_session_account_user_indexes`: aggiunge gli indici sulle foreign key `accounts.userId` e `sessions.userId`. Non applicarla fuori dal deploy protetto.
 
 Le nove migration precedenti non appartengono a questa cronologia: non erano applicate all'unico database condiviso e non devono essere eseguite o marcate tramite `migrate resolve`.
 

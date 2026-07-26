@@ -1,5 +1,7 @@
-# Workers Pages
+# Workers pages
 
-Pagine workspace per lista e dettaglio lavoratori. La lista mantiene una singola lettura tenant-scoped e apre creazione e riepilogo in Dialog; `/workers/new` reindirizza allo stesso modale, mentre `/workers/[nome-normalizzato]--[workerId]` resta la gestione completa. Gli URL legacy `/workers/[workerId]` continuano a funzionare.
+`/workers` e la rubrica operativa della sezione Persone. Usa ricerca, filtri e paginazione server-side, mostra attenzione documentale, cantieri, stato accesso e prossima azione senza caricare l'intero dataset nel client.
 
-Usano `/api/workers` per mutation client-side e service server-side per letture filtrate per azienda. L'invito opzionale dalla scheda lavoratore riusa `/api/organization/invitations` ma propone soltanto il ruolo WORKER; gli altri ruoli vengono invitati da `Utenti e inviti`. Il responsabile cantiere vede nella sidebar soltanto `Lavoratori` e la lista resta limitata ai cantieri assegnati.
+`Worker` resta un profilo operativo separato da `User` e `OrganizationMembership`. `roleLabel` descrive esclusivamente la mansione: non concede permessi e non certifica qualifiche. OWNER e ADMIN possono avviare il flusso guidato in quattro passaggi: dati, accesso, cantieri, riepilogo. Il percorso consente sia solo profilo sia invito WORKER; in quest'ultimo caso il ruolo e bloccato e l'invito conserva `workerId`.
+
+SITE_MANAGER vede solo lavoratori assegnati ai propri cantieri e riceve DTO con contatti e note oscurati. WORKER vede `Il mio profilo` tramite lo scope di `WorkerUserLink`. `/workers/new` resta compatibile e apre lo stesso flusso guidato.

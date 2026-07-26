@@ -95,6 +95,10 @@ enum AuditAction {
   JOB_SITE_USER_ASSIGNMENT_ARCHIVED
   JOB_SITE_WORKER_ASSIGNMENT_CREATED
   JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED
+  ORGANIZATION_INVITATION_CREATED
+  ORGANIZATION_INVITATION_REVOKED
+  ORGANIZATION_INVITATION_ACCEPTED
+  ORGANIZATION_MEMBERSHIP_REVOKED
   DATA_EXPORT_GENERATED
   DATA_EXPORT_FAILED
   DATA_CONTROL_JOB_CREATED
@@ -129,6 +133,8 @@ enum AuditEntityType {
   WORKER_USER_LINK
   JOB_SITE_USER_ASSIGNMENT
   JOB_SITE_WORKER_ASSIGNMENT
+  ORGANIZATION_INVITATION
+  ORGANIZATION_MEMBERSHIP
   ORGANIZATION
   USER
   SYSTEM
@@ -143,6 +149,14 @@ enum AuditOutcome {
 enum RecordStatus {
   ACTIVE
   ARCHIVED
+}
+
+enum JobSiteOperationalPhase {
+  PREPARATION
+  IN_PROGRESS
+  PAUSED
+  CLOSING
+  COMPLETED
 }
 
 enum DocumentStatus {
@@ -188,6 +202,34 @@ enum DocumentTypeAppliesTo {
   JOB_SITE
   EVIDENCE
   OTHER
+}
+
+enum DocumentCategoryKey {
+  COMPANY_IDENTITY_REGISTRATIONS
+  COMPANY_REGULARITY_QUALIFICATIONS
+  COMPANY_SAFETY
+  COMPANY_INSURANCE
+  COMPANY_ROLES_ORGANIZATION
+  WORKER_IDENTITY_ACCESS
+  WORKER_TRAINING_QUALIFICATIONS
+  WORKER_FITNESS_JUDGMENT
+  WORKER_PPE_DELIVERIES
+  WORKER_ROLES_ASSIGNMENTS
+  WORKER_RESTRICTED_ADMINISTRATION
+  SITE_START_AUTHORIZATIONS
+  SITE_SAFETY_COORDINATION
+  SITE_COMPANIES_SUBCONTRACTS
+  SITE_WORKERS_ACCESS
+  SITE_EQUIPMENT_SYSTEMS
+  SITE_REPORTS_INSPECTIONS
+  SITE_CLOSURE_HANDOVER
+  UNCLASSIFIED
+}
+
+enum DocumentSensitivity {
+  STANDARD
+  RESTRICTED
+  HEALTH_JUDGMENT
 }
 
 enum RequirementTargetType {
@@ -327,6 +369,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
   @@map("accounts")
 }
 
@@ -337,6 +380,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("sessions")
 }
 
@@ -407,8 +451,8 @@ model User {
   jobSiteUserAssignments      JobSiteUserAssignment[]
   assignedJobSiteUsers        JobSiteUserAssignment[]     @relation("JobSiteUserAssignmentCreator")
   assignedJobSiteWorkers      JobSiteWorkerAssignment[]   @relation("JobSiteWorkerAssignmentCreator")
-  createdCalendarEvents       CalendarEvent[]              @relation("CalendarEventCreator")
-  assignedCalendarEvents      CalendarEvent[]              @relation("CalendarEventAssignee")
+  createdCalendarEvents       CalendarEvent[]             @relation("CalendarEventCreator")
+  assignedCalendarEvents      CalendarEvent[]             @relation("CalendarEventAssignee")
   createdAt                   DateTime                    @default(now())
   updatedAt                   DateTime                    @updatedAt
 }
@@ -469,6 +513,7 @@ model Worker {
   evidence           Evidence[]
   userLinks          WorkerUserLink[]
   jobSiteAssignments JobSiteWorkerAssignment[]
+  invitations        OrganizationInvitation[]
 
   @@index([organizationId, status])
   @@index([organizationId, displayName])
@@ -482,6 +527,7 @@ model JobSite {
   address           String?
   clientName        String?
   status            RecordStatus              @default(ACTIVE)
+  operationalPhase  JobSiteOperationalPhase?
   startDate         DateTime?
   endDate           DateTime?
   notes             String?                   @db.Text
@@ -502,6 +548,7 @@ model JobSite {
   @@index([organizationId, status])
   @@index([organizationId, name])
   @@index([organizationId, clientName])
+  @@index([organizationId, operationalPhase, archivedAt], map: "JobSite_org_phase_archived_idx")
 }
 
 model WorkerUserLink {
@@ -571,6 +618,8 @@ model DocumentType {
   name               String
   description        String?               @db.Text
   appliesTo          DocumentTypeAppliesTo
+  categoryKey        DocumentCategoryKey   @default(UNCLASSIFIED)
+  sensitivity        DocumentSensitivity   @default(STANDARD)
   requiresExpiryDate Boolean               @default(false)
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
@@ -580,6 +629,7 @@ model DocumentType {
   requirements       DocumentRequirement[]
 
   @@index([organizationId, appliesTo])
+  @@index([organizationId, categoryKey, archivedAt], map: "DocumentType_org_category_archived_idx")
   @@index([organizationId, name])
 }
 
@@ -966,6 +1016,7 @@ model OrganizationMembership {
 model OrganizationInvitation {
   id             String           @id @default(cuid())
   organizationId String
+  workerId       String?
   email          String
   role           OrganizationRole
   tokenHash      String           @unique
@@ -975,9 +1026,11 @@ model OrganizationInvitation {
   revokedAt      DateTime?
   createdAt      DateTime         @default(now())
   organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  worker         Worker?          @relation(fields: [workerId], references: [id], onDelete: SetNull)
   invitedBy      User             @relation("InvitationSender", fields: [invitedById], references: [id], onDelete: Cascade)
 
   @@index([organizationId, email, createdAt])
+  @@index([organizationId, workerId, createdAt])
   @@index([email, expiresAt])
 }
 

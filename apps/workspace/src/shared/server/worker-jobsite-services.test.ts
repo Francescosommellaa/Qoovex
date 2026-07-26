@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => ({
     workerUserLink: { findFirst: vi.fn() },
     jobSiteUserAssignment: { findMany: vi.fn() },
     jobSiteWorkerAssignment: { findMany: vi.fn() },
+    organizationMembership: { findMany: vi.fn() },
   },
   getWorkspaceAccessContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
@@ -58,6 +59,7 @@ const jobSiteRecord = {
   address: "Via Roma 1",
   clientName: "Cliente",
   status: "ACTIVE",
+  operationalPhase: "IN_PROGRESS",
   startDate: new Date("2026-07-01T00:00:00.000Z"),
   endDate: null,
   notes: null,
@@ -86,6 +88,7 @@ beforeEach(() => {
   resetModel(mocks.db.workerUserLink);
   resetModel(mocks.db.jobSiteUserAssignment);
   resetModel(mocks.db.jobSiteWorkerAssignment);
+  resetModel(mocks.db.organizationMembership);
   mocks.getWorkspaceAccessContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
@@ -103,7 +106,7 @@ describe("worker service", () => {
   it("lets owners create, read, update and archive workers", async () => {
     mocks.db.worker.create.mockResolvedValue(workerRecord);
     mocks.db.worker.findMany.mockResolvedValue([workerRecord]);
-    mocks.db.worker.findFirst.mockResolvedValue({ id: "worker-1" });
+    mocks.db.worker.findFirst.mockResolvedValueOnce(null).mockResolvedValue({ id: "worker-1" });
     mocks.db.worker.update.mockResolvedValue({ ...workerRecord, displayName: "Mario Bianchi" });
 
     await expect(createWorker({ displayName: " Mario Rossi ", email: "MARIO@EXAMPLE.COM" })).resolves.toMatchObject({ email: "mario@example.com" });
@@ -175,11 +178,11 @@ describe("worker service", () => {
 describe("job site service", () => {
   it("lets owners create, read, update and archive job sites", async () => {
     mocks.db.jobSite.create.mockResolvedValue(jobSiteRecord);
-    mocks.db.jobSite.findMany.mockResolvedValue([jobSiteRecord]);
-    mocks.db.jobSite.findFirst.mockResolvedValue({ id: "jobsite-1", startDate: jobSiteRecord.startDate, endDate: null });
+    mocks.db.jobSite.findMany.mockResolvedValueOnce([]).mockResolvedValue([jobSiteRecord]);
+    mocks.db.jobSite.findFirst.mockResolvedValue({ id: "jobsite-1", startDate: jobSiteRecord.startDate, endDate: null, operationalPhase: "IN_PROGRESS" });
     mocks.db.jobSite.update.mockResolvedValue({ ...jobSiteRecord, name: "Cantiere Nord" });
 
-    await expect(createJobSite({ name: " Cantiere Centro ", startDate: "2026-07-01" })).resolves.toMatchObject({ name: "Cantiere Centro" });
+    await expect(createJobSite({ name: " Cantiere Centro ", operationalPhase: "IN_PROGRESS", startDate: "2026-07-01" })).resolves.toMatchObject({ name: "Cantiere Centro" });
     await expect(listJobSites()).resolves.toEqual([jobSiteRecord]);
     await expect(getJobSite("jobsite-1")).resolves.toMatchObject({ id: "jobsite-1" });
     await expect(updateJobSite("jobsite-1", { name: "Cantiere Nord" })).resolves.toMatchObject({ name: "Cantiere Nord" });
@@ -196,8 +199,9 @@ describe("job site service", () => {
 
   it("lets admins manage job sites and keeps safety consultants read-only", async () => {
     setRole("ADMIN");
+    mocks.db.jobSite.findMany.mockResolvedValue([]);
     mocks.db.jobSite.create.mockResolvedValue(jobSiteRecord);
-    await expect(createJobSite({ name: "Cantiere Centro" })).resolves.toMatchObject({ id: "jobsite-1" });
+    await expect(createJobSite({ name: "Cantiere Centro", operationalPhase: "PREPARATION" })).resolves.toMatchObject({ id: "jobsite-1" });
 
     setRole("SAFETY_CONSULTANT");
     mocks.db.jobSite.findMany.mockResolvedValue([jobSiteRecord]);
@@ -205,6 +209,22 @@ describe("job site service", () => {
     await expect(createJobSite({ name: "Cantiere Centro" })).rejects.toMatchObject({ status: 404 });
     await expect(updateJobSite("jobsite-1", { name: "Cantiere" })).rejects.toMatchObject({ status: 404 });
     await expect(archiveJobSite("jobsite-1")).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("creates the job site and selected people in one nested write", async () => {
+    mocks.db.jobSite.findMany.mockResolvedValue([]);
+    mocks.db.organizationMembership.findMany.mockResolvedValue([{ userId: "manager-1" }]);
+    mocks.db.worker.findMany.mockResolvedValue([{ id: "worker-1" }]);
+    mocks.db.jobSite.create.mockResolvedValue({ ...jobSiteRecord, userAssignments: [{ id: "assignment-user-1" }], workerAssignments: [{ id: "assignment-worker-1" }] });
+
+    await expect(createJobSite({ name: "Cantiere Centro", operationalPhase: "PREPARATION", managerUserIds: ["manager-1"], workerIds: ["worker-1"] })).resolves.toMatchObject({ id: "jobsite-1", operationalPhase: "IN_PROGRESS" });
+    expect(mocks.db.jobSite.create).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({
+        operationalPhase: "PREPARATION",
+        userAssignments: { create: [expect.objectContaining({ userId: "manager-1", assignmentRole: "SITE_MANAGER" })] },
+        workerAssignments: { create: [expect.objectContaining({ workerId: "worker-1" })] },
+      }),
+    }));
   });
 
   it("limits job site reads for operational roles and keeps management denied", async () => {
@@ -240,10 +260,11 @@ describe("job site service", () => {
 
   it("rejects invalid job site input, date ranges and coordinates", async () => {
     await expect(createJobSite({ name: " " })).rejects.toMatchObject({ status: 409 });
-    await expect(createJobSite({ name: "Cantiere", status: "OPEN" })).rejects.toMatchObject({ status: 409 });
-    await expect(createJobSite({ name: "Cantiere", status: "ARCHIVED" })).rejects.toMatchObject({ status: 409 });
-    await expect(createJobSite({ name: "Cantiere", startDate: "2026-08-01", endDate: "2026-07-01" })).rejects.toMatchObject({ status: 409 });
-    await expect(createJobSite({ name: "Cantiere", latitude: 45 })).rejects.toMatchObject({ status: 409 });
+    await expect(createJobSite({ name: "Cantiere", status: "OPEN", operationalPhase: "PREPARATION" })).rejects.toMatchObject({ status: 409 });
+    await expect(createJobSite({ name: "Cantiere", status: "ARCHIVED", operationalPhase: "PREPARATION" })).rejects.toMatchObject({ status: 409 });
+    await expect(createJobSite({ name: "Cantiere", operationalPhase: "INVALID" })).rejects.toMatchObject({ status: 409 });
+    await expect(createJobSite({ name: "Cantiere", operationalPhase: "IN_PROGRESS", startDate: "2026-08-01", endDate: "2026-07-01" })).rejects.toMatchObject({ status: 409 });
+    await expect(createJobSite({ name: "Cantiere", operationalPhase: "IN_PROGRESS", latitude: 45 })).rejects.toMatchObject({ status: 409 });
     expect(mocks.db.jobSite.create).not.toHaveBeenCalled();
   });
 });

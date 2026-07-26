@@ -127,7 +127,7 @@ beforeEach(() => {
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.recordSupportAccess.mockResolvedValue(undefined);
   mocks.db.jobSite.findFirst.mockResolvedValue({ id: "jobsite-1" });
-  mocks.db.documentPackage.findFirst.mockResolvedValue(packageRecord);
+  mocks.db.documentPackage.findFirst.mockResolvedValue({ ...packageRecord, items: [] });
   mocks.db.document.findFirst.mockResolvedValue({ id: "document-1" });
   mocks.db.documentVersion.findFirst.mockResolvedValue({
     id: "version-1",
@@ -188,6 +188,17 @@ describe("document package service", () => {
     expect(mocks.requirePermission).toHaveBeenCalledWith(expect.anything(), "documentPackages:share");
   });
 
+  it("filters ready packages with pagination in the existing tenant query", async () => {
+    mocks.db.documentPackage.findMany.mockResolvedValue([]);
+    await expect(listDocumentPackagesWithDetails({ statuses: ["READY_FOR_REVIEW", "SHARED"], take: 51, skip: 50 })).resolves.toEqual([]);
+    expect(mocks.db.documentPackage.findMany).toHaveBeenCalledTimes(1);
+    expect(mocks.db.documentPackage.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      take: 51,
+      skip: 50,
+      where: { organizationId: "org-1", archivedAt: null, status: { in: ["READY_FOR_REVIEW", "SHARED"] } },
+    }));
+  });
+
   it("lets safety consultants read/create package items but not share links", async () => {
     setRole("SAFETY_CONSULTANT");
     mocks.db.documentPackageItem.findFirst.mockResolvedValueOnce(null).mockResolvedValue({ position: -1 });
@@ -217,7 +228,10 @@ describe("document package service", () => {
 
     mocks.db.documentPackage.findFirst.mockResolvedValue(packageRecord);
     mocks.db.document.findFirst.mockResolvedValue(null);
-    await expect(addDocumentPackageItem("package-1", { itemType: "DOCUMENT", documentId: "foreign-document" })).rejects.toMatchObject({ status: 404 });
+    await expect(addDocumentPackageItem("package-1", { itemType: "DOCUMENT", documentId: "foreign-document" })).rejects.toMatchObject({ status: 409 });
+    expect(mocks.db.document.findFirst).toHaveBeenCalledWith(expect.objectContaining({
+      where: expect.objectContaining({ organizationId: "org-1", documentType: { is: { sensitivity: "STANDARD", categoryKey: { not: "UNCLASSIFIED" } } } }),
+    }));
   });
 
   it("validates package items and removes them with physical delete because item has no archivedAt", async () => {
@@ -260,6 +274,12 @@ describe("share link and destinatario esterno access", () => {
     expect(mocks.db.documentPackage.update).toHaveBeenCalledWith(expect.objectContaining({ data: { status: "SHARED" } }));
   });
 
+  it("blocks share links when a package contains unclassified or non-standard documents", async () => {
+    mocks.db.documentPackage.findFirst.mockResolvedValue({ ...packageRecord, items: [{ id: "unsafe-item" }] });
+    await expect(createShareLink("package-1")).rejects.toMatchObject({ status: 409 });
+    expect(mocks.db.shareLink.create).not.toHaveBeenCalled();
+  });
+
   it("rejects past share link expiry and revokes links without deleting them", async () => {
     await expect(createShareLink("package-1", { expiresAt: "2020-01-01T00:00:00.000Z" })).rejects.toMatchObject({ status: 409 });
 
@@ -292,7 +312,7 @@ describe("share link and destinatario esterno access", () => {
           mimeType: "application/pdf",
           size: 12,
           archivedAt: null,
-          document: { title: "Documento", status: "TO_REVIEW", archivedAt: null },
+          document: { title: "Documento", status: "TO_REVIEW", archivedAt: null, documentType: { categoryKey: "COMPANY_IDENTITY_REGISTRATIONS", sensitivity: "STANDARD" } },
         },
         evidence: null,
         checklist: null,

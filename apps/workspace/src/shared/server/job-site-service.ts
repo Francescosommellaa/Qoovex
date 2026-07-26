@@ -1,14 +1,14 @@
 import "server-only";
 
 import { db } from "@qoovex/db";
-import type { RecordStatus } from "@qoovex/types";
+import type { JobSiteOperationalPhase, RecordStatus } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { trimOptionalText, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
-import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort, recordProductAuditEventsBestEffort } from "./product-audit-service";
 import { canReadJobSite, getResourceScope } from "./resource-scope-service";
-import { parseEditableRecordStatus, parseOptionalDateRange, rejectSensitiveFields } from "./worker-jobsite-validation";
+import { parseEditableRecordStatus, parseJobSiteOperationalPhase, parseOptionalDateRange, rejectSensitiveFields } from "./worker-jobsite-validation";
 
 const JOBSITE_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
 const JOBSITE_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
@@ -20,6 +20,7 @@ const jobSiteSelect = {
   address: true,
   clientName: true,
   status: true,
+  operationalPhase: true,
   startDate: true,
   endDate: true,
   notes: true,
@@ -36,6 +37,10 @@ export interface CreateJobSiteInput extends Record<string, unknown> {
   startDate?: unknown;
   endDate?: unknown;
   notes?: unknown;
+  operationalPhase?: unknown;
+  managerUserIds?: unknown;
+  workerIds?: unknown;
+  continueAfterDuplicateWarning?: unknown;
 }
 
 export interface UpdateJobSiteInput extends Record<string, unknown> {
@@ -46,6 +51,36 @@ export interface UpdateJobSiteInput extends Record<string, unknown> {
   startDate?: unknown;
   endDate?: unknown;
   notes?: unknown;
+  operationalPhase?: unknown;
+}
+
+function parseIdList(value: unknown, label: string) {
+  if (value === undefined) return [];
+  if (!Array.isArray(value) || value.some((item) => typeof item !== "string" || !item.trim())) {
+    throw new AccessError(`${label} non validi.`, 409);
+  }
+  return [...new Set(value.map((item) => (item as string).trim()))];
+}
+
+export async function findJobSiteDuplicates(input: { name?: unknown; clientName?: unknown; address?: unknown }) {
+  const { organizationId } = await requireOrganizationDomainAccess("jobSites:read", JOBSITE_READ_ROLES);
+  const name = trimRequiredText(input.name, "Nome cantiere", 2, 160);
+  const clientName = trimOptionalText(input.clientName, "Nome committente", 160);
+  const address = trimOptionalText(input.address, "Indirizzo cantiere", 500);
+  return db.jobSite.findMany({
+    where: {
+      organizationId,
+      archivedAt: null,
+      OR: [
+        { name: { equals: name, mode: "insensitive" } },
+        ...(clientName ? [{ clientName: { equals: clientName, mode: "insensitive" as const } }] : []),
+        ...(address ? [{ address: { equals: address, mode: "insensitive" as const } }] : []),
+      ],
+    },
+    select: { id: true, name: true, clientName: true, address: true, operationalPhase: true },
+    orderBy: [{ updatedAt: "desc" }],
+    take: 5,
+  });
 }
 
 export async function listJobSites() {
@@ -76,13 +111,57 @@ export async function createJobSite(input: CreateJobSiteInput) {
   const address = trimOptionalText(input.address, "Indirizzo cantiere", 500) ?? null;
   const clientName = trimOptionalText(input.clientName, "Nome committente", 160) ?? null;
   const status = input.status === undefined ? "ACTIVE" : parseEditableRecordStatus(input.status);
+  const operationalPhase = parseJobSiteOperationalPhase(input.operationalPhase);
   const dates = parseOptionalDateRange({ startDate: input.startDate, endDate: input.endDate });
   const notes = trimOptionalText(input.notes, "Note cantiere", 4000) ?? null;
+  const managerUserIds = parseIdList(input.managerUserIds, "Responsabili");
+  const workerIds = parseIdList(input.workerIds, "Lavoratori");
 
-  const jobSite = await db.jobSite.create({
-    data: { organizationId, name, address, clientName, status, startDate: dates.resolvedStartDate, endDate: dates.resolvedEndDate, notes },
-    select: jobSiteSelect,
+  const duplicates = await db.jobSite.findMany({
+    where: {
+      organizationId,
+      archivedAt: null,
+      OR: [
+        { name: { equals: name, mode: "insensitive" } },
+        ...(clientName ? [{ clientName: { equals: clientName, mode: "insensitive" as const } }] : []),
+        ...(address ? [{ address: { equals: address, mode: "insensitive" as const } }] : []),
+      ],
+    },
+    select: { id: true },
+    take: 1,
   });
+  if (duplicates.length && input.continueAfterDuplicateWarning !== true) {
+    throw new AccessError("Esiste gia un cantiere simile. Verifica il duplicato oppure conferma di voler continuare.", 409);
+  }
+
+  const [managerMemberships, workers] = await Promise.all([
+    managerUserIds.length
+      ? db.organizationMembership.findMany({ where: { organizationId, revokedAt: null, role: "SITE_MANAGER", userId: { in: managerUserIds } }, select: { userId: true } })
+      : Promise.resolve([]),
+    workerIds.length
+      ? db.worker.findMany({ where: { organizationId, archivedAt: null, id: { in: workerIds } }, select: { id: true } })
+      : Promise.resolve([]),
+  ]);
+  if (managerMemberships.length !== managerUserIds.length) throw new AccessError("Uno o piu responsabili non sono disponibili per questa azienda.", 409);
+  if (workers.length !== workerIds.length) throw new AccessError("Uno o piu lavoratori non sono disponibili per questa azienda.", 409);
+
+  const created = await db.jobSite.create({
+    data: {
+      organizationId,
+      name,
+      address,
+      clientName,
+      status,
+      operationalPhase,
+      startDate: dates.resolvedStartDate,
+      endDate: dates.resolvedEndDate,
+      notes,
+      userAssignments: managerUserIds.length ? { create: managerUserIds.map((userId) => ({ organizationId, userId, assignmentRole: "SITE_MANAGER", assignedById: context.userId })) } : undefined,
+      workerAssignments: workerIds.length ? { create: workerIds.map((workerId) => ({ organizationId, workerId, assignedById: context.userId })) } : undefined,
+    },
+    select: { ...jobSiteSelect, userAssignments: { select: { id: true } }, workerAssignments: { select: { id: true } } },
+  });
+  const { userAssignments = [], workerAssignments = [], ...jobSite } = created;
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "job-site", resourceId: jobSite.id });
   await recordProductAuditEventBestEffort({
     organizationId,
@@ -90,8 +169,13 @@ export async function createJobSite(input: CreateJobSiteInput) {
     action: "JOB_SITE_CREATED",
     entityType: "JOB_SITE",
     entityId: jobSite.id,
-    metadata: { nextStatus: jobSite.status },
+    metadata: { nextStatus: jobSite.status, nextPhase: jobSite.operationalPhase },
   });
+  const actor = auditActorFromContext(context, actorRole);
+  await recordProductAuditEventsBestEffort([
+    ...userAssignments.map((assignment) => ({ organizationId, ...actor, action: "JOB_SITE_USER_ASSIGNMENT_CREATED" as const, entityType: "JOB_SITE_USER_ASSIGNMENT" as const, entityId: assignment.id, metadata: { entityType: "JobSiteUserAssignment", reasonCode: "created_with_job_site" } })),
+    ...workerAssignments.map((assignment) => ({ organizationId, ...actor, action: "JOB_SITE_WORKER_ASSIGNMENT_CREATED" as const, entityType: "JOB_SITE_WORKER_ASSIGNMENT" as const, entityId: assignment.id, metadata: { entityType: "JobSiteWorkerAssignment", reasonCode: "created_with_job_site" } })),
+  ]);
   return jobSite;
 }
 
@@ -100,7 +184,7 @@ export async function updateJobSite(jobSiteId: string, input: UpdateJobSiteInput
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("jobSites:update", JOBSITE_MANAGE_ROLES);
   const existing = await db.jobSite.findFirst({
     where: { id: jobSiteId, organizationId, archivedAt: null },
-    select: { id: true, startDate: true, endDate: true },
+    select: { id: true, startDate: true, endDate: true, operationalPhase: true },
   });
   if (!existing) throw new AccessError("Cantiere non trovato.", 404);
 
@@ -118,6 +202,7 @@ export async function updateJobSite(jobSiteId: string, input: UpdateJobSiteInput
     startDate?: Date | null;
     endDate?: Date | null;
     notes?: string | null;
+    operationalPhase?: JobSiteOperationalPhase;
   } = {};
   if (input.name !== undefined) data.name = trimRequiredText(input.name, "Nome cantiere", 2, 160);
   if (input.address !== undefined) data.address = trimOptionalText(input.address, "Indirizzo cantiere", 500) ?? null;
@@ -126,6 +211,7 @@ export async function updateJobSite(jobSiteId: string, input: UpdateJobSiteInput
   if (input.startDate !== undefined) data.startDate = dates.startDate ?? null;
   if (input.endDate !== undefined) data.endDate = dates.endDate ?? null;
   if (input.notes !== undefined) data.notes = trimOptionalText(input.notes, "Note cantiere", 4000) ?? null;
+  if (input.operationalPhase !== undefined && input.operationalPhase !== null) data.operationalPhase = parseJobSiteOperationalPhase(input.operationalPhase);
   if (!Object.keys(data).length) throw new AccessError("Nessun dato cantiere da aggiornare.", 409);
 
   const jobSite = await db.jobSite.update({ where: { id: existing.id }, data, select: jobSiteSelect });
@@ -136,7 +222,7 @@ export async function updateJobSite(jobSiteId: string, input: UpdateJobSiteInput
     action: "JOB_SITE_UPDATED",
     entityType: "JOB_SITE",
     entityId: jobSite.id,
-    metadata: { nextStatus: jobSite.status },
+    metadata: { nextStatus: jobSite.status, previousPhase: existing.operationalPhase, nextPhase: jobSite.operationalPhase },
   });
   return jobSite;
 }

@@ -236,6 +236,23 @@ export type EnumRecordStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumRecordStatusFilter<$PrismaModel>
 }
 
+export type EnumJobSiteOperationalPhaseNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobSiteOperationalPhase | Prisma.EnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  in?: $Enums.JobSiteOperationalPhase[] | Prisma.ListEnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.JobSiteOperationalPhase[] | Prisma.ListEnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumJobSiteOperationalPhaseNullableFilter<$PrismaModel> | $Enums.JobSiteOperationalPhase | null
+}
+
+export type EnumJobSiteOperationalPhaseNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobSiteOperationalPhase | Prisma.EnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  in?: $Enums.JobSiteOperationalPhase[] | Prisma.ListEnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.JobSiteOperationalPhase[] | Prisma.ListEnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumJobSiteOperationalPhaseNullableWithAggregatesFilter<$PrismaModel> | $Enums.JobSiteOperationalPhase | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumJobSiteOperationalPhaseNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumJobSiteOperationalPhaseNullableFilter<$PrismaModel>
+}
+
 export type EnumJobSiteUserAssignmentRoleFilter<$PrismaModel = never> = {
   equals?: $Enums.JobSiteUserAssignmentRole | Prisma.EnumJobSiteUserAssignmentRoleFieldRefInput<$PrismaModel>
   in?: $Enums.JobSiteUserAssignmentRole[] | Prisma.ListEnumJobSiteUserAssignmentRoleFieldRefInput<$PrismaModel>
@@ -260,6 +277,20 @@ export type EnumDocumentTypeAppliesToFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumDocumentTypeAppliesToFilter<$PrismaModel> | $Enums.DocumentTypeAppliesTo
 }
 
+export type EnumDocumentCategoryKeyFilter<$PrismaModel = never> = {
+  equals?: $Enums.DocumentCategoryKey | Prisma.EnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  in?: $Enums.DocumentCategoryKey[] | Prisma.ListEnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DocumentCategoryKey[] | Prisma.ListEnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDocumentCategoryKeyFilter<$PrismaModel> | $Enums.DocumentCategoryKey
+}
+
+export type EnumDocumentSensitivityFilter<$PrismaModel = never> = {
+  equals?: $Enums.DocumentSensitivity | Prisma.EnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  in?: $Enums.DocumentSensitivity[] | Prisma.ListEnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DocumentSensitivity[] | Prisma.ListEnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDocumentSensitivityFilter<$PrismaModel> | $Enums.DocumentSensitivity
+}
+
 export type EnumDocumentTypeAppliesToWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.DocumentTypeAppliesTo | Prisma.EnumDocumentTypeAppliesToFieldRefInput<$PrismaModel>
   in?: $Enums.DocumentTypeAppliesTo[] | Prisma.ListEnumDocumentTypeAppliesToFieldRefInput<$PrismaModel>
@@ -268,6 +299,26 @@ export type EnumDocumentTypeAppliesToWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumDocumentTypeAppliesToFilter<$PrismaModel>
   _max?: Prisma.NestedEnumDocumentTypeAppliesToFilter<$PrismaModel>
+}
+
+export type EnumDocumentCategoryKeyWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DocumentCategoryKey | Prisma.EnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  in?: $Enums.DocumentCategoryKey[] | Prisma.ListEnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DocumentCategoryKey[] | Prisma.ListEnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDocumentCategoryKeyWithAggregatesFilter<$PrismaModel> | $Enums.DocumentCategoryKey
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDocumentCategoryKeyFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDocumentCategoryKeyFilter<$PrismaModel>
+}
+
+export type EnumDocumentSensitivityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DocumentSensitivity | Prisma.EnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  in?: $Enums.DocumentSensitivity[] | Prisma.ListEnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DocumentSensitivity[] | Prisma.ListEnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDocumentSensitivityWithAggregatesFilter<$PrismaModel> | $Enums.DocumentSensitivity
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDocumentSensitivityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDocumentSensitivityFilter<$PrismaModel>
 }
 
 export type EnumDocumentOwnerTypeFilter<$PrismaModel = never> = {
@@ -1083,6 +1134,23 @@ export type NestedEnumRecordStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumRecordStatusFilter<$PrismaModel>
 }
 
+export type NestedEnumJobSiteOperationalPhaseNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobSiteOperationalPhase | Prisma.EnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  in?: $Enums.JobSiteOperationalPhase[] | Prisma.ListEnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.JobSiteOperationalPhase[] | Prisma.ListEnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumJobSiteOperationalPhaseNullableFilter<$PrismaModel> | $Enums.JobSiteOperationalPhase | null
+}
+
+export type NestedEnumJobSiteOperationalPhaseNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobSiteOperationalPhase | Prisma.EnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  in?: $Enums.JobSiteOperationalPhase[] | Prisma.ListEnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.JobSiteOperationalPhase[] | Prisma.ListEnumJobSiteOperationalPhaseFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumJobSiteOperationalPhaseNullableWithAggregatesFilter<$PrismaModel> | $Enums.JobSiteOperationalPhase | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumJobSiteOperationalPhaseNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumJobSiteOperationalPhaseNullableFilter<$PrismaModel>
+}
+
 export type NestedEnumJobSiteUserAssignmentRoleFilter<$PrismaModel = never> = {
   equals?: $Enums.JobSiteUserAssignmentRole | Prisma.EnumJobSiteUserAssignmentRoleFieldRefInput<$PrismaModel>
   in?: $Enums.JobSiteUserAssignmentRole[] | Prisma.ListEnumJobSiteUserAssignmentRoleFieldRefInput<$PrismaModel>
@@ -1107,6 +1175,20 @@ export type NestedEnumDocumentTypeAppliesToFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumDocumentTypeAppliesToFilter<$PrismaModel> | $Enums.DocumentTypeAppliesTo
 }
 
+export type NestedEnumDocumentCategoryKeyFilter<$PrismaModel = never> = {
+  equals?: $Enums.DocumentCategoryKey | Prisma.EnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  in?: $Enums.DocumentCategoryKey[] | Prisma.ListEnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DocumentCategoryKey[] | Prisma.ListEnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDocumentCategoryKeyFilter<$PrismaModel> | $Enums.DocumentCategoryKey
+}
+
+export type NestedEnumDocumentSensitivityFilter<$PrismaModel = never> = {
+  equals?: $Enums.DocumentSensitivity | Prisma.EnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  in?: $Enums.DocumentSensitivity[] | Prisma.ListEnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DocumentSensitivity[] | Prisma.ListEnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDocumentSensitivityFilter<$PrismaModel> | $Enums.DocumentSensitivity
+}
+
 export type NestedEnumDocumentTypeAppliesToWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.DocumentTypeAppliesTo | Prisma.EnumDocumentTypeAppliesToFieldRefInput<$PrismaModel>
   in?: $Enums.DocumentTypeAppliesTo[] | Prisma.ListEnumDocumentTypeAppliesToFieldRefInput<$PrismaModel>
@@ -1115,6 +1197,26 @@ export type NestedEnumDocumentTypeAppliesToWithAggregatesFilter<$PrismaModel = n
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumDocumentTypeAppliesToFilter<$PrismaModel>
   _max?: Prisma.NestedEnumDocumentTypeAppliesToFilter<$PrismaModel>
+}
+
+export type NestedEnumDocumentCategoryKeyWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DocumentCategoryKey | Prisma.EnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  in?: $Enums.DocumentCategoryKey[] | Prisma.ListEnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DocumentCategoryKey[] | Prisma.ListEnumDocumentCategoryKeyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDocumentCategoryKeyWithAggregatesFilter<$PrismaModel> | $Enums.DocumentCategoryKey
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDocumentCategoryKeyFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDocumentCategoryKeyFilter<$PrismaModel>
+}
+
+export type NestedEnumDocumentSensitivityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DocumentSensitivity | Prisma.EnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  in?: $Enums.DocumentSensitivity[] | Prisma.ListEnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DocumentSensitivity[] | Prisma.ListEnumDocumentSensitivityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDocumentSensitivityWithAggregatesFilter<$PrismaModel> | $Enums.DocumentSensitivity
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDocumentSensitivityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDocumentSensitivityFilter<$PrismaModel>
 }
 
 export type NestedEnumDocumentOwnerTypeFilter<$PrismaModel = never> = {

@@ -85,6 +85,8 @@ describe("product audit service", () => {
       mimeType: "image/png",
       size: 123,
       reasonCode: "manual",
+      previousPhase: "PREPARATION",
+      nextPhase: "IN_PROGRESS",
       blobKey: "hidden",
       token: "hidden",
       downloadUrl: "hidden",
@@ -95,7 +97,7 @@ describe("product audit service", () => {
       latitude: 45,
       stack: "hidden",
       arbitrary: "hidden",
-    })).toEqual({ mimeType: "image/png", size: 123, reasonCode: "manual" });
+    })).toEqual({ mimeType: "image/png", size: 123, reasonCode: "manual", previousPhase: "PREPARATION", nextPhase: "IN_PROGRESS" });
   });
 
   it("keeps best-effort audit writes from blocking user flows", async () => {

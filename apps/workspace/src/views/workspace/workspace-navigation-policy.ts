@@ -5,10 +5,19 @@ export interface WorkspaceNavigationItem {
   href: string;
 }
 
+export interface WorkspaceFavoritesModel {
+  role: WorkspaceRole | null;
+  candidates: WorkspaceNavigationItem[];
+  defaultHrefs: string[];
+}
+
 export interface WorkspaceNavigationModel {
   primary: WorkspaceNavigationItem[];
+  documents: WorkspaceNavigationItem[];
   people: WorkspaceNavigationItem[];
-  quickLinks: WorkspaceNavigationItem[];
+  jobSites: WorkspaceNavigationItem[];
+  jobSitesLabel: string;
+  favorites: WorkspaceFavoritesModel;
   add: WorkspaceNavigationItem[];
   account: WorkspaceNavigationItem[];
   showAnalytics: boolean;
@@ -17,48 +26,88 @@ export interface WorkspaceNavigationModel {
 const everydayNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> = {
   OWNER: [
     { label: "Da fare", href: "/dashboard" },
-    { label: "Documenti", href: "/documents" },
     { label: "Calendario", href: "/calendar" },
-    { label: "Cantieri", href: "/job-sites" },
   ],
   ADMIN: [
     { label: "Da fare", href: "/dashboard" },
-    { label: "Documenti", href: "/documents" },
     { label: "Calendario", href: "/calendar" },
-    { label: "Cantieri", href: "/job-sites" },
   ],
   SAFETY_CONSULTANT: [
     { label: "Da fare", href: "/dashboard" },
-    { label: "Documenti", href: "/documents" },
     { label: "Calendario", href: "/calendar" },
-    { label: "Cantieri", href: "/job-sites" },
   ],
   SITE_MANAGER: [
     { label: "Da fare", href: "/dashboard" },
-    { label: "Documenti", href: "/documents" },
     { label: "Calendario", href: "/calendar" },
-    { label: "Cantieri", href: "/job-sites" },
   ],
   WORKER: [
     { label: "Da fare", href: "/dashboard" },
-    { label: "Documenti", href: "/documents" },
     { label: "Calendario", href: "/calendar" },
-    { label: "Cantieri", href: "/job-sites" },
+  ],
+};
+
+const jobSiteNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> = {
+  OWNER: [{ label: "Panoramica", href: "/job-sites" }, { label: "Tutti i cantieri", href: "/job-sites/all" }, { label: "Archivio", href: "/job-sites/archive" }],
+  ADMIN: [{ label: "Panoramica", href: "/job-sites" }, { label: "Tutti i cantieri", href: "/job-sites/all" }, { label: "Archivio", href: "/job-sites/archive" }],
+  SAFETY_CONSULTANT: [{ label: "Panoramica", href: "/job-sites" }, { label: "Tutti i cantieri", href: "/job-sites/all" }],
+  SITE_MANAGER: [{ label: "Panoramica", href: "/job-sites" }, { label: "Elenco assegnato", href: "/job-sites/all" }],
+  WORKER: [{ label: "Panoramica", href: "/job-sites" }, { label: "Elenco assegnato", href: "/job-sites/all" }],
+};
+
+const documentNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> = {
+  OWNER: [
+    { label: "Panoramica", href: "/documents" },
+    { label: "Azienda", href: "/documents/company" },
+    { label: "Lavoratori", href: "/documents/workers" },
+    { label: "Cantieri", href: "/documents/job-sites" },
+    { label: "Pacchetti e condivisioni", href: "/document-packages" },
+    { label: "Archivio", href: "/documents/archive" },
+  ],
+  ADMIN: [
+    { label: "Panoramica", href: "/documents" },
+    { label: "Azienda", href: "/documents/company" },
+    { label: "Lavoratori", href: "/documents/workers" },
+    { label: "Cantieri", href: "/documents/job-sites" },
+    { label: "Pacchetti e condivisioni", href: "/document-packages" },
+    { label: "Archivio", href: "/documents/archive" },
+  ],
+  SAFETY_CONSULTANT: [
+    { label: "Panoramica", href: "/documents" },
+    { label: "Azienda", href: "/documents/company" },
+    { label: "Lavoratori", href: "/documents/workers" },
+    { label: "Cantieri", href: "/documents/job-sites" },
+    { label: "Pacchetti e condivisioni", href: "/document-packages" },
+  ],
+  SITE_MANAGER: [
+    { label: "Panoramica", href: "/documents" },
+    { label: "Cantieri", href: "/documents/job-sites" },
+  ],
+  WORKER: [
+    { label: "Panoramica", href: "/documents" },
+    { label: "Lavoratori", href: "/documents/workers" },
   ],
 };
 
 const peopleNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> = {
   OWNER: [
+    { label: "Panoramica", href: "/people" },
     { label: "Lavoratori", href: "/workers" },
-    { label: "Utenti e inviti", href: "/settings/people" },
+    { label: "Accessi", href: "/people/access" },
+    { label: "Assegnazioni", href: "/people/assignments" },
   ],
   ADMIN: [
+    { label: "Panoramica", href: "/people" },
     { label: "Lavoratori", href: "/workers" },
-    { label: "Utenti e inviti", href: "/settings/people" },
+    { label: "Accessi", href: "/people/access" },
+    { label: "Assegnazioni", href: "/people/assignments" },
   ],
-  SAFETY_CONSULTANT: [{ label: "Lavoratori", href: "/workers" }],
+  SAFETY_CONSULTANT: [
+    { label: "Panoramica", href: "/people" },
+    { label: "Lavoratori", href: "/workers" },
+    { label: "Assegnazioni", href: "/people/assignments" },
+  ],
   SITE_MANAGER: [{ label: "Lavoratori", href: "/workers" }],
-  WORKER: [],
+  WORKER: [{ label: "Il mio profilo", href: "/workers" }],
 };
 
 const addNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> = {
@@ -87,34 +136,66 @@ const addNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> =
   ],
 };
 
-const quickLinkNavigation: Record<WorkspaceRole, readonly WorkspaceNavigationItem[]> = {
-  OWNER: [
-    { label: "Scadenze", href: "/deadlines" },
-    { label: "Prove", href: "/evidence" },
-    { label: "Checklist", href: "/checklists" },
-    { label: "Condivisioni", href: "/document-packages" },
-  ],
-  ADMIN: [
-    { label: "Scadenze", href: "/deadlines" },
-    { label: "Prove", href: "/evidence" },
-    { label: "Checklist", href: "/checklists" },
-    { label: "Condivisioni", href: "/document-packages" },
-  ],
-  SAFETY_CONSULTANT: [
-    { label: "Scadenze", href: "/deadlines" },
-    { label: "Prove", href: "/evidence" },
-    { label: "Checklist", href: "/checklists" },
-    { label: "Condivisioni", href: "/document-packages" },
-  ],
-  SITE_MANAGER: [
-    { label: "Scadenze", href: "/deadlines" },
-    { label: "Prove", href: "/evidence" },
-    { label: "Checklist", href: "/checklists" },
-  ],
-  WORKER: [
-    { label: "Scadenze", href: "/deadlines" },
-    { label: "Prove", href: "/evidence" },
-  ],
+const favoritesNavigation: Record<WorkspaceRole, {
+  candidates: readonly WorkspaceNavigationItem[];
+  defaultHrefs: readonly string[];
+}> = {
+  OWNER: {
+    candidates: [
+      { label: "Documenti da controllare", href: "/documents?view=attention" },
+      { label: "Scadenze", href: "/deadlines" },
+      { label: "Checklist aperte", href: "/checklists?view=open" },
+      { label: "Prove recenti", href: "/evidence?sort=recent" },
+      { label: "Pacchetti pronti", href: "/document-packages?view=ready" },
+      { label: "Documenti Azienda", href: "/documents/company?view=attention" },
+      { label: "Documenti lavoratori", href: "/documents/workers?view=attention" },
+      { label: "Documenti cantieri", href: "/documents/job-sites?view=attention" },
+    ],
+    defaultHrefs: ["/documents?view=attention", "/deadlines"],
+  },
+  ADMIN: {
+    candidates: [
+      { label: "Documenti da controllare", href: "/documents?view=attention" },
+      { label: "Scadenze", href: "/deadlines" },
+      { label: "Checklist aperte", href: "/checklists?view=open" },
+      { label: "Prove recenti", href: "/evidence?sort=recent" },
+      { label: "Pacchetti pronti", href: "/document-packages?view=ready" },
+      { label: "Documenti Azienda", href: "/documents/company?view=attention" },
+      { label: "Documenti lavoratori", href: "/documents/workers?view=attention" },
+      { label: "Documenti cantieri", href: "/documents/job-sites?view=attention" },
+    ],
+    defaultHrefs: ["/documents?view=attention", "/deadlines"],
+  },
+  SAFETY_CONSULTANT: {
+    candidates: [
+      { label: "Checklist aperte", href: "/checklists?view=open" },
+      { label: "Documenti da controllare", href: "/documents?view=attention" },
+      { label: "Scadenze", href: "/deadlines" },
+      { label: "Prove recenti", href: "/evidence?sort=recent" },
+      { label: "Pacchetti pronti", href: "/document-packages?view=ready" },
+      { label: "Documenti lavoratori", href: "/documents/workers?view=attention" },
+      { label: "Documenti cantieri", href: "/documents/job-sites?view=attention" },
+    ],
+    defaultHrefs: ["/checklists?view=open", "/documents?view=attention"],
+  },
+  SITE_MANAGER: {
+    candidates: [
+      { label: "Prove recenti", href: "/evidence?sort=recent" },
+      { label: "Checklist aperte", href: "/checklists?view=open" },
+      { label: "Scadenze", href: "/deadlines" },
+      { label: "Documenti da controllare", href: "/documents?view=attention" },
+      { label: "Documenti cantieri", href: "/documents/job-sites?view=attention" },
+    ],
+    defaultHrefs: ["/evidence?sort=recent", "/checklists?view=open"],
+  },
+  WORKER: {
+    candidates: [
+      { label: "Prove recenti", href: "/evidence?sort=recent" },
+      { label: "Scadenze", href: "/deadlines" },
+      { label: "I miei documenti da controllare", href: "/documents?view=attention" },
+    ],
+    defaultHrefs: ["/evidence?sort=recent", "/deadlines"],
+  },
 };
 
 export function buildWorkspaceNavigation(role: WorkspaceRole | null, platformRole: "USER" | "SUPER_ADMIN" | null): WorkspaceNavigationModel {
@@ -127,8 +208,17 @@ export function buildWorkspaceNavigation(role: WorkspaceRole | null, platformRol
 
   return {
     primary: role ? [...everydayNavigation[role]] : [],
+    documents: role ? [...documentNavigation[role]] : [],
     people: role ? [...peopleNavigation[role]] : [],
-    quickLinks: role ? [...quickLinkNavigation[role]] : [],
+    jobSites: role ? [...jobSiteNavigation[role]] : [],
+    jobSitesLabel: role === "SITE_MANAGER" || role === "WORKER" ? "I miei cantieri" : "Cantieri",
+    favorites: role
+      ? {
+          role,
+          candidates: [...favoritesNavigation[role].candidates],
+          defaultHrefs: [...favoritesNavigation[role].defaultHrefs],
+        }
+      : { role: null, candidates: [], defaultHrefs: [] },
     add: role ? [...addNavigation[role]] : [],
     account,
     showAnalytics: role === "OWNER" || role === "ADMIN",

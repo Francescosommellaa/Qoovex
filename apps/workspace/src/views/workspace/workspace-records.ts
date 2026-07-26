@@ -7,11 +7,15 @@ import type {
   CalendarEventSource,
   CalendarEventStatus,
   DocumentOwnerType,
+  DocumentCategoryKey,
   DocumentPackageItemType,
   DocumentPackageStatus,
   DocumentStatus,
   DocumentTypeAppliesTo,
+  DocumentSensitivity,
   EvidenceType,
+  MissingDocumentRequirementItem,
+  JobSiteOperationalPhase,
   RecordStatus,
 } from "@qoovex/types";
 
@@ -49,7 +53,12 @@ export interface WorkspaceDocumentTypeRecord {
   id: string;
   name: string;
   appliesTo: DocumentTypeAppliesTo;
+  categoryKey: DocumentCategoryKey;
+  categoryLabel: string;
+  sensitivity: DocumentSensitivity;
   requiresExpiryDate: boolean;
+  documentCount?: number;
+  description?: string | null;
 }
 
 export interface WorkspaceWorkerRecord {
@@ -70,6 +79,7 @@ export interface WorkspaceJobSiteRecord {
   address?: string | null;
   clientName?: string | null;
   status: RecordStatus;
+  operationalPhase?: JobSiteOperationalPhase | null;
   startDate?: string | null;
   endDate?: string | null;
   notes?: string | null;
@@ -80,6 +90,10 @@ export interface WorkspaceJobSiteRecord {
 export interface WorkspaceDocumentRecord {
   id: string;
   documentTypeId?: string | null;
+  documentTypeName?: string | null;
+  categoryKey: DocumentCategoryKey;
+  categoryLabel: string;
+  sensitivity: DocumentSensitivity;
   ownerType: DocumentOwnerType;
   workerId?: string | null;
   jobSiteId?: string | null;
@@ -90,6 +104,17 @@ export interface WorkspaceDocumentRecord {
   createdAt?: string;
   updatedAt?: string;
   archivedAt?: string | null;
+  worker?: { id: string; displayName: string } | null;
+  jobSite?: { id: string; name: string } | null;
+}
+
+export interface WorkspaceDocumentOverviewRecord {
+  byOwner: Record<DocumentOwnerType, number>;
+  byStatus: Record<DocumentStatus, number>;
+  unclassifiedCount: number;
+  missingCount: number;
+  missing: MissingDocumentRequirementItem[];
+  attention: WorkspaceDocumentRecord[];
 }
 
 export interface WorkspaceDocumentVersionRecord {

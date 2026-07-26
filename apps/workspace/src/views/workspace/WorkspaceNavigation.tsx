@@ -19,8 +19,8 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Fragment, useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import type { SupportContext } from "@qoovex/types";
 import { Badge } from "@qoovex/ui/components/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@qoovex/ui/components/collapsible";
@@ -49,7 +49,7 @@ import {
   useSidebar,
 } from "@qoovex/ui/components/sidebar";
 import { WorkspaceLogoutButton } from "./WorkspaceSessionControls";
-import { WorkspaceQuickLinks } from "./WorkspaceQuickLinks";
+import { WorkspaceFavorites } from "./WorkspaceFavorites";
 import type { WorkspaceNavigationModel, WorkspaceNavigationItem } from "./workspace-navigation-policy";
 
 const platformNavItems = [
@@ -100,15 +100,20 @@ function NavigationLink({
   );
 }
 
-function PeopleNavigation({
+function GroupNavigation({
   current,
   items,
+  label,
+  icon: GroupIcon,
 }: {
   current: (href: string) => boolean;
   items: readonly WorkspaceNavigationItem[];
+  label: string;
+  icon: typeof IconUsers;
 }) {
   const { isMobile, setOpenMobile, state } = useSidebar();
-  const active = items.some((item) => current(item.href));
+  const pathname = usePathname();
+  const active = items.some((item) => current(item.href)) || (label === "Documenti" && (pathname.startsWith("/documents") || pathname.startsWith("/document-packages")));
   const [open, setOpen] = useState(active);
 
   useEffect(() => {
@@ -128,9 +133,9 @@ function PeopleNavigation({
     <SidebarMenuItem>
       <Collapsible onOpenChange={setOpen} open={open}>
         <CollapsibleTrigger
-          render={<SidebarMenuButton isActive={active} tooltip="Persone" />}
+          render={<SidebarMenuButton isActive={active} tooltip={label} />}
         >
-          <IconUsers /><span>Persone</span>
+          <GroupIcon /><span>{label}</span>
           <IconChevronRight className="ml-auto transition-transform duration-200 group-data-panel-open/menu-button:rotate-90 motion-reduce:transition-none" />
         </CollapsibleTrigger>
         <CollapsibleContent>
@@ -167,7 +172,12 @@ function CreationActions({ items }: { items: readonly WorkspaceNavigationItem[] 
 
   function actionLabel(item: WorkspaceNavigationItem) {
     if (item.href.includes("intent=upload")) return "Aggiungi file a un documento";
+    if (item.label === "Documento") return "Aggiungi documento";
+    if (item.label === "Cantiere") return "Crea cantiere";
+    if (item.label === "Lavoratore") return "Aggiungi lavoratore";
     if (item.label === "Prova") return "Aggiungi prova";
+    if (item.label === "Checklist") return "Crea checklist";
+    if (item.label === "Condivisione") return "Prepara condivisione";
     return `Crea ${item.label.toLowerCase()}`;
   }
 
@@ -209,8 +219,15 @@ function CreationActions({ items }: { items: readonly WorkspaceNavigationItem[] 
 export function WorkspaceNavigation({ navigation, platformRole, support, authenticated }: WorkspaceNavigationProps) {
   const { isMobile, setOpenMobile } = useSidebar();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const isPlatformConsole = pathname.startsWith("/qoovex-admin");
-  const current = (href: string) => pathname === href || (href !== "/dashboard" && pathname.startsWith(`${href}/`));
+  const current = (href: string) => {
+    const target = new URL(href, "https://workspace.qoovex.local");
+    const pathMatches = pathname === target.pathname
+      || (!["/dashboard", "/documents", "/people", "/job-sites"].includes(target.pathname) && pathname.startsWith(`${target.pathname}/`));
+    if (!pathMatches) return false;
+    return [...target.searchParams].every(([key, value]) => searchParams.get(key) === value);
+  };
 
   if (isPlatformConsole && platformRole === "SUPER_ADMIN") {
     return (
@@ -282,17 +299,15 @@ export function WorkspaceNavigation({ navigation, platformRole, support, authent
           <SidebarGroupLabel>Workspace</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {workspaceItems.map((item) => (
-                <Fragment key={item.href}>
-                  {item.href === "/job-sites" ? <PeopleNavigation current={current} items={navigation.people} /> : null}
-                  <NavigationLink current={current} item={item} />
-                </Fragment>
-              ))}
+              <GroupNavigation current={current} icon={IconFile} items={navigation.documents} label="Documenti" />
+              <GroupNavigation current={current} icon={IconUsers} items={navigation.people} label="Persone" />
+              <GroupNavigation current={current} icon={IconBuilding} items={navigation.jobSites} label={navigation.jobSitesLabel} />
+              {workspaceItems.map((item) => <NavigationLink current={current} item={item} key={item.href} />)}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <WorkspaceQuickLinks candidates={navigation.quickLinks} current={current} />
+        <WorkspaceFavorites favorites={navigation.favorites} current={current} key={navigation.favorites.role ?? "public"} />
       </SidebarContent>
 
       <SidebarFooter className="gap-2">

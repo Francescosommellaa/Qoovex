@@ -114,6 +114,14 @@ export async function createWorker(input: CreateWorkerInput) {
   const status = input.status === undefined ? "ACTIVE" : parseEditableRecordStatus(input.status);
   const notes = trimOptionalText(input.notes, "Note lavoratore", 4000) ?? null;
 
+  if (email) {
+    const duplicate = await db.worker.findFirst({
+      where: { organizationId, archivedAt: null, email: { equals: email, mode: "insensitive" } },
+      select: { id: true, displayName: true },
+    });
+    if (duplicate) throw new AccessError(`Esiste gia un lavoratore con questa email: ${duplicate.displayName}.`, 409);
+  }
+
   const worker = await db.worker.create({
     data: { organizationId, displayName, email, phone, roleLabel, status, notes },
     select: workerSelect,
@@ -128,6 +136,25 @@ export async function createWorker(input: CreateWorkerInput) {
     metadata: { nextStatus: worker.status },
   });
   return worker;
+}
+
+export async function checkWorkerDuplicates(input: { displayName?: unknown; email?: unknown }) {
+  const { organizationId } = await requireOrganizationDomainAccess("workers:create", WORKER_MANAGE_ROLES);
+  const displayName = trimRequiredText(input.displayName, "Nome lavoratore", 2, 160);
+  const email = normalizeOptionalEmail(input.email);
+  const [emailMatch, similarNames] = await Promise.all([
+    email ? db.worker.findFirst({
+      where: { organizationId, archivedAt: null, email: { equals: email, mode: "insensitive" } },
+      select: { id: true, displayName: true },
+    }) : null,
+    db.worker.findMany({
+      where: { organizationId, archivedAt: null, displayName: { contains: displayName, mode: "insensitive" } },
+      select: { id: true, displayName: true },
+      orderBy: [{ displayName: "asc" }],
+      take: 5,
+    }),
+  ]);
+  return { emailMatch, similarNames };
 }
 
 export async function updateWorker(workerId: string, input: UpdateWorkerInput) {

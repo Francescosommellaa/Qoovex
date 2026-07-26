@@ -12,15 +12,15 @@ import {
 } from "@qoovex/ui/components/dialog";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { WorkerForm, type WorkerAccessRole } from "./WorkerForm";
+import { GuidedWorkerCreateFlow } from "./GuidedWorkerCreateFlow";
 
 interface WorkerCreateDialogProps {
   className?: string;
   initialOpen?: boolean;
-  invitableRoles: WorkerAccessRole[];
+  jobSites: Array<{ id: string; name: string }>;
 }
 
-export function WorkerCreateDialog({ className, initialOpen = false, invitableRoles }: WorkerCreateDialogProps) {
+export function WorkerCreateDialog({ className, initialOpen = false, jobSites }: WorkerCreateDialogProps) {
   const router = useRouter();
   const [open, setOpen] = useState(initialOpen);
 
@@ -40,7 +40,7 @@ export function WorkerCreateDialog({ className, initialOpen = false, invitableRo
           <DialogTitle>Aggiungi lavoratore</DialogTitle>
           <DialogDescription>Registra il profilo operativo. Se deve usare Qoovex, puoi invitarlo con il ruolo Lavoratore.</DialogDescription>
         </DialogHeader>
-        <WorkerForm invitableRoles={invitableRoles} layout="dialog" mode="create" onCreated={() => handleOpenChange(false)} />
+        <GuidedWorkerCreateFlow jobSites={jobSites} onCreated={(worker) => { handleOpenChange(false); router.push(`/workers/${worker.id}`); router.refresh(); }} />
       </DialogContent>
     </Dialog>
   );

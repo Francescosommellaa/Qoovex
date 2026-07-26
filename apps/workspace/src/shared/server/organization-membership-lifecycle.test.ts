@@ -14,6 +14,8 @@ const mocks = vi.hoisted(() => ({
   },
   tx: {
     organization: { create: vi.fn() },
+    worker: { findFirst: vi.fn() },
+    workerUserLink: { findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
     organizationMembership: { findUnique: vi.fn(), create: vi.fn(), updateMany: vi.fn() },
     organizationInvitation: { findUnique: vi.fn(), updateMany: vi.fn() },
     user: { update: vi.fn() },
@@ -58,6 +60,9 @@ beforeEach(() => {
   mocks.tx.organizationMembership.updateMany.mockResolvedValue({ count: 1 });
   mocks.tx.organizationInvitation.updateMany.mockResolvedValue({ count: 1 });
   mocks.tx.user.update.mockResolvedValue({ id: "user-1" });
+  mocks.tx.worker.findFirst.mockResolvedValue({ id: "worker-1" });
+  mocks.tx.workerUserLink.findFirst.mockResolvedValue(null);
+  mocks.tx.workerUserLink.create.mockResolvedValue({ id: "link-1" });
 });
 
 describe("single organization membership lifecycle", () => {
@@ -127,6 +132,56 @@ describe("single organization membership lifecycle", () => {
       where: { id: "invite-1", acceptedAt: null, revokedAt: null, expiresAt: { gt: expect.any(Date) } },
       data: { acceptedAt: expect.any(Date) },
     });
+  });
+
+  it("creates the WORKER profile link in the same Serializable acceptance transaction", async () => {
+    mocks.tx.organizationMembership.findUnique.mockResolvedValue(null);
+    mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
+      id: "invite-worker",
+      email: "user@example.com",
+      role: "WORKER",
+      organizationId: "org-invite",
+      workerId: "worker-1",
+      invitedById: "owner-1",
+      expiresAt: new Date(Date.now() + 60_000),
+      acceptedAt: null,
+      revokedAt: null,
+    });
+
+    await expect(acceptInvitation("token")).resolves.toEqual({ accepted: true });
+    expect(mocks.tx.worker.findFirst).toHaveBeenCalledWith(expect.objectContaining({
+      where: { id: "worker-1", organizationId: "org-invite", archivedAt: null },
+    }));
+    expect(mocks.tx.workerUserLink.create).toHaveBeenCalledWith({
+      data: {
+        organizationId: "org-invite",
+        workerId: "worker-1",
+        userId: "user-1",
+        linkedById: "owner-1",
+      },
+    });
+    expect(mocks.tx.organizationInvitation.updateMany).toHaveBeenCalled();
+  });
+
+  it("does not consume the invitation when the automatic WORKER link fails", async () => {
+    mocks.tx.organizationMembership.findUnique.mockResolvedValue(null);
+    mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
+      id: "invite-worker",
+      email: "user@example.com",
+      role: "WORKER",
+      organizationId: "org-invite",
+      workerId: "worker-1",
+      invitedById: "owner-1",
+      expiresAt: new Date(Date.now() + 60_000),
+      acceptedAt: null,
+      revokedAt: null,
+    });
+    const linkError = new Error("link failed");
+    mocks.tx.workerUserLink.create.mockRejectedValue(linkError);
+
+    await expect(acceptInvitation("token")).rejects.toBe(linkError);
+    expect(mocks.tx.organizationInvitation.updateMany).not.toHaveBeenCalled();
+    expect(mocks.tx.user.update).not.toHaveBeenCalled();
   });
 
   it("rejects a concurrent claim of a revoked membership", async () => {

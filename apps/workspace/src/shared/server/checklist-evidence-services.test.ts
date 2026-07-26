@@ -204,6 +204,17 @@ describe("checklist service", () => {
     }));
   });
 
+  it("filters and paginates open checklists in the same scoped query", async () => {
+    mocks.db.checklist.findMany.mockResolvedValue([]);
+    await expect(listChecklistsWithItems({ itemStatuses: ["OPEN", "TO_REVIEW"], take: 51, skip: 50 })).resolves.toEqual([]);
+    expect(mocks.db.checklist.findMany).toHaveBeenCalledTimes(1);
+    expect(mocks.db.checklist.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      take: 51,
+      skip: 50,
+      where: expect.objectContaining({ organizationId: "org-1", items: { some: { status: { in: ["OPEN", "TO_REVIEW"] } } } }),
+    }));
+  });
+
   it("lets safety consultants manage checklist items and site managers complete assigned items", async () => {
     setRole("SAFETY_CONSULTANT");
     mocks.db.checklistItem.create.mockResolvedValue({ ...itemRecord, status: "DONE", completedAt: now, completedById: "user-1" });
@@ -334,6 +345,18 @@ describe("evidence service", () => {
     await expect(createEvidenceNote({ type: "NOTE", title: "Nota", jobSiteId: "jobsite-1" })).resolves.toMatchObject({ type: "NOTE" });
     await expect(getEvidenceDownload("evidence-1")).resolves.toMatchObject({ stream, originalFileName: "foto.png" });
     await expect(archiveEvidence("evidence-1")).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("keeps recent evidence ordered and paginated in one scoped query", async () => {
+    mocks.db.evidence.findMany.mockResolvedValue([]);
+    await expect(listEvidence({ take: 51, skip: 50 })).resolves.toEqual([]);
+    expect(mocks.db.evidence.findMany).toHaveBeenCalledTimes(1);
+    expect(mocks.db.evidence.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      take: 51,
+      skip: 50,
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      where: expect.objectContaining({ organizationId: "org-1", archivedAt: null }),
+    }));
   });
 
   it("scopes evidence access for operational roles and denies destinatari esterni", async () => {

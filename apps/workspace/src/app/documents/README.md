@@ -1,6 +1,8 @@
 # Documents Pages
 
-Pagine workspace per lista e dettaglio documenti.
+Pagine workspace per panoramica, macroaree, archivio e dettaglio documenti.
+
+`/documents` e la panoramica decisionale; `/documents/company`, `/documents/workers` e `/documents/job-sites` sono le viste operative. `?view=attention` mostra la coda scoped di documenti mancanti, scaduti, in scadenza o da verificare; sulle macroaree applica il filtro nella query e preserva la paginazione. Le viste per macroarea raggruppano per il registro categorie condiviso e paginano server-side 50 documenti con lookahead. Lavoratori e cantieri mostrano riepiloghi della pagina corrente calcolati dai record gia caricati, senza count o letture per singola card. I percorsi con filtri continuano a usare la lista compatibile e conservano i parametri di provenienza.
 
 Usano i service server-side esistenti per leggere dati filtrati per azienda e le API `/api/documents` per le mutation client-side.
 

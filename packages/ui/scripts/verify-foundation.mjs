@@ -121,7 +121,7 @@ const workspaceLayout = read("apps/workspace/src/app/layout.tsx");
 const workspaceDashboard = read("apps/workspace/src/views/dashboard/DashboardView.tsx");
 const workspaceShell = read("apps/workspace/src/views/workspace/WorkspaceShell.tsx");
 const workspaceNavigation = read("apps/workspace/src/views/workspace/WorkspaceNavigation.tsx");
-const workspaceQuickLinks = read("apps/workspace/src/views/workspace/WorkspaceQuickLinks.tsx");
+const workspaceFavorites = read("apps/workspace/src/views/workspace/WorkspaceFavorites.tsx");
 const workspaceTopbar = read("apps/workspace/src/views/workspace/WorkspaceTopbar.tsx");
 const workspaceNavigationHistory = read("apps/workspace/src/views/workspace/workspace-navigation-history.ts");
 const workspaceNotificationsPanel = read("apps/workspace/src/views/workspace/WorkspaceNotificationsPanel.tsx");
@@ -203,7 +203,7 @@ for (const required of ["DialogPrimitive.Root", "DialogPrimitive.Title", "Dialog
   assert(dialog.includes(required), `Dialog condiviso non contiene ${required}.`);
 }
 assert(sirioDashboardOverview.includes("<DialogTitle>Assegna responsabile</DialogTitle>"), "Sirio deve provare il Dialog di assegnazione.");
-for (const required of ["Ricerca rapida, in preparazione", "Analisi, in preparazione", "<PeopleNavigation", "items={navigation.people}", "<CreationActions", "<WorkspaceQuickLinks"]) {
+for (const required of ["Ricerca rapida, in preparazione", "Analisi, in preparazione", "<GroupNavigation", "items={navigation.documents}", "items={navigation.people}", "<CreationActions", "<WorkspaceFavorites"]) {
   assert(workspaceNavigation.includes(required), `Navigazione Workspace non contiene ${required}.`);
 }
 for (const required of ["Azioni rapide", "IconFilePlus", "IconBuildingPlus", "IconUserPlus", "IconPhotoPlus", "grid grid-cols-4", "items.map((item)", "hidden: false", 'data-slot="workspace-quick-actions"', "bg-sidebar-accent/55"]) {
@@ -211,13 +211,14 @@ for (const required of ["Azioni rapide", "IconFilePlus", "IconBuildingPlus", "Ic
 }
 assert(!workspaceNavigation.includes("visibleActions") && !workspaceNavigation.includes("Cosa vuoi creare?"), "Tutte le azioni autorizzate devono restare visibili nel dock compatto.");
 assert(workspaceNavigation.indexOf("<CreationActions items={navigation.add} />") > workspaceNavigation.lastIndexOf("<SidebarFooter"), "Azioni rapide Workspace devono vivere nel footer sopra account.");
-assert(workspaceNavigation.includes("setOpenMobile(false)") && workspaceQuickLinks.includes("setOpenMobile(false)"), "Le destinazioni della sidebar devono chiudere il drawer mobile dopo la navigazione.");
-for (const required of ["MAX_PINNED_LINKS = 4", "window.localStorage", "DropdownMenuCheckboxItem", "Personalizza collegamenti rapidi", "Collegamenti rapidi"]) {
-  assert(workspaceQuickLinks.includes(required), `Collegamenti rapidi Workspace non contengono ${required}.`);
+assert(workspaceNavigation.includes("setOpenMobile(false)") && workspaceFavorites.includes("setOpenMobile(false)"), "Le destinazioni della sidebar devono chiudere il drawer mobile dopo la navigazione.");
+for (const required of ["MAX_FAVORITES = 4", "qoovex.workspace.favorites.v2", "window.localStorage", "DropdownMenuCheckboxItem", "Personalizza Preferiti", "Scegli fino a {MAX_FAVORITES} viste", "sanitizeFavoriteHrefs", "loadFavoriteHrefs"]) {
+  assert(workspaceFavorites.includes(required), `Preferiti Workspace non contengono ${required}.`);
 }
+assert(!workspaceNavigation.includes('href="/notifications"') && !workspaceFavorites.includes("/notifications"), "La sidebar non deve contenere destinazioni Notifiche.");
 assert(!workspaceShell.includes("SidebarRail"), "Workspace non deve usare il rail ambiguo per ridurre il menu.");
 assert(workspaceShell.includes("SIDEBAR_COOKIE_NAME") && workspaceShell.includes("defaultOpen={sidebarDefaultOpen}"), "Workspace deve ripristinare la preferenza della sidebar dal cookie.");
-for (const required of ['className="h-dvh min-h-0! overflow-hidden bg-sidebar"', "overflow-y-auto", "...state.navigation.people"]) {
+for (const required of ['className="h-dvh min-h-0! overflow-hidden bg-sidebar"', "overflow-y-auto", "...state.navigation.documents", "...state.navigation.people"]) {
   assert(workspaceShell.includes(required), `Shell Workspace non contiene il contratto fisso ${required}.`);
 }
 assert(workspaceTopbar.includes("<SidebarCollapseButton") && workspaceTopbar.includes("iconOnly"), "La topbar Workspace deve ospitare il toggle desktop iconico.");
@@ -230,7 +231,7 @@ for (const required of ["MAX_RECENT_WORKSPACE_PAGES = 3", "window.sessionStorage
   assert(source.includes(required), `Cronologia Workspace non contiene ${required}.`);
 }
 assert(!workspaceTopbar.includes("WorkspaceBrandMark"), "La topbar mobile non deve mostrare il logo al posto del breadcrumb Da fare.");
-for (const required of ["Ricerca rapida", "Analisi", "Calendario", "Persone", "Azioni rapide", "Collegamenti rapidi", "IconFilePlus", "IconBuildingPlus", "Pagine recenti", "Navigazione mobile", "iconOnly", "overflow-y-auto"]) {
+for (const required of ["Ricerca rapida", "Analisi", "Calendario", "Persone", "Azioni rapide", "Preferiti", "Documenti da controllare", "IconFilePlus", "IconBuildingPlus", "Pagine recenti", "Navigazione mobile", "iconOnly", "overflow-y-auto"]) {
   assert(sirioDashboardShell.includes(required), `Sirio deve provare la nuova sidebar con ${required}.`);
 }
 assert(sirioDashboardShell.includes('data-slot="workspace-quick-actions"') && sirioDashboardShell.includes("<DemoQuickActions />"), "Sirio deve provare l'action tray nel footer.");

@@ -12,19 +12,26 @@ export function ChecklistsPageView({
   checklists,
   jobSites,
   capabilities,
+  activeView,
+  page,
+  hasNextPage,
 }: {
   checklists: WorkspaceChecklistRecord[];
   jobSites: WorkspaceJobSiteRecord[];
   capabilities: WorkspaceCapabilities;
+  activeView?: "open";
+  page: number;
+  hasNextPage: boolean;
 }) {
+  const pageHref = (nextPage: number) => `/checklists?${new URLSearchParams({ ...(activeView ? { view: activeView } : {}), ...(nextPage > 1 ? { page: String(nextPage) } : {}) }).toString()}`.replace(/\?$/, "");
   return (
     <WorkspacePage>
       <WorkspacePageHeader
         title="Checklist"
-        description="Consulta il progresso e apri la prossima voce da completare."
-        action={capabilities.canManageChecklists ? <Link className={styles.linkButton} href="/checklists/new">Crea checklist</Link> : undefined}
+        description={activeView ? "Checklist con almeno una voce aperta o da verificare nello scope autorizzato." : "Consulta il progresso e apri la prossima voce da completare."}
+        action={<div className="flex flex-wrap gap-2">{activeView ? <Link className={styles.linkButton} href="/checklists">Tutte le checklist</Link> : null}{capabilities.canManageChecklists ? <Link className={styles.linkButton} href="/checklists/new">Crea checklist</Link> : null}</div>}
       />
-      <WorkspacePanel title="Checklist" description="La gestione quotidiana resta nel cantiere collegato.">
+      <WorkspacePanel title={activeView ? "Checklist aperte" : "Checklist"} description="La gestione quotidiana resta nel cantiere collegato.">
           <div className={styles.list}>
             {!checklists.length ? (
               <WorkspaceEmptyState title="Nessuna checklist" description="Crea una checklist configurata per seguire attivita, documenti o prove da controllare." />
@@ -47,6 +54,7 @@ export function ChecklistsPageView({
             })}
           </div>
       </WorkspacePanel>
+      {page > 1 || hasNextPage ? <nav aria-label="Paginazione checklist" className="flex items-center justify-between gap-3"><span className="text-sm text-muted-foreground">Pagina {page}</span><div className="flex gap-2">{page > 1 ? <Link className={styles.linkButton} href={pageHref(page - 1)}>Precedente</Link> : null}{hasNextPage ? <Link className={styles.linkButton} href={pageHref(page + 1)}>Successiva</Link> : null}</div></nav> : null}
     </WorkspacePage>
   );
 }
