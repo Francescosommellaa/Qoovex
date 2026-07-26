@@ -1,40 +1,145 @@
 # Runtime and active features
 
-Workspace espone auth credentials e OAuth opzionale, MFA TOTP con backup code, recupero autonomo auditato, inviti e supporto auditato, dashboard e console Qoovex Admin. Per gli account che la abilitano, MFA protegge l'intera sessione workspace; il recupero dei ruoli inferiori resta isolato per Azienda e richiede un OWNER.
+## Stato attuale verificato
 
-La dashboard e una coda decisionale, non un riepilogo statistico. Il payload aggrega situazioni operative ordinate per scaduto, in scadenza, mancante e da verificare; ogni elemento dichiara motivo, conseguenza, contesto, responsabilita derivata e destinazione dell'azione. Pacchetti pronti, prossime scadenze e contesti sono sezioni separate e gli errori non autorizzativi restano circoscritti alla sezione. OWNER e ADMIN possono preparare e condividere pacchetti; SAFETY_CONSULTANT puo prepararli e caricare versioni documentali, ma non crea link esterni. SITE_MANAGER e WORKER vedono soltanto lo scope assegnato.
+Workspace espone auth credentials e OAuth opzionale, MFA TOTP con backup code, recupero auditato, inviti, supporto, dashboard e Console Qoovex. Azienda, ruolo, permessi e resource scope derivano sempre dal server.
 
-Quando una situazione di lavoratore o cantiere non ha ancora un responsabile, OWNER e ADMIN possono completare l'assegnazione direttamente dalla dashboard tramite un Dialog. Le opzioni arrivano da `GET /api/resource-assignments/options`, che conserva accesso e filtro Azienda server-side; la scrittura riusa gli endpoint di assegnazione esistenti e aggiorna la coda senza cambiare route.
+Il runtime attivo comprende:
 
-La navigazione quotidiana e deliberata per ruolo. Tutti i ruoli interni vedono `Da fare`, il gruppo espandibile `Documenti`, `Calendario` e `Cantieri`; il gruppo documentale contiene Panoramica, Azienda, Lavoratori, Cantieri e, soltanto per i ruoli gia autorizzati, Pacchetti. `Calendario` usa la route dedicata `/calendar` e unifica eventi, task e scadenze registrate senza duplicare i record Deadline. Espone mese, settimana, giorno e agenda, fasce da 30 minuti, giornata intera, priorita, stato, cantiere, assegnatario, filtri team e drag/ridimensionamento per chi puo gestire. Lo switch tra viste conserva il periodo, `Oggi` riporta il giorno corrente al centro del viewport e gli impegni di giornata intera usano date inclusive senza consentire l'inserimento di orari. `/deadlines` resta una superficie autonoma: una timeline cronologica con card dettagliate, contesto, promemoria e azioni principali per aprire la risorsa, modificare o archiviare. OWNER e ADMIN organizzano il calendario Azienda e gestiscono le scadenze; gli altri ruoli vedono soltanto il proprio scope e possono aggiornare esclusivamente lo stato di un impegno assegnato. `Preferiti` espone fino a quattro viste operative policy-derived, con due default espliciti per ruolo e persistenza locale role-scoped; include `Scadenze` quando previsto e non duplica destinazioni generiche. Il gruppo `Persone` distingue i profili operativi `Lavoratori` dagli account `Utenti e inviti`; SITE_MANAGER vede soltanto `Lavoratori`, mentre WORKER non riceve il gruppo. Le assegnazioni ai cantieri e l'associazione tecnica account-profilo non sono destinazioni di navigazione o Preferiti: restano azioni contestuali nelle risorse interessate. `Analisi` e mostrata come funzione in preparazione soltanto a OWNER e ADMIN. `Ricerca` e presente come affordance non attiva in attesa del flusso dedicato. Le creazioni autorizzate sono raccolte in `Azioni rapide`, un action tray compatto nel footer, subito sopra Azienda e account. Preferiti e Azioni rapide non eseguono query Prisma o contatori live. Notifiche e badge non letto restano esclusivamente nella topbar; audit e controllo dati restano owner-only nelle impostazioni.
+- documenti, versioni private, tassonomia, sensibilita e requisiti configurabili;
+- lavoratori, cantieri, fasi e assegnazioni;
+- scadenze e calendario con import/export iCalendar locale;
+- checklist, prove, pacchetti, share link revocabili e viewer esterno;
+- notifiche interne, reminder, preferenze e digest email;
+- ProductAuditEvent, inventario, export, retention, data-control e supporto.
 
-Le destinazioni operative dei Preferiti usano parametri validati server-side sulle route esistenti: `/documents?view=attention`, `/checklists?view=open`, `/evidence?sort=recent`, `/document-packages?view=ready` e le viste documentali per macroarea con `view=attention`. I filtri mantengono paginazione, tenant isolation, sensibilita documentale e resource scope; parametri non validi tornano alla vista completa senza ampliare accessi.
+`Da fare` e una coda situation-centric: ordina elementi mancanti, scaduti, in scadenza o da verificare e mostra motivo, conseguenza, contesto, responsabilita e prossima azione. Non e ancora alimentata da processi persistenti. La navigazione contiene viste di dominio, Preferiti e Azioni rapide; Ricerca e Analisi sono affordance disabilitate e non capability attive.
 
-L'interoperabilita esterna iniziale e iCalendar: import locale `.ics` con deduplica per UID ed export autenticato `.ics` di eventi e scadenze. Non vengono simulati collegamenti Google o Outlook: la sincronizzazione bidirezionale resta subordinata a provider, OAuth, consenso e gestione credenziali separati.
+I flussi attuali restano validi e protetti, ma sono ancora in parte CRUD: caricamento e classificazione documenti, creazione lavoratori/cantieri, scadenze, checklist, prove e composizione pacchetti richiedono coordinamento umano. Nessun servizio OCR/AI o ingresso universale e implementato.
 
-La topbar desktop mostra la pagina corrente insieme alle ultime due destinazioni distinte della sessione, per un massimo di tre breadcrumb navigabili. La cronologia e app-local, non attraversa sessioni e non modifica route o permessi. Nel layout mobile il marchio non occupa la topbar: resta un breadcrumb fisso `Da fare`, che riporta alla dashboard da ogni pagina.
+## Direzione approvata: modello operativo
 
-Le liste operative non affiancano il form completo. `/workers` e `/job-sites` aprono creazione e anteprima in Dialog; le rispettive route `/new` reindirizzano allo stesso flusso senza una pagina separata. Le gestioni complete usano `/workers/[nome-normalizzato]--[id]` e `/job-sites/[nome-normalizzato]--[id]`, registrano il nome nel breadcrumb e mantengono compatibili gli URL legacy senza seconda lettura. L'anteprima Cantiere riusa il record gia presente nella lista e conserva per tutti i ruoli autorizzati l'accesso alla pagina operativa completa; soltanto OWNER e ADMIN vedono modifica e archiviazione. Il profilo lavoratore distingue la mansione operativa dal ruolo di accesso: dalla scheda lavoratore si puo inviare soltanto un invito con ruolo WORKER; ADMIN, SAFETY_CONSULTANT e SITE_MANAGER vengono invitati da `Utenti e inviti`. SITE_MANAGER non crea lavoratori e non gestisce assegnazioni. `/settings/people` mostra esclusivamente account abilitati, ruolo assegnato e inviti in attesa. `/access`, raggiunto dai contesti che lo richiedono, gestisce le assegnazioni responsabile-cantiere e lavoratore-cantiere; l'associazione account-profilo WORKER e raccolta in disclosure avanzata e non assegna ne modifica il ruolo. OWNER e ADMIN gestiscono le relazioni, mentre SAFETY_CONSULTANT conserva la consultazione. Le route, le letture parallele e gli endpoint di assegnazione restano invariati e filtrati server-side per Azienda. `/documents/new` crea il documento e carica il file come un solo percorso percepito, conservando l'identificativo per un retry senza duplicazione quando l'upload fallisce. Tipi e requisiti documento vivono in `/settings/documents`; preferenze e digest in `/settings/notifications`; utenti e inviti in `/settings/people`.
+Ogni obiettivo operativo futuro segue:
 
-La panoramica `/documents` e le viste operative documentali usano la foundation Qoovex condivisa con una gerarchia operativa responsive: i filtri di stato ripetono il segmented control del Calendario, mostrano il conteggio della vista corrente e restano separati dall'accesso all'archivio. Contesto e scadenza sono leggibili per ogni elemento e l'empty state resta coerente con il ruolo. `Aggiungi documento` apre il form nel Dialog canonico senza lasciare la lista e recupera in modo lazy soltanto i tipi documento; lavoratori e cantieri vengono riusati dal read model gia presente nella pagina. L'azione primaria di ogni record apre un secondo dialog con metadati e versioni file; i file vengono caricati tramite la API protetta e il footer espone soltanto `Gestisci documento` come CTA primaria. La pagina completa usa la stessa foundation per riepilogo, file, upload, scadenze e gestione avanzata. I nuovi link dettaglio includono uno slug leggibile derivato dal titolo e l'ID come suffisso; gli URL legacy con solo ID restano validi, mentre il breadcrumb desktop mostra il titolo del documento e deduplica le due forme. I percorsi aperti dalla dashboard o dall'azione `File a un documento` conservano il contesto. OWNER e ADMIN dispongono inoltre della route dedicata `/documents/archive`, con filtri per contesto, avviso di zona sensibile, ripristino in `TO_REVIEW` ed eliminazione definitiva dopo conferma tramite titolo esatto. L'eliminazione rimuove documento, versioni e Blob privati, mentre conserva scadenze e pacchetti storici senza il collegamento. Gli URL precedenti con `status=ARCHIVED` vengono reindirizzati alla nuova route. Ogni query e mutation resta filtrata server-side per Azienda.
+1. **Ricezione** di un evento utente, dominio, temporale, decisionale o tecnico.
+2. **Blocco del contesto** di Azienda, attore, ruolo, scope, sensibilita e permessi.
+3. **Normalizzazione e deduplica** di evento, risorsa, processo e step.
+4. **Risoluzione delle regole** validate e versionate applicabili.
+5. **Produzione del piano** con input, fonte, affidabilita, impatto, reversibilita, permesso e completamento.
+6. **Esecuzione automatica** degli step ammessi.
+7. **Apertura delle eccezioni** quando servono giudizio, input o autorizzazione.
+8. **Riconciliazione** dopo eventi o decisioni, senza output duplicati.
+9. **Chiusura** quando output, eccezioni e azioni future sono coerenti.
 
-Nel dettaglio cantiere, `Responsabile cantiere` e il nome prodotto unico dell'incarico `SITE_MANAGER`: compare nel riepilogo e in una sezione primaria con assegnazione contestuale per OWNER e ADMIN. Le mansioni libere dei lavoratori restano dati operativi distinti e sono presentate esplicitamente come `Mansione`. Le azioni `Aggiungi documento`, `Aggiungi prova`, `Aggiungi scadenza`, `Crea checklist` e `Prepara condivisione` aprono Dialog mantenendo il cantiere preselezionato; le route `/new` restano fallback compatibili. Il dettaglio integra documenti e requisiti gia aggregati per categoria; non esegue query per singola card e il Dialog documento riusa i tipi configurati caricati dal render server.
+## Specifiche concettuali non implementate
 
-Il form condiviso `Aggiungi prova` parte da `Foto collegata`. Su desktop espone la scelta di un'immagine locale; su mobile mantiene la libreria e aggiunge un controllo separato con `capture="environment"` per la fotocamera posteriore. Lo scatto viene normalizzato nello stesso campo `file` gia gestito da `POST /api/evidence`; formati, limite, magic-byte validation, storage, permessi e scope Azienda restano invariati.
+I nomi provvisori sono `Process Definition`, `Process Run`, `Process Step`, `Process Event`, `Proposal`, `Decision`, `Exception` e `Artifact Reference`. Non esistono oggi come schema, tipi, API o UI.
 
-Su host loopback e solo con `NODE_ENV=development`, l'accesso dev firmato apre la dashboard con ruolo OWNER e rende disponibile uno switch tra tutti i ruoli Azienda. Il cambio aggiorna navigazione, permessi, API e scope server-side senza modificare membership o creare dati; la console Qoovex resta raggiungibile grazie al ruolo piattaforma runtime `SUPER_ADMIN`.
+Stati concettuali di processo: `RECEIVED`, `RUNNING`, `WAITING`, `RETRY_SCHEDULED`, `BLOCKED`, `COMPLETED`, `FAILED`, `CANCELLED`. Motivi di attesa: `INPUT_REQUIRED`, `CONFIRMATION_REQUIRED`, `APPROVAL_REQUIRED`, `EXTERNAL_RESPONSE_REQUIRED`. Gli stati dello step restano `PENDING`, `RUNNING`, `WAITING`, `COMPLETED`, `SKIPPED`, `FAILED`.
 
-I link inviati o copiati per un destinatario terminano su route frontend reali: `/invite?token=...` conserva il callback attraverso accesso e registrazione prima dell'accettazione, mentre `/shared/document-packages/[token]` mostra il pacchetto esterno in sola lettura e media i download tramite API tokenizzate.
+Eventi concettuali:
 
-Sono attive notifiche interne, preferenze e digest email paginato, reminder sincronizzati una volta per Azienda e run, assegnazioni granulari, audit log prodotto, inventario dati, export metadata completo, retention, job di cancellazione e verifica/bonifica Blob orfani. Inventario ed export includono tipi e requisiti documento, profili e membership, inviti, job data-control, supporto e metadata auth attribuibili; escludono sempre credenziali, codici, token, hash, chiavi storage e contenuti email. Le API dominio e le viste workspace derivano sempre l'unica Azienda dal server.
+- ingresso: file, foto, nota, lavoratore, cantiere, richiesta di condivisione, import;
+- dominio: documento/versione, requisito, assegnazione, checklist, prova, pacchetto/link, fase;
+- tempo: finestra di attenzione, scadenza, reminder, link, processo fermo, rivalutazione;
+- decisione: conferma, correzione, rifiuto, override, condivisione, annullamento;
+- tecnica: step, retry, riconciliazione, supersessione, fallimento.
 
-La base tecnica e testata contro isolamento aziendale server-side e accesso granulare.
+## Affidabilita e impatto
 
-Le viste documentali per macroarea paginano server-side 50 documenti con lookahead, filtri tenant/scope invariati e nessun count o query per card; i riepiloghi dichiarano esplicitamente quando derivano dalla pagina corrente.
+Non esistono soglie numeriche approvate.
 
-La sezione Persone usa read model server-rendered: `/people` aggrega l'attenzione, `/workers` ricerca e pagina i profili con stato documentale/accesso/cantieri, `/people/access` separa account e inviti, `/people/assignments` raggruppa per cantiere. Le vecchie route reindirizzano alle superfici canoniche. I read model usano un numero di query costante rispetto alle righe e non aggiungono query alla sidebar. L'invito SITE_MANAGER mantiene il flusso canonico e propone l'assegnazione dei cantieri dopo l'accettazione; non esiste una seconda tabella di pianificazione inviti.
-# Aggiornamento Cantieri 2026-07-23
+| Affidabilita | Significato |
+|---|---|
+| `VERIFIED` | contesto bloccato, relazione confermata o regola validata |
+| `HIGH` | conclusione dominante ma fallibile |
+| `MEDIUM` | piu alternative plausibili |
+| `LOW` | dati insufficienti |
+| `CONFLICT` | fonti affidabili incompatibili |
 
-Questa sezione sostituisce le precedenti descrizioni della superficie Cantieri in questo documento. La sidebar espone Cantieri come gruppo statico: OWNER/ADMIN vedono Panoramica, Tutti i cantieri e Archivio; SAFETY_CONSULTANT vede Panoramica e Tutti i cantieri; SITE_MANAGER/WORKER vedono `I miei cantieri` senza Archivio e senza ampliare lo scope.
+| Impatto | Esempi |
+|---|---|
+| `LOW` | titolo, vista derivata, deduplica |
+| `CONTROLLED` | collegamento, data proposta, pacchetto interno |
+| `SENSITIVE` | invito, assegnazione, documento riservato, condivisione |
+| `IRREVERSIBLE` | eliminazione definitiva, cancellazione Azienda, cleanup critico |
 
-`/job-sites` e la panoramica decisionale con fasi, coda deterministica e attivita recente; `/job-sites/all` ricerca, filtra e pagina sul server; `/job-sites/archive` consulta i record archiviati senza ripristino. Il Dialog di creazione segue cinque passi, richiede una fase esplicita, consente date o persone differite, avvisa sui possibili duplicati e non crea automaticamente documenti, checklist o scadenze. Il dettaglio usa sette sezioni condivisibili tramite `?section=` e carica soltanto il read model della sezione richiesta.
+| Affidabilita / impatto | LOW | CONTROLLED | SENSITIVE | IRREVERSIBLE |
+|---|---|---|---|---|
+| VERIFIED | automatico | automatico se reversibile e approvato | conferma autorizzata | conferma forte |
+| HIGH | automatico con timeline | conferma predefinita | conferma autorizzata | conferma forte |
+| MEDIUM | conferma | conferma | blocco fino ad approvazione | blocco |
+| LOW | input | input | blocco | blocco |
+| CONFLICT | blocco | blocco | blocco | blocco |
+
+Affidabilita alta non rende automatica un'azione sensibile o irreversibile.
+
+## Policy di automazione
+
+Automatiche per principio, quando supportate da dati e policy valide:
+
+- derivazione degli stati temporali;
+- situazioni mancanti da requisiti validati;
+- eredita del contesto;
+- titoli operativi modificabili;
+- deduplica di eventi e notifiche;
+- viste derivate e versione corrente deterministica;
+- promemoria secondo policy approvata;
+- aggiornamento di pacchetti interni non condivisi;
+- chiusura di eccezioni soddisfatte;
+- timeline e audit consentiti.
+
+Richiedono conferma:
+
+- classificazioni fallibili e date estratte;
+- associazioni non ereditate dal contesto;
+- sostituzioni non deterministiche;
+- applicazione retroattiva di modelli;
+- inviti e assegnazioni;
+- esclusione di elementi richiesti;
+- condivisioni esterne;
+- correzione di dati confermati.
+
+Non sono automatiche senza una futura decisione esplicita:
+
+- dichiarazioni di conformita, deduzioni normative o certificazioni;
+- modifica dei ruoli o ampliamento dello scope;
+- condivisione esterna di dati riservati;
+- trattamento sensibile con provider non approvati;
+- eliminazione definitiva, cancellazione Azienda o cleanup Blob;
+- modifica silenziosa dello storico;
+- sorveglianza o geolocalizzazione continua.
+
+## Eccezioni, timeline e retry
+
+Un'eccezione persistente descrive problema, motivo, conseguenza, fonti, attore autorizzato, azione primaria e condizione di ripresa. Le categorie concettuali includono input mancante, match ambiguo, fonti in conflitto, regola assente, permesso richiesto, contenuto sensibile, duplicato sospetto, failure tecnica, risposta esterna e failure terminale.
+
+Una notifica porta l'eccezione all'attenzione; leggerla o chiuderla non risolve l'eccezione. La timeline spiega avvio, regole, step, proposte, decisioni, retry, output e risultato; ProductAuditEvent resta separato e tecnico.
+
+Gli errori tecnici transitori usano claim atomico, fencing, tentativi limitati e backoff. Gli errori di business attendono un nuovo evento o una decisione. Il completamento parziale mostra output salvati, step mancanti, retry sicuri e possibili compensazioni.
+
+## Blueprint target
+
+### Documento ricevuto
+
+Input minimo: file, attore e contesto ereditato. Il processo valida file, deduplica, propone destinazione/tipo/titolo/date, riconcilia versione, requisiti, scadenze e pacchetti e apre soltanto le eccezioni residue. Classificazione fallibile, data estratta, sostituzione e sensibilita richiedono conferma.
+
+### Nuovo lavoratore
+
+Input minimo: nome, cognome ed eventuali mansione/contatto. Il processo controlla duplicati, applica il modello validato, identifica mancanti e propone cantieri e invito. Duplicati plausibili, assegnazioni, accesso e documenti ambigui richiedono conferma.
+
+### Nuovo cantiere
+
+Input minimo: identita operativa, fase dichiarata o confermata ed eventuali dati di contesto. Il processo applica un modello validato, predispone aspettative, checklist, attivita e pacchetto interno e propone persone. Modello, fase, date, persone, eccezioni e condivisione richiedono conferma quando non deterministici.
+
+### Controllo continuo
+
+Il sistema rivaluta su evento o frequenza approvata requisiti, date, processi fermi, pacchetti, link, assegnazioni e regole. Riconcilia tramite chiavi idempotenti senza ricreare processi o notifiche equivalenti. Runner e frequenze non sono decisi.
+
+## Centro operativo futuro
+
+La UI primaria mostrera decisioni richieste, processi in corso o in retry, processi bloccati/falliti e risultati recenti. Non simulera percentuali senza pesi reali. Il valore mostrato sara il lavoro evitato, non il numero di record creati.
+
+## Decisioni aperte e hard stop
+
+Restano aperti naming e schema, regole versionate, autorizzazioni decisionali, soglie, reversibilita, annullamento, runner/frequenze, canali di ingresso, provider, sensibilita, retention, ricerca, condivisione, export, notifiche, modifiche regole sui run aperti, compensazioni, livelli di servizio e limiti commerciali.

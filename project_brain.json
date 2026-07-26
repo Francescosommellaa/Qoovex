@@ -4,28 +4,163 @@
     "canonical_brain_root": "A:/Qoovex-Brain",
     "canonical_index": "A:/Qoovex-Brain/00_System/index.json",
     "canonical_task_routing": "A:/Qoovex-Brain/00_System/task-routing.md",
-    "read_rule": "Use Qoovex-Brain as the canonical operational memory."
+    "read_rule": "Use Qoovex-Brain as the canonical operational memory and repository code as truth for implemented state.",
+    "status_model": [
+      "verified_current_state",
+      "approved_direction",
+      "conceptual_not_implemented",
+      "open_decision"
+    ]
   },
   "project": {
     "name": "Qoovex",
     "type": "SaaS",
     "audience": "small construction businesses, subcontractors, craftspeople and safety consultants",
-    "positioning": "The simplest system for small businesses and subcontractors to keep documents, deadlines and construction-site evidence ready.",
-    "country": "Italy"
+    "positioning": "An exception-driven operating system for documents, deadlines and construction-site evidence.",
+    "promise": "Qoovex organizes operational information, executes deterministic and reversible steps, and presents exceptions, decisions and results for review.",
+    "country": "Italy",
+    "legal_limit": "Qoovex does not guarantee compliance, certify people or documents, or replace professional, technical, medical or legal judgment."
   },
-  "notes": [
-    "This file is intentionally minimal to avoid duplicated operational memory in the repo.",
-    "Detailed rules, decisions, feature constraints and failure modes are canonical in Qoovex-Brain."
+  "verified_current_state": {
+    "summary": "The current product is a protected operational document platform with a situation-centric dashboard, not yet a persistent process engine.",
+    "active_domain": [
+      "organizations and single-company memberships",
+      "workers and job sites",
+      "document types, requirements, documents and private versions",
+      "deadlines and calendar events",
+      "checklists and evidence",
+      "document packages and controlled share links",
+      "notifications, reminders and email digests",
+      "product audit, support and data control"
+    ],
+    "security": "Authorization, organizationId and resource scope are server-derived and default-deny. Prisma stores data and metadata; private Vercel Blob stores binaries.",
+    "not_implemented": [
+      "persistent operational processes, steps, proposals, decisions and exceptions",
+      "operational timeline distinct from ProductAuditEvent",
+      "universal intake and universal search",
+      "OCR or AI document extraction and classification"
+    ],
+    "migration_history": "The repository contains nine canonical migration directories through 20260725010000_add_session_account_user_indexes; applied state must be verified separately for each environment."
+  },
+  "approved_direction": {
+    "operating_model": "event -> interpretation -> plan -> deterministic automatic actions -> exception when judgment or authorization is required -> human decision -> reconciled result -> operational timeline",
+    "domain_and_processes": "Existing domain entities remain sources, outputs and advanced detail. Processes become the future first-class product concept and must not duplicate domain records.",
+    "primary_experience": "Da fare evolves into an operational center for decisions, running work, blocks and results. A universal intake replaces global CRUD quick actions. Complete domain views remain available for control, correction and configuration.",
+    "automation_principles": [
+      "deterministic context, confirmed relations and validated rules before OCR, matching or AI",
+      "automatic execution only when reliability, impact, reversibility, authorization and approved policy allow it",
+      "technical retries are handled by the system; business uncertainty becomes an exception",
+      "external sharing always requires an explicit authorized decision",
+      "success is measured by manual work avoided, not feature usage"
+    ],
+    "reliability_levels": ["VERIFIED", "HIGH", "MEDIUM", "LOW", "CONFLICT"],
+    "impact_levels": ["LOW", "CONTROLLED", "SENSITIVE", "IRREVERSIBLE"],
+    "execution_policy": {
+      "automatic": "Deterministic and reversible low-impact work supported by confirmed context or validated policy.",
+      "confirmation_required": "Fallible classifications or dates, non-inherited associations, invitations, assignments, retroactive model application, exclusions, sharing and corrections to confirmed data.",
+      "forbidden_without_future_decision": "Compliance declarations, regulatory deductions, certifications, role or access expansion, unapproved sensitive processing, external disclosure of reserved data, permanent deletion, Organization deletion, Blob cleanup, silent history changes and continuous surveillance or geolocation."
+    },
+    "exceptions": "An exception is persistent operational work with a reason, consequence, authorized resolver and resume condition. A notification is only a delivery channel and cannot close an exception by itself.",
+    "timeline_and_audit": "The operational timeline explains process progress and decisions to authorized users. Product audit remains a separate, minimized, technical accountability record.",
+    "process_guarantees": [
+      "tenant- and resource-scoped",
+      "persistent and resumable",
+      "idempotent at event, process and step level",
+      "protected by atomic claim and fencing",
+      "replayable without rewriting history",
+      "reconciled without duplicate output"
+    ],
+    "rules": "Validated rules are versioned inputs. A process must retain the rule version used and a rule change must not silently rewrite history."
+  },
+  "conceptual_not_implemented": {
+    "provisional_objects": [
+      "Process Definition",
+      "Process Run",
+      "Process Step",
+      "Process Event",
+      "Proposal",
+      "Decision",
+      "Exception",
+      "Artifact Reference"
+    ],
+    "blueprints": [
+      "document received",
+      "new worker",
+      "new job site",
+      "continuous control"
+    ],
+    "warning": "These names and blueprints are conceptual specifications. They do not authorize TypeScript contracts, Prisma models, migrations, routes, runners, providers or UI changes."
+  },
+  "approved_decisions": {
+    "phase_1": [
+      "Qoovex becomes exception-driven.",
+      "The domain remains rich while the primary interface becomes small.",
+      "One universal intake replaces many global quick actions.",
+      "Validated rules are Qoovex operational memory.",
+      "Statuses, deadlines and reminders are derived when policy and data allow it.",
+      "Checklists and packages become process outputs.",
+      "External sharing is the explicit result of a reviewed process.",
+      "The operational timeline becomes a central product object.",
+      "Manual correction and advanced control remain available.",
+      "Success is measured through manual work avoided."
+    ],
+    "phase_2": [
+      "Process becomes a first-class product concept.",
+      "Existing domain entities remain sources and outputs.",
+      "Automation is deterministic first.",
+      "Reliability and impact jointly decide execution.",
+      "Exceptions are the user's primary work.",
+      "Operational timeline and technical audit remain separate.",
+      "Every process is idempotent and resumable.",
+      "Technical failures are retried by the system before involving users.",
+      "Validated rules must be versioned.",
+      "External sharing remains explicit.",
+      "AI does not determine regulatory obligations or compliance.",
+      "Success is measured through manual work avoided."
+    ]
+  },
+  "open_hard_stops": [
+    "final process entity names and structure",
+    "Prisma schema and migration",
+    "concrete rule versioning model",
+    "roles authorized for each proposal and decision",
+    "concrete reliability criteria or thresholds",
+    "actions considered reversible",
+    "undo window",
+    "runner and frequencies",
+    "intake channels",
+    "OCR or AI provider",
+    "sensitive-document treatment",
+    "timeline and event retention",
+    "content indexing and search",
+    "external-sharing policy",
+    "export formats",
+    "additional notification channels",
+    "rule changes on already open processes",
+    "partial-output compensation",
+    "service levels and monitoring",
+    "commercial limits or entitlements"
+  ],
+  "recommended_future_sequence": [
+    "approve conceptual contracts and states",
+    "approve incremental schema and migration",
+    "implement a deterministic idempotent runner",
+    "implement the minimal timeline and operational-center read model",
+    "integrate decisions and exceptions into the dashboard",
+    "implement the deterministic document blueprint",
+    "add approved fallible extraction behind an adapter",
+    "implement worker and job-site blueprints",
+    "add continuous control and internally reconciled packages",
+    "measure manual work before and after",
+    "progressively remove duplicate CRUD paths"
   ],
   "technical_state": {
     "authentication": "Auth.js/NextAuth remains confined to apps/workspace.",
-    "styling": "Tailwind CSS v4 is installed with CSS-first configuration in the Next.js apps.",
+    "styling": "Tailwind CSS v4 uses CSS-first configuration in the Next.js apps.",
     "typography": "Sirio, web and workspace load Geist and Geist Mono through next/font; @qoovex/brand-resources is asset-only.",
-    "design_system": "@qoovex/ui is the canonical shadcn base-nova foundation with Base UI, Tabler and the Vercel light/dark/system theme. Sirio, web and workspace consume explicit package subpaths.",
-    "motion": "The shared foundation implements circular theme reveal, floating navigation and Base UI state transitions with reduced-motion and unsupported-browser fallbacks.",
-    "workspace_architecture": "FSD aliases are configured. Flow-by-flow migration has not started.",
-    "database_environments": "Production and Preview use distinct Prisma Postgres databases; local development and Prisma Studio use qoovex-local; CI uses loopback qoovex_ci. Root pnpm dev starts or reuses qoovex-local before the apps.",
-    "database_operations": "Every database-sensitive task automatically applies docs/OperationalProtocol.md#database-operation-impact, measures or evidences before/after Prisma calls, fixes safe verified waste in-scope, and preserves tenant isolation and authorization.",
-    "database_open_risk": "Prisma Git integration still creates automatic PR database and Compute resources outside the Vercel architecture; unlinking and cleanup require explicit approval."
+    "design_system": "@qoovex/ui is the shared shadcn base-nova foundation with Base UI, Tabler and the Vercel light/dark/system theme; domain compositions remain app-local.",
+    "workspace_architecture": "apps/workspace owns product pages, auth, MFA, API and server orchestration; no process-engine implementation exists.",
+    "database_environments": "Production, Preview, local development and CI use distinct guarded targets; current migration application state must be verified per environment before rollout.",
+    "database_operations": "Every database-sensitive task applies docs/OperationalProtocol.md#database-operation-impact and preserves correctness, authorization and tenant isolation."
   }
 }
