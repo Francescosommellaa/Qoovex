@@ -1,6 +1,9 @@
 {
   "name": "qoovex",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "packageManager": "pnpm@11.16.0+sha512.b767e9a98fc87aec0f42daefcd0e84941c2cdb45d73c4e1e68860fb2bdfdbe032ab592105479e5e05c237f740c8a5ffdbbb52385797ddc2296745a1bbb883e8d",
   "scripts": {
     "dev": "pnpm db:start:local && turbo run dev",
@@ -11,7 +14,12 @@
     "check:audit": "pnpm audit --prod",
     "check:fast": "pnpm type-check",
     "check:ci": "pnpm check && pnpm test:e2e",
+    "ci:db:prepare": "pnpm --filter @qoovex/db db:migrate:deploy -- --ci-ephemeral",
+    "ci:install": "pnpm install --frozen-lockfile",
+    "deps:update": "pnpm --workspace-root update --include-github-actions && pnpm update --recursive",
+    "deps:update:major": "pnpm --workspace-root update --latest --interactive --include-github-actions && pnpm update --recursive --latest --interactive",
     "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install --with-deps chromium",
     "test:unit": "turbo run test",
     "db:generate": "turbo run db:generate --filter=@qoovex/db",
     "db:push": "turbo run db:push --filter=@qoovex/db",
@@ -21,9 +29,9 @@
     "db:workspace": "turbo run db:workspace --filter=@qoovex/db"
   },
   "devDependencies": {
-    "@playwright/test": "^1.61.1",
-    "@tailwindcss/postcss": "^4.3.2",
-    "tailwindcss": "^4.3.2",
-    "turbo": "^2.10.5"
+    "@playwright/test": "^1.62.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "tailwindcss": "^4.3.3",
+    "turbo": "^2.10.6"
   }
 }

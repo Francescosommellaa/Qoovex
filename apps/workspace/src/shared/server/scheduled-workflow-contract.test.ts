@@ -13,12 +13,32 @@ describe("GitHub workflow contracts", () => {
     expect(workflow).toContain("--fail-with-body");
   });
 
-  it("attests isolated E2E targets and uses Node 24 actions", () => {
+  it("attests isolated E2E targets and consumes the root toolchain contract", () => {
     const workflow = readFileSync(resolve(process.cwd(), "../../.github/workflows/ci.yml"), "utf8");
+    const packageJson = JSON.parse(readFileSync(resolve(process.cwd(), "../../package.json"), "utf8")) as {
+      engines?: { node?: string };
+      scripts?: Record<string, string>;
+    };
 
-    expect(workflow).toContain("pnpm/action-setup@v6");
-    expect(workflow).toContain("actions/upload-artifact@v6");
-    expect(workflow).not.toMatch(/pnpm\/action-setup@v4|actions\/upload-artifact@v4/);
+    expect(packageJson.engines?.node).toBe("24.x");
+    expect(packageJson.scripts?.["ci:install"]).toBe("pnpm install --frozen-lockfile");
+    expect(packageJson.scripts?.["ci:db:prepare"]).toBe(
+      "pnpm --filter @qoovex/db db:migrate:deploy -- --ci-ephemeral",
+    );
+    expect(packageJson.scripts?.["test:e2e:install"]).toBe("playwright install --with-deps chromium");
+    expect(packageJson.scripts?.["deps:update"]).toBe(
+      "pnpm --workspace-root update --include-github-actions && pnpm update --recursive",
+    );
+    expect(packageJson.scripts?.["deps:update:major"]).toBe(
+      "pnpm --workspace-root update --latest --interactive --include-github-actions && pnpm update --recursive --latest --interactive",
+    );
+    expect(workflow.match(/node-version-file: package\.json/g)).toHaveLength(2);
+    expect(workflow.match(/run: pnpm ci:install/g)).toHaveLength(2);
+    expect(workflow.match(/run: pnpm ci:db:prepare/g)).toHaveLength(2);
+    expect(workflow).toContain("run: pnpm test:e2e:install");
+    expect(workflow).not.toMatch(/node-version:\s*24/);
+    expect(workflow).not.toContain("run: pnpm install --frozen-lockfile");
+    expect(workflow).not.toContain("run: pnpm exec playwright install");
     expect(workflow).toContain("QOOVEX_E2E_MODE: \"1\"");
     expect(workflow).toContain("QOOVEX_E2E_DATABASE_TARGET: ${{ env.DATABASE_URL }}");
     expect(workflow).toContain("BLOB_READ_WRITE_TOKEN: ${{ secrets.QOOVEX_E2E_BLOB_READ_WRITE_TOKEN }}");
