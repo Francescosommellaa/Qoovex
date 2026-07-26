@@ -231,8 +231,9 @@ async function createGuidedDocument(page: Page, input: {
     buffer: Buffer.from(E2E_PNG_BYTES),
   });
   await dialog.getByRole("button", { name: new RegExp("^Salva in ") }).click();
-  await page.waitForURL(/\/documents\/[^/?]+--[^/?]+\?notice=file-uploaded/);
-  const response = await expectJson(await page.context().request.get(`/api/documents/${page.url().match(/--([^/?]+)\?/)?.[1] ?? ""}`), 200);
+  await page.waitForURL((url) => url.pathname.startsWith("/documents/") && url.pathname.includes("--") && url.searchParams.get("result") === "file-uploaded");
+  const documentId = new URL(page.url()).pathname.match(/--([^/]+)$/)?.[1] ?? "";
+  const response = await expectJson(await page.context().request.get(`/api/documents/${documentId}`), 200);
   return response;
 }
 
