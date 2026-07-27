@@ -2,39 +2,29 @@
 
 ## Stato attuale verificato
 
-Gli esempi env versionati sono l'unica guida locale. `AUTH_URL` deve essere assoluto e includere il protocollo. Resend, Blob e database non dispongono di fallback che possa stampare segreti, token o contenuti sensibili.
+Production, Preview, locale e CI/E2E usano target distinti e guardati. Il repository contiene dieci migration; `20260726010000_operational_engine_phase_3` e stata applicata soltanto al database locale `qoovex-local` tramite wrapper protetto. `verify:prisma` ha confermato dieci migration e diff nullo; nessun ambiente remoto e stato migrato o distribuito.
 
-Production, Preview, sviluppo locale e CI/test usano target distinti. Sviluppo e Prisma Studio usano `qoovex-local`; CI/E2E usa `qoovex_ci` su loopback. `pnpm dev` esegue `db:start:local`, valida marker, host e porta `51225`, riusa o avvia il database e attende una query di readiness.
+Il workflow `scheduled-jobs.yml` include data-control, digest e il nuovo runner operativo ogni cinque minuti. Il runner operativo crea al massimo 25 processi di controllo continuo per batch, uno per Azienda/finestra oraria, e consuma al massimo 20 step per invocazione. La route `/api/operations/run` richiede `CRON_SECRET`; il workflow modificato non e attivo in ambienti remoti finche non viene distribuito.
 
-Il repository contiene nove migration canoniche. Il numero di file non prova lo stato di alcun ambiente; prima di ogni rollout verificare target, cronologia, checksum, diff, backup e marker. Il comando ammesso e `pnpm --filter @qoovex/db db:migrate:deploy`; non usare il deploy Prisma diretto, `db push`, reset o resolve per aggirare i guardrail.
+## Database operation impact Fase 3
 
-I runner attivi sono data-control e digest tramite GitHub Actions con `Authorization: Bearer <CRON_SECRET>`, risposta JSON valida e `failed == 0`. Playwright richiede target DB/Blob E2E dedicati, modalita e attestazione esplicite. Local, test e Preview non interrogano Production.
+```text
+Operazioni aggiunte: enqueue transazionale, read model Centro/dettaglio, claim/step, timeline, decisioni, eccezioni e receipt
+Operazioni eliminate: N+1 artifact sostituito da query batch fisse; i widget shell rimossi non eseguivano query database
+Query per flusso prima: nessuna operazione del motore; restano invariate le query proprie della mutazione dominio
+Query per flusso dopo: enqueue aggiunge validazione artifact batch e upsert processo nella transazione; Centro full-scope 8 query parallele oltre al gate auth; dettaglio 1 query aggregata oltre al gate/scope
+Rischio N+1: artifact validation continua usa 10 query tipizzate fisse per batch di 100 riferimenti; nessuna query per artifact/card
+Strategia cache: nessuna cache condivisa; dati autorizzativi e operativi letti request-scoped
+Strategia invalidazione: mutazioni e runner persistono stato; UI usa refresh esplicito dopo azioni
+Impatto tenant isolation: tutte le query operative filtrano organizationId e, per ruoli limitati, resource scope/artifact
+Ambienti coinvolti: codice repository e solo database locale guardato; nessun Blob, Preview o Production modificato
+Misurazione eseguita: conteggio statico dei Prisma Client call-site, test di query fisse, test runner e verify:prisma locale
+```
 
-## Direzione approvata
+## Specifiche non implementate
 
-Il motore operativo futuro sara database-sensitive. Dovra usare claim atomico, fencing, tentativi limitati, backoff, idempotenza e riconciliazione. Errori transitori saranno ritentati senza coinvolgere l'utente; errori terminali o di business diventeranno eccezioni visibili e minimizzate.
-
-Il centro operativo e la timeline dovranno evitare query per card, polling aggressivo, scansioni di processi chiusi, duplicazioni tra dashboard/topbar/notifiche e N+1 su artefatti o responsabili. Serviranno read model tenant-scoped, paginazione cursor, batch, invalidazione esplicita e misurazione Prisma prima/dopo.
-
-## Specifiche concettuali non implementate
-
-Non sono scelti runner, coda, scheduler, frequenze, concorrenza, indici, retry massimi, monitoraggio o livelli di servizio. GitHub Actions non e automaticamente il runner del futuro motore. Nessuna Operation DB o Blob viene aggiunta dalla sola documentazione.
+Non sono implementati coda esterna, provider aggiuntivi, retention automatica, SLA o monitoring commerciale. Non esiste polling client del Centro operativo.
 
 ## Decisioni aperte e hard stop
 
-Richiedono approvazione runner, frequenze, ambienti, deployment, schema, migration, backup/rollback, retention, osservabilita, soglie tecniche e provider. La Git integration Prisma/Compute non appartiene all'architettura Vercel approvata e qualunque scollegamento o cleanup resta azione esterna separata.
-
-## Database operation impact di questa specifica
-
-```text
-Operazioni aggiunte: 0
-Operazioni eliminate: 0
-Query per flusso prima: non modificate
-Query per flusso dopo: invariato
-Rischio N+1: nessuna modifica runtime; rischi futuri documentati
-Strategia cache: invariata; futura solo tenant-aware
-Strategia invalidazione: invariata; da progettare con i read model
-Impatto tenant isolation: nessuno; invarianti server-side confermati
-Ambienti coinvolti: solo repository e Brain; nessun database o Blob interrogato
-Misurazione eseguita: audit statico di codice, schema e documentazione
-```
+Ogni rollout remoto richiede target, backup, marker, checksum, diff, autorizzazione e smoke separati. Non usare deploy Prisma diretto, `db push`, reset o resolve.

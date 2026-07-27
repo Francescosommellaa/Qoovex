@@ -87,7 +87,7 @@ export function DeadlinesPageView({
         title="Scadenze"
         description="Una linea temporale delle date registrate, con contesto, promemoria e azioni operative. Le scadenze normative non vengono calcolate automaticamente."
         action={<div className="flex flex-wrap gap-2">
-          {returnToDashboard ? <Link className={buttonVariants({ variant: "outline" })} href="/dashboard">Torna a Da fare</Link> : <Link className={buttonVariants({ variant: "outline" })} href="/calendar"><IconCalendar />Apri calendario</Link>}
+          {returnToDashboard ? <Link className={buttonVariants({ variant: "outline" })} href="/dashboard">Torna al Centro operativo</Link> : <Link className={buttonVariants({ variant: "outline" })} href="/calendar"><IconCalendar />Apri calendario</Link>}
           {capabilities.canCreateDeadlines ? <Link className={buttonVariants()} href="/deadlines/new"><IconCalendarDue />Aggiungi scadenza</Link> : null}
         </div>}
       />

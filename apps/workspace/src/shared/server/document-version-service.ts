@@ -2,6 +2,7 @@ import "server-only";
 
 import crypto from "crypto";
 import { db } from "@qoovex/db";
+import { enqueueOperationalProcess } from "@shared/server/operational-process-service";
 import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { deletePrivateBlob, getPrivateBlob, putPrivateBlob } from "./blob-storage-service";
@@ -216,6 +217,19 @@ export async function uploadDocumentVersion(documentId: string, files: unknown[]
       if (document.status === "MISSING") {
         await tx.document.update({ where: { id: document.id }, data: { status: "TO_REVIEW" }, select: { id: true } });
       }
+      await enqueueOperationalProcess({
+        organizationId,
+        type: "DOCUMENT_RECEIVED",
+        triggerKind: "DOCUMENT_VERSION_UPLOADED",
+        idempotencyKey: `document-version:${created.id}:received`,
+        context: { source: "workspace", change: "version-uploaded" },
+        artifacts: [
+          { type: "DOCUMENT", id: document.id },
+          { type: "DOCUMENT_VERSION", id: created.id, label: created.originalFileName },
+        ],
+        actorUserId: context.userId,
+        actorRole,
+      }, tx);
       return created;
     });
     await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document-version", resourceId: version.id });

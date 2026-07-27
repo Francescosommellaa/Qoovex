@@ -8,8 +8,8 @@ describe("GitHub workflow contracts", () => {
     const responseCaptures = workflow.match(/response="\$\(curl/g) ?? [];
     const logicalChecks = workflow.match(/jq -e 'type == "object" and \(\(\.failed \| type\) == "number"\) and \.failed == 0'/g) ?? [];
 
-    expect(responseCaptures).toHaveLength(2);
-    expect(logicalChecks).toHaveLength(2);
+    expect(responseCaptures).toHaveLength(3);
+    expect(logicalChecks).toHaveLength(3);
     expect(workflow).toContain("--fail-with-body");
   });
 

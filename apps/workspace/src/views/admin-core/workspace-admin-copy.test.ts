@@ -34,7 +34,7 @@ describe("workspace admin UI copy", () => {
   const authSource = collectCodeFiles(join(root, "auth")).map((file) => readFileSync(file, "utf8")).join("\n");
   const signInSource = readFileSync(join(appRoot, "sign-in", "page.tsx"), "utf8");
   const signUpSource = readFileSync(join(appRoot, "sign-up", "page.tsx"), "utf8");
-  const dashboardSource = readFileSync(join(root, "dashboard", "DashboardView.tsx"), "utf8");
+  const dashboardSource = readFileSync(join(root, "operational-center", "OperationalCenterView.tsx"), "utf8");
   const documentListPageSource = readFileSync(join(appRoot, "documents", "page.tsx"), "utf8");
   const documentArchivePageSource = readFileSync(join(appRoot, "documents", "archive", "page.tsx"), "utf8");
   const documentDetailPageSource = readFileSync(join(appRoot, "documents", "[documentId]", "page.tsx"), "utf8");
@@ -82,7 +82,7 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps everyday navigation small and preserves secondary routes", () => {
-    for (const route of ["/dashboard", "/documents", "/calendar", "/workers", "/job-sites"]) expect(navigationPolicySource).toContain(`href: "${route}"`);
+    for (const route of ["/dashboard", "/documents", "/workers", "/job-sites", "/document-packages", "/settings"]) expect(navigationPolicySource).toContain(`href: "${route}"`);
     for (const route of adminRoutes) expect(appSource).toContain(route.slice(1));
     for (const route of ["/deadlines", "/checklists", "/evidence", "/document-packages", "/access", "/audit-log", "/data-control"]) {
       expect(navigationPolicySource).not.toContain(`label: "${route}"`);

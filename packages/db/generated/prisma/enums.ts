@@ -129,6 +129,18 @@ export const AuditAction = {
   DOCUMENT_REQUIREMENT_CREATED: 'DOCUMENT_REQUIREMENT_CREATED',
   DOCUMENT_REQUIREMENT_UPDATED: 'DOCUMENT_REQUIREMENT_UPDATED',
   DOCUMENT_REQUIREMENT_ARCHIVED: 'DOCUMENT_REQUIREMENT_ARCHIVED',
+  OPERATIONAL_PROCESS_CREATED: 'OPERATIONAL_PROCESS_CREATED',
+  OPERATIONAL_PROCESS_DEDUPLICATED: 'OPERATIONAL_PROCESS_DEDUPLICATED',
+  OPERATIONAL_STEP_CLAIMED: 'OPERATIONAL_STEP_CLAIMED',
+  OPERATIONAL_STEP_COMPLETED: 'OPERATIONAL_STEP_COMPLETED',
+  OPERATIONAL_RETRY_SCHEDULED: 'OPERATIONAL_RETRY_SCHEDULED',
+  OPERATIONAL_PROCESS_BLOCKED: 'OPERATIONAL_PROCESS_BLOCKED',
+  OPERATIONAL_PROCESS_COMPLETED: 'OPERATIONAL_PROCESS_COMPLETED',
+  OPERATIONAL_DECISION_CREATED: 'OPERATIONAL_DECISION_CREATED',
+  OPERATIONAL_DECISION_RESOLVED: 'OPERATIONAL_DECISION_RESOLVED',
+  OPERATIONAL_EXCEPTION_OPENED: 'OPERATIONAL_EXCEPTION_OPENED',
+  OPERATIONAL_EXCEPTION_RESOLVED: 'OPERATIONAL_EXCEPTION_RESOLVED',
+  OPERATIONAL_CONTROL_RUN: 'OPERATIONAL_CONTROL_RUN',
   SECURITY_DENIED: 'SECURITY_DENIED'
 } as const
 
@@ -153,6 +165,10 @@ export const AuditEntityType = {
   NOTIFICATION_PREFERENCE: 'NOTIFICATION_PREFERENCE',
   DATA_CONTROL_JOB: 'DATA_CONTROL_JOB',
   DOCUMENT_REQUIREMENT: 'DOCUMENT_REQUIREMENT',
+  OPERATIONAL_PROCESS: 'OPERATIONAL_PROCESS',
+  OPERATIONAL_STEP: 'OPERATIONAL_STEP',
+  OPERATIONAL_DECISION: 'OPERATIONAL_DECISION',
+  OPERATIONAL_EXCEPTION: 'OPERATIONAL_EXCEPTION',
   WORKER_USER_LINK: 'WORKER_USER_LINK',
   JOB_SITE_USER_ASSIGNMENT: 'JOB_SITE_USER_ASSIGNMENT',
   JOB_SITE_WORKER_ASSIGNMENT: 'JOB_SITE_WORKER_ASSIGNMENT',
@@ -464,3 +480,164 @@ export const RuntimeErrorStatus = {
 } as const
 
 export type RuntimeErrorStatus = (typeof RuntimeErrorStatus)[keyof typeof RuntimeErrorStatus]
+
+
+export const OperationalProcessType = {
+  DOCUMENT_RECEIVED: 'DOCUMENT_RECEIVED',
+  WORKER_CREATED: 'WORKER_CREATED',
+  JOB_SITE_CREATED: 'JOB_SITE_CREATED',
+  CONTINUOUS_CONTROL: 'CONTINUOUS_CONTROL'
+} as const
+
+export type OperationalProcessType = (typeof OperationalProcessType)[keyof typeof OperationalProcessType]
+
+
+export const OperationalProcessStatus = {
+  RECEIVED: 'RECEIVED',
+  READY: 'READY',
+  RUNNING: 'RUNNING',
+  WAITING_FOR_DECISION: 'WAITING_FOR_DECISION',
+  BLOCKED: 'BLOCKED',
+  RETRY_SCHEDULED: 'RETRY_SCHEDULED',
+  COMPLETED: 'COMPLETED',
+  COMPLETED_WITH_EXCEPTIONS: 'COMPLETED_WITH_EXCEPTIONS',
+  TECHNICAL_FAILURE: 'TECHNICAL_FAILURE'
+} as const
+
+export type OperationalProcessStatus = (typeof OperationalProcessStatus)[keyof typeof OperationalProcessStatus]
+
+
+export const OperationalStepStatus = {
+  WAITING: 'WAITING',
+  READY: 'READY',
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  BLOCKED: 'BLOCKED',
+  RETRY_SCHEDULED: 'RETRY_SCHEDULED',
+  TECHNICAL_FAILURE: 'TECHNICAL_FAILURE',
+  SKIPPED: 'SKIPPED'
+} as const
+
+export type OperationalStepStatus = (typeof OperationalStepStatus)[keyof typeof OperationalStepStatus]
+
+
+export const OperationalEventKind = {
+  INPUT: 'INPUT',
+  DOMAIN: 'DOMAIN',
+  TEMPORAL: 'TEMPORAL',
+  DECISION: 'DECISION',
+  TECHNICAL: 'TECHNICAL',
+  RETRY: 'RETRY',
+  COMPLETION: 'COMPLETION',
+  BLOCKED: 'BLOCKED',
+  RECONCILIATION: 'RECONCILIATION'
+} as const
+
+export type OperationalEventKind = (typeof OperationalEventKind)[keyof typeof OperationalEventKind]
+
+
+export const OperationalDecisionType = {
+  CONFIRM_DOCUMENT_TYPE: 'CONFIRM_DOCUMENT_TYPE',
+  CONFIRM_DOCUMENT_OWNER: 'CONFIRM_DOCUMENT_OWNER',
+  CONFIRM_EXPIRY_DATE: 'CONFIRM_EXPIRY_DATE',
+  RESOLVE_CONFLICT: 'RESOLVE_CONFLICT'
+} as const
+
+export type OperationalDecisionType = (typeof OperationalDecisionType)[keyof typeof OperationalDecisionType]
+
+
+export const OperationalDecisionStatus = {
+  OPEN: 'OPEN',
+  RESOLVED: 'RESOLVED',
+  SUPERSEDED: 'SUPERSEDED'
+} as const
+
+export type OperationalDecisionStatus = (typeof OperationalDecisionStatus)[keyof typeof OperationalDecisionStatus]
+
+
+export const OperationalExceptionType = {
+  MISSING_INFORMATION: 'MISSING_INFORMATION',
+  DATA_TO_VERIFY: 'DATA_TO_VERIFY',
+  CONFLICT: 'CONFLICT',
+  REQUIREMENT_NOT_SATISFIED: 'REQUIREMENT_NOT_SATISFIED',
+  DOCUMENT_MISSING: 'DOCUMENT_MISSING',
+  DOCUMENT_EXPIRED: 'DOCUMENT_EXPIRED',
+  DOCUMENT_EXPIRING: 'DOCUMENT_EXPIRING',
+  PROCESS_BLOCKED: 'PROCESS_BLOCKED',
+  PERSISTENT_TECHNICAL_ERROR: 'PERSISTENT_TECHNICAL_ERROR',
+  ACCESS_NOT_ALLOWED: 'ACCESS_NOT_ALLOWED',
+  SENSITIVE_ACTION_REQUIRED: 'SENSITIVE_ACTION_REQUIRED',
+  PARTIAL_RESULT: 'PARTIAL_RESULT',
+  INVALID_ARTIFACT_REFERENCE: 'INVALID_ARTIFACT_REFERENCE'
+} as const
+
+export type OperationalExceptionType = (typeof OperationalExceptionType)[keyof typeof OperationalExceptionType]
+
+
+export const OperationalExceptionSeverity = {
+  INFO: 'INFO',
+  ATTENTION: 'ATTENTION',
+  WARNING: 'WARNING',
+  BLOCKING: 'BLOCKING'
+} as const
+
+export type OperationalExceptionSeverity = (typeof OperationalExceptionSeverity)[keyof typeof OperationalExceptionSeverity]
+
+
+export const OperationalExceptionStatus = {
+  OPEN: 'OPEN',
+  RESOLVED: 'RESOLVED'
+} as const
+
+export type OperationalExceptionStatus = (typeof OperationalExceptionStatus)[keyof typeof OperationalExceptionStatus]
+
+
+export const OperationalArtifactType = {
+  ORGANIZATION: 'ORGANIZATION',
+  DOCUMENT: 'DOCUMENT',
+  DOCUMENT_VERSION: 'DOCUMENT_VERSION',
+  DOCUMENT_REQUIREMENT: 'DOCUMENT_REQUIREMENT',
+  WORKER: 'WORKER',
+  JOB_SITE: 'JOB_SITE',
+  DEADLINE: 'DEADLINE',
+  CHECKLIST: 'CHECKLIST',
+  EVIDENCE: 'EVIDENCE',
+  DOCUMENT_PACKAGE: 'DOCUMENT_PACKAGE'
+} as const
+
+export type OperationalArtifactType = (typeof OperationalArtifactType)[keyof typeof OperationalArtifactType]
+
+
+export const OperationalReliability = {
+  VERIFIED: 'VERIFIED',
+  HIGH: 'HIGH',
+  MEDIUM: 'MEDIUM',
+  LOW: 'LOW',
+  CONFLICT: 'CONFLICT'
+} as const
+
+export type OperationalReliability = (typeof OperationalReliability)[keyof typeof OperationalReliability]
+
+
+export const OperationalImpact = {
+  LOW: 'LOW',
+  CONTROLLED: 'CONTROLLED',
+  SENSITIVE: 'SENSITIVE',
+  IRREVERSIBLE: 'IRREVERSIBLE'
+} as const
+
+export type OperationalImpact = (typeof OperationalImpact)[keyof typeof OperationalImpact]
+
+
+export const OperationalEffectType = {
+  DOCUMENT_STATUS_RECONCILED: 'DOCUMENT_STATUS_RECONCILED',
+  DEADLINE_RECONCILED: 'DEADLINE_RECONCILED',
+  REMINDERS_RECONCILED: 'REMINDERS_RECONCILED',
+  PACKAGE_REVIEW_RESET: 'PACKAGE_REVIEW_RESET',
+  EXCEPTION_OPENED: 'EXCEPTION_OPENED',
+  EXCEPTION_RESOLVED: 'EXCEPTION_RESOLVED',
+  DECISION_OPENED: 'DECISION_OPENED',
+  NOTIFICATION_CREATED: 'NOTIFICATION_CREATED'
+} as const
+
+export type OperationalEffectType = (typeof OperationalEffectType)[keyof typeof OperationalEffectType]

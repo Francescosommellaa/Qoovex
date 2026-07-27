@@ -422,6 +422,14 @@ export const ModelName = {
   Notification: 'Notification',
   NotificationPreference: 'NotificationPreference',
   DataControlJob: 'DataControlJob',
+  OperationalProcess: 'OperationalProcess',
+  OperationalStep: 'OperationalStep',
+  OperationalEvent: 'OperationalEvent',
+  OperationalDecision: 'OperationalDecision',
+  OperationalException: 'OperationalException',
+  OperationalArtifactReference: 'OperationalArtifactReference',
+  OperationalRuleSnapshot: 'OperationalRuleSnapshot',
+  OperationalEffectReceipt: 'OperationalEffectReceipt',
   NotificationEmailDelivery: 'NotificationEmailDelivery',
   OrganizationMembership: 'OrganizationMembership',
   OrganizationInvitation: 'OrganizationInvitation',
@@ -451,7 +459,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "session" | "verificationToken" | "user" | "organization" | "worker" | "jobSite" | "workerUserLink" | "jobSiteUserAssignment" | "jobSiteWorkerAssignment" | "documentType" | "document" | "documentVersion" | "documentRequirement" | "deadline" | "calendarEvent" | "checklist" | "checklistItem" | "evidence" | "documentPackage" | "documentPackageItem" | "shareLink" | "notification" | "notificationPreference" | "dataControlJob" | "notificationEmailDelivery" | "organizationMembership" | "organizationInvitation" | "supportSession" | "supportAuditEvent" | "productAuditEvent" | "userCredential" | "authCode" | "mfaRecoveryRequest" | "authRateLimit" | "securityAuditEvent" | "runtimeErrorEvent" | "authDevice" | "mfaBackupCode"
+    modelProps: "account" | "session" | "verificationToken" | "user" | "organization" | "worker" | "jobSite" | "workerUserLink" | "jobSiteUserAssignment" | "jobSiteWorkerAssignment" | "documentType" | "document" | "documentVersion" | "documentRequirement" | "deadline" | "calendarEvent" | "checklist" | "checklistItem" | "evidence" | "documentPackage" | "documentPackageItem" | "shareLink" | "notification" | "notificationPreference" | "dataControlJob" | "operationalProcess" | "operationalStep" | "operationalEvent" | "operationalDecision" | "operationalException" | "operationalArtifactReference" | "operationalRuleSnapshot" | "operationalEffectReceipt" | "notificationEmailDelivery" | "organizationMembership" | "organizationInvitation" | "supportSession" | "supportAuditEvent" | "productAuditEvent" | "userCredential" | "authCode" | "mfaRecoveryRequest" | "authRateLimit" | "securityAuditEvent" | "runtimeErrorEvent" | "authDevice" | "mfaBackupCode"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2305,6 +2313,598 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OperationalProcess: {
+      payload: Prisma.$OperationalProcessPayload<ExtArgs>
+      fields: Prisma.OperationalProcessFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperationalProcessFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalProcessPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperationalProcessFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalProcessPayload>
+        }
+        findFirst: {
+          args: Prisma.OperationalProcessFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalProcessPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperationalProcessFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalProcessPayload>
+        }
+        findMany: {
+          args: Prisma.OperationalProcessFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalProcessPayload>[]
+        }
+        create: {
+          args: Prisma.OperationalProcessCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalProcessPayload>
+        }
+        createMany: {
+          args: Prisma.OperationalProcessCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperationalProcessCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalProcessPayload>[]
+        }
+        delete: {
+          args: Prisma.OperationalProcessDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalProcessPayload>
+        }
+        update: {
+          args: Prisma.OperationalProcessUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalProcessPayload>
+        }
+        deleteMany: {
+          args: Prisma.OperationalProcessDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperationalProcessUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperationalProcessUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalProcessPayload>[]
+        }
+        upsert: {
+          args: Prisma.OperationalProcessUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalProcessPayload>
+        }
+        aggregate: {
+          args: Prisma.OperationalProcessAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperationalProcess>
+        }
+        groupBy: {
+          args: Prisma.OperationalProcessGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalProcessGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperationalProcessCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalProcessCountAggregateOutputType> | number
+        }
+      }
+    }
+    OperationalStep: {
+      payload: Prisma.$OperationalStepPayload<ExtArgs>
+      fields: Prisma.OperationalStepFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperationalStepFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalStepPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperationalStepFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalStepPayload>
+        }
+        findFirst: {
+          args: Prisma.OperationalStepFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalStepPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperationalStepFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalStepPayload>
+        }
+        findMany: {
+          args: Prisma.OperationalStepFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalStepPayload>[]
+        }
+        create: {
+          args: Prisma.OperationalStepCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalStepPayload>
+        }
+        createMany: {
+          args: Prisma.OperationalStepCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperationalStepCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalStepPayload>[]
+        }
+        delete: {
+          args: Prisma.OperationalStepDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalStepPayload>
+        }
+        update: {
+          args: Prisma.OperationalStepUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalStepPayload>
+        }
+        deleteMany: {
+          args: Prisma.OperationalStepDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperationalStepUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperationalStepUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalStepPayload>[]
+        }
+        upsert: {
+          args: Prisma.OperationalStepUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalStepPayload>
+        }
+        aggregate: {
+          args: Prisma.OperationalStepAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperationalStep>
+        }
+        groupBy: {
+          args: Prisma.OperationalStepGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalStepGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperationalStepCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalStepCountAggregateOutputType> | number
+        }
+      }
+    }
+    OperationalEvent: {
+      payload: Prisma.$OperationalEventPayload<ExtArgs>
+      fields: Prisma.OperationalEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperationalEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperationalEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEventPayload>
+        }
+        findFirst: {
+          args: Prisma.OperationalEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperationalEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEventPayload>
+        }
+        findMany: {
+          args: Prisma.OperationalEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEventPayload>[]
+        }
+        create: {
+          args: Prisma.OperationalEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEventPayload>
+        }
+        createMany: {
+          args: Prisma.OperationalEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperationalEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEventPayload>[]
+        }
+        delete: {
+          args: Prisma.OperationalEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEventPayload>
+        }
+        update: {
+          args: Prisma.OperationalEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.OperationalEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperationalEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperationalEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.OperationalEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEventPayload>
+        }
+        aggregate: {
+          args: Prisma.OperationalEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperationalEvent>
+        }
+        groupBy: {
+          args: Prisma.OperationalEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperationalEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalEventCountAggregateOutputType> | number
+        }
+      }
+    }
+    OperationalDecision: {
+      payload: Prisma.$OperationalDecisionPayload<ExtArgs>
+      fields: Prisma.OperationalDecisionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperationalDecisionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalDecisionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperationalDecisionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalDecisionPayload>
+        }
+        findFirst: {
+          args: Prisma.OperationalDecisionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalDecisionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperationalDecisionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalDecisionPayload>
+        }
+        findMany: {
+          args: Prisma.OperationalDecisionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalDecisionPayload>[]
+        }
+        create: {
+          args: Prisma.OperationalDecisionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalDecisionPayload>
+        }
+        createMany: {
+          args: Prisma.OperationalDecisionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperationalDecisionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalDecisionPayload>[]
+        }
+        delete: {
+          args: Prisma.OperationalDecisionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalDecisionPayload>
+        }
+        update: {
+          args: Prisma.OperationalDecisionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalDecisionPayload>
+        }
+        deleteMany: {
+          args: Prisma.OperationalDecisionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperationalDecisionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperationalDecisionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalDecisionPayload>[]
+        }
+        upsert: {
+          args: Prisma.OperationalDecisionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalDecisionPayload>
+        }
+        aggregate: {
+          args: Prisma.OperationalDecisionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperationalDecision>
+        }
+        groupBy: {
+          args: Prisma.OperationalDecisionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalDecisionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperationalDecisionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalDecisionCountAggregateOutputType> | number
+        }
+      }
+    }
+    OperationalException: {
+      payload: Prisma.$OperationalExceptionPayload<ExtArgs>
+      fields: Prisma.OperationalExceptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperationalExceptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalExceptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperationalExceptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalExceptionPayload>
+        }
+        findFirst: {
+          args: Prisma.OperationalExceptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalExceptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperationalExceptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalExceptionPayload>
+        }
+        findMany: {
+          args: Prisma.OperationalExceptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalExceptionPayload>[]
+        }
+        create: {
+          args: Prisma.OperationalExceptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalExceptionPayload>
+        }
+        createMany: {
+          args: Prisma.OperationalExceptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperationalExceptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalExceptionPayload>[]
+        }
+        delete: {
+          args: Prisma.OperationalExceptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalExceptionPayload>
+        }
+        update: {
+          args: Prisma.OperationalExceptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalExceptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.OperationalExceptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperationalExceptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperationalExceptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalExceptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.OperationalExceptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalExceptionPayload>
+        }
+        aggregate: {
+          args: Prisma.OperationalExceptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperationalException>
+        }
+        groupBy: {
+          args: Prisma.OperationalExceptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalExceptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperationalExceptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalExceptionCountAggregateOutputType> | number
+        }
+      }
+    }
+    OperationalArtifactReference: {
+      payload: Prisma.$OperationalArtifactReferencePayload<ExtArgs>
+      fields: Prisma.OperationalArtifactReferenceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperationalArtifactReferenceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalArtifactReferencePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperationalArtifactReferenceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalArtifactReferencePayload>
+        }
+        findFirst: {
+          args: Prisma.OperationalArtifactReferenceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalArtifactReferencePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperationalArtifactReferenceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalArtifactReferencePayload>
+        }
+        findMany: {
+          args: Prisma.OperationalArtifactReferenceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalArtifactReferencePayload>[]
+        }
+        create: {
+          args: Prisma.OperationalArtifactReferenceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalArtifactReferencePayload>
+        }
+        createMany: {
+          args: Prisma.OperationalArtifactReferenceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperationalArtifactReferenceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalArtifactReferencePayload>[]
+        }
+        delete: {
+          args: Prisma.OperationalArtifactReferenceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalArtifactReferencePayload>
+        }
+        update: {
+          args: Prisma.OperationalArtifactReferenceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalArtifactReferencePayload>
+        }
+        deleteMany: {
+          args: Prisma.OperationalArtifactReferenceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperationalArtifactReferenceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperationalArtifactReferenceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalArtifactReferencePayload>[]
+        }
+        upsert: {
+          args: Prisma.OperationalArtifactReferenceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalArtifactReferencePayload>
+        }
+        aggregate: {
+          args: Prisma.OperationalArtifactReferenceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperationalArtifactReference>
+        }
+        groupBy: {
+          args: Prisma.OperationalArtifactReferenceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalArtifactReferenceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperationalArtifactReferenceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalArtifactReferenceCountAggregateOutputType> | number
+        }
+      }
+    }
+    OperationalRuleSnapshot: {
+      payload: Prisma.$OperationalRuleSnapshotPayload<ExtArgs>
+      fields: Prisma.OperationalRuleSnapshotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperationalRuleSnapshotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalRuleSnapshotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperationalRuleSnapshotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalRuleSnapshotPayload>
+        }
+        findFirst: {
+          args: Prisma.OperationalRuleSnapshotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalRuleSnapshotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperationalRuleSnapshotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalRuleSnapshotPayload>
+        }
+        findMany: {
+          args: Prisma.OperationalRuleSnapshotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalRuleSnapshotPayload>[]
+        }
+        create: {
+          args: Prisma.OperationalRuleSnapshotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalRuleSnapshotPayload>
+        }
+        createMany: {
+          args: Prisma.OperationalRuleSnapshotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperationalRuleSnapshotCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalRuleSnapshotPayload>[]
+        }
+        delete: {
+          args: Prisma.OperationalRuleSnapshotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalRuleSnapshotPayload>
+        }
+        update: {
+          args: Prisma.OperationalRuleSnapshotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalRuleSnapshotPayload>
+        }
+        deleteMany: {
+          args: Prisma.OperationalRuleSnapshotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperationalRuleSnapshotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperationalRuleSnapshotUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalRuleSnapshotPayload>[]
+        }
+        upsert: {
+          args: Prisma.OperationalRuleSnapshotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalRuleSnapshotPayload>
+        }
+        aggregate: {
+          args: Prisma.OperationalRuleSnapshotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperationalRuleSnapshot>
+        }
+        groupBy: {
+          args: Prisma.OperationalRuleSnapshotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalRuleSnapshotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperationalRuleSnapshotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalRuleSnapshotCountAggregateOutputType> | number
+        }
+      }
+    }
+    OperationalEffectReceipt: {
+      payload: Prisma.$OperationalEffectReceiptPayload<ExtArgs>
+      fields: Prisma.OperationalEffectReceiptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperationalEffectReceiptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEffectReceiptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperationalEffectReceiptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEffectReceiptPayload>
+        }
+        findFirst: {
+          args: Prisma.OperationalEffectReceiptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEffectReceiptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperationalEffectReceiptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEffectReceiptPayload>
+        }
+        findMany: {
+          args: Prisma.OperationalEffectReceiptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEffectReceiptPayload>[]
+        }
+        create: {
+          args: Prisma.OperationalEffectReceiptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEffectReceiptPayload>
+        }
+        createMany: {
+          args: Prisma.OperationalEffectReceiptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperationalEffectReceiptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEffectReceiptPayload>[]
+        }
+        delete: {
+          args: Prisma.OperationalEffectReceiptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEffectReceiptPayload>
+        }
+        update: {
+          args: Prisma.OperationalEffectReceiptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEffectReceiptPayload>
+        }
+        deleteMany: {
+          args: Prisma.OperationalEffectReceiptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperationalEffectReceiptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperationalEffectReceiptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEffectReceiptPayload>[]
+        }
+        upsert: {
+          args: Prisma.OperationalEffectReceiptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationalEffectReceiptPayload>
+        }
+        aggregate: {
+          args: Prisma.OperationalEffectReceiptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperationalEffectReceipt>
+        }
+        groupBy: {
+          args: Prisma.OperationalEffectReceiptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalEffectReceiptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperationalEffectReceiptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationalEffectReceiptCountAggregateOutputType> | number
+        }
+      }
+    }
     NotificationEmailDelivery: {
       payload: Prisma.$NotificationEmailDeliveryPayload<ExtArgs>
       fields: Prisma.NotificationEmailDeliveryFieldRefs
@@ -3815,6 +4415,168 @@ export const DataControlJobScalarFieldEnum = {
 export type DataControlJobScalarFieldEnum = (typeof DataControlJobScalarFieldEnum)[keyof typeof DataControlJobScalarFieldEnum]
 
 
+export const OperationalProcessScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  type: 'type',
+  definitionVersion: 'definitionVersion',
+  status: 'status',
+  triggerKind: 'triggerKind',
+  idempotencyKey: 'idempotencyKey',
+  context: 'context',
+  reliability: 'reliability',
+  impact: 'impact',
+  resultSummary: 'resultSummary',
+  revision: 'revision',
+  startedAt: 'startedAt',
+  blockedAt: 'blockedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperationalProcessScalarFieldEnum = (typeof OperationalProcessScalarFieldEnum)[keyof typeof OperationalProcessScalarFieldEnum]
+
+
+export const OperationalStepScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  key: 'key',
+  position: 'position',
+  status: 'status',
+  attemptCount: 'attemptCount',
+  maxAttempts: 'maxAttempts',
+  nextAttemptAt: 'nextAttemptAt',
+  claimToken: 'claimToken',
+  claimedAt: 'claimedAt',
+  leaseExpiresAt: 'leaseExpiresAt',
+  lastErrorCode: 'lastErrorCode',
+  input: 'input',
+  resultSummary: 'resultSummary',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperationalStepScalarFieldEnum = (typeof OperationalStepScalarFieldEnum)[keyof typeof OperationalStepScalarFieldEnum]
+
+
+export const OperationalEventScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  stepId: 'stepId',
+  eventKey: 'eventKey',
+  kind: 'kind',
+  userVisible: 'userVisible',
+  title: 'title',
+  summary: 'summary',
+  metadata: 'metadata',
+  actorUserId: 'actorUserId',
+  reliability: 'reliability',
+  impact: 'impact',
+  occurredAt: 'occurredAt'
+} as const
+
+export type OperationalEventScalarFieldEnum = (typeof OperationalEventScalarFieldEnum)[keyof typeof OperationalEventScalarFieldEnum]
+
+
+export const OperationalDecisionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  stepId: 'stepId',
+  type: 'type',
+  status: 'status',
+  question: 'question',
+  explanation: 'explanation',
+  options: 'options',
+  context: 'context',
+  proposedOptionKey: 'proposedOptionKey',
+  selectedOptionKey: 'selectedOptionKey',
+  selectedValue: 'selectedValue',
+  activeDedupeKey: 'activeDedupeKey',
+  decidedById: 'decidedById',
+  decidedAt: 'decidedAt',
+  reason: 'reason',
+  reliability: 'reliability',
+  impact: 'impact',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperationalDecisionScalarFieldEnum = (typeof OperationalDecisionScalarFieldEnum)[keyof typeof OperationalDecisionScalarFieldEnum]
+
+
+export const OperationalExceptionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  stepId: 'stepId',
+  decisionId: 'decisionId',
+  type: 'type',
+  severity: 'severity',
+  status: 'status',
+  title: 'title',
+  explanation: 'explanation',
+  nextStep: 'nextStep',
+  activeDedupeKey: 'activeDedupeKey',
+  dueAt: 'dueAt',
+  resolvedAt: 'resolvedAt',
+  resolvedById: 'resolvedById',
+  resolutionReason: 'resolutionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperationalExceptionScalarFieldEnum = (typeof OperationalExceptionScalarFieldEnum)[keyof typeof OperationalExceptionScalarFieldEnum]
+
+
+export const OperationalArtifactReferenceScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  artifactType: 'artifactType',
+  artifactId: 'artifactId',
+  label: 'label',
+  createdAt: 'createdAt'
+} as const
+
+export type OperationalArtifactReferenceScalarFieldEnum = (typeof OperationalArtifactReferenceScalarFieldEnum)[keyof typeof OperationalArtifactReferenceScalarFieldEnum]
+
+
+export const OperationalRuleSnapshotScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  sourceType: 'sourceType',
+  sourceId: 'sourceId',
+  sourceVersion: 'sourceVersion',
+  snapshot: 'snapshot',
+  capturedAt: 'capturedAt'
+} as const
+
+export type OperationalRuleSnapshotScalarFieldEnum = (typeof OperationalRuleSnapshotScalarFieldEnum)[keyof typeof OperationalRuleSnapshotScalarFieldEnum]
+
+
+export const OperationalEffectReceiptScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  stepId: 'stepId',
+  effectKey: 'effectKey',
+  type: 'type',
+  artifactType: 'artifactType',
+  artifactId: 'artifactId',
+  resultSummary: 'resultSummary',
+  createdAt: 'createdAt'
+} as const
+
+export type OperationalEffectReceiptScalarFieldEnum = (typeof OperationalEffectReceiptScalarFieldEnum)[keyof typeof OperationalEffectReceiptScalarFieldEnum]
+
+
 export const NotificationEmailDeliveryScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -4051,6 +4813,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -4512,6 +5281,188 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'OperationalProcessType'
+ */
+export type EnumOperationalProcessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalProcessType'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalProcessType[]'
+ */
+export type ListEnumOperationalProcessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalProcessType[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalProcessStatus'
+ */
+export type EnumOperationalProcessStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalProcessStatus'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalProcessStatus[]'
+ */
+export type ListEnumOperationalProcessStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalProcessStatus[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalReliability'
+ */
+export type EnumOperationalReliabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalReliability'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalReliability[]'
+ */
+export type ListEnumOperationalReliabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalReliability[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalImpact'
+ */
+export type EnumOperationalImpactFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalImpact'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalImpact[]'
+ */
+export type ListEnumOperationalImpactFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalImpact[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalStepStatus'
+ */
+export type EnumOperationalStepStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalStepStatus'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalStepStatus[]'
+ */
+export type ListEnumOperationalStepStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalStepStatus[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalEventKind'
+ */
+export type EnumOperationalEventKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalEventKind'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalEventKind[]'
+ */
+export type ListEnumOperationalEventKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalEventKind[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalDecisionType'
+ */
+export type EnumOperationalDecisionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalDecisionType'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalDecisionType[]'
+ */
+export type ListEnumOperationalDecisionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalDecisionType[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalDecisionStatus'
+ */
+export type EnumOperationalDecisionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalDecisionStatus'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalDecisionStatus[]'
+ */
+export type ListEnumOperationalDecisionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalDecisionStatus[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalExceptionType'
+ */
+export type EnumOperationalExceptionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalExceptionType'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalExceptionType[]'
+ */
+export type ListEnumOperationalExceptionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalExceptionType[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalExceptionSeverity'
+ */
+export type EnumOperationalExceptionSeverityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalExceptionSeverity'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalExceptionSeverity[]'
+ */
+export type ListEnumOperationalExceptionSeverityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalExceptionSeverity[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalExceptionStatus'
+ */
+export type EnumOperationalExceptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalExceptionStatus'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalExceptionStatus[]'
+ */
+export type ListEnumOperationalExceptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalExceptionStatus[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalArtifactType'
+ */
+export type EnumOperationalArtifactTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalArtifactType'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalArtifactType[]'
+ */
+export type ListEnumOperationalArtifactTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalArtifactType[]'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalEffectType'
+ */
+export type EnumOperationalEffectTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalEffectType'>
+
+
+
+/**
+ * Reference to a field of type 'OperationalEffectType[]'
+ */
+export type ListEnumOperationalEffectTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationalEffectType[]'>
+
+
+
+/**
  * Reference to a field of type 'NotificationEmailDeliveryType'
  */
 export type EnumNotificationEmailDeliveryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationEmailDeliveryType'>
@@ -4854,6 +5805,14 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   notificationPreference?: Prisma.NotificationPreferenceOmit
   dataControlJob?: Prisma.DataControlJobOmit
+  operationalProcess?: Prisma.OperationalProcessOmit
+  operationalStep?: Prisma.OperationalStepOmit
+  operationalEvent?: Prisma.OperationalEventOmit
+  operationalDecision?: Prisma.OperationalDecisionOmit
+  operationalException?: Prisma.OperationalExceptionOmit
+  operationalArtifactReference?: Prisma.OperationalArtifactReferenceOmit
+  operationalRuleSnapshot?: Prisma.OperationalRuleSnapshotOmit
+  operationalEffectReceipt?: Prisma.OperationalEffectReceiptOmit
   notificationEmailDelivery?: Prisma.NotificationEmailDeliveryOmit
   organizationMembership?: Prisma.OrganizationMembershipOmit
   organizationInvitation?: Prisma.OrganizationInvitationOmit

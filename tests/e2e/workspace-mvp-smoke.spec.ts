@@ -88,7 +88,7 @@ async function satisfyMfaGate(page: Page, secret: string) {
   await expect(page.getByRole("heading", { name: "Conferma MFA" })).toBeVisible();
   await page.locator("#mfa-gate-code").fill(currentTotp(secret));
   await page.getByRole("button", { name: "Apri il workspace" }).click();
-  await expect(page.getByRole("heading", { name: "Da fare", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Centro operativo", exact: true })).toBeVisible();
 }
 
 async function openWorkspaceAccountMenu(page: Page) {
@@ -199,12 +199,31 @@ async function createDomainData(page: Page, runId: string) {
   return { documentPackage, jobSite, jobSiteDocument, jobSiteDocumentType, worker, workerDocument, workerDocumentType };
 }
 
-async function expectFavoriteDefaults(page: Page, labels: string[]) {
+async function expectPrimaryNavigation(page: Page, labels: string[]) {
   const navigation = page.getByRole("navigation", { name: "Navigazione workspace" });
-  const favorites = navigation.getByRole("group", { name: "Preferiti" });
-  await expect(favorites).toBeVisible();
-  for (const label of labels) await expect(favorites.getByRole("link", { name: label, exact: true })).toBeVisible();
+  for (const label of labels) await expect(navigation.getByRole("link", { name: label, exact: true })).toBeVisible();
+  await expect(navigation.getByText("Preferiti", { exact: true })).toHaveCount(0);
+  await expect(navigation.getByText("Azioni rapide", { exact: true })).toHaveCount(0);
+  await expect(navigation.getByText("Ricerca", { exact: true })).toHaveCount(0);
+  await expect(navigation.getByText("Analisi", { exact: true })).toHaveCount(0);
   await expect(navigation.getByRole("link", { name: "Notifiche", exact: true })).toHaveCount(0);
+}
+
+async function runOperationalEngine(page: Page, times: number) {
+  const secret = process.env.CRON_SECRET;
+  expect(secret).toEqual(expect.any(String));
+  for (let index = 0; index < times; index += 1) {
+    await expectJson(await page.request.get("/api/operations/run", { headers: { Authorization: `Bearer ${secret}` } }), 200);
+  }
+}
+
+async function findOperationalProcessByArtifact(page: Page, type: string, artifactId: string) {
+  const pageResult = await expectJson(await page.request.get(`/api/operations/processes?type=${encodeURIComponent(type)}&take=50`), 200);
+  for (const item of pageResult.items as JsonRecord[]) {
+    const detail = await expectJson(await page.request.get(`/api/operations/processes/${item.id}`), 200);
+    if ((detail.artifacts as JsonRecord[]).some((artifact) => artifact.id === artifactId)) return detail;
+  }
+  throw new Error(`Operational process not found for ${type}:${artifactId}`);
 }
 
 async function createGuidedDocument(page: Page, input: {
@@ -364,18 +383,34 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     const owner = fixture.owner as JsonRecord;
     await signInWithCredentials(page, String(owner.email), String(fixture.password));
     await satisfyMfaGate(page, String(owner.secret));
-    await expectFavoriteDefaults(page, ["Documenti da controllare", "Scadenze"]);
+    await expectPrimaryNavigation(page, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri", "Pacchetti", "Impostazioni"]);
     await expect(page.getByRole("button", { name: /^Apri notifiche(?:, \d+ non lett[ae])?$/ })).toBeVisible();
-    await page.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
-    const openChecklistsFavorite = page.getByRole("menuitemcheckbox", { name: "Checklist aperte", exact: true });
-    const deadlinesFavorite = page.getByRole("menuitemcheckbox", { name: "Scadenze", exact: true });
-    await openChecklistsFavorite.click();
-    await expect(openChecklistsFavorite).toHaveAttribute("aria-checked", "true");
-    await deadlinesFavorite.click();
-    await expect(deadlinesFavorite).toHaveAttribute("aria-checked", "false");
-    await page.reload({ waitUntil: "domcontentloaded" });
-    await expectFavoriteDefaults(page, ["Documenti da controllare", "Checklist aperte"]);
-    await expect(page.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("link", { name: "Scadenze", exact: true })).toHaveCount(0);
+
+    const incompleteFixture = await expectJson(await adminApi.post("/api/dev-fixtures/platform-admin", { data: { kind: "operational-incomplete-document", runId, organizationId: fixture.organizationId } }), 201);
+    const incompleteDocument = incompleteFixture.document as JsonRecord;
+    const incompleteProcess = incompleteFixture.process as JsonRecord;
+    await runOperationalEngine(page, 2);
+    let incompleteDetail = await expectJson(await page.request.get(`/api/operations/processes/${incompleteProcess.id}`), 200);
+    const expiryDecision = (incompleteDetail.decisions as JsonRecord[]).find((decision) => decision.type === "CONFIRM_EXPIRY_DATE" && decision.status === "OPEN")!;
+    expect(expiryDecision).toBeTruthy();
+    await pageJsonRequest(page, "POST", `/api/operations/decisions/${expiryDecision.id}/resolve`, { kind: "CONFIRM_DATE", optionKey: "enter-date", value: "2099-12-31", reason: "Data confermata nello scenario E2E." });
+    await runOperationalEngine(page, 6);
+    incompleteDetail = await expectJson(await page.request.get(`/api/operations/processes/${incompleteProcess.id}`), 200);
+    expect(incompleteDetail.status).toBe("COMPLETED");
+    expect(await expectJson(await page.request.get(`/api/documents/${incompleteDocument.id}`), 200)).toMatchObject({ expiryDate: expect.stringContaining("2099-12-31") });
+
+    const missingType = await pagePostJson(page, "/api/document-types", { name: `Requisito lavoratore E2E ${runId}`, appliesTo: "WORKER", categoryKey: WORKER_DOCUMENT_CATEGORY, sensitivity: "STANDARD", requiresExpiryDate: false });
+    await pagePostJson(page, "/api/document-requirements", { name: `Documento richiesto E2E ${runId}`, targetType: "WORKER", documentTypeId: missingType.id, jobSiteId: null, isRequired: true });
+    const exceptionWorker = await pagePostJson(page, "/api/workers", { displayName: `Worker eccezione E2E ${runId}` });
+    await runOperationalEngine(page, 3);
+    let workerProcess = await findOperationalProcessByArtifact(page, "WORKER_CREATED", String(exceptionWorker.id));
+    const missingException = (workerProcess.exceptions as JsonRecord[]).find((exception) => exception.type === "DOCUMENT_MISSING")!;
+    expect(missingException).toMatchObject({ status: "OPEN", canResolve: false });
+    await pagePostJson(page, "/api/documents", { title: `Documento risolutivo E2E ${runId}`, documentTypeId: missingType.id, ownerType: "WORKER", workerId: exceptionWorker.id, status: "TO_REVIEW" });
+    await runOperationalEngine(page, 6);
+    workerProcess = await findOperationalProcessByArtifact(page, "WORKER_CREATED", String(exceptionWorker.id));
+    expect((workerProcess.exceptions as JsonRecord[]).find((exception) => exception.id === missingException.id)).toMatchObject({ status: "RESOLVED" });
+    expect(workerProcess.status).toBe("COMPLETED");
 
     const { documentPackage, jobSite, jobSiteDocument, jobSiteDocumentType, worker, workerDocument, workerDocumentType } = await createDomainData(page, runId);
     await uploadAndDownloadDocument(page, jobSiteDocument.id);
@@ -480,11 +515,8 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     const safetyPage = await safetyContext.newPage();
     await signInWithCredentials(safetyPage, String(safety.email), String(fixture.password));
     await satisfyMfaGate(safetyPage, String(safety.secret));
-    await expectFavoriteDefaults(safetyPage, ["Checklist aperte", "Documenti da controllare"]);
+    await expectPrimaryNavigation(safetyPage, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri", "Pacchetti", "Impostazioni"]);
     await expect(safetyPage.getByRole("button", { name: /^Apri notifiche(?:, \d+ non lett[ae])?$/ })).toBeVisible();
-    await safetyPage.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
-    await expect(safetyPage.getByRole("menuitemcheckbox", { name: "Pacchetti pronti", exact: true })).toBeVisible();
-    await expect(safetyPage.getByRole("menuitemcheckbox", { name: "Documenti Azienda", exact: true })).toHaveCount(0);
 
     expect((await sinkApi.delete(sinkUrl)).status()).toBe(200);
     await expectJson(await ownerPage.request.post("/api/organization/invitations", { data: { email: siteManagerEmail, role: "SITE_MANAGER" } }), 201);
@@ -545,7 +577,7 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
 
     const siteManagerPage = await scopedSiteManagerContext.newPage();
     await signInWithCredentials(siteManagerPage, siteManagerEmail, siteManagerPassword);
-    await expectFavoriteDefaults(siteManagerPage, ["Prove recenti", "Checklist aperte"]);
+    await expectPrimaryNavigation(siteManagerPage, ["Centro operativo", "Documenti", "Lavoratori", "I miei cantieri"]);
     const siteManagerJobSites = await expectJson(await siteManagerPage.request.get("/api/job-sites"), 200) as unknown as JsonRecord;
     expect((siteManagerJobSites.items as JsonRecord[]).map((jobSite) => jobSite.id)).toEqual([assignedJobSite.id]);
     await expectJson(await siteManagerPage.request.post("/api/job-sites", { data: { name: "Vietato" } }), 404);
@@ -553,11 +585,8 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     const workerPage = await workerContext.newPage();
     await signInWithCredentials(workerPage, String(worker.email), String(fixture.password));
     await satisfyMfaGate(workerPage, String(worker.secret));
-    await expectFavoriteDefaults(workerPage, ["Prove recenti", "Scadenze"]);
-    await workerPage.getByRole("button", { name: "Personalizza Preferiti", exact: true }).click();
-    await expect(workerPage.getByRole("menuitemcheckbox", { name: "Pacchetti pronti", exact: true })).toHaveCount(0);
-    await expect(workerPage.getByRole("menuitemcheckbox", { name: "Checklist aperte", exact: true })).toHaveCount(0);
-    await expect(workerPage.getByRole("menuitemcheckbox", { name: "I miei documenti da controllare", exact: true })).toBeVisible();
+    await expectPrimaryNavigation(workerPage, ["Centro operativo", "Documenti", "Il mio profilo", "I miei cantieri"]);
+    await expect(workerPage.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("link", { name: "Pacchetti", exact: true })).toHaveCount(0);
     const workerRecords = await expectJson(await workerPage.request.get("/api/workers"), 200) as unknown as JsonRecord[];
     expect(workerRecords.map((record) => record.id)).toEqual([linkedWorker.id]);
     await expectJson(await workerPage.request.post("/api/workers", { data: { displayName: "Vietato" } }), 404);

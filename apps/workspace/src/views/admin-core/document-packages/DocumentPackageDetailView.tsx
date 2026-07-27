@@ -18,6 +18,7 @@ import type {
   WorkspaceJobSiteRecord,
   WorkspaceShareLinkRecord,
 } from "@/views/workspace/workspace-records";
+import { OperationalArtifactStatus } from "@entities/operational-process/ui/OperationalArtifactStatus";
 
 function jobSiteLabel(jobSiteId: string | null | undefined, jobSites: WorkspaceJobSiteRecord[]) {
   return jobSites.find((jobSite) => jobSite.id === jobSiteId)?.name ?? "Nessun cantiere";
@@ -50,8 +51,9 @@ export function DocumentPackageDetailView({
       <WorkspacePageHeader
         title={documentPackage.title}
         description={`${jobSiteLabel(documentPackage.jobSiteId, jobSites)} - Controlla ogni elemento prima di creare il link.`}
-        action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/document-packages"}>{returnToDashboard ? "Torna a Da fare" : "Torna alle condivisioni"}</Link>}
+        action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/document-packages"}>{returnToDashboard ? "Torna al Centro operativo" : "Torna alle condivisioni"}</Link>}
       />
+      <OperationalArtifactStatus artifactId={documentPackage.id} artifactType="DOCUMENT_PACKAGE" />
       <div className={styles.grid}>
           <WorkspacePanel title="Riepilogo condivisione">
             <article className={styles.record}>

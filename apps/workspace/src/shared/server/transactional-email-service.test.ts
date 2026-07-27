@@ -40,6 +40,8 @@ describe("transactional email delivery", () => {
     process.env.QOOVEX_E2E_MODE = "1";
     process.env.QOOVEX_E2E_EMAIL_SINK_URL = "http://127.0.0.1:43119/messages";
     process.env.QOOVEX_E2E_EMAIL_SINK_SECRET = "ephemeral-test-secret";
+    process.env.RESEND_API_KEY = "configured-provider-key";
+    process.env.RESEND_FROM_EMAIL = "Qoovex <noreply@example.test>";
     const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: vi.fn().mockResolvedValue({ id: "sink-1" }) });
     vi.stubGlobal("fetch", fetchMock);
 

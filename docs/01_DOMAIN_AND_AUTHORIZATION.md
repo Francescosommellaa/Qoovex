@@ -2,35 +2,27 @@
 
 ## Stato attuale verificato
 
-`Organization` e il tenant tecnico e `Azienda` la label prodotto. Ogni utente ha al massimo una `OrganizationMembership`, riutilizzabile dopo revoca, e quindi zero o una sola Azienda. I ruoli interni sono OWNER, ADMIN, SAFETY_CONSULTANT, SITE_MANAGER e WORKER; gli esterni leggono esclusivamente tramite share link tokenizzati.
+`Organization` e il tenant tecnico e Azienda la label prodotto. I ruoli restano OWNER, ADMIN, SAFETY_CONSULTANT, SITE_MANAGER e WORKER; non sono stati aggiunti ruoli o permessi in Fase 3. `Worker`, `User`, membership, link e assegnazioni restano concetti distinti.
 
-Il dominio persistito include Worker, JobSite, DocumentType, DocumentRequirement, Document, DocumentVersion, Deadline, CalendarEvent, Checklist, ChecklistItem, Evidence, DocumentPackage, DocumentPackageItem, ShareLink, Notification e ProductAuditEvent. Non esistono modelli Prisma per processo, step, proposta, decisione, eccezione o timeline operativa.
+Il dominio esistente e preservato. I modelli Fase 3 sono `OperationalProcess`, `OperationalStep`, `OperationalEvent`, `OperationalDecision`, `OperationalException`, `OperationalArtifactReference`, `OperationalRuleSnapshot` e `OperationalEffectReceipt`. Referenziano gli oggetti dominio senza duplicare file o contenuti.
 
-`Worker`, `User`, `OrganizationMembership`, `WorkerUserLink` e assegnazioni sono concetti distinti. `roleLabel` e una mansione libera, non un ruolo, permesso o abilitazione. Un invito WORKER nuovo riferisce un Worker della stessa Azienda; l'accettazione crea o riattiva membership e link nella stessa transazione Serializable. Gli inviti legacy privi di `workerId` non deducono il profilo dall'email.
+## Invarianti autorizzativi implementati
 
-`JobSite.operationalPhase` e indipendente da stato, archiviazione e date; e nullable per i legacy e richiesta nelle nuove creazioni. La fase non prova conformita e non viene dedotta automaticamente soltanto dal periodo.
-
-Categoria, macroarea e sensibilita documentale sono validate server-side. Documenti non `STANDARD` sono visibili secondo la policy esistente e non entrano in nuovi pacchetti condivisi. Nessuna lista normativa o scadenza ufficiale e incorporata nel dominio.
-
-## Invarianti autorizzativi
-
-- Azienda, attore, ruolo, support session, permesso e resource scope derivano sempre dal server.
-- Route e processi futuri non accettano `organizationId` dal client come fonte autorevole.
-- Ogni query e mutazione applica default-deny e filtro Azienda; SITE_MANAGER e WORKER mantengono lo scope assegnato.
-- Una previsione, un evento o un processo non amplia permessi e non crea scorciatoie autorizzative.
-- Inviti, assegnazioni, ruoli, condivisioni e operazioni sensibili richiedono gli stessi controlli dei servizi dominio esistenti.
-- Supporto resta temporaneo, motivato, MFA-protected, notificato e auditato.
+- Azienda, attore, ruolo, support session, permesso e resource scope derivano dal server.
+- Le letture operative richiedono `organization:read` e applicano anche lo scope degli artifact.
+- SITE_MANAGER e WORKER vedono soltanto processi collegati a risorse assegnate o proprie.
+- Decisioni, risoluzioni manuali consentite e retry richiedono il permesso della mutazione sottostante.
+- Eccezioni oggettive, tecniche o collegate a decisioni non sono chiudibili manualmente.
+- Nessun processo amplia visibilita, ruolo o permesso; la condivisione esterna resta nel flusso esplicito esistente.
 
 ## Direzione approvata
 
-I processi futuri orchestrano il dominio senza sostituirlo. Ogni evento viene acquisito nel contesto autorizzativo corrente; ogni step dichiara risorsa, permesso e impatto. Un'eccezione identifica chi puo risolverla e la condizione per riprendere. Una decisione registra un attore gia autorizzato: non introduce un nuovo ruolo implicito.
+I processi orchestrano il dominio senza sostituirlo. Una regola configurata puo descrivere cosa attendersi, ma non equivale a un obbligo legale. Le route CRUD utili restano controllo avanzato.
 
-Le regole validate diventano input versionati dei processi. Una regola puo descrivere cosa attendersi rispetto a una configurazione approvata, ma non equivale a un obbligo legale e non puo ampliare la visibilita dei dati.
+## Specifiche non implementate
 
-## Specifiche concettuali non implementate
-
-`Process Definition`, `Process Run`, `Process Step`, `Process Event`, `Proposal`, `Decision`, `Exception` e `Artifact Reference` sono nomi provvisori. Nessun tipo, DTO, modello o permission scope corrispondente esiste oggi.
+Non esistono deleghe decisionali nuove, permission scope operativi aggiuntivi, policy di override generale o accesso supporto dedicato ai processi.
 
 ## Decisioni aperte e hard stop
 
-Restano da approvare i ruoli autorizzati per ogni proposta, override e condivisione, il trattamento per sensibilita, l'eventuale delega, la policy di annullamento e qualunque nuovo permesso. Non modificare la matrice attuale per anticipare il motore operativo.
+Nuovi ruoli, permessi, deleghe, disclosure sensibili o policy di condivisione richiedono una decisione separata. Il motore non e autorizzazione implicita.

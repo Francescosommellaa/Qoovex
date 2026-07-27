@@ -2,6 +2,7 @@ import "server-only";
 
 import { db } from "@qoovex/db";
 import type { JobSiteOperationalPhase, RecordStatus } from "@qoovex/types";
+import { enqueueOperationalProcess } from "@shared/server/operational-process-service";
 import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { trimOptionalText, trimRequiredText } from "./document-domain-validation";
@@ -145,21 +146,34 @@ export async function createJobSite(input: CreateJobSiteInput) {
   if (managerMemberships.length !== managerUserIds.length) throw new AccessError("Uno o piu responsabili non sono disponibili per questa azienda.", 409);
   if (workers.length !== workerIds.length) throw new AccessError("Uno o piu lavoratori non sono disponibili per questa azienda.", 409);
 
-  const created = await db.jobSite.create({
-    data: {
+  const created = await db.$transaction(async (tx) => {
+    const jobSite = await tx.jobSite.create({
+      data: {
+        organizationId,
+        name,
+        address,
+        clientName,
+        status,
+        operationalPhase,
+        startDate: dates.resolvedStartDate,
+        endDate: dates.resolvedEndDate,
+        notes,
+        userAssignments: managerUserIds.length ? { create: managerUserIds.map((userId) => ({ organizationId, userId, assignmentRole: "SITE_MANAGER", assignedById: context.userId })) } : undefined,
+        workerAssignments: workerIds.length ? { create: workerIds.map((workerId) => ({ organizationId, workerId, assignedById: context.userId })) } : undefined,
+      },
+      select: { ...jobSiteSelect, userAssignments: { select: { id: true } }, workerAssignments: { select: { id: true } } },
+    });
+    await enqueueOperationalProcess({
       organizationId,
-      name,
-      address,
-      clientName,
-      status,
-      operationalPhase,
-      startDate: dates.resolvedStartDate,
-      endDate: dates.resolvedEndDate,
-      notes,
-      userAssignments: managerUserIds.length ? { create: managerUserIds.map((userId) => ({ organizationId, userId, assignmentRole: "SITE_MANAGER", assignedById: context.userId })) } : undefined,
-      workerAssignments: workerIds.length ? { create: workerIds.map((workerId) => ({ organizationId, workerId, assignedById: context.userId })) } : undefined,
-    },
-    select: { ...jobSiteSelect, userAssignments: { select: { id: true } }, workerAssignments: { select: { id: true } } },
+      type: "JOB_SITE_CREATED",
+      triggerKind: "JOB_SITE_CREATED",
+      idempotencyKey: `job-site:${jobSite.id}:created`,
+      context: { source: "workspace", change: "created" },
+      artifacts: [{ type: "JOB_SITE", id: jobSite.id, label: jobSite.name }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return jobSite;
   });
   const { userAssignments = [], workerAssignments = [], ...jobSite } = created;
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "job-site", resourceId: jobSite.id });
@@ -214,7 +228,20 @@ export async function updateJobSite(jobSiteId: string, input: UpdateJobSiteInput
   if (input.operationalPhase !== undefined && input.operationalPhase !== null) data.operationalPhase = parseJobSiteOperationalPhase(input.operationalPhase);
   if (!Object.keys(data).length) throw new AccessError("Nessun dato cantiere da aggiornare.", 409);
 
-  const jobSite = await db.jobSite.update({ where: { id: existing.id }, data, select: jobSiteSelect });
+  const jobSite = await db.$transaction(async (tx) => {
+    const updated = await tx.jobSite.update({ where: { id: existing.id }, data, select: jobSiteSelect });
+    await enqueueOperationalProcess({
+      organizationId,
+      type: "JOB_SITE_CREATED",
+      triggerKind: "JOB_SITE_UPDATED",
+      idempotencyKey: `job-site:${updated.id}:updated:${updated.updatedAt.toISOString()}`,
+      context: { source: "workspace", change: "updated" },
+      artifacts: [{ type: "JOB_SITE", id: updated.id, label: updated.name }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return updated;
+  });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "job-site", resourceId: jobSite.id });
   await recordProductAuditEventBestEffort({
     organizationId,

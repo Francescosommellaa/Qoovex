@@ -17,6 +17,7 @@ const mocks = vi.hoisted(() => ({
   putPrivateBlob: vi.fn(),
   getPrivateBlob: vi.fn(),
   deletePrivateBlob: vi.fn(),
+  enqueueOperationalProcess: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -40,6 +41,7 @@ vi.mock("./blob-storage-service", () => ({
   getPrivateBlob: mocks.getPrivateBlob,
   deletePrivateBlob: mocks.deletePrivateBlob,
 }));
+vi.mock("@shared/server/operational-process-service", () => ({ enqueueOperationalProcess: mocks.enqueueOperationalProcess }));
 
 import {
   DOCUMENT_VERSION_MAX_SIZE_BYTES,
@@ -110,6 +112,7 @@ beforeEach(() => {
   mocks.putPrivateBlob.mockReset();
   mocks.getPrivateBlob.mockReset();
   mocks.deletePrivateBlob.mockReset();
+  mocks.enqueueOperationalProcess.mockReset().mockResolvedValue({ id: "process-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.recordSupportAccess.mockResolvedValue(undefined);

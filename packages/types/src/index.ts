@@ -280,6 +280,18 @@ export const auditActions = [
   "DOCUMENT_REQUIREMENT_CREATED",
   "DOCUMENT_REQUIREMENT_UPDATED",
   "DOCUMENT_REQUIREMENT_ARCHIVED",
+  "OPERATIONAL_PROCESS_CREATED",
+  "OPERATIONAL_PROCESS_DEDUPLICATED",
+  "OPERATIONAL_STEP_CLAIMED",
+  "OPERATIONAL_STEP_COMPLETED",
+  "OPERATIONAL_RETRY_SCHEDULED",
+  "OPERATIONAL_PROCESS_BLOCKED",
+  "OPERATIONAL_PROCESS_COMPLETED",
+  "OPERATIONAL_DECISION_CREATED",
+  "OPERATIONAL_DECISION_RESOLVED",
+  "OPERATIONAL_EXCEPTION_OPENED",
+  "OPERATIONAL_EXCEPTION_RESOLVED",
+  "OPERATIONAL_CONTROL_RUN",
   "SECURITY_DENIED",
 ] as const;
 export type AuditAction = (typeof auditActions)[number];
@@ -302,6 +314,10 @@ export const auditEntityTypes = [
   "NOTIFICATION_PREFERENCE",
   "DATA_CONTROL_JOB",
   "DOCUMENT_REQUIREMENT",
+  "OPERATIONAL_PROCESS",
+  "OPERATIONAL_STEP",
+  "OPERATIONAL_DECISION",
+  "OPERATIONAL_EXCEPTION",
   "WORKER_USER_LINK",
   "JOB_SITE_USER_ASSIGNMENT",
   "JOB_SITE_WORKER_ASSIGNMENT",
@@ -1566,4 +1582,161 @@ export interface DashboardResponse {
   };
   firstUse: boolean;
   errors: DashboardSectionError[];
+}
+
+export const operationalProcessTypes = ["DOCUMENT_RECEIVED", "WORKER_CREATED", "JOB_SITE_CREATED", "CONTINUOUS_CONTROL"] as const;
+export type OperationalProcessType = (typeof operationalProcessTypes)[number];
+
+export const operationalProcessStatuses = ["RECEIVED", "READY", "RUNNING", "WAITING_FOR_DECISION", "BLOCKED", "RETRY_SCHEDULED", "COMPLETED", "COMPLETED_WITH_EXCEPTIONS", "TECHNICAL_FAILURE"] as const;
+export type OperationalProcessStatus = (typeof operationalProcessStatuses)[number];
+
+export const operationalStepStatuses = ["WAITING", "READY", "RUNNING", "COMPLETED", "BLOCKED", "RETRY_SCHEDULED", "TECHNICAL_FAILURE", "SKIPPED"] as const;
+export type OperationalStepStatus = (typeof operationalStepStatuses)[number];
+
+export const operationalEventKinds = ["INPUT", "DOMAIN", "TEMPORAL", "DECISION", "TECHNICAL", "RETRY", "COMPLETION", "BLOCKED", "RECONCILIATION"] as const;
+export type OperationalEventKind = (typeof operationalEventKinds)[number];
+
+export const operationalDecisionTypes = ["CONFIRM_DOCUMENT_TYPE", "CONFIRM_DOCUMENT_OWNER", "CONFIRM_EXPIRY_DATE", "RESOLVE_CONFLICT"] as const;
+export type OperationalDecisionType = (typeof operationalDecisionTypes)[number];
+export type OperationalDecisionStatus = "OPEN" | "RESOLVED" | "SUPERSEDED";
+
+export const operationalExceptionTypes = ["MISSING_INFORMATION", "DATA_TO_VERIFY", "CONFLICT", "REQUIREMENT_NOT_SATISFIED", "DOCUMENT_MISSING", "DOCUMENT_EXPIRED", "DOCUMENT_EXPIRING", "PROCESS_BLOCKED", "PERSISTENT_TECHNICAL_ERROR", "ACCESS_NOT_ALLOWED", "SENSITIVE_ACTION_REQUIRED", "PARTIAL_RESULT", "INVALID_ARTIFACT_REFERENCE"] as const;
+export type OperationalExceptionType = (typeof operationalExceptionTypes)[number];
+export type OperationalExceptionSeverity = "INFO" | "ATTENTION" | "WARNING" | "BLOCKING";
+export type OperationalExceptionStatus = "OPEN" | "RESOLVED";
+
+export const operationalArtifactTypes = ["ORGANIZATION", "DOCUMENT", "DOCUMENT_VERSION", "DOCUMENT_REQUIREMENT", "WORKER", "JOB_SITE", "DEADLINE", "CHECKLIST", "EVIDENCE", "DOCUMENT_PACKAGE"] as const;
+export type OperationalArtifactType = (typeof operationalArtifactTypes)[number];
+export type OperationalReliability = "VERIFIED" | "HIGH" | "MEDIUM" | "LOW" | "CONFLICT";
+export type OperationalImpact = "LOW" | "CONTROLLED" | "SENSITIVE" | "IRREVERSIBLE";
+
+export interface OperationalArtifactReferenceDto {
+  type: OperationalArtifactType;
+  id: EntityId;
+  label: string | null;
+  href: string | null;
+}
+
+export interface OperationalStepDto {
+  id: EntityId;
+  key: string;
+  label: string;
+  position: number;
+  status: OperationalStepStatus;
+  attemptCount: number;
+  nextAttemptAt: string;
+  startedAt: string | null;
+  completedAt: string | null;
+  canRetry: boolean;
+}
+
+export interface OperationalEventDto {
+  id: EntityId;
+  kind: OperationalEventKind;
+  title: string;
+  summary: string | null;
+  reliability: OperationalReliability;
+  impact: OperationalImpact;
+  occurredAt: string;
+}
+
+export interface OperationalTimelinePage {
+  items: OperationalEventDto[];
+  nextCursor: string | null;
+}
+
+export interface OperationalDecisionOptionDto {
+  key: string;
+  label: string;
+  description?: string | null;
+}
+
+export interface OperationalDecisionDto {
+  id: EntityId;
+  processId: EntityId;
+  type: OperationalDecisionType;
+  status: OperationalDecisionStatus;
+  question: string;
+  explanation: string | null;
+  options: OperationalDecisionOptionDto[];
+  proposedOptionKey: string | null;
+  selectedOptionKey: string | null;
+  selectedValue: string | null;
+  impact: OperationalImpact;
+  createdAt: string;
+  decidedAt: string | null;
+  canResolve: boolean;
+}
+
+export type ResolveOperationalDecisionInput =
+  | { kind: "SELECT_OPTION"; optionKey: string; reason?: string | null; value?: never }
+  | { kind: "CONFIRM_DATE"; optionKey: "enter-date"; value: string; reason?: string | null };
+
+export interface OperationalExceptionDto {
+  id: EntityId;
+  processId: EntityId;
+  type: OperationalExceptionType;
+  severity: OperationalExceptionSeverity;
+  status: OperationalExceptionStatus;
+  title: string;
+  explanation: string;
+  nextStep: string;
+  dueAt: string | null;
+  createdAt: string;
+  resolvedAt: string | null;
+  canResolve: boolean;
+}
+
+export interface ResolveOperationalExceptionInput {
+  kind: "MANUAL_EXCEPTION_RESOLUTION";
+  reason: string;
+}
+
+export interface RetryOperationalStepInput {
+  kind: "RETRY_TECHNICAL_STEP";
+}
+
+export interface OperationalProcessSummary {
+  id: EntityId;
+  type: OperationalProcessType;
+  definitionVersion: number;
+  status: OperationalProcessStatus;
+  title: string;
+  summary: string | null;
+  reliability: OperationalReliability;
+  impact: OperationalImpact;
+  openDecisionCount: number;
+  openExceptionCount: number;
+  createdAt: string;
+  updatedAt: string;
+  completedAt: string | null;
+  href: string;
+}
+
+export interface OperationalProcessPage {
+  items: OperationalProcessSummary[];
+  nextCursor: string | null;
+}
+
+export interface OperationalProcessDetail extends OperationalProcessSummary {
+  artifacts: OperationalArtifactReferenceDto[];
+  steps: OperationalStepDto[];
+  decisions: OperationalDecisionDto[];
+  exceptions: OperationalExceptionDto[];
+  timeline: OperationalTimelinePage;
+}
+
+export interface OperationalCenterResponse {
+  generatedAt: string;
+  organization: DashboardOrganizationSummary;
+  counts: {
+    decisions: number;
+    exceptions: number;
+    blocked: number;
+    running: number;
+  };
+  decisions: OperationalDecisionDto[];
+  exceptions: OperationalExceptionDto[];
+  activeProcesses: OperationalProcessSummary[];
+  recentResults: OperationalProcessSummary[];
 }

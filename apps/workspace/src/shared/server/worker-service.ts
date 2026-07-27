@@ -2,6 +2,7 @@ import "server-only";
 
 import { db } from "@qoovex/db";
 import type { RecordStatus } from "@qoovex/types";
+import { enqueueOperationalProcess } from "@shared/server/operational-process-service";
 import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { trimOptionalText, trimRequiredText } from "./document-domain-validation";
@@ -122,9 +123,22 @@ export async function createWorker(input: CreateWorkerInput) {
     if (duplicate) throw new AccessError(`Esiste gia un lavoratore con questa email: ${duplicate.displayName}.`, 409);
   }
 
-  const worker = await db.worker.create({
-    data: { organizationId, displayName, email, phone, roleLabel, status, notes },
-    select: workerSelect,
+  const worker = await db.$transaction(async (tx) => {
+    const created = await tx.worker.create({
+      data: { organizationId, displayName, email, phone, roleLabel, status, notes },
+      select: workerSelect,
+    });
+    await enqueueOperationalProcess({
+      organizationId,
+      type: "WORKER_CREATED",
+      triggerKind: "WORKER_CREATED",
+      idempotencyKey: `worker:${created.id}:created`,
+      context: { source: "workspace", change: "created" },
+      artifacts: [{ type: "WORKER", id: created.id, label: created.displayName }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return created;
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "worker", resourceId: worker.id });
   await recordProductAuditEventBestEffort({
@@ -179,7 +193,20 @@ export async function updateWorker(workerId: string, input: UpdateWorkerInput) {
   if (input.notes !== undefined) data.notes = trimOptionalText(input.notes, "Note lavoratore", 4000) ?? null;
   if (!Object.keys(data).length) throw new AccessError("Nessun dato lavoratore da aggiornare.", 409);
 
-  const worker = await db.worker.update({ where: { id: existing.id }, data, select: workerSelect });
+  const worker = await db.$transaction(async (tx) => {
+    const updated = await tx.worker.update({ where: { id: existing.id }, data, select: workerSelect });
+    await enqueueOperationalProcess({
+      organizationId,
+      type: "WORKER_CREATED",
+      triggerKind: "WORKER_UPDATED",
+      idempotencyKey: `worker:${updated.id}:updated:${updated.updatedAt.toISOString()}`,
+      context: { source: "workspace", change: "updated" },
+      artifacts: [{ type: "WORKER", id: updated.id, label: updated.displayName }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return updated;
+  });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "worker", resourceId: worker.id });
   await recordProductAuditEventBestEffort({
     organizationId,

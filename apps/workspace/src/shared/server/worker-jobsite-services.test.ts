@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   db: {
+    $transaction: vi.fn(),
     worker: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     jobSite: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     workerUserLink: { findFirst: vi.fn() },
@@ -14,6 +15,7 @@ const mocks = vi.hoisted(() => ({
   getContextOrganizationId: vi.fn(),
   requirePermission: vi.fn(),
   recordSupportAccess: vi.fn(),
+  enqueueOperationalProcess: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -32,6 +34,7 @@ vi.mock("@shared/server/access-context-service", () => ({
   requirePermission: mocks.requirePermission,
 }));
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
+vi.mock("@shared/server/operational-process-service", () => ({ enqueueOperationalProcess: mocks.enqueueOperationalProcess }));
 
 import { archiveJobSite, createJobSite, getJobSite, listJobSites, updateJobSite } from "./job-site-service";
 import { archiveWorker, createWorker, getWorker, listWorkers, updateWorker } from "./worker-service";
@@ -83,6 +86,7 @@ function setRole(role: OrganizationRole) {
 }
 
 beforeEach(() => {
+  mocks.db.$transaction.mockReset().mockImplementation(async (callback) => callback(mocks.db));
   resetModel(mocks.db.worker);
   resetModel(mocks.db.jobSite);
   resetModel(mocks.db.workerUserLink);
@@ -93,6 +97,7 @@ beforeEach(() => {
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
   mocks.recordSupportAccess.mockReset();
+  mocks.enqueueOperationalProcess.mockReset().mockResolvedValue({ id: "process-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.recordSupportAccess.mockResolvedValue(undefined);

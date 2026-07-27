@@ -5,6 +5,7 @@ import { requireIdentity } from "@shared/server/access-context-service";
 import { hashPassword } from "@shared/server/auth-password";
 import { deletePrivateBlobs, listPrivateBlobs } from "@shared/server/blob-storage-service";
 import { isCurrentDevAuthIdentity } from "@shared/server/dev-auth";
+import { enqueueOperationalProcess } from "@shared/server/operational-process-service";
 
 async function requireDevFixtureAccess() {
   if (process.env.QOOVEX_E2E_MODE !== "1" || process.env.NODE_ENV === "production") throw new AccessError("Risorsa non disponibile.", 404);
@@ -126,7 +127,7 @@ async function createMfaSuiteFixture(runId: string) {
 export async function POST(request: Request) {
   try {
     await requireDevFixtureAccess();
-    const body = await request.json() as { runId?: string; kind?: "platform-admin" | "mfa-suite" | "mfa-recovery-code"; userId?: string };
+    const body = await request.json() as { runId?: string; kind?: "platform-admin" | "mfa-suite" | "mfa-recovery-code" | "operational-incomplete-document"; userId?: string; organizationId?: string };
     const runId = requireFixtureRunId(body.runId);
     if (body.kind === "mfa-suite") {
       return Response.json(await createMfaSuiteFixture(runId), { status: 201 });
@@ -153,6 +154,23 @@ export async function POST(request: Request) {
         }),
       ]);
       return Response.json({ code }, { status: 201 });
+    }
+    if (body.kind === "operational-incomplete-document") {
+      const organization = await db.organization.findFirst({ where: { id: body.organizationId ?? "", code: { startsWith: "MFA-" } }, select: { id: true } });
+      if (!organization) throw new AccessError("Fixture non valida.", 409);
+      const fixture = await db.$transaction(async (tx) => {
+        const documentType = await tx.documentType.create({
+          data: { organizationId: organization.id, name: `Tipo decisione E2E ${runId}`, appliesTo: "ORGANIZATION", categoryKey: "COMPANY_IDENTITY_REGISTRATIONS", sensitivity: "STANDARD", requiresExpiryDate: true },
+          select: { id: true, name: true },
+        });
+        const document = await tx.document.create({
+          data: { organizationId: organization.id, documentTypeId: documentType.id, ownerType: "ORGANIZATION", title: `Documento incompleto E2E ${runId}`, status: "TO_REVIEW", expiryDate: null },
+          select: { id: true, title: true },
+        });
+        const process = await enqueueOperationalProcess({ organizationId: organization.id, type: "DOCUMENT_RECEIVED", triggerKind: "E2E_INCOMPLETE_DOCUMENT", idempotencyKey: `e2e-incomplete-document:${document.id}`, context: { source: "e2e-fixture" }, artifacts: [{ type: "DOCUMENT", id: document.id, label: document.title }] }, tx);
+        return { documentType, document, process };
+      });
+      return Response.json(fixture, { status: 201 });
     }
     const [user, runtimeError] = await db.$transaction([
       db.user.create({

@@ -76,6 +76,14 @@ export const ModelName = {
   Notification: 'Notification',
   NotificationPreference: 'NotificationPreference',
   DataControlJob: 'DataControlJob',
+  OperationalProcess: 'OperationalProcess',
+  OperationalStep: 'OperationalStep',
+  OperationalEvent: 'OperationalEvent',
+  OperationalDecision: 'OperationalDecision',
+  OperationalException: 'OperationalException',
+  OperationalArtifactReference: 'OperationalArtifactReference',
+  OperationalRuleSnapshot: 'OperationalRuleSnapshot',
+  OperationalEffectReceipt: 'OperationalEffectReceipt',
   NotificationEmailDelivery: 'NotificationEmailDelivery',
   OrganizationMembership: 'OrganizationMembership',
   OrganizationInvitation: 'OrganizationInvitation',
@@ -543,6 +551,168 @@ export const DataControlJobScalarFieldEnum = {
 export type DataControlJobScalarFieldEnum = (typeof DataControlJobScalarFieldEnum)[keyof typeof DataControlJobScalarFieldEnum]
 
 
+export const OperationalProcessScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  type: 'type',
+  definitionVersion: 'definitionVersion',
+  status: 'status',
+  triggerKind: 'triggerKind',
+  idempotencyKey: 'idempotencyKey',
+  context: 'context',
+  reliability: 'reliability',
+  impact: 'impact',
+  resultSummary: 'resultSummary',
+  revision: 'revision',
+  startedAt: 'startedAt',
+  blockedAt: 'blockedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperationalProcessScalarFieldEnum = (typeof OperationalProcessScalarFieldEnum)[keyof typeof OperationalProcessScalarFieldEnum]
+
+
+export const OperationalStepScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  key: 'key',
+  position: 'position',
+  status: 'status',
+  attemptCount: 'attemptCount',
+  maxAttempts: 'maxAttempts',
+  nextAttemptAt: 'nextAttemptAt',
+  claimToken: 'claimToken',
+  claimedAt: 'claimedAt',
+  leaseExpiresAt: 'leaseExpiresAt',
+  lastErrorCode: 'lastErrorCode',
+  input: 'input',
+  resultSummary: 'resultSummary',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperationalStepScalarFieldEnum = (typeof OperationalStepScalarFieldEnum)[keyof typeof OperationalStepScalarFieldEnum]
+
+
+export const OperationalEventScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  stepId: 'stepId',
+  eventKey: 'eventKey',
+  kind: 'kind',
+  userVisible: 'userVisible',
+  title: 'title',
+  summary: 'summary',
+  metadata: 'metadata',
+  actorUserId: 'actorUserId',
+  reliability: 'reliability',
+  impact: 'impact',
+  occurredAt: 'occurredAt'
+} as const
+
+export type OperationalEventScalarFieldEnum = (typeof OperationalEventScalarFieldEnum)[keyof typeof OperationalEventScalarFieldEnum]
+
+
+export const OperationalDecisionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  stepId: 'stepId',
+  type: 'type',
+  status: 'status',
+  question: 'question',
+  explanation: 'explanation',
+  options: 'options',
+  context: 'context',
+  proposedOptionKey: 'proposedOptionKey',
+  selectedOptionKey: 'selectedOptionKey',
+  selectedValue: 'selectedValue',
+  activeDedupeKey: 'activeDedupeKey',
+  decidedById: 'decidedById',
+  decidedAt: 'decidedAt',
+  reason: 'reason',
+  reliability: 'reliability',
+  impact: 'impact',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperationalDecisionScalarFieldEnum = (typeof OperationalDecisionScalarFieldEnum)[keyof typeof OperationalDecisionScalarFieldEnum]
+
+
+export const OperationalExceptionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  stepId: 'stepId',
+  decisionId: 'decisionId',
+  type: 'type',
+  severity: 'severity',
+  status: 'status',
+  title: 'title',
+  explanation: 'explanation',
+  nextStep: 'nextStep',
+  activeDedupeKey: 'activeDedupeKey',
+  dueAt: 'dueAt',
+  resolvedAt: 'resolvedAt',
+  resolvedById: 'resolvedById',
+  resolutionReason: 'resolutionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperationalExceptionScalarFieldEnum = (typeof OperationalExceptionScalarFieldEnum)[keyof typeof OperationalExceptionScalarFieldEnum]
+
+
+export const OperationalArtifactReferenceScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  artifactType: 'artifactType',
+  artifactId: 'artifactId',
+  label: 'label',
+  createdAt: 'createdAt'
+} as const
+
+export type OperationalArtifactReferenceScalarFieldEnum = (typeof OperationalArtifactReferenceScalarFieldEnum)[keyof typeof OperationalArtifactReferenceScalarFieldEnum]
+
+
+export const OperationalRuleSnapshotScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  sourceType: 'sourceType',
+  sourceId: 'sourceId',
+  sourceVersion: 'sourceVersion',
+  snapshot: 'snapshot',
+  capturedAt: 'capturedAt'
+} as const
+
+export type OperationalRuleSnapshotScalarFieldEnum = (typeof OperationalRuleSnapshotScalarFieldEnum)[keyof typeof OperationalRuleSnapshotScalarFieldEnum]
+
+
+export const OperationalEffectReceiptScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  processId: 'processId',
+  stepId: 'stepId',
+  effectKey: 'effectKey',
+  type: 'type',
+  artifactType: 'artifactType',
+  artifactId: 'artifactId',
+  resultSummary: 'resultSummary',
+  createdAt: 'createdAt'
+} as const
+
+export type OperationalEffectReceiptScalarFieldEnum = (typeof OperationalEffectReceiptScalarFieldEnum)[keyof typeof OperationalEffectReceiptScalarFieldEnum]
+
+
 export const NotificationEmailDeliveryScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -779,6 +949,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

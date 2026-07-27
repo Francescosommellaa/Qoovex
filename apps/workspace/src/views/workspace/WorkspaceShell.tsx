@@ -93,7 +93,7 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
           <WorkspaceTopbar
             fallbackLabel={isWorkspace ? "Area di lavoro" : "Sicurezza account"}
             isSuperAdmin={isSuperAdmin}
-            navigation={isWorkspace ? [...state.navigation.primary, ...state.navigation.documents, ...state.navigation.people] : []}
+            navigation={isWorkspace ? state.navigation.primary : []}
             showNotifications={isWorkspace && canReadWorkspaceNotifications(state.role)}
             unreadNotificationCount={isWorkspace ? state.unreadNotificationCount : 0}
           />

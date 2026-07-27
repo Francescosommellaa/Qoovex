@@ -109,6 +109,18 @@ enum AuditAction {
   DOCUMENT_REQUIREMENT_CREATED
   DOCUMENT_REQUIREMENT_UPDATED
   DOCUMENT_REQUIREMENT_ARCHIVED
+  OPERATIONAL_PROCESS_CREATED
+  OPERATIONAL_PROCESS_DEDUPLICATED
+  OPERATIONAL_STEP_CLAIMED
+  OPERATIONAL_STEP_COMPLETED
+  OPERATIONAL_RETRY_SCHEDULED
+  OPERATIONAL_PROCESS_BLOCKED
+  OPERATIONAL_PROCESS_COMPLETED
+  OPERATIONAL_DECISION_CREATED
+  OPERATIONAL_DECISION_RESOLVED
+  OPERATIONAL_EXCEPTION_OPENED
+  OPERATIONAL_EXCEPTION_RESOLVED
+  OPERATIONAL_CONTROL_RUN
   SECURITY_DENIED
 }
 
@@ -130,6 +142,10 @@ enum AuditEntityType {
   NOTIFICATION_PREFERENCE
   DATA_CONTROL_JOB
   DOCUMENT_REQUIREMENT
+  OPERATIONAL_PROCESS
+  OPERATIONAL_STEP
+  OPERATIONAL_DECISION
+  OPERATIONAL_EXCEPTION
   WORKER_USER_LINK
   JOB_SITE_USER_ASSIGNMENT
   JOB_SITE_WORKER_ASSIGNMENT
@@ -353,6 +369,128 @@ enum RuntimeErrorStatus {
   RESOLVED
 }
 
+enum OperationalProcessType {
+  DOCUMENT_RECEIVED
+  WORKER_CREATED
+  JOB_SITE_CREATED
+  CONTINUOUS_CONTROL
+}
+
+enum OperationalProcessStatus {
+  RECEIVED
+  READY
+  RUNNING
+  WAITING_FOR_DECISION
+  BLOCKED
+  RETRY_SCHEDULED
+  COMPLETED
+  COMPLETED_WITH_EXCEPTIONS
+  TECHNICAL_FAILURE
+}
+
+enum OperationalStepStatus {
+  WAITING
+  READY
+  RUNNING
+  COMPLETED
+  BLOCKED
+  RETRY_SCHEDULED
+  TECHNICAL_FAILURE
+  SKIPPED
+}
+
+enum OperationalEventKind {
+  INPUT
+  DOMAIN
+  TEMPORAL
+  DECISION
+  TECHNICAL
+  RETRY
+  COMPLETION
+  BLOCKED
+  RECONCILIATION
+}
+
+enum OperationalDecisionType {
+  CONFIRM_DOCUMENT_TYPE
+  CONFIRM_DOCUMENT_OWNER
+  CONFIRM_EXPIRY_DATE
+  RESOLVE_CONFLICT
+}
+
+enum OperationalDecisionStatus {
+  OPEN
+  RESOLVED
+  SUPERSEDED
+}
+
+enum OperationalExceptionType {
+  MISSING_INFORMATION
+  DATA_TO_VERIFY
+  CONFLICT
+  REQUIREMENT_NOT_SATISFIED
+  DOCUMENT_MISSING
+  DOCUMENT_EXPIRED
+  DOCUMENT_EXPIRING
+  PROCESS_BLOCKED
+  PERSISTENT_TECHNICAL_ERROR
+  ACCESS_NOT_ALLOWED
+  SENSITIVE_ACTION_REQUIRED
+  PARTIAL_RESULT
+  INVALID_ARTIFACT_REFERENCE
+}
+
+enum OperationalExceptionSeverity {
+  INFO
+  ATTENTION
+  WARNING
+  BLOCKING
+}
+
+enum OperationalExceptionStatus {
+  OPEN
+  RESOLVED
+}
+
+enum OperationalArtifactType {
+  ORGANIZATION
+  DOCUMENT
+  DOCUMENT_VERSION
+  DOCUMENT_REQUIREMENT
+  WORKER
+  JOB_SITE
+  DEADLINE
+  CHECKLIST
+  EVIDENCE
+  DOCUMENT_PACKAGE
+}
+
+enum OperationalReliability {
+  VERIFIED
+  HIGH
+  MEDIUM
+  LOW
+  CONFLICT
+}
+
+enum OperationalImpact {
+  LOW
+  CONTROLLED
+  SENSITIVE
+  IRREVERSIBLE
+}
+
+enum OperationalEffectType {
+  DOCUMENT_STATUS_RECONCILED
+  DEADLINE_RECONCILED
+  REMINDERS_RECONCILED
+  PACKAGE_REVIEW_RESET
+  EXCEPTION_OPENED
+  EXCEPTION_RESOLVED
+  DECISION_OPENED
+  NOTIFICATION_CREATED
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -458,13 +596,13 @@ model User {
 }
 
 model Organization {
-  id                          String                      @id @default(cuid())
+  id                          String                         @id @default(cuid())
   name                        String
-  code                        String                      @unique
+  code                        String                         @unique
   createdById                 String?
-  createdAt                   DateTime                    @default(now())
-  updatedAt                   DateTime                    @updatedAt
-  createdBy                   User?                       @relation("OrganizationCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt                   DateTime                       @default(now())
+  updatedAt                   DateTime                       @updatedAt
+  createdBy                   User?                          @relation("OrganizationCreator", fields: [createdById], references: [id], onDelete: SetNull)
   memberships                 OrganizationMembership[]
   invitations                 OrganizationInvitation[]
   supportSessions             SupportSession[]
@@ -491,6 +629,14 @@ model Organization {
   workerUserLinks             WorkerUserLink[]
   jobSiteUserAssignments      JobSiteUserAssignment[]
   jobSiteWorkerAssignments    JobSiteWorkerAssignment[]
+  operationalProcesses        OperationalProcess[]
+  operationalSteps            OperationalStep[]
+  operationalEvents           OperationalEvent[]
+  operationalDecisions        OperationalDecision[]
+  operationalExceptions       OperationalException[]
+  operationalArtifactRefs     OperationalArtifactReference[]
+  operationalRuleSnapshots    OperationalRuleSnapshot[]
+  operationalEffectReceipts   OperationalEffectReceipt[]
 
   @@index([name])
 }
@@ -974,6 +1120,211 @@ model DataControlJob {
   @@index([status, nextAttemptAt, createdAt])
   @@index([requestedById, createdAt])
   @@index([blobKey])
+}
+
+model OperationalProcess {
+  id                String                         @id @default(cuid())
+  organizationId    String
+  type              OperationalProcessType
+  definitionVersion Int
+  status            OperationalProcessStatus       @default(RECEIVED)
+  triggerKind       String
+  idempotencyKey    String
+  context           Json?
+  reliability       OperationalReliability         @default(VERIFIED)
+  impact            OperationalImpact              @default(LOW)
+  resultSummary     Json?
+  revision          Int                            @default(0)
+  startedAt         DateTime?
+  blockedAt         DateTime?
+  completedAt       DateTime?
+  createdAt         DateTime                       @default(now())
+  updatedAt         DateTime                       @updatedAt
+  organization      Organization                   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  steps             OperationalStep[]
+  events            OperationalEvent[]
+  decisions         OperationalDecision[]
+  exceptions        OperationalException[]
+  artifactRefs      OperationalArtifactReference[]
+  ruleSnapshots     OperationalRuleSnapshot[]
+  effectReceipts    OperationalEffectReceipt[]
+
+  @@unique([organizationId, idempotencyKey])
+  @@index([organizationId, status, updatedAt])
+  @@index([organizationId, type, createdAt])
+  @@index([status, updatedAt])
+}
+
+model OperationalStep {
+  id             String                     @id @default(cuid())
+  organizationId String
+  processId      String
+  key            String
+  position       Int
+  status         OperationalStepStatus      @default(WAITING)
+  attemptCount   Int                        @default(0)
+  maxAttempts    Int                        @default(5)
+  nextAttemptAt  DateTime                   @default(now())
+  claimToken     String?
+  claimedAt      DateTime?
+  leaseExpiresAt DateTime?
+  lastErrorCode  String?
+  input          Json?
+  resultSummary  Json?
+  startedAt      DateTime?
+  completedAt    DateTime?
+  createdAt      DateTime                   @default(now())
+  updatedAt      DateTime                   @updatedAt
+  organization   Organization               @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  process        OperationalProcess         @relation(fields: [processId], references: [id], onDelete: Cascade)
+  events         OperationalEvent[]
+  decisions      OperationalDecision[]
+  exceptions     OperationalException[]
+  effectReceipts OperationalEffectReceipt[]
+
+  @@unique([processId, key])
+  @@index([organizationId, status, updatedAt])
+  @@index([status, nextAttemptAt, leaseExpiresAt])
+  @@index([processId, position])
+}
+
+model OperationalEvent {
+  id             String                 @id @default(cuid())
+  organizationId String
+  processId      String
+  stepId         String?
+  eventKey       String
+  kind           OperationalEventKind
+  userVisible    Boolean                @default(true)
+  title          String
+  summary        String?                @db.Text
+  metadata       Json?
+  actorUserId    String?
+  reliability    OperationalReliability @default(VERIFIED)
+  impact         OperationalImpact      @default(LOW)
+  occurredAt     DateTime               @default(now())
+  organization   Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  process        OperationalProcess     @relation(fields: [processId], references: [id], onDelete: Cascade)
+  step           OperationalStep?       @relation(fields: [stepId], references: [id], onDelete: SetNull)
+
+  @@unique([processId, eventKey])
+  @@index([organizationId, occurredAt])
+  @@index([processId, occurredAt])
+  @@index([stepId, occurredAt])
+}
+
+model OperationalDecision {
+  id                String                    @id @default(cuid())
+  organizationId    String
+  processId         String
+  stepId            String?
+  type              OperationalDecisionType
+  status            OperationalDecisionStatus @default(OPEN)
+  question          String
+  explanation       String?                   @db.Text
+  options           Json
+  context           Json?
+  proposedOptionKey String?
+  selectedOptionKey String?
+  selectedValue     String?
+  activeDedupeKey   String?
+  decidedById       String?
+  decidedAt         DateTime?
+  reason            String?                   @db.Text
+  reliability       OperationalReliability    @default(VERIFIED)
+  impact            OperationalImpact         @default(CONTROLLED)
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+  organization      Organization              @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  process           OperationalProcess        @relation(fields: [processId], references: [id], onDelete: Cascade)
+  step              OperationalStep?          @relation(fields: [stepId], references: [id], onDelete: SetNull)
+  exceptions        OperationalException[]
+
+  @@unique([organizationId, activeDedupeKey])
+  @@index([organizationId, status, createdAt])
+  @@index([processId, status, createdAt])
+  @@index([stepId, status])
+}
+
+model OperationalException {
+  id               String                       @id @default(cuid())
+  organizationId   String
+  processId        String
+  stepId           String?
+  decisionId       String?
+  type             OperationalExceptionType
+  severity         OperationalExceptionSeverity
+  status           OperationalExceptionStatus   @default(OPEN)
+  title            String
+  explanation      String                       @db.Text
+  nextStep         String                       @db.Text
+  activeDedupeKey  String?
+  dueAt            DateTime?
+  resolvedAt       DateTime?
+  resolvedById     String?
+  resolutionReason String?                      @db.Text
+  createdAt        DateTime                     @default(now())
+  updatedAt        DateTime                     @updatedAt
+  organization     Organization                 @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  process          OperationalProcess           @relation(fields: [processId], references: [id], onDelete: Cascade)
+  step             OperationalStep?             @relation(fields: [stepId], references: [id], onDelete: SetNull)
+  decision         OperationalDecision?         @relation(fields: [decisionId], references: [id], onDelete: SetNull)
+
+  @@unique([organizationId, activeDedupeKey])
+  @@index([organizationId, status, severity, createdAt])
+  @@index([processId, status, createdAt])
+  @@index([decisionId, status])
+}
+
+model OperationalArtifactReference {
+  id             String                  @id @default(cuid())
+  organizationId String
+  processId      String
+  artifactType   OperationalArtifactType
+  artifactId     String
+  label          String?
+  createdAt      DateTime                @default(now())
+  organization   Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  process        OperationalProcess      @relation(fields: [processId], references: [id], onDelete: Cascade)
+
+  @@unique([processId, artifactType, artifactId])
+  @@index([organizationId, artifactType, artifactId])
+}
+
+model OperationalRuleSnapshot {
+  id             String             @id @default(cuid())
+  organizationId String
+  processId      String
+  sourceType     String
+  sourceId       String
+  sourceVersion  String
+  snapshot       Json
+  capturedAt     DateTime           @default(now())
+  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  process        OperationalProcess @relation(fields: [processId], references: [id], onDelete: Cascade)
+
+  @@unique([processId, sourceType, sourceId, sourceVersion])
+  @@index([organizationId, sourceType, sourceId])
+}
+
+model OperationalEffectReceipt {
+  id             String                   @id @default(cuid())
+  organizationId String
+  processId      String
+  stepId         String
+  effectKey      String
+  type           OperationalEffectType
+  artifactType   OperationalArtifactType?
+  artifactId     String?
+  resultSummary  Json?
+  createdAt      DateTime                 @default(now())
+  organization   Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  process        OperationalProcess       @relation(fields: [processId], references: [id], onDelete: Cascade)
+  step           OperationalStep          @relation(fields: [stepId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, effectKey])
+  @@index([processId, createdAt])
+  @@index([stepId, createdAt])
 }
 
 model NotificationEmailDelivery {

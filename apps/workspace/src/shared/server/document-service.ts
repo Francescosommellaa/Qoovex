@@ -3,6 +3,7 @@ import "server-only";
 import { db, type Prisma } from "@qoovex/db";
 import type { DocumentCategoryKey, DocumentOwnerType, DocumentStatus } from "@qoovex/types";
 import { documentCategoryRegistry, documentOwnerTypes, documentStatuses } from "@qoovex/types";
+import { enqueueOperationalProcess } from "@shared/server/operational-process-service";
 import { AccessError } from "@shared/server/access-errors";
 import { deletePrivateBlobs } from "@shared/server/blob-storage-service";
 import { recordRuntimeErrorBestEffort } from "@shared/server/runtime-error-service";
@@ -248,9 +249,22 @@ export async function createDocument(input: CreateDocumentInput) {
   if (documentType.requiresExpiryDate && !expiryDate) throw new AccessError("Questo tipo documento richiede una scadenza registrata.", 409);
   const notes = trimOptionalText(input.notes, "Note documento", 4000) ?? null;
 
-  const document = await db.document.create({
-    data: { organizationId, documentTypeId: documentType.id, ownerType, ...owner, title, status, expiryDate, notes },
-    select: documentListSelect,
+  const document = await db.$transaction(async (tx) => {
+    const created = await tx.document.create({
+      data: { organizationId, documentTypeId: documentType.id, ownerType, ...owner, title, status, expiryDate, notes },
+      select: documentListSelect,
+    });
+    await enqueueOperationalProcess({
+      organizationId,
+      type: "DOCUMENT_RECEIVED",
+      triggerKind: "DOCUMENT_CREATED",
+      idempotencyKey: `document:${created.id}:created`,
+      context: { source: "workspace", change: "created" },
+      artifacts: [{ type: "DOCUMENT", id: created.id, label: created.title }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return created;
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document", resourceId: document.id });
   await recordProductAuditEventBestEffort({
@@ -316,7 +330,20 @@ export async function updateDocument(documentId: string, input: UpdateDocumentIn
   if (input.notes !== undefined) data.notes = trimOptionalText(input.notes, "Note documento", 4000) ?? null;
   if (!Object.keys(data).length) throw new AccessError("Nessun dato documento da aggiornare.", 409);
 
-  const document = await db.document.update({ where: { id: existing.id }, data, select: documentListSelect });
+  const document = await db.$transaction(async (tx) => {
+    const updated = await tx.document.update({ where: { id: existing.id }, data, select: documentListSelect });
+    await enqueueOperationalProcess({
+      organizationId,
+      type: "DOCUMENT_RECEIVED",
+      triggerKind: "DOCUMENT_UPDATED",
+      idempotencyKey: `document:${updated.id}:updated:${updated.updatedAt.toISOString()}`,
+      context: { source: "workspace", change: "updated" },
+      artifacts: [{ type: "DOCUMENT", id: updated.id, label: updated.title }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return updated;
+  });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document", resourceId: document.id });
   await recordProductAuditEventBestEffort({
     organizationId,

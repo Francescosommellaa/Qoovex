@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   db: {
+    $transaction: vi.fn(),
     documentType: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     document: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn(), deleteMany: vi.fn() },
     worker: { findFirst: vi.fn() },
@@ -18,6 +19,7 @@ const mocks = vi.hoisted(() => ({
   recordSupportAccess: vi.fn(),
   deletePrivateBlobs: vi.fn(),
   recordRuntimeErrorBestEffort: vi.fn(),
+  enqueueOperationalProcess: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -38,6 +40,7 @@ vi.mock("@shared/server/access-context-service", () => ({
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
 vi.mock("@shared/server/blob-storage-service", () => ({ deletePrivateBlobs: mocks.deletePrivateBlobs }));
 vi.mock("@shared/server/runtime-error-service", () => ({ recordRuntimeErrorBestEffort: mocks.recordRuntimeErrorBestEffort }));
+vi.mock("@shared/server/operational-process-service", () => ({ enqueueOperationalProcess: mocks.enqueueOperationalProcess }));
 
 import { archiveDeadline, createDeadline, listDeadlines } from "./deadline-service";
 import { archiveDocument, createDocument, getDocument, getDocumentWithVersions, listDocuments, permanentlyDeleteArchivedDocument, restoreDocument, updateDocument } from "./document-service";
@@ -133,6 +136,7 @@ function setRole(role: OrganizationRole) {
 }
 
 beforeEach(() => {
+  mocks.db.$transaction.mockReset().mockImplementation(async (callback) => callback(mocks.db));
   resetModel(mocks.db.documentType);
   resetModel(mocks.db.document);
   resetModel(mocks.db.worker);
@@ -147,6 +151,7 @@ beforeEach(() => {
   mocks.recordSupportAccess.mockReset();
   mocks.deletePrivateBlobs.mockReset().mockResolvedValue(undefined);
   mocks.recordRuntimeErrorBestEffort.mockReset().mockResolvedValue(undefined);
+  mocks.enqueueOperationalProcess.mockReset().mockResolvedValue({ id: "process-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.recordSupportAccess.mockResolvedValue(undefined);

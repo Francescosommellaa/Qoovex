@@ -45,6 +45,7 @@ import type {
   WorkspaceJobSiteRecord,
   WorkspaceWorkerRecord,
 } from "@/views/workspace/workspace-records";
+import { OperationalArtifactStatus } from "@entities/operational-process/ui/OperationalArtifactStatus";
 
 function workerInitials(displayName: string) {
   return displayName
@@ -108,10 +109,12 @@ export function WorkerDetailView({
             href={returnToDashboard ? "/dashboard" : "/workers"}
           >
             <IconArrowLeft aria-hidden="true" />
-            {returnToDashboard ? "Torna a Da fare" : "Torna ai lavoratori"}
+            {returnToDashboard ? "Torna al Centro operativo" : "Torna ai lavoratori"}
           </Link>
         )}
       />
+
+      <OperationalArtifactStatus artifactId={worker.id} artifactType="WORKER" />
 
       <Card id="summary" size="sm">
         <CardHeader className="border-b">

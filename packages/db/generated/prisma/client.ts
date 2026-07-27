@@ -167,6 +167,46 @@ export type NotificationPreference = Prisma.NotificationPreferenceModel
  */
 export type DataControlJob = Prisma.DataControlJobModel
 /**
+ * Model OperationalProcess
+ *
+ */
+export type OperationalProcess = Prisma.OperationalProcessModel
+/**
+ * Model OperationalStep
+ *
+ */
+export type OperationalStep = Prisma.OperationalStepModel
+/**
+ * Model OperationalEvent
+ *
+ */
+export type OperationalEvent = Prisma.OperationalEventModel
+/**
+ * Model OperationalDecision
+ *
+ */
+export type OperationalDecision = Prisma.OperationalDecisionModel
+/**
+ * Model OperationalException
+ *
+ */
+export type OperationalException = Prisma.OperationalExceptionModel
+/**
+ * Model OperationalArtifactReference
+ *
+ */
+export type OperationalArtifactReference = Prisma.OperationalArtifactReferenceModel
+/**
+ * Model OperationalRuleSnapshot
+ *
+ */
+export type OperationalRuleSnapshot = Prisma.OperationalRuleSnapshotModel
+/**
+ * Model OperationalEffectReceipt
+ *
+ */
+export type OperationalEffectReceipt = Prisma.OperationalEffectReceiptModel
+/**
  * Model NotificationEmailDelivery
  *
  */

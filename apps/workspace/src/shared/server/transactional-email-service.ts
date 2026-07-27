@@ -411,14 +411,15 @@ export async function sendTransactionalEmail(input: {
   template: TransactionalEmailTemplate;
   idempotencyKey?: string;
 }): Promise<{ providerMessageId: string | null }> {
+  const sink = getE2eEmailSink();
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const from = process.env.RESEND_FROM_EMAIL?.trim();
   const replyTo = process.env.RESEND_REPLY_TO_EMAIL?.trim();
   const rendered = renderEmail(input);
 
+  if (sink) return sendToE2eEmailSink({ sink, ...input, rendered });
+
   if (!apiKey || !from) {
-    const sink = getE2eEmailSink();
-    if (sink) return sendToE2eEmailSink({ sink, ...input, rendered });
     throw new TransactionalEmailError("Email transazionali non configurate.");
   }
 

@@ -217,6 +217,14 @@ export type OrganizationWhereInput = {
   workerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentListRelationFilter
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentListRelationFilter
+  operationalProcesses?: Prisma.OperationalProcessListRelationFilter
+  operationalSteps?: Prisma.OperationalStepListRelationFilter
+  operationalEvents?: Prisma.OperationalEventListRelationFilter
+  operationalDecisions?: Prisma.OperationalDecisionListRelationFilter
+  operationalExceptions?: Prisma.OperationalExceptionListRelationFilter
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceListRelationFilter
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotListRelationFilter
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -253,6 +261,14 @@ export type OrganizationOrderByWithRelationInput = {
   workerUserLinks?: Prisma.WorkerUserLinkOrderByRelationAggregateInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentOrderByRelationAggregateInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentOrderByRelationAggregateInput
+  operationalProcesses?: Prisma.OperationalProcessOrderByRelationAggregateInput
+  operationalSteps?: Prisma.OperationalStepOrderByRelationAggregateInput
+  operationalEvents?: Prisma.OperationalEventOrderByRelationAggregateInput
+  operationalDecisions?: Prisma.OperationalDecisionOrderByRelationAggregateInput
+  operationalExceptions?: Prisma.OperationalExceptionOrderByRelationAggregateInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceOrderByRelationAggregateInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotOrderByRelationAggregateInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -292,6 +308,14 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   workerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentListRelationFilter
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentListRelationFilter
+  operationalProcesses?: Prisma.OperationalProcessListRelationFilter
+  operationalSteps?: Prisma.OperationalStepListRelationFilter
+  operationalEvents?: Prisma.OperationalEventListRelationFilter
+  operationalDecisions?: Prisma.OperationalDecisionListRelationFilter
+  operationalExceptions?: Prisma.OperationalExceptionListRelationFilter
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceListRelationFilter
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotListRelationFilter
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptListRelationFilter
 }, "id" | "code">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -351,6 +375,14 @@ export type OrganizationCreateInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -386,6 +418,14 @@ export type OrganizationUncheckedCreateInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -421,6 +461,14 @@ export type OrganizationUpdateInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -456,6 +504,14 @@ export type OrganizationUncheckedUpdateInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -839,6 +895,118 @@ export type OrganizationUpdateOneRequiredWithoutNotificationPreferencesNestedInp
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutNotificationPreferencesInput, Prisma.OrganizationUpdateWithoutNotificationPreferencesInput>, Prisma.OrganizationUncheckedUpdateWithoutNotificationPreferencesInput>
 }
 
+export type OrganizationCreateNestedOneWithoutOperationalProcessesInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalProcessesInput, Prisma.OrganizationUncheckedCreateWithoutOperationalProcessesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalProcessesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutOperationalProcessesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalProcessesInput, Prisma.OrganizationUncheckedCreateWithoutOperationalProcessesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalProcessesInput
+  upsert?: Prisma.OrganizationUpsertWithoutOperationalProcessesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutOperationalProcessesInput, Prisma.OrganizationUpdateWithoutOperationalProcessesInput>, Prisma.OrganizationUncheckedUpdateWithoutOperationalProcessesInput>
+}
+
+export type OrganizationCreateNestedOneWithoutOperationalStepsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalStepsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalStepsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalStepsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutOperationalStepsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalStepsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalStepsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalStepsInput
+  upsert?: Prisma.OrganizationUpsertWithoutOperationalStepsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutOperationalStepsInput, Prisma.OrganizationUpdateWithoutOperationalStepsInput>, Prisma.OrganizationUncheckedUpdateWithoutOperationalStepsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutOperationalEventsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalEventsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalEventsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalEventsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutOperationalEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalEventsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalEventsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalEventsInput
+  upsert?: Prisma.OrganizationUpsertWithoutOperationalEventsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutOperationalEventsInput, Prisma.OrganizationUpdateWithoutOperationalEventsInput>, Prisma.OrganizationUncheckedUpdateWithoutOperationalEventsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutOperationalDecisionsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalDecisionsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalDecisionsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalDecisionsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutOperationalDecisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalDecisionsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalDecisionsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalDecisionsInput
+  upsert?: Prisma.OrganizationUpsertWithoutOperationalDecisionsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutOperationalDecisionsInput, Prisma.OrganizationUpdateWithoutOperationalDecisionsInput>, Prisma.OrganizationUncheckedUpdateWithoutOperationalDecisionsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutOperationalExceptionsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalExceptionsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalExceptionsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalExceptionsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutOperationalExceptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalExceptionsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalExceptionsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalExceptionsInput
+  upsert?: Prisma.OrganizationUpsertWithoutOperationalExceptionsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutOperationalExceptionsInput, Prisma.OrganizationUpdateWithoutOperationalExceptionsInput>, Prisma.OrganizationUncheckedUpdateWithoutOperationalExceptionsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutOperationalArtifactRefsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalArtifactRefsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalArtifactRefsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalArtifactRefsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutOperationalArtifactRefsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalArtifactRefsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalArtifactRefsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalArtifactRefsInput
+  upsert?: Prisma.OrganizationUpsertWithoutOperationalArtifactRefsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutOperationalArtifactRefsInput, Prisma.OrganizationUpdateWithoutOperationalArtifactRefsInput>, Prisma.OrganizationUncheckedUpdateWithoutOperationalArtifactRefsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutOperationalRuleSnapshotsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalRuleSnapshotsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalRuleSnapshotsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalRuleSnapshotsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutOperationalRuleSnapshotsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalRuleSnapshotsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalRuleSnapshotsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalRuleSnapshotsInput
+  upsert?: Prisma.OrganizationUpsertWithoutOperationalRuleSnapshotsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutOperationalRuleSnapshotsInput, Prisma.OrganizationUpdateWithoutOperationalRuleSnapshotsInput>, Prisma.OrganizationUncheckedUpdateWithoutOperationalRuleSnapshotsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutOperationalEffectReceiptsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalEffectReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalEffectReceiptsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalEffectReceiptsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutOperationalEffectReceiptsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalEffectReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalEffectReceiptsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOperationalEffectReceiptsInput
+  upsert?: Prisma.OrganizationUpsertWithoutOperationalEffectReceiptsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutOperationalEffectReceiptsInput, Prisma.OrganizationUpdateWithoutOperationalEffectReceiptsInput>, Prisma.OrganizationUncheckedUpdateWithoutOperationalEffectReceiptsInput>
+}
+
 export type OrganizationCreateNestedOneWithoutNotificationEmailDeliveriesInput = {
   create?: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationEmailDeliveriesInput, Prisma.OrganizationUncheckedCreateWithoutNotificationEmailDeliveriesInput>
   connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutNotificationEmailDeliveriesInput
@@ -971,6 +1139,14 @@ export type OrganizationCreateWithoutCreatedByInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutCreatedByInput = {
@@ -1005,6 +1181,14 @@ export type OrganizationUncheckedCreateWithoutCreatedByInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutCreatedByInput = {
@@ -1077,6 +1261,14 @@ export type OrganizationCreateWithoutWorkersInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutWorkersInput = {
@@ -1111,6 +1303,14 @@ export type OrganizationUncheckedCreateWithoutWorkersInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutWorkersInput = {
@@ -1161,6 +1361,14 @@ export type OrganizationUpdateWithoutWorkersInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutWorkersInput = {
@@ -1195,6 +1403,14 @@ export type OrganizationUncheckedUpdateWithoutWorkersInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutJobSitesInput = {
@@ -1229,6 +1445,14 @@ export type OrganizationCreateWithoutJobSitesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutJobSitesInput = {
@@ -1263,6 +1487,14 @@ export type OrganizationUncheckedCreateWithoutJobSitesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutJobSitesInput = {
@@ -1313,6 +1545,14 @@ export type OrganizationUpdateWithoutJobSitesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutJobSitesInput = {
@@ -1347,6 +1587,14 @@ export type OrganizationUncheckedUpdateWithoutJobSitesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutWorkerUserLinksInput = {
@@ -1381,6 +1629,14 @@ export type OrganizationCreateWithoutWorkerUserLinksInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutWorkerUserLinksInput = {
@@ -1415,6 +1671,14 @@ export type OrganizationUncheckedCreateWithoutWorkerUserLinksInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutWorkerUserLinksInput = {
@@ -1465,6 +1729,14 @@ export type OrganizationUpdateWithoutWorkerUserLinksInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutWorkerUserLinksInput = {
@@ -1499,6 +1771,14 @@ export type OrganizationUncheckedUpdateWithoutWorkerUserLinksInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutJobSiteUserAssignmentsInput = {
@@ -1533,6 +1813,14 @@ export type OrganizationCreateWithoutJobSiteUserAssignmentsInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutJobSiteUserAssignmentsInput = {
@@ -1567,6 +1855,14 @@ export type OrganizationUncheckedCreateWithoutJobSiteUserAssignmentsInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutJobSiteUserAssignmentsInput = {
@@ -1617,6 +1913,14 @@ export type OrganizationUpdateWithoutJobSiteUserAssignmentsInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutJobSiteUserAssignmentsInput = {
@@ -1651,6 +1955,14 @@ export type OrganizationUncheckedUpdateWithoutJobSiteUserAssignmentsInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutJobSiteWorkerAssignmentsInput = {
@@ -1685,6 +1997,14 @@ export type OrganizationCreateWithoutJobSiteWorkerAssignmentsInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutJobSiteWorkerAssignmentsInput = {
@@ -1719,6 +2039,14 @@ export type OrganizationUncheckedCreateWithoutJobSiteWorkerAssignmentsInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutJobSiteWorkerAssignmentsInput = {
@@ -1769,6 +2097,14 @@ export type OrganizationUpdateWithoutJobSiteWorkerAssignmentsInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutJobSiteWorkerAssignmentsInput = {
@@ -1803,6 +2139,14 @@ export type OrganizationUncheckedUpdateWithoutJobSiteWorkerAssignmentsInput = {
   notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutDocumentTypesInput = {
@@ -1837,6 +2181,14 @@ export type OrganizationCreateWithoutDocumentTypesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDocumentTypesInput = {
@@ -1871,6 +2223,14 @@ export type OrganizationUncheckedCreateWithoutDocumentTypesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDocumentTypesInput = {
@@ -1921,6 +2281,14 @@ export type OrganizationUpdateWithoutDocumentTypesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDocumentTypesInput = {
@@ -1955,6 +2323,14 @@ export type OrganizationUncheckedUpdateWithoutDocumentTypesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutDocumentsInput = {
@@ -1989,6 +2365,14 @@ export type OrganizationCreateWithoutDocumentsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDocumentsInput = {
@@ -2023,6 +2407,14 @@ export type OrganizationUncheckedCreateWithoutDocumentsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDocumentsInput = {
@@ -2073,6 +2465,14 @@ export type OrganizationUpdateWithoutDocumentsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDocumentsInput = {
@@ -2107,6 +2507,14 @@ export type OrganizationUncheckedUpdateWithoutDocumentsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutDocumentVersionsInput = {
@@ -2141,6 +2549,14 @@ export type OrganizationCreateWithoutDocumentVersionsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDocumentVersionsInput = {
@@ -2175,6 +2591,14 @@ export type OrganizationUncheckedCreateWithoutDocumentVersionsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDocumentVersionsInput = {
@@ -2225,6 +2649,14 @@ export type OrganizationUpdateWithoutDocumentVersionsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDocumentVersionsInput = {
@@ -2259,6 +2691,14 @@ export type OrganizationUncheckedUpdateWithoutDocumentVersionsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutDocumentRequirementsInput = {
@@ -2293,6 +2733,14 @@ export type OrganizationCreateWithoutDocumentRequirementsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDocumentRequirementsInput = {
@@ -2327,6 +2775,14 @@ export type OrganizationUncheckedCreateWithoutDocumentRequirementsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDocumentRequirementsInput = {
@@ -2377,6 +2833,14 @@ export type OrganizationUpdateWithoutDocumentRequirementsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDocumentRequirementsInput = {
@@ -2411,6 +2875,14 @@ export type OrganizationUncheckedUpdateWithoutDocumentRequirementsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutDeadlinesInput = {
@@ -2445,6 +2917,14 @@ export type OrganizationCreateWithoutDeadlinesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDeadlinesInput = {
@@ -2479,6 +2959,14 @@ export type OrganizationUncheckedCreateWithoutDeadlinesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDeadlinesInput = {
@@ -2529,6 +3017,14 @@ export type OrganizationUpdateWithoutDeadlinesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDeadlinesInput = {
@@ -2563,6 +3059,14 @@ export type OrganizationUncheckedUpdateWithoutDeadlinesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutCalendarEventsInput = {
@@ -2597,6 +3101,14 @@ export type OrganizationCreateWithoutCalendarEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutCalendarEventsInput = {
@@ -2631,6 +3143,14 @@ export type OrganizationUncheckedCreateWithoutCalendarEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutCalendarEventsInput = {
@@ -2681,6 +3201,14 @@ export type OrganizationUpdateWithoutCalendarEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutCalendarEventsInput = {
@@ -2715,6 +3243,14 @@ export type OrganizationUncheckedUpdateWithoutCalendarEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutChecklistsInput = {
@@ -2749,6 +3285,14 @@ export type OrganizationCreateWithoutChecklistsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutChecklistsInput = {
@@ -2783,6 +3327,14 @@ export type OrganizationUncheckedCreateWithoutChecklistsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutChecklistsInput = {
@@ -2833,6 +3385,14 @@ export type OrganizationUpdateWithoutChecklistsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutChecklistsInput = {
@@ -2867,6 +3427,14 @@ export type OrganizationUncheckedUpdateWithoutChecklistsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutChecklistItemsInput = {
@@ -2901,6 +3469,14 @@ export type OrganizationCreateWithoutChecklistItemsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutChecklistItemsInput = {
@@ -2935,6 +3511,14 @@ export type OrganizationUncheckedCreateWithoutChecklistItemsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutChecklistItemsInput = {
@@ -2985,6 +3569,14 @@ export type OrganizationUpdateWithoutChecklistItemsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutChecklistItemsInput = {
@@ -3019,6 +3611,14 @@ export type OrganizationUncheckedUpdateWithoutChecklistItemsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutEvidenceInput = {
@@ -3053,6 +3653,14 @@ export type OrganizationCreateWithoutEvidenceInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutEvidenceInput = {
@@ -3087,6 +3695,14 @@ export type OrganizationUncheckedCreateWithoutEvidenceInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutEvidenceInput = {
@@ -3137,6 +3753,14 @@ export type OrganizationUpdateWithoutEvidenceInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutEvidenceInput = {
@@ -3171,6 +3795,14 @@ export type OrganizationUncheckedUpdateWithoutEvidenceInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutDocumentPackagesInput = {
@@ -3205,6 +3837,14 @@ export type OrganizationCreateWithoutDocumentPackagesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDocumentPackagesInput = {
@@ -3239,6 +3879,14 @@ export type OrganizationUncheckedCreateWithoutDocumentPackagesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDocumentPackagesInput = {
@@ -3289,6 +3937,14 @@ export type OrganizationUpdateWithoutDocumentPackagesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDocumentPackagesInput = {
@@ -3323,6 +3979,14 @@ export type OrganizationUncheckedUpdateWithoutDocumentPackagesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutDocumentPackageItemsInput = {
@@ -3357,6 +4021,14 @@ export type OrganizationCreateWithoutDocumentPackageItemsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDocumentPackageItemsInput = {
@@ -3391,6 +4063,14 @@ export type OrganizationUncheckedCreateWithoutDocumentPackageItemsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDocumentPackageItemsInput = {
@@ -3441,6 +4121,14 @@ export type OrganizationUpdateWithoutDocumentPackageItemsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDocumentPackageItemsInput = {
@@ -3475,6 +4163,14 @@ export type OrganizationUncheckedUpdateWithoutDocumentPackageItemsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutShareLinksInput = {
@@ -3509,6 +4205,14 @@ export type OrganizationCreateWithoutShareLinksInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutShareLinksInput = {
@@ -3543,6 +4247,14 @@ export type OrganizationUncheckedCreateWithoutShareLinksInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutShareLinksInput = {
@@ -3593,6 +4305,14 @@ export type OrganizationUpdateWithoutShareLinksInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutShareLinksInput = {
@@ -3627,6 +4347,14 @@ export type OrganizationUncheckedUpdateWithoutShareLinksInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutNotificationsInput = {
@@ -3661,6 +4389,14 @@ export type OrganizationCreateWithoutNotificationsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutNotificationsInput = {
@@ -3695,6 +4431,14 @@ export type OrganizationUncheckedCreateWithoutNotificationsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutNotificationsInput = {
@@ -3745,6 +4489,14 @@ export type OrganizationUpdateWithoutNotificationsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
@@ -3779,6 +4531,14 @@ export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutNotificationPreferencesInput = {
@@ -3813,6 +4573,14 @@ export type OrganizationCreateWithoutNotificationPreferencesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutNotificationPreferencesInput = {
@@ -3847,6 +4615,14 @@ export type OrganizationUncheckedCreateWithoutNotificationPreferencesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutNotificationPreferencesInput = {
@@ -3897,6 +4673,14 @@ export type OrganizationUpdateWithoutNotificationPreferencesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutNotificationPreferencesInput = {
@@ -3931,6 +4715,1486 @@ export type OrganizationUncheckedUpdateWithoutNotificationPreferencesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutOperationalProcessesInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutOperationalProcessesInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutOperationalProcessesInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalProcessesInput, Prisma.OrganizationUncheckedCreateWithoutOperationalProcessesInput>
+}
+
+export type OrganizationUpsertWithoutOperationalProcessesInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalProcessesInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalProcessesInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalProcessesInput, Prisma.OrganizationUncheckedCreateWithoutOperationalProcessesInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutOperationalProcessesInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalProcessesInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalProcessesInput>
+}
+
+export type OrganizationUpdateWithoutOperationalProcessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutOperationalProcessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutOperationalStepsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutOperationalStepsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutOperationalStepsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalStepsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalStepsInput>
+}
+
+export type OrganizationUpsertWithoutOperationalStepsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalStepsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalStepsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalStepsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalStepsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutOperationalStepsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalStepsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalStepsInput>
+}
+
+export type OrganizationUpdateWithoutOperationalStepsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutOperationalStepsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutOperationalEventsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutOperationalEventsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutOperationalEventsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalEventsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalEventsInput>
+}
+
+export type OrganizationUpsertWithoutOperationalEventsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalEventsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalEventsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalEventsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalEventsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutOperationalEventsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalEventsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalEventsInput>
+}
+
+export type OrganizationUpdateWithoutOperationalEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutOperationalEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutOperationalDecisionsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutOperationalDecisionsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutOperationalDecisionsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalDecisionsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalDecisionsInput>
+}
+
+export type OrganizationUpsertWithoutOperationalDecisionsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalDecisionsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalDecisionsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalDecisionsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalDecisionsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutOperationalDecisionsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalDecisionsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalDecisionsInput>
+}
+
+export type OrganizationUpdateWithoutOperationalDecisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutOperationalDecisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutOperationalExceptionsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutOperationalExceptionsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutOperationalExceptionsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalExceptionsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalExceptionsInput>
+}
+
+export type OrganizationUpsertWithoutOperationalExceptionsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalExceptionsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalExceptionsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalExceptionsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalExceptionsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutOperationalExceptionsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalExceptionsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalExceptionsInput>
+}
+
+export type OrganizationUpdateWithoutOperationalExceptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutOperationalExceptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutOperationalArtifactRefsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutOperationalArtifactRefsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutOperationalArtifactRefsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalArtifactRefsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalArtifactRefsInput>
+}
+
+export type OrganizationUpsertWithoutOperationalArtifactRefsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalArtifactRefsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalArtifactRefsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalArtifactRefsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalArtifactRefsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutOperationalArtifactRefsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalArtifactRefsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalArtifactRefsInput>
+}
+
+export type OrganizationUpdateWithoutOperationalArtifactRefsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutOperationalArtifactRefsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutOperationalRuleSnapshotsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutOperationalRuleSnapshotsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutOperationalRuleSnapshotsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalRuleSnapshotsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalRuleSnapshotsInput>
+}
+
+export type OrganizationUpsertWithoutOperationalRuleSnapshotsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalRuleSnapshotsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalRuleSnapshotsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalRuleSnapshotsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalRuleSnapshotsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutOperationalRuleSnapshotsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalRuleSnapshotsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalRuleSnapshotsInput>
+}
+
+export type OrganizationUpdateWithoutOperationalRuleSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutOperationalRuleSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutOperationalEffectReceiptsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutOperationalEffectReceiptsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documentTypes?: Prisma.DocumentTypeUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutOrganizationInput
+  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutOrganizationInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutOrganizationInput
+  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutOrganizationInput
+  checklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutOrganizationInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutOrganizationInput
+  shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutOperationalEffectReceiptsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalEffectReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalEffectReceiptsInput>
+}
+
+export type OrganizationUpsertWithoutOperationalEffectReceiptsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalEffectReceiptsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalEffectReceiptsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOperationalEffectReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutOperationalEffectReceiptsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutOperationalEffectReceiptsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutOperationalEffectReceiptsInput, Prisma.OrganizationUncheckedUpdateWithoutOperationalEffectReceiptsInput>
+}
+
+export type OrganizationUpdateWithoutOperationalEffectReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutOperationalEffectReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentTypes?: Prisma.DocumentTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentRequirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutOrganizationNestedInput
+  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutOrganizationNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutOrganizationNestedInput
+  checklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentPackageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutOrganizationNestedInput
+  shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutNotificationEmailDeliveriesInput = {
@@ -3965,6 +6229,14 @@ export type OrganizationCreateWithoutNotificationEmailDeliveriesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutNotificationEmailDeliveriesInput = {
@@ -3999,6 +6271,14 @@ export type OrganizationUncheckedCreateWithoutNotificationEmailDeliveriesInput =
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutNotificationEmailDeliveriesInput = {
@@ -4049,6 +6329,14 @@ export type OrganizationUpdateWithoutNotificationEmailDeliveriesInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutNotificationEmailDeliveriesInput = {
@@ -4083,6 +6371,14 @@ export type OrganizationUncheckedUpdateWithoutNotificationEmailDeliveriesInput =
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutMembershipsInput = {
@@ -4117,6 +6413,14 @@ export type OrganizationCreateWithoutMembershipsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembershipsInput = {
@@ -4151,6 +6455,14 @@ export type OrganizationUncheckedCreateWithoutMembershipsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembershipsInput = {
@@ -4201,6 +6513,14 @@ export type OrganizationUpdateWithoutMembershipsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
@@ -4235,6 +6555,14 @@ export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvitationsInput = {
@@ -4269,6 +6597,14 @@ export type OrganizationCreateWithoutInvitationsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvitationsInput = {
@@ -4303,6 +6639,14 @@ export type OrganizationUncheckedCreateWithoutInvitationsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvitationsInput = {
@@ -4353,6 +6697,14 @@ export type OrganizationUpdateWithoutInvitationsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
@@ -4387,6 +6739,14 @@ export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutSupportSessionsInput = {
@@ -4421,6 +6781,14 @@ export type OrganizationCreateWithoutSupportSessionsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutSupportSessionsInput = {
@@ -4455,6 +6823,14 @@ export type OrganizationUncheckedCreateWithoutSupportSessionsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutSupportSessionsInput = {
@@ -4505,6 +6881,14 @@ export type OrganizationUpdateWithoutSupportSessionsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutSupportSessionsInput = {
@@ -4539,6 +6923,14 @@ export type OrganizationUncheckedUpdateWithoutSupportSessionsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutSupportEventsInput = {
@@ -4573,6 +6965,14 @@ export type OrganizationCreateWithoutSupportEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutSupportEventsInput = {
@@ -4607,6 +7007,14 @@ export type OrganizationUncheckedCreateWithoutSupportEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutSupportEventsInput = {
@@ -4657,6 +7065,14 @@ export type OrganizationUpdateWithoutSupportEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutSupportEventsInput = {
@@ -4691,6 +7107,14 @@ export type OrganizationUncheckedUpdateWithoutSupportEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutProductAuditEventsInput = {
@@ -4725,6 +7149,14 @@ export type OrganizationCreateWithoutProductAuditEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutProductAuditEventsInput = {
@@ -4759,6 +7191,14 @@ export type OrganizationUncheckedCreateWithoutProductAuditEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutProductAuditEventsInput = {
@@ -4809,6 +7249,14 @@ export type OrganizationUpdateWithoutProductAuditEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutProductAuditEventsInput = {
@@ -4843,6 +7291,14 @@ export type OrganizationUncheckedUpdateWithoutProductAuditEventsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutMfaRecoveryRequestsInput = {
@@ -4877,6 +7333,14 @@ export type OrganizationCreateWithoutMfaRecoveryRequestsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMfaRecoveryRequestsInput = {
@@ -4911,6 +7375,14 @@ export type OrganizationUncheckedCreateWithoutMfaRecoveryRequestsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalSteps?: Prisma.OperationalStepUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEvents?: Prisma.OperationalEventUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedCreateNestedManyWithoutOrganizationInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMfaRecoveryRequestsInput = {
@@ -4961,6 +7433,14 @@ export type OrganizationUpdateWithoutMfaRecoveryRequestsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMfaRecoveryRequestsInput = {
@@ -4995,6 +7475,14 @@ export type OrganizationUncheckedUpdateWithoutMfaRecoveryRequestsInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyCreatedByInput = {
@@ -5037,6 +7525,14 @@ export type OrganizationUpdateWithoutCreatedByInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutCreatedByInput = {
@@ -5071,6 +7567,14 @@ export type OrganizationUncheckedUpdateWithoutCreatedByInput = {
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalProcesses?: Prisma.OperationalProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalSteps?: Prisma.OperationalStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEvents?: Prisma.OperationalEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalDecisions?: Prisma.OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalExceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalArtifactRefs?: Prisma.OperationalArtifactReferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalRuleSnapshots?: Prisma.OperationalRuleSnapshotUncheckedUpdateManyWithoutOrganizationNestedInput
+  operationalEffectReceipts?: Prisma.OperationalEffectReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateManyWithoutCreatedByInput = {
@@ -5113,6 +7617,14 @@ export type OrganizationCountOutputType = {
   workerUserLinks: number
   jobSiteUserAssignments: number
   jobSiteWorkerAssignments: number
+  operationalProcesses: number
+  operationalSteps: number
+  operationalEvents: number
+  operationalDecisions: number
+  operationalExceptions: number
+  operationalArtifactRefs: number
+  operationalRuleSnapshots: number
+  operationalEffectReceipts: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5142,6 +7654,14 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   workerUserLinks?: boolean | OrganizationCountOutputTypeCountWorkerUserLinksArgs
   jobSiteUserAssignments?: boolean | OrganizationCountOutputTypeCountJobSiteUserAssignmentsArgs
   jobSiteWorkerAssignments?: boolean | OrganizationCountOutputTypeCountJobSiteWorkerAssignmentsArgs
+  operationalProcesses?: boolean | OrganizationCountOutputTypeCountOperationalProcessesArgs
+  operationalSteps?: boolean | OrganizationCountOutputTypeCountOperationalStepsArgs
+  operationalEvents?: boolean | OrganizationCountOutputTypeCountOperationalEventsArgs
+  operationalDecisions?: boolean | OrganizationCountOutputTypeCountOperationalDecisionsArgs
+  operationalExceptions?: boolean | OrganizationCountOutputTypeCountOperationalExceptionsArgs
+  operationalArtifactRefs?: boolean | OrganizationCountOutputTypeCountOperationalArtifactRefsArgs
+  operationalRuleSnapshots?: boolean | OrganizationCountOutputTypeCountOperationalRuleSnapshotsArgs
+  operationalEffectReceipts?: boolean | OrganizationCountOutputTypeCountOperationalEffectReceiptsArgs
 }
 
 /**
@@ -5336,6 +7856,62 @@ export type OrganizationCountOutputTypeCountJobSiteWorkerAssignmentsArgs<ExtArgs
   where?: Prisma.JobSiteWorkerAssignmentWhereInput
 }
 
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountOperationalProcessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationalProcessWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountOperationalStepsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationalStepWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountOperationalEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationalEventWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountOperationalDecisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationalDecisionWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountOperationalExceptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationalExceptionWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountOperationalArtifactRefsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationalArtifactReferenceWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountOperationalRuleSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationalRuleSnapshotWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountOperationalEffectReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationalEffectReceiptWhereInput
+}
+
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -5371,6 +7947,14 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   workerUserLinks?: boolean | Prisma.Organization$workerUserLinksArgs<ExtArgs>
   jobSiteUserAssignments?: boolean | Prisma.Organization$jobSiteUserAssignmentsArgs<ExtArgs>
   jobSiteWorkerAssignments?: boolean | Prisma.Organization$jobSiteWorkerAssignmentsArgs<ExtArgs>
+  operationalProcesses?: boolean | Prisma.Organization$operationalProcessesArgs<ExtArgs>
+  operationalSteps?: boolean | Prisma.Organization$operationalStepsArgs<ExtArgs>
+  operationalEvents?: boolean | Prisma.Organization$operationalEventsArgs<ExtArgs>
+  operationalDecisions?: boolean | Prisma.Organization$operationalDecisionsArgs<ExtArgs>
+  operationalExceptions?: boolean | Prisma.Organization$operationalExceptionsArgs<ExtArgs>
+  operationalArtifactRefs?: boolean | Prisma.Organization$operationalArtifactRefsArgs<ExtArgs>
+  operationalRuleSnapshots?: boolean | Prisma.Organization$operationalRuleSnapshotsArgs<ExtArgs>
+  operationalEffectReceipts?: boolean | Prisma.Organization$operationalEffectReceiptsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -5432,6 +8016,14 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   workerUserLinks?: boolean | Prisma.Organization$workerUserLinksArgs<ExtArgs>
   jobSiteUserAssignments?: boolean | Prisma.Organization$jobSiteUserAssignmentsArgs<ExtArgs>
   jobSiteWorkerAssignments?: boolean | Prisma.Organization$jobSiteWorkerAssignmentsArgs<ExtArgs>
+  operationalProcesses?: boolean | Prisma.Organization$operationalProcessesArgs<ExtArgs>
+  operationalSteps?: boolean | Prisma.Organization$operationalStepsArgs<ExtArgs>
+  operationalEvents?: boolean | Prisma.Organization$operationalEventsArgs<ExtArgs>
+  operationalDecisions?: boolean | Prisma.Organization$operationalDecisionsArgs<ExtArgs>
+  operationalExceptions?: boolean | Prisma.Organization$operationalExceptionsArgs<ExtArgs>
+  operationalArtifactRefs?: boolean | Prisma.Organization$operationalArtifactRefsArgs<ExtArgs>
+  operationalRuleSnapshots?: boolean | Prisma.Organization$operationalRuleSnapshotsArgs<ExtArgs>
+  operationalEffectReceipts?: boolean | Prisma.Organization$operationalEffectReceiptsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5471,6 +8063,14 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     workerUserLinks: Prisma.$WorkerUserLinkPayload<ExtArgs>[]
     jobSiteUserAssignments: Prisma.$JobSiteUserAssignmentPayload<ExtArgs>[]
     jobSiteWorkerAssignments: Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>[]
+    operationalProcesses: Prisma.$OperationalProcessPayload<ExtArgs>[]
+    operationalSteps: Prisma.$OperationalStepPayload<ExtArgs>[]
+    operationalEvents: Prisma.$OperationalEventPayload<ExtArgs>[]
+    operationalDecisions: Prisma.$OperationalDecisionPayload<ExtArgs>[]
+    operationalExceptions: Prisma.$OperationalExceptionPayload<ExtArgs>[]
+    operationalArtifactRefs: Prisma.$OperationalArtifactReferencePayload<ExtArgs>[]
+    operationalRuleSnapshots: Prisma.$OperationalRuleSnapshotPayload<ExtArgs>[]
+    operationalEffectReceipts: Prisma.$OperationalEffectReceiptPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -5900,6 +8500,14 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   workerUserLinks<T extends Prisma.Organization$workerUserLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$workerUserLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkerUserLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   jobSiteUserAssignments<T extends Prisma.Organization$jobSiteUserAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$jobSiteUserAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteUserAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   jobSiteWorkerAssignments<T extends Prisma.Organization$jobSiteWorkerAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$jobSiteWorkerAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  operationalProcesses<T extends Prisma.Organization$operationalProcessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$operationalProcessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationalProcessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  operationalSteps<T extends Prisma.Organization$operationalStepsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$operationalStepsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationalStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  operationalEvents<T extends Prisma.Organization$operationalEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$operationalEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationalEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  operationalDecisions<T extends Prisma.Organization$operationalDecisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$operationalDecisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationalDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  operationalExceptions<T extends Prisma.Organization$operationalExceptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$operationalExceptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationalExceptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  operationalArtifactRefs<T extends Prisma.Organization$operationalArtifactRefsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$operationalArtifactRefsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationalArtifactReferencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  operationalRuleSnapshots<T extends Prisma.Organization$operationalRuleSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$operationalRuleSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationalRuleSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  operationalEffectReceipts<T extends Prisma.Organization$operationalEffectReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$operationalEffectReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationalEffectReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6976,6 +9584,198 @@ export type Organization$jobSiteWorkerAssignmentsArgs<ExtArgs extends runtime.Ty
   take?: number
   skip?: number
   distinct?: Prisma.JobSiteWorkerAssignmentScalarFieldEnum | Prisma.JobSiteWorkerAssignmentScalarFieldEnum[]
+}
+
+/**
+ * Organization.operationalProcesses
+ */
+export type Organization$operationalProcessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationalProcess
+   */
+  select?: Prisma.OperationalProcessSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationalProcess
+   */
+  omit?: Prisma.OperationalProcessOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationalProcessInclude<ExtArgs> | null
+  where?: Prisma.OperationalProcessWhereInput
+  orderBy?: Prisma.OperationalProcessOrderByWithRelationInput | Prisma.OperationalProcessOrderByWithRelationInput[]
+  cursor?: Prisma.OperationalProcessWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationalProcessScalarFieldEnum | Prisma.OperationalProcessScalarFieldEnum[]
+}
+
+/**
+ * Organization.operationalSteps
+ */
+export type Organization$operationalStepsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationalStep
+   */
+  select?: Prisma.OperationalStepSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationalStep
+   */
+  omit?: Prisma.OperationalStepOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationalStepInclude<ExtArgs> | null
+  where?: Prisma.OperationalStepWhereInput
+  orderBy?: Prisma.OperationalStepOrderByWithRelationInput | Prisma.OperationalStepOrderByWithRelationInput[]
+  cursor?: Prisma.OperationalStepWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationalStepScalarFieldEnum | Prisma.OperationalStepScalarFieldEnum[]
+}
+
+/**
+ * Organization.operationalEvents
+ */
+export type Organization$operationalEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationalEvent
+   */
+  select?: Prisma.OperationalEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationalEvent
+   */
+  omit?: Prisma.OperationalEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationalEventInclude<ExtArgs> | null
+  where?: Prisma.OperationalEventWhereInput
+  orderBy?: Prisma.OperationalEventOrderByWithRelationInput | Prisma.OperationalEventOrderByWithRelationInput[]
+  cursor?: Prisma.OperationalEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationalEventScalarFieldEnum | Prisma.OperationalEventScalarFieldEnum[]
+}
+
+/**
+ * Organization.operationalDecisions
+ */
+export type Organization$operationalDecisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationalDecision
+   */
+  select?: Prisma.OperationalDecisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationalDecision
+   */
+  omit?: Prisma.OperationalDecisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationalDecisionInclude<ExtArgs> | null
+  where?: Prisma.OperationalDecisionWhereInput
+  orderBy?: Prisma.OperationalDecisionOrderByWithRelationInput | Prisma.OperationalDecisionOrderByWithRelationInput[]
+  cursor?: Prisma.OperationalDecisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationalDecisionScalarFieldEnum | Prisma.OperationalDecisionScalarFieldEnum[]
+}
+
+/**
+ * Organization.operationalExceptions
+ */
+export type Organization$operationalExceptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationalException
+   */
+  select?: Prisma.OperationalExceptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationalException
+   */
+  omit?: Prisma.OperationalExceptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationalExceptionInclude<ExtArgs> | null
+  where?: Prisma.OperationalExceptionWhereInput
+  orderBy?: Prisma.OperationalExceptionOrderByWithRelationInput | Prisma.OperationalExceptionOrderByWithRelationInput[]
+  cursor?: Prisma.OperationalExceptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationalExceptionScalarFieldEnum | Prisma.OperationalExceptionScalarFieldEnum[]
+}
+
+/**
+ * Organization.operationalArtifactRefs
+ */
+export type Organization$operationalArtifactRefsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationalArtifactReference
+   */
+  select?: Prisma.OperationalArtifactReferenceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationalArtifactReference
+   */
+  omit?: Prisma.OperationalArtifactReferenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationalArtifactReferenceInclude<ExtArgs> | null
+  where?: Prisma.OperationalArtifactReferenceWhereInput
+  orderBy?: Prisma.OperationalArtifactReferenceOrderByWithRelationInput | Prisma.OperationalArtifactReferenceOrderByWithRelationInput[]
+  cursor?: Prisma.OperationalArtifactReferenceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationalArtifactReferenceScalarFieldEnum | Prisma.OperationalArtifactReferenceScalarFieldEnum[]
+}
+
+/**
+ * Organization.operationalRuleSnapshots
+ */
+export type Organization$operationalRuleSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationalRuleSnapshot
+   */
+  select?: Prisma.OperationalRuleSnapshotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationalRuleSnapshot
+   */
+  omit?: Prisma.OperationalRuleSnapshotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationalRuleSnapshotInclude<ExtArgs> | null
+  where?: Prisma.OperationalRuleSnapshotWhereInput
+  orderBy?: Prisma.OperationalRuleSnapshotOrderByWithRelationInput | Prisma.OperationalRuleSnapshotOrderByWithRelationInput[]
+  cursor?: Prisma.OperationalRuleSnapshotWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationalRuleSnapshotScalarFieldEnum | Prisma.OperationalRuleSnapshotScalarFieldEnum[]
+}
+
+/**
+ * Organization.operationalEffectReceipts
+ */
+export type Organization$operationalEffectReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationalEffectReceipt
+   */
+  select?: Prisma.OperationalEffectReceiptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationalEffectReceipt
+   */
+  omit?: Prisma.OperationalEffectReceiptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationalEffectReceiptInclude<ExtArgs> | null
+  where?: Prisma.OperationalEffectReceiptWhereInput
+  orderBy?: Prisma.OperationalEffectReceiptOrderByWithRelationInput | Prisma.OperationalEffectReceiptOrderByWithRelationInput[]
+  cursor?: Prisma.OperationalEffectReceiptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationalEffectReceiptScalarFieldEnum | Prisma.OperationalEffectReceiptScalarFieldEnum[]
 }
 
 /**

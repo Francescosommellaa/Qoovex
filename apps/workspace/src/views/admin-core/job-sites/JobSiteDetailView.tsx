@@ -96,7 +96,7 @@ export function JobSiteDetailView({
         action={(
           <Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} data-link="plain" href={returnToDashboard ? "/dashboard" : "/job-sites"}>
             <IconArrowLeft aria-hidden="true" />
-            {returnToDashboard ? "Torna a Da fare" : "Torna ai cantieri"}
+            {returnToDashboard ? "Torna al Centro operativo" : "Torna ai cantieri"}
           </Link>
         )}
       />

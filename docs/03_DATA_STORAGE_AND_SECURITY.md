@@ -2,24 +2,26 @@
 
 ## Stato attuale verificato
 
-Prisma salva record, relazioni, stati, permessi, scadenze e audit. Vercel Blob privato salva file binari; DocumentVersion ed Evidence conservano metadati e blob key. Download e condivisione passano da endpoint autorizzati senza esporre blob key, token hash o URL permanenti.
+Prisma conserva record, relazioni, stati e audit; Vercel Blob privato conserva i binari. Il motore non salva contenuto file, Blob key, token, URL firmati, credenziali, stack trace o dati sensibili non necessari.
 
-Il repository contiene nove migration canoniche, da `20260712010000_single_company_baseline` a `20260725010000_add_session_account_user_indexes`. La presenza dei file non prova lo stato applicato di Local, Preview o Production: ogni ambiente deve essere verificato separatamente con i guardrail di `packages/db`. Le migration applicate sono immutabili; non usare `migrate resolve`, `db push` o reset per nascondere divergenze.
+Il repository contiene dieci migration canoniche, fino a `20260726010000_operational_engine_phase_3`. La decima migration e additiva ed e stata applicata e verificata soltanto sul database locale guardato. Nessun ambiente Preview o Production e dichiarato allineato.
 
-Il dominio corrente include tassonomia e sensibilita documentale, CalendarEvent, fase operativa dei cantieri e relazione invito-lavoratore. I record legacy non vengono riclassificati o backfillati per deduzione. Auth, MFA, rate limit, support session, audit e protezioni HTTP restano nel workspace.
+`OperationalEvent` e append-only per servizio e usa `eventKey` idempotente. `OperationalArtifactReference` valida tipo, Azienda e risorsa. `OperationalRuleSnapshot` conserva uno snapshot minimizzato e immutabile dei `DocumentRequirement` usati; modifiche successive non riscrivono i run aperti. `OperationalEffectReceipt` impedisce effetti equivalenti duplicati.
 
-## Direzione approvata
+## Garanzie runtime implementate
 
-Un processo futuro deve essere persistente, riprendibile e idempotente. Evento, processo e step richiedono chiavi idempotenti distinte; claim e completamento devono essere atomici; un worker obsoleto non puo completare dopo una nuova acquisizione. Replay e riconciliazione aggiungono storia e aggiornano lo stato corrente senza riscrivere il passato.
+- idempotency key univoca per Azienda e processo;
+- step univoci per processo;
+- claim token, lease di cinque minuti e fencing al completamento;
+- massimo cinque tentativi e backoff 1/5/15/60 minuti;
+- eventi e payload allow-listed/minimizzati;
+- query e mutazioni sempre tenant-scoped;
+- timeline utente separata dall'audit tecnico.
 
-Le regole validate devono essere versionate e il processo deve conservare quale versione ha applicato. Gli output restano nelle entita dominio esistenti; la persistenza di processo conserva riferimenti autorizzati, non copie di file o segreti.
+## Specifiche non implementate
 
-La timeline operativa deve essere minimizzata. Puo conservare riepiloghi, attori, fonti, affidabilita, impatto, decisioni e riferimenti dominio; non conserva contenuti completi, token, blob key, URL permanenti, credenziali, stack trace, body email o dati sensibili non necessari.
-
-## Specifiche concettuali non implementate
-
-I concetti di definizione, run, step, evento, proposta, decisione, eccezione e riferimento artefatto non corrispondono a modelli Prisma. Stati, indici, vincoli, payload, retention e compensazioni non sono approvati.
+Non sono implementati retention automatica dedicata, cifratura applicativa aggiuntiva, indicizzazione del contenuto, OCR/AI, compensazioni generali o export di processo.
 
 ## Decisioni aperte e hard stop
 
-Richiedono decisione esplicita: schema e migration, versionamento concreto, idempotency key, fencing token, retention di timeline/eventi, trattamento dei documenti sensibili, indicizzazione, cifratura aggiuntiva, compensazioni, provider OCR/AI e subprocessors. Non introdurre provider DB o storage alternativi.
+Retention, ricerca, provider, trattamento ulteriore dei dati sensibili e deploy remoto restano decisioni separate. Non usare `db push`, reset o `migrate resolve` per aggirare cronologia o drift.
