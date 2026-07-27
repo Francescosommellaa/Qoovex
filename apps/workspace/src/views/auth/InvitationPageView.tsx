@@ -16,6 +16,8 @@ import styles from "./AuthPages.module.css";
 
 const roleLabels: Record<Exclude<OrganizationRole, "OWNER">, string> = {
   ADMIN: "Amministratore",
+  MEMBER: "Collaboratore",
+  VIEWER: "Visualizzatore",
   SAFETY_CONSULTANT: "Consulente sicurezza",
   SITE_MANAGER: "Responsabile cantiere",
   WORKER: "Lavoratore",

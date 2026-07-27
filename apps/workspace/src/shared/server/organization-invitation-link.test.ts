@@ -38,7 +38,12 @@ vi.mock("@shared/server/access-context-service", () => ({
   getContextOrganizationId: mocks.getContextOrganizationId,
   requireIdentity: vi.fn(),
 }));
-vi.mock("@shared/server/authorization-policy", () => ({ canInviteRole: mocks.canInviteRole }));
+vi.mock("@shared/server/authorization-policy", () => ({
+  canInviteRole: mocks.canInviteRole,
+  getPermissionsForPreset: () => ["organization:read", "documents:upload"],
+  getPermissionsForRole: () => ["organization:read"],
+  sanitizeOrganizationPermissions: (values: string[]) => values,
+}));
 vi.mock("@shared/server/transactional-email-service", () => ({ sendTransactionalEmail: mocks.sendTransactionalEmail }));
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
 

@@ -1,7 +1,7 @@
 import "server-only";
 
-import { db } from "@qoovex/db";
-import type { DocumentPackageItemType, DocumentPackageStatus } from "@qoovex/types";
+import { db, Prisma } from "@qoovex/db";
+import type { DocumentPackageEffectiveState, DocumentPackageItemType, DocumentPackageStatus } from "@qoovex/types";
 import { documentPackageItemTypes, documentPackageStatuses } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 import { requirePermission } from "@shared/server/access-context-service";
@@ -44,12 +44,48 @@ const packageShareLinkSelect = {
   id: true,
   organizationId: true,
   documentPackageId: true,
+  revisionId: true,
+  proposalId: true,
+  purpose: true,
+  recipientLabel: true,
+  allowDownload: true,
   expiresAt: true,
+  expiredAt: true,
   revokedAt: true,
   createdById: true,
   createdAt: true,
   lastAccessedAt: true,
 } as const;
+
+const packageControlSelect = {
+  shareProposals: { select: { status: true }, orderBy: [{ createdAt: "desc" }, { id: "desc" }], take: 1 },
+  shareLinks: { select: { revokedAt: true, expiredAt: true, expiresAt: true, revision: { select: { preparedAt: true } } }, orderBy: [{ createdAt: "desc" }, { id: "desc" }], take: 20 },
+} satisfies Prisma.DocumentPackageSelect;
+
+function withEffectiveState<T extends {
+  status: DocumentPackageStatus;
+  archivedAt: Date | null;
+  updatedAt: Date;
+  shareProposals: Array<{ status: "PREPARING" | "READY_FOR_REVIEW" | "BLOCKED" | "APPROVED" | "PUBLISHED" }>;
+  shareLinks: Array<{ revokedAt: Date | null; expiredAt: Date | null; expiresAt: Date | null; revision: { preparedAt: Date } }>;
+}>(documentPackage: T) {
+  const { shareProposals, shareLinks, ...result } = documentPackage;
+  const now = Date.now();
+  let effectiveState: DocumentPackageEffectiveState = documentPackage.status;
+  if (documentPackage.archivedAt) effectiveState = "ARCHIVED";
+  else {
+    const active = shareLinks.find((link) => !link.revokedAt && !link.expiredAt && (!link.expiresAt || link.expiresAt.getTime() > now));
+    if (active && documentPackage.updatedAt.getTime() > active.revision.preparedAt.getTime()) effectiveState = "UPDATED_AFTER_SHARING";
+    else if (active) effectiveState = "SHARED";
+    else if (shareLinks.length && shareLinks.every((link) => Boolean(link.revokedAt))) effectiveState = "REVOKED";
+    else if (shareLinks.length && shareLinks.every((link) => Boolean(link.expiredAt) || Boolean(link.expiresAt && link.expiresAt.getTime() <= now))) effectiveState = "EXPIRED";
+    else if (shareProposals[0]?.status === "PREPARING") effectiveState = "PREPARING";
+    else if (shareProposals[0]?.status === "BLOCKED") effectiveState = "INCOMPLETE";
+    else if (shareProposals[0]?.status === "READY_FOR_REVIEW") effectiveState = "READY_FOR_REVIEW";
+    else if (shareProposals[0]?.status === "APPROVED") effectiveState = "APPROVED";
+  }
+  return { ...result, effectiveState };
+}
 
 export interface ListDocumentPackagesInput {
   jobSiteId?: unknown;
@@ -260,14 +296,18 @@ export async function listDocumentPackagesWithDetails(input: ListDocumentPackage
       select: {
         ...documentPackageSelect,
         items: { select: packageItemSelect, orderBy: [{ position: "asc" }, { createdAt: "asc" }] },
-        shareLinks: { select: packageShareLinkSelect, orderBy: { createdAt: "desc" } },
+        shareLinks: { select: { ...packageShareLinkSelect, revision: { select: { preparedAt: true } } }, orderBy: { createdAt: "desc" } },
+        shareProposals: packageControlSelect.shareProposals,
       },
       orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
       ...(input.take === undefined ? {} : { take: input.take }),
       ...(input.skip === undefined ? {} : { skip: input.skip }),
     });
     await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-packages" });
-    return packages;
+    return packages.map((documentPackage) => {
+      const effective = withEffectiveState(documentPackage);
+      return { ...effective, shareLinks: documentPackage.shareLinks.map(({ revision: _revision, ...link }) => link) };
+    });
   }
 
   const packages = await db.documentPackage.findMany({
@@ -275,13 +315,14 @@ export async function listDocumentPackagesWithDetails(input: ListDocumentPackage
     select: {
       ...documentPackageSelect,
       items: { select: packageItemSelect, orderBy: [{ position: "asc" }, { createdAt: "asc" }] },
+      ...packageControlSelect,
     },
     orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
     ...(input.take === undefined ? {} : { take: input.take }),
     ...(input.skip === undefined ? {} : { skip: input.skip }),
   });
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-packages" });
-  return packages.map((documentPackage) => ({ ...documentPackage, shareLinks: [] }));
+  return packages.map((documentPackage) => ({ ...withEffectiveState(documentPackage), shareLinks: [] }));
 }
 
 export async function getDocumentPackage(packageId: string) {
@@ -291,11 +332,12 @@ export async function getDocumentPackage(packageId: string) {
     select: {
       ...documentPackageSelect,
       items: { select: packageItemSelect, orderBy: [{ position: "asc" }, { createdAt: "asc" }] },
+      ...packageControlSelect,
     },
   });
   if (!documentPackage) throw new AccessError("Pacchetto documentale non trovato.", 404);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-package", resourceId: documentPackage.id });
-  return documentPackage;
+  return withEffectiveState(documentPackage);
 }
 
 export async function createDocumentPackage(input: CreateDocumentPackageInput) {
@@ -330,6 +372,7 @@ export async function updateDocumentPackage(packageId: string, input: UpdateDocu
   if (input.jobSiteId !== undefined) data.jobSiteId = await assertActiveJobSite(organizationId, trimOptionalId(input.jobSiteId, "Cantiere"));
   if (input.status !== undefined) data.status = parseEditablePackageStatus(input.status);
   if (!Object.keys(data).length) throw new AccessError("Nessun dato pacchetto da aggiornare.", 409);
+  if (existing.status === "SHARED" && input.status === undefined) data.status = "DRAFT";
 
   const documentPackage = await db.documentPackage.update({ where: { id: existing.id }, data, select: documentPackageSelect });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document-package", resourceId: documentPackage.id });
@@ -396,9 +439,13 @@ export async function addDocumentPackageItem(packageId: string, input: AddDocume
   if (duplicate) throw new AccessError("Elemento gia presente nel pacchetto.", 409);
   const position = parseOptionalPosition(input.position) ?? await nextPackageItemPosition(organizationId, documentPackage.id);
 
-  const item = await db.documentPackageItem.create({
-    data: { organizationId, documentPackageId: documentPackage.id, ...data, position },
-    select: packageItemSelect,
+  const item = await db.$transaction(async (tx) => {
+    const created = await tx.documentPackageItem.create({
+      data: { organizationId, documentPackageId: documentPackage.id, ...data, position },
+      select: packageItemSelect,
+    });
+    await tx.documentPackage.updateMany({ where: { id: documentPackage.id, organizationId, status: { in: ["SHARED", "READY_FOR_REVIEW"] } }, data: { status: "DRAFT" } });
+    return created;
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document-package-item", resourceId: item.id });
   await recordProductAuditEventBestEffort({
@@ -417,7 +464,11 @@ export async function updateDocumentPackageItem(packageId: string, itemId: strin
   await findActivePackage(organizationId, packageId);
   const existing = await findPackageItem(organizationId, packageId, itemId);
   const position = parseRequiredPosition(input.position);
-  const item = await db.documentPackageItem.update({ where: { id: existing.id }, data: { position }, select: packageItemSelect });
+  const item = await db.$transaction(async (tx) => {
+    const updated = await tx.documentPackageItem.update({ where: { id: existing.id }, data: { position }, select: packageItemSelect });
+    await tx.documentPackage.updateMany({ where: { id: packageId, organizationId, status: { in: ["SHARED", "READY_FOR_REVIEW"] } }, data: { status: "DRAFT" } });
+    return updated;
+  });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document-package-item", resourceId: item.id });
   return item;
 }
@@ -427,7 +478,11 @@ export async function removeDocumentPackageItem(packageId: string, itemId: strin
   await findActivePackage(organizationId, packageId);
   const existing = await findPackageItem(organizationId, packageId, itemId);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "document-package-item", resourceId: existing.id });
-  const item = await db.documentPackageItem.delete({ where: { id: existing.id }, select: packageItemSelect });
+  const item = await db.$transaction(async (tx) => {
+    const removed = await tx.documentPackageItem.delete({ where: { id: existing.id }, select: packageItemSelect });
+    await tx.documentPackage.updateMany({ where: { id: packageId, organizationId, status: { in: ["SHARED", "READY_FOR_REVIEW"] } }, data: { status: "DRAFT" } });
+    return removed;
+  });
   await recordProductAuditEventBestEffort({
     organizationId,
     ...auditActorFromContext(context, actorRole),

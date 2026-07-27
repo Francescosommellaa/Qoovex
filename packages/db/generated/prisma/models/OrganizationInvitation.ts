@@ -30,11 +30,14 @@ export type OrganizationInvitationMinAggregateOutputType = {
   workerId: string | null
   email: string | null
   role: $Enums.OrganizationRole | null
+  preset: $Enums.OrganizationAccessPreset | null
+  scopeMode: $Enums.OrganizationScopeMode | null
   tokenHash: string | null
   invitedById: string | null
   expiresAt: Date | null
   acceptedAt: Date | null
   revokedAt: Date | null
+  accessExpiresAt: Date | null
   createdAt: Date | null
 }
 
@@ -44,11 +47,14 @@ export type OrganizationInvitationMaxAggregateOutputType = {
   workerId: string | null
   email: string | null
   role: $Enums.OrganizationRole | null
+  preset: $Enums.OrganizationAccessPreset | null
+  scopeMode: $Enums.OrganizationScopeMode | null
   tokenHash: string | null
   invitedById: string | null
   expiresAt: Date | null
   acceptedAt: Date | null
   revokedAt: Date | null
+  accessExpiresAt: Date | null
   createdAt: Date | null
 }
 
@@ -58,11 +64,15 @@ export type OrganizationInvitationCountAggregateOutputType = {
   workerId: number
   email: number
   role: number
+  preset: number
+  permissionKeys: number
+  scopeMode: number
   tokenHash: number
   invitedById: number
   expiresAt: number
   acceptedAt: number
   revokedAt: number
+  accessExpiresAt: number
   createdAt: number
   _all: number
 }
@@ -74,11 +84,14 @@ export type OrganizationInvitationMinAggregateInputType = {
   workerId?: true
   email?: true
   role?: true
+  preset?: true
+  scopeMode?: true
   tokenHash?: true
   invitedById?: true
   expiresAt?: true
   acceptedAt?: true
   revokedAt?: true
+  accessExpiresAt?: true
   createdAt?: true
 }
 
@@ -88,11 +101,14 @@ export type OrganizationInvitationMaxAggregateInputType = {
   workerId?: true
   email?: true
   role?: true
+  preset?: true
+  scopeMode?: true
   tokenHash?: true
   invitedById?: true
   expiresAt?: true
   acceptedAt?: true
   revokedAt?: true
+  accessExpiresAt?: true
   createdAt?: true
 }
 
@@ -102,11 +118,15 @@ export type OrganizationInvitationCountAggregateInputType = {
   workerId?: true
   email?: true
   role?: true
+  preset?: true
+  permissionKeys?: true
+  scopeMode?: true
   tokenHash?: true
   invitedById?: true
   expiresAt?: true
   acceptedAt?: true
   revokedAt?: true
+  accessExpiresAt?: true
   createdAt?: true
   _all?: true
 }
@@ -189,11 +209,15 @@ export type OrganizationInvitationGroupByOutputType = {
   workerId: string | null
   email: string
   role: $Enums.OrganizationRole
+  preset: $Enums.OrganizationAccessPreset | null
+  permissionKeys: string[]
+  scopeMode: $Enums.OrganizationScopeMode
   tokenHash: string
   invitedById: string
   expiresAt: Date
   acceptedAt: Date | null
   revokedAt: Date | null
+  accessExpiresAt: Date | null
   createdAt: Date
   _count: OrganizationInvitationCountAggregateOutputType | null
   _min: OrganizationInvitationMinAggregateOutputType | null
@@ -224,15 +248,20 @@ export type OrganizationInvitationWhereInput = {
   workerId?: Prisma.StringNullableFilter<"OrganizationInvitation"> | string | null
   email?: Prisma.StringFilter<"OrganizationInvitation"> | string
   role?: Prisma.EnumOrganizationRoleFilter<"OrganizationInvitation"> | $Enums.OrganizationRole
+  preset?: Prisma.EnumOrganizationAccessPresetNullableFilter<"OrganizationInvitation"> | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.StringNullableListFilter<"OrganizationInvitation">
+  scopeMode?: Prisma.EnumOrganizationScopeModeFilter<"OrganizationInvitation"> | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFilter<"OrganizationInvitation"> | string
   invitedById?: Prisma.StringFilter<"OrganizationInvitation"> | string
   expiresAt?: Prisma.DateTimeFilter<"OrganizationInvitation"> | Date | string
   acceptedAt?: Prisma.DateTimeNullableFilter<"OrganizationInvitation"> | Date | string | null
   revokedAt?: Prisma.DateTimeNullableFilter<"OrganizationInvitation"> | Date | string | null
+  accessExpiresAt?: Prisma.DateTimeNullableFilter<"OrganizationInvitation"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"OrganizationInvitation"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   worker?: Prisma.XOR<Prisma.WorkerNullableScalarRelationFilter, Prisma.WorkerWhereInput> | null
   invitedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantListRelationFilter
 }
 
 export type OrganizationInvitationOrderByWithRelationInput = {
@@ -241,15 +270,20 @@ export type OrganizationInvitationOrderByWithRelationInput = {
   workerId?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preset?: Prisma.SortOrderInput | Prisma.SortOrder
+  permissionKeys?: Prisma.SortOrder
+  scopeMode?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   invitedById?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  accessExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   worker?: Prisma.WorkerOrderByWithRelationInput
   invitedBy?: Prisma.UserOrderByWithRelationInput
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantOrderByRelationAggregateInput
 }
 
 export type OrganizationInvitationWhereUniqueInput = Prisma.AtLeast<{
@@ -262,14 +296,19 @@ export type OrganizationInvitationWhereUniqueInput = Prisma.AtLeast<{
   workerId?: Prisma.StringNullableFilter<"OrganizationInvitation"> | string | null
   email?: Prisma.StringFilter<"OrganizationInvitation"> | string
   role?: Prisma.EnumOrganizationRoleFilter<"OrganizationInvitation"> | $Enums.OrganizationRole
+  preset?: Prisma.EnumOrganizationAccessPresetNullableFilter<"OrganizationInvitation"> | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.StringNullableListFilter<"OrganizationInvitation">
+  scopeMode?: Prisma.EnumOrganizationScopeModeFilter<"OrganizationInvitation"> | $Enums.OrganizationScopeMode
   invitedById?: Prisma.StringFilter<"OrganizationInvitation"> | string
   expiresAt?: Prisma.DateTimeFilter<"OrganizationInvitation"> | Date | string
   acceptedAt?: Prisma.DateTimeNullableFilter<"OrganizationInvitation"> | Date | string | null
   revokedAt?: Prisma.DateTimeNullableFilter<"OrganizationInvitation"> | Date | string | null
+  accessExpiresAt?: Prisma.DateTimeNullableFilter<"OrganizationInvitation"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"OrganizationInvitation"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   worker?: Prisma.XOR<Prisma.WorkerNullableScalarRelationFilter, Prisma.WorkerWhereInput> | null
   invitedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantListRelationFilter
 }, "id" | "tokenHash">
 
 export type OrganizationInvitationOrderByWithAggregationInput = {
@@ -278,11 +317,15 @@ export type OrganizationInvitationOrderByWithAggregationInput = {
   workerId?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preset?: Prisma.SortOrderInput | Prisma.SortOrder
+  permissionKeys?: Prisma.SortOrder
+  scopeMode?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   invitedById?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  accessExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.OrganizationInvitationCountOrderByAggregateInput
   _max?: Prisma.OrganizationInvitationMaxOrderByAggregateInput
@@ -298,11 +341,15 @@ export type OrganizationInvitationScalarWhereWithAggregatesInput = {
   workerId?: Prisma.StringNullableWithAggregatesFilter<"OrganizationInvitation"> | string | null
   email?: Prisma.StringWithAggregatesFilter<"OrganizationInvitation"> | string
   role?: Prisma.EnumOrganizationRoleWithAggregatesFilter<"OrganizationInvitation"> | $Enums.OrganizationRole
+  preset?: Prisma.EnumOrganizationAccessPresetNullableWithAggregatesFilter<"OrganizationInvitation"> | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.StringNullableListFilter<"OrganizationInvitation">
+  scopeMode?: Prisma.EnumOrganizationScopeModeWithAggregatesFilter<"OrganizationInvitation"> | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringWithAggregatesFilter<"OrganizationInvitation"> | string
   invitedById?: Prisma.StringWithAggregatesFilter<"OrganizationInvitation"> | string
   expiresAt?: Prisma.DateTimeWithAggregatesFilter<"OrganizationInvitation"> | Date | string
   acceptedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OrganizationInvitation"> | Date | string | null
   revokedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OrganizationInvitation"> | Date | string | null
+  accessExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OrganizationInvitation"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OrganizationInvitation"> | Date | string
 }
 
@@ -310,14 +357,19 @@ export type OrganizationInvitationCreateInput = {
   id?: string
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutInvitationsInput
   worker?: Prisma.WorkerCreateNestedOneWithoutInvitationsInput
   invitedBy: Prisma.UserCreateNestedOneWithoutSentOrganizationInvitationsInput
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutInvitationInput
 }
 
 export type OrganizationInvitationUncheckedCreateInput = {
@@ -326,26 +378,36 @@ export type OrganizationInvitationUncheckedCreateInput = {
   workerId?: string | null
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   invitedById: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutInvitationInput
 }
 
 export type OrganizationInvitationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutInvitationsNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutInvitationsNestedInput
   invitedBy?: Prisma.UserUpdateOneRequiredWithoutSentOrganizationInvitationsNestedInput
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutInvitationNestedInput
 }
 
 export type OrganizationInvitationUncheckedUpdateInput = {
@@ -354,12 +416,17 @@ export type OrganizationInvitationUncheckedUpdateInput = {
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   invitedById?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutInvitationNestedInput
 }
 
 export type OrganizationInvitationCreateManyInput = {
@@ -368,11 +435,15 @@ export type OrganizationInvitationCreateManyInput = {
   workerId?: string | null
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   invitedById: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -380,10 +451,14 @@ export type OrganizationInvitationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -393,11 +468,15 @@ export type OrganizationInvitationUncheckedUpdateManyInput = {
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   invitedById?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -417,11 +496,15 @@ export type OrganizationInvitationCountOrderByAggregateInput = {
   workerId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preset?: Prisma.SortOrder
+  permissionKeys?: Prisma.SortOrder
+  scopeMode?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   invitedById?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrder
+  accessExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -431,11 +514,14 @@ export type OrganizationInvitationMaxOrderByAggregateInput = {
   workerId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preset?: Prisma.SortOrder
+  scopeMode?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   invitedById?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrder
+  accessExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -445,12 +531,20 @@ export type OrganizationInvitationMinOrderByAggregateInput = {
   workerId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preset?: Prisma.SortOrder
+  scopeMode?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   invitedById?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrder
+  accessExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type OrganizationInvitationScalarRelationFilter = {
+  is?: Prisma.OrganizationInvitationWhereInput
+  isNot?: Prisma.OrganizationInvitationWhereInput
 }
 
 export type OrganizationInvitationCreateNestedManyWithoutInvitedByInput = {
@@ -579,17 +673,45 @@ export type OrganizationInvitationUncheckedUpdateManyWithoutWorkerNestedInput = 
   deleteMany?: Prisma.OrganizationInvitationScalarWhereInput | Prisma.OrganizationInvitationScalarWhereInput[]
 }
 
+export type OrganizationInvitationCreatepermissionKeysInput = {
+  set: string[]
+}
+
+export type OrganizationInvitationUpdatepermissionKeysInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type OrganizationInvitationCreateNestedOneWithoutResourceGrantsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationInvitationCreateWithoutResourceGrantsInput, Prisma.OrganizationInvitationUncheckedCreateWithoutResourceGrantsInput>
+  connectOrCreate?: Prisma.OrganizationInvitationCreateOrConnectWithoutResourceGrantsInput
+  connect?: Prisma.OrganizationInvitationWhereUniqueInput
+}
+
+export type OrganizationInvitationUpdateOneRequiredWithoutResourceGrantsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationInvitationCreateWithoutResourceGrantsInput, Prisma.OrganizationInvitationUncheckedCreateWithoutResourceGrantsInput>
+  connectOrCreate?: Prisma.OrganizationInvitationCreateOrConnectWithoutResourceGrantsInput
+  upsert?: Prisma.OrganizationInvitationUpsertWithoutResourceGrantsInput
+  connect?: Prisma.OrganizationInvitationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationInvitationUpdateToOneWithWhereWithoutResourceGrantsInput, Prisma.OrganizationInvitationUpdateWithoutResourceGrantsInput>, Prisma.OrganizationInvitationUncheckedUpdateWithoutResourceGrantsInput>
+}
+
 export type OrganizationInvitationCreateWithoutInvitedByInput = {
   id?: string
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutInvitationsInput
   worker?: Prisma.WorkerCreateNestedOneWithoutInvitationsInput
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutInvitationInput
 }
 
 export type OrganizationInvitationUncheckedCreateWithoutInvitedByInput = {
@@ -598,11 +720,16 @@ export type OrganizationInvitationUncheckedCreateWithoutInvitedByInput = {
   workerId?: string | null
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutInvitationInput
 }
 
 export type OrganizationInvitationCreateOrConnectWithoutInvitedByInput = {
@@ -640,11 +767,15 @@ export type OrganizationInvitationScalarWhereInput = {
   workerId?: Prisma.StringNullableFilter<"OrganizationInvitation"> | string | null
   email?: Prisma.StringFilter<"OrganizationInvitation"> | string
   role?: Prisma.EnumOrganizationRoleFilter<"OrganizationInvitation"> | $Enums.OrganizationRole
+  preset?: Prisma.EnumOrganizationAccessPresetNullableFilter<"OrganizationInvitation"> | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.StringNullableListFilter<"OrganizationInvitation">
+  scopeMode?: Prisma.EnumOrganizationScopeModeFilter<"OrganizationInvitation"> | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFilter<"OrganizationInvitation"> | string
   invitedById?: Prisma.StringFilter<"OrganizationInvitation"> | string
   expiresAt?: Prisma.DateTimeFilter<"OrganizationInvitation"> | Date | string
   acceptedAt?: Prisma.DateTimeNullableFilter<"OrganizationInvitation"> | Date | string | null
   revokedAt?: Prisma.DateTimeNullableFilter<"OrganizationInvitation"> | Date | string | null
+  accessExpiresAt?: Prisma.DateTimeNullableFilter<"OrganizationInvitation"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"OrganizationInvitation"> | Date | string
 }
 
@@ -652,13 +783,18 @@ export type OrganizationInvitationCreateWithoutOrganizationInput = {
   id?: string
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
   worker?: Prisma.WorkerCreateNestedOneWithoutInvitationsInput
   invitedBy: Prisma.UserCreateNestedOneWithoutSentOrganizationInvitationsInput
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutInvitationInput
 }
 
 export type OrganizationInvitationUncheckedCreateWithoutOrganizationInput = {
@@ -666,12 +802,17 @@ export type OrganizationInvitationUncheckedCreateWithoutOrganizationInput = {
   workerId?: string | null
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   invitedById: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutInvitationInput
 }
 
 export type OrganizationInvitationCreateOrConnectWithoutOrganizationInput = {
@@ -704,13 +845,18 @@ export type OrganizationInvitationCreateWithoutWorkerInput = {
   id?: string
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutInvitationsInput
   invitedBy: Prisma.UserCreateNestedOneWithoutSentOrganizationInvitationsInput
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutInvitationInput
 }
 
 export type OrganizationInvitationUncheckedCreateWithoutWorkerInput = {
@@ -718,12 +864,17 @@ export type OrganizationInvitationUncheckedCreateWithoutWorkerInput = {
   organizationId: string
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   invitedById: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutInvitationInput
 }
 
 export type OrganizationInvitationCreateOrConnectWithoutWorkerInput = {
@@ -752,16 +903,108 @@ export type OrganizationInvitationUpdateManyWithWhereWithoutWorkerInput = {
   data: Prisma.XOR<Prisma.OrganizationInvitationUpdateManyMutationInput, Prisma.OrganizationInvitationUncheckedUpdateManyWithoutWorkerInput>
 }
 
+export type OrganizationInvitationCreateWithoutResourceGrantsInput = {
+  id?: string
+  email: string
+  role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  tokenHash: string
+  expiresAt: Date | string
+  acceptedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutInvitationsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutInvitationsInput
+  invitedBy: Prisma.UserCreateNestedOneWithoutSentOrganizationInvitationsInput
+}
+
+export type OrganizationInvitationUncheckedCreateWithoutResourceGrantsInput = {
+  id?: string
+  organizationId: string
+  workerId?: string | null
+  email: string
+  role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  tokenHash: string
+  invitedById: string
+  expiresAt: Date | string
+  acceptedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
+  createdAt?: Date | string
+}
+
+export type OrganizationInvitationCreateOrConnectWithoutResourceGrantsInput = {
+  where: Prisma.OrganizationInvitationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationInvitationCreateWithoutResourceGrantsInput, Prisma.OrganizationInvitationUncheckedCreateWithoutResourceGrantsInput>
+}
+
+export type OrganizationInvitationUpsertWithoutResourceGrantsInput = {
+  update: Prisma.XOR<Prisma.OrganizationInvitationUpdateWithoutResourceGrantsInput, Prisma.OrganizationInvitationUncheckedUpdateWithoutResourceGrantsInput>
+  create: Prisma.XOR<Prisma.OrganizationInvitationCreateWithoutResourceGrantsInput, Prisma.OrganizationInvitationUncheckedCreateWithoutResourceGrantsInput>
+  where?: Prisma.OrganizationInvitationWhereInput
+}
+
+export type OrganizationInvitationUpdateToOneWithWhereWithoutResourceGrantsInput = {
+  where?: Prisma.OrganizationInvitationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationInvitationUpdateWithoutResourceGrantsInput, Prisma.OrganizationInvitationUncheckedUpdateWithoutResourceGrantsInput>
+}
+
+export type OrganizationInvitationUpdateWithoutResourceGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutInvitationsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutInvitationsNestedInput
+  invitedBy?: Prisma.UserUpdateOneRequiredWithoutSentOrganizationInvitationsNestedInput
+}
+
+export type OrganizationInvitationUncheckedUpdateWithoutResourceGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
+  invitedById?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type OrganizationInvitationCreateManyInvitedByInput = {
   id?: string
   organizationId: string
   workerId?: string | null
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -769,13 +1012,18 @@ export type OrganizationInvitationUpdateWithoutInvitedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutInvitationsNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutInvitationsNestedInput
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutInvitationNestedInput
 }
 
 export type OrganizationInvitationUncheckedUpdateWithoutInvitedByInput = {
@@ -784,11 +1032,16 @@ export type OrganizationInvitationUncheckedUpdateWithoutInvitedByInput = {
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutInvitationNestedInput
 }
 
 export type OrganizationInvitationUncheckedUpdateManyWithoutInvitedByInput = {
@@ -797,10 +1050,14 @@ export type OrganizationInvitationUncheckedUpdateManyWithoutInvitedByInput = {
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -809,11 +1066,15 @@ export type OrganizationInvitationCreateManyOrganizationInput = {
   workerId?: string | null
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   invitedById: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -821,13 +1082,18 @@ export type OrganizationInvitationUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   worker?: Prisma.WorkerUpdateOneWithoutInvitationsNestedInput
   invitedBy?: Prisma.UserUpdateOneRequiredWithoutSentOrganizationInvitationsNestedInput
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutInvitationNestedInput
 }
 
 export type OrganizationInvitationUncheckedUpdateWithoutOrganizationInput = {
@@ -835,12 +1101,17 @@ export type OrganizationInvitationUncheckedUpdateWithoutOrganizationInput = {
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   invitedById?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutInvitationNestedInput
 }
 
 export type OrganizationInvitationUncheckedUpdateManyWithoutOrganizationInput = {
@@ -848,11 +1119,15 @@ export type OrganizationInvitationUncheckedUpdateManyWithoutOrganizationInput = 
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   invitedById?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -861,11 +1136,15 @@ export type OrganizationInvitationCreateManyWorkerInput = {
   organizationId: string
   email: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
   tokenHash: string
   invitedById: string
   expiresAt: Date | string
   acceptedAt?: Date | string | null
   revokedAt?: Date | string | null
+  accessExpiresAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -873,13 +1152,18 @@ export type OrganizationInvitationUpdateWithoutWorkerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutInvitationsNestedInput
   invitedBy?: Prisma.UserUpdateOneRequiredWithoutSentOrganizationInvitationsNestedInput
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutInvitationNestedInput
 }
 
 export type OrganizationInvitationUncheckedUpdateWithoutWorkerInput = {
@@ -887,12 +1171,17 @@ export type OrganizationInvitationUncheckedUpdateWithoutWorkerInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   invitedById?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutInvitationNestedInput
 }
 
 export type OrganizationInvitationUncheckedUpdateManyWithoutWorkerInput = {
@@ -900,14 +1189,47 @@ export type OrganizationInvitationUncheckedUpdateManyWithoutWorkerInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationInvitationUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   invitedById?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type OrganizationInvitationCountOutputType
+ */
+
+export type OrganizationInvitationCountOutputType = {
+  resourceGrants: number
+}
+
+export type OrganizationInvitationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  resourceGrants?: boolean | OrganizationInvitationCountOutputTypeCountResourceGrantsArgs
+}
+
+/**
+ * OrganizationInvitationCountOutputType without action
+ */
+export type OrganizationInvitationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrganizationInvitationCountOutputType
+   */
+  select?: Prisma.OrganizationInvitationCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * OrganizationInvitationCountOutputType without action
+ */
+export type OrganizationInvitationCountOutputTypeCountResourceGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrganizationInvitationResourceGrantWhereInput
+}
 
 
 export type OrganizationInvitationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -916,15 +1238,21 @@ export type OrganizationInvitationSelect<ExtArgs extends runtime.Types.Extension
   workerId?: boolean
   email?: boolean
   role?: boolean
+  preset?: boolean
+  permissionKeys?: boolean
+  scopeMode?: boolean
   tokenHash?: boolean
   invitedById?: boolean
   expiresAt?: boolean
   acceptedAt?: boolean
   revokedAt?: boolean
+  accessExpiresAt?: boolean
   createdAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   worker?: boolean | Prisma.OrganizationInvitation$workerArgs<ExtArgs>
   invitedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  resourceGrants?: boolean | Prisma.OrganizationInvitation$resourceGrantsArgs<ExtArgs>
+  _count?: boolean | Prisma.OrganizationInvitationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organizationInvitation"]>
 
 export type OrganizationInvitationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -933,11 +1261,15 @@ export type OrganizationInvitationSelectCreateManyAndReturn<ExtArgs extends runt
   workerId?: boolean
   email?: boolean
   role?: boolean
+  preset?: boolean
+  permissionKeys?: boolean
+  scopeMode?: boolean
   tokenHash?: boolean
   invitedById?: boolean
   expiresAt?: boolean
   acceptedAt?: boolean
   revokedAt?: boolean
+  accessExpiresAt?: boolean
   createdAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   worker?: boolean | Prisma.OrganizationInvitation$workerArgs<ExtArgs>
@@ -950,11 +1282,15 @@ export type OrganizationInvitationSelectUpdateManyAndReturn<ExtArgs extends runt
   workerId?: boolean
   email?: boolean
   role?: boolean
+  preset?: boolean
+  permissionKeys?: boolean
+  scopeMode?: boolean
   tokenHash?: boolean
   invitedById?: boolean
   expiresAt?: boolean
   acceptedAt?: boolean
   revokedAt?: boolean
+  accessExpiresAt?: boolean
   createdAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   worker?: boolean | Prisma.OrganizationInvitation$workerArgs<ExtArgs>
@@ -967,19 +1303,25 @@ export type OrganizationInvitationSelectScalar = {
   workerId?: boolean
   email?: boolean
   role?: boolean
+  preset?: boolean
+  permissionKeys?: boolean
+  scopeMode?: boolean
   tokenHash?: boolean
   invitedById?: boolean
   expiresAt?: boolean
   acceptedAt?: boolean
   revokedAt?: boolean
+  accessExpiresAt?: boolean
   createdAt?: boolean
 }
 
-export type OrganizationInvitationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "workerId" | "email" | "role" | "tokenHash" | "invitedById" | "expiresAt" | "acceptedAt" | "revokedAt" | "createdAt", ExtArgs["result"]["organizationInvitation"]>
+export type OrganizationInvitationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "workerId" | "email" | "role" | "preset" | "permissionKeys" | "scopeMode" | "tokenHash" | "invitedById" | "expiresAt" | "acceptedAt" | "revokedAt" | "accessExpiresAt" | "createdAt", ExtArgs["result"]["organizationInvitation"]>
 export type OrganizationInvitationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   worker?: boolean | Prisma.OrganizationInvitation$workerArgs<ExtArgs>
   invitedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  resourceGrants?: boolean | Prisma.OrganizationInvitation$resourceGrantsArgs<ExtArgs>
+  _count?: boolean | Prisma.OrganizationInvitationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationInvitationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -998,6 +1340,7 @@ export type $OrganizationInvitationPayload<ExtArgs extends runtime.Types.Extensi
     organization: Prisma.$OrganizationPayload<ExtArgs>
     worker: Prisma.$WorkerPayload<ExtArgs> | null
     invitedBy: Prisma.$UserPayload<ExtArgs>
+    resourceGrants: Prisma.$OrganizationInvitationResourceGrantPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1005,11 +1348,15 @@ export type $OrganizationInvitationPayload<ExtArgs extends runtime.Types.Extensi
     workerId: string | null
     email: string
     role: $Enums.OrganizationRole
+    preset: $Enums.OrganizationAccessPreset | null
+    permissionKeys: string[]
+    scopeMode: $Enums.OrganizationScopeMode
     tokenHash: string
     invitedById: string
     expiresAt: Date
     acceptedAt: Date | null
     revokedAt: Date | null
+    accessExpiresAt: Date | null
     createdAt: Date
   }, ExtArgs["result"]["organizationInvitation"]>
   composites: {}
@@ -1408,6 +1755,7 @@ export interface Prisma__OrganizationInvitationClient<T, Null = never, ExtArgs e
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   worker<T extends Prisma.OrganizationInvitation$workerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationInvitation$workerArgs<ExtArgs>>): Prisma.Prisma__WorkerClient<runtime.Types.Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   invitedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  resourceGrants<T extends Prisma.OrganizationInvitation$resourceGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationInvitation$resourceGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationInvitationResourceGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1442,11 +1790,15 @@ export interface OrganizationInvitationFieldRefs {
   readonly workerId: Prisma.FieldRef<"OrganizationInvitation", 'String'>
   readonly email: Prisma.FieldRef<"OrganizationInvitation", 'String'>
   readonly role: Prisma.FieldRef<"OrganizationInvitation", 'OrganizationRole'>
+  readonly preset: Prisma.FieldRef<"OrganizationInvitation", 'OrganizationAccessPreset'>
+  readonly permissionKeys: Prisma.FieldRef<"OrganizationInvitation", 'String[]'>
+  readonly scopeMode: Prisma.FieldRef<"OrganizationInvitation", 'OrganizationScopeMode'>
   readonly tokenHash: Prisma.FieldRef<"OrganizationInvitation", 'String'>
   readonly invitedById: Prisma.FieldRef<"OrganizationInvitation", 'String'>
   readonly expiresAt: Prisma.FieldRef<"OrganizationInvitation", 'DateTime'>
   readonly acceptedAt: Prisma.FieldRef<"OrganizationInvitation", 'DateTime'>
   readonly revokedAt: Prisma.FieldRef<"OrganizationInvitation", 'DateTime'>
+  readonly accessExpiresAt: Prisma.FieldRef<"OrganizationInvitation", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"OrganizationInvitation", 'DateTime'>
 }
     
@@ -1865,6 +2217,30 @@ export type OrganizationInvitation$workerArgs<ExtArgs extends runtime.Types.Exte
    */
   include?: Prisma.WorkerInclude<ExtArgs> | null
   where?: Prisma.WorkerWhereInput
+}
+
+/**
+ * OrganizationInvitation.resourceGrants
+ */
+export type OrganizationInvitation$resourceGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrganizationInvitationResourceGrant
+   */
+  select?: Prisma.OrganizationInvitationResourceGrantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrganizationInvitationResourceGrant
+   */
+  omit?: Prisma.OrganizationInvitationResourceGrantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationInvitationResourceGrantInclude<ExtArgs> | null
+  where?: Prisma.OrganizationInvitationResourceGrantWhereInput
+  orderBy?: Prisma.OrganizationInvitationResourceGrantOrderByWithRelationInput | Prisma.OrganizationInvitationResourceGrantOrderByWithRelationInput[]
+  cursor?: Prisma.OrganizationInvitationResourceGrantWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrganizationInvitationResourceGrantScalarFieldEnum | Prisma.OrganizationInvitationResourceGrantScalarFieldEnum[]
 }
 
 /**

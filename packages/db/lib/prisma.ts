@@ -26,7 +26,14 @@ function getDatabaseConnectionString() {
 function createPrismaClient(): PrismaClient {
   assertVercelDatabaseEnvironmentMarker();
   const connectionString = normalizeDatabaseConnectionString(getDatabaseConnectionString());
-  const adapter = new PrismaPg({ connectionString });
+  const target = new URL(connectionString);
+  const isCanonicalPrismaDev = process.env.QOOVEX_DATABASE_ENVIRONMENT?.trim() === "local"
+    && ["localhost", "127.0.0.1", "::1", "[::1]"].includes(target.hostname.toLowerCase())
+    && target.port === "51225";
+  // Prisma Dev uses a single-process PGlite protocol server. Queueing through a
+  // one-connection pool prevents overlapping prepared messages locally; CI and
+  // remote PostgreSQL targets retain the adapter's normal pool concurrency.
+  const adapter = new PrismaPg({ connectionString, ...(isCanonicalPrismaDev ? { max: 1 } : {}) });
   return new PrismaClient({ adapter }).$extends({
     name: "qoovex-operation-metrics",
     query: {

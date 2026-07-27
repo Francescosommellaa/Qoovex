@@ -123,6 +123,16 @@ export type DocumentPackage = Prisma.DocumentPackageModel
  */
 export type DocumentPackageItem = Prisma.DocumentPackageItemModel
 /**
+ * Model DocumentPackageRevision
+ *
+ */
+export type DocumentPackageRevision = Prisma.DocumentPackageRevisionModel
+/**
+ * Model DocumentPackageShareProposal
+ *
+ */
+export type DocumentPackageShareProposal = Prisma.DocumentPackageShareProposalModel
+/**
  * Model ShareLink
  *
  */
@@ -163,6 +173,11 @@ export type OperationalEvent = Prisma.OperationalEventModel
  */
 export type OperationalDecision = Prisma.OperationalDecisionModel
 /**
+ * Model OperationalEventArtifactReference
+ *
+ */
+export type OperationalEventArtifactReference = Prisma.OperationalEventArtifactReferenceModel
+/**
  * Model OperationalException
  *
  */
@@ -197,6 +212,16 @@ export type OrganizationMembership = Prisma.OrganizationMembershipModel
  *
  */
 export type OrganizationInvitation = Prisma.OrganizationInvitationModel
+/**
+ * Model OrganizationMembershipResourceGrant
+ *
+ */
+export type OrganizationMembershipResourceGrant = Prisma.OrganizationMembershipResourceGrantModel
+/**
+ * Model OrganizationInvitationResourceGrant
+ *
+ */
+export type OrganizationInvitationResourceGrant = Prisma.OrganizationInvitationResourceGrantModel
 /**
  * Model SupportSession
  *

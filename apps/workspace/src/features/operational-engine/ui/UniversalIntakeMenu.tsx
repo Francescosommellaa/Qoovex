@@ -18,6 +18,8 @@ const entries = {
 const byRole: Record<OrganizationRole, readonly (keyof typeof entries)[]> = {
   OWNER: ["document", "worker", "site", "evidence", "package"],
   ADMIN: ["document", "worker", "site", "evidence", "package"],
+  MEMBER: ["upload", "evidence"],
+  VIEWER: [],
   SAFETY_CONSULTANT: ["upload", "evidence", "package"],
   SITE_MANAGER: ["evidence"],
   WORKER: ["upload", "evidence"],

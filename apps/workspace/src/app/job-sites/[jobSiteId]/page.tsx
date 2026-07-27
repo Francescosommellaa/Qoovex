@@ -16,10 +16,12 @@ import type { WorkspaceChecklistRecord, WorkspaceDeadlineRecord, WorkspaceDocume
 
 export default async function JobSiteDetailPage({ params, searchParams }: { params: Promise<{ jobSiteId: string }>; searchParams: Promise<{ from?: string; section?: string }> }) {
   try {
-    const [{ jobSiteId: routeParam }, query] = await Promise.all([params, searchParams]);
+    const { jobSiteId: routeParam } = await params;
+    const query = await searchParams;
     const jobSiteId = jobSiteRouteId(routeParam);
     const section: JobSiteDetailSection = jobSiteDetailSections.includes(query.section as JobSiteDetailSection) ? query.section as JobSiteDetailSection : "overview";
-    const [jobSite, rawCapabilities] = await Promise.all([getJobSiteShell(jobSiteId, true), getWorkspaceCapabilities()]);
+    const jobSite = await getJobSiteShell(jobSiteId, true);
+    const rawCapabilities = await getWorkspaceCapabilities();
     const capabilities = jobSite.archivedAt ? { ...rawCapabilities, canCreateDocuments: false, canCreateDeadlines: false, canManageCalendar: false, canManageChecklists: false, canCompleteChecklists: false, canUploadEvidence: false, canManagePackages: false, canSharePackages: false, canManageAssignments: false, canManageCore: false } : rawCapabilities;
     let documents: WorkspaceDocumentRecord[] = [];
     let missingDocuments: MissingDocumentRequirementItem[] = [];
@@ -31,13 +33,16 @@ export default async function JobSiteDetailPage({ params, searchParams }: { para
     let workerAssignments: JobSiteWorkerAssignmentResponse[] = [];
 
     if (section === "documents") {
-      const [documentRows, missing] = await Promise.all([listDocuments({ ownerType: "JOB_SITE", jobSiteId }), getMissingDocumentRequirements()]);
+      const documentRows = await listDocuments({ ownerType: "JOB_SITE", jobSiteId });
+      const missing = await getMissingDocumentRequirements();
       documents = serializeForClient<WorkspaceDocumentRecord[]>(documentRows);
       missingDocuments = serializeForClient<MissingDocumentRequirementItem[]>(missing.items.filter((item) => item.jobSiteId === jobSiteId));
     } else if (section === "people" && capabilities.canReadAssignments) {
-      [userAssignments, workerAssignments] = await Promise.all([listJobSiteUserAssignments({ jobSiteId }), listJobSiteWorkerAssignments({ jobSiteId })]);
+      userAssignments = await listJobSiteUserAssignments({ jobSiteId });
+      workerAssignments = await listJobSiteWorkerAssignments({ jobSiteId });
     } else if (section === "activities") {
-      const [deadlineRows, checklistRows] = await Promise.all([listDeadlines({ jobSiteId }), listChecklistsWithItems({ jobSiteId })]);
+      const deadlineRows = await listDeadlines({ jobSiteId });
+      const checklistRows = await listChecklistsWithItems({ jobSiteId });
       deadlines = serializeForClient<WorkspaceDeadlineRecord[]>(deadlineRows);
       checklists = serializeForClient<WorkspaceChecklistRecord[]>(checklistRows);
     } else if (section === "evidence") {

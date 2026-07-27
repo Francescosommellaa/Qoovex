@@ -51,12 +51,50 @@ export type PlatformRole = (typeof PlatformRole)[keyof typeof PlatformRole]
 export const OrganizationRole = {
   OWNER: 'OWNER',
   ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER',
+  VIEWER: 'VIEWER',
   SAFETY_CONSULTANT: 'SAFETY_CONSULTANT',
   SITE_MANAGER: 'SITE_MANAGER',
   WORKER: 'WORKER'
 } as const
 
 export type OrganizationRole = (typeof OrganizationRole)[keyof typeof OrganizationRole]
+
+
+export const OrganizationAccessPreset = {
+  OPERATIONAL_COLLABORATOR: 'OPERATIONAL_COLLABORATOR',
+  SITE_MANAGER: 'SITE_MANAGER',
+  CONSULTANT: 'CONSULTANT',
+  VIEWER: 'VIEWER',
+  LIMITED_UPLOAD: 'LIMITED_UPLOAD'
+} as const
+
+export type OrganizationAccessPreset = (typeof OrganizationAccessPreset)[keyof typeof OrganizationAccessPreset]
+
+
+export const OrganizationScopeMode = {
+  FULL: 'FULL',
+  ASSIGNED: 'ASSIGNED'
+} as const
+
+export type OrganizationScopeMode = (typeof OrganizationScopeMode)[keyof typeof OrganizationScopeMode]
+
+
+export const OrganizationResourceType = {
+  JOB_SITE: 'JOB_SITE',
+  WORKER: 'WORKER',
+  DOCUMENT: 'DOCUMENT',
+  DOCUMENT_TYPE: 'DOCUMENT_TYPE',
+  DOCUMENT_PACKAGE: 'DOCUMENT_PACKAGE',
+  OPERATIONAL_PROCESS: 'OPERATIONAL_PROCESS',
+  OPERATIONAL_DECISION: 'OPERATIONAL_DECISION',
+  OPERATIONAL_EXCEPTION: 'OPERATIONAL_EXCEPTION',
+  EVIDENCE: 'EVIDENCE',
+  CHECKLIST: 'CHECKLIST',
+  SHARE_LINK: 'SHARE_LINK'
+} as const
+
+export type OrganizationResourceType = (typeof OrganizationResourceType)[keyof typeof OrganizationResourceType]
 
 
 export const SupportAuditAction = {
@@ -251,6 +289,41 @@ export const DocumentPackageStatus = {
 } as const
 
 export type DocumentPackageStatus = (typeof DocumentPackageStatus)[keyof typeof DocumentPackageStatus]
+
+
+export const DocumentPackageRevisionOrigin = {
+  AUTOMATED_PREPARATION: 'AUTOMATED_PREPARATION',
+  LEGACY_BACKFILL: 'LEGACY_BACKFILL'
+} as const
+
+export type DocumentPackageRevisionOrigin = (typeof DocumentPackageRevisionOrigin)[keyof typeof DocumentPackageRevisionOrigin]
+
+
+export const DocumentPackageRevisionStatus = {
+  PREPARED: 'PREPARED',
+  APPROVED: 'APPROVED'
+} as const
+
+export type DocumentPackageRevisionStatus = (typeof DocumentPackageRevisionStatus)[keyof typeof DocumentPackageRevisionStatus]
+
+
+export const DocumentPackageShareProposalTarget = {
+  NAMED_RECIPIENT: 'NAMED_RECIPIENT',
+  LINK_PURPOSE: 'LINK_PURPOSE'
+} as const
+
+export type DocumentPackageShareProposalTarget = (typeof DocumentPackageShareProposalTarget)[keyof typeof DocumentPackageShareProposalTarget]
+
+
+export const DocumentPackageShareProposalStatus = {
+  PREPARING: 'PREPARING',
+  READY_FOR_REVIEW: 'READY_FOR_REVIEW',
+  BLOCKED: 'BLOCKED',
+  APPROVED: 'APPROVED',
+  PUBLISHED: 'PUBLISHED'
+} as const
+
+export type DocumentPackageShareProposalStatus = (typeof DocumentPackageShareProposalStatus)[keyof typeof DocumentPackageShareProposalStatus]
 
 
 export const DocumentOwnerType = {
@@ -486,7 +559,8 @@ export const OperationalProcessType = {
   DOCUMENT_RECEIVED: 'DOCUMENT_RECEIVED',
   WORKER_CREATED: 'WORKER_CREATED',
   JOB_SITE_CREATED: 'JOB_SITE_CREATED',
-  CONTINUOUS_CONTROL: 'CONTINUOUS_CONTROL'
+  CONTINUOUS_CONTROL: 'CONTINUOUS_CONTROL',
+  DOCUMENT_PACKAGE_SHARING: 'DOCUMENT_PACKAGE_SHARING'
 } as const
 
 export type OperationalProcessType = (typeof OperationalProcessType)[keyof typeof OperationalProcessType]
@@ -536,11 +610,68 @@ export const OperationalEventKind = {
 export type OperationalEventKind = (typeof OperationalEventKind)[keyof typeof OperationalEventKind]
 
 
+export const OperationalEventType = {
+  LEGACY_EVENT: 'LEGACY_EVENT',
+  PROCESS_STARTED: 'PROCESS_STARTED',
+  STEP_STARTED: 'STEP_STARTED',
+  RULE_APPLIED: 'RULE_APPLIED',
+  PROPOSAL_PREPARED: 'PROPOSAL_PREPARED',
+  AUTOMATION_COMPLETED: 'AUTOMATION_COMPLETED',
+  DOCUMENT_LINKED: 'DOCUMENT_LINKED',
+  DOCUMENT_VERSION_ADDED: 'DOCUMENT_VERSION_ADDED',
+  REQUIREMENT_SATISFIED: 'REQUIREMENT_SATISFIED',
+  EXCEPTION_OPENED: 'EXCEPTION_OPENED',
+  EXCEPTION_RESOLVED: 'EXCEPTION_RESOLVED',
+  DECISION_REQUESTED: 'DECISION_REQUESTED',
+  DECISION_RESOLVED: 'DECISION_RESOLVED',
+  VALUE_CORRECTED: 'VALUE_CORRECTED',
+  RETRY_SCHEDULED: 'RETRY_SCHEDULED',
+  PROCESS_BLOCKED: 'PROCESS_BLOCKED',
+  PROCESS_RESUMED: 'PROCESS_RESUMED',
+  RESULT_CREATED: 'RESULT_CREATED',
+  PACKAGE_PREPARED: 'PACKAGE_PREPARED',
+  PACKAGE_UPDATED: 'PACKAGE_UPDATED',
+  SHARE_APPROVED: 'SHARE_APPROVED',
+  SHARE_LINK_CREATED: 'SHARE_LINK_CREATED',
+  SHARE_LINK_OPENED: 'SHARE_LINK_OPENED',
+  SHARE_DOWNLOAD_REQUESTED: 'SHARE_DOWNLOAD_REQUESTED',
+  SHARE_LINK_REVOKED: 'SHARE_LINK_REVOKED',
+  SHARE_LINK_EXPIRED: 'SHARE_LINK_EXPIRED',
+  PROCESS_COMPLETED: 'PROCESS_COMPLETED',
+  PROCESS_COMPLETED_WITH_EXCEPTIONS: 'PROCESS_COMPLETED_WITH_EXCEPTIONS',
+  PROCESS_TECHNICAL_FAILURE: 'PROCESS_TECHNICAL_FAILURE'
+} as const
+
+export type OperationalEventType = (typeof OperationalEventType)[keyof typeof OperationalEventType]
+
+
+export const OperationalActorType = {
+  SYSTEM: 'SYSTEM',
+  USER: 'USER',
+  SUPPORT: 'SUPPORT',
+  EXTERNAL: 'EXTERNAL'
+} as const
+
+export type OperationalActorType = (typeof OperationalActorType)[keyof typeof OperationalActorType]
+
+
+export const OperationalEventSourceType = {
+  ENGINE: 'ENGINE',
+  DOMAIN: 'DOMAIN',
+  USER_ACTION: 'USER_ACTION',
+  SHARING_ACCESS: 'SHARING_ACCESS',
+  CONTINUOUS_CONTROL: 'CONTINUOUS_CONTROL'
+} as const
+
+export type OperationalEventSourceType = (typeof OperationalEventSourceType)[keyof typeof OperationalEventSourceType]
+
+
 export const OperationalDecisionType = {
   CONFIRM_DOCUMENT_TYPE: 'CONFIRM_DOCUMENT_TYPE',
   CONFIRM_DOCUMENT_OWNER: 'CONFIRM_DOCUMENT_OWNER',
   CONFIRM_EXPIRY_DATE: 'CONFIRM_EXPIRY_DATE',
-  RESOLVE_CONFLICT: 'RESOLVE_CONFLICT'
+  RESOLVE_CONFLICT: 'RESOLVE_CONFLICT',
+  APPROVE_DOCUMENT_PACKAGE_SHARE: 'APPROVE_DOCUMENT_PACKAGE_SHARE'
 } as const
 
 export type OperationalDecisionType = (typeof OperationalDecisionType)[keyof typeof OperationalDecisionType]
@@ -602,7 +733,8 @@ export const OperationalArtifactType = {
   DEADLINE: 'DEADLINE',
   CHECKLIST: 'CHECKLIST',
   EVIDENCE: 'EVIDENCE',
-  DOCUMENT_PACKAGE: 'DOCUMENT_PACKAGE'
+  DOCUMENT_PACKAGE: 'DOCUMENT_PACKAGE',
+  SHARE_LINK: 'SHARE_LINK'
 } as const
 
 export type OperationalArtifactType = (typeof OperationalArtifactType)[keyof typeof OperationalArtifactType]

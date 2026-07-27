@@ -2,7 +2,7 @@ import "server-only";
 
 import crypto from "node:crypto";
 import { db, Prisma } from "@qoovex/db";
-import type { OperationalExceptionSeverity, OperationalExceptionType } from "@qoovex/types";
+import type { OperationalEventType, OperationalExceptionSeverity, OperationalExceptionType } from "@qoovex/types";
 import { syncOrganizationReminderRecords } from "@shared/server/reminder-service";
 import { captureRequirementSnapshots, enqueueOperationalProcess } from "./operational-process-service";
 
@@ -21,6 +21,28 @@ function artifactId(step: ClaimedStep, type: string) {
   return step.process.artifactRefs.find((artifact) => artifact.artifactType === type)?.artifactId ?? null;
 }
 
+async function ensureExpirationProcess(tx: Prisma.TransactionClient, shareLink: { id: string; organizationId: string; documentPackageId: string; proposal?: { processId: string } | null }) {
+  if (shareLink.proposal?.processId) return shareLink.proposal.processId;
+  const existing = await tx.operationalProcess.findFirst({
+    where: { organizationId: shareLink.organizationId, type: "DOCUMENT_PACKAGE_SHARING", artifactRefs: { some: { artifactType: "SHARE_LINK", artifactId: shareLink.id } } },
+    select: { id: true },
+  });
+  if (existing) return existing.id;
+  const process = await enqueueOperationalProcess({
+    organizationId: shareLink.organizationId,
+    type: "DOCUMENT_PACKAGE_SHARING",
+    triggerKind: "LEGACY_SHARE_LINK_CONTROL",
+    idempotencyKey: `legacy-share-link:${shareLink.id}`,
+    context: {},
+    artifacts: [{ type: "DOCUMENT_PACKAGE", id: shareLink.documentPackageId }, { type: "SHARE_LINK", id: shareLink.id }],
+    reliability: "VERIFIED",
+    impact: "LOW",
+  }, tx);
+  await tx.operationalStep.updateMany({ where: { processId: process.id }, data: { status: "COMPLETED", completedAt: new Date() } });
+  await tx.operationalProcess.update({ where: { id: process.id }, data: { status: "COMPLETED", completedAt: new Date(), resultSummary: { summary: "Link legacy acquisito nel controllo operativo." } } });
+  return process.id;
+}
+
 async function appendEvent(tx: Prisma.TransactionClient, input: {
   organizationId: string;
   processId: string;
@@ -30,7 +52,17 @@ async function appendEvent(tx: Prisma.TransactionClient, input: {
   title: string;
   summary?: string | null;
   userVisible?: boolean;
+  eventType?: OperationalEventType;
+  metadata?: Prisma.InputJsonValue;
 }) {
+  const eventType: OperationalEventType = input.eventType
+    ?? (input.kind === "DECISION" ? "DECISION_REQUESTED"
+      : input.kind === "RETRY" ? "RETRY_SCHEDULED"
+        : input.kind === "TECHNICAL" ? "PROCESS_TECHNICAL_FAILURE"
+          : input.kind === "BLOCKED" ? "EXCEPTION_OPENED"
+            : input.kind === "RECONCILIATION" ? "EXCEPTION_RESOLVED"
+              : input.kind === "COMPLETION" ? "AUTOMATION_COMPLETED"
+                : "LEGACY_EVENT");
   await tx.operationalEvent.createMany({
     data: [{
       organizationId: input.organizationId,
@@ -38,9 +70,13 @@ async function appendEvent(tx: Prisma.TransactionClient, input: {
       stepId: input.stepId ?? null,
       eventKey: input.eventKey,
       kind: input.kind,
+      eventType,
       title: input.title,
       summary: input.summary ?? null,
       userVisible: input.userVisible ?? true,
+      metadata: input.metadata,
+      actorType: "SYSTEM",
+      sourceType: "ENGINE",
     }],
     skipDuplicates: true,
   });
@@ -419,7 +455,30 @@ async function reconcileTemporalStatuses(tx: Prisma.TransactionClient, step: Cla
       dueAt: document.expiryDate,
     });
   }
-  return { summary: `${documents.length} stati temporali aggiornati.` };
+  const expiredLinks = await tx.shareLink.findMany({
+    where: { organizationId: step.organizationId, revokedAt: null, expiredAt: null, expiresAt: { lte: now } },
+    select: { id: true, organizationId: true, documentPackageId: true, expiresAt: true, proposal: { select: { processId: true } } },
+    orderBy: [{ expiresAt: "asc" }, { id: "asc" }],
+    take: 100,
+  });
+  let expiredLinkCount = 0;
+  for (const shareLink of expiredLinks) {
+    const processId = await ensureExpirationProcess(tx, shareLink);
+    const updated = await tx.shareLink.updateMany({ where: { id: shareLink.id, expiredAt: null }, data: { expiredAt: now } });
+    if (!updated.count) continue;
+    expiredLinkCount += 1;
+    await appendEvent(tx, {
+      organizationId: step.organizationId,
+      processId,
+      eventKey: `share-link-expired:${shareLink.id}`,
+      kind: "TEMPORAL",
+      eventType: "SHARE_LINK_EXPIRED",
+      title: "Link condiviso scaduto",
+      summary: "La scadenza registrata impedisce ulteriori accessi e download.",
+      metadata: { nextState: "EXPIRED" },
+    });
+  }
+  return { summary: `${documents.length} stati documentali e ${expiredLinkCount} link condivisi aggiornati.` };
 }
 
 async function reconcileContinuousRequirements(tx: Prisma.TransactionClient, step: ClaimedStep) {
@@ -449,7 +508,7 @@ async function reconcileContinuousExceptions(tx: Prisma.TransactionClient, step:
 async function validateArtifactReferences(tx: Prisma.TransactionClient, step: ClaimedStep) {
   const refs = await tx.operationalArtifactReference.findMany({ where: { organizationId: step.organizationId }, select: { id: true, processId: true, artifactType: true, artifactId: true }, orderBy: { id: "asc" }, take: 100 });
   const ids = (type: (typeof refs)[number]["artifactType"]) => [...new Set(refs.filter((ref) => ref.artifactType === type).map((ref) => ref.artifactId))];
-  const [organizations, documents, versions, requirements, workers, sites, deadlines, checklists, evidence, packages] = await Promise.all([
+  const [organizations, documents, versions, requirements, workers, sites, deadlines, checklists, evidence, packages, shareLinks] = await Promise.all([
     tx.organization.findMany({ where: { id: { in: ids("ORGANIZATION") } }, select: { id: true } }),
     tx.document.findMany({ where: { organizationId: step.organizationId, id: { in: ids("DOCUMENT") } }, select: { id: true } }),
     tx.documentVersion.findMany({ where: { organizationId: step.organizationId, id: { in: ids("DOCUMENT_VERSION") } }, select: { id: true } }),
@@ -460,6 +519,7 @@ async function validateArtifactReferences(tx: Prisma.TransactionClient, step: Cl
     tx.checklist.findMany({ where: { organizationId: step.organizationId, id: { in: ids("CHECKLIST") } }, select: { id: true } }),
     tx.evidence.findMany({ where: { organizationId: step.organizationId, id: { in: ids("EVIDENCE") } }, select: { id: true } }),
     tx.documentPackage.findMany({ where: { organizationId: step.organizationId, id: { in: ids("DOCUMENT_PACKAGE") } }, select: { id: true } }),
+    tx.shareLink.findMany({ where: { organizationId: step.organizationId, id: { in: ids("SHARE_LINK") } }, select: { id: true } }),
   ]);
   const available = new Map<(typeof refs)[number]["artifactType"], Set<string>>([
     ["ORGANIZATION", new Set(organizations.filter((item) => item.id === step.organizationId).map((item) => item.id))],
@@ -472,6 +532,7 @@ async function validateArtifactReferences(tx: Prisma.TransactionClient, step: Cl
     ["CHECKLIST", new Set(checklists.map((item) => item.id))],
     ["EVIDENCE", new Set(evidence.map((item) => item.id))],
     ["DOCUMENT_PACKAGE", new Set(packages.map((item) => item.id))],
+    ["SHARE_LINK", new Set(shareLinks.map((item) => item.id))],
   ]);
   let invalid = 0;
   for (const ref of refs) {

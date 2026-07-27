@@ -62,7 +62,7 @@ export function SharedDocumentPackagePageView({ token, documentPackage }: { toke
                   </div>
                   <div className={styles.actions}>
                     {label ? <WorkspaceState label={label} tone={statusTone(item.status ?? "")} /> : null}
-                    {item.hasFile ? (
+                    {item.hasFile && documentPackage.allowDownload ? (
                       <a className={styles.linkButton} href={buildSharedDocumentPackageDownloadPath(token, item.id)}>
                         Scarica file
                       </a>
@@ -76,6 +76,7 @@ export function SharedDocumentPackagePageView({ token, documentPackage }: { toke
           <WorkspaceEmptyState title="Nessun elemento disponibile" description="Il pacchetto non contiene elementi condivisibili." />
         )}
       </WorkspacePanel>
+      {!documentPackage.allowDownload ? <WorkspacePanel title="Consultazione protetta"><p className="text-sm text-muted-foreground">Il download non è stato autorizzato per questa condivisione.</p></WorkspacePanel> : null}
     </WorkspacePage>
   );
 }

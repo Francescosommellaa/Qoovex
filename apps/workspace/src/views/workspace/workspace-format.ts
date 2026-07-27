@@ -1,4 +1,4 @@
-import type { ChecklistItemStatus, DeadlineStatus, DocumentOwnerType, DocumentPackageItemType, DocumentPackageStatus, DocumentStatus, EvidenceType, RecordStatus } from "@qoovex/types";
+import type { ChecklistItemStatus, DeadlineStatus, DocumentOwnerType, DocumentPackageEffectiveState, DocumentPackageItemType, DocumentPackageStatus, DocumentStatus, EvidenceType, RecordStatus } from "@qoovex/types";
 import type { WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "./workspace-records";
 
 export const documentStatusLabels: Record<DocumentStatus, string> = {
@@ -41,6 +41,12 @@ export const documentPackageStatusLabels: Record<DocumentPackageStatus, string> 
   READY_FOR_REVIEW: "Pronto per revisione",
   SHARED: "Condiviso in lettura",
   ARCHIVED: "Archiviato",
+};
+
+export const documentPackageEffectiveStateLabels: Record<DocumentPackageEffectiveState, string> = {
+  DRAFT: "Bozza", PREPARING: "In preparazione", INCOMPLETE: "Incompleto", TO_VERIFY: "Da verificare",
+  READY_FOR_REVIEW: "Pronto per revisione", APPROVED: "Approvato", SHARED: "Condiviso",
+  UPDATED_AFTER_SHARING: "Aggiornato dopo la condivisione", EXPIRED: "Scaduto", REVOKED: "Revocato", ARCHIVED: "Archiviato",
 };
 
 export const documentPackageItemTypeLabels: Record<DocumentPackageItemType, string> = {

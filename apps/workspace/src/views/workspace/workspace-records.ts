@@ -9,6 +9,7 @@ import type {
   DocumentOwnerType,
   DocumentCategoryKey,
   DocumentPackageItemType,
+  DocumentPackageEffectiveState,
   DocumentPackageStatus,
   DocumentStatus,
   DocumentTypeAppliesTo,
@@ -17,9 +18,10 @@ import type {
   MissingDocumentRequirementItem,
   JobSiteOperationalPhase,
   RecordStatus,
+  OrganizationRole,
 } from "@qoovex/types";
 
-export type WorkspaceRole = "OWNER" | "ADMIN" | "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER";
+export type WorkspaceRole = OrganizationRole;
 
 export interface WorkspaceCapabilities {
   role: WorkspaceRole | null;
@@ -230,6 +232,7 @@ export interface WorkspaceDocumentPackageRecord {
   title: string;
   description?: string | null;
   status: DocumentPackageStatus;
+  effectiveState?: DocumentPackageEffectiveState;
   createdById: string;
   createdAt: string;
   updatedAt: string;
@@ -239,7 +242,13 @@ export interface WorkspaceDocumentPackageRecord {
 export interface WorkspaceShareLinkRecord {
   id: string;
   documentPackageId: string;
+  revisionId: string;
+  proposalId?: string | null;
+  purpose?: string | null;
+  recipientLabel?: string | null;
+  allowDownload: boolean;
   expiresAt?: string | null;
+  expiredAt?: string | null;
   revokedAt?: string | null;
   createdById: string;
   createdAt: string;

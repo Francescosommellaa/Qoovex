@@ -72,6 +72,8 @@ export const ModelName = {
   Evidence: 'Evidence',
   DocumentPackage: 'DocumentPackage',
   DocumentPackageItem: 'DocumentPackageItem',
+  DocumentPackageRevision: 'DocumentPackageRevision',
+  DocumentPackageShareProposal: 'DocumentPackageShareProposal',
   ShareLink: 'ShareLink',
   Notification: 'Notification',
   NotificationPreference: 'NotificationPreference',
@@ -80,6 +82,7 @@ export const ModelName = {
   OperationalStep: 'OperationalStep',
   OperationalEvent: 'OperationalEvent',
   OperationalDecision: 'OperationalDecision',
+  OperationalEventArtifactReference: 'OperationalEventArtifactReference',
   OperationalException: 'OperationalException',
   OperationalArtifactReference: 'OperationalArtifactReference',
   OperationalRuleSnapshot: 'OperationalRuleSnapshot',
@@ -87,6 +90,8 @@ export const ModelName = {
   NotificationEmailDelivery: 'NotificationEmailDelivery',
   OrganizationMembership: 'OrganizationMembership',
   OrganizationInvitation: 'OrganizationInvitation',
+  OrganizationMembershipResourceGrant: 'OrganizationMembershipResourceGrant',
+  OrganizationInvitationResourceGrant: 'OrganizationInvitationResourceGrant',
   SupportSession: 'SupportSession',
   SupportAuditEvent: 'SupportAuditEvent',
   ProductAuditEvent: 'ProductAuditEvent',
@@ -476,12 +481,62 @@ export const DocumentPackageItemScalarFieldEnum = {
 export type DocumentPackageItemScalarFieldEnum = (typeof DocumentPackageItemScalarFieldEnum)[keyof typeof DocumentPackageItemScalarFieldEnum]
 
 
+export const DocumentPackageRevisionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  documentPackageId: 'documentPackageId',
+  revisionNumber: 'revisionNumber',
+  origin: 'origin',
+  status: 'status',
+  manifest: 'manifest',
+  fingerprint: 'fingerprint',
+  preparedById: 'preparedById',
+  approvedById: 'approvedById',
+  preparedAt: 'preparedAt',
+  approvedAt: 'approvedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type DocumentPackageRevisionScalarFieldEnum = (typeof DocumentPackageRevisionScalarFieldEnum)[keyof typeof DocumentPackageRevisionScalarFieldEnum]
+
+
+export const DocumentPackageShareProposalScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  documentPackageId: 'documentPackageId',
+  revisionId: 'revisionId',
+  processId: 'processId',
+  decisionId: 'decisionId',
+  targetKind: 'targetKind',
+  recipientLabel: 'recipientLabel',
+  purpose: 'purpose',
+  expiresAt: 'expiresAt',
+  allowDownload: 'allowDownload',
+  status: 'status',
+  preparedAt: 'preparedAt',
+  approvedAt: 'approvedAt',
+  publishedAt: 'publishedAt',
+  createdById: 'createdById',
+  approvedById: 'approvedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DocumentPackageShareProposalScalarFieldEnum = (typeof DocumentPackageShareProposalScalarFieldEnum)[keyof typeof DocumentPackageShareProposalScalarFieldEnum]
+
+
 export const ShareLinkScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
   documentPackageId: 'documentPackageId',
+  revisionId: 'revisionId',
+  proposalId: 'proposalId',
   tokenHash: 'tokenHash',
+  purpose: 'purpose',
+  recipientLabel: 'recipientLabel',
+  allowDownload: 'allowDownload',
   expiresAt: 'expiresAt',
+  expiredAt: 'expiredAt',
   revokedAt: 'revokedAt',
   createdById: 'createdById',
   createdAt: 'createdAt',
@@ -606,11 +661,16 @@ export const OperationalEventScalarFieldEnum = {
   stepId: 'stepId',
   eventKey: 'eventKey',
   kind: 'kind',
+  eventType: 'eventType',
   userVisible: 'userVisible',
   title: 'title',
   summary: 'summary',
   metadata: 'metadata',
   actorUserId: 'actorUserId',
+  actorType: 'actorType',
+  actorRole: 'actorRole',
+  sourceType: 'sourceType',
+  sourceId: 'sourceId',
   reliability: 'reliability',
   impact: 'impact',
   occurredAt: 'occurredAt'
@@ -644,6 +704,18 @@ export const OperationalDecisionScalarFieldEnum = {
 } as const
 
 export type OperationalDecisionScalarFieldEnum = (typeof OperationalDecisionScalarFieldEnum)[keyof typeof OperationalDecisionScalarFieldEnum]
+
+
+export const OperationalEventArtifactReferenceScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  eventId: 'eventId',
+  artifactType: 'artifactType',
+  artifactId: 'artifactId',
+  createdAt: 'createdAt'
+} as const
+
+export type OperationalEventArtifactReferenceScalarFieldEnum = (typeof OperationalEventArtifactReferenceScalarFieldEnum)[keyof typeof OperationalEventArtifactReferenceScalarFieldEnum]
 
 
 export const OperationalExceptionScalarFieldEnum = {
@@ -736,6 +808,10 @@ export const OrganizationMembershipScalarFieldEnum = {
   organizationId: 'organizationId',
   userId: 'userId',
   role: 'role',
+  preset: 'preset',
+  permissionKeys: 'permissionKeys',
+  scopeMode: 'scopeMode',
+  expiresAt: 'expiresAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   revokedAt: 'revokedAt'
@@ -750,15 +826,44 @@ export const OrganizationInvitationScalarFieldEnum = {
   workerId: 'workerId',
   email: 'email',
   role: 'role',
+  preset: 'preset',
+  permissionKeys: 'permissionKeys',
+  scopeMode: 'scopeMode',
   tokenHash: 'tokenHash',
   invitedById: 'invitedById',
   expiresAt: 'expiresAt',
   acceptedAt: 'acceptedAt',
   revokedAt: 'revokedAt',
+  accessExpiresAt: 'accessExpiresAt',
   createdAt: 'createdAt'
 } as const
 
 export type OrganizationInvitationScalarFieldEnum = (typeof OrganizationInvitationScalarFieldEnum)[keyof typeof OrganizationInvitationScalarFieldEnum]
+
+
+export const OrganizationMembershipResourceGrantScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  membershipId: 'membershipId',
+  resourceType: 'resourceType',
+  resourceId: 'resourceId',
+  grantedById: 'grantedById',
+  createdAt: 'createdAt'
+} as const
+
+export type OrganizationMembershipResourceGrantScalarFieldEnum = (typeof OrganizationMembershipResourceGrantScalarFieldEnum)[keyof typeof OrganizationMembershipResourceGrantScalarFieldEnum]
+
+
+export const OrganizationInvitationResourceGrantScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  invitationId: 'invitationId',
+  resourceType: 'resourceType',
+  resourceId: 'resourceId',
+  createdAt: 'createdAt'
+} as const
+
+export type OrganizationInvitationResourceGrantScalarFieldEnum = (typeof OrganizationInvitationResourceGrantScalarFieldEnum)[keyof typeof OrganizationInvitationResourceGrantScalarFieldEnum]
 
 
 export const SupportSessionScalarFieldEnum = {
@@ -943,19 +1048,19 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const NullableJsonNullValueInput = {
   DbNull: DbNull,
   JsonNull: JsonNull
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
-
-
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

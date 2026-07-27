@@ -4,7 +4,7 @@ import { getWorkspaceCapabilities } from "@/views/admin-core/admin-core-server";
 import { InvitePersonView } from "@/views/settings/InvitePersonView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 
-const candidateRoles: Array<Exclude<OrganizationRole, "OWNER" | "WORKER">> = ["ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"];
+const candidateRoles: Array<Exclude<OrganizationRole, "OWNER" | "WORKER">> = ["ADMIN", "MEMBER", "VIEWER"];
 
 export default async function PeopleInvitePage() {
   try {

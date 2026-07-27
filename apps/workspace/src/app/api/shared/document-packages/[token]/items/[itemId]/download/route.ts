@@ -19,6 +19,9 @@ export async function GET(_request: Request, context: RouteContext) {
         "Content-Disposition": `attachment; filename="${safeAttachmentFileName(file.originalFileName)}"`,
         "Content-Length": String(file.size),
         "Content-Type": file.mimeType,
+        "Referrer-Policy": "no-referrer",
+        "X-Content-Type-Options": "nosniff",
+        "X-Robots-Tag": "noindex, nofollow",
       },
     });
   } catch (error) { return asAccessResponse(error); }

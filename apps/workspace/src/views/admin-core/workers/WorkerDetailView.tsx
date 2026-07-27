@@ -46,6 +46,7 @@ import type {
   WorkspaceWorkerRecord,
 } from "@/views/workspace/workspace-records";
 import { OperationalArtifactStatus } from "@entities/operational-process/ui/OperationalArtifactStatus";
+import { ArtifactTimeline } from "@widgets/artifact-timeline/ui/ArtifactTimeline";
 
 function workerInitials(displayName: string) {
   return displayName
@@ -263,6 +264,8 @@ export function WorkerDetailView({
           </CardContent>
         </Card>
       ) : null}
+
+      <ArtifactTimeline artifactId={worker.id} artifactType="WORKER" />
 
       {capabilities.canManageCore ? (
         <Card size="sm">

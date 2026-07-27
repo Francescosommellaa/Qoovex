@@ -30,6 +30,8 @@ const DASHBOARD_QUERY_LIMIT = 20;
 const roleLabels: Record<OrganizationRole, string> = {
   OWNER: "Titolare",
   ADMIN: "Amministratore",
+  MEMBER: "Membro",
+  VIEWER: "Visualizzatore",
   SAFETY_CONSULTANT: "Consulente sicurezza",
   SITE_MANAGER: "Responsabile cantiere",
   WORKER: "Lavoratore",

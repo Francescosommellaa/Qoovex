@@ -5,6 +5,7 @@ import { listDocumentVersionsByDocumentIds } from "@shared/server/document-versi
 import { listEvidence } from "@shared/server/evidence-service";
 import { listJobSites } from "@shared/server/job-site-service";
 import { listShareLinks } from "@shared/server/share-link-service";
+import { listDocumentPackageShareProposals } from "@shared/server/document-package-share-proposal-service";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { DocumentPackageDetailView } from "@/views/admin-core/document-packages/DocumentPackageDetailView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
@@ -34,9 +35,10 @@ export default async function DocumentPackageDetailPage({ params, searchParams }
       listChecklistsWithItems(),
       getWorkspaceCapabilities(),
     ]);
-    const [documentVersions, shareLinks] = await Promise.all([
+    const [documentVersions, shareLinks, shareProposals] = await Promise.all([
       listDocumentVersionsByDocumentIds(documents.map((document) => document.id)),
       capabilities.canSharePackages ? listShareLinks(packageId) : Promise.resolve([]),
+      capabilities.canSharePackages ? listDocumentPackageShareProposals(packageId) : Promise.resolve([]),
     ]);
     return (
       <DocumentPackageDetailView
@@ -48,6 +50,7 @@ export default async function DocumentPackageDetailPage({ params, searchParams }
         checklists={serializeForClient<WorkspaceChecklistRecord[]>(checklists)}
         jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
         shareLinks={serializeForClient<WorkspaceShareLinkRecord[]>(shareLinks)}
+        shareProposals={serializeForClient(shareProposals)}
         returnToDashboard={from === "dashboard"}
       />
     );

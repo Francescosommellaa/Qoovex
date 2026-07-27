@@ -306,6 +306,7 @@ export type OperationalDecisionWhereInput = {
   process?: Prisma.XOR<Prisma.OperationalProcessScalarRelationFilter, Prisma.OperationalProcessWhereInput>
   step?: Prisma.XOR<Prisma.OperationalStepNullableScalarRelationFilter, Prisma.OperationalStepWhereInput> | null
   exceptions?: Prisma.OperationalExceptionListRelationFilter
+  shareProposals?: Prisma.DocumentPackageShareProposalListRelationFilter
 }
 
 export type OperationalDecisionOrderByWithRelationInput = {
@@ -334,6 +335,7 @@ export type OperationalDecisionOrderByWithRelationInput = {
   process?: Prisma.OperationalProcessOrderByWithRelationInput
   step?: Prisma.OperationalStepOrderByWithRelationInput
   exceptions?: Prisma.OperationalExceptionOrderByRelationAggregateInput
+  shareProposals?: Prisma.DocumentPackageShareProposalOrderByRelationAggregateInput
 }
 
 export type OperationalDecisionWhereUniqueInput = Prisma.AtLeast<{
@@ -366,6 +368,7 @@ export type OperationalDecisionWhereUniqueInput = Prisma.AtLeast<{
   process?: Prisma.XOR<Prisma.OperationalProcessScalarRelationFilter, Prisma.OperationalProcessWhereInput>
   step?: Prisma.XOR<Prisma.OperationalStepNullableScalarRelationFilter, Prisma.OperationalStepWhereInput> | null
   exceptions?: Prisma.OperationalExceptionListRelationFilter
+  shareProposals?: Prisma.DocumentPackageShareProposalListRelationFilter
 }, "id" | "organizationId_activeDedupeKey">
 
 export type OperationalDecisionOrderByWithAggregationInput = {
@@ -445,6 +448,7 @@ export type OperationalDecisionCreateInput = {
   process: Prisma.OperationalProcessCreateNestedOneWithoutDecisionsInput
   step?: Prisma.OperationalStepCreateNestedOneWithoutDecisionsInput
   exceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutDecisionInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDecisionInput
 }
 
 export type OperationalDecisionUncheckedCreateInput = {
@@ -470,6 +474,7 @@ export type OperationalDecisionUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   exceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutDecisionInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDecisionInput
 }
 
 export type OperationalDecisionUpdateInput = {
@@ -495,6 +500,7 @@ export type OperationalDecisionUpdateInput = {
   process?: Prisma.OperationalProcessUpdateOneRequiredWithoutDecisionsNestedInput
   step?: Prisma.OperationalStepUpdateOneWithoutDecisionsNestedInput
   exceptions?: Prisma.OperationalExceptionUpdateManyWithoutDecisionNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDecisionNestedInput
 }
 
 export type OperationalDecisionUncheckedUpdateInput = {
@@ -520,6 +526,7 @@ export type OperationalDecisionUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutDecisionNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDecisionNestedInput
 }
 
 export type OperationalDecisionCreateManyInput = {
@@ -601,6 +608,11 @@ export type OperationalDecisionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type OperationalDecisionNullableScalarRelationFilter = {
+  is?: Prisma.OperationalDecisionWhereInput | null
+  isNot?: Prisma.OperationalDecisionWhereInput | null
+}
+
 export type OperationalDecisionOrganizationIdActiveDedupeKeyCompoundUniqueInput = {
   organizationId: string
   activeDedupeKey: string
@@ -674,11 +686,6 @@ export type OperationalDecisionMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type OperationalDecisionNullableScalarRelationFilter = {
-  is?: Prisma.OperationalDecisionWhereInput | null
-  isNot?: Prisma.OperationalDecisionWhereInput | null
-}
-
 export type OperationalDecisionCreateNestedManyWithoutOrganizationInput = {
   create?: Prisma.XOR<Prisma.OperationalDecisionCreateWithoutOrganizationInput, Prisma.OperationalDecisionUncheckedCreateWithoutOrganizationInput> | Prisma.OperationalDecisionCreateWithoutOrganizationInput[] | Prisma.OperationalDecisionUncheckedCreateWithoutOrganizationInput[]
   connectOrCreate?: Prisma.OperationalDecisionCreateOrConnectWithoutOrganizationInput | Prisma.OperationalDecisionCreateOrConnectWithoutOrganizationInput[]
@@ -719,6 +726,22 @@ export type OperationalDecisionUncheckedUpdateManyWithoutOrganizationNestedInput
   update?: Prisma.OperationalDecisionUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.OperationalDecisionUpdateWithWhereUniqueWithoutOrganizationInput[]
   updateMany?: Prisma.OperationalDecisionUpdateManyWithWhereWithoutOrganizationInput | Prisma.OperationalDecisionUpdateManyWithWhereWithoutOrganizationInput[]
   deleteMany?: Prisma.OperationalDecisionScalarWhereInput | Prisma.OperationalDecisionScalarWhereInput[]
+}
+
+export type OperationalDecisionCreateNestedOneWithoutShareProposalsInput = {
+  create?: Prisma.XOR<Prisma.OperationalDecisionCreateWithoutShareProposalsInput, Prisma.OperationalDecisionUncheckedCreateWithoutShareProposalsInput>
+  connectOrCreate?: Prisma.OperationalDecisionCreateOrConnectWithoutShareProposalsInput
+  connect?: Prisma.OperationalDecisionWhereUniqueInput
+}
+
+export type OperationalDecisionUpdateOneWithoutShareProposalsNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationalDecisionCreateWithoutShareProposalsInput, Prisma.OperationalDecisionUncheckedCreateWithoutShareProposalsInput>
+  connectOrCreate?: Prisma.OperationalDecisionCreateOrConnectWithoutShareProposalsInput
+  upsert?: Prisma.OperationalDecisionUpsertWithoutShareProposalsInput
+  disconnect?: Prisma.OperationalDecisionWhereInput | boolean
+  delete?: Prisma.OperationalDecisionWhereInput | boolean
+  connect?: Prisma.OperationalDecisionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationalDecisionUpdateToOneWithWhereWithoutShareProposalsInput, Prisma.OperationalDecisionUpdateWithoutShareProposalsInput>, Prisma.OperationalDecisionUncheckedUpdateWithoutShareProposalsInput>
 }
 
 export type OperationalDecisionCreateNestedManyWithoutProcessInput = {
@@ -851,6 +874,7 @@ export type OperationalDecisionCreateWithoutOrganizationInput = {
   process: Prisma.OperationalProcessCreateNestedOneWithoutDecisionsInput
   step?: Prisma.OperationalStepCreateNestedOneWithoutDecisionsInput
   exceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutDecisionInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDecisionInput
 }
 
 export type OperationalDecisionUncheckedCreateWithoutOrganizationInput = {
@@ -875,6 +899,7 @@ export type OperationalDecisionUncheckedCreateWithoutOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   exceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutDecisionInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDecisionInput
 }
 
 export type OperationalDecisionCreateOrConnectWithoutOrganizationInput = {
@@ -930,6 +955,122 @@ export type OperationalDecisionScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"OperationalDecision"> | Date | string
 }
 
+export type OperationalDecisionCreateWithoutShareProposalsInput = {
+  id?: string
+  type: $Enums.OperationalDecisionType
+  status?: $Enums.OperationalDecisionStatus
+  question: string
+  explanation?: string | null
+  options: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  proposedOptionKey?: string | null
+  selectedOptionKey?: string | null
+  selectedValue?: string | null
+  activeDedupeKey?: string | null
+  decidedById?: string | null
+  decidedAt?: Date | string | null
+  reason?: string | null
+  reliability?: $Enums.OperationalReliability
+  impact?: $Enums.OperationalImpact
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutOperationalDecisionsInput
+  process: Prisma.OperationalProcessCreateNestedOneWithoutDecisionsInput
+  step?: Prisma.OperationalStepCreateNestedOneWithoutDecisionsInput
+  exceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutDecisionInput
+}
+
+export type OperationalDecisionUncheckedCreateWithoutShareProposalsInput = {
+  id?: string
+  organizationId: string
+  processId: string
+  stepId?: string | null
+  type: $Enums.OperationalDecisionType
+  status?: $Enums.OperationalDecisionStatus
+  question: string
+  explanation?: string | null
+  options: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  proposedOptionKey?: string | null
+  selectedOptionKey?: string | null
+  selectedValue?: string | null
+  activeDedupeKey?: string | null
+  decidedById?: string | null
+  decidedAt?: Date | string | null
+  reason?: string | null
+  reliability?: $Enums.OperationalReliability
+  impact?: $Enums.OperationalImpact
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  exceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutDecisionInput
+}
+
+export type OperationalDecisionCreateOrConnectWithoutShareProposalsInput = {
+  where: Prisma.OperationalDecisionWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationalDecisionCreateWithoutShareProposalsInput, Prisma.OperationalDecisionUncheckedCreateWithoutShareProposalsInput>
+}
+
+export type OperationalDecisionUpsertWithoutShareProposalsInput = {
+  update: Prisma.XOR<Prisma.OperationalDecisionUpdateWithoutShareProposalsInput, Prisma.OperationalDecisionUncheckedUpdateWithoutShareProposalsInput>
+  create: Prisma.XOR<Prisma.OperationalDecisionCreateWithoutShareProposalsInput, Prisma.OperationalDecisionUncheckedCreateWithoutShareProposalsInput>
+  where?: Prisma.OperationalDecisionWhereInput
+}
+
+export type OperationalDecisionUpdateToOneWithWhereWithoutShareProposalsInput = {
+  where?: Prisma.OperationalDecisionWhereInput
+  data: Prisma.XOR<Prisma.OperationalDecisionUpdateWithoutShareProposalsInput, Prisma.OperationalDecisionUncheckedUpdateWithoutShareProposalsInput>
+}
+
+export type OperationalDecisionUpdateWithoutShareProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumOperationalDecisionTypeFieldUpdateOperationsInput | $Enums.OperationalDecisionType
+  status?: Prisma.EnumOperationalDecisionStatusFieldUpdateOperationsInput | $Enums.OperationalDecisionStatus
+  question?: Prisma.StringFieldUpdateOperationsInput | string
+  explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  proposedOptionKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedOptionKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeDedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  decidedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  decidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
+  impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutOperationalDecisionsNestedInput
+  process?: Prisma.OperationalProcessUpdateOneRequiredWithoutDecisionsNestedInput
+  step?: Prisma.OperationalStepUpdateOneWithoutDecisionsNestedInput
+  exceptions?: Prisma.OperationalExceptionUpdateManyWithoutDecisionNestedInput
+}
+
+export type OperationalDecisionUncheckedUpdateWithoutShareProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  processId?: Prisma.StringFieldUpdateOperationsInput | string
+  stepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumOperationalDecisionTypeFieldUpdateOperationsInput | $Enums.OperationalDecisionType
+  status?: Prisma.EnumOperationalDecisionStatusFieldUpdateOperationsInput | $Enums.OperationalDecisionStatus
+  question?: Prisma.StringFieldUpdateOperationsInput | string
+  explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  proposedOptionKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedOptionKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeDedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  decidedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  decidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
+  impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  exceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutDecisionNestedInput
+}
+
 export type OperationalDecisionCreateWithoutProcessInput = {
   id?: string
   type: $Enums.OperationalDecisionType
@@ -952,6 +1093,7 @@ export type OperationalDecisionCreateWithoutProcessInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutOperationalDecisionsInput
   step?: Prisma.OperationalStepCreateNestedOneWithoutDecisionsInput
   exceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutDecisionInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDecisionInput
 }
 
 export type OperationalDecisionUncheckedCreateWithoutProcessInput = {
@@ -976,6 +1118,7 @@ export type OperationalDecisionUncheckedCreateWithoutProcessInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   exceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutDecisionInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDecisionInput
 }
 
 export type OperationalDecisionCreateOrConnectWithoutProcessInput = {
@@ -1026,6 +1169,7 @@ export type OperationalDecisionCreateWithoutStepInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutOperationalDecisionsInput
   process: Prisma.OperationalProcessCreateNestedOneWithoutDecisionsInput
   exceptions?: Prisma.OperationalExceptionCreateNestedManyWithoutDecisionInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDecisionInput
 }
 
 export type OperationalDecisionUncheckedCreateWithoutStepInput = {
@@ -1050,6 +1194,7 @@ export type OperationalDecisionUncheckedCreateWithoutStepInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   exceptions?: Prisma.OperationalExceptionUncheckedCreateNestedManyWithoutDecisionInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDecisionInput
 }
 
 export type OperationalDecisionCreateOrConnectWithoutStepInput = {
@@ -1100,6 +1245,7 @@ export type OperationalDecisionCreateWithoutExceptionsInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutOperationalDecisionsInput
   process: Prisma.OperationalProcessCreateNestedOneWithoutDecisionsInput
   step?: Prisma.OperationalStepCreateNestedOneWithoutDecisionsInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDecisionInput
 }
 
 export type OperationalDecisionUncheckedCreateWithoutExceptionsInput = {
@@ -1124,6 +1270,7 @@ export type OperationalDecisionUncheckedCreateWithoutExceptionsInput = {
   impact?: $Enums.OperationalImpact
   createdAt?: Date | string
   updatedAt?: Date | string
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDecisionInput
 }
 
 export type OperationalDecisionCreateOrConnectWithoutExceptionsInput = {
@@ -1164,6 +1311,7 @@ export type OperationalDecisionUpdateWithoutExceptionsInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutOperationalDecisionsNestedInput
   process?: Prisma.OperationalProcessUpdateOneRequiredWithoutDecisionsNestedInput
   step?: Prisma.OperationalStepUpdateOneWithoutDecisionsNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDecisionNestedInput
 }
 
 export type OperationalDecisionUncheckedUpdateWithoutExceptionsInput = {
@@ -1188,6 +1336,7 @@ export type OperationalDecisionUncheckedUpdateWithoutExceptionsInput = {
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDecisionNestedInput
 }
 
 export type OperationalDecisionCreateManyOrganizationInput = {
@@ -1235,6 +1384,7 @@ export type OperationalDecisionUpdateWithoutOrganizationInput = {
   process?: Prisma.OperationalProcessUpdateOneRequiredWithoutDecisionsNestedInput
   step?: Prisma.OperationalStepUpdateOneWithoutDecisionsNestedInput
   exceptions?: Prisma.OperationalExceptionUpdateManyWithoutDecisionNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDecisionNestedInput
 }
 
 export type OperationalDecisionUncheckedUpdateWithoutOrganizationInput = {
@@ -1259,6 +1409,7 @@ export type OperationalDecisionUncheckedUpdateWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutDecisionNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDecisionNestedInput
 }
 
 export type OperationalDecisionUncheckedUpdateManyWithoutOrganizationInput = {
@@ -1329,6 +1480,7 @@ export type OperationalDecisionUpdateWithoutProcessInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutOperationalDecisionsNestedInput
   step?: Prisma.OperationalStepUpdateOneWithoutDecisionsNestedInput
   exceptions?: Prisma.OperationalExceptionUpdateManyWithoutDecisionNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDecisionNestedInput
 }
 
 export type OperationalDecisionUncheckedUpdateWithoutProcessInput = {
@@ -1353,6 +1505,7 @@ export type OperationalDecisionUncheckedUpdateWithoutProcessInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutDecisionNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDecisionNestedInput
 }
 
 export type OperationalDecisionUncheckedUpdateManyWithoutProcessInput = {
@@ -1423,6 +1576,7 @@ export type OperationalDecisionUpdateWithoutStepInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutOperationalDecisionsNestedInput
   process?: Prisma.OperationalProcessUpdateOneRequiredWithoutDecisionsNestedInput
   exceptions?: Prisma.OperationalExceptionUpdateManyWithoutDecisionNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDecisionNestedInput
 }
 
 export type OperationalDecisionUncheckedUpdateWithoutStepInput = {
@@ -1447,6 +1601,7 @@ export type OperationalDecisionUncheckedUpdateWithoutStepInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exceptions?: Prisma.OperationalExceptionUncheckedUpdateManyWithoutDecisionNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDecisionNestedInput
 }
 
 export type OperationalDecisionUncheckedUpdateManyWithoutStepInput = {
@@ -1479,10 +1634,12 @@ export type OperationalDecisionUncheckedUpdateManyWithoutStepInput = {
 
 export type OperationalDecisionCountOutputType = {
   exceptions: number
+  shareProposals: number
 }
 
 export type OperationalDecisionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   exceptions?: boolean | OperationalDecisionCountOutputTypeCountExceptionsArgs
+  shareProposals?: boolean | OperationalDecisionCountOutputTypeCountShareProposalsArgs
 }
 
 /**
@@ -1500,6 +1657,13 @@ export type OperationalDecisionCountOutputTypeDefaultArgs<ExtArgs extends runtim
  */
 export type OperationalDecisionCountOutputTypeCountExceptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OperationalExceptionWhereInput
+}
+
+/**
+ * OperationalDecisionCountOutputType without action
+ */
+export type OperationalDecisionCountOutputTypeCountShareProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DocumentPackageShareProposalWhereInput
 }
 
 
@@ -1529,6 +1693,7 @@ export type OperationalDecisionSelect<ExtArgs extends runtime.Types.Extensions.I
   process?: boolean | Prisma.OperationalProcessDefaultArgs<ExtArgs>
   step?: boolean | Prisma.OperationalDecision$stepArgs<ExtArgs>
   exceptions?: boolean | Prisma.OperationalDecision$exceptionsArgs<ExtArgs>
+  shareProposals?: boolean | Prisma.OperationalDecision$shareProposalsArgs<ExtArgs>
   _count?: boolean | Prisma.OperationalDecisionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["operationalDecision"]>
 
@@ -1616,6 +1781,7 @@ export type OperationalDecisionInclude<ExtArgs extends runtime.Types.Extensions.
   process?: boolean | Prisma.OperationalProcessDefaultArgs<ExtArgs>
   step?: boolean | Prisma.OperationalDecision$stepArgs<ExtArgs>
   exceptions?: boolean | Prisma.OperationalDecision$exceptionsArgs<ExtArgs>
+  shareProposals?: boolean | Prisma.OperationalDecision$shareProposalsArgs<ExtArgs>
   _count?: boolean | Prisma.OperationalDecisionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OperationalDecisionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1636,6 +1802,7 @@ export type $OperationalDecisionPayload<ExtArgs extends runtime.Types.Extensions
     process: Prisma.$OperationalProcessPayload<ExtArgs>
     step: Prisma.$OperationalStepPayload<ExtArgs> | null
     exceptions: Prisma.$OperationalExceptionPayload<ExtArgs>[]
+    shareProposals: Prisma.$DocumentPackageShareProposalPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2057,6 +2224,7 @@ export interface Prisma__OperationalDecisionClient<T, Null = never, ExtArgs exte
   process<T extends Prisma.OperationalProcessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationalProcessDefaultArgs<ExtArgs>>): Prisma.Prisma__OperationalProcessClient<runtime.Types.Result.GetResult<Prisma.$OperationalProcessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   step<T extends Prisma.OperationalDecision$stepArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationalDecision$stepArgs<ExtArgs>>): Prisma.Prisma__OperationalStepClient<runtime.Types.Result.GetResult<Prisma.$OperationalStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   exceptions<T extends Prisma.OperationalDecision$exceptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationalDecision$exceptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationalExceptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  shareProposals<T extends Prisma.OperationalDecision$shareProposalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationalDecision$shareProposalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPackageShareProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2548,6 +2716,30 @@ export type OperationalDecision$exceptionsArgs<ExtArgs extends runtime.Types.Ext
   take?: number
   skip?: number
   distinct?: Prisma.OperationalExceptionScalarFieldEnum | Prisma.OperationalExceptionScalarFieldEnum[]
+}
+
+/**
+ * OperationalDecision.shareProposals
+ */
+export type OperationalDecision$shareProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DocumentPackageShareProposal
+   */
+  select?: Prisma.DocumentPackageShareProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DocumentPackageShareProposal
+   */
+  omit?: Prisma.DocumentPackageShareProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentPackageShareProposalInclude<ExtArgs> | null
+  where?: Prisma.DocumentPackageShareProposalWhereInput
+  orderBy?: Prisma.DocumentPackageShareProposalOrderByWithRelationInput | Prisma.DocumentPackageShareProposalOrderByWithRelationInput[]
+  cursor?: Prisma.DocumentPackageShareProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DocumentPackageShareProposalScalarFieldEnum | Prisma.DocumentPackageShareProposalScalarFieldEnum[]
 }
 
 /**

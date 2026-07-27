@@ -4,9 +4,9 @@
 
 Prisma conserva record, relazioni, stati e audit; Vercel Blob privato conserva i binari. Il motore non salva contenuto file, Blob key, token, URL firmati, credenziali, stack trace o dati sensibili non necessari.
 
-Il repository contiene dieci migration canoniche, fino a `20260726010000_operational_engine_phase_3`. La decima migration e additiva ed e stata applicata e verificata soltanto sul database locale guardato. Nessun ambiente Preview o Production e dichiarato allineato.
+Il repository contiene tredici migration canoniche. Dopo le due migration Fase 4, `20260727030000_adaptive_access_model` aggiunge preset, permessi persistiti, scope, scadenza e grant tenant-safe, quindi mappa i ruoli professionali esistenti a `MEMBER` senza ampliare le assegnazioni. Le tredici migration sono applicate e verificate soltanto sul database locale guardato. Nessun ambiente Preview o Production e dichiarato allineato.
 
-`OperationalEvent` e append-only per servizio e usa `eventKey` idempotente. `OperationalArtifactReference` valida tipo, Azienda e risorsa. `OperationalRuleSnapshot` conserva uno snapshot minimizzato e immutabile dei `DocumentRequirement` usati; modifiche successive non riscrivono i run aperti. `OperationalEffectReceipt` impedisce effetti equivalenti duplicati.
+`OperationalEvent` e append-only per servizio e usa `eventKey` idempotente. `OperationalEventArtifactReference` aggrega timeline senza duplicare eventi. `DocumentPackageRevision` congela manifest minimizzato e fingerprint SHA-256; una mutazione successiva non riscrive revisioni o link. I link legacy sono associati a revisioni `LEGACY_BACKFILL` preservando accesso, scadenza e download preesistenti.
 
 ## Garanzie runtime implementate
 
@@ -20,7 +20,7 @@ Il repository contiene dieci migration canoniche, fino a `20260726010000_operati
 
 ## Specifiche non implementate
 
-Non sono implementati retention automatica dedicata, cifratura applicativa aggiuntiva, indicizzazione del contenuto, OCR/AI, compensazioni generali o export di processo.
+Non sono implementati retention automatica dedicata, cifratura applicativa aggiuntiva, indicizzazione del contenuto file, OCR/AI, ricerca semantica, compensazioni generali o export di processo.
 
 ## Decisioni aperte e hard stop
 

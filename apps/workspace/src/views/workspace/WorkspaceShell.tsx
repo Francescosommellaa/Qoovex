@@ -32,7 +32,7 @@ async function getShellState() {
     const context = await getWorkspaceAccessContext();
     const devSession = await getDevAuthSession();
     const role = getEffectiveOrganizationRole(context);
-    const unreadNotificationCount = canReadWorkspaceNotifications(role)
+    const unreadNotificationCount = canReadWorkspaceNotifications(context.permissions)
       ? await getUnreadNotificationCount().catch(() => 0)
       : 0;
     return {
@@ -40,7 +40,7 @@ async function getShellState() {
       context,
       devRole: devSession?.role ?? null,
       role,
-      navigation: buildWorkspaceNavigation(role, context.platformRole),
+      navigation: buildWorkspaceNavigation(context.permissions, context.platformRole),
       unreadNotificationCount,
     };
   } catch (error) {
@@ -94,7 +94,7 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
             fallbackLabel={isWorkspace ? "Area di lavoro" : "Sicurezza account"}
             isSuperAdmin={isSuperAdmin}
             navigation={isWorkspace ? state.navigation.primary : []}
-            showNotifications={isWorkspace && canReadWorkspaceNotifications(state.role)}
+            showNotifications={isWorkspace && canReadWorkspaceNotifications(state.context.permissions)}
             unreadNotificationCount={isWorkspace ? state.unreadNotificationCount : 0}
           />
 

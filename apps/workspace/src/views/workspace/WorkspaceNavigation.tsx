@@ -2,13 +2,17 @@
 
 import {
   IconBuilding,
+  IconBuildingPlus,
   IconClipboardCheck,
   IconFile,
+  IconFilePlus,
   IconHome,
   IconPackageExport,
+  IconPhotoPlus,
   IconSettings,
   IconShieldLock,
   IconUsers,
+  IconUserPlus,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -35,6 +39,7 @@ import {
   useSidebar,
 } from "@qoovex/ui/components/sidebar";
 import { WorkspaceLogoutButton } from "./WorkspaceSessionControls";
+import { UniversalSearchDialog } from "@widgets/universal-search/ui/UniversalSearchDialog";
 import type { WorkspaceNavigationModel, WorkspaceNavigationItem } from "./workspace-navigation-policy";
 
 const platformNavItems = [
@@ -79,6 +84,20 @@ function NavigationLink({ current, item }: { current: (href: string) => boolean;
   );
 }
 
+function CreationActions({ items }: { items: readonly WorkspaceNavigationItem[] }) {
+  const { isMobile, setOpenMobile, state } = useSidebar();
+  if (!items.length) return null;
+  const iconFor = (item: WorkspaceNavigationItem) => item.href.startsWith("/documents") ? IconFilePlus : item.href.startsWith("/job-sites") ? IconBuildingPlus : item.href.startsWith("/workers") ? IconUserPlus : IconPhotoPlus;
+  return (
+    <div aria-label="Azioni rapide" className="rounded-lg bg-sidebar-accent/55 p-1.5 ring-1 ring-sidebar-border/70 group-data-[collapsible=icon]:p-1" data-slot="workspace-quick-actions" role="group">
+      <div className="flex h-6 items-center px-1 text-xs font-medium text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">Azioni rapide</div>
+      <SidebarMenu aria-label="Azioni manuali principali" className={isMobile ? "grid grid-cols-2 gap-1" : "grid grid-cols-4 gap-1 group-data-[collapsible=icon]:grid-cols-1"}>
+        {items.map((item) => { const Icon = iconFor(item); return <SidebarMenuItem key={`${item.href}-${item.label}`}><SidebarMenuButton aria-label={`Avvia: ${item.label}`} className={isMobile ? "bg-sidebar/45" : "justify-center bg-sidebar/45 px-0"} render={<Link href={item.href} onClick={() => { if (isMobile) setOpenMobile(false); }} />} tooltip={isMobile ? undefined : { children: item.label, hidden: false, side: state === "collapsed" ? "right" : "top" }}><Icon aria-hidden /><span className={isMobile ? undefined : "sr-only"}>{item.label}</span></SidebarMenuButton></SidebarMenuItem>; })}
+      </SidebarMenu>
+    </div>
+  );
+}
+
 export function WorkspaceNavigation({ navigation, platformRole, support, authenticated }: WorkspaceNavigationProps) {
   const { isMobile, setOpenMobile } = useSidebar();
   const pathname = usePathname();
@@ -107,12 +126,14 @@ export function WorkspaceNavigation({ navigation, platformRole, support, authent
   return (
     <>
       <SidebarContent>
+        {navigation.searchEnabled ? <SidebarGroup><SidebarGroupContent><SidebarMenu><SidebarMenuItem><UniversalSearchDialog /></SidebarMenuItem></SidebarMenu></SidebarGroupContent></SidebarGroup> : null}
         <SidebarGroup>
           <SidebarGroupLabel>Workspace</SidebarGroupLabel>
           <SidebarGroupContent><SidebarMenu>{navigation.primary.map((item) => <NavigationLink current={current} item={item} key={item.href} />)}</SidebarMenu></SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="gap-2">
+        <CreationActions items={navigation.actions} />
         {authenticated ? <AccountMenu navigation={navigation} support={support} onNavigate={() => { if (isMobile) setOpenMobile(false); }} /> : <Badge variant="outline">Sessione pubblica</Badge>}
       </SidebarFooter>
     </>

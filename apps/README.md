@@ -2,7 +2,7 @@
 
 - `workspace`: runtime Next.js del prodotto, con Centro operativo, motore exception-driven, pagine, auth, MFA, API, servizi server, supporto e Console Qoovex.
 - `web`: sito marketing pubblico e pagine legali.
-- `sirio`: catalogo e superficie di verifica del design system, invariata in Fase 3.
+- `sirio`: catalogo e superficie di verifica del design system, inclusa la proof operativa Fase 4 senza logica prodotto.
 - `mobile`: placeholder per una futura app mobile nativa.
 
 Regole:
@@ -15,4 +15,4 @@ Regole:
 - asset proprietari provengono da `packages/brand-resources`;
 - composizioni e logica dominio restano app-locali.
 
-Il motore operativo vive nel Workspace server-side e orchestra il dominio esistente. Web, Sirio e Mobile non ricevono logica operativa. La Fase 3 cambia architettura informativa e composizioni funzionali del Workspace, non il linguaggio visivo.
+Il motore operativo, la ricerca metadata-only, la timeline e le condivisioni revisionate vivono nel Workspace server-side. Web, Sirio e Mobile non ricevono logica operativa. La Fase 4 aggiunge alla foundation condivisa soltanto primitive generiche dimostrate in Sirio; non cambia il linguaggio visivo.

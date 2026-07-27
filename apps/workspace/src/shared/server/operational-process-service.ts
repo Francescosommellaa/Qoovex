@@ -46,6 +46,7 @@ async function artifactExists(client: OperationalDb, organizationId: string, art
   if (artifact.type === "CHECKLIST") return Boolean(await client.checklist.findFirst({ where: { id: artifact.id, organizationId }, select: { id: true } }));
   if (artifact.type === "EVIDENCE") return Boolean(await client.evidence.findFirst({ where: { id: artifact.id, organizationId }, select: { id: true } }));
   if (artifact.type === "DOCUMENT_PACKAGE") return Boolean(await client.documentPackage.findFirst({ where: { id: artifact.id, organizationId }, select: { id: true } }));
+  if (artifact.type === "SHARE_LINK") return Boolean(await client.shareLink.findFirst({ where: { id: artifact.id, organizationId }, select: { id: true } }));
   return false;
 }
 
@@ -73,7 +74,7 @@ export async function enqueueOperationalProcess(input: EnqueueOperationalProcess
       reliability: input.reliability ?? "VERIFIED",
       impact: input.impact ?? "LOW",
       steps: { create: definition.steps.map((step, position) => ({ organizationId: input.organizationId, key: step.key, position, status: position === 0 ? "READY" : "WAITING" })) },
-      events: { create: { organizationId: input.organizationId, eventKey: "input", kind: "INPUT", title: definition.title, summary: "Ingresso operativo acquisito. Qoovex verifichera i dati registrati.", actorUserId: input.actorUserId ?? null, reliability: input.reliability ?? "VERIFIED", impact: input.impact ?? "LOW" } },
+      events: { create: { organizationId: input.organizationId, eventKey: "input", kind: "INPUT", eventType: "PROCESS_STARTED", title: definition.title, summary: "Ingresso operativo acquisito. Qoovex verifichera i dati registrati.", actorUserId: input.actorUserId ?? null, actorType: input.actorUserId ? "USER" : "SYSTEM", actorRole: input.actorRole ?? null, sourceType: "DOMAIN", reliability: input.reliability ?? "VERIFIED", impact: input.impact ?? "LOW" } },
       artifactRefs: { create: input.artifacts.map((artifact) => ({ organizationId: input.organizationId, artifactType: artifact.type, artifactId: artifact.id, label: artifact.label ?? null })) },
     },
     select: { id: true, organizationId: true, type: true, definitionVersion: true, status: true, createdAt: true },

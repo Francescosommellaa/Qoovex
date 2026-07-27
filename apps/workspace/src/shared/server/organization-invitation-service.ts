@@ -2,10 +2,10 @@ import "server-only";
 
 import crypto from "crypto";
 import { db } from "@qoovex/db";
-import type { OrganizationRole } from "@qoovex/types";
+import type { OrganizationAccessPreset, OrganizationPermission, OrganizationRole, OrganizationScopeMode } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 import { getContextOrganizationId, getWorkspaceAccessContext, requireIdentity } from "@shared/server/access-context-service";
-import { canInviteRole } from "@shared/server/authorization-policy";
+import { canInviteRole, getPermissionsForPreset, getPermissionsForRole, sanitizeOrganizationPermissions } from "@shared/server/authorization-policy";
 import { buildOrganizationInvitationPath } from "../lib/workspace-link-routes";
 import { sendTransactionalEmail } from "@shared/server/transactional-email-service";
 import { recordSupportAccess } from "@shared/server/support-access-service";
@@ -18,7 +18,7 @@ import {
 } from "./serializable-transaction";
 
 const INVITATION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
-const INVITABLE_ROLES = new Set<OrganizationRole>(["ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"]);
+const INVITABLE_ROLES = new Set<OrganizationRole>(["ADMIN", "MEMBER", "VIEWER", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"]);
 
 function normalizeEmail(email: string) { return email.trim().toLowerCase(); }
 function hashToken(token: string) { return crypto.createHash("sha256").update(token).digest("hex"); }
@@ -35,18 +35,22 @@ export async function listInvitations() {
   return invitations;
 }
 
-export async function createInvitation(input: { email: string; role: OrganizationRole; workerId?: string | null }) {
+export async function createInvitation(input: { email: string; role: OrganizationRole; preset?: OrganizationAccessPreset | null; permissions?: OrganizationPermission[]; scopeMode?: OrganizationScopeMode; accessExpiresAt?: string | null; workerId?: string | null }) {
   if (!INVITABLE_ROLES.has(input.role)) throw new AccessError("Ruolo non invitabile.", 403);
   const context = await getWorkspaceAccessContext();
   const actorRole = context.support ? "OWNER" : context.company?.role;
   if (!actorRole || !canInviteRole(actorRole, input.role)) throw new AccessError("Non puoi invitare questo ruolo.", 403);
-  const role = input.role as Exclude<OrganizationRole, "OWNER">;
+  const legacyPreset: OrganizationAccessPreset | null = input.role === "WORKER" ? "LIMITED_UPLOAD" : input.role === "SITE_MANAGER" ? "SITE_MANAGER" : input.role === "SAFETY_CONSULTANT" ? "CONSULTANT" : null;
+  const role: Exclude<OrganizationRole, "OWNER"> = input.role === "SAFETY_CONSULTANT" || input.role === "SITE_MANAGER" || input.role === "WORKER" ? "MEMBER" : input.role as Exclude<OrganizationRole, "OWNER">;
+  const preset = input.preset ?? legacyPreset ?? (role === "VIEWER" ? "VIEWER" : role === "MEMBER" ? "OPERATIONAL_COLLABORATOR" : null);
+  const permissionKeys = sanitizeOrganizationPermissions(input.permissions?.length ? input.permissions : preset ? getPermissionsForPreset(preset) : getPermissionsForRole(role));
+  const scopeMode: OrganizationScopeMode = input.scopeMode ?? (role === "ADMIN" || preset === "CONSULTANT" ? "FULL" : "ASSIGNED");
   const email = normalizeEmail(input.email);
   if (!email.includes("@")) throw new AccessError("Inserisci una email valida.", 409);
   const organizationId = getContextOrganizationId(context);
   const workerId = typeof input.workerId === "string" && input.workerId.trim() ? input.workerId.trim() : null;
-  if (role === "WORKER" && !workerId) throw new AccessError("Seleziona il profilo lavoratore da invitare.", 409);
-  if (workerId && role !== "WORKER") throw new AccessError("Il profilo lavoratore puo essere collegato soltanto a un invito Lavoratore.", 409);
+  if (preset === "LIMITED_UPLOAD" && !workerId) throw new AccessError("Seleziona il profilo lavoratore da invitare.", 409);
+  if (workerId && preset !== "LIMITED_UPLOAD") throw new AccessError("Il profilo lavoratore puo essere collegato soltanto al preset Caricamento limitato.", 409);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "organization-invitation", metadata: { role } });
 
   if (workerId) {
@@ -87,7 +91,9 @@ export async function createInvitation(input: { email: string; role: Organizatio
     });
     return tx.organizationInvitation.create({
       data: {
-        organizationId, workerId, email, role, tokenHash: hashToken(rawToken),
+        organizationId, workerId, email, role, preset, permissionKeys, scopeMode,
+        accessExpiresAt: input.accessExpiresAt ? new Date(input.accessExpiresAt) : null,
+        tokenHash: hashToken(rawToken),
         invitedById: context.userId, expiresAt: new Date(Date.now() + INVITATION_TTL_MS),
       },
       select: { id: true, email: true, role: true, expiresAt: true, organization: { select: { name: true } } },
@@ -163,13 +169,14 @@ export async function acceptInvitation(rawToken: string) {
       const now = new Date();
       const invitation = await tx.organizationInvitation.findUnique({
         where: { tokenHash },
-        select: { id: true, email: true, role: true, organizationId: true, workerId: true, invitedById: true, expiresAt: true, acceptedAt: true, revokedAt: true },
+        select: { id: true, email: true, role: true, preset: true, permissionKeys: true, scopeMode: true, accessExpiresAt: true, organizationId: true, workerId: true, invitedById: true, expiresAt: true, acceptedAt: true, revokedAt: true },
       });
       if (!invitation) throw new AccessError("Invito non trovato.", 404);
       if (invitation.revokedAt || invitation.acceptedAt || invitation.expiresAt <= now) {
         throw new AccessError("Invito scaduto o non piu valido.", 410);
       }
       if (normalizeEmail(user.email) !== invitation.email) throw new AccessError("L'invito appartiene a un'altra email.", 403);
+      const invitationPreset = invitation.preset ?? (invitation.role === "WORKER" ? "LIMITED_UPLOAD" : invitation.role === "SITE_MANAGER" ? "SITE_MANAGER" : invitation.role === "SAFETY_CONSULTANT" ? "CONSULTANT" : null);
 
       const membership = await tx.organizationMembership.findUnique({
         where: { userId: user.id },
@@ -180,15 +187,15 @@ export async function acceptInvitation(rawToken: string) {
       if (membership) {
         const claimed = await tx.organizationMembership.updateMany({
           where: { id: membership.id, userId: user.id, revokedAt: { not: null } },
-          data: { organizationId: invitation.organizationId, role: invitation.role, revokedAt: null },
+          data: { organizationId: invitation.organizationId, role: invitation.role, preset: invitationPreset, permissionKeys: invitation.permissionKeys ?? [], scopeMode: invitation.scopeMode ?? "ASSIGNED", expiresAt: invitation.accessExpiresAt ?? null, revokedAt: null },
         });
         if (claimed.count !== 1) throw new AccessError("Appartieni gia a una azienda.", 409);
       } else {
         await tx.organizationMembership.create({
-          data: { organizationId: invitation.organizationId, userId: user.id, role: invitation.role },
+          data: { organizationId: invitation.organizationId, userId: user.id, role: invitation.role, preset: invitationPreset, permissionKeys: invitation.permissionKeys ?? [], scopeMode: invitation.scopeMode ?? "ASSIGNED", expiresAt: invitation.accessExpiresAt ?? null },
         });
       }
-      if (invitation.role === "WORKER" && invitation.workerId) {
+      if (invitationPreset === "LIMITED_UPLOAD" && invitation.workerId) {
         const worker = await tx.worker.findFirst({
           where: { id: invitation.workerId, organizationId: invitation.organizationId, archivedAt: null },
           select: { id: true },

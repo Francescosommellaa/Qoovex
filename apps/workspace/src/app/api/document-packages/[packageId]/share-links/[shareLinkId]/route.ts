@@ -8,7 +8,7 @@ interface RouteContext {
 export async function DELETE(_request: Request, context: RouteContext) {
   try {
     const { packageId, shareLinkId } = await context.params;
-    const shareLink = await revokeShareLink(packageId, shareLinkId);
-    return Response.json({ shareLink, revoked: true });
+    const result = await revokeShareLink(packageId, shareLinkId);
+    return Response.json({ ...result, revoked: true });
   } catch (error) { return asAccessResponse(error); }
 }

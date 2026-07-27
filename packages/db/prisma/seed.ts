@@ -19,6 +19,10 @@ const FIXTURE_USER_IDS = {
   workerLegacy: "local_demo_user_worker_legacy",
 } as const;
 
+const consultantPermissions = ["organization:read", "workers:read", "jobSites:read", "documents:read", "documents:upload", "documents:update", "deadlines:read", "calendar:read", "checklists:read", "checklists:manage", "checklists:complete", "evidence:read", "evidence:upload", "documentPackages:read", "documentPackages:create", "assignments:read"];
+const siteManagerPermissions = ["organization:read", "workers:read", "jobSites:read", "documents:read", "deadlines:read", "calendar:read", "checklists:read", "checklists:complete", "evidence:read", "evidence:upload"];
+const limitedUploadPermissions = ["organization:read", "workers:read", "jobSites:read", "documents:read", "documents:upload", "deadlines:read", "calendar:read", "evidence:read", "evidence:upload"];
+
 function getLocalDatabaseConnectionString() {
   const connectionString =
     process.env.DATABASE_URL?.trim() ||
@@ -183,11 +187,11 @@ async function main() {
       data: [
         { id: "local_demo_membership_owner", organizationId: FIXTURE_ORGANIZATION_ID, userId: owner.id, role: "OWNER" },
         { id: "local_demo_membership_admin", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.admin, role: "ADMIN" },
-        { id: "local_demo_membership_consultant", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.consultant, role: "SAFETY_CONSULTANT" },
-        { id: "local_demo_membership_manager", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.manager, role: "SITE_MANAGER" },
-        { id: "local_demo_membership_manager_unscoped", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.managerWithoutSite, role: "SITE_MANAGER" },
-        { id: "local_demo_membership_worker", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.worker, role: "WORKER" },
-        { id: "local_demo_membership_worker_legacy", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.workerLegacy, role: "WORKER" },
+        { id: "local_demo_membership_consultant", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.consultant, role: "MEMBER", preset: "CONSULTANT", scopeMode: "FULL", permissionKeys: consultantPermissions },
+        { id: "local_demo_membership_manager", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.manager, role: "MEMBER", preset: "SITE_MANAGER", scopeMode: "ASSIGNED", permissionKeys: siteManagerPermissions },
+        { id: "local_demo_membership_manager_unscoped", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.managerWithoutSite, role: "MEMBER", preset: "SITE_MANAGER", scopeMode: "ASSIGNED", permissionKeys: siteManagerPermissions },
+        { id: "local_demo_membership_worker", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.worker, role: "MEMBER", preset: "LIMITED_UPLOAD", scopeMode: "ASSIGNED", permissionKeys: limitedUploadPermissions },
+        { id: "local_demo_membership_worker_legacy", organizationId: FIXTURE_ORGANIZATION_ID, userId: FIXTURE_USER_IDS.workerLegacy, role: "MEMBER", preset: "LIMITED_UPLOAD", scopeMode: "ASSIGNED", permissionKeys: limitedUploadPermissions },
       ],
     });
 
@@ -726,11 +730,38 @@ async function main() {
         },
       ],
     });
+    const localDemoRevisionManifest = {
+      schemaVersion: 1,
+      package: { title: "Pacchetto Via Roma · revisione", description: "Pacchetto dimostrativo pronto per revisione." },
+      items: [
+        { id: "local_demo_package_item_document", sourceItemId: "local_demo_package_item_document", itemType: "DOCUMENT", position: 0, documentId: "local_demo_document_present", documentVersionId: null, evidenceId: null, checklistId: null, title: "Documento identificativo · Luca Verdi", status: "PRESENT", included: true, exclusionReason: null, hasFile: false },
+        { id: "local_demo_package_item_evidence", sourceItemId: "local_demo_package_item_evidence", itemType: "EVIDENCE", position: 1, documentId: null, documentVersionId: null, evidenceId: "local_demo_evidence_note", checklistId: null, title: "Accessi verificati", status: "NOTE", included: true, exclusionReason: null, hasFile: false },
+        { id: "local_demo_package_item_checklist", sourceItemId: "local_demo_package_item_checklist", itemType: "CHECKLIST", position: 2, documentId: null, documentVersionId: null, evidenceId: null, checklistId: "local_demo_checklist_open", title: "Apertura giornaliera Via Roma", status: "ACTIVE", included: true, exclusionReason: null, hasFile: false },
+      ],
+      issues: [],
+    };
+    await tx.documentPackageRevision.create({
+      data: {
+        id: "local_demo_package_revision_approved",
+        organizationId: FIXTURE_ORGANIZATION_ID,
+        documentPackageId: "local_demo_package_review",
+        revisionNumber: 1,
+        origin: "AUTOMATED_PREPARATION",
+        status: "APPROVED",
+        manifest: localDemoRevisionManifest,
+        fingerprint: fixtureTokenHash(JSON.stringify(localDemoRevisionManifest)),
+        preparedById: owner.id,
+        approvedById: owner.id,
+        approvedAt: new Date(),
+      },
+    });
     await tx.shareLink.create({
       data: {
         id: "local_demo_share_link",
         organizationId: FIXTURE_ORGANIZATION_ID,
         documentPackageId: "local_demo_package_review",
+        revisionId: "local_demo_package_revision_approved",
+        allowDownload: true,
         tokenHash: fixtureTokenHash("local-demo-share-link-not-for-production"),
         expiresAt: atDayOffset(10),
         createdById: owner.id,
@@ -812,7 +843,9 @@ async function main() {
           organizationId: FIXTURE_ORGANIZATION_ID,
           workerId: "local_demo_worker_elena",
           email: "elena.ferri@qoovex.local",
-          role: "WORKER",
+          role: "MEMBER",
+          preset: "LIMITED_UPLOAD",
+          permissionKeys: limitedUploadPermissions,
           tokenHash: fixtureTokenHash("local-demo-invitation-not-for-production"),
           invitedById: owner.id,
           expiresAt: atDayOffset(7),
@@ -821,7 +854,9 @@ async function main() {
           id: "local_demo_invitation_expired",
           organizationId: FIXTURE_ORGANIZATION_ID,
           email: "responsabile.scaduto@qoovex.local",
-          role: "SITE_MANAGER",
+          role: "MEMBER",
+          preset: "SITE_MANAGER",
+          permissionKeys: siteManagerPermissions,
           tokenHash: fixtureTokenHash("local-demo-expired-invitation-not-for-production"),
           invitedById: owner.id,
           expiresAt: atDayOffset(-2),
@@ -830,7 +865,10 @@ async function main() {
           id: "local_demo_invitation_revoked",
           organizationId: FIXTURE_ORGANIZATION_ID,
           email: "consulente.revocato@qoovex.local",
-          role: "SAFETY_CONSULTANT",
+          role: "MEMBER",
+          preset: "CONSULTANT",
+          permissionKeys: consultantPermissions,
+          scopeMode: "FULL",
           tokenHash: fixtureTokenHash("local-demo-revoked-invitation-not-for-production"),
           invitedById: owner.id,
           expiresAt: atDayOffset(5),
@@ -845,7 +883,7 @@ async function main() {
           id: "local_demo_audit_document",
           organizationId: FIXTURE_ORGANIZATION_ID,
           actorUserId: FIXTURE_USER_IDS.consultant,
-          actorRole: "SAFETY_CONSULTANT",
+          actorRole: "MEMBER",
           action: "DOCUMENT_UPDATED",
           entityType: "DOCUMENT",
           entityId: "local_demo_document_review",
@@ -857,7 +895,7 @@ async function main() {
           id: "local_demo_audit_checklist",
           organizationId: FIXTURE_ORGANIZATION_ID,
           actorUserId: FIXTURE_USER_IDS.manager,
-          actorRole: "SITE_MANAGER",
+          actorRole: "MEMBER",
           action: "CHECKLIST_ITEM_COMPLETED",
           entityType: "CHECKLIST_ITEM",
           entityId: "local_demo_checklist_item_done",
@@ -869,7 +907,7 @@ async function main() {
           id: "local_demo_audit_package",
           organizationId: FIXTURE_ORGANIZATION_ID,
           actorUserId: FIXTURE_USER_IDS.consultant,
-          actorRole: "SAFETY_CONSULTANT",
+          actorRole: "MEMBER",
           action: "DOCUMENT_PACKAGE_UPDATED",
           entityType: "DOCUMENT_PACKAGE",
           entityId: "local_demo_package_review",

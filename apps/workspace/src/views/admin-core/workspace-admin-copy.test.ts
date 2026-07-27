@@ -23,7 +23,7 @@ describe("workspace admin UI copy", () => {
   const settingsHubSource = readFileSync(join(root, "settings", "SettingsHubView.tsx"), "utf8");
   const evidenceFormSource = readFileSync(join(root, "admin-core", "evidence", "EvidenceForm.tsx"), "utf8");
   const shareLinksPanelSource = readFileSync(join(root, "admin-core", "document-packages", "ShareLinksPanel.tsx"), "utf8");
-  const shareLinkCreateSource = readFileSync(join(root, "admin-core", "document-packages", "ShareLinkCreateForm.tsx"), "utf8");
+  const shareReviewSource = readFileSync(join(root, "..", "widgets", "document-package-share-review", "ui", "DocumentPackageShareReview.tsx"), "utf8");
   const notificationEmailPanelSource = readFileSync(join(root, "admin-core", "notifications", "NotificationEmailDigestPanel.tsx"), "utf8");
   const notificationPreferencesPanelSource = readFileSync(join(root, "admin-core", "notifications", "NotificationEmailPreferencesPanel.tsx"), "utf8");
   const notificationActionsSource = readFileSync(join(root, "admin-core", "notifications", "NotificationActionButtons.tsx"), "utf8");
@@ -151,7 +151,8 @@ describe("workspace admin UI copy", () => {
   it("does not keep created share link values in the share link list", () => {
     expect(shareLinksPanelSource).not.toContain("createdToken");
     expect(shareLinksPanelSource).not.toContain("token");
-    expect(shareLinkCreateSource).toContain("Link creato. Copialo ora");
+    expect(shareReviewSource).toContain("Link creato: copialo ora");
+    expect(shareReviewSource).toContain("Approva e crea link");
   });
 
   it("keeps the audit log UI minimized and adds basic security headers", () => {

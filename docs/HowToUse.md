@@ -19,7 +19,7 @@ Ogni documento deve distinguere:
 - **Specifica concettuale non implementata**: direzione priva di contratto o runtime attivo.
 - **Decisione aperta / hard stop**: richiede approvazione e non puo essere risolta per deduzione.
 
-Processi persistenti, Centro operativo e quattro definizioni deterministiche sono implementati in Fase 3. OCR, AI, ricerca universale, nuovi canali, retention automatica, SLA e limiti commerciali non sono capability attive.
+Processi persistenti, Centro operativo, cinque definizioni deterministiche, ricerca consultiva sui metadati autorizzati, timeline aggregate e condivisione revisionata sono implementati nelle Fasi 3-4. OCR, AI, ricerca nei file o semantica, cronologia/viste salvate, nuovi canali, retention automatica, SLA e limiti commerciali non sono capability attive.
 
 ## Modifiche tecniche
 
@@ -31,4 +31,4 @@ La direzione grafica resta quella canonica: Geist/Geist Mono, Tabler, tema light
 
 Classificare come database-sensitive qualunque modifica a route, server action, servizio, query, dashboard, widget dati, polling, reminder, job, notifiche, audit, liste, ricerca, filtri, export, supporto, retention o workflow documentali. Applicare `Database operation impact` di `OperationalProtocol.md`: ricostruire il flusso reale, misurare o stimare con evidenza le chiamate Prisma prima/dopo e verificare duplicazioni, N+1, polling, scansioni, over-fetching e accessi cloud evitabili.
 
-Schema, migration, provider, auth, permessi, tenant isolation, frequenze job, audit, retention, servizi esterni e configurazioni cloud sono hard stop fuori da un piano esplicitamente approvato. La Fase 3 autorizza la sola migration additiva locale e il runner esistente; non autorizza deploy remoti.
+Schema, migration, provider, auth, permessi, tenant isolation, frequenze job, audit, retention, servizi esterni e configurazioni cloud sono hard stop fuori da un piano esplicitamente approvato. La Fase 4 ha autorizzato soltanto le migration additive e le prove sul database locale guardato; non autorizza deploy remoti.

@@ -203,8 +203,9 @@ async function expectPrimaryNavigation(page: Page, labels: string[]) {
   const navigation = page.getByRole("navigation", { name: "Navigazione workspace" });
   for (const label of labels) await expect(navigation.getByRole("link", { name: label, exact: true })).toBeVisible();
   await expect(navigation.getByText("Preferiti", { exact: true })).toHaveCount(0);
-  await expect(navigation.getByText("Azioni rapide", { exact: true })).toHaveCount(0);
-  await expect(navigation.getByText("Ricerca", { exact: true })).toHaveCount(0);
+  await expect(navigation.getByText("Azioni rapide", { exact: true })).toBeVisible();
+  await expect(navigation.getByRole("button", { name: "Cerca", exact: true })).toBeVisible();
+  await expect(navigation.getByRole("link", { name: "Ricerca", exact: true })).toHaveCount(0);
   await expect(navigation.getByText("Analisi", { exact: true })).toHaveCount(0);
   await expect(navigation.getByRole("link", { name: "Notifiche", exact: true })).toHaveCount(0);
 }
@@ -383,7 +384,10 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     const owner = fixture.owner as JsonRecord;
     await signInWithCredentials(page, String(owner.email), String(fixture.password));
     await satisfyMfaGate(page, String(owner.secret));
-    await expectPrimaryNavigation(page, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri", "Pacchetti", "Impostazioni"]);
+    await expectPrimaryNavigation(page, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri", "Condivisioni", "Impostazioni"]);
+    await page.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("button", { name: "Cerca", exact: true }).click();
+    await expect(page.getByRole("dialog", { name: "Cerca nel workspace" })).toBeVisible();
+    await page.keyboard.press("Escape");
     await expect(page.getByRole("button", { name: /^Apri notifiche(?:, \d+ non lett[ae])?$/ })).toBeVisible();
 
     const incompleteFixture = await expectJson(await adminApi.post("/api/dev-fixtures/platform-admin", { data: { kind: "operational-incomplete-document", runId, organizationId: fixture.organizationId } }), 201);
@@ -457,8 +461,29 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
     await page.setViewportSize({ width: 1280, height: 900 });
 
+    await runOperationalEngine(page, 3);
+    const searchPage = await pageJsonRequest(page, "POST", "/api/search", { query: String(guidedJobSiteDocument.title), take: 20 }, 200);
+    const documentSearchResult = (searchPage.items as JsonRecord[]).find((item) => item.type === "DOCUMENT" && item.id === guidedJobSiteDocument.id)!;
+    expect(documentSearchResult).toMatchObject({ href: `/documents/${guidedJobSiteDocument.id}`, timelineHref: expect.any(String) });
+    const artifactTimeline = await expectJson(await page.request.get(`/api/operations/artifacts/DOCUMENT/${guidedJobSiteDocument.id}/events`), 200);
+    expect((artifactTimeline.items as JsonRecord[]).length).toBeGreaterThan(0);
+    await page.goto(String(documentSearchResult.href), { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("heading", { name: String(guidedJobSiteDocument.title), exact: true })).toBeVisible();
+
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
-    const shareLinkResponse = await pagePostJson(page, `/api/document-packages/${documentPackage.id}/share-links`, { expiresAt });
+    const shareProposal = await pagePostJson(page, `/api/document-packages/${documentPackage.id}/share-proposals`, {
+      targetKind: "NAMED_RECIPIENT",
+      recipientLabel: `Destinatario E2E ${runId}`,
+      purpose: "Verifica condivisione E2E",
+      expiresAt,
+      allowDownload: true,
+    });
+    expect(shareProposal).toMatchObject({ status: "READY_FOR_REVIEW", canConfirm: true, revision: { fingerprint: expect.stringMatching(/^[a-f0-9]{64}$/) } });
+    const revision = shareProposal.revision as JsonRecord;
+    const shareLinkResponse = await pagePostJson(page, `/api/document-packages/${documentPackage.id}/share-proposals/${shareProposal.id}/confirm`, {
+      confirmation: "APPROVE_AND_CREATE",
+      fingerprint: revision.fingerprint,
+    });
     const shareLink = shareLinkResponse.shareLink as JsonRecord;
     const token = shareLinkResponse.token;
     expect(token).toEqual(expect.any(String));
@@ -515,7 +540,7 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     const safetyPage = await safetyContext.newPage();
     await signInWithCredentials(safetyPage, String(safety.email), String(fixture.password));
     await satisfyMfaGate(safetyPage, String(safety.secret));
-    await expectPrimaryNavigation(safetyPage, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri", "Pacchetti", "Impostazioni"]);
+    await expectPrimaryNavigation(safetyPage, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri", "Condivisioni"]);
     await expect(safetyPage.getByRole("button", { name: /^Apri notifiche(?:, \d+ non lett[ae])?$/ })).toBeVisible();
 
     expect((await sinkApi.delete(sinkUrl)).status()).toBe(200);
@@ -577,7 +602,7 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
 
     const siteManagerPage = await scopedSiteManagerContext.newPage();
     await signInWithCredentials(siteManagerPage, siteManagerEmail, siteManagerPassword);
-    await expectPrimaryNavigation(siteManagerPage, ["Centro operativo", "Documenti", "Lavoratori", "I miei cantieri"]);
+    await expectPrimaryNavigation(siteManagerPage, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri"]);
     const siteManagerJobSites = await expectJson(await siteManagerPage.request.get("/api/job-sites"), 200) as unknown as JsonRecord;
     expect((siteManagerJobSites.items as JsonRecord[]).map((jobSite) => jobSite.id)).toEqual([assignedJobSite.id]);
     await expectJson(await siteManagerPage.request.post("/api/job-sites", { data: { name: "Vietato" } }), 404);
@@ -585,8 +610,8 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     const workerPage = await workerContext.newPage();
     await signInWithCredentials(workerPage, String(worker.email), String(fixture.password));
     await satisfyMfaGate(workerPage, String(worker.secret));
-    await expectPrimaryNavigation(workerPage, ["Centro operativo", "Documenti", "Il mio profilo", "I miei cantieri"]);
-    await expect(workerPage.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("link", { name: "Pacchetti", exact: true })).toHaveCount(0);
+    await expectPrimaryNavigation(workerPage, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri"]);
+    await expect(workerPage.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("link", { name: "Condivisioni", exact: true })).toHaveCount(0);
     const workerRecords = await expectJson(await workerPage.request.get("/api/workers"), 200) as unknown as JsonRecord[];
     expect(workerRecords.map((record) => record.id)).toEqual([linkedWorker.id]);
     await expectJson(await workerPage.request.post("/api/workers", { data: { displayName: "Vietato" } }), 404);

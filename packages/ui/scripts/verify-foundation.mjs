@@ -205,9 +205,13 @@ assert(sirioDashboardOverview.includes("<DialogTitle>Assegna responsabile</Dialo
 for (const required of ["navigation.primary.map", "<AccountMenu", "Workspace", "setOpenMobile(false)", 'tooltip="Torna al workspace"']) {
   assert(workspaceNavigation.includes(required), `Navigazione primaria Workspace non contiene ${required}.`);
 }
-for (const removed of ["WorkspaceFavorites", "CreationActions", "Ricerca rapida, in preparazione", "Analisi, in preparazione", "Azioni rapide"]) {
+for (const removed of ["WorkspaceFavorites", "Ricerca rapida, in preparazione", "Analisi, in preparazione"]) {
   assert(!workspaceNavigation.includes(removed), `Navigazione Workspace contiene ancora ${removed}.`);
 }
+for (const required of ["CreationActions", "Azioni rapide", 'data-slot="workspace-quick-actions"', "UniversalSearchDialog"]) {
+  assert(workspaceNavigation.includes(required), `Navigazione Workspace non contiene il contratto ${required}.`);
+}
+assert(!workspaceNavigation.includes('href="/search"'), "La ricerca deve restare un modale separato dalla navigazione primaria.");
 assert(!workspaceNavigation.includes('href="/notifications"'), "La sidebar non deve contenere destinazioni Notifiche.");
 assert(!workspaceShell.includes("SidebarRail"), "Workspace non deve usare il rail ambiguo per ridurre il menu.");
 assert(workspaceShell.includes("SIDEBAR_COOKIE_NAME") && workspaceShell.includes("defaultOpen={sidebarDefaultOpen}"), "Workspace deve ripristinare la preferenza della sidebar dal cookie.");

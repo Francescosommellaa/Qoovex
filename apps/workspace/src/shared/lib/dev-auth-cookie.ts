@@ -43,7 +43,7 @@ async function signPayload(secret: string, payload: string) {
 }
 
 export function isDevAuthRole(value: unknown): value is OrganizationRole {
-  return typeof value === "string" && (organizationRoles as readonly string[]).includes(value);
+  return typeof value === "string" && [...organizationRoles, "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"].includes(value as OrganizationRole);
 }
 
 export async function signDevAuthCookieValue(role: OrganizationRole = "OWNER") {

@@ -10,9 +10,9 @@ Qoovex non garantisce conformita, non certifica persone, documenti o cantieri e 
 
 Il Workspace implementa il dominio protetto di Aziende, lavoratori, cantieri, documenti/versioni private, requisiti, scadenze, calendario, checklist, prove, pacchetti, condivisioni, notifiche, audit, supporto e data-control.
 
-La Fase 3 aggiunge un motore operativo persistente con quattro definizioni versionate: `DOCUMENT_RECEIVED@1`, `WORKER_CREATED@1`, `JOB_SITE_CREATED@1` e `CONTINUOUS_CONTROL@1`. Creazione e aggiornamento di documenti, versioni, lavoratori e cantieri accodano il processo nella stessa transazione della mutazione dominio. Il runner usa claim atomico, lease, fencing, retry limitato e riconciliazione.
+Le Fasi 3-4 implementano un motore operativo persistente con cinque definizioni versionate: `DOCUMENT_RECEIVED@1`, `WORKER_CREATED@1`, `JOB_SITE_CREATED@1`, `CONTINUOUS_CONTROL@1` e `DOCUMENT_PACKAGE_SHARING@1`. Il runner usa claim atomico, lease, fencing, retry limitato e riconciliazione.
 
-`/dashboard` e ora il Centro operativo; `/operations/[processId]` mostra step, timeline utente, decisioni, eccezioni e riferimenti autorizzati. La shell espone Centro operativo, Documenti, Lavoratori, Cantieri, Pacchetti quando autorizzato e Impostazioni. L'ingresso universale instrada verso i flussi controllati esistenti senza endpoint generico.
+`/dashboard` e il Centro operativo; `/operations/[processId]` mostra step, timeline utente, decisioni, eccezioni e riferimenti autorizzati. La shell espone destinazioni autorizzate, una ricerca metadata-only in modale separato e la card `Azioni rapide` per le mutazioni manuali principali. Non esiste una pagina `/search`. `/document-packages` prepara una revisione immutabile, richiede review e crea il link soltanto dopo conferma umana.
 
 ## Direzione approvata
 
@@ -25,10 +25,10 @@ La Fase 3 aggiunge un motore operativo persistente con quattro definizioni versi
 
 ## Specifiche non implementate
 
-Non sono implementati OCR, AI documentale, ricerca universale, editor visuale di processi, nuovi canali di ingresso o notifica, nuove policy di condivisione, annullamento/undo, retention automatica dedicata o nuovi ruoli/permessi.
+Non sono implementati OCR, AI documentale, ricerca nei file o semantica, viste salvate o cronologia query, editor visuale di processi, nuovi canali di ingresso/notifica, condivisione automatica, annullamento/undo o retention automatica dedicata.
 
 I nomi concettuali delle Fasi 1-2 restano storia decisionale; i contratti implementati usano i nomi `Operational*` descritti dal codice e dallo schema.
 
 ## Decisioni aperte e hard stop
 
-Restano aperti provider e policy OCR/AI, retention di processi/eventi, ricerca e indicizzazione, nuovi canali, annullamento/compensazioni, trattamento ulteriore dei documenti sensibili, SLA/monitoraggio e limiti commerciali. Qualunque deploy o migration fuori dal database locale richiede verifica e autorizzazione separate.
+Restano aperti provider e policy OCR/AI, retention di processi/eventi, ricerca nei file/semantica, privacy di viste salvate e cronologia, nuovi canali, annullamento/compensazioni, trattamento ulteriore dei documenti sensibili, SLA/monitoraggio e limiti commerciali. Qualunque deploy o migration fuori dal database locale richiede verifica e autorizzazione separate.

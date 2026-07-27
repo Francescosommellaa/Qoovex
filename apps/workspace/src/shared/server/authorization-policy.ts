@@ -1,130 +1,46 @@
-import type { OrganizationPermission, OrganizationRole } from "@qoovex/types";
+import {
+  organizationPermissions,
+  type OrganizationAccessPreset,
+  type OrganizationPermission,
+  type OrganizationRole,
+} from "@qoovex/types";
 
-const OWNER_PERMISSIONS: readonly OrganizationPermission[] = [
-  "organization:read",
-  "organization:update",
-  "members:read",
-  "members:invite",
-  "members:manage",
-  "workers:read",
-  "workers:create",
-  "workers:update",
-  "workers:archive",
-  "jobSites:read",
-  "jobSites:create",
-  "jobSites:update",
-  "jobSites:archive",
-  "documents:read",
-  "documents:upload",
-  "documents:update",
-  "documents:archive",
-  "deadlines:read",
-  "deadlines:manage",
-  "calendar:read",
-  "calendar:manage",
-  "checklists:read",
-  "checklists:manage",
-  "checklists:complete",
-  "evidence:read",
-  "evidence:upload",
-  "evidence:delete",
-  "documentPackages:read",
-  "documentPackages:create",
-  "documentPackages:share",
-  "auditLog:read",
-  "assignments:read",
-  "assignments:manage",
-  "settings:update",
-];
+const ADMIN_PERMISSIONS: readonly OrganizationPermission[] = organizationPermissions.filter((permission) =>
+  !["organization:update", "members:manage", "auditLog:read", "settings:update"].includes(permission),
+);
 
-const ROLE_PERMISSIONS: Record<OrganizationRole, readonly OrganizationPermission[]> = {
-  OWNER: OWNER_PERMISSIONS,
-  ADMIN: [
-    "organization:read",
-    "members:read",
-    "members:invite",
-    "workers:read",
-    "workers:create",
-    "workers:update",
-    "workers:archive",
-    "jobSites:read",
-    "jobSites:create",
-    "jobSites:update",
-    "jobSites:archive",
-    "documents:read",
-    "documents:upload",
-    "documents:update",
-    "documents:archive",
-    "deadlines:read",
-    "deadlines:manage",
-    "calendar:read",
-    "calendar:manage",
-    "checklists:read",
-    "checklists:manage",
-    "checklists:complete",
-    "evidence:read",
-    "evidence:upload",
-    "evidence:delete",
-    "documentPackages:read",
-    "documentPackages:create",
-    "documentPackages:share",
-    "assignments:read",
-    "assignments:manage",
-  ],
-  SAFETY_CONSULTANT: [
-    "organization:read",
-    "workers:read",
-    "jobSites:read",
-    "documents:read",
-    "documents:upload",
-    "documents:update",
-    "deadlines:read",
-    "calendar:read",
-    "checklists:read",
-    "checklists:manage",
-    "checklists:complete",
-    "evidence:read",
-    "evidence:upload",
-    "documentPackages:read",
-    "documentPackages:create",
-    "assignments:read",
-  ],
-  SITE_MANAGER: [
-    "organization:read",
-    "workers:read",
-    "jobSites:read",
-    "documents:read",
-    "deadlines:read",
-    "calendar:read",
-    "checklists:read",
-    "checklists:complete",
-    "evidence:read",
-    "evidence:upload",
-  ],
-  WORKER: [
-    "organization:read",
-    "workers:read",
-    "jobSites:read",
-    "documents:read",
-    "documents:upload",
-    "deadlines:read",
-    "calendar:read",
-    "evidence:read",
-    "evidence:upload",
-  ],
+const PRESET_PERMISSIONS: Record<OrganizationAccessPreset, readonly OrganizationPermission[]> = {
+  OPERATIONAL_COLLABORATOR: ["organization:read", "workers:read", "jobSites:read", "documents:read", "documents:upload", "deadlines:read", "calendar:read", "checklists:read", "checklists:complete", "evidence:read", "evidence:upload"],
+  SITE_MANAGER: ["organization:read", "workers:read", "jobSites:read", "documents:read", "deadlines:read", "calendar:read", "checklists:read", "checklists:complete", "evidence:read", "evidence:upload"],
+  CONSULTANT: ["organization:read", "workers:read", "jobSites:read", "documents:read", "documents:upload", "documents:update", "deadlines:read", "calendar:read", "checklists:read", "checklists:manage", "checklists:complete", "evidence:read", "evidence:upload", "documentPackages:read", "documentPackages:create", "assignments:read"],
+  VIEWER: ["organization:read", "workers:read", "jobSites:read", "documents:read", "deadlines:read", "calendar:read", "checklists:read", "evidence:read", "documentPackages:read"],
+  LIMITED_UPLOAD: ["organization:read", "workers:read", "jobSites:read", "documents:read", "documents:upload", "deadlines:read", "calendar:read", "evidence:read", "evidence:upload"],
 };
 
 export function getPermissionsForRole(role: OrganizationRole | null): OrganizationPermission[] {
-  return role ? [...ROLE_PERMISSIONS[role]] : [];
+  if (role === "OWNER") return [...organizationPermissions];
+  if (role === "ADMIN") return [...ADMIN_PERMISSIONS];
+  if (role === "SAFETY_CONSULTANT") return getPermissionsForPreset("CONSULTANT");
+  if (role === "SITE_MANAGER") return getPermissionsForPreset("SITE_MANAGER");
+  if (role === "WORKER") return getPermissionsForPreset("LIMITED_UPLOAD");
+  if (role === "VIEWER") return getPermissionsForPreset("VIEWER");
+  return [];
+}
+
+export function getPermissionsForPreset(preset: OrganizationAccessPreset): OrganizationPermission[] {
+  return [...PRESET_PERMISSIONS[preset]];
+}
+
+export function sanitizeOrganizationPermissions(values: readonly string[]): OrganizationPermission[] {
+  const valid = new Set<string>(organizationPermissions);
+  return [...new Set(values.filter((value): value is OrganizationPermission => valid.has(value)))];
 }
 
 export function canInviteRole(actor: OrganizationRole, target: OrganizationRole) {
   if (target === "OWNER") return false;
-  if (actor === "OWNER") return true;
-  return actor === "ADMIN" && target !== "ADMIN";
+  return actor === "OWNER" || (actor === "ADMIN" && target !== "ADMIN");
 }
 
 export function canRevokeRole(actor: OrganizationRole, target: OrganizationRole) {
-  if (target === "OWNER") return false;
-  return actor === "OWNER";
+  return target !== "OWNER" && actor === "OWNER";
 }

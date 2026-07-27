@@ -13,7 +13,7 @@ import { submitJson } from "@/views/admin-core/admin-api-client";
 import { WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 
 const roleLabels: Record<OrganizationRole, string> = {
-  OWNER: "Proprietario", ADMIN: "Amministratore", SAFETY_CONSULTANT: "Consulente sicurezza", SITE_MANAGER: "Responsabile cantiere", WORKER: "Lavoratore",
+  OWNER: "Proprietario", ADMIN: "Amministratore", MEMBER: "Membro", VIEWER: "Visualizzatore", SAFETY_CONSULTANT: "Consulente sicurezza", SITE_MANAGER: "Responsabile cantiere", WORKER: "Lavoratore",
 };
 
 interface AccessMember {

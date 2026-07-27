@@ -29,6 +29,9 @@ export type OrganizationMembershipMinAggregateOutputType = {
   organizationId: string | null
   userId: string | null
   role: $Enums.OrganizationRole | null
+  preset: $Enums.OrganizationAccessPreset | null
+  scopeMode: $Enums.OrganizationScopeMode | null
+  expiresAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
   revokedAt: Date | null
@@ -39,6 +42,9 @@ export type OrganizationMembershipMaxAggregateOutputType = {
   organizationId: string | null
   userId: string | null
   role: $Enums.OrganizationRole | null
+  preset: $Enums.OrganizationAccessPreset | null
+  scopeMode: $Enums.OrganizationScopeMode | null
+  expiresAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
   revokedAt: Date | null
@@ -49,6 +55,10 @@ export type OrganizationMembershipCountAggregateOutputType = {
   organizationId: number
   userId: number
   role: number
+  preset: number
+  permissionKeys: number
+  scopeMode: number
+  expiresAt: number
   createdAt: number
   updatedAt: number
   revokedAt: number
@@ -61,6 +71,9 @@ export type OrganizationMembershipMinAggregateInputType = {
   organizationId?: true
   userId?: true
   role?: true
+  preset?: true
+  scopeMode?: true
+  expiresAt?: true
   createdAt?: true
   updatedAt?: true
   revokedAt?: true
@@ -71,6 +84,9 @@ export type OrganizationMembershipMaxAggregateInputType = {
   organizationId?: true
   userId?: true
   role?: true
+  preset?: true
+  scopeMode?: true
+  expiresAt?: true
   createdAt?: true
   updatedAt?: true
   revokedAt?: true
@@ -81,6 +97,10 @@ export type OrganizationMembershipCountAggregateInputType = {
   organizationId?: true
   userId?: true
   role?: true
+  preset?: true
+  permissionKeys?: true
+  scopeMode?: true
+  expiresAt?: true
   createdAt?: true
   updatedAt?: true
   revokedAt?: true
@@ -164,6 +184,10 @@ export type OrganizationMembershipGroupByOutputType = {
   organizationId: string
   userId: string
   role: $Enums.OrganizationRole
+  preset: $Enums.OrganizationAccessPreset | null
+  permissionKeys: string[]
+  scopeMode: $Enums.OrganizationScopeMode
+  expiresAt: Date | null
   createdAt: Date
   updatedAt: Date
   revokedAt: Date | null
@@ -195,11 +219,16 @@ export type OrganizationMembershipWhereInput = {
   organizationId?: Prisma.StringFilter<"OrganizationMembership"> | string
   userId?: Prisma.StringFilter<"OrganizationMembership"> | string
   role?: Prisma.EnumOrganizationRoleFilter<"OrganizationMembership"> | $Enums.OrganizationRole
+  preset?: Prisma.EnumOrganizationAccessPresetNullableFilter<"OrganizationMembership"> | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.StringNullableListFilter<"OrganizationMembership">
+  scopeMode?: Prisma.EnumOrganizationScopeModeFilter<"OrganizationMembership"> | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.DateTimeNullableFilter<"OrganizationMembership"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"OrganizationMembership"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OrganizationMembership"> | Date | string
   revokedAt?: Prisma.DateTimeNullableFilter<"OrganizationMembership"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantListRelationFilter
 }
 
 export type OrganizationMembershipOrderByWithRelationInput = {
@@ -207,11 +236,16 @@ export type OrganizationMembershipOrderByWithRelationInput = {
   organizationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preset?: Prisma.SortOrderInput | Prisma.SortOrder
+  permissionKeys?: Prisma.SortOrder
+  scopeMode?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantOrderByRelationAggregateInput
 }
 
 export type OrganizationMembershipWhereUniqueInput = Prisma.AtLeast<{
@@ -222,11 +256,16 @@ export type OrganizationMembershipWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.OrganizationMembershipWhereInput | Prisma.OrganizationMembershipWhereInput[]
   organizationId?: Prisma.StringFilter<"OrganizationMembership"> | string
   role?: Prisma.EnumOrganizationRoleFilter<"OrganizationMembership"> | $Enums.OrganizationRole
+  preset?: Prisma.EnumOrganizationAccessPresetNullableFilter<"OrganizationMembership"> | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.StringNullableListFilter<"OrganizationMembership">
+  scopeMode?: Prisma.EnumOrganizationScopeModeFilter<"OrganizationMembership"> | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.DateTimeNullableFilter<"OrganizationMembership"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"OrganizationMembership"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OrganizationMembership"> | Date | string
   revokedAt?: Prisma.DateTimeNullableFilter<"OrganizationMembership"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantListRelationFilter
 }, "id" | "userId">
 
 export type OrganizationMembershipOrderByWithAggregationInput = {
@@ -234,6 +273,10 @@ export type OrganizationMembershipOrderByWithAggregationInput = {
   organizationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preset?: Prisma.SortOrderInput | Prisma.SortOrder
+  permissionKeys?: Prisma.SortOrder
+  scopeMode?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -250,6 +293,10 @@ export type OrganizationMembershipScalarWhereWithAggregatesInput = {
   organizationId?: Prisma.StringWithAggregatesFilter<"OrganizationMembership"> | string
   userId?: Prisma.StringWithAggregatesFilter<"OrganizationMembership"> | string
   role?: Prisma.EnumOrganizationRoleWithAggregatesFilter<"OrganizationMembership"> | $Enums.OrganizationRole
+  preset?: Prisma.EnumOrganizationAccessPresetNullableWithAggregatesFilter<"OrganizationMembership"> | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.StringNullableListFilter<"OrganizationMembership">
+  scopeMode?: Prisma.EnumOrganizationScopeModeWithAggregatesFilter<"OrganizationMembership"> | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OrganizationMembership"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OrganizationMembership"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"OrganizationMembership"> | Date | string
   revokedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OrganizationMembership"> | Date | string | null
@@ -258,11 +305,16 @@ export type OrganizationMembershipScalarWhereWithAggregatesInput = {
 export type OrganizationMembershipCreateInput = {
   id?: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  expiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   revokedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutMembershipsInput
   user: Prisma.UserCreateNestedOneWithoutOrganizationMembershipInput
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutMembershipInput
 }
 
 export type OrganizationMembershipUncheckedCreateInput = {
@@ -270,19 +322,29 @@ export type OrganizationMembershipUncheckedCreateInput = {
   organizationId: string
   userId: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  expiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   revokedAt?: Date | string | null
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutMembershipInput
 }
 
 export type OrganizationMembershipUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutMembershipsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutOrganizationMembershipNestedInput
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutMembershipNestedInput
 }
 
 export type OrganizationMembershipUncheckedUpdateInput = {
@@ -290,9 +352,14 @@ export type OrganizationMembershipUncheckedUpdateInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutMembershipNestedInput
 }
 
 export type OrganizationMembershipCreateManyInput = {
@@ -300,6 +367,10 @@ export type OrganizationMembershipCreateManyInput = {
   organizationId: string
   userId: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  expiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   revokedAt?: Date | string | null
@@ -308,6 +379,10 @@ export type OrganizationMembershipCreateManyInput = {
 export type OrganizationMembershipUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -318,6 +393,10 @@ export type OrganizationMembershipUncheckedUpdateManyInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -338,11 +417,23 @@ export type OrganizationMembershipOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type OrganizationMembershipCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preset?: Prisma.SortOrder
+  permissionKeys?: Prisma.SortOrder
+  scopeMode?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrder
@@ -353,6 +444,9 @@ export type OrganizationMembershipMaxOrderByAggregateInput = {
   organizationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preset?: Prisma.SortOrder
+  scopeMode?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrder
@@ -363,9 +457,17 @@ export type OrganizationMembershipMinOrderByAggregateInput = {
   organizationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preset?: Prisma.SortOrder
+  scopeMode?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrder
+}
+
+export type OrganizationMembershipScalarRelationFilter = {
+  is?: Prisma.OrganizationMembershipWhereInput
+  isNot?: Prisma.OrganizationMembershipWhereInput
 }
 
 export type OrganizationMembershipCreateNestedOneWithoutUserInput = {
@@ -442,26 +544,67 @@ export type OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedIn
   deleteMany?: Prisma.OrganizationMembershipScalarWhereInput | Prisma.OrganizationMembershipScalarWhereInput[]
 }
 
+export type OrganizationMembershipCreatepermissionKeysInput = {
+  set: string[]
+}
+
 export type EnumOrganizationRoleFieldUpdateOperationsInput = {
   set?: $Enums.OrganizationRole
+}
+
+export type NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput = {
+  set?: $Enums.OrganizationAccessPreset | null
+}
+
+export type OrganizationMembershipUpdatepermissionKeysInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type EnumOrganizationScopeModeFieldUpdateOperationsInput = {
+  set?: $Enums.OrganizationScopeMode
+}
+
+export type OrganizationMembershipCreateNestedOneWithoutResourceGrantsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationMembershipCreateWithoutResourceGrantsInput, Prisma.OrganizationMembershipUncheckedCreateWithoutResourceGrantsInput>
+  connectOrCreate?: Prisma.OrganizationMembershipCreateOrConnectWithoutResourceGrantsInput
+  connect?: Prisma.OrganizationMembershipWhereUniqueInput
+}
+
+export type OrganizationMembershipUpdateOneRequiredWithoutResourceGrantsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationMembershipCreateWithoutResourceGrantsInput, Prisma.OrganizationMembershipUncheckedCreateWithoutResourceGrantsInput>
+  connectOrCreate?: Prisma.OrganizationMembershipCreateOrConnectWithoutResourceGrantsInput
+  upsert?: Prisma.OrganizationMembershipUpsertWithoutResourceGrantsInput
+  connect?: Prisma.OrganizationMembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationMembershipUpdateToOneWithWhereWithoutResourceGrantsInput, Prisma.OrganizationMembershipUpdateWithoutResourceGrantsInput>, Prisma.OrganizationMembershipUncheckedUpdateWithoutResourceGrantsInput>
 }
 
 export type OrganizationMembershipCreateWithoutUserInput = {
   id?: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  expiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   revokedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutMembershipsInput
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutMembershipInput
 }
 
 export type OrganizationMembershipUncheckedCreateWithoutUserInput = {
   id?: string
   organizationId: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  expiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   revokedAt?: Date | string | null
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutMembershipInput
 }
 
 export type OrganizationMembershipCreateOrConnectWithoutUserInput = {
@@ -483,37 +626,57 @@ export type OrganizationMembershipUpdateToOneWithWhereWithoutUserInput = {
 export type OrganizationMembershipUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutMembershipsNestedInput
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutMembershipNestedInput
 }
 
 export type OrganizationMembershipUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutMembershipNestedInput
 }
 
 export type OrganizationMembershipCreateWithoutOrganizationInput = {
   id?: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  expiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   revokedAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutOrganizationMembershipInput
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutMembershipInput
 }
 
 export type OrganizationMembershipUncheckedCreateWithoutOrganizationInput = {
   id?: string
   userId: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  expiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   revokedAt?: Date | string | null
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutMembershipInput
 }
 
 export type OrganizationMembershipCreateOrConnectWithoutOrganizationInput = {
@@ -550,15 +713,95 @@ export type OrganizationMembershipScalarWhereInput = {
   organizationId?: Prisma.StringFilter<"OrganizationMembership"> | string
   userId?: Prisma.StringFilter<"OrganizationMembership"> | string
   role?: Prisma.EnumOrganizationRoleFilter<"OrganizationMembership"> | $Enums.OrganizationRole
+  preset?: Prisma.EnumOrganizationAccessPresetNullableFilter<"OrganizationMembership"> | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.StringNullableListFilter<"OrganizationMembership">
+  scopeMode?: Prisma.EnumOrganizationScopeModeFilter<"OrganizationMembership"> | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.DateTimeNullableFilter<"OrganizationMembership"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"OrganizationMembership"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OrganizationMembership"> | Date | string
   revokedAt?: Prisma.DateTimeNullableFilter<"OrganizationMembership"> | Date | string | null
+}
+
+export type OrganizationMembershipCreateWithoutResourceGrantsInput = {
+  id?: string
+  role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  expiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  revokedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutOrganizationMembershipInput
+}
+
+export type OrganizationMembershipUncheckedCreateWithoutResourceGrantsInput = {
+  id?: string
+  organizationId: string
+  userId: string
+  role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  expiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  revokedAt?: Date | string | null
+}
+
+export type OrganizationMembershipCreateOrConnectWithoutResourceGrantsInput = {
+  where: Prisma.OrganizationMembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationMembershipCreateWithoutResourceGrantsInput, Prisma.OrganizationMembershipUncheckedCreateWithoutResourceGrantsInput>
+}
+
+export type OrganizationMembershipUpsertWithoutResourceGrantsInput = {
+  update: Prisma.XOR<Prisma.OrganizationMembershipUpdateWithoutResourceGrantsInput, Prisma.OrganizationMembershipUncheckedUpdateWithoutResourceGrantsInput>
+  create: Prisma.XOR<Prisma.OrganizationMembershipCreateWithoutResourceGrantsInput, Prisma.OrganizationMembershipUncheckedCreateWithoutResourceGrantsInput>
+  where?: Prisma.OrganizationMembershipWhereInput
+}
+
+export type OrganizationMembershipUpdateToOneWithWhereWithoutResourceGrantsInput = {
+  where?: Prisma.OrganizationMembershipWhereInput
+  data: Prisma.XOR<Prisma.OrganizationMembershipUpdateWithoutResourceGrantsInput, Prisma.OrganizationMembershipUncheckedUpdateWithoutResourceGrantsInput>
+}
+
+export type OrganizationMembershipUpdateWithoutResourceGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutOrganizationMembershipNestedInput
+}
+
+export type OrganizationMembershipUncheckedUpdateWithoutResourceGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type OrganizationMembershipCreateManyOrganizationInput = {
   id?: string
   userId: string
   role: $Enums.OrganizationRole
+  preset?: $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipCreatepermissionKeysInput | string[]
+  scopeMode?: $Enums.OrganizationScopeMode
+  expiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   revokedAt?: Date | string | null
@@ -567,30 +810,73 @@ export type OrganizationMembershipCreateManyOrganizationInput = {
 export type OrganizationMembershipUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutOrganizationMembershipNestedInput
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutMembershipNestedInput
 }
 
 export type OrganizationMembershipUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutMembershipNestedInput
 }
 
 export type OrganizationMembershipUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole
+  preset?: Prisma.NullableEnumOrganizationAccessPresetFieldUpdateOperationsInput | $Enums.OrganizationAccessPreset | null
+  permissionKeys?: Prisma.OrganizationMembershipUpdatepermissionKeysInput | string[]
+  scopeMode?: Prisma.EnumOrganizationScopeModeFieldUpdateOperationsInput | $Enums.OrganizationScopeMode
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
+
+/**
+ * Count Type OrganizationMembershipCountOutputType
+ */
+
+export type OrganizationMembershipCountOutputType = {
+  resourceGrants: number
+}
+
+export type OrganizationMembershipCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  resourceGrants?: boolean | OrganizationMembershipCountOutputTypeCountResourceGrantsArgs
+}
+
+/**
+ * OrganizationMembershipCountOutputType without action
+ */
+export type OrganizationMembershipCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrganizationMembershipCountOutputType
+   */
+  select?: Prisma.OrganizationMembershipCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * OrganizationMembershipCountOutputType without action
+ */
+export type OrganizationMembershipCountOutputTypeCountResourceGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrganizationMembershipResourceGrantWhereInput
+}
 
 
 export type OrganizationMembershipSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -598,11 +884,17 @@ export type OrganizationMembershipSelect<ExtArgs extends runtime.Types.Extension
   organizationId?: boolean
   userId?: boolean
   role?: boolean
+  preset?: boolean
+  permissionKeys?: boolean
+  scopeMode?: boolean
+  expiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   revokedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  resourceGrants?: boolean | Prisma.OrganizationMembership$resourceGrantsArgs<ExtArgs>
+  _count?: boolean | Prisma.OrganizationMembershipCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organizationMembership"]>
 
 export type OrganizationMembershipSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -610,6 +902,10 @@ export type OrganizationMembershipSelectCreateManyAndReturn<ExtArgs extends runt
   organizationId?: boolean
   userId?: boolean
   role?: boolean
+  preset?: boolean
+  permissionKeys?: boolean
+  scopeMode?: boolean
+  expiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   revokedAt?: boolean
@@ -622,6 +918,10 @@ export type OrganizationMembershipSelectUpdateManyAndReturn<ExtArgs extends runt
   organizationId?: boolean
   userId?: boolean
   role?: boolean
+  preset?: boolean
+  permissionKeys?: boolean
+  scopeMode?: boolean
+  expiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   revokedAt?: boolean
@@ -634,15 +934,21 @@ export type OrganizationMembershipSelectScalar = {
   organizationId?: boolean
   userId?: boolean
   role?: boolean
+  preset?: boolean
+  permissionKeys?: boolean
+  scopeMode?: boolean
+  expiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   revokedAt?: boolean
 }
 
-export type OrganizationMembershipOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "userId" | "role" | "createdAt" | "updatedAt" | "revokedAt", ExtArgs["result"]["organizationMembership"]>
+export type OrganizationMembershipOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "userId" | "role" | "preset" | "permissionKeys" | "scopeMode" | "expiresAt" | "createdAt" | "updatedAt" | "revokedAt", ExtArgs["result"]["organizationMembership"]>
 export type OrganizationMembershipInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  resourceGrants?: boolean | Prisma.OrganizationMembership$resourceGrantsArgs<ExtArgs>
+  _count?: boolean | Prisma.OrganizationMembershipCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationMembershipIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -658,12 +964,17 @@ export type $OrganizationMembershipPayload<ExtArgs extends runtime.Types.Extensi
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
+    resourceGrants: Prisma.$OrganizationMembershipResourceGrantPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     organizationId: string
     userId: string
     role: $Enums.OrganizationRole
+    preset: $Enums.OrganizationAccessPreset | null
+    permissionKeys: string[]
+    scopeMode: $Enums.OrganizationScopeMode
+    expiresAt: Date | null
     createdAt: Date
     updatedAt: Date
     revokedAt: Date | null
@@ -1063,6 +1374,7 @@ export interface Prisma__OrganizationMembershipClient<T, Null = never, ExtArgs e
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  resourceGrants<T extends Prisma.OrganizationMembership$resourceGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationMembership$resourceGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationMembershipResourceGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1096,6 +1408,10 @@ export interface OrganizationMembershipFieldRefs {
   readonly organizationId: Prisma.FieldRef<"OrganizationMembership", 'String'>
   readonly userId: Prisma.FieldRef<"OrganizationMembership", 'String'>
   readonly role: Prisma.FieldRef<"OrganizationMembership", 'OrganizationRole'>
+  readonly preset: Prisma.FieldRef<"OrganizationMembership", 'OrganizationAccessPreset'>
+  readonly permissionKeys: Prisma.FieldRef<"OrganizationMembership", 'String[]'>
+  readonly scopeMode: Prisma.FieldRef<"OrganizationMembership", 'OrganizationScopeMode'>
+  readonly expiresAt: Prisma.FieldRef<"OrganizationMembership", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"OrganizationMembership", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"OrganizationMembership", 'DateTime'>
   readonly revokedAt: Prisma.FieldRef<"OrganizationMembership", 'DateTime'>
@@ -1497,6 +1813,30 @@ export type OrganizationMembershipDeleteManyArgs<ExtArgs extends runtime.Types.E
    * Limit how many OrganizationMemberships to delete.
    */
   limit?: number
+}
+
+/**
+ * OrganizationMembership.resourceGrants
+ */
+export type OrganizationMembership$resourceGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrganizationMembershipResourceGrant
+   */
+  select?: Prisma.OrganizationMembershipResourceGrantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrganizationMembershipResourceGrant
+   */
+  omit?: Prisma.OrganizationMembershipResourceGrantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationMembershipResourceGrantInclude<ExtArgs> | null
+  where?: Prisma.OrganizationMembershipResourceGrantWhereInput
+  orderBy?: Prisma.OrganizationMembershipResourceGrantOrderByWithRelationInput | Prisma.OrganizationMembershipResourceGrantOrderByWithRelationInput[]
+  cursor?: Prisma.OrganizationMembershipResourceGrantWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrganizationMembershipResourceGrantScalarFieldEnum | Prisma.OrganizationMembershipResourceGrantScalarFieldEnum[]
 }
 
 /**

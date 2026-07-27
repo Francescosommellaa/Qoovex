@@ -175,13 +175,11 @@ export async function getJobSiteOverview(): Promise<JobSiteOverviewResponse> {
   const { context, organizationId } = await requireOrganizationDomainAccess("jobSites:read", JOBSITE_READ_ROLES);
   const scope = await getResourceScope(context);
   const where = { organizationId, archivedAt: null, ...(scope.fullAccess ? {} : { id: { in: scope.visibleJobSiteIds } }) };
-  const [rows, documents, checklists, evidence, packages] = await Promise.all([
-    db.jobSite.findMany({ where, select: operationalJobSiteSelect, orderBy: [{ updatedAt: "desc" }] }),
-    db.document.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 }),
-    db.checklist.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, name: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 }),
-    db.evidence.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, createdAt: true }, orderBy: [{ createdAt: "desc" }], take: 6 }),
-    db.documentPackage.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 }),
-  ]);
+  const rows = await db.jobSite.findMany({ where, select: operationalJobSiteSelect, orderBy: [{ updatedAt: "desc" }] });
+  const documents = await db.document.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 });
+  const checklists = await db.checklist.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, name: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 });
+  const evidence = await db.evidence.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, createdAt: true }, orderBy: [{ createdAt: "desc" }], take: 6 });
+  const packages = await db.documentPackage.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 });
   const items = rows.map(toListItem);
   const emptySummary: JobSiteOperationalSummary = { missingDocuments: 0, expiredDocuments: 0, documentsToReview: 0, openChecklistItems: 0, checklistItemsToReview: 0, overdueDeadlines: 0, upcomingDeadlines: 0, managerCount: 0, workerCount: 0, readyPackages: 0, attentionScore: 0, attentionStates: [], nextDeadline: null };
   const totals = items.reduce((sum, item) => {

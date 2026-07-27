@@ -126,7 +126,7 @@ describe("single organization membership lifecycle", () => {
     await expect(acceptInvitation("token")).resolves.toEqual({ accepted: true });
     expect(mocks.tx.organizationMembership.updateMany).toHaveBeenCalledWith({
       where: { id: "membership-1", userId: "user-1", revokedAt: { not: null } },
-      data: { organizationId: "org-invite", role: "WORKER", revokedAt: null },
+      data: expect.objectContaining({ organizationId: "org-invite", role: "WORKER", preset: "LIMITED_UPLOAD", scopeMode: "ASSIGNED", revokedAt: null }),
     });
     expect(mocks.tx.organizationInvitation.updateMany).toHaveBeenCalledWith({
       where: { id: "invite-1", acceptedAt: null, revokedAt: null, expiresAt: { gt: expect.any(Date) } },

@@ -5,7 +5,7 @@ import { db } from "@qoovex/db";
 import type { Permission, WorkspaceAccessContext } from "@qoovex/types";
 import { auth } from "@shared/server/auth/config";
 import { AccessError } from "@shared/server/access-errors";
-import { getPermissionsForRole } from "@shared/server/authorization-policy";
+import { getPermissionsForRole, sanitizeOrganizationPermissions } from "@shared/server/authorization-policy";
 import { getActiveSupportSession } from "@shared/server/support-access-service";
 import { bootstrapDevUser } from "@shared/server/dev-auth";
 import { isMfaSatisfiedForUser } from "@shared/server/mfa-service";
@@ -63,17 +63,24 @@ async function getWorkspaceAccessContextUncached(): Promise<WorkspaceAccessConte
   const [membership, support] = await Promise.all([
     db.organizationMembership.findUnique({
       where: { userId: user.id, revokedAt: null },
-      select: { id: true, role: true, organization: { select: { id: true, name: true, code: true } } },
+      select: { id: true, role: true, preset: true, permissionKeys: true, scopeMode: true, expiresAt: true, organization: { select: { id: true, name: true, code: true } } },
     }),
     user.platformRole === "SUPER_ADMIN" ? getActiveSupportSession(user.id) : Promise.resolve(null),
   ]);
 
+  if (membership?.expiresAt && membership.expiresAt <= new Date()) throw new AccessError("Accesso scaduto.", 403);
   const companyRole = membership ? user.devRole ?? membership.role : null;
   const effectiveRole = support ? "OWNER" : companyRole;
   return {
     userId: user.id,
     platformRole: user.platformRole,
-    company: membership ? { role: companyRole ?? membership.role, organization: membership.organization } : null,
+    company: membership ? {
+      role: companyRole ?? membership.role,
+      preset: membership.preset,
+      scopeMode: membership.scopeMode,
+      expiresAt: membership.expiresAt?.toISOString() ?? null,
+      organization: membership.organization,
+    } : null,
     support: support ? {
       sessionId: support.id,
       reason: support.reason,
@@ -81,7 +88,11 @@ async function getWorkspaceAccessContextUncached(): Promise<WorkspaceAccessConte
       sensitiveConfirmedUntil: support.sensitiveConfirmedUntil?.toISOString() ?? null,
       organization: support.organization,
     } : null,
-    permissions: getPermissionsForRole(effectiveRole),
+    permissions: support
+      ? getPermissionsForRole("OWNER")
+      : membership?.permissionKeys?.length
+        ? sanitizeOrganizationPermissions(membership.permissionKeys)
+        : getPermissionsForRole(effectiveRole),
   };
 }
 

@@ -1,11 +1,13 @@
 import "server-only";
 
-import { db } from "@qoovex/db";
-import type { DocumentPackageItemType } from "@qoovex/types";
+import crypto from "node:crypto";
+import { db, Prisma } from "@qoovex/db";
+import type { DocumentPackageRevisionItemDto, SharedDocumentPackageResponse } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
-import { getPrivateBlob } from "./blob-storage-service";
-import { recordProductAuditEventBestEffort } from "./product-audit-service";
-import { hashShareToken } from "./share-token-service";
+import { getPrivateBlob } from "@shared/server/blob-storage-service";
+import { ensureShareLinkOperationalProcess } from "@shared/server/document-package-share-proposal-service";
+import { recordProductAuditEventBestEffort } from "@shared/server/product-audit-service";
+import { hashShareToken } from "@shared/server/share-token-service";
 
 interface SharedDownloadResult {
   stream: ReadableStream<Uint8Array>;
@@ -14,45 +16,21 @@ interface SharedDownloadResult {
   size: number;
 }
 
-const sharedItemSelect = {
-  id: true,
-  organizationId: true,
-  documentPackageId: true,
-  itemType: true,
-  documentId: true,
-  documentVersionId: true,
-  evidenceId: true,
-  checklistId: true,
-  note: true,
-  position: true,
-  document: { select: { id: true, title: true, status: true, archivedAt: true, documentType: { select: { categoryKey: true, sensitivity: true } } } },
-  documentVersion: {
-    select: {
-      id: true,
-      originalFileName: true,
-      mimeType: true,
-      size: true,
-      archivedAt: true,
-      document: { select: { id: true, title: true, status: true, archivedAt: true, documentType: { select: { categoryKey: true, sensitivity: true } } } },
-    },
-  },
-  evidence: {
-    select: {
-      id: true,
-      title: true,
-      type: true,
-      originalFileName: true,
-      mimeType: true,
-      size: true,
-      blobKey: true,
-      archivedAt: true,
-    },
-  },
-  checklist: { select: { id: true, name: true, status: true, archivedAt: true } },
-} as const;
+interface RevisionManifest {
+  schemaVersion: 1;
+  package: { title: string; description: string | null };
+  items: DocumentPackageRevisionItemDto[];
+}
+
+function readManifest(value: Prisma.JsonValue): RevisionManifest {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new AccessError("Link non disponibile.", 404);
+  const manifest = value as unknown as RevisionManifest;
+  if (manifest.schemaVersion !== 1 || !manifest.package || !Array.isArray(manifest.items)) throw new AccessError("Link non disponibile.", 404);
+  return manifest;
+}
 
 async function getValidShareLink(token: string) {
-  if (!token || typeof token !== "string") throw new AccessError("Link non disponibile.", 404);
+  if (!token || typeof token !== "string" || token.length > 512) throw new AccessError("Link non disponibile.", 404);
   const tokenHash = hashShareToken(token);
   const shareLink = await db.shareLink.findUnique({
     where: { tokenHash },
@@ -60,128 +38,88 @@ async function getValidShareLink(token: string) {
       id: true,
       organizationId: true,
       documentPackageId: true,
+      revisionId: true,
+      allowDownload: true,
       expiresAt: true,
+      expiredAt: true,
       revokedAt: true,
-      documentPackage: {
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          status: true,
-          updatedAt: true,
-          archivedAt: true,
-        },
-      },
+      proposal: { select: { processId: true } },
+      revision: { select: { manifest: true, preparedAt: true } },
+      documentPackage: { select: { archivedAt: true } },
     },
   });
-  if (!shareLink || shareLink.revokedAt || shareLink.documentPackage.archivedAt) {
-    throw new AccessError("Link non disponibile.", 404);
-  }
-  if (shareLink.expiresAt && shareLink.expiresAt.getTime() <= Date.now()) {
-    throw new AccessError("Link non disponibile.", 404);
-  }
+  if (!shareLink || shareLink.revokedAt || shareLink.expiredAt || shareLink.documentPackage.archivedAt) throw new AccessError("Link non disponibile.", 404);
+  if (shareLink.expiresAt && shareLink.expiresAt.getTime() <= Date.now()) throw new AccessError("Link non disponibile.", 404);
   return shareLink;
 }
 
-function toSharedItem(item: {
-  id: string;
-  itemType: DocumentPackageItemType;
-  position: number;
-  note: string | null;
-  document: { title: string; status: string; archivedAt: Date | null; documentType: { categoryKey: string; sensitivity: string } | null } | null;
-  documentVersion: {
-    originalFileName: string;
-    mimeType: string;
-    size: number;
-    archivedAt: Date | null;
-    document: { title: string; status: string; archivedAt: Date | null; documentType: { categoryKey: string; sensitivity: string } | null };
-  } | null;
-  evidence: {
-    title: string;
-    type: string;
-    originalFileName: string | null;
-    mimeType: string | null;
-    size: number | null;
-    blobKey: string | null;
-    archivedAt: Date | null;
-  } | null;
-  checklist: { name: string; status: string; archivedAt: Date | null } | null;
-}) {
-  if (item.itemType === "DOCUMENT") {
-    if (!item.document || item.document.archivedAt || item.document.documentType?.sensitivity !== "STANDARD" || item.document.documentType.categoryKey === "UNCLASSIFIED") return null;
-    return { id: item.id, itemType: item.itemType, position: item.position, title: item.document.title, status: item.document.status, hasFile: false };
-  }
-  if (item.itemType === "DOCUMENT_VERSION") {
-    if (!item.documentVersion || item.documentVersion.archivedAt || item.documentVersion.document.archivedAt || item.documentVersion.document.documentType?.sensitivity !== "STANDARD" || item.documentVersion.document.documentType.categoryKey === "UNCLASSIFIED") return null;
-    return {
-      id: item.id,
-      itemType: item.itemType,
-      position: item.position,
-      title: item.documentVersion.document.title,
-      status: item.documentVersion.document.status,
-      hasFile: true,
-      originalFileName: item.documentVersion.originalFileName,
-      mimeType: item.documentVersion.mimeType,
-      size: item.documentVersion.size,
-    };
-  }
-  if (item.itemType === "EVIDENCE") {
-    if (!item.evidence || item.evidence.archivedAt) return null;
-    return {
-      id: item.id,
-      itemType: item.itemType,
-      position: item.position,
-      title: item.evidence.title,
-      status: item.evidence.type,
-      hasFile: Boolean(item.evidence.blobKey),
-      originalFileName: item.evidence.originalFileName,
-      mimeType: item.evidence.mimeType,
-      size: item.evidence.size,
-    };
-  }
-  if (item.itemType === "CHECKLIST") {
-    if (!item.checklist || item.checklist.archivedAt) return null;
-    return { id: item.id, itemType: item.itemType, position: item.position, title: item.checklist.name, status: item.checklist.status, hasFile: false };
-  }
-  return { id: item.id, itemType: item.itemType, position: item.position, note: item.note, hasFile: false };
-}
-
-export async function getSharedDocumentPackage(token: string) {
-  const shareLink = await getValidShareLink(token);
-  const items = await db.documentPackageItem.findMany({
-    where: { organizationId: shareLink.organizationId, documentPackageId: shareLink.documentPackageId },
-    select: sharedItemSelect,
-    orderBy: [{ position: "asc" }, { createdAt: "asc" }],
+async function recordShareAccess(shareLink: Awaited<ReturnType<typeof getValidShareLink>>, input: { type: "OPEN" | "DOWNLOAD_REQUESTED"; item?: DocumentPackageRevisionItemDto }) {
+  await db.$transaction(async (tx) => {
+    const processId = await ensureShareLinkOperationalProcess(tx, shareLink);
+    await tx.shareLink.update({ where: { id: shareLink.id }, data: { lastAccessedAt: new Date() }, select: { id: true } });
+    await tx.operationalEvent.create({
+      data: {
+        organizationId: shareLink.organizationId,
+        processId,
+        eventKey: `${input.type === "OPEN" ? "share-link-opened" : "share-download-requested"}:${shareLink.id}:${crypto.randomUUID()}`,
+        kind: "DOMAIN",
+        eventType: input.type === "OPEN" ? "SHARE_LINK_OPENED" : "SHARE_DOWNLOAD_REQUESTED",
+        title: input.type === "OPEN" ? "Link aperto" : "Download richiesto",
+        summary: input.type === "OPEN" ? "La pagina condivisa e stata aperta." : "Il file autorizzato e stato richiesto tramite il download mediato.",
+        metadata: input.item ? { sourceItemId: input.item.sourceItemId, itemType: input.item.itemType, outcome: "AUTHORIZED" } : { outcome: "AUTHORIZED" },
+        actorType: "EXTERNAL",
+        sourceType: "SHARING_ACCESS",
+        sourceId: shareLink.id,
+        reliability: "VERIFIED",
+        impact: "LOW",
+      },
+    });
   });
-  await db.shareLink.update({ where: { id: shareLink.id }, data: { lastAccessedAt: new Date() }, select: { id: true } });
   await recordProductAuditEventBestEffort({
     organizationId: shareLink.organizationId,
     action: "SHARE_LINK_ACCESSED",
     entityType: "SHARE_LINK",
     entityId: shareLink.id,
-    metadata: { reasonCode: "destinatario esterno-package-access" },
+    metadata: input.item ? { reasonCode: "external-download-requested", itemType: input.item.itemType } : { reasonCode: "external-link-opened" },
   });
+}
+
+function toSharedItem(item: DocumentPackageRevisionItemDto) {
   return {
-    id: shareLink.documentPackage.id,
-    title: shareLink.documentPackage.title,
-    description: shareLink.documentPackage.description,
-    status: shareLink.documentPackage.status,
-    updatedAt: shareLink.documentPackage.updatedAt,
-    items: items.map(toSharedItem).filter((item): item is NonNullable<typeof item> => item !== null),
+    id: item.sourceItemId,
+    itemType: item.itemType,
+    position: item.position,
+    title: item.title ?? null,
+    status: item.status ?? null,
+    note: item.note ?? null,
+    hasFile: item.hasFile,
+    originalFileName: item.originalFileName ?? null,
+    mimeType: item.mimeType ?? null,
+    size: item.size ?? null,
+  };
+}
+
+export async function getSharedDocumentPackage(token: string): Promise<SharedDocumentPackageResponse> {
+  const shareLink = await getValidShareLink(token);
+  const manifest = readManifest(shareLink.revision.manifest);
+  await recordShareAccess(shareLink, { type: "OPEN" });
+  return {
+    id: shareLink.documentPackageId,
+    title: manifest.package.title,
+    description: manifest.package.description,
+    status: "SHARED",
+    updatedAt: shareLink.revision.preparedAt.toISOString(),
+    expiresAt: shareLink.expiresAt?.toISOString() ?? null,
+    allowDownload: shareLink.allowDownload,
+    items: manifest.items.filter((item) => item.included).map(toSharedItem),
   };
 }
 
 export async function getSharedPackageItemDownload(token: string, itemId: string): Promise<SharedDownloadResult> {
   const shareLink = await getValidShareLink(token);
-  const item = await db.documentPackageItem.findFirst({
-    where: { id: itemId, organizationId: shareLink.organizationId, documentPackageId: shareLink.documentPackageId },
-    select: {
-      id: true,
-      itemType: true,
-      documentVersionId: true,
-      evidenceId: true,
-    },
-  });
+  if (!shareLink.allowDownload) throw new AccessError("Download non consentito per questo link.", 404);
+  const manifest = readManifest(shareLink.revision.manifest);
+  const item = manifest.items.find((candidate) => candidate.sourceItemId === itemId && candidate.included && candidate.hasFile);
   if (!item) throw new AccessError("File condiviso non trovato.", 404);
 
   if (item.itemType === "DOCUMENT_VERSION" && item.documentVersionId) {
@@ -192,14 +130,7 @@ export async function getSharedPackageItemDownload(token: string, itemId: string
     if (!version) throw new AccessError("File condiviso non trovato.", 404);
     const blob = await getPrivateBlob(version.blobKey);
     if (!blob) throw new AccessError("File condiviso non trovato.", 404);
-    await db.shareLink.update({ where: { id: shareLink.id }, data: { lastAccessedAt: new Date() }, select: { id: true } });
-    await recordProductAuditEventBestEffort({
-      organizationId: shareLink.organizationId,
-      action: "SHARE_LINK_ACCESSED",
-      entityType: "SHARE_LINK",
-      entityId: shareLink.id,
-      metadata: { reasonCode: "destinatario esterno-file-download", itemType: item.itemType, mimeType: version.mimeType, size: version.size, hasFile: true },
-    });
+    await recordShareAccess(shareLink, { type: "DOWNLOAD_REQUESTED", item });
     return { stream: blob.stream, originalFileName: version.originalFileName, mimeType: version.mimeType, size: version.size };
   }
 
@@ -208,19 +139,10 @@ export async function getSharedPackageItemDownload(token: string, itemId: string
       where: { id: item.evidenceId, organizationId: shareLink.organizationId, archivedAt: null },
       select: { blobKey: true, originalFileName: true, mimeType: true, size: true },
     });
-    if (!evidence?.blobKey || !evidence.originalFileName || !evidence.mimeType || evidence.size === null) {
-      throw new AccessError("File condiviso non trovato.", 404);
-    }
+    if (!evidence?.blobKey || !evidence.originalFileName || !evidence.mimeType || evidence.size === null) throw new AccessError("File condiviso non trovato.", 404);
     const blob = await getPrivateBlob(evidence.blobKey);
     if (!blob) throw new AccessError("File condiviso non trovato.", 404);
-    await db.shareLink.update({ where: { id: shareLink.id }, data: { lastAccessedAt: new Date() }, select: { id: true } });
-    await recordProductAuditEventBestEffort({
-      organizationId: shareLink.organizationId,
-      action: "SHARE_LINK_ACCESSED",
-      entityType: "SHARE_LINK",
-      entityId: shareLink.id,
-      metadata: { reasonCode: "destinatario esterno-file-download", itemType: item.itemType, mimeType: evidence.mimeType, size: evidence.size, hasFile: true },
-    });
+    await recordShareAccess(shareLink, { type: "DOWNLOAD_REQUESTED", item });
     return { stream: blob.stream, originalFileName: evidence.originalFileName, mimeType: evidence.mimeType, size: evidence.size };
   }
 

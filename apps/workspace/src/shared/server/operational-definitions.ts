@@ -28,6 +28,13 @@ const definitions: Record<OperationalProcessType, OperationalProcessDefinition> 
     { key: "reconcile-reminders", label: "Aggiornamento dei promemoria" },
     { key: "validate-artifacts", label: "Verifica dei riferimenti operativi" },
   ] },
+  DOCUMENT_PACKAGE_SHARING: { type: "DOCUMENT_PACKAGE_SHARING", version: 1, title: "Preparazione della condivisione", steps: [
+    { key: "capture-package", label: "Acquisizione del pacchetto" },
+    { key: "validate-artifacts", label: "Verifica degli elementi inclusi" },
+    { key: "prepare-revision", label: "Preparazione della revisione" },
+    { key: "wait-for-approval", label: "Attesa della conferma autorizzata" },
+    { key: "activate-share", label: "Creazione del link approvato" },
+  ] },
 };
 
 export function getOperationalDefinition(type: OperationalProcessType) { return definitions[type]; }

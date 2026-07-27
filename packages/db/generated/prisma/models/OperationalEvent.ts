@@ -31,10 +31,15 @@ export type OperationalEventMinAggregateOutputType = {
   stepId: string | null
   eventKey: string | null
   kind: $Enums.OperationalEventKind | null
+  eventType: $Enums.OperationalEventType | null
   userVisible: boolean | null
   title: string | null
   summary: string | null
   actorUserId: string | null
+  actorType: $Enums.OperationalActorType | null
+  actorRole: $Enums.OrganizationRole | null
+  sourceType: $Enums.OperationalEventSourceType | null
+  sourceId: string | null
   reliability: $Enums.OperationalReliability | null
   impact: $Enums.OperationalImpact | null
   occurredAt: Date | null
@@ -47,10 +52,15 @@ export type OperationalEventMaxAggregateOutputType = {
   stepId: string | null
   eventKey: string | null
   kind: $Enums.OperationalEventKind | null
+  eventType: $Enums.OperationalEventType | null
   userVisible: boolean | null
   title: string | null
   summary: string | null
   actorUserId: string | null
+  actorType: $Enums.OperationalActorType | null
+  actorRole: $Enums.OrganizationRole | null
+  sourceType: $Enums.OperationalEventSourceType | null
+  sourceId: string | null
   reliability: $Enums.OperationalReliability | null
   impact: $Enums.OperationalImpact | null
   occurredAt: Date | null
@@ -63,11 +73,16 @@ export type OperationalEventCountAggregateOutputType = {
   stepId: number
   eventKey: number
   kind: number
+  eventType: number
   userVisible: number
   title: number
   summary: number
   metadata: number
   actorUserId: number
+  actorType: number
+  actorRole: number
+  sourceType: number
+  sourceId: number
   reliability: number
   impact: number
   occurredAt: number
@@ -82,10 +97,15 @@ export type OperationalEventMinAggregateInputType = {
   stepId?: true
   eventKey?: true
   kind?: true
+  eventType?: true
   userVisible?: true
   title?: true
   summary?: true
   actorUserId?: true
+  actorType?: true
+  actorRole?: true
+  sourceType?: true
+  sourceId?: true
   reliability?: true
   impact?: true
   occurredAt?: true
@@ -98,10 +118,15 @@ export type OperationalEventMaxAggregateInputType = {
   stepId?: true
   eventKey?: true
   kind?: true
+  eventType?: true
   userVisible?: true
   title?: true
   summary?: true
   actorUserId?: true
+  actorType?: true
+  actorRole?: true
+  sourceType?: true
+  sourceId?: true
   reliability?: true
   impact?: true
   occurredAt?: true
@@ -114,11 +139,16 @@ export type OperationalEventCountAggregateInputType = {
   stepId?: true
   eventKey?: true
   kind?: true
+  eventType?: true
   userVisible?: true
   title?: true
   summary?: true
   metadata?: true
   actorUserId?: true
+  actorType?: true
+  actorRole?: true
+  sourceType?: true
+  sourceId?: true
   reliability?: true
   impact?: true
   occurredAt?: true
@@ -204,11 +234,16 @@ export type OperationalEventGroupByOutputType = {
   stepId: string | null
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType: $Enums.OperationalEventType
   userVisible: boolean
   title: string
   summary: string | null
   metadata: runtime.JsonValue | null
   actorUserId: string | null
+  actorType: $Enums.OperationalActorType
+  actorRole: $Enums.OrganizationRole | null
+  sourceType: $Enums.OperationalEventSourceType
+  sourceId: string | null
   reliability: $Enums.OperationalReliability
   impact: $Enums.OperationalImpact
   occurredAt: Date
@@ -242,17 +277,23 @@ export type OperationalEventWhereInput = {
   stepId?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
   eventKey?: Prisma.StringFilter<"OperationalEvent"> | string
   kind?: Prisma.EnumOperationalEventKindFilter<"OperationalEvent"> | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFilter<"OperationalEvent"> | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFilter<"OperationalEvent"> | boolean
   title?: Prisma.StringFilter<"OperationalEvent"> | string
   summary?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
   metadata?: Prisma.JsonNullableFilter<"OperationalEvent">
   actorUserId?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFilter<"OperationalEvent"> | $Enums.OperationalActorType
+  actorRole?: Prisma.EnumOrganizationRoleNullableFilter<"OperationalEvent"> | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFilter<"OperationalEvent"> | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
   reliability?: Prisma.EnumOperationalReliabilityFilter<"OperationalEvent"> | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFilter<"OperationalEvent"> | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFilter<"OperationalEvent"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   process?: Prisma.XOR<Prisma.OperationalProcessScalarRelationFilter, Prisma.OperationalProcessWhereInput>
   step?: Prisma.XOR<Prisma.OperationalStepNullableScalarRelationFilter, Prisma.OperationalStepWhereInput> | null
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceListRelationFilter
 }
 
 export type OperationalEventOrderByWithRelationInput = {
@@ -262,17 +303,23 @@ export type OperationalEventOrderByWithRelationInput = {
   stepId?: Prisma.SortOrderInput | Prisma.SortOrder
   eventKey?: Prisma.SortOrder
   kind?: Prisma.SortOrder
+  eventType?: Prisma.SortOrder
   userVisible?: Prisma.SortOrder
   title?: Prisma.SortOrder
   summary?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   actorUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorType?: Prisma.SortOrder
+  actorRole?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceType?: Prisma.SortOrder
+  sourceId?: Prisma.SortOrderInput | Prisma.SortOrder
   reliability?: Prisma.SortOrder
   impact?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   process?: Prisma.OperationalProcessOrderByWithRelationInput
   step?: Prisma.OperationalStepOrderByWithRelationInput
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceOrderByRelationAggregateInput
 }
 
 export type OperationalEventWhereUniqueInput = Prisma.AtLeast<{
@@ -286,17 +333,23 @@ export type OperationalEventWhereUniqueInput = Prisma.AtLeast<{
   stepId?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
   eventKey?: Prisma.StringFilter<"OperationalEvent"> | string
   kind?: Prisma.EnumOperationalEventKindFilter<"OperationalEvent"> | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFilter<"OperationalEvent"> | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFilter<"OperationalEvent"> | boolean
   title?: Prisma.StringFilter<"OperationalEvent"> | string
   summary?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
   metadata?: Prisma.JsonNullableFilter<"OperationalEvent">
   actorUserId?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFilter<"OperationalEvent"> | $Enums.OperationalActorType
+  actorRole?: Prisma.EnumOrganizationRoleNullableFilter<"OperationalEvent"> | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFilter<"OperationalEvent"> | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
   reliability?: Prisma.EnumOperationalReliabilityFilter<"OperationalEvent"> | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFilter<"OperationalEvent"> | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFilter<"OperationalEvent"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   process?: Prisma.XOR<Prisma.OperationalProcessScalarRelationFilter, Prisma.OperationalProcessWhereInput>
   step?: Prisma.XOR<Prisma.OperationalStepNullableScalarRelationFilter, Prisma.OperationalStepWhereInput> | null
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceListRelationFilter
 }, "id" | "processId_eventKey">
 
 export type OperationalEventOrderByWithAggregationInput = {
@@ -306,11 +359,16 @@ export type OperationalEventOrderByWithAggregationInput = {
   stepId?: Prisma.SortOrderInput | Prisma.SortOrder
   eventKey?: Prisma.SortOrder
   kind?: Prisma.SortOrder
+  eventType?: Prisma.SortOrder
   userVisible?: Prisma.SortOrder
   title?: Prisma.SortOrder
   summary?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   actorUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorType?: Prisma.SortOrder
+  actorRole?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceType?: Prisma.SortOrder
+  sourceId?: Prisma.SortOrderInput | Prisma.SortOrder
   reliability?: Prisma.SortOrder
   impact?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
@@ -329,11 +387,16 @@ export type OperationalEventScalarWhereWithAggregatesInput = {
   stepId?: Prisma.StringNullableWithAggregatesFilter<"OperationalEvent"> | string | null
   eventKey?: Prisma.StringWithAggregatesFilter<"OperationalEvent"> | string
   kind?: Prisma.EnumOperationalEventKindWithAggregatesFilter<"OperationalEvent"> | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeWithAggregatesFilter<"OperationalEvent"> | $Enums.OperationalEventType
   userVisible?: Prisma.BoolWithAggregatesFilter<"OperationalEvent"> | boolean
   title?: Prisma.StringWithAggregatesFilter<"OperationalEvent"> | string
   summary?: Prisma.StringNullableWithAggregatesFilter<"OperationalEvent"> | string | null
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"OperationalEvent">
   actorUserId?: Prisma.StringNullableWithAggregatesFilter<"OperationalEvent"> | string | null
+  actorType?: Prisma.EnumOperationalActorTypeWithAggregatesFilter<"OperationalEvent"> | $Enums.OperationalActorType
+  actorRole?: Prisma.EnumOrganizationRoleNullableWithAggregatesFilter<"OperationalEvent"> | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeWithAggregatesFilter<"OperationalEvent"> | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.StringNullableWithAggregatesFilter<"OperationalEvent"> | string | null
   reliability?: Prisma.EnumOperationalReliabilityWithAggregatesFilter<"OperationalEvent"> | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactWithAggregatesFilter<"OperationalEvent"> | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeWithAggregatesFilter<"OperationalEvent"> | Date | string
@@ -343,17 +406,23 @@ export type OperationalEventCreateInput = {
   id?: string
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutOperationalEventsInput
   process: Prisma.OperationalProcessCreateNestedOneWithoutEventsInput
   step?: Prisma.OperationalStepCreateNestedOneWithoutEventsInput
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceCreateNestedManyWithoutEventInput
 }
 
 export type OperationalEventUncheckedCreateInput = {
@@ -363,31 +432,43 @@ export type OperationalEventUncheckedCreateInput = {
   stepId?: string | null
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type OperationalEventUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutOperationalEventsNestedInput
   process?: Prisma.OperationalProcessUpdateOneRequiredWithoutEventsNestedInput
   step?: Prisma.OperationalStepUpdateOneWithoutEventsNestedInput
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUpdateManyWithoutEventNestedInput
 }
 
 export type OperationalEventUncheckedUpdateInput = {
@@ -397,14 +478,20 @@ export type OperationalEventUncheckedUpdateInput = {
   stepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type OperationalEventCreateManyInput = {
@@ -414,11 +501,16 @@ export type OperationalEventCreateManyInput = {
   stepId?: string | null
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
@@ -428,11 +520,16 @@ export type OperationalEventUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -445,11 +542,16 @@ export type OperationalEventUncheckedUpdateManyInput = {
   stepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -477,11 +579,16 @@ export type OperationalEventCountOrderByAggregateInput = {
   stepId?: Prisma.SortOrder
   eventKey?: Prisma.SortOrder
   kind?: Prisma.SortOrder
+  eventType?: Prisma.SortOrder
   userVisible?: Prisma.SortOrder
   title?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
   actorUserId?: Prisma.SortOrder
+  actorType?: Prisma.SortOrder
+  actorRole?: Prisma.SortOrder
+  sourceType?: Prisma.SortOrder
+  sourceId?: Prisma.SortOrder
   reliability?: Prisma.SortOrder
   impact?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
@@ -494,10 +601,15 @@ export type OperationalEventMaxOrderByAggregateInput = {
   stepId?: Prisma.SortOrder
   eventKey?: Prisma.SortOrder
   kind?: Prisma.SortOrder
+  eventType?: Prisma.SortOrder
   userVisible?: Prisma.SortOrder
   title?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   actorUserId?: Prisma.SortOrder
+  actorType?: Prisma.SortOrder
+  actorRole?: Prisma.SortOrder
+  sourceType?: Prisma.SortOrder
+  sourceId?: Prisma.SortOrder
   reliability?: Prisma.SortOrder
   impact?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
@@ -510,13 +622,23 @@ export type OperationalEventMinOrderByAggregateInput = {
   stepId?: Prisma.SortOrder
   eventKey?: Prisma.SortOrder
   kind?: Prisma.SortOrder
+  eventType?: Prisma.SortOrder
   userVisible?: Prisma.SortOrder
   title?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   actorUserId?: Prisma.SortOrder
+  actorType?: Prisma.SortOrder
+  actorRole?: Prisma.SortOrder
+  sourceType?: Prisma.SortOrder
+  sourceId?: Prisma.SortOrder
   reliability?: Prisma.SortOrder
   impact?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
+}
+
+export type OperationalEventScalarRelationFilter = {
+  is?: Prisma.OperationalEventWhereInput
+  isNot?: Prisma.OperationalEventWhereInput
 }
 
 export type OperationalEventCreateNestedManyWithoutOrganizationInput = {
@@ -649,20 +771,56 @@ export type EnumOperationalEventKindFieldUpdateOperationsInput = {
   set?: $Enums.OperationalEventKind
 }
 
+export type EnumOperationalEventTypeFieldUpdateOperationsInput = {
+  set?: $Enums.OperationalEventType
+}
+
+export type EnumOperationalActorTypeFieldUpdateOperationsInput = {
+  set?: $Enums.OperationalActorType
+}
+
+export type NullableEnumOrganizationRoleFieldUpdateOperationsInput = {
+  set?: $Enums.OrganizationRole | null
+}
+
+export type EnumOperationalEventSourceTypeFieldUpdateOperationsInput = {
+  set?: $Enums.OperationalEventSourceType
+}
+
+export type OperationalEventCreateNestedOneWithoutArtifactRefsInput = {
+  create?: Prisma.XOR<Prisma.OperationalEventCreateWithoutArtifactRefsInput, Prisma.OperationalEventUncheckedCreateWithoutArtifactRefsInput>
+  connectOrCreate?: Prisma.OperationalEventCreateOrConnectWithoutArtifactRefsInput
+  connect?: Prisma.OperationalEventWhereUniqueInput
+}
+
+export type OperationalEventUpdateOneRequiredWithoutArtifactRefsNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationalEventCreateWithoutArtifactRefsInput, Prisma.OperationalEventUncheckedCreateWithoutArtifactRefsInput>
+  connectOrCreate?: Prisma.OperationalEventCreateOrConnectWithoutArtifactRefsInput
+  upsert?: Prisma.OperationalEventUpsertWithoutArtifactRefsInput
+  connect?: Prisma.OperationalEventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OperationalEventUpdateToOneWithWhereWithoutArtifactRefsInput, Prisma.OperationalEventUpdateWithoutArtifactRefsInput>, Prisma.OperationalEventUncheckedUpdateWithoutArtifactRefsInput>
+}
+
 export type OperationalEventCreateWithoutOrganizationInput = {
   id?: string
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
   process: Prisma.OperationalProcessCreateNestedOneWithoutEventsInput
   step?: Prisma.OperationalStepCreateNestedOneWithoutEventsInput
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceCreateNestedManyWithoutEventInput
 }
 
 export type OperationalEventUncheckedCreateWithoutOrganizationInput = {
@@ -671,14 +829,20 @@ export type OperationalEventUncheckedCreateWithoutOrganizationInput = {
   stepId?: string | null
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type OperationalEventCreateOrConnectWithoutOrganizationInput = {
@@ -717,11 +881,16 @@ export type OperationalEventScalarWhereInput = {
   stepId?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
   eventKey?: Prisma.StringFilter<"OperationalEvent"> | string
   kind?: Prisma.EnumOperationalEventKindFilter<"OperationalEvent"> | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFilter<"OperationalEvent"> | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFilter<"OperationalEvent"> | boolean
   title?: Prisma.StringFilter<"OperationalEvent"> | string
   summary?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
   metadata?: Prisma.JsonNullableFilter<"OperationalEvent">
   actorUserId?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFilter<"OperationalEvent"> | $Enums.OperationalActorType
+  actorRole?: Prisma.EnumOrganizationRoleNullableFilter<"OperationalEvent"> | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFilter<"OperationalEvent"> | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.StringNullableFilter<"OperationalEvent"> | string | null
   reliability?: Prisma.EnumOperationalReliabilityFilter<"OperationalEvent"> | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFilter<"OperationalEvent"> | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFilter<"OperationalEvent"> | Date | string
@@ -731,16 +900,22 @@ export type OperationalEventCreateWithoutProcessInput = {
   id?: string
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutOperationalEventsInput
   step?: Prisma.OperationalStepCreateNestedOneWithoutEventsInput
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceCreateNestedManyWithoutEventInput
 }
 
 export type OperationalEventUncheckedCreateWithoutProcessInput = {
@@ -749,14 +924,20 @@ export type OperationalEventUncheckedCreateWithoutProcessInput = {
   stepId?: string | null
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type OperationalEventCreateOrConnectWithoutProcessInput = {
@@ -789,16 +970,22 @@ export type OperationalEventCreateWithoutStepInput = {
   id?: string
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutOperationalEventsInput
   process: Prisma.OperationalProcessCreateNestedOneWithoutEventsInput
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceCreateNestedManyWithoutEventInput
 }
 
 export type OperationalEventUncheckedCreateWithoutStepInput = {
@@ -807,14 +994,20 @@ export type OperationalEventUncheckedCreateWithoutStepInput = {
   processId: string
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type OperationalEventCreateOrConnectWithoutStepInput = {
@@ -843,17 +1036,126 @@ export type OperationalEventUpdateManyWithWhereWithoutStepInput = {
   data: Prisma.XOR<Prisma.OperationalEventUpdateManyMutationInput, Prisma.OperationalEventUncheckedUpdateManyWithoutStepInput>
 }
 
+export type OperationalEventCreateWithoutArtifactRefsInput = {
+  id?: string
+  eventKey: string
+  kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
+  userVisible?: boolean
+  title: string
+  summary?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
+  reliability?: $Enums.OperationalReliability
+  impact?: $Enums.OperationalImpact
+  occurredAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutOperationalEventsInput
+  process: Prisma.OperationalProcessCreateNestedOneWithoutEventsInput
+  step?: Prisma.OperationalStepCreateNestedOneWithoutEventsInput
+}
+
+export type OperationalEventUncheckedCreateWithoutArtifactRefsInput = {
+  id?: string
+  organizationId: string
+  processId: string
+  stepId?: string | null
+  eventKey: string
+  kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
+  userVisible?: boolean
+  title: string
+  summary?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
+  reliability?: $Enums.OperationalReliability
+  impact?: $Enums.OperationalImpact
+  occurredAt?: Date | string
+}
+
+export type OperationalEventCreateOrConnectWithoutArtifactRefsInput = {
+  where: Prisma.OperationalEventWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationalEventCreateWithoutArtifactRefsInput, Prisma.OperationalEventUncheckedCreateWithoutArtifactRefsInput>
+}
+
+export type OperationalEventUpsertWithoutArtifactRefsInput = {
+  update: Prisma.XOR<Prisma.OperationalEventUpdateWithoutArtifactRefsInput, Prisma.OperationalEventUncheckedUpdateWithoutArtifactRefsInput>
+  create: Prisma.XOR<Prisma.OperationalEventCreateWithoutArtifactRefsInput, Prisma.OperationalEventUncheckedCreateWithoutArtifactRefsInput>
+  where?: Prisma.OperationalEventWhereInput
+}
+
+export type OperationalEventUpdateToOneWithWhereWithoutArtifactRefsInput = {
+  where?: Prisma.OperationalEventWhereInput
+  data: Prisma.XOR<Prisma.OperationalEventUpdateWithoutArtifactRefsInput, Prisma.OperationalEventUncheckedUpdateWithoutArtifactRefsInput>
+}
+
+export type OperationalEventUpdateWithoutArtifactRefsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  eventKey?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
+  userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
+  impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutOperationalEventsNestedInput
+  process?: Prisma.OperationalProcessUpdateOneRequiredWithoutEventsNestedInput
+  step?: Prisma.OperationalStepUpdateOneWithoutEventsNestedInput
+}
+
+export type OperationalEventUncheckedUpdateWithoutArtifactRefsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  processId?: Prisma.StringFieldUpdateOperationsInput | string
+  stepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventKey?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
+  userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
+  impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type OperationalEventCreateManyOrganizationInput = {
   id?: string
   processId: string
   stepId?: string | null
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
@@ -863,16 +1165,22 @@ export type OperationalEventUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   process?: Prisma.OperationalProcessUpdateOneRequiredWithoutEventsNestedInput
   step?: Prisma.OperationalStepUpdateOneWithoutEventsNestedInput
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUpdateManyWithoutEventNestedInput
 }
 
 export type OperationalEventUncheckedUpdateWithoutOrganizationInput = {
@@ -881,14 +1189,20 @@ export type OperationalEventUncheckedUpdateWithoutOrganizationInput = {
   stepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type OperationalEventUncheckedUpdateManyWithoutOrganizationInput = {
@@ -897,11 +1211,16 @@ export type OperationalEventUncheckedUpdateManyWithoutOrganizationInput = {
   stepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -913,11 +1232,16 @@ export type OperationalEventCreateManyProcessInput = {
   stepId?: string | null
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
@@ -927,16 +1251,22 @@ export type OperationalEventUpdateWithoutProcessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutOperationalEventsNestedInput
   step?: Prisma.OperationalStepUpdateOneWithoutEventsNestedInput
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUpdateManyWithoutEventNestedInput
 }
 
 export type OperationalEventUncheckedUpdateWithoutProcessInput = {
@@ -945,14 +1275,20 @@ export type OperationalEventUncheckedUpdateWithoutProcessInput = {
   stepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type OperationalEventUncheckedUpdateManyWithoutProcessInput = {
@@ -961,11 +1297,16 @@ export type OperationalEventUncheckedUpdateManyWithoutProcessInput = {
   stepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -977,11 +1318,16 @@ export type OperationalEventCreateManyStepInput = {
   processId: string
   eventKey: string
   kind: $Enums.OperationalEventKind
+  eventType?: $Enums.OperationalEventType
   userVisible?: boolean
   title: string
   summary?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: string | null
+  actorType?: $Enums.OperationalActorType
+  actorRole?: $Enums.OrganizationRole | null
+  sourceType?: $Enums.OperationalEventSourceType
+  sourceId?: string | null
   reliability?: $Enums.OperationalReliability
   impact?: $Enums.OperationalImpact
   occurredAt?: Date | string
@@ -991,16 +1337,22 @@ export type OperationalEventUpdateWithoutStepInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutOperationalEventsNestedInput
   process?: Prisma.OperationalProcessUpdateOneRequiredWithoutEventsNestedInput
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUpdateManyWithoutEventNestedInput
 }
 
 export type OperationalEventUncheckedUpdateWithoutStepInput = {
@@ -1009,14 +1361,20 @@ export type OperationalEventUncheckedUpdateWithoutStepInput = {
   processId?: Prisma.StringFieldUpdateOperationsInput | string
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  artifactRefs?: Prisma.OperationalEventArtifactReferenceUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type OperationalEventUncheckedUpdateManyWithoutStepInput = {
@@ -1025,16 +1383,50 @@ export type OperationalEventUncheckedUpdateManyWithoutStepInput = {
   processId?: Prisma.StringFieldUpdateOperationsInput | string
   eventKey?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumOperationalEventKindFieldUpdateOperationsInput | $Enums.OperationalEventKind
+  eventType?: Prisma.EnumOperationalEventTypeFieldUpdateOperationsInput | $Enums.OperationalEventType
   userVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumOperationalActorTypeFieldUpdateOperationsInput | $Enums.OperationalActorType
+  actorRole?: Prisma.NullableEnumOrganizationRoleFieldUpdateOperationsInput | $Enums.OrganizationRole | null
+  sourceType?: Prisma.EnumOperationalEventSourceTypeFieldUpdateOperationsInput | $Enums.OperationalEventSourceType
+  sourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reliability?: Prisma.EnumOperationalReliabilityFieldUpdateOperationsInput | $Enums.OperationalReliability
   impact?: Prisma.EnumOperationalImpactFieldUpdateOperationsInput | $Enums.OperationalImpact
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type OperationalEventCountOutputType
+ */
+
+export type OperationalEventCountOutputType = {
+  artifactRefs: number
+}
+
+export type OperationalEventCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  artifactRefs?: boolean | OperationalEventCountOutputTypeCountArtifactRefsArgs
+}
+
+/**
+ * OperationalEventCountOutputType without action
+ */
+export type OperationalEventCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationalEventCountOutputType
+   */
+  select?: Prisma.OperationalEventCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * OperationalEventCountOutputType without action
+ */
+export type OperationalEventCountOutputTypeCountArtifactRefsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperationalEventArtifactReferenceWhereInput
+}
 
 
 export type OperationalEventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1044,17 +1436,24 @@ export type OperationalEventSelect<ExtArgs extends runtime.Types.Extensions.Inte
   stepId?: boolean
   eventKey?: boolean
   kind?: boolean
+  eventType?: boolean
   userVisible?: boolean
   title?: boolean
   summary?: boolean
   metadata?: boolean
   actorUserId?: boolean
+  actorType?: boolean
+  actorRole?: boolean
+  sourceType?: boolean
+  sourceId?: boolean
   reliability?: boolean
   impact?: boolean
   occurredAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   process?: boolean | Prisma.OperationalProcessDefaultArgs<ExtArgs>
   step?: boolean | Prisma.OperationalEvent$stepArgs<ExtArgs>
+  artifactRefs?: boolean | Prisma.OperationalEvent$artifactRefsArgs<ExtArgs>
+  _count?: boolean | Prisma.OperationalEventCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["operationalEvent"]>
 
 export type OperationalEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1064,11 +1463,16 @@ export type OperationalEventSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   stepId?: boolean
   eventKey?: boolean
   kind?: boolean
+  eventType?: boolean
   userVisible?: boolean
   title?: boolean
   summary?: boolean
   metadata?: boolean
   actorUserId?: boolean
+  actorType?: boolean
+  actorRole?: boolean
+  sourceType?: boolean
+  sourceId?: boolean
   reliability?: boolean
   impact?: boolean
   occurredAt?: boolean
@@ -1084,11 +1488,16 @@ export type OperationalEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   stepId?: boolean
   eventKey?: boolean
   kind?: boolean
+  eventType?: boolean
   userVisible?: boolean
   title?: boolean
   summary?: boolean
   metadata?: boolean
   actorUserId?: boolean
+  actorType?: boolean
+  actorRole?: boolean
+  sourceType?: boolean
+  sourceId?: boolean
   reliability?: boolean
   impact?: boolean
   occurredAt?: boolean
@@ -1104,21 +1513,28 @@ export type OperationalEventSelectScalar = {
   stepId?: boolean
   eventKey?: boolean
   kind?: boolean
+  eventType?: boolean
   userVisible?: boolean
   title?: boolean
   summary?: boolean
   metadata?: boolean
   actorUserId?: boolean
+  actorType?: boolean
+  actorRole?: boolean
+  sourceType?: boolean
+  sourceId?: boolean
   reliability?: boolean
   impact?: boolean
   occurredAt?: boolean
 }
 
-export type OperationalEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "processId" | "stepId" | "eventKey" | "kind" | "userVisible" | "title" | "summary" | "metadata" | "actorUserId" | "reliability" | "impact" | "occurredAt", ExtArgs["result"]["operationalEvent"]>
+export type OperationalEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "processId" | "stepId" | "eventKey" | "kind" | "eventType" | "userVisible" | "title" | "summary" | "metadata" | "actorUserId" | "actorType" | "actorRole" | "sourceType" | "sourceId" | "reliability" | "impact" | "occurredAt", ExtArgs["result"]["operationalEvent"]>
 export type OperationalEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   process?: boolean | Prisma.OperationalProcessDefaultArgs<ExtArgs>
   step?: boolean | Prisma.OperationalEvent$stepArgs<ExtArgs>
+  artifactRefs?: boolean | Prisma.OperationalEvent$artifactRefsArgs<ExtArgs>
+  _count?: boolean | Prisma.OperationalEventCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OperationalEventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -1137,6 +1553,7 @@ export type $OperationalEventPayload<ExtArgs extends runtime.Types.Extensions.In
     organization: Prisma.$OrganizationPayload<ExtArgs>
     process: Prisma.$OperationalProcessPayload<ExtArgs>
     step: Prisma.$OperationalStepPayload<ExtArgs> | null
+    artifactRefs: Prisma.$OperationalEventArtifactReferencePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1145,11 +1562,16 @@ export type $OperationalEventPayload<ExtArgs extends runtime.Types.Extensions.In
     stepId: string | null
     eventKey: string
     kind: $Enums.OperationalEventKind
+    eventType: $Enums.OperationalEventType
     userVisible: boolean
     title: string
     summary: string | null
     metadata: runtime.JsonValue | null
     actorUserId: string | null
+    actorType: $Enums.OperationalActorType
+    actorRole: $Enums.OrganizationRole | null
+    sourceType: $Enums.OperationalEventSourceType
+    sourceId: string | null
     reliability: $Enums.OperationalReliability
     impact: $Enums.OperationalImpact
     occurredAt: Date
@@ -1550,6 +1972,7 @@ export interface Prisma__OperationalEventClient<T, Null = never, ExtArgs extends
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   process<T extends Prisma.OperationalProcessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationalProcessDefaultArgs<ExtArgs>>): Prisma.Prisma__OperationalProcessClient<runtime.Types.Result.GetResult<Prisma.$OperationalProcessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   step<T extends Prisma.OperationalEvent$stepArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationalEvent$stepArgs<ExtArgs>>): Prisma.Prisma__OperationalStepClient<runtime.Types.Result.GetResult<Prisma.$OperationalStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  artifactRefs<T extends Prisma.OperationalEvent$artifactRefsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationalEvent$artifactRefsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationalEventArtifactReferencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1585,11 +2008,16 @@ export interface OperationalEventFieldRefs {
   readonly stepId: Prisma.FieldRef<"OperationalEvent", 'String'>
   readonly eventKey: Prisma.FieldRef<"OperationalEvent", 'String'>
   readonly kind: Prisma.FieldRef<"OperationalEvent", 'OperationalEventKind'>
+  readonly eventType: Prisma.FieldRef<"OperationalEvent", 'OperationalEventType'>
   readonly userVisible: Prisma.FieldRef<"OperationalEvent", 'Boolean'>
   readonly title: Prisma.FieldRef<"OperationalEvent", 'String'>
   readonly summary: Prisma.FieldRef<"OperationalEvent", 'String'>
   readonly metadata: Prisma.FieldRef<"OperationalEvent", 'Json'>
   readonly actorUserId: Prisma.FieldRef<"OperationalEvent", 'String'>
+  readonly actorType: Prisma.FieldRef<"OperationalEvent", 'OperationalActorType'>
+  readonly actorRole: Prisma.FieldRef<"OperationalEvent", 'OrganizationRole'>
+  readonly sourceType: Prisma.FieldRef<"OperationalEvent", 'OperationalEventSourceType'>
+  readonly sourceId: Prisma.FieldRef<"OperationalEvent", 'String'>
   readonly reliability: Prisma.FieldRef<"OperationalEvent", 'OperationalReliability'>
   readonly impact: Prisma.FieldRef<"OperationalEvent", 'OperationalImpact'>
   readonly occurredAt: Prisma.FieldRef<"OperationalEvent", 'DateTime'>
@@ -2010,6 +2438,30 @@ export type OperationalEvent$stepArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   include?: Prisma.OperationalStepInclude<ExtArgs> | null
   where?: Prisma.OperationalStepWhereInput
+}
+
+/**
+ * OperationalEvent.artifactRefs
+ */
+export type OperationalEvent$artifactRefsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationalEventArtifactReference
+   */
+  select?: Prisma.OperationalEventArtifactReferenceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationalEventArtifactReference
+   */
+  omit?: Prisma.OperationalEventArtifactReferenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationalEventArtifactReferenceInclude<ExtArgs> | null
+  where?: Prisma.OperationalEventArtifactReferenceWhereInput
+  orderBy?: Prisma.OperationalEventArtifactReferenceOrderByWithRelationInput | Prisma.OperationalEventArtifactReferenceOrderByWithRelationInput[]
+  cursor?: Prisma.OperationalEventArtifactReferenceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperationalEventArtifactReferenceScalarFieldEnum | Prisma.OperationalEventArtifactReferenceScalarFieldEnum[]
 }
 
 /**

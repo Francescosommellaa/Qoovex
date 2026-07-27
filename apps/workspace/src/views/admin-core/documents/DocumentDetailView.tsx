@@ -24,6 +24,7 @@ import { WorkspacePageIdentity } from "@/views/workspace/WorkspacePageIdentity";
 import { deadlineStatusLabels, documentStatusLabels, formatDate, ownerLabel, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceDocumentTypeRecord, WorkspaceDocumentVersionRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 import { OperationalArtifactStatus } from "@entities/operational-process/ui/OperationalArtifactStatus";
+import { ArtifactTimeline } from "@widgets/artifact-timeline/ui/ArtifactTimeline";
 
 export function DocumentDetailView({
   document,
@@ -129,6 +130,8 @@ export function DocumentDetailView({
           </Card>
         ) : null}
       </div>
+
+      <ArtifactTimeline artifactId={document.id} artifactType="DOCUMENT" />
 
       {canManage ? (
         <Card size="sm">

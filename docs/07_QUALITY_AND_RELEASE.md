@@ -4,19 +4,23 @@
 
 `pnpm check` esegue type-check, test unitari, build, audit dipendenze, verifica Prisma e `git diff --check`; `pnpm check:ci` aggiunge E2E. `verify:prisma` resta bloccante su migration, checksum e drift.
 
-## Copertura Fase 3 implementata
+## Copertura Fasi 3-4 implementata
 
-- quattro definizioni registry e transizioni invalide;
-- matrice affidabilita × impatto;
+- cinque definizioni registry e transizioni invalide;
+- matrice affidabilita x impatto;
 - payload minimizzati, artifact tenant-scoped e idempotency key;
 - claim concorrente, lease di cinque minuti, fencing e backoff;
-- enqueue nella transazione di documento/versione/lavoratore/cantiere;
+- enqueue nella transazione di documento/versione/lavoratore/cantiere/pacchetto;
 - contratti API discriminati, route protette e permission mapping;
-- shell primaria ridotta e assenza di Preferiti/Azioni rapide/Ricerca/Analisi;
+- shell unica adattiva, ricerca consultiva metadata-only in modale separato e card Azioni rapide guidata dai permessi;
 - workflow scheduled con controllo JSON/logical failure;
-- E2E: documento incompleto → decisione → ripresa; lavoratore → requisito mancante → documento → eccezione risolta.
+- revisioni immutabili, backfill legacy, review obbligatoria, conferma concorrente, revoca/scadenza idempotente e download opt-in;
+- ricerca esatta/prefisso/termine, tenant/resource scope, cursori stabili e indici PostgreSQL;
+- timeline tipizzata e aggregata, correzioni append-only, payload minimizzati e audit tecnico separato;
+- E2E Fase 3: documento incompleto -> decisione -> ripresa; lavoratore -> requisito mancante -> documento -> eccezione risolta;
+- E2E Fase 4: ricerca autorizzata -> artifact -> timeline; preparazione -> review -> link; aggiornamento immutabile; revoca/scadenza; Centro operativo.
 
-La suite Workspace verificata dopo l'implementazione conta 59 file passati, 2 skipped; 311 test passati, 3 skipped. Questo dato e locale e deve essere aggiornato se i test cambiano.
+La suite Workspace verificata dopo l'implementazione conta 61 file passati, 2 skipped; 316 test passati, 3 skipped. La suite E2E Workspace conta 5 scenari passati. Questi dati sono locali e devono essere aggiornati se i test cambiano.
 
 ## Gate prima di release
 
@@ -24,8 +28,8 @@ Eseguire Prisma validate/generate, migration status/diff sul target autorizzato,
 
 ## Specifiche non implementate
 
-Nessun deploy Preview/Production, commit, branch, push o PR fa parte della Fase 3 locale. Un workflow nel repository non prova esecuzione remota.
+Nessun deploy Preview/Production, commit, branch, push o PR fa parte delle Fasi 3-4 locali. Un workflow nel repository non prova esecuzione remota.
 
 ## Decisioni aperte e hard stop
 
-Non dichiarare un ambiente allineato senza verifica specifica. OCR/AI, retention, ricerca, nuovi canali, SLA e limiti commerciali richiederanno test e gate propri.
+Non dichiarare un ambiente allineato senza verifica specifica. OCR/AI, ricerca nei file o semantica, retention, nuovi canali, SLA e limiti commerciali richiederanno test e gate propri.

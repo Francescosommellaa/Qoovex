@@ -4,7 +4,7 @@
 
 Supporto, Qoovex Admin e data-control conservano i guardrail esistenti. Il motore non espone credenziali, token, Blob key, URL permanenti, contenuti file o stack trace.
 
-`OperationalEvent` alimenta la timeline funzionale e append-only; `ProductAuditEvent` resta il registro tecnico/prodotto separato. Risoluzione decisione, risoluzione manuale consentita e retry autorizzato generano audit minimizzato. Leggere o chiudere una notifica non chiude un'eccezione.
+`OperationalEvent` alimenta la timeline funzionale tipizzata e append-only; `ProductAuditEvent` resta il registro tecnico/prodotto separato. Gli accessi esterni registrano solo `LINK_OPENED` e `DOWNLOAD_REQUESTED`: non dichiarano lettura o download completato e non includono token, IP, user-agent, Blob key o URL firmato.
 
 Le eccezioni oggettive vengono riconciliate quando la condizione dominio e soddisfatta. Le eccezioni `DATA_TO_VERIFY` e `PARTIAL_RESULT` possono essere chiuse manualmente con motivazione e permesso sottostante; eccezioni tecniche, oggettive o collegate a decisioni non possono esserlo.
 

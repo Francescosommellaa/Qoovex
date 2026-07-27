@@ -4,15 +4,15 @@
 
 - `apps/workspace`: runtime prodotto, auth/MFA, route, motore, runner, read model e UI operativa;
 - `apps/web`: marketing pubblico e pagine legali;
-- `apps/sirio`: catalogo/proof del design system, non modificato in Fase 3;
-- `packages/db`: Prisma, dieci migration canoniche, client e guardrail;
+- `apps/sirio`: catalogo/proof del design system con scenario operativo Fase 4, senza logica prodotto;
+- `packages/db`: Prisma, tredici migration canoniche, client e guardrail;
 - `packages/types`: contratti platform-neutral inclusi i DTO `Operational*`;
-- `packages/ui`: foundation condivisa invariata;
+- `packages/ui`: foundation condivisa con primitive generiche search/timeline/work queue, senza dominio;
 - `packages/brand-resources`: asset SVG proprietari.
 
 Nel Workspace il registry e l'enqueue server-only vivono nel layer condiviso; read model e azioni operative vivono nella feature; il riepilogo artifact e un'entity; Centro operativo e dettaglio sono view; il routing resta in `app`. Il gate FSD impedisce import verso layer superiori.
 
-Le definizioni eseguibili sono un registry server-side versionato, non una tabella o un editor. Gli enqueue avvengono nella stessa transazione delle mutazioni dominio. Il runner usa l'infrastruttura GitHub Actions/`CRON_SECRET` gia adottata e non introduce code o dipendenze esterne.
+Le definizioni eseguibili sono un registry server-side versionato, non una tabella o un editor. Ricerca, timeline e condivisione sono servizi Workspace server-only; i route handler fanno parsing, auth e delega. PostgreSQL full-text usa indici di espressione e non replica il dominio in una tabella indice.
 
 ## Direzione approvata
 
@@ -20,7 +20,7 @@ Documenti, lavoratori, cantieri, scadenze, checklist, prove e pacchetti restano 
 
 ## Specifiche non implementate
 
-Non esistono editor processi, plugin provider, coda esterna, ricerca universale o runtime in Web/Sirio. `packages/ui` non contiene logica operativa.
+Non esistono editor processi, plugin provider, coda esterna, ricerca semantica/nei file o runtime in Web/Sirio. `packages/ui` non contiene logica operativa, permessi o API.
 
 ## Decisioni aperte e hard stop
 

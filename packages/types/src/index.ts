@@ -4,8 +4,18 @@ export type EntityId = string;
 export const platformRoles = ["USER", "SUPER_ADMIN"] as const;
 export type PlatformRole = (typeof platformRoles)[number];
 
-export const organizationRoles = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
-export type OrganizationRole = (typeof organizationRoles)[number];
+export const organizationRoles = ["OWNER", "ADMIN", "MEMBER", "VIEWER"] as const;
+export type CanonicalOrganizationRole = (typeof organizationRoles)[number];
+/** @deprecated Read compatibility only while legacy fixtures and audit projections are migrated. */
+export type LegacyOrganizationRole = "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER";
+export type OrganizationRole = CanonicalOrganizationRole | LegacyOrganizationRole;
+
+export const organizationAccessPresets = ["OPERATIONAL_COLLABORATOR", "SITE_MANAGER", "CONSULTANT", "VIEWER", "LIMITED_UPLOAD"] as const;
+export type OrganizationAccessPreset = (typeof organizationAccessPresets)[number];
+export const organizationScopeModes = ["FULL", "ASSIGNED"] as const;
+export type OrganizationScopeMode = (typeof organizationScopeModes)[number];
+export const organizationResourceTypes = ["JOB_SITE", "WORKER", "DOCUMENT", "DOCUMENT_TYPE", "DOCUMENT_PACKAGE", "OPERATIONAL_PROCESS", "OPERATIONAL_DECISION", "OPERATIONAL_EXCEPTION", "EVIDENCE", "CHECKLIST", "SHARE_LINK"] as const;
+export type OrganizationResourceType = (typeof organizationResourceTypes)[number];
 
 export type SupportAuditAction = "READ" | "WRITE" | "SENSITIVE" | "EXPORT";
 export type AuthCodePurpose = "EMAIL_VERIFICATION" | "PASSWORD_RESET" | "EMAIL_CHANGE" | "MFA_ENROLLMENT" | "MFA_RECOVERY";
@@ -92,6 +102,13 @@ export type ChecklistItemStatus = (typeof checklistItemStatuses)[number];
 
 export const documentPackageStatuses = ["DRAFT", "READY_FOR_REVIEW", "SHARED", "ARCHIVED"] as const;
 export type DocumentPackageStatus = (typeof documentPackageStatuses)[number];
+
+export const documentPackageEffectiveStates = ["DRAFT", "PREPARING", "INCOMPLETE", "TO_VERIFY", "READY_FOR_REVIEW", "APPROVED", "SHARED", "UPDATED_AFTER_SHARING", "EXPIRED", "REVOKED", "ARCHIVED"] as const;
+export type DocumentPackageEffectiveState = (typeof documentPackageEffectiveStates)[number];
+export type DocumentPackageRevisionOrigin = "AUTOMATED_PREPARATION" | "LEGACY_BACKFILL";
+export type DocumentPackageRevisionStatus = "PREPARED" | "APPROVED";
+export type DocumentPackageShareProposalTarget = "NAMED_RECIPIENT" | "LINK_PURPOSE";
+export type DocumentPackageShareProposalStatus = "PREPARING" | "READY_FOR_REVIEW" | "BLOCKED" | "APPROVED" | "PUBLISHED";
 
 export const documentOwnerTypes = ["ORGANIZATION", "WORKER", "JOB_SITE"] as const;
 export type DocumentOwnerType = (typeof documentOwnerTypes)[number];
@@ -343,6 +360,9 @@ export interface OrganizationSummary {
 
 export interface WorkspaceCompanyContext {
   role: OrganizationRole;
+  preset?: OrganizationAccessPreset | null;
+  scopeMode?: OrganizationScopeMode;
+  expiresAt?: string | null;
   organization: OrganizationSummary;
 }
 
@@ -363,7 +383,16 @@ export interface WorkspaceAccessContext {
 }
 
 export interface CreateOrganizationInput { name: string }
-export interface CreateInvitationInput { email: string; role: Exclude<OrganizationRole, "OWNER"> }
+export interface OrganizationResourceGrantInput { resourceType: OrganizationResourceType; resourceId: EntityId }
+export interface CreateInvitationInput {
+  email: string;
+  role: Exclude<OrganizationRole, "OWNER">;
+  preset: OrganizationAccessPreset | null;
+  permissions: OrganizationPermission[];
+  scopeMode: OrganizationScopeMode;
+  expiresAt?: string | null;
+  grants?: OrganizationResourceGrantInput[];
+}
 export interface AcceptInvitationInput { token: string }
 export interface OpenSupportSessionInput { organizationCode: string; reason: string }
 
@@ -935,6 +964,7 @@ export interface DocumentPackageResponse {
   title: string;
   description?: string | null;
   status: DocumentPackageStatus;
+  effectiveState?: DocumentPackageEffectiveState;
   createdById: EntityId;
   createdAt: string;
   updatedAt: string;
@@ -998,7 +1028,13 @@ export interface ShareLinkResponse {
   id: EntityId;
   organizationId: EntityId;
   documentPackageId: EntityId;
+  revisionId: EntityId;
+  proposalId?: EntityId | null;
+  purpose?: string | null;
+  recipientLabel?: string | null;
+  allowDownload: boolean;
   expiresAt?: string | null;
+  expiredAt?: string | null;
   revokedAt?: string | null;
   createdById: EntityId;
   createdAt: string;
@@ -1006,7 +1042,8 @@ export interface ShareLinkResponse {
 }
 
 export interface CreateShareLinkInput {
-  expiresAt?: string | null;
+  proposalId: EntityId;
+  confirmation: "APPROVE_AND_CREATE";
 }
 
 export interface CreateShareLinkResponse {
@@ -1017,6 +1054,7 @@ export interface CreateShareLinkResponse {
 export interface RevokeShareLinkResponse {
   shareLink: ShareLinkResponse;
   revoked: true;
+  alreadyRevoked: boolean;
 }
 
 export interface SharedDocumentPackageResponse {
@@ -1025,6 +1063,8 @@ export interface SharedDocumentPackageResponse {
   description?: string | null;
   status: DocumentPackageStatus;
   updatedAt: string;
+  expiresAt?: string | null;
+  allowDownload: boolean;
   items: SharedDocumentPackageItemResponse[];
 }
 
@@ -1039,6 +1079,69 @@ export interface SharedDocumentPackageItemResponse {
   originalFileName?: string | null;
   mimeType?: string | null;
   size?: number | null;
+}
+
+export interface DocumentPackageRevisionIssueDto {
+  code: "MISSING_REFERENCE" | "ARCHIVED_REFERENCE" | "UNCLASSIFIED_DOCUMENT" | "SENSITIVE_DOCUMENT" | "EXPIRED_DOCUMENT" | "DOCUMENT_TO_VERIFY";
+  severity: "ATTENTION" | "BLOCKING";
+  title: string;
+  sourceItemId?: EntityId | null;
+}
+
+export interface DocumentPackageRevisionItemDto extends SharedDocumentPackageItemResponse {
+  sourceItemId: EntityId;
+  documentId?: EntityId | null;
+  documentVersionId?: EntityId | null;
+  evidenceId?: EntityId | null;
+  checklistId?: EntityId | null;
+  included: boolean;
+  exclusionReason?: string | null;
+}
+
+export interface DocumentPackageRevisionDto {
+  id: EntityId;
+  documentPackageId: EntityId;
+  revisionNumber: number;
+  origin: DocumentPackageRevisionOrigin;
+  status: DocumentPackageRevisionStatus;
+  fingerprint: string;
+  packageTitle: string;
+  packageDescription?: string | null;
+  items: DocumentPackageRevisionItemDto[];
+  issues: DocumentPackageRevisionIssueDto[];
+  preparedAt: string;
+  approvedAt?: string | null;
+}
+
+export interface DocumentPackageShareProposalDto {
+  id: EntityId;
+  documentPackageId: EntityId;
+  processId: EntityId;
+  decisionId?: EntityId | null;
+  targetKind: DocumentPackageShareProposalTarget;
+  recipientLabel?: string | null;
+  purpose?: string | null;
+  expiresAt: string;
+  allowDownload: boolean;
+  status: DocumentPackageShareProposalStatus;
+  revision: DocumentPackageRevisionDto;
+  createdAt: string;
+  approvedAt?: string | null;
+  publishedAt?: string | null;
+  canConfirm: boolean;
+}
+
+export type PrepareDocumentPackageShareProposalInput =
+  | { targetKind: "NAMED_RECIPIENT"; recipientLabel: string; purpose?: string | null; expiresAt: string; allowDownload?: boolean }
+  | { targetKind: "LINK_PURPOSE"; purpose: string; recipientLabel?: never; expiresAt: string; allowDownload?: boolean };
+
+export interface ConfirmDocumentPackageShareProposalInput {
+  confirmation: "APPROVE_AND_CREATE";
+  fingerprint: string;
+}
+
+export interface ConfirmDocumentPackageShareProposalResponse extends CreateShareLinkResponse {
+  proposal: DocumentPackageShareProposalDto;
 }
 
 export interface NotificationResponse {
@@ -1584,7 +1687,7 @@ export interface DashboardResponse {
   errors: DashboardSectionError[];
 }
 
-export const operationalProcessTypes = ["DOCUMENT_RECEIVED", "WORKER_CREATED", "JOB_SITE_CREATED", "CONTINUOUS_CONTROL"] as const;
+export const operationalProcessTypes = ["DOCUMENT_RECEIVED", "WORKER_CREATED", "JOB_SITE_CREATED", "CONTINUOUS_CONTROL", "DOCUMENT_PACKAGE_SHARING"] as const;
 export type OperationalProcessType = (typeof operationalProcessTypes)[number];
 
 export const operationalProcessStatuses = ["RECEIVED", "READY", "RUNNING", "WAITING_FOR_DECISION", "BLOCKED", "RETRY_SCHEDULED", "COMPLETED", "COMPLETED_WITH_EXCEPTIONS", "TECHNICAL_FAILURE"] as const;
@@ -1596,7 +1699,12 @@ export type OperationalStepStatus = (typeof operationalStepStatuses)[number];
 export const operationalEventKinds = ["INPUT", "DOMAIN", "TEMPORAL", "DECISION", "TECHNICAL", "RETRY", "COMPLETION", "BLOCKED", "RECONCILIATION"] as const;
 export type OperationalEventKind = (typeof operationalEventKinds)[number];
 
-export const operationalDecisionTypes = ["CONFIRM_DOCUMENT_TYPE", "CONFIRM_DOCUMENT_OWNER", "CONFIRM_EXPIRY_DATE", "RESOLVE_CONFLICT"] as const;
+export const operationalEventTypes = ["LEGACY_EVENT", "PROCESS_STARTED", "STEP_STARTED", "RULE_APPLIED", "PROPOSAL_PREPARED", "AUTOMATION_COMPLETED", "DOCUMENT_LINKED", "DOCUMENT_VERSION_ADDED", "REQUIREMENT_SATISFIED", "EXCEPTION_OPENED", "EXCEPTION_RESOLVED", "DECISION_REQUESTED", "DECISION_RESOLVED", "VALUE_CORRECTED", "RETRY_SCHEDULED", "PROCESS_BLOCKED", "PROCESS_RESUMED", "RESULT_CREATED", "PACKAGE_PREPARED", "PACKAGE_UPDATED", "SHARE_APPROVED", "SHARE_LINK_CREATED", "SHARE_LINK_OPENED", "SHARE_DOWNLOAD_REQUESTED", "SHARE_LINK_REVOKED", "SHARE_LINK_EXPIRED", "PROCESS_COMPLETED", "PROCESS_COMPLETED_WITH_EXCEPTIONS", "PROCESS_TECHNICAL_FAILURE"] as const;
+export type OperationalEventType = (typeof operationalEventTypes)[number];
+export type OperationalActorType = "SYSTEM" | "USER" | "SUPPORT" | "EXTERNAL";
+export type OperationalEventSourceType = "ENGINE" | "DOMAIN" | "USER_ACTION" | "SHARING_ACCESS" | "CONTINUOUS_CONTROL";
+
+export const operationalDecisionTypes = ["CONFIRM_DOCUMENT_TYPE", "CONFIRM_DOCUMENT_OWNER", "CONFIRM_EXPIRY_DATE", "RESOLVE_CONFLICT", "APPROVE_DOCUMENT_PACKAGE_SHARE"] as const;
 export type OperationalDecisionType = (typeof operationalDecisionTypes)[number];
 export type OperationalDecisionStatus = "OPEN" | "RESOLVED" | "SUPERSEDED";
 
@@ -1605,7 +1713,7 @@ export type OperationalExceptionType = (typeof operationalExceptionTypes)[number
 export type OperationalExceptionSeverity = "INFO" | "ATTENTION" | "WARNING" | "BLOCKING";
 export type OperationalExceptionStatus = "OPEN" | "RESOLVED";
 
-export const operationalArtifactTypes = ["ORGANIZATION", "DOCUMENT", "DOCUMENT_VERSION", "DOCUMENT_REQUIREMENT", "WORKER", "JOB_SITE", "DEADLINE", "CHECKLIST", "EVIDENCE", "DOCUMENT_PACKAGE"] as const;
+export const operationalArtifactTypes = ["ORGANIZATION", "DOCUMENT", "DOCUMENT_VERSION", "DOCUMENT_REQUIREMENT", "WORKER", "JOB_SITE", "DEADLINE", "CHECKLIST", "EVIDENCE", "DOCUMENT_PACKAGE", "SHARE_LINK"] as const;
 export type OperationalArtifactType = (typeof operationalArtifactTypes)[number];
 export type OperationalReliability = "VERIFIED" | "HIGH" | "MEDIUM" | "LOW" | "CONFLICT";
 export type OperationalImpact = "LOW" | "CONTROLLED" | "SENSITIVE" | "IRREVERSIBLE";
@@ -1633,10 +1741,21 @@ export interface OperationalStepDto {
 export interface OperationalEventDto {
   id: EntityId;
   kind: OperationalEventKind;
+  eventType: OperationalEventType;
   title: string;
   summary: string | null;
+  actorType: OperationalActorType;
+  actorRole: OrganizationRole | null;
+  sourceType: OperationalEventSourceType;
+  sourceId: string | null;
   reliability: OperationalReliability;
   impact: OperationalImpact;
+  artifacts: OperationalArtifactReferenceDto[];
+  reason: string | null;
+  previousState: string | null;
+  nextState: string | null;
+  result: string | null;
+  nextStep: string | null;
   occurredAt: string;
 }
 
@@ -1739,4 +1858,78 @@ export interface OperationalCenterResponse {
   exceptions: OperationalExceptionDto[];
   activeProcesses: OperationalProcessSummary[];
   recentResults: OperationalProcessSummary[];
+  workItems: OperationalCenterItemDto[];
+}
+
+export type OperationalCenterView = "ALL" | "TO_DECIDE" | "TO_VERIFY" | "OVERDUE" | "EXPIRING" | "BLOCKED" | "IN_PROGRESS" | "RECENTLY_COMPLETED" | "SHARING";
+export type OperationalCenterItemKind = "DECISION" | "EXCEPTION" | "PROCESS" | "DEADLINE" | "SHARING" | "RESULT";
+
+export interface OperationalCenterFilters {
+  view?: OperationalCenterView;
+  artifactType?: OperationalArtifactType;
+  workerId?: EntityId;
+  jobSiteId?: EntityId;
+  status?: string;
+  from?: string;
+  to?: string;
+}
+
+export interface OperationalCenterItemDto {
+  id: EntityId;
+  kind: OperationalCenterItemKind;
+  title: string;
+  summary: string;
+  status: string;
+  blocking: boolean;
+  overdue: boolean;
+  severity: OperationalExceptionSeverity | null;
+  dueAt: string | null;
+  openedAt: string;
+  artifact: OperationalArtifactReferenceDto | null;
+  href: string;
+  timelineHref: string | null;
+  primaryActionLabel: string | null;
+  priorityReason: string;
+}
+
+export interface OperationalCenterPage {
+  generatedAt: string;
+  items: OperationalCenterItemDto[];
+  nextCursor: string | null;
+}
+
+export const universalSearchResultTypes = ["DOCUMENT", "DOCUMENT_TYPE", "WORKER", "JOB_SITE", "DEADLINE", "CHECKLIST", "EVIDENCE", "DOCUMENT_PACKAGE", "OPERATIONAL_PROCESS", "OPERATIONAL_DECISION", "OPERATIONAL_EXCEPTION", "SHARE_LINK"] as const;
+export type UniversalSearchResultType = (typeof universalSearchResultTypes)[number];
+
+export interface UniversalSearchRequest {
+  query: string;
+  types?: UniversalSearchResultType[];
+  cursor?: string | null;
+  take?: number;
+}
+
+export interface UniversalSearchResultDto {
+  type: UniversalSearchResultType;
+  id: EntityId;
+  title: string;
+  context: string | null;
+  status: string | null;
+  usefulDate: string | null;
+  matchReason: string;
+  href: string;
+  timelineHref: string | null;
+  attention: boolean;
+}
+
+export interface UniversalSearchGroupDto {
+  type: UniversalSearchResultType;
+  label: string;
+  items: UniversalSearchResultDto[];
+  hasMore: boolean;
+}
+
+export interface UniversalSearchPage {
+  groups: UniversalSearchGroupDto[];
+  items: UniversalSearchResultDto[];
+  nextCursor: string | null;
 }
