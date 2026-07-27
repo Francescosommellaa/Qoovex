@@ -22,6 +22,7 @@ env:
   QOOVEX_AUDIT_SECRET: ci-audit-secret-at-least-32-characters
   QOOVEX_MFA_ENCRYPTION_KEY: ci-mfa-encryption-key-at-least-32-chars
   QOOVEX_MFA_COOKIE_SECRET: ci-mfa-cookie-secret-at-least-32-chars
+  CRON_SECRET: ci-cron-secret-at-least-32-characters
 
 jobs:
   quality-gate:

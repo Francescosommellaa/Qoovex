@@ -109,7 +109,7 @@ beforeEach(() => {
   mocks.auditActorFromContext.mockReturnValue({ actorUserId: "user-owner", actorRole: "OWNER", supportSessionId: null });
   mocks.db.worker.findFirst.mockResolvedValue(worker);
   mocks.db.jobSite.findFirst.mockResolvedValue(jobSite);
-  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "WORKER", user });
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "MEMBER", preset: "LIMITED_UPLOAD", user });
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteUserAssignment.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteWorkerAssignment.findFirst.mockResolvedValue(null);
@@ -128,8 +128,8 @@ describe("resource assignment service", () => {
     mocks.db.worker.findMany.mockResolvedValue([worker]);
     mocks.db.jobSite.findMany.mockResolvedValue([jobSite]);
     mocks.db.organizationMembership.findMany.mockResolvedValue([
-      { role: "WORKER", user },
-      { role: "SITE_MANAGER", user: { id: "manager-1", name: "Elena Mariani", email: "elena@example.com" } },
+      { role: "MEMBER", preset: "LIMITED_UPLOAD", user },
+      { role: "MEMBER", preset: "SITE_MANAGER", user: { id: "manager-1", name: "Elena Mariani", email: "elena@example.com" } },
     ]);
 
     await expect(getResourceAssignmentOptions()).resolves.toEqual({
@@ -193,7 +193,7 @@ describe("resource assignment service", () => {
   });
 
   it("validates role-specific jobsite assignments and soft archives them", async () => {
-    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "SITE_MANAGER", user });
+    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "MEMBER", preset: "SITE_MANAGER", user });
     await expect(createJobSiteUserAssignment({ jobSiteId: "jobsite-1", userId: "user-worker" })).resolves.toMatchObject({
       jobSiteId: "jobsite-1",
       assignmentRole: "SITE_MANAGER",

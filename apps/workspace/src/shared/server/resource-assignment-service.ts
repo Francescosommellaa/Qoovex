@@ -10,6 +10,7 @@ import type {
   CreateWorkerUserLinkInput,
   JobSiteUserAssignmentResponse,
   JobSiteWorkerAssignmentResponse,
+  OrganizationAccessPreset,
   OrganizationRole,
   WorkerUserLinkResponse,
 } from "@qoovex/types";
@@ -21,7 +22,7 @@ import { getResourceScope, toMyResourceScopeResponse } from "./resource-scope-se
 
 const ASSIGNMENT_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
 const ASSIGNMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
-const MY_SCOPE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const MY_SCOPE_ROLES = ["OWNER", "ADMIN", "MEMBER", "VIEWER", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
 
 interface ListWorkerUserLinksInput {
   workerId?: unknown;
@@ -46,8 +47,15 @@ function userLabel(user: { name: string | null; email: string }) {
   return user.name?.trim() || user.email;
 }
 
-function assertExpectedCompanyRole(role: OrganizationRole, expected: OrganizationRole, label: string) {
-  if (role !== expected) throw new AccessError(`${label} non disponibile per questa assegnazione.`, 409);
+function assertExpectedCompanyAccess(
+  membership: { role: OrganizationRole; preset: OrganizationAccessPreset | null },
+  expectedLegacyRole: OrganizationRole,
+  expectedPreset: OrganizationAccessPreset,
+  label: string,
+) {
+  if (membership.role !== expectedLegacyRole && membership.preset !== expectedPreset) {
+    throw new AccessError(`${label} non disponibile per questa assegnazione.`, 409);
+  }
 }
 
 async function assertActiveWorker(organizationId: string, workerId: string) {
@@ -71,7 +79,7 @@ async function assertActiveJobSite(organizationId: string, jobSiteId: string) {
 async function assertActiveMembership(organizationId: string, userId: string) {
   const membership = await db.organizationMembership.findFirst({
     where: { organizationId, userId, revokedAt: null },
-    select: { id: true, role: true, user: { select: { id: true, name: true, email: true } } },
+    select: { id: true, role: true, preset: true, user: { select: { id: true, name: true, email: true } } },
   });
   if (!membership) throw new AccessError("Utente non disponibile per questa azienda.", 404);
   return membership;
@@ -183,7 +191,7 @@ export async function createWorkerUserLink(input: CreateWorkerUserLinkInput | Re
     assertActiveWorker(organizationId, workerId),
     assertActiveMembership(organizationId, userId),
   ]);
-  assertExpectedCompanyRole(membership.role, "WORKER", "Utente");
+  assertExpectedCompanyAccess(membership, "WORKER", "LIMITED_UPLOAD", "Utente");
 
   const duplicate = await db.workerUserLink.findFirst({
     where: { organizationId, archivedAt: null, OR: [{ workerId }, { userId }] },
@@ -274,7 +282,7 @@ export async function createJobSiteUserAssignment(input: CreateJobSiteUserAssign
   const userId = parseRequiredId(input.userId, "Utente");
   await assertActiveJobSite(organizationId, jobSiteId);
   const membership = await assertActiveMembership(organizationId, userId);
-  assertExpectedCompanyRole(membership.role, "SITE_MANAGER", "Utente");
+  assertExpectedCompanyAccess(membership, "SITE_MANAGER", "SITE_MANAGER", "Utente");
 
   const duplicate = await db.jobSiteUserAssignment.findFirst({
     where: { organizationId, jobSiteId, userId, assignmentRole: "SITE_MANAGER", archivedAt: null },
@@ -453,8 +461,15 @@ export async function getResourceAssignmentOptions() {
       orderBy: [{ name: "asc" }],
     }),
     db.organizationMembership.findMany({
-      where: { organizationId, revokedAt: null, role: { in: ["SITE_MANAGER", "WORKER"] } },
-      select: { role: true, user: { select: { id: true, name: true, email: true } } },
+      where: {
+        organizationId,
+        revokedAt: null,
+        OR: [
+          { role: { in: ["SITE_MANAGER", "WORKER"] } },
+          { preset: { in: ["SITE_MANAGER", "LIMITED_UPLOAD"] } },
+        ],
+      },
+      select: { role: true, preset: true, user: { select: { id: true, name: true, email: true } } },
       orderBy: [{ createdAt: "asc" }],
     }),
   ]);
@@ -465,7 +480,7 @@ export async function getResourceAssignmentOptions() {
       id: membership.user.id,
       label: userLabel(membership.user),
       email: membership.user.email,
-      role: membership.role,
+      role: membership.preset === "SITE_MANAGER" ? "SITE_MANAGER" : membership.preset === "LIMITED_UPLOAD" ? "WORKER" : membership.role,
     })),
   };
 }
@@ -477,7 +492,7 @@ export async function getWorkerUserLinkOptions(workerId: string) {
     where: {
       organizationId,
       revokedAt: null,
-      role: "WORKER",
+      OR: [{ role: "WORKER" }, { preset: "LIMITED_UPLOAD" }],
       user: { workerUserLinks: { none: { organizationId, archivedAt: null } } },
     },
     select: { user: { select: { id: true, name: true, email: true } } },
