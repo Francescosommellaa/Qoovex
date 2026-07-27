@@ -21,7 +21,7 @@ export function UniversalSearchDialog() {
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>
-      <DialogTrigger render={<SidebarMenuButton tooltip="Cerca nel workspace" />}>
+      <DialogTrigger render={<SidebarMenuButton aria-label="Cerca" tooltip="Cerca nel workspace" />}>
         <IconSearch aria-hidden /><span>Cerca</span><kbd className="ml-auto text-[10px] text-muted-foreground group-data-[collapsible=icon]:hidden">Ctrl K</kbd>
       </DialogTrigger>
       <DialogContent className="max-h-[min(92dvh,52rem)] overflow-y-auto sm:max-w-3xl">
