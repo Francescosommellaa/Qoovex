@@ -104,8 +104,8 @@ async function createMfaSuiteFixture(runId: string) {
         createdById: owner.id,
         memberships: {
           create: [
-            { userId: owner.id, role: "OWNER" },
-            { userId: safety.id, role: "SAFETY_CONSULTANT" },
+            { userId: owner.id, role: "OWNER", scopeMode: "FULL" },
+            { userId: safety.id, role: "SAFETY_CONSULTANT", scopeMode: "FULL" },
             { userId: worker.id, role: "WORKER" },
           ],
         },

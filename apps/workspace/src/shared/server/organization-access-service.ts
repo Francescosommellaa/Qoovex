@@ -40,12 +40,12 @@ export async function createOrganization(nameInput: string) {
       if (existing) {
         const claimed = await tx.organizationMembership.updateMany({
           where: { id: existing.id, userId: user.id, revokedAt: { not: null } },
-          data: { organizationId: organization.id, role: "OWNER", revokedAt: null },
+          data: { organizationId: organization.id, role: "OWNER", scopeMode: "FULL", revokedAt: null },
         });
         if (claimed.count !== 1) throw new AccessError("Appartieni gia a una azienda.", 409);
       } else {
         await tx.organizationMembership.create({
-          data: { organizationId: organization.id, userId: user.id, role: "OWNER" },
+          data: { organizationId: organization.id, userId: user.id, role: "OWNER", scopeMode: "FULL" },
         });
       }
       return organization;

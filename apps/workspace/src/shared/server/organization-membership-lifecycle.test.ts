@@ -106,9 +106,23 @@ describe("single organization membership lifecycle", () => {
     await expect(createOrganization("Nuova Azienda")).resolves.toMatchObject({ id: "org-new" });
     expect(mocks.tx.organizationMembership.updateMany).toHaveBeenCalledWith({
       where: { id: "membership-1", userId: "user-1", revokedAt: { not: null } },
-      data: { organizationId: "org-new", role: "OWNER", revokedAt: null },
+      data: { organizationId: "org-new", role: "OWNER", scopeMode: "FULL", revokedAt: null },
     });
     expect(mocks.tx.organizationMembership.create).not.toHaveBeenCalled();
+  });
+
+  it("creates an OWNER membership with full organization scope", async () => {
+    mocks.tx.organizationMembership.findUnique.mockResolvedValue(null);
+
+    await expect(createOrganization("Nuova Azienda")).resolves.toMatchObject({ id: "org-new" });
+    expect(mocks.tx.organizationMembership.create).toHaveBeenCalledWith({
+      data: {
+        organizationId: "org-new",
+        userId: "user-1",
+        role: "OWNER",
+        scopeMode: "FULL",
+      },
+    });
   });
 
   it("reassigns a revoked membership when accepting an invitation", async () => {
