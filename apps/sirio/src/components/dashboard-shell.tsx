@@ -56,6 +56,7 @@ const workspaceNavigation = [
   { label: "Documenti", icon: IconFileDescription, href: "/dashboard" },
   { label: "Calendario", icon: IconCalendar, href: "/calendar" },
   { label: "Cantieri", icon: IconBuilding, href: "/dashboard" },
+  { label: "Spazio operativo", icon: IconActivity, href: "/dashboard/operational-workspace" },
 ];
 
 const quickActions = [

@@ -43,12 +43,20 @@ export type EvidenceMinAggregateOutputType = {
   type: $Enums.EvidenceType | null
   title: string | null
   description: string | null
+  sensitivity: $Enums.EvidenceSensitivity | null
+  reviewStatus: $Enums.EvidenceReviewStatus | null
+  origin: $Enums.EvidenceOrigin | null
+  capturedAt: Date | null
+  reviewedById: string | null
+  reviewedAt: Date | null
+  reviewReason: string | null
   blobKey: string | null
   originalFileName: string | null
   mimeType: string | null
   size: number | null
   createdById: string | null
   createdAt: Date | null
+  updatedAt: Date | null
   archivedAt: Date | null
 }
 
@@ -61,12 +69,20 @@ export type EvidenceMaxAggregateOutputType = {
   type: $Enums.EvidenceType | null
   title: string | null
   description: string | null
+  sensitivity: $Enums.EvidenceSensitivity | null
+  reviewStatus: $Enums.EvidenceReviewStatus | null
+  origin: $Enums.EvidenceOrigin | null
+  capturedAt: Date | null
+  reviewedById: string | null
+  reviewedAt: Date | null
+  reviewReason: string | null
   blobKey: string | null
   originalFileName: string | null
   mimeType: string | null
   size: number | null
   createdById: string | null
   createdAt: Date | null
+  updatedAt: Date | null
   archivedAt: Date | null
 }
 
@@ -79,12 +95,20 @@ export type EvidenceCountAggregateOutputType = {
   type: number
   title: number
   description: number
+  sensitivity: number
+  reviewStatus: number
+  origin: number
+  capturedAt: number
+  reviewedById: number
+  reviewedAt: number
+  reviewReason: number
   blobKey: number
   originalFileName: number
   mimeType: number
   size: number
   createdById: number
   createdAt: number
+  updatedAt: number
   archivedAt: number
   _all: number
 }
@@ -107,12 +131,20 @@ export type EvidenceMinAggregateInputType = {
   type?: true
   title?: true
   description?: true
+  sensitivity?: true
+  reviewStatus?: true
+  origin?: true
+  capturedAt?: true
+  reviewedById?: true
+  reviewedAt?: true
+  reviewReason?: true
   blobKey?: true
   originalFileName?: true
   mimeType?: true
   size?: true
   createdById?: true
   createdAt?: true
+  updatedAt?: true
   archivedAt?: true
 }
 
@@ -125,12 +157,20 @@ export type EvidenceMaxAggregateInputType = {
   type?: true
   title?: true
   description?: true
+  sensitivity?: true
+  reviewStatus?: true
+  origin?: true
+  capturedAt?: true
+  reviewedById?: true
+  reviewedAt?: true
+  reviewReason?: true
   blobKey?: true
   originalFileName?: true
   mimeType?: true
   size?: true
   createdById?: true
   createdAt?: true
+  updatedAt?: true
   archivedAt?: true
 }
 
@@ -143,12 +183,20 @@ export type EvidenceCountAggregateInputType = {
   type?: true
   title?: true
   description?: true
+  sensitivity?: true
+  reviewStatus?: true
+  origin?: true
+  capturedAt?: true
+  reviewedById?: true
+  reviewedAt?: true
+  reviewReason?: true
   blobKey?: true
   originalFileName?: true
   mimeType?: true
   size?: true
   createdById?: true
   createdAt?: true
+  updatedAt?: true
   archivedAt?: true
   _all?: true
 }
@@ -248,12 +296,20 @@ export type EvidenceGroupByOutputType = {
   type: $Enums.EvidenceType
   title: string
   description: string | null
+  sensitivity: $Enums.EvidenceSensitivity
+  reviewStatus: $Enums.EvidenceReviewStatus
+  origin: $Enums.EvidenceOrigin
+  capturedAt: Date | null
+  reviewedById: string | null
+  reviewedAt: Date | null
+  reviewReason: string | null
   blobKey: string | null
   originalFileName: string | null
   mimeType: string | null
   size: number | null
   createdById: string
   createdAt: Date
+  updatedAt: Date
   archivedAt: Date | null
   _count: EvidenceCountAggregateOutputType | null
   _avg: EvidenceAvgAggregateOutputType | null
@@ -289,18 +345,28 @@ export type EvidenceWhereInput = {
   type?: Prisma.EnumEvidenceTypeFilter<"Evidence"> | $Enums.EvidenceType
   title?: Prisma.StringFilter<"Evidence"> | string
   description?: Prisma.StringNullableFilter<"Evidence"> | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFilter<"Evidence"> | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFilter<"Evidence"> | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFilter<"Evidence"> | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.DateTimeNullableFilter<"Evidence"> | Date | string | null
+  reviewedById?: Prisma.StringNullableFilter<"Evidence"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"Evidence"> | Date | string | null
+  reviewReason?: Prisma.StringNullableFilter<"Evidence"> | string | null
   blobKey?: Prisma.StringNullableFilter<"Evidence"> | string | null
   originalFileName?: Prisma.StringNullableFilter<"Evidence"> | string | null
   mimeType?: Prisma.StringNullableFilter<"Evidence"> | string | null
   size?: Prisma.IntNullableFilter<"Evidence"> | number | null
   createdById?: Prisma.StringFilter<"Evidence"> | string
   createdAt?: Prisma.DateTimeFilter<"Evidence"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Evidence"> | Date | string
   archivedAt?: Prisma.DateTimeNullableFilter<"Evidence"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   jobSite?: Prisma.XOR<Prisma.JobSiteNullableScalarRelationFilter, Prisma.JobSiteWhereInput> | null
   worker?: Prisma.XOR<Prisma.WorkerNullableScalarRelationFilter, Prisma.WorkerWhereInput> | null
   checklistItem?: Prisma.XOR<Prisma.ChecklistItemNullableScalarRelationFilter, Prisma.ChecklistItemWhereInput> | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  revisions?: Prisma.EvidenceRevisionListRelationFilter
   packageItems?: Prisma.DocumentPackageItemListRelationFilter
 }
 
@@ -313,18 +379,28 @@ export type EvidenceOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  sensitivity?: Prisma.SortOrder
+  reviewStatus?: Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  capturedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewReason?: Prisma.SortOrderInput | Prisma.SortOrder
   blobKey?: Prisma.SortOrderInput | Prisma.SortOrder
   originalFileName?: Prisma.SortOrderInput | Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   size?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   jobSite?: Prisma.JobSiteOrderByWithRelationInput
   worker?: Prisma.WorkerOrderByWithRelationInput
   checklistItem?: Prisma.ChecklistItemOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
+  reviewedBy?: Prisma.UserOrderByWithRelationInput
+  revisions?: Prisma.EvidenceRevisionOrderByRelationAggregateInput
   packageItems?: Prisma.DocumentPackageItemOrderByRelationAggregateInput
 }
 
@@ -340,18 +416,28 @@ export type EvidenceWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumEvidenceTypeFilter<"Evidence"> | $Enums.EvidenceType
   title?: Prisma.StringFilter<"Evidence"> | string
   description?: Prisma.StringNullableFilter<"Evidence"> | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFilter<"Evidence"> | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFilter<"Evidence"> | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFilter<"Evidence"> | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.DateTimeNullableFilter<"Evidence"> | Date | string | null
+  reviewedById?: Prisma.StringNullableFilter<"Evidence"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"Evidence"> | Date | string | null
+  reviewReason?: Prisma.StringNullableFilter<"Evidence"> | string | null
   blobKey?: Prisma.StringNullableFilter<"Evidence"> | string | null
   originalFileName?: Prisma.StringNullableFilter<"Evidence"> | string | null
   mimeType?: Prisma.StringNullableFilter<"Evidence"> | string | null
   size?: Prisma.IntNullableFilter<"Evidence"> | number | null
   createdById?: Prisma.StringFilter<"Evidence"> | string
   createdAt?: Prisma.DateTimeFilter<"Evidence"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Evidence"> | Date | string
   archivedAt?: Prisma.DateTimeNullableFilter<"Evidence"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   jobSite?: Prisma.XOR<Prisma.JobSiteNullableScalarRelationFilter, Prisma.JobSiteWhereInput> | null
   worker?: Prisma.XOR<Prisma.WorkerNullableScalarRelationFilter, Prisma.WorkerWhereInput> | null
   checklistItem?: Prisma.XOR<Prisma.ChecklistItemNullableScalarRelationFilter, Prisma.ChecklistItemWhereInput> | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  revisions?: Prisma.EvidenceRevisionListRelationFilter
   packageItems?: Prisma.DocumentPackageItemListRelationFilter
 }, "id">
 
@@ -364,12 +450,20 @@ export type EvidenceOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  sensitivity?: Prisma.SortOrder
+  reviewStatus?: Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  capturedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewReason?: Prisma.SortOrderInput | Prisma.SortOrder
   blobKey?: Prisma.SortOrderInput | Prisma.SortOrder
   originalFileName?: Prisma.SortOrderInput | Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   size?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EvidenceCountOrderByAggregateInput
   _avg?: Prisma.EvidenceAvgOrderByAggregateInput
@@ -390,12 +484,20 @@ export type EvidenceScalarWhereWithAggregatesInput = {
   type?: Prisma.EnumEvidenceTypeWithAggregatesFilter<"Evidence"> | $Enums.EvidenceType
   title?: Prisma.StringWithAggregatesFilter<"Evidence"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Evidence"> | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityWithAggregatesFilter<"Evidence"> | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusWithAggregatesFilter<"Evidence"> | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginWithAggregatesFilter<"Evidence"> | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Evidence"> | Date | string | null
+  reviewedById?: Prisma.StringNullableWithAggregatesFilter<"Evidence"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Evidence"> | Date | string | null
+  reviewReason?: Prisma.StringNullableWithAggregatesFilter<"Evidence"> | string | null
   blobKey?: Prisma.StringNullableWithAggregatesFilter<"Evidence"> | string | null
   originalFileName?: Prisma.StringNullableWithAggregatesFilter<"Evidence"> | string | null
   mimeType?: Prisma.StringNullableWithAggregatesFilter<"Evidence"> | string | null
   size?: Prisma.IntNullableWithAggregatesFilter<"Evidence"> | number | null
   createdById?: Prisma.StringWithAggregatesFilter<"Evidence"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Evidence"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Evidence"> | Date | string
   archivedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Evidence"> | Date | string | null
 }
 
@@ -404,17 +506,26 @@ export type EvidenceCreateInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutEvidenceInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutEvidenceInput
   worker?: Prisma.WorkerCreateNestedOneWithoutEvidenceInput
   checklistItem?: Prisma.ChecklistItemCreateNestedOneWithoutEvidenceInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedEvidenceInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedEvidenceInput
+  revisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutEvidenceInput
 }
 
@@ -427,13 +538,22 @@ export type EvidenceUncheckedCreateInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdById: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutEvidenceInput
 }
 
@@ -442,17 +562,26 @@ export type EvidenceUpdateInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutEvidenceNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutEvidenceNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutEvidenceNestedInput
   checklistItem?: Prisma.ChecklistItemUpdateOneWithoutEvidenceNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedEvidenceNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedEvidenceNestedInput
+  revisions?: Prisma.EvidenceRevisionUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -465,13 +594,22 @@ export type EvidenceUncheckedUpdateInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -484,12 +622,20 @@ export type EvidenceCreateManyInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdById: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
 }
 
@@ -498,11 +644,18 @@ export type EvidenceUpdateManyMutationInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -515,12 +668,20 @@ export type EvidenceUncheckedUpdateManyInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -543,12 +704,20 @@ export type EvidenceCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  sensitivity?: Prisma.SortOrder
+  reviewStatus?: Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  capturedAt?: Prisma.SortOrder
+  reviewedById?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
+  reviewReason?: Prisma.SortOrder
   blobKey?: Prisma.SortOrder
   originalFileName?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   size?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   archivedAt?: Prisma.SortOrder
 }
 
@@ -565,12 +734,20 @@ export type EvidenceMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  sensitivity?: Prisma.SortOrder
+  reviewStatus?: Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  capturedAt?: Prisma.SortOrder
+  reviewedById?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
+  reviewReason?: Prisma.SortOrder
   blobKey?: Prisma.SortOrder
   originalFileName?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   size?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   archivedAt?: Prisma.SortOrder
 }
 
@@ -583,17 +760,30 @@ export type EvidenceMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  sensitivity?: Prisma.SortOrder
+  reviewStatus?: Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  capturedAt?: Prisma.SortOrder
+  reviewedById?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
+  reviewReason?: Prisma.SortOrder
   blobKey?: Prisma.SortOrder
   originalFileName?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   size?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   archivedAt?: Prisma.SortOrder
 }
 
 export type EvidenceSumOrderByAggregateInput = {
   size?: Prisma.SortOrder
+}
+
+export type EvidenceScalarRelationFilter = {
+  is?: Prisma.EvidenceWhereInput
+  isNot?: Prisma.EvidenceWhereInput
 }
 
 export type EvidenceNullableScalarRelationFilter = {
@@ -608,10 +798,24 @@ export type EvidenceCreateNestedManyWithoutCreatedByInput = {
   connect?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
 }
 
+export type EvidenceCreateNestedManyWithoutReviewedByInput = {
+  create?: Prisma.XOR<Prisma.EvidenceCreateWithoutReviewedByInput, Prisma.EvidenceUncheckedCreateWithoutReviewedByInput> | Prisma.EvidenceCreateWithoutReviewedByInput[] | Prisma.EvidenceUncheckedCreateWithoutReviewedByInput[]
+  connectOrCreate?: Prisma.EvidenceCreateOrConnectWithoutReviewedByInput | Prisma.EvidenceCreateOrConnectWithoutReviewedByInput[]
+  createMany?: Prisma.EvidenceCreateManyReviewedByInputEnvelope
+  connect?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
+}
+
 export type EvidenceUncheckedCreateNestedManyWithoutCreatedByInput = {
   create?: Prisma.XOR<Prisma.EvidenceCreateWithoutCreatedByInput, Prisma.EvidenceUncheckedCreateWithoutCreatedByInput> | Prisma.EvidenceCreateWithoutCreatedByInput[] | Prisma.EvidenceUncheckedCreateWithoutCreatedByInput[]
   connectOrCreate?: Prisma.EvidenceCreateOrConnectWithoutCreatedByInput | Prisma.EvidenceCreateOrConnectWithoutCreatedByInput[]
   createMany?: Prisma.EvidenceCreateManyCreatedByInputEnvelope
+  connect?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
+}
+
+export type EvidenceUncheckedCreateNestedManyWithoutReviewedByInput = {
+  create?: Prisma.XOR<Prisma.EvidenceCreateWithoutReviewedByInput, Prisma.EvidenceUncheckedCreateWithoutReviewedByInput> | Prisma.EvidenceCreateWithoutReviewedByInput[] | Prisma.EvidenceUncheckedCreateWithoutReviewedByInput[]
+  connectOrCreate?: Prisma.EvidenceCreateOrConnectWithoutReviewedByInput | Prisma.EvidenceCreateOrConnectWithoutReviewedByInput[]
+  createMany?: Prisma.EvidenceCreateManyReviewedByInputEnvelope
   connect?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
 }
 
@@ -629,6 +833,20 @@ export type EvidenceUpdateManyWithoutCreatedByNestedInput = {
   deleteMany?: Prisma.EvidenceScalarWhereInput | Prisma.EvidenceScalarWhereInput[]
 }
 
+export type EvidenceUpdateManyWithoutReviewedByNestedInput = {
+  create?: Prisma.XOR<Prisma.EvidenceCreateWithoutReviewedByInput, Prisma.EvidenceUncheckedCreateWithoutReviewedByInput> | Prisma.EvidenceCreateWithoutReviewedByInput[] | Prisma.EvidenceUncheckedCreateWithoutReviewedByInput[]
+  connectOrCreate?: Prisma.EvidenceCreateOrConnectWithoutReviewedByInput | Prisma.EvidenceCreateOrConnectWithoutReviewedByInput[]
+  upsert?: Prisma.EvidenceUpsertWithWhereUniqueWithoutReviewedByInput | Prisma.EvidenceUpsertWithWhereUniqueWithoutReviewedByInput[]
+  createMany?: Prisma.EvidenceCreateManyReviewedByInputEnvelope
+  set?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
+  disconnect?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
+  delete?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
+  connect?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
+  update?: Prisma.EvidenceUpdateWithWhereUniqueWithoutReviewedByInput | Prisma.EvidenceUpdateWithWhereUniqueWithoutReviewedByInput[]
+  updateMany?: Prisma.EvidenceUpdateManyWithWhereWithoutReviewedByInput | Prisma.EvidenceUpdateManyWithWhereWithoutReviewedByInput[]
+  deleteMany?: Prisma.EvidenceScalarWhereInput | Prisma.EvidenceScalarWhereInput[]
+}
+
 export type EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput = {
   create?: Prisma.XOR<Prisma.EvidenceCreateWithoutCreatedByInput, Prisma.EvidenceUncheckedCreateWithoutCreatedByInput> | Prisma.EvidenceCreateWithoutCreatedByInput[] | Prisma.EvidenceUncheckedCreateWithoutCreatedByInput[]
   connectOrCreate?: Prisma.EvidenceCreateOrConnectWithoutCreatedByInput | Prisma.EvidenceCreateOrConnectWithoutCreatedByInput[]
@@ -640,6 +858,20 @@ export type EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput = {
   connect?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
   update?: Prisma.EvidenceUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.EvidenceUpdateWithWhereUniqueWithoutCreatedByInput[]
   updateMany?: Prisma.EvidenceUpdateManyWithWhereWithoutCreatedByInput | Prisma.EvidenceUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.EvidenceScalarWhereInput | Prisma.EvidenceScalarWhereInput[]
+}
+
+export type EvidenceUncheckedUpdateManyWithoutReviewedByNestedInput = {
+  create?: Prisma.XOR<Prisma.EvidenceCreateWithoutReviewedByInput, Prisma.EvidenceUncheckedCreateWithoutReviewedByInput> | Prisma.EvidenceCreateWithoutReviewedByInput[] | Prisma.EvidenceUncheckedCreateWithoutReviewedByInput[]
+  connectOrCreate?: Prisma.EvidenceCreateOrConnectWithoutReviewedByInput | Prisma.EvidenceCreateOrConnectWithoutReviewedByInput[]
+  upsert?: Prisma.EvidenceUpsertWithWhereUniqueWithoutReviewedByInput | Prisma.EvidenceUpsertWithWhereUniqueWithoutReviewedByInput[]
+  createMany?: Prisma.EvidenceCreateManyReviewedByInputEnvelope
+  set?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
+  disconnect?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
+  delete?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
+  connect?: Prisma.EvidenceWhereUniqueInput | Prisma.EvidenceWhereUniqueInput[]
+  update?: Prisma.EvidenceUpdateWithWhereUniqueWithoutReviewedByInput | Prisma.EvidenceUpdateWithWhereUniqueWithoutReviewedByInput[]
+  updateMany?: Prisma.EvidenceUpdateManyWithWhereWithoutReviewedByInput | Prisma.EvidenceUpdateManyWithWhereWithoutReviewedByInput[]
   deleteMany?: Prisma.EvidenceScalarWhereInput | Prisma.EvidenceScalarWhereInput[]
 }
 
@@ -815,6 +1047,32 @@ export type EnumEvidenceTypeFieldUpdateOperationsInput = {
   set?: $Enums.EvidenceType
 }
 
+export type EnumEvidenceSensitivityFieldUpdateOperationsInput = {
+  set?: $Enums.EvidenceSensitivity
+}
+
+export type EnumEvidenceReviewStatusFieldUpdateOperationsInput = {
+  set?: $Enums.EvidenceReviewStatus
+}
+
+export type EnumEvidenceOriginFieldUpdateOperationsInput = {
+  set?: $Enums.EvidenceOrigin
+}
+
+export type EvidenceCreateNestedOneWithoutRevisionsInput = {
+  create?: Prisma.XOR<Prisma.EvidenceCreateWithoutRevisionsInput, Prisma.EvidenceUncheckedCreateWithoutRevisionsInput>
+  connectOrCreate?: Prisma.EvidenceCreateOrConnectWithoutRevisionsInput
+  connect?: Prisma.EvidenceWhereUniqueInput
+}
+
+export type EvidenceUpdateOneRequiredWithoutRevisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.EvidenceCreateWithoutRevisionsInput, Prisma.EvidenceUncheckedCreateWithoutRevisionsInput>
+  connectOrCreate?: Prisma.EvidenceCreateOrConnectWithoutRevisionsInput
+  upsert?: Prisma.EvidenceUpsertWithoutRevisionsInput
+  connect?: Prisma.EvidenceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EvidenceUpdateToOneWithWhereWithoutRevisionsInput, Prisma.EvidenceUpdateWithoutRevisionsInput>, Prisma.EvidenceUncheckedUpdateWithoutRevisionsInput>
+}
+
 export type EvidenceCreateNestedOneWithoutPackageItemsInput = {
   create?: Prisma.XOR<Prisma.EvidenceCreateWithoutPackageItemsInput, Prisma.EvidenceUncheckedCreateWithoutPackageItemsInput>
   connectOrCreate?: Prisma.EvidenceCreateOrConnectWithoutPackageItemsInput
@@ -836,16 +1094,25 @@ export type EvidenceCreateWithoutCreatedByInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutEvidenceInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutEvidenceInput
   worker?: Prisma.WorkerCreateNestedOneWithoutEvidenceInput
   checklistItem?: Prisma.ChecklistItemCreateNestedOneWithoutEvidenceInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedEvidenceInput
+  revisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutEvidenceInput
 }
 
@@ -858,12 +1125,21 @@ export type EvidenceUncheckedCreateWithoutCreatedByInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutEvidenceInput
 }
 
@@ -874,6 +1150,70 @@ export type EvidenceCreateOrConnectWithoutCreatedByInput = {
 
 export type EvidenceCreateManyCreatedByInputEnvelope = {
   data: Prisma.EvidenceCreateManyCreatedByInput | Prisma.EvidenceCreateManyCreatedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type EvidenceCreateWithoutReviewedByInput = {
+  id?: string
+  type: $Enums.EvidenceType
+  title: string
+  description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
+  blobKey?: string | null
+  originalFileName?: string | null
+  mimeType?: string | null
+  size?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutEvidenceInput
+  jobSite?: Prisma.JobSiteCreateNestedOneWithoutEvidenceInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutEvidenceInput
+  checklistItem?: Prisma.ChecklistItemCreateNestedOneWithoutEvidenceInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedEvidenceInput
+  revisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutEvidenceInput
+  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutEvidenceInput
+}
+
+export type EvidenceUncheckedCreateWithoutReviewedByInput = {
+  id?: string
+  organizationId: string
+  jobSiteId?: string | null
+  workerId?: string | null
+  checklistItemId?: string | null
+  type: $Enums.EvidenceType
+  title: string
+  description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
+  blobKey?: string | null
+  originalFileName?: string | null
+  mimeType?: string | null
+  size?: number | null
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutEvidenceInput
+  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutEvidenceInput
+}
+
+export type EvidenceCreateOrConnectWithoutReviewedByInput = {
+  where: Prisma.EvidenceWhereUniqueInput
+  create: Prisma.XOR<Prisma.EvidenceCreateWithoutReviewedByInput, Prisma.EvidenceUncheckedCreateWithoutReviewedByInput>
+}
+
+export type EvidenceCreateManyReviewedByInputEnvelope = {
+  data: Prisma.EvidenceCreateManyReviewedByInput | Prisma.EvidenceCreateManyReviewedByInput[]
   skipDuplicates?: boolean
 }
 
@@ -905,13 +1245,37 @@ export type EvidenceScalarWhereInput = {
   type?: Prisma.EnumEvidenceTypeFilter<"Evidence"> | $Enums.EvidenceType
   title?: Prisma.StringFilter<"Evidence"> | string
   description?: Prisma.StringNullableFilter<"Evidence"> | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFilter<"Evidence"> | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFilter<"Evidence"> | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFilter<"Evidence"> | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.DateTimeNullableFilter<"Evidence"> | Date | string | null
+  reviewedById?: Prisma.StringNullableFilter<"Evidence"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"Evidence"> | Date | string | null
+  reviewReason?: Prisma.StringNullableFilter<"Evidence"> | string | null
   blobKey?: Prisma.StringNullableFilter<"Evidence"> | string | null
   originalFileName?: Prisma.StringNullableFilter<"Evidence"> | string | null
   mimeType?: Prisma.StringNullableFilter<"Evidence"> | string | null
   size?: Prisma.IntNullableFilter<"Evidence"> | number | null
   createdById?: Prisma.StringFilter<"Evidence"> | string
   createdAt?: Prisma.DateTimeFilter<"Evidence"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Evidence"> | Date | string
   archivedAt?: Prisma.DateTimeNullableFilter<"Evidence"> | Date | string | null
+}
+
+export type EvidenceUpsertWithWhereUniqueWithoutReviewedByInput = {
+  where: Prisma.EvidenceWhereUniqueInput
+  update: Prisma.XOR<Prisma.EvidenceUpdateWithoutReviewedByInput, Prisma.EvidenceUncheckedUpdateWithoutReviewedByInput>
+  create: Prisma.XOR<Prisma.EvidenceCreateWithoutReviewedByInput, Prisma.EvidenceUncheckedCreateWithoutReviewedByInput>
+}
+
+export type EvidenceUpdateWithWhereUniqueWithoutReviewedByInput = {
+  where: Prisma.EvidenceWhereUniqueInput
+  data: Prisma.XOR<Prisma.EvidenceUpdateWithoutReviewedByInput, Prisma.EvidenceUncheckedUpdateWithoutReviewedByInput>
+}
+
+export type EvidenceUpdateManyWithWhereWithoutReviewedByInput = {
+  where: Prisma.EvidenceScalarWhereInput
+  data: Prisma.XOR<Prisma.EvidenceUpdateManyMutationInput, Prisma.EvidenceUncheckedUpdateManyWithoutReviewedByInput>
 }
 
 export type EvidenceCreateWithoutOrganizationInput = {
@@ -919,16 +1283,25 @@ export type EvidenceCreateWithoutOrganizationInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutEvidenceInput
   worker?: Prisma.WorkerCreateNestedOneWithoutEvidenceInput
   checklistItem?: Prisma.ChecklistItemCreateNestedOneWithoutEvidenceInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedEvidenceInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedEvidenceInput
+  revisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutEvidenceInput
 }
 
@@ -940,13 +1313,22 @@ export type EvidenceUncheckedCreateWithoutOrganizationInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdById: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutEvidenceInput
 }
 
@@ -981,16 +1363,25 @@ export type EvidenceCreateWithoutWorkerInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutEvidenceInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutEvidenceInput
   checklistItem?: Prisma.ChecklistItemCreateNestedOneWithoutEvidenceInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedEvidenceInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedEvidenceInput
+  revisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutEvidenceInput
 }
 
@@ -1002,13 +1393,22 @@ export type EvidenceUncheckedCreateWithoutWorkerInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdById: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutEvidenceInput
 }
 
@@ -1043,16 +1443,25 @@ export type EvidenceCreateWithoutJobSiteInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutEvidenceInput
   worker?: Prisma.WorkerCreateNestedOneWithoutEvidenceInput
   checklistItem?: Prisma.ChecklistItemCreateNestedOneWithoutEvidenceInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedEvidenceInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedEvidenceInput
+  revisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutEvidenceInput
 }
 
@@ -1064,13 +1473,22 @@ export type EvidenceUncheckedCreateWithoutJobSiteInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdById: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutEvidenceInput
 }
 
@@ -1105,16 +1523,25 @@ export type EvidenceCreateWithoutChecklistItemInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutEvidenceInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutEvidenceInput
   worker?: Prisma.WorkerCreateNestedOneWithoutEvidenceInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedEvidenceInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedEvidenceInput
+  revisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutEvidenceInput
 }
 
@@ -1126,13 +1553,22 @@ export type EvidenceUncheckedCreateWithoutChecklistItemInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdById: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutEvidenceInput
   packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutEvidenceInput
 }
 
@@ -1162,22 +1598,155 @@ export type EvidenceUpdateManyWithWhereWithoutChecklistItemInput = {
   data: Prisma.XOR<Prisma.EvidenceUpdateManyMutationInput, Prisma.EvidenceUncheckedUpdateManyWithoutChecklistItemInput>
 }
 
-export type EvidenceCreateWithoutPackageItemsInput = {
+export type EvidenceCreateWithoutRevisionsInput = {
   id?: string
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutEvidenceInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutEvidenceInput
   worker?: Prisma.WorkerCreateNestedOneWithoutEvidenceInput
   checklistItem?: Prisma.ChecklistItemCreateNestedOneWithoutEvidenceInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedEvidenceInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedEvidenceInput
+  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutEvidenceInput
+}
+
+export type EvidenceUncheckedCreateWithoutRevisionsInput = {
+  id?: string
+  organizationId: string
+  jobSiteId?: string | null
+  workerId?: string | null
+  checklistItemId?: string | null
+  type: $Enums.EvidenceType
+  title: string
+  description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
+  blobKey?: string | null
+  originalFileName?: string | null
+  mimeType?: string | null
+  size?: number | null
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutEvidenceInput
+}
+
+export type EvidenceCreateOrConnectWithoutRevisionsInput = {
+  where: Prisma.EvidenceWhereUniqueInput
+  create: Prisma.XOR<Prisma.EvidenceCreateWithoutRevisionsInput, Prisma.EvidenceUncheckedCreateWithoutRevisionsInput>
+}
+
+export type EvidenceUpsertWithoutRevisionsInput = {
+  update: Prisma.XOR<Prisma.EvidenceUpdateWithoutRevisionsInput, Prisma.EvidenceUncheckedUpdateWithoutRevisionsInput>
+  create: Prisma.XOR<Prisma.EvidenceCreateWithoutRevisionsInput, Prisma.EvidenceUncheckedCreateWithoutRevisionsInput>
+  where?: Prisma.EvidenceWhereInput
+}
+
+export type EvidenceUpdateToOneWithWhereWithoutRevisionsInput = {
+  where?: Prisma.EvidenceWhereInput
+  data: Prisma.XOR<Prisma.EvidenceUpdateWithoutRevisionsInput, Prisma.EvidenceUncheckedUpdateWithoutRevisionsInput>
+}
+
+export type EvidenceUpdateWithoutRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutEvidenceNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneWithoutEvidenceNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutEvidenceNestedInput
+  checklistItem?: Prisma.ChecklistItemUpdateOneWithoutEvidenceNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedEvidenceNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedEvidenceNestedInput
+  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutEvidenceNestedInput
+}
+
+export type EvidenceUncheckedUpdateWithoutRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutEvidenceNestedInput
+}
+
+export type EvidenceCreateWithoutPackageItemsInput = {
+  id?: string
+  type: $Enums.EvidenceType
+  title: string
+  description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
+  blobKey?: string | null
+  originalFileName?: string | null
+  mimeType?: string | null
+  size?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutEvidenceInput
+  jobSite?: Prisma.JobSiteCreateNestedOneWithoutEvidenceInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutEvidenceInput
+  checklistItem?: Prisma.ChecklistItemCreateNestedOneWithoutEvidenceInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedEvidenceInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedEvidenceInput
+  revisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutEvidenceInput
 }
 
 export type EvidenceUncheckedCreateWithoutPackageItemsInput = {
@@ -1189,13 +1758,22 @@ export type EvidenceUncheckedCreateWithoutPackageItemsInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdById: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutEvidenceInput
 }
 
 export type EvidenceCreateOrConnectWithoutPackageItemsInput = {
@@ -1219,17 +1797,26 @@ export type EvidenceUpdateWithoutPackageItemsInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutEvidenceNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutEvidenceNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutEvidenceNestedInput
   checklistItem?: Prisma.ChecklistItemUpdateOneWithoutEvidenceNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedEvidenceNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedEvidenceNestedInput
+  revisions?: Prisma.EvidenceRevisionUpdateManyWithoutEvidenceNestedInput
 }
 
 export type EvidenceUncheckedUpdateWithoutPackageItemsInput = {
@@ -1241,13 +1828,22 @@ export type EvidenceUncheckedUpdateWithoutPackageItemsInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutEvidenceNestedInput
 }
 
 export type EvidenceCreateManyCreatedByInput = {
@@ -1259,11 +1855,44 @@ export type EvidenceCreateManyCreatedByInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+}
+
+export type EvidenceCreateManyReviewedByInput = {
+  id?: string
+  organizationId: string
+  jobSiteId?: string | null
+  workerId?: string | null
+  checklistItemId?: string | null
+  type: $Enums.EvidenceType
+  title: string
+  description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
+  blobKey?: string | null
+  originalFileName?: string | null
+  mimeType?: string | null
+  size?: number | null
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
 }
 
@@ -1272,16 +1901,25 @@ export type EvidenceUpdateWithoutCreatedByInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutEvidenceNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutEvidenceNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutEvidenceNestedInput
   checklistItem?: Prisma.ChecklistItemUpdateOneWithoutEvidenceNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedEvidenceNestedInput
+  revisions?: Prisma.EvidenceRevisionUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -1294,12 +1932,21 @@ export type EvidenceUncheckedUpdateWithoutCreatedByInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -1312,11 +1959,98 @@ export type EvidenceUncheckedUpdateManyWithoutCreatedByInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type EvidenceUpdateWithoutReviewedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutEvidenceNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneWithoutEvidenceNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutEvidenceNestedInput
+  checklistItem?: Prisma.ChecklistItemUpdateOneWithoutEvidenceNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedEvidenceNestedInput
+  revisions?: Prisma.EvidenceRevisionUpdateManyWithoutEvidenceNestedInput
+  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutEvidenceNestedInput
+}
+
+export type EvidenceUncheckedUpdateWithoutReviewedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutEvidenceNestedInput
+  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutEvidenceNestedInput
+}
+
+export type EvidenceUncheckedUpdateManyWithoutReviewedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -1328,12 +2062,20 @@ export type EvidenceCreateManyOrganizationInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdById: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
 }
 
@@ -1342,16 +2084,25 @@ export type EvidenceUpdateWithoutOrganizationInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   jobSite?: Prisma.JobSiteUpdateOneWithoutEvidenceNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutEvidenceNestedInput
   checklistItem?: Prisma.ChecklistItemUpdateOneWithoutEvidenceNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedEvidenceNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedEvidenceNestedInput
+  revisions?: Prisma.EvidenceRevisionUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -1363,13 +2114,22 @@ export type EvidenceUncheckedUpdateWithoutOrganizationInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -1381,12 +2141,20 @@ export type EvidenceUncheckedUpdateManyWithoutOrganizationInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -1398,12 +2166,20 @@ export type EvidenceCreateManyWorkerInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdById: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
 }
 
@@ -1412,16 +2188,25 @@ export type EvidenceUpdateWithoutWorkerInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutEvidenceNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutEvidenceNestedInput
   checklistItem?: Prisma.ChecklistItemUpdateOneWithoutEvidenceNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedEvidenceNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedEvidenceNestedInput
+  revisions?: Prisma.EvidenceRevisionUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -1433,13 +2218,22 @@ export type EvidenceUncheckedUpdateWithoutWorkerInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -1451,12 +2245,20 @@ export type EvidenceUncheckedUpdateManyWithoutWorkerInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -1468,12 +2270,20 @@ export type EvidenceCreateManyJobSiteInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdById: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
 }
 
@@ -1482,16 +2292,25 @@ export type EvidenceUpdateWithoutJobSiteInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutEvidenceNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutEvidenceNestedInput
   checklistItem?: Prisma.ChecklistItemUpdateOneWithoutEvidenceNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedEvidenceNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedEvidenceNestedInput
+  revisions?: Prisma.EvidenceRevisionUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -1503,13 +2322,22 @@ export type EvidenceUncheckedUpdateWithoutJobSiteInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -1521,12 +2349,20 @@ export type EvidenceUncheckedUpdateManyWithoutJobSiteInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -1538,12 +2374,20 @@ export type EvidenceCreateManyChecklistItemInput = {
   type: $Enums.EvidenceType
   title: string
   description?: string | null
+  sensitivity?: $Enums.EvidenceSensitivity
+  reviewStatus?: $Enums.EvidenceReviewStatus
+  origin?: $Enums.EvidenceOrigin
+  capturedAt?: Date | string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  reviewReason?: string | null
   blobKey?: string | null
   originalFileName?: string | null
   mimeType?: string | null
   size?: number | null
   createdById: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   archivedAt?: Date | string | null
 }
 
@@ -1552,16 +2396,25 @@ export type EvidenceUpdateWithoutChecklistItemInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutEvidenceNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutEvidenceNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutEvidenceNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedEvidenceNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedEvidenceNestedInput
+  revisions?: Prisma.EvidenceRevisionUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -1573,13 +2426,22 @@ export type EvidenceUncheckedUpdateWithoutChecklistItemInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutEvidenceNestedInput
   packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutEvidenceNestedInput
 }
 
@@ -1591,12 +2453,20 @@ export type EvidenceUncheckedUpdateManyWithoutChecklistItemInput = {
   type?: Prisma.EnumEvidenceTypeFieldUpdateOperationsInput | $Enums.EvidenceType
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
+  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
+  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
+  capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blobKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   originalFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -1606,10 +2476,12 @@ export type EvidenceUncheckedUpdateManyWithoutChecklistItemInput = {
  */
 
 export type EvidenceCountOutputType = {
+  revisions: number
   packageItems: number
 }
 
 export type EvidenceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  revisions?: boolean | EvidenceCountOutputTypeCountRevisionsArgs
   packageItems?: boolean | EvidenceCountOutputTypeCountPackageItemsArgs
 }
 
@@ -1621,6 +2493,13 @@ export type EvidenceCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
    * Select specific fields to fetch from the EvidenceCountOutputType
    */
   select?: Prisma.EvidenceCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * EvidenceCountOutputType without action
+ */
+export type EvidenceCountOutputTypeCountRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EvidenceRevisionWhereInput
 }
 
 /**
@@ -1640,18 +2519,28 @@ export type EvidenceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   type?: boolean
   title?: boolean
   description?: boolean
+  sensitivity?: boolean
+  reviewStatus?: boolean
+  origin?: boolean
+  capturedAt?: boolean
+  reviewedById?: boolean
+  reviewedAt?: boolean
+  reviewReason?: boolean
   blobKey?: boolean
   originalFileName?: boolean
   mimeType?: boolean
   size?: boolean
   createdById?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   archivedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.Evidence$jobSiteArgs<ExtArgs>
   worker?: boolean | Prisma.Evidence$workerArgs<ExtArgs>
   checklistItem?: boolean | Prisma.Evidence$checklistItemArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.Evidence$reviewedByArgs<ExtArgs>
+  revisions?: boolean | Prisma.Evidence$revisionsArgs<ExtArgs>
   packageItems?: boolean | Prisma.Evidence$packageItemsArgs<ExtArgs>
   _count?: boolean | Prisma.EvidenceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["evidence"]>
@@ -1665,18 +2554,27 @@ export type EvidenceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   type?: boolean
   title?: boolean
   description?: boolean
+  sensitivity?: boolean
+  reviewStatus?: boolean
+  origin?: boolean
+  capturedAt?: boolean
+  reviewedById?: boolean
+  reviewedAt?: boolean
+  reviewReason?: boolean
   blobKey?: boolean
   originalFileName?: boolean
   mimeType?: boolean
   size?: boolean
   createdById?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   archivedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.Evidence$jobSiteArgs<ExtArgs>
   worker?: boolean | Prisma.Evidence$workerArgs<ExtArgs>
   checklistItem?: boolean | Prisma.Evidence$checklistItemArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.Evidence$reviewedByArgs<ExtArgs>
 }, ExtArgs["result"]["evidence"]>
 
 export type EvidenceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1688,18 +2586,27 @@ export type EvidenceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   type?: boolean
   title?: boolean
   description?: boolean
+  sensitivity?: boolean
+  reviewStatus?: boolean
+  origin?: boolean
+  capturedAt?: boolean
+  reviewedById?: boolean
+  reviewedAt?: boolean
+  reviewReason?: boolean
   blobKey?: boolean
   originalFileName?: boolean
   mimeType?: boolean
   size?: boolean
   createdById?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   archivedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.Evidence$jobSiteArgs<ExtArgs>
   worker?: boolean | Prisma.Evidence$workerArgs<ExtArgs>
   checklistItem?: boolean | Prisma.Evidence$checklistItemArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.Evidence$reviewedByArgs<ExtArgs>
 }, ExtArgs["result"]["evidence"]>
 
 export type EvidenceSelectScalar = {
@@ -1711,22 +2618,32 @@ export type EvidenceSelectScalar = {
   type?: boolean
   title?: boolean
   description?: boolean
+  sensitivity?: boolean
+  reviewStatus?: boolean
+  origin?: boolean
+  capturedAt?: boolean
+  reviewedById?: boolean
+  reviewedAt?: boolean
+  reviewReason?: boolean
   blobKey?: boolean
   originalFileName?: boolean
   mimeType?: boolean
   size?: boolean
   createdById?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   archivedAt?: boolean
 }
 
-export type EvidenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "jobSiteId" | "workerId" | "checklistItemId" | "type" | "title" | "description" | "blobKey" | "originalFileName" | "mimeType" | "size" | "createdById" | "createdAt" | "archivedAt", ExtArgs["result"]["evidence"]>
+export type EvidenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "jobSiteId" | "workerId" | "checklistItemId" | "type" | "title" | "description" | "sensitivity" | "reviewStatus" | "origin" | "capturedAt" | "reviewedById" | "reviewedAt" | "reviewReason" | "blobKey" | "originalFileName" | "mimeType" | "size" | "createdById" | "createdAt" | "updatedAt" | "archivedAt", ExtArgs["result"]["evidence"]>
 export type EvidenceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.Evidence$jobSiteArgs<ExtArgs>
   worker?: boolean | Prisma.Evidence$workerArgs<ExtArgs>
   checklistItem?: boolean | Prisma.Evidence$checklistItemArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.Evidence$reviewedByArgs<ExtArgs>
+  revisions?: boolean | Prisma.Evidence$revisionsArgs<ExtArgs>
   packageItems?: boolean | Prisma.Evidence$packageItemsArgs<ExtArgs>
   _count?: boolean | Prisma.EvidenceCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1736,6 +2653,7 @@ export type EvidenceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   worker?: boolean | Prisma.Evidence$workerArgs<ExtArgs>
   checklistItem?: boolean | Prisma.Evidence$checklistItemArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.Evidence$reviewedByArgs<ExtArgs>
 }
 export type EvidenceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -1743,6 +2661,7 @@ export type EvidenceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   worker?: boolean | Prisma.Evidence$workerArgs<ExtArgs>
   checklistItem?: boolean | Prisma.Evidence$checklistItemArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  reviewedBy?: boolean | Prisma.Evidence$reviewedByArgs<ExtArgs>
 }
 
 export type $EvidencePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1753,6 +2672,8 @@ export type $EvidencePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     worker: Prisma.$WorkerPayload<ExtArgs> | null
     checklistItem: Prisma.$ChecklistItemPayload<ExtArgs> | null
     createdBy: Prisma.$UserPayload<ExtArgs>
+    reviewedBy: Prisma.$UserPayload<ExtArgs> | null
+    revisions: Prisma.$EvidenceRevisionPayload<ExtArgs>[]
     packageItems: Prisma.$DocumentPackageItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1764,12 +2685,20 @@ export type $EvidencePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     type: $Enums.EvidenceType
     title: string
     description: string | null
+    sensitivity: $Enums.EvidenceSensitivity
+    reviewStatus: $Enums.EvidenceReviewStatus
+    origin: $Enums.EvidenceOrigin
+    capturedAt: Date | null
+    reviewedById: string | null
+    reviewedAt: Date | null
+    reviewReason: string | null
     blobKey: string | null
     originalFileName: string | null
     mimeType: string | null
     size: number | null
     createdById: string
     createdAt: Date
+    updatedAt: Date
     archivedAt: Date | null
   }, ExtArgs["result"]["evidence"]>
   composites: {}
@@ -2170,6 +3099,8 @@ export interface Prisma__EvidenceClient<T, Null = never, ExtArgs extends runtime
   worker<T extends Prisma.Evidence$workerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Evidence$workerArgs<ExtArgs>>): Prisma.Prisma__WorkerClient<runtime.Types.Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   checklistItem<T extends Prisma.Evidence$checklistItemArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Evidence$checklistItemArgs<ExtArgs>>): Prisma.Prisma__ChecklistItemClient<runtime.Types.Result.GetResult<Prisma.$ChecklistItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  reviewedBy<T extends Prisma.Evidence$reviewedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Evidence$reviewedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  revisions<T extends Prisma.Evidence$revisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Evidence$revisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidenceRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   packageItems<T extends Prisma.Evidence$packageItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Evidence$packageItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPackageItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2208,12 +3139,20 @@ export interface EvidenceFieldRefs {
   readonly type: Prisma.FieldRef<"Evidence", 'EvidenceType'>
   readonly title: Prisma.FieldRef<"Evidence", 'String'>
   readonly description: Prisma.FieldRef<"Evidence", 'String'>
+  readonly sensitivity: Prisma.FieldRef<"Evidence", 'EvidenceSensitivity'>
+  readonly reviewStatus: Prisma.FieldRef<"Evidence", 'EvidenceReviewStatus'>
+  readonly origin: Prisma.FieldRef<"Evidence", 'EvidenceOrigin'>
+  readonly capturedAt: Prisma.FieldRef<"Evidence", 'DateTime'>
+  readonly reviewedById: Prisma.FieldRef<"Evidence", 'String'>
+  readonly reviewedAt: Prisma.FieldRef<"Evidence", 'DateTime'>
+  readonly reviewReason: Prisma.FieldRef<"Evidence", 'String'>
   readonly blobKey: Prisma.FieldRef<"Evidence", 'String'>
   readonly originalFileName: Prisma.FieldRef<"Evidence", 'String'>
   readonly mimeType: Prisma.FieldRef<"Evidence", 'String'>
   readonly size: Prisma.FieldRef<"Evidence", 'Int'>
   readonly createdById: Prisma.FieldRef<"Evidence", 'String'>
   readonly createdAt: Prisma.FieldRef<"Evidence", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Evidence", 'DateTime'>
   readonly archivedAt: Prisma.FieldRef<"Evidence", 'DateTime'>
 }
     
@@ -2670,6 +3609,49 @@ export type Evidence$checklistItemArgs<ExtArgs extends runtime.Types.Extensions.
    */
   include?: Prisma.ChecklistItemInclude<ExtArgs> | null
   where?: Prisma.ChecklistItemWhereInput
+}
+
+/**
+ * Evidence.reviewedBy
+ */
+export type Evidence$reviewedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * Evidence.revisions
+ */
+export type Evidence$revisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EvidenceRevision
+   */
+  select?: Prisma.EvidenceRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EvidenceRevision
+   */
+  omit?: Prisma.EvidenceRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EvidenceRevisionInclude<ExtArgs> | null
+  where?: Prisma.EvidenceRevisionWhereInput
+  orderBy?: Prisma.EvidenceRevisionOrderByWithRelationInput | Prisma.EvidenceRevisionOrderByWithRelationInput[]
+  cursor?: Prisma.EvidenceRevisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EvidenceRevisionScalarFieldEnum | Prisma.EvidenceRevisionScalarFieldEnum[]
 }
 
 /**

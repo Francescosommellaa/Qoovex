@@ -5,7 +5,7 @@
 - `apps/workspace`: runtime prodotto, auth/MFA, route, motore, runner, read model e UI operativa;
 - `apps/web`: marketing pubblico e pagine legali;
 - `apps/sirio`: catalogo/proof del design system con scenario operativo Fase 4, senza logica prodotto;
-- `packages/db`: Prisma, tredici migration canoniche, client e guardrail;
+- `packages/db`: Prisma, sedici migration canoniche, client e guardrail; l'ultima migration additiva e presente nel repository ma non ancora applicata al target locale corrente;
 - `packages/types`: contratti platform-neutral inclusi i DTO `Operational*`;
 - `packages/ui`: foundation condivisa con primitive generiche search/timeline/work queue, senza dominio;
 - `packages/brand-resources`: asset SVG proprietari.

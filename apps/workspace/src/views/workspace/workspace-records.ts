@@ -36,10 +36,16 @@ export interface WorkspaceCapabilities {
   canUpdateDocuments: boolean;
   canManageArchivedDocuments: boolean;
   canUploadDocumentVersions: boolean;
+  canReadDocumentFiles: boolean;
+  canReadSensitiveDocuments: boolean;
+  canVerifyDocuments: boolean;
   canManageChecklists: boolean;
   canCompleteChecklists: boolean;
   canUploadEvidence: boolean;
   canDeleteEvidence: boolean;
+  canReadEvidenceFiles: boolean;
+  canReadSensitiveEvidence: boolean;
+  canReviewEvidence: boolean;
   canManagePackages: boolean;
   canSharePackages: boolean;
   canReadAssignments: boolean;
@@ -51,6 +57,8 @@ export interface WorkspaceCapabilities {
   canReadNotifications: boolean;
   canReadAudit: boolean;
   canReadDataControl: boolean;
+  canReadOrganizationProfile: boolean;
+  canUpdateOrganizationProfile: boolean;
 }
 
 export interface WorkspaceDocumentTypeRecord {
@@ -129,6 +137,10 @@ export interface WorkspaceDocumentVersionRecord {
   size: number;
   checksum?: string | null;
   uploadedById: string;
+  reviewStatus: import("@qoovex/types").DocumentVersionReviewStatus;
+  reviewedById?: string | null;
+  reviewedAt?: string | null;
+  reviewReason?: string | null;
   createdAt: string;
   archivedAt?: string | null;
 }
@@ -206,12 +218,17 @@ export interface WorkspaceEvidenceRecord {
   type: EvidenceType;
   title: string;
   description?: string | null;
+  sensitivity: import("@qoovex/types").EvidenceSensitivity;
+  reviewStatus: import("@qoovex/types").EvidenceReviewStatus;
+  origin: import("@qoovex/types").EvidenceOrigin;
+  capturedAt?: string | null;
   hasFile: boolean;
   originalFileName?: string | null;
   mimeType?: string | null;
   size?: number | null;
   createdById: string;
   createdAt: string;
+  updatedAt: string;
   archivedAt?: string | null;
 }
 

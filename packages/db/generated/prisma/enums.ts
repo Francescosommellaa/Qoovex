@@ -150,6 +150,24 @@ export const AuditAction = {
   JOB_SITE_USER_ASSIGNMENT_ARCHIVED: 'JOB_SITE_USER_ASSIGNMENT_ARCHIVED',
   JOB_SITE_WORKER_ASSIGNMENT_CREATED: 'JOB_SITE_WORKER_ASSIGNMENT_CREATED',
   JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED: 'JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED',
+  ORGANIZATION_PROFILE_UPDATED: 'ORGANIZATION_PROFILE_UPDATED',
+  ORGANIZATION_CONTACT_CREATED: 'ORGANIZATION_CONTACT_CREATED',
+  ORGANIZATION_CONTACT_UPDATED: 'ORGANIZATION_CONTACT_UPDATED',
+  ORGANIZATION_CONTACT_ARCHIVED: 'ORGANIZATION_CONTACT_ARCHIVED',
+  DOCUMENT_JOB_SITE_LINK_CREATED: 'DOCUMENT_JOB_SITE_LINK_CREATED',
+  DOCUMENT_JOB_SITE_LINK_ARCHIVED: 'DOCUMENT_JOB_SITE_LINK_ARCHIVED',
+  DOCUMENT_VERSION_REVIEWED: 'DOCUMENT_VERSION_REVIEWED',
+  EVIDENCE_UPDATED: 'EVIDENCE_UPDATED',
+  EVIDENCE_REVIEWED: 'EVIDENCE_REVIEWED',
+  OPERATIONAL_REQUEST_CREATED: 'OPERATIONAL_REQUEST_CREATED',
+  OPERATIONAL_REQUEST_UPDATED: 'OPERATIONAL_REQUEST_UPDATED',
+  CONTEXT_MESSAGE_CREATED: 'CONTEXT_MESSAGE_CREATED',
+  DOCUMENT_SOURCE_POLICY_CREATED: 'DOCUMENT_SOURCE_POLICY_CREATED',
+  DOCUMENT_SOURCE_POLICY_UPDATED: 'DOCUMENT_SOURCE_POLICY_UPDATED',
+  DOCUMENT_SOURCE_CHECK_CREATED: 'DOCUMENT_SOURCE_CHECK_CREATED',
+  DOCUMENT_SOURCE_CHECK_UPDATED: 'DOCUMENT_SOURCE_CHECK_UPDATED',
+  DOCUMENT_ACQUISITION_CREATED: 'DOCUMENT_ACQUISITION_CREATED',
+  JOB_SITE_PHASE_CHANGED: 'JOB_SITE_PHASE_CHANGED',
   ORGANIZATION_INVITATION_CREATED: 'ORGANIZATION_INVITATION_CREATED',
   ORGANIZATION_INVITATION_REVOKED: 'ORGANIZATION_INVITATION_REVOKED',
   ORGANIZATION_INVITATION_ACCEPTED: 'ORGANIZATION_INVITATION_ACCEPTED',
@@ -210,6 +228,16 @@ export const AuditEntityType = {
   ORGANIZATION_INVITATION: 'ORGANIZATION_INVITATION',
   ORGANIZATION_MEMBERSHIP: 'ORGANIZATION_MEMBERSHIP',
   ORGANIZATION: 'ORGANIZATION',
+  ORGANIZATION_PROFILE: 'ORGANIZATION_PROFILE',
+  ORGANIZATION_CONTACT: 'ORGANIZATION_CONTACT',
+  DOCUMENT_JOB_SITE_LINK: 'DOCUMENT_JOB_SITE_LINK',
+  EVIDENCE_REVISION: 'EVIDENCE_REVISION',
+  OPERATIONAL_REQUEST: 'OPERATIONAL_REQUEST',
+  CONTEXT_MESSAGE: 'CONTEXT_MESSAGE',
+  CONTEXT_TIMELINE_EVENT: 'CONTEXT_TIMELINE_EVENT',
+  DOCUMENT_SOURCE_POLICY: 'DOCUMENT_SOURCE_POLICY',
+  DOCUMENT_SOURCE_CHECK: 'DOCUMENT_SOURCE_CHECK',
+  DOCUMENT_ACQUISITION: 'DOCUMENT_ACQUISITION',
   USER: 'USER',
   SYSTEM: 'SYSTEM'
 } as const
@@ -235,6 +263,7 @@ export type RecordStatus = (typeof RecordStatus)[keyof typeof RecordStatus]
 
 
 export const JobSiteOperationalPhase = {
+  DRAFT: 'DRAFT',
   PREPARATION: 'PREPARATION',
   IN_PROGRESS: 'IN_PROGRESS',
   PAUSED: 'PAUSED',
@@ -255,6 +284,16 @@ export const DocumentStatus = {
 } as const
 
 export type DocumentStatus = (typeof DocumentStatus)[keyof typeof DocumentStatus]
+
+
+export const DocumentVersionReviewStatus = {
+  TO_REVIEW: 'TO_REVIEW',
+  CURRENT: 'CURRENT',
+  SUPERSEDED: 'SUPERSEDED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type DocumentVersionReviewStatus = (typeof DocumentVersionReviewStatus)[keyof typeof DocumentVersionReviewStatus]
 
 
 export const DeadlineStatus = {
@@ -442,15 +481,104 @@ export const EvidenceType = {
 export type EvidenceType = (typeof EvidenceType)[keyof typeof EvidenceType]
 
 
+export const EvidenceSensitivity = {
+  INTERNAL: 'INTERNAL',
+  SHAREABLE: 'SHAREABLE',
+  RESTRICTED: 'RESTRICTED'
+} as const
+
+export type EvidenceSensitivity = (typeof EvidenceSensitivity)[keyof typeof EvidenceSensitivity]
+
+
+export const EvidenceReviewStatus = {
+  RECORDED: 'RECORDED',
+  TO_REVIEW: 'TO_REVIEW',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type EvidenceReviewStatus = (typeof EvidenceReviewStatus)[keyof typeof EvidenceReviewStatus]
+
+
+export const EvidenceOrigin = {
+  DIRECT_UPLOAD: 'DIRECT_UPLOAD',
+  GUIDED_MANUAL: 'GUIDED_MANUAL',
+  AUTHORIZED_INTEGRATION: 'AUTHORIZED_INTEGRATION'
+} as const
+
+export type EvidenceOrigin = (typeof EvidenceOrigin)[keyof typeof EvidenceOrigin]
+
+
 export const DocumentPackageItemType = {
   DOCUMENT: 'DOCUMENT',
   DOCUMENT_VERSION: 'DOCUMENT_VERSION',
   EVIDENCE: 'EVIDENCE',
   CHECKLIST: 'CHECKLIST',
-  NOTE: 'NOTE'
+  NOTE: 'NOTE',
+  WORKER: 'WORKER',
+  JOB_SITE_USER_ASSIGNMENT: 'JOB_SITE_USER_ASSIGNMENT',
+  JOB_SITE_WORKER_ASSIGNMENT: 'JOB_SITE_WORKER_ASSIGNMENT',
+  OPERATIONAL_REQUEST: 'OPERATIONAL_REQUEST',
+  CONTEXT_MESSAGE: 'CONTEXT_MESSAGE',
+  CONTEXT_TIMELINE_EVENT: 'CONTEXT_TIMELINE_EVENT'
 } as const
 
 export type DocumentPackageItemType = (typeof DocumentPackageItemType)[keyof typeof DocumentPackageItemType]
+
+
+export const OrganizationContactKind = {
+  GENERAL: 'GENERAL',
+  ADMINISTRATION: 'ADMINISTRATION',
+  SAFETY: 'SAFETY',
+  TECHNICAL: 'TECHNICAL'
+} as const
+
+export type OrganizationContactKind = (typeof OrganizationContactKind)[keyof typeof OrganizationContactKind]
+
+
+export const OperationalRequestStatus = {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type OperationalRequestStatus = (typeof OperationalRequestStatus)[keyof typeof OperationalRequestStatus]
+
+
+export const ContextMessageVisibility = {
+  INTERNAL: 'INTERNAL'
+} as const
+
+export type ContextMessageVisibility = (typeof ContextMessageVisibility)[keyof typeof ContextMessageVisibility]
+
+
+export const DocumentSourceType = {
+  DIRECT_UPLOAD: 'DIRECT_UPLOAD',
+  GUIDED_MANUAL: 'GUIDED_MANUAL',
+  AUTHORIZED_INTEGRATION: 'AUTHORIZED_INTEGRATION'
+} as const
+
+export type DocumentSourceType = (typeof DocumentSourceType)[keyof typeof DocumentSourceType]
+
+
+export const DocumentSourceCheckStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  NEEDS_ACTION: 'NEEDS_ACTION'
+} as const
+
+export type DocumentSourceCheckStatus = (typeof DocumentSourceCheckStatus)[keyof typeof DocumentSourceCheckStatus]
+
+
+export const DocumentAcquisitionStatus = {
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+} as const
+
+export type DocumentAcquisitionStatus = (typeof DocumentAcquisitionStatus)[keyof typeof DocumentAcquisitionStatus]
 
 
 export const NotificationType = {
@@ -519,7 +647,9 @@ export type NotificationEmailDeliveryStatus = (typeof NotificationEmailDeliveryS
 
 
 export const JobSiteUserAssignmentRole = {
-  SITE_MANAGER: 'SITE_MANAGER'
+  SITE_MANAGER: 'SITE_MANAGER',
+  DOCUMENT_REVIEWER: 'DOCUMENT_REVIEWER',
+  CONTRIBUTOR: 'CONTRIBUTOR'
 } as const
 
 export type JobSiteUserAssignmentRole = (typeof JobSiteUserAssignmentRole)[keyof typeof JobSiteUserAssignmentRole]
@@ -636,7 +766,19 @@ export const OperationalEventType = {
   SHARE_LINK_EXPIRED: 'SHARE_LINK_EXPIRED',
   PROCESS_COMPLETED: 'PROCESS_COMPLETED',
   PROCESS_COMPLETED_WITH_EXCEPTIONS: 'PROCESS_COMPLETED_WITH_EXCEPTIONS',
-  PROCESS_TECHNICAL_FAILURE: 'PROCESS_TECHNICAL_FAILURE'
+  PROCESS_TECHNICAL_FAILURE: 'PROCESS_TECHNICAL_FAILURE',
+  JOB_SITE_PHASE_CHANGED: 'JOB_SITE_PHASE_CHANGED',
+  ASSIGNMENT_STARTED: 'ASSIGNMENT_STARTED',
+  ASSIGNMENT_ENDED: 'ASSIGNMENT_ENDED',
+  EVIDENCE_RECORDED: 'EVIDENCE_RECORDED',
+  EVIDENCE_REVIEWED: 'EVIDENCE_REVIEWED',
+  REQUEST_CREATED: 'REQUEST_CREATED',
+  REQUEST_UPDATED: 'REQUEST_UPDATED',
+  CONTEXT_MESSAGE_ADDED: 'CONTEXT_MESSAGE_ADDED',
+  DOCUMENT_SOURCE_CHECKED: 'DOCUMENT_SOURCE_CHECKED',
+  DOCUMENT_LINKED_TO_JOB_SITE: 'DOCUMENT_LINKED_TO_JOB_SITE',
+  DOCUMENT_UNLINKED_FROM_JOB_SITE: 'DOCUMENT_UNLINKED_FROM_JOB_SITE',
+  DOCUMENT_VERSION_REVIEWED: 'DOCUMENT_VERSION_REVIEWED'
 } as const
 
 export type OperationalEventType = (typeof OperationalEventType)[keyof typeof OperationalEventType]
@@ -731,7 +873,10 @@ export const OperationalArtifactType = {
   CHECKLIST: 'CHECKLIST',
   EVIDENCE: 'EVIDENCE',
   DOCUMENT_PACKAGE: 'DOCUMENT_PACKAGE',
-  SHARE_LINK: 'SHARE_LINK'
+  SHARE_LINK: 'SHARE_LINK',
+  OPERATIONAL_REQUEST: 'OPERATIONAL_REQUEST',
+  CONTEXT_MESSAGE: 'CONTEXT_MESSAGE',
+  DOCUMENT_SOURCE: 'DOCUMENT_SOURCE'
 } as const
 
 export type OperationalArtifactType = (typeof OperationalArtifactType)[keyof typeof OperationalArtifactType]

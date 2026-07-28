@@ -2,7 +2,9 @@
 
 ## Stato attuale verificato
 
-Production, Preview, locale e CI/E2E usano target distinti e guardati. Il repository contiene quindici migration; `20260728010000_access_model_expand` e `20260728020000_access_model_contract` sono state applicate soltanto al database locale guardato tramite wrapper protetto. `verify:prisma` ha confermato quindici migration e diff nullo; il backfill idempotente ha riconciliato 1 Azienda, 7 membership e 3 inviti senza anomalie. Nessun ambiente remoto e stato migrato o distribuito.
+Production, Preview, locale e CI/E2E usano target distinti e guardati. Il repository contiene sedici migration; le prime quindici risultano applicate al database locale guardato. `20260728030000_operational_workspace_expansion` e stata validata e genera un client coerente, ma `verify:prisma` la segnala pendente. Il deploy locale non e stato forzato: il wrapper canonico richiede `QOOVEX_MIGRATION_BACKUP_REF` e il target esatto. Nessun ambiente remoto e stato migrato o distribuito.
+
+Impatto query del nuovo percorso: il caricamento di una versione aggiunge una sola lettura checksum prima del Blob per evitare duplicati; profilo e contatti usano una join organizzazione; liste di richieste/timeline sono limitate e senza N+1; controlli fonte e revisioni usano transazioni a numero fisso di query. Nessun polling o cache condivisa e stato introdotto.
 
 ## Rollout e rollback access model
 

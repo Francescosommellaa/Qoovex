@@ -6,11 +6,11 @@ import {
 } from "@qoovex/types";
 
 const PRESET_PERMISSIONS: Record<OrganizationAccessPreset, readonly OrganizationPermission[]> = {
-  READ_ONLY: ["organization:read", "workers:read", "jobSites:read", "documents:read", "documents:file:read", "deadlines:read", "calendar:read", "checklists:read", "evidence:read", "documentPackages:read", "processes:read", "processes:timeline:read"],
-  OPERATIONAL_COLLABORATION: ["organization:read", "workers:read", "workers:create", "workers:update", "jobSites:read", "jobSites:create", "jobSites:update", "documents:read", "documents:file:read", "documents:upload", "deadlines:read", "calendar:read", "checklists:read", "checklists:complete", "evidence:read", "evidence:upload", "processes:read", "processes:timeline:read"],
-  SITE_MANAGER: ["organization:read", "workers:read", "jobSites:read", "documents:read", "deadlines:read", "calendar:read", "checklists:read", "checklists:complete", "evidence:read", "evidence:upload"],
-  DOCUMENT_REVIEWER: ["organization:read", "workers:read", "jobSites:read", "documents:read", "documents:file:read", "documents:update", "documents:verify", "documents:expiry:manage", "documents:packages:add", "deadlines:read", "documentPackages:read", "documentPackages:create", "documentPackages:update", "documentPackages:review", "processes:read", "processes:timeline:read", "processes:decide"],
-  LIMITED_UPLOAD: ["organization:read", "workers:read", "jobSites:read", "documents:read", "documents:upload", "deadlines:read", "calendar:read", "evidence:read", "evidence:upload"],
+  READ_ONLY: ["organization:read", "organizationProfile:read", "workers:read", "jobSites:read", "documents:read", "documents:file:read", "deadlines:read", "calendar:read", "checklists:read", "evidence:read", "evidence:file:read", "documentPackages:read", "processes:read", "processes:timeline:read", "requests:read", "contextMessages:read", "documentSources:read"],
+  OPERATIONAL_COLLABORATION: ["organization:read", "organizationProfile:read", "workers:read", "workers:create", "workers:update", "jobSites:read", "jobSites:create", "jobSites:update", "documents:read", "documents:file:read", "documents:upload", "deadlines:read", "calendar:read", "checklists:read", "checklists:complete", "evidence:read", "evidence:file:read", "evidence:upload", "processes:read", "processes:timeline:read", "requests:read", "requests:create", "requests:manage", "contextMessages:read", "contextMessages:create", "documentSources:read", "documentSources:check"],
+  SITE_MANAGER: ["organization:read", "organizationProfile:read", "workers:read", "jobSites:read", "documents:read", "documents:file:read", "deadlines:read", "calendar:read", "checklists:read", "checklists:complete", "evidence:read", "evidence:file:read", "evidence:upload", "requests:read", "requests:create", "requests:manage", "contextMessages:read", "contextMessages:create", "documentSources:read", "documentSources:check"],
+  DOCUMENT_REVIEWER: ["organization:read", "organizationProfile:read", "workers:read", "jobSites:read", "documents:read", "documents:file:read", "documents:update", "documents:verify", "documents:expiry:manage", "documents:packages:add", "deadlines:read", "documentPackages:read", "documentPackages:create", "documentPackages:update", "documentPackages:review", "evidence:read", "evidence:file:read", "evidence:review", "evidence:upload", "processes:read", "processes:timeline:read", "processes:decide", "requests:read", "requests:create", "requests:manage", "contextMessages:read", "contextMessages:create", "documentSources:read", "documentSources:manage", "documentSources:check"],
+  LIMITED_UPLOAD: ["organization:read", "organizationProfile:read", "workers:read", "jobSites:read", "documents:read", "documents:file:read", "documents:upload", "deadlines:read", "calendar:read", "evidence:read", "evidence:file:read", "evidence:upload", "requests:read", "requests:create", "contextMessages:read", "contextMessages:create", "documentSources:read"],
   CUSTOM: [],
 };
 
@@ -25,6 +25,7 @@ export function getPermissionsForPreset(preset: OrganizationAccessPreset): Organ
 
 const SUPPORT_SESSION_PERMISSIONS: readonly OrganizationPermission[] = [
   "organization:read",
+  "organizationProfile:read",
   "members:read",
   "workers:read",
   "jobSites:read",
@@ -37,6 +38,8 @@ const SUPPORT_SESSION_PERMISSIONS: readonly OrganizationPermission[] = [
   "processes:read",
   "processes:timeline:read",
   "assignments:read",
+  "requests:read",
+  "documentSources:read",
 ];
 
 export function getSupportSessionPermissions(): OrganizationPermission[] {
@@ -50,6 +53,7 @@ export function sanitizeOrganizationPermissions(values: readonly string[]): Orga
 
 const COLLABORATOR_FORBIDDEN_PERMISSIONS = new Set<OrganizationPermission>([
   "organization:update",
+  "organizationProfile:update",
   "members:invite",
   "members:manage",
   "auditLog:read",
@@ -74,6 +78,9 @@ const PERMISSION_DEPENDENCIES: Partial<Record<OrganizationPermission, readonly O
   "checklists:complete": ["checklists:read"],
   "evidence:upload": ["evidence:read"],
   "evidence:delete": ["evidence:read"],
+  "evidence:file:read": ["evidence:read"],
+  "evidence:sensitive:read": ["evidence:read", "evidence:file:read"],
+  "evidence:review": ["evidence:read"],
   "documentPackages:create": ["documentPackages:read"],
   "documentPackages:update": ["documentPackages:read"],
   "documentPackages:review": ["documentPackages:read"],
@@ -86,6 +93,12 @@ const PERMISSION_DEPENDENCIES: Partial<Record<OrganizationPermission, readonly O
   "processes:exceptions:resolve": ["processes:read", "processes:timeline:read"],
   "processes:retry": ["processes:read", "processes:timeline:read"],
   "assignments:manage": ["assignments:read"],
+  "organizationProfile:update": ["organizationProfile:read"],
+  "requests:create": ["requests:read"],
+  "requests:manage": ["requests:read"],
+  "contextMessages:create": ["contextMessages:read"],
+  "documentSources:manage": ["documentSources:read"],
+  "documentSources:check": ["documentSources:read"],
 };
 
 export function normalizeCollaboratorPermissions(values: readonly string[]): OrganizationPermission[] {

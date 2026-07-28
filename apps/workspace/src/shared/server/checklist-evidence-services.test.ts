@@ -3,11 +3,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   db: {
+    $transaction: vi.fn(),
     checklist: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     checklistItem: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     jobSite: { findFirst: vi.fn() },
     worker: { findFirst: vi.fn() },
     evidence: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
+    evidenceRevision: { findFirst: vi.fn(), create: vi.fn() },
     workerUserLink: { findFirst: vi.fn() },
     jobSiteUserAssignment: { findMany: vi.fn() },
     jobSiteWorkerAssignment: { findMany: vi.fn() },
@@ -20,6 +22,7 @@ const mocks = vi.hoisted(() => ({
   putPrivateBlob: vi.fn(),
   getPrivateBlob: vi.fn(),
   deletePrivateBlob: vi.fn(),
+  appendContextTimelineEvent: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -43,6 +46,7 @@ vi.mock("./blob-storage-service", () => ({
   getPrivateBlob: mocks.getPrivateBlob,
   deletePrivateBlob: mocks.deletePrivateBlob,
 }));
+vi.mock("./context-timeline-service", () => ({ appendContextTimelineEvent: mocks.appendContextTimelineEvent }));
 
 import {
   archiveChecklist,
@@ -59,6 +63,7 @@ import {
   createEvidenceNote,
   getEvidenceDownload,
   listEvidence,
+  reviewEvidence,
   uploadEvidenceFile,
 } from "./evidence-service";
 
@@ -142,11 +147,13 @@ function makeFile(input: { name?: string; type?: string; bytes?: number[]; sizeB
 }
 
 beforeEach(() => {
+  mocks.db.$transaction.mockReset().mockImplementation(async (callback) => callback(mocks.db));
   resetModel(mocks.db.checklist);
   resetModel(mocks.db.checklistItem);
   resetModel(mocks.db.jobSite);
   resetModel(mocks.db.worker);
   resetModel(mocks.db.evidence);
+  resetModel(mocks.db.evidenceRevision);
   resetModel(mocks.db.workerUserLink);
   resetModel(mocks.db.jobSiteUserAssignment);
   resetModel(mocks.db.jobSiteWorkerAssignment);
@@ -158,6 +165,7 @@ beforeEach(() => {
   mocks.putPrivateBlob.mockReset();
   mocks.getPrivateBlob.mockReset();
   mocks.deletePrivateBlob.mockReset();
+  mocks.appendContextTimelineEvent.mockReset().mockResolvedValue({ id: "timeline-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation((context, permission) => { if (!context.permissions.includes(permission)) throw Object.assign(new Error("Risorsa non disponibile."), { status: 404 }); });
   mocks.recordSupportAccess.mockResolvedValue(undefined);
@@ -337,7 +345,7 @@ describe("evidence service", () => {
   });
 
   it("lets safety consultants read, upload and download evidence but not archive", async () => {
-    setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["evidence:read", "evidence:upload"], "FULL");
+    setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["evidence:read", "evidence:file:read", "evidence:upload"], "FULL");
     mocks.db.evidence.findMany.mockResolvedValue([fileEvidenceRecord]);
     mocks.db.evidence.findFirst.mockResolvedValue(fileEvidenceRecord);
     mocks.db.evidence.create.mockResolvedValue(evidenceRecord);
@@ -348,6 +356,14 @@ describe("evidence service", () => {
     await expect(createEvidenceNote({ type: "NOTE", title: "Nota", jobSiteId: "jobsite-1" })).resolves.toMatchObject({ type: "NOTE" });
     await expect(getEvidenceDownload("evidence-1")).resolves.toMatchObject({ stream, originalFileName: "foto.png" });
     await expect(archiveEvidence("evidence-1")).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("does not resolve a private evidence Blob without explicit file permission", async () => {
+    setRole("COLLABORATOR", "CUSTOM", ["evidence:read"], "FULL");
+    mocks.db.evidence.findFirst.mockResolvedValue(fileEvidenceRecord);
+
+    await expect(getEvidenceDownload("evidence-1")).rejects.toMatchObject({ status: 404 });
+    expect(mocks.getPrivateBlob).not.toHaveBeenCalled();
   });
 
   it("keeps recent evidence ordered and paginated in one scoped query", async () => {
@@ -425,6 +441,22 @@ describe("evidence service", () => {
 
     mocks.db.evidence.findFirst.mockResolvedValue(null);
     await expect(getEvidenceDownload("evidence-1")).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("enforces evidence review transitions and records an append-only revision", async () => {
+    const recorded = { ...evidenceRecord, sensitivity: "INTERNAL", reviewStatus: "RECORDED", origin: "DIRECT_UPLOAD", capturedAt: now, reviewedById: null, reviewedAt: null, reviewReason: null, updatedAt: now, checklistItem: { checklist: { jobSiteId: "jobsite-1" } } };
+    mocks.db.evidence.findFirst.mockResolvedValue(recorded);
+    await expect(reviewEvidence("evidence-1", { decision: "ACCEPT" })).rejects.toMatchObject({ status: 409 });
+
+    const toReview = { ...recorded, reviewStatus: "TO_REVIEW" };
+    const accepted = { ...toReview, reviewStatus: "ACCEPTED", sensitivity: "SHAREABLE", reviewedById: "user-1", reviewedAt: now };
+    mocks.db.evidence.findFirst.mockResolvedValue(toReview);
+    mocks.db.evidence.update.mockResolvedValue(accepted);
+    mocks.db.evidenceRevision.findFirst.mockResolvedValue({ revisionNumber: 2 });
+    mocks.db.evidenceRevision.create.mockResolvedValue({ id: "revision-3" });
+    await expect(reviewEvidence("evidence-1", { decision: "ACCEPT", sensitivity: "SHAREABLE" })).resolves.toMatchObject({ reviewStatus: "ACCEPTED", sensitivity: "SHAREABLE" });
+    expect(mocks.db.evidenceRevision.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ revisionNumber: 3, reviewStatus: "ACCEPTED" }) }));
+    expect(mocks.appendContextTimelineEvent).toHaveBeenCalledWith(expect.objectContaining({ eventType: "EVIDENCE_REVIEWED" }), mocks.db);
   });
 
   it("cleans up uploaded Blob if Prisma persistence fails", async () => {

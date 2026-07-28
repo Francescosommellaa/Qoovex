@@ -9,6 +9,7 @@ import { deletePrivateBlob, getPrivateBlob, putPrivateBlob } from "./blob-storag
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { canReadDocument, getResourceScope } from "./resource-scope-service";
+import { appendContextTimelineEvent } from "./context-timeline-service";
 import { validateBinaryFileContent } from "./file-content-validation";
 
 const DOCUMENT_VERSION_UPLOAD_ROLES = ["OWNER", "COLLABORATOR"] as const;
@@ -28,6 +29,10 @@ const documentVersionSelect = {
   size: true,
   checksum: true,
   uploadedById: true,
+  reviewStatus: true,
+  reviewedById: true,
+  reviewedAt: true,
+  reviewReason: true,
   createdAt: true,
   archivedAt: true,
 } as const;
@@ -41,6 +46,10 @@ export const documentVersionListSelect = {
   size: true,
   checksum: true,
   uploadedById: true,
+  reviewStatus: true,
+  reviewedById: true,
+  reviewedAt: true,
+  reviewReason: true,
   createdAt: true,
   archivedAt: true,
 } as const;
@@ -54,6 +63,10 @@ export interface DocumentVersionResponse {
   size: number;
   checksum: string | null;
   uploadedById: string;
+  reviewStatus: "TO_REVIEW" | "CURRENT" | "SUPERSEDED" | "REJECTED";
+  reviewedById: string | null;
+  reviewedAt: Date | null;
+  reviewReason: string | null;
   createdAt: Date;
   archivedAt: Date | null;
 }
@@ -74,6 +87,10 @@ export function toDocumentVersionResponse(version: {
   size: number;
   checksum: string | null;
   uploadedById: string;
+  reviewStatus: "TO_REVIEW" | "CURRENT" | "SUPERSEDED" | "REJECTED";
+  reviewedById: string | null;
+  reviewedAt: Date | null;
+  reviewReason: string | null;
   createdAt: Date;
   archivedAt: Date | null;
 }): DocumentVersionResponse {
@@ -86,6 +103,10 @@ export function toDocumentVersionResponse(version: {
     size: version.size,
     checksum: version.checksum,
     uploadedById: version.uploadedById,
+    reviewStatus: version.reviewStatus,
+    reviewedById: version.reviewedById,
+    reviewedAt: version.reviewedAt,
+    reviewReason: version.reviewReason,
     createdAt: version.createdAt,
     archivedAt: version.archivedAt,
   };
@@ -114,7 +135,16 @@ function assertSingleFile(files: unknown[]): File {
 async function findActiveDocument(organizationId: string, documentId: string) {
   const document = await db.document.findFirst({
     where: { id: documentId, organizationId, archivedAt: null },
-    select: { id: true, organizationId: true, status: true, ownerType: true, workerId: true, jobSiteId: true },
+    select: {
+      id: true,
+      organizationId: true,
+      status: true,
+      ownerType: true,
+      workerId: true,
+      jobSiteId: true,
+      currentVersionId: true,
+      documentType: { select: { sensitivity: true } },
+    },
   });
   if (!document) throw new AccessError("Documento non trovato.", 404);
   return document;
@@ -130,10 +160,13 @@ async function findActiveDocumentVersion(organizationId: string, documentId: str
 }
 
 export async function listDocumentVersions(documentId: string) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_VERSION_READ_ROLES);
+  const { context, organizationId } = await requireOrganizationDomainAccess("documents:file:read", DOCUMENT_VERSION_READ_ROLES);
   const scope = await getResourceScope(context);
   const document = await findActiveDocument(organizationId, documentId);
-  if (!canReadDocument(scope, document)) throw new AccessError("Documento non trovato.", 404);
+  if (
+    !canReadDocument(scope, document) ||
+    (document.documentType && document.documentType.sensitivity !== "STANDARD" && !context.permissions.includes("documents:sensitive:read"))
+  ) throw new AccessError("Documento non trovato.", 404);
   const versions = await db.documentVersion.findMany({
     where: { documentId, organizationId, archivedAt: null },
     select: documentVersionListSelect,
@@ -144,7 +177,7 @@ export async function listDocumentVersions(documentId: string) {
 }
 
 export async function listDocumentVersionsByDocumentIds(documentIds: string[]) {
-  const { context, organizationId } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_VERSION_READ_ROLES);
+  const { context, organizationId } = await requireOrganizationDomainAccess("documents:file:read", DOCUMENT_VERSION_READ_ROLES);
   const scope = await getResourceScope(context);
   const uniqueDocumentIds = [...new Set(documentIds.filter(Boolean))];
   if (uniqueDocumentIds.length === 0) return [];
@@ -163,7 +196,16 @@ export async function listDocumentVersionsByDocumentIds(documentIds: string[]) {
       organizationId,
       documentId: { in: uniqueDocumentIds },
       archivedAt: null,
-      document: { is: { organizationId, archivedAt: null, ...documentScope } },
+      document: {
+        is: {
+          organizationId,
+          archivedAt: null,
+          ...documentScope,
+          ...(context.permissions.includes("documents:sensitive:read")
+            ? {}
+            : { OR: [{ documentTypeId: null }, { documentType: { is: { sensitivity: "STANDARD" as const } } }] }),
+        },
+      },
     },
     select: documentVersionListSelect,
     orderBy: [{ documentId: "asc" }, { createdAt: "desc" }],
@@ -189,6 +231,11 @@ export async function uploadDocumentVersion(documentId: string, files: unknown[]
   const buffer = Buffer.from(await file.arrayBuffer());
   const detectedMimeType = await validateBinaryFileContent(buffer, file.type, DOCUMENT_VERSION_ALLOWED_MIME_TYPES);
   const checksum = crypto.createHash("sha256").update(buffer).digest("hex");
+  const duplicate = await db.documentVersion.findFirst({
+    where: { organizationId, documentId: document.id, checksum, archivedAt: null },
+    select: { id: true },
+  });
+  if (duplicate) throw new AccessError("Questo file e gia presente nel documento.", 409);
 
   const uploadedBlob = await putPrivateBlob({
     pathname: blobKey,
@@ -214,9 +261,7 @@ export async function uploadDocumentVersion(documentId: string, files: unknown[]
         },
         select: documentVersionSelect,
       });
-      if (document.status === "MISSING") {
-        await tx.document.update({ where: { id: document.id }, data: { status: "TO_REVIEW" }, select: { id: true } });
-      }
+      await tx.document.update({ where: { id: document.id }, data: { status: "TO_REVIEW" }, select: { id: true } });
       await enqueueOperationalProcess({
         organizationId,
         type: "DOCUMENT_RECEIVED",
@@ -250,8 +295,9 @@ export async function uploadDocumentVersion(documentId: string, files: unknown[]
 
 export async function archiveDocumentVersion(documentId: string, versionId: string) {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:archive", DOCUMENT_VERSION_ARCHIVE_ROLES);
-  await findActiveDocument(organizationId, documentId);
+  const document = await findActiveDocument(organizationId, documentId);
   const existing = await findActiveDocumentVersion(organizationId, documentId, versionId);
+  if (document.currentVersionId === existing.id) throw new AccessError("La versione corrente non puo essere archiviata.", 409);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "document-version", resourceId: existing.id });
   const version = await db.documentVersion.update({
     where: { id: existing.id },
@@ -269,11 +315,77 @@ export async function archiveDocumentVersion(documentId: string, versionId: stri
   return toDocumentVersionResponse(version);
 }
 
-export async function getDocumentVersionDownload(documentId: string, versionId: string): Promise<DownloadDocumentVersionResult> {
-  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_VERSION_READ_ROLES);
+export async function reviewDocumentVersion(
+  documentId: string,
+  versionId: string,
+  input: { decision?: unknown; reason?: unknown },
+) {
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:verify", DOCUMENT_VERSION_READ_ROLES);
   const scope = await getResourceScope(context);
   const document = await findActiveDocument(organizationId, documentId);
-  if (!canReadDocument(scope, document)) throw new AccessError("Documento non trovato.", 404);
+  if (
+    !canReadDocument(scope, document) ||
+    (document.documentType && document.documentType.sensitivity !== "STANDARD" && !context.permissions.includes("documents:sensitive:read"))
+  ) throw new AccessError("Documento non trovato.", 404);
+  const version = await findActiveDocumentVersion(organizationId, documentId, versionId);
+  if (input.decision !== "APPROVE" && input.decision !== "REJECT") throw new AccessError("Decisione revisione non valida.", 409);
+  const reason = typeof input.reason === "string" && input.reason.trim() ? input.reason.trim().slice(0, 2000) : null;
+  if (input.decision === "REJECT" && !reason) throw new AccessError("Indica il motivo del rifiuto.", 409);
+  const reviewedAt = new Date();
+
+  const reviewed = await db.$transaction(async (tx) => {
+    if (input.decision === "APPROVE") {
+      await tx.documentVersion.updateMany({
+        where: { organizationId, documentId, reviewStatus: "CURRENT", id: { not: version.id } },
+        data: { reviewStatus: "SUPERSEDED" },
+      });
+      const current = await tx.documentVersion.update({
+        where: { id: version.id },
+        data: { reviewStatus: "CURRENT", reviewedById: context.userId, reviewedAt, reviewReason: reason },
+        select: documentVersionSelect,
+      });
+      await tx.document.update({
+        where: { id: document.id },
+        data: { currentVersionId: current.id, status: "PRESENT", reviewedById: context.userId, reviewedAt },
+        select: { id: true },
+      });
+      await appendContextTimelineEvent({ organizationId, eventKey: `document-version:${current.id}:reviewed:current`, targetType: "DOCUMENT", targetId: document.id, eventType: "DOCUMENT_VERSION_REVIEWED", title: "Versione documento approvata", summary: current.originalFileName, metadata: { versionId: current.id, reviewStatus: current.reviewStatus }, actorUserId: context.userId, actorRole, sourceType: "USER_ACTION", sourceId: current.id }, tx);
+      return current;
+    }
+
+    const rejected = await tx.documentVersion.update({
+      where: { id: version.id },
+      data: { reviewStatus: "REJECTED", reviewedById: context.userId, reviewedAt, reviewReason: reason },
+      select: documentVersionSelect,
+    });
+    await tx.document.update({
+      where: { id: document.id },
+      data: { status: document.currentVersionId ? "PRESENT" : "TO_REVIEW" },
+      select: { id: true },
+    });
+    await appendContextTimelineEvent({ organizationId, eventKey: `document-version:${rejected.id}:reviewed:rejected`, targetType: "DOCUMENT", targetId: document.id, eventType: "DOCUMENT_VERSION_REVIEWED", title: "Versione documento rifiutata", summary: reason, metadata: { versionId: rejected.id, reviewStatus: rejected.reviewStatus }, actorUserId: context.userId, actorRole, sourceType: "USER_ACTION", sourceId: rejected.id }, tx);
+    return rejected;
+  });
+
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "DOCUMENT_VERSION_REVIEWED",
+    entityType: "DOCUMENT_VERSION",
+    entityId: reviewed.id,
+    metadata: { decision: input.decision, reviewStatus: reviewed.reviewStatus },
+  });
+  return toDocumentVersionResponse(reviewed);
+}
+
+export async function getDocumentVersionDownload(documentId: string, versionId: string): Promise<DownloadDocumentVersionResult> {
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:file:read", DOCUMENT_VERSION_READ_ROLES);
+  const scope = await getResourceScope(context);
+  const document = await findActiveDocument(organizationId, documentId);
+  if (
+    !canReadDocument(scope, document) ||
+    (document.documentType && document.documentType.sensitivity !== "STANDARD" && !context.permissions.includes("documents:sensitive:read"))
+  ) throw new AccessError("Documento non trovato.", 404);
   const version = await findActiveDocumentVersion(organizationId, documentId, versionId);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-version-file", resourceId: version.id });
   const blob = await getPrivateBlob(version.blobKey);

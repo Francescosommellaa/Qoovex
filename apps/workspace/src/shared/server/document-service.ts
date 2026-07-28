@@ -214,7 +214,7 @@ export async function getDocument(documentId: string) {
 }
 
 export async function getDocumentWithVersions(documentId: string) {
-  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_READ_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:file:read", DOCUMENT_READ_ROLES);
   const scope = await getResourceScope(context);
   const document = await db.document.findFirst({
     where: { id: documentId, organizationId, archivedAt: null },

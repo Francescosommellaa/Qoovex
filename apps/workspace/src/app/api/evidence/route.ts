@@ -1,7 +1,10 @@
 import { AccessError, asAccessResponse } from "@shared/server/access-errors";
 import { createEvidenceNote, listEvidence, uploadEvidenceFile } from "@shared/server/evidence-service";
 
-const EVIDENCE_FORM_FIELDS = new Set(["file", "type", "title", "description", "jobSiteId", "workerId", "checklistItemId"]);
+const EVIDENCE_FORM_FIELDS = new Set([
+  "file", "type", "title", "description", "jobSiteId", "workerId", "checklistItemId",
+  "sensitivity", "reviewStatus", "capturedAt", "origin",
+]);
 
 function formDataToEvidenceInput(formData: FormData) {
   const input: Record<string, unknown> = {};

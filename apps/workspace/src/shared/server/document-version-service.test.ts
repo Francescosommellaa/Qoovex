@@ -5,7 +5,7 @@ const mocks = vi.hoisted(() => ({
   db: {
     $transaction: vi.fn(),
     document: { findFirst: vi.fn(), update: vi.fn() },
-    documentVersion: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
+    documentVersion: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn(), updateMany: vi.fn() },
     workerUserLink: { findFirst: vi.fn() },
     jobSiteUserAssignment: { findMany: vi.fn() },
     jobSiteWorkerAssignment: { findMany: vi.fn() },
@@ -19,6 +19,7 @@ const mocks = vi.hoisted(() => ({
   getPrivateBlob: vi.fn(),
   deletePrivateBlob: vi.fn(),
   enqueueOperationalProcess: vi.fn(),
+  appendContextTimelineEvent: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -43,6 +44,7 @@ vi.mock("./blob-storage-service", () => ({
   deletePrivateBlob: mocks.deletePrivateBlob,
 }));
 vi.mock("@shared/server/operational-process-service", () => ({ enqueueOperationalProcess: mocks.enqueueOperationalProcess }));
+vi.mock("./context-timeline-service", () => ({ appendContextTimelineEvent: mocks.appendContextTimelineEvent }));
 
 import {
   DOCUMENT_VERSION_MAX_SIZE_BYTES,
@@ -50,6 +52,7 @@ import {
   getDocumentVersionDownload,
   listDocumentVersions,
   listDocumentVersionsByDocumentIds,
+  reviewDocumentVersion,
   uploadDocumentVersion,
 } from "./document-version-service";
 
@@ -115,6 +118,7 @@ beforeEach(() => {
   mocks.getPrivateBlob.mockReset();
   mocks.deletePrivateBlob.mockReset();
   mocks.enqueueOperationalProcess.mockReset().mockResolvedValue({ id: "process-1" });
+  mocks.appendContextTimelineEvent.mockReset().mockResolvedValue({ id: "timeline-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation((context, permission) => { if (!context.permissions.includes(permission)) throw Object.assign(new Error("Risorsa non disponibile."), { status: 404 }); });
   mocks.recordSupportAccess.mockResolvedValue(undefined);
@@ -227,6 +231,19 @@ describe("document version service", () => {
     await expect(listDocumentVersions("doc-1")).rejects.toMatchObject({ status: 404 });
   });
 
+  it("requires file and sensitive permissions before reading version files", async () => {
+    setRole("COLLABORATOR", "CUSTOM", ["documents:read"], "FULL");
+    await expect(listDocumentVersions("doc-1")).rejects.toMatchObject({ status: 404 });
+    await expect(getDocumentVersionDownload("doc-1", "version-1")).rejects.toMatchObject({ status: 404 });
+    expect(mocks.getPrivateBlob).not.toHaveBeenCalled();
+
+    setRole("COLLABORATOR", "CUSTOM", ["documents:read", "documents:file:read"], "FULL");
+    mocks.db.document.findFirst.mockResolvedValue({ ...documentRecord, documentType: { sensitivity: "SENSITIVE" } });
+    await expect(listDocumentVersions("doc-1")).rejects.toMatchObject({ status: 404 });
+    await expect(getDocumentVersionDownload("doc-1", "version-1")).rejects.toMatchObject({ status: 404 });
+    expect(mocks.getPrivateBlob).not.toHaveBeenCalled();
+  });
+
   it("filters document and version access by organization", async () => {
     mocks.db.document.findFirst.mockResolvedValue(null);
 
@@ -270,6 +287,19 @@ describe("document version service", () => {
       data: expect.objectContaining({ archivedAt: expect.any(Date) }),
     }));
     expect(mocks.deletePrivateBlob).not.toHaveBeenCalled();
+  });
+
+  it("promotes an approved version atomically and supersedes the previous current version", async () => {
+    mocks.db.document.findFirst.mockResolvedValue({ ...documentRecord, currentVersionId: "version-old", documentType: { sensitivity: "STANDARD" } });
+    mocks.db.documentVersion.findFirst.mockResolvedValue({ ...versionRecord, reviewStatus: "TO_REVIEW", reviewedById: null, reviewedAt: null, reviewReason: null });
+    mocks.db.documentVersion.updateMany.mockResolvedValue({ count: 1 });
+    mocks.db.documentVersion.update.mockResolvedValue({ ...versionRecord, reviewStatus: "CURRENT", reviewedById: "user-1", reviewedAt: now, reviewReason: null });
+    mocks.db.document.update.mockResolvedValue({ id: "doc-1" });
+
+    await expect(reviewDocumentVersion("doc-1", "version-1", { decision: "APPROVE" })).resolves.toMatchObject({ id: "version-1", reviewStatus: "CURRENT" });
+    expect(mocks.db.documentVersion.updateMany).toHaveBeenCalledWith(expect.objectContaining({ data: { reviewStatus: "SUPERSEDED" } }));
+    expect(mocks.db.document.update).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ currentVersionId: "version-1", status: "PRESENT" }) }));
+    expect(mocks.appendContextTimelineEvent).toHaveBeenCalledWith(expect.objectContaining({ eventType: "DOCUMENT_VERSION_REVIEWED", targetId: "doc-1" }), mocks.db);
   });
 
   it("denies download for missing or archived versions", async () => {

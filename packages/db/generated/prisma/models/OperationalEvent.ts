@@ -771,22 +771,6 @@ export type EnumOperationalEventKindFieldUpdateOperationsInput = {
   set?: $Enums.OperationalEventKind
 }
 
-export type EnumOperationalEventTypeFieldUpdateOperationsInput = {
-  set?: $Enums.OperationalEventType
-}
-
-export type EnumOperationalActorTypeFieldUpdateOperationsInput = {
-  set?: $Enums.OperationalActorType
-}
-
-export type NullableEnumOrganizationRoleFieldUpdateOperationsInput = {
-  set?: $Enums.OrganizationRole | null
-}
-
-export type EnumOperationalEventSourceTypeFieldUpdateOperationsInput = {
-  set?: $Enums.OperationalEventSourceType
-}
-
 export type OperationalEventCreateNestedOneWithoutArtifactRefsInput = {
   create?: Prisma.XOR<Prisma.OperationalEventCreateWithoutArtifactRefsInput, Prisma.OperationalEventUncheckedCreateWithoutArtifactRefsInput>
   connectOrCreate?: Prisma.OperationalEventCreateOrConnectWithoutArtifactRefsInput

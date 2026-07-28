@@ -45,6 +45,7 @@ describe("document package immutable revision manifest", () => {
           originalFileName: "duvri.pdf",
           mimeType: "application/pdf",
           size: 128,
+          reviewStatus: "CURRENT",
           archivedAt: null,
           document: {
             id: "document-1",
@@ -124,7 +125,7 @@ describe("document package immutable revision manifest", () => {
   it("includes an active evidence reference while retaining only mediated file metadata", () => {
     const manifest = buildDocumentPackageRevisionManifest(packageRecord({ items: [{
       id: "evidence", itemType: "EVIDENCE", position: 0, note: null, documentId: null, documentVersionId: null, evidenceId: "evidence-1", checklistId: null, createdAt: now,
-      document: null, documentVersion: null, evidence: { id: "evidence-1", title: "Foto accesso", type: "PHOTO", originalFileName: "accesso.jpg", mimeType: "image/jpeg", size: 42, blobKey: "secret/blob/key", archivedAt: null }, checklist: null,
+      document: null, documentVersion: null, evidence: { id: "evidence-1", title: "Foto accesso", type: "PHOTO", sensitivity: "SHAREABLE", reviewStatus: "ACCEPTED", originalFileName: "accesso.jpg", mimeType: "image/jpeg", size: 42, blobKey: "secret/blob/key", archivedAt: null }, checklist: null,
     }] }) as never, now);
     expect(manifest.items[0]).toMatchObject({ included: true, hasFile: true, evidenceId: "evidence-1", originalFileName: "accesso.jpg" });
     expect(JSON.stringify(manifest)).not.toContain("secret/blob/key");

@@ -121,6 +121,24 @@ enum AuditAction {
   JOB_SITE_USER_ASSIGNMENT_ARCHIVED
   JOB_SITE_WORKER_ASSIGNMENT_CREATED
   JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED
+  ORGANIZATION_PROFILE_UPDATED
+  ORGANIZATION_CONTACT_CREATED
+  ORGANIZATION_CONTACT_UPDATED
+  ORGANIZATION_CONTACT_ARCHIVED
+  DOCUMENT_JOB_SITE_LINK_CREATED
+  DOCUMENT_JOB_SITE_LINK_ARCHIVED
+  DOCUMENT_VERSION_REVIEWED
+  EVIDENCE_UPDATED
+  EVIDENCE_REVIEWED
+  OPERATIONAL_REQUEST_CREATED
+  OPERATIONAL_REQUEST_UPDATED
+  CONTEXT_MESSAGE_CREATED
+  DOCUMENT_SOURCE_POLICY_CREATED
+  DOCUMENT_SOURCE_POLICY_UPDATED
+  DOCUMENT_SOURCE_CHECK_CREATED
+  DOCUMENT_SOURCE_CHECK_UPDATED
+  DOCUMENT_ACQUISITION_CREATED
+  JOB_SITE_PHASE_CHANGED
   ORGANIZATION_INVITATION_CREATED
   ORGANIZATION_INVITATION_REVOKED
   ORGANIZATION_INVITATION_ACCEPTED
@@ -178,6 +196,16 @@ enum AuditEntityType {
   ORGANIZATION_INVITATION
   ORGANIZATION_MEMBERSHIP
   ORGANIZATION
+  ORGANIZATION_PROFILE
+  ORGANIZATION_CONTACT
+  DOCUMENT_JOB_SITE_LINK
+  EVIDENCE_REVISION
+  OPERATIONAL_REQUEST
+  CONTEXT_MESSAGE
+  CONTEXT_TIMELINE_EVENT
+  DOCUMENT_SOURCE_POLICY
+  DOCUMENT_SOURCE_CHECK
+  DOCUMENT_ACQUISITION
   USER
   SYSTEM
 }
@@ -194,6 +222,7 @@ enum RecordStatus {
 }
 
 enum JobSiteOperationalPhase {
+  DRAFT
   PREPARATION
   IN_PROGRESS
   PAUSED
@@ -208,6 +237,13 @@ enum DocumentStatus {
   EXPIRING_SOON
   TO_REVIEW
   ARCHIVED
+}
+
+enum DocumentVersionReviewStatus {
+  TO_REVIEW
+  CURRENT
+  SUPERSEDED
+  REJECTED
 }
 
 enum DeadlineStatus {
@@ -341,12 +377,74 @@ enum EvidenceType {
   NOTE
 }
 
+enum EvidenceSensitivity {
+  INTERNAL
+  SHAREABLE
+  RESTRICTED
+}
+
+enum EvidenceReviewStatus {
+  RECORDED
+  TO_REVIEW
+  ACCEPTED
+  REJECTED
+}
+
+enum EvidenceOrigin {
+  DIRECT_UPLOAD
+  GUIDED_MANUAL
+  AUTHORIZED_INTEGRATION
+}
+
 enum DocumentPackageItemType {
   DOCUMENT
   DOCUMENT_VERSION
   EVIDENCE
   CHECKLIST
   NOTE
+  WORKER
+  JOB_SITE_USER_ASSIGNMENT
+  JOB_SITE_WORKER_ASSIGNMENT
+  OPERATIONAL_REQUEST
+  CONTEXT_MESSAGE
+  CONTEXT_TIMELINE_EVENT
+}
+
+enum OrganizationContactKind {
+  GENERAL
+  ADMINISTRATION
+  SAFETY
+  TECHNICAL
+}
+
+enum OperationalRequestStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ContextMessageVisibility {
+  INTERNAL
+}
+
+enum DocumentSourceType {
+  DIRECT_UPLOAD
+  GUIDED_MANUAL
+  AUTHORIZED_INTEGRATION
+}
+
+enum DocumentSourceCheckStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  NEEDS_ACTION
+}
+
+enum DocumentAcquisitionStatus {
+  PENDING_REVIEW
+  COMPLETED
+  FAILED
 }
 
 enum NotificationType {
@@ -398,6 +496,8 @@ enum NotificationEmailDeliveryStatus {
 
 enum JobSiteUserAssignmentRole {
   SITE_MANAGER
+  DOCUMENT_REVIEWER
+  CONTRIBUTOR
 }
 
 enum DataControlJobType {
@@ -491,6 +591,18 @@ enum OperationalEventType {
   PROCESS_COMPLETED
   PROCESS_COMPLETED_WITH_EXCEPTIONS
   PROCESS_TECHNICAL_FAILURE
+  JOB_SITE_PHASE_CHANGED
+  ASSIGNMENT_STARTED
+  ASSIGNMENT_ENDED
+  EVIDENCE_RECORDED
+  EVIDENCE_REVIEWED
+  REQUEST_CREATED
+  REQUEST_UPDATED
+  CONTEXT_MESSAGE_ADDED
+  DOCUMENT_SOURCE_CHECKED
+  DOCUMENT_LINKED_TO_JOB_SITE
+  DOCUMENT_UNLINKED_FROM_JOB_SITE
+  DOCUMENT_VERSION_REVIEWED
 }
 
 enum OperationalActorType {
@@ -562,6 +674,9 @@ enum OperationalArtifactType {
   EVIDENCE
   DOCUMENT_PACKAGE
   SHARE_LINK
+  OPERATIONAL_REQUEST
+  CONTEXT_MESSAGE
+  DOCUMENT_SOURCE
 }
 
 enum OperationalReliability {
@@ -631,74 +746,89 @@ model VerificationToken {
 }
 
 model User {
-  id                          String                                @id @default(cuid())
-  name                        String?
-  email                       String                                @unique
-  emailVerified               DateTime?
-  image                       String?
-  firstName                   String                                @default("")
-  lastName                    String?
-  username                    String                                @unique
-  usernameOnboarded           Boolean                               @default(true)
-  profileOnboarded            Boolean                               @default(true)
-  avatarBlobPathname          String?
-  phoneNumber                 String?
-  platformRole                PlatformRole                          @default(USER)
-  authVersion                 Int                                   @default(1)
-  suspendedAt                 DateTime?
-  suspensionReason            String?
-  accounts                    Account[]
-  sessions                    Session[]
-  credential                  UserCredential?
-  authCodes                   AuthCode[]
-  authRateLimits              AuthRateLimit[]
-  securityEvents              SecurityAuditEvent[]
-  mfaEnabled                  Boolean                               @default(false)
-  totpSecretEncrypted         String?
-  totpSecretNonce             String?
-  totpPendingSecretEncrypted  String?
-  totpPendingSecretNonce      String?
-  totpPendingCreatedAt        DateTime?
-  totpVerifiedAt              DateTime?
-  usernameChangedAt           DateTime?
-  mfaBackupCodes              MfaBackupCode[]
-  mfaRecoveryRequests         MfaRecoveryRequest[]                  @relation("MfaRecoverySubject")
-  approvedMfaRecoveries       MfaRecoveryRequest[]                  @relation("MfaRecoveryApprover")
-  deniedMfaRecoveries         MfaRecoveryRequest[]                  @relation("MfaRecoveryDenier")
-  authDevices                 AuthDevice[]
-  organizationMembership      OrganizationMembership?
-  createdOrganizations        Organization[]                        @relation("OrganizationCreator")
-  sentOrganizationInvitations OrganizationInvitation[]              @relation("InvitationSender")
-  grantedMembershipResources  OrganizationMembershipResourceGrant[] @relation("MembershipResourceGrantActor")
-  updatedMembershipAccesses   OrganizationMembership[]              @relation("MembershipAccessUpdater")
-  updatedInvitationAccesses   OrganizationInvitation[]              @relation("InvitationAccessUpdater")
-  supportSessions             SupportSession[]                      @relation("SupportActor")
-  supportAuditEvents          SupportAuditEvent[]                   @relation("SupportAuditActor")
-  productAuditEvents          ProductAuditEvent[]                   @relation("ProductAuditActor")
-  reviewedDocuments           Document[]                            @relation("DocumentReviewer")
-  uploadedDocumentVersions    DocumentVersion[]                     @relation("DocumentVersionUploader")
-  completedChecklistItems     ChecklistItem[]                       @relation("ChecklistItemCompleter")
-  createdEvidence             Evidence[]                            @relation("EvidenceCreator")
-  createdDocumentPackages     DocumentPackage[]                     @relation("DocumentPackageCreator")
-  createdShareLinks           ShareLink[]                           @relation("ShareLinkCreator")
-  preparedPackageRevisions    DocumentPackageRevision[]             @relation("DocumentPackageRevisionPreparer")
-  approvedPackageRevisions    DocumentPackageRevision[]             @relation("DocumentPackageRevisionApprover")
-  createdShareProposals       DocumentPackageShareProposal[]        @relation("DocumentPackageShareProposalCreator")
-  approvedShareProposals      DocumentPackageShareProposal[]        @relation("DocumentPackageShareProposalApprover")
-  notifications               Notification[]
-  notificationPreferences     NotificationPreference[]
-  notificationEmailDeliveries NotificationEmailDelivery[]
-  requestedDataControlJobs    DataControlJob[]                      @relation("DataControlJobRequester")
-  resolvedRuntimeErrors       RuntimeErrorEvent[]                   @relation("RuntimeErrorResolver")
-  workerUserLinks             WorkerUserLink[]
-  linkedWorkerUserLinks       WorkerUserLink[]                      @relation("WorkerUserLinkCreator")
-  jobSiteUserAssignments      JobSiteUserAssignment[]
-  assignedJobSiteUsers        JobSiteUserAssignment[]               @relation("JobSiteUserAssignmentCreator")
-  assignedJobSiteWorkers      JobSiteWorkerAssignment[]             @relation("JobSiteWorkerAssignmentCreator")
-  createdCalendarEvents       CalendarEvent[]                       @relation("CalendarEventCreator")
-  assignedCalendarEvents      CalendarEvent[]                       @relation("CalendarEventAssignee")
-  createdAt                   DateTime                              @default(now())
-  updatedAt                   DateTime                              @updatedAt
+  id                           String                                @id @default(cuid())
+  name                         String?
+  email                        String                                @unique
+  emailVerified                DateTime?
+  image                        String?
+  firstName                    String                                @default("")
+  lastName                     String?
+  username                     String                                @unique
+  usernameOnboarded            Boolean                               @default(true)
+  profileOnboarded             Boolean                               @default(true)
+  avatarBlobPathname           String?
+  phoneNumber                  String?
+  platformRole                 PlatformRole                          @default(USER)
+  authVersion                  Int                                   @default(1)
+  suspendedAt                  DateTime?
+  suspensionReason             String?
+  accounts                     Account[]
+  sessions                     Session[]
+  credential                   UserCredential?
+  authCodes                    AuthCode[]
+  authRateLimits               AuthRateLimit[]
+  securityEvents               SecurityAuditEvent[]
+  mfaEnabled                   Boolean                               @default(false)
+  totpSecretEncrypted          String?
+  totpSecretNonce              String?
+  totpPendingSecretEncrypted   String?
+  totpPendingSecretNonce       String?
+  totpPendingCreatedAt         DateTime?
+  totpVerifiedAt               DateTime?
+  usernameChangedAt            DateTime?
+  mfaBackupCodes               MfaBackupCode[]
+  mfaRecoveryRequests          MfaRecoveryRequest[]                  @relation("MfaRecoverySubject")
+  approvedMfaRecoveries        MfaRecoveryRequest[]                  @relation("MfaRecoveryApprover")
+  deniedMfaRecoveries          MfaRecoveryRequest[]                  @relation("MfaRecoveryDenier")
+  authDevices                  AuthDevice[]
+  organizationMembership       OrganizationMembership?
+  createdOrganizations         Organization[]                        @relation("OrganizationCreator")
+  sentOrganizationInvitations  OrganizationInvitation[]              @relation("InvitationSender")
+  grantedMembershipResources   OrganizationMembershipResourceGrant[] @relation("MembershipResourceGrantActor")
+  updatedMembershipAccesses    OrganizationMembership[]              @relation("MembershipAccessUpdater")
+  updatedInvitationAccesses    OrganizationInvitation[]              @relation("InvitationAccessUpdater")
+  supportSessions              SupportSession[]                      @relation("SupportActor")
+  supportAuditEvents           SupportAuditEvent[]                   @relation("SupportAuditActor")
+  productAuditEvents           ProductAuditEvent[]                   @relation("ProductAuditActor")
+  reviewedDocuments            Document[]                            @relation("DocumentReviewer")
+  uploadedDocumentVersions     DocumentVersion[]                     @relation("DocumentVersionUploader")
+  reviewedDocumentVersions     DocumentVersion[]                     @relation("DocumentVersionReviewer")
+  completedChecklistItems      ChecklistItem[]                       @relation("ChecklistItemCompleter")
+  createdEvidence              Evidence[]                            @relation("EvidenceCreator")
+  reviewedEvidence             Evidence[]                            @relation("EvidenceReviewer")
+  evidenceRevisions            EvidenceRevision[]                    @relation("EvidenceRevisionActor")
+  createdDocumentPackages      DocumentPackage[]                     @relation("DocumentPackageCreator")
+  createdShareLinks            ShareLink[]                           @relation("ShareLinkCreator")
+  preparedPackageRevisions     DocumentPackageRevision[]             @relation("DocumentPackageRevisionPreparer")
+  approvedPackageRevisions     DocumentPackageRevision[]             @relation("DocumentPackageRevisionApprover")
+  createdShareProposals        DocumentPackageShareProposal[]        @relation("DocumentPackageShareProposalCreator")
+  approvedShareProposals       DocumentPackageShareProposal[]        @relation("DocumentPackageShareProposalApprover")
+  notifications                Notification[]
+  notificationPreferences      NotificationPreference[]
+  notificationEmailDeliveries  NotificationEmailDelivery[]
+  requestedDataControlJobs     DataControlJob[]                      @relation("DataControlJobRequester")
+  resolvedRuntimeErrors        RuntimeErrorEvent[]                   @relation("RuntimeErrorResolver")
+  workerUserLinks              WorkerUserLink[]
+  linkedWorkerUserLinks        WorkerUserLink[]                      @relation("WorkerUserLinkCreator")
+  jobSiteUserAssignments       JobSiteUserAssignment[]
+  assignedJobSiteUsers         JobSiteUserAssignment[]               @relation("JobSiteUserAssignmentCreator")
+  endedJobSiteUsers            JobSiteUserAssignment[]               @relation("JobSiteUserAssignmentEnder")
+  assignedJobSiteWorkers       JobSiteWorkerAssignment[]             @relation("JobSiteWorkerAssignmentCreator")
+  endedJobSiteWorkers          JobSiteWorkerAssignment[]             @relation("JobSiteWorkerAssignmentEnder")
+  linkedDocumentJobSites       DocumentJobSiteLink[]                 @relation("DocumentJobSiteLinkCreator")
+  unlinkedDocumentJobSites     DocumentJobSiteLink[]                 @relation("DocumentJobSiteLinkEnder")
+  organizationContacts         OrganizationContact[]
+  createdOperationalRequests   OperationalRequest[]                  @relation("OperationalRequestCreator")
+  assignedOperationalRequests  OperationalRequest[]                  @relation("OperationalRequestAssignee")
+  completedOperationalRequests OperationalRequest[]                  @relation("OperationalRequestCompleter")
+  contextMessages              ContextMessage[]                      @relation("ContextMessageAuthor")
+  responsibleDocumentSources   DocumentSourcePolicy[]                @relation("DocumentSourceResponsible")
+  requestedSourceChecks        DocumentSourceCheck[]                 @relation("DocumentSourceCheckRequester")
+  confirmedAcquisitions        DocumentAcquisition[]                 @relation("DocumentAcquisitionConfirmer")
+  createdCalendarEvents        CalendarEvent[]                       @relation("CalendarEventCreator")
+  assignedCalendarEvents       CalendarEvent[]                       @relation("CalendarEventAssignee")
+  createdAt                    DateTime                              @default(now())
+  updatedAt                    DateTime                              @updatedAt
 }
 
 model Organization {
@@ -748,8 +878,56 @@ model Organization {
   operationalArtifactRefs       OperationalArtifactReference[]
   operationalRuleSnapshots      OperationalRuleSnapshot[]
   operationalEffectReceipts     OperationalEffectReceipt[]
+  profile                       OrganizationProfile?
+  contacts                      OrganizationContact[]
+  documentJobSiteLinks          DocumentJobSiteLink[]
+  evidenceRevisions             EvidenceRevision[]
+  operationalRequests           OperationalRequest[]
+  contextMessages               ContextMessage[]
+  contextTimelineEvents         ContextTimelineEvent[]
+  documentSourcePolicies        DocumentSourcePolicy[]
+  documentSourceChecks          DocumentSourceCheck[]
+  documentAcquisitions          DocumentAcquisition[]
 
   @@index([name])
+}
+
+model OrganizationProfile {
+  id                      String       @id @default(cuid())
+  organizationId          String       @unique
+  legalName               String?
+  taxCode                 String?
+  vatNumber               String?
+  registeredOfficeAddress String?      @db.Text
+  operatingDescription    String?      @db.Text
+  specializations         String[]     @default([])
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
+  organization            Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, legalName])
+}
+
+model OrganizationContact {
+  id             String                  @id @default(cuid())
+  organizationId String
+  userId         String?
+  kind           OrganizationContactKind @default(GENERAL)
+  name           String
+  email          String?
+  phone          String?
+  position       String?
+  isPrimary      Boolean                 @default(false)
+  sortOrder      Int                     @default(0)
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  archivedAt     DateTime?
+  organization   Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User?                   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, archivedAt, sortOrder])
+  @@index([organizationId, kind, archivedAt])
+  @@index([userId])
 }
 
 model Worker {
@@ -771,6 +949,7 @@ model Worker {
   userLinks          WorkerUserLink[]
   jobSiteAssignments JobSiteWorkerAssignment[]
   invitations        OrganizationInvitation[]
+  packageItems       DocumentPackageItem[]
 
   @@index([organizationId, status])
   @@index([organizationId, displayName])
@@ -784,7 +963,7 @@ model JobSite {
   address           String?
   clientName        String?
   status            RecordStatus              @default(ACTIVE)
-  operationalPhase  JobSiteOperationalPhase?
+  operationalPhase  JobSiteOperationalPhase   @default(DRAFT)
   startDate         DateTime?
   endDate           DateTime?
   notes             String?                   @db.Text
@@ -801,6 +980,7 @@ model JobSite {
   documentPackages  DocumentPackage[]
   userAssignments   JobSiteUserAssignment[]
   workerAssignments JobSiteWorkerAssignment[]
+  documentLinks     DocumentJobSiteLink[]
 
   @@index([organizationId, status])
   @@index([organizationId, name])
@@ -829,61 +1009,82 @@ model WorkerUserLink {
 }
 
 model JobSiteUserAssignment {
-  id             String                    @id @default(cuid())
-  organizationId String
-  jobSiteId      String
-  userId         String
-  assignmentRole JobSiteUserAssignmentRole @default(SITE_MANAGER)
-  assignedById   String
-  createdAt      DateTime                  @default(now())
-  updatedAt      DateTime                  @updatedAt
-  archivedAt     DateTime?
-  organization   Organization              @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  jobSite        JobSite                   @relation(fields: [jobSiteId], references: [id], onDelete: Cascade)
-  user           User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  assignedBy     User                      @relation("JobSiteUserAssignmentCreator", fields: [assignedById], references: [id], onDelete: Restrict)
+  id                   String                    @id @default(cuid())
+  organizationId       String
+  jobSiteId            String
+  userId               String
+  assignmentRole       JobSiteUserAssignmentRole @default(SITE_MANAGER)
+  operationalRoleLabel String?
+  taskLabel            String?
+  startsAt             DateTime                  @default(now())
+  endsAt               DateTime?
+  endedById            String?
+  endReason            String?                   @db.Text
+  assignedById         String
+  createdAt            DateTime                  @default(now())
+  updatedAt            DateTime                  @updatedAt
+  archivedAt           DateTime?
+  organization         Organization              @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  jobSite              JobSite                   @relation(fields: [jobSiteId], references: [id], onDelete: Cascade)
+  user                 User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignedBy           User                      @relation("JobSiteUserAssignmentCreator", fields: [assignedById], references: [id], onDelete: Restrict)
+  endedBy              User?                     @relation("JobSiteUserAssignmentEnder", fields: [endedById], references: [id], onDelete: SetNull)
+  packageItems         DocumentPackageItem[]
 
   @@index([organizationId, jobSiteId, assignmentRole, archivedAt], map: "JobSiteUserAssignment_org_job_role_archived_idx")
   @@index([organizationId, userId, assignmentRole, archivedAt], map: "JobSiteUserAssignment_org_user_role_archived_idx")
   @@index([organizationId, createdAt])
   @@index([assignedById])
+  @@index([organizationId, startsAt, endsAt])
+  @@index([endedById])
 }
 
 model JobSiteWorkerAssignment {
-  id             String       @id @default(cuid())
-  organizationId String
-  jobSiteId      String
-  workerId       String
-  assignedById   String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  archivedAt     DateTime?
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  jobSite        JobSite      @relation(fields: [jobSiteId], references: [id], onDelete: Cascade)
-  worker         Worker       @relation(fields: [workerId], references: [id], onDelete: Cascade)
-  assignedBy     User         @relation("JobSiteWorkerAssignmentCreator", fields: [assignedById], references: [id], onDelete: Restrict)
+  id                   String                @id @default(cuid())
+  organizationId       String
+  jobSiteId            String
+  workerId             String
+  operationalRoleLabel String?
+  taskLabel            String?
+  startsAt             DateTime              @default(now())
+  endsAt               DateTime?
+  endedById            String?
+  endReason            String?               @db.Text
+  assignedById         String
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  archivedAt           DateTime?
+  organization         Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  jobSite              JobSite               @relation(fields: [jobSiteId], references: [id], onDelete: Cascade)
+  worker               Worker                @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  assignedBy           User                  @relation("JobSiteWorkerAssignmentCreator", fields: [assignedById], references: [id], onDelete: Restrict)
+  endedBy              User?                 @relation("JobSiteWorkerAssignmentEnder", fields: [endedById], references: [id], onDelete: SetNull)
+  packageItems         DocumentPackageItem[]
 
   @@index([organizationId, jobSiteId, archivedAt], map: "JobSiteWorkerAssignment_org_job_archived_idx")
   @@index([organizationId, workerId, archivedAt], map: "JobSiteWorkerAssignment_org_worker_archived_idx")
   @@index([organizationId, createdAt])
   @@index([assignedById])
+  @@index([organizationId, startsAt, endsAt])
+  @@index([endedById])
 }
 
 model DocumentType {
-  id                 String                @id @default(cuid())
+  id                 String                 @id @default(cuid())
   organizationId     String
   name               String
-  description        String?               @db.Text
+  description        String?                @db.Text
   appliesTo          DocumentTypeAppliesTo
-  categoryKey        DocumentCategoryKey   @default(UNCLASSIFIED)
-  sensitivity        DocumentSensitivity   @default(STANDARD)
-  requiresExpiryDate Boolean               @default(false)
-  createdAt          DateTime              @default(now())
-  updatedAt          DateTime              @updatedAt
+  categoryKey        DocumentCategoryKey    @default(UNCLASSIFIED)
+  sensitivity        DocumentSensitivity    @default(STANDARD)
+  requiresExpiryDate Boolean                @default(false)
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
   archivedAt         DateTime?
-  organization       Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization       Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   documents          Document[]
   requirements       DocumentRequirement[]
+  sourcePolicies     DocumentSourcePolicy[]
 
   @@index([organizationId, appliesTo])
   @@index([organizationId, categoryKey, archivedAt], map: "DocumentType_org_category_archived_idx")
@@ -891,29 +1092,34 @@ model DocumentType {
 }
 
 model Document {
-  id             String                @id @default(cuid())
-  organizationId String
-  documentTypeId String?
-  ownerType      DocumentOwnerType
-  workerId       String?
-  jobSiteId      String?
-  title          String
-  status         DocumentStatus        @default(TO_REVIEW)
-  expiryDate     DateTime?
-  reviewedAt     DateTime?
-  reviewedById   String?
-  notes          String?               @db.Text
-  createdAt      DateTime              @default(now())
-  updatedAt      DateTime              @updatedAt
-  archivedAt     DateTime?
-  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  documentType   DocumentType?         @relation(fields: [documentTypeId], references: [id], onDelete: SetNull)
-  worker         Worker?               @relation(fields: [workerId], references: [id], onDelete: SetNull)
-  jobSite        JobSite?              @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
-  reviewedBy     User?                 @relation("DocumentReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
-  versions       DocumentVersion[]
-  deadlines      Deadline[]
-  packageItems   DocumentPackageItem[]
+  id               String                @id @default(cuid())
+  organizationId   String
+  documentTypeId   String?
+  currentVersionId String?               @unique
+  ownerType        DocumentOwnerType
+  workerId         String?
+  jobSiteId        String?
+  title            String
+  status           DocumentStatus        @default(TO_REVIEW)
+  expiryDate       DateTime?
+  reviewedAt       DateTime?
+  reviewedById     String?
+  notes            String?               @db.Text
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  archivedAt       DateTime?
+  organization     Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  documentType     DocumentType?         @relation(fields: [documentTypeId], references: [id], onDelete: SetNull)
+  currentVersion   DocumentVersion?      @relation("DocumentCurrentVersion", fields: [currentVersionId], references: [id], onDelete: SetNull)
+  worker           Worker?               @relation(fields: [workerId], references: [id], onDelete: SetNull)
+  jobSite          JobSite?              @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
+  reviewedBy       User?                 @relation("DocumentReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  versions         DocumentVersion[]
+  deadlines        Deadline[]
+  packageItems     DocumentPackageItem[]
+  jobSiteLinks     DocumentJobSiteLink[]
+  sourceChecks     DocumentSourceCheck[]
+  acquisitions     DocumentAcquisition[]
 
   @@index([organizationId, status])
   @@index([organizationId, ownerType])
@@ -925,25 +1131,61 @@ model Document {
 }
 
 model DocumentVersion {
-  id               String                @id @default(cuid())
-  organizationId   String
-  documentId       String
-  blobKey          String
-  originalFileName String
-  mimeType         String
-  size             Int
-  checksum         String?
-  uploadedById     String
-  createdAt        DateTime              @default(now())
-  archivedAt       DateTime?
-  organization     Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  document         Document              @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  uploadedBy       User                  @relation("DocumentVersionUploader", fields: [uploadedById], references: [id], onDelete: Restrict)
-  packageItems     DocumentPackageItem[]
+  id                 String                      @id @default(cuid())
+  organizationId     String
+  documentId         String
+  blobKey            String
+  originalFileName   String
+  mimeType           String
+  size               Int
+  checksum           String?
+  uploadedById       String
+  reviewStatus       DocumentVersionReviewStatus @default(TO_REVIEW)
+  reviewedById       String?
+  reviewedAt         DateTime?
+  reviewReason       String?                     @db.Text
+  createdAt          DateTime                    @default(now())
+  archivedAt         DateTime?
+  organization       Organization                @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  document           Document                    @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  uploadedBy         User                        @relation("DocumentVersionUploader", fields: [uploadedById], references: [id], onDelete: Restrict)
+  reviewedBy         User?                       @relation("DocumentVersionReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  currentForDocument Document?                   @relation("DocumentCurrentVersion")
+  packageItems       DocumentPackageItem[]
+  acquisitions       DocumentAcquisition[]
 
   @@index([organizationId, documentId, createdAt])
   @@index([organizationId, uploadedById])
+  @@index([organizationId, documentId, reviewStatus, createdAt])
+  @@index([reviewedById])
   @@index([organizationId, blobKey])
+}
+
+model DocumentJobSiteLink {
+  id             String       @id @default(cuid())
+  organizationId String
+  documentId     String
+  jobSiteId      String
+  purpose        String?
+  validFrom      DateTime?
+  validTo        DateTime?
+  linkedById     String
+  unlinkedAt     DateTime?
+  unlinkedById   String?
+  unlinkReason   String?      @db.Text
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  document       Document     @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  jobSite        JobSite      @relation(fields: [jobSiteId], references: [id], onDelete: Cascade)
+  linkedBy       User         @relation("DocumentJobSiteLinkCreator", fields: [linkedById], references: [id], onDelete: Restrict)
+  unlinkedBy     User?        @relation("DocumentJobSiteLinkEnder", fields: [unlinkedById], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, documentId, unlinkedAt])
+  @@index([organizationId, jobSiteId, unlinkedAt])
+  @@index([organizationId, validFrom, validTo])
+  @@index([linkedById])
+  @@index([unlinkedById])
 }
 
 model DocumentRequirement {
@@ -1076,18 +1318,28 @@ model Evidence {
   type             EvidenceType
   title            String
   description      String?               @db.Text
+  sensitivity      EvidenceSensitivity   @default(INTERNAL)
+  reviewStatus     EvidenceReviewStatus  @default(RECORDED)
+  origin           EvidenceOrigin        @default(DIRECT_UPLOAD)
+  capturedAt       DateTime?
+  reviewedById     String?
+  reviewedAt       DateTime?
+  reviewReason     String?               @db.Text
   blobKey          String?
   originalFileName String?
   mimeType         String?
   size             Int?
   createdById      String
   createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
   archivedAt       DateTime?
   organization     Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   jobSite          JobSite?              @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
   worker           Worker?               @relation(fields: [workerId], references: [id], onDelete: SetNull)
   checklistItem    ChecklistItem?        @relation(fields: [checklistItemId], references: [id], onDelete: SetNull)
   createdBy        User                  @relation("EvidenceCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  reviewedBy       User?                 @relation("EvidenceReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  revisions        EvidenceRevision[]
   packageItems     DocumentPackageItem[]
 
   @@index([organizationId, type])
@@ -1095,7 +1347,32 @@ model Evidence {
   @@index([organizationId, workerId])
   @@index([organizationId, checklistItemId])
   @@index([organizationId, createdAt])
+  @@index([organizationId, reviewStatus, sensitivity, createdAt])
+  @@index([reviewedById])
   @@index([organizationId, title])
+}
+
+model EvidenceRevision {
+  id             String               @id @default(cuid())
+  organizationId String
+  evidenceId     String
+  revisionNumber Int
+  title          String
+  description    String?              @db.Text
+  sensitivity    EvidenceSensitivity
+  reviewStatus   EvidenceReviewStatus
+  capturedAt     DateTime?
+  origin         EvidenceOrigin
+  reason         String?              @db.Text
+  createdById    String
+  createdAt      DateTime             @default(now())
+  organization   Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  evidence       Evidence             @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+  createdBy      User                 @relation("EvidenceRevisionActor", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@unique([evidenceId, revisionNumber])
+  @@index([organizationId, evidenceId, createdAt])
+  @@index([createdById])
 }
 
 model DocumentPackage {
@@ -1124,29 +1401,47 @@ model DocumentPackage {
 }
 
 model DocumentPackageItem {
-  id                String                  @id @default(cuid())
-  organizationId    String
-  documentPackageId String
-  itemType          DocumentPackageItemType
-  documentId        String?
-  documentVersionId String?
-  evidenceId        String?
-  checklistId       String?
-  note              String?                 @db.Text
-  position          Int                     @default(0)
-  createdAt         DateTime                @default(now())
-  organization      Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  documentPackage   DocumentPackage         @relation(fields: [documentPackageId], references: [id], onDelete: Cascade)
-  document          Document?               @relation(fields: [documentId], references: [id], onDelete: SetNull)
-  documentVersion   DocumentVersion?        @relation(fields: [documentVersionId], references: [id], onDelete: SetNull)
-  evidence          Evidence?               @relation(fields: [evidenceId], references: [id], onDelete: SetNull)
-  checklist         Checklist?              @relation(fields: [checklistId], references: [id], onDelete: SetNull)
+  id                        String                   @id @default(cuid())
+  organizationId            String
+  documentPackageId         String
+  itemType                  DocumentPackageItemType
+  documentId                String?
+  documentVersionId         String?
+  evidenceId                String?
+  checklistId               String?
+  workerId                  String?
+  jobSiteUserAssignmentId   String?
+  jobSiteWorkerAssignmentId String?
+  operationalRequestId      String?
+  contextMessageId          String?
+  contextTimelineEventId    String?
+  note                      String?                  @db.Text
+  position                  Int                      @default(0)
+  createdAt                 DateTime                 @default(now())
+  organization              Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  documentPackage           DocumentPackage          @relation(fields: [documentPackageId], references: [id], onDelete: Cascade)
+  document                  Document?                @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  documentVersion           DocumentVersion?         @relation(fields: [documentVersionId], references: [id], onDelete: SetNull)
+  evidence                  Evidence?                @relation(fields: [evidenceId], references: [id], onDelete: SetNull)
+  checklist                 Checklist?               @relation(fields: [checklistId], references: [id], onDelete: SetNull)
+  worker                    Worker?                  @relation(fields: [workerId], references: [id], onDelete: SetNull)
+  jobSiteUserAssignment     JobSiteUserAssignment?   @relation(fields: [jobSiteUserAssignmentId], references: [id], onDelete: SetNull)
+  jobSiteWorkerAssignment   JobSiteWorkerAssignment? @relation(fields: [jobSiteWorkerAssignmentId], references: [id], onDelete: SetNull)
+  operationalRequest        OperationalRequest?      @relation(fields: [operationalRequestId], references: [id], onDelete: SetNull)
+  contextMessage            ContextMessage?          @relation(fields: [contextMessageId], references: [id], onDelete: SetNull)
+  contextTimelineEvent      ContextTimelineEvent?    @relation(fields: [contextTimelineEventId], references: [id], onDelete: SetNull)
 
   @@index([organizationId, documentPackageId, position])
   @@index([organizationId, documentId])
   @@index([organizationId, documentVersionId])
   @@index([organizationId, evidenceId])
   @@index([organizationId, checklistId])
+  @@index([organizationId, workerId])
+  @@index([organizationId, jobSiteUserAssignmentId])
+  @@index([organizationId, jobSiteWorkerAssignmentId])
+  @@index([organizationId, operationalRequestId])
+  @@index([organizationId, contextMessageId])
+  @@index([organizationId, contextTimelineEventId])
 }
 
 model DocumentPackageRevision {
@@ -1173,6 +1468,163 @@ model DocumentPackageRevision {
   @@unique([documentPackageId, revisionNumber])
   @@index([organizationId, documentPackageId, createdAt])
   @@index([organizationId, status, createdAt])
+}
+
+model OperationalRequest {
+  id             String                   @id @default(cuid())
+  organizationId String
+  targetType     OperationalArtifactType
+  targetId       String
+  title          String
+  description    String?                  @db.Text
+  status         OperationalRequestStatus @default(OPEN)
+  assigneeUserId String?
+  dueAt          DateTime?
+  outcome        String?                  @db.Text
+  createdById    String
+  completedById  String?
+  completedAt    DateTime?
+  cancelledAt    DateTime?
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+  organization   Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignee       User?                    @relation("OperationalRequestAssignee", fields: [assigneeUserId], references: [id], onDelete: SetNull)
+  createdBy      User                     @relation("OperationalRequestCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  completedBy    User?                    @relation("OperationalRequestCompleter", fields: [completedById], references: [id], onDelete: SetNull)
+  messages       ContextMessage[]
+  packageItems   DocumentPackageItem[]
+
+  @@index([organizationId, status, dueAt])
+  @@index([organizationId, assigneeUserId, status])
+  @@index([organizationId, targetType, targetId, createdAt])
+  @@index([createdById])
+  @@index([completedById])
+}
+
+model ContextMessage {
+  id             String                   @id @default(cuid())
+  organizationId String
+  requestId      String?
+  targetType     OperationalArtifactType
+  targetId       String
+  visibility     ContextMessageVisibility @default(INTERNAL)
+  body           String                   @db.Text
+  authorId       String
+  createdAt      DateTime                 @default(now())
+  organization   Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  request        OperationalRequest?      @relation(fields: [requestId], references: [id], onDelete: SetNull)
+  author         User                     @relation("ContextMessageAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  packageItems   DocumentPackageItem[]
+
+  @@index([organizationId, targetType, targetId, createdAt])
+  @@index([organizationId, requestId, createdAt])
+  @@index([authorId, createdAt])
+}
+
+model ContextTimelineEvent {
+  id             String                     @id @default(cuid())
+  organizationId String
+  eventKey       String
+  targetType     OperationalArtifactType
+  targetId       String
+  eventType      OperationalEventType
+  title          String
+  summary        String?                    @db.Text
+  metadata       Json?
+  actorUserId    String?
+  actorType      OperationalActorType       @default(USER)
+  actorRole      OrganizationRole?
+  sourceType     OperationalEventSourceType @default(DOMAIN)
+  sourceId       String?
+  reliability    OperationalReliability     @default(VERIFIED)
+  impact         OperationalImpact          @default(LOW)
+  occurredAt     DateTime                   @default(now())
+  organization   Organization               @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  packageItems   DocumentPackageItem[]
+
+  @@unique([organizationId, eventKey])
+  @@index([organizationId, targetType, targetId, occurredAt])
+  @@index([organizationId, eventType, occurredAt])
+}
+
+model DocumentSourcePolicy {
+  id                String                @id @default(cuid())
+  organizationId    String
+  documentTypeId    String?
+  categoryKey       DocumentCategoryKey
+  sourceType        DocumentSourceType
+  responsibleUserId String?
+  label             String
+  triggerKinds      String[]              @default([])
+  allowSharing      Boolean               @default(false)
+  allowAi           Boolean               @default(false)
+  enabled           Boolean               @default(true)
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  archivedAt        DateTime?
+  organization      Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  documentType      DocumentType?         @relation(fields: [documentTypeId], references: [id], onDelete: SetNull)
+  responsibleUser   User?                 @relation("DocumentSourceResponsible", fields: [responsibleUserId], references: [id], onDelete: SetNull)
+  checks            DocumentSourceCheck[]
+  acquisitions      DocumentAcquisition[]
+
+  @@index([organizationId, categoryKey, archivedAt])
+  @@index([organizationId, documentTypeId, archivedAt])
+  @@index([responsibleUserId])
+}
+
+model DocumentSourceCheck {
+  id             String                    @id @default(cuid())
+  organizationId String
+  policyId       String
+  documentId     String?
+  status         DocumentSourceCheckStatus @default(PENDING)
+  triggerKind    String
+  summary        String?                   @db.Text
+  errorCode      String?
+  nextCheckAt    DateTime?
+  requestedById  String?
+  createdAt      DateTime                  @default(now())
+  completedAt    DateTime?
+  organization   Organization              @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  policy         DocumentSourcePolicy      @relation(fields: [policyId], references: [id], onDelete: Cascade)
+  document       Document?                 @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  requestedBy    User?                     @relation("DocumentSourceCheckRequester", fields: [requestedById], references: [id], onDelete: SetNull)
+  acquisitions   DocumentAcquisition[]
+
+  @@index([organizationId, status, createdAt])
+  @@index([organizationId, policyId, createdAt])
+  @@index([organizationId, documentId, createdAt])
+  @@index([requestedById])
+}
+
+model DocumentAcquisition {
+  id                String                    @id @default(cuid())
+  organizationId    String
+  policyId          String?
+  checkId           String?
+  documentId        String
+  documentVersionId String?
+  sourceType        DocumentSourceType
+  status            DocumentAcquisitionStatus @default(PENDING_REVIEW)
+  provenanceLabel   String
+  checksum          String?
+  errorCode         String?
+  confirmedById     String?
+  confirmedAt       DateTime?
+  createdAt         DateTime                  @default(now())
+  organization      Organization              @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  policy            DocumentSourcePolicy?     @relation(fields: [policyId], references: [id], onDelete: SetNull)
+  check             DocumentSourceCheck?      @relation(fields: [checkId], references: [id], onDelete: SetNull)
+  document          Document                  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  documentVersion   DocumentVersion?          @relation(fields: [documentVersionId], references: [id], onDelete: SetNull)
+  confirmedBy       User?                     @relation("DocumentAcquisitionConfirmer", fields: [confirmedById], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, documentId, createdAt])
+  @@index([organizationId, policyId, status])
+  @@index([organizationId, checkId])
+  @@index([documentVersionId])
+  @@index([confirmedById])
 }
 
 model DocumentPackageShareProposal {

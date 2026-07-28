@@ -432,10 +432,6 @@ export type OperationalEventArtifactReferenceUncheckedUpdateManyWithoutEventNest
   deleteMany?: Prisma.OperationalEventArtifactReferenceScalarWhereInput | Prisma.OperationalEventArtifactReferenceScalarWhereInput[]
 }
 
-export type EnumOperationalArtifactTypeFieldUpdateOperationsInput = {
-  set?: $Enums.OperationalArtifactType
-}
-
 export type OperationalEventArtifactReferenceCreateWithoutOrganizationInput = {
   id?: string
   artifactType: $Enums.OperationalArtifactType

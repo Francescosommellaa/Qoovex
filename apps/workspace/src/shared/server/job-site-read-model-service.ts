@@ -186,7 +186,7 @@ export async function getJobSiteOverview(): Promise<JobSiteOverviewResponse> {
     for (const key of ["missingDocuments", "expiredDocuments", "documentsToReview", "openChecklistItems", "checklistItemsToReview", "overdueDeadlines", "upcomingDeadlines", "managerCount", "workerCount", "readyPackages", "attentionScore"] as const) sum[key] += item.summary[key];
     return sum;
   }, { ...emptySummary });
-  const phaseCounts: JobSiteOverviewResponse["phaseCounts"] = { PREPARATION: 0, IN_PROGRESS: 0, PAUSED: 0, CLOSING: 0, COMPLETED: 0, UNSET: 0 };
+  const phaseCounts: JobSiteOverviewResponse["phaseCounts"] = { DRAFT: 0, PREPARATION: 0, IN_PROGRESS: 0, PAUSED: 0, CLOSING: 0, COMPLETED: 0, UNSET: 0 };
   for (const item of items) phaseCounts[item.operationalPhase ?? "UNSET"] += 1;
   const names = new Map(rows.map((row) => [row.id, row.name]));
   const recentActivity = [

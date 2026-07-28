@@ -9,7 +9,9 @@ describe("organization authorization policy", () => {
   it("does not infer collaborator permissions from the role", () => {
     expect(getPermissionsForRole("COLLABORATOR")).toEqual([]);
     expect(getPermissionsForPreset("READ_ONLY")).toContain("documents:file:read");
+    expect(getPermissionsForPreset("READ_ONLY")).toContain("evidence:file:read");
     expect(getPermissionsForPreset("DOCUMENT_REVIEWER")).toContain("documents:verify");
+    expect(getPermissionsForPreset("DOCUMENT_REVIEWER")).not.toContain("evidence:sensitive:read");
     expect(getPermissionsForPreset("LIMITED_UPLOAD")).not.toContain("documents:verify");
   });
 
@@ -36,6 +38,6 @@ describe("organization authorization policy", () => {
 
   it("keeps temporary support sessions metadata-only and non-mutating", () => {
     expect(getSupportSessionPermissions()).toEqual(expect.arrayContaining(["organization:read", "members:read", "processes:read"]));
-    expect(getSupportSessionPermissions()).not.toEqual(expect.arrayContaining(["documents:file:read", "documents:upload", "members:manage", "documentPackages:share"]));
+    expect(getSupportSessionPermissions()).not.toEqual(expect.arrayContaining(["documents:file:read", "evidence:file:read", "evidence:sensitive:read", "documents:upload", "members:manage", "documentPackages:share"]));
   });
 });

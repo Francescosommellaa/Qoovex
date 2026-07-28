@@ -8,6 +8,8 @@ Il Workspace usa una sola shell adattiva. La navigazione primaria contiene solta
 
 In locale, un solo dropdown nella topbar passa tra le viste `Owner`, `Support Agent` e `Platform Admin`; il vecchio banner di cambio vista e stato eliminato. Il profilo dev e il comando `Accedi come dev` restano invariati. La sezione Accessi usa un invito progressivo in quattro passaggi con preset, scope `FULL/ASSIGNED`, risorse selezionate, permessi raggruppati e riepilogo; la modifica di un Collaborator mostra differenze prima della conferma.
 
+Sirio include la prova `/dashboard/operational-workspace` per profilo, cantiere, prova mobile, richieste, review pacchetto e timeline. Workspace promuove il profilo azienda in `/settings/organization-profile`, la state machine e il lavoro contestuale nel dettaglio cantiere, e gli stati di revisione su versioni e prove. Le sette sezioni del cantiere, la ricerca modal-only, le notifiche topbar e le azioni rapide restano invariati.
+
 `/dashboard` conserva compatibilita URL ma presenta “Centro operativo”. L'ingresso universale responsive apre i flussi controllati esistenti; `/operations/[processId]` mostra stato reale, step, timeline, decisioni, eccezioni e artifact. Le viste di dominio restano controllo avanzato.
 
 Le nuove composizioni usano esclusivamente primitive canoniche gia presenti. Restano vincolanti focus visibile, tastiera, touch, zoom 200%, contenuti lunghi, reduced motion, forced colors, light/dark/system e nessuna capability simulata.

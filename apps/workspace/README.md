@@ -16,6 +16,8 @@ Il dominio comprende lavoratori, cantieri, documenti e versioni private, tipi/re
 
 Il registry server-side versionato contiene `DOCUMENT_RECEIVED@1`, `WORKER_CREATED@1`, `JOB_SITE_CREATED@1`, `CONTINUOUS_CONTROL@1` e `DOCUMENT_PACKAGE_SHARING@1`. Il lifecycle centralizzato usa idempotenza, claim atomico, lease di cinque minuti, fencing, massimo cinque tentativi, backoff 1/5/15/60 minuti, snapshot minimizzati ed effect receipt.
 
+Lo spazio operativo contestuale aggiunge profilo e contatti azienda, lifecycle esplicito delle versioni, link documento-cantiere, assegnazioni storiche, prove classificate/revisionate, richieste, messaggi, timeline e fonti manuali guidate. File e sensibilita richiedono permessi distinti; Support resta metadata-only. La migration `20260728030000_operational_workspace_expansion` e presente ma non va dichiarata distribuita finche il wrapper, Prisma e i workflow remoti non sono verdi.
+
 Il runner usa l'infrastruttura scheduled esistente e `CRON_SECRET`. Affidabilita e impatto sono derivati dal server: il client non puo impostare liberamente stati o transizioni. Le decisioni e i retry richiedono il permesso della mutazione sottostante; le eccezioni oggettive non sono chiudibili manualmente.
 
 ## Confini

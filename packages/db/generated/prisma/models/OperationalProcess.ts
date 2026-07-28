@@ -750,14 +750,6 @@ export type EnumOperationalProcessStatusFieldUpdateOperationsInput = {
   set?: $Enums.OperationalProcessStatus
 }
 
-export type EnumOperationalReliabilityFieldUpdateOperationsInput = {
-  set?: $Enums.OperationalReliability
-}
-
-export type EnumOperationalImpactFieldUpdateOperationsInput = {
-  set?: $Enums.OperationalImpact
-}
-
 export type OperationalProcessCreateNestedOneWithoutStepsInput = {
   create?: Prisma.XOR<Prisma.OperationalProcessCreateWithoutStepsInput, Prisma.OperationalProcessUncheckedCreateWithoutStepsInput>
   connectOrCreate?: Prisma.OperationalProcessCreateOrConnectWithoutStepsInput

@@ -7,8 +7,11 @@ const mocks = vi.hoisted(() => ({
     worker: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     jobSite: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     workerUserLink: { findFirst: vi.fn() },
-    jobSiteUserAssignment: { findMany: vi.fn() },
-    jobSiteWorkerAssignment: { findMany: vi.fn() },
+    jobSiteUserAssignment: { findMany: vi.fn(), count: vi.fn() },
+    jobSiteWorkerAssignment: { findMany: vi.fn(), count: vi.fn() },
+    operationalRequest: { count: vi.fn() },
+    checklistItem: { count: vi.fn() },
+    document: { count: vi.fn() },
     organizationMembership: { findMany: vi.fn(), findFirst: vi.fn() },
   },
   getWorkspaceAccessContext: vi.fn(),
@@ -16,6 +19,7 @@ const mocks = vi.hoisted(() => ({
   requirePermission: vi.fn(),
   recordSupportAccess: vi.fn(),
   enqueueOperationalProcess: vi.fn(),
+  appendContextTimelineEvent: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -35,8 +39,9 @@ vi.mock("@shared/server/access-context-service", () => ({
 }));
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
 vi.mock("@shared/server/operational-process-service", () => ({ enqueueOperationalProcess: mocks.enqueueOperationalProcess }));
+vi.mock("@shared/server/context-timeline-service", () => ({ appendContextTimelineEvent: mocks.appendContextTimelineEvent }));
 
-import { archiveJobSite, createJobSite, getJobSite, listJobSites, updateJobSite } from "./job-site-service";
+import { archiveJobSite, createJobSite, getJobSite, listJobSites, transitionJobSiteOperationalPhase, updateJobSite } from "./job-site-service";
 import { archiveWorker, createWorker, getWorker, listWorkers, updateWorker } from "./worker-service";
 
 const now = new Date("2026-06-30T12:00:00.000Z");
@@ -98,16 +103,25 @@ beforeEach(() => {
   resetModel(mocks.db.workerUserLink);
   resetModel(mocks.db.jobSiteUserAssignment);
   resetModel(mocks.db.jobSiteWorkerAssignment);
+  resetModel(mocks.db.operationalRequest);
+  resetModel(mocks.db.checklistItem);
+  resetModel(mocks.db.document);
   resetModel(mocks.db.organizationMembership);
   mocks.getWorkspaceAccessContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
   mocks.recordSupportAccess.mockReset();
   mocks.enqueueOperationalProcess.mockReset().mockResolvedValue({ id: "process-1" });
+  mocks.appendContextTimelineEvent.mockReset().mockResolvedValue({ id: "timeline-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.recordSupportAccess.mockResolvedValue(undefined);
   mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([]);
+  mocks.db.jobSiteUserAssignment.count.mockResolvedValue(0);
+  mocks.db.jobSiteWorkerAssignment.count.mockResolvedValue(0);
+  mocks.db.operationalRequest.count.mockResolvedValue(0);
+  mocks.db.checklistItem.count.mockResolvedValue(0);
+  mocks.db.document.count.mockResolvedValue(0);
   mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-1", resourceGrants: [] });
@@ -280,6 +294,28 @@ describe("job site service", () => {
     expect(mocks.db.jobSite.findFirst).toHaveBeenCalledWith(expect.objectContaining({
       where: { id: "jobsite-foreign", organizationId: "org-1", archivedAt: null },
     }));
+  });
+
+  it("prevents phase changes through generic updates and enforces the canonical state machine", async () => {
+    mocks.db.jobSite.findFirst.mockResolvedValue({ id: "jobsite-1", name: "Cantiere Centro", startDate: null, endDate: null, operationalPhase: "PREPARATION" });
+    await expect(updateJobSite("jobsite-1", { operationalPhase: "COMPLETED" })).rejects.toMatchObject({ status: 409 });
+    await expect(transitionJobSiteOperationalPhase("jobsite-1", { nextPhase: "COMPLETED" })).rejects.toMatchObject({ status: 409 });
+    expect(mocks.db.jobSite.update).not.toHaveBeenCalled();
+  });
+
+  it("requires an owner override with reason when opening a blocked job site", async () => {
+    mocks.db.jobSite.findFirst.mockResolvedValue({ id: "jobsite-1", name: "Cantiere Centro", operationalPhase: "PREPARATION" });
+    mocks.db.operationalRequest.count.mockResolvedValue(1);
+    mocks.db.checklistItem.count.mockResolvedValue(2);
+    mocks.db.document.count.mockResolvedValue(1);
+    await expect(transitionJobSiteOperationalPhase("jobsite-1", { nextPhase: "IN_PROGRESS" })).rejects.toMatchObject({ status: 409 });
+
+    mocks.db.jobSite.update.mockResolvedValue({ ...jobSiteRecord, operationalPhase: "IN_PROGRESS", updatedAt: now });
+    await expect(transitionJobSiteOperationalPhase("jobsite-1", { nextPhase: "IN_PROGRESS", overrideConfirmed: true, reason: "Apertura autorizzata con piano di rientro." })).resolves.toMatchObject({
+      jobSite: { operationalPhase: "IN_PROGRESS" },
+      blockers: { openRequests: 1, openChecklistItems: 2, criticalDocuments: 1 },
+    });
+    expect(mocks.appendContextTimelineEvent).toHaveBeenCalledWith(expect.objectContaining({ eventType: "JOB_SITE_PHASE_CHANGED", targetId: "jobsite-1" }));
   });
 
   it("rejects invalid job site input, date ranges and coordinates", async () => {

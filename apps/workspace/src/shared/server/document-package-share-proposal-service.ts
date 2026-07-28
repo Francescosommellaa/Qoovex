@@ -49,6 +49,12 @@ const packageForRevisionSelect = {
       documentVersionId: true,
       evidenceId: true,
       checklistId: true,
+      workerId: true,
+      jobSiteUserAssignmentId: true,
+      jobSiteWorkerAssignmentId: true,
+      operationalRequestId: true,
+      contextMessageId: true,
+      contextTimelineEventId: true,
       createdAt: true,
       document: {
         select: {
@@ -66,6 +72,7 @@ const packageForRevisionSelect = {
           originalFileName: true,
           mimeType: true,
           size: true,
+          reviewStatus: true,
           archivedAt: true,
           document: {
             select: {
@@ -88,10 +95,30 @@ const packageForRevisionSelect = {
           mimeType: true,
           size: true,
           blobKey: true,
+          sensitivity: true,
+          reviewStatus: true,
           archivedAt: true,
         },
       },
       checklist: { select: { id: true, name: true, status: true, archivedAt: true } },
+      worker: { select: { id: true, displayName: true, roleLabel: true, status: true, archivedAt: true } },
+      jobSiteUserAssignment: {
+        select: {
+          id: true, assignmentRole: true, operationalRoleLabel: true, taskLabel: true, startsAt: true, endsAt: true, archivedAt: true,
+          user: { select: { firstName: true, lastName: true, name: true } },
+          jobSite: { select: { name: true } },
+        },
+      },
+      jobSiteWorkerAssignment: {
+        select: {
+          id: true, operationalRoleLabel: true, taskLabel: true, startsAt: true, endsAt: true, archivedAt: true,
+          worker: { select: { displayName: true } },
+          jobSite: { select: { name: true } },
+        },
+      },
+      operationalRequest: { select: { id: true, title: true, description: true, status: true, dueAt: true } },
+      contextMessage: { select: { id: true, body: true, visibility: true, createdAt: true } },
+      contextTimelineEvent: { select: { id: true, title: true, summary: true, eventType: true, occurredAt: true } },
     },
     orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],
   },
@@ -196,6 +223,12 @@ export function buildDocumentPackageRevisionManifest(value: PackageForRevision, 
       documentVersionId: item.documentVersionId,
       evidenceId: item.evidenceId,
       checklistId: item.checklistId,
+      workerId: item.workerId,
+      jobSiteUserAssignmentId: item.jobSiteUserAssignmentId,
+      jobSiteWorkerAssignmentId: item.jobSiteWorkerAssignmentId,
+      operationalRequestId: item.operationalRequestId,
+      contextMessageId: item.contextMessageId,
+      contextTimelineEventId: item.contextTimelineEventId,
       included: true,
       exclusionReason: null,
       hasFile: false,
@@ -221,6 +254,7 @@ export function buildDocumentPackageRevisionManifest(value: PackageForRevision, 
         continue;
       }
       const currentIssues = documentIssues(item.documentVersion.document, item.id, now);
+      if (item.documentVersion.reviewStatus !== "CURRENT") currentIssues.push(issue("DOCUMENT_VERSION_NOT_CURRENT", "BLOCKING", "Versione documento non approvata come corrente", item.id));
       issues.push(...currentIssues);
       const blocked = currentIssues.some((entry) => entry.severity === "BLOCKING");
       items.push({
@@ -243,11 +277,18 @@ export function buildDocumentPackageRevisionManifest(value: PackageForRevision, 
         items.push({ ...base, included: false, exclusionReason: "Prova non disponibile" });
         continue;
       }
+      const evidenceIssues: DocumentPackageRevisionIssueDto[] = [];
+      if (item.evidence.reviewStatus !== "ACCEPTED") evidenceIssues.push(issue("EVIDENCE_NOT_APPROVED", "BLOCKING", "Prova non approvata", item.id));
+      if (item.evidence.sensitivity !== "SHAREABLE") evidenceIssues.push(issue("EVIDENCE_NOT_SHAREABLE", "BLOCKING", "Prova non classificata come condivisibile", item.id));
+      issues.push(...evidenceIssues);
+      const blocked = evidenceIssues.length > 0;
       items.push({
         ...base,
         title: item.evidence.title,
         status: item.evidence.type,
-        hasFile: Boolean(item.evidence.blobKey),
+        included: !blocked,
+        exclusionReason: blocked ? "Prova non condivisibile" : null,
+        hasFile: !blocked && Boolean(item.evidence.blobKey),
         originalFileName: item.evidence.originalFileName,
         mimeType: item.evidence.mimeType,
         size: item.evidence.size,
@@ -262,6 +303,69 @@ export function buildDocumentPackageRevisionManifest(value: PackageForRevision, 
         continue;
       }
       items.push({ ...base, title: item.checklist.name, status: item.checklist.status });
+      continue;
+    }
+
+    if (item.itemType === "WORKER") {
+      if (!item.worker || item.worker.archivedAt) {
+        issues.push(issue("MISSING_REFERENCE", "BLOCKING", "Lavoratore non disponibile", item.id));
+        items.push({ ...base, included: false, exclusionReason: "Lavoratore non disponibile" });
+      } else {
+        items.push({ ...base, title: item.worker.displayName, status: item.worker.status, note: item.worker.roleLabel });
+      }
+      continue;
+    }
+
+    if (item.itemType === "JOB_SITE_USER_ASSIGNMENT") {
+      const assignment = item.jobSiteUserAssignment;
+      if (!assignment || assignment.archivedAt) {
+        issues.push(issue("MISSING_REFERENCE", "BLOCKING", "Assegnazione utente non disponibile", item.id));
+        items.push({ ...base, included: false, exclusionReason: "Assegnazione non disponibile" });
+      } else {
+        const person = [assignment.user.firstName, assignment.user.lastName].filter(Boolean).join(" ") || assignment.user.name || "Utente";
+        items.push({ ...base, title: `${person} · ${assignment.jobSite.name}`, status: assignment.endsAt ? "ENDED" : "ACTIVE", note: assignment.operationalRoleLabel || assignment.taskLabel || assignment.assignmentRole });
+      }
+      continue;
+    }
+
+    if (item.itemType === "JOB_SITE_WORKER_ASSIGNMENT") {
+      const assignment = item.jobSiteWorkerAssignment;
+      if (!assignment || assignment.archivedAt) {
+        issues.push(issue("MISSING_REFERENCE", "BLOCKING", "Assegnazione lavoratore non disponibile", item.id));
+        items.push({ ...base, included: false, exclusionReason: "Assegnazione non disponibile" });
+      } else {
+        items.push({ ...base, title: `${assignment.worker.displayName} · ${assignment.jobSite.name}`, status: assignment.endsAt ? "ENDED" : "ACTIVE", note: assignment.operationalRoleLabel || assignment.taskLabel });
+      }
+      continue;
+    }
+
+    if (item.itemType === "OPERATIONAL_REQUEST") {
+      if (!item.operationalRequest) {
+        issues.push(issue("MISSING_REFERENCE", "BLOCKING", "Richiesta non disponibile", item.id));
+        items.push({ ...base, included: false, exclusionReason: "Richiesta non disponibile" });
+      } else {
+        items.push({ ...base, title: item.operationalRequest.title, status: item.operationalRequest.status, note: item.operationalRequest.description });
+      }
+      continue;
+    }
+
+    if (item.itemType === "CONTEXT_MESSAGE") {
+      if (!item.contextMessage) {
+        issues.push(issue("MISSING_REFERENCE", "BLOCKING", "Messaggio non disponibile", item.id));
+        items.push({ ...base, included: false, exclusionReason: "Messaggio non disponibile" });
+      } else {
+        items.push({ ...base, title: "Messaggio contestuale", status: item.contextMessage.visibility, note: item.contextMessage.body });
+      }
+      continue;
+    }
+
+    if (item.itemType === "CONTEXT_TIMELINE_EVENT") {
+      if (!item.contextTimelineEvent) {
+        issues.push(issue("MISSING_REFERENCE", "BLOCKING", "Evento timeline non disponibile", item.id));
+        items.push({ ...base, included: false, exclusionReason: "Evento non disponibile" });
+      } else {
+        items.push({ ...base, title: item.contextTimelineEvent.title, status: item.contextTimelineEvent.eventType, note: item.contextTimelineEvent.summary });
+      }
       continue;
     }
 

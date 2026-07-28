@@ -67,6 +67,16 @@ export type User = Prisma.UserModel
  */
 export type Organization = Prisma.OrganizationModel
 /**
+ * Model OrganizationProfile
+ *
+ */
+export type OrganizationProfile = Prisma.OrganizationProfileModel
+/**
+ * Model OrganizationContact
+ *
+ */
+export type OrganizationContact = Prisma.OrganizationContactModel
+/**
  * Model Worker
  *
  */
@@ -107,6 +117,11 @@ export type Document = Prisma.DocumentModel
  */
 export type DocumentVersion = Prisma.DocumentVersionModel
 /**
+ * Model DocumentJobSiteLink
+ *
+ */
+export type DocumentJobSiteLink = Prisma.DocumentJobSiteLinkModel
+/**
  * Model DocumentRequirement
  *
  */
@@ -137,6 +152,11 @@ export type ChecklistItem = Prisma.ChecklistItemModel
  */
 export type Evidence = Prisma.EvidenceModel
 /**
+ * Model EvidenceRevision
+ *
+ */
+export type EvidenceRevision = Prisma.EvidenceRevisionModel
+/**
  * Model DocumentPackage
  *
  */
@@ -151,6 +171,36 @@ export type DocumentPackageItem = Prisma.DocumentPackageItemModel
  *
  */
 export type DocumentPackageRevision = Prisma.DocumentPackageRevisionModel
+/**
+ * Model OperationalRequest
+ *
+ */
+export type OperationalRequest = Prisma.OperationalRequestModel
+/**
+ * Model ContextMessage
+ *
+ */
+export type ContextMessage = Prisma.ContextMessageModel
+/**
+ * Model ContextTimelineEvent
+ *
+ */
+export type ContextTimelineEvent = Prisma.ContextTimelineEventModel
+/**
+ * Model DocumentSourcePolicy
+ *
+ */
+export type DocumentSourcePolicy = Prisma.DocumentSourcePolicyModel
+/**
+ * Model DocumentSourceCheck
+ *
+ */
+export type DocumentSourceCheck = Prisma.DocumentSourceCheckModel
+/**
+ * Model DocumentAcquisition
+ *
+ */
+export type DocumentAcquisition = Prisma.DocumentAcquisitionModel
 /**
  * Model DocumentPackageShareProposal
  *

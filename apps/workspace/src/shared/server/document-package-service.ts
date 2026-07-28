@@ -35,6 +35,12 @@ const packageItemSelect = {
   documentVersionId: true,
   evidenceId: true,
   checklistId: true,
+  workerId: true,
+  jobSiteUserAssignmentId: true,
+  jobSiteWorkerAssignmentId: true,
+  operationalRequestId: true,
+  contextMessageId: true,
+  contextTimelineEventId: true,
   note: true,
   position: true,
   createdAt: true,
@@ -119,6 +125,12 @@ export interface AddDocumentPackageItemInput extends Record<string, unknown> {
   documentVersionId?: unknown;
   evidenceId?: unknown;
   checklistId?: unknown;
+  workerId?: unknown;
+  jobSiteUserAssignmentId?: unknown;
+  jobSiteWorkerAssignmentId?: unknown;
+  operationalRequestId?: unknown;
+  contextMessageId?: unknown;
+  contextTimelineEventId?: unknown;
   note?: unknown;
   position?: unknown;
 }
@@ -188,6 +200,12 @@ function assertOnlyExpectedReference(input: {
   documentVersionId: string | null | undefined;
   evidenceId: string | null | undefined;
   checklistId: string | null | undefined;
+  workerId: string | null | undefined;
+  jobSiteUserAssignmentId: string | null | undefined;
+  jobSiteWorkerAssignmentId: string | null | undefined;
+  operationalRequestId: string | null | undefined;
+  contextMessageId: string | null | undefined;
+  contextTimelineEventId: string | null | undefined;
   note: string | null | undefined;
 }) {
   const refs = [
@@ -195,6 +213,12 @@ function assertOnlyExpectedReference(input: {
     input.documentVersionId ? "documentVersionId" : null,
     input.evidenceId ? "evidenceId" : null,
     input.checklistId ? "checklistId" : null,
+    input.workerId ? "workerId" : null,
+    input.jobSiteUserAssignmentId ? "jobSiteUserAssignmentId" : null,
+    input.jobSiteWorkerAssignmentId ? "jobSiteWorkerAssignmentId" : null,
+    input.operationalRequestId ? "operationalRequestId" : null,
+    input.contextMessageId ? "contextMessageId" : null,
+    input.contextTimelineEventId ? "contextTimelineEventId" : null,
     input.note ? "note" : null,
   ].filter(Boolean);
   if (refs.length !== 1) throw new AccessError("Elemento pacchetto non coerente con il tipo indicato.", 409);
@@ -204,10 +228,45 @@ function assertOnlyExpectedReference(input: {
     EVIDENCE: "evidenceId",
     CHECKLIST: "checklistId",
     NOTE: "note",
+    WORKER: "workerId",
+    JOB_SITE_USER_ASSIGNMENT: "jobSiteUserAssignmentId",
+    JOB_SITE_WORKER_ASSIGNMENT: "jobSiteWorkerAssignmentId",
+    OPERATIONAL_REQUEST: "operationalRequestId",
+    CONTEXT_MESSAGE: "contextMessageId",
+    CONTEXT_TIMELINE_EVENT: "contextTimelineEventId",
   };
   if (refs[0] !== expectedRefByType[input.itemType]) {
     throw new AccessError("Elemento pacchetto non coerente con il tipo indicato.", 409);
   }
+}
+
+function packageItemData(itemType: DocumentPackageItemType, values: Partial<{
+  documentId: string;
+  documentVersionId: string;
+  evidenceId: string;
+  checklistId: string;
+  workerId: string;
+  jobSiteUserAssignmentId: string;
+  jobSiteWorkerAssignmentId: string;
+  operationalRequestId: string;
+  contextMessageId: string;
+  contextTimelineEventId: string;
+  note: string | null;
+}>) {
+  return {
+    itemType,
+    documentId: values.documentId ?? null,
+    documentVersionId: values.documentVersionId ?? null,
+    evidenceId: values.evidenceId ?? null,
+    checklistId: values.checklistId ?? null,
+    workerId: values.workerId ?? null,
+    jobSiteUserAssignmentId: values.jobSiteUserAssignmentId ?? null,
+    jobSiteWorkerAssignmentId: values.jobSiteWorkerAssignmentId ?? null,
+    operationalRequestId: values.operationalRequestId ?? null,
+    contextMessageId: values.contextMessageId ?? null,
+    contextTimelineEventId: values.contextTimelineEventId ?? null,
+    note: values.note ?? null,
+  };
 }
 
 async function normalizePackageItem(organizationId: string, input: AddDocumentPackageItemInput) {
@@ -216,6 +275,12 @@ async function normalizePackageItem(organizationId: string, input: AddDocumentPa
   const documentVersionIdInput = trimOptionalId(input.documentVersionId, "Versione documento") ?? null;
   const evidenceIdInput = trimOptionalId(input.evidenceId, "Prova") ?? null;
   const checklistIdInput = trimOptionalId(input.checklistId, "Checklist") ?? null;
+  const workerIdInput = trimOptionalId(input.workerId, "Lavoratore") ?? null;
+  const jobSiteUserAssignmentIdInput = trimOptionalId(input.jobSiteUserAssignmentId, "Assegnazione collaboratore") ?? null;
+  const jobSiteWorkerAssignmentIdInput = trimOptionalId(input.jobSiteWorkerAssignmentId, "Assegnazione lavoratore") ?? null;
+  const operationalRequestIdInput = trimOptionalId(input.operationalRequestId, "Richiesta operativa") ?? null;
+  const contextMessageIdInput = trimOptionalId(input.contextMessageId, "Messaggio contestuale") ?? null;
+  const contextTimelineEventIdInput = trimOptionalId(input.contextTimelineEventId, "Evento operativo") ?? null;
   const noteInput = itemType === "NOTE" && input.note !== undefined ? trimRequiredText(input.note, "Nota pacchetto", 2, 4000) : trimOptionalText(input.note, "Nota pacchetto", 4000) ?? null;
 
   assertOnlyExpectedReference({
@@ -224,6 +289,12 @@ async function normalizePackageItem(organizationId: string, input: AddDocumentPa
     documentVersionId: documentVersionIdInput,
     evidenceId: evidenceIdInput,
     checklistId: checklistIdInput,
+    workerId: workerIdInput,
+    jobSiteUserAssignmentId: jobSiteUserAssignmentIdInput,
+    jobSiteWorkerAssignmentId: jobSiteWorkerAssignmentIdInput,
+    operationalRequestId: operationalRequestIdInput,
+    contextMessageId: contextMessageIdInput,
+    contextTimelineEventId: contextTimelineEventIdInput,
     note: noteInput,
   });
 
@@ -233,27 +304,57 @@ async function normalizePackageItem(organizationId: string, input: AddDocumentPa
       select: { id: true },
     });
     if (!document) throw new AccessError("Il documento non e condivisibile: deve essere classificato e avere sensibilita Standard.", 409);
-    return { itemType, documentId: document.id, documentVersionId: null, evidenceId: null, checklistId: null, note: null };
+    return packageItemData(itemType, { documentId: document.id });
   }
   if (itemType === "DOCUMENT_VERSION") {
     const version = await db.documentVersion.findFirst({
-      where: { id: documentVersionIdInput ?? "", organizationId, archivedAt: null, document: { is: { organizationId, archivedAt: null, documentType: { is: { sensitivity: "STANDARD", categoryKey: { not: "UNCLASSIFIED" } } } } } },
+      where: { id: documentVersionIdInput ?? "", organizationId, archivedAt: null, reviewStatus: "CURRENT", document: { is: { organizationId, archivedAt: null, documentType: { is: { sensitivity: "STANDARD", categoryKey: { not: "UNCLASSIFIED" } } } } } },
       select: { id: true },
     });
     if (!version) throw new AccessError("Il file non e condivisibile: il documento deve essere classificato e avere sensibilita Standard.", 409);
-    return { itemType, documentId: null, documentVersionId: version.id, evidenceId: null, checklistId: null, note: null };
+    return packageItemData(itemType, { documentVersionId: version.id });
   }
   if (itemType === "EVIDENCE") {
-    const evidence = await db.evidence.findFirst({ where: { id: evidenceIdInput ?? "", organizationId, archivedAt: null }, select: { id: true } });
-    if (!evidence) throw new AccessError("Prova non trovata.", 404);
-    return { itemType, documentId: null, documentVersionId: null, evidenceId: evidence.id, checklistId: null, note: null };
+    const evidence = await db.evidence.findFirst({ where: { id: evidenceIdInput ?? "", organizationId, archivedAt: null, reviewStatus: "ACCEPTED", sensitivity: "SHAREABLE" }, select: { id: true } });
+    if (!evidence) throw new AccessError("La prova non e condivisibile: deve essere approvata e classificata come condivisibile.", 409);
+    return packageItemData(itemType, { evidenceId: evidence.id });
   }
   if (itemType === "CHECKLIST") {
     const checklist = await db.checklist.findFirst({ where: { id: checklistIdInput ?? "", organizationId, archivedAt: null }, select: { id: true } });
     if (!checklist) throw new AccessError("Checklist non trovata.", 404);
-    return { itemType, documentId: null, documentVersionId: null, evidenceId: null, checklistId: checklist.id, note: null };
+    return packageItemData(itemType, { checklistId: checklist.id });
   }
-  return { itemType, documentId: null, documentVersionId: null, evidenceId: null, checklistId: null, note: noteInput };
+  if (itemType === "WORKER") {
+    const worker = await db.worker.findFirst({ where: { id: workerIdInput ?? "", organizationId, archivedAt: null }, select: { id: true } });
+    if (!worker) throw new AccessError("Lavoratore non trovato.", 404);
+    return packageItemData(itemType, { workerId: worker.id });
+  }
+  if (itemType === "JOB_SITE_USER_ASSIGNMENT") {
+    const assignment = await db.jobSiteUserAssignment.findFirst({ where: { id: jobSiteUserAssignmentIdInput ?? "", organizationId, archivedAt: null }, select: { id: true } });
+    if (!assignment) throw new AccessError("Assegnazione collaboratore non trovata.", 404);
+    return packageItemData(itemType, { jobSiteUserAssignmentId: assignment.id });
+  }
+  if (itemType === "JOB_SITE_WORKER_ASSIGNMENT") {
+    const assignment = await db.jobSiteWorkerAssignment.findFirst({ where: { id: jobSiteWorkerAssignmentIdInput ?? "", organizationId, archivedAt: null }, select: { id: true } });
+    if (!assignment) throw new AccessError("Assegnazione lavoratore non trovata.", 404);
+    return packageItemData(itemType, { jobSiteWorkerAssignmentId: assignment.id });
+  }
+  if (itemType === "OPERATIONAL_REQUEST") {
+    const request = await db.operationalRequest.findFirst({ where: { id: operationalRequestIdInput ?? "", organizationId }, select: { id: true } });
+    if (!request) throw new AccessError("Richiesta operativa non trovata.", 404);
+    return packageItemData(itemType, { operationalRequestId: request.id });
+  }
+  if (itemType === "CONTEXT_MESSAGE") {
+    const message = await db.contextMessage.findFirst({ where: { id: contextMessageIdInput ?? "", organizationId, visibility: "INTERNAL" }, select: { id: true } });
+    if (!message) throw new AccessError("Messaggio contestuale non trovato.", 404);
+    return packageItemData(itemType, { contextMessageId: message.id });
+  }
+  if (itemType === "CONTEXT_TIMELINE_EVENT") {
+    const event = await db.contextTimelineEvent.findFirst({ where: { id: contextTimelineEventIdInput ?? "", organizationId }, select: { id: true } });
+    if (!event) throw new AccessError("Evento operativo non trovato.", 404);
+    return packageItemData(itemType, { contextTimelineEventId: event.id });
+  }
+  return packageItemData(itemType, { note: noteInput });
 }
 
 async function nextPackageItemPosition(organizationId: string, packageId: string) {
@@ -431,6 +532,12 @@ export async function addDocumentPackageItem(packageId: string, input: AddDocume
       documentVersionId: data.documentVersionId,
       evidenceId: data.evidenceId,
       checklistId: data.checklistId,
+      workerId: data.workerId,
+      jobSiteUserAssignmentId: data.jobSiteUserAssignmentId,
+      jobSiteWorkerAssignmentId: data.jobSiteWorkerAssignmentId,
+      operationalRequestId: data.operationalRequestId,
+      contextMessageId: data.contextMessageId,
+      contextTimelineEventId: data.contextTimelineEventId,
       note: data.note,
     },
     select: { id: true },

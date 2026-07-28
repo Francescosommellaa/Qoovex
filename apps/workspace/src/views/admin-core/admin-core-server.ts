@@ -21,10 +21,16 @@ export async function getWorkspaceCapabilities(): Promise<WorkspaceCapabilities>
     canUpdateDocuments: can("documents:update"),
     canManageArchivedDocuments: can("documents:archive"),
     canUploadDocumentVersions: can("documents:upload"),
+    canReadDocumentFiles: can("documents:file:read"),
+    canReadSensitiveDocuments: can("documents:sensitive:read"),
+    canVerifyDocuments: can("documents:verify"),
     canManageChecklists: can("checklists:manage"),
     canCompleteChecklists: can("checklists:complete"),
     canUploadEvidence: can("evidence:upload"),
     canDeleteEvidence: can("evidence:delete"),
+    canReadEvidenceFiles: can("evidence:file:read"),
+    canReadSensitiveEvidence: can("evidence:sensitive:read"),
+    canReviewEvidence: can("evidence:review"),
     canManagePackages: can("documentPackages:create"),
     canSharePackages: can("documentPackages:share"),
     canReadAssignments: can("assignments:read"),
@@ -36,6 +42,8 @@ export async function getWorkspaceCapabilities(): Promise<WorkspaceCapabilities>
     canReadNotifications: can("organization:read"),
     canReadAudit: can("auditLog:read"),
     canReadDataControl: can("auditLog:read"),
+    canReadOrganizationProfile: can("organizationProfile:read"),
+    canUpdateOrganizationProfile: can("organizationProfile:update"),
   };
 }
 

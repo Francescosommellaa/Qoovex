@@ -55,6 +55,12 @@ export const documentPackageItemTypeLabels: Record<DocumentPackageItemType, stri
   EVIDENCE: "Prova",
   CHECKLIST: "Checklist",
   NOTE: "Nota",
+  WORKER: "Lavoratore",
+  JOB_SITE_USER_ASSIGNMENT: "Assegnazione collaboratore",
+  JOB_SITE_WORKER_ASSIGNMENT: "Assegnazione lavoratore",
+  OPERATIONAL_REQUEST: "Richiesta operativa",
+  CONTEXT_MESSAGE: "Messaggio contestuale",
+  CONTEXT_TIMELINE_EVENT: "Evento operativo",
 };
 
 export const ownerTypeLabels: Record<DocumentOwnerType, string> = {

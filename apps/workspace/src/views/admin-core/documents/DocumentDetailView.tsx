@@ -95,7 +95,7 @@ export function DocumentDetailView({
               <CardDescription>Download protetto e versioni attive del documento.</CardDescription>
               <CardAction><Badge variant="outline"><IconFileDescription />{versions.length} file</Badge></CardAction>
             </CardHeader>
-            <CardContent><DocumentVersionList canArchive={capabilities.canManageCore} documentId={document.id} versions={versions} /></CardContent>
+            <CardContent><DocumentVersionList canArchive={capabilities.canManageCore} canDownload={capabilities.canReadDocumentFiles} canReview={capabilities.canVerifyDocuments} documentId={document.id} versions={versions} /></CardContent>
           </Card>
 
           <Card size="sm">

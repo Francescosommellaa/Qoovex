@@ -1,7 +1,7 @@
 import "server-only";
 
 import { db } from "@qoovex/db";
-import type { MyResourceScopeResponse, OrganizationAccessPreset, OrganizationRole, RecordStatus, WorkspaceAccessContext } from "@qoovex/types";
+import type { MyResourceScopeResponse, OrganizationAccessPreset, OrganizationResourceType, OrganizationRole, RecordStatus, WorkspaceAccessContext } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 
 export interface ResourceScope {
@@ -19,6 +19,7 @@ export interface ResourceScope {
   siteManagerJobSiteIds: string[];
   workerJobSiteIds: string[];
   visibleJobSiteIds: string[];
+  grantedResourceIds: Partial<Record<OrganizationResourceType, string[]>>;
 }
 
 function uniqueIds(ids: string[]) {
@@ -43,11 +44,15 @@ export async function getResourceScope(context?: WorkspaceAccessContext): Promis
   const scopeUserId = context.userId;
 
   const membership = fullAccess ? null : await db.organizationMembership.findFirst({
-    where: { userId: scopeUserId, revokedAt: null },
+    where: { organizationId, userId: scopeUserId, revokedAt: null },
     select: { id: true, resourceGrants: { select: { resourceType: true, resourceId: true } } },
   });
   const grantedJobSiteIds = membership?.resourceGrants?.filter((grant) => grant.resourceType === "JOB_SITE").map((grant) => grant.resourceId) ?? [];
   const grantedWorkerIds = membership?.resourceGrants?.filter((grant) => grant.resourceType === "WORKER").map((grant) => grant.resourceId) ?? [];
+  const grantedResourceIds = (membership?.resourceGrants ?? []).reduce<Partial<Record<OrganizationResourceType, string[]>>>((result, grant) => {
+    result[grant.resourceType] = [...(result[grant.resourceType] ?? []), grant.resourceId];
+    return result;
+  }, {});
 
   let linkedWorker: ResourceScope["linkedWorker"] = null;
   let siteManagerJobSiteIds: string[] = [];
@@ -97,8 +102,13 @@ export async function getResourceScope(context?: WorkspaceAccessContext): Promis
     linkedWorker,
     siteManagerJobSiteIds: uniqueIds(siteManagerJobSiteIds),
     workerJobSiteIds: uniqueIds(workerJobSiteIds),
-    visibleJobSiteIds: uniqueIds([...siteManagerJobSiteIds, ...workerJobSiteIds]),
+    visibleJobSiteIds: uniqueIds([...grantedJobSiteIds, ...siteManagerJobSiteIds, ...workerJobSiteIds]),
+    grantedResourceIds,
   };
+}
+
+export function hasResourceGrant(scope: ResourceScope, resourceType: OrganizationResourceType, resourceId: string | null | undefined) {
+  return Boolean(resourceId && scope.grantedResourceIds[resourceType]?.includes(resourceId));
 }
 
 export function requireAssignedJobSite(scope: ResourceScope, jobSiteId: string | null | undefined) {
@@ -112,11 +122,12 @@ export function requireLinkedWorker(scope: ResourceScope, workerId: string | nul
 }
 
 export function canReadJobSite(scope: ResourceScope, jobSiteId: string) {
-  return scope.fullAccess || scope.visibleJobSiteIds.includes(jobSiteId);
+  return scope.fullAccess || hasResourceGrant(scope, "JOB_SITE", jobSiteId) || scope.visibleJobSiteIds.includes(jobSiteId);
 }
 
 export function canReadWorker(scope: ResourceScope, workerId: string) {
   if (scope.fullAccess) return true;
+  if (hasResourceGrant(scope, "WORKER", workerId)) return true;
   if (scope.preset === "LIMITED_UPLOAD") return scope.linkedWorker?.id === workerId;
   return scope.preset === "SITE_MANAGER" && scope.siteManagerJobSiteIds.length > 0;
 }
@@ -125,8 +136,9 @@ export function canReadSiteManagerWorker(scope: ResourceScope, workerJobSiteIds:
   return scope.preset === "SITE_MANAGER" && workerJobSiteIds.some((jobSiteId) => scope.siteManagerJobSiteIds.includes(jobSiteId));
 }
 
-export function canReadDocument(scope: ResourceScope, document: { ownerType: string; workerId: string | null; jobSiteId: string | null }) {
+export function canReadDocument(scope: ResourceScope, document: { id?: string; documentTypeId?: string | null; ownerType: string; workerId: string | null; jobSiteId: string | null }) {
   if (scope.fullAccess) return true;
+  if (hasResourceGrant(scope, "DOCUMENT", document.id) || hasResourceGrant(scope, "DOCUMENT_TYPE", document.documentTypeId)) return true;
   if (scope.preset === "SITE_MANAGER") return document.ownerType === "JOB_SITE" && !!document.jobSiteId && scope.siteManagerJobSiteIds.includes(document.jobSiteId);
   if (scope.preset === "LIMITED_UPLOAD") return document.ownerType === "WORKER" && !!document.workerId && scope.linkedWorker?.id === document.workerId;
   return false;
@@ -142,8 +154,9 @@ export function canReadDeadline(scope: ResourceScope, deadline: { workerId: stri
   return false;
 }
 
-export function canReadEvidence(scope: ResourceScope, evidence: { workerId: string | null; jobSiteId: string | null; checklistItem?: { checklist: { jobSiteId: string | null } } | null }) {
+export function canReadEvidence(scope: ResourceScope, evidence: { id?: string; workerId: string | null; jobSiteId: string | null; checklistItem?: { checklist: { jobSiteId: string | null } } | null }) {
   if (scope.fullAccess) return true;
+  if (hasResourceGrant(scope, "EVIDENCE", evidence.id)) return true;
   const checklistJobSiteId = evidence.checklistItem?.checklist.jobSiteId ?? null;
   if (scope.preset === "SITE_MANAGER") {
     const jobSiteId = evidence.jobSiteId ?? checklistJobSiteId;

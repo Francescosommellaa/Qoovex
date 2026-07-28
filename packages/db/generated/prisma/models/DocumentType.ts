@@ -233,6 +233,7 @@ export type DocumentTypeWhereInput = {
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   documents?: Prisma.DocumentListRelationFilter
   requirements?: Prisma.DocumentRequirementListRelationFilter
+  sourcePolicies?: Prisma.DocumentSourcePolicyListRelationFilter
 }
 
 export type DocumentTypeOrderByWithRelationInput = {
@@ -250,6 +251,7 @@ export type DocumentTypeOrderByWithRelationInput = {
   organization?: Prisma.OrganizationOrderByWithRelationInput
   documents?: Prisma.DocumentOrderByRelationAggregateInput
   requirements?: Prisma.DocumentRequirementOrderByRelationAggregateInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyOrderByRelationAggregateInput
 }
 
 export type DocumentTypeWhereUniqueInput = Prisma.AtLeast<{
@@ -270,6 +272,7 @@ export type DocumentTypeWhereUniqueInput = Prisma.AtLeast<{
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   documents?: Prisma.DocumentListRelationFilter
   requirements?: Prisma.DocumentRequirementListRelationFilter
+  sourcePolicies?: Prisma.DocumentSourcePolicyListRelationFilter
 }, "id">
 
 export type DocumentTypeOrderByWithAggregationInput = {
@@ -320,6 +323,7 @@ export type DocumentTypeCreateInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentTypesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutDocumentTypeInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutDocumentTypeInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyCreateNestedManyWithoutDocumentTypeInput
 }
 
 export type DocumentTypeUncheckedCreateInput = {
@@ -336,6 +340,7 @@ export type DocumentTypeUncheckedCreateInput = {
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutDocumentTypeInput
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutDocumentTypeInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUncheckedCreateNestedManyWithoutDocumentTypeInput
 }
 
 export type DocumentTypeUpdateInput = {
@@ -352,6 +357,7 @@ export type DocumentTypeUpdateInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentTypesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutDocumentTypeNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutDocumentTypeNestedInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUpdateManyWithoutDocumentTypeNestedInput
 }
 
 export type DocumentTypeUncheckedUpdateInput = {
@@ -368,6 +374,7 @@ export type DocumentTypeUncheckedUpdateInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutDocumentTypeNestedInput
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutDocumentTypeNestedInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUncheckedUpdateManyWithoutDocumentTypeNestedInput
 }
 
 export type DocumentTypeCreateManyInput = {
@@ -554,6 +561,22 @@ export type DocumentTypeUpdateOneWithoutRequirementsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentTypeUpdateToOneWithWhereWithoutRequirementsInput, Prisma.DocumentTypeUpdateWithoutRequirementsInput>, Prisma.DocumentTypeUncheckedUpdateWithoutRequirementsInput>
 }
 
+export type DocumentTypeCreateNestedOneWithoutSourcePoliciesInput = {
+  create?: Prisma.XOR<Prisma.DocumentTypeCreateWithoutSourcePoliciesInput, Prisma.DocumentTypeUncheckedCreateWithoutSourcePoliciesInput>
+  connectOrCreate?: Prisma.DocumentTypeCreateOrConnectWithoutSourcePoliciesInput
+  connect?: Prisma.DocumentTypeWhereUniqueInput
+}
+
+export type DocumentTypeUpdateOneWithoutSourcePoliciesNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentTypeCreateWithoutSourcePoliciesInput, Prisma.DocumentTypeUncheckedCreateWithoutSourcePoliciesInput>
+  connectOrCreate?: Prisma.DocumentTypeCreateOrConnectWithoutSourcePoliciesInput
+  upsert?: Prisma.DocumentTypeUpsertWithoutSourcePoliciesInput
+  disconnect?: Prisma.DocumentTypeWhereInput | boolean
+  delete?: Prisma.DocumentTypeWhereInput | boolean
+  connect?: Prisma.DocumentTypeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentTypeUpdateToOneWithWhereWithoutSourcePoliciesInput, Prisma.DocumentTypeUpdateWithoutSourcePoliciesInput>, Prisma.DocumentTypeUncheckedUpdateWithoutSourcePoliciesInput>
+}
+
 export type DocumentTypeCreateWithoutOrganizationInput = {
   id?: string
   name: string
@@ -567,6 +590,7 @@ export type DocumentTypeCreateWithoutOrganizationInput = {
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentCreateNestedManyWithoutDocumentTypeInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutDocumentTypeInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyCreateNestedManyWithoutDocumentTypeInput
 }
 
 export type DocumentTypeUncheckedCreateWithoutOrganizationInput = {
@@ -582,6 +606,7 @@ export type DocumentTypeUncheckedCreateWithoutOrganizationInput = {
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutDocumentTypeInput
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutDocumentTypeInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUncheckedCreateNestedManyWithoutDocumentTypeInput
 }
 
 export type DocumentTypeCreateOrConnectWithoutOrganizationInput = {
@@ -640,6 +665,7 @@ export type DocumentTypeCreateWithoutDocumentsInput = {
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentTypesInput
   requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutDocumentTypeInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyCreateNestedManyWithoutDocumentTypeInput
 }
 
 export type DocumentTypeUncheckedCreateWithoutDocumentsInput = {
@@ -655,6 +681,7 @@ export type DocumentTypeUncheckedCreateWithoutDocumentsInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutDocumentTypeInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUncheckedCreateNestedManyWithoutDocumentTypeInput
 }
 
 export type DocumentTypeCreateOrConnectWithoutDocumentsInput = {
@@ -686,6 +713,7 @@ export type DocumentTypeUpdateWithoutDocumentsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentTypesNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutDocumentTypeNestedInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUpdateManyWithoutDocumentTypeNestedInput
 }
 
 export type DocumentTypeUncheckedUpdateWithoutDocumentsInput = {
@@ -701,6 +729,7 @@ export type DocumentTypeUncheckedUpdateWithoutDocumentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutDocumentTypeNestedInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUncheckedUpdateManyWithoutDocumentTypeNestedInput
 }
 
 export type DocumentTypeCreateWithoutRequirementsInput = {
@@ -716,6 +745,7 @@ export type DocumentTypeCreateWithoutRequirementsInput = {
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentTypesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutDocumentTypeInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyCreateNestedManyWithoutDocumentTypeInput
 }
 
 export type DocumentTypeUncheckedCreateWithoutRequirementsInput = {
@@ -731,6 +761,7 @@ export type DocumentTypeUncheckedCreateWithoutRequirementsInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutDocumentTypeInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUncheckedCreateNestedManyWithoutDocumentTypeInput
 }
 
 export type DocumentTypeCreateOrConnectWithoutRequirementsInput = {
@@ -762,6 +793,7 @@ export type DocumentTypeUpdateWithoutRequirementsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentTypesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutDocumentTypeNestedInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUpdateManyWithoutDocumentTypeNestedInput
 }
 
 export type DocumentTypeUncheckedUpdateWithoutRequirementsInput = {
@@ -777,6 +809,87 @@ export type DocumentTypeUncheckedUpdateWithoutRequirementsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutDocumentTypeNestedInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUncheckedUpdateManyWithoutDocumentTypeNestedInput
+}
+
+export type DocumentTypeCreateWithoutSourcePoliciesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
+  requiresExpiryDate?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentTypesInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutDocumentTypeInput
+  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutDocumentTypeInput
+}
+
+export type DocumentTypeUncheckedCreateWithoutSourcePoliciesInput = {
+  id?: string
+  organizationId: string
+  name: string
+  description?: string | null
+  appliesTo: $Enums.DocumentTypeAppliesTo
+  categoryKey?: $Enums.DocumentCategoryKey
+  sensitivity?: $Enums.DocumentSensitivity
+  requiresExpiryDate?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutDocumentTypeInput
+  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutDocumentTypeInput
+}
+
+export type DocumentTypeCreateOrConnectWithoutSourcePoliciesInput = {
+  where: Prisma.DocumentTypeWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentTypeCreateWithoutSourcePoliciesInput, Prisma.DocumentTypeUncheckedCreateWithoutSourcePoliciesInput>
+}
+
+export type DocumentTypeUpsertWithoutSourcePoliciesInput = {
+  update: Prisma.XOR<Prisma.DocumentTypeUpdateWithoutSourcePoliciesInput, Prisma.DocumentTypeUncheckedUpdateWithoutSourcePoliciesInput>
+  create: Prisma.XOR<Prisma.DocumentTypeCreateWithoutSourcePoliciesInput, Prisma.DocumentTypeUncheckedCreateWithoutSourcePoliciesInput>
+  where?: Prisma.DocumentTypeWhereInput
+}
+
+export type DocumentTypeUpdateToOneWithWhereWithoutSourcePoliciesInput = {
+  where?: Prisma.DocumentTypeWhereInput
+  data: Prisma.XOR<Prisma.DocumentTypeUpdateWithoutSourcePoliciesInput, Prisma.DocumentTypeUncheckedUpdateWithoutSourcePoliciesInput>
+}
+
+export type DocumentTypeUpdateWithoutSourcePoliciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
+  requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentTypesNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutDocumentTypeNestedInput
+  requirements?: Prisma.DocumentRequirementUpdateManyWithoutDocumentTypeNestedInput
+}
+
+export type DocumentTypeUncheckedUpdateWithoutSourcePoliciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  appliesTo?: Prisma.EnumDocumentTypeAppliesToFieldUpdateOperationsInput | $Enums.DocumentTypeAppliesTo
+  categoryKey?: Prisma.EnumDocumentCategoryKeyFieldUpdateOperationsInput | $Enums.DocumentCategoryKey
+  sensitivity?: Prisma.EnumDocumentSensitivityFieldUpdateOperationsInput | $Enums.DocumentSensitivity
+  requiresExpiryDate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutDocumentTypeNestedInput
+  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutDocumentTypeNestedInput
 }
 
 export type DocumentTypeCreateManyOrganizationInput = {
@@ -805,6 +918,7 @@ export type DocumentTypeUpdateWithoutOrganizationInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUpdateManyWithoutDocumentTypeNestedInput
   requirements?: Prisma.DocumentRequirementUpdateManyWithoutDocumentTypeNestedInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUpdateManyWithoutDocumentTypeNestedInput
 }
 
 export type DocumentTypeUncheckedUpdateWithoutOrganizationInput = {
@@ -820,6 +934,7 @@ export type DocumentTypeUncheckedUpdateWithoutOrganizationInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutDocumentTypeNestedInput
   requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutDocumentTypeNestedInput
+  sourcePolicies?: Prisma.DocumentSourcePolicyUncheckedUpdateManyWithoutDocumentTypeNestedInput
 }
 
 export type DocumentTypeUncheckedUpdateManyWithoutOrganizationInput = {
@@ -843,11 +958,13 @@ export type DocumentTypeUncheckedUpdateManyWithoutOrganizationInput = {
 export type DocumentTypeCountOutputType = {
   documents: number
   requirements: number
+  sourcePolicies: number
 }
 
 export type DocumentTypeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documents?: boolean | DocumentTypeCountOutputTypeCountDocumentsArgs
   requirements?: boolean | DocumentTypeCountOutputTypeCountRequirementsArgs
+  sourcePolicies?: boolean | DocumentTypeCountOutputTypeCountSourcePoliciesArgs
 }
 
 /**
@@ -874,6 +991,13 @@ export type DocumentTypeCountOutputTypeCountRequirementsArgs<ExtArgs extends run
   where?: Prisma.DocumentRequirementWhereInput
 }
 
+/**
+ * DocumentTypeCountOutputType without action
+ */
+export type DocumentTypeCountOutputTypeCountSourcePoliciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DocumentSourcePolicyWhereInput
+}
+
 
 export type DocumentTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -890,6 +1014,7 @@ export type DocumentTypeSelect<ExtArgs extends runtime.Types.Extensions.Internal
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.DocumentType$documentsArgs<ExtArgs>
   requirements?: boolean | Prisma.DocumentType$requirementsArgs<ExtArgs>
+  sourcePolicies?: boolean | Prisma.DocumentType$sourcePoliciesArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentTypeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["documentType"]>
 
@@ -942,6 +1067,7 @@ export type DocumentTypeInclude<ExtArgs extends runtime.Types.Extensions.Interna
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.DocumentType$documentsArgs<ExtArgs>
   requirements?: boolean | Prisma.DocumentType$requirementsArgs<ExtArgs>
+  sourcePolicies?: boolean | Prisma.DocumentType$sourcePoliciesArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentTypeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DocumentTypeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -957,6 +1083,7 @@ export type $DocumentTypePayload<ExtArgs extends runtime.Types.Extensions.Intern
     organization: Prisma.$OrganizationPayload<ExtArgs>
     documents: Prisma.$DocumentPayload<ExtArgs>[]
     requirements: Prisma.$DocumentRequirementPayload<ExtArgs>[]
+    sourcePolicies: Prisma.$DocumentSourcePolicyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1367,6 +1494,7 @@ export interface Prisma__DocumentTypeClient<T, Null = never, ExtArgs extends run
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   documents<T extends Prisma.DocumentType$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentType$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   requirements<T extends Prisma.DocumentType$requirementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentType$requirementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sourcePolicies<T extends Prisma.DocumentType$sourcePoliciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentType$sourcePoliciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentSourcePolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1853,6 +1981,30 @@ export type DocumentType$requirementsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.DocumentRequirementScalarFieldEnum | Prisma.DocumentRequirementScalarFieldEnum[]
+}
+
+/**
+ * DocumentType.sourcePolicies
+ */
+export type DocumentType$sourcePoliciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DocumentSourcePolicy
+   */
+  select?: Prisma.DocumentSourcePolicySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DocumentSourcePolicy
+   */
+  omit?: Prisma.DocumentSourcePolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentSourcePolicyInclude<ExtArgs> | null
+  where?: Prisma.DocumentSourcePolicyWhereInput
+  orderBy?: Prisma.DocumentSourcePolicyOrderByWithRelationInput | Prisma.DocumentSourcePolicyOrderByWithRelationInput[]
+  cursor?: Prisma.DocumentSourcePolicyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DocumentSourcePolicyScalarFieldEnum | Prisma.DocumentSourcePolicyScalarFieldEnum[]
 }
 
 /**

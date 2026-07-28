@@ -30,6 +30,12 @@ export type JobSiteUserAssignmentMinAggregateOutputType = {
   jobSiteId: string | null
   userId: string | null
   assignmentRole: $Enums.JobSiteUserAssignmentRole | null
+  operationalRoleLabel: string | null
+  taskLabel: string | null
+  startsAt: Date | null
+  endsAt: Date | null
+  endedById: string | null
+  endReason: string | null
   assignedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -42,6 +48,12 @@ export type JobSiteUserAssignmentMaxAggregateOutputType = {
   jobSiteId: string | null
   userId: string | null
   assignmentRole: $Enums.JobSiteUserAssignmentRole | null
+  operationalRoleLabel: string | null
+  taskLabel: string | null
+  startsAt: Date | null
+  endsAt: Date | null
+  endedById: string | null
+  endReason: string | null
   assignedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -54,6 +66,12 @@ export type JobSiteUserAssignmentCountAggregateOutputType = {
   jobSiteId: number
   userId: number
   assignmentRole: number
+  operationalRoleLabel: number
+  taskLabel: number
+  startsAt: number
+  endsAt: number
+  endedById: number
+  endReason: number
   assignedById: number
   createdAt: number
   updatedAt: number
@@ -68,6 +86,12 @@ export type JobSiteUserAssignmentMinAggregateInputType = {
   jobSiteId?: true
   userId?: true
   assignmentRole?: true
+  operationalRoleLabel?: true
+  taskLabel?: true
+  startsAt?: true
+  endsAt?: true
+  endedById?: true
+  endReason?: true
   assignedById?: true
   createdAt?: true
   updatedAt?: true
@@ -80,6 +104,12 @@ export type JobSiteUserAssignmentMaxAggregateInputType = {
   jobSiteId?: true
   userId?: true
   assignmentRole?: true
+  operationalRoleLabel?: true
+  taskLabel?: true
+  startsAt?: true
+  endsAt?: true
+  endedById?: true
+  endReason?: true
   assignedById?: true
   createdAt?: true
   updatedAt?: true
@@ -92,6 +122,12 @@ export type JobSiteUserAssignmentCountAggregateInputType = {
   jobSiteId?: true
   userId?: true
   assignmentRole?: true
+  operationalRoleLabel?: true
+  taskLabel?: true
+  startsAt?: true
+  endsAt?: true
+  endedById?: true
+  endReason?: true
   assignedById?: true
   createdAt?: true
   updatedAt?: true
@@ -177,6 +213,12 @@ export type JobSiteUserAssignmentGroupByOutputType = {
   jobSiteId: string
   userId: string
   assignmentRole: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel: string | null
+  taskLabel: string | null
+  startsAt: Date
+  endsAt: Date | null
+  endedById: string | null
+  endReason: string | null
   assignedById: string
   createdAt: Date
   updatedAt: Date
@@ -210,6 +252,12 @@ export type JobSiteUserAssignmentWhereInput = {
   jobSiteId?: Prisma.StringFilter<"JobSiteUserAssignment"> | string
   userId?: Prisma.StringFilter<"JobSiteUserAssignment"> | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFilter<"JobSiteUserAssignment"> | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
+  taskLabel?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
+  startsAt?: Prisma.DateTimeFilter<"JobSiteUserAssignment"> | Date | string
+  endsAt?: Prisma.DateTimeNullableFilter<"JobSiteUserAssignment"> | Date | string | null
+  endedById?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
+  endReason?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
   assignedById?: Prisma.StringFilter<"JobSiteUserAssignment"> | string
   createdAt?: Prisma.DateTimeFilter<"JobSiteUserAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"JobSiteUserAssignment"> | Date | string
@@ -218,6 +266,8 @@ export type JobSiteUserAssignmentWhereInput = {
   jobSite?: Prisma.XOR<Prisma.JobSiteScalarRelationFilter, Prisma.JobSiteWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   assignedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  endedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  packageItems?: Prisma.DocumentPackageItemListRelationFilter
 }
 
 export type JobSiteUserAssignmentOrderByWithRelationInput = {
@@ -226,6 +276,12 @@ export type JobSiteUserAssignmentOrderByWithRelationInput = {
   jobSiteId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   assignmentRole?: Prisma.SortOrder
+  operationalRoleLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  taskLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  startsAt?: Prisma.SortOrder
+  endsAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  endedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  endReason?: Prisma.SortOrderInput | Prisma.SortOrder
   assignedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -234,6 +290,8 @@ export type JobSiteUserAssignmentOrderByWithRelationInput = {
   jobSite?: Prisma.JobSiteOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
   assignedBy?: Prisma.UserOrderByWithRelationInput
+  endedBy?: Prisma.UserOrderByWithRelationInput
+  packageItems?: Prisma.DocumentPackageItemOrderByRelationAggregateInput
 }
 
 export type JobSiteUserAssignmentWhereUniqueInput = Prisma.AtLeast<{
@@ -245,6 +303,12 @@ export type JobSiteUserAssignmentWhereUniqueInput = Prisma.AtLeast<{
   jobSiteId?: Prisma.StringFilter<"JobSiteUserAssignment"> | string
   userId?: Prisma.StringFilter<"JobSiteUserAssignment"> | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFilter<"JobSiteUserAssignment"> | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
+  taskLabel?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
+  startsAt?: Prisma.DateTimeFilter<"JobSiteUserAssignment"> | Date | string
+  endsAt?: Prisma.DateTimeNullableFilter<"JobSiteUserAssignment"> | Date | string | null
+  endedById?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
+  endReason?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
   assignedById?: Prisma.StringFilter<"JobSiteUserAssignment"> | string
   createdAt?: Prisma.DateTimeFilter<"JobSiteUserAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"JobSiteUserAssignment"> | Date | string
@@ -253,6 +317,8 @@ export type JobSiteUserAssignmentWhereUniqueInput = Prisma.AtLeast<{
   jobSite?: Prisma.XOR<Prisma.JobSiteScalarRelationFilter, Prisma.JobSiteWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   assignedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  endedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  packageItems?: Prisma.DocumentPackageItemListRelationFilter
 }, "id">
 
 export type JobSiteUserAssignmentOrderByWithAggregationInput = {
@@ -261,6 +327,12 @@ export type JobSiteUserAssignmentOrderByWithAggregationInput = {
   jobSiteId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   assignmentRole?: Prisma.SortOrder
+  operationalRoleLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  taskLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  startsAt?: Prisma.SortOrder
+  endsAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  endedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  endReason?: Prisma.SortOrderInput | Prisma.SortOrder
   assignedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -279,6 +351,12 @@ export type JobSiteUserAssignmentScalarWhereWithAggregatesInput = {
   jobSiteId?: Prisma.StringWithAggregatesFilter<"JobSiteUserAssignment"> | string
   userId?: Prisma.StringWithAggregatesFilter<"JobSiteUserAssignment"> | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleWithAggregatesFilter<"JobSiteUserAssignment"> | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.StringNullableWithAggregatesFilter<"JobSiteUserAssignment"> | string | null
+  taskLabel?: Prisma.StringNullableWithAggregatesFilter<"JobSiteUserAssignment"> | string | null
+  startsAt?: Prisma.DateTimeWithAggregatesFilter<"JobSiteUserAssignment"> | Date | string
+  endsAt?: Prisma.DateTimeNullableWithAggregatesFilter<"JobSiteUserAssignment"> | Date | string | null
+  endedById?: Prisma.StringNullableWithAggregatesFilter<"JobSiteUserAssignment"> | string | null
+  endReason?: Prisma.StringNullableWithAggregatesFilter<"JobSiteUserAssignment"> | string | null
   assignedById?: Prisma.StringWithAggregatesFilter<"JobSiteUserAssignment"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"JobSiteUserAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"JobSiteUserAssignment"> | Date | string
@@ -288,6 +366,11 @@ export type JobSiteUserAssignmentScalarWhereWithAggregatesInput = {
 export type JobSiteUserAssignmentCreateInput = {
   id?: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
@@ -295,6 +378,8 @@ export type JobSiteUserAssignmentCreateInput = {
   jobSite: Prisma.JobSiteCreateNestedOneWithoutUserAssignmentsInput
   user: Prisma.UserCreateNestedOneWithoutJobSiteUserAssignmentsInput
   assignedBy: Prisma.UserCreateNestedOneWithoutAssignedJobSiteUsersInput
+  endedBy?: Prisma.UserCreateNestedOneWithoutEndedJobSiteUsersInput
+  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutJobSiteUserAssignmentInput
 }
 
 export type JobSiteUserAssignmentUncheckedCreateInput = {
@@ -303,15 +388,27 @@ export type JobSiteUserAssignmentUncheckedCreateInput = {
   jobSiteId: string
   userId: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endedById?: string | null
+  endReason?: string | null
   assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutJobSiteUserAssignmentInput
 }
 
 export type JobSiteUserAssignmentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -319,6 +416,8 @@ export type JobSiteUserAssignmentUpdateInput = {
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutUserAssignmentsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput
   assignedBy?: Prisma.UserUpdateOneRequiredWithoutAssignedJobSiteUsersNestedInput
+  endedBy?: Prisma.UserUpdateOneWithoutEndedJobSiteUsersNestedInput
+  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutJobSiteUserAssignmentNestedInput
 }
 
 export type JobSiteUserAssignmentUncheckedUpdateInput = {
@@ -327,10 +426,17 @@ export type JobSiteUserAssignmentUncheckedUpdateInput = {
   jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutJobSiteUserAssignmentNestedInput
 }
 
 export type JobSiteUserAssignmentCreateManyInput = {
@@ -339,6 +445,12 @@ export type JobSiteUserAssignmentCreateManyInput = {
   jobSiteId: string
   userId: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endedById?: string | null
+  endReason?: string | null
   assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -348,6 +460,11 @@ export type JobSiteUserAssignmentCreateManyInput = {
 export type JobSiteUserAssignmentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -359,6 +476,12 @@ export type JobSiteUserAssignmentUncheckedUpdateManyInput = {
   jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -381,6 +504,12 @@ export type JobSiteUserAssignmentCountOrderByAggregateInput = {
   jobSiteId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   assignmentRole?: Prisma.SortOrder
+  operationalRoleLabel?: Prisma.SortOrder
+  taskLabel?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrder
+  endsAt?: Prisma.SortOrder
+  endedById?: Prisma.SortOrder
+  endReason?: Prisma.SortOrder
   assignedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -393,6 +522,12 @@ export type JobSiteUserAssignmentMaxOrderByAggregateInput = {
   jobSiteId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   assignmentRole?: Prisma.SortOrder
+  operationalRoleLabel?: Prisma.SortOrder
+  taskLabel?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrder
+  endsAt?: Prisma.SortOrder
+  endedById?: Prisma.SortOrder
+  endReason?: Prisma.SortOrder
   assignedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -405,10 +540,21 @@ export type JobSiteUserAssignmentMinOrderByAggregateInput = {
   jobSiteId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   assignmentRole?: Prisma.SortOrder
+  operationalRoleLabel?: Prisma.SortOrder
+  taskLabel?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrder
+  endsAt?: Prisma.SortOrder
+  endedById?: Prisma.SortOrder
+  endReason?: Prisma.SortOrder
   assignedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   archivedAt?: Prisma.SortOrder
+}
+
+export type JobSiteUserAssignmentNullableScalarRelationFilter = {
+  is?: Prisma.JobSiteUserAssignmentWhereInput | null
+  isNot?: Prisma.JobSiteUserAssignmentWhereInput | null
 }
 
 export type JobSiteUserAssignmentCreateNestedManyWithoutUserInput = {
@@ -425,6 +571,13 @@ export type JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput = {
   connect?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
 }
 
+export type JobSiteUserAssignmentCreateNestedManyWithoutEndedByInput = {
+  create?: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutEndedByInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutEndedByInput> | Prisma.JobSiteUserAssignmentCreateWithoutEndedByInput[] | Prisma.JobSiteUserAssignmentUncheckedCreateWithoutEndedByInput[]
+  connectOrCreate?: Prisma.JobSiteUserAssignmentCreateOrConnectWithoutEndedByInput | Prisma.JobSiteUserAssignmentCreateOrConnectWithoutEndedByInput[]
+  createMany?: Prisma.JobSiteUserAssignmentCreateManyEndedByInputEnvelope
+  connect?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
+}
+
 export type JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutUserInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutUserInput> | Prisma.JobSiteUserAssignmentCreateWithoutUserInput[] | Prisma.JobSiteUserAssignmentUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.JobSiteUserAssignmentCreateOrConnectWithoutUserInput | Prisma.JobSiteUserAssignmentCreateOrConnectWithoutUserInput[]
@@ -436,6 +589,13 @@ export type JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   create?: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutAssignedByInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutAssignedByInput> | Prisma.JobSiteUserAssignmentCreateWithoutAssignedByInput[] | Prisma.JobSiteUserAssignmentUncheckedCreateWithoutAssignedByInput[]
   connectOrCreate?: Prisma.JobSiteUserAssignmentCreateOrConnectWithoutAssignedByInput | Prisma.JobSiteUserAssignmentCreateOrConnectWithoutAssignedByInput[]
   createMany?: Prisma.JobSiteUserAssignmentCreateManyAssignedByInputEnvelope
+  connect?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
+}
+
+export type JobSiteUserAssignmentUncheckedCreateNestedManyWithoutEndedByInput = {
+  create?: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutEndedByInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutEndedByInput> | Prisma.JobSiteUserAssignmentCreateWithoutEndedByInput[] | Prisma.JobSiteUserAssignmentUncheckedCreateWithoutEndedByInput[]
+  connectOrCreate?: Prisma.JobSiteUserAssignmentCreateOrConnectWithoutEndedByInput | Prisma.JobSiteUserAssignmentCreateOrConnectWithoutEndedByInput[]
+  createMany?: Prisma.JobSiteUserAssignmentCreateManyEndedByInputEnvelope
   connect?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
 }
 
@@ -467,6 +627,20 @@ export type JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput = {
   deleteMany?: Prisma.JobSiteUserAssignmentScalarWhereInput | Prisma.JobSiteUserAssignmentScalarWhereInput[]
 }
 
+export type JobSiteUserAssignmentUpdateManyWithoutEndedByNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutEndedByInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutEndedByInput> | Prisma.JobSiteUserAssignmentCreateWithoutEndedByInput[] | Prisma.JobSiteUserAssignmentUncheckedCreateWithoutEndedByInput[]
+  connectOrCreate?: Prisma.JobSiteUserAssignmentCreateOrConnectWithoutEndedByInput | Prisma.JobSiteUserAssignmentCreateOrConnectWithoutEndedByInput[]
+  upsert?: Prisma.JobSiteUserAssignmentUpsertWithWhereUniqueWithoutEndedByInput | Prisma.JobSiteUserAssignmentUpsertWithWhereUniqueWithoutEndedByInput[]
+  createMany?: Prisma.JobSiteUserAssignmentCreateManyEndedByInputEnvelope
+  set?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
+  disconnect?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
+  delete?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
+  connect?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
+  update?: Prisma.JobSiteUserAssignmentUpdateWithWhereUniqueWithoutEndedByInput | Prisma.JobSiteUserAssignmentUpdateWithWhereUniqueWithoutEndedByInput[]
+  updateMany?: Prisma.JobSiteUserAssignmentUpdateManyWithWhereWithoutEndedByInput | Prisma.JobSiteUserAssignmentUpdateManyWithWhereWithoutEndedByInput[]
+  deleteMany?: Prisma.JobSiteUserAssignmentScalarWhereInput | Prisma.JobSiteUserAssignmentScalarWhereInput[]
+}
+
 export type JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput = {
   create?: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutUserInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutUserInput> | Prisma.JobSiteUserAssignmentCreateWithoutUserInput[] | Prisma.JobSiteUserAssignmentUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.JobSiteUserAssignmentCreateOrConnectWithoutUserInput | Prisma.JobSiteUserAssignmentCreateOrConnectWithoutUserInput[]
@@ -492,6 +666,20 @@ export type JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   connect?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
   update?: Prisma.JobSiteUserAssignmentUpdateWithWhereUniqueWithoutAssignedByInput | Prisma.JobSiteUserAssignmentUpdateWithWhereUniqueWithoutAssignedByInput[]
   updateMany?: Prisma.JobSiteUserAssignmentUpdateManyWithWhereWithoutAssignedByInput | Prisma.JobSiteUserAssignmentUpdateManyWithWhereWithoutAssignedByInput[]
+  deleteMany?: Prisma.JobSiteUserAssignmentScalarWhereInput | Prisma.JobSiteUserAssignmentScalarWhereInput[]
+}
+
+export type JobSiteUserAssignmentUncheckedUpdateManyWithoutEndedByNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutEndedByInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutEndedByInput> | Prisma.JobSiteUserAssignmentCreateWithoutEndedByInput[] | Prisma.JobSiteUserAssignmentUncheckedCreateWithoutEndedByInput[]
+  connectOrCreate?: Prisma.JobSiteUserAssignmentCreateOrConnectWithoutEndedByInput | Prisma.JobSiteUserAssignmentCreateOrConnectWithoutEndedByInput[]
+  upsert?: Prisma.JobSiteUserAssignmentUpsertWithWhereUniqueWithoutEndedByInput | Prisma.JobSiteUserAssignmentUpsertWithWhereUniqueWithoutEndedByInput[]
+  createMany?: Prisma.JobSiteUserAssignmentCreateManyEndedByInputEnvelope
+  set?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
+  disconnect?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
+  delete?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
+  connect?: Prisma.JobSiteUserAssignmentWhereUniqueInput | Prisma.JobSiteUserAssignmentWhereUniqueInput[]
+  update?: Prisma.JobSiteUserAssignmentUpdateWithWhereUniqueWithoutEndedByInput | Prisma.JobSiteUserAssignmentUpdateWithWhereUniqueWithoutEndedByInput[]
+  updateMany?: Prisma.JobSiteUserAssignmentUpdateManyWithWhereWithoutEndedByInput | Prisma.JobSiteUserAssignmentUpdateManyWithWhereWithoutEndedByInput[]
   deleteMany?: Prisma.JobSiteUserAssignmentScalarWhereInput | Prisma.JobSiteUserAssignmentScalarWhereInput[]
 }
 
@@ -583,15 +771,38 @@ export type EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput = {
   set?: $Enums.JobSiteUserAssignmentRole
 }
 
+export type JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput = {
+  create?: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutPackageItemsInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutPackageItemsInput>
+  connectOrCreate?: Prisma.JobSiteUserAssignmentCreateOrConnectWithoutPackageItemsInput
+  connect?: Prisma.JobSiteUserAssignmentWhereUniqueInput
+}
+
+export type JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutPackageItemsInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutPackageItemsInput>
+  connectOrCreate?: Prisma.JobSiteUserAssignmentCreateOrConnectWithoutPackageItemsInput
+  upsert?: Prisma.JobSiteUserAssignmentUpsertWithoutPackageItemsInput
+  disconnect?: Prisma.JobSiteUserAssignmentWhereInput | boolean
+  delete?: Prisma.JobSiteUserAssignmentWhereInput | boolean
+  connect?: Prisma.JobSiteUserAssignmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUserAssignmentUpdateToOneWithWhereWithoutPackageItemsInput, Prisma.JobSiteUserAssignmentUpdateWithoutPackageItemsInput>, Prisma.JobSiteUserAssignmentUncheckedUpdateWithoutPackageItemsInput>
+}
+
 export type JobSiteUserAssignmentCreateWithoutUserInput = {
   id?: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSiteUserAssignmentsInput
   jobSite: Prisma.JobSiteCreateNestedOneWithoutUserAssignmentsInput
   assignedBy: Prisma.UserCreateNestedOneWithoutAssignedJobSiteUsersInput
+  endedBy?: Prisma.UserCreateNestedOneWithoutEndedJobSiteUsersInput
+  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutJobSiteUserAssignmentInput
 }
 
 export type JobSiteUserAssignmentUncheckedCreateWithoutUserInput = {
@@ -599,10 +810,17 @@ export type JobSiteUserAssignmentUncheckedCreateWithoutUserInput = {
   organizationId: string
   jobSiteId: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endedById?: string | null
+  endReason?: string | null
   assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutJobSiteUserAssignmentInput
 }
 
 export type JobSiteUserAssignmentCreateOrConnectWithoutUserInput = {
@@ -618,12 +836,19 @@ export type JobSiteUserAssignmentCreateManyUserInputEnvelope = {
 export type JobSiteUserAssignmentCreateWithoutAssignedByInput = {
   id?: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSiteUserAssignmentsInput
   jobSite: Prisma.JobSiteCreateNestedOneWithoutUserAssignmentsInput
   user: Prisma.UserCreateNestedOneWithoutJobSiteUserAssignmentsInput
+  endedBy?: Prisma.UserCreateNestedOneWithoutEndedJobSiteUsersInput
+  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutJobSiteUserAssignmentInput
 }
 
 export type JobSiteUserAssignmentUncheckedCreateWithoutAssignedByInput = {
@@ -632,9 +857,16 @@ export type JobSiteUserAssignmentUncheckedCreateWithoutAssignedByInput = {
   jobSiteId: string
   userId: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endedById?: string | null
+  endReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutJobSiteUserAssignmentInput
 }
 
 export type JobSiteUserAssignmentCreateOrConnectWithoutAssignedByInput = {
@@ -644,6 +876,52 @@ export type JobSiteUserAssignmentCreateOrConnectWithoutAssignedByInput = {
 
 export type JobSiteUserAssignmentCreateManyAssignedByInputEnvelope = {
   data: Prisma.JobSiteUserAssignmentCreateManyAssignedByInput | Prisma.JobSiteUserAssignmentCreateManyAssignedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type JobSiteUserAssignmentCreateWithoutEndedByInput = {
+  id?: string
+  assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutJobSiteUserAssignmentsInput
+  jobSite: Prisma.JobSiteCreateNestedOneWithoutUserAssignmentsInput
+  user: Prisma.UserCreateNestedOneWithoutJobSiteUserAssignmentsInput
+  assignedBy: Prisma.UserCreateNestedOneWithoutAssignedJobSiteUsersInput
+  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutJobSiteUserAssignmentInput
+}
+
+export type JobSiteUserAssignmentUncheckedCreateWithoutEndedByInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  userId: string
+  assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endReason?: string | null
+  assignedById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutJobSiteUserAssignmentInput
+}
+
+export type JobSiteUserAssignmentCreateOrConnectWithoutEndedByInput = {
+  where: Prisma.JobSiteUserAssignmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutEndedByInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutEndedByInput>
+}
+
+export type JobSiteUserAssignmentCreateManyEndedByInputEnvelope = {
+  data: Prisma.JobSiteUserAssignmentCreateManyEndedByInput | Prisma.JobSiteUserAssignmentCreateManyEndedByInput[]
   skipDuplicates?: boolean
 }
 
@@ -672,6 +950,12 @@ export type JobSiteUserAssignmentScalarWhereInput = {
   jobSiteId?: Prisma.StringFilter<"JobSiteUserAssignment"> | string
   userId?: Prisma.StringFilter<"JobSiteUserAssignment"> | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFilter<"JobSiteUserAssignment"> | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
+  taskLabel?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
+  startsAt?: Prisma.DateTimeFilter<"JobSiteUserAssignment"> | Date | string
+  endsAt?: Prisma.DateTimeNullableFilter<"JobSiteUserAssignment"> | Date | string | null
+  endedById?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
+  endReason?: Prisma.StringNullableFilter<"JobSiteUserAssignment"> | string | null
   assignedById?: Prisma.StringFilter<"JobSiteUserAssignment"> | string
   createdAt?: Prisma.DateTimeFilter<"JobSiteUserAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"JobSiteUserAssignment"> | Date | string
@@ -694,15 +978,38 @@ export type JobSiteUserAssignmentUpdateManyWithWhereWithoutAssignedByInput = {
   data: Prisma.XOR<Prisma.JobSiteUserAssignmentUpdateManyMutationInput, Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByInput>
 }
 
+export type JobSiteUserAssignmentUpsertWithWhereUniqueWithoutEndedByInput = {
+  where: Prisma.JobSiteUserAssignmentWhereUniqueInput
+  update: Prisma.XOR<Prisma.JobSiteUserAssignmentUpdateWithoutEndedByInput, Prisma.JobSiteUserAssignmentUncheckedUpdateWithoutEndedByInput>
+  create: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutEndedByInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutEndedByInput>
+}
+
+export type JobSiteUserAssignmentUpdateWithWhereUniqueWithoutEndedByInput = {
+  where: Prisma.JobSiteUserAssignmentWhereUniqueInput
+  data: Prisma.XOR<Prisma.JobSiteUserAssignmentUpdateWithoutEndedByInput, Prisma.JobSiteUserAssignmentUncheckedUpdateWithoutEndedByInput>
+}
+
+export type JobSiteUserAssignmentUpdateManyWithWhereWithoutEndedByInput = {
+  where: Prisma.JobSiteUserAssignmentScalarWhereInput
+  data: Prisma.XOR<Prisma.JobSiteUserAssignmentUpdateManyMutationInput, Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutEndedByInput>
+}
+
 export type JobSiteUserAssignmentCreateWithoutOrganizationInput = {
   id?: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   jobSite: Prisma.JobSiteCreateNestedOneWithoutUserAssignmentsInput
   user: Prisma.UserCreateNestedOneWithoutJobSiteUserAssignmentsInput
   assignedBy: Prisma.UserCreateNestedOneWithoutAssignedJobSiteUsersInput
+  endedBy?: Prisma.UserCreateNestedOneWithoutEndedJobSiteUsersInput
+  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutJobSiteUserAssignmentInput
 }
 
 export type JobSiteUserAssignmentUncheckedCreateWithoutOrganizationInput = {
@@ -710,10 +1017,17 @@ export type JobSiteUserAssignmentUncheckedCreateWithoutOrganizationInput = {
   jobSiteId: string
   userId: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endedById?: string | null
+  endReason?: string | null
   assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutJobSiteUserAssignmentInput
 }
 
 export type JobSiteUserAssignmentCreateOrConnectWithoutOrganizationInput = {
@@ -745,12 +1059,19 @@ export type JobSiteUserAssignmentUpdateManyWithWhereWithoutOrganizationInput = {
 export type JobSiteUserAssignmentCreateWithoutJobSiteInput = {
   id?: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSiteUserAssignmentsInput
   user: Prisma.UserCreateNestedOneWithoutJobSiteUserAssignmentsInput
   assignedBy: Prisma.UserCreateNestedOneWithoutAssignedJobSiteUsersInput
+  endedBy?: Prisma.UserCreateNestedOneWithoutEndedJobSiteUsersInput
+  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutJobSiteUserAssignmentInput
 }
 
 export type JobSiteUserAssignmentUncheckedCreateWithoutJobSiteInput = {
@@ -758,10 +1079,17 @@ export type JobSiteUserAssignmentUncheckedCreateWithoutJobSiteInput = {
   organizationId: string
   userId: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endedById?: string | null
+  endReason?: string | null
   assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutJobSiteUserAssignmentInput
 }
 
 export type JobSiteUserAssignmentCreateOrConnectWithoutJobSiteInput = {
@@ -790,11 +1118,105 @@ export type JobSiteUserAssignmentUpdateManyWithWhereWithoutJobSiteInput = {
   data: Prisma.XOR<Prisma.JobSiteUserAssignmentUpdateManyMutationInput, Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteInput>
 }
 
+export type JobSiteUserAssignmentCreateWithoutPackageItemsInput = {
+  id?: string
+  assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutJobSiteUserAssignmentsInput
+  jobSite: Prisma.JobSiteCreateNestedOneWithoutUserAssignmentsInput
+  user: Prisma.UserCreateNestedOneWithoutJobSiteUserAssignmentsInput
+  assignedBy: Prisma.UserCreateNestedOneWithoutAssignedJobSiteUsersInput
+  endedBy?: Prisma.UserCreateNestedOneWithoutEndedJobSiteUsersInput
+}
+
+export type JobSiteUserAssignmentUncheckedCreateWithoutPackageItemsInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  userId: string
+  assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endedById?: string | null
+  endReason?: string | null
+  assignedById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+}
+
+export type JobSiteUserAssignmentCreateOrConnectWithoutPackageItemsInput = {
+  where: Prisma.JobSiteUserAssignmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutPackageItemsInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutPackageItemsInput>
+}
+
+export type JobSiteUserAssignmentUpsertWithoutPackageItemsInput = {
+  update: Prisma.XOR<Prisma.JobSiteUserAssignmentUpdateWithoutPackageItemsInput, Prisma.JobSiteUserAssignmentUncheckedUpdateWithoutPackageItemsInput>
+  create: Prisma.XOR<Prisma.JobSiteUserAssignmentCreateWithoutPackageItemsInput, Prisma.JobSiteUserAssignmentUncheckedCreateWithoutPackageItemsInput>
+  where?: Prisma.JobSiteUserAssignmentWhereInput
+}
+
+export type JobSiteUserAssignmentUpdateToOneWithWhereWithoutPackageItemsInput = {
+  where?: Prisma.JobSiteUserAssignmentWhereInput
+  data: Prisma.XOR<Prisma.JobSiteUserAssignmentUpdateWithoutPackageItemsInput, Prisma.JobSiteUserAssignmentUncheckedUpdateWithoutPackageItemsInput>
+}
+
+export type JobSiteUserAssignmentUpdateWithoutPackageItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutUserAssignmentsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput
+  assignedBy?: Prisma.UserUpdateOneRequiredWithoutAssignedJobSiteUsersNestedInput
+  endedBy?: Prisma.UserUpdateOneWithoutEndedJobSiteUsersNestedInput
+}
+
+export type JobSiteUserAssignmentUncheckedUpdateWithoutPackageItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 export type JobSiteUserAssignmentCreateManyUserInput = {
   id?: string
   organizationId: string
   jobSiteId: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endedById?: string | null
+  endReason?: string | null
   assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -807,6 +1229,29 @@ export type JobSiteUserAssignmentCreateManyAssignedByInput = {
   jobSiteId: string
   userId: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endedById?: string | null
+  endReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+}
+
+export type JobSiteUserAssignmentCreateManyEndedByInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  userId: string
+  assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endReason?: string | null
+  assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
@@ -815,12 +1260,19 @@ export type JobSiteUserAssignmentCreateManyAssignedByInput = {
 export type JobSiteUserAssignmentUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutUserAssignmentsNestedInput
   assignedBy?: Prisma.UserUpdateOneRequiredWithoutAssignedJobSiteUsersNestedInput
+  endedBy?: Prisma.UserUpdateOneWithoutEndedJobSiteUsersNestedInput
+  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutJobSiteUserAssignmentNestedInput
 }
 
 export type JobSiteUserAssignmentUncheckedUpdateWithoutUserInput = {
@@ -828,10 +1280,17 @@ export type JobSiteUserAssignmentUncheckedUpdateWithoutUserInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutJobSiteUserAssignmentNestedInput
 }
 
 export type JobSiteUserAssignmentUncheckedUpdateManyWithoutUserInput = {
@@ -839,6 +1298,12 @@ export type JobSiteUserAssignmentUncheckedUpdateManyWithoutUserInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -848,12 +1313,19 @@ export type JobSiteUserAssignmentUncheckedUpdateManyWithoutUserInput = {
 export type JobSiteUserAssignmentUpdateWithoutAssignedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutUserAssignmentsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput
+  endedBy?: Prisma.UserUpdateOneWithoutEndedJobSiteUsersNestedInput
+  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutJobSiteUserAssignmentNestedInput
 }
 
 export type JobSiteUserAssignmentUncheckedUpdateWithoutAssignedByInput = {
@@ -862,9 +1334,16 @@ export type JobSiteUserAssignmentUncheckedUpdateWithoutAssignedByInput = {
   jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutJobSiteUserAssignmentNestedInput
 }
 
 export type JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByInput = {
@@ -873,6 +1352,65 @@ export type JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByInput = {
   jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type JobSiteUserAssignmentUpdateWithoutEndedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutUserAssignmentsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput
+  assignedBy?: Prisma.UserUpdateOneRequiredWithoutAssignedJobSiteUsersNestedInput
+  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutJobSiteUserAssignmentNestedInput
+}
+
+export type JobSiteUserAssignmentUncheckedUpdateWithoutEndedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutJobSiteUserAssignmentNestedInput
+}
+
+export type JobSiteUserAssignmentUncheckedUpdateManyWithoutEndedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -883,6 +1421,12 @@ export type JobSiteUserAssignmentCreateManyOrganizationInput = {
   jobSiteId: string
   userId: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endedById?: string | null
+  endReason?: string | null
   assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -892,12 +1436,19 @@ export type JobSiteUserAssignmentCreateManyOrganizationInput = {
 export type JobSiteUserAssignmentUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutUserAssignmentsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput
   assignedBy?: Prisma.UserUpdateOneRequiredWithoutAssignedJobSiteUsersNestedInput
+  endedBy?: Prisma.UserUpdateOneWithoutEndedJobSiteUsersNestedInput
+  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutJobSiteUserAssignmentNestedInput
 }
 
 export type JobSiteUserAssignmentUncheckedUpdateWithoutOrganizationInput = {
@@ -905,10 +1456,17 @@ export type JobSiteUserAssignmentUncheckedUpdateWithoutOrganizationInput = {
   jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutJobSiteUserAssignmentNestedInput
 }
 
 export type JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationInput = {
@@ -916,6 +1474,12 @@ export type JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationInput = {
   jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -927,6 +1491,12 @@ export type JobSiteUserAssignmentCreateManyJobSiteInput = {
   organizationId: string
   userId: string
   assignmentRole?: $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: string | null
+  taskLabel?: string | null
+  startsAt?: Date | string
+  endsAt?: Date | string | null
+  endedById?: string | null
+  endReason?: string | null
   assignedById: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -936,12 +1506,19 @@ export type JobSiteUserAssignmentCreateManyJobSiteInput = {
 export type JobSiteUserAssignmentUpdateWithoutJobSiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput
   assignedBy?: Prisma.UserUpdateOneRequiredWithoutAssignedJobSiteUsersNestedInput
+  endedBy?: Prisma.UserUpdateOneWithoutEndedJobSiteUsersNestedInput
+  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutJobSiteUserAssignmentNestedInput
 }
 
 export type JobSiteUserAssignmentUncheckedUpdateWithoutJobSiteInput = {
@@ -949,10 +1526,17 @@ export type JobSiteUserAssignmentUncheckedUpdateWithoutJobSiteInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutJobSiteUserAssignmentNestedInput
 }
 
 export type JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteInput = {
@@ -960,12 +1544,47 @@ export type JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentRole?: Prisma.EnumJobSiteUserAssignmentRoleFieldUpdateOperationsInput | $Enums.JobSiteUserAssignmentRole
+  operationalRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taskLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
+
+/**
+ * Count Type JobSiteUserAssignmentCountOutputType
+ */
+
+export type JobSiteUserAssignmentCountOutputType = {
+  packageItems: number
+}
+
+export type JobSiteUserAssignmentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  packageItems?: boolean | JobSiteUserAssignmentCountOutputTypeCountPackageItemsArgs
+}
+
+/**
+ * JobSiteUserAssignmentCountOutputType without action
+ */
+export type JobSiteUserAssignmentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteUserAssignmentCountOutputType
+   */
+  select?: Prisma.JobSiteUserAssignmentCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * JobSiteUserAssignmentCountOutputType without action
+ */
+export type JobSiteUserAssignmentCountOutputTypeCountPackageItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DocumentPackageItemWhereInput
+}
 
 
 export type JobSiteUserAssignmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -974,6 +1593,12 @@ export type JobSiteUserAssignmentSelect<ExtArgs extends runtime.Types.Extensions
   jobSiteId?: boolean
   userId?: boolean
   assignmentRole?: boolean
+  operationalRoleLabel?: boolean
+  taskLabel?: boolean
+  startsAt?: boolean
+  endsAt?: boolean
+  endedById?: boolean
+  endReason?: boolean
   assignedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -982,6 +1607,9 @@ export type JobSiteUserAssignmentSelect<ExtArgs extends runtime.Types.Extensions
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  endedBy?: boolean | Prisma.JobSiteUserAssignment$endedByArgs<ExtArgs>
+  packageItems?: boolean | Prisma.JobSiteUserAssignment$packageItemsArgs<ExtArgs>
+  _count?: boolean | Prisma.JobSiteUserAssignmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jobSiteUserAssignment"]>
 
 export type JobSiteUserAssignmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -990,6 +1618,12 @@ export type JobSiteUserAssignmentSelectCreateManyAndReturn<ExtArgs extends runti
   jobSiteId?: boolean
   userId?: boolean
   assignmentRole?: boolean
+  operationalRoleLabel?: boolean
+  taskLabel?: boolean
+  startsAt?: boolean
+  endsAt?: boolean
+  endedById?: boolean
+  endReason?: boolean
   assignedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -998,6 +1632,7 @@ export type JobSiteUserAssignmentSelectCreateManyAndReturn<ExtArgs extends runti
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  endedBy?: boolean | Prisma.JobSiteUserAssignment$endedByArgs<ExtArgs>
 }, ExtArgs["result"]["jobSiteUserAssignment"]>
 
 export type JobSiteUserAssignmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1006,6 +1641,12 @@ export type JobSiteUserAssignmentSelectUpdateManyAndReturn<ExtArgs extends runti
   jobSiteId?: boolean
   userId?: boolean
   assignmentRole?: boolean
+  operationalRoleLabel?: boolean
+  taskLabel?: boolean
+  startsAt?: boolean
+  endsAt?: boolean
+  endedById?: boolean
+  endReason?: boolean
   assignedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1014,6 +1655,7 @@ export type JobSiteUserAssignmentSelectUpdateManyAndReturn<ExtArgs extends runti
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  endedBy?: boolean | Prisma.JobSiteUserAssignment$endedByArgs<ExtArgs>
 }, ExtArgs["result"]["jobSiteUserAssignment"]>
 
 export type JobSiteUserAssignmentSelectScalar = {
@@ -1022,30 +1664,41 @@ export type JobSiteUserAssignmentSelectScalar = {
   jobSiteId?: boolean
   userId?: boolean
   assignmentRole?: boolean
+  operationalRoleLabel?: boolean
+  taskLabel?: boolean
+  startsAt?: boolean
+  endsAt?: boolean
+  endedById?: boolean
+  endReason?: boolean
   assignedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   archivedAt?: boolean
 }
 
-export type JobSiteUserAssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "jobSiteId" | "userId" | "assignmentRole" | "assignedById" | "createdAt" | "updatedAt" | "archivedAt", ExtArgs["result"]["jobSiteUserAssignment"]>
+export type JobSiteUserAssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "jobSiteId" | "userId" | "assignmentRole" | "operationalRoleLabel" | "taskLabel" | "startsAt" | "endsAt" | "endedById" | "endReason" | "assignedById" | "createdAt" | "updatedAt" | "archivedAt", ExtArgs["result"]["jobSiteUserAssignment"]>
 export type JobSiteUserAssignmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  endedBy?: boolean | Prisma.JobSiteUserAssignment$endedByArgs<ExtArgs>
+  packageItems?: boolean | Prisma.JobSiteUserAssignment$packageItemsArgs<ExtArgs>
+  _count?: boolean | Prisma.JobSiteUserAssignmentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type JobSiteUserAssignmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  endedBy?: boolean | Prisma.JobSiteUserAssignment$endedByArgs<ExtArgs>
 }
 export type JobSiteUserAssignmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  endedBy?: boolean | Prisma.JobSiteUserAssignment$endedByArgs<ExtArgs>
 }
 
 export type $JobSiteUserAssignmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1055,6 +1708,8 @@ export type $JobSiteUserAssignmentPayload<ExtArgs extends runtime.Types.Extensio
     jobSite: Prisma.$JobSitePayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
     assignedBy: Prisma.$UserPayload<ExtArgs>
+    endedBy: Prisma.$UserPayload<ExtArgs> | null
+    packageItems: Prisma.$DocumentPackageItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1062,6 +1717,12 @@ export type $JobSiteUserAssignmentPayload<ExtArgs extends runtime.Types.Extensio
     jobSiteId: string
     userId: string
     assignmentRole: $Enums.JobSiteUserAssignmentRole
+    operationalRoleLabel: string | null
+    taskLabel: string | null
+    startsAt: Date
+    endsAt: Date | null
+    endedById: string | null
+    endReason: string | null
     assignedById: string
     createdAt: Date
     updatedAt: Date
@@ -1464,6 +2125,8 @@ export interface Prisma__JobSiteUserAssignmentClient<T, Null = never, ExtArgs ex
   jobSite<T extends Prisma.JobSiteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteDefaultArgs<ExtArgs>>): Prisma.Prisma__JobSiteClient<runtime.Types.Result.GetResult<Prisma.$JobSitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   assignedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  endedBy<T extends Prisma.JobSiteUserAssignment$endedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteUserAssignment$endedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  packageItems<T extends Prisma.JobSiteUserAssignment$packageItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteUserAssignment$packageItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPackageItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1498,6 +2161,12 @@ export interface JobSiteUserAssignmentFieldRefs {
   readonly jobSiteId: Prisma.FieldRef<"JobSiteUserAssignment", 'String'>
   readonly userId: Prisma.FieldRef<"JobSiteUserAssignment", 'String'>
   readonly assignmentRole: Prisma.FieldRef<"JobSiteUserAssignment", 'JobSiteUserAssignmentRole'>
+  readonly operationalRoleLabel: Prisma.FieldRef<"JobSiteUserAssignment", 'String'>
+  readonly taskLabel: Prisma.FieldRef<"JobSiteUserAssignment", 'String'>
+  readonly startsAt: Prisma.FieldRef<"JobSiteUserAssignment", 'DateTime'>
+  readonly endsAt: Prisma.FieldRef<"JobSiteUserAssignment", 'DateTime'>
+  readonly endedById: Prisma.FieldRef<"JobSiteUserAssignment", 'String'>
+  readonly endReason: Prisma.FieldRef<"JobSiteUserAssignment", 'String'>
   readonly assignedById: Prisma.FieldRef<"JobSiteUserAssignment", 'String'>
   readonly createdAt: Prisma.FieldRef<"JobSiteUserAssignment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"JobSiteUserAssignment", 'DateTime'>
@@ -1900,6 +2569,49 @@ export type JobSiteUserAssignmentDeleteManyArgs<ExtArgs extends runtime.Types.Ex
    * Limit how many JobSiteUserAssignments to delete.
    */
   limit?: number
+}
+
+/**
+ * JobSiteUserAssignment.endedBy
+ */
+export type JobSiteUserAssignment$endedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * JobSiteUserAssignment.packageItems
+ */
+export type JobSiteUserAssignment$packageItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DocumentPackageItem
+   */
+  select?: Prisma.DocumentPackageItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DocumentPackageItem
+   */
+  omit?: Prisma.DocumentPackageItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentPackageItemInclude<ExtArgs> | null
+  where?: Prisma.DocumentPackageItemWhereInput
+  orderBy?: Prisma.DocumentPackageItemOrderByWithRelationInput | Prisma.DocumentPackageItemOrderByWithRelationInput[]
+  cursor?: Prisma.DocumentPackageItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DocumentPackageItemScalarFieldEnum | Prisma.DocumentPackageItemScalarFieldEnum[]
 }
 
 /**

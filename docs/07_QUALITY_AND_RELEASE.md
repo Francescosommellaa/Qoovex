@@ -7,6 +7,10 @@
 ## Copertura Fasi 3-4 implementata
 
 - cinque definizioni registry e transizioni invalide;
+- transizioni cantiere valide/invalide, blocchi, override e riapertura;
+- ID noto e negazioni per file, sensibilita, scope assegnato e sessione Support;
+- lifecycle versioni e prove, checksum duplicato e snapshot selettivi dei pacchetti;
+- richieste, messaggi, timeline e controlli fonte tenant-safe;
 - matrice affidabilita x impatto;
 - payload minimizzati, artifact tenant-scoped e idempotency key;
 - claim concorrente, lease di cinque minuti, fencing e backoff;
