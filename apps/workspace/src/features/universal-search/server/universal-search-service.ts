@@ -13,7 +13,7 @@ import { requireOrganizationDomainAccess } from "@shared/server/domain-access-se
 import { getResourceScope } from "@shared/server/resource-scope-service";
 import { processScopeWhere } from "@features/operational-engine/server/operational-read-service";
 
-const SEARCH_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const SEARCH_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const labels: Record<UniversalSearchResultType, string> = {
   DOCUMENT: "Documenti",
   DOCUMENT_TYPE: "Tipi documento",
@@ -120,7 +120,7 @@ function isAfterCursor(item: { score: number; row: CandidateRow }, cursor: Searc
 
 function isVisible(row: CandidateRow, input: {
   fullAccess: boolean;
-  actorRole: string;
+  preset: string | null;
   linkedWorkerId: string | null;
   visibleJobSiteIds: Set<string>;
   visibleWorkerIds: Set<string>;
@@ -134,7 +134,7 @@ function isVisible(row: CandidateRow, input: {
   if (row.type === "WORKER") return row.id === input.linkedWorkerId || input.visibleWorkerIds.has(row.id);
   if (row.type === "JOB_SITE" || row.type === "CHECKLIST") return Boolean(row.jobSiteId && input.visibleJobSiteIds.has(row.jobSiteId));
   if (row.type === "DOCUMENT") {
-    if (input.actorRole === "WORKER") return row.workerId === input.linkedWorkerId;
+    if (input.preset === "LIMITED_UPLOAD") return row.workerId === input.linkedWorkerId;
     return Boolean(row.jobSiteId && input.visibleJobSiteIds.has(row.jobSiteId));
   }
   if (row.type === "DEADLINE" || row.type === "EVIDENCE") {
@@ -222,14 +222,14 @@ export async function universalSearch(input: UniversalSearchRequest): Promise<Un
   const canShare = access.context.permissions.includes("documentPackages:share");
   const [rows, visibleWorkers, visibleProcesses] = await Promise.all([
     loadCandidates(scope.organizationId, parsed.query),
-    scope.actorRole === "SITE_MANAGER" && scope.siteManagerJobSiteIds.length
+    scope.preset === "SITE_MANAGER" && scope.siteManagerJobSiteIds.length
       ? db.jobSiteWorkerAssignment.findMany({ where: { organizationId: scope.organizationId, archivedAt: null, jobSiteId: { in: scope.siteManagerJobSiteIds } }, select: { workerId: true } })
       : Promise.resolve([]),
     db.operationalProcess.findMany({ where: await processScopeWhere(scope), select: { id: true } }),
   ]);
   const visibility = {
     fullAccess: scope.fullAccess,
-    actorRole: scope.actorRole,
+    preset: scope.preset,
     linkedWorkerId: scope.linkedWorker?.id ?? null,
     visibleJobSiteIds,
     visibleWorkerIds: new Set(visibleWorkers.map((item) => item.workerId)),

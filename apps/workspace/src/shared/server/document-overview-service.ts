@@ -9,23 +9,24 @@ import { documentListSelect, toDocumentListRecord } from "./document-service";
 import { getResourceScope } from "./resource-scope-service";
 import { recordSupportAccess } from "./support-access-service";
 
-const DOCUMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const DOCUMENT_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const ATTENTION_STATUSES: DocumentStatus[] = ["EXPIRED", "EXPIRING_SOON", "MISSING", "TO_REVIEW"];
 
 function scopedDocumentWhere(input: {
   organizationId: string;
-  actorRole: string;
+  preset: string | null;
+  canReadSensitive: boolean;
   fullAccess: boolean;
   siteManagerJobSiteIds: string[];
   linkedWorkerId?: string;
 }): Prisma.DocumentWhereInput {
   const where: Prisma.DocumentWhereInput = { organizationId: input.organizationId, archivedAt: null };
   if (!input.fullAccess) {
-    if (input.actorRole === "SITE_MANAGER") where.OR = [{ ownerType: "JOB_SITE", jobSiteId: { in: input.siteManagerJobSiteIds } }];
-    if (input.actorRole === "WORKER" && input.linkedWorkerId) where.OR = [{ ownerType: "WORKER", workerId: input.linkedWorkerId }];
+    if (input.preset === "SITE_MANAGER") where.OR = [{ ownerType: "JOB_SITE", jobSiteId: { in: input.siteManagerJobSiteIds } }];
+    if (input.preset === "LIMITED_UPLOAD" && input.linkedWorkerId) where.OR = [{ ownerType: "WORKER", workerId: input.linkedWorkerId }];
     if (!where.OR) where.id = { in: [] };
   }
-  if (input.actorRole !== "OWNER" && input.actorRole !== "ADMIN") {
+  if (!input.canReadSensitive) {
     where.AND = [{ OR: [{ documentTypeId: null }, { documentType: { is: { sensitivity: "STANDARD" } } }] }];
   }
   return where;
@@ -39,7 +40,8 @@ export async function getDocumentOverview(visibleTargets?: {
   const scope = await getResourceScope(context);
   const where = scopedDocumentWhere({
     organizationId,
-    actorRole,
+    preset: scope.preset,
+    canReadSensitive: context.permissions.includes("documents:sensitive:read"),
     fullAccess: scope.fullAccess,
     siteManagerJobSiteIds: scope.siteManagerJobSiteIds,
     linkedWorkerId: scope.linkedWorker?.id,

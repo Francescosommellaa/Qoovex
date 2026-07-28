@@ -13,9 +13,9 @@ import { auditActorFromContext, recordProductAuditEventBestEffort } from "./prod
 import { canReadEvidence, getResourceScope, type ResourceScope } from "./resource-scope-service";
 import { validateBinaryFileContent } from "./file-content-validation";
 
-const EVIDENCE_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
-const EVIDENCE_UPLOAD_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
-const EVIDENCE_ARCHIVE_ROLES = ["OWNER", "ADMIN"] as const;
+const EVIDENCE_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const EVIDENCE_UPLOAD_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const EVIDENCE_ARCHIVE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 export const EVIDENCE_MAX_SIZE_BYTES = 4 * 1024 * 1024;
 export const EVIDENCE_PHOTO_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
@@ -174,13 +174,13 @@ async function assertEvidenceContextAllowed(scope: ResourceScope, context: { job
     checklistJobSiteId = checklistItem?.checklist.jobSiteId ?? null;
   }
 
-  if (scope.actorRole === "SITE_MANAGER") {
+  if (scope.preset === "SITE_MANAGER") {
     const jobSiteId = context.jobSiteId ?? checklistJobSiteId;
     if (!jobSiteId || !scope.siteManagerJobSiteIds.includes(jobSiteId)) throw new AccessError("Risorsa non disponibile.", 404);
     return;
   }
 
-  if (scope.actorRole === "WORKER") {
+  if (scope.preset === "LIMITED_UPLOAD") {
     if (context.workerId && context.workerId !== scope.linkedWorker?.id) throw new AccessError("Risorsa non disponibile.", 404);
     const jobSiteId = context.jobSiteId ?? checklistJobSiteId;
     if (jobSiteId && !scope.workerJobSiteIds.includes(jobSiteId)) throw new AccessError("Risorsa non disponibile.", 404);
@@ -205,13 +205,13 @@ export async function listEvidence(input: ListEvidenceInput = {}) {
     archivedAt: null,
   };
   if (!scope.fullAccess) {
-    if (scope.actorRole === "SITE_MANAGER") {
+    if (scope.preset === "SITE_MANAGER") {
       where.OR = [
         { jobSiteId: { in: scope.siteManagerJobSiteIds } },
         { checklistItem: { checklist: { jobSiteId: { in: scope.siteManagerJobSiteIds } } } },
       ];
     }
-    if (scope.actorRole === "WORKER" && scope.linkedWorker) {
+    if (scope.preset === "LIMITED_UPLOAD" && scope.linkedWorker) {
       where.OR = [
         { workerId: scope.linkedWorker.id },
         { jobSiteId: { in: scope.workerJobSiteIds } },

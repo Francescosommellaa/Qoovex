@@ -200,7 +200,7 @@ describe("workspace admin UI copy", () => {
     expect(documentCreateFlowSource).toContain("setCreatedDocument(document)");
     expect(documentCreateFlowSource).toContain("senza creare un duplicato");
     expect(invitePersonSource).not.toContain('value: "OWNER"');
-    expect(invitePersonSource).toContain("Gestisce l'azienda e il lavoro quotidiano");
+    expect(invitePersonSource).toContain("Configura il Collaboratore con perimetro e permessi espliciti");
   });
 
   it("keeps the document list on the canonical UI foundation and preserves task context across filters", () => {
@@ -275,9 +275,9 @@ describe("workspace admin UI copy", () => {
     expect(workerDetailsDialogSource).not.toContain("fetch(");
     expect(workerFormSource).toContain("Mansione");
     expect(guidedWorkerCreateSource).toContain("Solo profilo operativo");
-    expect(guidedWorkerCreateSource).toContain('role: "WORKER"');
+    expect(guidedWorkerCreateSource).toContain('role: "COLLABORATOR"');
     expect(guidedWorkerCreateSource).toContain("Nomi simili trovati");
-    for (const role of ["ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"]) expect(guidedWorkerCreateSource).not.toContain(`role: "${role}"`);
+    expect(guidedWorkerCreateSource).toContain('preset: "LIMITED_UPLOAD"');
     expect(workersRouteSource).toContain("listPeopleWorkers");
     expect(workersRouteSource).toContain('params.intent === "create"');
     expect(newWorkerRouteSource).toContain('redirect("/workers?intent=create")');

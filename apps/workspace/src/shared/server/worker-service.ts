@@ -11,8 +11,8 @@ import { auditActorFromContext, recordProductAuditEventBestEffort } from "./prod
 import { canReadSiteManagerWorker, canReadWorker, getResourceScope } from "./resource-scope-service";
 import { normalizeOptionalEmail, parseEditableRecordStatus, rejectSensitiveFields } from "./worker-jobsite-validation";
 
-const WORKER_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
-const WORKER_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const WORKER_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const WORKER_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 const workerSelect = {
   id: true,
@@ -49,12 +49,12 @@ export interface UpdateWorkerInput extends Record<string, unknown> {
 export async function listWorkers() {
   const { context, organizationId } = await requireOrganizationDomainAccess("workers:read", WORKER_READ_ROLES);
   const scope = await getResourceScope(context);
-  if (scope.actorRole === "WORKER") {
+  if (scope.preset === "LIMITED_UPLOAD") {
     if (!scope.linkedWorker) return [];
     const worker = await db.worker.findFirst({ where: { id: scope.linkedWorker.id, organizationId, archivedAt: null }, select: workerSelect });
     return worker ? [worker] : [];
   }
-  if (scope.actorRole === "SITE_MANAGER") {
+  if (scope.preset === "SITE_MANAGER") {
     if (!scope.siteManagerJobSiteIds.length) return [];
     const assignments = await db.jobSiteWorkerAssignment.findMany({
       where: {
@@ -88,7 +88,7 @@ export async function getWorker(workerId: string) {
   const worker = await db.worker.findFirst({ where: { id: workerId, organizationId, archivedAt: null }, select: workerSelect });
   if (!worker) throw new AccessError("Lavoratore non trovato.", 404);
   if (!canReadWorker(scope, worker.id)) {
-    const assignments = scope.actorRole === "SITE_MANAGER"
+    const assignments = scope.preset === "SITE_MANAGER"
       ? await db.jobSiteWorkerAssignment.findMany({
         where: { organizationId, workerId: worker.id, archivedAt: null, jobSite: { archivedAt: null } },
         select: { jobSiteId: true },

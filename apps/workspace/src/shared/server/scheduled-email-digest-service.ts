@@ -7,7 +7,7 @@ import { sendTransactionalEmail, TransactionalEmailError } from "./transactional
 import { syncOrganizationReminderRecords } from "./reminder-service";
 import { recordProductAuditEventBestEffort } from "./product-audit-service";
 
-const SCHEDULED_EMAIL_ROLES: OrganizationRole[] = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"];
+const SCHEDULED_EMAIL_ROLES: OrganizationRole[] = ["OWNER", "COLLABORATOR"];
 const DAY_MS = 24 * 60 * 60 * 1000;
 const WEEK_MS = 7 * DAY_MS;
 const DIGEST_PAGE_SIZE = 100;

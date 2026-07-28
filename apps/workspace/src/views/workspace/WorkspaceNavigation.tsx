@@ -16,7 +16,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import type { SupportContext } from "@qoovex/types";
+import type { PlatformRole, SupportContext } from "@qoovex/types";
 import { Badge } from "@qoovex/ui/components/badge";
 import {
   DropdownMenu,
@@ -64,7 +64,7 @@ const iconByHref = {
 interface WorkspaceNavigationProps {
   authenticated: boolean;
   navigation: WorkspaceNavigationModel;
-  platformRole: "USER" | "SUPER_ADMIN" | null;
+  platformRole: PlatformRole | null;
   support: SupportContext | null;
 }
 
@@ -109,14 +109,17 @@ export function WorkspaceNavigation({ navigation, platformRole, support, authent
     return pathMatches && [...target.searchParams].every(([key, value]) => searchParams.get(key) === value);
   };
 
-  if (isPlatformConsole && platformRole === "SUPER_ADMIN") {
+  if (isPlatformConsole && (platformRole === "SUPPORT_AGENT" || platformRole === "PLATFORM_ADMIN")) {
+    const visiblePlatformItems = platformRole === "PLATFORM_ADMIN"
+      ? platformNavItems
+      : platformNavItems.filter((item) => item.href === "/qoovex-admin" || item.href === "/account/security");
     return (
       <>
         <SidebarContent><SidebarGroup><SidebarGroupLabel>Console Qoovex</SidebarGroupLabel><SidebarGroupContent>
-          <SidebarMenu>{platformNavItems.map((item) => <NavigationLink current={current} item={item} key={item.href} />)}</SidebarMenu>
+          <SidebarMenu>{visiblePlatformItems.map((item) => <NavigationLink current={current} item={item} key={item.href} />)}</SidebarMenu>
         </SidebarGroupContent></SidebarGroup></SidebarContent>
         <SidebarFooter>
-          <SidebarMenu><SidebarMenuItem><SidebarMenuButton render={<Link href="/dashboard" onClick={() => { if (isMobile) setOpenMobile(false); }} />} tooltip="Torna al workspace"><IconHome /><span>Torna al workspace</span></SidebarMenuButton></SidebarMenuItem></SidebarMenu>
+          {support ? <SidebarMenu><SidebarMenuItem><SidebarMenuButton render={<Link href="/dashboard" onClick={() => { if (isMobile) setOpenMobile(false); }} />} tooltip="Torna al workspace"><IconHome /><span>Azienda assistita</span></SidebarMenuButton></SidebarMenuItem></SidebarMenu> : null}
           <AccountMenu navigation={navigation} support={support} onNavigate={() => { if (isMobile) setOpenMobile(false); }} />
         </SidebarFooter>
       </>

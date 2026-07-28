@@ -109,7 +109,7 @@ beforeEach(() => {
   mocks.auditActorFromContext.mockReturnValue({ actorUserId: "user-owner", actorRole: "OWNER", supportSessionId: null });
   mocks.db.worker.findFirst.mockResolvedValue(worker);
   mocks.db.jobSite.findFirst.mockResolvedValue(jobSite);
-  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "WORKER", user });
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "COLLABORATOR", preset: "LIMITED_UPLOAD", user });
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteUserAssignment.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteWorkerAssignment.findFirst.mockResolvedValue(null);
@@ -128,16 +128,16 @@ describe("resource assignment service", () => {
     mocks.db.worker.findMany.mockResolvedValue([worker]);
     mocks.db.jobSite.findMany.mockResolvedValue([jobSite]);
     mocks.db.organizationMembership.findMany.mockResolvedValue([
-      { role: "WORKER", user },
-      { role: "SITE_MANAGER", user: { id: "manager-1", name: "Elena Mariani", email: "elena@example.com" } },
+      { role: "COLLABORATOR", user },
+      { role: "COLLABORATOR", user: { id: "manager-1", name: "Elena Mariani", email: "elena@example.com" } },
     ]);
 
     await expect(getResourceAssignmentOptions()).resolves.toEqual({
       workers: [worker],
       jobSites: [jobSite],
       users: [
-        { id: "user-worker", label: "Mario Utente", email: "mario@example.com", role: "WORKER" },
-        { id: "manager-1", label: "Elena Mariani", email: "elena@example.com", role: "SITE_MANAGER" },
+        { id: "user-worker", label: "Mario Utente", email: "mario@example.com", role: "COLLABORATOR" },
+        { id: "manager-1", label: "Elena Mariani", email: "elena@example.com", role: "COLLABORATOR" },
       ],
     });
     expect(mocks.db.worker.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { organizationId: "org-1", archivedAt: null } }));
@@ -159,10 +159,13 @@ describe("resource assignment service", () => {
     }));
   });
 
-  it("keeps safety consultants read-only for assignments", async () => {
-    setRole("SAFETY_CONSULTANT");
+  it("keeps collaborators without management permission read-only for assignments", async () => {
+    setRole("COLLABORATOR");
+    mocks.requirePermission.mockImplementationOnce(() => undefined).mockImplementationOnce(() => {
+      throw Object.assign(new Error("Azione non disponibile."), { status: 403 });
+    });
     await expect(listWorkerUserLinks()).resolves.toHaveLength(1);
-    await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 404 });
+    await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 403 });
   });
 
   it("pushes detail-page assignment filters into tenant-scoped Prisma queries", async () => {
@@ -193,7 +196,7 @@ describe("resource assignment service", () => {
   });
 
   it("validates role-specific jobsite assignments and soft archives them", async () => {
-    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "SITE_MANAGER", user });
+    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "COLLABORATOR", preset: "SITE_MANAGER", user });
     await expect(createJobSiteUserAssignment({ jobSiteId: "jobsite-1", userId: "user-worker" })).resolves.toMatchObject({
       jobSiteId: "jobsite-1",
       assignmentRole: "SITE_MANAGER",
@@ -211,10 +214,9 @@ describe("resource assignment service", () => {
     }));
   });
 
-  it("denies assignment management to site managers and workers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER"] as const) {
-      setRole(role);
-      await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 404 });
-    }
+  it("denies assignment management when the collaborator lacks the explicit permission", async () => {
+    setRole("COLLABORATOR");
+    mocks.requirePermission.mockImplementation(() => { throw Object.assign(new Error("Azione non disponibile."), { status: 403 }); });
+    await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 403 });
   });
 });

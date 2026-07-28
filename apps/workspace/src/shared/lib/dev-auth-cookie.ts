@@ -1,14 +1,13 @@
-import { organizationRoles, type OrganizationRole } from "@qoovex/types";
+import { devWorkspaceViews, type DevWorkspaceView } from "@qoovex/types";
 
 export const DEV_AUTH_COOKIE_NAME = "qv-dev-auth";
 
 const COOKIE_VERSION = "v2";
-const LEGACY_COOKIE_VERSION = "v1";
 const COOKIE_TTL_SECONDS = 60 * 60 * 8;
 
 export interface DevAuthCookieSession {
   expiresAt: number;
-  role: OrganizationRole;
+  view: DevWorkspaceView;
 }
 
 function getDevAuthSecret() {
@@ -42,18 +41,18 @@ async function signPayload(secret: string, payload: string) {
   return base64UrlEncode(new Uint8Array(signature));
 }
 
-export function isDevAuthRole(value: unknown): value is OrganizationRole {
-  return typeof value === "string" && [...organizationRoles, "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"].includes(value as OrganizationRole);
+export function isDevAuthView(value: unknown): value is DevWorkspaceView {
+  return typeof value === "string" && devWorkspaceViews.includes(value as DevWorkspaceView);
 }
 
-export async function signDevAuthCookieValue(role: OrganizationRole = "OWNER") {
+export async function signDevAuthCookieValue(view: DevWorkspaceView = "OWNER") {
   const secret = getDevAuthSecret();
   if (!isDevAuthSecretConfigured()) {
     throw new Error("DEV_AUTH_SECRET is missing or too short");
   }
 
   const expiresAt = Math.floor(Date.now() / 1000) + COOKIE_TTL_SECONDS;
-  const payload = `${COOKIE_VERSION}.${expiresAt}.${role}`;
+  const payload = `${COOKIE_VERSION}.${expiresAt}.${view}`;
   const signature = await signPayload(secret, payload);
 
   return {
@@ -69,26 +68,22 @@ export async function readDevAuthCookieValue(value: string | undefined | null): 
   const secret = getDevAuthSecret();
   const parts = value.split(".");
   const version = parts[0];
-  const isLegacy = version === LEGACY_COOKIE_VERSION && parts.length === 3;
-  const isCurrent = version === COOKIE_VERSION && parts.length === 4;
-  if (!isLegacy && !isCurrent) return null;
+  if (version !== COOKIE_VERSION || parts.length !== 4) return null;
 
   const expiresAtRaw = parts[1];
-  const role = isCurrent ? parts[2] : "OWNER";
-  const signature = parts[isCurrent ? 3 : 2];
-  if (!expiresAtRaw || !signature || !isDevAuthRole(role)) return null;
+  const view = parts[2];
+  const signature = parts[3];
+  if (!expiresAtRaw || !signature || !isDevAuthView(view)) return null;
 
   const expiresAt = Number(expiresAtRaw);
   if (!Number.isFinite(expiresAt) || expiresAt <= Math.floor(Date.now() / 1000)) {
     return null;
   }
 
-  const payload = isCurrent
-    ? `${version}.${expiresAtRaw}.${role}`
-    : `${version}.${expiresAtRaw}`;
+  const payload = `${version}.${expiresAtRaw}.${view}`;
   const expectedSignature = await signPayload(secret, payload);
 
-  return timingSafeEqual(signature, expectedSignature) ? { expiresAt, role } : null;
+  return timingSafeEqual(signature, expectedSignature) ? { expiresAt, view } : null;
 }
 
 export async function verifyDevAuthCookieValue(value: string | undefined | null) {

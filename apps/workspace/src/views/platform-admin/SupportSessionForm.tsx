@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import styles from "./PlatformAdmin.module.css";
 
-export function SupportSessionForm({ organizationCode }: { organizationCode: string }) {
+export function SupportSessionForm({ organizationCode }: { organizationCode?: string }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -13,11 +13,13 @@ export function SupportSessionForm({ organizationCode }: { organizationCode: str
     event.preventDefault();
     setLoading(true);
     setError(null);
-    const reason = String(new FormData(event.currentTarget).get("reason") ?? "");
+    const formData = new FormData(event.currentTarget);
+    const code = organizationCode ?? String(formData.get("organizationCode") ?? "").trim().toUpperCase();
+    const reason = String(formData.get("reason") ?? "");
     const response = await fetch("/api/support/sessions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ organizationCode, reason }),
+      body: JSON.stringify({ organizationCode: code, reason }),
     });
     const body = await response.json().catch(() => null) as { message?: string } | null;
     setLoading(false);
@@ -31,9 +33,15 @@ export function SupportSessionForm({ organizationCode }: { organizationCode: str
 
   return (
     <form className={styles.form} onSubmit={submit}>
+      {!organizationCode ? (
+        <div className={styles.field}>
+          <label htmlFor="support-organization-code">Codice azienda</label>
+          <input autoCapitalize="characters" autoComplete="off" id="support-organization-code" name="organizationCode" required />
+        </div>
+      ) : null}
       <div className={styles.field}>
-        <label htmlFor={`support-${organizationCode}`}>Motivo del supporto</label>
-        <textarea id={`support-${organizationCode}`} minLength={8} maxLength={500} name="reason" required />
+        <label htmlFor={`support-${organizationCode ?? "organization"}`}>Motivo del supporto</label>
+        <textarea id={`support-${organizationCode ?? "organization"}`} minLength={8} maxLength={500} name="reason" required />
       </div>
       <button className={styles.button} disabled={loading} type="submit">{loading ? "Apertura in corso" : "Apri supporto"}</button>
       {error ? <p className={styles.error} role="alert">{error}</p> : null}

@@ -1,4 +1,4 @@
-import type { OrganizationPermission, OrganizationRole } from "@qoovex/types";
+import type { OrganizationPermission, OrganizationRole, PlatformRole } from "@qoovex/types";
 import { getPermissionsForRole } from "@shared/server/authorization-policy";
 
 export interface WorkspaceNavigationItem { label: string; href: string; }
@@ -13,7 +13,7 @@ function has(permissions: readonly OrganizationPermission[], permission: Organiz
   return permissions.includes(permission);
 }
 
-export function buildWorkspaceNavigation(access: readonly OrganizationPermission[] | OrganizationRole | null, platformRole: "USER" | "SUPER_ADMIN" | null): WorkspaceNavigationModel {
+export function buildWorkspaceNavigation(access: readonly OrganizationPermission[] | OrganizationRole | null, platformRole: PlatformRole | null): WorkspaceNavigationModel {
   const permissions = Array.isArray(access) ? access : getPermissionsForRole(access as OrganizationRole | null);
   const primary: WorkspaceNavigationItem[] = [];
   if (has(permissions, "organization:read")) primary.push({ label: "Centro operativo", href: "/dashboard" });
@@ -31,7 +31,8 @@ export function buildWorkspaceNavigation(access: readonly OrganizationPermission
 
   const account: WorkspaceNavigationItem[] = [];
   if (platformRole) account.push({ label: "Sicurezza", href: "/account/security" });
-  if (platformRole === "SUPER_ADMIN") account.unshift({ label: "Console Qoovex", href: "/qoovex-admin" });
+  if (platformRole === "SUPPORT_AGENT") account.unshift({ label: "Console supporto", href: "/qoovex-admin" });
+  if (platformRole === "PLATFORM_ADMIN") account.unshift({ label: "Console Qoovex", href: "/qoovex-admin" });
   return { primary, actions: actions.slice(0, 4), account, searchEnabled: has(permissions, "organization:read") };
 }
 

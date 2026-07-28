@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import {
   clearDevAuthCookieValue,
-  isDevAuthRole,
+  isDevAuthView,
   isDevAuthSecretConfigured,
   signDevAuthCookieValue,
 } from "@shared/lib/dev-auth-cookie";
@@ -29,22 +29,22 @@ export async function POST(request: Request) {
     );
   }
 
-  let role: unknown = "OWNER";
+  let view: unknown = "OWNER";
   const rawBody = await request.text();
   if (rawBody) {
     try {
-      role = (JSON.parse(rawBody) as { role?: unknown }).role ?? "OWNER";
+      view = (JSON.parse(rawBody) as { view?: unknown }).view ?? "OWNER";
     } catch {
       return NextResponse.json({ error: "Richiesta dev non valida." }, { status: 400 });
     }
   }
-  if (!isDevAuthRole(role)) {
-    return NextResponse.json({ error: "Ruolo dev non valido." }, { status: 400 });
+  if (!isDevAuthView(view)) {
+    return NextResponse.json({ error: "Vista dev non valida." }, { status: 400 });
   }
 
   let signedCookie;
   try {
-    signedCookie = await signDevAuthCookieValue(role);
+    signedCookie = await signDevAuthCookieValue(view);
   } catch {
     return NextResponse.json(
       { error: "DEV_AUTH_SECRET non configurato (minimo 32 caratteri)." },
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const response = NextResponse.json({ ok: true, role });
+  const response = NextResponse.json({ ok: true, view });
 
   response.cookies.set({
     name: signedCookie.name,

@@ -11,9 +11,9 @@ import { auditActorFromContext, recordProductAuditEventBestEffort } from "./prod
 import { getResourceScope, requireAssignedJobSite } from "./resource-scope-service";
 import { parseEditableRecordStatus } from "./worker-jobsite-validation";
 
-const CHECKLIST_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"] as const;
-const CHECKLIST_MANAGE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
-const CHECKLIST_COMPLETE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"] as const;
+const CHECKLIST_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const CHECKLIST_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const CHECKLIST_COMPLETE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 const checklistSelect = {
   id: true,

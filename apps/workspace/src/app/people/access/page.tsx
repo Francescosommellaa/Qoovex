@@ -5,7 +5,7 @@ import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core
 import { PeopleAccessView } from "@/views/people/PeopleAccessView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 
-const candidateRoles: Array<Exclude<OrganizationRole, "OWNER" | "WORKER">> = ["ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"];
+const candidateRoles: Array<Exclude<OrganizationRole, "OWNER">> = ["COLLABORATOR"];
 
 export default async function PeopleAccessPage() {
   try {

@@ -26,21 +26,7 @@ function uniqueIds(ids: string[]) {
 }
 
 export function isFullResourceScopeRole(role: OrganizationRole) {
-  return role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT";
-}
-
-async function getScopeUserId(context: WorkspaceAccessContext, organizationId: string, preset: OrganizationAccessPreset | null) {
-  if (!(preset === "SITE_MANAGER" || preset === "LIMITED_UPLOAD")) return context.userId;
-  if (context.platformRole !== "SUPER_ADMIN") return context.userId;
-  const { isCurrentDevAuthIdentity } = await import("./dev-auth");
-  if (!(await isCurrentDevAuthIdentity(context.userId))) return context.userId;
-  const legacyRole = preset === "SITE_MANAGER" ? "SITE_MANAGER" : "WORKER";
-  const scopedMembership = await db.organizationMembership.findFirst({
-    where: { organizationId, role: legacyRole, revokedAt: null, user: { suspendedAt: null } },
-    select: { userId: true },
-    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-  });
-  return scopedMembership?.userId ?? context.userId;
+  return role === "OWNER";
 }
 
 export async function getResourceScope(context?: WorkspaceAccessContext): Promise<ResourceScope> {
@@ -52,11 +38,11 @@ export async function getResourceScope(context?: WorkspaceAccessContext): Promis
   if (!actorRole) throw new AccessError("Risorsa non disponibile.", 404);
   const organizationId = context.support?.organization.id ?? context.company?.organization.id;
   if (!organizationId) throw new AccessError("Nessuna azienda configurata.", 403);
-  const preset = context.support ? null : context.company?.preset ?? (actorRole === "SITE_MANAGER" ? "SITE_MANAGER" : actorRole === "WORKER" ? "LIMITED_UPLOAD" : null);
+  const preset = context.support ? null : context.company?.preset ?? null;
   const fullAccess = Boolean(context.support) || (context.company?.scopeMode === undefined ? isFullResourceScopeRole(actorRole) : context.company.scopeMode === "FULL");
-  const scopeUserId = await getScopeUserId(context, organizationId, preset);
+  const scopeUserId = context.userId;
 
-  const membership = context.support || context.company?.scopeMode === undefined ? null : await db.organizationMembership.findFirst({
+  const membership = fullAccess ? null : await db.organizationMembership.findFirst({
     where: { userId: scopeUserId, revokedAt: null },
     select: { id: true, resourceGrants: { select: { resourceType: true, resourceId: true } } },
   });

@@ -2,7 +2,11 @@
 
 ## Stato attuale verificato
 
-Production, Preview, locale e CI/E2E usano target distinti e guardati. Il repository contiene tredici migration; `20260727030000_adaptive_access_model` e stata applicata soltanto al database locale guardato tramite wrapper protetto. `verify:prisma` ha confermato tredici migration e diff nullo; nessun ambiente remoto e stato migrato o distribuito.
+Production, Preview, locale e CI/E2E usano target distinti e guardati. Il repository contiene quindici migration; `20260728010000_access_model_expand` e `20260728020000_access_model_contract` sono state applicate soltanto al database locale guardato tramite wrapper protetto. `verify:prisma` ha confermato quindici migration e diff nullo; il backfill idempotente ha riconciliato 1 Azienda, 7 membership e 3 inviti senza anomalie. Nessun ambiente remoto e stato migrato o distribuito.
+
+## Rollout e rollback access model
+
+Preview e Production restano in hard stop finche target, fingerprint, migration history, drift, backup/PITR e procedura di restore non sono verificabili separatamente. Il rollout autorizzato deve eseguire expand, dry-run del backfill, backfill reale, riconciliazione, codice compatibile, smoke test e solo infine contract, prima su Preview e poi su Production. Il rollback prima del contract usa il punto di ripristino verificato e il codice dual-compatible; dopo il contract richiede restore coordinato di schema e dati. Non usare `db push`, reset, resolve, SQL manuale o rollout simultaneo.
 
 Il workflow `scheduled-jobs.yml` include data-control, digest e il nuovo runner operativo ogni cinque minuti. Il runner operativo crea al massimo 25 processi di controllo continuo per batch, uno per Azienda/finestra oraria, e consuma al massimo 20 step per invocazione. La route `/api/operations/run` richiede `CRON_SECRET`; il workflow modificato non e attivo in ambienti remoti finche non viene distribuito.
 

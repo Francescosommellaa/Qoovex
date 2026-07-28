@@ -5046,6 +5046,8 @@ export const OrganizationMembershipScalarFieldEnum = {
   permissionKeys: 'permissionKeys',
   scopeMode: 'scopeMode',
   expiresAt: 'expiresAt',
+  accessVersion: 'accessVersion',
+  accessUpdatedById: 'accessUpdatedById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   revokedAt: 'revokedAt'
@@ -5059,17 +5061,24 @@ export const OrganizationInvitationScalarFieldEnum = {
   organizationId: 'organizationId',
   workerId: 'workerId',
   email: 'email',
+  recipientName: 'recipientName',
+  message: 'message',
   role: 'role',
   preset: 'preset',
   permissionKeys: 'permissionKeys',
   scopeMode: 'scopeMode',
   tokenHash: 'tokenHash',
+  activeKey: 'activeKey',
   invitedById: 'invitedById',
   expiresAt: 'expiresAt',
   acceptedAt: 'acceptedAt',
+  declinedAt: 'declinedAt',
   revokedAt: 'revokedAt',
   accessExpiresAt: 'accessExpiresAt',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  accessVersion: 'accessVersion',
+  accessUpdatedById: 'accessUpdatedById'
 } as const
 
 export type OrganizationInvitationScalarFieldEnum = (typeof OrganizationInvitationScalarFieldEnum)[keyof typeof OrganizationInvitationScalarFieldEnum]

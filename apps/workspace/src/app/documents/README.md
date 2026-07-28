@@ -8,7 +8,7 @@ Usano i service server-side esistenti per leggere dati filtrati per azienda e le
 
 La lista compone esclusivamente primitive canoniche `@qoovex/ui`, mantiene i filtri nello stato della URL e conserva `origin=dashboard` e `intent=upload` quando presenti. La composizione e app-local e non modifica route, payload, permessi o ordinamento server-side.
 
-OWNER e ADMIN possono aprire la route dedicata `/documents/archive`, filtrarla per contesto, ripristinare un documento come `TO_REVIEW` o eliminarlo definitivamente dopo averne digitato il titolo esatto. Scadenze ed elementi dei pacchetti restano registrati senza il collegamento al documento eliminato. Il vecchio filtro URL `status=ARCHIVED` reindirizza alla route dedicata.
+Gli utenti con `documents:archive` possono aprire la route dedicata `/documents/archive`, filtrarla per contesto, ripristinare un documento come `TO_REVIEW` o eliminarlo definitivamente dopo averne digitato il titolo esatto. Scadenze ed elementi dei pacchetti restano registrati senza il collegamento al documento eliminato. Il vecchio filtro URL `status=ARCHIVED` reindirizza alla route dedicata.
 
 L'azione primaria di ogni riga apre un dialog app-local con i dati gia presenti nella lista. Le versioni file vengono richieste una sola volta alla prima apertura tramite la API protetta esistente; `Gestisci documento` e l'unica CTA del footer e apre la pagina completa per le operazioni avanzate.
 

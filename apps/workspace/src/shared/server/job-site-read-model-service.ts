@@ -16,7 +16,7 @@ import { trimOptionalText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { canReadJobSite, getResourceScope } from "./resource-scope-service";
 
-const JOBSITE_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const JOBSITE_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const DEFAULT_PAGE_SIZE = 20;
 const MAX_PAGE_SIZE = 50;
 const UPCOMING_DAYS = 30;

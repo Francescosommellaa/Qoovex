@@ -34,10 +34,10 @@ beforeEach(() => {
     id: "dev-user",
     email: "dev@qoovex.local",
     emailVerified: new Date(0),
-    platformRole: "SUPER_ADMIN",
+    platformRole: "USER",
     authVersion: 1,
     mfaEnabled: false,
-    devRole: "WORKER",
+    devView: "OWNER",
   });
   mocks.findMembership.mockReset().mockResolvedValue({
     id: "membership-1",
@@ -53,11 +53,11 @@ describe("workspace dev role simulation", () => {
     const context = await getWorkspaceAccessContext();
 
     expect(context.company).toMatchObject({
-      role: "WORKER",
+      role: "OWNER",
       organization: { id: "org-1", name: "Azienda Dev", code: "DEV" },
     });
-    expect(context.platformRole).toBe("SUPER_ADMIN");
-    expect(mocks.getPermissionsForRole).toHaveBeenCalledWith("WORKER");
+    expect(context.platformRole).toBe("USER");
+    expect(mocks.getPermissionsForRole).toHaveBeenCalledWith("OWNER");
     expect(mocks.findMembership).toHaveBeenCalledWith(expect.objectContaining({ where: { userId: "dev-user", revokedAt: null } }));
   });
 });

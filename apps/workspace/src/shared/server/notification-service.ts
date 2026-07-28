@@ -8,7 +8,7 @@ import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { syncOrganizationReminderRecords } from "./reminder-service";
 
-const NOTIFICATION_ACCESS_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const NOTIFICATION_ACCESS_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 export interface ListNotificationsInput {
   filter?: unknown;

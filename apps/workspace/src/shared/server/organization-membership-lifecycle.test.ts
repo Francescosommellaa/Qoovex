@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => ({
   },
   db: {
     organizationMembership: { findUnique: vi.fn() },
-    organizationInvitation: { findUnique: vi.fn() },
+    organizationInvitation: { findUnique: vi.fn(), updateMany: vi.fn() },
     $transaction: vi.fn(),
   },
   tx: {
@@ -17,6 +17,7 @@ const mocks = vi.hoisted(() => ({
     worker: { findFirst: vi.fn() },
     workerUserLink: { findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
     organizationMembership: { findUnique: vi.fn(), create: vi.fn(), updateMany: vi.fn() },
+    organizationMembershipResourceGrant: { deleteMany: vi.fn(), createMany: vi.fn() },
     organizationInvitation: { findUnique: vi.fn(), updateMany: vi.fn() },
     user: { update: vi.fn() },
   },
@@ -50,7 +51,7 @@ vi.mock("@shared/server/transactional-email-service", () => ({ sendTransactional
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: vi.fn() }));
 
 import { createOrganization } from "./organization-access-service";
-import { acceptInvitation, getInvitationPreview } from "./organization-invitation-service";
+import { acceptInvitation, declineInvitation, getInvitationPreview } from "./organization-invitation-service";
 
 beforeEach(() => {
   vi.resetAllMocks();
@@ -63,13 +64,14 @@ beforeEach(() => {
   mocks.tx.worker.findFirst.mockResolvedValue({ id: "worker-1" });
   mocks.tx.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.tx.workerUserLink.create.mockResolvedValue({ id: "link-1" });
+  mocks.db.organizationInvitation.updateMany.mockResolvedValue({ count: 1 });
 });
 
 describe("single organization membership lifecycle", () => {
   it("returns only safe preview data for an active invitation", async () => {
     const expiresAt = new Date(Date.now() + 60_000);
     mocks.db.organizationInvitation.findUnique.mockResolvedValue({
-      role: "WORKER",
+      role: "COLLABORATOR",
       expiresAt,
       acceptedAt: null,
       revokedAt: null,
@@ -78,20 +80,35 @@ describe("single organization membership lifecycle", () => {
 
     await expect(getInvitationPreview("token")).resolves.toEqual({
       organizationName: "Azienda Demo",
-      role: "WORKER",
+      role: "COLLABORATOR",
       expiresAt,
     });
   });
 
   it("does not preview expired or already used invitations", async () => {
     mocks.db.organizationInvitation.findUnique.mockResolvedValue({
-      role: "WORKER",
+      role: "COLLABORATOR",
       expiresAt: new Date(Date.now() - 60_000),
       acceptedAt: null,
       revokedAt: null,
       organization: { name: "Azienda Demo" },
     });
     await expect(getInvitationPreview("token")).resolves.toBeNull();
+  });
+
+  it("lets only the authenticated recipient decline an active invitation without exposing the token", async () => {
+    await expect(declineInvitation("raw-recipient-token")).resolves.toEqual({ declined: true });
+    expect(mocks.db.organizationInvitation.updateMany).toHaveBeenCalledWith({
+      where: expect.objectContaining({
+        tokenHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+        email: "user@example.com",
+        acceptedAt: null,
+        declinedAt: null,
+        revokedAt: null,
+      }),
+      data: { declinedAt: expect.any(Date), activeKey: null, accessVersion: { increment: 1 } },
+    });
+    expect(JSON.stringify(mocks.db.organizationInvitation.updateMany.mock.calls)).not.toContain("raw-recipient-token");
   });
 
   it("rejects a second active membership", async () => {
@@ -116,7 +133,13 @@ describe("single organization membership lifecycle", () => {
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-1",
       email: "user@example.com",
-      role: "WORKER",
+      role: "COLLABORATOR",
+      preset: "CUSTOM",
+      permissionKeys: [],
+      scopeMode: "ASSIGNED",
+      accessExpiresAt: null,
+      invitedById: "owner-1",
+      resourceGrants: [],
       organizationId: "org-invite",
       expiresAt: new Date(Date.now() + 60_000),
       acceptedAt: null,
@@ -126,11 +149,11 @@ describe("single organization membership lifecycle", () => {
     await expect(acceptInvitation("token")).resolves.toEqual({ accepted: true });
     expect(mocks.tx.organizationMembership.updateMany).toHaveBeenCalledWith({
       where: { id: "membership-1", userId: "user-1", revokedAt: { not: null } },
-      data: expect.objectContaining({ organizationId: "org-invite", role: "WORKER", preset: "LIMITED_UPLOAD", scopeMode: "ASSIGNED", revokedAt: null }),
+      data: expect.objectContaining({ organizationId: "org-invite", role: "COLLABORATOR", preset: "CUSTOM", scopeMode: "ASSIGNED", revokedAt: null }),
     });
     expect(mocks.tx.organizationInvitation.updateMany).toHaveBeenCalledWith({
-      where: { id: "invite-1", acceptedAt: null, revokedAt: null, expiresAt: { gt: expect.any(Date) } },
-      data: { acceptedAt: expect.any(Date) },
+      where: { id: "invite-1", acceptedAt: null, declinedAt: null, revokedAt: null, expiresAt: { gt: expect.any(Date) } },
+      data: { acceptedAt: expect.any(Date), activeKey: null },
     });
   });
 
@@ -139,7 +162,12 @@ describe("single organization membership lifecycle", () => {
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-worker",
       email: "user@example.com",
-      role: "WORKER",
+      role: "COLLABORATOR",
+      preset: "LIMITED_UPLOAD",
+      permissionKeys: ["organization:read", "documents:read", "documents:upload"],
+      scopeMode: "ASSIGNED",
+      accessExpiresAt: null,
+      resourceGrants: [],
       organizationId: "org-invite",
       workerId: "worker-1",
       invitedById: "owner-1",
@@ -168,7 +196,12 @@ describe("single organization membership lifecycle", () => {
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-worker",
       email: "user@example.com",
-      role: "WORKER",
+      role: "COLLABORATOR",
+      preset: "LIMITED_UPLOAD",
+      permissionKeys: ["organization:read", "documents:read", "documents:upload"],
+      scopeMode: "ASSIGNED",
+      accessExpiresAt: null,
+      resourceGrants: [],
       organizationId: "org-invite",
       workerId: "worker-1",
       invitedById: "owner-1",
@@ -189,7 +222,7 @@ describe("single organization membership lifecycle", () => {
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-1",
       email: "user@example.com",
-      role: "WORKER",
+      role: "COLLABORATOR",
       organizationId: "org-invite",
       expiresAt: new Date(Date.now() + 60_000),
       acceptedAt: null,
@@ -254,7 +287,7 @@ describe("single organization membership lifecycle", () => {
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-1",
       email: "user@example.com",
-      role: "WORKER",
+      role: "COLLABORATOR",
       organizationId: "org-invite",
       expiresAt: new Date(Date.now() + 60_000),
       acceptedAt: null,

@@ -11,9 +11,9 @@ import { auditActorFromContext, recordProductAuditEventBestEffort } from "./prod
 import { canReadDocument, getResourceScope } from "./resource-scope-service";
 import { validateBinaryFileContent } from "./file-content-validation";
 
-const DOCUMENT_VERSION_UPLOAD_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "WORKER"] as const;
-const DOCUMENT_VERSION_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
-const DOCUMENT_VERSION_ARCHIVE_ROLES = ["OWNER", "ADMIN"] as const;
+const DOCUMENT_VERSION_UPLOAD_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const DOCUMENT_VERSION_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const DOCUMENT_VERSION_ARCHIVE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 export const DOCUMENT_VERSION_MAX_SIZE_BYTES = 4 * 1024 * 1024;
 export const DOCUMENT_VERSION_ALLOWED_MIME_TYPES = ["application/pdf", "image/jpeg", "image/png", "image/webp"] as const;
@@ -151,7 +151,7 @@ export async function listDocumentVersionsByDocumentIds(documentIds: string[]) {
 
   const documentScope = scope.fullAccess
     ? {}
-    : scope.actorRole === "SITE_MANAGER"
+    : scope.preset === "SITE_MANAGER"
       ? { ownerType: "JOB_SITE" as const, jobSiteId: { in: scope.siteManagerJobSiteIds } }
       : scope.linkedWorker
         ? { ownerType: "WORKER" as const, workerId: scope.linkedWorker.id }
@@ -176,7 +176,7 @@ export async function uploadDocumentVersion(documentId: string, files: unknown[]
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:upload", DOCUMENT_VERSION_UPLOAD_ROLES);
   const scope = await getResourceScope(context);
   const document = await findActiveDocument(organizationId, documentId);
-  if (scope.actorRole === "WORKER") {
+  if (scope.preset === "LIMITED_UPLOAD") {
     if (document.ownerType !== "WORKER" || document.workerId !== scope.linkedWorker?.id) throw new AccessError("Documento non trovato.", 404);
   } else if (!scope.fullAccess) {
     throw new AccessError("Risorsa non disponibile.", 404);

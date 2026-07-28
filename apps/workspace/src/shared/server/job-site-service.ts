@@ -11,8 +11,8 @@ import { auditActorFromContext, recordProductAuditEventBestEffort, recordProduct
 import { canReadJobSite, getResourceScope } from "./resource-scope-service";
 import { parseEditableRecordStatus, parseJobSiteOperationalPhase, parseOptionalDateRange, rejectSensitiveFields } from "./worker-jobsite-validation";
 
-const JOBSITE_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
-const JOBSITE_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const JOBSITE_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const JOBSITE_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 const jobSiteSelect = {
   id: true,
@@ -137,7 +137,7 @@ export async function createJobSite(input: CreateJobSiteInput) {
 
   const [managerMemberships, workers] = await Promise.all([
     managerUserIds.length
-      ? db.organizationMembership.findMany({ where: { organizationId, revokedAt: null, role: "SITE_MANAGER", userId: { in: managerUserIds } }, select: { userId: true } })
+      ? db.organizationMembership.findMany({ where: { organizationId, revokedAt: null, role: "COLLABORATOR", preset: "SITE_MANAGER", userId: { in: managerUserIds } }, select: { userId: true } })
       : Promise.resolve([]),
     workerIds.length
       ? db.worker.findMany({ where: { organizationId, archivedAt: null, id: { in: workerIds } }, select: { id: true } })

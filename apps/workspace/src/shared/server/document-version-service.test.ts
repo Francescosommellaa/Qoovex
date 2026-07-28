@@ -1,4 +1,4 @@
-import type { OrganizationRole } from "@qoovex/types";
+import { organizationPermissions, type OrganizationAccessPreset, type OrganizationPermission, type OrganizationRole } from "@qoovex/types";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -9,6 +9,7 @@ const mocks = vi.hoisted(() => ({
     workerUserLink: { findFirst: vi.fn() },
     jobSiteUserAssignment: { findMany: vi.fn() },
     jobSiteWorkerAssignment: { findMany: vi.fn() },
+    organizationMembership: { findFirst: vi.fn() },
   },
   getWorkspaceAccessContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
@@ -81,13 +82,13 @@ function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
   for (const method of Object.values(model)) method.mockReset();
 }
 
-function setRole(role: OrganizationRole) {
+function setRole(role: OrganizationRole, preset: OrganizationAccessPreset | null = null, permissions: OrganizationPermission[] = role === "OWNER" ? [...organizationPermissions] : [], scopeMode: "FULL" | "ASSIGNED" = role === "OWNER" ? "FULL" : "ASSIGNED") {
   mocks.getWorkspaceAccessContext.mockResolvedValue({
     userId: "user-1",
     platformRole: "USER",
-    company: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
+    company: { id: "member-1", role, preset, scopeMode, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
     support: null,
-    permissions: [],
+    permissions,
   });
 }
 
@@ -105,6 +106,7 @@ beforeEach(() => {
   resetModel(mocks.db.workerUserLink);
   resetModel(mocks.db.jobSiteUserAssignment);
   resetModel(mocks.db.jobSiteWorkerAssignment);
+  resetModel(mocks.db.organizationMembership);
   mocks.getWorkspaceAccessContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
@@ -114,7 +116,7 @@ beforeEach(() => {
   mocks.deletePrivateBlob.mockReset();
   mocks.enqueueOperationalProcess.mockReset().mockResolvedValue({ id: "process-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
-  mocks.requirePermission.mockImplementation(() => undefined);
+  mocks.requirePermission.mockImplementation((context, permission) => { if (!context.permissions.includes(permission)) throw Object.assign(new Error("Risorsa non disponibile."), { status: 404 }); });
   mocks.recordSupportAccess.mockResolvedValue(undefined);
   mocks.putPrivateBlob.mockResolvedValue({ pathname: versionRecord.blobKey, etag: "etag", contentType: "application/pdf" });
   mocks.deletePrivateBlob.mockResolvedValue(undefined);
@@ -123,6 +125,7 @@ beforeEach(() => {
   mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: { id: "worker-1", displayName: "Mario", roleLabel: null, status: "ACTIVE" } });
   mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([]);
   mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "membership-1", resourceGrants: [] });
   mocks.db.document.update.mockResolvedValue({ id: "doc-1" });
   mocks.db.documentVersion.create.mockImplementation(async ({ data }) => ({
     ...versionRecord,
@@ -182,21 +185,21 @@ describe("document version service", () => {
   });
 
   it("lets admins, safety consultants and linked workers upload while denying site managers", async () => {
-    setRole("ADMIN");
+    setRole("COLLABORATOR", "OPERATIONAL_COLLABORATION", ["documents:upload"], "FULL");
     await expect(uploadDocumentVersion("doc-1", [makeFile()])).resolves.toMatchObject({ documentId: "doc-1" });
 
-    setRole("SAFETY_CONSULTANT");
+    setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["documents:upload"], "FULL");
     await expect(uploadDocumentVersion("doc-1", [makeFile()])).resolves.toMatchObject({ documentId: "doc-1" });
 
-    setRole("WORKER");
+    setRole("COLLABORATOR", "LIMITED_UPLOAD", ["documents:upload"]);
     await expect(uploadDocumentVersion("doc-1", [makeFile()])).resolves.toMatchObject({ documentId: "doc-1" });
 
-    setRole("SITE_MANAGER");
+    setRole("COLLABORATOR", "SITE_MANAGER", ["documents:upload"]);
     await expect(uploadDocumentVersion("doc-1", [makeFile()])).rejects.toMatchObject({ status: 404 });
   });
 
   it("lets safety consultants list and download versions but not archive", async () => {
-    setRole("SAFETY_CONSULTANT");
+    setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["documents:read", "documents:file:read"], "FULL");
     mocks.db.documentVersion.findMany.mockResolvedValue([versionRecord]);
     mocks.db.documentVersion.findFirst.mockResolvedValue(versionRecord);
     const stream = new ReadableStream<Uint8Array>();
@@ -212,15 +215,15 @@ describe("document version service", () => {
     mocks.db.documentVersion.findFirst.mockResolvedValue(versionRecord);
     mocks.getPrivateBlob.mockResolvedValue({ stream: new ReadableStream<Uint8Array>(), contentType: "application/pdf", size: 4 });
 
-    setRole("WORKER");
+    setRole("COLLABORATOR", "LIMITED_UPLOAD", ["documents:read", "documents:file:read"]);
     await expect(listDocumentVersions("doc-1")).resolves.toHaveLength(1);
     await expect(getDocumentVersionDownload("doc-1", "version-1")).resolves.toMatchObject({ originalFileName: "documento.pdf" });
 
-    setRole("SITE_MANAGER");
+    setRole("COLLABORATOR", "SITE_MANAGER", ["documents:read", "documents:file:read"]);
     await expect(listDocumentVersions("doc-1")).rejects.toMatchObject({ status: 404 });
     await expect(getDocumentVersionDownload("doc-1", "version-1")).rejects.toMatchObject({ status: 404 });
 
-    setRole("SITE_MANAGER");
+    setRole("COLLABORATOR", "READ_ONLY", ["documents:read", "documents:file:read"]);
     await expect(listDocumentVersions("doc-1")).rejects.toMatchObject({ status: 404 });
   });
 

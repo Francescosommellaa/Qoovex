@@ -5,7 +5,7 @@ import { db } from "@qoovex/db";
 import type { Permission, WorkspaceAccessContext } from "@qoovex/types";
 import { auth } from "@shared/server/auth/config";
 import { AccessError } from "@shared/server/access-errors";
-import { getPermissionsForRole, sanitizeOrganizationPermissions } from "@shared/server/authorization-policy";
+import { getPermissionsForRole, getSupportSessionPermissions, sanitizeOrganizationPermissions } from "@shared/server/authorization-policy";
 import { getActiveSupportSession } from "@shared/server/support-access-service";
 import { bootstrapDevUser } from "@shared/server/dev-auth";
 import { isMfaSatisfiedForUser } from "@shared/server/mfa-service";
@@ -23,7 +23,7 @@ async function requirePrimaryIdentityUncached() {
       suspendedAt: null,
       authSessionId: `dev:${devUser.id}`,
       isDev: true,
-      devRole: devUser.devRole,
+      devView: devUser.devView,
     };
   }
 
@@ -37,7 +37,7 @@ async function requirePrimaryIdentityUncached() {
     select: { id: true, email: true, emailVerified: true, platformRole: true, authVersion: true, mfaEnabled: true, suspendedAt: true },
   });
   if (!user || user.suspendedAt) throw new AccessError("Sessione non valida.", 401);
-  return { ...user, authSessionId, isDev: false, devRole: null };
+  return { ...user, authSessionId, isDev: false, devView: null };
 }
 
 export const requirePrimaryIdentity = cache(requirePrimaryIdentityUncached);
@@ -65,22 +65,25 @@ async function getWorkspaceAccessContextUncached(): Promise<WorkspaceAccessConte
       where: { userId: user.id, revokedAt: null },
       select: { id: true, role: true, preset: true, permissionKeys: true, scopeMode: true, expiresAt: true, organization: { select: { id: true, name: true, code: true } } },
     }),
-    user.platformRole === "SUPER_ADMIN" ? getActiveSupportSession(user.id) : Promise.resolve(null),
+    user.platformRole === "SUPPORT_AGENT" || user.platformRole === "PLATFORM_ADMIN"
+      ? getActiveSupportSession(user.id)
+      : Promise.resolve(null),
   ]);
 
   if (membership?.expiresAt && membership.expiresAt <= new Date()) throw new AccessError("Accesso scaduto.", 403);
-  const companyRole = membership ? user.devRole ?? membership.role : null;
-  const effectiveRole = support ? "OWNER" : companyRole;
+  const internalDevView = user.isDev && user.devView !== "OWNER";
+  const company = !internalDevView && membership ? {
+    role: membership.role,
+    preset: membership.preset,
+    scopeMode: membership.scopeMode,
+    expiresAt: membership.expiresAt?.toISOString() ?? null,
+    organization: membership.organization,
+  } : null;
   return {
     userId: user.id,
     platformRole: user.platformRole,
-    company: membership ? {
-      role: companyRole ?? membership.role,
-      preset: membership.preset,
-      scopeMode: membership.scopeMode,
-      expiresAt: membership.expiresAt?.toISOString() ?? null,
-      organization: membership.organization,
-    } : null,
+    devView: user.devView,
+    company,
     support: support ? {
       sessionId: support.id,
       reason: support.reason,
@@ -89,10 +92,12 @@ async function getWorkspaceAccessContextUncached(): Promise<WorkspaceAccessConte
       organization: support.organization,
     } : null,
     permissions: support
-      ? getPermissionsForRole("OWNER")
-      : membership?.permissionKeys?.length
-        ? sanitizeOrganizationPermissions(membership.permissionKeys)
-        : getPermissionsForRole(effectiveRole),
+      ? getSupportSessionPermissions()
+      : company?.role === "OWNER"
+        ? getPermissionsForRole("OWNER")
+        : company
+          ? sanitizeOrganizationPermissions(membership?.permissionKeys ?? [])
+          : [],
   };
 }
 

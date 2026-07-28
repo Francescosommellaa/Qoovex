@@ -11,6 +11,7 @@ export async function getWorkspaceCapabilities(): Promise<WorkspaceCapabilities>
   const can = (permission: (typeof context.permissions)[number]) => context.permissions.includes(permission);
   return {
     role,
+    accessPreset: context.company?.preset ?? null,
     canManageCore: can("organization:update"),
     canCreateDocuments: can("documents:upload"),
     canCreateWorkers: can("workers:create"),

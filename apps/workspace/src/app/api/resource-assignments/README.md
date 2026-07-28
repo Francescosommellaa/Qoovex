@@ -11,6 +11,6 @@ Route protette per collegamenti operativi e scope risorsa.
 - `GET /api/resource-assignments/my-scope`
 - `GET /api/resource-assignments/options`: opzioni autorizzate per i flussi contestuali di assegnazione.
 
-Le route non accettano `organizationId` dal client. `OWNER` e `ADMIN` gestiscono le assegnazioni; `SAFETY_CONSULTANT` legge; `SITE_MANAGER` e `WORKER` leggono solo `my-scope`.
+Le route non accettano `organizationId` dal client. La gestione richiede `assignments:manage`, la lettura `assignments:read`; preset e scope restringono ulteriormente gli artifact visibili. Nessun ruolo professionale e codificato nella membership.
 
-La UI canonica `/people/assignments` espone soltanto assegnazioni responsabile-cantiere e lavoratore-cantiere, raggruppate per cantiere. La gestione `WorkerUserLink` non appare in questa pagina: resta nel dettaglio del lavoratore e nel collegamento automatico dell'invito WORKER.
+La UI canonica `/people/assignments` espone soltanto assegnazioni responsabile-cantiere e lavoratore-cantiere, raggruppate per cantiere. La gestione `WorkerUserLink` non appare in questa pagina: resta nel dettaglio del lavoratore e nel collegamento automatico dell'invito `COLLABORATOR` con preset `LIMITED_UPLOAD`.

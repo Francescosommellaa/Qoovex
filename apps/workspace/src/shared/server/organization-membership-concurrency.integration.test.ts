@@ -112,7 +112,7 @@ async function createInvitationFixture(input: {
     data: {
       organizationId: input.organizationId,
       email: input.email,
-      role: "WORKER",
+      role: "COLLABORATOR",
       tokenHash: invitationTokenHash(input.token),
       invitedById: input.invitedById,
       expiresAt: new Date(Date.now() + 60_000),
@@ -197,7 +197,7 @@ describeOnLocalCi("single membership concurrency on PostgreSQL", () => {
       data: {
         organizationId: previousOrganization.id,
         userId: user.id,
-        role: "WORKER",
+        role: "COLLABORATOR",
         revokedAt: new Date(),
       },
     });

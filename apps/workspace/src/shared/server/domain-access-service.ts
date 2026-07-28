@@ -22,8 +22,5 @@ export async function requireOrganizationDomainAccess(
   requirePermission(context, permission);
   const actorRole = getEffectiveOrganizationRole(context);
   if (!actorRole) throw new AccessError("Risorsa non disponibile.", 404);
-  if (context.company?.scopeMode === undefined && _allowedRoles?.length && !_allowedRoles.includes(actorRole)) {
-    throw new AccessError("Risorsa non disponibile.", 404);
-  }
   return { context, organizationId: getContextOrganizationId(context), actorRole };
 }

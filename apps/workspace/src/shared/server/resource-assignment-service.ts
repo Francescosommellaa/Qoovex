@@ -10,7 +10,7 @@ import type {
   CreateWorkerUserLinkInput,
   JobSiteUserAssignmentResponse,
   JobSiteWorkerAssignmentResponse,
-  OrganizationRole,
+  OrganizationAccessPreset,
   WorkerUserLinkResponse,
 } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
@@ -19,9 +19,9 @@ import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { getResourceScope, toMyResourceScopeResponse } from "./resource-scope-service";
 
-const ASSIGNMENT_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
-const ASSIGNMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
-const MY_SCOPE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const ASSIGNMENT_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const ASSIGNMENT_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const MY_SCOPE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 interface ListWorkerUserLinksInput {
   workerId?: unknown;
@@ -46,8 +46,8 @@ function userLabel(user: { name: string | null; email: string }) {
   return user.name?.trim() || user.email;
 }
 
-function assertExpectedCompanyRole(role: OrganizationRole, expected: OrganizationRole, label: string) {
-  if (role !== expected) throw new AccessError(`${label} non disponibile per questa assegnazione.`, 409);
+function assertExpectedAccessPreset(preset: OrganizationAccessPreset | null, expected: OrganizationAccessPreset, label: string) {
+  if (preset !== expected) throw new AccessError(`${label} non disponibile per questa assegnazione.`, 409);
 }
 
 async function assertActiveWorker(organizationId: string, workerId: string) {
@@ -71,7 +71,7 @@ async function assertActiveJobSite(organizationId: string, jobSiteId: string) {
 async function assertActiveMembership(organizationId: string, userId: string) {
   const membership = await db.organizationMembership.findFirst({
     where: { organizationId, userId, revokedAt: null },
-    select: { id: true, role: true, user: { select: { id: true, name: true, email: true } } },
+    select: { id: true, role: true, preset: true, user: { select: { id: true, name: true, email: true } } },
   });
   if (!membership) throw new AccessError("Utente non disponibile per questa azienda.", 404);
   return membership;
@@ -183,7 +183,7 @@ export async function createWorkerUserLink(input: CreateWorkerUserLinkInput | Re
     assertActiveWorker(organizationId, workerId),
     assertActiveMembership(organizationId, userId),
   ]);
-  assertExpectedCompanyRole(membership.role, "WORKER", "Utente");
+  assertExpectedAccessPreset(membership.preset, "LIMITED_UPLOAD", "Utente");
 
   const duplicate = await db.workerUserLink.findFirst({
     where: { organizationId, archivedAt: null, OR: [{ workerId }, { userId }] },
@@ -274,7 +274,7 @@ export async function createJobSiteUserAssignment(input: CreateJobSiteUserAssign
   const userId = parseRequiredId(input.userId, "Utente");
   await assertActiveJobSite(organizationId, jobSiteId);
   const membership = await assertActiveMembership(organizationId, userId);
-  assertExpectedCompanyRole(membership.role, "SITE_MANAGER", "Utente");
+  assertExpectedAccessPreset(membership.preset, "SITE_MANAGER", "Utente");
 
   const duplicate = await db.jobSiteUserAssignment.findFirst({
     where: { organizationId, jobSiteId, userId, assignmentRole: "SITE_MANAGER", archivedAt: null },
@@ -435,7 +435,6 @@ export async function archiveJobSiteWorkerAssignment(assignmentId: string): Prom
 
 export async function getMyResourceScope() {
   const scope = await getResourceScope();
-  if (!(MY_SCOPE_ROLES as readonly OrganizationRole[]).includes(scope.actorRole)) throw new AccessError("Risorsa non disponibile.", 404);
   return toMyResourceScopeResponse(scope);
 }
 
@@ -453,8 +452,8 @@ export async function getResourceAssignmentOptions() {
       orderBy: [{ name: "asc" }],
     }),
     db.organizationMembership.findMany({
-      where: { organizationId, revokedAt: null, role: { in: ["SITE_MANAGER", "WORKER"] } },
-      select: { role: true, user: { select: { id: true, name: true, email: true } } },
+      where: { organizationId, revokedAt: null, role: "COLLABORATOR", preset: { in: ["SITE_MANAGER", "LIMITED_UPLOAD"] } },
+      select: { role: true, preset: true, user: { select: { id: true, name: true, email: true } } },
       orderBy: [{ createdAt: "asc" }],
     }),
   ]);
@@ -477,7 +476,8 @@ export async function getWorkerUserLinkOptions(workerId: string) {
     where: {
       organizationId,
       revokedAt: null,
-      role: "WORKER",
+      role: "COLLABORATOR",
+      preset: "LIMITED_UPLOAD",
       user: { workerUserLinks: { none: { organizationId, archivedAt: null } } },
     },
     select: { user: { select: { id: true, name: true, email: true } } },

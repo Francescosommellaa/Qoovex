@@ -8,8 +8,8 @@ import { recordSupportAccess } from "@shared/server/support-access-service";
 import { assertDocumentTaxonomy, isEnumValue, parseDocumentCategoryKey, parseDocumentSensitivity, trimOptionalText, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 
-const FULL_DOCUMENT_ROLES = ["OWNER", "ADMIN"] as const;
-const DOCUMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const FULL_DOCUMENT_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const DOCUMENT_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 const documentTypeSelect = {
   id: true,

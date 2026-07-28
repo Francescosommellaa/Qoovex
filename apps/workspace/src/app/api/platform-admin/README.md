@@ -1,3 +1,3 @@
 # Platform Admin API
 
-API private della Console Qoovex. Richiede `SUPER_ADMIN` e MFA, salvo il dev-auth firmato e limitato a localhost.
+API privata della Console Qoovex. Richiede `PLATFORM_ADMIN` e MFA, salvo la vista `PLATFORM_ADMIN` del dev-auth firmato e limitato a localhost.

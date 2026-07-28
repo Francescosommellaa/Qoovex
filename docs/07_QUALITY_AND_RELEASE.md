@@ -19,8 +19,9 @@
 - timeline tipizzata e aggregata, correzioni append-only, payload minimizzati e audit tecnico separato;
 - E2E Fase 3: documento incompleto -> decisione -> ripresa; lavoratore -> requisito mancante -> documento -> eccezione risolta;
 - E2E Fase 4: ricerca autorizzata -> artifact -> timeline; preparazione -> review -> link; aggiornamento immutabile; revoca/scadenza; Centro operativo.
+- access model: mapping expand/migrate/contract, backfill dry-run/idempotenza, Owner/Collaborator, permessi dipendenti, scope e grant cross-tenant, optimistic concurrency, scadenza/revoca, reinvio/rifiuto invito e separazione Support Agent/Platform Admin;
 
-La suite Workspace verificata dopo l'implementazione conta 61 file passati, 2 skipped; 316 test passati, 3 skipped. La suite E2E Workspace conta 5 scenari passati. Questi dati sono locali e devono essere aggiornati se i test cambiano.
+I conteggi esatti delle suite vengono riportati dal gate finale della sessione; restano prove locali e non attestano Preview o Production.
 
 ## Gate prima di release
 

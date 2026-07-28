@@ -1,35 +1,41 @@
 import { describe, expect, it } from "vitest";
-import { canInviteRole, canRevokeRole, getPermissionsForRole } from "./authorization-policy";
+import { canInviteRole, canRevokeRole, getPermissionsForPreset, getPermissionsForRole, getSupportSessionPermissions, normalizeCollaboratorPermissions } from "./authorization-policy";
 
 describe("organization authorization policy", () => {
   it("gives the owner complete organization permissions", () => {
     expect(getPermissionsForRole("OWNER")).toEqual(expect.arrayContaining(["organization:update", "members:manage", "auditLog:read", "settings:update"]));
   });
 
-  it("keeps admin operational but not owner-level", () => {
-    expect(getPermissionsForRole("ADMIN")).toEqual(expect.arrayContaining(["organization:read", "members:invite", "documents:upload", "documentPackages:share"]));
-    expect(getPermissionsForRole("ADMIN")).not.toContain("organization:update");
-    expect(getPermissionsForRole("ADMIN")).not.toContain("auditLog:read");
+  it("does not infer collaborator permissions from the role", () => {
+    expect(getPermissionsForRole("COLLABORATOR")).toEqual([]);
+    expect(getPermissionsForPreset("READ_ONLY")).toContain("documents:file:read");
+    expect(getPermissionsForPreset("DOCUMENT_REVIEWER")).toContain("documents:verify");
+    expect(getPermissionsForPreset("LIMITED_UPLOAD")).not.toContain("documents:verify");
   });
 
-  it("scopes limited roles to explicit action gates", () => {
-    expect(getPermissionsForRole("SAFETY_CONSULTANT")).toEqual(expect.arrayContaining(["documents:read", "documents:update", "checklists:manage"]));
-    expect(getPermissionsForRole("SITE_MANAGER")).toEqual(expect.arrayContaining(["jobSites:read", "checklists:complete", "evidence:upload"]));
-    expect(getPermissionsForRole("WORKER")).toEqual(expect.arrayContaining(["documents:upload", "deadlines:read", "evidence:upload"]));
-    expect(getPermissionsForRole("WORKER")).not.toContain("checklists:complete");
-  });
-
-  it("allows owner and admin invitations without owner escalation", () => {
-    expect(canInviteRole("OWNER", "ADMIN")).toBe(true);
+  it("keeps invitations and revocations owner-only", () => {
+    expect(canInviteRole("OWNER", "COLLABORATOR")).toBe(true);
     expect(canInviteRole("OWNER", "OWNER")).toBe(false);
-    expect(canInviteRole("ADMIN", "WORKER")).toBe(true);
-    expect(canInviteRole("ADMIN", "ADMIN")).toBe(false);
-    expect(canInviteRole("SAFETY_CONSULTANT", "WORKER")).toBe(false);
+    expect(canInviteRole("COLLABORATOR", "COLLABORATOR")).toBe(false);
+    expect(canRevokeRole("OWNER", "COLLABORATOR")).toBe(true);
+    expect(canRevokeRole("COLLABORATOR", "COLLABORATOR")).toBe(false);
   });
 
-  it("keeps member management owner-only", () => {
-    expect(canRevokeRole("OWNER", "ADMIN")).toBe(true);
-    expect(canRevokeRole("OWNER", "OWNER")).toBe(false);
-    expect(canRevokeRole("ADMIN", "WORKER")).toBe(false);
+  it("normalizes collaborator permissions with dependencies and strips owner capabilities", () => {
+    expect(normalizeCollaboratorPermissions(["documents:file:read", "documentPackages:share", "members:manage", "organization:update"])).toEqual(expect.arrayContaining([
+      "organization:read",
+      "documents:read",
+      "documents:file:read",
+      "documentPackages:read",
+      "documentPackages:review",
+      "documentPackages:approve",
+      "documentPackages:share",
+    ]));
+    expect(normalizeCollaboratorPermissions(["members:manage", "organization:update"])).toEqual([]);
+  });
+
+  it("keeps temporary support sessions metadata-only and non-mutating", () => {
+    expect(getSupportSessionPermissions()).toEqual(expect.arrayContaining(["organization:read", "members:read", "processes:read"]));
+    expect(getSupportSessionPermissions()).not.toEqual(expect.arrayContaining(["documents:file:read", "documents:upload", "members:manage", "documentPackages:share"]));
   });
 });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getPermissionsForRole } from "@shared/server/authorization-policy";
+import { getPermissionsForPreset, getPermissionsForRole } from "@shared/server/authorization-policy";
 import { buildWorkspaceNavigation, canReadWorkspaceNotifications } from "./workspace-navigation-policy";
 
 describe("workspace navigation policy", () => {
@@ -14,12 +14,12 @@ describe("workspace navigation policy", () => {
 
   it("derives mandatory manual quick actions from effective permissions", () => {
     expect(buildWorkspaceNavigation(getPermissionsForRole("OWNER"), "USER").actions.map((item) => item.label)).toEqual(["Documento", "Cantiere", "Lavoratore", "Prova"]);
-    expect(buildWorkspaceNavigation(getPermissionsForRole("WORKER"), "USER").actions.map((item) => item.label)).toEqual(["Documento", "Prova"]);
+    expect(buildWorkspaceNavigation(getPermissionsForPreset("LIMITED_UPLOAD"), "USER").actions.map((item) => item.label)).toEqual(["Documento", "Prova"]);
   });
 
   it("keeps account security and the platform console in the account menu", () => {
     expect(buildWorkspaceNavigation(getPermissionsForRole("OWNER"), "USER").account).toEqual([{ label: "Sicurezza", href: "/account/security" }]);
-    expect(buildWorkspaceNavigation(getPermissionsForRole("OWNER"), "SUPER_ADMIN").account).toEqual([
+    expect(buildWorkspaceNavigation(getPermissionsForRole("OWNER"), "PLATFORM_ADMIN").account).toEqual([
       { label: "Console Qoovex", href: "/qoovex-admin" },
       { label: "Sicurezza", href: "/account/security" },
     ]);

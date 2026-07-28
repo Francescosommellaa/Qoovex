@@ -3,7 +3,7 @@ import "server-only";
 import { db, Prisma, type RuntimeErrorStatus } from "@qoovex/db";
 import { AccessError } from "@shared/server/access-errors";
 import { requireIdentity } from "@shared/server/access-context-service";
-import { requireQoovexOperatorById } from "@shared/server/qoovex-operator-access";
+import { requirePlatformAdminById } from "@shared/server/qoovex-operator-access";
 
 const DEFAULT_LIMIT = 25;
 const MAX_LIMIT = 50;
@@ -24,7 +24,7 @@ function parseReason(value: string | null | undefined) {
 
 export async function requireQoovexOperator() {
   const identity = await requireIdentity();
-  return requireQoovexOperatorById(identity.id);
+  return requirePlatformAdminById(identity.id);
 }
 
 async function recordPlatformUserAction(input: {
@@ -51,7 +51,7 @@ async function getManageableUser(actorId: string, targetUserId: string) {
     select: { id: true, email: true, platformRole: true, suspendedAt: true },
   });
   if (!target) throw new AccessError("Utente non trovato.", 404);
-  if (target.id === actorId || target.platformRole === "SUPER_ADMIN") {
+  if (target.id === actorId || target.platformRole === "SUPPORT_AGENT" || target.platformRole === "PLATFORM_ADMIN") {
     throw new AccessError("Questo account operatore non puo essere modificato dalla console.", 409);
   }
   return target;

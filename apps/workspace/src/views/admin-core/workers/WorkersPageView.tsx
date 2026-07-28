@@ -126,7 +126,7 @@ export function WorkersPageView({
   return (
     <WorkspacePage>
       <WorkspacePageHeader
-        title={capabilities.role === "WORKER" ? "Il mio profilo" : "Lavoratori"}
+        title={capabilities.accessPreset === "LIMITED_UPLOAD" ? "Il mio profilo" : "Lavoratori"}
         description="Rubrica operativa con documenti da verificare, cantieri, accesso a Qoovex e prossima azione."
         action={
           capabilities.canCreateWorkers ? (
@@ -139,7 +139,7 @@ export function WorkersPageView({
         }
       />
 
-      {capabilities.role !== "WORKER" ? (
+      {capabilities.accessPreset !== "LIMITED_UPLOAD" ? (
         <Card size="sm">
           <CardContent>
             <form

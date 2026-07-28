@@ -11,6 +11,7 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "tsx scripts/migrate-deploy.ts",
+    "db:access:backfill": "tsx scripts/access-model-backfill.ts",
     "db:seed": "prisma db seed",
     "db:fixtures:inventory:local": "tsx scripts/fixture-inventory.ts local",
     "db:fixtures:inventory:production": "tsx scripts/fixture-inventory.ts production",

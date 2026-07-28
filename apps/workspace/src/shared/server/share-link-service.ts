@@ -7,7 +7,7 @@ import { requireOrganizationDomainAccess } from "@shared/server/domain-access-se
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "@shared/server/product-audit-service";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 
-const SHARE_LINK_ROLES = ["OWNER", "ADMIN"] as const;
+const SHARE_LINK_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 export const shareLinkSelect = {
   id: true,

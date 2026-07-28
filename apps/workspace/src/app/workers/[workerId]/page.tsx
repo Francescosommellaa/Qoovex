@@ -41,7 +41,7 @@ export default async function WorkerDetailPage({ params, searchParams }: WorkerD
       userLinks = links;
       accessSummary = await getWorkerAccessSummary(workerId);
       if (capabilities.canManageAssignments && !links.length) userLinkOptions = await getWorkerUserLinkOptions(workerId);
-    } else if (capabilities.role === "WORKER") jobSites = await listJobSites();
+    } else if (capabilities.accessPreset === "LIMITED_UPLOAD") jobSites = await listJobSites();
     return (
       <WorkerDetailView
         capabilities={capabilities}

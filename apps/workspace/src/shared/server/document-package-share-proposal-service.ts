@@ -18,7 +18,7 @@ import { auditActorFromContext } from "@shared/server/product-audit-service";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { createShareToken, hashShareToken } from "@shared/server/share-token-service";
 
-const SHARE_ROLES = ["OWNER", "ADMIN"] as const;
+const SHARE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const SHARE_PURPOSE_MAX = 500;
 const SHARE_RECIPIENT_MAX = 160;
 

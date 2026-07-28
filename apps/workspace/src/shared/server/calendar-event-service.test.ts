@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   role: "OWNER" as OrganizationRole,
+  preset: null as "SITE_MANAGER" | "LIMITED_UPLOAD" | null,
   userId: "owner-1",
   calendarEvent: {
     findMany: vi.fn(),
@@ -21,10 +22,10 @@ vi.mock("@qoovex/db", () => ({ db: { calendarEvent: mocks.calendarEvent, organiz
 vi.mock("@shared/server/access-errors", () => ({ AccessError: class AccessError extends Error { constructor(message: string, public readonly status: number) { super(message); } } }));
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
 vi.mock("./domain-access-service", () => ({
-  requireOrganizationDomainAccess: vi.fn(async () => ({ context: { userId: mocks.userId }, organizationId: "org-1", actorRole: mocks.role })),
+  requireOrganizationDomainAccess: vi.fn(async () => ({ context: { userId: mocks.userId, permissions: mocks.role === "OWNER" ? ["calendar:read", "calendar:manage"] : ["calendar:read"] }, organizationId: "org-1", actorRole: mocks.role })),
 }));
 vi.mock("./resource-scope-service", () => ({
-  getResourceScope: vi.fn(async () => ({ fullAccess: mocks.role === "OWNER" || mocks.role === "ADMIN", actorRole: mocks.role, siteManagerJobSiteIds: ["site-1"], linkedWorker: null })),
+  getResourceScope: vi.fn(async () => ({ fullAccess: mocks.role === "OWNER", actorRole: mocks.role, preset: mocks.preset, siteManagerJobSiteIds: ["site-1"], linkedWorker: null })),
 }));
 vi.mock("./product-audit-service", () => ({ auditActorFromContext: vi.fn(() => ({ actorUserId: mocks.userId, actorRole: mocks.role, supportSessionId: null })), recordProductAuditEventBestEffort: mocks.recordAudit }));
 
@@ -36,7 +37,7 @@ const record = {
   startAt: now, endAt: new Date("2026-07-20T10:00:00.000Z"), allDay: false,
   kind: "EVENT", priority: "HIGH", status: "PLANNED", source: "QOOVEX", externalUid: null,
   assignedToId: "worker-1", jobSiteId: "site-1", createdById: "owner-1", createdAt: now, updatedAt: now, archivedAt: null,
-  assignedTo: { id: "worker-1", name: "Mario Rossi", email: "mario@example.test", organizationMembership: { role: "WORKER", revokedAt: null } },
+  assignedTo: { id: "worker-1", name: "Mario Rossi", email: "mario@example.test", organizationMembership: { role: "COLLABORATOR", revokedAt: null } },
   jobSite: { id: "site-1", name: "Cantiere Centro" },
 } as const;
 
@@ -44,6 +45,7 @@ describe("calendar event service", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.role = "OWNER";
+    mocks.preset = null;
     mocks.userId = "owner-1";
     mocks.organizationMembership.findFirst.mockResolvedValue({ userId: "worker-1" });
     mocks.jobSite.findFirst.mockResolvedValue({ id: "site-1" });
@@ -65,14 +67,16 @@ describe("calendar event service", () => {
   });
 
   it("scopes a site manager to their own and assigned-site events", async () => {
-    mocks.role = "SITE_MANAGER";
+    mocks.role = "COLLABORATOR";
+    mocks.preset = "SITE_MANAGER";
     mocks.userId = "manager-1";
     await listCalendarEvents({ start: "2026-07-01", end: "2026-08-01" });
     expect(mocks.calendarEvent.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ organizationId: "org-1", OR: [{ assignedToId: "manager-1" }, { jobSiteId: { in: ["site-1"] } }] }) }));
   });
 
   it("lets an assignee update only task status", async () => {
-    mocks.role = "WORKER";
+    mocks.role = "COLLABORATOR";
+    mocks.preset = "LIMITED_UPLOAD";
     mocks.userId = "worker-1";
     await expect(updateCalendarEvent("event-1", { status: "DONE" })).resolves.toMatchObject({ status: "DONE" });
     await expect(updateCalendarEvent("event-1", { title: "Titolo cambiato" })).rejects.toMatchObject({ status: 403 });

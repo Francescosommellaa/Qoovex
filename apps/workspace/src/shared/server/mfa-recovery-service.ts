@@ -99,7 +99,7 @@ export async function createMfaRecoveryRequest(input: { userId: string; emailCod
   }
 
   const membership = user.organizationMembership?.revokedAt ? null : user.organizationMembership;
-  const needsOwner = Boolean(membership && membership.role !== "OWNER" && user.platformRole !== "SUPER_ADMIN");
+  const needsOwner = Boolean(membership && membership.role !== "OWNER" && user.platformRole !== "PLATFORM_ADMIN");
   const now = new Date();
   const expiresAt = new Date(now.getTime() + RECOVERY_TTL_MS);
   const existing = await db.mfaRecoveryRequest.findFirst({

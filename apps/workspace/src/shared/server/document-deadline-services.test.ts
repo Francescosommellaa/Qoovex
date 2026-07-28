@@ -1,4 +1,4 @@
-import type { OrganizationRole } from "@qoovex/types";
+import { organizationPermissions, type OrganizationAccessPreset, type OrganizationPermission, type OrganizationRole } from "@qoovex/types";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -12,6 +12,7 @@ const mocks = vi.hoisted(() => ({
     workerUserLink: { findFirst: vi.fn() },
     jobSiteUserAssignment: { findMany: vi.fn() },
     jobSiteWorkerAssignment: { findMany: vi.fn() },
+    organizationMembership: { findFirst: vi.fn() },
   },
   getWorkspaceAccessContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
@@ -125,13 +126,13 @@ function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
   for (const method of Object.values(model)) method.mockReset();
 }
 
-function setRole(role: OrganizationRole) {
+function setRole(role: OrganizationRole, preset: OrganizationAccessPreset | null = null, permissions: OrganizationPermission[] = role === "OWNER" ? [...organizationPermissions] : [], scopeMode: "FULL" | "ASSIGNED" = role === "OWNER" ? "FULL" : "ASSIGNED") {
   mocks.getWorkspaceAccessContext.mockResolvedValue({
     userId: "user-1",
     platformRole: "USER",
-    company: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
+    company: { id: "member-1", role, preset, scopeMode, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
     support: null,
-    permissions: [],
+    permissions,
   });
 }
 
@@ -145,6 +146,7 @@ beforeEach(() => {
   resetModel(mocks.db.workerUserLink);
   resetModel(mocks.db.jobSiteUserAssignment);
   resetModel(mocks.db.jobSiteWorkerAssignment);
+  resetModel(mocks.db.organizationMembership);
   mocks.getWorkspaceAccessContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
@@ -153,12 +155,13 @@ beforeEach(() => {
   mocks.recordRuntimeErrorBestEffort.mockReset().mockResolvedValue(undefined);
   mocks.enqueueOperationalProcess.mockReset().mockResolvedValue({ id: "process-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
-  mocks.requirePermission.mockImplementation(() => undefined);
+  mocks.requirePermission.mockImplementation((context, permission) => { if (!context.permissions.includes(permission)) throw Object.assign(new Error("Risorsa non disponibile."), { status: 404 }); });
   mocks.recordSupportAccess.mockResolvedValue(undefined);
   mocks.db.document.deleteMany.mockResolvedValue({ count: 1 });
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([]);
   mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "membership-1", resourceGrants: [] });
   setRole("OWNER");
 });
 
@@ -220,7 +223,7 @@ describe("document service", () => {
   });
 
   it("lets admins create logical organization documents without Blob fields", async () => {
-    setRole("ADMIN");
+    setRole("COLLABORATOR", "OPERATIONAL_COLLABORATION", ["documents:update"], "FULL");
     mocks.db.documentType.findFirst.mockResolvedValue(organizationDocumentTypeRecord);
     mocks.db.document.create.mockResolvedValue(documentRecord);
 
@@ -269,7 +272,7 @@ describe("document service", () => {
   });
 
   it("lets safety consultants read and update document metadata but not archive", async () => {
-    setRole("SAFETY_CONSULTANT");
+    setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["documents:read", "documents:update"], "FULL");
     mocks.db.document.findFirst.mockResolvedValue({ id: "doc-1", ownerType: "ORGANIZATION", workerId: null, jobSiteId: null });
     mocks.db.document.update.mockResolvedValue({ ...documentRecord, status: "PRESENT" });
 
@@ -279,7 +282,7 @@ describe("document service", () => {
   });
 
   it("scopes document reads for site managers and workers while destinatari esterni stay denied", async () => {
-    setRole("SITE_MANAGER");
+    setRole("COLLABORATOR", "SITE_MANAGER", ["documents:read"]);
     mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
     mocks.db.document.findMany.mockResolvedValue([{ ...documentRecord, ownerType: "JOB_SITE", jobSiteId: "jobsite-1" }]);
     await expect(listDocuments()).resolves.toHaveLength(1);
@@ -290,7 +293,7 @@ describe("document service", () => {
       }),
     }));
 
-    setRole("WORKER");
+    setRole("COLLABORATOR", "LIMITED_UPLOAD", ["documents:read"]);
     mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: { id: "worker-1", displayName: "Mario", roleLabel: null, status: "ACTIVE" } });
     mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
     mocks.db.document.findMany.mockResolvedValue([{ ...documentRecord, ownerType: "WORKER", workerId: "worker-1" }]);
@@ -302,7 +305,7 @@ describe("document service", () => {
       }),
     }));
 
-    setRole("SITE_MANAGER");
+    setRole("COLLABORATOR", "READ_ONLY", ["documents:read"]);
     await expect(listDocuments()).resolves.toBeDefined();
   });
 
@@ -389,7 +392,7 @@ describe("document service", () => {
 
 describe("deadline service", () => {
   it("lets safety consultants read deadlines but not manage them", async () => {
-    setRole("SAFETY_CONSULTANT");
+    setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["deadlines:read"], "FULL");
     mocks.db.deadline.findMany.mockResolvedValue([deadlineRecord]);
 
     await expect(listDeadlines()).resolves.toEqual([deadlineRecord]);
@@ -397,7 +400,7 @@ describe("deadline service", () => {
   });
 
   it("creates manual deadlines with user supplied dates", async () => {
-    setRole("ADMIN");
+    setRole("COLLABORATOR", "OPERATIONAL_COLLABORATION", ["deadlines:read", "deadlines:manage"], "FULL");
     mocks.db.deadline.create.mockResolvedValue(deadlineRecord);
 
     await expect(createDeadline({ title: " Scadenza ", dueDate: "2099-01-10", sourceType: "MANUAL" })).resolves.toEqual(deadlineRecord);

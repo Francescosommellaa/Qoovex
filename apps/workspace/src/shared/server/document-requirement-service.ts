@@ -19,9 +19,9 @@ import { auditActorFromContext, recordProductAuditEventBestEffort } from "./prod
 import { getResourceScope, type ResourceScope } from "./resource-scope-service";
 import { recordSupportAccess } from "./support-access-service";
 
-const REQUIREMENT_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
-const REQUIREMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
-const REQUIREMENT_MISSING_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const REQUIREMENT_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const REQUIREMENT_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const REQUIREMENT_MISSING_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 const requirementSelect = {
   id: true,
@@ -230,7 +230,7 @@ async function buildVisibleTargets(organizationId: string, scope: ResourceScope)
   const [workers, jobSites] = await Promise.all([
     scope.fullAccess
       ? db.worker.findMany({ where: { organizationId, archivedAt: null, status: "ACTIVE" }, select: { id: true, displayName: true }, orderBy: { displayName: "asc" } })
-      : scope.actorRole === "WORKER" && scope.linkedWorker
+      : scope.preset === "LIMITED_UPLOAD" && scope.linkedWorker
         ? Promise.resolve([{ id: scope.linkedWorker.id, displayName: scope.linkedWorker.displayName }])
         : Promise.resolve([]),
     scope.fullAccess
@@ -259,7 +259,7 @@ export async function buildMissingDocumentRequirementItemsForScope(input: {
       documentType: {
         archivedAt: null,
         categoryKey: { not: "UNCLASSIFIED" },
-        ...(input.scope.actorRole === "OWNER" || input.scope.actorRole === "ADMIN" ? {} : { sensitivity: "STANDARD" as const }),
+        ...(input.scope.context.permissions.includes("documents:sensitive:read") ? {} : { sensitivity: "STANDARD" as const }),
       },
     },
     select: {

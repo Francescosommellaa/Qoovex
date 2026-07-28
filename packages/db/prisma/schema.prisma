@@ -31,25 +31,22 @@ enum MfaRecoveryStatus {
 
 enum PlatformRole {
   USER
-  SUPER_ADMIN
+  SUPPORT_AGENT
+  PLATFORM_ADMIN
 }
 
 enum OrganizationRole {
   OWNER
-  ADMIN
-  MEMBER
-  VIEWER
-  SAFETY_CONSULTANT
-  SITE_MANAGER
-  WORKER
+  COLLABORATOR
 }
 
 enum OrganizationAccessPreset {
-  OPERATIONAL_COLLABORATOR
+  READ_ONLY
+  OPERATIONAL_COLLABORATION
   SITE_MANAGER
-  CONSULTANT
-  VIEWER
+  DOCUMENT_REVIEWER
   LIMITED_UPLOAD
+  CUSTOM
 }
 
 enum OrganizationScopeMode {
@@ -673,6 +670,8 @@ model User {
   createdOrganizations        Organization[]                        @relation("OrganizationCreator")
   sentOrganizationInvitations OrganizationInvitation[]              @relation("InvitationSender")
   grantedMembershipResources  OrganizationMembershipResourceGrant[] @relation("MembershipResourceGrantActor")
+  updatedMembershipAccesses   OrganizationMembership[]              @relation("MembershipAccessUpdater")
+  updatedInvitationAccesses   OrganizationInvitation[]              @relation("InvitationAccessUpdater")
   supportSessions             SupportSession[]                      @relation("SupportActor")
   supportAuditEvents          SupportAuditEvent[]                   @relation("SupportAuditActor")
   productAuditEvents          ProductAuditEvent[]                   @relation("ProductAuditActor")
@@ -1566,48 +1565,61 @@ model NotificationEmailDelivery {
 }
 
 model OrganizationMembership {
-  id             String                                @id @default(cuid())
-  organizationId String
-  userId         String                                @unique
-  role           OrganizationRole
-  preset         OrganizationAccessPreset?
-  permissionKeys String[]                              @default([])
-  scopeMode      OrganizationScopeMode                 @default(ASSIGNED)
-  expiresAt      DateTime?
-  createdAt      DateTime                              @default(now())
-  updatedAt      DateTime                              @updatedAt
-  revokedAt      DateTime?
-  organization   Organization                          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user           User                                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  resourceGrants OrganizationMembershipResourceGrant[]
+  id                String                                @id @default(cuid())
+  organizationId    String
+  userId            String                                @unique
+  role              OrganizationRole
+  preset            OrganizationAccessPreset?
+  permissionKeys    String[]                              @default([])
+  scopeMode         OrganizationScopeMode                 @default(ASSIGNED)
+  expiresAt         DateTime?
+  accessVersion     Int                                   @default(1)
+  accessUpdatedById String?
+  createdAt         DateTime                              @default(now())
+  updatedAt         DateTime                              @updatedAt
+  revokedAt         DateTime?
+  organization      Organization                          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user              User                                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessUpdatedBy   User?                                 @relation("MembershipAccessUpdater", fields: [accessUpdatedById], references: [id], onDelete: SetNull)
+  resourceGrants    OrganizationMembershipResourceGrant[]
 
   @@index([organizationId, role, revokedAt])
+  @@index([accessUpdatedById, updatedAt])
 }
 
 model OrganizationInvitation {
-  id              String                                @id @default(cuid())
-  organizationId  String
-  workerId        String?
-  email           String
-  role            OrganizationRole
-  preset          OrganizationAccessPreset?
-  permissionKeys  String[]                              @default([])
-  scopeMode       OrganizationScopeMode                 @default(ASSIGNED)
-  tokenHash       String                                @unique
-  invitedById     String
-  expiresAt       DateTime
-  acceptedAt      DateTime?
-  revokedAt       DateTime?
-  accessExpiresAt DateTime?
-  createdAt       DateTime                              @default(now())
-  organization    Organization                          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  worker          Worker?                               @relation(fields: [workerId], references: [id], onDelete: SetNull)
-  invitedBy       User                                  @relation("InvitationSender", fields: [invitedById], references: [id], onDelete: Cascade)
-  resourceGrants  OrganizationInvitationResourceGrant[]
+  id                String                                @id @default(cuid())
+  organizationId    String
+  workerId          String?
+  email             String
+  recipientName     String?
+  message           String?
+  role              OrganizationRole
+  preset            OrganizationAccessPreset?
+  permissionKeys    String[]                              @default([])
+  scopeMode         OrganizationScopeMode                 @default(ASSIGNED)
+  tokenHash         String                                @unique
+  activeKey         String?                               @unique
+  invitedById       String
+  expiresAt         DateTime
+  acceptedAt        DateTime?
+  declinedAt        DateTime?
+  revokedAt         DateTime?
+  accessExpiresAt   DateTime?
+  createdAt         DateTime                              @default(now())
+  updatedAt         DateTime                              @default(now()) @updatedAt
+  accessVersion     Int                                   @default(1)
+  accessUpdatedById String?
+  organization      Organization                          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  worker            Worker?                               @relation(fields: [workerId], references: [id], onDelete: SetNull)
+  invitedBy         User                                  @relation("InvitationSender", fields: [invitedById], references: [id], onDelete: Cascade)
+  accessUpdatedBy   User?                                 @relation("InvitationAccessUpdater", fields: [accessUpdatedById], references: [id], onDelete: SetNull)
+  resourceGrants    OrganizationInvitationResourceGrant[]
 
   @@index([organizationId, email, createdAt])
   @@index([organizationId, workerId, createdAt])
   @@index([email, expiresAt])
+  @@index([accessUpdatedById, updatedAt])
 }
 
 model OrganizationMembershipResourceGrant {

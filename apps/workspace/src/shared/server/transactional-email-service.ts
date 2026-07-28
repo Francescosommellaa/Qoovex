@@ -13,7 +13,7 @@ export type SecurityEmailEvent =
   | "MFA_RECOVERY_DENIED"
   | "NEW_DEVICE";
 
-type InviteRole = "ADMIN" | "MEMBER" | "VIEWER" | "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER";
+type InviteRole = "COLLABORATOR";
 
 export interface NotificationEmailItem {
   title: string;

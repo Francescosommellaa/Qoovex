@@ -25,7 +25,7 @@ Route frontend attive:
 - `/evidence`: lista e creazione prove operative, inclusa la vista `?sort=recent`;
 - `/document-packages`: lista e creazione pacchetti documentali, inclusa la coda `?view=ready`;
 - `/document-packages/[packageId]`: dettaglio pacchetto, item e share link.
-- `/access`: gestione collegamenti operativi e assegnazioni risorsa per OWNER/ADMIN;
+- `/access`: gestione collegamenti operativi e assegnazioni risorsa con permessi espliciti;
 - `/audit-log`: audit prodotto owner-only;
 - `/data-control`: inventario dati, export metadata e retention operativa owner-only.
 

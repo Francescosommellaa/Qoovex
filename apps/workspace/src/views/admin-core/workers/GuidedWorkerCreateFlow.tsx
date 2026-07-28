@@ -60,7 +60,16 @@ export function GuidedWorkerCreateFlow({ jobSites, onCreated }: { jobSites: JobS
     }
     let inviteFailed = false;
     if (mustInvite) {
-      try { await submitJson("/api/organization/invitations", "POST", { email: values.email, role: "WORKER", workerId: worker.id }); }
+      try {
+        await submitJson("/api/organization/invitations", "POST", {
+          email: values.email,
+          role: "COLLABORATOR",
+          preset: "LIMITED_UPLOAD",
+          scopeMode: "ASSIGNED",
+          permissions: ["organization:read", "documents:read", "documents:upload", "evidence:read", "evidence:upload"],
+          workerId: worker.id,
+        });
+      }
       catch { inviteFailed = true; }
     }
     setPendingSiteIds(failedSites);
@@ -105,14 +114,14 @@ export function GuidedWorkerCreateFlow({ jobSites, onCreated }: { jobSites: JobS
         <FieldLegend>Accesso a Qoovex</FieldLegend>
         <div className="grid gap-3">
           <button aria-pressed={!invite} className={`rounded-xl border p-4 text-left ${!invite ? "border-primary/40 bg-primary/5" : ""}`} onClick={() => setInvite(false)} type="button"><IconUser aria-hidden="true" className="size-5" /><strong className="mt-2 block">Solo profilo operativo</strong><span className="mt-1 block text-sm text-muted-foreground">Nessun account o invito.</span></button>
-          <button aria-pressed={invite} className={`rounded-xl border p-4 text-left ${invite ? "border-primary/40 bg-primary/5" : ""}`} onClick={() => setInvite(true)} type="button"><IconMail aria-hidden="true" className="size-5" /><strong className="mt-2 block">Invita come Lavoratore</strong><span className="mt-1 block text-sm text-muted-foreground">Il ruolo e bloccato su Lavoratore e il profilo verra collegato automaticamente all'accettazione.</span></button>
+          <button aria-pressed={invite} className={`rounded-xl border p-4 text-left ${invite ? "border-primary/40 bg-primary/5" : ""}`} onClick={() => setInvite(true)} type="button"><IconMail aria-hidden="true" className="size-5" /><strong className="mt-2 block">Invita con accesso limitato</strong><span className="mt-1 block text-sm text-muted-foreground">Crea un accesso Collaboratore limitato al caricamento e collega il profilo operativo all'accettazione.</span></button>
         </div>
       </FieldSet>
     ) : null}
 
     {step === 2 ? <div className="grid gap-3"><label className="flex items-start gap-3 rounded-lg border p-3"><Checkbox checked={assignLater} onCheckedChange={(checked) => setAssignLater(checked === true)} /><span><strong className="block text-sm">Assegna i cantieri piu tardi</strong><span className="text-xs text-muted-foreground">Il profilo viene salvato senza ambito operativo.</span></span></label>{!assignLater ? <div className="grid gap-2 sm:grid-cols-2">{jobSites.map((site) => <label className="flex items-center gap-3 rounded-lg border p-3" key={site.id}><Checkbox checked={siteIds.includes(site.id)} onCheckedChange={(checked) => setSiteIds((current) => checked === true ? [...current, site.id] : current.filter((id) => id !== site.id))} /><span className="text-sm">{site.name}</span></label>)}</div> : null}</div> : null}
 
-    {step === 3 ? <div className="grid gap-4"><dl className="grid gap-3 rounded-xl border p-4 sm:grid-cols-2"><div><dt className="text-xs text-muted-foreground">Lavoratore</dt><dd className="mt-1 text-sm font-medium">{values.displayName}</dd></div><div><dt className="text-xs text-muted-foreground">Mansione</dt><dd className="mt-1 text-sm">{values.roleLabel || "Non indicata"}</dd></div><div><dt className="text-xs text-muted-foreground">Accesso</dt><dd className="mt-1 text-sm">{invite ? "Invito WORKER con collegamento automatico" : "Solo profilo"}</dd></div><div><dt className="text-xs text-muted-foreground">Cantieri</dt><dd className="mt-1 text-sm">{assignLater ? "Da assegnare" : `${siteIds.length} selezionati`}</dd></div></dl>{duplicates?.similarNames.length ? <Alert variant="warning"><IconAlertTriangle aria-hidden="true" /><AlertTitle>Nomi simili trovati</AlertTitle><AlertDescription>Verifica prima di creare: {duplicates.similarNames.map((item) => item.displayName).join(", ")}. Qoovex non unisce mai profili in base al nome.</AlertDescription></Alert> : null}</div> : null}
+    {step === 3 ? <div className="grid gap-4"><dl className="grid gap-3 rounded-xl border p-4 sm:grid-cols-2"><div><dt className="text-xs text-muted-foreground">Lavoratore</dt><dd className="mt-1 text-sm font-medium">{values.displayName}</dd></div><div><dt className="text-xs text-muted-foreground">Mansione</dt><dd className="mt-1 text-sm">{values.roleLabel || "Non indicata"}</dd></div><div><dt className="text-xs text-muted-foreground">Accesso</dt><dd className="mt-1 text-sm">{invite ? "Collaboratore con caricamento limitato e collegamento automatico" : "Solo profilo"}</dd></div><div><dt className="text-xs text-muted-foreground">Cantieri</dt><dd className="mt-1 text-sm">{assignLater ? "Da assegnare" : `${siteIds.length} selezionati`}</dd></div></dl>{duplicates?.similarNames.length ? <Alert variant="warning"><IconAlertTriangle aria-hidden="true" /><AlertTitle>Nomi simili trovati</AlertTitle><AlertDescription>Verifica prima di creare: {duplicates.similarNames.map((item) => item.displayName).join(", ")}. Qoovex non unisce mai profili in base al nome.</AlertDescription></Alert> : null}</div> : null}
 
     <DialogFooter><Button disabled={pending || step === 0} onClick={() => setStep((current) => Math.max(0, current - 1))} type="button" variant="outline"><IconArrowLeft aria-hidden="true" />Indietro</Button>{step < 3 ? <Button disabled={pending} onClick={() => void continueStep()} type="button">Continua<IconArrowRight aria-hidden="true" /></Button> : <Button disabled={pending} onClick={() => void create()} type="button"><IconCheck aria-hidden="true" />{pending ? "Salvataggio..." : "Conferma e salva"}</Button>}</DialogFooter>
   </div>;

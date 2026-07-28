@@ -10,8 +10,8 @@ import { isEnumValue, trimOptionalId, trimOptionalText, trimRequiredText } from 
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 
-const PACKAGE_ACCESS_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
-const PACKAGE_WRITE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const PACKAGE_ACCESS_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const PACKAGE_WRITE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 const documentPackageSelect = {
   id: true,
@@ -290,7 +290,6 @@ export async function listDocumentPackagesWithDetails(input: ListDocumentPackage
 
   if (input.includeShareLinks) {
     requirePermission(context, "documentPackages:share");
-    if (actorRole !== "OWNER" && actorRole !== "ADMIN") throw new AccessError("Risorsa non disponibile.", 404);
     const packages = await db.documentPackage.findMany({
       where,
       select: {

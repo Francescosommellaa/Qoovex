@@ -399,6 +399,8 @@ export type UserWhereInput = {
   createdOrganizations?: Prisma.OrganizationListRelationFilter
   sentOrganizationInvitations?: Prisma.OrganizationInvitationListRelationFilter
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantListRelationFilter
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipListRelationFilter
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationListRelationFilter
   supportSessions?: Prisma.SupportSessionListRelationFilter
   supportAuditEvents?: Prisma.SupportAuditEventListRelationFilter
   productAuditEvents?: Prisma.ProductAuditEventListRelationFilter
@@ -468,6 +470,8 @@ export type UserOrderByWithRelationInput = {
   createdOrganizations?: Prisma.OrganizationOrderByRelationAggregateInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationOrderByRelationAggregateInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantOrderByRelationAggregateInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipOrderByRelationAggregateInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationOrderByRelationAggregateInput
   supportSessions?: Prisma.SupportSessionOrderByRelationAggregateInput
   supportAuditEvents?: Prisma.SupportAuditEventOrderByRelationAggregateInput
   productAuditEvents?: Prisma.ProductAuditEventOrderByRelationAggregateInput
@@ -540,6 +544,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdOrganizations?: Prisma.OrganizationListRelationFilter
   sentOrganizationInvitations?: Prisma.OrganizationInvitationListRelationFilter
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantListRelationFilter
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipListRelationFilter
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationListRelationFilter
   supportSessions?: Prisma.SupportSessionListRelationFilter
   supportAuditEvents?: Prisma.SupportAuditEventListRelationFilter
   productAuditEvents?: Prisma.ProductAuditEventListRelationFilter
@@ -675,6 +681,8 @@ export type UserCreateInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -744,6 +752,8 @@ export type UserUncheckedCreateInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -813,6 +823,8 @@ export type UserUpdateInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -882,6 +894,8 @@ export type UserUncheckedUpdateInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -1479,6 +1493,12 @@ export type UserCreateNestedOneWithoutOrganizationMembershipInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutUpdatedMembershipAccessesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedMembershipAccessesInput, Prisma.UserUncheckedCreateWithoutUpdatedMembershipAccessesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedMembershipAccessesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutOrganizationMembershipNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationMembershipInput, Prisma.UserUncheckedCreateWithoutOrganizationMembershipInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationMembershipInput
@@ -1487,9 +1507,25 @@ export type UserUpdateOneRequiredWithoutOrganizationMembershipNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrganizationMembershipInput, Prisma.UserUpdateWithoutOrganizationMembershipInput>, Prisma.UserUncheckedUpdateWithoutOrganizationMembershipInput>
 }
 
+export type UserUpdateOneWithoutUpdatedMembershipAccessesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedMembershipAccessesInput, Prisma.UserUncheckedCreateWithoutUpdatedMembershipAccessesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedMembershipAccessesInput
+  upsert?: Prisma.UserUpsertWithoutUpdatedMembershipAccessesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUpdatedMembershipAccessesInput, Prisma.UserUpdateWithoutUpdatedMembershipAccessesInput>, Prisma.UserUncheckedUpdateWithoutUpdatedMembershipAccessesInput>
+}
+
 export type UserCreateNestedOneWithoutSentOrganizationInvitationsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSentOrganizationInvitationsInput, Prisma.UserUncheckedCreateWithoutSentOrganizationInvitationsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSentOrganizationInvitationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutUpdatedInvitationAccessesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedInvitationAccessesInput, Prisma.UserUncheckedCreateWithoutUpdatedInvitationAccessesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedInvitationAccessesInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
@@ -1499,6 +1535,16 @@ export type UserUpdateOneRequiredWithoutSentOrganizationInvitationsNestedInput =
   upsert?: Prisma.UserUpsertWithoutSentOrganizationInvitationsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSentOrganizationInvitationsInput, Prisma.UserUpdateWithoutSentOrganizationInvitationsInput>, Prisma.UserUncheckedUpdateWithoutSentOrganizationInvitationsInput>
+}
+
+export type UserUpdateOneWithoutUpdatedInvitationAccessesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedInvitationAccessesInput, Prisma.UserUncheckedCreateWithoutUpdatedInvitationAccessesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedInvitationAccessesInput
+  upsert?: Prisma.UserUpsertWithoutUpdatedInvitationAccessesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUpdatedInvitationAccessesInput, Prisma.UserUpdateWithoutUpdatedInvitationAccessesInput>, Prisma.UserUncheckedUpdateWithoutUpdatedInvitationAccessesInput>
 }
 
 export type UserCreateNestedOneWithoutGrantedMembershipResourcesInput = {
@@ -1754,6 +1800,8 @@ export type UserCreateWithoutAccountsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -1822,6 +1870,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -1906,6 +1956,8 @@ export type UserUpdateWithoutAccountsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -1974,6 +2026,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -2042,6 +2096,8 @@ export type UserCreateWithoutSessionsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -2110,6 +2166,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -2194,6 +2252,8 @@ export type UserUpdateWithoutSessionsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -2262,6 +2322,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -2330,6 +2392,8 @@ export type UserCreateWithoutCreatedOrganizationsInput = {
   organizationMembership?: Prisma.OrganizationMembershipCreateNestedOneWithoutUserInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -2398,6 +2462,8 @@ export type UserUncheckedCreateWithoutCreatedOrganizationsInput = {
   organizationMembership?: Prisma.OrganizationMembershipUncheckedCreateNestedOneWithoutUserInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -2482,6 +2548,8 @@ export type UserUpdateWithoutCreatedOrganizationsInput = {
   organizationMembership?: Prisma.OrganizationMembershipUpdateOneWithoutUserNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -2550,6 +2618,8 @@ export type UserUncheckedUpdateWithoutCreatedOrganizationsInput = {
   organizationMembership?: Prisma.OrganizationMembershipUncheckedUpdateOneWithoutUserNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -2619,6 +2689,8 @@ export type UserCreateWithoutWorkerUserLinksInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -2687,6 +2759,8 @@ export type UserUncheckedCreateWithoutWorkerUserLinksInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -2760,6 +2834,8 @@ export type UserCreateWithoutLinkedWorkerUserLinksInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -2828,6 +2904,8 @@ export type UserUncheckedCreateWithoutLinkedWorkerUserLinksInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -2912,6 +2990,8 @@ export type UserUpdateWithoutWorkerUserLinksInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -2980,6 +3060,8 @@ export type UserUncheckedUpdateWithoutWorkerUserLinksInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -3059,6 +3141,8 @@ export type UserUpdateWithoutLinkedWorkerUserLinksInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -3127,6 +3211,8 @@ export type UserUncheckedUpdateWithoutLinkedWorkerUserLinksInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -3195,6 +3281,8 @@ export type UserCreateWithoutJobSiteUserAssignmentsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -3263,6 +3351,8 @@ export type UserUncheckedCreateWithoutJobSiteUserAssignmentsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -3336,6 +3426,8 @@ export type UserCreateWithoutAssignedJobSiteUsersInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -3404,6 +3496,8 @@ export type UserUncheckedCreateWithoutAssignedJobSiteUsersInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -3488,6 +3582,8 @@ export type UserUpdateWithoutJobSiteUserAssignmentsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -3556,6 +3652,8 @@ export type UserUncheckedUpdateWithoutJobSiteUserAssignmentsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -3635,6 +3733,8 @@ export type UserUpdateWithoutAssignedJobSiteUsersInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -3703,6 +3803,8 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteUsersInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -3771,6 +3873,8 @@ export type UserCreateWithoutAssignedJobSiteWorkersInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -3839,6 +3943,8 @@ export type UserUncheckedCreateWithoutAssignedJobSiteWorkersInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -3923,6 +4029,8 @@ export type UserUpdateWithoutAssignedJobSiteWorkersInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -3991,6 +4099,8 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteWorkersInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -4059,6 +4169,8 @@ export type UserCreateWithoutReviewedDocumentsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -4127,6 +4239,8 @@ export type UserUncheckedCreateWithoutReviewedDocumentsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -4211,6 +4325,8 @@ export type UserUpdateWithoutReviewedDocumentsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -4279,6 +4395,8 @@ export type UserUncheckedUpdateWithoutReviewedDocumentsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -4347,6 +4465,8 @@ export type UserCreateWithoutUploadedDocumentVersionsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -4415,6 +4535,8 @@ export type UserUncheckedCreateWithoutUploadedDocumentVersionsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -4499,6 +4621,8 @@ export type UserUpdateWithoutUploadedDocumentVersionsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -4567,6 +4691,8 @@ export type UserUncheckedUpdateWithoutUploadedDocumentVersionsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -4635,6 +4761,8 @@ export type UserCreateWithoutAssignedCalendarEventsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -4703,6 +4831,8 @@ export type UserUncheckedCreateWithoutAssignedCalendarEventsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -4776,6 +4906,8 @@ export type UserCreateWithoutCreatedCalendarEventsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -4844,6 +4976,8 @@ export type UserUncheckedCreateWithoutCreatedCalendarEventsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -4928,6 +5062,8 @@ export type UserUpdateWithoutAssignedCalendarEventsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -4996,6 +5132,8 @@ export type UserUncheckedUpdateWithoutAssignedCalendarEventsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -5075,6 +5213,8 @@ export type UserUpdateWithoutCreatedCalendarEventsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -5143,6 +5283,8 @@ export type UserUncheckedUpdateWithoutCreatedCalendarEventsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -5211,6 +5353,8 @@ export type UserCreateWithoutCompletedChecklistItemsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -5279,6 +5423,8 @@ export type UserUncheckedCreateWithoutCompletedChecklistItemsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -5363,6 +5509,8 @@ export type UserUpdateWithoutCompletedChecklistItemsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -5431,6 +5579,8 @@ export type UserUncheckedUpdateWithoutCompletedChecklistItemsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -5499,6 +5649,8 @@ export type UserCreateWithoutCreatedEvidenceInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -5567,6 +5719,8 @@ export type UserUncheckedCreateWithoutCreatedEvidenceInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -5651,6 +5805,8 @@ export type UserUpdateWithoutCreatedEvidenceInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -5719,6 +5875,8 @@ export type UserUncheckedUpdateWithoutCreatedEvidenceInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -5787,6 +5945,8 @@ export type UserCreateWithoutCreatedDocumentPackagesInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -5855,6 +6015,8 @@ export type UserUncheckedCreateWithoutCreatedDocumentPackagesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -5939,6 +6101,8 @@ export type UserUpdateWithoutCreatedDocumentPackagesInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -6007,6 +6171,8 @@ export type UserUncheckedUpdateWithoutCreatedDocumentPackagesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -6075,6 +6241,8 @@ export type UserCreateWithoutPreparedPackageRevisionsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -6143,6 +6311,8 @@ export type UserUncheckedCreateWithoutPreparedPackageRevisionsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -6216,6 +6386,8 @@ export type UserCreateWithoutApprovedPackageRevisionsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -6284,6 +6456,8 @@ export type UserUncheckedCreateWithoutApprovedPackageRevisionsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -6368,6 +6542,8 @@ export type UserUpdateWithoutPreparedPackageRevisionsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -6436,6 +6612,8 @@ export type UserUncheckedUpdateWithoutPreparedPackageRevisionsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -6515,6 +6693,8 @@ export type UserUpdateWithoutApprovedPackageRevisionsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -6583,6 +6763,8 @@ export type UserUncheckedUpdateWithoutApprovedPackageRevisionsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -6651,6 +6833,8 @@ export type UserCreateWithoutCreatedShareProposalsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -6719,6 +6903,8 @@ export type UserUncheckedCreateWithoutCreatedShareProposalsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -6792,6 +6978,8 @@ export type UserCreateWithoutApprovedShareProposalsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -6860,6 +7048,8 @@ export type UserUncheckedCreateWithoutApprovedShareProposalsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -6944,6 +7134,8 @@ export type UserUpdateWithoutCreatedShareProposalsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -7012,6 +7204,8 @@ export type UserUncheckedUpdateWithoutCreatedShareProposalsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -7091,6 +7285,8 @@ export type UserUpdateWithoutApprovedShareProposalsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -7159,6 +7355,8 @@ export type UserUncheckedUpdateWithoutApprovedShareProposalsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -7227,6 +7425,8 @@ export type UserCreateWithoutCreatedShareLinksInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -7295,6 +7495,8 @@ export type UserUncheckedCreateWithoutCreatedShareLinksInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -7379,6 +7581,8 @@ export type UserUpdateWithoutCreatedShareLinksInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -7447,6 +7651,8 @@ export type UserUncheckedUpdateWithoutCreatedShareLinksInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -7515,6 +7721,8 @@ export type UserCreateWithoutNotificationsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -7583,6 +7791,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -7667,6 +7877,8 @@ export type UserUpdateWithoutNotificationsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -7735,6 +7947,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -7803,6 +8017,8 @@ export type UserCreateWithoutNotificationPreferencesInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -7871,6 +8087,8 @@ export type UserUncheckedCreateWithoutNotificationPreferencesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -7955,6 +8173,8 @@ export type UserUpdateWithoutNotificationPreferencesInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -8023,6 +8243,8 @@ export type UserUncheckedUpdateWithoutNotificationPreferencesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -8091,6 +8313,8 @@ export type UserCreateWithoutRequestedDataControlJobsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -8159,6 +8383,8 @@ export type UserUncheckedCreateWithoutRequestedDataControlJobsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -8243,6 +8469,8 @@ export type UserUpdateWithoutRequestedDataControlJobsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -8311,6 +8539,8 @@ export type UserUncheckedUpdateWithoutRequestedDataControlJobsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -8379,6 +8609,8 @@ export type UserCreateWithoutNotificationEmailDeliveriesInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -8447,6 +8679,8 @@ export type UserUncheckedCreateWithoutNotificationEmailDeliveriesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -8531,6 +8765,8 @@ export type UserUpdateWithoutNotificationEmailDeliveriesInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -8599,6 +8835,8 @@ export type UserUncheckedUpdateWithoutNotificationEmailDeliveriesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -8666,6 +8904,8 @@ export type UserCreateWithoutOrganizationMembershipInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -8734,6 +8974,8 @@ export type UserUncheckedCreateWithoutOrganizationMembershipInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -8764,6 +9006,151 @@ export type UserUncheckedCreateWithoutOrganizationMembershipInput = {
 export type UserCreateOrConnectWithoutOrganizationMembershipInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutOrganizationMembershipInput, Prisma.UserUncheckedCreateWithoutOrganizationMembershipInput>
+}
+
+export type UserCreateWithoutUpdatedMembershipAccessesInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutApprovedByInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutDeniedByInput
+  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
+  organizationMembership?: Prisma.OrganizationMembershipCreateNestedOneWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
+  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkCreateNestedManyWithoutCreatedByInput
+  preparedPackageRevisions?: Prisma.DocumentPackageRevisionCreateNestedManyWithoutPreparedByInput
+  approvedPackageRevisions?: Prisma.DocumentPackageRevisionCreateNestedManyWithoutApprovedByInput
+  createdShareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutCreatedByInput
+  approvedShareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutApprovedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
+  createdCalendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutCreatedByInput
+  assignedCalendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutAssignedToInput
+}
+
+export type UserUncheckedCreateWithoutUpdatedMembershipAccessesInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutDeniedByInput
+  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
+  organizationMembership?: Prisma.OrganizationMembershipUncheckedCreateNestedOneWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
+  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentUncheckedCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutCreatedByInput
+  preparedPackageRevisions?: Prisma.DocumentPackageRevisionUncheckedCreateNestedManyWithoutPreparedByInput
+  approvedPackageRevisions?: Prisma.DocumentPackageRevisionUncheckedCreateNestedManyWithoutApprovedByInput
+  createdShareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutCreatedByInput
+  approvedShareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutApprovedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+  createdCalendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedCalendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutAssignedToInput
+}
+
+export type UserCreateOrConnectWithoutUpdatedMembershipAccessesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedMembershipAccessesInput, Prisma.UserUncheckedCreateWithoutUpdatedMembershipAccessesInput>
 }
 
 export type UserUpsertWithoutOrganizationMembershipInput = {
@@ -8818,6 +9205,8 @@ export type UserUpdateWithoutOrganizationMembershipInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -8886,6 +9275,159 @@ export type UserUncheckedUpdateWithoutOrganizationMembershipInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUncheckedUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutCreatedByNestedInput
+  preparedPackageRevisions?: Prisma.DocumentPackageRevisionUncheckedUpdateManyWithoutPreparedByNestedInput
+  approvedPackageRevisions?: Prisma.DocumentPackageRevisionUncheckedUpdateManyWithoutApprovedByNestedInput
+  createdShareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+  approvedShareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutApprovedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+  createdCalendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedCalendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutAssignedToNestedInput
+}
+
+export type UserUpsertWithoutUpdatedMembershipAccessesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedMembershipAccessesInput, Prisma.UserUncheckedUpdateWithoutUpdatedMembershipAccessesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedMembershipAccessesInput, Prisma.UserUncheckedCreateWithoutUpdatedMembershipAccessesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUpdatedMembershipAccessesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedMembershipAccessesInput, Prisma.UserUncheckedUpdateWithoutUpdatedMembershipAccessesInput>
+}
+
+export type UserUpdateWithoutUpdatedMembershipAccessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutApprovedByNestedInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutDeniedByNestedInput
+  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
+  organizationMembership?: Prisma.OrganizationMembershipUpdateOneWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
+  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUpdateManyWithoutCreatedByNestedInput
+  preparedPackageRevisions?: Prisma.DocumentPackageRevisionUpdateManyWithoutPreparedByNestedInput
+  approvedPackageRevisions?: Prisma.DocumentPackageRevisionUpdateManyWithoutApprovedByNestedInput
+  createdShareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutCreatedByNestedInput
+  approvedShareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutApprovedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
+  createdCalendarEvents?: Prisma.CalendarEventUpdateManyWithoutCreatedByNestedInput
+  assignedCalendarEvents?: Prisma.CalendarEventUpdateManyWithoutAssignedToNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUpdatedMembershipAccessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutDeniedByNestedInput
+  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
+  organizationMembership?: Prisma.OrganizationMembershipUncheckedUpdateOneWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
+  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -8954,6 +9496,8 @@ export type UserCreateWithoutSentOrganizationInvitationsInput = {
   organizationMembership?: Prisma.OrganizationMembershipCreateNestedOneWithoutUserInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -9022,6 +9566,8 @@ export type UserUncheckedCreateWithoutSentOrganizationInvitationsInput = {
   organizationMembership?: Prisma.OrganizationMembershipUncheckedCreateNestedOneWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -9052,6 +9598,151 @@ export type UserUncheckedCreateWithoutSentOrganizationInvitationsInput = {
 export type UserCreateOrConnectWithoutSentOrganizationInvitationsInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutSentOrganizationInvitationsInput, Prisma.UserUncheckedCreateWithoutSentOrganizationInvitationsInput>
+}
+
+export type UserCreateWithoutUpdatedInvitationAccessesInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutApprovedByInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutDeniedByInput
+  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
+  organizationMembership?: Prisma.OrganizationMembershipCreateNestedOneWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
+  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkCreateNestedManyWithoutCreatedByInput
+  preparedPackageRevisions?: Prisma.DocumentPackageRevisionCreateNestedManyWithoutPreparedByInput
+  approvedPackageRevisions?: Prisma.DocumentPackageRevisionCreateNestedManyWithoutApprovedByInput
+  createdShareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutCreatedByInput
+  approvedShareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutApprovedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
+  createdCalendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutCreatedByInput
+  assignedCalendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutAssignedToInput
+}
+
+export type UserUncheckedCreateWithoutUpdatedInvitationAccessesInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  firstName?: string
+  lastName?: string | null
+  username: string
+  usernameOnboarded?: boolean
+  profileOnboarded?: boolean
+  avatarBlobPathname?: string | null
+  phoneNumber?: string | null
+  platformRole?: $Enums.PlatformRole
+  authVersion?: number
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  mfaEnabled?: boolean
+  totpSecretEncrypted?: string | null
+  totpSecretNonce?: string | null
+  totpPendingSecretEncrypted?: string | null
+  totpPendingSecretNonce?: string | null
+  totpPendingCreatedAt?: Date | string | null
+  totpVerifiedAt?: Date | string | null
+  usernameChangedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
+  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutDeniedByInput
+  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
+  organizationMembership?: Prisma.OrganizationMembershipUncheckedCreateNestedOneWithoutUserInput
+  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
+  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
+  reviewedDocuments?: Prisma.DocumentUncheckedCreateNestedManyWithoutReviewedByInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedCreateNestedManyWithoutCompletedByInput
+  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutCreatedByInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutCreatedByInput
+  preparedPackageRevisions?: Prisma.DocumentPackageRevisionUncheckedCreateNestedManyWithoutPreparedByInput
+  approvedPackageRevisions?: Prisma.DocumentPackageRevisionUncheckedCreateNestedManyWithoutApprovedByInput
+  createdShareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutCreatedByInput
+  approvedShareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutApprovedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedCreateNestedManyWithoutUserInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutUserInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+  createdCalendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedCalendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutAssignedToInput
+}
+
+export type UserCreateOrConnectWithoutUpdatedInvitationAccessesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedInvitationAccessesInput, Prisma.UserUncheckedCreateWithoutUpdatedInvitationAccessesInput>
 }
 
 export type UserUpsertWithoutSentOrganizationInvitationsInput = {
@@ -9106,6 +9797,8 @@ export type UserUpdateWithoutSentOrganizationInvitationsInput = {
   organizationMembership?: Prisma.OrganizationMembershipUpdateOneWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -9174,6 +9867,159 @@ export type UserUncheckedUpdateWithoutSentOrganizationInvitationsInput = {
   organizationMembership?: Prisma.OrganizationMembershipUncheckedUpdateOneWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUncheckedUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUncheckedUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutCreatedByNestedInput
+  preparedPackageRevisions?: Prisma.DocumentPackageRevisionUncheckedUpdateManyWithoutPreparedByNestedInput
+  approvedPackageRevisions?: Prisma.DocumentPackageRevisionUncheckedUpdateManyWithoutApprovedByNestedInput
+  createdShareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+  approvedShareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutApprovedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUncheckedUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+  createdCalendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedCalendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutAssignedToNestedInput
+}
+
+export type UserUpsertWithoutUpdatedInvitationAccessesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedInvitationAccessesInput, Prisma.UserUncheckedUpdateWithoutUpdatedInvitationAccessesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedInvitationAccessesInput, Prisma.UserUncheckedCreateWithoutUpdatedInvitationAccessesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUpdatedInvitationAccessesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedInvitationAccessesInput, Prisma.UserUncheckedUpdateWithoutUpdatedInvitationAccessesInput>
+}
+
+export type UserUpdateWithoutUpdatedInvitationAccessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutApprovedByNestedInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutDeniedByNestedInput
+  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
+  organizationMembership?: Prisma.OrganizationMembershipUpdateOneWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
+  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
+  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
+  reviewedDocuments?: Prisma.DocumentUpdateManyWithoutReviewedByNestedInput
+  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
+  completedChecklistItems?: Prisma.ChecklistItemUpdateManyWithoutCompletedByNestedInput
+  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
+  createdDocumentPackages?: Prisma.DocumentPackageUpdateManyWithoutCreatedByNestedInput
+  createdShareLinks?: Prisma.ShareLinkUpdateManyWithoutCreatedByNestedInput
+  preparedPackageRevisions?: Prisma.DocumentPackageRevisionUpdateManyWithoutPreparedByNestedInput
+  approvedPackageRevisions?: Prisma.DocumentPackageRevisionUpdateManyWithoutApprovedByNestedInput
+  createdShareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutCreatedByNestedInput
+  approvedShareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutApprovedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
+  notificationEmailDeliveries?: Prisma.NotificationEmailDeliveryUpdateManyWithoutUserNestedInput
+  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
+  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
+  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
+  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutUserNestedInput
+  assignedJobSiteUsers?: Prisma.JobSiteUserAssignmentUpdateManyWithoutAssignedByNestedInput
+  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
+  createdCalendarEvents?: Prisma.CalendarEventUpdateManyWithoutCreatedByNestedInput
+  assignedCalendarEvents?: Prisma.CalendarEventUpdateManyWithoutAssignedToNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUpdatedInvitationAccessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
+  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
+  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
+  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
+  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutDeniedByNestedInput
+  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
+  organizationMembership?: Prisma.OrganizationMembershipUncheckedUpdateOneWithoutUserNestedInput
+  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
+  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
+  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -9242,6 +10088,8 @@ export type UserCreateWithoutGrantedMembershipResourcesInput = {
   organizationMembership?: Prisma.OrganizationMembershipCreateNestedOneWithoutUserInput
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -9310,6 +10158,8 @@ export type UserUncheckedCreateWithoutGrantedMembershipResourcesInput = {
   organizationMembership?: Prisma.OrganizationMembershipUncheckedCreateNestedOneWithoutUserInput
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -9394,6 +10244,8 @@ export type UserUpdateWithoutGrantedMembershipResourcesInput = {
   organizationMembership?: Prisma.OrganizationMembershipUpdateOneWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -9462,6 +10314,8 @@ export type UserUncheckedUpdateWithoutGrantedMembershipResourcesInput = {
   organizationMembership?: Prisma.OrganizationMembershipUncheckedUpdateOneWithoutUserNestedInput
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -9531,6 +10385,8 @@ export type UserCreateWithoutSupportSessionsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
   reviewedDocuments?: Prisma.DocumentCreateNestedManyWithoutReviewedByInput
@@ -9599,6 +10455,8 @@ export type UserUncheckedCreateWithoutSupportSessionsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
   reviewedDocuments?: Prisma.DocumentUncheckedCreateNestedManyWithoutReviewedByInput
@@ -9683,6 +10541,8 @@ export type UserUpdateWithoutSupportSessionsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
   reviewedDocuments?: Prisma.DocumentUpdateManyWithoutReviewedByNestedInput
@@ -9751,6 +10611,8 @@ export type UserUncheckedUpdateWithoutSupportSessionsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
   reviewedDocuments?: Prisma.DocumentUncheckedUpdateManyWithoutReviewedByNestedInput
@@ -9819,6 +10681,8 @@ export type UserCreateWithoutSupportAuditEventsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
   reviewedDocuments?: Prisma.DocumentCreateNestedManyWithoutReviewedByInput
@@ -9887,6 +10751,8 @@ export type UserUncheckedCreateWithoutSupportAuditEventsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
   reviewedDocuments?: Prisma.DocumentUncheckedCreateNestedManyWithoutReviewedByInput
@@ -9971,6 +10837,8 @@ export type UserUpdateWithoutSupportAuditEventsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
   reviewedDocuments?: Prisma.DocumentUpdateManyWithoutReviewedByNestedInput
@@ -10039,6 +10907,8 @@ export type UserUncheckedUpdateWithoutSupportAuditEventsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
   reviewedDocuments?: Prisma.DocumentUncheckedUpdateManyWithoutReviewedByNestedInput
@@ -10107,6 +10977,8 @@ export type UserCreateWithoutProductAuditEventsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   reviewedDocuments?: Prisma.DocumentCreateNestedManyWithoutReviewedByInput
@@ -10175,6 +11047,8 @@ export type UserUncheckedCreateWithoutProductAuditEventsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   reviewedDocuments?: Prisma.DocumentUncheckedCreateNestedManyWithoutReviewedByInput
@@ -10259,6 +11133,8 @@ export type UserUpdateWithoutProductAuditEventsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   reviewedDocuments?: Prisma.DocumentUpdateManyWithoutReviewedByNestedInput
@@ -10327,6 +11203,8 @@ export type UserUncheckedUpdateWithoutProductAuditEventsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   reviewedDocuments?: Prisma.DocumentUncheckedUpdateManyWithoutReviewedByNestedInput
@@ -10394,6 +11272,8 @@ export type UserCreateWithoutCredentialInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -10462,6 +11342,8 @@ export type UserUncheckedCreateWithoutCredentialInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -10546,6 +11428,8 @@ export type UserUpdateWithoutCredentialInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -10614,6 +11498,8 @@ export type UserUncheckedUpdateWithoutCredentialInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -10682,6 +11568,8 @@ export type UserCreateWithoutAuthCodesInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -10750,6 +11638,8 @@ export type UserUncheckedCreateWithoutAuthCodesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -10834,6 +11724,8 @@ export type UserUpdateWithoutAuthCodesInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -10902,6 +11794,8 @@ export type UserUncheckedUpdateWithoutAuthCodesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -10970,6 +11864,8 @@ export type UserCreateWithoutMfaRecoveryRequestsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -11038,6 +11934,8 @@ export type UserUncheckedCreateWithoutMfaRecoveryRequestsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -11111,6 +12009,8 @@ export type UserCreateWithoutApprovedMfaRecoveriesInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -11179,6 +12079,8 @@ export type UserUncheckedCreateWithoutApprovedMfaRecoveriesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -11252,6 +12154,8 @@ export type UserCreateWithoutDeniedMfaRecoveriesInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -11320,6 +12224,8 @@ export type UserUncheckedCreateWithoutDeniedMfaRecoveriesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -11404,6 +12310,8 @@ export type UserUpdateWithoutMfaRecoveryRequestsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -11472,6 +12380,8 @@ export type UserUncheckedUpdateWithoutMfaRecoveryRequestsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -11551,6 +12461,8 @@ export type UserUpdateWithoutApprovedMfaRecoveriesInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -11619,6 +12531,8 @@ export type UserUncheckedUpdateWithoutApprovedMfaRecoveriesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -11698,6 +12612,8 @@ export type UserUpdateWithoutDeniedMfaRecoveriesInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -11766,6 +12682,8 @@ export type UserUncheckedUpdateWithoutDeniedMfaRecoveriesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -11834,6 +12752,8 @@ export type UserCreateWithoutAuthRateLimitsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -11902,6 +12822,8 @@ export type UserUncheckedCreateWithoutAuthRateLimitsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -11986,6 +12908,8 @@ export type UserUpdateWithoutAuthRateLimitsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -12054,6 +12978,8 @@ export type UserUncheckedUpdateWithoutAuthRateLimitsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -12122,6 +13048,8 @@ export type UserCreateWithoutSecurityEventsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -12190,6 +13118,8 @@ export type UserUncheckedCreateWithoutSecurityEventsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -12274,6 +13204,8 @@ export type UserUpdateWithoutSecurityEventsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -12342,6 +13274,8 @@ export type UserUncheckedUpdateWithoutSecurityEventsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -12411,6 +13345,8 @@ export type UserCreateWithoutResolvedRuntimeErrorsInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -12479,6 +13415,8 @@ export type UserUncheckedCreateWithoutResolvedRuntimeErrorsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -12563,6 +13501,8 @@ export type UserUpdateWithoutResolvedRuntimeErrorsInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -12631,6 +13571,8 @@ export type UserUncheckedUpdateWithoutResolvedRuntimeErrorsInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -12698,6 +13640,8 @@ export type UserCreateWithoutAuthDevicesInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -12766,6 +13710,8 @@ export type UserUncheckedCreateWithoutAuthDevicesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -12850,6 +13796,8 @@ export type UserUpdateWithoutAuthDevicesInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -12918,6 +13866,8 @@ export type UserUncheckedUpdateWithoutAuthDevicesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -12986,6 +13936,8 @@ export type UserCreateWithoutMfaBackupCodesInput = {
   createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
@@ -13054,6 +14006,8 @@ export type UserUncheckedCreateWithoutMfaBackupCodesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -13138,6 +14092,8 @@ export type UserUpdateWithoutMfaBackupCodesInput = {
   createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
@@ -13206,6 +14162,8 @@ export type UserUncheckedUpdateWithoutMfaBackupCodesInput = {
   createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
   sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
   grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
+  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
+  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -13252,6 +14210,8 @@ export type UserCountOutputType = {
   createdOrganizations: number
   sentOrganizationInvitations: number
   grantedMembershipResources: number
+  updatedMembershipAccesses: number
+  updatedInvitationAccesses: number
   supportSessions: number
   supportAuditEvents: number
   productAuditEvents: number
@@ -13293,6 +14253,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   createdOrganizations?: boolean | UserCountOutputTypeCountCreatedOrganizationsArgs
   sentOrganizationInvitations?: boolean | UserCountOutputTypeCountSentOrganizationInvitationsArgs
   grantedMembershipResources?: boolean | UserCountOutputTypeCountGrantedMembershipResourcesArgs
+  updatedMembershipAccesses?: boolean | UserCountOutputTypeCountUpdatedMembershipAccessesArgs
+  updatedInvitationAccesses?: boolean | UserCountOutputTypeCountUpdatedInvitationAccessesArgs
   supportSessions?: boolean | UserCountOutputTypeCountSupportSessionsArgs
   supportAuditEvents?: boolean | UserCountOutputTypeCountSupportAuditEventsArgs
   productAuditEvents?: boolean | UserCountOutputTypeCountProductAuditEventsArgs
@@ -13419,6 +14381,20 @@ export type UserCountOutputTypeCountSentOrganizationInvitationsArgs<ExtArgs exte
  */
 export type UserCountOutputTypeCountGrantedMembershipResourcesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OrganizationMembershipResourceGrantWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountUpdatedMembershipAccessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrganizationMembershipWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountUpdatedInvitationAccessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrganizationInvitationWhereInput
 }
 
 /**
@@ -13639,6 +14615,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdOrganizations?: boolean | Prisma.User$createdOrganizationsArgs<ExtArgs>
   sentOrganizationInvitations?: boolean | Prisma.User$sentOrganizationInvitationsArgs<ExtArgs>
   grantedMembershipResources?: boolean | Prisma.User$grantedMembershipResourcesArgs<ExtArgs>
+  updatedMembershipAccesses?: boolean | Prisma.User$updatedMembershipAccessesArgs<ExtArgs>
+  updatedInvitationAccesses?: boolean | Prisma.User$updatedInvitationAccessesArgs<ExtArgs>
   supportSessions?: boolean | Prisma.User$supportSessionsArgs<ExtArgs>
   supportAuditEvents?: boolean | Prisma.User$supportAuditEventsArgs<ExtArgs>
   productAuditEvents?: boolean | Prisma.User$productAuditEventsArgs<ExtArgs>
@@ -13771,6 +14749,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdOrganizations?: boolean | Prisma.User$createdOrganizationsArgs<ExtArgs>
   sentOrganizationInvitations?: boolean | Prisma.User$sentOrganizationInvitationsArgs<ExtArgs>
   grantedMembershipResources?: boolean | Prisma.User$grantedMembershipResourcesArgs<ExtArgs>
+  updatedMembershipAccesses?: boolean | Prisma.User$updatedMembershipAccessesArgs<ExtArgs>
+  updatedInvitationAccesses?: boolean | Prisma.User$updatedInvitationAccessesArgs<ExtArgs>
   supportSessions?: boolean | Prisma.User$supportSessionsArgs<ExtArgs>
   supportAuditEvents?: boolean | Prisma.User$supportAuditEventsArgs<ExtArgs>
   productAuditEvents?: boolean | Prisma.User$productAuditEventsArgs<ExtArgs>
@@ -13819,6 +14799,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdOrganizations: Prisma.$OrganizationPayload<ExtArgs>[]
     sentOrganizationInvitations: Prisma.$OrganizationInvitationPayload<ExtArgs>[]
     grantedMembershipResources: Prisma.$OrganizationMembershipResourceGrantPayload<ExtArgs>[]
+    updatedMembershipAccesses: Prisma.$OrganizationMembershipPayload<ExtArgs>[]
+    updatedInvitationAccesses: Prisma.$OrganizationInvitationPayload<ExtArgs>[]
     supportSessions: Prisma.$SupportSessionPayload<ExtArgs>[]
     supportAuditEvents: Prisma.$SupportAuditEventPayload<ExtArgs>[]
     productAuditEvents: Prisma.$ProductAuditEventPayload<ExtArgs>[]
@@ -14281,6 +15263,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   createdOrganizations<T extends Prisma.User$createdOrganizationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdOrganizationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sentOrganizationInvitations<T extends Prisma.User$sentOrganizationInvitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentOrganizationInvitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   grantedMembershipResources<T extends Prisma.User$grantedMembershipResourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$grantedMembershipResourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationMembershipResourceGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  updatedMembershipAccesses<T extends Prisma.User$updatedMembershipAccessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$updatedMembershipAccessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationMembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  updatedInvitationAccesses<T extends Prisma.User$updatedInvitationAccessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$updatedInvitationAccessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   supportSessions<T extends Prisma.User$supportSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   supportAuditEvents<T extends Prisma.User$supportAuditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportAuditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   productAuditEvents<T extends Prisma.User$productAuditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$productAuditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -15101,6 +16085,54 @@ export type User$grantedMembershipResourcesArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.OrganizationMembershipResourceGrantScalarFieldEnum | Prisma.OrganizationMembershipResourceGrantScalarFieldEnum[]
+}
+
+/**
+ * User.updatedMembershipAccesses
+ */
+export type User$updatedMembershipAccessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrganizationMembership
+   */
+  select?: Prisma.OrganizationMembershipSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrganizationMembership
+   */
+  omit?: Prisma.OrganizationMembershipOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationMembershipInclude<ExtArgs> | null
+  where?: Prisma.OrganizationMembershipWhereInput
+  orderBy?: Prisma.OrganizationMembershipOrderByWithRelationInput | Prisma.OrganizationMembershipOrderByWithRelationInput[]
+  cursor?: Prisma.OrganizationMembershipWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrganizationMembershipScalarFieldEnum | Prisma.OrganizationMembershipScalarFieldEnum[]
+}
+
+/**
+ * User.updatedInvitationAccesses
+ */
+export type User$updatedInvitationAccessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrganizationInvitation
+   */
+  select?: Prisma.OrganizationInvitationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrganizationInvitation
+   */
+  omit?: Prisma.OrganizationInvitationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationInvitationInclude<ExtArgs> | null
+  where?: Prisma.OrganizationInvitationWhereInput
+  orderBy?: Prisma.OrganizationInvitationOrderByWithRelationInput | Prisma.OrganizationInvitationOrderByWithRelationInput[]
+  cursor?: Prisma.OrganizationInvitationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrganizationInvitationScalarFieldEnum | Prisma.OrganizationInvitationScalarFieldEnum[]
 }
 
 /**

@@ -42,7 +42,8 @@ export type MfaRecoveryStatus = (typeof MfaRecoveryStatus)[keyof typeof MfaRecov
 
 export const PlatformRole = {
   USER: 'USER',
-  SUPER_ADMIN: 'SUPER_ADMIN'
+  SUPPORT_AGENT: 'SUPPORT_AGENT',
+  PLATFORM_ADMIN: 'PLATFORM_ADMIN'
 } as const
 
 export type PlatformRole = (typeof PlatformRole)[keyof typeof PlatformRole]
@@ -50,23 +51,19 @@ export type PlatformRole = (typeof PlatformRole)[keyof typeof PlatformRole]
 
 export const OrganizationRole = {
   OWNER: 'OWNER',
-  ADMIN: 'ADMIN',
-  MEMBER: 'MEMBER',
-  VIEWER: 'VIEWER',
-  SAFETY_CONSULTANT: 'SAFETY_CONSULTANT',
-  SITE_MANAGER: 'SITE_MANAGER',
-  WORKER: 'WORKER'
+  COLLABORATOR: 'COLLABORATOR'
 } as const
 
 export type OrganizationRole = (typeof OrganizationRole)[keyof typeof OrganizationRole]
 
 
 export const OrganizationAccessPreset = {
-  OPERATIONAL_COLLABORATOR: 'OPERATIONAL_COLLABORATOR',
+  READ_ONLY: 'READ_ONLY',
+  OPERATIONAL_COLLABORATION: 'OPERATIONAL_COLLABORATION',
   SITE_MANAGER: 'SITE_MANAGER',
-  CONSULTANT: 'CONSULTANT',
-  VIEWER: 'VIEWER',
-  LIMITED_UPLOAD: 'LIMITED_UPLOAD'
+  DOCUMENT_REVIEWER: 'DOCUMENT_REVIEWER',
+  LIMITED_UPLOAD: 'LIMITED_UPLOAD',
+  CUSTOM: 'CUSTOM'
 } as const
 
 export type OrganizationAccessPreset = (typeof OrganizationAccessPreset)[keyof typeof OrganizationAccessPreset]

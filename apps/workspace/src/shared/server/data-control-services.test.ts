@@ -112,7 +112,7 @@ describe("data control services", () => {
   it("allows only OWNER to read inventory", async () => {
     await expect(getDataInventory()).resolves.toMatchObject({ counts: expect.any(Object) });
 
-    mocks.role = "ADMIN";
+    mocks.role = "COLLABORATOR";
     await expect(getDataInventory()).rejects.toMatchObject({ status: 404 });
   });
 

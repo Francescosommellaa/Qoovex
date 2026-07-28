@@ -1,6 +1,7 @@
 "use client";
 
 import { IconShieldLock } from "@tabler/icons-react";
+import type { DevWorkspaceView, PlatformRole } from "@qoovex/types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
@@ -26,16 +27,19 @@ import {
 } from "./workspace-navigation-history";
 import type { WorkspaceNavigationItem } from "./workspace-navigation-policy";
 import { useWorkspacePageIdentity } from "./WorkspacePageIdentity";
+import { DevViewSwitcher } from "./DevViewSwitcher";
 
 export function WorkspaceTopbar({
   fallbackLabel,
-  isSuperAdmin,
+  platformRole,
+  devView,
   navigation,
   showNotifications,
   unreadNotificationCount,
 }: {
   fallbackLabel: string;
-  isSuperAdmin: boolean;
+  platformRole: PlatformRole;
+  devView: DevWorkspaceView | null;
   navigation: readonly WorkspaceNavigationItem[];
   showNotifications: boolean;
   unreadNotificationCount: number;
@@ -105,7 +109,8 @@ export function WorkspaceTopbar({
         {showNotifications ? (
           <WorkspaceNotificationsPanel unreadNotificationCount={unreadNotificationCount} />
         ) : null}
-        {isSuperAdmin ? <Badge className="hidden sm:inline-flex" variant="outline">Operatore Qoovex</Badge> : null}
+        {devView ? <DevViewSwitcher view={devView} /> : null}
+        {platformRole === "SUPPORT_AGENT" || platformRole === "PLATFORM_ADMIN" ? <Badge className="hidden sm:inline-flex" variant="outline">Operatore Qoovex</Badge> : null}
         {fallbackLabel === "Sicurezza account" ? <IconShieldLock aria-hidden="true" className="mx-1 size-4 text-muted-foreground" /> : null}
         <ThemeToggle />
       </div>

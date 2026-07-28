@@ -4,7 +4,7 @@ Runtime Next.js autenticato del prodotto Qoovex. Contiene Centro operativo, moto
 
 ## Stato attuale verificato
 
-`Organization` e il tenant canonico e Azienda la label prodotto. Ogni account usa zero o una sola `OrganizationMembership`. Il ruolo organizzativo e `OWNER`, `ADMIN`, `MEMBER` o `VIEWER`; preset, permessi persistiti, scadenza e resource grant restano separati e derivano dal server. `Worker` non e un account. Gli esterni usano soltanto share link tokenizzati.
+`Organization` e il tenant canonico e Azienda la label prodotto. Ogni account usa zero o una sola `OrganizationMembership`. Il ruolo organizzativo e `OWNER` o `COLLABORATOR`; preset, permessi persistiti, scadenza e resource grant restano separati e derivano dal server. `Worker` non e un account. `SUPPORT_AGENT` e `PLATFORM_ADMIN` sono ruoli piattaforma separati. Gli esterni usano soltanto share link tokenizzati.
 
 Il dominio comprende lavoratori, cantieri, documenti e versioni private, tipi/requisiti, scadenze, calendario, checklist, prove, pacchetti, condivisioni, notifiche, audit, export, retention e data-control. Prisma salva dati e metadati; Vercel Blob privato salva file. Le response non espongono storage key, token hash o URL permanenti.
 

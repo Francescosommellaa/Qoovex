@@ -111,7 +111,7 @@ afterEach(() => {
 
 describe("notification service", () => {
   it("lets owners, admins and safety consultants list notifications", async () => {
-    for (const role of ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const) {
+    for (const role of ["OWNER", "COLLABORATOR"] as const) {
       setRole(role);
       await expect(listNotifications()).resolves.toMatchObject({ unreadCount: 1 });
     }
@@ -122,12 +122,9 @@ describe("notification service", () => {
     }));
   });
 
-  it("denies notifications to site managers, workers and destinatari esterni", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER"] as const) {
-      setRole(role);
-      await expect(listNotifications()).rejects.toMatchObject({ status: 404 });
-    }
-    expect(mocks.db.notification.findMany).not.toHaveBeenCalled();
+  it("keeps collaborator notification access permission-driven", async () => {
+    setRole("COLLABORATOR");
+    await expect(listNotifications()).resolves.toMatchObject({ unreadCount: 1 });
   });
 
   it("returns a safe notification payload without internal keys", async () => {

@@ -1,17 +1,16 @@
 /** Shared platform-neutral contracts for the Qoovex Organization domain. */
 export type EntityId = string;
 
-export const platformRoles = ["USER", "SUPER_ADMIN"] as const;
+export const platformRoles = ["USER", "SUPPORT_AGENT", "PLATFORM_ADMIN"] as const;
 export type PlatformRole = (typeof platformRoles)[number];
 
-export const organizationRoles = ["OWNER", "ADMIN", "MEMBER", "VIEWER"] as const;
-export type CanonicalOrganizationRole = (typeof organizationRoles)[number];
-/** @deprecated Read compatibility only while legacy fixtures and audit projections are migrated. */
-export type LegacyOrganizationRole = "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER";
-export type OrganizationRole = CanonicalOrganizationRole | LegacyOrganizationRole;
+export const organizationRoles = ["OWNER", "COLLABORATOR"] as const;
+export type OrganizationRole = (typeof organizationRoles)[number];
 
-export const organizationAccessPresets = ["OPERATIONAL_COLLABORATOR", "SITE_MANAGER", "CONSULTANT", "VIEWER", "LIMITED_UPLOAD"] as const;
+export const organizationAccessPresets = ["READ_ONLY", "OPERATIONAL_COLLABORATION", "SITE_MANAGER", "DOCUMENT_REVIEWER", "LIMITED_UPLOAD", "CUSTOM"] as const;
 export type OrganizationAccessPreset = (typeof organizationAccessPresets)[number];
+export const devWorkspaceViews = ["OWNER", "SUPPORT_AGENT", "PLATFORM_ADMIN"] as const;
+export type DevWorkspaceView = (typeof devWorkspaceViews)[number];
 export const organizationScopeModes = ["FULL", "ASSIGNED"] as const;
 export type OrganizationScopeMode = (typeof organizationScopeModes)[number];
 export const organizationResourceTypes = ["JOB_SITE", "WORKER", "DOCUMENT", "DOCUMENT_TYPE", "DOCUMENT_PACKAGE", "OPERATIONAL_PROCESS", "OPERATIONAL_DECISION", "OPERATIONAL_EXCEPTION", "EVIDENCE", "CHECKLIST", "SHARE_LINK"] as const;
@@ -37,8 +36,13 @@ export const organizationPermissions = [
   "jobSites:update",
   "jobSites:archive",
   "documents:read",
+  "documents:file:read",
   "documents:upload",
   "documents:update",
+  "documents:verify",
+  "documents:expiry:manage",
+  "documents:packages:add",
+  "documents:sensitive:read",
   "documents:archive",
   "deadlines:read",
   "deadlines:manage",
@@ -52,7 +56,17 @@ export const organizationPermissions = [
   "evidence:delete",
   "documentPackages:read",
   "documentPackages:create",
+  "documentPackages:update",
+  "documentPackages:review",
+  "documentPackages:approve",
   "documentPackages:share",
+  "documentPackages:revoke",
+  "documentPackages:access:read",
+  "processes:read",
+  "processes:timeline:read",
+  "processes:decide",
+  "processes:exceptions:resolve",
+  "processes:retry",
   "auditLog:read",
   "assignments:read",
   "assignments:manage",
@@ -169,7 +183,7 @@ export const documentCategoryRegistry: Record<DocumentCategoryKey, DocumentCateg
   SITE_EQUIPMENT_SYSTEMS: { key: "SITE_EQUIPMENT_SYSTEMS", label: "Mezzi, attrezzature e impianti", description: "Documenti registrati per mezzi, attrezzature e impianti del cantiere.", appliesTo: "JOB_SITE", availableForNewDocuments: true },
   SITE_REPORTS_INSPECTIONS: { key: "SITE_REPORTS_INSPECTIONS", label: "Verbali e controlli", description: "Verbali, sopralluoghi e controlli registrati per il cantiere.", appliesTo: "JOB_SITE", availableForNewDocuments: true },
   SITE_CLOSURE_HANDOVER: { key: "SITE_CLOSURE_HANDOVER", label: "Chiusura e consegna", description: "Documenti configurati per chiusura e consegna del cantiere.", appliesTo: "JOB_SITE", availableForNewDocuments: true },
-  UNCLASSIFIED: { key: "UNCLASSIFIED", label: "Da classificare", description: "Dato legacy mantenuto visibile finche OWNER o ADMIN non ne confermano la destinazione.", appliesTo: null, availableForNewDocuments: false },
+  UNCLASSIFIED: { key: "UNCLASSIFIED", label: "Da classificare", description: "Dato preesistente mantenuto visibile finche un utente con il permesso richiesto non ne conferma la destinazione.", appliesTo: null, availableForNewDocuments: false },
 };
 
 export const documentSensitivityLabels: Record<DocumentSensitivity, string> = {
@@ -377,6 +391,7 @@ export interface SupportContext {
 export interface WorkspaceAccessContext {
   userId: EntityId;
   platformRole: PlatformRole;
+  devView?: DevWorkspaceView | null;
   company: WorkspaceCompanyContext | null;
   support: SupportContext | null;
   permissions: Permission[];
@@ -385,8 +400,10 @@ export interface WorkspaceAccessContext {
 export interface CreateOrganizationInput { name: string }
 export interface OrganizationResourceGrantInput { resourceType: OrganizationResourceType; resourceId: EntityId }
 export interface CreateInvitationInput {
+  recipientName?: string | null;
   email: string;
-  role: Exclude<OrganizationRole, "OWNER">;
+  message?: string | null;
+  role: "COLLABORATOR";
   preset: OrganizationAccessPreset | null;
   permissions: OrganizationPermission[];
   scopeMode: OrganizationScopeMode;

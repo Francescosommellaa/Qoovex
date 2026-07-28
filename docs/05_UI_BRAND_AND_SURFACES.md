@@ -6,6 +6,8 @@ La direzione grafica e invariata. Qoovex usa shadcn `base-nova`, Base UI, Tabler
 
 Il Workspace usa una sola shell adattiva. La navigazione primaria contiene soltanto destinazioni autorizzate. `Cerca` e un controllo separato che apre un modale consultivo (`Ctrl/Cmd+K`) e non una pagina o una voce primaria. La card `Azioni rapide`, nel footer sopra l'account, espone le principali mutazioni manuali derivate dai permessi; desktop usa una riga compatta, sidebar collassata una colonna e mobile una griglia 2x2. Notifiche, account e tema mantengono la collocazione esistente.
 
+In locale, un solo dropdown nella topbar passa tra le viste `Owner`, `Support Agent` e `Platform Admin`; il vecchio banner di cambio vista e stato eliminato. Il profilo dev e il comando `Accedi come dev` restano invariati. La sezione Accessi usa un invito progressivo in quattro passaggi con preset, scope `FULL/ASSIGNED`, risorse selezionate, permessi raggruppati e riepilogo; la modifica di un Collaborator mostra differenze prima della conferma.
+
 `/dashboard` conserva compatibilita URL ma presenta “Centro operativo”. L'ingresso universale responsive apre i flussi controllati esistenti; `/operations/[processId]` mostra stato reale, step, timeline, decisioni, eccezioni e artifact. Le viste di dominio restano controllo avanzato.
 
 Le nuove composizioni usano esclusivamente primitive canoniche gia presenti. Restano vincolanti focus visibile, tastiera, touch, zoom 200%, contenuti lunghi, reduced motion, forced colors, light/dark/system e nessuna capability simulata.

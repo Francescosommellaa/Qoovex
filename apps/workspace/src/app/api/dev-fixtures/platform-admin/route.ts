@@ -105,8 +105,8 @@ async function createMfaSuiteFixture(runId: string) {
         memberships: {
           create: [
             { userId: owner.id, role: "OWNER" },
-            { userId: safety.id, role: "SAFETY_CONSULTANT" },
-            { userId: worker.id, role: "WORKER" },
+            { userId: safety.id, role: "COLLABORATOR", preset: "DOCUMENT_REVIEWER", scopeMode: "FULL" },
+            { userId: worker.id, role: "COLLABORATOR", preset: "LIMITED_UPLOAD", scopeMode: "ASSIGNED" },
           ],
         },
       },

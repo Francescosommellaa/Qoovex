@@ -2,7 +2,7 @@
 
 ## Stato attuale verificato
 
-Supporto, Qoovex Admin e data-control conservano i guardrail esistenti. Il motore non espone credenziali, token, Blob key, URL permanenti, contenuti file o stack trace.
+Supporto, Qoovex Admin e data-control conservano i guardrail esistenti. `SUPPORT_AGENT` e `PLATFORM_ADMIN` sono ruoli piattaforma separati dalle membership. Il Support Agent apre una sessione temporanea e motivata tramite codice Azienda e riceve soltanto permessi metadata/read-only: nessuna lettura file, upload, gestione accessi o condivisione. La gestione globale resta esclusiva del Platform Admin. Il motore non espone credenziali, token, Blob key, URL permanenti, contenuti file o stack trace.
 
 `OperationalEvent` alimenta la timeline funzionale tipizzata e append-only; `ProductAuditEvent` resta il registro tecnico/prodotto separato. Gli accessi esterni registrano solo `LINK_OPENED` e `DOWNLOAD_REQUESTED`: non dichiarano lettura o download completato e non includono token, IP, user-agent, Blob key o URL firmato.
 

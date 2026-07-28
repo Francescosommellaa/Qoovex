@@ -91,7 +91,7 @@ interface EventDraft {
 const priorityLabels = { LOW: "Bassa", MEDIUM: "Media", HIGH: "Alta", URGENT: "Urgente" } as const;
 const statusLabels = { PLANNED: "Pianificato", IN_PROGRESS: "In corso", DONE: "Completato", CANCELLED: "Annullato" } as const;
 const kindLabels = { EVENT: "Evento", TASK: "Attività" } as const;
-const roleLabels = { OWNER: "Owner", ADMIN: "Admin", MEMBER: "Membro", VIEWER: "Visualizzatore", SAFETY_CONSULTANT: "Consulente", SITE_MANAGER: "Responsabile cantiere", WORKER: "Lavoratore" } as const;
+const roleLabels = { OWNER: "Owner", COLLABORATOR: "Collaboratore" } as const;
 const calendarViews: { label: string; value: CalendarView }[] = [
   { label: "Mese", value: "dayGridMonth" },
   { label: "Settimana", value: "timeGridWeek" },

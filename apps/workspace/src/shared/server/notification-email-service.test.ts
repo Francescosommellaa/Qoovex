@@ -116,7 +116,7 @@ beforeEach(() => {
 
 describe("notification email service", () => {
   it("lets owners, admins and safety consultants preview email digest", async () => {
-    for (const role of ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const) {
+    for (const role of ["OWNER", "COLLABORATOR"] as const) {
       setRole(role);
       await expect(previewNotificationEmailDigest()).resolves.toMatchObject({ unreadCount: 1 });
     }
@@ -127,11 +127,9 @@ describe("notification email service", () => {
     }));
   });
 
-  it("denies site managers, workers and destinatari esterni", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER"] as const) {
-      setRole(role);
-      await expect(previewNotificationEmailDigest()).rejects.toMatchObject({ status: 404 });
-    }
+  it("keeps collaborator notification access permission-driven", async () => {
+    setRole("COLLABORATOR");
+    await expect(previewNotificationEmailDigest()).resolves.toMatchObject({ unreadCount: 1 });
   });
 
   it("returns a safe preview payload", async () => {

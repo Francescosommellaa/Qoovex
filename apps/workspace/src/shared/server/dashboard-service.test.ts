@@ -28,28 +28,29 @@ const now = new Date("2026-07-14T10:42:00.000Z");
 const future = new Date("2026-07-18T10:42:00.000Z");
 const past = new Date("2026-07-01T10:42:00.000Z");
 
-function context(role: OrganizationRole): WorkspaceAccessContext {
+function context(role: OrganizationRole, permissions: WorkspaceAccessContext["permissions"]): WorkspaceAccessContext {
   return {
     userId: "user-1",
     platformRole: "USER",
     company: { role, organization: { id: "org-1", name: "Azienda Demo", code: "QVX-1" } },
     support: null,
-    permissions: [],
+    permissions,
   };
 }
 
-function setRole(role: OrganizationRole) {
-  const accessContext = context(role);
+function setRole(role: OrganizationRole, preset: "SITE_MANAGER" | "DOCUMENT_REVIEWER" | null = null, permissions: WorkspaceAccessContext["permissions"] = role === "OWNER" ? ["documents:upload", "documents:verify", "documents:sensitive:read", "assignments:manage", "documentPackages:read", "documentPackages:share"] : []) {
+  const accessContext = context(role, permissions);
   mocks.requireOrganizationDomainAccess.mockResolvedValue({ context: accessContext, organizationId: "org-1", actorRole: role });
   mocks.getResourceScope.mockResolvedValue({
     context: accessContext,
     organizationId: "org-1",
     actorRole: role,
-    fullAccess: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    linkedWorker: role === "WORKER" ? { id: "worker-1", displayName: "Mario Rossi", roleLabel: null, status: "ACTIVE" } : null,
-    siteManagerJobSiteIds: role === "SITE_MANAGER" ? ["jobsite-1"] : [],
-    workerJobSiteIds: role === "WORKER" ? ["jobsite-1"] : [],
-    visibleJobSiteIds: role === "SITE_MANAGER" || role === "WORKER" ? ["jobsite-1"] : [],
+    preset,
+    fullAccess: role === "OWNER",
+    linkedWorker: null,
+    siteManagerJobSiteIds: preset === "SITE_MANAGER" ? ["jobsite-1"] : [],
+    workerJobSiteIds: [],
+    visibleJobSiteIds: preset === "SITE_MANAGER" ? ["jobsite-1"] : [],
   });
 }
 
@@ -132,7 +133,7 @@ beforeEach(() => {
 
 describe("dashboard service", () => {
   it("lets every internal role read a situation-centric dashboard", async () => {
-    for (const role of ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const) {
+    for (const role of ["OWNER", "COLLABORATOR"] as const) {
       setRole(role);
       primeDashboardMocks();
       await expect(getDashboardData()).resolves.toMatchObject({ organization: { role } });
@@ -197,7 +198,7 @@ describe("dashboard service", () => {
   });
 
   it("hides sharing for scoped roles and filters attention by assigned resources", async () => {
-    setRole("SITE_MANAGER");
+    setRole("COLLABORATOR", "SITE_MANAGER");
     primeDashboardMocks();
     const dashboard = await getDashboardData();
 
@@ -210,7 +211,7 @@ describe("dashboard service", () => {
   });
 
   it("keeps packages reviewable by safety consultants without exposing share creation", async () => {
-    setRole("SAFETY_CONSULTANT");
+    setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["documentPackages:read"]);
     primeDashboardMocks();
     const dashboard = await getDashboardData();
 

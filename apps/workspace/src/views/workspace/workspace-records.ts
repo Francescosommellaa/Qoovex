@@ -19,12 +19,14 @@ import type {
   JobSiteOperationalPhase,
   RecordStatus,
   OrganizationRole,
+  OrganizationAccessPreset,
 } from "@qoovex/types";
 
 export type WorkspaceRole = OrganizationRole;
 
 export interface WorkspaceCapabilities {
   role: WorkspaceRole | null;
+  accessPreset: OrganizationAccessPreset | null;
   canManageCore: boolean;
   canCreateDocuments: boolean;
   canCreateWorkers: boolean;

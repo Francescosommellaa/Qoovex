@@ -31,16 +31,11 @@ import { getResourceScope, type ResourceScope } from "@shared/server/resource-sc
 import { auditActorFromContext } from "@shared/server/product-audit-service";
 import { getOperationalDefinition } from "./definitions";
 
-const READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const MANUAL_EXCEPTION_TYPES = ["DATA_TO_VERIFY", "PARTIAL_RESULT"] as const;
 const roleLabels: Record<OrganizationRole, string> = {
   OWNER: "Titolare",
-  ADMIN: "Amministratore",
-  MEMBER: "Membro",
-  VIEWER: "Visualizzatore",
-  SAFETY_CONSULTANT: "Consulente sicurezza",
-  SITE_MANAGER: "Responsabile cantiere",
-  WORKER: "Lavoratore",
+  COLLABORATOR: "Collaboratore",
 };
 
 function jsonObject(value: Prisma.JsonValue | null): Record<string, unknown> {
@@ -85,7 +80,7 @@ async function operationalAccess() {
 
 export async function processScopeWhere(scope: ResourceScope): Promise<Prisma.OperationalProcessWhereInput> {
   if (scope.fullAccess) return { organizationId: scope.organizationId };
-  const jobSiteIds = scope.actorRole === "SITE_MANAGER" ? scope.siteManagerJobSiteIds : scope.workerJobSiteIds;
+  const jobSiteIds = scope.preset === "SITE_MANAGER" ? scope.siteManagerJobSiteIds : scope.workerJobSiteIds;
   const workerIds = scope.linkedWorker ? [scope.linkedWorker.id] : [];
   if (!jobSiteIds.length && !workerIds.length) return { organizationId: scope.organizationId, id: "__no_visible_process__" };
   const [documents, checklists, evidence] = await Promise.all([
@@ -335,10 +330,10 @@ async function findVisibleProcess(processId: string) {
 }
 
 export async function getOperationalProcess(processId: string): Promise<OperationalProcessDetail> {
-  const { process, actorRole } = await findVisibleProcess(processId);
+  const { process, scope } = await findVisibleProcess(processId);
   const definition = getOperationalDefinition(process.type);
-  const canDecide = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"].includes(actorRole);
-  const canManuallyResolve = ["OWNER", "ADMIN"].includes(actorRole);
+  const canDecide = scope.context.permissions.includes("processes:decide");
+  const canManuallyResolve = scope.context.permissions.includes("processes:exceptions:resolve");
   const timelineItems = process.events.slice(0, 20);
   return {
     ...toProcessSummary(process),
@@ -349,7 +344,7 @@ export async function getOperationalProcess(processId: string): Promise<Operatio
       nextAttemptAt: step.nextAttemptAt.toISOString(),
       startedAt: step.startedAt?.toISOString() ?? null,
       completedAt: step.completedAt?.toISOString() ?? null,
-      canRetry: ["OWNER", "ADMIN"].includes(actorRole) && step.status === "TECHNICAL_FAILURE",
+      canRetry: scope.context.permissions.includes("processes:retry") && step.status === "TECHNICAL_FAILURE",
     })),
     decisions: process.decisions.map((decision) => toDecisionDto(decision, canDecide)),
     exceptions: process.exceptions.map((exception) => toExceptionDto(exception, canManuallyResolve)),
@@ -428,7 +423,7 @@ export async function getOperationalCenter(): Promise<OperationalCenterResponse>
   const openDeadlineStatuses = ["SCHEDULED", "EXPIRING_SOON", "EXPIRED"] as const;
   const deadlineWhere: Prisma.DeadlineWhereInput = scope.fullAccess
     ? { organizationId: scope.organizationId, archivedAt: null, status: { in: [...openDeadlineStatuses] } }
-    : scope.actorRole === "SITE_MANAGER"
+    : scope.preset === "SITE_MANAGER"
       ? { organizationId: scope.organizationId, archivedAt: null, status: { in: [...openDeadlineStatuses] }, jobSiteId: { in: scope.siteManagerJobSiteIds } }
       : { organizationId: scope.organizationId, archivedAt: null, status: { in: [...openDeadlineStatuses] }, OR: [
           ...(scope.linkedWorker ? [{ workerId: scope.linkedWorker.id }] : []),
@@ -453,8 +448,8 @@ export async function getOperationalCenter(): Promise<OperationalCenterResponse>
   const exceptionCount = await db.operationalException.count({ where: { organizationId: scope.organizationId, status: "OPEN", process: { is: where } } });
   const blocked = await db.operationalProcess.count({ where: { AND: [where, { status: { in: ["BLOCKED", "WAITING_FOR_DECISION", "TECHNICAL_FAILURE"] } }] } });
   const running = await db.operationalProcess.count({ where: { AND: [where, { status: { in: ["RECEIVED", "READY", "RUNNING", "RETRY_SCHEDULED"] } }] } });
-  const canDecide = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"].includes(actorRole);
-  const canManuallyResolve = ["OWNER", "ADMIN"].includes(actorRole);
+  const canDecide = ["OWNER", "COLLABORATOR"].includes(actorRole);
+  const canManuallyResolve = ["OWNER", "COLLABORATOR"].includes(actorRole);
   const now = Date.now();
   const decisionItems: OperationalCenterItemDto[] = decisions.map((item) => ({
     id: item.id,
@@ -579,7 +574,7 @@ export async function getOperationalCenter(): Promise<OperationalCenterResponse>
       name: context.support?.organization.name ?? context.company?.organization.name ?? "Azienda",
       role: actorRole,
       roleLabel: roleLabels[actorRole],
-      viewLabel: scope.fullAccess ? "Tutta l'azienda" : actorRole === "SITE_MANAGER" ? "Cantieri assegnati" : "I miei dati",
+      viewLabel: scope.fullAccess ? "Tutta l'azienda" : scope.preset === "SITE_MANAGER" ? "Cantieri assegnati" : "I miei dati",
     },
     counts: { decisions: decisionCount, exceptions: exceptionCount, blocked, running },
     decisions: decisions.map((item) => toDecisionDto(item, canDecide)),

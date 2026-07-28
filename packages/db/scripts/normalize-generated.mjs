@@ -14,6 +14,8 @@ const generatedFilesWithPrismaWhitespace = [
   "../generated/prisma/client.ts",
   "../generated/prisma/internal/prismaNamespace.ts",
   "../generated/prisma/models/CalendarEvent.ts",
+  "../generated/prisma/models/OrganizationInvitation.ts",
+  "../generated/prisma/models/OrganizationMembership.ts",
 ];
 
 for (const relativePath of generatedFilesWithPrismaWhitespace) {
