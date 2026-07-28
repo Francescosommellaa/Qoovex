@@ -198,6 +198,7 @@ describeOnLocalCi("single membership concurrency on PostgreSQL", () => {
         organizationId: previousOrganization.id,
         userId: user.id,
         role: "COLLABORATOR",
+        preset: "CUSTOM",
         revokedAt: new Date(),
       },
     });
