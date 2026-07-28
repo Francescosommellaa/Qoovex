@@ -11,6 +11,10 @@ import type {
   JobSiteUserAssignmentResponse,
   JobSiteWorkerAssignmentResponse,
   OrganizationAccessPreset,
+<<<<<<< HEAD
+=======
+  OrganizationRole,
+>>>>>>> a0aabbf4eb8a7c4ee34022813a82027a8827c852
   WorkerUserLinkResponse,
 } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
@@ -19,9 +23,15 @@ import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { getResourceScope, toMyResourceScopeResponse } from "./resource-scope-service";
 
+<<<<<<< HEAD
 const ASSIGNMENT_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const ASSIGNMENT_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const MY_SCOPE_ROLES = ["OWNER", "COLLABORATOR"] as const;
+=======
+const ASSIGNMENT_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
+const ASSIGNMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const MY_SCOPE_ROLES = ["OWNER", "ADMIN", "MEMBER", "VIEWER", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+>>>>>>> a0aabbf4eb8a7c4ee34022813a82027a8827c852
 
 interface ListWorkerUserLinksInput {
   workerId?: unknown;
@@ -46,8 +56,20 @@ function userLabel(user: { name: string | null; email: string }) {
   return user.name?.trim() || user.email;
 }
 
+<<<<<<< HEAD
 function assertExpectedAccessPreset(preset: OrganizationAccessPreset | null, expected: OrganizationAccessPreset, label: string) {
   if (preset !== expected) throw new AccessError(`${label} non disponibile per questa assegnazione.`, 409);
+=======
+function assertExpectedCompanyAccess(
+  membership: { role: OrganizationRole; preset: OrganizationAccessPreset | null },
+  expectedLegacyRole: OrganizationRole,
+  expectedPreset: OrganizationAccessPreset,
+  label: string,
+) {
+  if (membership.role !== expectedLegacyRole && membership.preset !== expectedPreset) {
+    throw new AccessError(`${label} non disponibile per questa assegnazione.`, 409);
+  }
+>>>>>>> a0aabbf4eb8a7c4ee34022813a82027a8827c852
 }
 
 async function assertActiveWorker(organizationId: string, workerId: string) {
@@ -183,7 +205,11 @@ export async function createWorkerUserLink(input: CreateWorkerUserLinkInput | Re
     assertActiveWorker(organizationId, workerId),
     assertActiveMembership(organizationId, userId),
   ]);
+<<<<<<< HEAD
   assertExpectedAccessPreset(membership.preset, "LIMITED_UPLOAD", "Utente");
+=======
+  assertExpectedCompanyAccess(membership, "WORKER", "LIMITED_UPLOAD", "Utente");
+>>>>>>> a0aabbf4eb8a7c4ee34022813a82027a8827c852
 
   const duplicate = await db.workerUserLink.findFirst({
     where: { organizationId, archivedAt: null, OR: [{ workerId }, { userId }] },
@@ -274,7 +300,11 @@ export async function createJobSiteUserAssignment(input: CreateJobSiteUserAssign
   const userId = parseRequiredId(input.userId, "Utente");
   await assertActiveJobSite(organizationId, jobSiteId);
   const membership = await assertActiveMembership(organizationId, userId);
+<<<<<<< HEAD
   assertExpectedAccessPreset(membership.preset, "SITE_MANAGER", "Utente");
+=======
+  assertExpectedCompanyAccess(membership, "SITE_MANAGER", "SITE_MANAGER", "Utente");
+>>>>>>> a0aabbf4eb8a7c4ee34022813a82027a8827c852
 
   const duplicate = await db.jobSiteUserAssignment.findFirst({
     where: { organizationId, jobSiteId, userId, assignmentRole: "SITE_MANAGER", archivedAt: null },
@@ -452,7 +482,18 @@ export async function getResourceAssignmentOptions() {
       orderBy: [{ name: "asc" }],
     }),
     db.organizationMembership.findMany({
+<<<<<<< HEAD
       where: { organizationId, revokedAt: null, role: "COLLABORATOR", preset: { in: ["SITE_MANAGER", "LIMITED_UPLOAD"] } },
+=======
+      where: {
+        organizationId,
+        revokedAt: null,
+        OR: [
+          { role: { in: ["SITE_MANAGER", "WORKER"] } },
+          { preset: { in: ["SITE_MANAGER", "LIMITED_UPLOAD"] } },
+        ],
+      },
+>>>>>>> a0aabbf4eb8a7c4ee34022813a82027a8827c852
       select: { role: true, preset: true, user: { select: { id: true, name: true, email: true } } },
       orderBy: [{ createdAt: "asc" }],
     }),
@@ -464,7 +505,7 @@ export async function getResourceAssignmentOptions() {
       id: membership.user.id,
       label: userLabel(membership.user),
       email: membership.user.email,
-      role: membership.role,
+      role: membership.preset === "SITE_MANAGER" ? "SITE_MANAGER" : membership.preset === "LIMITED_UPLOAD" ? "WORKER" : membership.role,
     })),
   };
 }
@@ -476,8 +517,12 @@ export async function getWorkerUserLinkOptions(workerId: string) {
     where: {
       organizationId,
       revokedAt: null,
+<<<<<<< HEAD
       role: "COLLABORATOR",
       preset: "LIMITED_UPLOAD",
+=======
+      OR: [{ role: "WORKER" }, { preset: "LIMITED_UPLOAD" }],
+>>>>>>> a0aabbf4eb8a7c4ee34022813a82027a8827c852
       user: { workerUserLinks: { none: { organizationId, archivedAt: null } } },
     },
     select: { user: { select: { id: true, name: true, email: true } } },

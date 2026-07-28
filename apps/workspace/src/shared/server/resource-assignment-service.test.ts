@@ -109,7 +109,11 @@ beforeEach(() => {
   mocks.auditActorFromContext.mockReturnValue({ actorUserId: "user-owner", actorRole: "OWNER", supportSessionId: null });
   mocks.db.worker.findFirst.mockResolvedValue(worker);
   mocks.db.jobSite.findFirst.mockResolvedValue(jobSite);
+<<<<<<< HEAD
   mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "COLLABORATOR", preset: "LIMITED_UPLOAD", user });
+=======
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "MEMBER", preset: "LIMITED_UPLOAD", user });
+>>>>>>> a0aabbf4eb8a7c4ee34022813a82027a8827c852
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteUserAssignment.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteWorkerAssignment.findFirst.mockResolvedValue(null);
@@ -128,8 +132,13 @@ describe("resource assignment service", () => {
     mocks.db.worker.findMany.mockResolvedValue([worker]);
     mocks.db.jobSite.findMany.mockResolvedValue([jobSite]);
     mocks.db.organizationMembership.findMany.mockResolvedValue([
+<<<<<<< HEAD
       { role: "COLLABORATOR", user },
       { role: "COLLABORATOR", user: { id: "manager-1", name: "Elena Mariani", email: "elena@example.com" } },
+=======
+      { role: "MEMBER", preset: "LIMITED_UPLOAD", user },
+      { role: "MEMBER", preset: "SITE_MANAGER", user: { id: "manager-1", name: "Elena Mariani", email: "elena@example.com" } },
+>>>>>>> a0aabbf4eb8a7c4ee34022813a82027a8827c852
     ]);
 
     await expect(getResourceAssignmentOptions()).resolves.toEqual({
@@ -196,7 +205,11 @@ describe("resource assignment service", () => {
   });
 
   it("validates role-specific jobsite assignments and soft archives them", async () => {
+<<<<<<< HEAD
     mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "COLLABORATOR", preset: "SITE_MANAGER", user });
+=======
+    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "MEMBER", preset: "SITE_MANAGER", user });
+>>>>>>> a0aabbf4eb8a7c4ee34022813a82027a8827c852
     await expect(createJobSiteUserAssignment({ jobSiteId: "jobsite-1", userId: "user-worker" })).resolves.toMatchObject({
       jobSiteId: "jobsite-1",
       assignmentRole: "SITE_MANAGER",
