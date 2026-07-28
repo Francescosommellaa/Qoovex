@@ -21,7 +21,7 @@ import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { buildMissingDocumentRequirementItemsForScope } from "./document-requirement-service";
 import { getResourceScope, type ResourceScope } from "./resource-scope-service";
 
-const DASHBOARD_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const DASHBOARD_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const ATTENTION_DOCUMENT_STATUSES: DocumentStatus[] = ["MISSING", "EXPIRED", "EXPIRING_SOON", "TO_REVIEW"];
 const CLOSED_DEADLINE_STATUSES = ["DONE", "ARCHIVED"] as const;
 const DASHBOARD_SITUATION_LIMIT = 5;
@@ -29,10 +29,7 @@ const DASHBOARD_QUERY_LIMIT = 20;
 
 const roleLabels: Record<OrganizationRole, string> = {
   OWNER: "Titolare",
-  ADMIN: "Amministratore",
-  SAFETY_CONSULTANT: "Consulente sicurezza",
-  SITE_MANAGER: "Responsabile cantiere",
-  WORKER: "Lavoratore",
+  COLLABORATOR: "Collaboratore",
 };
 
 type AssignmentRow = {
@@ -104,11 +101,11 @@ function statusConsequence(kind: DashboardSituationKind) {
   return "Lo stato resta aperto finche una persona non completa la verifica.";
 }
 
-function documentActionLabel(kind: DashboardSituationKind, actorRole: OrganizationRole) {
+function documentActionLabel(kind: DashboardSituationKind, scope: ResourceScope) {
   if (kind === "EXPIRED") return "Controlla il documento";
   if (kind === "EXPIRING_SOON") return "Apri la scadenza";
-  if (kind === "MISSING") return actorRole === "SITE_MANAGER" ? "Apri il documento" : "Carica versione";
-  return actorRole === "OWNER" || actorRole === "ADMIN" || actorRole === "SAFETY_CONSULTANT" ? "Verifica informazioni" : "Apri il documento";
+  if (kind === "MISSING") return scope.context.permissions.includes("documents:upload") ? "Carica versione" : "Apri il documento";
+  return scope.context.permissions.includes("documents:verify") ? "Verifica informazioni" : "Apri il documento";
 }
 
 function userLabel(row: AssignmentRow) {
@@ -127,7 +124,7 @@ function responsibility(input: {
   workerAssignments: Map<string, AssignmentRow[]>;
   jobSiteAssignments: Map<string, AssignmentRow[]>;
 }) {
-  const canAssign = input.actorRole === "OWNER" || input.actorRole === "ADMIN";
+  const canAssign = input.scope.context.permissions.includes("assignments:manage");
   const assignmentHref = canAssign && (input.workerId || input.jobSiteId) ? "/access?from=dashboard" : null;
 
   if (input.ownerType === "ORGANIZATION") {
@@ -210,7 +207,7 @@ function contextsFromSituations(situations: DashboardSituation[]): DashboardCont
 
 function documentWhere(organizationId: string, scope: ResourceScope) {
   if (scope.fullAccess) return { organizationId, archivedAt: null };
-  if (scope.actorRole === "SITE_MANAGER") {
+  if (scope.preset === "SITE_MANAGER") {
     return { organizationId, archivedAt: null, ownerType: "JOB_SITE" as const, jobSiteId: { in: scope.siteManagerJobSiteIds } };
   }
   if (scope.linkedWorker) {
@@ -222,7 +219,7 @@ function documentWhere(organizationId: string, scope: ResourceScope) {
 function deadlineWhere(organizationId: string, scope: ResourceScope) {
   const open = { notIn: [...CLOSED_DEADLINE_STATUSES] };
   if (scope.fullAccess) return { organizationId, archivedAt: null, status: open };
-  if (scope.actorRole === "SITE_MANAGER") {
+  if (scope.preset === "SITE_MANAGER") {
     return { organizationId, archivedAt: null, status: open, jobSiteId: { in: scope.siteManagerJobSiteIds } };
   }
   if (scope.linkedWorker) {
@@ -347,7 +344,7 @@ async function loadAttention(input: {
         workerAssignments,
         jobSiteAssignments,
       }),
-      action: { label: documentActionLabel(kind, input.actorRole), href: documentDetailsHref(document, new URLSearchParams({ from: "dashboard" })) },
+      action: { label: documentActionLabel(kind, input.scope), href: documentDetailsHref(document, new URLSearchParams({ from: "dashboard" })) },
       date: document.expiryDate?.toISOString() ?? null,
       updatedAt: document.updatedAt.toISOString(),
     };
@@ -376,7 +373,7 @@ async function loadAttention(input: {
         jobSiteAssignments,
       }),
       action: {
-        label: input.actorRole === "OWNER" || input.actorRole === "ADMIN" ? "Aggiungi documento" : "Apri documenti",
+        label: input.scope.context.permissions.includes("documents:upload") ? "Aggiungi documento" : "Apri documenti",
         href: "/documents?status=MISSING&from=dashboard",
       },
       date: null,
@@ -434,8 +431,7 @@ async function loadAttention(input: {
   };
 }
 
-async function loadPackages(organizationId: string, actorRole: OrganizationRole, now: Date): Promise<DashboardPackageItem[]> {
-  const canShare = actorRole === "OWNER" || actorRole === "ADMIN";
+async function loadPackages(organizationId: string, canShare: boolean, now: Date): Promise<DashboardPackageItem[]> {
   const packages = await db.documentPackage.findMany({
     where: { organizationId, archivedAt: null, status: { in: ["READY_FOR_REVIEW", "SHARED"] } },
     select: {
@@ -509,11 +505,11 @@ export async function getDashboardData(): Promise<DashboardResponse> {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("organization:read", DASHBOARD_ROLES);
   const scope = await getResourceScope(context);
   const now = new Date();
-  const canSeePackages = scope.fullAccess;
+  const canSeePackages = scope.context.permissions.includes("documentPackages:read");
 
   const [attentionResult, packageResult, deadlineResult] = await Promise.allSettled([
     loadAttention({ organizationId, scope, actorRole, currentUserId: context.userId }),
-    canSeePackages ? loadPackages(organizationId, actorRole, now) : Promise.resolve([]),
+    canSeePackages ? loadPackages(organizationId, scope.context.permissions.includes("documentPackages:share"), now) : Promise.resolve([]),
     loadDeadlines(organizationId, scope),
   ]);
 
@@ -538,7 +534,7 @@ export async function getDashboardData(): Promise<DashboardResponse> {
       name: context.support?.organization.name ?? context.company?.organization.name ?? "Azienda",
       role: actorRole,
       roleLabel: roleLabels[actorRole],
-      viewLabel: scope.fullAccess ? "Tutta l'azienda" : actorRole === "SITE_MANAGER" ? "Cantieri assegnati" : "I miei dati",
+      viewLabel: scope.fullAccess ? "Tutta l'azienda" : scope.preset === "SITE_MANAGER" ? "Cantieri assegnati" : "I miei dati",
     },
     attention: {
       total: attention.total,
@@ -553,7 +549,7 @@ export async function getDashboardData(): Promise<DashboardResponse> {
       contexts: true,
     },
     firstUse: errors.length === 0
-      && (actorRole === "OWNER" || actorRole === "ADMIN")
+      && actorRole === "OWNER"
       && attention.total === 0
       && readyPackages.length === 0
       && upcomingDeadlines.length === 0,

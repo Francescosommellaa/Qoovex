@@ -29,7 +29,7 @@ const accessRoleOptions: Array<{
   label: string;
   description: string;
 }> = [
-  { value: "WORKER", label: "Invita come lavoratore", description: "Riceve il ruolo Lavoratore. Dopo l'accettazione, associa questo profilo al suo account." },
+  { value: "COLLABORATOR", label: "Invita come collaboratore", description: "Riceve accesso limitato e, dopo l'accettazione, associa questo profilo al suo account." },
 ];
 
 interface WorkerFormProps {

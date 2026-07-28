@@ -1,43 +1,43 @@
 # Quality and release
 
-## Stato attuale verificato
+## Gate standard
 
-### Gate standard
+`pnpm check` esegue type-check, test unitari, build, audit dipendenze, verifica Prisma e `git diff --check`; `pnpm check:ci` aggiunge E2E. `verify:prisma` resta bloccante su migration, checksum e drift.
 
-Il gate repository e `pnpm check`: type-check, test unitari, build, audit dipendenze, verifica Prisma e `git diff --check`. `pnpm check:ci` aggiunge E2E. `pnpm lint` non e un comando root valido.
+## Copertura Fasi 3-4 implementata
 
-`verify:prisma` deve bloccare migration mancanti, riordinate, modificate, fallite o pendenti e qualunque schema diff. La CI usa PostgreSQL effimero e le protezioni E2E dedicate. Non indebolire il controllo drift e non usare `.first()` per nascondere collisioni strict-mode Playwright.
+- cinque definizioni registry e transizioni invalide;
+- transizioni cantiere valide/invalide, blocchi, override e riapertura;
+- ID noto e negazioni per file, sensibilita, scope assegnato e sessione Support;
+- lifecycle versioni e prove, checksum duplicato e snapshot selettivi dei pacchetti;
+- richieste, messaggi, timeline e controlli fonte tenant-safe;
+- matrice affidabilita x impatto;
+- payload minimizzati, artifact tenant-scoped e idempotency key;
+- claim concorrente, lease di cinque minuti, fencing e backoff;
+- enqueue nella transazione di documento/versione/lavoratore/cantiere/pacchetto;
+- contratti API discriminati, route protette e permission mapping;
+- shell unica adattiva, ricerca consultiva metadata-only in modale separato e card Azioni rapide guidata dai permessi;
+- workflow scheduled con controllo JSON/logical failure;
+- revisioni immutabili, backfill legacy, review obbligatoria, conferma concorrente, revoca/scadenza idempotente e download opt-in;
+- ricerca esatta/prefisso/termine, tenant/resource scope, cursori stabili e indici PostgreSQL;
+- timeline tipizzata e aggregata, correzioni append-only, payload minimizzati e audit tecnico separato;
+- E2E Fase 3: documento incompleto -> decisione -> ripresa; lavoratore -> requisito mancante -> documento -> eccezione risolta;
+- E2E Fase 4: ricerca autorizzata -> artifact -> timeline; preparazione -> review -> link; aggiornamento immutabile; revoca/scadenza; Centro operativo.
+- access model: mapping expand/migrate/contract, backfill dry-run/idempotenza, Owner/Collaborator, permessi dipendenti, scope e grant cross-tenant, optimistic concurrency, scadenza/revoca, reinvio/rifiuto invito e separazione Support Agent/Platform Admin;
+- storia migration fresca e mapping espliciti per gli indici PostgreSQL al limite di 63 byte, verificati con `migrate reset`, `migrate status` e diff nullo;
 
-## Verifica documentale
+I conteggi esatti delle suite vengono riportati dal gate finale della sessione; restano prove locali e non attestano Preview o Production.
 
-Una modifica esclusivamente documentale deve almeno:
+Il gate locale del 28 luglio 2026 ha verificato 19 test DB e 328 test Workspace superati, con 3 test di concorrenza skipped, build Web/Sirio/Workspace, 17 migration senza drift e 5 test E2E superati. Il test inviti/resource scope e stato inoltre ripetuto isolatamente dopo la correzione del cleanup fixture. L'E2E usa un server Workspace dedicato in modalita E2E; al termine il profilo dev normale viene ripristinato.
 
-- validare ogni JSON modificato;
-- distinguere stato attuale, direzione approvata, concetti non implementati e hard stop;
-- controllare link, percorsi e riferimenti a file eliminati;
-- cercare placeholder presentati come capability e promesse legali;
-- verificare l'allowlist dei file modificati;
-- eseguire `git diff --check` e `pnpm check:fast`.
+## Gate prima di release
 
-Il gate documentale non autorizza query, migration, codegen o operazioni di ambiente. Se vengono modificati codice, schema, manifest o contratti runtime, si applica il gate completo proporzionato e la prova browser per le superfici UI.
+Eseguire Prisma validate/generate, migration status/diff sul target autorizzato, test mirati, `pnpm check:fast`, `pnpm check`, E2E e `git diff --check`. Per la UI verificare desktop/mobile, loading/empty/error, tastiera, touch, zoom 200%, temi, reduced motion, forced colors, overflow e console.
 
-## Qualita del motore futuro
+## Specifiche non implementate
 
-Prima della Fase 3 dovranno essere approvati contratti, stati, schema e migration. I test futuri dovranno coprire:
+Nessun deploy Preview/Production, commit, branch, push o PR fa parte delle Fasi 3-4 locali. Un workflow nel repository non prova esecuzione remota.
 
-- isolamento tra Aziende, utenti e resource scope;
-- deduplica di evento, processo e step;
-- retry idempotente e fencing;
-- replay senza riscrittura dello storico;
-- completamento parziale e riconciliazione;
-- affidabilita e impatto senza soglie implicite;
-- separazione tra eccezione e notifica;
-- minimizzazione di timeline e audit;
-- nessuna condivisione, ruolo o eliminazione automatica non autorizzata;
-- query count indipendente dalla cardinalita per dashboard e timeline.
+## Decisioni aperte e hard stop
 
-Nessun test di processo esiste oggi e questa documentazione non ne simula l'esito.
-
-## Allineamento post-task
-
-Ogni modifica sostanziale aggiorna documentazione canonica, Qoovex-Brain e session log. La Memory Codex si aggiorna soltanto su richiesta esplicita tramite il canale ad hoc autorizzato. Un deploy e verificato solo con smoke check nell'ambiente interessato.
+Non dichiarare un ambiente allineato senza verifica specifica. OCR/AI, ricerca nei file o semantica, retention, nuovi canali, SLA e limiti commerciali richiederanno test e gate propri.

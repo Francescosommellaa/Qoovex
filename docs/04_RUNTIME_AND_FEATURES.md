@@ -2,144 +2,47 @@
 
 ## Stato attuale verificato
 
-Workspace espone auth credentials e OAuth opzionale, MFA TOTP con backup code, recupero auditato, inviti, supporto, dashboard e Console Qoovex. Azienda, ruolo, permessi e resource scope derivano sempre dal server.
+Il Workspace mantiene auth, MFA, inviti, supporto, dominio documentale, scadenze/calendario, checklist/prove, pacchetti/condivisioni, notifiche, audit e data-control. Gli inviti creano soltanto `COLLABORATOR`; preset, permessi normalizzati, scope, grant tenant-safe e scadenza vengono persistiti. L'`OWNER` puo modificarli con optimistic concurrency, reinviare o revocare inviti e accessi; aggiornamento e revoca invalidano le sessioni del destinatario.
 
-Il runtime attivo comprende:
+Il motore operativo implementa cinque definizioni:
 
-- documenti, versioni private, tassonomia, sensibilita e requisiti configurabili;
-- lavoratori, cantieri, fasi e assegnazioni;
-- scadenze e calendario con import/export iCalendar locale;
-- checklist, prove, pacchetti, share link revocabili e viewer esterno;
-- notifiche interne, reminder, preferenze e digest email;
-- ProductAuditEvent, inventario, export, retention, data-control e supporto.
+| Definizione | Trigger | Effetti deterministici |
+|---|---|---|
+| `DOCUMENT_RECEIVED@1` | documento, aggiornamento o nuova versione | contesto, dati mancanti, requisiti, deadline/reminder, pacchetti interni |
+| `WORKER_CREATED@1` | creazione o aggiornamento lavoratore | snapshot requisiti WORKER, documenti mancanti, reminder |
+| `JOB_SITE_CREATED@1` | creazione o aggiornamento cantiere | requisiti globali/specifici, documenti/checklist esistenti, reminder |
+| `CONTINUOUS_CONTROL@1` | una volta per Azienda/finestra oraria | stati temporali a 30 giorni, requisiti, processi fermi, reminder e artifact |
+| `DOCUMENT_PACKAGE_SHARING@1` | preparazione esplicita pacchetto | manifest deterministico, problemi, decisione umana e pubblicazione idempotente |
 
-`Da fare` e una coda situation-centric: ordina elementi mancanti, scaduti, in scadenza o da verificare e mostra motivo, conseguenza, contesto, responsabilita e prossima azione. Non e ancora alimentata da processi persistenti. La navigazione contiene viste di dominio, Preferiti e Azioni rapide; Ricerca e Analisi sono affordance disabilitate e non capability attive.
+Una nuova versione riporta da `READY_FOR_REVIEW` a `DRAFT` soltanto pacchetti interni non condivisi. I pacchetti `SHARED` non vengono modificati. I problemi tecnici sono ritentati; i dati mancanti o ambigui aprono decisioni/eccezioni senza retry infinito.
 
-I flussi attuali restano validi e protetti, ma sono ancora in parte CRUD: caricamento e classificazione documenti, creazione lavoratori/cantieri, scadenze, checklist, prove e composizione pacchetti richiedono coordinamento umano. Nessun servizio OCR/AI o ingresso universale e implementato.
+## Spazio operativo contestuale
 
-## Direzione approvata: modello operativo
+Il Workspace espone servizi tenant-safe per profilo azienda e contatti, link non duplicanti documento-cantiere, revisione delle versioni, assegnazioni con ruolo/periodo/storico, prove classificate e revisionate, richieste, messaggi e timeline contestuale append-only. La timeline utente resta separata da `ProductAuditEvent` e accetta solo metadati minimizzati.
 
-Ogni obiettivo operativo futuro segue:
+La fase cantiere segue `DRAFT -> PREPARATION -> IN_PROGRESS <-> PAUSED -> CLOSING -> COMPLETED`. Il cambio usa una route dedicata: apertura e completamento calcolano richieste, checklist e documenti bloccanti; override e riapertura richiedono Owner e motivazione. L'editing generico non puo cambiare fase.
 
-1. **Ricezione** di un evento utente, dominio, temporale, decisionale o tecnico.
-2. **Blocco del contesto** di Azienda, attore, ruolo, scope, sensibilita e permessi.
-3. **Normalizzazione e deduplica** di evento, risorsa, processo e step.
-4. **Risoluzione delle regole** validate e versionate applicabili.
-5. **Produzione del piano** con input, fonte, affidabilita, impatto, reversibilita, permesso e completamento.
-6. **Esecuzione automatica** degli step ammessi.
-7. **Apertura delle eccezioni** quando servono giudizio, input o autorizzazione.
-8. **Riconciliazione** dopo eventi o decisioni, senza output duplicati.
-9. **Chiusura** quando output, eccezioni e azioni future sono coerenti.
-
-## Specifiche concettuali non implementate
-
-I nomi provvisori sono `Process Definition`, `Process Run`, `Process Step`, `Process Event`, `Proposal`, `Decision`, `Exception` e `Artifact Reference`. Non esistono oggi come schema, tipi, API o UI.
-
-Stati concettuali di processo: `RECEIVED`, `RUNNING`, `WAITING`, `RETRY_SCHEDULED`, `BLOCKED`, `COMPLETED`, `FAILED`, `CANCELLED`. Motivi di attesa: `INPUT_REQUIRED`, `CONFIRMATION_REQUIRED`, `APPROVAL_REQUIRED`, `EXTERNAL_RESPONSE_REQUIRED`. Gli stati dello step restano `PENDING`, `RUNNING`, `WAITING`, `COMPLETED`, `SKIPPED`, `FAILED`.
-
-Eventi concettuali:
-
-- ingresso: file, foto, nota, lavoratore, cantiere, richiesta di condivisione, import;
-- dominio: documento/versione, requisito, assegnazione, checklist, prova, pacchetto/link, fase;
-- tempo: finestra di attenzione, scadenza, reminder, link, processo fermo, rivalutazione;
-- decisione: conferma, correzione, rifiuto, override, condivisione, annullamento;
-- tecnica: step, retry, riconciliazione, supersessione, fallimento.
+Le fonti v1 sono `DIRECT_UPLOAD` e `GUIDED_MANUAL`. Un controllo deterministico puo aprire una richiesta guidata ma non degrada documenti approvati. `AUTHORIZED_INTEGRATION`, scraping, password conservate e AI restano disabilitati.
 
 ## Affidabilita e impatto
 
-Non esistono soglie numeriche approvate.
+I livelli implementati sono `VERIFIED/HIGH/MEDIUM/LOW/CONFLICT` e `LOW/CONTROLLED/SENSITIVE/IRREVERSIBLE`. La policy non usa soglie numeriche:
 
-| Affidabilita | Significato |
-|---|---|
-| `VERIFIED` | contesto bloccato, relazione confermata o regola validata |
-| `HIGH` | conclusione dominante ma fallibile |
-| `MEDIUM` | piu alternative plausibili |
-| `LOW` | dati insufficienti |
-| `CONFLICT` | fonti affidabili incompatibili |
+- automatico: affidabilita `VERIFIED/HIGH`, impatto `LOW`, effetto deterministico, reversibile e autorizzato;
+- decisione: impatto `CONTROLLED` o affidabilita `MEDIUM/LOW/CONFLICT`;
+- vietato: `IRREVERSIBLE`, effetto non autorizzato, ampliamento accesso, disclosure o azione legale;
+- `SENSITIVE` non e automatico.
 
-| Impatto | Esempi |
-|---|---|
-| `LOW` | titolo, vista derivata, deduplica |
-| `CONTROLLED` | collegamento, data proposta, pacchetto interno |
-| `SENSITIVE` | invito, assegnazione, documento riservato, condivisione |
-| `IRREVERSIBLE` | eliminazione definitiva, cancellazione Azienda, cleanup critico |
+## API e UI attive
 
-| Affidabilita / impatto | LOW | CONTROLLED | SENSITIVE | IRREVERSIBLE |
-|---|---|---|---|---|
-| VERIFIED | automatico | automatico se reversibile e approvato | conferma autorizzata | conferma forte |
-| HIGH | automatico con timeline | conferma predefinita | conferma autorizzata | conferma forte |
-| MEDIUM | conferma | conferma | blocco fino ad approvazione | blocco |
-| LOW | input | input | blocco | blocco |
-| CONFLICT | blocco | blocco | blocco | blocco |
+Sono attive le route `/api/operations/center`, `/inbox`, `/processes`, timeline processo/artifact cursor-based, risoluzione decisioni/eccezioni, retry step e runner protetto. `POST /api/search` applica query 2-120 caratteri, massimo 8 termini, timeout due secondi e ranking deterministico sui soli metadati. Le route share proposal applicano preparazione, review e conferma con fingerprint.
 
-Affidabilita alta non rende automatica un'azione sensibile o irreversibile.
+Il Centro operativo mostra decisioni, eccezioni, processi attivi e risultati; il dettaglio espone step, timeline, artifact e sole azioni consentite. Documenti, lavoratori, cantieri e pacchetti mostrano l'ultimo stato operativo collegato. L'ingresso universale compone i flussi esistenti.
 
-## Policy di automazione
+## Specifiche non implementate
 
-Automatiche per principio, quando supportate da dati e policy valide:
-
-- derivazione degli stati temporali;
-- situazioni mancanti da requisiti validati;
-- eredita del contesto;
-- titoli operativi modificabili;
-- deduplica di eventi e notifiche;
-- viste derivate e versione corrente deterministica;
-- promemoria secondo policy approvata;
-- aggiornamento di pacchetti interni non condivisi;
-- chiusura di eccezioni soddisfatte;
-- timeline e audit consentiti.
-
-Richiedono conferma:
-
-- classificazioni fallibili e date estratte;
-- associazioni non ereditate dal contesto;
-- sostituzioni non deterministiche;
-- applicazione retroattiva di modelli;
-- inviti e assegnazioni;
-- esclusione di elementi richiesti;
-- condivisioni esterne;
-- correzione di dati confermati.
-
-Non sono automatiche senza una futura decisione esplicita:
-
-- dichiarazioni di conformita, deduzioni normative o certificazioni;
-- modifica dei ruoli o ampliamento dello scope;
-- condivisione esterna di dati riservati;
-- trattamento sensibile con provider non approvati;
-- eliminazione definitiva, cancellazione Azienda o cleanup Blob;
-- modifica silenziosa dello storico;
-- sorveglianza o geolocalizzazione continua.
-
-## Eccezioni, timeline e retry
-
-Un'eccezione persistente descrive problema, motivo, conseguenza, fonti, attore autorizzato, azione primaria e condizione di ripresa. Le categorie concettuali includono input mancante, match ambiguo, fonti in conflitto, regola assente, permesso richiesto, contenuto sensibile, duplicato sospetto, failure tecnica, risposta esterna e failure terminale.
-
-Una notifica porta l'eccezione all'attenzione; leggerla o chiuderla non risolve l'eccezione. La timeline spiega avvio, regole, step, proposte, decisioni, retry, output e risultato; ProductAuditEvent resta separato e tecnico.
-
-Gli errori tecnici transitori usano claim atomico, fencing, tentativi limitati e backoff. Gli errori di business attendono un nuovo evento o una decisione. Il completamento parziale mostra output salvati, step mancanti, retry sicuri e possibili compensazioni.
-
-## Blueprint target
-
-### Documento ricevuto
-
-Input minimo: file, attore e contesto ereditato. Il processo valida file, deduplica, propone destinazione/tipo/titolo/date, riconcilia versione, requisiti, scadenze e pacchetti e apre soltanto le eccezioni residue. Classificazione fallibile, data estratta, sostituzione e sensibilita richiedono conferma.
-
-### Nuovo lavoratore
-
-Input minimo: nome, cognome ed eventuali mansione/contatto. Il processo controlla duplicati, applica il modello validato, identifica mancanti e propone cantieri e invito. Duplicati plausibili, assegnazioni, accesso e documenti ambigui richiedono conferma.
-
-### Nuovo cantiere
-
-Input minimo: identita operativa, fase dichiarata o confermata ed eventuali dati di contesto. Il processo applica un modello validato, predispone aspettative, checklist, attivita e pacchetto interno e propone persone. Modello, fase, date, persone, eccezioni e condivisione richiedono conferma quando non deterministici.
-
-### Controllo continuo
-
-Il sistema rivaluta su evento o frequenza approvata requisiti, date, processi fermi, pacchetti, link, assegnazioni e regole. Riconcilia tramite chiavi idempotenti senza ricreare processi o notifiche equivalenti. Runner e frequenze non sono decisi.
-
-## Centro operativo futuro
-
-La UI primaria mostrera decisioni richieste, processi in corso o in retry, processi bloccati/falliti e risultati recenti. Non simulera percentuali senza pesi reali. Il valore mostrato sara il lavoro evitato, non il numero di record creati.
+Nessun OCR, AI, ricerca nei file/semantica, query salvata, template inventato, nuovo canale, annullamento, undo, condivisione automatica o deduzione normativa e attivo.
 
 ## Decisioni aperte e hard stop
 
-Restano aperti naming e schema, regole versionate, autorizzazioni decisionali, soglie, reversibilita, annullamento, runner/frequenze, canali di ingresso, provider, sensibilita, retention, ricerca, condivisione, export, notifiche, modifiche regole sui run aperti, compensazioni, livelli di servizio e limiti commerciali.
+Restano aperti OCR/AI, retention, ricerca nei file o semantica, viste salvate e cronologia, nuovi canali, compensazioni/undo, SLA e limiti commerciali. Cancellazione e undo non sono esposti finche la policy resta aperta.

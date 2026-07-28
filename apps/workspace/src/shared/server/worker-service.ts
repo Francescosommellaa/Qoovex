@@ -2,6 +2,7 @@ import "server-only";
 
 import { db } from "@qoovex/db";
 import type { RecordStatus } from "@qoovex/types";
+import { enqueueOperationalProcess } from "@shared/server/operational-process-service";
 import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { trimOptionalText, trimRequiredText } from "./document-domain-validation";
@@ -10,8 +11,8 @@ import { auditActorFromContext, recordProductAuditEventBestEffort } from "./prod
 import { canReadSiteManagerWorker, canReadWorker, getResourceScope } from "./resource-scope-service";
 import { normalizeOptionalEmail, parseEditableRecordStatus, rejectSensitiveFields } from "./worker-jobsite-validation";
 
-const WORKER_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
-const WORKER_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const WORKER_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const WORKER_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 const workerSelect = {
   id: true,
@@ -48,12 +49,12 @@ export interface UpdateWorkerInput extends Record<string, unknown> {
 export async function listWorkers() {
   const { context, organizationId } = await requireOrganizationDomainAccess("workers:read", WORKER_READ_ROLES);
   const scope = await getResourceScope(context);
-  if (scope.actorRole === "WORKER") {
+  if (scope.preset === "LIMITED_UPLOAD") {
     if (!scope.linkedWorker) return [];
     const worker = await db.worker.findFirst({ where: { id: scope.linkedWorker.id, organizationId, archivedAt: null }, select: workerSelect });
     return worker ? [worker] : [];
   }
-  if (scope.actorRole === "SITE_MANAGER") {
+  if (scope.preset === "SITE_MANAGER") {
     if (!scope.siteManagerJobSiteIds.length) return [];
     const assignments = await db.jobSiteWorkerAssignment.findMany({
       where: {
@@ -87,7 +88,7 @@ export async function getWorker(workerId: string) {
   const worker = await db.worker.findFirst({ where: { id: workerId, organizationId, archivedAt: null }, select: workerSelect });
   if (!worker) throw new AccessError("Lavoratore non trovato.", 404);
   if (!canReadWorker(scope, worker.id)) {
-    const assignments = scope.actorRole === "SITE_MANAGER"
+    const assignments = scope.preset === "SITE_MANAGER"
       ? await db.jobSiteWorkerAssignment.findMany({
         where: { organizationId, workerId: worker.id, archivedAt: null, jobSite: { archivedAt: null } },
         select: { jobSiteId: true },
@@ -122,9 +123,22 @@ export async function createWorker(input: CreateWorkerInput) {
     if (duplicate) throw new AccessError(`Esiste gia un lavoratore con questa email: ${duplicate.displayName}.`, 409);
   }
 
-  const worker = await db.worker.create({
-    data: { organizationId, displayName, email, phone, roleLabel, status, notes },
-    select: workerSelect,
+  const worker = await db.$transaction(async (tx) => {
+    const created = await tx.worker.create({
+      data: { organizationId, displayName, email, phone, roleLabel, status, notes },
+      select: workerSelect,
+    });
+    await enqueueOperationalProcess({
+      organizationId,
+      type: "WORKER_CREATED",
+      triggerKind: "WORKER_CREATED",
+      idempotencyKey: `worker:${created.id}:created`,
+      context: { source: "workspace", change: "created" },
+      artifacts: [{ type: "WORKER", id: created.id, label: created.displayName }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return created;
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "worker", resourceId: worker.id });
   await recordProductAuditEventBestEffort({
@@ -179,7 +193,20 @@ export async function updateWorker(workerId: string, input: UpdateWorkerInput) {
   if (input.notes !== undefined) data.notes = trimOptionalText(input.notes, "Note lavoratore", 4000) ?? null;
   if (!Object.keys(data).length) throw new AccessError("Nessun dato lavoratore da aggiornare.", 409);
 
-  const worker = await db.worker.update({ where: { id: existing.id }, data, select: workerSelect });
+  const worker = await db.$transaction(async (tx) => {
+    const updated = await tx.worker.update({ where: { id: existing.id }, data, select: workerSelect });
+    await enqueueOperationalProcess({
+      organizationId,
+      type: "WORKER_CREATED",
+      triggerKind: "WORKER_UPDATED",
+      idempotencyKey: `worker:${updated.id}:updated:${updated.updatedAt.toISOString()}`,
+      context: { source: "workspace", change: "updated" },
+      artifacts: [{ type: "WORKER", id: updated.id, label: updated.displayName }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return updated;
+  });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "worker", resourceId: worker.id });
   await recordProductAuditEventBestEffort({
     organizationId,

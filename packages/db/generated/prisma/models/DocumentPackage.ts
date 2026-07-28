@@ -226,6 +226,8 @@ export type DocumentPackageWhereInput = {
   jobSite?: Prisma.XOR<Prisma.JobSiteNullableScalarRelationFilter, Prisma.JobSiteWhereInput> | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   items?: Prisma.DocumentPackageItemListRelationFilter
+  revisions?: Prisma.DocumentPackageRevisionListRelationFilter
+  shareProposals?: Prisma.DocumentPackageShareProposalListRelationFilter
   shareLinks?: Prisma.ShareLinkListRelationFilter
 }
 
@@ -244,6 +246,8 @@ export type DocumentPackageOrderByWithRelationInput = {
   jobSite?: Prisma.JobSiteOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
   items?: Prisma.DocumentPackageItemOrderByRelationAggregateInput
+  revisions?: Prisma.DocumentPackageRevisionOrderByRelationAggregateInput
+  shareProposals?: Prisma.DocumentPackageShareProposalOrderByRelationAggregateInput
   shareLinks?: Prisma.ShareLinkOrderByRelationAggregateInput
 }
 
@@ -265,6 +269,8 @@ export type DocumentPackageWhereUniqueInput = Prisma.AtLeast<{
   jobSite?: Prisma.XOR<Prisma.JobSiteNullableScalarRelationFilter, Prisma.JobSiteWhereInput> | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   items?: Prisma.DocumentPackageItemListRelationFilter
+  revisions?: Prisma.DocumentPackageRevisionListRelationFilter
+  shareProposals?: Prisma.DocumentPackageShareProposalListRelationFilter
   shareLinks?: Prisma.ShareLinkListRelationFilter
 }, "id">
 
@@ -312,6 +318,8 @@ export type DocumentPackageCreateInput = {
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentPackagesInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedDocumentPackagesInput
   items?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDocumentPackageInput
   shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutDocumentPackageInput
 }
 
@@ -327,6 +335,8 @@ export type DocumentPackageUncheckedCreateInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   items?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDocumentPackageInput
   shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutDocumentPackageInput
 }
 
@@ -342,6 +352,8 @@ export type DocumentPackageUpdateInput = {
   jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentPackagesNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedDocumentPackagesNestedInput
   items?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDocumentPackageNestedInput
   shareLinks?: Prisma.ShareLinkUpdateManyWithoutDocumentPackageNestedInput
 }
 
@@ -357,6 +369,8 @@ export type DocumentPackageUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDocumentPackageNestedInput
   shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutDocumentPackageNestedInput
 }
 
@@ -594,6 +608,34 @@ export type DocumentPackageUpdateOneRequiredWithoutItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentPackageUpdateToOneWithWhereWithoutItemsInput, Prisma.DocumentPackageUpdateWithoutItemsInput>, Prisma.DocumentPackageUncheckedUpdateWithoutItemsInput>
 }
 
+export type DocumentPackageCreateNestedOneWithoutRevisionsInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageCreateWithoutRevisionsInput, Prisma.DocumentPackageUncheckedCreateWithoutRevisionsInput>
+  connectOrCreate?: Prisma.DocumentPackageCreateOrConnectWithoutRevisionsInput
+  connect?: Prisma.DocumentPackageWhereUniqueInput
+}
+
+export type DocumentPackageUpdateOneRequiredWithoutRevisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageCreateWithoutRevisionsInput, Prisma.DocumentPackageUncheckedCreateWithoutRevisionsInput>
+  connectOrCreate?: Prisma.DocumentPackageCreateOrConnectWithoutRevisionsInput
+  upsert?: Prisma.DocumentPackageUpsertWithoutRevisionsInput
+  connect?: Prisma.DocumentPackageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentPackageUpdateToOneWithWhereWithoutRevisionsInput, Prisma.DocumentPackageUpdateWithoutRevisionsInput>, Prisma.DocumentPackageUncheckedUpdateWithoutRevisionsInput>
+}
+
+export type DocumentPackageCreateNestedOneWithoutShareProposalsInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageCreateWithoutShareProposalsInput, Prisma.DocumentPackageUncheckedCreateWithoutShareProposalsInput>
+  connectOrCreate?: Prisma.DocumentPackageCreateOrConnectWithoutShareProposalsInput
+  connect?: Prisma.DocumentPackageWhereUniqueInput
+}
+
+export type DocumentPackageUpdateOneRequiredWithoutShareProposalsNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageCreateWithoutShareProposalsInput, Prisma.DocumentPackageUncheckedCreateWithoutShareProposalsInput>
+  connectOrCreate?: Prisma.DocumentPackageCreateOrConnectWithoutShareProposalsInput
+  upsert?: Prisma.DocumentPackageUpsertWithoutShareProposalsInput
+  connect?: Prisma.DocumentPackageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentPackageUpdateToOneWithWhereWithoutShareProposalsInput, Prisma.DocumentPackageUpdateWithoutShareProposalsInput>, Prisma.DocumentPackageUncheckedUpdateWithoutShareProposalsInput>
+}
+
 export type DocumentPackageCreateNestedOneWithoutShareLinksInput = {
   create?: Prisma.XOR<Prisma.DocumentPackageCreateWithoutShareLinksInput, Prisma.DocumentPackageUncheckedCreateWithoutShareLinksInput>
   connectOrCreate?: Prisma.DocumentPackageCreateOrConnectWithoutShareLinksInput
@@ -619,6 +661,8 @@ export type DocumentPackageCreateWithoutCreatedByInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentPackagesInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentPackagesInput
   items?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDocumentPackageInput
   shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutDocumentPackageInput
 }
 
@@ -633,6 +677,8 @@ export type DocumentPackageUncheckedCreateWithoutCreatedByInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   items?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDocumentPackageInput
   shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutDocumentPackageInput
 }
 
@@ -689,6 +735,8 @@ export type DocumentPackageCreateWithoutOrganizationInput = {
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentPackagesInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedDocumentPackagesInput
   items?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDocumentPackageInput
   shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutDocumentPackageInput
 }
 
@@ -703,6 +751,8 @@ export type DocumentPackageUncheckedCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   items?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDocumentPackageInput
   shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutDocumentPackageInput
 }
 
@@ -743,6 +793,8 @@ export type DocumentPackageCreateWithoutJobSiteInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentPackagesInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedDocumentPackagesInput
   items?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDocumentPackageInput
   shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutDocumentPackageInput
 }
 
@@ -757,6 +809,8 @@ export type DocumentPackageUncheckedCreateWithoutJobSiteInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   items?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDocumentPackageInput
   shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutDocumentPackageInput
 }
 
@@ -797,6 +851,8 @@ export type DocumentPackageCreateWithoutItemsInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentPackagesInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentPackagesInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedDocumentPackagesInput
+  revisions?: Prisma.DocumentPackageRevisionCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDocumentPackageInput
   shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutDocumentPackageInput
 }
 
@@ -811,6 +867,8 @@ export type DocumentPackageUncheckedCreateWithoutItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
+  revisions?: Prisma.DocumentPackageRevisionUncheckedCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDocumentPackageInput
   shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutDocumentPackageInput
 }
 
@@ -841,6 +899,8 @@ export type DocumentPackageUpdateWithoutItemsInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentPackagesNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentPackagesNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedDocumentPackagesNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDocumentPackageNestedInput
   shareLinks?: Prisma.ShareLinkUpdateManyWithoutDocumentPackageNestedInput
 }
 
@@ -855,6 +915,168 @@ export type DocumentPackageUncheckedUpdateWithoutItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revisions?: Prisma.DocumentPackageRevisionUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutDocumentPackageNestedInput
+}
+
+export type DocumentPackageCreateWithoutRevisionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  status?: $Enums.DocumentPackageStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentPackagesInput
+  jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentPackagesInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedDocumentPackagesInput
+  items?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDocumentPackageInput
+  shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutDocumentPackageInput
+}
+
+export type DocumentPackageUncheckedCreateWithoutRevisionsInput = {
+  id?: string
+  organizationId: string
+  jobSiteId?: string | null
+  title: string
+  description?: string | null
+  status?: $Enums.DocumentPackageStatus
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  items?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDocumentPackageInput
+  shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutDocumentPackageInput
+}
+
+export type DocumentPackageCreateOrConnectWithoutRevisionsInput = {
+  where: Prisma.DocumentPackageWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentPackageCreateWithoutRevisionsInput, Prisma.DocumentPackageUncheckedCreateWithoutRevisionsInput>
+}
+
+export type DocumentPackageUpsertWithoutRevisionsInput = {
+  update: Prisma.XOR<Prisma.DocumentPackageUpdateWithoutRevisionsInput, Prisma.DocumentPackageUncheckedUpdateWithoutRevisionsInput>
+  create: Prisma.XOR<Prisma.DocumentPackageCreateWithoutRevisionsInput, Prisma.DocumentPackageUncheckedCreateWithoutRevisionsInput>
+  where?: Prisma.DocumentPackageWhereInput
+}
+
+export type DocumentPackageUpdateToOneWithWhereWithoutRevisionsInput = {
+  where?: Prisma.DocumentPackageWhereInput
+  data: Prisma.XOR<Prisma.DocumentPackageUpdateWithoutRevisionsInput, Prisma.DocumentPackageUncheckedUpdateWithoutRevisionsInput>
+}
+
+export type DocumentPackageUpdateWithoutRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDocumentPackageStatusFieldUpdateOperationsInput | $Enums.DocumentPackageStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentPackagesNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentPackagesNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedDocumentPackagesNestedInput
+  items?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDocumentPackageNestedInput
+  shareLinks?: Prisma.ShareLinkUpdateManyWithoutDocumentPackageNestedInput
+}
+
+export type DocumentPackageUncheckedUpdateWithoutRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDocumentPackageStatusFieldUpdateOperationsInput | $Enums.DocumentPackageStatus
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  items?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutDocumentPackageNestedInput
+}
+
+export type DocumentPackageCreateWithoutShareProposalsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  status?: $Enums.DocumentPackageStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentPackagesInput
+  jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentPackagesInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedDocumentPackagesInput
+  items?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionCreateNestedManyWithoutDocumentPackageInput
+  shareLinks?: Prisma.ShareLinkCreateNestedManyWithoutDocumentPackageInput
+}
+
+export type DocumentPackageUncheckedCreateWithoutShareProposalsInput = {
+  id?: string
+  organizationId: string
+  jobSiteId?: string | null
+  title: string
+  description?: string | null
+  status?: $Enums.DocumentPackageStatus
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  items?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedCreateNestedManyWithoutDocumentPackageInput
+  shareLinks?: Prisma.ShareLinkUncheckedCreateNestedManyWithoutDocumentPackageInput
+}
+
+export type DocumentPackageCreateOrConnectWithoutShareProposalsInput = {
+  where: Prisma.DocumentPackageWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentPackageCreateWithoutShareProposalsInput, Prisma.DocumentPackageUncheckedCreateWithoutShareProposalsInput>
+}
+
+export type DocumentPackageUpsertWithoutShareProposalsInput = {
+  update: Prisma.XOR<Prisma.DocumentPackageUpdateWithoutShareProposalsInput, Prisma.DocumentPackageUncheckedUpdateWithoutShareProposalsInput>
+  create: Prisma.XOR<Prisma.DocumentPackageCreateWithoutShareProposalsInput, Prisma.DocumentPackageUncheckedCreateWithoutShareProposalsInput>
+  where?: Prisma.DocumentPackageWhereInput
+}
+
+export type DocumentPackageUpdateToOneWithWhereWithoutShareProposalsInput = {
+  where?: Prisma.DocumentPackageWhereInput
+  data: Prisma.XOR<Prisma.DocumentPackageUpdateWithoutShareProposalsInput, Prisma.DocumentPackageUncheckedUpdateWithoutShareProposalsInput>
+}
+
+export type DocumentPackageUpdateWithoutShareProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDocumentPackageStatusFieldUpdateOperationsInput | $Enums.DocumentPackageStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentPackagesNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentPackagesNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedDocumentPackagesNestedInput
+  items?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUpdateManyWithoutDocumentPackageNestedInput
+  shareLinks?: Prisma.ShareLinkUpdateManyWithoutDocumentPackageNestedInput
+}
+
+export type DocumentPackageUncheckedUpdateWithoutShareProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDocumentPackageStatusFieldUpdateOperationsInput | $Enums.DocumentPackageStatus
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  items?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedUpdateManyWithoutDocumentPackageNestedInput
   shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutDocumentPackageNestedInput
 }
 
@@ -870,6 +1092,8 @@ export type DocumentPackageCreateWithoutShareLinksInput = {
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentPackagesInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedDocumentPackagesInput
   items?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalCreateNestedManyWithoutDocumentPackageInput
 }
 
 export type DocumentPackageUncheckedCreateWithoutShareLinksInput = {
@@ -884,6 +1108,8 @@ export type DocumentPackageUncheckedCreateWithoutShareLinksInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   items?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentPackageInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedCreateNestedManyWithoutDocumentPackageInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedCreateNestedManyWithoutDocumentPackageInput
 }
 
 export type DocumentPackageCreateOrConnectWithoutShareLinksInput = {
@@ -914,6 +1140,8 @@ export type DocumentPackageUpdateWithoutShareLinksInput = {
   jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentPackagesNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedDocumentPackagesNestedInput
   items?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDocumentPackageNestedInput
 }
 
 export type DocumentPackageUncheckedUpdateWithoutShareLinksInput = {
@@ -928,6 +1156,8 @@ export type DocumentPackageUncheckedUpdateWithoutShareLinksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDocumentPackageNestedInput
 }
 
 export type DocumentPackageCreateManyCreatedByInput = {
@@ -953,6 +1183,8 @@ export type DocumentPackageUpdateWithoutCreatedByInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentPackagesNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentPackagesNestedInput
   items?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDocumentPackageNestedInput
   shareLinks?: Prisma.ShareLinkUpdateManyWithoutDocumentPackageNestedInput
 }
 
@@ -967,6 +1199,8 @@ export type DocumentPackageUncheckedUpdateWithoutCreatedByInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDocumentPackageNestedInput
   shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutDocumentPackageNestedInput
 }
 
@@ -1005,6 +1239,8 @@ export type DocumentPackageUpdateWithoutOrganizationInput = {
   jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentPackagesNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedDocumentPackagesNestedInput
   items?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDocumentPackageNestedInput
   shareLinks?: Prisma.ShareLinkUpdateManyWithoutDocumentPackageNestedInput
 }
 
@@ -1019,6 +1255,8 @@ export type DocumentPackageUncheckedUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDocumentPackageNestedInput
   shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutDocumentPackageNestedInput
 }
 
@@ -1057,6 +1295,8 @@ export type DocumentPackageUpdateWithoutJobSiteInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentPackagesNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedDocumentPackagesNestedInput
   items?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUpdateManyWithoutDocumentPackageNestedInput
   shareLinks?: Prisma.ShareLinkUpdateManyWithoutDocumentPackageNestedInput
 }
 
@@ -1071,6 +1311,8 @@ export type DocumentPackageUncheckedUpdateWithoutJobSiteInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  revisions?: Prisma.DocumentPackageRevisionUncheckedUpdateManyWithoutDocumentPackageNestedInput
+  shareProposals?: Prisma.DocumentPackageShareProposalUncheckedUpdateManyWithoutDocumentPackageNestedInput
   shareLinks?: Prisma.ShareLinkUncheckedUpdateManyWithoutDocumentPackageNestedInput
 }
 
@@ -1093,11 +1335,15 @@ export type DocumentPackageUncheckedUpdateManyWithoutJobSiteInput = {
 
 export type DocumentPackageCountOutputType = {
   items: number
+  revisions: number
+  shareProposals: number
   shareLinks: number
 }
 
 export type DocumentPackageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | DocumentPackageCountOutputTypeCountItemsArgs
+  revisions?: boolean | DocumentPackageCountOutputTypeCountRevisionsArgs
+  shareProposals?: boolean | DocumentPackageCountOutputTypeCountShareProposalsArgs
   shareLinks?: boolean | DocumentPackageCountOutputTypeCountShareLinksArgs
 }
 
@@ -1116,6 +1362,20 @@ export type DocumentPackageCountOutputTypeDefaultArgs<ExtArgs extends runtime.Ty
  */
 export type DocumentPackageCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DocumentPackageItemWhereInput
+}
+
+/**
+ * DocumentPackageCountOutputType without action
+ */
+export type DocumentPackageCountOutputTypeCountRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DocumentPackageRevisionWhereInput
+}
+
+/**
+ * DocumentPackageCountOutputType without action
+ */
+export type DocumentPackageCountOutputTypeCountShareProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DocumentPackageShareProposalWhereInput
 }
 
 /**
@@ -1141,6 +1401,8 @@ export type DocumentPackageSelect<ExtArgs extends runtime.Types.Extensions.Inter
   jobSite?: boolean | Prisma.DocumentPackage$jobSiteArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   items?: boolean | Prisma.DocumentPackage$itemsArgs<ExtArgs>
+  revisions?: boolean | Prisma.DocumentPackage$revisionsArgs<ExtArgs>
+  shareProposals?: boolean | Prisma.DocumentPackage$shareProposalsArgs<ExtArgs>
   shareLinks?: boolean | Prisma.DocumentPackage$shareLinksArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentPackageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["documentPackage"]>
@@ -1196,6 +1458,8 @@ export type DocumentPackageInclude<ExtArgs extends runtime.Types.Extensions.Inte
   jobSite?: boolean | Prisma.DocumentPackage$jobSiteArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   items?: boolean | Prisma.DocumentPackage$itemsArgs<ExtArgs>
+  revisions?: boolean | Prisma.DocumentPackage$revisionsArgs<ExtArgs>
+  shareProposals?: boolean | Prisma.DocumentPackage$shareProposalsArgs<ExtArgs>
   shareLinks?: boolean | Prisma.DocumentPackage$shareLinksArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentPackageCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1217,6 +1481,8 @@ export type $DocumentPackagePayload<ExtArgs extends runtime.Types.Extensions.Int
     jobSite: Prisma.$JobSitePayload<ExtArgs> | null
     createdBy: Prisma.$UserPayload<ExtArgs>
     items: Prisma.$DocumentPackageItemPayload<ExtArgs>[]
+    revisions: Prisma.$DocumentPackageRevisionPayload<ExtArgs>[]
+    shareProposals: Prisma.$DocumentPackageShareProposalPayload<ExtArgs>[]
     shareLinks: Prisma.$ShareLinkPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1628,6 +1894,8 @@ export interface Prisma__DocumentPackageClient<T, Null = never, ExtArgs extends 
   jobSite<T extends Prisma.DocumentPackage$jobSiteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackage$jobSiteArgs<ExtArgs>>): Prisma.Prisma__JobSiteClient<runtime.Types.Result.GetResult<Prisma.$JobSitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.DocumentPackage$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackage$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPackageItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  revisions<T extends Prisma.DocumentPackage$revisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackage$revisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPackageRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  shareProposals<T extends Prisma.DocumentPackage$shareProposalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackage$shareProposalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPackageShareProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shareLinks<T extends Prisma.DocumentPackage$shareLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackage$shareLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShareLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2109,6 +2377,54 @@ export type DocumentPackage$itemsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.DocumentPackageItemScalarFieldEnum | Prisma.DocumentPackageItemScalarFieldEnum[]
+}
+
+/**
+ * DocumentPackage.revisions
+ */
+export type DocumentPackage$revisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DocumentPackageRevision
+   */
+  select?: Prisma.DocumentPackageRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DocumentPackageRevision
+   */
+  omit?: Prisma.DocumentPackageRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentPackageRevisionInclude<ExtArgs> | null
+  where?: Prisma.DocumentPackageRevisionWhereInput
+  orderBy?: Prisma.DocumentPackageRevisionOrderByWithRelationInput | Prisma.DocumentPackageRevisionOrderByWithRelationInput[]
+  cursor?: Prisma.DocumentPackageRevisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DocumentPackageRevisionScalarFieldEnum | Prisma.DocumentPackageRevisionScalarFieldEnum[]
+}
+
+/**
+ * DocumentPackage.shareProposals
+ */
+export type DocumentPackage$shareProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DocumentPackageShareProposal
+   */
+  select?: Prisma.DocumentPackageShareProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DocumentPackageShareProposal
+   */
+  omit?: Prisma.DocumentPackageShareProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentPackageShareProposalInclude<ExtArgs> | null
+  where?: Prisma.DocumentPackageShareProposalWhereInput
+  orderBy?: Prisma.DocumentPackageShareProposalOrderByWithRelationInput | Prisma.DocumentPackageShareProposalOrderByWithRelationInput[]
+  cursor?: Prisma.DocumentPackageShareProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DocumentPackageShareProposalScalarFieldEnum | Prisma.DocumentPackageShareProposalScalarFieldEnum[]
 }
 
 /**

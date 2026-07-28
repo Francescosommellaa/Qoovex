@@ -3,6 +3,7 @@ import "server-only";
 import { db, type Prisma } from "@qoovex/db";
 import type { DocumentCategoryKey, DocumentOwnerType, DocumentStatus } from "@qoovex/types";
 import { documentCategoryRegistry, documentOwnerTypes, documentStatuses } from "@qoovex/types";
+import { enqueueOperationalProcess } from "@shared/server/operational-process-service";
 import { AccessError } from "@shared/server/access-errors";
 import { deletePrivateBlobs } from "@shared/server/blob-storage-service";
 import { recordRuntimeErrorBestEffort } from "@shared/server/runtime-error-service";
@@ -13,9 +14,9 @@ import { auditActorFromContext, recordProductAuditEventBestEffort } from "./prod
 import { canReadDocument, getResourceScope } from "./resource-scope-service";
 import { documentVersionListSelect, toDocumentVersionResponse } from "./document-version-service";
 
-const FULL_DOCUMENT_ROLES = ["OWNER", "ADMIN"] as const;
-const DOCUMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
-const DOCUMENT_UPDATE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const FULL_DOCUMENT_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const DOCUMENT_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const DOCUMENT_UPDATE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 export const documentListSelect = {
   id: true,
@@ -167,8 +168,8 @@ export async function listDocuments(input: ListDocumentsInput = {}) {
   const scope = await getResourceScope(context);
   const where: Prisma.DocumentWhereInput = { organizationId, archivedAt: archiveMode ? { not: null } : null };
   if (!scope.fullAccess) {
-    if (scope.actorRole === "SITE_MANAGER") where.OR = [{ ownerType: "JOB_SITE", jobSiteId: { in: scope.siteManagerJobSiteIds } }];
-    if (scope.actorRole === "WORKER" && scope.linkedWorker) where.OR = [{ ownerType: "WORKER", workerId: scope.linkedWorker.id }];
+    if (scope.preset === "SITE_MANAGER") where.OR = [{ ownerType: "JOB_SITE", jobSiteId: { in: scope.siteManagerJobSiteIds } }];
+    if (scope.preset === "LIMITED_UPLOAD" && scope.linkedWorker) where.OR = [{ ownerType: "WORKER", workerId: scope.linkedWorker.id }];
     if (!where.OR) return [];
   }
   if (input.ownerType !== undefined) where.ownerType = parseOwnerType(input.ownerType);
@@ -182,7 +183,7 @@ export async function listDocuments(input: ListDocumentsInput = {}) {
     const categoryKey = parseDocumentCategoryKey(input.categoryKey);
     where.documentType = { is: { categoryKey } };
   }
-  if (actorRole !== "OWNER" && actorRole !== "ADMIN") {
+  if (!context.permissions.includes("documents:sensitive:read")) {
     where.AND = [{ OR: [{ documentTypeId: null }, { documentType: { is: { sensitivity: "STANDARD" } } }] }];
   }
 
@@ -207,13 +208,13 @@ export async function getDocument(documentId: string) {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_READ_ROLES);
   const scope = await getResourceScope(context);
   const document = await db.document.findFirst({ where: { id: documentId, organizationId, archivedAt: null }, select: documentListSelect });
-  if (!document || !canReadDocument(scope, document) || (document.documentType && document.documentType.sensitivity !== "STANDARD" && actorRole !== "OWNER" && actorRole !== "ADMIN")) throw new AccessError("Documento non trovato.", 404);
+  if (!document || !canReadDocument(scope, document) || (document.documentType && document.documentType.sensitivity !== "STANDARD" && !context.permissions.includes("documents:sensitive:read"))) throw new AccessError("Documento non trovato.", 404);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document", resourceId: document.id });
   return toDocumentListRecord(document);
 }
 
 export async function getDocumentWithVersions(documentId: string) {
-  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:read", DOCUMENT_READ_ROLES);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documents:file:read", DOCUMENT_READ_ROLES);
   const scope = await getResourceScope(context);
   const document = await db.document.findFirst({
     where: { id: documentId, organizationId, archivedAt: null },
@@ -226,7 +227,7 @@ export async function getDocumentWithVersions(documentId: string) {
       },
     },
   });
-  if (!document || !canReadDocument(scope, document) || (document.documentType && document.documentType.sensitivity !== "STANDARD" && actorRole !== "OWNER" && actorRole !== "ADMIN")) throw new AccessError("Documento non trovato.", 404);
+  if (!document || !canReadDocument(scope, document) || (document.documentType && document.documentType.sensitivity !== "STANDARD" && !context.permissions.includes("documents:sensitive:read"))) throw new AccessError("Documento non trovato.", 404);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document", resourceId: document.id });
   const { versions, ...documentRecord } = document;
   return { document: toDocumentListRecord(documentRecord), versions: versions.map(toDocumentVersionResponse) };
@@ -248,9 +249,22 @@ export async function createDocument(input: CreateDocumentInput) {
   if (documentType.requiresExpiryDate && !expiryDate) throw new AccessError("Questo tipo documento richiede una scadenza registrata.", 409);
   const notes = trimOptionalText(input.notes, "Note documento", 4000) ?? null;
 
-  const document = await db.document.create({
-    data: { organizationId, documentTypeId: documentType.id, ownerType, ...owner, title, status, expiryDate, notes },
-    select: documentListSelect,
+  const document = await db.$transaction(async (tx) => {
+    const created = await tx.document.create({
+      data: { organizationId, documentTypeId: documentType.id, ownerType, ...owner, title, status, expiryDate, notes },
+      select: documentListSelect,
+    });
+    await enqueueOperationalProcess({
+      organizationId,
+      type: "DOCUMENT_RECEIVED",
+      triggerKind: "DOCUMENT_CREATED",
+      idempotencyKey: `document:${created.id}:created`,
+      context: { source: "workspace", change: "created" },
+      artifacts: [{ type: "DOCUMENT", id: created.id, label: created.title }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return created;
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document", resourceId: document.id });
   await recordProductAuditEventBestEffort({
@@ -316,7 +330,20 @@ export async function updateDocument(documentId: string, input: UpdateDocumentIn
   if (input.notes !== undefined) data.notes = trimOptionalText(input.notes, "Note documento", 4000) ?? null;
   if (!Object.keys(data).length) throw new AccessError("Nessun dato documento da aggiornare.", 409);
 
-  const document = await db.document.update({ where: { id: existing.id }, data, select: documentListSelect });
+  const document = await db.$transaction(async (tx) => {
+    const updated = await tx.document.update({ where: { id: existing.id }, data, select: documentListSelect });
+    await enqueueOperationalProcess({
+      organizationId,
+      type: "DOCUMENT_RECEIVED",
+      triggerKind: "DOCUMENT_UPDATED",
+      idempotencyKey: `document:${updated.id}:updated:${updated.updatedAt.toISOString()}`,
+      context: { source: "workspace", change: "updated" },
+      artifacts: [{ type: "DOCUMENT", id: updated.id, label: updated.title }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return updated;
+  });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document", resourceId: document.id });
   await recordProductAuditEventBestEffort({
     organizationId,

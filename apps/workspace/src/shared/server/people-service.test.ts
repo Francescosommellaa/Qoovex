@@ -44,8 +44,8 @@ const baseWorker = (id: string) => ({
 
 beforeEach(() => {
   vi.resetAllMocks();
-  mocks.requireAccess.mockResolvedValue({ context: { userId: "owner-1" }, organizationId: "org-1", actorRole: "OWNER" });
-  mocks.getResourceScope.mockResolvedValue({ actorRole: "OWNER", linkedWorker: null, siteManagerJobSiteIds: [] });
+  mocks.requireAccess.mockResolvedValue({ context: { userId: "owner-1", permissions: ["workers:read", "documents:sensitive:read", "assignments:manage"] }, organizationId: "org-1", actorRole: "OWNER" });
+  mocks.getResourceScope.mockResolvedValue({ actorRole: "OWNER", preset: null, fullAccess: true, linkedWorker: null, siteManagerJobSiteIds: [] });
   mocks.db.worker.count.mockResolvedValue(2);
   mocks.db.worker.findMany.mockResolvedValue([baseWorker("one"), baseWorker("two")]);
   mocks.db.organizationMembership.count.mockResolvedValue(0);
@@ -72,7 +72,7 @@ describe("People server read models", () => {
   });
 
   it("adds one scoped assignment read for SITE_MANAGER without per-worker reads", async () => {
-    mocks.getResourceScope.mockResolvedValue({ actorRole: "SITE_MANAGER", linkedWorker: null, siteManagerJobSiteIds: ["site-1"] });
+    mocks.getResourceScope.mockResolvedValue({ actorRole: "COLLABORATOR", preset: "SITE_MANAGER", fullAccess: false, linkedWorker: null, siteManagerJobSiteIds: ["site-1"] });
     mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ workerId: "one" }, { workerId: "two" }]);
     await listPeopleWorkers();
     expect(mocks.db.jobSiteWorkerAssignment.findMany).toHaveBeenCalledOnce();

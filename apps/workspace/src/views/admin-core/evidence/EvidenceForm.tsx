@@ -56,6 +56,9 @@ export function EvidenceForm({ jobSites, workers, checklistItems, checklists, di
           type: selectedType,
           title: formValue(formData, "title"),
           description: nullableFormValue(formData, "description"),
+          sensitivity: formValue(formData, "sensitivity"),
+          capturedAt: nullableFormValue(formData, "capturedAt"),
+          origin: "DIRECT_UPLOAD",
           jobSiteId: nullableFormValue(formData, "jobSiteId"),
           workerId: nullableFormValue(formData, "workerId"),
           checklistItemId: nullableFormValue(formData, "checklistItemId"),
@@ -150,6 +153,18 @@ export function EvidenceForm({ jobSites, workers, checklistItems, checklists, di
             ) : null}
           </>
         ) : null}
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field>
+            <FieldLabel htmlFor="create-evidence-sensitivity">Classificazione iniziale</FieldLabel>
+            <select className="h-11 rounded-md border bg-background px-3 text-sm" defaultValue="INTERNAL" disabled={formDisabled} id="create-evidence-sensitivity" name="sensitivity"><option value="INTERNAL">Interna</option><option value="RESTRICTED">Riservata</option><option value="SHAREABLE">Condivisibile dopo revisione</option></select>
+            <FieldDescription>Il default e interno; la condivisione richiede approvazione.</FieldDescription>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="create-evidence-captured-at">Data e ora acquisizione</FieldLabel>
+            <Input disabled={formDisabled} id="create-evidence-captured-at" name="capturedAt" type="datetime-local" />
+          </Field>
+        </div>
 
         <Field>
           <FieldLabel htmlFor="create-evidence-description">Descrizione</FieldLabel>

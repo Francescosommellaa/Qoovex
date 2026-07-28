@@ -3,6 +3,7 @@ import styles from "../AdminCore.module.css";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { evidenceTypeLabels, fileSizeLabel, formatDate, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceChecklistItemRecord, WorkspaceChecklistRecord, WorkspaceEvidenceRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
+import { EvidenceReviewActions } from "./EvidenceReviewActions";
 
 function jobSiteLabel(jobSiteId: string | null | undefined, jobSites: WorkspaceJobSiteRecord[]) {
   return jobSites.find((jobSite) => jobSite.id === jobSiteId)?.name ?? null;
@@ -67,7 +68,10 @@ export function EvidencePageView({
                 </div>
                 <div className={styles.actions}>
                   <WorkspaceState label={evidenceTypeLabels[item.type]} tone={item.type === "NOTE" ? "info" : "good"} />
-                  {item.hasFile ? <a className={styles.linkButton} href={`/api/evidence/${item.id}/download`}>Scarica</a> : null}
+                  <WorkspaceState label={item.reviewStatus.replace(/_/g, " ")} tone={item.reviewStatus === "ACCEPTED" ? "good" : item.reviewStatus === "REJECTED" ? "danger" : "warning"} />
+                  <WorkspaceState label={item.sensitivity} tone={item.sensitivity === "RESTRICTED" ? "danger" : item.sensitivity === "SHAREABLE" ? "good" : "info"} />
+                  {capabilities.canReviewEvidence ? <EvidenceReviewActions evidenceId={item.id} /> : null}
+                  {item.hasFile && capabilities.canReadEvidenceFiles ? <a className={styles.linkButton} href={`/api/evidence/${item.id}/download`}>Scarica</a> : null}
                 </div>
               </article>
             ))}

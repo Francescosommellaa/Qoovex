@@ -13,7 +13,7 @@ import { recordSupportAccess } from "@shared/server/support-access-service";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 
-const NOTIFICATION_PREFERENCE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const NOTIFICATION_PREFERENCE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const EMAIL_DIGEST_FREQUENCIES = new Set<EmailDigestFrequency>(["OFF", "DAILY", "WEEKLY"]);
 const GRANULAR_PREFERENCE_KEYS = [
   "deadlineNotificationsEnabled",

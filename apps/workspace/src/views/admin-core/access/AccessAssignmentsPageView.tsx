@@ -257,7 +257,7 @@ export function AccessAssignmentsPageView({
         action={returnToDashboard ? (
           <Link className={buttonVariants({ variant: "outline" })} data-link="plain" href="/dashboard">
             <IconArrowLeft aria-hidden="true" />
-            Torna a Da fare
+            Torna al Centro operativo
           </Link>
         ) : undefined}
       />

@@ -23,6 +23,8 @@ import { WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/work
 import { WorkspacePageIdentity } from "@/views/workspace/WorkspacePageIdentity";
 import { deadlineStatusLabels, documentStatusLabels, formatDate, ownerLabel, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceDocumentTypeRecord, WorkspaceDocumentVersionRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
+import { OperationalArtifactStatus } from "@entities/operational-process/ui/OperationalArtifactStatus";
+import { ArtifactTimeline } from "@widgets/artifact-timeline/ui/ArtifactTimeline";
 
 export function DocumentDetailView({
   document,
@@ -54,10 +56,12 @@ export function DocumentDetailView({
         description={`${contextLabel} · Scadenza registrata: ${formatDate(document.expiryDate)}`}
         action={
           <Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} data-link="plain" href={returnToDashboard ? "/dashboard" : "/documents"}>
-            <IconArrowLeft />{returnToDashboard ? "Torna a Da fare" : "Torna ai documenti"}
+            <IconArrowLeft />{returnToDashboard ? "Torna al Centro operativo" : "Torna ai documenti"}
           </Link>
         }
       />
+
+      <OperationalArtifactStatus artifactId={document.id} artifactType="DOCUMENT" />
 
       <Card size="sm">
         <CardHeader className="border-b">
@@ -91,7 +95,7 @@ export function DocumentDetailView({
               <CardDescription>Download protetto e versioni attive del documento.</CardDescription>
               <CardAction><Badge variant="outline"><IconFileDescription />{versions.length} file</Badge></CardAction>
             </CardHeader>
-            <CardContent><DocumentVersionList canArchive={capabilities.canManageCore} documentId={document.id} versions={versions} /></CardContent>
+            <CardContent><DocumentVersionList canArchive={capabilities.canManageCore} canDownload={capabilities.canReadDocumentFiles} canReview={capabilities.canVerifyDocuments} documentId={document.id} versions={versions} /></CardContent>
           </Card>
 
           <Card size="sm">
@@ -126,6 +130,8 @@ export function DocumentDetailView({
           </Card>
         ) : null}
       </div>
+
+      <ArtifactTimeline artifactId={document.id} artifactType="DOCUMENT" />
 
       {canManage ? (
         <Card size="sm">

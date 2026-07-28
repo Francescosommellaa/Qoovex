@@ -20,7 +20,7 @@ import { syncOrganizationReminderRecords } from "./reminder-service";
 import { toNotificationResponse } from "./notification-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 
-const NOTIFICATION_EMAIL_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const NOTIFICATION_EMAIL_ROLES = ["OWNER", "COLLABORATOR"] as const;
 export const EMAIL_DIGEST_LIMIT = 10;
 const EMAIL_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const DIGEST_SUBJECT = "Qoovex - Promemoria documenti e scadenze";

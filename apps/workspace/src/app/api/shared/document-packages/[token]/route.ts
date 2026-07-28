@@ -8,6 +8,11 @@ interface RouteContext {
 export async function GET(_request: Request, context: RouteContext) {
   try {
     const { token } = await context.params;
-    return Response.json(await getSharedDocumentPackage(token));
+    return Response.json(await getSharedDocumentPackage(token), { headers: {
+      "Cache-Control": "private, no-store",
+      "Referrer-Policy": "no-referrer",
+      "X-Content-Type-Options": "nosniff",
+      "X-Robots-Tag": "noindex, nofollow",
+    } });
   } catch (error) { return asAccessResponse(error); }
 }

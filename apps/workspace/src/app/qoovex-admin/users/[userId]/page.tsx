@@ -21,7 +21,7 @@ export default async function PlatformUserDetailPage({ params }: { params: Promi
               <WorkspaceState label={`${user._count.sessions} sessioni persistenti`} />
             </div>
             {user.suspensionReason ? <p className={styles.error}>{user.suspensionReason}</p> : null}
-            <PlatformUserActions userId={user.id} suspended={Boolean(user.suspendedAt)} protectedAccount={user.id === actor.id || user.platformRole === "SUPER_ADMIN"} />
+            <PlatformUserActions userId={user.id} suspended={Boolean(user.suspendedAt)} protectedAccount={user.id === actor.id || user.platformRole === "SUPPORT_AGENT" || user.platformRole === "PLATFORM_ADMIN"} />
           </div>
         </WorkspacePanel>
         <WorkspacePanel title="Membership attive">

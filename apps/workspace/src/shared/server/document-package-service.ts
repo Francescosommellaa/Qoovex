@@ -1,7 +1,7 @@
 import "server-only";
 
-import { db } from "@qoovex/db";
-import type { DocumentPackageItemType, DocumentPackageStatus } from "@qoovex/types";
+import { db, Prisma } from "@qoovex/db";
+import type { DocumentPackageEffectiveState, DocumentPackageItemType, DocumentPackageStatus } from "@qoovex/types";
 import { documentPackageItemTypes, documentPackageStatuses } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 import { requirePermission } from "@shared/server/access-context-service";
@@ -10,8 +10,8 @@ import { isEnumValue, trimOptionalId, trimOptionalText, trimRequiredText } from 
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 
-const PACKAGE_ACCESS_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
-const PACKAGE_WRITE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const PACKAGE_ACCESS_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const PACKAGE_WRITE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 const documentPackageSelect = {
   id: true,
@@ -35,6 +35,12 @@ const packageItemSelect = {
   documentVersionId: true,
   evidenceId: true,
   checklistId: true,
+  workerId: true,
+  jobSiteUserAssignmentId: true,
+  jobSiteWorkerAssignmentId: true,
+  operationalRequestId: true,
+  contextMessageId: true,
+  contextTimelineEventId: true,
   note: true,
   position: true,
   createdAt: true,
@@ -44,12 +50,48 @@ const packageShareLinkSelect = {
   id: true,
   organizationId: true,
   documentPackageId: true,
+  revisionId: true,
+  proposalId: true,
+  purpose: true,
+  recipientLabel: true,
+  allowDownload: true,
   expiresAt: true,
+  expiredAt: true,
   revokedAt: true,
   createdById: true,
   createdAt: true,
   lastAccessedAt: true,
 } as const;
+
+const packageControlSelect = {
+  shareProposals: { select: { status: true }, orderBy: [{ createdAt: "desc" }, { id: "desc" }], take: 1 },
+  shareLinks: { select: { revokedAt: true, expiredAt: true, expiresAt: true, revision: { select: { preparedAt: true } } }, orderBy: [{ createdAt: "desc" }, { id: "desc" }], take: 20 },
+} satisfies Prisma.DocumentPackageSelect;
+
+function withEffectiveState<T extends {
+  status: DocumentPackageStatus;
+  archivedAt: Date | null;
+  updatedAt: Date;
+  shareProposals: Array<{ status: "PREPARING" | "READY_FOR_REVIEW" | "BLOCKED" | "APPROVED" | "PUBLISHED" }>;
+  shareLinks: Array<{ revokedAt: Date | null; expiredAt: Date | null; expiresAt: Date | null; revision: { preparedAt: Date } }>;
+}>(documentPackage: T) {
+  const { shareProposals, shareLinks, ...result } = documentPackage;
+  const now = Date.now();
+  let effectiveState: DocumentPackageEffectiveState = documentPackage.status;
+  if (documentPackage.archivedAt) effectiveState = "ARCHIVED";
+  else {
+    const active = shareLinks.find((link) => !link.revokedAt && !link.expiredAt && (!link.expiresAt || link.expiresAt.getTime() > now));
+    if (active && documentPackage.updatedAt.getTime() > active.revision.preparedAt.getTime()) effectiveState = "UPDATED_AFTER_SHARING";
+    else if (active) effectiveState = "SHARED";
+    else if (shareLinks.length && shareLinks.every((link) => Boolean(link.revokedAt))) effectiveState = "REVOKED";
+    else if (shareLinks.length && shareLinks.every((link) => Boolean(link.expiredAt) || Boolean(link.expiresAt && link.expiresAt.getTime() <= now))) effectiveState = "EXPIRED";
+    else if (shareProposals[0]?.status === "PREPARING") effectiveState = "PREPARING";
+    else if (shareProposals[0]?.status === "BLOCKED") effectiveState = "INCOMPLETE";
+    else if (shareProposals[0]?.status === "READY_FOR_REVIEW") effectiveState = "READY_FOR_REVIEW";
+    else if (shareProposals[0]?.status === "APPROVED") effectiveState = "APPROVED";
+  }
+  return { ...result, effectiveState };
+}
 
 export interface ListDocumentPackagesInput {
   jobSiteId?: unknown;
@@ -83,6 +125,12 @@ export interface AddDocumentPackageItemInput extends Record<string, unknown> {
   documentVersionId?: unknown;
   evidenceId?: unknown;
   checklistId?: unknown;
+  workerId?: unknown;
+  jobSiteUserAssignmentId?: unknown;
+  jobSiteWorkerAssignmentId?: unknown;
+  operationalRequestId?: unknown;
+  contextMessageId?: unknown;
+  contextTimelineEventId?: unknown;
   note?: unknown;
   position?: unknown;
 }
@@ -152,6 +200,12 @@ function assertOnlyExpectedReference(input: {
   documentVersionId: string | null | undefined;
   evidenceId: string | null | undefined;
   checklistId: string | null | undefined;
+  workerId: string | null | undefined;
+  jobSiteUserAssignmentId: string | null | undefined;
+  jobSiteWorkerAssignmentId: string | null | undefined;
+  operationalRequestId: string | null | undefined;
+  contextMessageId: string | null | undefined;
+  contextTimelineEventId: string | null | undefined;
   note: string | null | undefined;
 }) {
   const refs = [
@@ -159,6 +213,12 @@ function assertOnlyExpectedReference(input: {
     input.documentVersionId ? "documentVersionId" : null,
     input.evidenceId ? "evidenceId" : null,
     input.checklistId ? "checklistId" : null,
+    input.workerId ? "workerId" : null,
+    input.jobSiteUserAssignmentId ? "jobSiteUserAssignmentId" : null,
+    input.jobSiteWorkerAssignmentId ? "jobSiteWorkerAssignmentId" : null,
+    input.operationalRequestId ? "operationalRequestId" : null,
+    input.contextMessageId ? "contextMessageId" : null,
+    input.contextTimelineEventId ? "contextTimelineEventId" : null,
     input.note ? "note" : null,
   ].filter(Boolean);
   if (refs.length !== 1) throw new AccessError("Elemento pacchetto non coerente con il tipo indicato.", 409);
@@ -168,10 +228,45 @@ function assertOnlyExpectedReference(input: {
     EVIDENCE: "evidenceId",
     CHECKLIST: "checklistId",
     NOTE: "note",
+    WORKER: "workerId",
+    JOB_SITE_USER_ASSIGNMENT: "jobSiteUserAssignmentId",
+    JOB_SITE_WORKER_ASSIGNMENT: "jobSiteWorkerAssignmentId",
+    OPERATIONAL_REQUEST: "operationalRequestId",
+    CONTEXT_MESSAGE: "contextMessageId",
+    CONTEXT_TIMELINE_EVENT: "contextTimelineEventId",
   };
   if (refs[0] !== expectedRefByType[input.itemType]) {
     throw new AccessError("Elemento pacchetto non coerente con il tipo indicato.", 409);
   }
+}
+
+function packageItemData(itemType: DocumentPackageItemType, values: Partial<{
+  documentId: string;
+  documentVersionId: string;
+  evidenceId: string;
+  checklistId: string;
+  workerId: string;
+  jobSiteUserAssignmentId: string;
+  jobSiteWorkerAssignmentId: string;
+  operationalRequestId: string;
+  contextMessageId: string;
+  contextTimelineEventId: string;
+  note: string | null;
+}>) {
+  return {
+    itemType,
+    documentId: values.documentId ?? null,
+    documentVersionId: values.documentVersionId ?? null,
+    evidenceId: values.evidenceId ?? null,
+    checklistId: values.checklistId ?? null,
+    workerId: values.workerId ?? null,
+    jobSiteUserAssignmentId: values.jobSiteUserAssignmentId ?? null,
+    jobSiteWorkerAssignmentId: values.jobSiteWorkerAssignmentId ?? null,
+    operationalRequestId: values.operationalRequestId ?? null,
+    contextMessageId: values.contextMessageId ?? null,
+    contextTimelineEventId: values.contextTimelineEventId ?? null,
+    note: values.note ?? null,
+  };
 }
 
 async function normalizePackageItem(organizationId: string, input: AddDocumentPackageItemInput) {
@@ -180,6 +275,12 @@ async function normalizePackageItem(organizationId: string, input: AddDocumentPa
   const documentVersionIdInput = trimOptionalId(input.documentVersionId, "Versione documento") ?? null;
   const evidenceIdInput = trimOptionalId(input.evidenceId, "Prova") ?? null;
   const checklistIdInput = trimOptionalId(input.checklistId, "Checklist") ?? null;
+  const workerIdInput = trimOptionalId(input.workerId, "Lavoratore") ?? null;
+  const jobSiteUserAssignmentIdInput = trimOptionalId(input.jobSiteUserAssignmentId, "Assegnazione collaboratore") ?? null;
+  const jobSiteWorkerAssignmentIdInput = trimOptionalId(input.jobSiteWorkerAssignmentId, "Assegnazione lavoratore") ?? null;
+  const operationalRequestIdInput = trimOptionalId(input.operationalRequestId, "Richiesta operativa") ?? null;
+  const contextMessageIdInput = trimOptionalId(input.contextMessageId, "Messaggio contestuale") ?? null;
+  const contextTimelineEventIdInput = trimOptionalId(input.contextTimelineEventId, "Evento operativo") ?? null;
   const noteInput = itemType === "NOTE" && input.note !== undefined ? trimRequiredText(input.note, "Nota pacchetto", 2, 4000) : trimOptionalText(input.note, "Nota pacchetto", 4000) ?? null;
 
   assertOnlyExpectedReference({
@@ -188,6 +289,12 @@ async function normalizePackageItem(organizationId: string, input: AddDocumentPa
     documentVersionId: documentVersionIdInput,
     evidenceId: evidenceIdInput,
     checklistId: checklistIdInput,
+    workerId: workerIdInput,
+    jobSiteUserAssignmentId: jobSiteUserAssignmentIdInput,
+    jobSiteWorkerAssignmentId: jobSiteWorkerAssignmentIdInput,
+    operationalRequestId: operationalRequestIdInput,
+    contextMessageId: contextMessageIdInput,
+    contextTimelineEventId: contextTimelineEventIdInput,
     note: noteInput,
   });
 
@@ -197,27 +304,57 @@ async function normalizePackageItem(organizationId: string, input: AddDocumentPa
       select: { id: true },
     });
     if (!document) throw new AccessError("Il documento non e condivisibile: deve essere classificato e avere sensibilita Standard.", 409);
-    return { itemType, documentId: document.id, documentVersionId: null, evidenceId: null, checklistId: null, note: null };
+    return packageItemData(itemType, { documentId: document.id });
   }
   if (itemType === "DOCUMENT_VERSION") {
     const version = await db.documentVersion.findFirst({
-      where: { id: documentVersionIdInput ?? "", organizationId, archivedAt: null, document: { is: { organizationId, archivedAt: null, documentType: { is: { sensitivity: "STANDARD", categoryKey: { not: "UNCLASSIFIED" } } } } } },
+      where: { id: documentVersionIdInput ?? "", organizationId, archivedAt: null, reviewStatus: "CURRENT", document: { is: { organizationId, archivedAt: null, documentType: { is: { sensitivity: "STANDARD", categoryKey: { not: "UNCLASSIFIED" } } } } } },
       select: { id: true },
     });
     if (!version) throw new AccessError("Il file non e condivisibile: il documento deve essere classificato e avere sensibilita Standard.", 409);
-    return { itemType, documentId: null, documentVersionId: version.id, evidenceId: null, checklistId: null, note: null };
+    return packageItemData(itemType, { documentVersionId: version.id });
   }
   if (itemType === "EVIDENCE") {
-    const evidence = await db.evidence.findFirst({ where: { id: evidenceIdInput ?? "", organizationId, archivedAt: null }, select: { id: true } });
-    if (!evidence) throw new AccessError("Prova non trovata.", 404);
-    return { itemType, documentId: null, documentVersionId: null, evidenceId: evidence.id, checklistId: null, note: null };
+    const evidence = await db.evidence.findFirst({ where: { id: evidenceIdInput ?? "", organizationId, archivedAt: null, reviewStatus: "ACCEPTED", sensitivity: "SHAREABLE" }, select: { id: true } });
+    if (!evidence) throw new AccessError("La prova non e condivisibile: deve essere approvata e classificata come condivisibile.", 409);
+    return packageItemData(itemType, { evidenceId: evidence.id });
   }
   if (itemType === "CHECKLIST") {
     const checklist = await db.checklist.findFirst({ where: { id: checklistIdInput ?? "", organizationId, archivedAt: null }, select: { id: true } });
     if (!checklist) throw new AccessError("Checklist non trovata.", 404);
-    return { itemType, documentId: null, documentVersionId: null, evidenceId: null, checklistId: checklist.id, note: null };
+    return packageItemData(itemType, { checklistId: checklist.id });
   }
-  return { itemType, documentId: null, documentVersionId: null, evidenceId: null, checklistId: null, note: noteInput };
+  if (itemType === "WORKER") {
+    const worker = await db.worker.findFirst({ where: { id: workerIdInput ?? "", organizationId, archivedAt: null }, select: { id: true } });
+    if (!worker) throw new AccessError("Lavoratore non trovato.", 404);
+    return packageItemData(itemType, { workerId: worker.id });
+  }
+  if (itemType === "JOB_SITE_USER_ASSIGNMENT") {
+    const assignment = await db.jobSiteUserAssignment.findFirst({ where: { id: jobSiteUserAssignmentIdInput ?? "", organizationId, archivedAt: null }, select: { id: true } });
+    if (!assignment) throw new AccessError("Assegnazione collaboratore non trovata.", 404);
+    return packageItemData(itemType, { jobSiteUserAssignmentId: assignment.id });
+  }
+  if (itemType === "JOB_SITE_WORKER_ASSIGNMENT") {
+    const assignment = await db.jobSiteWorkerAssignment.findFirst({ where: { id: jobSiteWorkerAssignmentIdInput ?? "", organizationId, archivedAt: null }, select: { id: true } });
+    if (!assignment) throw new AccessError("Assegnazione lavoratore non trovata.", 404);
+    return packageItemData(itemType, { jobSiteWorkerAssignmentId: assignment.id });
+  }
+  if (itemType === "OPERATIONAL_REQUEST") {
+    const request = await db.operationalRequest.findFirst({ where: { id: operationalRequestIdInput ?? "", organizationId }, select: { id: true } });
+    if (!request) throw new AccessError("Richiesta operativa non trovata.", 404);
+    return packageItemData(itemType, { operationalRequestId: request.id });
+  }
+  if (itemType === "CONTEXT_MESSAGE") {
+    const message = await db.contextMessage.findFirst({ where: { id: contextMessageIdInput ?? "", organizationId, visibility: "INTERNAL" }, select: { id: true } });
+    if (!message) throw new AccessError("Messaggio contestuale non trovato.", 404);
+    return packageItemData(itemType, { contextMessageId: message.id });
+  }
+  if (itemType === "CONTEXT_TIMELINE_EVENT") {
+    const event = await db.contextTimelineEvent.findFirst({ where: { id: contextTimelineEventIdInput ?? "", organizationId }, select: { id: true } });
+    if (!event) throw new AccessError("Evento operativo non trovato.", 404);
+    return packageItemData(itemType, { contextTimelineEventId: event.id });
+  }
+  return packageItemData(itemType, { note: noteInput });
 }
 
 async function nextPackageItemPosition(organizationId: string, packageId: string) {
@@ -254,20 +391,23 @@ export async function listDocumentPackagesWithDetails(input: ListDocumentPackage
 
   if (input.includeShareLinks) {
     requirePermission(context, "documentPackages:share");
-    if (actorRole !== "OWNER" && actorRole !== "ADMIN") throw new AccessError("Risorsa non disponibile.", 404);
     const packages = await db.documentPackage.findMany({
       where,
       select: {
         ...documentPackageSelect,
         items: { select: packageItemSelect, orderBy: [{ position: "asc" }, { createdAt: "asc" }] },
-        shareLinks: { select: packageShareLinkSelect, orderBy: { createdAt: "desc" } },
+        shareLinks: { select: { ...packageShareLinkSelect, revision: { select: { preparedAt: true } } }, orderBy: { createdAt: "desc" } },
+        shareProposals: packageControlSelect.shareProposals,
       },
       orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
       ...(input.take === undefined ? {} : { take: input.take }),
       ...(input.skip === undefined ? {} : { skip: input.skip }),
     });
     await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-packages" });
-    return packages;
+    return packages.map((documentPackage) => {
+      const effective = withEffectiveState(documentPackage);
+      return { ...effective, shareLinks: documentPackage.shareLinks.map(({ revision: _revision, ...link }) => link) };
+    });
   }
 
   const packages = await db.documentPackage.findMany({
@@ -275,13 +415,14 @@ export async function listDocumentPackagesWithDetails(input: ListDocumentPackage
     select: {
       ...documentPackageSelect,
       items: { select: packageItemSelect, orderBy: [{ position: "asc" }, { createdAt: "asc" }] },
+      ...packageControlSelect,
     },
     orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
     ...(input.take === undefined ? {} : { take: input.take }),
     ...(input.skip === undefined ? {} : { skip: input.skip }),
   });
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-packages" });
-  return packages.map((documentPackage) => ({ ...documentPackage, shareLinks: [] }));
+  return packages.map((documentPackage) => ({ ...withEffectiveState(documentPackage), shareLinks: [] }));
 }
 
 export async function getDocumentPackage(packageId: string) {
@@ -291,11 +432,12 @@ export async function getDocumentPackage(packageId: string) {
     select: {
       ...documentPackageSelect,
       items: { select: packageItemSelect, orderBy: [{ position: "asc" }, { createdAt: "asc" }] },
+      ...packageControlSelect,
     },
   });
   if (!documentPackage) throw new AccessError("Pacchetto documentale non trovato.", 404);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "document-package", resourceId: documentPackage.id });
-  return documentPackage;
+  return withEffectiveState(documentPackage);
 }
 
 export async function createDocumentPackage(input: CreateDocumentPackageInput) {
@@ -330,6 +472,7 @@ export async function updateDocumentPackage(packageId: string, input: UpdateDocu
   if (input.jobSiteId !== undefined) data.jobSiteId = await assertActiveJobSite(organizationId, trimOptionalId(input.jobSiteId, "Cantiere"));
   if (input.status !== undefined) data.status = parseEditablePackageStatus(input.status);
   if (!Object.keys(data).length) throw new AccessError("Nessun dato pacchetto da aggiornare.", 409);
+  if (existing.status === "SHARED" && input.status === undefined) data.status = "DRAFT";
 
   const documentPackage = await db.documentPackage.update({ where: { id: existing.id }, data, select: documentPackageSelect });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document-package", resourceId: documentPackage.id });
@@ -389,6 +532,12 @@ export async function addDocumentPackageItem(packageId: string, input: AddDocume
       documentVersionId: data.documentVersionId,
       evidenceId: data.evidenceId,
       checklistId: data.checklistId,
+      workerId: data.workerId,
+      jobSiteUserAssignmentId: data.jobSiteUserAssignmentId,
+      jobSiteWorkerAssignmentId: data.jobSiteWorkerAssignmentId,
+      operationalRequestId: data.operationalRequestId,
+      contextMessageId: data.contextMessageId,
+      contextTimelineEventId: data.contextTimelineEventId,
       note: data.note,
     },
     select: { id: true },
@@ -396,9 +545,13 @@ export async function addDocumentPackageItem(packageId: string, input: AddDocume
   if (duplicate) throw new AccessError("Elemento gia presente nel pacchetto.", 409);
   const position = parseOptionalPosition(input.position) ?? await nextPackageItemPosition(organizationId, documentPackage.id);
 
-  const item = await db.documentPackageItem.create({
-    data: { organizationId, documentPackageId: documentPackage.id, ...data, position },
-    select: packageItemSelect,
+  const item = await db.$transaction(async (tx) => {
+    const created = await tx.documentPackageItem.create({
+      data: { organizationId, documentPackageId: documentPackage.id, ...data, position },
+      select: packageItemSelect,
+    });
+    await tx.documentPackage.updateMany({ where: { id: documentPackage.id, organizationId, status: { in: ["SHARED", "READY_FOR_REVIEW"] } }, data: { status: "DRAFT" } });
+    return created;
   });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document-package-item", resourceId: item.id });
   await recordProductAuditEventBestEffort({
@@ -417,7 +570,11 @@ export async function updateDocumentPackageItem(packageId: string, itemId: strin
   await findActivePackage(organizationId, packageId);
   const existing = await findPackageItem(organizationId, packageId, itemId);
   const position = parseRequiredPosition(input.position);
-  const item = await db.documentPackageItem.update({ where: { id: existing.id }, data: { position }, select: packageItemSelect });
+  const item = await db.$transaction(async (tx) => {
+    const updated = await tx.documentPackageItem.update({ where: { id: existing.id }, data: { position }, select: packageItemSelect });
+    await tx.documentPackage.updateMany({ where: { id: packageId, organizationId, status: { in: ["SHARED", "READY_FOR_REVIEW"] } }, data: { status: "DRAFT" } });
+    return updated;
+  });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "document-package-item", resourceId: item.id });
   return item;
 }
@@ -427,7 +584,11 @@ export async function removeDocumentPackageItem(packageId: string, itemId: strin
   await findActivePackage(organizationId, packageId);
   const existing = await findPackageItem(organizationId, packageId, itemId);
   await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "document-package-item", resourceId: existing.id });
-  const item = await db.documentPackageItem.delete({ where: { id: existing.id }, select: packageItemSelect });
+  const item = await db.$transaction(async (tx) => {
+    const removed = await tx.documentPackageItem.delete({ where: { id: existing.id }, select: packageItemSelect });
+    await tx.documentPackage.updateMany({ where: { id: packageId, organizationId, status: { in: ["SHARED", "READY_FOR_REVIEW"] } }, data: { status: "DRAFT" } });
+    return removed;
+  });
   await recordProductAuditEventBestEffort({
     organizationId,
     ...auditActorFromContext(context, actorRole),

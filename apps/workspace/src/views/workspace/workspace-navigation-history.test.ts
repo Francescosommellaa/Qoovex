@@ -26,7 +26,7 @@ describe("workspace navigation history", () => {
 
   it("keeps the current page and at most the last three distinct destinations", () => {
     const pages = [
-      { href: "/dashboard", label: "Da fare" },
+      { href: "/dashboard", label: "Centro operativo" },
       { href: "/documents", label: "Documenti" },
       { href: "/job-sites", label: "Cantieri" },
     ];
@@ -34,7 +34,7 @@ describe("workspace navigation history", () => {
 
     expect(MAX_RECENT_WORKSPACE_PAGES).toBe(3);
     expect(next).toEqual([
-      { href: "/dashboard", label: "Da fare" },
+      { href: "/dashboard", label: "Centro operativo" },
       { href: "/job-sites", label: "Cantieri" },
       { href: "/documents", label: "Documenti" },
     ]);
@@ -72,13 +72,13 @@ describe("workspace navigation history", () => {
   });
 
   it("ignores malformed session storage entries", () => {
-    expect(parseRecentWorkspacePages('[{"href":"https://example.com","label":"Esterno"},{"href":"//example.com","label":"Esterno relativo"},{"href":"/dashboard","label":"Da fare"}]')).toEqual([
-      { href: "/dashboard", label: "Da fare" },
+    expect(parseRecentWorkspacePages('[{"href":"https://example.com","label":"Esterno"},{"href":"//example.com","label":"Esterno relativo"},{"href":"/dashboard","label":"Centro operativo"}]')).toEqual([
+      { href: "/dashboard", label: "Centro operativo" },
     ]);
     expect(parseRecentWorkspacePages("not-json")).toEqual([]);
   });
 
   it("keeps malformed encoded paths isolated instead of breaking navigation history", () => {
-    expect(() => pushRecentWorkspacePage([{ href: "/documents/%", label: "Documento" }], { href: "/dashboard", label: "Da fare" })).not.toThrow();
+    expect(() => pushRecentWorkspacePage([{ href: "/documents/%", label: "Documento" }], { href: "/dashboard", label: "Centro operativo" })).not.toThrow();
   });
 });

@@ -67,6 +67,16 @@ export type User = Prisma.UserModel
  */
 export type Organization = Prisma.OrganizationModel
 /**
+ * Model OrganizationProfile
+ *
+ */
+export type OrganizationProfile = Prisma.OrganizationProfileModel
+/**
+ * Model OrganizationContact
+ *
+ */
+export type OrganizationContact = Prisma.OrganizationContactModel
+/**
  * Model Worker
  *
  */
@@ -107,6 +117,11 @@ export type Document = Prisma.DocumentModel
  */
 export type DocumentVersion = Prisma.DocumentVersionModel
 /**
+ * Model DocumentJobSiteLink
+ *
+ */
+export type DocumentJobSiteLink = Prisma.DocumentJobSiteLinkModel
+/**
  * Model DocumentRequirement
  *
  */
@@ -137,6 +152,11 @@ export type ChecklistItem = Prisma.ChecklistItemModel
  */
 export type Evidence = Prisma.EvidenceModel
 /**
+ * Model EvidenceRevision
+ *
+ */
+export type EvidenceRevision = Prisma.EvidenceRevisionModel
+/**
  * Model DocumentPackage
  *
  */
@@ -146,6 +166,46 @@ export type DocumentPackage = Prisma.DocumentPackageModel
  *
  */
 export type DocumentPackageItem = Prisma.DocumentPackageItemModel
+/**
+ * Model DocumentPackageRevision
+ *
+ */
+export type DocumentPackageRevision = Prisma.DocumentPackageRevisionModel
+/**
+ * Model OperationalRequest
+ *
+ */
+export type OperationalRequest = Prisma.OperationalRequestModel
+/**
+ * Model ContextMessage
+ *
+ */
+export type ContextMessage = Prisma.ContextMessageModel
+/**
+ * Model ContextTimelineEvent
+ *
+ */
+export type ContextTimelineEvent = Prisma.ContextTimelineEventModel
+/**
+ * Model DocumentSourcePolicy
+ *
+ */
+export type DocumentSourcePolicy = Prisma.DocumentSourcePolicyModel
+/**
+ * Model DocumentSourceCheck
+ *
+ */
+export type DocumentSourceCheck = Prisma.DocumentSourceCheckModel
+/**
+ * Model DocumentAcquisition
+ *
+ */
+export type DocumentAcquisition = Prisma.DocumentAcquisitionModel
+/**
+ * Model DocumentPackageShareProposal
+ *
+ */
+export type DocumentPackageShareProposal = Prisma.DocumentPackageShareProposalModel
 /**
  * Model ShareLink
  *
@@ -167,6 +227,51 @@ export type NotificationPreference = Prisma.NotificationPreferenceModel
  */
 export type DataControlJob = Prisma.DataControlJobModel
 /**
+ * Model OperationalProcess
+ *
+ */
+export type OperationalProcess = Prisma.OperationalProcessModel
+/**
+ * Model OperationalStep
+ *
+ */
+export type OperationalStep = Prisma.OperationalStepModel
+/**
+ * Model OperationalEvent
+ *
+ */
+export type OperationalEvent = Prisma.OperationalEventModel
+/**
+ * Model OperationalDecision
+ *
+ */
+export type OperationalDecision = Prisma.OperationalDecisionModel
+/**
+ * Model OperationalEventArtifactReference
+ *
+ */
+export type OperationalEventArtifactReference = Prisma.OperationalEventArtifactReferenceModel
+/**
+ * Model OperationalException
+ *
+ */
+export type OperationalException = Prisma.OperationalExceptionModel
+/**
+ * Model OperationalArtifactReference
+ *
+ */
+export type OperationalArtifactReference = Prisma.OperationalArtifactReferenceModel
+/**
+ * Model OperationalRuleSnapshot
+ *
+ */
+export type OperationalRuleSnapshot = Prisma.OperationalRuleSnapshotModel
+/**
+ * Model OperationalEffectReceipt
+ *
+ */
+export type OperationalEffectReceipt = Prisma.OperationalEffectReceiptModel
+/**
  * Model NotificationEmailDelivery
  *
  */
@@ -181,6 +286,16 @@ export type OrganizationMembership = Prisma.OrganizationMembershipModel
  *
  */
 export type OrganizationInvitation = Prisma.OrganizationInvitationModel
+/**
+ * Model OrganizationMembershipResourceGrant
+ *
+ */
+export type OrganizationMembershipResourceGrant = Prisma.OrganizationMembershipResourceGrantModel
+/**
+ * Model OrganizationInvitationResourceGrant
+ *
+ */
+export type OrganizationInvitationResourceGrant = Prisma.OrganizationInvitationResourceGrantModel
 /**
  * Model SupportSession
  *

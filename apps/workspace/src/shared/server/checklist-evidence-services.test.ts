@@ -1,16 +1,19 @@
-import type { OrganizationRole } from "@qoovex/types";
+import { organizationPermissions, type OrganizationAccessPreset, type OrganizationPermission, type OrganizationRole } from "@qoovex/types";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   db: {
+    $transaction: vi.fn(),
     checklist: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     checklistItem: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     jobSite: { findFirst: vi.fn() },
     worker: { findFirst: vi.fn() },
     evidence: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
+    evidenceRevision: { findFirst: vi.fn(), create: vi.fn() },
     workerUserLink: { findFirst: vi.fn() },
     jobSiteUserAssignment: { findMany: vi.fn() },
     jobSiteWorkerAssignment: { findMany: vi.fn() },
+    organizationMembership: { findFirst: vi.fn() },
   },
   getWorkspaceAccessContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
@@ -19,6 +22,7 @@ const mocks = vi.hoisted(() => ({
   putPrivateBlob: vi.fn(),
   getPrivateBlob: vi.fn(),
   deletePrivateBlob: vi.fn(),
+  appendContextTimelineEvent: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -42,6 +46,7 @@ vi.mock("./blob-storage-service", () => ({
   getPrivateBlob: mocks.getPrivateBlob,
   deletePrivateBlob: mocks.deletePrivateBlob,
 }));
+vi.mock("./context-timeline-service", () => ({ appendContextTimelineEvent: mocks.appendContextTimelineEvent }));
 
 import {
   archiveChecklist,
@@ -58,6 +63,7 @@ import {
   createEvidenceNote,
   getEvidenceDownload,
   listEvidence,
+  reviewEvidence,
   uploadEvidenceFile,
 } from "./evidence-service";
 
@@ -119,13 +125,13 @@ function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
   for (const method of Object.values(model)) method.mockReset();
 }
 
-function setRole(role: OrganizationRole) {
+function setRole(role: OrganizationRole, preset: OrganizationAccessPreset | null = null, permissions: OrganizationPermission[] = role === "OWNER" ? [...organizationPermissions] : [], scopeMode: "FULL" | "ASSIGNED" = role === "OWNER" ? "FULL" : "ASSIGNED") {
   mocks.getWorkspaceAccessContext.mockResolvedValue({
     userId: "user-1",
     platformRole: "USER",
-    company: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
+    company: { id: "member-1", role, preset, scopeMode, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
     support: null,
-    permissions: [],
+    permissions,
   });
 }
 
@@ -141,14 +147,17 @@ function makeFile(input: { name?: string; type?: string; bytes?: number[]; sizeB
 }
 
 beforeEach(() => {
+  mocks.db.$transaction.mockReset().mockImplementation(async (callback) => callback(mocks.db));
   resetModel(mocks.db.checklist);
   resetModel(mocks.db.checklistItem);
   resetModel(mocks.db.jobSite);
   resetModel(mocks.db.worker);
   resetModel(mocks.db.evidence);
+  resetModel(mocks.db.evidenceRevision);
   resetModel(mocks.db.workerUserLink);
   resetModel(mocks.db.jobSiteUserAssignment);
   resetModel(mocks.db.jobSiteWorkerAssignment);
+  resetModel(mocks.db.organizationMembership);
   mocks.getWorkspaceAccessContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
@@ -156,8 +165,9 @@ beforeEach(() => {
   mocks.putPrivateBlob.mockReset();
   mocks.getPrivateBlob.mockReset();
   mocks.deletePrivateBlob.mockReset();
+  mocks.appendContextTimelineEvent.mockReset().mockResolvedValue({ id: "timeline-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
-  mocks.requirePermission.mockImplementation(() => undefined);
+  mocks.requirePermission.mockImplementation((context, permission) => { if (!context.permissions.includes(permission)) throw Object.assign(new Error("Risorsa non disponibile."), { status: 404 }); });
   mocks.recordSupportAccess.mockResolvedValue(undefined);
   mocks.db.jobSite.findFirst.mockResolvedValue({ id: "jobsite-1" });
   mocks.db.worker.findFirst.mockResolvedValue({ id: "worker-1" });
@@ -166,6 +176,7 @@ beforeEach(() => {
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([]);
   mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "membership-1", resourceGrants: [] });
   mocks.putPrivateBlob.mockResolvedValue({ pathname: fileEvidenceRecord.blobKey, etag: "etag", contentType: "image/png" });
   mocks.deletePrivateBlob.mockResolvedValue(undefined);
   setRole("OWNER");
@@ -216,14 +227,14 @@ describe("checklist service", () => {
   });
 
   it("lets safety consultants manage checklist items and site managers complete assigned items", async () => {
-    setRole("SAFETY_CONSULTANT");
+    setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["checklists:read", "checklists:manage", "checklists:complete"], "FULL");
     mocks.db.checklistItem.create.mockResolvedValue({ ...itemRecord, status: "DONE", completedAt: now, completedById: "user-1" });
     await expect(createChecklistItem("checklist-1", { label: "Completa voce", status: "DONE" })).resolves.toMatchObject({
       status: "DONE",
       completedById: "user-1",
     });
 
-    setRole("SITE_MANAGER");
+    setRole("COLLABORATOR", "SITE_MANAGER", ["checklists:read", "checklists:complete"]);
     mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
     mocks.db.checklist.findMany.mockResolvedValue([checklistRecord]);
     mocks.db.checklistItem.update.mockResolvedValue({ ...itemRecord, status: "DONE", completedAt: now, completedById: "user-1" });
@@ -231,10 +242,10 @@ describe("checklist service", () => {
     await expect(updateChecklistItem("checklist-1", "item-1", { status: "DONE" })).resolves.toMatchObject({ status: "DONE" });
     await expect(createChecklistItem("checklist-1", { label: "Voce" })).rejects.toMatchObject({ status: 404 });
 
-    setRole("WORKER");
+    setRole("COLLABORATOR", "LIMITED_UPLOAD");
     await expect(listChecklists()).rejects.toMatchObject({ status: 404 });
 
-    setRole("SITE_MANAGER");
+    setRole("COLLABORATOR", "READ_ONLY", ["checklists:read"]);
     await expect(listChecklists()).resolves.toBeDefined();
   });
 
@@ -334,7 +345,7 @@ describe("evidence service", () => {
   });
 
   it("lets safety consultants read, upload and download evidence but not archive", async () => {
-    setRole("SAFETY_CONSULTANT");
+    setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["evidence:read", "evidence:file:read", "evidence:upload"], "FULL");
     mocks.db.evidence.findMany.mockResolvedValue([fileEvidenceRecord]);
     mocks.db.evidence.findFirst.mockResolvedValue(fileEvidenceRecord);
     mocks.db.evidence.create.mockResolvedValue(evidenceRecord);
@@ -345,6 +356,14 @@ describe("evidence service", () => {
     await expect(createEvidenceNote({ type: "NOTE", title: "Nota", jobSiteId: "jobsite-1" })).resolves.toMatchObject({ type: "NOTE" });
     await expect(getEvidenceDownload("evidence-1")).resolves.toMatchObject({ stream, originalFileName: "foto.png" });
     await expect(archiveEvidence("evidence-1")).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("does not resolve a private evidence Blob without explicit file permission", async () => {
+    setRole("COLLABORATOR", "CUSTOM", ["evidence:read"], "FULL");
+    mocks.db.evidence.findFirst.mockResolvedValue(fileEvidenceRecord);
+
+    await expect(getEvidenceDownload("evidence-1")).rejects.toMatchObject({ status: 404 });
+    expect(mocks.getPrivateBlob).not.toHaveBeenCalled();
   });
 
   it("keeps recent evidence ordered and paginated in one scoped query", async () => {
@@ -360,14 +379,14 @@ describe("evidence service", () => {
   });
 
   it("scopes evidence access for operational roles and denies destinatari esterni", async () => {
-    setRole("SITE_MANAGER");
+    setRole("COLLABORATOR", "SITE_MANAGER", ["evidence:read", "evidence:upload"]);
     mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
     mocks.db.evidence.findMany.mockResolvedValue([evidenceRecord]);
     mocks.db.evidence.create.mockResolvedValue(evidenceRecord);
     await expect(listEvidence()).resolves.toHaveLength(1);
     await expect(createEvidenceNote({ type: "NOTE", title: "Nota", jobSiteId: "jobsite-1" })).resolves.toMatchObject({ type: "NOTE" });
 
-    setRole("WORKER");
+    setRole("COLLABORATOR", "LIMITED_UPLOAD", ["evidence:read", "evidence:upload"]);
     mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: { id: "worker-1", displayName: "Mario", roleLabel: null, status: "ACTIVE" } });
     mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
     mocks.db.evidence.findMany.mockResolvedValue([{ ...evidenceRecord, workerId: "worker-1" }]);
@@ -375,7 +394,7 @@ describe("evidence service", () => {
     await expect(listEvidence()).resolves.toHaveLength(1);
     await expect(createEvidenceNote({ type: "NOTE", title: "Nota", workerId: "worker-1" })).resolves.toMatchObject({ type: "NOTE" });
 
-    setRole("SITE_MANAGER");
+    setRole("COLLABORATOR", "READ_ONLY", ["evidence:read"]);
     await expect(listEvidence()).resolves.toBeDefined();
   });
 
@@ -422,6 +441,22 @@ describe("evidence service", () => {
 
     mocks.db.evidence.findFirst.mockResolvedValue(null);
     await expect(getEvidenceDownload("evidence-1")).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("enforces evidence review transitions and records an append-only revision", async () => {
+    const recorded = { ...evidenceRecord, sensitivity: "INTERNAL", reviewStatus: "RECORDED", origin: "DIRECT_UPLOAD", capturedAt: now, reviewedById: null, reviewedAt: null, reviewReason: null, updatedAt: now, checklistItem: { checklist: { jobSiteId: "jobsite-1" } } };
+    mocks.db.evidence.findFirst.mockResolvedValue(recorded);
+    await expect(reviewEvidence("evidence-1", { decision: "ACCEPT" })).rejects.toMatchObject({ status: 409 });
+
+    const toReview = { ...recorded, reviewStatus: "TO_REVIEW" };
+    const accepted = { ...toReview, reviewStatus: "ACCEPTED", sensitivity: "SHAREABLE", reviewedById: "user-1", reviewedAt: now };
+    mocks.db.evidence.findFirst.mockResolvedValue(toReview);
+    mocks.db.evidence.update.mockResolvedValue(accepted);
+    mocks.db.evidenceRevision.findFirst.mockResolvedValue({ revisionNumber: 2 });
+    mocks.db.evidenceRevision.create.mockResolvedValue({ id: "revision-3" });
+    await expect(reviewEvidence("evidence-1", { decision: "ACCEPT", sensitivity: "SHAREABLE" })).resolves.toMatchObject({ reviewStatus: "ACCEPTED", sensitivity: "SHAREABLE" });
+    expect(mocks.db.evidenceRevision.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ revisionNumber: 3, reviewStatus: "ACCEPTED" }) }));
+    expect(mocks.appendContextTimelineEvent).toHaveBeenCalledWith(expect.objectContaining({ eventType: "EVIDENCE_REVIEWED" }), mocks.db);
   });
 
   it("cleans up uploaded Blob if Prisma persistence fails", async () => {

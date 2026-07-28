@@ -41,7 +41,7 @@ async function readApiError(response: Response) {
   return new ApiError(message, fieldErrors);
 }
 
-export async function submitJson<TResponse>(path: string, method: "POST" | "PATCH" | "DELETE", payload?: Record<string, unknown>) {
+export async function submitJson<TResponse>(path: string, method: "POST" | "PUT" | "PATCH" | "DELETE", payload?: Record<string, unknown>) {
   const response = await fetch(path, {
     method,
     headers: payload ? { "Content-Type": "application/json" } : undefined,

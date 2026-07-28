@@ -2,11 +2,14 @@ import "server-only";
 
 import crypto from "crypto";
 import { db } from "@qoovex/db";
+import type { OrganizationAccessPreset, OrganizationPermission, OrganizationResourceGrantInput, OrganizationScopeMode } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 import { getContextOrganizationId, getWorkspaceAccessContext, requireIdentity, requirePermission } from "@shared/server/access-context-service";
 import { canRevokeRole } from "@shared/server/authorization-policy";
+import { normalizeCollaboratorPermissions } from "@shared/server/authorization-policy";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
+import { validateOrganizationResourceGrants } from "./organization-invitation-service";
 import {
   isPrismaKnownRequestError,
   runSerializableTransaction,
@@ -40,12 +43,12 @@ export async function createOrganization(nameInput: string) {
       if (existing) {
         const claimed = await tx.organizationMembership.updateMany({
           where: { id: existing.id, userId: user.id, revokedAt: { not: null } },
-          data: { organizationId: organization.id, role: "OWNER", revokedAt: null },
+          data: { organizationId: organization.id, role: "OWNER", scopeMode: "FULL", revokedAt: null },
         });
         if (claimed.count !== 1) throw new AccessError("Appartieni gia a una azienda.", 409);
       } else {
         await tx.organizationMembership.create({
-          data: { organizationId: organization.id, userId: user.id, role: "OWNER" },
+          data: { organizationId: organization.id, userId: user.id, role: "OWNER", scopeMode: "FULL" },
         });
       }
       return organization;
@@ -86,6 +89,116 @@ export async function listMembers() {
   });
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "organization-members" });
   return members;
+}
+
+async function requireOwnerAccessManager() {
+  const context = await getWorkspaceAccessContext();
+  if (context.support || context.company?.role !== "OWNER") throw new AccessError("Risorsa non disponibile.", 404);
+  requirePermission(context, "members:manage");
+  return { context, organizationId: getContextOrganizationId(context) };
+}
+
+export async function getMemberAccess(memberId: string) {
+  const { organizationId } = await requireOwnerAccessManager();
+  const membership = await db.organizationMembership.findFirst({
+    where: { id: memberId, organizationId, role: "COLLABORATOR" },
+    select: {
+      id: true,
+      role: true,
+      preset: true,
+      permissionKeys: true,
+      scopeMode: true,
+      expiresAt: true,
+      accessVersion: true,
+      updatedAt: true,
+      revokedAt: true,
+      user: { select: { id: true, email: true, firstName: true, lastName: true } },
+      resourceGrants: { select: { resourceType: true, resourceId: true }, orderBy: [{ resourceType: "asc" }, { resourceId: "asc" }] },
+    },
+  });
+  if (!membership) throw new AccessError("Collaboratore non trovato.", 404);
+  return membership;
+}
+
+export async function getAccessResourceOptions() {
+  const { organizationId } = await requireOwnerAccessManager();
+  const [jobSites, workers, documentTypes, documentPackages] = await Promise.all([
+    db.jobSite.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, name: true }, orderBy: { name: "asc" }, take: 100 }),
+    db.worker.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, displayName: true }, orderBy: { displayName: "asc" }, take: 100 }),
+    db.documentType.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, name: true }, orderBy: { name: "asc" }, take: 100 }),
+    db.documentPackage.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, title: true }, orderBy: { title: "asc" }, take: 100 }),
+  ]);
+  return {
+    jobSites: jobSites.map((item) => ({ id: item.id, label: item.name, resourceType: "JOB_SITE" as const })),
+    workers: workers.map((item) => ({ id: item.id, label: item.displayName, resourceType: "WORKER" as const })),
+    documentTypes: documentTypes.map((item) => ({ id: item.id, label: item.name, resourceType: "DOCUMENT_TYPE" as const })),
+    documentPackages: documentPackages.map((item) => ({ id: item.id, label: item.title, resourceType: "DOCUMENT_PACKAGE" as const })),
+  };
+}
+
+export async function updateMemberAccess(memberId: string, input: {
+  expectedVersion: number;
+  preset: OrganizationAccessPreset | null;
+  permissions: OrganizationPermission[];
+  scopeMode: OrganizationScopeMode;
+  expiresAt?: string | null;
+  grants?: OrganizationResourceGrantInput[];
+}) {
+  const { context, organizationId } = await requireOwnerAccessManager();
+  if (!Number.isInteger(input.expectedVersion) || input.expectedVersion < 1) throw new AccessError("Versione accesso non valida.", 409);
+  if (input.scopeMode !== "FULL" && input.scopeMode !== "ASSIGNED") throw new AccessError("Scope non valido.", 409);
+  const permissionKeys = normalizeCollaboratorPermissions(input.permissions);
+  const grants = input.scopeMode === "FULL" ? [] : await validateOrganizationResourceGrants(organizationId, input.grants ?? []);
+  const expiresAt = input.expiresAt ? new Date(input.expiresAt) : null;
+  if (expiresAt && Number.isNaN(expiresAt.getTime())) throw new AccessError("Scadenza accesso non valida.", 409);
+
+  const result = await runSerializableTransaction(async (tx) => {
+    const target = await tx.organizationMembership.findFirst({
+      where: { id: memberId, organizationId, role: "COLLABORATOR", revokedAt: null },
+      select: { id: true, userId: true, permissionKeys: true, scopeMode: true, expiresAt: true, accessVersion: true },
+    });
+    if (!target) throw new AccessError("Collaboratore non trovato.", 404);
+    const updated = await tx.organizationMembership.updateMany({
+      where: { id: target.id, organizationId, role: "COLLABORATOR", revokedAt: null, accessVersion: input.expectedVersion },
+      data: {
+        preset: input.preset,
+        permissionKeys,
+        scopeMode: input.scopeMode,
+        expiresAt,
+        accessUpdatedById: context.userId,
+        accessVersion: { increment: 1 },
+      },
+    });
+    if (updated.count !== 1) throw new AccessError("L'accesso e stato modificato da un'altra sessione. Ricarica e riprova.", 409);
+    await tx.organizationMembershipResourceGrant.deleteMany({ where: { membershipId: target.id } });
+    if (grants.length) {
+      await tx.organizationMembershipResourceGrant.createMany({
+        data: grants.map((grant) => ({ organizationId, membershipId: target.id, resourceType: grant.resourceType, resourceId: grant.resourceId, grantedById: context.userId })),
+      });
+    }
+    await tx.user.update({ where: { id: target.userId }, data: { authVersion: { increment: 1 } } });
+    await tx.session.deleteMany({ where: { userId: target.userId } });
+    await tx.securityAuditEvent.create({
+      data: {
+        userId: target.userId,
+        type: "ORGANIZATION_MEMBERSHIP_ACCESS_UPDATED",
+        metadata: {
+          organizationId,
+          actorUserId: context.userId,
+          membershipId: target.id,
+          previousAccessVersion: target.accessVersion,
+          nextAccessVersion: target.accessVersion + 1,
+          permissionsAdded: permissionKeys.filter((permission) => !target.permissionKeys.includes(permission)),
+          permissionsRemoved: target.permissionKeys.filter((permission) => !new Set<string>(permissionKeys).has(permission)),
+          scopeChanged: target.scopeMode !== input.scopeMode,
+          expiryChanged: target.expiresAt?.toISOString() !== expiresAt?.toISOString(),
+          grantCount: grants.length,
+        },
+      },
+    });
+    return { updated: true, accessVersion: target.accessVersion + 1 };
+  });
+  return result;
 }
 
 export async function revokeMember(memberId: string) {

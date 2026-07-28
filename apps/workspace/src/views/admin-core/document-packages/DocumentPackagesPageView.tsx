@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styles from "../AdminCore.module.css";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
-import { documentPackageStatusLabels, formatDate, statusTone } from "@/views/workspace/workspace-format";
+import { documentPackageEffectiveStateLabels, formatDate, statusTone } from "@/views/workspace/workspace-format";
 import type { WorkspaceCapabilities, WorkspaceDocumentPackageRecord, WorkspaceJobSiteRecord, WorkspaceShareLinkRecord } from "@/views/workspace/workspace-records";
 
 function jobSiteLabel(jobSiteId: string | null | undefined, jobSites: WorkspaceJobSiteRecord[]) {
@@ -50,7 +50,7 @@ export function DocumentPackagesPageView({
                   <small>Aggiornato: {formatDate(documentPackage.updatedAt)}</small>
                 </div>
                 <div className={styles.actions}>
-                  <WorkspaceState label={documentPackageStatusLabels[documentPackage.status]} tone={statusTone(documentPackage.status)} />
+                  <WorkspaceState label={documentPackageEffectiveStateLabels[documentPackage.effectiveState ?? documentPackage.status]} tone={statusTone(documentPackage.effectiveState ?? documentPackage.status)} />
                   <Link className={styles.linkButton} href={`/document-packages/${documentPackage.id}`}>Apri</Link>
                 </div>
               </article>

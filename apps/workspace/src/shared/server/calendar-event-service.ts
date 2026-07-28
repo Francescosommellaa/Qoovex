@@ -10,8 +10,8 @@ import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { getResourceScope } from "./resource-scope-service";
 
-const CALENDAR_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
-const CALENDAR_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
+const CALENDAR_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const CALENDAR_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const MAX_RANGE_DAYS = 550;
 
 const calendarEventSelect = {
@@ -133,13 +133,13 @@ function parseRange(input: { start?: unknown; end?: unknown }) {
 }
 
 function visibilityWhere(input: {
-  actorRole: OrganizationRole;
+  fullAccess: boolean;
+  preset: string | null;
   userId: string;
   siteManagerJobSiteIds: string[];
 }) {
-  if (input.actorRole === "OWNER" || input.actorRole === "ADMIN") return undefined;
-  if (input.actorRole === "SAFETY_CONSULTANT") return { assignedToId: input.userId };
-  if (input.actorRole === "SITE_MANAGER") {
+  if (input.fullAccess) return undefined;
+  if (input.preset === "SITE_MANAGER") {
     return { OR: [{ assignedToId: input.userId }, { jobSiteId: { in: input.siteManagerJobSiteIds } }] };
   }
   return { assignedToId: input.userId };
@@ -150,8 +150,8 @@ export async function listCalendarEvents(input: { start?: unknown; end?: unknown
   const range = parseRange(input);
   const scope = await getResourceScope(context);
   const requestedAssignee = trimOptionalId(input.assignedToId, "Persona");
-  const visibility = visibilityWhere({ actorRole, userId: context.userId, siteManagerJobSiteIds: scope.siteManagerJobSiteIds });
-  if (requestedAssignee && actorRole !== "OWNER" && actorRole !== "ADMIN" && requestedAssignee !== context.userId) {
+  const visibility = visibilityWhere({ fullAccess: scope.fullAccess, preset: scope.preset, userId: context.userId, siteManagerJobSiteIds: scope.siteManagerJobSiteIds });
+  if (requestedAssignee && !scope.fullAccess && requestedAssignee !== context.userId) {
     throw new AccessError("Calendario persona non disponibile.", 404);
   }
   const events = await db.calendarEvent.findMany({
@@ -175,7 +175,7 @@ export async function listCalendarParticipants() {
     where: {
       organizationId,
       revokedAt: null,
-      ...(actorRole === "OWNER" || actorRole === "ADMIN" ? {} : { userId: context.userId }),
+      ...(context.permissions.includes("calendar:manage") ? {} : { userId: context.userId }),
     },
     select: { role: true, user: { select: { id: true, name: true, email: true } } },
     orderBy: [{ role: "asc" }, { createdAt: "asc" }],
@@ -261,7 +261,7 @@ export async function updateCalendarEvent(eventId: string, input: CalendarEventI
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("calendar:read", CALENDAR_ROLES);
   const existing = await db.calendarEvent.findFirst({ where: { id: eventId, organizationId, archivedAt: null }, select: calendarEventSelect });
   if (!existing) throw new AccessError("Impegno non trovato.", 404);
-  const canManage = actorRole === "OWNER" || actorRole === "ADMIN";
+  const canManage = context.permissions.includes("calendar:manage");
   const submittedKeys = Object.entries(input).filter(([, value]) => value !== undefined).map(([key]) => key);
   if (!canManage && (existing.assignedToId !== context.userId || submittedKeys.some((key) => key !== "status"))) {
     throw new AccessError("Puoi aggiornare soltanto lo stato degli impegni assegnati a te.", 403);

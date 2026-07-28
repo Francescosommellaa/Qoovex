@@ -6,7 +6,7 @@ import { recordSupportAccess } from "@shared/server/support-access-service";
 import { documentDetailsHref } from "../lib/document-routes";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 
-const REMINDER_ACCESS_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const REMINDER_ACCESS_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 export const UPCOMING_DEADLINE_WINDOW_DAYS = 30;
 

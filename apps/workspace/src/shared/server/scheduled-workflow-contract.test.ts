@@ -8,8 +8,8 @@ describe("GitHub workflow contracts", () => {
     const responseCaptures = workflow.match(/response="\$\(curl/g) ?? [];
     const logicalChecks = workflow.match(/jq -e 'type == "object" and \(\(\.failed \| type\) == "number"\) and \.failed == 0'/g) ?? [];
 
-    expect(responseCaptures).toHaveLength(2);
-    expect(logicalChecks).toHaveLength(2);
+    expect(responseCaptures).toHaveLength(3);
+    expect(logicalChecks).toHaveLength(3);
     expect(workflow).toContain("--fail-with-body");
   });
 
@@ -40,6 +40,7 @@ describe("GitHub workflow contracts", () => {
     expect(workflow).not.toContain("run: pnpm install --frozen-lockfile");
     expect(workflow).not.toContain("run: pnpm exec playwright install");
     expect(workflow).toContain("QOOVEX_E2E_MODE: \"1\"");
+    expect(workflow).toContain("CRON_SECRET: ci-cron-secret-at-least-32-characters");
     expect(workflow).toContain("QOOVEX_E2E_DATABASE_TARGET: ${{ env.DATABASE_URL }}");
     expect(workflow).toContain("BLOB_READ_WRITE_TOKEN: ${{ secrets.QOOVEX_E2E_BLOB_READ_WRITE_TOKEN }}");
     expect(workflow).toContain("QOOVEX_E2E_BLOB_TARGET: ${{ vars.QOOVEX_E2E_BLOB_STORE_ID }}");

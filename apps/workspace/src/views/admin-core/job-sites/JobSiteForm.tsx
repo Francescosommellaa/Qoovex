@@ -45,7 +45,7 @@ export function JobSiteForm({ mode, jobSite, disabled, layout = "page", onCreate
       startDate: nullableFormValue(formData, "startDate"),
       endDate: nullableFormValue(formData, "endDate"),
       notes: nullableFormValue(formData, "notes"),
-      operationalPhase: formValue(formData, "operationalPhase"),
+      ...(mode === "create" ? { operationalPhase: formValue(formData, "operationalPhase") } : {}),
     };
     try {
       const response = await submitJson<WorkspaceJobSiteRecord>(
@@ -75,12 +75,12 @@ export function JobSiteForm({ mode, jobSite, disabled, layout = "page", onCreate
 
       <FieldGroup className="gap-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field>
+          {mode === "create" ? <Field>
             <FieldLabel htmlFor={`${mode}-job-site-phase`}>Fase operativa</FieldLabel>
             <select className="h-10 rounded-md border bg-background px-3 text-sm" defaultValue={jobSite?.operationalPhase ?? "PREPARATION"} disabled={disabled || pending} id={`${mode}-job-site-phase`} name="operationalPhase" required>
               {jobSiteOperationalPhases.map((phase) => <option key={phase} value={phase}>{jobSiteOperationalPhaseLabels[phase]}</option>)}
             </select>
-          </Field>
+          </Field> : <Field><FieldLabel>Fase operativa</FieldLabel><p className="flex h-10 items-center rounded-md border bg-muted/40 px-3 text-sm">{jobSite?.operationalPhase ? jobSiteOperationalPhaseLabels[jobSite.operationalPhase] : "Non impostata"}</p><FieldDescription>La fase cambia tramite una transizione esplicita, con verifica dei blocchi.</FieldDescription></Field>}
           <Field>
             <FieldLabel htmlFor={`${mode}-job-site-name`}>Nome cantiere</FieldLabel>
             <Input autoFocus defaultValue={jobSite?.name ?? ""} disabled={disabled || pending} id={`${mode}-job-site-name`} maxLength={160} minLength={2} name="name" required />

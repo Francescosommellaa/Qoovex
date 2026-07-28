@@ -5,6 +5,7 @@ import styles from "@/views/admin-core/AdminCore.module.css";
 
 export function SettingsHubView({ capabilities }: { capabilities: WorkspaceCapabilities }) {
   const areas = [
+    capabilities.canReadOrganizationProfile ? { title: "Profilo azienda", description: "Dati societari, sede, attivita e contatti operativi.", href: "/settings/organization-profile" } : null,
     capabilities.canReadMembers ? { title: "Utenti e inviti", description: "Account abilitati, ruolo assegnato e inviti in attesa.", href: "/settings/people" } : null,
     capabilities.canReadDocumentSettings ? { title: "Impostazioni documenti", description: "Tipi documento e requisiti documentali.", href: "/settings/documents" } : null,
     capabilities.canReadNotifications ? { title: "Notifiche ed email", description: "Preferenze, riepilogo e invii recenti.", href: "/settings/notifications" } : null,

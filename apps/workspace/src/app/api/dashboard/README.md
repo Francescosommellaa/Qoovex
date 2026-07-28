@@ -5,6 +5,5 @@
 Regole:
 
 - accesso solo a membri autorizzati della Organization;
-- `OWNER`, `ADMIN` e `SAFETY_CONSULTANT` possono leggere;
-- `SITE_MANAGER` e `WORKER` restano bloccati finche non esistono filtri per risorsa;
+- `OWNER` e `COLLABORATOR` possono leggere soltanto con `organization:read` e con lo scope applicabile;
 - nessun `blobKey`, `tokenHash`, token raw o URL permanente viene restituito.

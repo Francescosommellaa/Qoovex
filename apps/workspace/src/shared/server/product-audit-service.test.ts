@@ -74,7 +74,7 @@ describe("product audit service", () => {
   });
 
   it("denies non-owner roles from reading audit events", async () => {
-    mocks.role = "ADMIN";
+    mocks.role = "COLLABORATOR";
 
     await expect(listProductAuditEvents()).rejects.toMatchObject({ status: 404 });
     expect(mocks.db.productAuditEvent.findMany).not.toHaveBeenCalled();

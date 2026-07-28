@@ -2,16 +2,18 @@ import "server-only";
 
 import { db } from "@qoovex/db";
 import type { JobSiteOperationalPhase, RecordStatus } from "@qoovex/types";
+import { enqueueOperationalProcess } from "@shared/server/operational-process-service";
 import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { trimOptionalText, trimRequiredText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort, recordProductAuditEventsBestEffort } from "./product-audit-service";
 import { canReadJobSite, getResourceScope } from "./resource-scope-service";
+import { appendContextTimelineEvent } from "./context-timeline-service";
 import { parseEditableRecordStatus, parseJobSiteOperationalPhase, parseOptionalDateRange, rejectSensitiveFields } from "./worker-jobsite-validation";
 
-const JOBSITE_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
-const JOBSITE_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const JOBSITE_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const JOBSITE_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
 const jobSiteSelect = {
   id: true,
@@ -52,6 +54,19 @@ export interface UpdateJobSiteInput extends Record<string, unknown> {
   endDate?: unknown;
   notes?: unknown;
   operationalPhase?: unknown;
+}
+
+const JOB_SITE_PHASE_TRANSITIONS: Record<JobSiteOperationalPhase, readonly JobSiteOperationalPhase[]> = {
+  DRAFT: ["PREPARATION"],
+  PREPARATION: ["IN_PROGRESS"],
+  IN_PROGRESS: ["PAUSED", "CLOSING"],
+  PAUSED: ["IN_PROGRESS"],
+  CLOSING: ["COMPLETED"],
+  COMPLETED: ["PREPARATION"],
+};
+
+function parseTransitionReason(value: unknown) {
+  return trimOptionalText(value, "Motivazione transizione", 1000) ?? null;
 }
 
 function parseIdList(value: unknown, label: string) {
@@ -136,7 +151,7 @@ export async function createJobSite(input: CreateJobSiteInput) {
 
   const [managerMemberships, workers] = await Promise.all([
     managerUserIds.length
-      ? db.organizationMembership.findMany({ where: { organizationId, revokedAt: null, role: "SITE_MANAGER", userId: { in: managerUserIds } }, select: { userId: true } })
+      ? db.organizationMembership.findMany({ where: { organizationId, revokedAt: null, role: "COLLABORATOR", preset: "SITE_MANAGER", userId: { in: managerUserIds } }, select: { userId: true } })
       : Promise.resolve([]),
     workerIds.length
       ? db.worker.findMany({ where: { organizationId, archivedAt: null, id: { in: workerIds } }, select: { id: true } })
@@ -145,21 +160,34 @@ export async function createJobSite(input: CreateJobSiteInput) {
   if (managerMemberships.length !== managerUserIds.length) throw new AccessError("Uno o piu responsabili non sono disponibili per questa azienda.", 409);
   if (workers.length !== workerIds.length) throw new AccessError("Uno o piu lavoratori non sono disponibili per questa azienda.", 409);
 
-  const created = await db.jobSite.create({
-    data: {
+  const created = await db.$transaction(async (tx) => {
+    const jobSite = await tx.jobSite.create({
+      data: {
+        organizationId,
+        name,
+        address,
+        clientName,
+        status,
+        operationalPhase,
+        startDate: dates.resolvedStartDate,
+        endDate: dates.resolvedEndDate,
+        notes,
+        userAssignments: managerUserIds.length ? { create: managerUserIds.map((userId) => ({ organizationId, userId, assignmentRole: "SITE_MANAGER", assignedById: context.userId })) } : undefined,
+        workerAssignments: workerIds.length ? { create: workerIds.map((workerId) => ({ organizationId, workerId, assignedById: context.userId })) } : undefined,
+      },
+      select: { ...jobSiteSelect, userAssignments: { select: { id: true } }, workerAssignments: { select: { id: true } } },
+    });
+    await enqueueOperationalProcess({
       organizationId,
-      name,
-      address,
-      clientName,
-      status,
-      operationalPhase,
-      startDate: dates.resolvedStartDate,
-      endDate: dates.resolvedEndDate,
-      notes,
-      userAssignments: managerUserIds.length ? { create: managerUserIds.map((userId) => ({ organizationId, userId, assignmentRole: "SITE_MANAGER", assignedById: context.userId })) } : undefined,
-      workerAssignments: workerIds.length ? { create: workerIds.map((workerId) => ({ organizationId, workerId, assignedById: context.userId })) } : undefined,
-    },
-    select: { ...jobSiteSelect, userAssignments: { select: { id: true } }, workerAssignments: { select: { id: true } } },
+      type: "JOB_SITE_CREATED",
+      triggerKind: "JOB_SITE_CREATED",
+      idempotencyKey: `job-site:${jobSite.id}:created`,
+      context: { source: "workspace", change: "created" },
+      artifacts: [{ type: "JOB_SITE", id: jobSite.id, label: jobSite.name }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return jobSite;
   });
   const { userAssignments = [], workerAssignments = [], ...jobSite } = created;
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "job-site", resourceId: jobSite.id });
@@ -211,10 +239,28 @@ export async function updateJobSite(jobSiteId: string, input: UpdateJobSiteInput
   if (input.startDate !== undefined) data.startDate = dates.startDate ?? null;
   if (input.endDate !== undefined) data.endDate = dates.endDate ?? null;
   if (input.notes !== undefined) data.notes = trimOptionalText(input.notes, "Note cantiere", 4000) ?? null;
-  if (input.operationalPhase !== undefined && input.operationalPhase !== null) data.operationalPhase = parseJobSiteOperationalPhase(input.operationalPhase);
+  if (input.operationalPhase !== undefined && input.operationalPhase !== null) {
+    const requestedPhase = parseJobSiteOperationalPhase(input.operationalPhase);
+    if (requestedPhase !== existing.operationalPhase) {
+      throw new AccessError("Usa la transizione di fase dedicata per cambiare la fase operativa.", 409);
+    }
+  }
   if (!Object.keys(data).length) throw new AccessError("Nessun dato cantiere da aggiornare.", 409);
 
-  const jobSite = await db.jobSite.update({ where: { id: existing.id }, data, select: jobSiteSelect });
+  const jobSite = await db.$transaction(async (tx) => {
+    const updated = await tx.jobSite.update({ where: { id: existing.id }, data, select: jobSiteSelect });
+    await enqueueOperationalProcess({
+      organizationId,
+      type: "JOB_SITE_CREATED",
+      triggerKind: "JOB_SITE_UPDATED",
+      idempotencyKey: `job-site:${updated.id}:updated:${updated.updatedAt.toISOString()}`,
+      context: { source: "workspace", change: "updated" },
+      artifacts: [{ type: "JOB_SITE", id: updated.id, label: updated.name }],
+      actorUserId: context.userId,
+      actorRole,
+    }, tx);
+    return updated;
+  });
   await recordSupportAccess({ userId: context.userId, action: "WRITE", resourceType: "job-site", resourceId: jobSite.id });
   await recordProductAuditEventBestEffort({
     organizationId,
@@ -225,6 +271,84 @@ export async function updateJobSite(jobSiteId: string, input: UpdateJobSiteInput
     metadata: { nextStatus: jobSite.status, previousPhase: existing.operationalPhase, nextPhase: jobSite.operationalPhase },
   });
   return jobSite;
+}
+
+export async function transitionJobSiteOperationalPhase(jobSiteId: string, input: Record<string, unknown>) {
+  rejectSensitiveFields(input);
+  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("jobSites:update", JOBSITE_MANAGE_ROLES);
+  const scope = await getResourceScope(context);
+  const existing = await db.jobSite.findFirst({
+    where: { id: jobSiteId, organizationId, archivedAt: null },
+    select: { id: true, name: true, operationalPhase: true },
+  });
+  if (!existing || !canReadJobSite(scope, existing.id)) throw new AccessError("Cantiere non trovato.", 404);
+
+  const nextPhase = parseJobSiteOperationalPhase(input.nextPhase);
+  if (!JOB_SITE_PHASE_TRANSITIONS[existing.operationalPhase].includes(nextPhase)) {
+    throw new AccessError(`Transizione da ${existing.operationalPhase} a ${nextPhase} non consentita.`, 409);
+  }
+  const reason = parseTransitionReason(input.reason);
+  const reopening = existing.operationalPhase === "COMPLETED";
+  if (reopening && (actorRole !== "OWNER" || !reason)) {
+    throw new AccessError("La riapertura richiede Owner e una motivazione.", 403);
+  }
+
+  const shouldInspectBlockers = nextPhase === "IN_PROGRESS" || nextPhase === "COMPLETED";
+  const transitionTime = new Date();
+  const [openRequests, openChecklistItems, criticalDocuments, activeAssignments] = shouldInspectBlockers
+    ? await Promise.all([
+        db.operationalRequest.count({ where: { organizationId, targetType: "JOB_SITE", targetId: existing.id, status: { in: ["OPEN", "IN_PROGRESS"] } } }),
+        db.checklistItem.count({ where: { organizationId, status: { in: ["OPEN", "TO_REVIEW"] }, checklist: { jobSiteId: existing.id, archivedAt: null } } }),
+        db.document.count({
+          where: {
+            organizationId,
+            archivedAt: null,
+            status: { in: ["MISSING", "EXPIRED", "TO_REVIEW"] },
+            OR: [{ jobSiteId: existing.id }, { jobSiteLinks: { some: { jobSiteId: existing.id, unlinkedAt: null } } }],
+          },
+        }),
+        Promise.all([
+          db.jobSiteUserAssignment.count({ where: { organizationId, jobSiteId: existing.id, archivedAt: null, startsAt: { lte: transitionTime }, OR: [{ endsAt: null }, { endsAt: { gt: transitionTime } }] } }),
+          db.jobSiteWorkerAssignment.count({ where: { organizationId, jobSiteId: existing.id, archivedAt: null, startsAt: { lte: transitionTime }, OR: [{ endsAt: null }, { endsAt: { gt: transitionTime } }] } }),
+        ]).then(([users, workers]) => users + workers),
+      ])
+    : [0, 0, 0, 0];
+  const blockers = { openRequests, openChecklistItems, criticalDocuments, activeAssignments };
+  const hasBlockingItems = openRequests + openChecklistItems + criticalDocuments > 0;
+  const overrideConfirmed = input.overrideConfirmed === true;
+  if (hasBlockingItems && (!overrideConfirmed || actorRole !== "OWNER" || !reason)) {
+    throw new AccessError(
+      `La transizione ha elementi aperti (${openRequests} richieste, ${openChecklistItems} checklist, ${criticalDocuments} documenti). Solo un Owner puo confermare l'override con motivazione.`,
+      409,
+      "JOB_SITE_PHASE_BLOCKED",
+    );
+  }
+
+  const jobSite = await db.jobSite.update({
+    where: { id: existing.id },
+    data: { operationalPhase: nextPhase },
+    select: jobSiteSelect,
+  });
+  await appendContextTimelineEvent({
+    organizationId,
+    actorUserId: context.userId,
+    targetType: "JOB_SITE",
+    targetId: existing.id,
+    eventType: "JOB_SITE_PHASE_CHANGED",
+    eventKey: `job-site:${existing.id}:phase:${existing.operationalPhase}:${nextPhase}:${jobSite.updatedAt.toISOString()}`,
+    title: "Fase cantiere aggiornata",
+    summary: `Fase cantiere aggiornata da ${existing.operationalPhase} a ${nextPhase}.`,
+    metadata: { previousPhase: existing.operationalPhase, nextPhase, overrideConfirmed: hasBlockingItems && overrideConfirmed, reason },
+  });
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "JOB_SITE_PHASE_CHANGED",
+    entityType: "JOB_SITE",
+    entityId: jobSite.id,
+    metadata: { previousPhase: existing.operationalPhase, nextPhase, overrideConfirmed: hasBlockingItems && overrideConfirmed, reason },
+  });
+  return { jobSite, blockers };
 }
 
 export async function archiveJobSite(jobSiteId: string) {

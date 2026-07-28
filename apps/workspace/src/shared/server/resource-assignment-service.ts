@@ -9,19 +9,72 @@ import type {
   CreateJobSiteWorkerAssignmentInput,
   CreateWorkerUserLinkInput,
   JobSiteUserAssignmentResponse,
+  JobSiteUserAssignmentRole,
   JobSiteWorkerAssignmentResponse,
-  OrganizationRole,
+  OrganizationAccessPreset,
   WorkerUserLinkResponse,
 } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
-import { trimOptionalId } from "./document-domain-validation";
+import { isEnumValue, parseOptionalDate, trimOptionalId, trimOptionalText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { getResourceScope, toMyResourceScopeResponse } from "./resource-scope-service";
+import { appendContextTimelineEvent } from "./context-timeline-service";
 
-const ASSIGNMENT_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
-const ASSIGNMENT_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
-const MY_SCOPE_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const ASSIGNMENT_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const ASSIGNMENT_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const MY_SCOPE_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const JOB_SITE_USER_ASSIGNMENT_ROLES = ["SITE_MANAGER", "DOCUMENT_REVIEWER", "CONTRIBUTOR"] as const satisfies readonly JobSiteUserAssignmentRole[];
+
+const jobSiteUserAssignmentSelect = {
+  id: true,
+  jobSiteId: true,
+  userId: true,
+  assignmentRole: true,
+  operationalRoleLabel: true,
+  taskLabel: true,
+  startsAt: true,
+  endsAt: true,
+  endedById: true,
+  endReason: true,
+  assignedById: true,
+  createdAt: true,
+  updatedAt: true,
+  archivedAt: true,
+  jobSite: { select: { name: true } },
+  user: { select: { name: true, email: true } },
+} as const;
+
+const jobSiteWorkerAssignmentSelect = {
+  id: true,
+  jobSiteId: true,
+  workerId: true,
+  operationalRoleLabel: true,
+  taskLabel: true,
+  startsAt: true,
+  endsAt: true,
+  endedById: true,
+  endReason: true,
+  assignedById: true,
+  createdAt: true,
+  updatedAt: true,
+  archivedAt: true,
+  jobSite: { select: { name: true } },
+  worker: { select: { displayName: true, roleLabel: true } },
+} as const;
+
+function parseAssignmentRole(value: unknown): JobSiteUserAssignmentRole {
+  if (value === undefined) return "SITE_MANAGER";
+  if (!isEnumValue(JOB_SITE_USER_ASSIGNMENT_ROLES, value)) throw new AccessError("Ruolo operativo cantiere non valido.", 409);
+  return value;
+}
+
+function normalizeAssignmentPeriod(input: { startsAt?: unknown; endsAt?: unknown }) {
+  const startsAt = parseOptionalDate(input.startsAt, "Inizio assegnazione") ?? new Date();
+  const endsAt = parseOptionalDate(input.endsAt, "Fine assegnazione") ?? null;
+  if (endsAt && endsAt <= startsAt) throw new AccessError("La fine assegnazione deve essere successiva all'inizio.", 409);
+  return { startsAt, endsAt };
+}
 
 interface ListWorkerUserLinksInput {
   workerId?: unknown;
@@ -29,11 +82,28 @@ interface ListWorkerUserLinksInput {
 
 interface ListJobSiteUserAssignmentsInput {
   jobSiteId?: unknown;
+  includeHistory?: unknown;
 }
 
 interface ListJobSiteWorkerAssignmentsInput {
   jobSiteId?: unknown;
   workerId?: unknown;
+  includeHistory?: unknown;
+}
+
+function parseIncludeHistory(value: unknown) {
+  if (value === undefined) return false;
+  if (value === true || value === "true") return true;
+  if (value === false || value === "false") return false;
+  throw new AccessError("Filtro storico assegnazioni non valido.", 409);
+}
+
+function assignmentStatus(assignment: { startsAt?: Date | null; endsAt?: Date | null; archivedAt: Date | null }, now = new Date()) {
+  const startsAt = assignment.startsAt ?? now;
+  if (assignment.archivedAt) return assignment.endsAt && assignment.endsAt < startsAt ? "CANCELLED" as const : "ENDED" as const;
+  if (startsAt > now) return "SCHEDULED" as const;
+  if (assignment.endsAt && assignment.endsAt <= now) return "ENDED" as const;
+  return "ACTIVE" as const;
 }
 
 function parseRequiredId(value: unknown, label: string) {
@@ -46,8 +116,8 @@ function userLabel(user: { name: string | null; email: string }) {
   return user.name?.trim() || user.email;
 }
 
-function assertExpectedCompanyRole(role: OrganizationRole, expected: OrganizationRole, label: string) {
-  if (role !== expected) throw new AccessError(`${label} non disponibile per questa assegnazione.`, 409);
+function assertExpectedAccessPreset(preset: OrganizationAccessPreset | null, expected: OrganizationAccessPreset, label: string) {
+  if (preset !== expected) throw new AccessError(`${label} non disponibile per questa assegnazione.`, 409);
 }
 
 async function assertActiveWorker(organizationId: string, workerId: string) {
@@ -71,7 +141,7 @@ async function assertActiveJobSite(organizationId: string, jobSiteId: string) {
 async function assertActiveMembership(organizationId: string, userId: string) {
   const membership = await db.organizationMembership.findFirst({
     where: { organizationId, userId, revokedAt: null },
-    select: { id: true, role: true, user: { select: { id: true, name: true, email: true } } },
+    select: { id: true, role: true, preset: true, user: { select: { id: true, name: true, email: true } } },
   });
   if (!membership) throw new AccessError("Utente non disponibile per questa azienda.", 404);
   return membership;
@@ -106,7 +176,13 @@ function toJobSiteUserAssignmentResponse(assignment: {
   id: string;
   jobSiteId: string;
   userId: string;
-  assignmentRole: "SITE_MANAGER";
+  assignmentRole: JobSiteUserAssignmentRole;
+  operationalRoleLabel?: string | null;
+  taskLabel?: string | null;
+  startsAt?: Date | null;
+  endsAt?: Date | null;
+  endedById?: string | null;
+  endReason?: string | null;
   assignedById: string;
   createdAt: Date;
   updatedAt: Date;
@@ -119,6 +195,13 @@ function toJobSiteUserAssignmentResponse(assignment: {
     jobSiteId: assignment.jobSiteId,
     userId: assignment.userId,
     assignmentRole: assignment.assignmentRole,
+    assignmentStatus: assignmentStatus(assignment),
+    operationalRoleLabel: assignment.operationalRoleLabel ?? null,
+    taskLabel: assignment.taskLabel ?? null,
+    startsAt: (assignment.startsAt ?? assignment.createdAt).toISOString(),
+    endsAt: assignment.endsAt?.toISOString() ?? null,
+    endedById: assignment.endedById ?? null,
+    endReason: assignment.endReason ?? null,
     assignedById: assignment.assignedById,
     jobSiteName: assignment.jobSite.name,
     userLabel: userLabel(assignment.user),
@@ -134,6 +217,12 @@ function toJobSiteWorkerAssignmentResponse(assignment: {
   jobSiteId: string;
   workerId: string;
   assignedById: string;
+  operationalRoleLabel?: string | null;
+  taskLabel?: string | null;
+  startsAt?: Date | null;
+  endsAt?: Date | null;
+  endedById?: string | null;
+  endReason?: string | null;
   createdAt: Date;
   updatedAt: Date;
   archivedAt: Date | null;
@@ -145,9 +234,16 @@ function toJobSiteWorkerAssignmentResponse(assignment: {
     jobSiteId: assignment.jobSiteId,
     workerId: assignment.workerId,
     assignedById: assignment.assignedById,
+    assignmentStatus: assignmentStatus(assignment),
     jobSiteName: assignment.jobSite.name,
     workerDisplayName: assignment.worker.displayName,
     workerRoleLabel: assignment.worker.roleLabel,
+    operationalRoleLabel: assignment.operationalRoleLabel ?? null,
+    taskLabel: assignment.taskLabel ?? null,
+    startsAt: (assignment.startsAt ?? assignment.createdAt).toISOString(),
+    endsAt: assignment.endsAt?.toISOString() ?? null,
+    endedById: assignment.endedById ?? null,
+    endReason: assignment.endReason ?? null,
     createdAt: assignment.createdAt.toISOString(),
     updatedAt: assignment.updatedAt.toISOString(),
     archivedAt: assignment.archivedAt?.toISOString() ?? null,
@@ -183,7 +279,7 @@ export async function createWorkerUserLink(input: CreateWorkerUserLinkInput | Re
     assertActiveWorker(organizationId, workerId),
     assertActiveMembership(organizationId, userId),
   ]);
-  assertExpectedCompanyRole(membership.role, "WORKER", "Utente");
+  assertExpectedAccessPreset(membership.preset, "LIMITED_UPLOAD", "Utente");
 
   const duplicate = await db.workerUserLink.findFirst({
     where: { organizationId, archivedAt: null, OR: [{ workerId }, { userId }] },
@@ -249,20 +345,10 @@ export async function archiveWorkerUserLink(linkId: string): Promise<ArchiveWork
 export async function listJobSiteUserAssignments(input: ListJobSiteUserAssignmentsInput = {}) {
   const { organizationId } = await requireOrganizationDomainAccess("assignments:read", ASSIGNMENT_READ_ROLES);
   const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
+  const includeHistory = parseIncludeHistory(input.includeHistory);
   const assignments = await db.jobSiteUserAssignment.findMany({
-    where: { organizationId, archivedAt: null, ...(jobSiteId ? { jobSiteId } : {}) },
-    select: {
-      id: true,
-      jobSiteId: true,
-      userId: true,
-      assignmentRole: true,
-      assignedById: true,
-      createdAt: true,
-      updatedAt: true,
-      archivedAt: true,
-      jobSite: { select: { name: true } },
-      user: { select: { name: true, email: true } },
-    },
+    where: { organizationId, ...(includeHistory ? {} : { archivedAt: null }), ...(jobSiteId ? { jobSiteId } : {}) },
+    select: jobSiteUserAssignmentSelect,
     orderBy: [{ createdAt: "desc" }],
   });
   return assignments.map(toJobSiteUserAssignmentResponse);
@@ -272,30 +358,29 @@ export async function createJobSiteUserAssignment(input: CreateJobSiteUserAssign
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("assignments:manage", ASSIGNMENT_MANAGE_ROLES);
   const jobSiteId = parseRequiredId(input.jobSiteId, "Cantiere");
   const userId = parseRequiredId(input.userId, "Utente");
+  const assignmentRole = parseAssignmentRole(input.assignmentRole);
+  const operationalRoleLabel = trimOptionalText(input.operationalRoleLabel, "Ruolo operativo", 120) ?? null;
+  const taskLabel = trimOptionalText(input.taskLabel, "Mansione", 160) ?? null;
+  const period = normalizeAssignmentPeriod(input);
   await assertActiveJobSite(organizationId, jobSiteId);
   const membership = await assertActiveMembership(organizationId, userId);
-  assertExpectedCompanyRole(membership.role, "SITE_MANAGER", "Utente");
+  const expectedPreset: OrganizationAccessPreset = assignmentRole === "SITE_MANAGER"
+    ? "SITE_MANAGER"
+    : assignmentRole === "DOCUMENT_REVIEWER"
+      ? "DOCUMENT_REVIEWER"
+      : "OPERATIONAL_COLLABORATION";
+  assertExpectedAccessPreset(membership.preset, expectedPreset, "Utente");
 
   const duplicate = await db.jobSiteUserAssignment.findFirst({
-    where: { organizationId, jobSiteId, userId, assignmentRole: "SITE_MANAGER", archivedAt: null },
+    where: { organizationId, jobSiteId, userId, assignmentRole, archivedAt: null },
     select: { id: true },
   });
   if (duplicate) throw new AccessError("Cantiere gia assegnato a questo utente.", 409);
 
-  const assignment = await db.jobSiteUserAssignment.create({
-    data: { organizationId, jobSiteId, userId, assignmentRole: "SITE_MANAGER", assignedById: context.userId },
-    select: {
-      id: true,
-      jobSiteId: true,
-      userId: true,
-      assignmentRole: true,
-      assignedById: true,
-      createdAt: true,
-      updatedAt: true,
-      archivedAt: true,
-      jobSite: { select: { name: true } },
-      user: { select: { name: true, email: true } },
-    },
+  const assignment = await db.$transaction(async (tx) => {
+    const created = await tx.jobSiteUserAssignment.create({ data: { organizationId, jobSiteId, userId, assignmentRole, operationalRoleLabel, taskLabel, ...period, assignedById: context.userId }, select: jobSiteUserAssignmentSelect });
+    await appendContextTimelineEvent({ organizationId, eventKey: `job-site-user-assignment:${created.id}:started`, targetType: "JOB_SITE", targetId: jobSiteId, eventType: "ASSIGNMENT_STARTED", title: "Assegnazione utente registrata", summary: operationalRoleLabel || taskLabel || assignmentRole, metadata: { assignmentId: created.id, userId, startsAt: created.startsAt }, actorUserId: context.userId, actorRole, sourceType: "USER_ACTION", sourceId: created.id }, tx);
+    return created;
   });
   await recordProductAuditEventBestEffort({
     organizationId,
@@ -310,23 +395,15 @@ export async function createJobSiteUserAssignment(input: CreateJobSiteUserAssign
 
 export async function archiveJobSiteUserAssignment(assignmentId: string): Promise<ArchiveJobSiteUserAssignmentResponse> {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("assignments:manage", ASSIGNMENT_MANAGE_ROLES);
-  const existing = await db.jobSiteUserAssignment.findFirst({ where: { id: assignmentId, organizationId, archivedAt: null }, select: { id: true } });
+  const existing = await db.jobSiteUserAssignment.findFirst({ where: { id: assignmentId, organizationId, archivedAt: null }, select: { id: true, jobSiteId: true, startsAt: true } });
   if (!existing) throw new AccessError("Assegnazione cantiere non trovata.", 404);
-  const assignment = await db.jobSiteUserAssignment.update({
-    where: { id: existing.id },
-    data: { archivedAt: new Date() },
-    select: {
-      id: true,
-      jobSiteId: true,
-      userId: true,
-      assignmentRole: true,
-      assignedById: true,
-      createdAt: true,
-      updatedAt: true,
-      archivedAt: true,
-      jobSite: { select: { name: true } },
-      user: { select: { name: true, email: true } },
-    },
+  const endedAt = new Date();
+  const cancelled = existing.startsAt > endedAt;
+  const endReason = cancelled ? "Assegnazione pianificata annullata manualmente." : "Assegnazione conclusa manualmente.";
+  const assignment = await db.$transaction(async (tx) => {
+    const updated = await tx.jobSiteUserAssignment.update({ where: { id: existing.id }, data: { endsAt: endedAt, endedById: context.userId, endReason, archivedAt: endedAt }, select: jobSiteUserAssignmentSelect });
+    await appendContextTimelineEvent({ organizationId, eventKey: `job-site-user-assignment:${updated.id}:ended`, targetType: "JOB_SITE", targetId: existing.jobSiteId, eventType: "ASSIGNMENT_ENDED", title: cancelled ? "Assegnazione utente annullata" : "Assegnazione utente conclusa", summary: endReason, metadata: { assignmentId: updated.id, userId: updated.userId }, actorUserId: context.userId, actorRole, sourceType: "USER_ACTION", sourceId: updated.id }, tx);
+    return updated;
   });
   await recordProductAuditEventBestEffort({
     organizationId,
@@ -343,24 +420,15 @@ export async function listJobSiteWorkerAssignments(input: ListJobSiteWorkerAssig
   const { organizationId } = await requireOrganizationDomainAccess("assignments:read", ASSIGNMENT_READ_ROLES);
   const jobSiteId = trimOptionalId(input.jobSiteId, "Cantiere");
   const workerId = trimOptionalId(input.workerId, "Lavoratore");
+  const includeHistory = parseIncludeHistory(input.includeHistory);
   const assignments = await db.jobSiteWorkerAssignment.findMany({
     where: {
       organizationId,
-      archivedAt: null,
+      ...(includeHistory ? {} : { archivedAt: null }),
       ...(jobSiteId ? { jobSiteId } : {}),
       ...(workerId ? { workerId } : {}),
     },
-    select: {
-      id: true,
-      jobSiteId: true,
-      workerId: true,
-      assignedById: true,
-      createdAt: true,
-      updatedAt: true,
-      archivedAt: true,
-      jobSite: { select: { name: true } },
-      worker: { select: { displayName: true, roleLabel: true } },
-    },
+    select: jobSiteWorkerAssignmentSelect,
     orderBy: [{ createdAt: "desc" }],
   });
   return assignments.map(toJobSiteWorkerAssignmentResponse);
@@ -370,6 +438,9 @@ export async function createJobSiteWorkerAssignment(input: CreateJobSiteWorkerAs
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("assignments:manage", ASSIGNMENT_MANAGE_ROLES);
   const jobSiteId = parseRequiredId(input.jobSiteId, "Cantiere");
   const workerId = parseRequiredId(input.workerId, "Lavoratore");
+  const operationalRoleLabel = trimOptionalText(input.operationalRoleLabel, "Ruolo operativo", 120) ?? null;
+  const taskLabel = trimOptionalText(input.taskLabel, "Mansione", 160) ?? null;
+  const period = normalizeAssignmentPeriod(input);
   await Promise.all([assertActiveJobSite(organizationId, jobSiteId), assertActiveWorker(organizationId, workerId)]);
 
   const duplicate = await db.jobSiteWorkerAssignment.findFirst({
@@ -378,19 +449,10 @@ export async function createJobSiteWorkerAssignment(input: CreateJobSiteWorkerAs
   });
   if (duplicate) throw new AccessError("Cantiere gia assegnato a questo lavoratore.", 409);
 
-  const assignment = await db.jobSiteWorkerAssignment.create({
-    data: { organizationId, jobSiteId, workerId, assignedById: context.userId },
-    select: {
-      id: true,
-      jobSiteId: true,
-      workerId: true,
-      assignedById: true,
-      createdAt: true,
-      updatedAt: true,
-      archivedAt: true,
-      jobSite: { select: { name: true } },
-      worker: { select: { displayName: true, roleLabel: true } },
-    },
+  const assignment = await db.$transaction(async (tx) => {
+    const created = await tx.jobSiteWorkerAssignment.create({ data: { organizationId, jobSiteId, workerId, operationalRoleLabel, taskLabel, ...period, assignedById: context.userId }, select: jobSiteWorkerAssignmentSelect });
+    await appendContextTimelineEvent({ organizationId, eventKey: `job-site-worker-assignment:${created.id}:started`, targetType: "JOB_SITE", targetId: jobSiteId, eventType: "ASSIGNMENT_STARTED", title: "Assegnazione lavoratore registrata", summary: operationalRoleLabel || taskLabel || created.worker.displayName, metadata: { assignmentId: created.id, workerId, startsAt: created.startsAt }, actorUserId: context.userId, actorRole, sourceType: "USER_ACTION", sourceId: created.id }, tx);
+    return created;
   });
   await recordProductAuditEventBestEffort({
     organizationId,
@@ -405,22 +467,15 @@ export async function createJobSiteWorkerAssignment(input: CreateJobSiteWorkerAs
 
 export async function archiveJobSiteWorkerAssignment(assignmentId: string): Promise<ArchiveJobSiteWorkerAssignmentResponse> {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("assignments:manage", ASSIGNMENT_MANAGE_ROLES);
-  const existing = await db.jobSiteWorkerAssignment.findFirst({ where: { id: assignmentId, organizationId, archivedAt: null }, select: { id: true } });
+  const existing = await db.jobSiteWorkerAssignment.findFirst({ where: { id: assignmentId, organizationId, archivedAt: null }, select: { id: true, jobSiteId: true, startsAt: true } });
   if (!existing) throw new AccessError("Assegnazione lavoratore-cantiere non trovata.", 404);
-  const assignment = await db.jobSiteWorkerAssignment.update({
-    where: { id: existing.id },
-    data: { archivedAt: new Date() },
-    select: {
-      id: true,
-      jobSiteId: true,
-      workerId: true,
-      assignedById: true,
-      createdAt: true,
-      updatedAt: true,
-      archivedAt: true,
-      jobSite: { select: { name: true } },
-      worker: { select: { displayName: true, roleLabel: true } },
-    },
+  const endedAt = new Date();
+  const cancelled = existing.startsAt > endedAt;
+  const endReason = cancelled ? "Assegnazione pianificata annullata manualmente." : "Assegnazione conclusa manualmente.";
+  const assignment = await db.$transaction(async (tx) => {
+    const updated = await tx.jobSiteWorkerAssignment.update({ where: { id: existing.id }, data: { endsAt: endedAt, endedById: context.userId, endReason, archivedAt: endedAt }, select: jobSiteWorkerAssignmentSelect });
+    await appendContextTimelineEvent({ organizationId, eventKey: `job-site-worker-assignment:${updated.id}:ended`, targetType: "JOB_SITE", targetId: existing.jobSiteId, eventType: "ASSIGNMENT_ENDED", title: cancelled ? "Assegnazione lavoratore annullata" : "Assegnazione lavoratore conclusa", summary: endReason, metadata: { assignmentId: updated.id, workerId: updated.workerId }, actorUserId: context.userId, actorRole, sourceType: "USER_ACTION", sourceId: updated.id }, tx);
+    return updated;
   });
   await recordProductAuditEventBestEffort({
     organizationId,
@@ -435,7 +490,6 @@ export async function archiveJobSiteWorkerAssignment(assignmentId: string): Prom
 
 export async function getMyResourceScope() {
   const scope = await getResourceScope();
-  if (!(MY_SCOPE_ROLES as readonly OrganizationRole[]).includes(scope.actorRole)) throw new AccessError("Risorsa non disponibile.", 404);
   return toMyResourceScopeResponse(scope);
 }
 
@@ -453,8 +507,8 @@ export async function getResourceAssignmentOptions() {
       orderBy: [{ name: "asc" }],
     }),
     db.organizationMembership.findMany({
-      where: { organizationId, revokedAt: null, role: { in: ["SITE_MANAGER", "WORKER"] } },
-      select: { role: true, user: { select: { id: true, name: true, email: true } } },
+      where: { organizationId, revokedAt: null, role: "COLLABORATOR", preset: { in: ["SITE_MANAGER", "LIMITED_UPLOAD"] } },
+      select: { role: true, preset: true, user: { select: { id: true, name: true, email: true } } },
       orderBy: [{ createdAt: "asc" }],
     }),
   ]);
@@ -465,7 +519,7 @@ export async function getResourceAssignmentOptions() {
       id: membership.user.id,
       label: userLabel(membership.user),
       email: membership.user.email,
-      role: membership.role,
+      role: membership.preset === "SITE_MANAGER" ? "SITE_MANAGER" : membership.preset === "LIMITED_UPLOAD" ? "WORKER" : membership.role,
     })),
   };
 }
@@ -477,7 +531,8 @@ export async function getWorkerUserLinkOptions(workerId: string) {
     where: {
       organizationId,
       revokedAt: null,
-      role: "WORKER",
+      role: "COLLABORATOR",
+      preset: "LIMITED_UPLOAD",
       user: { workerUserLinks: { none: { organizationId, archivedAt: null } } },
     },
     select: { user: { select: { id: true, name: true, email: true } } },

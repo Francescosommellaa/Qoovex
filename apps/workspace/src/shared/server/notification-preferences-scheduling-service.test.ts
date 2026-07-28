@@ -127,7 +127,7 @@ beforeEach(() => {
 
 describe("notification preferences", () => {
   it("lets owner, admin and safety consultant read safe default preferences", async () => {
-    for (const role of ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const) {
+    for (const role of ["OWNER", "COLLABORATOR"] as const) {
       setRole(role);
       await expect(getNotificationPreference()).resolves.toMatchObject({
         emailDigestEnabled: false,
@@ -146,11 +146,9 @@ describe("notification preferences", () => {
     }));
   });
 
-  it("denies site manager, worker and destinatario esterno preferences", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER"] as const) {
-      setRole(role);
-      await expect(getNotificationPreference()).rejects.toMatchObject({ status: 404 });
-    }
+  it("keeps collaborator preferences permission-driven", async () => {
+    setRole("COLLABORATOR");
+    await expect(getNotificationPreference()).resolves.toMatchObject({ emailDigestFrequency: "OFF" });
   });
 
   it("validates preference updates and rejects client-owned fields", async () => {
@@ -242,7 +240,7 @@ describe("scheduled email digest service", () => {
         organizationId: "org-1",
         userId: "user-1",
         revokedAt: null,
-        role: { in: ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] },
+        role: { in: ["OWNER", "COLLABORATOR"] },
       },
     }));
     expect(mocks.sendTransactionalEmail).toHaveBeenCalledWith(expect.objectContaining({

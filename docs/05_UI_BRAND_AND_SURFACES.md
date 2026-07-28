@@ -2,50 +2,30 @@
 
 ## Stato attuale verificato
 
-Qoovex usa la foundation derivata da `Kiranism/next-shadcn-dashboard-starter` al commit `0edc5cf631ac7a8280112fd2bcb80312597bafdf`: shadcn `base-nova`, Base UI, Tabler Icons, Tailwind CSS v4 CSS-first, Geist/Geist Mono e tema Vercel light/dark/system. Provenienza e licenze sono in `packages/ui/THIRD_PARTY_NOTICES.md`.
+La direzione grafica e invariata. Qoovex usa shadcn `base-nova`, Base UI, Tabler Icons, Tailwind CSS v4 CSS-first, Geist/Geist Mono e tema Vercel light/dark/system. Token, font, tema, iconografia, motion e stile base non sono stati modificati. `packages/ui` aggiunge solo primitive generiche per search field/results, timeline e work queue; `apps/sirio` ne dimostra loading, empty, error, timeline lunga, ricerca multi-tipo e review.
 
-`packages/ui` e la foundation condivisa implementata per token, CSS base, primitive, tema, hook e utility. Sirio, Web e Workspace importano subpath espliciti; layout e composizioni dominio restano app-locali. `packages/brand-resources` espone soltanto SVG proprietari.
+Il Workspace usa una sola shell adattiva. La navigazione primaria contiene soltanto destinazioni autorizzate. `Cerca` e un controllo separato che apre un modale consultivo (`Ctrl/Cmd+K`) e non una pagina o una voce primaria. La card `Azioni rapide`, nel footer sopra l'account, espone le principali mutazioni manuali derivate dai permessi; desktop usa una riga compatta, sidebar collassata una colonna e mobile una griglia 2x2. Notifiche, account e tema mantengono la collocazione esistente.
 
-Contratti trasversali implementati:
+In locale, un solo dropdown nella topbar passa tra le viste `Owner`, `Support Agent` e `Platform Admin`; il vecchio banner di cambio vista e stato eliminato. Il profilo dev e il comando `Accedi come dev` restano invariati. La sezione Accessi usa un invito progressivo in quattro passaggi con preset, scope `FULL/ASSIGNED`, risorse selezionate, permessi raggruppati e riepilogo; la modifica di un Collaborator mostra differenze prima della conferma.
 
-- `Button` e action-only; link e navigazione usano elementi reali e `buttonVariants` quando necessario;
-- link `inline`, `quiet` e `plain` distinguono contenuto, azione testuale e navigazione;
-- testo operativo ed editoriale resta selezionabile; immagini, marchio e mockup possono disabilitare la selezione accidentale;
-- scrollbar nativa condivisa con fallback touch e forced-colors;
-- focus visibile, tastiera, touch, zoom 200%, contenuti lunghi, reduced motion e forced colors sono requisiti;
-- motion limitata a orientamento e feedback; nessuna libreria visuale parallela;
-- copy prudente: presente, mancante, in scadenza, da verificare, pronto per revisione.
+Sirio include la prova `/dashboard/operational-workspace` per profilo, cantiere, prova mobile, richieste, review pacchetto e timeline. Workspace promuove il profilo azienda in `/settings/organization-profile`, la state machine e il lavoro contestuale nel dettaglio cantiere, e gli stati di revisione su versioni e prove. Le sette sezioni del cantiere, la ricerca modal-only, le notifiche topbar e le azioni rapide restano invariati.
 
-Web contiene marketing e pagine legali; Sirio e il catalogo/proof. Le superfici auth Workspace condividono primitive approvate, incluse PasswordInput, OtpInput, Dialog e Sheet, senza spostare logica auth nel package UI.
+`/dashboard` conserva compatibilita URL ma presenta “Centro operativo”. L'ingresso universale responsive apre i flussi controllati esistenti; `/operations/[processId]` mostra stato reale, step, timeline, decisioni, eccezioni e artifact. Le viste di dominio restano controllo avanzato.
 
-La UI Workspace attuale usa una shell role-aware con topbar, notifiche, tema, breadcrumb, gruppi Documenti/Persone/Cantieri, Calendario, Preferiti e Azioni rapide. `Da fare` mostra la coda situation-centric. Ricerca e Analisi sono disabilitate e marcate come non disponibili. Le viste complete di documenti, persone, cantieri, calendario, scadenze, checklist, prove, pacchetti, archivi e impostazioni esistono come superfici operative o avanzate.
-
-I Dialog contestuali preservano route, permessi e resource scope. Le viste archivio mantengono conferme distruttive; le superfici non azionabili non simulano hover o navigazione. Notifiche e contatore restano nella topbar.
+Le nuove composizioni usano esclusivamente primitive canoniche gia presenti. Restano vincolanti focus visibile, tastiera, touch, zoom 200%, contenuti lunghi, reduced motion, forced colors, light/dark/system e nessuna capability simulata.
 
 ## Direzione approvata
 
-La direzione target non e una collezione di moduli CRUD coordinati dalla sidebar:
+La UI primaria resta exception-driven: problema, motivo, prossimo passo e attore autorizzato sono visibili nello stesso contesto. Progressi e risultati derivano dallo stato persistito; non vengono inventate percentuali o metriche.
 
-- `Da fare` evolve nel centro operativo con decisioni, processi in corso, blocchi e risultati;
-- un ingresso universale per file, foto, informazioni, lavoratori e cantieri sostituisce le azioni rapide globali;
-- Preferiti non resta un secondo sistema primario di navigazione prima di una ricerca universale reale;
-- viste documentali, profili, calendario, checklist, prove, pacchetti, archivi, accessi e configurazioni diventano dettaglio avanzato o contestuale;
-- le azioni ricevono il contesto dal processo o dalla risorsa aperta e chiedono soltanto informazioni realmente mancanti;
-- ogni eccezione mostra problema, motivo, conseguenza, proposta, attore autorizzato, azione primaria e condizione di ripresa;
-- progressi e risultati provengono da stato reale: nessuna percentuale, metrica o capability simulata.
+## Specifiche non implementate
 
-Il centro operativo dovra coprire loading, vuoto, errore, retry, waiting, blocked, failed, completed, permesso insufficiente, contenuto lungo e stati responsive/accessibili. La timeline deve essere leggibile ma minimizzata e separata dall'audit tecnico.
-
-## Specifiche concettuali non implementate
-
-Ingresso universale, ricerca universale, cronologia di processo, viste `In corso`, eccezioni persistenti e decisioni inline non esistono oggi. I blueprint Documento/Lavoratore/Cantiere/Controllo continuo non autorizzano redesign, componenti, route o payload.
-
-Qualunque futura implementazione UI segue il workflow Qoovex Sirio-first e richiede approvazione separata prima della promozione in Workspace. La foundation, accessibilita, ruoli, API, Prisma e Blob non cambiano per effetto di questa documentazione.
+Ricerca nei file o semantica, OCR/AI, viste salvate, nuovi canali di intake e visual editor non sono attivi. La ricerca Fase 4 e consultiva e limitata ai metadati autorizzati.
 
 ## Decisioni aperte e hard stop
 
-Restano da decidere IA finale, naming delle viste, ricerca, canali di ingresso, ruoli per decisione, soglie, annullamento, sensibilita e disclosure. Non rimuovere route o flussi attuali finche una migrazione prodotto approvata non garantisce compatibilita e controllo avanzato.
+Ricerca nei file o semantica, viste salvate/cronologia, nuovi canali, disclosure sensibile e modifiche alle primitive o alla foundation richiedono approvazione. Non adottare Satoshi, Chillax, Phosphor o una foundation visuale parallela.
 
-## Verifica visuale futura
+## Verifica visuale
 
-Le modifiche UI reali richiederanno Sirio, viewport 320/390/768/1024/1440, light/dark/system, zoom 200%, tastiera, touch, focus, reduced motion, forced colors, hydration, console e overflow. Questa task documentale non modifica superfici e non richiede browser proof.
+Le superfici operative devono essere provate a 320/390/768/1024/1440, light/dark/system, zoom 200%, tastiera, touch, reduced motion, forced colors, hydration, console e overflow prima di una dichiarazione di release.

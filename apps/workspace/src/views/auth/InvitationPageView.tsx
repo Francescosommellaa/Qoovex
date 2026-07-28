@@ -15,10 +15,7 @@ import { AuthPageShell, AuthStage } from "./AuthPageShell";
 import styles from "./AuthPages.module.css";
 
 const roleLabels: Record<Exclude<OrganizationRole, "OWNER">, string> = {
-  ADMIN: "Amministratore",
-  SAFETY_CONSULTANT: "Consulente sicurezza",
-  SITE_MANAGER: "Responsabile cantiere",
-  WORKER: "Lavoratore",
+  COLLABORATOR: "Collaboratore",
 };
 
 function invitationCallbackUrl(token: string) {
@@ -74,6 +71,7 @@ export function InvitationAcceptancePageView({
 }) {
   const [loading, setLoading] = useState(false);
   const [accepted, setAccepted] = useState(false);
+  const [declined, setDeclined] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function accept() {
@@ -96,6 +94,20 @@ export function InvitationAcceptancePageView({
     setAccepted(true);
   }
 
+  async function decline() {
+    setLoading(true);
+    setError(null);
+    const response = await fetch("/api/organization/invitations/accept", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
+    const body = await response.json().catch(() => null) as { message?: string } | null;
+    setLoading(false);
+    if (!response.ok) return setError(body?.message ?? "Rifiuto dell'invito non riuscito.");
+    setDeclined(true);
+  }
+
   if (accepted) {
     return (
       <AuthPageShell
@@ -108,6 +120,14 @@ export function InvitationAcceptancePageView({
           <Alert role="status" variant="success"><IconCircleCheck /><AlertDescription>La tua associazione all’Azienda è stata aggiornata.</AlertDescription></Alert>
           <Link className={cn(buttonVariants(), "mt-5 h-11 w-full")} href="/sign-in?callbackUrl=%2Fdashboard">Accedi al workspace <IconArrowRight data-icon="inline-end" /></Link>
         </AuthStage>
+      </AuthPageShell>
+    );
+  }
+
+  if (declined) {
+    return (
+      <AuthPageShell description={<p>L'invito a <strong>{organizationName}</strong> non e piu utilizzabile. Nessun accesso e stato aggiunto.</p>} kicker="Invito rifiutato" title="Invito rifiutato" titleId="invitation-declined-title">
+        <AuthStage><Link className={cn(buttonVariants({ variant: "outline" }), "h-11 w-full")} href="/dashboard">Torna al workspace</Link></AuthStage>
       </AuthPageShell>
     );
   }
@@ -130,7 +150,7 @@ export function InvitationAcceptancePageView({
           <Button className="h-11 active:scale-[0.985]" disabled={loading} onClick={accept} type="button">
             {loading ? <><Spinner /> Accettazione in corso</> : <>Accetta e continua <IconArrowRight data-icon="inline-end" /></>}
           </Button>
-          <Link className={cn(buttonVariants({ variant: "outline" }), "h-11")} href="/dashboard">Non accettare</Link>
+          <Button className="h-11" disabled={loading} onClick={() => void decline()} type="button" variant="outline">Rifiuta invito</Button>
         </div>
       </AuthStage>
     </AuthPageShell>

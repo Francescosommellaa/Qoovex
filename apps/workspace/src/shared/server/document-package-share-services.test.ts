@@ -1,365 +1,178 @@
-import type { OrganizationRole } from "@qoovex/types";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-
-const mocks = vi.hoisted(() => ({
-  db: {
-    documentPackage: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
-    documentPackageItem: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn() },
-    shareLink: { findMany: vi.fn(), findFirst: vi.fn(), findUnique: vi.fn(), create: vi.fn(), update: vi.fn() },
-    jobSite: { findFirst: vi.fn() },
-    document: { findFirst: vi.fn() },
-    documentVersion: { findFirst: vi.fn() },
-    evidence: { findFirst: vi.fn() },
-    checklist: { findFirst: vi.fn() },
-    $transaction: vi.fn(),
-  },
-  getWorkspaceAccessContext: vi.fn(),
-  getContextOrganizationId: vi.fn(),
-  requirePermission: vi.fn(),
-  recordSupportAccess: vi.fn(),
-  getPrivateBlob: vi.fn(),
-}));
+import { describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
-vi.mock("@qoovex/db", () => ({ db: mocks.db }));
-vi.mock("@shared/server/access-errors", () => ({
-  AccessError: class AccessError extends Error {
-    constructor(message: string, public readonly status: 401 | 403 | 404 | 409 | 410) {
-      super(message);
-      this.name = "AccessError";
-    }
-  },
-}));
-vi.mock("@shared/server/access-context-service", () => ({
-  getWorkspaceAccessContext: mocks.getWorkspaceAccessContext,
-  getContextOrganizationId: mocks.getContextOrganizationId,
-  requirePermission: mocks.requirePermission,
-}));
-vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
-vi.mock("./blob-storage-service", () => ({ getPrivateBlob: mocks.getPrivateBlob }));
+vi.mock("@qoovex/db", () => ({ db: {} }));
+vi.mock("@shared/server/domain-access-service", () => ({ requireOrganizationDomainAccess: vi.fn() }));
+vi.mock("@shared/server/operational-process-service", () => ({ enqueueOperationalProcess: vi.fn() }));
+vi.mock("@shared/server/product-audit-service", () => ({ auditActorFromContext: vi.fn() }));
+vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: vi.fn() }));
 
-import {
-  addDocumentPackageItem,
-  archiveDocumentPackage,
-  createDocumentPackage,
-  getDocumentPackage,
-  listDocumentPackages,
-  listDocumentPackagesWithDetails,
-  removeDocumentPackageItem,
-  updateDocumentPackageItem,
-} from "./document-package-service";
-import { createShareLink, listShareLinks, revokeShareLink } from "./share-link-service";
+import { buildDocumentPackageRevisionManifest } from "./document-package-share-proposal-service";
 import { hashShareToken } from "./share-token-service";
-import { getSharedDocumentPackage, getSharedPackageItemDownload } from "./shared-package-access-service";
 
-const now = new Date("2026-07-01T10:00:00.000Z");
-const future = new Date("2030-07-08T10:00:00.000Z");
+const now = new Date("2026-07-27T10:00:00.000Z");
 
-const packageRecord = {
-  id: "package-1",
-  organizationId: "org-1",
-  jobSiteId: "jobsite-1",
-  title: "Pacchetto ingresso",
-  description: null,
-  status: "DRAFT",
-  createdById: "user-1",
-  createdAt: now,
-  updatedAt: now,
-  archivedAt: null,
-};
-
-const itemRecord = {
-  id: "item-1",
-  organizationId: "org-1",
-  documentPackageId: "package-1",
-  itemType: "DOCUMENT_VERSION",
-  documentId: null,
-  documentVersionId: "version-1",
-  evidenceId: null,
-  checklistId: null,
-  note: null,
-  position: 0,
-  createdAt: now,
-};
-
-const shareLinkRecord = {
-  id: "share-1",
-  organizationId: "org-1",
-  documentPackageId: "package-1",
-  expiresAt: future,
-  revokedAt: null,
-  createdById: "user-1",
-  createdAt: now,
-  lastAccessedAt: null,
-};
-
-function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
-  for (const method of Object.values(model)) method.mockReset();
+function packageRecord(overrides: Record<string, unknown> = {}) {
+  return {
+    id: "package-1",
+    organizationId: "org-1",
+    title: "Pacchetto ingresso",
+    description: "Condivisione controllata",
+    status: "DRAFT" as const,
+    updatedAt: now,
+    archivedAt: null,
+    items: [],
+    ...overrides,
+  };
 }
 
-function setRole(role: OrganizationRole) {
-  mocks.getWorkspaceAccessContext.mockResolvedValue({
-    userId: "user-1",
-    platformRole: "USER",
-    company: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
-    support: null,
-    permissions: [],
-  });
-}
-
-beforeEach(() => {
-  resetModel(mocks.db.documentPackage);
-  resetModel(mocks.db.documentPackageItem);
-  resetModel(mocks.db.shareLink);
-  resetModel(mocks.db.jobSite);
-  resetModel(mocks.db.document);
-  resetModel(mocks.db.documentVersion);
-  resetModel(mocks.db.evidence);
-  resetModel(mocks.db.checklist);
-  mocks.db.$transaction.mockReset();
-  mocks.getWorkspaceAccessContext.mockReset();
-  mocks.getContextOrganizationId.mockReset();
-  mocks.requirePermission.mockReset();
-  mocks.recordSupportAccess.mockReset();
-  mocks.getPrivateBlob.mockReset();
-
-  mocks.getContextOrganizationId.mockReturnValue("org-1");
-  mocks.requirePermission.mockImplementation(() => undefined);
-  mocks.recordSupportAccess.mockResolvedValue(undefined);
-  mocks.db.jobSite.findFirst.mockResolvedValue({ id: "jobsite-1" });
-  mocks.db.documentPackage.findFirst.mockResolvedValue({ ...packageRecord, items: [] });
-  mocks.db.document.findFirst.mockResolvedValue({ id: "document-1" });
-  mocks.db.documentVersion.findFirst.mockResolvedValue({
-    id: "version-1",
-    blobKey: "organizations/org-1/documents/document-1/versions/version-1/file.pdf",
-    originalFileName: "file.pdf",
-    mimeType: "application/pdf",
-    size: 12,
-  });
-  mocks.db.evidence.findFirst.mockResolvedValue({
-    id: "evidence-1",
-    blobKey: "organizations/org-1/evidence/evidence-1/foto.png",
-    originalFileName: "foto.png",
-    mimeType: "image/png",
-    size: 4,
-  });
-  mocks.db.checklist.findFirst.mockResolvedValue({ id: "checklist-1" });
-  mocks.db.documentPackageItem.findFirst.mockResolvedValue(null);
-  mocks.db.$transaction.mockImplementation(async (callback) => callback(mocks.db));
-  setRole("OWNER");
-});
-
-describe("document package service", () => {
-  it("lets owners create, read, update item positions and archive packages", async () => {
-    mocks.db.documentPackage.create.mockResolvedValue(packageRecord);
-    mocks.db.documentPackage.findMany.mockResolvedValue([packageRecord]);
-    mocks.db.documentPackage.findFirst
-      .mockResolvedValueOnce({ ...packageRecord, items: [itemRecord] })
-      .mockResolvedValue(packageRecord);
-    mocks.db.documentPackage.update.mockResolvedValue({ ...packageRecord, status: "ARCHIVED", archivedAt: now });
-    mocks.db.documentPackageItem.findFirst.mockResolvedValue(itemRecord);
-    mocks.db.documentPackageItem.update.mockResolvedValue({ ...itemRecord, position: 2 });
-
-    await expect(createDocumentPackage({ title: " Pacchetto ingresso ", jobSiteId: "jobsite-1" })).resolves.toMatchObject({ title: "Pacchetto ingresso" });
-    await expect(listDocumentPackages()).resolves.toEqual([packageRecord]);
-    await expect(getDocumentPackage("package-1")).resolves.toMatchObject({ items: [itemRecord] });
-    await expect(updateDocumentPackageItem("package-1", "item-1", { position: 2 })).resolves.toMatchObject({ position: 2 });
-    await expect(archiveDocumentPackage("package-1")).resolves.toMatchObject({ status: "ARCHIVED" });
-
-    expect(mocks.db.documentPackage.findMany).toHaveBeenCalledWith(expect.objectContaining({
-      where: { organizationId: "org-1", archivedAt: null },
-    }));
-    expect(mocks.db.documentPackage.update).toHaveBeenCalledWith(expect.objectContaining({
-      data: expect.objectContaining({ status: "ARCHIVED", archivedAt: expect.any(Date) }),
-    }));
-  });
-
-  it("loads package items and authorized share links with one Prisma operation", async () => {
-    mocks.db.documentPackage.findMany.mockResolvedValue([
-      { ...packageRecord, items: [itemRecord], shareLinks: [shareLinkRecord] },
-      { ...packageRecord, id: "package-2", items: [], shareLinks: [] },
-    ]);
-
-    await expect(listDocumentPackagesWithDetails({ includeShareLinks: true })).resolves.toHaveLength(2);
-    expect(mocks.db.documentPackage.findMany).toHaveBeenCalledTimes(1);
-    expect(mocks.db.documentPackage.findMany).toHaveBeenCalledWith(expect.objectContaining({
-      select: expect.objectContaining({ items: expect.any(Object), shareLinks: expect.any(Object) }),
-    }));
-    expect(mocks.requirePermission).toHaveBeenCalledWith(expect.anything(), "documentPackages:share");
-  });
-
-  it("filters ready packages with pagination in the existing tenant query", async () => {
-    mocks.db.documentPackage.findMany.mockResolvedValue([]);
-    await expect(listDocumentPackagesWithDetails({ statuses: ["READY_FOR_REVIEW", "SHARED"], take: 51, skip: 50 })).resolves.toEqual([]);
-    expect(mocks.db.documentPackage.findMany).toHaveBeenCalledTimes(1);
-    expect(mocks.db.documentPackage.findMany).toHaveBeenCalledWith(expect.objectContaining({
-      take: 51,
-      skip: 50,
-      where: { organizationId: "org-1", archivedAt: null, status: { in: ["READY_FOR_REVIEW", "SHARED"] } },
-    }));
-  });
-
-  it("lets safety consultants read/create package items but not share links", async () => {
-    setRole("SAFETY_CONSULTANT");
-    mocks.db.documentPackageItem.findFirst.mockResolvedValueOnce(null).mockResolvedValue({ position: -1 });
-    mocks.db.documentPackageItem.create.mockResolvedValue({ ...itemRecord, itemType: "NOTE", note: "Nota per revisione", documentVersionId: null });
-
-    await expect(addDocumentPackageItem("package-1", { itemType: "NOTE", note: "Nota per revisione" })).resolves.toMatchObject({ itemType: "NOTE" });
-    await expect(listShareLinks("package-1")).rejects.toMatchObject({ status: 404 });
-    await expect(createShareLink("package-1")).rejects.toMatchObject({ status: 404 });
-    await expect(listDocumentPackagesWithDetails({ includeShareLinks: true })).rejects.toMatchObject({ status: 404 });
-  });
-
-  it("denies broad internal package access to site managers, workers and destinatari esterni", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER"] as const) {
-      setRole(role);
-      await expect(listDocumentPackages()).rejects.toMatchObject({ status: 404 });
-      await expect(createDocumentPackage({ title: "Pacchetto" })).rejects.toMatchObject({ status: 404 });
-      await expect(addDocumentPackageItem("package-1", { itemType: "NOTE", note: "Nota" })).rejects.toMatchObject({ status: 404 });
-    }
-  });
-
-  it("rejects cross-organization packages and archived references", async () => {
-    mocks.db.documentPackage.findFirst.mockResolvedValue(null);
-    await expect(getDocumentPackage("foreign-package")).rejects.toMatchObject({ status: 404 });
-    expect(mocks.db.documentPackage.findFirst).toHaveBeenCalledWith(expect.objectContaining({
-      where: { id: "foreign-package", organizationId: "org-1", archivedAt: null },
-    }));
-
-    mocks.db.documentPackage.findFirst.mockResolvedValue(packageRecord);
-    mocks.db.document.findFirst.mockResolvedValue(null);
-    await expect(addDocumentPackageItem("package-1", { itemType: "DOCUMENT", documentId: "foreign-document" })).rejects.toMatchObject({ status: 409 });
-    expect(mocks.db.document.findFirst).toHaveBeenCalledWith(expect.objectContaining({
-      where: expect.objectContaining({ organizationId: "org-1", documentType: { is: { sensitivity: "STANDARD", categoryKey: { not: "UNCLASSIFIED" } } } }),
-    }));
-  });
-
-  it("validates package items and removes them with physical delete because item has no archivedAt", async () => {
-    await expect(addDocumentPackageItem("package-1", { itemType: "DOCUMENT" })).rejects.toMatchObject({ status: 409 });
-    await expect(addDocumentPackageItem("package-1", { itemType: "DOCUMENT", evidenceId: "evidence-1" })).rejects.toMatchObject({ status: 409 });
-    mocks.db.documentPackageItem.findFirst.mockResolvedValueOnce({ id: "duplicate" });
-    await expect(addDocumentPackageItem("package-1", { itemType: "DOCUMENT_VERSION", documentVersionId: "version-1" })).rejects.toMatchObject({ status: 409 });
-
-    mocks.db.documentPackageItem.findFirst.mockResolvedValue(itemRecord);
-    mocks.db.documentPackageItem.delete.mockResolvedValue(itemRecord);
-    await expect(removeDocumentPackageItem("package-1", "item-1")).resolves.toEqual(itemRecord);
-    expect(mocks.db.documentPackageItem.delete).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "item-1" } }));
-  });
-});
-
-describe("share link and destinatario esterno access", () => {
-  it("creates share links with hashed token only and default expiry", async () => {
-    mocks.db.shareLink.create.mockImplementation(async ({ data }) => ({
-      ...shareLinkRecord,
-      organizationId: data.organizationId,
-      documentPackageId: data.documentPackageId,
-      expiresAt: data.expiresAt,
-      createdById: data.createdById,
-    }));
-    mocks.db.documentPackage.update.mockResolvedValue({ id: "package-1" });
-
-    const response = await createShareLink("package-1");
-
-    expect(response.token).toEqual(expect.any(String));
-    expect(response.shareLink).not.toHaveProperty("tokenHash");
-    expect(mocks.db.shareLink.create).toHaveBeenCalledWith(expect.objectContaining({
-      data: expect.objectContaining({
-        organizationId: "org-1",
-        documentPackageId: "package-1",
-        tokenHash: hashShareToken(response.token),
-        expiresAt: expect.any(Date),
-      }),
-    }));
-    expect(mocks.db.shareLink.create.mock.calls[0][0].data).not.toHaveProperty("token");
-    expect(mocks.db.documentPackage.update).toHaveBeenCalledWith(expect.objectContaining({ data: { status: "SHARED" } }));
-  });
-
-  it("blocks share links when a package contains unclassified or non-standard documents", async () => {
-    mocks.db.documentPackage.findFirst.mockResolvedValue({ ...packageRecord, items: [{ id: "unsafe-item" }] });
-    await expect(createShareLink("package-1")).rejects.toMatchObject({ status: 409 });
-    expect(mocks.db.shareLink.create).not.toHaveBeenCalled();
-  });
-
-  it("rejects past share link expiry and revokes links without deleting them", async () => {
-    await expect(createShareLink("package-1", { expiresAt: "2020-01-01T00:00:00.000Z" })).rejects.toMatchObject({ status: 409 });
-
-    mocks.db.shareLink.findFirst.mockResolvedValue({ id: "share-1" });
-    mocks.db.shareLink.update.mockResolvedValue({ ...shareLinkRecord, revokedAt: now });
-    await expect(revokeShareLink("package-1", "share-1")).resolves.toMatchObject({ revokedAt: now });
-    expect(mocks.db.shareLink.update).toHaveBeenCalledWith(expect.objectContaining({ data: { revokedAt: expect.any(Date) } }));
-  });
-
-  it("lists share links without raw tokens or token hashes", async () => {
-    mocks.db.shareLink.findMany.mockResolvedValue([shareLinkRecord]);
-    const links = await listShareLinks("package-1");
-    expect(links[0]).not.toHaveProperty("token");
-    expect(links[0]).not.toHaveProperty("tokenHash");
-  });
-
-  it("lets a valid token read only included destinatario esterno-safe package data", async () => {
-    const token = "raw-token";
-    mocks.db.shareLink.findUnique.mockResolvedValue({
-      ...shareLinkRecord,
-      tokenHash: hashShareToken(token),
-      documentPackage: packageRecord,
-    });
-    mocks.db.documentPackageItem.findMany.mockResolvedValue([
-      {
-        ...itemRecord,
+describe("document package immutable revision manifest", () => {
+  it("freezes only allow-listed metadata and never exposes Blob keys", () => {
+    const manifest = buildDocumentPackageRevisionManifest(packageRecord({
+      items: [{
+        id: "item-1",
+        itemType: "DOCUMENT_VERSION",
+        position: 0,
+        note: null,
+        documentId: null,
+        documentVersionId: "version-1",
+        evidenceId: null,
+        checklistId: null,
+        createdAt: now,
         document: null,
         documentVersion: {
-          originalFileName: "file.pdf",
+          id: "version-1",
+          originalFileName: "duvri.pdf",
           mimeType: "application/pdf",
-          size: 12,
+          size: 128,
+          reviewStatus: "CURRENT",
           archivedAt: null,
-          document: { title: "Documento", status: "TO_REVIEW", archivedAt: null, documentType: { categoryKey: "COMPANY_IDENTITY_REGISTRATIONS", sensitivity: "STANDARD" } },
+          document: {
+            id: "document-1",
+            title: "DUVRI",
+            status: "VALID",
+            expiryDate: new Date("2027-07-27T10:00:00.000Z"),
+            archivedAt: null,
+            documentType: { categoryKey: "SAFETY", sensitivity: "STANDARD" },
+          },
         },
         evidence: null,
         checklist: null,
-      },
-    ]);
-    mocks.db.shareLink.update.mockResolvedValue({ id: "share-1" });
+      }],
+    }) as never, now);
 
-    const shared = await getSharedDocumentPackage(token);
-    expect(shared).toMatchObject({ title: "Pacchetto ingresso", items: [expect.objectContaining({ hasFile: true, originalFileName: "file.pdf" })] });
-    expect(shared).not.toHaveProperty("organizationId");
-    expect(JSON.stringify(shared)).not.toContain("blobKey");
-    expect(JSON.stringify(shared)).not.toContain("tokenHash");
+    expect(manifest.items).toEqual([expect.objectContaining({
+      sourceItemId: "item-1",
+      documentVersionId: "version-1",
+      title: "DUVRI",
+      included: true,
+      hasFile: true,
+    })]);
+    expect(manifest.issues).toEqual([]);
+    expect(JSON.stringify(manifest)).not.toContain("blobKey");
   });
 
-  it("denies expired, revoked and archived package share links", async () => {
-    mocks.db.shareLink.findUnique.mockResolvedValue({ ...shareLinkRecord, expiresAt: new Date("2020-01-01T00:00:00.000Z"), documentPackage: packageRecord });
-    await expect(getSharedDocumentPackage("expired")).rejects.toMatchObject({ status: 404 });
+  it("blocks archived or non-standard document references instead of substituting them", () => {
+    const manifest = buildDocumentPackageRevisionManifest(packageRecord({
+      items: [{
+        id: "item-sensitive",
+        itemType: "DOCUMENT",
+        position: 0,
+        note: null,
+        documentId: "document-sensitive",
+        documentVersionId: null,
+        evidenceId: null,
+        checklistId: null,
+        createdAt: now,
+        document: {
+          id: "document-sensitive",
+          title: "Documento riservato",
+          status: "VALID",
+          expiryDate: null,
+          archivedAt: now,
+          documentType: { categoryKey: "SAFETY", sensitivity: "RESTRICTED" },
+        },
+        documentVersion: null,
+        evidence: null,
+        checklist: null,
+      }],
+    }) as never, now);
 
-    mocks.db.shareLink.findUnique.mockResolvedValue({ ...shareLinkRecord, revokedAt: now, documentPackage: packageRecord });
-    await expect(getSharedDocumentPackage("revoked")).rejects.toMatchObject({ status: 404 });
-
-    mocks.db.shareLink.findUnique.mockResolvedValue({ ...shareLinkRecord, documentPackage: { ...packageRecord, archivedAt: now } });
-    await expect(getSharedDocumentPackage("archived")).rejects.toMatchObject({ status: 404 });
+    expect(manifest.items[0]).toMatchObject({ included: false, documentId: "document-sensitive" });
+    expect(manifest.issues.map((item) => item.code)).toEqual(expect.arrayContaining(["ARCHIVED_REFERENCE", "SENSITIVE_DOCUMENT"]));
   });
 
-  it("downloads only included document versions or evidence through Blob without permanent URLs", async () => {
-    mocks.db.shareLink.findUnique.mockResolvedValue({ ...shareLinkRecord, documentPackage: packageRecord });
-    mocks.db.documentPackageItem.findFirst.mockResolvedValue({ id: "item-1", itemType: "DOCUMENT_VERSION", documentVersionId: "version-1", evidenceId: null });
-    const stream = new ReadableStream<Uint8Array>();
-    mocks.getPrivateBlob.mockResolvedValue({ stream, contentType: "application/pdf", size: 12 });
-    mocks.db.shareLink.update.mockResolvedValue({ id: "share-1" });
-
-    const documentDownload = await getSharedPackageItemDownload("token", "item-1");
-    expect(documentDownload).toMatchObject({ stream, originalFileName: "file.pdf", mimeType: "application/pdf" });
-
-    mocks.db.documentPackageItem.findFirst.mockResolvedValue({ id: "item-2", itemType: "EVIDENCE", documentVersionId: null, evidenceId: "evidence-1" });
-    const evidenceDownload = await getSharedPackageItemDownload("token", "item-2");
-    expect(evidenceDownload).toMatchObject({ stream, originalFileName: "foto.png", mimeType: "image/png" });
+  it("keeps an expired document in review and records attention without silently excluding it", () => {
+    const manifest = buildDocumentPackageRevisionManifest(packageRecord({ items: [{
+      id: "expired", itemType: "DOCUMENT", position: 0, note: null, documentId: "doc-expired", documentVersionId: null, evidenceId: null, checklistId: null, createdAt: now,
+      document: { id: "doc-expired", title: "DURC", status: "EXPIRED", expiryDate: new Date("2026-07-01T00:00:00.000Z"), archivedAt: null, documentType: { categoryKey: "COMPANY_IDENTITY_REGISTRATIONS", sensitivity: "STANDARD" } },
+      documentVersion: null, evidence: null, checklist: null,
+    }] }) as never, now);
+    expect(manifest.items[0]).toMatchObject({ included: true, title: "DURC" });
+    expect(manifest.issues).toEqual([expect.objectContaining({ code: "EXPIRED_DOCUMENT", severity: "ATTENTION" })]);
   });
 
-  it("denies destinatario esterno download for items not included or archived files", async () => {
-    mocks.db.shareLink.findUnique.mockResolvedValue({ ...shareLinkRecord, documentPackage: packageRecord });
-    mocks.db.documentPackageItem.findFirst.mockResolvedValue(null);
-    await expect(getSharedPackageItemDownload("token", "missing-item")).rejects.toMatchObject({ status: 404 });
+  it("marks a document to review without granting automatic authority", () => {
+    const manifest = buildDocumentPackageRevisionManifest(packageRecord({ items: [{
+      id: "review", itemType: "DOCUMENT", position: 0, note: null, documentId: "doc-review", documentVersionId: null, evidenceId: null, checklistId: null, createdAt: now,
+      document: { id: "doc-review", title: "Attestato", status: "TO_REVIEW", expiryDate: null, archivedAt: null, documentType: { categoryKey: "TRAINING", sensitivity: "STANDARD" } },
+      documentVersion: null, evidence: null, checklist: null,
+    }] }) as never, now);
+    expect(manifest.items[0].included).toBe(true);
+    expect(manifest.issues[0]).toMatchObject({ code: "DOCUMENT_TO_VERIFY", severity: "ATTENTION" });
+  });
 
-    mocks.db.documentPackageItem.findFirst.mockResolvedValue({ id: "item-1", itemType: "DOCUMENT_VERSION", documentVersionId: "version-1", evidenceId: null });
-    mocks.db.documentVersion.findFirst.mockResolvedValue(null);
-    await expect(getSharedPackageItemDownload("token", "item-1")).rejects.toMatchObject({ status: 404 });
+  it("includes an active evidence reference while retaining only mediated file metadata", () => {
+    const manifest = buildDocumentPackageRevisionManifest(packageRecord({ items: [{
+      id: "evidence", itemType: "EVIDENCE", position: 0, note: null, documentId: null, documentVersionId: null, evidenceId: "evidence-1", checklistId: null, createdAt: now,
+      document: null, documentVersion: null, evidence: { id: "evidence-1", title: "Foto accesso", type: "PHOTO", sensitivity: "SHAREABLE", reviewStatus: "ACCEPTED", originalFileName: "accesso.jpg", mimeType: "image/jpeg", size: 42, blobKey: "secret/blob/key", archivedAt: null }, checklist: null,
+    }] }) as never, now);
+    expect(manifest.items[0]).toMatchObject({ included: true, hasFile: true, evidenceId: "evidence-1", originalFileName: "accesso.jpg" });
+    expect(JSON.stringify(manifest)).not.toContain("secret/blob/key");
+  });
+
+  it("excludes archived evidence rather than switching to a newer file", () => {
+    const manifest = buildDocumentPackageRevisionManifest(packageRecord({ items: [{
+      id: "evidence", itemType: "EVIDENCE", position: 0, note: null, documentId: null, documentVersionId: null, evidenceId: "evidence-1", checklistId: null, createdAt: now,
+      document: null, documentVersion: null, evidence: { id: "evidence-1", title: "Foto", type: "PHOTO", originalFileName: "foto.jpg", mimeType: "image/jpeg", size: 42, blobKey: "blob", archivedAt: now }, checklist: null,
+    }] }) as never, now);
+    expect(manifest.items[0]).toMatchObject({ included: false, evidenceId: "evidence-1" });
+    expect(manifest.issues[0].code).toBe("MISSING_REFERENCE");
+  });
+
+  it("freezes an active checklist by identifier and display snapshot", () => {
+    const manifest = buildDocumentPackageRevisionManifest(packageRecord({ items: [{
+      id: "checklist", itemType: "CHECKLIST", position: 0, note: null, documentId: null, documentVersionId: null, evidenceId: null, checklistId: "checklist-1", createdAt: now,
+      document: null, documentVersion: null, evidence: null, checklist: { id: "checklist-1", name: "Apertura cantiere", status: "ACTIVE", archivedAt: null },
+    }] }) as never, now);
+    expect(manifest.items[0]).toMatchObject({ included: true, checklistId: "checklist-1", title: "Apertura cantiere" });
+  });
+
+  it("excludes archived checklists and reports a blocking issue", () => {
+    const manifest = buildDocumentPackageRevisionManifest(packageRecord({ items: [{
+      id: "checklist", itemType: "CHECKLIST", position: 0, note: null, documentId: null, documentVersionId: null, evidenceId: null, checklistId: "checklist-1", createdAt: now,
+      document: null, documentVersion: null, evidence: null, checklist: { id: "checklist-1", name: "Apertura", status: "ARCHIVED", archivedAt: now },
+    }] }) as never, now);
+    expect(manifest.items[0].included).toBe(false);
+    expect(manifest.issues[0]).toMatchObject({ code: "MISSING_REFERENCE", severity: "BLOCKING" });
+  });
+
+  it("keeps a note as an explicit non-file item", () => {
+    const manifest = buildDocumentPackageRevisionManifest(packageRecord({ items: [{
+      id: "note", itemType: "NOTE", position: 0, note: "Accesso solo su appuntamento", documentId: null, documentVersionId: null, evidenceId: null, checklistId: null, createdAt: now,
+      document: null, documentVersion: null, evidence: null, checklist: null,
+    }] }) as never, now);
+    expect(manifest.items[0]).toMatchObject({ included: true, hasFile: false, note: "Accesso solo su appuntamento" });
+  });
+});
+
+describe("share token storage", () => {
+  it("produces a deterministic hash without retaining the raw token", () => {
+    expect(hashShareToken("token-once")).toBe(hashShareToken("token-once"));
+    expect(hashShareToken("token-once")).not.toContain("token-once");
+  });
+
+  it("produces different hashes for different one-time tokens", () => {
+    expect(hashShareToken("token-one")).not.toBe(hashShareToken("token-two"));
   });
 });

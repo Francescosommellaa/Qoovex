@@ -1,72 +1,37 @@
 import "server-only";
 
-import { db } from "@qoovex/db";
+import { db, Prisma } from "@qoovex/db";
 import { AccessError } from "@shared/server/access-errors";
+import { ensureShareLinkOperationalProcess } from "@shared/server/document-package-share-proposal-service";
+import { requireOrganizationDomainAccess } from "@shared/server/domain-access-service";
+import { auditActorFromContext, recordProductAuditEventBestEffort } from "@shared/server/product-audit-service";
 import { recordSupportAccess } from "@shared/server/support-access-service";
-import { parseOptionalDate } from "./document-domain-validation";
-import { requireOrganizationDomainAccess } from "./domain-access-service";
-import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
-import { createShareToken, hashShareToken } from "./share-token-service";
 
-const SHARE_LINK_ROLES = ["OWNER", "ADMIN"] as const;
-const DEFAULT_SHARE_LINK_DAYS = 7;
+const SHARE_LINK_ROLES = ["OWNER", "COLLABORATOR"] as const;
 
-const shareLinkSelect = {
+export const shareLinkSelect = {
   id: true,
   organizationId: true,
   documentPackageId: true,
+  revisionId: true,
+  proposalId: true,
+  purpose: true,
+  recipientLabel: true,
+  allowDownload: true,
   expiresAt: true,
+  expiredAt: true,
   revokedAt: true,
   createdById: true,
   createdAt: true,
   lastAccessedAt: true,
 } as const;
 
-export interface CreateShareLinkInput extends Record<string, unknown> {
-  expiresAt?: unknown;
-}
-
-function getDefaultExpiresAt() {
-  const expiresAt = new Date();
-  expiresAt.setDate(expiresAt.getDate() + DEFAULT_SHARE_LINK_DAYS);
-  return expiresAt;
-}
-
-function parseShareExpiresAt(value: unknown) {
-  const expiresAt = parseOptionalDate(value, "Scadenza link") ?? getDefaultExpiresAt();
-  if (expiresAt.getTime() <= Date.now()) throw new AccessError("Scadenza link non valida.", 409);
-  return expiresAt;
-}
-
 async function findActivePackage(organizationId: string, packageId: string) {
   const documentPackage = await db.documentPackage.findFirst({
     where: { id: packageId, organizationId, archivedAt: null },
-    select: { id: true, status: true },
+    select: { id: true },
   });
   if (!documentPackage) throw new AccessError("Pacchetto documentale non trovato.", 404);
-  return documentPackage;
-}
-
-async function findShareablePackage(organizationId: string, packageId: string) {
-  const documentPackage = await db.documentPackage.findFirst({
-    where: { id: packageId, organizationId, archivedAt: null },
-    select: {
-      id: true,
-      status: true,
-      items: {
-        where: {
-          OR: [
-            { document: { is: { documentType: { is: { OR: [{ sensitivity: { not: "STANDARD" } }, { categoryKey: "UNCLASSIFIED" }] } } } } },
-            { documentVersion: { is: { document: { is: { documentType: { is: { OR: [{ sensitivity: { not: "STANDARD" } }, { categoryKey: "UNCLASSIFIED" }] } } } } } } },
-          ],
-        },
-        select: { id: true },
-        take: 1,
-      },
-    },
-  });
-  if (!documentPackage) throw new AccessError("Pacchetto documentale non trovato.", 404);
-  if (documentPackage.items.length) throw new AccessError("Rimuovi i documenti non classificati o con sensibilita diversa da Standard prima di creare il link.", 409);
   return documentPackage;
 }
 
@@ -76,69 +41,63 @@ export async function listShareLinks(packageId: string) {
   const links = await db.shareLink.findMany({
     where: { organizationId, documentPackageId: packageId },
     select: shareLinkSelect,
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    take: 100,
   });
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "share-links", resourceId: packageId });
   return links;
 }
 
-export async function createShareLink(packageId: string, input: CreateShareLinkInput = {}) {
-  const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:share", SHARE_LINK_ROLES);
-  const documentPackage = await findShareablePackage(organizationId, packageId);
-  const expiresAt = parseShareExpiresAt(input.expiresAt);
-  const token = createShareToken();
-  const tokenHash = hashShareToken(token);
-
-  const shareLink = await db.$transaction(async (tx) => {
-    const created = await tx.shareLink.create({
-      data: {
-        organizationId,
-        documentPackageId: documentPackage.id,
-        tokenHash,
-        expiresAt,
-        createdById: context.userId,
-      },
-      select: shareLinkSelect,
-    });
-    if (documentPackage.status !== "SHARED") {
-      await tx.documentPackage.update({ where: { id: documentPackage.id }, data: { status: "SHARED" }, select: { id: true } });
-    }
-    return created;
-  });
-
-  await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "share-link", resourceId: shareLink.id });
-  await recordProductAuditEventBestEffort({
-    organizationId,
-    ...auditActorFromContext(context, actorRole),
-    action: "SHARE_LINK_CREATED",
-    entityType: "SHARE_LINK",
-    entityId: shareLink.id,
-    metadata: { expiresAt: shareLink.expiresAt?.toISOString() ?? null },
-  });
-  return { shareLink, token };
-}
-
 export async function revokeShareLink(packageId: string, shareLinkId: string) {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("documentPackages:share", SHARE_LINK_ROLES);
   await findActivePackage(organizationId, packageId);
-  const existing = await db.shareLink.findFirst({
-    where: { id: shareLinkId, organizationId, documentPackageId: packageId },
-    select: { id: true },
-  });
-  if (!existing) throw new AccessError("Link di condivisione non trovato.", 404);
-  await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "share-link", resourceId: existing.id });
-  const shareLink = await db.shareLink.update({
-    where: { id: existing.id },
-    data: { revokedAt: new Date() },
-    select: shareLinkSelect,
-  });
-  await recordProductAuditEventBestEffort({
-    organizationId,
-    ...auditActorFromContext(context, actorRole),
-    action: "SHARE_LINK_REVOKED",
-    entityType: "SHARE_LINK",
-    entityId: shareLink.id,
-    metadata: { reasonCode: "manual-revoke" },
-  });
-  return shareLink;
+  await recordSupportAccess({ userId: context.userId, action: "SENSITIVE", resourceType: "share-link", resourceId: shareLinkId });
+
+  const result = await db.$transaction(async (tx) => {
+    const existing = await tx.shareLink.findFirst({
+      where: { id: shareLinkId, organizationId, documentPackageId: packageId },
+      select: { id: true, organizationId: true, documentPackageId: true, revokedAt: true, proposal: { select: { processId: true } } },
+    });
+    if (!existing) throw new AccessError("Link di condivisione non trovato.", 404);
+    const processId = await ensureShareLinkOperationalProcess(tx, existing);
+    const updated = await tx.shareLink.updateMany({
+      where: { id: existing.id, organizationId, revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
+    const shareLink = await tx.shareLink.findUnique({ where: { id: existing.id }, select: shareLinkSelect });
+    if (!shareLink) throw new AccessError("Link di condivisione non trovato.", 404);
+    if (updated.count) {
+      await tx.operationalEvent.create({
+        data: {
+          organizationId,
+          processId,
+          eventKey: `share-link-revoked:${shareLink.id}`,
+          kind: "DOMAIN",
+          eventType: "SHARE_LINK_REVOKED",
+          title: "Link revocato",
+          summary: "Non sono consentiti nuovi accessi. Il pacchetto e i file non sono stati eliminati.",
+          actorUserId: context.userId,
+          actorType: context.support ? "SUPPORT" : "USER",
+          actorRole,
+          sourceType: "USER_ACTION",
+          sourceId: shareLink.id,
+          reliability: "VERIFIED",
+          impact: "CONTROLLED",
+        },
+      });
+    }
+    return { shareLink, alreadyRevoked: updated.count === 0 };
+  }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+
+  if (!result.alreadyRevoked) {
+    await recordProductAuditEventBestEffort({
+      organizationId,
+      ...auditActorFromContext(context, actorRole),
+      action: "SHARE_LINK_REVOKED",
+      entityType: "SHARE_LINK",
+      entityId: result.shareLink.id,
+      metadata: { reasonCode: "manual-revoke" },
+    });
+  }
+  return result;
 }

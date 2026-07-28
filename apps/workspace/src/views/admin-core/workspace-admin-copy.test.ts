@@ -23,7 +23,7 @@ describe("workspace admin UI copy", () => {
   const settingsHubSource = readFileSync(join(root, "settings", "SettingsHubView.tsx"), "utf8");
   const evidenceFormSource = readFileSync(join(root, "admin-core", "evidence", "EvidenceForm.tsx"), "utf8");
   const shareLinksPanelSource = readFileSync(join(root, "admin-core", "document-packages", "ShareLinksPanel.tsx"), "utf8");
-  const shareLinkCreateSource = readFileSync(join(root, "admin-core", "document-packages", "ShareLinkCreateForm.tsx"), "utf8");
+  const shareReviewSource = readFileSync(join(root, "..", "widgets", "document-package-share-review", "ui", "DocumentPackageShareReview.tsx"), "utf8");
   const notificationEmailPanelSource = readFileSync(join(root, "admin-core", "notifications", "NotificationEmailDigestPanel.tsx"), "utf8");
   const notificationPreferencesPanelSource = readFileSync(join(root, "admin-core", "notifications", "NotificationEmailPreferencesPanel.tsx"), "utf8");
   const notificationActionsSource = readFileSync(join(root, "admin-core", "notifications", "NotificationActionButtons.tsx"), "utf8");
@@ -34,7 +34,7 @@ describe("workspace admin UI copy", () => {
   const authSource = collectCodeFiles(join(root, "auth")).map((file) => readFileSync(file, "utf8")).join("\n");
   const signInSource = readFileSync(join(appRoot, "sign-in", "page.tsx"), "utf8");
   const signUpSource = readFileSync(join(appRoot, "sign-up", "page.tsx"), "utf8");
-  const dashboardSource = readFileSync(join(root, "dashboard", "DashboardView.tsx"), "utf8");
+  const dashboardSource = readFileSync(join(root, "operational-center", "OperationalCenterView.tsx"), "utf8");
   const documentListPageSource = readFileSync(join(appRoot, "documents", "page.tsx"), "utf8");
   const documentArchivePageSource = readFileSync(join(appRoot, "documents", "archive", "page.tsx"), "utf8");
   const documentDetailPageSource = readFileSync(join(appRoot, "documents", "[documentId]", "page.tsx"), "utf8");
@@ -82,7 +82,7 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps everyday navigation small and preserves secondary routes", () => {
-    for (const route of ["/dashboard", "/documents", "/calendar", "/workers", "/job-sites"]) expect(navigationPolicySource).toContain(`href: "${route}"`);
+    for (const route of ["/dashboard", "/documents", "/workers", "/job-sites", "/document-packages", "/settings"]) expect(navigationPolicySource).toContain(`href: "${route}"`);
     for (const route of adminRoutes) expect(appSource).toContain(route.slice(1));
     for (const route of ["/deadlines", "/checklists", "/evidence", "/document-packages", "/access", "/audit-log", "/data-control"]) {
       expect(navigationPolicySource).not.toContain(`label: "${route}"`);
@@ -151,7 +151,8 @@ describe("workspace admin UI copy", () => {
   it("does not keep created share link values in the share link list", () => {
     expect(shareLinksPanelSource).not.toContain("createdToken");
     expect(shareLinksPanelSource).not.toContain("token");
-    expect(shareLinkCreateSource).toContain("Link creato. Copialo ora");
+    expect(shareReviewSource).toContain("Link creato: copialo ora");
+    expect(shareReviewSource).toContain("Approva e crea link");
   });
 
   it("keeps the audit log UI minimized and adds basic security headers", () => {
@@ -199,7 +200,7 @@ describe("workspace admin UI copy", () => {
     expect(documentCreateFlowSource).toContain("setCreatedDocument(document)");
     expect(documentCreateFlowSource).toContain("senza creare un duplicato");
     expect(invitePersonSource).not.toContain('value: "OWNER"');
-    expect(invitePersonSource).toContain("Gestisce l'azienda e il lavoro quotidiano");
+    expect(invitePersonSource).toContain("Configura il Collaboratore con perimetro e permessi espliciti");
   });
 
   it("keeps the document list on the canonical UI foundation and preserves task context across filters", () => {
@@ -274,9 +275,9 @@ describe("workspace admin UI copy", () => {
     expect(workerDetailsDialogSource).not.toContain("fetch(");
     expect(workerFormSource).toContain("Mansione");
     expect(guidedWorkerCreateSource).toContain("Solo profilo operativo");
-    expect(guidedWorkerCreateSource).toContain('role: "WORKER"');
+    expect(guidedWorkerCreateSource).toContain('role: "COLLABORATOR"');
     expect(guidedWorkerCreateSource).toContain("Nomi simili trovati");
-    for (const role of ["ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER"]) expect(guidedWorkerCreateSource).not.toContain(`role: "${role}"`);
+    expect(guidedWorkerCreateSource).toContain('preset: "LIMITED_UPLOAD"');
     expect(workersRouteSource).toContain("listPeopleWorkers");
     expect(workersRouteSource).toContain('params.intent === "create"');
     expect(newWorkerRouteSource).toContain('redirect("/workers?intent=create")');

@@ -3,11 +3,12 @@ import { DocumentPackageArchiveButton } from "./DocumentPackageArchiveButton";
 import { DocumentPackageForm } from "./DocumentPackageForm";
 import { DocumentPackageItemForm } from "./DocumentPackageItemForm";
 import { DocumentPackageItemsList } from "./DocumentPackageItemsList";
-import { ShareLinkCreateForm } from "./ShareLinkCreateForm";
 import { ShareLinksPanel } from "./ShareLinksPanel";
+import type { DocumentPackageShareProposalDto } from "@qoovex/types";
+import { DocumentPackageShareReview } from "@widgets/document-package-share-review/ui/DocumentPackageShareReview";
 import styles from "../AdminCore.module.css";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
-import { documentPackageStatusLabels, formatDate, statusTone } from "@/views/workspace/workspace-format";
+import { documentPackageEffectiveStateLabels, formatDate, statusTone } from "@/views/workspace/workspace-format";
 import type {
   WorkspaceCapabilities,
   WorkspaceChecklistRecord,
@@ -18,6 +19,8 @@ import type {
   WorkspaceJobSiteRecord,
   WorkspaceShareLinkRecord,
 } from "@/views/workspace/workspace-records";
+import { OperationalArtifactStatus } from "@entities/operational-process/ui/OperationalArtifactStatus";
+import { ArtifactTimeline } from "@widgets/artifact-timeline/ui/ArtifactTimeline";
 
 function jobSiteLabel(jobSiteId: string | null | undefined, jobSites: WorkspaceJobSiteRecord[]) {
   return jobSites.find((jobSite) => jobSite.id === jobSiteId)?.name ?? "Nessun cantiere";
@@ -31,6 +34,7 @@ export function DocumentPackageDetailView({
   evidence,
   checklists,
   shareLinks,
+  shareProposals,
   capabilities,
   returnToDashboard = false,
 }: {
@@ -41,6 +45,7 @@ export function DocumentPackageDetailView({
   evidence: WorkspaceEvidenceRecord[];
   checklists: WorkspaceChecklistRecord[];
   shareLinks: WorkspaceShareLinkRecord[];
+  shareProposals: DocumentPackageShareProposalDto[];
   capabilities: WorkspaceCapabilities;
   returnToDashboard?: boolean;
 }) {
@@ -50,8 +55,9 @@ export function DocumentPackageDetailView({
       <WorkspacePageHeader
         title={documentPackage.title}
         description={`${jobSiteLabel(documentPackage.jobSiteId, jobSites)} - Controlla ogni elemento prima di creare il link.`}
-        action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/document-packages"}>{returnToDashboard ? "Torna a Da fare" : "Torna alle condivisioni"}</Link>}
+        action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/document-packages"}>{returnToDashboard ? "Torna al Centro operativo" : "Torna alle condivisioni"}</Link>}
       />
+      <OperationalArtifactStatus artifactId={documentPackage.id} artifactType="DOCUMENT_PACKAGE" />
       <div className={styles.grid}>
           <WorkspacePanel title="Riepilogo condivisione">
             <article className={styles.record}>
@@ -61,7 +67,7 @@ export function DocumentPackageDetailView({
                 <small>Aggiornato: {formatDate(documentPackage.updatedAt)}</small>
               </div>
               <div className={styles.actions}>
-                <WorkspaceState label={documentPackageStatusLabels[documentPackage.status]} tone={statusTone(documentPackage.status)} />
+                <WorkspaceState label={documentPackageEffectiveStateLabels[documentPackage.effectiveState ?? documentPackage.status]} tone={statusTone(documentPackage.effectiveState ?? documentPackage.status)} />
               </div>
             </article>
           </WorkspacePanel>
@@ -77,11 +83,12 @@ export function DocumentPackageDetailView({
             />
           </WorkspacePanel>
           {capabilities.canManagePackages ? <WorkspacePanel title="Aggiungi elementi" description="Seleziona esplicitamente documenti, file, prove o checklist da includere."><details className={styles.details}><summary>Aggiungi elemento</summary><DocumentPackageItemForm packageId={documentPackage.id} documents={documents} documentVersions={documentVersions} evidence={evidence} checklists={checklists} /></details></WorkspacePanel> : null}
-          {capabilities.canSharePackages ? <WorkspacePanel title="Crea link" description="Crea il link solo dopo aver controllato il riepilogo."><ShareLinkCreateForm packageId={documentPackage.id} /></WorkspacePanel> : null}
+          {capabilities.canSharePackages ? <WorkspacePanel title="Prepara e approva" description="Fotografa il contenuto, controlla inclusi ed esclusi, poi crea il link con una conferma esplicita."><DocumentPackageShareReview initialProposals={shareProposals} packageId={documentPackage.id} /></WorkspacePanel> : null}
           <WorkspacePanel title="Accessi creati" description="Ogni accesso può avere una scadenza ed essere revocato. Il codice copiabile è mostrato solo alla creazione.">
             <ShareLinksPanel packageId={documentPackage.id} links={shareLinks} canShare={capabilities.canSharePackages} />
           </WorkspacePanel>
       </div>
+      <ArtifactTimeline artifactId={documentPackage.id} artifactType="DOCUMENT_PACKAGE" />
       {capabilities.canManagePackages ? <WorkspacePanel title="Gestione avanzata" description="Modifica informazioni o archivia la condivisione."><details className={styles.details}><summary>Modifica informazioni</summary><DocumentPackageForm mode="update" documentPackage={documentPackage} jobSites={jobSites} /></details><details className={styles.details}><summary>Zona riservata</summary><DocumentPackageArchiveButton packageId={documentPackage.id} redirectToList /></details></WorkspacePanel> : null}
     </WorkspacePage>
   );

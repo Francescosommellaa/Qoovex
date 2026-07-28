@@ -3,17 +3,23 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   db: {
+    $transaction: vi.fn(),
     worker: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     jobSite: { findMany: vi.fn(), create: vi.fn(), findFirst: vi.fn(), update: vi.fn() },
     workerUserLink: { findFirst: vi.fn() },
-    jobSiteUserAssignment: { findMany: vi.fn() },
-    jobSiteWorkerAssignment: { findMany: vi.fn() },
-    organizationMembership: { findMany: vi.fn() },
+    jobSiteUserAssignment: { findMany: vi.fn(), count: vi.fn() },
+    jobSiteWorkerAssignment: { findMany: vi.fn(), count: vi.fn() },
+    operationalRequest: { count: vi.fn() },
+    checklistItem: { count: vi.fn() },
+    document: { count: vi.fn() },
+    organizationMembership: { findMany: vi.fn(), findFirst: vi.fn() },
   },
   getWorkspaceAccessContext: vi.fn(),
   getContextOrganizationId: vi.fn(),
   requirePermission: vi.fn(),
   recordSupportAccess: vi.fn(),
+  enqueueOperationalProcess: vi.fn(),
+  appendContextTimelineEvent: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -32,8 +38,10 @@ vi.mock("@shared/server/access-context-service", () => ({
   requirePermission: mocks.requirePermission,
 }));
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: mocks.recordSupportAccess }));
+vi.mock("@shared/server/operational-process-service", () => ({ enqueueOperationalProcess: mocks.enqueueOperationalProcess }));
+vi.mock("@shared/server/context-timeline-service", () => ({ appendContextTimelineEvent: mocks.appendContextTimelineEvent }));
 
-import { archiveJobSite, createJobSite, getJobSite, listJobSites, updateJobSite } from "./job-site-service";
+import { archiveJobSite, createJobSite, getJobSite, listJobSites, transitionJobSiteOperationalPhase, updateJobSite } from "./job-site-service";
 import { archiveWorker, createWorker, getWorker, listWorkers, updateWorker } from "./worker-service";
 
 const now = new Date("2026-06-30T12:00:00.000Z");
@@ -72,33 +80,51 @@ function resetModel(model: Record<string, ReturnType<typeof vi.fn>>) {
   for (const method of Object.values(model)) method.mockReset();
 }
 
-function setRole(role: OrganizationRole) {
+function setRole(role: OrganizationRole, options: { preset?: "OPERATIONAL_COLLABORATION" | "SITE_MANAGER" | "LIMITED_UPLOAD" | "READ_ONLY" | null; scopeMode?: "FULL" | "ASSIGNED" } = {}) {
   mocks.getWorkspaceAccessContext.mockResolvedValue({
     userId: "user-1",
     platformRole: "USER",
-    company: { id: "member-1", role, organization: { id: "org-1", name: "Azienda", code: "QVX-1" } },
+    company: {
+      id: "member-1",
+      role,
+      preset: options.preset ?? (role === "OWNER" ? null : "OPERATIONAL_COLLABORATION"),
+      scopeMode: options.scopeMode ?? (role === "OWNER" ? "FULL" : "ASSIGNED"),
+      organization: { id: "org-1", name: "Azienda", code: "QVX-1" },
+    },
     support: null,
     permissions: [],
   });
 }
 
 beforeEach(() => {
+  mocks.db.$transaction.mockReset().mockImplementation(async (callback) => callback(mocks.db));
   resetModel(mocks.db.worker);
   resetModel(mocks.db.jobSite);
   resetModel(mocks.db.workerUserLink);
   resetModel(mocks.db.jobSiteUserAssignment);
   resetModel(mocks.db.jobSiteWorkerAssignment);
+  resetModel(mocks.db.operationalRequest);
+  resetModel(mocks.db.checklistItem);
+  resetModel(mocks.db.document);
   resetModel(mocks.db.organizationMembership);
   mocks.getWorkspaceAccessContext.mockReset();
   mocks.getContextOrganizationId.mockReset();
   mocks.requirePermission.mockReset();
   mocks.recordSupportAccess.mockReset();
+  mocks.enqueueOperationalProcess.mockReset().mockResolvedValue({ id: "process-1" });
+  mocks.appendContextTimelineEvent.mockReset().mockResolvedValue({ id: "timeline-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.recordSupportAccess.mockResolvedValue(undefined);
   mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([]);
+  mocks.db.jobSiteUserAssignment.count.mockResolvedValue(0);
+  mocks.db.jobSiteWorkerAssignment.count.mockResolvedValue(0);
+  mocks.db.operationalRequest.count.mockResolvedValue(0);
+  mocks.db.checklistItem.count.mockResolvedValue(0);
+  mocks.db.document.count.mockResolvedValue(0);
   mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([]);
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-1", resourceGrants: [] });
   setRole("OWNER");
 });
 
@@ -124,32 +150,38 @@ describe("worker service", () => {
     }));
   });
 
-  it("lets admins manage workers and keeps safety consultants read-only", async () => {
-    setRole("ADMIN");
+  it("lets an explicitly authorized collaborator manage workers and keeps read-only access non-mutating", async () => {
+    setRole("COLLABORATOR", { scopeMode: "FULL" });
     mocks.db.worker.create.mockResolvedValue(workerRecord);
     await expect(createWorker({ displayName: "Mario Rossi" })).resolves.toMatchObject({ id: "worker-1" });
 
-    setRole("SAFETY_CONSULTANT");
+    setRole("COLLABORATOR", { preset: "READ_ONLY", scopeMode: "FULL" });
+    mocks.requirePermission.mockImplementation((_context, permission) => {
+      if (permission !== "workers:read") throw Object.assign(new Error("Azione non disponibile."), { status: 403 });
+    });
     mocks.db.worker.findMany.mockResolvedValue([workerRecord]);
     await expect(listWorkers()).resolves.toEqual([workerRecord]);
-    await expect(createWorker({ displayName: "Mario Rossi" })).rejects.toMatchObject({ status: 404 });
-    await expect(updateWorker("worker-1", { displayName: "Mario" })).rejects.toMatchObject({ status: 404 });
-    await expect(archiveWorker("worker-1")).rejects.toMatchObject({ status: 404 });
+    await expect(createWorker({ displayName: "Mario Rossi" })).rejects.toMatchObject({ status: 403 });
+    await expect(updateWorker("worker-1", { displayName: "Mario" })).rejects.toMatchObject({ status: 403 });
+    await expect(archiveWorker("worker-1")).rejects.toMatchObject({ status: 403 });
   });
 
   it("limits worker reads for operational roles and keeps management denied", async () => {
-    setRole("SITE_MANAGER");
+    mocks.requirePermission.mockImplementation((_context, permission) => {
+      if (permission !== "workers:read") throw Object.assign(new Error("Azione non disponibile."), { status: 403 });
+    });
+    setRole("COLLABORATOR", { preset: "SITE_MANAGER" });
     mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
     mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ worker: { id: "worker-1", organizationId: "org-1", displayName: "Mario Rossi", roleLabel: "Operativo", status: "ACTIVE", createdAt: now, updatedAt: now, archivedAt: null } }]);
     await expect(listWorkers()).resolves.toEqual([{ id: "worker-1", organizationId: "org-1", displayName: "Mario Rossi", email: null, phone: null, roleLabel: "Operativo", status: "ACTIVE", notes: null, createdAt: now, updatedAt: now, archivedAt: null }]);
-    await expect(createWorker({ displayName: "Mario Rossi" })).rejects.toMatchObject({ status: 404 });
+    await expect(createWorker({ displayName: "Mario Rossi" })).rejects.toMatchObject({ status: 403 });
 
-    setRole("WORKER");
+    setRole("COLLABORATOR", { preset: "LIMITED_UPLOAD" });
     mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: workerRecord });
     mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
     mocks.db.worker.findFirst.mockResolvedValue(workerRecord);
     await expect(listWorkers()).resolves.toEqual([workerRecord]);
-    await expect(createWorker({ displayName: "Mario Rossi" })).rejects.toMatchObject({ status: 404 });
+    await expect(createWorker({ displayName: "Mario Rossi" })).rejects.toMatchObject({ status: 403 });
 
   });
 
@@ -197,18 +229,21 @@ describe("job site service", () => {
     }));
   });
 
-  it("lets admins manage job sites and keeps safety consultants read-only", async () => {
-    setRole("ADMIN");
+  it("lets an explicitly authorized collaborator manage job sites and keeps read-only access non-mutating", async () => {
+    setRole("COLLABORATOR", { scopeMode: "FULL" });
     mocks.db.jobSite.findMany.mockResolvedValue([]);
     mocks.db.jobSite.create.mockResolvedValue(jobSiteRecord);
     await expect(createJobSite({ name: "Cantiere Centro", operationalPhase: "PREPARATION" })).resolves.toMatchObject({ id: "jobsite-1" });
 
-    setRole("SAFETY_CONSULTANT");
+    setRole("COLLABORATOR", { preset: "READ_ONLY", scopeMode: "FULL" });
+    mocks.requirePermission.mockImplementation((_context, permission) => {
+      if (permission !== "jobSites:read") throw Object.assign(new Error("Azione non disponibile."), { status: 403 });
+    });
     mocks.db.jobSite.findMany.mockResolvedValue([jobSiteRecord]);
     await expect(listJobSites()).resolves.toEqual([jobSiteRecord]);
-    await expect(createJobSite({ name: "Cantiere Centro" })).rejects.toMatchObject({ status: 404 });
-    await expect(updateJobSite("jobsite-1", { name: "Cantiere" })).rejects.toMatchObject({ status: 404 });
-    await expect(archiveJobSite("jobsite-1")).rejects.toMatchObject({ status: 404 });
+    await expect(createJobSite({ name: "Cantiere Centro" })).rejects.toMatchObject({ status: 403 });
+    await expect(updateJobSite("jobsite-1", { name: "Cantiere" })).rejects.toMatchObject({ status: 403 });
+    await expect(archiveJobSite("jobsite-1")).rejects.toMatchObject({ status: 403 });
   });
 
   it("creates the job site and selected people in one nested write", async () => {
@@ -228,21 +263,24 @@ describe("job site service", () => {
   });
 
   it("limits job site reads for operational roles and keeps management denied", async () => {
-    setRole("SITE_MANAGER");
+    mocks.requirePermission.mockImplementation((_context, permission) => {
+      if (permission !== "jobSites:read") throw Object.assign(new Error("Azione non disponibile."), { status: 403 });
+    });
+    setRole("COLLABORATOR", { preset: "SITE_MANAGER" });
     mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
     mocks.db.jobSite.findMany.mockResolvedValue([jobSiteRecord]);
     await expect(listJobSites()).resolves.toEqual([jobSiteRecord]);
-    await expect(createJobSite({ name: "Cantiere Centro" })).rejects.toMatchObject({ status: 404 });
+    await expect(createJobSite({ name: "Cantiere Centro" })).rejects.toMatchObject({ status: 403 });
     expect(mocks.db.jobSite.findMany).toHaveBeenCalledWith(expect.objectContaining({
       where: { organizationId: "org-1", archivedAt: null, id: { in: ["jobsite-1"] } },
     }));
 
-    setRole("WORKER");
+    setRole("COLLABORATOR", { preset: "LIMITED_UPLOAD" });
     mocks.db.workerUserLink.findFirst.mockResolvedValue({ worker: workerRecord });
     mocks.db.jobSiteWorkerAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
     mocks.db.jobSite.findMany.mockResolvedValue([jobSiteRecord]);
     await expect(listJobSites()).resolves.toEqual([jobSiteRecord]);
-    await expect(createJobSite({ name: "Cantiere Centro" })).rejects.toMatchObject({ status: 404 });
+    await expect(createJobSite({ name: "Cantiere Centro" })).rejects.toMatchObject({ status: 403 });
 
   });
 
@@ -256,6 +294,28 @@ describe("job site service", () => {
     expect(mocks.db.jobSite.findFirst).toHaveBeenCalledWith(expect.objectContaining({
       where: { id: "jobsite-foreign", organizationId: "org-1", archivedAt: null },
     }));
+  });
+
+  it("prevents phase changes through generic updates and enforces the canonical state machine", async () => {
+    mocks.db.jobSite.findFirst.mockResolvedValue({ id: "jobsite-1", name: "Cantiere Centro", startDate: null, endDate: null, operationalPhase: "PREPARATION" });
+    await expect(updateJobSite("jobsite-1", { operationalPhase: "COMPLETED" })).rejects.toMatchObject({ status: 409 });
+    await expect(transitionJobSiteOperationalPhase("jobsite-1", { nextPhase: "COMPLETED" })).rejects.toMatchObject({ status: 409 });
+    expect(mocks.db.jobSite.update).not.toHaveBeenCalled();
+  });
+
+  it("requires an owner override with reason when opening a blocked job site", async () => {
+    mocks.db.jobSite.findFirst.mockResolvedValue({ id: "jobsite-1", name: "Cantiere Centro", operationalPhase: "PREPARATION" });
+    mocks.db.operationalRequest.count.mockResolvedValue(1);
+    mocks.db.checklistItem.count.mockResolvedValue(2);
+    mocks.db.document.count.mockResolvedValue(1);
+    await expect(transitionJobSiteOperationalPhase("jobsite-1", { nextPhase: "IN_PROGRESS" })).rejects.toMatchObject({ status: 409 });
+
+    mocks.db.jobSite.update.mockResolvedValue({ ...jobSiteRecord, operationalPhase: "IN_PROGRESS", updatedAt: now });
+    await expect(transitionJobSiteOperationalPhase("jobsite-1", { nextPhase: "IN_PROGRESS", overrideConfirmed: true, reason: "Apertura autorizzata con piano di rientro." })).resolves.toMatchObject({
+      jobSite: { operationalPhase: "IN_PROGRESS" },
+      blockers: { openRequests: 1, openChecklistItems: 2, criticalDocuments: 1 },
+    });
+    expect(mocks.appendContextTimelineEvent).toHaveBeenCalledWith(expect.objectContaining({ eventType: "JOB_SITE_PHASE_CHANGED", targetId: "jobsite-1" }));
   });
 
   it("rejects invalid job site input, date ranges and coordinates", async () => {

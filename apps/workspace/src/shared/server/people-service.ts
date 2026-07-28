@@ -6,10 +6,10 @@ import { AccessError } from "./access-errors";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { getResourceScope } from "./resource-scope-service";
 
-const PEOPLE_OVERVIEW_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
-const PEOPLE_WORKER_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
-const PEOPLE_ACCESS_ROLES = ["OWNER", "ADMIN"] as const;
-const PEOPLE_ASSIGNMENT_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
+const PEOPLE_OVERVIEW_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const PEOPLE_WORKER_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const PEOPLE_ACCESS_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const PEOPLE_ASSIGNMENT_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const ATTENTION_DOCUMENT_STATUSES = ["MISSING", "EXPIRED", "EXPIRING_SOON", "TO_REVIEW"] as const;
 
 export type PeopleAccessState =
@@ -61,9 +61,9 @@ function deriveWorkerAccessState(input: {
 }
 
 export async function getPeopleOverview() {
-  const { organizationId, actorRole } = await requireOrganizationDomainAccess("workers:read", PEOPLE_OVERVIEW_ROLES);
+  const { context, organizationId } = await requireOrganizationDomainAccess("workers:read", PEOPLE_OVERVIEW_ROLES);
   const now = new Date();
-  const visibleDocumentWhere = actorRole === "OWNER" || actorRole === "ADMIN"
+  const visibleDocumentWhere = context.permissions.includes("documents:sensitive:read")
     ? {}
     : { OR: [{ documentTypeId: null }, { documentType: { is: { sensitivity: "STANDARD" as const } } }] };
   const [workers, accessIssues, assignmentIssues] = await Promise.all([
@@ -79,8 +79,8 @@ export async function getPeopleOverview() {
         organizationId,
         revokedAt: null,
         OR: [
-          { role: "WORKER", user: { workerUserLinks: { none: { organizationId, archivedAt: null } } } },
-          { role: "SITE_MANAGER", user: { jobSiteUserAssignments: { none: { organizationId, archivedAt: null } } } },
+          { role: "COLLABORATOR", preset: "LIMITED_UPLOAD", user: { workerUserLinks: { none: { organizationId, archivedAt: null } } } },
+          { role: "COLLABORATOR", preset: "SITE_MANAGER", user: { jobSiteUserAssignments: { none: { organizationId, archivedAt: null } } } },
         ],
       },
     }),
@@ -112,13 +112,13 @@ export async function listPeopleWorkers(input: WorkerDirectoryInput = {}) {
   const page = boundedInteger(input.page, 1, 1, 10_000);
   const pageSize = boundedInteger(input.pageSize, 20, 10, 50);
   const now = new Date();
-  const visibleDocumentWhere = scope.actorRole === "OWNER" || scope.actorRole === "ADMIN"
+  const visibleDocumentWhere = context.permissions.includes("documents:sensitive:read")
     ? {}
     : { OR: [{ documentTypeId: null }, { documentType: { is: { sensitivity: "STANDARD" as const } } }] };
 
   let visibleWorkerIds: string[] | undefined;
-  if (scope.actorRole === "WORKER") visibleWorkerIds = scope.linkedWorker ? [scope.linkedWorker.id] : [];
-  if (scope.actorRole === "SITE_MANAGER") {
+  if (scope.preset === "LIMITED_UPLOAD") visibleWorkerIds = scope.linkedWorker ? [scope.linkedWorker.id] : [];
+  if (scope.preset === "SITE_MANAGER") {
     if (!scope.siteManagerJobSiteIds.length) visibleWorkerIds = [];
     else {
       const rows = await db.jobSiteWorkerAssignment.findMany({
@@ -237,7 +237,7 @@ export async function listPeopleWorkers(input: WorkerDirectoryInput = {}) {
       now,
     });
     const attentionDocuments = worker.documents.filter((document) => ATTENTION_DOCUMENT_STATUSES.includes(document.status as (typeof ATTENTION_DOCUMENT_STATUSES)[number]));
-    const redacted = scope.actorRole === "SITE_MANAGER";
+    const redacted = !context.permissions.includes("documents:sensitive:read");
     return {
       id: worker.id,
       displayName: worker.displayName,
@@ -254,7 +254,7 @@ export async function listPeopleWorkers(input: WorkerDirectoryInput = {}) {
         ? { label: "Controlla documenti", href: `/workers/${worker.id}#documents` }
         : accessState === "ACCESS_SETUP_REQUIRED"
           ? { label: "Completa accesso", href: `/workers/${worker.id}#access` }
-          : worker.jobSiteAssignments.length === 0 && (scope.actorRole === "OWNER" || scope.actorRole === "ADMIN")
+          : worker.jobSiteAssignments.length === 0 && context.permissions.includes("assignments:manage")
             ? { label: "Assegna un cantiere", href: `/people/assignments?workerId=${worker.id}` }
             : { label: "Apri profilo", href: `/workers/${worker.id}` },
     };
@@ -276,6 +276,12 @@ export async function getPeopleAccessOverview() {
       select: {
         id: true,
         role: true,
+        preset: true,
+        permissionKeys: true,
+        scopeMode: true,
+        expiresAt: true,
+        accessVersion: true,
+        updatedAt: true,
         createdAt: true,
         revokedAt: true,
         user: {
@@ -293,7 +299,7 @@ export async function getPeopleAccessOverview() {
     }),
     db.organizationInvitation.findMany({
       where: { organizationId },
-      select: { id: true, email: true, role: true, workerId: true, expiresAt: true, acceptedAt: true, revokedAt: true, createdAt: true, worker: { select: { displayName: true } } },
+      select: { id: true, email: true, role: true, workerId: true, expiresAt: true, acceptedAt: true, declinedAt: true, revokedAt: true, createdAt: true, worker: { select: { displayName: true } } },
       orderBy: [{ createdAt: "desc" }],
       take: 200,
     }),
@@ -301,10 +307,10 @@ export async function getPeopleAccessOverview() {
   const activeUsers = memberships.filter((item) => item.revokedAt === null);
   const incomplete: Array<{ kind: "WORKER_LINK" | "SITE_MANAGER_SCOPE"; membershipId: string; userId: string; label: string; message: string }> = [];
   for (const membership of activeUsers) {
-    if (membership.role === "WORKER" && membership.user.workerUserLinks.length === 0) {
+    if (membership.preset === "LIMITED_UPLOAD" && membership.user.workerUserLinks.length === 0) {
       incomplete.push({ kind: "WORKER_LINK", membershipId: membership.id, userId: membership.user.id, label: membership.user.email, message: "Collega l'account a un profilo lavoratore." });
     }
-    if (membership.role === "SITE_MANAGER" && membership.user.jobSiteUserAssignments.length === 0) {
+    if (membership.preset === "SITE_MANAGER" && membership.user.jobSiteUserAssignments.length === 0) {
       incomplete.push({ kind: "SITE_MANAGER_SCOPE", membershipId: membership.id, userId: membership.user.id, label: membership.user.email, message: "Assegna almeno un cantiere al responsabile." });
     }
   }
@@ -312,9 +318,9 @@ export async function getPeopleAccessOverview() {
     generatedAt: now.toISOString(),
     activeUsers,
     revokedUsers: memberships.filter((item) => item.revokedAt !== null),
-    pendingInvitations: invitations.filter((item) => !item.acceptedAt && !item.revokedAt && item.expiresAt > now),
-    expiredInvitations: invitations.filter((item) => !item.acceptedAt && !item.revokedAt && item.expiresAt <= now),
-    revokedInvitations: invitations.filter((item) => Boolean(item.revokedAt)),
+    pendingInvitations: invitations.filter((item) => !item.acceptedAt && !item.declinedAt && !item.revokedAt && item.expiresAt > now),
+    expiredInvitations: invitations.filter((item) => !item.acceptedAt && !item.declinedAt && !item.revokedAt && item.expiresAt <= now),
+    revokedInvitations: invitations.filter((item) => Boolean(item.revokedAt || item.declinedAt)),
     incomplete,
   };
 }
@@ -345,7 +351,7 @@ export async function getPeopleAssignmentsOverview() {
       orderBy: [{ displayName: "asc" }],
     }),
     db.organizationMembership.findMany({
-      where: { organizationId, revokedAt: null, role: "SITE_MANAGER" },
+      where: { organizationId, revokedAt: null, role: "COLLABORATOR", preset: "SITE_MANAGER" },
       select: { user: { select: { id: true, name: true, email: true } } },
       orderBy: [{ createdAt: "asc" }],
     }),
@@ -389,5 +395,5 @@ export async function getWorkerAccessSummary(workerId: string) {
 }
 
 export function canOpenPeopleSection(role: OrganizationRole | null) {
-  return role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT";
+  return role !== null;
 }

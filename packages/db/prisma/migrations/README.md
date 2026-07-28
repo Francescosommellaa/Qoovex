@@ -13,8 +13,9 @@ Questa cartella contiene l'unica cronologia Prisma canonica di Qoovex.
 - `20260723010000_people_invitation_worker`: aggiunge la relazione opzionale `OrganizationInvitation.workerId`, indici e azioni audit per inviti/membership. Gli inviti preesistenti restano validi. Applicata e verificata soltanto sul database locale `localhost:51225`; fuori dal locale richiede il deploy protetto.
 - `20260723020000_job_site_operational_phase`: aggiunge la fase operativa opzionale dei cantieri e il relativo indice; i record legacy restano senza fase. Non applicarla fuori dal deploy protetto.
 - `20260725010000_add_session_account_user_indexes`: aggiunge gli indici sulle foreign key `accounts.userId` e `sessions.userId`. Non applicarla fuori dal deploy protetto.
+- `20260726010000_operational_engine_phase_3`: aggiunge modelli, enum, indici e vincoli del motore operativo persistente. Applicata e verificata soltanto sul database locale guardato; Preview e Production richiedono verifica e autorizzazione separate.
 
-Le nove migration precedenti non appartengono a questa cronologia: non erano applicate all'unico database condiviso e non devono essere eseguite o marcate tramite `migrate resolve`.
+Le migration storiche esterne a questa cronologia non devono essere eseguite o marcate tramite `migrate resolve`.
 
 ## Regole operative
 

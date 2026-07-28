@@ -16,6 +16,7 @@ Regole:
 - `NotificationPreference` contiene opt-in email per utente/azienda, disattivato di default;
 - `NotificationEmailDelivery` contiene log minimo degli invii email e non salva body, token, blob key o URL privati;
 - `ProductAuditEvent` contiene audit prodotto minimizzato e separato da support/auth audit;
+- `OperationalProcess` e i relativi step, eventi, decisioni, eccezioni, artifact, snapshot ed effect receipt persistono il motore exception-driven senza contenuti file o URL privati;
 - `WorkerUserLink`, `JobSiteUserAssignment` e `JobSiteWorkerAssignment` contengono assegnazioni operative addittive per scope risorsa;
 - `OrganizationMembership` e singolare per utente; la lettura esterna usa share link e non un ruolo interno dedicato;
 - `lib/prisma.ts` crea il singleton server-side con `PrismaPg`;

@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   findUnique: vi.fn(),
   isCurrentDevAuthIdentity: vi.fn(),
+  getDevAuthSession: vi.fn(),
   isMfaSatisfiedForUser: vi.fn(),
 }));
 
@@ -13,7 +14,7 @@ vi.mock("@shared/server/access-errors", () => ({
   },
 }));
 vi.mock("@qoovex/db", () => ({ db: { user: { findUnique: mocks.findUnique } } }));
-vi.mock("@shared/server/dev-auth", () => ({ isCurrentDevAuthIdentity: mocks.isCurrentDevAuthIdentity }));
+vi.mock("@shared/server/dev-auth", () => ({ isCurrentDevAuthIdentity: mocks.isCurrentDevAuthIdentity, getDevAuthSession: mocks.getDevAuthSession }));
 vi.mock("@shared/server/mfa-service", () => ({ isMfaSatisfiedForUser: mocks.isMfaSatisfiedForUser }));
 
 import { requireQoovexOperatorById } from "./qoovex-operator-access";
@@ -21,6 +22,7 @@ import { requireQoovexOperatorById } from "./qoovex-operator-access";
 beforeEach(() => {
   mocks.findUnique.mockReset();
   mocks.isCurrentDevAuthIdentity.mockReset().mockResolvedValue(false);
+  mocks.getDevAuthSession.mockReset().mockResolvedValue(null);
   mocks.isMfaSatisfiedForUser.mockReset().mockResolvedValue(false);
 });
 
@@ -31,7 +33,7 @@ describe("requireQoovexOperatorById", () => {
   });
 
   it("requires configured and satisfied MFA from real operators", async () => {
-    mocks.findUnique.mockResolvedValue({ id: "admin-1", email: "admin@example.com", platformRole: "SUPER_ADMIN", mfaEnabled: true, suspendedAt: null });
+    mocks.findUnique.mockResolvedValue({ id: "admin-1", email: "admin@example.com", platformRole: "PLATFORM_ADMIN", mfaEnabled: true, suspendedAt: null });
     await expect(requireQoovexOperatorById("admin-1")).rejects.toMatchObject({ status: 403 });
     mocks.isMfaSatisfiedForUser.mockResolvedValue(true);
     await expect(requireQoovexOperatorById("admin-1")).resolves.toMatchObject({ id: "admin-1", isDev: false });
@@ -40,7 +42,8 @@ describe("requireQoovexOperatorById", () => {
   it("allows only the signed local dev identity to bypass role and MFA", async () => {
     mocks.findUnique.mockResolvedValue({ id: "dev_qoovex_local_user", email: "dev@qoovex.local", platformRole: "USER", mfaEnabled: false, suspendedAt: null });
     mocks.isCurrentDevAuthIdentity.mockResolvedValue(true);
-    await expect(requireQoovexOperatorById("dev_qoovex_local_user")).resolves.toMatchObject({ platformRole: "SUPER_ADMIN", isDev: true });
+    mocks.getDevAuthSession.mockResolvedValue({ view: "PLATFORM_ADMIN", expiresAt: 9_999_999_999 });
+    await expect(requireQoovexOperatorById("dev_qoovex_local_user")).resolves.toMatchObject({ platformRole: "PLATFORM_ADMIN", isDev: true });
     expect(mocks.isMfaSatisfiedForUser).not.toHaveBeenCalled();
   });
 });

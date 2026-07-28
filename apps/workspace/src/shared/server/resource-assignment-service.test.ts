@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   db: {
+    $transaction: vi.fn(),
     worker: { findMany: vi.fn(), findFirst: vi.fn() },
     jobSite: { findMany: vi.fn(), findFirst: vi.fn() },
     organizationMembership: { findMany: vi.fn(), findFirst: vi.fn() },
@@ -15,6 +16,7 @@ const mocks = vi.hoisted(() => ({
   requirePermission: vi.fn(),
   recordProductAuditEventBestEffort: vi.fn(),
   auditActorFromContext: vi.fn(),
+  appendContextTimelineEvent: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -36,6 +38,7 @@ vi.mock("./product-audit-service", () => ({
   recordProductAuditEventBestEffort: mocks.recordProductAuditEventBestEffort,
   auditActorFromContext: mocks.auditActorFromContext,
 }));
+vi.mock("./context-timeline-service", () => ({ appendContextTimelineEvent: mocks.appendContextTimelineEvent }));
 
 import {
   archiveJobSiteUserAssignment,
@@ -102,14 +105,16 @@ function setRole(role: OrganizationRole) {
 }
 
 beforeEach(() => {
-  for (const model of Object.values(mocks.db)) resetModel(model);
+  for (const model of Object.values(mocks.db)) if (typeof model === "object") resetModel(model);
   vi.clearAllMocks();
+  mocks.db.$transaction.mockImplementation(async (callback) => callback(mocks.db));
+  mocks.appendContextTimelineEvent.mockResolvedValue({ id: "timeline-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.auditActorFromContext.mockReturnValue({ actorUserId: "user-owner", actorRole: "OWNER", supportSessionId: null });
   mocks.db.worker.findFirst.mockResolvedValue(worker);
   mocks.db.jobSite.findFirst.mockResolvedValue(jobSite);
-  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "WORKER", user });
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "COLLABORATOR", preset: "LIMITED_UPLOAD", user });
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteUserAssignment.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteWorkerAssignment.findFirst.mockResolvedValue(null);
@@ -128,8 +133,8 @@ describe("resource assignment service", () => {
     mocks.db.worker.findMany.mockResolvedValue([worker]);
     mocks.db.jobSite.findMany.mockResolvedValue([jobSite]);
     mocks.db.organizationMembership.findMany.mockResolvedValue([
-      { role: "WORKER", user },
-      { role: "SITE_MANAGER", user: { id: "manager-1", name: "Elena Mariani", email: "elena@example.com" } },
+      { role: "COLLABORATOR", preset: "LIMITED_UPLOAD", user },
+      { role: "COLLABORATOR", preset: "SITE_MANAGER", user: { id: "manager-1", name: "Elena Mariani", email: "elena@example.com" } },
     ]);
 
     await expect(getResourceAssignmentOptions()).resolves.toEqual({
@@ -159,10 +164,13 @@ describe("resource assignment service", () => {
     }));
   });
 
-  it("keeps safety consultants read-only for assignments", async () => {
-    setRole("SAFETY_CONSULTANT");
+  it("keeps collaborators without management permission read-only for assignments", async () => {
+    setRole("COLLABORATOR");
+    mocks.requirePermission.mockImplementationOnce(() => undefined).mockImplementationOnce(() => {
+      throw Object.assign(new Error("Azione non disponibile."), { status: 403 });
+    });
     await expect(listWorkerUserLinks()).resolves.toHaveLength(1);
-    await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 404 });
+    await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 403 });
   });
 
   it("pushes detail-page assignment filters into tenant-scoped Prisma queries", async () => {
@@ -193,7 +201,7 @@ describe("resource assignment service", () => {
   });
 
   it("validates role-specific jobsite assignments and soft archives them", async () => {
-    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "SITE_MANAGER", user });
+    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "COLLABORATOR", preset: "SITE_MANAGER", user });
     await expect(createJobSiteUserAssignment({ jobSiteId: "jobsite-1", userId: "user-worker" })).resolves.toMatchObject({
       jobSiteId: "jobsite-1",
       assignmentRole: "SITE_MANAGER",
@@ -207,14 +215,13 @@ describe("resource assignment service", () => {
     mocks.db.jobSiteUserAssignment.findFirst.mockResolvedValueOnce({ id: "assignment-1" });
     await expect(archiveJobSiteUserAssignment("assignment-1")).resolves.toMatchObject({ archived: true });
     expect(mocks.db.jobSiteUserAssignment.update).toHaveBeenCalledWith(expect.objectContaining({
-      data: { archivedAt: expect.any(Date) },
+      data: expect.objectContaining({ archivedAt: expect.any(Date), endsAt: expect.any(Date), endedById: "user-owner", endReason: expect.any(String) }),
     }));
   });
 
-  it("denies assignment management to site managers and workers", async () => {
-    for (const role of ["SITE_MANAGER", "WORKER"] as const) {
-      setRole(role);
-      await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 404 });
-    }
+  it("denies assignment management when the collaborator lacks the explicit permission", async () => {
+    setRole("COLLABORATOR");
+    mocks.requirePermission.mockImplementation(() => { throw Object.assign(new Error("Azione non disponibile."), { status: 403 }); });
+    await expect(createWorkerUserLink({ workerId: "worker-1", userId: "user-worker" })).rejects.toMatchObject({ status: 403 });
   });
 });

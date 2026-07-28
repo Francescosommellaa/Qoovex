@@ -2,24 +2,31 @@
 
 ## Stato attuale verificato
 
-Prisma salva record, relazioni, stati, permessi, scadenze e audit. Vercel Blob privato salva file binari; DocumentVersion ed Evidence conservano metadati e blob key. Download e condivisione passano da endpoint autorizzati senza esporre blob key, token hash o URL permanenti.
+Prisma conserva record, relazioni, stati e audit; Vercel Blob privato conserva i binari. Il motore non salva contenuto file, Blob key, token, URL firmati, credenziali, stack trace o dati sensibili non necessari.
 
-Il repository contiene nove migration canoniche, da `20260712010000_single_company_baseline` a `20260725010000_add_session_account_user_indexes`. La presenza dei file non prova lo stato applicato di Local, Preview o Production: ogni ambiente deve essere verificato separatamente con i guardrail di `packages/db`. Le migration applicate sono immutabili; non usare `migrate resolve`, `db push` o reset per nascondere divergenze.
+Il repository contiene sedici migration canoniche. `20260728010000_access_model_expand` e `20260728020000_access_model_contract` sono applicate soltanto al database locale guardato. La migration additiva `20260728030000_operational_workspace_expansion` introduce profilo e contatti, lifecycle versioni, collegamenti documento-cantiere, storico assegnazioni, prove revisionate, richieste/messaggi/timeline, fonti manuali e snapshot estesi; al termine di questa implementazione resta pendente perche il wrapper richiede un backup reference esplicito. Nessun ambiente Preview o Production e dichiarato allineato.
 
-Il dominio corrente include tassonomia e sensibilita documentale, CalendarEvent, fase operativa dei cantieri e relazione invito-lavoratore. I record legacy non vengono riclassificati o backfillati per deduzione. Auth, MFA, rate limit, support session, audit e protezioni HTTP restano nel workspace.
+`OperationalEvent` e append-only per servizio e usa `eventKey` idempotente. `OperationalEventArtifactReference` aggrega timeline senza duplicare eventi. `DocumentPackageRevision` congela manifest minimizzato e fingerprint SHA-256; una mutazione successiva non riscrive revisioni o link. I link legacy sono associati a revisioni `LEGACY_BACKFILL` preservando accesso, scadenza e download preesistenti.
 
-## Direzione approvata
+## Garanzie runtime implementate
 
-Un processo futuro deve essere persistente, riprendibile e idempotente. Evento, processo e step richiedono chiavi idempotenti distinte; claim e completamento devono essere atomici; un worker obsoleto non puo completare dopo una nuova acquisizione. Replay e riconciliazione aggiungono storia e aggiornano lo stato corrente senza riscrivere il passato.
+- idempotency key univoca per Azienda e processo;
+- step univoci per processo;
+- claim token, lease di cinque minuti e fencing al completamento;
+- massimo cinque tentativi e backoff 1/5/15/60 minuti;
+- eventi e payload allow-listed/minimizzati;
+- query e mutazioni sempre tenant-scoped;
+- timeline utente separata dall'audit tecnico.
+- download documenti subordinato a `documents:file:read` e, per categorie sensibili, a `documents:sensitive:read`;
+- download prove subordinato a `evidence:file:read` e, per classificazione `RESTRICTED`, a `evidence:sensitive:read`;
+- sessioni Support sempre metadata-only, senza file documentali o prove;
+- versione corrente approvata puntata da `Document.currentVersionId`, con revisioni condivise immutabili;
+- prove `INTERNAL` per default, condivisibili soltanto se `ACCEPTED` e `SHAREABLE`.
 
-Le regole validate devono essere versionate e il processo deve conservare quale versione ha applicato. Gli output restano nelle entita dominio esistenti; la persistenza di processo conserva riferimenti autorizzati, non copie di file o segreti.
+## Specifiche non implementate
 
-La timeline operativa deve essere minimizzata. Puo conservare riepiloghi, attori, fonti, affidabilita, impatto, decisioni e riferimenti dominio; non conserva contenuti completi, token, blob key, URL permanenti, credenziali, stack trace, body email o dati sensibili non necessari.
-
-## Specifiche concettuali non implementate
-
-I concetti di definizione, run, step, evento, proposta, decisione, eccezione e riferimento artefatto non corrispondono a modelli Prisma. Stati, indici, vincoli, payload, retention e compensazioni non sono approvati.
+Non sono implementati retention automatica dedicata, cifratura applicativa aggiuntiva, indicizzazione del contenuto file, OCR/AI, ricerca semantica, compensazioni generali o export di processo.
 
 ## Decisioni aperte e hard stop
 
-Richiedono decisione esplicita: schema e migration, versionamento concreto, idempotency key, fencing token, retention di timeline/eventi, trattamento dei documenti sensibili, indicizzazione, cifratura aggiuntiva, compensazioni, provider OCR/AI e subprocessors. Non introdurre provider DB o storage alternativi.
+Retention, ricerca, provider, trattamento ulteriore dei dati sensibili e deploy remoto restano decisioni separate. Non usare `db push`, reset o `migrate resolve` per aggirare cronologia o drift.

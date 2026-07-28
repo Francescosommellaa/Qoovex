@@ -116,7 +116,7 @@ export function DocumentsPageView({
         description={archiveMode ? "Consulta i documenti fuori dalle viste operative, ripristinali oppure eliminali definitivamente." : intentUpload ? "Scegli il documento a cui aggiungere un nuovo file, senza modificare le informazioni già registrate." : "Controlla ciò che è presente, individua ciò che richiede attenzione e apri subito il prossimo passo."}
         action={
           <div className="grid w-full grid-cols-1 gap-2 min-[420px]:grid-cols-2 sm:flex sm:w-auto sm:flex-wrap sm:justify-end">
-            {archiveMode ? <Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} data-link="plain" href="/documents"><IconArrowLeft />Torna ai documenti</Link> : preserveDashboardOrigin ? <Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} data-link="plain" href="/dashboard"><IconArrowLeft />Torna a Da fare</Link> : null}
+            {archiveMode ? <Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} data-link="plain" href="/documents"><IconArrowLeft />Torna ai documenti</Link> : preserveDashboardOrigin ? <Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} data-link="plain" href="/dashboard"><IconArrowLeft />Torna al Centro operativo</Link> : null}
             {!archiveMode && capabilities.canCreateDocuments ? <DocumentCreateDialog canManageTypes={capabilities.canManageDocumentSettings} className="h-10 sm:h-8" jobSites={jobSites} origin="documents" workers={workers} /> : null}
           </div>
         }

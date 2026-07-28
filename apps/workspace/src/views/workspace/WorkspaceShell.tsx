@@ -20,7 +20,6 @@ import { getDevAuthSession } from "@shared/server/dev-auth";
 import { getUnreadNotificationCount } from "@shared/server/notification-service";
 import { WorkspaceBrandMark } from "../../components/workspace-brand-mark";
 import { AccountSecurityFlow } from "@/views/account-security/AccountSecurityFlow";
-import { DevRoleSwitcher } from "./DevRoleSwitcher";
 import { WorkspaceNavigation } from "./WorkspaceNavigation";
 import { buildWorkspaceNavigation, canReadWorkspaceNotifications } from "./workspace-navigation-policy";
 import { SupportSessionBanner, WorkspaceLogoutButton } from "./WorkspaceSessionControls";
@@ -32,15 +31,15 @@ async function getShellState() {
     const context = await getWorkspaceAccessContext();
     const devSession = await getDevAuthSession();
     const role = getEffectiveOrganizationRole(context);
-    const unreadNotificationCount = canReadWorkspaceNotifications(role)
+    const unreadNotificationCount = canReadWorkspaceNotifications(context.permissions)
       ? await getUnreadNotificationCount().catch(() => 0)
       : 0;
     return {
       kind: "workspace" as const,
       context,
-      devRole: devSession?.role ?? null,
+      devView: devSession?.view ?? null,
       role,
-      navigation: buildWorkspaceNavigation(role, context.platformRole),
+      navigation: buildWorkspaceNavigation(context.permissions, context.platformRole),
       unreadNotificationCount,
     };
   } catch (error) {
@@ -62,15 +61,13 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
   }
 
   const isWorkspace = state.kind === "workspace";
-  const isSuperAdmin = (isWorkspace ? state.context.platformRole : state.platformRole) === "SUPER_ADMIN";
-
   return (
     <SidebarProvider className="h-dvh min-h-0! overflow-hidden bg-sidebar" defaultOpen={sidebarDefaultOpen}>
       <Sidebar collapsible="icon" variant="inset">
         <nav aria-label="Navigazione workspace" className="contents">
           <SidebarHeader className="pb-0">
             <SidebarMenu><SidebarMenuItem>
-              <SidebarMenuButton render={<Link href={isWorkspace ? "/dashboard" : "/account/security"} />} size="lg" tooltip="Qoovex">
+              <SidebarMenuButton render={<Link href={isWorkspace && (state.context.platformRole === "SUPPORT_AGENT" || state.context.platformRole === "PLATFORM_ADMIN") && !state.context.support ? "/qoovex-admin" : isWorkspace ? "/dashboard" : "/account/security"} />} size="lg" tooltip="Qoovex">
                 <WorkspaceBrandMark />
               </SidebarMenuButton>
             </SidebarMenuItem></SidebarMenu>
@@ -92,13 +89,13 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
         <WorkspacePageIdentityProvider>
           <WorkspaceTopbar
             fallbackLabel={isWorkspace ? "Area di lavoro" : "Sicurezza account"}
-            isSuperAdmin={isSuperAdmin}
-            navigation={isWorkspace ? [...state.navigation.primary, ...state.navigation.documents, ...state.navigation.people] : []}
-            showNotifications={isWorkspace && canReadWorkspaceNotifications(state.role)}
+            platformRole={isWorkspace ? state.context.platformRole : state.platformRole}
+            devView={isWorkspace ? state.devView : null}
+            navigation={isWorkspace ? state.navigation.primary : []}
+            showNotifications={isWorkspace && canReadWorkspaceNotifications(state.context.permissions)}
             unreadNotificationCount={isWorkspace ? state.unreadNotificationCount : 0}
           />
 
-          {isWorkspace && state.devRole && !state.context.support ? <DevRoleSwitcher key={state.devRole} role={state.devRole} /> : null}
           {isWorkspace && state.context.support ? <SupportSessionBanner support={state.context.support} /> : null}
           <main className="min-h-0 min-w-0 flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">
             {isWorkspace ? children : <AccountSecurityFlow initialStatus={state.status} mode="gate" />}

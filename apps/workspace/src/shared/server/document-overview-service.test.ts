@@ -21,8 +21,8 @@ import { getDocumentOverview } from "./document-overview-service";
 describe("document overview service", () => {
   beforeEach(() => {
     for (const method of Object.values(mocks.db.document)) method.mockReset();
-    mocks.requireOrganizationDomainAccess.mockReset().mockResolvedValue({ context: { userId: "user-1" }, organizationId: "org-1", actorRole: "OWNER" });
-    mocks.getResourceScope.mockReset().mockResolvedValue({ fullAccess: true, actorRole: "OWNER", siteManagerJobSiteIds: [], visibleJobSiteIds: [], linkedWorker: null });
+    mocks.requireOrganizationDomainAccess.mockReset().mockResolvedValue({ context: { userId: "user-1", permissions: ["documents:read", "documents:sensitive:read"] }, organizationId: "org-1", actorRole: "OWNER" });
+    mocks.getResourceScope.mockReset().mockResolvedValue({ fullAccess: true, actorRole: "OWNER", preset: null, siteManagerJobSiteIds: [], visibleJobSiteIds: [], linkedWorker: null });
     mocks.buildMissing.mockReset().mockResolvedValue([]);
     mocks.recordSupportAccess.mockReset().mockResolvedValue(undefined);
     mocks.db.document.groupBy.mockResolvedValue([{ ownerType: "ORGANIZATION", status: "PRESENT", _count: { _all: 7 } }]);
@@ -43,8 +43,8 @@ describe("document overview service", () => {
   });
 
   it("adds role and sensitivity scope before every overview operation", async () => {
-    mocks.requireOrganizationDomainAccess.mockResolvedValue({ context: { userId: "manager-1" }, organizationId: "org-1", actorRole: "SITE_MANAGER" });
-    mocks.getResourceScope.mockResolvedValue({ fullAccess: false, actorRole: "SITE_MANAGER", siteManagerJobSiteIds: ["site-1"], visibleJobSiteIds: ["site-1"], linkedWorker: null });
+    mocks.requireOrganizationDomainAccess.mockResolvedValue({ context: { userId: "manager-1", permissions: ["documents:read"] }, organizationId: "org-1", actorRole: "COLLABORATOR" });
+    mocks.getResourceScope.mockResolvedValue({ fullAccess: false, actorRole: "COLLABORATOR", preset: "SITE_MANAGER", siteManagerJobSiteIds: ["site-1"], visibleJobSiteIds: ["site-1"], linkedWorker: null });
 
     await getDocumentOverview();
 

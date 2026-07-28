@@ -14,10 +14,7 @@ export default async function SharedDocumentPackagePage({ params }: SharedDocume
   const { token } = await params;
   try {
     const documentPackage = await getSharedDocumentPackage(token);
-    const response: SharedDocumentPackageResponse = {
-      ...documentPackage,
-      updatedAt: documentPackage.updatedAt.toISOString(),
-    };
+    const response: SharedDocumentPackageResponse = documentPackage;
     return <SharedDocumentPackagePageView token={token} documentPackage={response} />;
   } catch (error) {
     if (error instanceof AccessError) {

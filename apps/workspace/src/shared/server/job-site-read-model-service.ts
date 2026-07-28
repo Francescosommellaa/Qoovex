@@ -16,7 +16,7 @@ import { trimOptionalText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { canReadJobSite, getResourceScope } from "./resource-scope-service";
 
-const JOBSITE_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const JOBSITE_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const DEFAULT_PAGE_SIZE = 20;
 const MAX_PAGE_SIZE = 50;
 const UPCOMING_DAYS = 30;
@@ -175,20 +175,18 @@ export async function getJobSiteOverview(): Promise<JobSiteOverviewResponse> {
   const { context, organizationId } = await requireOrganizationDomainAccess("jobSites:read", JOBSITE_READ_ROLES);
   const scope = await getResourceScope(context);
   const where = { organizationId, archivedAt: null, ...(scope.fullAccess ? {} : { id: { in: scope.visibleJobSiteIds } }) };
-  const [rows, documents, checklists, evidence, packages] = await Promise.all([
-    db.jobSite.findMany({ where, select: operationalJobSiteSelect, orderBy: [{ updatedAt: "desc" }] }),
-    db.document.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 }),
-    db.checklist.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, name: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 }),
-    db.evidence.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, createdAt: true }, orderBy: [{ createdAt: "desc" }], take: 6 }),
-    db.documentPackage.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 }),
-  ]);
+  const rows = await db.jobSite.findMany({ where, select: operationalJobSiteSelect, orderBy: [{ updatedAt: "desc" }] });
+  const documents = await db.document.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 });
+  const checklists = await db.checklist.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, name: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 });
+  const evidence = await db.evidence.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, createdAt: true }, orderBy: [{ createdAt: "desc" }], take: 6 });
+  const packages = await db.documentPackage.findMany({ where: { organizationId, archivedAt: null, jobSiteId: { not: null }, jobSite: where }, select: { id: true, jobSiteId: true, title: true, updatedAt: true }, orderBy: [{ updatedAt: "desc" }], take: 6 });
   const items = rows.map(toListItem);
   const emptySummary: JobSiteOperationalSummary = { missingDocuments: 0, expiredDocuments: 0, documentsToReview: 0, openChecklistItems: 0, checklistItemsToReview: 0, overdueDeadlines: 0, upcomingDeadlines: 0, managerCount: 0, workerCount: 0, readyPackages: 0, attentionScore: 0, attentionStates: [], nextDeadline: null };
   const totals = items.reduce((sum, item) => {
     for (const key of ["missingDocuments", "expiredDocuments", "documentsToReview", "openChecklistItems", "checklistItemsToReview", "overdueDeadlines", "upcomingDeadlines", "managerCount", "workerCount", "readyPackages", "attentionScore"] as const) sum[key] += item.summary[key];
     return sum;
   }, { ...emptySummary });
-  const phaseCounts: JobSiteOverviewResponse["phaseCounts"] = { PREPARATION: 0, IN_PROGRESS: 0, PAUSED: 0, CLOSING: 0, COMPLETED: 0, UNSET: 0 };
+  const phaseCounts: JobSiteOverviewResponse["phaseCounts"] = { DRAFT: 0, PREPARATION: 0, IN_PROGRESS: 0, PAUSED: 0, CLOSING: 0, COMPLETED: 0, UNSET: 0 };
   for (const item of items) phaseCounts[item.operationalPhase ?? "UNSET"] += 1;
   const names = new Map(rows.map((row) => [row.id, row.name]));
   const recentActivity = [

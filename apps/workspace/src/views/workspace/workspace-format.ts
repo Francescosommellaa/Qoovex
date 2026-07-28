@@ -1,4 +1,4 @@
-import type { ChecklistItemStatus, DeadlineStatus, DocumentOwnerType, DocumentPackageItemType, DocumentPackageStatus, DocumentStatus, EvidenceType, RecordStatus } from "@qoovex/types";
+import type { ChecklistItemStatus, DeadlineStatus, DocumentOwnerType, DocumentPackageEffectiveState, DocumentPackageItemType, DocumentPackageStatus, DocumentStatus, EvidenceType, RecordStatus } from "@qoovex/types";
 import type { WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "./workspace-records";
 
 export const documentStatusLabels: Record<DocumentStatus, string> = {
@@ -43,12 +43,24 @@ export const documentPackageStatusLabels: Record<DocumentPackageStatus, string> 
   ARCHIVED: "Archiviato",
 };
 
+export const documentPackageEffectiveStateLabels: Record<DocumentPackageEffectiveState, string> = {
+  DRAFT: "Bozza", PREPARING: "In preparazione", INCOMPLETE: "Incompleto", TO_VERIFY: "Da verificare",
+  READY_FOR_REVIEW: "Pronto per revisione", APPROVED: "Approvato", SHARED: "Condiviso",
+  UPDATED_AFTER_SHARING: "Aggiornato dopo la condivisione", EXPIRED: "Scaduto", REVOKED: "Revocato", ARCHIVED: "Archiviato",
+};
+
 export const documentPackageItemTypeLabels: Record<DocumentPackageItemType, string> = {
   DOCUMENT: "Documento",
   DOCUMENT_VERSION: "File del documento",
   EVIDENCE: "Prova",
   CHECKLIST: "Checklist",
   NOTE: "Nota",
+  WORKER: "Lavoratore",
+  JOB_SITE_USER_ASSIGNMENT: "Assegnazione collaboratore",
+  JOB_SITE_WORKER_ASSIGNMENT: "Assegnazione lavoratore",
+  OPERATIONAL_REQUEST: "Richiesta operativa",
+  CONTEXT_MESSAGE: "Messaggio contestuale",
+  CONTEXT_TIMELINE_EVENT: "Evento operativo",
 };
 
 export const ownerTypeLabels: Record<DocumentOwnerType, string> = {

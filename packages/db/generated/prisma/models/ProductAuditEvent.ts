@@ -595,10 +595,6 @@ export type ProductAuditEventUncheckedUpdateManyWithoutSupportSessionNestedInput
   deleteMany?: Prisma.ProductAuditEventScalarWhereInput | Prisma.ProductAuditEventScalarWhereInput[]
 }
 
-export type NullableEnumOrganizationRoleFieldUpdateOperationsInput = {
-  set?: $Enums.OrganizationRole | null
-}
-
 export type EnumAuditActionFieldUpdateOperationsInput = {
   set?: $Enums.AuditAction
 }

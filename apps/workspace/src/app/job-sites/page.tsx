@@ -9,7 +9,9 @@ interface JobSitesPageProps {
 
 export default async function JobSitesPage({ searchParams }: JobSitesPageProps) {
   try {
-    const [overview, capabilities, params] = await Promise.all([getJobSiteOverview(), getWorkspaceCapabilities(), searchParams]);
+    const params = await searchParams;
+    const overview = await getJobSiteOverview();
+    const capabilities = await getWorkspaceCapabilities();
     return <JobSitesOverviewView capabilities={capabilities} initialCreateOpen={params.intent === "create" && capabilities.canCreateJobSites} overview={overview} />;
   } catch {
     return <WorkspaceAccessState title="Cantieri non disponibili" description="Verifica accesso e azienda configurata." />;

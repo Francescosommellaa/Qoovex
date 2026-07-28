@@ -2,38 +2,26 @@
 
 ## Stato attuale verificato
 
-Il monorepo contiene:
+- `apps/workspace`: runtime prodotto, auth/MFA, route, motore, runner, read model e UI operativa;
+- `apps/web`: marketing pubblico e pagine legali;
+- `apps/sirio`: catalogo/proof del design system con scenario operativo Fase 4, senza logica prodotto;
+- `packages/db`: Prisma, sedici migration canoniche, client e guardrail; l'ultima migration additiva e presente nel repository ma non ancora applicata al target locale corrente;
+- `packages/types`: contratti platform-neutral inclusi i DTO `Operational*`;
+- `packages/ui`: foundation condivisa con primitive generiche search/timeline/work queue, senza dominio;
+- `packages/brand-resources`: asset SVG proprietari.
 
-- `apps/workspace`: runtime Next.js del prodotto, pagine, auth, MFA, API, servizi server, supporto e Console Qoovex;
-- `apps/web`: sito pubblico e pagine legali;
-- `apps/sirio`: catalogo e prova tecnica del design system;
-- `apps/mobile`: placeholder;
-- `packages/db`: Prisma, client, schema, migration e guardrail database;
-- `packages/types`: contratti platform-neutral;
-- `packages/ui`: foundation condivisa per token, CSS, primitive, tema, hook e utility;
-- `packages/brand-resources`: SVG proprietari asset-only.
+Nel Workspace il registry e l'enqueue server-only vivono nel layer condiviso; read model e azioni operative vivono nella feature; il riepilogo artifact e un'entity; Centro operativo e dettaglio sono view; il routing resta in `app`. Il gate FSD impedisce import verso layer superiori.
 
-Le app non si importano tra loro. `packages/ui` non conosce auth, Prisma, route, ruoli o dominio; le composizioni prodotto restano app-locali. Route e servizi autorizzativi vivono nel workspace. Prisma salva dati e metadati; Vercel Blob privato salva binari.
-
-Gli alias Feature-Sliced del workspace esistono, ma non provano una migrazione completa delle view. Il registro documentale condiviso vive in `packages/types`; nessuna view ricostruisce categorie o sensibilita dal nome.
+Le definizioni eseguibili sono un registry server-side versionato, non una tabella o un editor. Ricerca, timeline e condivisione sono servizi Workspace server-only; i route handler fanno parsing, auth e delega. PostgreSQL full-text usa indici di espressione e non replica il dominio in una tabella indice.
 
 ## Direzione approvata
 
-Il motore operativo futuro resta server-side nel workspace e orchestra servizi dominio esistenti. I processi non duplicano Document, Worker, JobSite, Deadline, Checklist, Evidence o DocumentPackage: li referenziano come input e output autorizzati.
+Documenti, lavoratori, cantieri, scadenze, checklist, prove e pacchetti restano entita dominio. I processi conservano riferimenti, snapshot di regole e receipt idempotenti. Prisma salva dati/metadati; Blob privato resta l'unico storage dei binari.
 
-Il placement target, subordinato alle decisioni di Fase 3, e:
+## Specifiche non implementate
 
-- `apps/workspace`: orchestrazione, runner, accesso, riconciliazione, read model del centro operativo e route decisionali;
-- `packages/types`: eventuali enum e DTO platform-neutral approvati;
-- `packages/db`: eventuale persistenza e indici soltanto dopo schema e migration approvati;
-- `packages/ui`: sole primitive realmente generiche; composizioni processo app-locali;
-- `apps/sirio`: eventuale proof visuale prima di promozioni UI;
-- `apps/web`: nessuna logica dominio.
-
-## Specifiche concettuali non implementate
-
-Il modello target prevede acquisizione evento, blocco del contesto autorizzativo, deduplica, risoluzione delle regole, piano, esecuzione, eccezioni, riconciliazione e chiusura. Questa sequenza non autorizza cartelle, servizi, code, dipendenze o contratti.
+Non esistono editor processi, plugin provider, coda esterna, ricerca semantica/nei file o runtime in Web/Sirio. `packages/ui` non contiene logica operativa, permessi o API.
 
 ## Decisioni aperte e hard stop
 
-Schema, migration, naming, runner, frequenze, adapter OCR/AI, code o scheduler, cache, indicizzazione e placement concreto richiedono approvazione. Le architetture esistenti di auth, Prisma, Blob, Vercel e isolamento Azienda restano vincolanti.
+Provider OCR/AI, indicizzazione, nuove infrastrutture, retention e osservabilita esterna richiedono approvazione. Le app non si importano tra loro e i package non acquisiscono business logic app-specific.

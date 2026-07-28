@@ -18,7 +18,7 @@ export default async function WorkerDocumentsPage({ searchParams }: { searchPara
     const view = parseDocumentQueueView(params.view);
     const page = parseWorkspaceListPage(params.page);
     const capabilities = await getWorkspaceCapabilities();
-    const canReadTypeCatalog = capabilities.role === "OWNER" || capabilities.role === "ADMIN" || capabilities.role === "SAFETY_CONSULTANT";
+    const canReadTypeCatalog = capabilities.canReadDocumentSettings;
     const [workers, jobSites] = await Promise.all([listWorkers(), listJobSites()]);
     const visibleTargets = { workers: workers.filter((item) => item.status === "ACTIVE").map((item) => ({ id: item.id, displayName: item.displayName })), jobSites: jobSites.filter((item) => item.status === "ACTIVE").map((item) => ({ id: item.id, name: item.name })) };
     const [documents, documentTypes, missingResponse] = await Promise.all([listDocuments({ ownerType: "WORKER", ...(view ? { statuses: ATTENTION_DOCUMENT_STATUSES } : { status }), take: WORKSPACE_LIST_PAGE_SIZE + 1, skip: (page - 1) * WORKSPACE_LIST_PAGE_SIZE }), canReadTypeCatalog ? listDocumentTypes() : Promise.resolve([]), getMissingDocumentRequirements(visibleTargets)]);

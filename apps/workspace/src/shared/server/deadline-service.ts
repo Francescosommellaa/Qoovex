@@ -10,8 +10,8 @@ import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { getResourceScope } from "./resource-scope-service";
 
-const DEADLINE_MANAGE_ROLES = ["OWNER", "ADMIN"] as const;
-const DEADLINE_READ_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"] as const;
+const DEADLINE_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const DEADLINE_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const EXPIRING_SOON_DAYS = 30;
 
 const deadlineSelect = {
@@ -134,8 +134,8 @@ export async function listDeadlines(input: ListDeadlinesInput = {}) {
     >;
   } = { organizationId, archivedAt: null };
   if (!scope.fullAccess) {
-    if (scope.actorRole === "SITE_MANAGER") where.OR = [{ jobSiteId: { in: scope.siteManagerJobSiteIds } }];
-    if (scope.actorRole === "WORKER" && scope.linkedWorker) {
+    if (scope.preset === "SITE_MANAGER") where.OR = [{ jobSiteId: { in: scope.siteManagerJobSiteIds } }];
+    if (scope.preset === "LIMITED_UPLOAD" && scope.linkedWorker) {
       where.OR = [{ workerId: scope.linkedWorker.id }, { document: { ownerType: "WORKER", workerId: scope.linkedWorker.id } }];
     }
     if (!where.OR) return [];

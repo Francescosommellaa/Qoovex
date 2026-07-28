@@ -43,6 +43,12 @@ export type DocumentPackageItemMinAggregateOutputType = {
   documentVersionId: string | null
   evidenceId: string | null
   checklistId: string | null
+  workerId: string | null
+  jobSiteUserAssignmentId: string | null
+  jobSiteWorkerAssignmentId: string | null
+  operationalRequestId: string | null
+  contextMessageId: string | null
+  contextTimelineEventId: string | null
   note: string | null
   position: number | null
   createdAt: Date | null
@@ -57,6 +63,12 @@ export type DocumentPackageItemMaxAggregateOutputType = {
   documentVersionId: string | null
   evidenceId: string | null
   checklistId: string | null
+  workerId: string | null
+  jobSiteUserAssignmentId: string | null
+  jobSiteWorkerAssignmentId: string | null
+  operationalRequestId: string | null
+  contextMessageId: string | null
+  contextTimelineEventId: string | null
   note: string | null
   position: number | null
   createdAt: Date | null
@@ -71,6 +83,12 @@ export type DocumentPackageItemCountAggregateOutputType = {
   documentVersionId: number
   evidenceId: number
   checklistId: number
+  workerId: number
+  jobSiteUserAssignmentId: number
+  jobSiteWorkerAssignmentId: number
+  operationalRequestId: number
+  contextMessageId: number
+  contextTimelineEventId: number
   note: number
   position: number
   createdAt: number
@@ -95,6 +113,12 @@ export type DocumentPackageItemMinAggregateInputType = {
   documentVersionId?: true
   evidenceId?: true
   checklistId?: true
+  workerId?: true
+  jobSiteUserAssignmentId?: true
+  jobSiteWorkerAssignmentId?: true
+  operationalRequestId?: true
+  contextMessageId?: true
+  contextTimelineEventId?: true
   note?: true
   position?: true
   createdAt?: true
@@ -109,6 +133,12 @@ export type DocumentPackageItemMaxAggregateInputType = {
   documentVersionId?: true
   evidenceId?: true
   checklistId?: true
+  workerId?: true
+  jobSiteUserAssignmentId?: true
+  jobSiteWorkerAssignmentId?: true
+  operationalRequestId?: true
+  contextMessageId?: true
+  contextTimelineEventId?: true
   note?: true
   position?: true
   createdAt?: true
@@ -123,6 +153,12 @@ export type DocumentPackageItemCountAggregateInputType = {
   documentVersionId?: true
   evidenceId?: true
   checklistId?: true
+  workerId?: true
+  jobSiteUserAssignmentId?: true
+  jobSiteWorkerAssignmentId?: true
+  operationalRequestId?: true
+  contextMessageId?: true
+  contextTimelineEventId?: true
   note?: true
   position?: true
   createdAt?: true
@@ -224,6 +260,12 @@ export type DocumentPackageItemGroupByOutputType = {
   documentVersionId: string | null
   evidenceId: string | null
   checklistId: string | null
+  workerId: string | null
+  jobSiteUserAssignmentId: string | null
+  jobSiteWorkerAssignmentId: string | null
+  operationalRequestId: string | null
+  contextMessageId: string | null
+  contextTimelineEventId: string | null
   note: string | null
   position: number
   createdAt: Date
@@ -261,6 +303,12 @@ export type DocumentPackageItemWhereInput = {
   documentVersionId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   evidenceId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   checklistId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  workerId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  jobSiteUserAssignmentId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  jobSiteWorkerAssignmentId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  operationalRequestId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  contextMessageId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  contextTimelineEventId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   note?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   position?: Prisma.IntFilter<"DocumentPackageItem"> | number
   createdAt?: Prisma.DateTimeFilter<"DocumentPackageItem"> | Date | string
@@ -270,6 +318,12 @@ export type DocumentPackageItemWhereInput = {
   documentVersion?: Prisma.XOR<Prisma.DocumentVersionNullableScalarRelationFilter, Prisma.DocumentVersionWhereInput> | null
   evidence?: Prisma.XOR<Prisma.EvidenceNullableScalarRelationFilter, Prisma.EvidenceWhereInput> | null
   checklist?: Prisma.XOR<Prisma.ChecklistNullableScalarRelationFilter, Prisma.ChecklistWhereInput> | null
+  worker?: Prisma.XOR<Prisma.WorkerNullableScalarRelationFilter, Prisma.WorkerWhereInput> | null
+  jobSiteUserAssignment?: Prisma.XOR<Prisma.JobSiteUserAssignmentNullableScalarRelationFilter, Prisma.JobSiteUserAssignmentWhereInput> | null
+  jobSiteWorkerAssignment?: Prisma.XOR<Prisma.JobSiteWorkerAssignmentNullableScalarRelationFilter, Prisma.JobSiteWorkerAssignmentWhereInput> | null
+  operationalRequest?: Prisma.XOR<Prisma.OperationalRequestNullableScalarRelationFilter, Prisma.OperationalRequestWhereInput> | null
+  contextMessage?: Prisma.XOR<Prisma.ContextMessageNullableScalarRelationFilter, Prisma.ContextMessageWhereInput> | null
+  contextTimelineEvent?: Prisma.XOR<Prisma.ContextTimelineEventNullableScalarRelationFilter, Prisma.ContextTimelineEventWhereInput> | null
 }
 
 export type DocumentPackageItemOrderByWithRelationInput = {
@@ -281,6 +335,12 @@ export type DocumentPackageItemOrderByWithRelationInput = {
   documentVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   evidenceId?: Prisma.SortOrderInput | Prisma.SortOrder
   checklistId?: Prisma.SortOrderInput | Prisma.SortOrder
+  workerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  jobSiteUserAssignmentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  jobSiteWorkerAssignmentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  operationalRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
+  contextMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  contextTimelineEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   position?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -290,6 +350,12 @@ export type DocumentPackageItemOrderByWithRelationInput = {
   documentVersion?: Prisma.DocumentVersionOrderByWithRelationInput
   evidence?: Prisma.EvidenceOrderByWithRelationInput
   checklist?: Prisma.ChecklistOrderByWithRelationInput
+  worker?: Prisma.WorkerOrderByWithRelationInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentOrderByWithRelationInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentOrderByWithRelationInput
+  operationalRequest?: Prisma.OperationalRequestOrderByWithRelationInput
+  contextMessage?: Prisma.ContextMessageOrderByWithRelationInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventOrderByWithRelationInput
 }
 
 export type DocumentPackageItemWhereUniqueInput = Prisma.AtLeast<{
@@ -304,6 +370,12 @@ export type DocumentPackageItemWhereUniqueInput = Prisma.AtLeast<{
   documentVersionId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   evidenceId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   checklistId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  workerId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  jobSiteUserAssignmentId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  jobSiteWorkerAssignmentId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  operationalRequestId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  contextMessageId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  contextTimelineEventId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   note?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   position?: Prisma.IntFilter<"DocumentPackageItem"> | number
   createdAt?: Prisma.DateTimeFilter<"DocumentPackageItem"> | Date | string
@@ -313,6 +385,12 @@ export type DocumentPackageItemWhereUniqueInput = Prisma.AtLeast<{
   documentVersion?: Prisma.XOR<Prisma.DocumentVersionNullableScalarRelationFilter, Prisma.DocumentVersionWhereInput> | null
   evidence?: Prisma.XOR<Prisma.EvidenceNullableScalarRelationFilter, Prisma.EvidenceWhereInput> | null
   checklist?: Prisma.XOR<Prisma.ChecklistNullableScalarRelationFilter, Prisma.ChecklistWhereInput> | null
+  worker?: Prisma.XOR<Prisma.WorkerNullableScalarRelationFilter, Prisma.WorkerWhereInput> | null
+  jobSiteUserAssignment?: Prisma.XOR<Prisma.JobSiteUserAssignmentNullableScalarRelationFilter, Prisma.JobSiteUserAssignmentWhereInput> | null
+  jobSiteWorkerAssignment?: Prisma.XOR<Prisma.JobSiteWorkerAssignmentNullableScalarRelationFilter, Prisma.JobSiteWorkerAssignmentWhereInput> | null
+  operationalRequest?: Prisma.XOR<Prisma.OperationalRequestNullableScalarRelationFilter, Prisma.OperationalRequestWhereInput> | null
+  contextMessage?: Prisma.XOR<Prisma.ContextMessageNullableScalarRelationFilter, Prisma.ContextMessageWhereInput> | null
+  contextTimelineEvent?: Prisma.XOR<Prisma.ContextTimelineEventNullableScalarRelationFilter, Prisma.ContextTimelineEventWhereInput> | null
 }, "id">
 
 export type DocumentPackageItemOrderByWithAggregationInput = {
@@ -324,6 +402,12 @@ export type DocumentPackageItemOrderByWithAggregationInput = {
   documentVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   evidenceId?: Prisma.SortOrderInput | Prisma.SortOrder
   checklistId?: Prisma.SortOrderInput | Prisma.SortOrder
+  workerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  jobSiteUserAssignmentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  jobSiteWorkerAssignmentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  operationalRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
+  contextMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  contextTimelineEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   position?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -346,6 +430,12 @@ export type DocumentPackageItemScalarWhereWithAggregatesInput = {
   documentVersionId?: Prisma.StringNullableWithAggregatesFilter<"DocumentPackageItem"> | string | null
   evidenceId?: Prisma.StringNullableWithAggregatesFilter<"DocumentPackageItem"> | string | null
   checklistId?: Prisma.StringNullableWithAggregatesFilter<"DocumentPackageItem"> | string | null
+  workerId?: Prisma.StringNullableWithAggregatesFilter<"DocumentPackageItem"> | string | null
+  jobSiteUserAssignmentId?: Prisma.StringNullableWithAggregatesFilter<"DocumentPackageItem"> | string | null
+  jobSiteWorkerAssignmentId?: Prisma.StringNullableWithAggregatesFilter<"DocumentPackageItem"> | string | null
+  operationalRequestId?: Prisma.StringNullableWithAggregatesFilter<"DocumentPackageItem"> | string | null
+  contextMessageId?: Prisma.StringNullableWithAggregatesFilter<"DocumentPackageItem"> | string | null
+  contextTimelineEventId?: Prisma.StringNullableWithAggregatesFilter<"DocumentPackageItem"> | string | null
   note?: Prisma.StringNullableWithAggregatesFilter<"DocumentPackageItem"> | string | null
   position?: Prisma.IntWithAggregatesFilter<"DocumentPackageItem"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"DocumentPackageItem"> | Date | string
@@ -363,6 +453,12 @@ export type DocumentPackageItemCreateInput = {
   documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
   evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
   checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
 }
 
 export type DocumentPackageItemUncheckedCreateInput = {
@@ -374,6 +470,12 @@ export type DocumentPackageItemUncheckedCreateInput = {
   documentVersionId?: string | null
   evidenceId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -391,6 +493,12 @@ export type DocumentPackageItemUpdateInput = {
   documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
   evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
   checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
 }
 
 export type DocumentPackageItemUncheckedUpdateInput = {
@@ -402,6 +510,12 @@ export type DocumentPackageItemUncheckedUpdateInput = {
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -416,6 +530,12 @@ export type DocumentPackageItemCreateManyInput = {
   documentVersionId?: string | null
   evidenceId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -438,6 +558,12 @@ export type DocumentPackageItemUncheckedUpdateManyInput = {
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -462,6 +588,12 @@ export type DocumentPackageItemCountOrderByAggregateInput = {
   documentVersionId?: Prisma.SortOrder
   evidenceId?: Prisma.SortOrder
   checklistId?: Prisma.SortOrder
+  workerId?: Prisma.SortOrder
+  jobSiteUserAssignmentId?: Prisma.SortOrder
+  jobSiteWorkerAssignmentId?: Prisma.SortOrder
+  operationalRequestId?: Prisma.SortOrder
+  contextMessageId?: Prisma.SortOrder
+  contextTimelineEventId?: Prisma.SortOrder
   note?: Prisma.SortOrder
   position?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -480,6 +612,12 @@ export type DocumentPackageItemMaxOrderByAggregateInput = {
   documentVersionId?: Prisma.SortOrder
   evidenceId?: Prisma.SortOrder
   checklistId?: Prisma.SortOrder
+  workerId?: Prisma.SortOrder
+  jobSiteUserAssignmentId?: Prisma.SortOrder
+  jobSiteWorkerAssignmentId?: Prisma.SortOrder
+  operationalRequestId?: Prisma.SortOrder
+  contextMessageId?: Prisma.SortOrder
+  contextTimelineEventId?: Prisma.SortOrder
   note?: Prisma.SortOrder
   position?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -494,6 +632,12 @@ export type DocumentPackageItemMinOrderByAggregateInput = {
   documentVersionId?: Prisma.SortOrder
   evidenceId?: Prisma.SortOrder
   checklistId?: Prisma.SortOrder
+  workerId?: Prisma.SortOrder
+  jobSiteUserAssignmentId?: Prisma.SortOrder
+  jobSiteWorkerAssignmentId?: Prisma.SortOrder
+  operationalRequestId?: Prisma.SortOrder
+  contextMessageId?: Prisma.SortOrder
+  contextTimelineEventId?: Prisma.SortOrder
   note?: Prisma.SortOrder
   position?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -542,6 +686,132 @@ export type DocumentPackageItemUncheckedUpdateManyWithoutOrganizationNestedInput
   connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
   update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutOrganizationInput[]
   updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutOrganizationInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
+export type DocumentPackageItemCreateNestedManyWithoutWorkerInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutWorkerInput, Prisma.DocumentPackageItemUncheckedCreateWithoutWorkerInput> | Prisma.DocumentPackageItemCreateWithoutWorkerInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutWorkerInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutWorkerInput | Prisma.DocumentPackageItemCreateOrConnectWithoutWorkerInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyWorkerInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUncheckedCreateNestedManyWithoutWorkerInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutWorkerInput, Prisma.DocumentPackageItemUncheckedCreateWithoutWorkerInput> | Prisma.DocumentPackageItemCreateWithoutWorkerInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutWorkerInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutWorkerInput | Prisma.DocumentPackageItemCreateOrConnectWithoutWorkerInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyWorkerInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUpdateManyWithoutWorkerNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutWorkerInput, Prisma.DocumentPackageItemUncheckedCreateWithoutWorkerInput> | Prisma.DocumentPackageItemCreateWithoutWorkerInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutWorkerInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutWorkerInput | Prisma.DocumentPackageItemCreateOrConnectWithoutWorkerInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutWorkerInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutWorkerInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyWorkerInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutWorkerInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutWorkerInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutWorkerInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutWorkerInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutWorkerNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutWorkerInput, Prisma.DocumentPackageItemUncheckedCreateWithoutWorkerInput> | Prisma.DocumentPackageItemCreateWithoutWorkerInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutWorkerInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutWorkerInput | Prisma.DocumentPackageItemCreateOrConnectWithoutWorkerInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutWorkerInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutWorkerInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyWorkerInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutWorkerInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutWorkerInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutWorkerInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutWorkerInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
+export type DocumentPackageItemCreateNestedManyWithoutJobSiteUserAssignmentInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteUserAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteUserAssignmentInput> | Prisma.DocumentPackageItemCreateWithoutJobSiteUserAssignmentInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteUserAssignmentInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteUserAssignmentInput | Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteUserAssignmentInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyJobSiteUserAssignmentInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUncheckedCreateNestedManyWithoutJobSiteUserAssignmentInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteUserAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteUserAssignmentInput> | Prisma.DocumentPackageItemCreateWithoutJobSiteUserAssignmentInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteUserAssignmentInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteUserAssignmentInput | Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteUserAssignmentInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyJobSiteUserAssignmentInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUpdateManyWithoutJobSiteUserAssignmentNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteUserAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteUserAssignmentInput> | Prisma.DocumentPackageItemCreateWithoutJobSiteUserAssignmentInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteUserAssignmentInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteUserAssignmentInput | Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteUserAssignmentInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutJobSiteUserAssignmentInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutJobSiteUserAssignmentInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyJobSiteUserAssignmentInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutJobSiteUserAssignmentInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutJobSiteUserAssignmentInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutJobSiteUserAssignmentInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutJobSiteUserAssignmentInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutJobSiteUserAssignmentNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteUserAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteUserAssignmentInput> | Prisma.DocumentPackageItemCreateWithoutJobSiteUserAssignmentInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteUserAssignmentInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteUserAssignmentInput | Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteUserAssignmentInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutJobSiteUserAssignmentInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutJobSiteUserAssignmentInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyJobSiteUserAssignmentInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutJobSiteUserAssignmentInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutJobSiteUserAssignmentInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutJobSiteUserAssignmentInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutJobSiteUserAssignmentInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
+export type DocumentPackageItemCreateNestedManyWithoutJobSiteWorkerAssignmentInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteWorkerAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteWorkerAssignmentInput> | Prisma.DocumentPackageItemCreateWithoutJobSiteWorkerAssignmentInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteWorkerAssignmentInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteWorkerAssignmentInput | Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteWorkerAssignmentInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyJobSiteWorkerAssignmentInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUncheckedCreateNestedManyWithoutJobSiteWorkerAssignmentInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteWorkerAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteWorkerAssignmentInput> | Prisma.DocumentPackageItemCreateWithoutJobSiteWorkerAssignmentInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteWorkerAssignmentInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteWorkerAssignmentInput | Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteWorkerAssignmentInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyJobSiteWorkerAssignmentInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUpdateManyWithoutJobSiteWorkerAssignmentNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteWorkerAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteWorkerAssignmentInput> | Prisma.DocumentPackageItemCreateWithoutJobSiteWorkerAssignmentInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteWorkerAssignmentInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteWorkerAssignmentInput | Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteWorkerAssignmentInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutJobSiteWorkerAssignmentInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutJobSiteWorkerAssignmentInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyJobSiteWorkerAssignmentInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutJobSiteWorkerAssignmentInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutJobSiteWorkerAssignmentInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutJobSiteWorkerAssignmentInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutJobSiteWorkerAssignmentInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutJobSiteWorkerAssignmentNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteWorkerAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteWorkerAssignmentInput> | Prisma.DocumentPackageItemCreateWithoutJobSiteWorkerAssignmentInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteWorkerAssignmentInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteWorkerAssignmentInput | Prisma.DocumentPackageItemCreateOrConnectWithoutJobSiteWorkerAssignmentInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutJobSiteWorkerAssignmentInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutJobSiteWorkerAssignmentInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyJobSiteWorkerAssignmentInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutJobSiteWorkerAssignmentInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutJobSiteWorkerAssignmentInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutJobSiteWorkerAssignmentInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutJobSiteWorkerAssignmentInput[]
   deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
 }
 
@@ -759,6 +1029,132 @@ export type EnumDocumentPackageItemTypeFieldUpdateOperationsInput = {
   set?: $Enums.DocumentPackageItemType
 }
 
+export type DocumentPackageItemCreateNestedManyWithoutOperationalRequestInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutOperationalRequestInput, Prisma.DocumentPackageItemUncheckedCreateWithoutOperationalRequestInput> | Prisma.DocumentPackageItemCreateWithoutOperationalRequestInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutOperationalRequestInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutOperationalRequestInput | Prisma.DocumentPackageItemCreateOrConnectWithoutOperationalRequestInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyOperationalRequestInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUncheckedCreateNestedManyWithoutOperationalRequestInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutOperationalRequestInput, Prisma.DocumentPackageItemUncheckedCreateWithoutOperationalRequestInput> | Prisma.DocumentPackageItemCreateWithoutOperationalRequestInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutOperationalRequestInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutOperationalRequestInput | Prisma.DocumentPackageItemCreateOrConnectWithoutOperationalRequestInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyOperationalRequestInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUpdateManyWithoutOperationalRequestNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutOperationalRequestInput, Prisma.DocumentPackageItemUncheckedCreateWithoutOperationalRequestInput> | Prisma.DocumentPackageItemCreateWithoutOperationalRequestInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutOperationalRequestInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutOperationalRequestInput | Prisma.DocumentPackageItemCreateOrConnectWithoutOperationalRequestInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutOperationalRequestInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutOperationalRequestInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyOperationalRequestInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutOperationalRequestInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutOperationalRequestInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutOperationalRequestInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutOperationalRequestInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutOperationalRequestNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutOperationalRequestInput, Prisma.DocumentPackageItemUncheckedCreateWithoutOperationalRequestInput> | Prisma.DocumentPackageItemCreateWithoutOperationalRequestInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutOperationalRequestInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutOperationalRequestInput | Prisma.DocumentPackageItemCreateOrConnectWithoutOperationalRequestInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutOperationalRequestInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutOperationalRequestInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyOperationalRequestInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutOperationalRequestInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutOperationalRequestInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutOperationalRequestInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutOperationalRequestInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
+export type DocumentPackageItemCreateNestedManyWithoutContextMessageInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextMessageInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextMessageInput> | Prisma.DocumentPackageItemCreateWithoutContextMessageInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutContextMessageInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutContextMessageInput | Prisma.DocumentPackageItemCreateOrConnectWithoutContextMessageInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyContextMessageInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUncheckedCreateNestedManyWithoutContextMessageInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextMessageInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextMessageInput> | Prisma.DocumentPackageItemCreateWithoutContextMessageInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutContextMessageInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutContextMessageInput | Prisma.DocumentPackageItemCreateOrConnectWithoutContextMessageInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyContextMessageInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUpdateManyWithoutContextMessageNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextMessageInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextMessageInput> | Prisma.DocumentPackageItemCreateWithoutContextMessageInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutContextMessageInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutContextMessageInput | Prisma.DocumentPackageItemCreateOrConnectWithoutContextMessageInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutContextMessageInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutContextMessageInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyContextMessageInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutContextMessageInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutContextMessageInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutContextMessageInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutContextMessageInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutContextMessageNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextMessageInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextMessageInput> | Prisma.DocumentPackageItemCreateWithoutContextMessageInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutContextMessageInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutContextMessageInput | Prisma.DocumentPackageItemCreateOrConnectWithoutContextMessageInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutContextMessageInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutContextMessageInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyContextMessageInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutContextMessageInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutContextMessageInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutContextMessageInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutContextMessageInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
+export type DocumentPackageItemCreateNestedManyWithoutContextTimelineEventInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextTimelineEventInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextTimelineEventInput> | Prisma.DocumentPackageItemCreateWithoutContextTimelineEventInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutContextTimelineEventInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutContextTimelineEventInput | Prisma.DocumentPackageItemCreateOrConnectWithoutContextTimelineEventInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyContextTimelineEventInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUncheckedCreateNestedManyWithoutContextTimelineEventInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextTimelineEventInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextTimelineEventInput> | Prisma.DocumentPackageItemCreateWithoutContextTimelineEventInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutContextTimelineEventInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutContextTimelineEventInput | Prisma.DocumentPackageItemCreateOrConnectWithoutContextTimelineEventInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyContextTimelineEventInputEnvelope
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+}
+
+export type DocumentPackageItemUpdateManyWithoutContextTimelineEventNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextTimelineEventInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextTimelineEventInput> | Prisma.DocumentPackageItemCreateWithoutContextTimelineEventInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutContextTimelineEventInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutContextTimelineEventInput | Prisma.DocumentPackageItemCreateOrConnectWithoutContextTimelineEventInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutContextTimelineEventInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutContextTimelineEventInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyContextTimelineEventInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutContextTimelineEventInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutContextTimelineEventInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutContextTimelineEventInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutContextTimelineEventInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutContextTimelineEventNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextTimelineEventInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextTimelineEventInput> | Prisma.DocumentPackageItemCreateWithoutContextTimelineEventInput[] | Prisma.DocumentPackageItemUncheckedCreateWithoutContextTimelineEventInput[]
+  connectOrCreate?: Prisma.DocumentPackageItemCreateOrConnectWithoutContextTimelineEventInput | Prisma.DocumentPackageItemCreateOrConnectWithoutContextTimelineEventInput[]
+  upsert?: Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutContextTimelineEventInput | Prisma.DocumentPackageItemUpsertWithWhereUniqueWithoutContextTimelineEventInput[]
+  createMany?: Prisma.DocumentPackageItemCreateManyContextTimelineEventInputEnvelope
+  set?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  disconnect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  delete?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  connect?: Prisma.DocumentPackageItemWhereUniqueInput | Prisma.DocumentPackageItemWhereUniqueInput[]
+  update?: Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutContextTimelineEventInput | Prisma.DocumentPackageItemUpdateWithWhereUniqueWithoutContextTimelineEventInput[]
+  updateMany?: Prisma.DocumentPackageItemUpdateManyWithWhereWithoutContextTimelineEventInput | Prisma.DocumentPackageItemUpdateManyWithWhereWithoutContextTimelineEventInput[]
+  deleteMany?: Prisma.DocumentPackageItemScalarWhereInput | Prisma.DocumentPackageItemScalarWhereInput[]
+}
+
 export type DocumentPackageItemCreateWithoutOrganizationInput = {
   id?: string
   itemType: $Enums.DocumentPackageItemType
@@ -770,6 +1166,12 @@ export type DocumentPackageItemCreateWithoutOrganizationInput = {
   documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
   evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
   checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
 }
 
 export type DocumentPackageItemUncheckedCreateWithoutOrganizationInput = {
@@ -780,6 +1182,12 @@ export type DocumentPackageItemUncheckedCreateWithoutOrganizationInput = {
   documentVersionId?: string | null
   evidenceId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -823,9 +1231,207 @@ export type DocumentPackageItemScalarWhereInput = {
   documentVersionId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   evidenceId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   checklistId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  workerId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  jobSiteUserAssignmentId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  jobSiteWorkerAssignmentId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  operationalRequestId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  contextMessageId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
+  contextTimelineEventId?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   note?: Prisma.StringNullableFilter<"DocumentPackageItem"> | string | null
   position?: Prisma.IntFilter<"DocumentPackageItem"> | number
   createdAt?: Prisma.DateTimeFilter<"DocumentPackageItem"> | Date | string
+}
+
+export type DocumentPackageItemCreateWithoutWorkerInput = {
+  id?: string
+  itemType: $Enums.DocumentPackageItemType
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentPackageItemsInput
+  documentPackage: Prisma.DocumentPackageCreateNestedOneWithoutItemsInput
+  document?: Prisma.DocumentCreateNestedOneWithoutPackageItemsInput
+  documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
+  evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
+  checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
+}
+
+export type DocumentPackageItemUncheckedCreateWithoutWorkerInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemCreateOrConnectWithoutWorkerInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutWorkerInput, Prisma.DocumentPackageItemUncheckedCreateWithoutWorkerInput>
+}
+
+export type DocumentPackageItemCreateManyWorkerInputEnvelope = {
+  data: Prisma.DocumentPackageItemCreateManyWorkerInput | Prisma.DocumentPackageItemCreateManyWorkerInput[]
+  skipDuplicates?: boolean
+}
+
+export type DocumentPackageItemUpsertWithWhereUniqueWithoutWorkerInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutWorkerInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutWorkerInput>
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutWorkerInput, Prisma.DocumentPackageItemUncheckedCreateWithoutWorkerInput>
+}
+
+export type DocumentPackageItemUpdateWithWhereUniqueWithoutWorkerInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutWorkerInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutWorkerInput>
+}
+
+export type DocumentPackageItemUpdateManyWithWhereWithoutWorkerInput = {
+  where: Prisma.DocumentPackageItemScalarWhereInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateManyMutationInput, Prisma.DocumentPackageItemUncheckedUpdateManyWithoutWorkerInput>
+}
+
+export type DocumentPackageItemCreateWithoutJobSiteUserAssignmentInput = {
+  id?: string
+  itemType: $Enums.DocumentPackageItemType
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentPackageItemsInput
+  documentPackage: Prisma.DocumentPackageCreateNestedOneWithoutItemsInput
+  document?: Prisma.DocumentCreateNestedOneWithoutPackageItemsInput
+  documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
+  evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
+  checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
+}
+
+export type DocumentPackageItemUncheckedCreateWithoutJobSiteUserAssignmentInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  workerId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemCreateOrConnectWithoutJobSiteUserAssignmentInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteUserAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteUserAssignmentInput>
+}
+
+export type DocumentPackageItemCreateManyJobSiteUserAssignmentInputEnvelope = {
+  data: Prisma.DocumentPackageItemCreateManyJobSiteUserAssignmentInput | Prisma.DocumentPackageItemCreateManyJobSiteUserAssignmentInput[]
+  skipDuplicates?: boolean
+}
+
+export type DocumentPackageItemUpsertWithWhereUniqueWithoutJobSiteUserAssignmentInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutJobSiteUserAssignmentInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutJobSiteUserAssignmentInput>
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteUserAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteUserAssignmentInput>
+}
+
+export type DocumentPackageItemUpdateWithWhereUniqueWithoutJobSiteUserAssignmentInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutJobSiteUserAssignmentInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutJobSiteUserAssignmentInput>
+}
+
+export type DocumentPackageItemUpdateManyWithWhereWithoutJobSiteUserAssignmentInput = {
+  where: Prisma.DocumentPackageItemScalarWhereInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateManyMutationInput, Prisma.DocumentPackageItemUncheckedUpdateManyWithoutJobSiteUserAssignmentInput>
+}
+
+export type DocumentPackageItemCreateWithoutJobSiteWorkerAssignmentInput = {
+  id?: string
+  itemType: $Enums.DocumentPackageItemType
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentPackageItemsInput
+  documentPackage: Prisma.DocumentPackageCreateNestedOneWithoutItemsInput
+  document?: Prisma.DocumentCreateNestedOneWithoutPackageItemsInput
+  documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
+  evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
+  checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
+}
+
+export type DocumentPackageItemUncheckedCreateWithoutJobSiteWorkerAssignmentInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemCreateOrConnectWithoutJobSiteWorkerAssignmentInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteWorkerAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteWorkerAssignmentInput>
+}
+
+export type DocumentPackageItemCreateManyJobSiteWorkerAssignmentInputEnvelope = {
+  data: Prisma.DocumentPackageItemCreateManyJobSiteWorkerAssignmentInput | Prisma.DocumentPackageItemCreateManyJobSiteWorkerAssignmentInput[]
+  skipDuplicates?: boolean
+}
+
+export type DocumentPackageItemUpsertWithWhereUniqueWithoutJobSiteWorkerAssignmentInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutJobSiteWorkerAssignmentInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutJobSiteWorkerAssignmentInput>
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutJobSiteWorkerAssignmentInput, Prisma.DocumentPackageItemUncheckedCreateWithoutJobSiteWorkerAssignmentInput>
+}
+
+export type DocumentPackageItemUpdateWithWhereUniqueWithoutJobSiteWorkerAssignmentInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutJobSiteWorkerAssignmentInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutJobSiteWorkerAssignmentInput>
+}
+
+export type DocumentPackageItemUpdateManyWithWhereWithoutJobSiteWorkerAssignmentInput = {
+  where: Prisma.DocumentPackageItemScalarWhereInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateManyMutationInput, Prisma.DocumentPackageItemUncheckedUpdateManyWithoutJobSiteWorkerAssignmentInput>
 }
 
 export type DocumentPackageItemCreateWithoutDocumentInput = {
@@ -839,6 +1445,12 @@ export type DocumentPackageItemCreateWithoutDocumentInput = {
   documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
   evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
   checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
 }
 
 export type DocumentPackageItemUncheckedCreateWithoutDocumentInput = {
@@ -849,6 +1461,12 @@ export type DocumentPackageItemUncheckedCreateWithoutDocumentInput = {
   documentVersionId?: string | null
   evidenceId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -891,6 +1509,12 @@ export type DocumentPackageItemCreateWithoutDocumentVersionInput = {
   document?: Prisma.DocumentCreateNestedOneWithoutPackageItemsInput
   evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
   checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
 }
 
 export type DocumentPackageItemUncheckedCreateWithoutDocumentVersionInput = {
@@ -901,6 +1525,12 @@ export type DocumentPackageItemUncheckedCreateWithoutDocumentVersionInput = {
   documentId?: string | null
   evidenceId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -943,6 +1573,12 @@ export type DocumentPackageItemCreateWithoutChecklistInput = {
   document?: Prisma.DocumentCreateNestedOneWithoutPackageItemsInput
   documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
   evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
 }
 
 export type DocumentPackageItemUncheckedCreateWithoutChecklistInput = {
@@ -953,6 +1589,12 @@ export type DocumentPackageItemUncheckedCreateWithoutChecklistInput = {
   documentId?: string | null
   documentVersionId?: string | null
   evidenceId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -995,6 +1637,12 @@ export type DocumentPackageItemCreateWithoutEvidenceInput = {
   document?: Prisma.DocumentCreateNestedOneWithoutPackageItemsInput
   documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
   checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
 }
 
 export type DocumentPackageItemUncheckedCreateWithoutEvidenceInput = {
@@ -1005,6 +1653,12 @@ export type DocumentPackageItemUncheckedCreateWithoutEvidenceInput = {
   documentId?: string | null
   documentVersionId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -1047,6 +1701,12 @@ export type DocumentPackageItemCreateWithoutDocumentPackageInput = {
   documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
   evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
   checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
 }
 
 export type DocumentPackageItemUncheckedCreateWithoutDocumentPackageInput = {
@@ -1057,6 +1717,12 @@ export type DocumentPackageItemUncheckedCreateWithoutDocumentPackageInput = {
   documentVersionId?: string | null
   evidenceId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -1088,6 +1754,198 @@ export type DocumentPackageItemUpdateManyWithWhereWithoutDocumentPackageInput = 
   data: Prisma.XOR<Prisma.DocumentPackageItemUpdateManyMutationInput, Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentPackageInput>
 }
 
+export type DocumentPackageItemCreateWithoutOperationalRequestInput = {
+  id?: string
+  itemType: $Enums.DocumentPackageItemType
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentPackageItemsInput
+  documentPackage: Prisma.DocumentPackageCreateNestedOneWithoutItemsInput
+  document?: Prisma.DocumentCreateNestedOneWithoutPackageItemsInput
+  documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
+  evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
+  checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
+}
+
+export type DocumentPackageItemUncheckedCreateWithoutOperationalRequestInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemCreateOrConnectWithoutOperationalRequestInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutOperationalRequestInput, Prisma.DocumentPackageItemUncheckedCreateWithoutOperationalRequestInput>
+}
+
+export type DocumentPackageItemCreateManyOperationalRequestInputEnvelope = {
+  data: Prisma.DocumentPackageItemCreateManyOperationalRequestInput | Prisma.DocumentPackageItemCreateManyOperationalRequestInput[]
+  skipDuplicates?: boolean
+}
+
+export type DocumentPackageItemUpsertWithWhereUniqueWithoutOperationalRequestInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutOperationalRequestInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutOperationalRequestInput>
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutOperationalRequestInput, Prisma.DocumentPackageItemUncheckedCreateWithoutOperationalRequestInput>
+}
+
+export type DocumentPackageItemUpdateWithWhereUniqueWithoutOperationalRequestInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutOperationalRequestInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutOperationalRequestInput>
+}
+
+export type DocumentPackageItemUpdateManyWithWhereWithoutOperationalRequestInput = {
+  where: Prisma.DocumentPackageItemScalarWhereInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateManyMutationInput, Prisma.DocumentPackageItemUncheckedUpdateManyWithoutOperationalRequestInput>
+}
+
+export type DocumentPackageItemCreateWithoutContextMessageInput = {
+  id?: string
+  itemType: $Enums.DocumentPackageItemType
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentPackageItemsInput
+  documentPackage: Prisma.DocumentPackageCreateNestedOneWithoutItemsInput
+  document?: Prisma.DocumentCreateNestedOneWithoutPackageItemsInput
+  documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
+  evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
+  checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventCreateNestedOneWithoutPackageItemsInput
+}
+
+export type DocumentPackageItemUncheckedCreateWithoutContextMessageInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextTimelineEventId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemCreateOrConnectWithoutContextMessageInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextMessageInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextMessageInput>
+}
+
+export type DocumentPackageItemCreateManyContextMessageInputEnvelope = {
+  data: Prisma.DocumentPackageItemCreateManyContextMessageInput | Prisma.DocumentPackageItemCreateManyContextMessageInput[]
+  skipDuplicates?: boolean
+}
+
+export type DocumentPackageItemUpsertWithWhereUniqueWithoutContextMessageInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutContextMessageInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutContextMessageInput>
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextMessageInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextMessageInput>
+}
+
+export type DocumentPackageItemUpdateWithWhereUniqueWithoutContextMessageInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutContextMessageInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutContextMessageInput>
+}
+
+export type DocumentPackageItemUpdateManyWithWhereWithoutContextMessageInput = {
+  where: Prisma.DocumentPackageItemScalarWhereInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateManyMutationInput, Prisma.DocumentPackageItemUncheckedUpdateManyWithoutContextMessageInput>
+}
+
+export type DocumentPackageItemCreateWithoutContextTimelineEventInput = {
+  id?: string
+  itemType: $Enums.DocumentPackageItemType
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentPackageItemsInput
+  documentPackage: Prisma.DocumentPackageCreateNestedOneWithoutItemsInput
+  document?: Prisma.DocumentCreateNestedOneWithoutPackageItemsInput
+  documentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutPackageItemsInput
+  evidence?: Prisma.EvidenceCreateNestedOneWithoutPackageItemsInput
+  checklist?: Prisma.ChecklistCreateNestedOneWithoutPackageItemsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutPackageItemsInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentCreateNestedOneWithoutPackageItemsInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentCreateNestedOneWithoutPackageItemsInput
+  operationalRequest?: Prisma.OperationalRequestCreateNestedOneWithoutPackageItemsInput
+  contextMessage?: Prisma.ContextMessageCreateNestedOneWithoutPackageItemsInput
+}
+
+export type DocumentPackageItemUncheckedCreateWithoutContextTimelineEventInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemCreateOrConnectWithoutContextTimelineEventInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextTimelineEventInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextTimelineEventInput>
+}
+
+export type DocumentPackageItemCreateManyContextTimelineEventInputEnvelope = {
+  data: Prisma.DocumentPackageItemCreateManyContextTimelineEventInput | Prisma.DocumentPackageItemCreateManyContextTimelineEventInput[]
+  skipDuplicates?: boolean
+}
+
+export type DocumentPackageItemUpsertWithWhereUniqueWithoutContextTimelineEventInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutContextTimelineEventInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutContextTimelineEventInput>
+  create: Prisma.XOR<Prisma.DocumentPackageItemCreateWithoutContextTimelineEventInput, Prisma.DocumentPackageItemUncheckedCreateWithoutContextTimelineEventInput>
+}
+
+export type DocumentPackageItemUpdateWithWhereUniqueWithoutContextTimelineEventInput = {
+  where: Prisma.DocumentPackageItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateWithoutContextTimelineEventInput, Prisma.DocumentPackageItemUncheckedUpdateWithoutContextTimelineEventInput>
+}
+
+export type DocumentPackageItemUpdateManyWithWhereWithoutContextTimelineEventInput = {
+  where: Prisma.DocumentPackageItemScalarWhereInput
+  data: Prisma.XOR<Prisma.DocumentPackageItemUpdateManyMutationInput, Prisma.DocumentPackageItemUncheckedUpdateManyWithoutContextTimelineEventInput>
+}
+
 export type DocumentPackageItemCreateManyOrganizationInput = {
   id?: string
   documentPackageId: string
@@ -1096,6 +1954,12 @@ export type DocumentPackageItemCreateManyOrganizationInput = {
   documentVersionId?: string | null
   evidenceId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -1112,6 +1976,12 @@ export type DocumentPackageItemUpdateWithoutOrganizationInput = {
   documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
   evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
   checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
 }
 
 export type DocumentPackageItemUncheckedUpdateWithoutOrganizationInput = {
@@ -1122,6 +1992,12 @@ export type DocumentPackageItemUncheckedUpdateWithoutOrganizationInput = {
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1135,6 +2011,240 @@ export type DocumentPackageItemUncheckedUpdateManyWithoutOrganizationInput = {
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemCreateManyWorkerInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemUpdateWithoutWorkerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentPackageItemsNestedInput
+  documentPackage?: Prisma.DocumentPackageUpdateOneRequiredWithoutItemsNestedInput
+  document?: Prisma.DocumentUpdateOneWithoutPackageItemsNestedInput
+  documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
+  evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
+  checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
+}
+
+export type DocumentPackageItemUncheckedUpdateWithoutWorkerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutWorkerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemCreateManyJobSiteUserAssignmentInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  workerId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemUpdateWithoutJobSiteUserAssignmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentPackageItemsNestedInput
+  documentPackage?: Prisma.DocumentPackageUpdateOneRequiredWithoutItemsNestedInput
+  document?: Prisma.DocumentUpdateOneWithoutPackageItemsNestedInput
+  documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
+  evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
+  checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
+}
+
+export type DocumentPackageItemUncheckedUpdateWithoutJobSiteUserAssignmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutJobSiteUserAssignmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemCreateManyJobSiteWorkerAssignmentInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemUpdateWithoutJobSiteWorkerAssignmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentPackageItemsNestedInput
+  documentPackage?: Prisma.DocumentPackageUpdateOneRequiredWithoutItemsNestedInput
+  document?: Prisma.DocumentUpdateOneWithoutPackageItemsNestedInput
+  documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
+  evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
+  checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
+}
+
+export type DocumentPackageItemUncheckedUpdateWithoutJobSiteWorkerAssignmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutJobSiteWorkerAssignmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1148,6 +2258,12 @@ export type DocumentPackageItemCreateManyDocumentInput = {
   documentVersionId?: string | null
   evidenceId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -1164,6 +2280,12 @@ export type DocumentPackageItemUpdateWithoutDocumentInput = {
   documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
   evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
   checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
 }
 
 export type DocumentPackageItemUncheckedUpdateWithoutDocumentInput = {
@@ -1174,6 +2296,12 @@ export type DocumentPackageItemUncheckedUpdateWithoutDocumentInput = {
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1187,6 +2315,12 @@ export type DocumentPackageItemUncheckedUpdateManyWithoutDocumentInput = {
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1200,6 +2334,12 @@ export type DocumentPackageItemCreateManyDocumentVersionInput = {
   documentId?: string | null
   evidenceId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -1216,6 +2356,12 @@ export type DocumentPackageItemUpdateWithoutDocumentVersionInput = {
   document?: Prisma.DocumentUpdateOneWithoutPackageItemsNestedInput
   evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
   checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
 }
 
 export type DocumentPackageItemUncheckedUpdateWithoutDocumentVersionInput = {
@@ -1226,6 +2372,12 @@ export type DocumentPackageItemUncheckedUpdateWithoutDocumentVersionInput = {
   documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1239,6 +2391,12 @@ export type DocumentPackageItemUncheckedUpdateManyWithoutDocumentVersionInput = 
   documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1252,6 +2410,12 @@ export type DocumentPackageItemCreateManyChecklistInput = {
   documentId?: string | null
   documentVersionId?: string | null
   evidenceId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -1268,6 +2432,12 @@ export type DocumentPackageItemUpdateWithoutChecklistInput = {
   document?: Prisma.DocumentUpdateOneWithoutPackageItemsNestedInput
   documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
   evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
 }
 
 export type DocumentPackageItemUncheckedUpdateWithoutChecklistInput = {
@@ -1278,6 +2448,12 @@ export type DocumentPackageItemUncheckedUpdateWithoutChecklistInput = {
   documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1291,6 +2467,12 @@ export type DocumentPackageItemUncheckedUpdateManyWithoutChecklistInput = {
   documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1304,6 +2486,12 @@ export type DocumentPackageItemCreateManyEvidenceInput = {
   documentId?: string | null
   documentVersionId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -1320,6 +2508,12 @@ export type DocumentPackageItemUpdateWithoutEvidenceInput = {
   document?: Prisma.DocumentUpdateOneWithoutPackageItemsNestedInput
   documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
   checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
 }
 
 export type DocumentPackageItemUncheckedUpdateWithoutEvidenceInput = {
@@ -1330,6 +2524,12 @@ export type DocumentPackageItemUncheckedUpdateWithoutEvidenceInput = {
   documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1343,6 +2543,12 @@ export type DocumentPackageItemUncheckedUpdateManyWithoutEvidenceInput = {
   documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1356,6 +2562,12 @@ export type DocumentPackageItemCreateManyDocumentPackageInput = {
   documentVersionId?: string | null
   evidenceId?: string | null
   checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
   note?: string | null
   position?: number
   createdAt?: Date | string
@@ -1372,6 +2584,12 @@ export type DocumentPackageItemUpdateWithoutDocumentPackageInput = {
   documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
   evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
   checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
 }
 
 export type DocumentPackageItemUncheckedUpdateWithoutDocumentPackageInput = {
@@ -1382,6 +2600,12 @@ export type DocumentPackageItemUncheckedUpdateWithoutDocumentPackageInput = {
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1395,6 +2619,240 @@ export type DocumentPackageItemUncheckedUpdateManyWithoutDocumentPackageInput = 
   documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemCreateManyOperationalRequestInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  contextMessageId?: string | null
+  contextTimelineEventId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemUpdateWithoutOperationalRequestInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentPackageItemsNestedInput
+  documentPackage?: Prisma.DocumentPackageUpdateOneRequiredWithoutItemsNestedInput
+  document?: Prisma.DocumentUpdateOneWithoutPackageItemsNestedInput
+  documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
+  evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
+  checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
+}
+
+export type DocumentPackageItemUncheckedUpdateWithoutOperationalRequestInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutOperationalRequestInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemCreateManyContextMessageInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextTimelineEventId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemUpdateWithoutContextMessageInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentPackageItemsNestedInput
+  documentPackage?: Prisma.DocumentPackageUpdateOneRequiredWithoutItemsNestedInput
+  document?: Prisma.DocumentUpdateOneWithoutPackageItemsNestedInput
+  documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
+  evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
+  checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextTimelineEvent?: Prisma.ContextTimelineEventUpdateOneWithoutPackageItemsNestedInput
+}
+
+export type DocumentPackageItemUncheckedUpdateWithoutContextMessageInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutContextMessageInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextTimelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemCreateManyContextTimelineEventInput = {
+  id?: string
+  organizationId: string
+  documentPackageId: string
+  itemType: $Enums.DocumentPackageItemType
+  documentId?: string | null
+  documentVersionId?: string | null
+  evidenceId?: string | null
+  checklistId?: string | null
+  workerId?: string | null
+  jobSiteUserAssignmentId?: string | null
+  jobSiteWorkerAssignmentId?: string | null
+  operationalRequestId?: string | null
+  contextMessageId?: string | null
+  note?: string | null
+  position?: number
+  createdAt?: Date | string
+}
+
+export type DocumentPackageItemUpdateWithoutContextTimelineEventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentPackageItemsNestedInput
+  documentPackage?: Prisma.DocumentPackageUpdateOneRequiredWithoutItemsNestedInput
+  document?: Prisma.DocumentUpdateOneWithoutPackageItemsNestedInput
+  documentVersion?: Prisma.DocumentVersionUpdateOneWithoutPackageItemsNestedInput
+  evidence?: Prisma.EvidenceUpdateOneWithoutPackageItemsNestedInput
+  checklist?: Prisma.ChecklistUpdateOneWithoutPackageItemsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutPackageItemsNestedInput
+  jobSiteUserAssignment?: Prisma.JobSiteUserAssignmentUpdateOneWithoutPackageItemsNestedInput
+  jobSiteWorkerAssignment?: Prisma.JobSiteWorkerAssignmentUpdateOneWithoutPackageItemsNestedInput
+  operationalRequest?: Prisma.OperationalRequestUpdateOneWithoutPackageItemsNestedInput
+  contextMessage?: Prisma.ContextMessageUpdateOneWithoutPackageItemsNestedInput
+}
+
+export type DocumentPackageItemUncheckedUpdateWithoutContextTimelineEventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentPackageItemUncheckedUpdateManyWithoutContextTimelineEventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentPackageId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemType?: Prisma.EnumDocumentPackageItemTypeFieldUpdateOperationsInput | $Enums.DocumentPackageItemType
+  documentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteUserAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteWorkerAssignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1411,6 +2869,12 @@ export type DocumentPackageItemSelect<ExtArgs extends runtime.Types.Extensions.I
   documentVersionId?: boolean
   evidenceId?: boolean
   checklistId?: boolean
+  workerId?: boolean
+  jobSiteUserAssignmentId?: boolean
+  jobSiteWorkerAssignmentId?: boolean
+  operationalRequestId?: boolean
+  contextMessageId?: boolean
+  contextTimelineEventId?: boolean
   note?: boolean
   position?: boolean
   createdAt?: boolean
@@ -1420,6 +2884,12 @@ export type DocumentPackageItemSelect<ExtArgs extends runtime.Types.Extensions.I
   documentVersion?: boolean | Prisma.DocumentPackageItem$documentVersionArgs<ExtArgs>
   evidence?: boolean | Prisma.DocumentPackageItem$evidenceArgs<ExtArgs>
   checklist?: boolean | Prisma.DocumentPackageItem$checklistArgs<ExtArgs>
+  worker?: boolean | Prisma.DocumentPackageItem$workerArgs<ExtArgs>
+  jobSiteUserAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteUserAssignmentArgs<ExtArgs>
+  jobSiteWorkerAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteWorkerAssignmentArgs<ExtArgs>
+  operationalRequest?: boolean | Prisma.DocumentPackageItem$operationalRequestArgs<ExtArgs>
+  contextMessage?: boolean | Prisma.DocumentPackageItem$contextMessageArgs<ExtArgs>
+  contextTimelineEvent?: boolean | Prisma.DocumentPackageItem$contextTimelineEventArgs<ExtArgs>
 }, ExtArgs["result"]["documentPackageItem"]>
 
 export type DocumentPackageItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1431,6 +2901,12 @@ export type DocumentPackageItemSelectCreateManyAndReturn<ExtArgs extends runtime
   documentVersionId?: boolean
   evidenceId?: boolean
   checklistId?: boolean
+  workerId?: boolean
+  jobSiteUserAssignmentId?: boolean
+  jobSiteWorkerAssignmentId?: boolean
+  operationalRequestId?: boolean
+  contextMessageId?: boolean
+  contextTimelineEventId?: boolean
   note?: boolean
   position?: boolean
   createdAt?: boolean
@@ -1440,6 +2916,12 @@ export type DocumentPackageItemSelectCreateManyAndReturn<ExtArgs extends runtime
   documentVersion?: boolean | Prisma.DocumentPackageItem$documentVersionArgs<ExtArgs>
   evidence?: boolean | Prisma.DocumentPackageItem$evidenceArgs<ExtArgs>
   checklist?: boolean | Prisma.DocumentPackageItem$checklistArgs<ExtArgs>
+  worker?: boolean | Prisma.DocumentPackageItem$workerArgs<ExtArgs>
+  jobSiteUserAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteUserAssignmentArgs<ExtArgs>
+  jobSiteWorkerAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteWorkerAssignmentArgs<ExtArgs>
+  operationalRequest?: boolean | Prisma.DocumentPackageItem$operationalRequestArgs<ExtArgs>
+  contextMessage?: boolean | Prisma.DocumentPackageItem$contextMessageArgs<ExtArgs>
+  contextTimelineEvent?: boolean | Prisma.DocumentPackageItem$contextTimelineEventArgs<ExtArgs>
 }, ExtArgs["result"]["documentPackageItem"]>
 
 export type DocumentPackageItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1451,6 +2933,12 @@ export type DocumentPackageItemSelectUpdateManyAndReturn<ExtArgs extends runtime
   documentVersionId?: boolean
   evidenceId?: boolean
   checklistId?: boolean
+  workerId?: boolean
+  jobSiteUserAssignmentId?: boolean
+  jobSiteWorkerAssignmentId?: boolean
+  operationalRequestId?: boolean
+  contextMessageId?: boolean
+  contextTimelineEventId?: boolean
   note?: boolean
   position?: boolean
   createdAt?: boolean
@@ -1460,6 +2948,12 @@ export type DocumentPackageItemSelectUpdateManyAndReturn<ExtArgs extends runtime
   documentVersion?: boolean | Prisma.DocumentPackageItem$documentVersionArgs<ExtArgs>
   evidence?: boolean | Prisma.DocumentPackageItem$evidenceArgs<ExtArgs>
   checklist?: boolean | Prisma.DocumentPackageItem$checklistArgs<ExtArgs>
+  worker?: boolean | Prisma.DocumentPackageItem$workerArgs<ExtArgs>
+  jobSiteUserAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteUserAssignmentArgs<ExtArgs>
+  jobSiteWorkerAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteWorkerAssignmentArgs<ExtArgs>
+  operationalRequest?: boolean | Prisma.DocumentPackageItem$operationalRequestArgs<ExtArgs>
+  contextMessage?: boolean | Prisma.DocumentPackageItem$contextMessageArgs<ExtArgs>
+  contextTimelineEvent?: boolean | Prisma.DocumentPackageItem$contextTimelineEventArgs<ExtArgs>
 }, ExtArgs["result"]["documentPackageItem"]>
 
 export type DocumentPackageItemSelectScalar = {
@@ -1471,12 +2965,18 @@ export type DocumentPackageItemSelectScalar = {
   documentVersionId?: boolean
   evidenceId?: boolean
   checklistId?: boolean
+  workerId?: boolean
+  jobSiteUserAssignmentId?: boolean
+  jobSiteWorkerAssignmentId?: boolean
+  operationalRequestId?: boolean
+  contextMessageId?: boolean
+  contextTimelineEventId?: boolean
   note?: boolean
   position?: boolean
   createdAt?: boolean
 }
 
-export type DocumentPackageItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "documentPackageId" | "itemType" | "documentId" | "documentVersionId" | "evidenceId" | "checklistId" | "note" | "position" | "createdAt", ExtArgs["result"]["documentPackageItem"]>
+export type DocumentPackageItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "documentPackageId" | "itemType" | "documentId" | "documentVersionId" | "evidenceId" | "checklistId" | "workerId" | "jobSiteUserAssignmentId" | "jobSiteWorkerAssignmentId" | "operationalRequestId" | "contextMessageId" | "contextTimelineEventId" | "note" | "position" | "createdAt", ExtArgs["result"]["documentPackageItem"]>
 export type DocumentPackageItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   documentPackage?: boolean | Prisma.DocumentPackageDefaultArgs<ExtArgs>
@@ -1484,6 +2984,12 @@ export type DocumentPackageItemInclude<ExtArgs extends runtime.Types.Extensions.
   documentVersion?: boolean | Prisma.DocumentPackageItem$documentVersionArgs<ExtArgs>
   evidence?: boolean | Prisma.DocumentPackageItem$evidenceArgs<ExtArgs>
   checklist?: boolean | Prisma.DocumentPackageItem$checklistArgs<ExtArgs>
+  worker?: boolean | Prisma.DocumentPackageItem$workerArgs<ExtArgs>
+  jobSiteUserAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteUserAssignmentArgs<ExtArgs>
+  jobSiteWorkerAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteWorkerAssignmentArgs<ExtArgs>
+  operationalRequest?: boolean | Prisma.DocumentPackageItem$operationalRequestArgs<ExtArgs>
+  contextMessage?: boolean | Prisma.DocumentPackageItem$contextMessageArgs<ExtArgs>
+  contextTimelineEvent?: boolean | Prisma.DocumentPackageItem$contextTimelineEventArgs<ExtArgs>
 }
 export type DocumentPackageItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -1492,6 +2998,12 @@ export type DocumentPackageItemIncludeCreateManyAndReturn<ExtArgs extends runtim
   documentVersion?: boolean | Prisma.DocumentPackageItem$documentVersionArgs<ExtArgs>
   evidence?: boolean | Prisma.DocumentPackageItem$evidenceArgs<ExtArgs>
   checklist?: boolean | Prisma.DocumentPackageItem$checklistArgs<ExtArgs>
+  worker?: boolean | Prisma.DocumentPackageItem$workerArgs<ExtArgs>
+  jobSiteUserAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteUserAssignmentArgs<ExtArgs>
+  jobSiteWorkerAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteWorkerAssignmentArgs<ExtArgs>
+  operationalRequest?: boolean | Prisma.DocumentPackageItem$operationalRequestArgs<ExtArgs>
+  contextMessage?: boolean | Prisma.DocumentPackageItem$contextMessageArgs<ExtArgs>
+  contextTimelineEvent?: boolean | Prisma.DocumentPackageItem$contextTimelineEventArgs<ExtArgs>
 }
 export type DocumentPackageItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -1500,6 +3012,12 @@ export type DocumentPackageItemIncludeUpdateManyAndReturn<ExtArgs extends runtim
   documentVersion?: boolean | Prisma.DocumentPackageItem$documentVersionArgs<ExtArgs>
   evidence?: boolean | Prisma.DocumentPackageItem$evidenceArgs<ExtArgs>
   checklist?: boolean | Prisma.DocumentPackageItem$checklistArgs<ExtArgs>
+  worker?: boolean | Prisma.DocumentPackageItem$workerArgs<ExtArgs>
+  jobSiteUserAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteUserAssignmentArgs<ExtArgs>
+  jobSiteWorkerAssignment?: boolean | Prisma.DocumentPackageItem$jobSiteWorkerAssignmentArgs<ExtArgs>
+  operationalRequest?: boolean | Prisma.DocumentPackageItem$operationalRequestArgs<ExtArgs>
+  contextMessage?: boolean | Prisma.DocumentPackageItem$contextMessageArgs<ExtArgs>
+  contextTimelineEvent?: boolean | Prisma.DocumentPackageItem$contextTimelineEventArgs<ExtArgs>
 }
 
 export type $DocumentPackageItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1511,6 +3029,12 @@ export type $DocumentPackageItemPayload<ExtArgs extends runtime.Types.Extensions
     documentVersion: Prisma.$DocumentVersionPayload<ExtArgs> | null
     evidence: Prisma.$EvidencePayload<ExtArgs> | null
     checklist: Prisma.$ChecklistPayload<ExtArgs> | null
+    worker: Prisma.$WorkerPayload<ExtArgs> | null
+    jobSiteUserAssignment: Prisma.$JobSiteUserAssignmentPayload<ExtArgs> | null
+    jobSiteWorkerAssignment: Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs> | null
+    operationalRequest: Prisma.$OperationalRequestPayload<ExtArgs> | null
+    contextMessage: Prisma.$ContextMessagePayload<ExtArgs> | null
+    contextTimelineEvent: Prisma.$ContextTimelineEventPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1521,6 +3045,12 @@ export type $DocumentPackageItemPayload<ExtArgs extends runtime.Types.Extensions
     documentVersionId: string | null
     evidenceId: string | null
     checklistId: string | null
+    workerId: string | null
+    jobSiteUserAssignmentId: string | null
+    jobSiteWorkerAssignmentId: string | null
+    operationalRequestId: string | null
+    contextMessageId: string | null
+    contextTimelineEventId: string | null
     note: string | null
     position: number
     createdAt: Date
@@ -1924,6 +3454,12 @@ export interface Prisma__DocumentPackageItemClient<T, Null = never, ExtArgs exte
   documentVersion<T extends Prisma.DocumentPackageItem$documentVersionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackageItem$documentVersionArgs<ExtArgs>>): Prisma.Prisma__DocumentVersionClient<runtime.Types.Result.GetResult<Prisma.$DocumentVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   evidence<T extends Prisma.DocumentPackageItem$evidenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackageItem$evidenceArgs<ExtArgs>>): Prisma.Prisma__EvidenceClient<runtime.Types.Result.GetResult<Prisma.$EvidencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   checklist<T extends Prisma.DocumentPackageItem$checklistArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackageItem$checklistArgs<ExtArgs>>): Prisma.Prisma__ChecklistClient<runtime.Types.Result.GetResult<Prisma.$ChecklistPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  worker<T extends Prisma.DocumentPackageItem$workerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackageItem$workerArgs<ExtArgs>>): Prisma.Prisma__WorkerClient<runtime.Types.Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  jobSiteUserAssignment<T extends Prisma.DocumentPackageItem$jobSiteUserAssignmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackageItem$jobSiteUserAssignmentArgs<ExtArgs>>): Prisma.Prisma__JobSiteUserAssignmentClient<runtime.Types.Result.GetResult<Prisma.$JobSiteUserAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  jobSiteWorkerAssignment<T extends Prisma.DocumentPackageItem$jobSiteWorkerAssignmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackageItem$jobSiteWorkerAssignmentArgs<ExtArgs>>): Prisma.Prisma__JobSiteWorkerAssignmentClient<runtime.Types.Result.GetResult<Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  operationalRequest<T extends Prisma.DocumentPackageItem$operationalRequestArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackageItem$operationalRequestArgs<ExtArgs>>): Prisma.Prisma__OperationalRequestClient<runtime.Types.Result.GetResult<Prisma.$OperationalRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  contextMessage<T extends Prisma.DocumentPackageItem$contextMessageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackageItem$contextMessageArgs<ExtArgs>>): Prisma.Prisma__ContextMessageClient<runtime.Types.Result.GetResult<Prisma.$ContextMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  contextTimelineEvent<T extends Prisma.DocumentPackageItem$contextTimelineEventArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentPackageItem$contextTimelineEventArgs<ExtArgs>>): Prisma.Prisma__ContextTimelineEventClient<runtime.Types.Result.GetResult<Prisma.$ContextTimelineEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1961,6 +3497,12 @@ export interface DocumentPackageItemFieldRefs {
   readonly documentVersionId: Prisma.FieldRef<"DocumentPackageItem", 'String'>
   readonly evidenceId: Prisma.FieldRef<"DocumentPackageItem", 'String'>
   readonly checklistId: Prisma.FieldRef<"DocumentPackageItem", 'String'>
+  readonly workerId: Prisma.FieldRef<"DocumentPackageItem", 'String'>
+  readonly jobSiteUserAssignmentId: Prisma.FieldRef<"DocumentPackageItem", 'String'>
+  readonly jobSiteWorkerAssignmentId: Prisma.FieldRef<"DocumentPackageItem", 'String'>
+  readonly operationalRequestId: Prisma.FieldRef<"DocumentPackageItem", 'String'>
+  readonly contextMessageId: Prisma.FieldRef<"DocumentPackageItem", 'String'>
+  readonly contextTimelineEventId: Prisma.FieldRef<"DocumentPackageItem", 'String'>
   readonly note: Prisma.FieldRef<"DocumentPackageItem", 'String'>
   readonly position: Prisma.FieldRef<"DocumentPackageItem", 'Int'>
   readonly createdAt: Prisma.FieldRef<"DocumentPackageItem", 'DateTime'>
@@ -2438,6 +3980,120 @@ export type DocumentPackageItem$checklistArgs<ExtArgs extends runtime.Types.Exte
    */
   include?: Prisma.ChecklistInclude<ExtArgs> | null
   where?: Prisma.ChecklistWhereInput
+}
+
+/**
+ * DocumentPackageItem.worker
+ */
+export type DocumentPackageItem$workerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Worker
+   */
+  select?: Prisma.WorkerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Worker
+   */
+  omit?: Prisma.WorkerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkerInclude<ExtArgs> | null
+  where?: Prisma.WorkerWhereInput
+}
+
+/**
+ * DocumentPackageItem.jobSiteUserAssignment
+ */
+export type DocumentPackageItem$jobSiteUserAssignmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteUserAssignment
+   */
+  select?: Prisma.JobSiteUserAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteUserAssignment
+   */
+  omit?: Prisma.JobSiteUserAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteUserAssignmentInclude<ExtArgs> | null
+  where?: Prisma.JobSiteUserAssignmentWhereInput
+}
+
+/**
+ * DocumentPackageItem.jobSiteWorkerAssignment
+ */
+export type DocumentPackageItem$jobSiteWorkerAssignmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteWorkerAssignment
+   */
+  select?: Prisma.JobSiteWorkerAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteWorkerAssignment
+   */
+  omit?: Prisma.JobSiteWorkerAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteWorkerAssignmentInclude<ExtArgs> | null
+  where?: Prisma.JobSiteWorkerAssignmentWhereInput
+}
+
+/**
+ * DocumentPackageItem.operationalRequest
+ */
+export type DocumentPackageItem$operationalRequestArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationalRequest
+   */
+  select?: Prisma.OperationalRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationalRequest
+   */
+  omit?: Prisma.OperationalRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationalRequestInclude<ExtArgs> | null
+  where?: Prisma.OperationalRequestWhereInput
+}
+
+/**
+ * DocumentPackageItem.contextMessage
+ */
+export type DocumentPackageItem$contextMessageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ContextMessage
+   */
+  select?: Prisma.ContextMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ContextMessage
+   */
+  omit?: Prisma.ContextMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContextMessageInclude<ExtArgs> | null
+  where?: Prisma.ContextMessageWhereInput
+}
+
+/**
+ * DocumentPackageItem.contextTimelineEvent
+ */
+export type DocumentPackageItem$contextTimelineEventArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ContextTimelineEvent
+   */
+  select?: Prisma.ContextTimelineEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ContextTimelineEvent
+   */
+  omit?: Prisma.ContextTimelineEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContextTimelineEventInclude<ExtArgs> | null
+  where?: Prisma.ContextTimelineEventWhereInput
 }
 
 /**

@@ -14,6 +14,7 @@ on:
         options:
           - all
           - data-control
+          - operational
           - digest
 
 permissions:
@@ -58,4 +59,24 @@ jobs:
             --retry 2 --retry-all-errors --connect-timeout 10 --max-time 240 \
             --header "Authorization: Bearer $CRON_SECRET" \
             "$WORKSPACE_BASE_URL/api/reminders/email-digest/run")"
+          jq -e 'type == "object" and ((.failed | type) == "number") and .failed == 0' <<<"$response" >/dev/null
+
+  operational:
+    if: github.event.schedule == '3-58/5 * * * *' || inputs.target == 'all' || inputs.target == 'operational'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: scheduled-operational
+      cancel-in-progress: false
+    steps:
+      - name: Run operational engine
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          WORKSPACE_BASE_URL: ${{ vars.WORKSPACE_BASE_URL }}
+        run: |
+          test -n "$CRON_SECRET"
+          test -n "$WORKSPACE_BASE_URL"
+          response="$(curl --fail-with-body --silent --show-error \
+            --retry 2 --retry-all-errors --connect-timeout 10 --max-time 240 \
+            --header "Authorization: Bearer $CRON_SECRET" \
+            "$WORKSPACE_BASE_URL/api/operations/run")"
           jq -e 'type == "object" and ((.failed | type) == "number") and .failed == 0' <<<"$response" >/dev/null
