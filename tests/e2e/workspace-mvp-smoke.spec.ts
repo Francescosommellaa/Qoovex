@@ -544,7 +544,9 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     await expect(safetyPage.getByRole("button", { name: /^Apri notifiche(?:, \d+ non lett[ae])?$/ })).toBeVisible();
 
     expect((await sinkApi.delete(sinkUrl)).status()).toBe(200);
-    await expectJson(await ownerPage.request.post("/api/organization/invitations", { data: { email: siteManagerEmail, role: "SITE_MANAGER" } }), 201);
+    await expectJson(await ownerPage.request.post("/api/organization/invitations", {
+      data: { email: siteManagerEmail, role: "COLLABORATOR", preset: "SITE_MANAGER", scopeMode: "ASSIGNED" },
+    }), 201);
     const invitationTemplate = await waitForSinkTemplate(sinkApi, sinkUrl, siteManagerEmail, "organization-invitation");
     const invitationToken = new URL(String(invitationTemplate.acceptUrl)).searchParams.get("token");
     expect(invitationToken).toEqual(expect.any(String));
@@ -573,7 +575,9 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     const invitedWorkerProfile = await pagePostJson(ownerPage, "/api/workers", { displayName: `Worker invitato ${runId}`, email: invitedWorkerEmail });
     await expectJson(await ownerPage.request.post("/api/workers", { data: { displayName: `Duplicato ${runId}`, email: invitedWorkerEmail } }), 409);
     expect((await sinkApi.delete(sinkUrl)).status()).toBe(200);
-    await expectJson(await ownerPage.request.post("/api/organization/invitations", { data: { email: invitedWorkerEmail, role: "WORKER", workerId: invitedWorkerProfile.id } }), 201);
+    await expectJson(await ownerPage.request.post("/api/organization/invitations", {
+      data: { email: invitedWorkerEmail, role: "COLLABORATOR", preset: "LIMITED_UPLOAD", scopeMode: "ASSIGNED", workerId: invitedWorkerProfile.id },
+    }), 201);
     const workerInvitationTemplate = await waitForSinkTemplate(sinkApi, sinkUrl, invitedWorkerEmail, "organization-invitation");
     const workerInvitationToken = new URL(String(workerInvitationTemplate.acceptUrl)).searchParams.get("token");
     expect(workerInvitationToken).toEqual(expect.any(String));
@@ -641,10 +645,8 @@ test("Qoovex operator manages a customer, support session, and runtime error", a
     expect((await page.context().request.post("/api/dev-auth")).status()).toBe(200);
     await page.goto("/dashboard", { waitUntil: "domcontentloaded" });
     await expect(page).toHaveURL(/\/dashboard$/);
-    await openWorkspaceAccountMenu(page);
-    const qoovexConsoleItem = page.getByRole("menuitem", { name: "Console Qoovex" });
-    await expect(qoovexConsoleItem).toBeVisible();
-    await qoovexConsoleItem.click();
+    await page.getByRole("combobox", { name: "Vista di sviluppo" }).click();
+    await page.getByRole("option", { name: "Platform Admin", exact: true }).click();
     await expect(page).toHaveURL(/\/qoovex-admin$/);
     organizationFixture = await pagePostJson(page, "/api/dev-fixtures/platform-admin", { kind: "mfa-suite", runId });
     const organization = { id: organizationFixture.organizationId, code: `MFA-${runId}` };

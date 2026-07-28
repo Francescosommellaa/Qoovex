@@ -1156,7 +1156,7 @@ model DocumentVersion {
 
   @@index([organizationId, documentId, createdAt])
   @@index([organizationId, uploadedById])
-  @@index([organizationId, documentId, reviewStatus, createdAt])
+  @@index([organizationId, documentId, reviewStatus, createdAt], map: "DocumentVersion_organizationId_documentId_reviewStatus_crea_idx")
   @@index([reviewedById])
   @@index([organizationId, blobKey])
 }
@@ -1438,7 +1438,7 @@ model DocumentPackageItem {
   @@index([organizationId, checklistId])
   @@index([organizationId, workerId])
   @@index([organizationId, jobSiteUserAssignmentId])
-  @@index([organizationId, jobSiteWorkerAssignmentId])
+  @@index([organizationId, jobSiteWorkerAssignmentId], map: "DocumentPackageItem_organizationId_jobSiteWorkerAssignmentI_idx")
   @@index([organizationId, operationalRequestId])
   @@index([organizationId, contextMessageId])
   @@index([organizationId, contextTimelineEventId])
@@ -1496,7 +1496,7 @@ model OperationalRequest {
 
   @@index([organizationId, status, dueAt])
   @@index([organizationId, assigneeUserId, status])
-  @@index([organizationId, targetType, targetId, createdAt])
+  @@index([organizationId, targetType, targetId, createdAt], map: "OperationalRequest_organizationId_targetType_targetId_creat_idx")
   @@index([createdById])
   @@index([completedById])
 }
@@ -1543,7 +1543,7 @@ model ContextTimelineEvent {
   packageItems   DocumentPackageItem[]
 
   @@unique([organizationId, eventKey])
-  @@index([organizationId, targetType, targetId, occurredAt])
+  @@index([organizationId, targetType, targetId, occurredAt], map: "ContextTimelineEvent_organizationId_targetType_targetId_occ_idx")
   @@index([organizationId, eventType, occurredAt])
 }
 
@@ -1569,7 +1569,7 @@ model DocumentSourcePolicy {
   acquisitions      DocumentAcquisition[]
 
   @@index([organizationId, categoryKey, archivedAt])
-  @@index([organizationId, documentTypeId, archivedAt])
+  @@index([organizationId, documentTypeId, archivedAt], map: "DocumentSourcePolicy_organizationId_documentTypeId_archived_idx")
   @@index([responsibleUserId])
 }
 

@@ -6,6 +6,7 @@ import { hashPassword } from "@shared/server/auth-password";
 import { deletePrivateBlobs, listPrivateBlobs } from "@shared/server/blob-storage-service";
 import { isCurrentDevAuthIdentity } from "@shared/server/dev-auth";
 import { enqueueOperationalProcess } from "@shared/server/operational-process-service";
+import { getPermissionsForPreset } from "@shared/server/authorization-policy";
 
 async function requireDevFixtureAccess() {
   if (process.env.QOOVEX_E2E_MODE !== "1" || process.env.NODE_ENV === "production") throw new AccessError("Risorsa non disponibile.", 404);
@@ -104,9 +105,9 @@ async function createMfaSuiteFixture(runId: string) {
         createdById: owner.id,
         memberships: {
           create: [
-            { userId: owner.id, role: "OWNER" },
-            { userId: safety.id, role: "COLLABORATOR", preset: "DOCUMENT_REVIEWER", scopeMode: "FULL" },
-            { userId: worker.id, role: "COLLABORATOR", preset: "LIMITED_UPLOAD", scopeMode: "ASSIGNED" },
+            { userId: owner.id, role: "OWNER", scopeMode: "FULL" },
+            { userId: safety.id, role: "COLLABORATOR", preset: "DOCUMENT_REVIEWER", permissionKeys: getPermissionsForPreset("DOCUMENT_REVIEWER"), scopeMode: "FULL" },
+            { userId: worker.id, role: "COLLABORATOR", preset: "LIMITED_UPLOAD", permissionKeys: getPermissionsForPreset("LIMITED_UPLOAD"), scopeMode: "ASSIGNED" },
           ],
         },
       },
@@ -191,7 +192,7 @@ export async function DELETE(request: Request) {
     await requireDevFixtureAccess();
     const body = await request.json() as { userId?: string; userIds?: string[]; fixtureEmails?: string[]; organizationId?: string; runtimeErrorId?: string };
     const userIds = [body.userId, ...(body.userIds ?? [])].filter((value): value is string => Boolean(value));
-    const fixtureEmails = (body.fixtureEmails ?? []).filter((value) => /^signup-e2e-\d{8,20}@example\.test$/.test(value));
+    const fixtureEmails = (body.fixtureEmails ?? []).filter((value) => /^(?:signup|site-manager|worker-invite)-e2e-\d{8,20}@example\.test$/.test(value));
     const fixtureOrganization = body.organizationId
       ? await db.organization.findFirst({ where: { id: body.organizationId, code: { startsWith: "MFA-" } }, select: { id: true } })
       : null;
@@ -209,6 +210,8 @@ export async function DELETE(request: Request) {
               { username: { startsWith: "mfa_safety_" } },
               { username: { startsWith: "mfa_worker_" } },
               { username: { startsWith: "signup_e2e_" } },
+              { username: { startsWith: "site_manager_e2e_" } },
+              { username: { startsWith: "worker_invite_e2e_" } },
             ] },
           ],
         },

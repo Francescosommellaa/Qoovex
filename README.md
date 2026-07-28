@@ -10,7 +10,7 @@ Il Workspace autenticato esegue cinque processi persistenti e deterministici: ri
 - `apps/web`: sito pubblico, contenuti marketing e pagine legali.
 - `apps/sirio`: catalogo e prova tecnica del design system, inclusa la proof Fase 4; non ospita logica operativa.
 - `apps/mobile`: placeholder per una futura app mobile.
-- `packages/db`: Prisma, client, schema e sedici migration canoniche nel repository; la sedicesima (`20260728030000_operational_workspace_expansion`) e additiva e resta pendente finche il wrapper non riceve un backup reference verificabile.
+- `packages/db`: Prisma, client, schema e diciassette migration canoniche nel repository; `20260728030000_operational_workspace_expansion` e `20260728040000_operational_workspace_index_names` sono applicate e senza drift soltanto sul database locale guardato.
 - `packages/types`: ruoli, permessi e DTO platform-neutral, inclusi i contratti operativi minimizzati.
 - `packages/ui`: foundation condivisa shadcn `base-nova`, Base UI, Tabler, Geist e tema light/dark/system; la Fase 4 aggiunge solo primitive generiche per ricerca, timeline e work queue.
 - `packages/brand-resources`: asset SVG proprietari condivisi.

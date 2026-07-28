@@ -24,8 +24,11 @@
 - E2E Fase 3: documento incompleto -> decisione -> ripresa; lavoratore -> requisito mancante -> documento -> eccezione risolta;
 - E2E Fase 4: ricerca autorizzata -> artifact -> timeline; preparazione -> review -> link; aggiornamento immutabile; revoca/scadenza; Centro operativo.
 - access model: mapping expand/migrate/contract, backfill dry-run/idempotenza, Owner/Collaborator, permessi dipendenti, scope e grant cross-tenant, optimistic concurrency, scadenza/revoca, reinvio/rifiuto invito e separazione Support Agent/Platform Admin;
+- storia migration fresca e mapping espliciti per gli indici PostgreSQL al limite di 63 byte, verificati con `migrate reset`, `migrate status` e diff nullo;
 
 I conteggi esatti delle suite vengono riportati dal gate finale della sessione; restano prove locali e non attestano Preview o Production.
+
+Il gate locale del 28 luglio 2026 ha verificato 19 test DB e 328 test Workspace superati, con 3 test di concorrenza skipped, build Web/Sirio/Workspace, 17 migration senza drift e 5 test E2E superati. Il test inviti/resource scope e stato inoltre ripetuto isolatamente dopo la correzione del cleanup fixture. L'E2E usa un server Workspace dedicato in modalita E2E; al termine il profilo dev normale viene ripristinato.
 
 ## Gate prima di release
 
