@@ -40,4 +40,4 @@ I servizi documento validano `macroarea -> categoria -> tipo` dal registro condi
 
 `people-service.ts` costruisce read model server-only per panoramica, rubrica paginata, accessi e assegnazioni. Le operazioni restano costanti rispetto al numero di righe (nessun N+1) e ogni query contiene `organizationId`; i preset `SITE_MANAGER` e `LIMITED_UPLOAD` ricevono inoltre lo scope da `resource-scope-service.ts`. La visibilita documentale non standard richiede il permesso sensibile canonico.
 
-`organization-invitation-service.ts` conserva il `workerId` opzionale dell'invito WORKER e crea/riattiva membership e link nella stessa transazione Serializable. Non esegue matching automatico per email sugli inviti legacy.
+`organization-invitation-service.ts` conserva il `workerId` opzionale dell'invito Collaboratore con preset `LIMITED_UPLOAD` e crea/riattiva membership e link nella stessa transazione Serializable. Non esegue matching automatico per email sugli inviti legacy.

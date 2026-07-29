@@ -117,7 +117,7 @@ export function JobSiteDetailView({
             <div className="min-w-0 lg:col-span-2"><dt className="flex items-center gap-2 text-xs font-medium text-muted-foreground"><IconMapPin aria-hidden="true" className="size-4" />Indirizzo</dt><dd className="mt-1 [overflow-wrap:anywhere] font-medium">{jobSite.address || "Non registrato"}</dd></div>
             <div><dt className="flex items-center gap-2 text-xs font-medium text-muted-foreground"><IconCalendar aria-hidden="true" className="size-4" />Data inizio</dt><dd className="mt-1 font-medium">{formatDate(jobSite.startDate)}</dd></div>
             <div><dt className="flex items-center gap-2 text-xs font-medium text-muted-foreground"><IconCalendar aria-hidden="true" className="size-4" />Data fine</dt><dd className="mt-1 font-medium">{formatDate(jobSite.endDate)}</dd></div>
-            {capabilities.canReadAssignments ? <div className="min-w-0 lg:col-span-2"><dt className="flex items-center gap-2 text-xs font-medium text-muted-foreground"><IconUserCheck aria-hidden="true" className="size-4" />Responsabile cantiere</dt><dd className="mt-1 [overflow-wrap:anywhere] font-medium">{responsiblePeopleLabel}</dd></div> : null}
+            {capabilities.canReadAssignments ? <div className="min-w-0 lg:col-span-2"><dt className="flex items-center gap-2 text-xs font-medium text-muted-foreground"><IconUserCheck aria-hidden="true" className="size-4" />Collaboratori del cantiere</dt><dd className="mt-1 [overflow-wrap:anywhere] font-medium">{responsiblePeopleLabel}</dd></div> : null}
             <div><dt className="text-xs font-medium text-muted-foreground">Creato</dt><dd className="mt-1 font-medium">{formatDate(jobSite.createdAt)}</dd></div>
             <div><dt className="text-xs font-medium text-muted-foreground">Ultimo aggiornamento</dt><dd className="mt-1 font-medium">{formatDate(jobSite.updatedAt)}</dd></div>
           </dl>
@@ -132,13 +132,13 @@ export function JobSiteDetailView({
       {capabilities.canReadAssignments ? (
         <Card size="sm">
           <CardHeader className="border-b">
-            <CardTitle><h2>Responsabile cantiere</h2></CardTitle>
-            <CardDescription>Incarico principale per l'accesso operativo e il coordinamento di questo cantiere.</CardDescription>
+            <CardTitle><h2>Collaboratori del cantiere</h2></CardTitle>
+            <CardDescription>Collaboratori con accesso operativo assegnato a questo cantiere.</CardDescription>
             <CardAction><Badge variant="outline"><IconUserCheck aria-hidden="true" />{userAssignments.length}</Badge></CardAction>
           </CardHeader>
           <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
-              <span className="block text-xs font-medium text-muted-foreground">Responsabile assegnato</span>
+              <span className="block text-xs font-medium text-muted-foreground">Collaboratori assegnati</span>
               <strong className="mt-1 block [overflow-wrap:anywhere] text-sm font-medium">{responsiblePeopleLabel}</strong>
             </div>
             <div className="flex shrink-0 flex-wrap items-center gap-2">
@@ -150,7 +150,7 @@ export function JobSiteDetailView({
                   excludedUserIds={userAssignments.map((item) => item.userId)}
                   primaryAction
                   responsibilityLabel={responsiblePeopleLabel}
-                  triggerLabel={userAssignments.length ? "Aggiungi responsabile cantiere" : "Assegna responsabile cantiere"}
+                  triggerLabel={userAssignments.length ? "Aggiungi collaboratore" : "Assegna collaboratore"}
                 />
               ) : null}
               <Link className={buttonVariants({ size: "sm", variant: "outline" })} href="/access"><IconUsers aria-hidden="true" />Vedi assegnazioni</Link>
@@ -195,7 +195,7 @@ export function JobSiteDetailView({
 
       {capabilities.canReadAssignments ? (
         <Card size="sm">
-          <CardHeader className="border-b"><CardTitle><h2>Lavoratori assegnati</h2></CardTitle><CardDescription>Profili operativi collegati al cantiere, separati dal Responsabile cantiere.</CardDescription><CardAction><Badge variant="outline"><IconUsers aria-hidden="true" />{workerAssignments.length}</Badge></CardAction></CardHeader>
+          <CardHeader className="border-b"><CardTitle><h2>Lavoratori assegnati</h2></CardTitle><CardDescription>Profili operativi collegati al cantiere, separati dagli accessi dei Collaboratori.</CardDescription><CardAction><Badge variant="outline"><IconUsers aria-hidden="true" />{workerAssignments.length}</Badge></CardAction></CardHeader>
           <CardContent className="grid gap-3">{!workerAssignments.length ? <RelatedEmpty description="Non risultano lavoratori assegnati a questo cantiere." icon={IconUsers} title="Nessun lavoratore assegnato" /> : <ul className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2">{workerAssignments.map((item) => <li className="rounded-lg border p-3" key={item.id}><strong className="block text-sm font-medium">{item.workerDisplayName}</strong><span className="mt-1 block text-xs text-muted-foreground">Mansione: {item.workerRoleLabel || "non indicata"}</span></li>)}</ul>}<div><Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/access"><IconUsers aria-hidden="true" />Gestisci lavoratori assegnati</Link></div></CardContent>
         </Card>
       ) : null}

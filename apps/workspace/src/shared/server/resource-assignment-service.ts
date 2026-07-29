@@ -12,6 +12,7 @@ import type {
   JobSiteUserAssignmentRole,
   JobSiteWorkerAssignmentResponse,
   OrganizationAccessPreset,
+  OrganizationPermission,
   WorkerUserLinkResponse,
 } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
@@ -120,6 +121,13 @@ function assertExpectedAccessPreset(preset: OrganizationAccessPreset | null, exp
   if (preset !== expected) throw new AccessError(`${label} non disponibile per questa assegnazione.`, 409);
 }
 
+function assertAssignmentPermission(permissionKeys: readonly string[], assignmentRole: JobSiteUserAssignmentRole) {
+  const requiredPermission: OrganizationPermission = assignmentRole === "DOCUMENT_REVIEWER" ? "documents:read" : "jobSites:read";
+  if (!permissionKeys.includes(requiredPermission)) {
+    throw new AccessError("Il Collaboratore non dispone dei permessi richiesti per questa assegnazione.", 409);
+  }
+}
+
 async function assertActiveWorker(organizationId: string, workerId: string) {
   const worker = await db.worker.findFirst({
     where: { id: workerId, organizationId, archivedAt: null },
@@ -140,8 +148,8 @@ async function assertActiveJobSite(organizationId: string, jobSiteId: string) {
 
 async function assertActiveMembership(organizationId: string, userId: string) {
   const membership = await db.organizationMembership.findFirst({
-    where: { organizationId, userId, revokedAt: null },
-    select: { id: true, role: true, preset: true, user: { select: { id: true, name: true, email: true } } },
+    where: { organizationId, userId, revokedAt: null, role: "COLLABORATOR", OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+    select: { id: true, role: true, preset: true, permissionKeys: true, user: { select: { id: true, name: true, email: true } } },
   });
   if (!membership) throw new AccessError("Utente non disponibile per questa azienda.", 404);
   return membership;
@@ -364,12 +372,7 @@ export async function createJobSiteUserAssignment(input: CreateJobSiteUserAssign
   const period = normalizeAssignmentPeriod(input);
   await assertActiveJobSite(organizationId, jobSiteId);
   const membership = await assertActiveMembership(organizationId, userId);
-  const expectedPreset: OrganizationAccessPreset = assignmentRole === "SITE_MANAGER"
-    ? "SITE_MANAGER"
-    : assignmentRole === "DOCUMENT_REVIEWER"
-      ? "DOCUMENT_REVIEWER"
-      : "OPERATIONAL_COLLABORATION";
-  assertExpectedAccessPreset(membership.preset, expectedPreset, "Utente");
+  assertAssignmentPermission(membership.permissionKeys, assignmentRole);
 
   const duplicate = await db.jobSiteUserAssignment.findFirst({
     where: { organizationId, jobSiteId, userId, assignmentRole, archivedAt: null },
@@ -507,8 +510,8 @@ export async function getResourceAssignmentOptions() {
       orderBy: [{ name: "asc" }],
     }),
     db.organizationMembership.findMany({
-      where: { organizationId, revokedAt: null, role: "COLLABORATOR", preset: { in: ["SITE_MANAGER", "LIMITED_UPLOAD"] } },
-      select: { role: true, preset: true, user: { select: { id: true, name: true, email: true } } },
+      where: { organizationId, revokedAt: null, role: "COLLABORATOR", OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+      select: { role: true, preset: true, permissionKeys: true, user: { select: { id: true, name: true, email: true } } },
       orderBy: [{ createdAt: "asc" }],
     }),
   ]);
@@ -519,7 +522,9 @@ export async function getResourceAssignmentOptions() {
       id: membership.user.id,
       label: userLabel(membership.user),
       email: membership.user.email,
-      role: membership.preset === "SITE_MANAGER" ? "SITE_MANAGER" : membership.preset === "LIMITED_UPLOAD" ? "WORKER" : membership.role,
+      role: membership.role,
+      preset: membership.preset,
+      permissionKeys: membership.permissionKeys,
     })),
   };
 }

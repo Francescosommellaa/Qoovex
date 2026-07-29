@@ -199,15 +199,31 @@ async function createDomainData(page: Page, runId: string) {
   return { documentPackage, jobSite, jobSiteDocument, jobSiteDocumentType, worker, workerDocument, workerDocumentType };
 }
 
-async function expectPrimaryNavigation(page: Page, labels: string[]) {
+async function expectPrimaryNavigation(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Navigazione workspace" });
-  for (const label of labels) await expect(navigation.getByRole("link", { name: label, exact: true })).toBeVisible();
+  await expect(navigation.getByRole("link", { name: "Panoramica", exact: true })).toBeVisible();
+  await expect(navigation.getByRole("link", { name: "Tutti i cantieri", exact: true })).toBeVisible();
+  await expect(navigation.getByRole("link", { name: "Lavoratori", exact: true })).toHaveCount(0);
+  await expect(navigation.getByRole("link", { name: "Azienda", exact: true })).toHaveCount(0);
+  await expect(navigation.getByRole("button", { name: "Analytics, disponibile in futuro", exact: true })).toBeDisabled();
+  await expect(navigation.getByRole("button", { name: "Calendario, disponibile in futuro", exact: true })).toBeDisabled();
   await expect(navigation.getByText("Preferiti", { exact: true })).toHaveCount(0);
   await expect(navigation.getByText("Azioni rapide", { exact: true })).toBeVisible();
+  const quickActions = navigation.getByRole("group", { name: "Azioni rapide" });
+  await expect(quickActions.getByRole("link", { name: "Aggiungi prova", exact: true })).toBeVisible();
+  await expect(quickActions.getByRole("link", { name: "Carica documento", exact: true })).toBeVisible();
+  await expect(quickActions.getByRole("link", { name: "Aggiungi collaboratore", exact: true })).toBeVisible();
+  await expect(quickActions.getByRole("link", { name: "Crea cantiere", exact: true })).toHaveCount(0);
   await expect(navigation.getByRole("button", { name: "Cerca", exact: true })).toBeVisible();
   await expect(navigation.getByRole("link", { name: "Ricerca", exact: true })).toHaveCount(0);
   await expect(navigation.getByText("Analisi", { exact: true })).toHaveCount(0);
   await expect(navigation.getByRole("link", { name: "Notifiche", exact: true })).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Riduci menu", exact: true }).click();
+  await expect(navigation.getByRole("link", { name: "Tutti i cantieri", exact: true })).toBeHidden();
+  await navigation.getByRole("link", { name: "Panoramica", exact: true }).hover();
+  await expect(navigation.getByRole("link", { name: "Tutti i cantieri", exact: true })).toBeHidden();
+  await page.getByRole("button", { name: "Espandi menu", exact: true }).click();
 }
 
 async function runOperationalEngine(page: Page, times: number) {
@@ -384,7 +400,7 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     const owner = fixture.owner as JsonRecord;
     await signInWithCredentials(page, String(owner.email), String(fixture.password));
     await satisfyMfaGate(page, String(owner.secret));
-    await expectPrimaryNavigation(page, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri", "Condivisioni", "Impostazioni"]);
+    await expectPrimaryNavigation(page);
     await page.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("button", { name: "Cerca", exact: true }).click();
     await expect(page.getByRole("dialog", { name: "Cerca nel workspace" })).toBeVisible();
     await page.keyboard.press("Escape");
@@ -452,10 +468,26 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     await expect(page.getByRole("heading", { name: "Coda di attenzione", exact: true })).toBeVisible();
     await page.goto(`/job-sites/all?search=${encodeURIComponent(String(jobSite.name))}`, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: String(jobSite.name), exact: true })).toBeVisible();
-    for (const section of ["overview", "documents", "people", "activities", "evidence", "sharing", "settings"]) {
+    for (const section of ["overview", "updates", "documents", "people", "activities", "evidence", "sharing", "settings"]) {
       await page.goto(`/job-sites/${jobSite.id}?section=${section}`, { waitUntil: "domcontentloaded" });
       await expect(page.getByRole("navigation", { name: "Sezioni cantiere" })).toBeVisible();
     }
+    await page.goto("/job-sites/all", { waitUntil: "domcontentloaded" });
+    const jobSiteNavigation = page.getByRole("navigation", { name: "Navigazione workspace" });
+    await jobSiteNavigation.getByRole("link", { name: String(jobSite.name), exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`/job-sites/.+${jobSite.id}`));
+    await page.goto("/job-sites/all", { waitUntil: "domcontentloaded" });
+    await jobSiteNavigation.getByRole("button", { name: `Mostra aggiornamenti di ${jobSite.name}`, exact: true }).click();
+    await expect(page).toHaveURL(/\/job-sites\/all$/);
+    const timelineLink = jobSiteNavigation.locator('a[href*="?section=updates#timeline-"]').first();
+    await expect(timelineLink).toBeVisible();
+    const timelineHref = await timelineLink.getAttribute("href");
+    expect(timelineHref).toMatch(new RegExp(`^/job-sites/${jobSite.id}\\?section=updates#timeline-`));
+    await timelineLink.click();
+    await expect(page).toHaveURL(new RegExp(`/job-sites/${jobSite.id}\\?section=updates#timeline-`));
+    await expect(jobSiteNavigation.locator('a[aria-current="location"]')).toHaveAttribute("href", timelineHref!);
+    const timelineAnchor = new URL(page.url()).hash;
+    await expect(page.locator(timelineAnchor)).toBeVisible();
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`/job-sites/${jobSite.id}?section=overview`, { waitUntil: "domcontentloaded" });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
@@ -540,7 +572,7 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     const safetyPage = await safetyContext.newPage();
     await signInWithCredentials(safetyPage, String(safety.email), String(fixture.password));
     await satisfyMfaGate(safetyPage, String(safety.secret));
-    await expectPrimaryNavigation(safetyPage, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri", "Condivisioni"]);
+    await expectPrimaryNavigation(safetyPage);
     await expect(safetyPage.getByRole("button", { name: /^Apri notifiche(?:, \d+ non lett[ae])?$/ })).toBeVisible();
 
     expect((await sinkApi.delete(sinkUrl)).status()).toBe(200);
@@ -606,7 +638,7 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
 
     const siteManagerPage = await scopedSiteManagerContext.newPage();
     await signInWithCredentials(siteManagerPage, siteManagerEmail, siteManagerPassword);
-    await expectPrimaryNavigation(siteManagerPage, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri"]);
+    await expectPrimaryNavigation(siteManagerPage);
     const siteManagerJobSites = await expectJson(await siteManagerPage.request.get("/api/job-sites"), 200) as unknown as JsonRecord;
     expect((siteManagerJobSites.items as JsonRecord[]).map((jobSite) => jobSite.id)).toEqual([assignedJobSite.id]);
     await expectJson(await siteManagerPage.request.post("/api/job-sites", { data: { name: "Vietato" } }), 404);
@@ -614,7 +646,7 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     const workerPage = await workerContext.newPage();
     await signInWithCredentials(workerPage, String(worker.email), String(fixture.password));
     await satisfyMfaGate(workerPage, String(worker.secret));
-    await expectPrimaryNavigation(workerPage, ["Centro operativo", "Documenti", "Lavoratori", "Cantieri"]);
+    await expectPrimaryNavigation(workerPage);
     await expect(workerPage.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("link", { name: "Condivisioni", exact: true })).toHaveCount(0);
     const workerRecords = await expectJson(await workerPage.request.get("/api/workers"), 200) as unknown as JsonRecord[];
     expect(workerRecords.map((record) => record.id)).toEqual([linkedWorker.id]);

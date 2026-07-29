@@ -21,6 +21,7 @@ import { useState } from "react";
 import { formValue, nullableFormValue, submitJson } from "../admin-api-client";
 import type { WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 import { workerDetailsHref } from "@shared/lib/worker-routes";
+import { buildWorkerCollaboratorInvitation, type WorkerCollaboratorInvitation } from "./worker-collaborator-invitation";
 
 export type WorkerAccessRole = Exclude<OrganizationRole, "OWNER">;
 
@@ -42,8 +43,7 @@ interface WorkerFormProps {
 }
 
 interface PendingInvitation {
-  email: string;
-  role: WorkerAccessRole;
+  payload: WorkerCollaboratorInvitation;
 }
 
 export function WorkerForm({
@@ -68,7 +68,7 @@ export function WorkerForm({
   }
 
   async function sendInvitation(invitation: PendingInvitation) {
-    await submitJson("/api/organization/invitations", "POST", { ...invitation });
+    await submitJson("/api/organization/invitations", "POST", invitation.payload);
   }
 
   async function retryInvitation() {
@@ -114,7 +114,7 @@ export function WorkerForm({
       );
 
       if (mode === "create" && accessRole && email) {
-        const invitation = { email, role: accessRole };
+        const invitation = { payload: buildWorkerCollaboratorInvitation(email, response.id) };
         try {
           await sendInvitation(invitation);
         } catch (cause) {
@@ -198,7 +198,7 @@ export function WorkerForm({
         {mode === "create" && visibleAccessRoles.length ? (
           <FieldSet>
             <FieldLegend>Accesso a Qoovex</FieldLegend>
-            <FieldDescription>Da questa scheda puoi invitare soltanto il lavoratore registrato. Gli altri ruoli si invitano da Utenti e inviti.</FieldDescription>
+            <FieldDescription>Da questa scheda puoi invitare un Collaboratore e collegarlo a questo profilo operativo. Gli altri collaboratori si gestiscono da Accessi.</FieldDescription>
             <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3">
               <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors has-checked:border-primary/40 has-checked:bg-primary/5 hover:bg-muted/60">
                 <input className="mt-0.5 size-4 accent-primary" defaultChecked name="accessRole" type="radio" value="" />

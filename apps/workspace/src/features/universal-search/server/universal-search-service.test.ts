@@ -98,8 +98,8 @@ describe("universal metadata search", () => {
     expect(second.items[0].id).not.toBe(first.items[0].id);
   });
 
-  it("removes non-visible site-manager rows before counts and groups are built", async () => {
-    mocks.getScope.mockResolvedValue({ organizationId: "org-1", fullAccess: false, actorRole: "SITE_MANAGER", linkedWorker: null, visibleJobSiteIds: ["site-visible"], siteManagerJobSiteIds: ["site-visible"], workerJobSiteIds: [] });
+  it("removes rows outside a Collaborator's assigned job sites before counts and groups are built", async () => {
+    mocks.getScope.mockResolvedValue({ organizationId: "org-1", fullAccess: false, actorRole: "COLLABORATOR", linkedWorker: null, visibleJobSiteIds: ["site-visible"], siteManagerJobSiteIds: ["site-visible"], workerJobSiteIds: [] });
     mocks.rows = [
       candidate({ id: "visible", jobSiteId: "site-visible" }),
       candidate({ id: "hidden", jobSiteId: "site-hidden" }),

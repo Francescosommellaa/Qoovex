@@ -50,7 +50,7 @@ interface AssignmentOverview {
   }>;
   options: {
     workers: Array<{ id: string; displayName: string; roleLabel: string | null }>;
-    siteManagers: Array<{ id: string; label: string; email: string }>;
+    jobSiteCollaborators: Array<{ id: string; label: string; email: string }>;
   };
 }
 
@@ -100,7 +100,7 @@ function AssignmentForm({
   const [error, setError] = useState<string | null>(null);
   const options =
     kind === "manager"
-      ? overview.options.siteManagers.map((item) => ({
+      ? overview.options.jobSiteCollaborators.map((item) => ({
           value: item.id,
           label: `${item.label} · ${item.email}`,
         }))
@@ -138,7 +138,7 @@ function AssignmentForm({
     >
       <Field>
         <FieldLabel htmlFor={`${kind}-${jobSiteId}`}>
-          {kind === "manager" ? "Responsabile" : "Lavoratore"}
+          {kind === "manager" ? "Collaboratore" : "Lavoratore"}
         </FieldLabel>
         <Select items={options} name="personId" required>
           <SelectTrigger id={`${kind}-${jobSiteId}`}>
@@ -176,8 +176,8 @@ export function PeopleAssignmentsView({
         title="Assegnazioni"
         description={
           canManage
-            ? "Organizza per cantiere i responsabili e i lavoratori che possono operare nel relativo ambito."
-            : "Consulta responsabili e lavoratori assegnati ai cantieri."
+            ? "Organizza per cantiere i Collaboratori e i lavoratori che possono operare nel relativo ambito."
+            : "Consulta Collaboratori e lavoratori assegnati ai cantieri."
         }
       />
       {!overview.jobSites.length ? (
@@ -209,8 +209,8 @@ export function PeopleAssignmentsView({
                   <CardDescription>
                     {countLabel(
                       site.userAssignments.length,
-                      "responsabile",
-                      "responsabili",
+                      "Collaboratore",
+                      "Collaboratori",
                     )}{" "}
                     · {countLabel(site.workerAssignments.length, "lavoratore", "lavoratori")}
                   </CardDescription>
@@ -223,7 +223,7 @@ export function PeopleAssignmentsView({
                 <CardContent className="grid gap-5">
                   <div className="grid gap-5 lg:grid-cols-2">
                     <section>
-                      <h3 className="text-sm font-medium">Responsabili cantiere</h3>
+                      <h3 className="text-sm font-medium">Collaboratori del cantiere</h3>
                       {site.userAssignments.length ? (
                         <ul className="mt-2 divide-y divide-border">
                           {site.userAssignments.map((assignment) => (
@@ -249,7 +249,7 @@ export function PeopleAssignmentsView({
                         </ul>
                       ) : (
                         <p className="mt-2 text-sm text-muted-foreground">
-                          Nessun responsabile assegnato.
+                          Nessun Collaboratore assegnato.
                         </p>
                       )}
                     </section>

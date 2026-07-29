@@ -821,7 +821,7 @@ export interface JobSiteOverviewResponse {
   generatedAt: string;
 }
 
-export const jobSiteDetailSections = ["overview", "documents", "people", "activities", "evidence", "sharing", "settings"] as const;
+export const jobSiteDetailSections = ["overview", "updates", "documents", "people", "activities", "evidence", "sharing", "settings"] as const;
 export type JobSiteDetailSection = (typeof jobSiteDetailSections)[number];
 
 export interface DocumentSummary {

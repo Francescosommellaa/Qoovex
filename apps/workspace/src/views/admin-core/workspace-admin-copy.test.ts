@@ -19,6 +19,8 @@ describe("workspace admin UI copy", () => {
   const source = collectCodeFiles(root).map((file) => readFileSync(file, "utf8")).join("\n");
   const appSource = collectCodeFiles(appRoot).map((file) => readFileSync(file, "utf8")).join("\n");
   const navigationSource = readFileSync(join(root, "workspace", "WorkspaceNavigation.tsx"), "utf8");
+  const sidebarFrameSource = readFileSync(join(root, "workspace", "WorkspaceSidebarFrame.tsx"), "utf8");
+  const workspaceShellSource = readFileSync(join(root, "workspace", "WorkspaceShell.tsx"), "utf8");
   const navigationPolicySource = readFileSync(join(root, "workspace", "workspace-navigation-policy.ts"), "utf8");
   const settingsHubSource = readFileSync(join(root, "settings", "SettingsHubView.tsx"), "utf8");
   const evidenceFormSource = readFileSync(join(root, "admin-core", "evidence", "EvidenceForm.tsx"), "utf8");
@@ -49,11 +51,14 @@ describe("workspace admin UI copy", () => {
   const guidedWorkerCreateSource = readFileSync(join(root, "admin-core", "workers", "GuidedWorkerCreateFlow.tsx"), "utf8");
   const workerDetailsDialogSource = readFileSync(join(root, "admin-core", "workers", "WorkerDetailsDialog.tsx"), "utf8");
   const workerFormSource = readFileSync(join(root, "admin-core", "workers", "WorkerForm.tsx"), "utf8");
+  const workerAccessPanelSource = readFileSync(join(root, "admin-core", "workers", "WorkerAccessPanel.tsx"), "utf8");
+  const workerInvitationSource = readFileSync(join(root, "admin-core", "workers", "worker-collaborator-invitation.ts"), "utf8");
   const workerDetailViewSource = readFileSync(join(root, "admin-core", "workers", "WorkerDetailView.tsx"), "utf8");
   const workerDetailRouteSource = readFileSync(join(appRoot, "workers", "[workerId]", "page.tsx"), "utf8");
   const workersRouteSource = readFileSync(join(appRoot, "workers", "page.tsx"), "utf8");
   const newWorkerRouteSource = readFileSync(join(appRoot, "workers", "new", "page.tsx"), "utf8");
   const jobSitesPageViewSource = readFileSync(join(root, "admin-core", "job-sites", "JobSitesPageView.tsx"), "utf8");
+  const workspacePrimitivesSource = readFileSync(join(root, "workspace", "WorkspacePrimitives.tsx"), "utf8");
   const jobSitesOverviewSource = readFileSync(join(root, "admin-core", "job-sites", "JobSitesOverviewView.tsx"), "utf8");
   const jobSiteCreateWizardSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteCreateWizard.tsx"), "utf8");
   const jobSiteSegmentedViewSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteDetailSegmentedView.tsx"), "utf8");
@@ -62,6 +67,7 @@ describe("workspace admin UI copy", () => {
   const jobSiteFormSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteForm.tsx"), "utf8");
   const jobSiteDetailViewSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteDetailView.tsx"), "utf8");
   const jobSiteQuickActionsSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteQuickActions.tsx"), "utf8");
+  const jobSiteUpdatesSource = readFileSync(join(root, "admin-core", "job-sites", "JobSiteUpdatesPanel.tsx"), "utf8");
   const jobSiteDetailRouteSource = readFileSync(join(appRoot, "job-sites", "[jobSiteId]", "page.tsx"), "utf8");
   const jobSitesRouteSource = readFileSync(join(appRoot, "job-sites", "page.tsx"), "utf8");
   const newJobSiteRouteSource = readFileSync(join(appRoot, "job-sites", "new", "page.tsx"), "utf8");
@@ -82,7 +88,11 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps everyday navigation small and preserves secondary routes", () => {
-    for (const route of ["/dashboard", "/documents", "/workers", "/job-sites", "/document-packages", "/settings"]) expect(navigationPolicySource).toContain(`href: "${route}"`);
+    for (const route of ["/dashboard", "/job-sites/all", "/settings/organization-profile"]) expect(navigationPolicySource).toContain(`href: "${route}"`);
+    for (const route of ["/people/access", "/account/security", "/settings"]) expect(navigationPolicySource).toContain(`href: "${route}"`);
+    expect(navigationPolicySource).not.toContain('primary.push({ label: "Lavoratori"');
+    expect(navigationPolicySource).not.toContain('primary.push({ label: "Azienda"');
+    for (const label of ["Documenti", "Condivisioni"]) expect(navigationPolicySource).not.toContain(`primary.push({ label: "${label}"`);
     for (const route of adminRoutes) expect(appSource).toContain(route.slice(1));
     for (const route of ["/deadlines", "/checklists", "/evidence", "/document-packages", "/access", "/audit-log", "/data-control"]) {
       expect(navigationPolicySource).not.toContain(`label: "${route}"`);
@@ -170,7 +180,7 @@ describe("workspace admin UI copy", () => {
     expect(accessSource).toContain("Assegnazioni cantieri");
     expect(accessSource).toContain("Associazione account al profilo");
     expect(accessSource).toContain("Non assegna e non modifica il ruolo");
-    expect(accessSource).toContain("Responsabili dei cantieri");
+    expect(accessSource).toContain("Collaboratori nei cantieri");
     expect(accessSource).toContain("Lavoratori nei cantieri");
     expect(accessSource).toContain('@qoovex/ui/components/select');
     expect(accessSource).toContain('@qoovex/ui/components/field');
@@ -275,9 +285,13 @@ describe("workspace admin UI copy", () => {
     expect(workerDetailsDialogSource).not.toContain("fetch(");
     expect(workerFormSource).toContain("Mansione");
     expect(guidedWorkerCreateSource).toContain("Solo profilo operativo");
-    expect(guidedWorkerCreateSource).toContain('role: "COLLABORATOR"');
+    expect(workerInvitationSource).toContain('role: "COLLABORATOR"');
     expect(guidedWorkerCreateSource).toContain("Nomi simili trovati");
-    expect(guidedWorkerCreateSource).toContain('preset: "LIMITED_UPLOAD"');
+    expect(workerInvitationSource).toContain('preset: "LIMITED_UPLOAD"');
+    expect(workerInvitationSource).toContain('scopeMode: "ASSIGNED"');
+    expect(workerFormSource).toContain("buildWorkerCollaboratorInvitation(email, response.id)");
+    expect(workerAccessPanelSource).toContain("buildWorkerCollaboratorInvitation(workerEmail, workerId)");
+    expect(workerAccessPanelSource).not.toContain('role: "WORKER"');
     expect(workersRouteSource).toContain("listPeopleWorkers");
     expect(workersRouteSource).toContain('params.intent === "create"');
     expect(newWorkerRouteSource).toContain('redirect("/workers?intent=create")');
@@ -292,6 +306,8 @@ describe("workspace admin UI copy", () => {
     expect(jobSitesPageViewSource).toContain('@qoovex/ui/components/card');
     expect(jobSitesPageViewSource).toContain('@tabler/icons-react');
     expect(jobSitesPageViewSource).toContain("<JobSiteCreateDialog");
+    expect(jobSitesPageViewSource).toContain("<WorkspaceJobSitePhaseIcon phase={item.operationalPhase} />");
+    expect(jobSitesPageViewSource).toContain("<WorkspaceState label={item.operationalPhase");
     expect(jobSitesOverviewSource).toContain("Coda di attenzione");
     expect(jobSiteCreateWizardSource).toContain("Avanzamento creazione");
     expect(jobSiteCreateWizardSource).toContain("continueAfterDuplicateWarning");
@@ -310,9 +326,14 @@ describe("workspace admin UI copy", () => {
     expect(jobSiteSegmentedViewSource).toContain("<WorkspacePageIdentity");
     expect(jobSiteSegmentedViewSource).toContain('@qoovex/ui/components/card');
     expect(jobSiteSegmentedViewSource).not.toContain("AdminCore.module.css");
-    expect(jobSiteSegmentedViewSource).toContain("Responsabili cantiere");
+    expect(jobSiteSegmentedViewSource).toContain("Collaboratori del cantiere");
     expect(jobSiteSegmentedViewSource).toContain("<JobSiteQuickActions");
-    for (const section of ["overview", "documents", "people", "activities", "evidence", "sharing", "settings"]) expect(jobSiteSegmentedViewSource).toContain(`id: "${section}"`);
+    expect(jobSiteSegmentedViewSource).toContain("<JobSiteUpdatesPanel");
+    expect(jobSiteUpdatesSource).toContain('@qoovex/ui/components/timeline');
+    expect(jobSiteUpdatesSource).toContain('id={`timeline-${item.id}`}');
+    expect(jobSiteUpdatesSource).toContain('submitJson("/api/context-messages"');
+    expect(jobSitesPageViewSource).toContain('href="/job-sites/archive"');
+    for (const section of ["overview", "updates", "documents", "people", "activities", "evidence", "sharing", "settings"]) expect(jobSiteSegmentedViewSource).toContain(`id: "${section}"`);
     expect(documentCreateDialogSource).toContain("Aggiungi documento");
     for (const action of ["Aggiungi prova", "Aggiungi scadenza", "Crea checklist", "Prepara condivisione"]) {
       expect(jobSiteQuickActionsSource).toContain(action);
@@ -339,11 +360,14 @@ describe("workspace admin UI copy", () => {
     expect(evidenceFormSource).toContain('capture="environment"');
     expect(evidenceFormSource).toContain('className="md:hidden"');
     expect(evidenceFormSource).toContain('formData.set("file", cameraFile)');
+    expect(evidenceFormSource).toContain("requireJobSite && !nullableFormValue");
+    expect(evidenceFormSource).toContain("<SearchField");
+    expect(evidenceFormSource).toContain("cliente o località");
   });
 
-  it("uses one product name for the site manager role", () => {
-    expect(combinedSource).not.toMatch(/capocantiere|capo cantiere|caposquadra/i);
-    expect(combinedSource).toContain("Responsabile cantiere");
+  it("does not present deprecated job-site responsibilities as account roles", () => {
+    expect(combinedSource).not.toMatch(/capocantiere|capo cantiere|caposquadra|account SITE_MANAGER|ruolo Lavoratore|account WORKER|invito WORKER/i);
+    expect(combinedSource).toContain("Collaboratori del cantiere");
   });
 
   it("keeps the shared responsive sidebar navigation surface", () => {
@@ -351,6 +375,98 @@ describe("workspace admin UI copy", () => {
     expect(navigationSource).toContain("SidebarFooter");
     expect(navigationSource).toContain("SidebarMenu");
     expect(navigationSource).toContain("Azienda e account");
+    expect(navigationSource).toContain('aria-label="Orientamento e controllo"');
+    const overviewPosition = navigationSource.indexOf('item.href === "/dashboard"');
+    const analyticsPosition = navigationSource.indexOf('aria-label="Analytics, disponibile in futuro"');
+    const calendarPosition = navigationSource.indexOf('aria-label="Calendario, disponibile in futuro"');
+    expect(overviewPosition).toBeGreaterThan(-1);
+    expect(analyticsPosition).toBeGreaterThan(overviewPosition);
+    expect(calendarPosition).toBeGreaterThan(analyticsPosition);
+    expect(navigationSource).toContain('aria-label="Analytics, disponibile in futuro" disabled');
+    expect(navigationSource).toContain('aria-label="Calendario, disponibile in futuro" disabled');
+    expect(navigationSource).not.toContain('href="/analytics"');
+    expect(navigationSource).not.toContain('href="/calendar"');
+    expect(navigationSource).toContain('aria-label="Cantieri operativi"');
+    expect(navigationSource).not.toContain("<SidebarGroupLabel>Workspace</SidebarGroupLabel>");
+    expect(navigationSource).toContain('aria-current={active ? "page" : undefined}');
+    expect(navigationSource).toContain("previousLocation.current !== location");
+    expect(navigationSource).toContain("setOpenMobile(false)");
+    expect(navigationSource).toContain('aria-label="Cantieri recenti"');
+    expect(navigationSource).toContain("getCurrentJobSiteId(pathname)");
+    expect(navigationSource).toContain('href="/job-sites/new"');
+    expect(navigationSource).toContain("isJobSiteCollectionPathCurrent(pathname)");
+    expect(navigationSource).not.toContain("IconListDetails");
+    expect(navigationSource).toContain("<span>Tutti</span>");
+    expect(navigationSource).toContain('item.operationalPhase !== "COMPLETED"');
+    expect(navigationSource).toContain('jobSite.operationalPhase === "COMPLETED"');
+    expect(navigationSource).toContain('items.filter((item) => item.href !== "/job-sites/new")');
+    expect(navigationSource).toContain("line-clamp-2 min-h-6 w-full max-w-16 text-center");
+    expect(navigationSource).toContain("bg-transparent p-1.5 ring-1 ring-sidebar-border/65");
+    expect(navigationSource).toContain('group-data-[collapsible=icon]:hidden');
+    expect(navigationSource).toContain('aria-label={`${expanded ? "Nascondi" : "Mostra"} aggiornamenti di ${item.name}`}');
+    expect(navigationSource).toContain("toggleExpandedJobSiteIds(current, item.id, exclusiveExpansion)");
+    expect(navigationSource).toContain('sidebarWidth < MULTI_EXPAND_SIDEBAR_MIN_WIDTH');
+    expect(navigationSource).toContain('state === "collapsed"');
+    expect(navigationSource).toContain("normalizeExpandedJobSiteIds(current, currentId)");
+    expect(navigationSource).not.toContain("IconTimelineEvent");
+    expect(navigationSource).toContain("<WorkspaceJobSitePhaseIcon phase={item.operationalPhase} />");
+    expect(navigationSource).toContain('? "ml-1.5 max-w-24 opacity-100"');
+    expect(workspacePrimitivesSource).toContain("jobSiteVisualByPhase");
+    for (const icon of ["IconPencil", "IconTool", "IconCrane", "IconPlayerPause", "IconClipboardCheck", "IconCircleCheck"]) expect(workspacePrimitivesSource).toContain(icon);
+    expect(navigationSource).toContain('"/settings/organization-profile": IconBuildingCog');
+    expect(navigationSource).toContain('"/people/access": IconUsersGroup');
+    expect(navigationSource).toContain('"/account/security": IconUserCog');
+    expect(navigationSource).not.toContain("hoveredId");
+    expect(navigationSource).not.toContain("focusedId");
+    expect(navigationSource).toContain("?section=updates${updateHash}");
+    expect(navigationSource).toContain("Vai all'aggiornamento:");
+    expect(navigationSource).toContain("IconChevronRight");
+    expect(navigationSource).toContain("IconChevronDown");
+    expect(navigationSource).not.toContain("IconCaretRight");
+    expect(navigationSource).not.toContain("IconCaretDown");
+    expect(navigationSource).toContain("group-hover/job-site-row:max-w-24");
+    expect(navigationSource).toContain("group-focus-within/job-site-row:max-w-24");
+    expect(navigationSource).toContain("IconMessageCircle");
+    expect(navigationSource).toContain('aria-current={updateActive ? "location" : undefined}');
+    expect(navigationSource).toContain("formatSidebarUpdateDate(update.occurredAt)");
+    expect(navigationSource).toContain("before:inset-y-2");
+    expect(navigationSource).toContain("bg-sidebar-accent/30");
+    expect(navigationSource).not.toContain("IconChevronLeft");
+    expect(navigationSource).not.toContain("Comprimi aggiornamenti di");
+    expect(navigationSource).not.toContain("Espandi aggiornamenti di");
+    expect(navigationSource).toContain("grid-rows-[0fr]");
+    expect(navigationSource).toContain("flex flex-col-reverse");
+    expect(navigationSource).toContain('window.matchMedia("(hover: hover) and (pointer: fine)")');
+    expect(navigationSource).toContain("motion-reduce:transition-none");
+    expect(navigationSource).toContain('event.key !== "Escape"');
+    expect(navigationSource).toContain("inert={!expanded}");
+    expect(navigationSource).toContain('document.addEventListener("pointerdown", closeOnOutsidePointer)');
+    expect(navigationSource).toContain("suppressFocusExpansion.current");
+    expect(navigationSource).toContain("!dismissed && (focused || hovered || pinned)");
+    expect(navigationSource).toContain("setOpen(true)");
+    expect(navigationSource).not.toContain("<DropdownMenu");
+    expect(navigationSource).toContain("account.organizationName");
+    expect(navigationSource).toContain("account.email");
+    expect(workspaceShellSource).toContain("<WorkspaceSidebarResizeHandle />");
+    expect(workspaceShellSource).toContain("<WorkspaceSidebarProvider defaultOpen={sidebarDefaultOpen}>");
+    expect(workspaceShellSource).toContain("<WorkspaceSidebarSurface>");
+    expect(sidebarFrameSource).toContain("open={persistentOpen}");
+    expect(sidebarFrameSource).not.toContain("hoverPreview");
+    expect(sidebarFrameSource).not.toContain("focusPreview");
+    expect(sidebarFrameSource).not.toContain("onPointerEnter");
+    expect(sidebarFrameSource).toContain('role="separator"');
+    expect(sidebarFrameSource).toContain('aria-label="Ridimensiona navigazione"');
+    expect(sidebarFrameSource).toContain('event.key === "ArrowLeft"');
+    expect(sidebarFrameSource).toContain('event.key === "ArrowRight"');
+    expect(sidebarFrameSource).toContain("setPointerCapture");
+    expect(sidebarFrameSource).toContain("MIN_CONTENT_WIDTH");
+    expect(sidebarFrameSource).toContain("SIDEBAR_WIDTH_STORAGE_KEY");
+    expect(sidebarFrameSource).toContain("after:h-10");
+    expect(sidebarFrameSource).not.toContain("after:h-full");
+    expect(navigationSource).toContain("group-data-[collapsible=icon]:p-1.5!");
+    expect(navigationSource).toContain("group-data-[collapsible=icon]:place-items-center");
+    expect(navigationSource).toContain("group-data-[collapsible=icon]:p-0.5");
+    expect(navigationSource).toContain("group-data-[collapsible=icon]:justify-center");
   });
 
   it("keeps data control metadata-only and owner scoped", () => {

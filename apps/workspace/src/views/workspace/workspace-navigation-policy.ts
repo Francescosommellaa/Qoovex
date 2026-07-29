@@ -1,7 +1,7 @@
 import type { OrganizationPermission, OrganizationRole, PlatformRole } from "@qoovex/types";
 import { getPermissionsForRole } from "@shared/server/authorization-policy";
 
-export interface WorkspaceNavigationItem { label: string; href: string; }
+export interface WorkspaceNavigationItem { label: string; href: string; activePath?: string; }
 export interface WorkspaceNavigationModel {
   primary: WorkspaceNavigationItem[];
   actions: WorkspaceNavigationItem[];
@@ -16,24 +16,38 @@ function has(permissions: readonly OrganizationPermission[], permission: Organiz
 export function buildWorkspaceNavigation(access: readonly OrganizationPermission[] | OrganizationRole | null, platformRole: PlatformRole | null): WorkspaceNavigationModel {
   const permissions = Array.isArray(access) ? access : getPermissionsForRole(access as OrganizationRole | null);
   const primary: WorkspaceNavigationItem[] = [];
-  if (has(permissions, "organization:read")) primary.push({ label: "Centro operativo", href: "/dashboard" });
-  if (has(permissions, "documents:read")) primary.push({ label: "Documenti", href: "/documents" });
-  if (has(permissions, "workers:read")) primary.push({ label: "Lavoratori", href: "/workers" });
-  if (has(permissions, "jobSites:read")) primary.push({ label: "Cantieri", href: "/job-sites" });
-  if (has(permissions, "documentPackages:read")) primary.push({ label: "Condivisioni", href: "/document-packages" });
-  if (has(permissions, "settings:update") || has(permissions, "members:read")) primary.push({ label: "Impostazioni", href: "/settings" });
+  if (has(permissions, "organization:read")) primary.push({ label: "Panoramica", href: "/dashboard" });
+  if (has(permissions, "jobSites:read")) primary.push({ label: "Tutti i cantieri", href: "/job-sites/all" });
 
   const actions: WorkspaceNavigationItem[] = [];
-  if (has(permissions, "documents:upload")) actions.push({ label: "Documento", href: "/documents?intent=upload" });
-  if (has(permissions, "jobSites:create")) actions.push({ label: "Cantiere", href: "/job-sites/new" });
-  if (has(permissions, "workers:create")) actions.push({ label: "Lavoratore", href: "/workers/new" });
-  if (has(permissions, "evidence:upload")) actions.push({ label: "Prova", href: "/evidence/new" });
+  if (has(permissions, "evidence:upload")) actions.push({ label: "Aggiungi prova", href: "/evidence/new?intent=quick-job-site" });
+  if (has(permissions, "jobSites:create")) actions.push({ label: "Crea cantiere", href: "/job-sites/new" });
+  if (has(permissions, "documents:upload")) actions.push({ label: "Carica documento", href: "/documents?intent=upload" });
+  if (has(permissions, "members:manage")) actions.push({ label: "Aggiungi collaboratore", href: "/people/access/invite" });
 
   const account: WorkspaceNavigationItem[] = [];
-  if (platformRole) account.push({ label: "Sicurezza", href: "/account/security" });
+  if (has(permissions, "organization:read")) account.push({ label: "Gestisci azienda", href: "/settings/organization-profile" });
+  if (has(permissions, "members:read")) account.push({ label: "Gestisci collaboratori", href: "/people/access" });
+  if (platformRole) account.push({ label: "Gestisci account", href: "/account/security" });
+  if (has(permissions, "settings:update") || has(permissions, "members:read")) account.push({ label: "Impostazioni", href: "/settings" });
   if (platformRole === "SUPPORT_AGENT") account.unshift({ label: "Console supporto", href: "/qoovex-admin" });
   if (platformRole === "PLATFORM_ADMIN") account.unshift({ label: "Console Qoovex", href: "/qoovex-admin" });
   return { primary, actions: actions.slice(0, 4), account, searchEnabled: has(permissions, "organization:read") };
+}
+
+export function isJobSiteCollectionPathCurrent(pathname: string) {
+  return pathname === "/job-sites"
+    || pathname === "/job-sites/all"
+    || pathname === "/job-sites/archive"
+    || pathname === "/job-sites/new";
+}
+
+export function isWorkspaceNavigationItemCurrent(pathname: string, searchParams: Pick<URLSearchParams, "get">, href: string, activePath?: string) {
+  const target = new URL(href, "https://workspace.qoovex.local");
+  const matchPath = activePath ?? target.pathname;
+  const pathMatches = pathname === matchPath
+    || (matchPath !== "/dashboard" && pathname.startsWith(`${matchPath}/`));
+  return pathMatches && [...target.searchParams].every(([key, value]) => searchParams.get(key) === value);
 }
 
 export function canReadWorkspaceNotifications(access: readonly OrganizationPermission[] | OrganizationRole | null) {

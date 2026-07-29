@@ -59,6 +59,10 @@ export interface WorkspaceCapabilities {
   canReadDataControl: boolean;
   canReadOrganizationProfile: boolean;
   canUpdateOrganizationProfile: boolean;
+  canReadContextMessages: boolean;
+  canCreateContextMessages: boolean;
+  canReadRequests: boolean;
+  canManageRequests: boolean;
 }
 
 export interface WorkspaceDocumentTypeRecord {

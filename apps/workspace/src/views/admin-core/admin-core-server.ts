@@ -44,6 +44,10 @@ export async function getWorkspaceCapabilities(): Promise<WorkspaceCapabilities>
     canReadDataControl: can("auditLog:read"),
     canReadOrganizationProfile: can("organizationProfile:read"),
     canUpdateOrganizationProfile: can("organizationProfile:update"),
+    canReadContextMessages: can("contextMessages:read"),
+    canCreateContextMessages: can("contextMessages:create"),
+    canReadRequests: can("requests:read"),
+    canManageRequests: can("requests:manage"),
   };
 }
 

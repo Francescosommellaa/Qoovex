@@ -215,7 +215,7 @@ export function WorkersPageView({
               <h2>Rubrica operativa</h2>
             </CardTitle>
             <CardDescription>
-              I contatti restano nascosti ai responsabili di cantiere.
+              I contatti restano visibili soltanto ai Collaboratori autorizzati dall'Owner.
             </CardDescription>
             <CardAction>
               <Badge variant="outline">

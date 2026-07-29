@@ -12,6 +12,7 @@ import { Input } from "@qoovex/ui/components/input";
 import { Textarea } from "@qoovex/ui/components/textarea";
 import { submitJson } from "../admin-api-client";
 import type { WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
+import { buildWorkerCollaboratorInvitation } from "./worker-collaborator-invitation";
 
 interface JobSiteOption { id: string; name: string }
 interface DuplicateCheck { emailMatch: { id: string; displayName: string } | null; similarNames: Array<{ id: string; displayName: string }> }
@@ -38,7 +39,7 @@ export function GuidedWorkerCreateFlow({ jobSites, onCreated }: { jobSites: JobS
   async function continueStep() {
     setError(null);
     if (step === 0 && values.displayName.trim().length < 2) return setError("Inserisci nome e cognome.");
-    if (step === 1 && invite && !values.email.trim()) return setError("L'email e obbligatoria per invitare il lavoratore.");
+    if (step === 1 && invite && !values.email.trim()) return setError("L'email e obbligatoria per invitare il collaboratore.");
     if (step === 2 && !assignLater && !siteIds.length) return setError("Seleziona almeno un cantiere oppure scegli di farlo piu tardi.");
     if (step === 2) {
       setPending(true);
@@ -61,14 +62,7 @@ export function GuidedWorkerCreateFlow({ jobSites, onCreated }: { jobSites: JobS
     let inviteFailed = false;
     if (mustInvite) {
       try {
-        await submitJson("/api/organization/invitations", "POST", {
-          email: values.email,
-          role: "COLLABORATOR",
-          preset: "LIMITED_UPLOAD",
-          scopeMode: "ASSIGNED",
-          permissions: ["organization:read", "documents:read", "documents:upload", "evidence:read", "evidence:upload"],
-          workerId: worker.id,
-        });
+        await submitJson("/api/organization/invitations", "POST", buildWorkerCollaboratorInvitation(values.email, worker.id));
       }
       catch { inviteFailed = true; }
     }

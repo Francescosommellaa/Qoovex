@@ -38,7 +38,7 @@ export function WorkerCreateDialog({ className, initialOpen = false, jobSites }:
       <DialogContent className="max-h-[calc(100dvh-1rem)] sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>Aggiungi lavoratore</DialogTitle>
-          <DialogDescription>Registra il profilo operativo. Se deve usare Qoovex, puoi invitarlo con il ruolo Lavoratore.</DialogDescription>
+          <DialogDescription>Registra il profilo operativo. Se deve usare Qoovex, puoi invitarlo come Collaboratore con accesso limitato e collegarlo al profilo.</DialogDescription>
         </DialogHeader>
         <GuidedWorkerCreateFlow jobSites={jobSites} onCreated={(worker) => { handleOpenChange(false); router.push(`/workers/${worker.id}`); router.refresh(); }} />
       </DialogContent>
