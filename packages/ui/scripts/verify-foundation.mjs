@@ -120,6 +120,7 @@ const sirioDashboardShell = read("apps/sirio/src/components/dashboard-shell.tsx"
 const workspaceLayout = read("apps/workspace/src/app/layout.tsx");
 const workspaceOperationalCenter = read("apps/workspace/src/views/operational-center/OperationalCenterView.tsx");
 const workspaceShell = read("apps/workspace/src/views/workspace/WorkspaceShell.tsx");
+const workspaceSidebarFrame = read("apps/workspace/src/views/workspace/WorkspaceSidebarFrame.tsx");
 const workspaceNavigation = read("apps/workspace/src/views/workspace/WorkspaceNavigation.tsx");
 const workspaceTopbar = read("apps/workspace/src/views/workspace/WorkspaceTopbar.tsx");
 const workspaceNavigationHistory = read("apps/workspace/src/views/workspace/workspace-navigation-history.ts");
@@ -208,15 +209,16 @@ for (const required of ["navigation.primary.map", "<AccountMenu", "Workspace", "
 for (const removed of ["WorkspaceFavorites", "Ricerca rapida, in preparazione", "Analisi, in preparazione"]) {
   assert(!workspaceNavigation.includes(removed), `Navigazione Workspace contiene ancora ${removed}.`);
 }
-for (const required of ["CreationActions", "Azioni rapide", 'data-slot="workspace-quick-actions"', "UniversalSearchDialog"]) {
+for (const required of ["CreationActions", "Azioni rapide", 'data-slot="workspace-quick-actions"']) {
   assert(workspaceNavigation.includes(required), `Navigazione Workspace non contiene il contratto ${required}.`);
 }
+assert(workspaceShell.includes("UniversalSearchDialog") && workspaceShell.includes("iconOnly"), "Header Workspace non contiene il trigger iconico UniversalSearchDialog.");
 assert(!workspaceNavigation.includes('href="/search"'), "La ricerca deve restare un modale separato dalla navigazione primaria.");
 assert(!workspaceNavigation.includes('href="/notifications"'), "La sidebar non deve contenere destinazioni Notifiche.");
 assert(!workspaceShell.includes("SidebarRail"), "Workspace non deve usare il rail ambiguo per ridurre il menu.");
 assert(workspaceShell.includes("SIDEBAR_COOKIE_NAME") && workspaceShell.includes("defaultOpen={sidebarDefaultOpen}"), "Workspace deve ripristinare la preferenza della sidebar dal cookie.");
 for (const required of ['className="h-dvh min-h-0! overflow-hidden bg-sidebar"', "overflow-y-auto", "state.navigation.primary"]) {
-  assert(workspaceShell.includes(required), `Shell Workspace non contiene il contratto fisso ${required}.`);
+  assert(`${workspaceShell}\n${workspaceSidebarFrame}`.includes(required), `Shell Workspace non contiene il contratto fisso ${required}.`);
 }
 assert(workspaceTopbar.includes("<SidebarCollapseButton") && workspaceTopbar.includes("iconOnly"), "La topbar Workspace deve ospitare il toggle desktop iconico.");
 assert(workspaceTopbar.includes("<WorkspaceNotificationsPanel"), "La campanella Workspace deve aprire il pannello notifiche.");
@@ -236,7 +238,7 @@ assert(sirioDashboardShell.indexOf("<DemoQuickActions />") > sirioDashboardShell
 for (const required of ['fetch("/api/notifications?limit=5&sort=recent"', "<SheetTitle>Notifiche</SheetTitle>", "Vedi tutte le notifiche", "NotificationsLoading", "Nessuna notifica recente", "Impossibile caricare le notifiche"]) {
   assert(workspaceNotificationsPanel.includes(required), `Pannello notifiche Workspace non contiene ${required}.`);
 }
-for (const required of ["<DialogTitle>{dialogTitle}</DialogTitle>", "Assegna Responsabile cantiere", "Responsabile cantiere assegnato", "Collega account lavoratore", 'fetch("/api/resource-assignments/options"', "worker-user-links", "job-site-user-assignments", "Nessuna persona disponibile"]) {
+for (const required of ["<DialogTitle>{dialogTitle}</DialogTitle>", "Assegna un collaboratore al cantiere", "Collaboratore assegnato", "Collega un collaboratore", 'fetch("/api/resource-assignments/options"', "worker-user-links", "job-site-user-assignments", "Nessuna persona disponibile"]) {
   assert(workspaceAssignmentDialog.includes(required), `Dialog assegnazione Workspace non contiene ${required}.`);
 }
 assert(resourceAssignmentOptionsRoute.includes("getResourceAssignmentOptions"), "La dashboard deve caricare opzioni assegnazione tramite una route autorizzata.");

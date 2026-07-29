@@ -188,7 +188,7 @@ describe("document version service", () => {
     expect(version).not.toHaveProperty("downloadUrl");
   });
 
-  it("lets admins, safety consultants and linked workers upload while denying site managers", async () => {
+  it("uses persisted Collaborator permissions and scope for uploads", async () => {
     setRole("COLLABORATOR", "OPERATIONAL_COLLABORATION", ["documents:upload"], "FULL");
     await expect(uploadDocumentVersion("doc-1", [makeFile()])).resolves.toMatchObject({ documentId: "doc-1" });
 
@@ -202,7 +202,7 @@ describe("document version service", () => {
     await expect(uploadDocumentVersion("doc-1", [makeFile()])).rejects.toMatchObject({ status: 404 });
   });
 
-  it("lets safety consultants list and download versions but not archive", async () => {
+  it("lets Collaborators with review permissions list and download versions but not archive", async () => {
     setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["documents:read", "documents:file:read"], "FULL");
     mocks.db.documentVersion.findMany.mockResolvedValue([versionRecord]);
     mocks.db.documentVersion.findFirst.mockResolvedValue(versionRecord);

@@ -8,6 +8,7 @@ import type {
   JobSiteOperationalPhase,
   JobSiteOperationalSummary,
   JobSiteOverviewResponse,
+  WorkspaceAccessContext,
 } from "@qoovex/types";
 import { jobSiteAttentionStates, jobSiteOperationalPhases } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
@@ -15,11 +16,14 @@ import { recordSupportAccess } from "@shared/server/support-access-service";
 import { trimOptionalText } from "./document-domain-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { canReadJobSite, getResourceScope } from "./resource-scope-service";
+import type { WorkspaceJobSiteNavigationItem } from "@shared/lib/workspace-job-site-navigation";
 
 const JOBSITE_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const DEFAULT_PAGE_SIZE = 20;
 const MAX_PAGE_SIZE = 50;
 const UPCOMING_DAYS = 30;
+const SIDEBAR_JOB_SITE_LIMIT = 6;
+const SIDEBAR_UPDATE_LIMIT = 3;
 
 const operationalRelationsSelect = {
   documents: { where: { archivedAt: null }, select: { documentTypeId: true, status: true } },
@@ -169,6 +173,56 @@ export async function listOperationalJobSites(input: { search?: unknown; phase?:
   ]);
   await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: input.archived ? "job-sites-archive" : "job-sites" });
   return { items: rows.map(toListItem), page, pageSize, total, totalPages: Math.max(1, Math.ceil(total / pageSize)), generatedAt: now.toISOString() };
+}
+
+export async function listWorkspaceJobSiteNavigation(context: WorkspaceAccessContext): Promise<WorkspaceJobSiteNavigationItem[]> {
+  if (!context.permissions.includes("jobSites:read")) return [];
+  const scope = await getResourceScope(context);
+  const rows = await db.jobSite.findMany({
+    where: {
+      organizationId: scope.organizationId,
+      archivedAt: null,
+      operationalPhase: { not: "COMPLETED" },
+      ...(scope.fullAccess ? {} : { id: { in: scope.visibleJobSiteIds } }),
+    },
+    select: { id: true, name: true, operationalPhase: true, updatedAt: true },
+    orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
+    take: SIDEBAR_JOB_SITE_LIMIT,
+  });
+  const limitedRows = rows.slice(0, SIDEBAR_JOB_SITE_LIMIT);
+  const events = limitedRows.length && context.permissions.includes("contextMessages:read")
+    ? await db.contextTimelineEvent.findMany({
+        where: {
+          organizationId: scope.organizationId,
+          targetType: "JOB_SITE",
+          targetId: { in: limitedRows.map((row) => row.id) },
+        },
+        select: { id: true, targetId: true, title: true, summary: true, eventType: true, occurredAt: true },
+        orderBy: [{ occurredAt: "desc" }, { id: "desc" }],
+        take: SIDEBAR_JOB_SITE_LIMIT * SIDEBAR_UPDATE_LIMIT * 2,
+      })
+    : [];
+  const updatesByJobSite = new Map<string, WorkspaceJobSiteNavigationItem["updates"]>();
+  for (const event of events) {
+    const updates = updatesByJobSite.get(event.targetId) ?? [];
+    if (updates.length >= SIDEBAR_UPDATE_LIMIT) continue;
+    updates.push({
+      id: event.id,
+      title: event.title,
+      summary: event.summary,
+      eventType: event.eventType,
+      occurredAt: event.occurredAt.toISOString(),
+    });
+    updatesByJobSite.set(event.targetId, updates);
+  }
+  await recordSupportAccess({ userId: context.userId, action: "READ", resourceType: "workspace-job-sites-navigation" });
+  return limitedRows.map((row) => ({
+    id: row.id,
+    name: row.name,
+    operationalPhase: row.operationalPhase,
+    updatedAt: row.updatedAt.toISOString(),
+    updates: updatesByJobSite.get(row.id) ?? [],
+  }));
 }
 
 export async function getJobSiteOverview(): Promise<JobSiteOverviewResponse> {

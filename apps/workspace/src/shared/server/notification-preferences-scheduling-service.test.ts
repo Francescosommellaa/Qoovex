@@ -126,7 +126,7 @@ beforeEach(() => {
 });
 
 describe("notification preferences", () => {
-  it("lets owner, admin and safety consultant read safe default preferences", async () => {
+  it("lets Owners and authorized Collaborators read safe default preferences", async () => {
     for (const role of ["OWNER", "COLLABORATOR"] as const) {
       setRole(role);
       await expect(getNotificationPreference()).resolves.toMatchObject({

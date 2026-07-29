@@ -11,6 +11,7 @@ import { DialogFooter } from "@qoovex/ui/components/dialog";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@qoovex/ui/components/field";
 import { Input } from "@qoovex/ui/components/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
+import { SearchField } from "@qoovex/ui/components/search-field";
 import { Spinner } from "@qoovex/ui/components/spinner";
 import { Textarea } from "@qoovex/ui/components/textarea";
 import { formValue, nullableFormValue, submitFormData, submitJson } from "../admin-api-client";
@@ -27,6 +28,7 @@ interface EvidenceFormProps {
   initialContext?: WorkspaceCreationContext | null;
   origin?: WorkspaceOrigin | null;
   layout?: "page" | "dialog";
+  requireJobSite?: boolean;
 }
 
 function checklistItemLabel(item: WorkspaceChecklistItemRecord, checklists: WorkspaceChecklistRecord[]) {
@@ -34,12 +36,14 @@ function checklistItemLabel(item: WorkspaceChecklistItemRecord, checklists: Work
   return `${checklist?.name ?? "Checklist"} - ${item.label}`;
 }
 
-export function EvidenceForm({ jobSites, workers, checklistItems, checklists, disabled, initialContext = null, origin = null, layout = "page" }: EvidenceFormProps) {
+export function EvidenceForm({ jobSites, workers, checklistItems, checklists, disabled, initialContext = null, origin = null, layout = "page", requireJobSite = false }: EvidenceFormProps) {
   const router = useRouter();
   const [type, setType] = useState<EvidenceType>("PHOTO");
   const availableContextTypes = [jobSites.length ? "job-site" : null, workers.length ? "worker" : null, checklistItems.length ? "checklist-item" : null].filter((value): value is "job-site" | "worker" | "checklist-item" => Boolean(value));
-  const initialContextType = initialContext?.type === "job-site" || initialContext?.type === "worker" || initialContext?.type === "checklist-item" ? initialContext.type : availableContextTypes[0] ?? "job-site";
+  const initialContextType = requireJobSite ? "job-site" : initialContext?.type === "job-site" || initialContext?.type === "worker" || initialContext?.type === "checklist-item" ? initialContext.type : availableContextTypes[0] ?? "job-site";
   const [contextType, setContextType] = useState<"job-site" | "worker" | "checklist-item">(initialContextType);
+  const [jobSiteSearch, setJobSiteSearch] = useState("");
+  const [selectedJobSiteId, setSelectedJobSiteId] = useState(initialContext?.type === "job-site" ? initialContext.id : "");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -51,6 +55,7 @@ export function EvidenceForm({ jobSites, workers, checklistItems, checklists, di
     const selectedType = (formValue(formData, "type") ?? "PHOTO") as EvidenceType;
 
     try {
+      if (requireJobSite && !nullableFormValue(formData, "jobSiteId")) throw new Error("Seleziona il cantiere a cui collegare la prova.");
       if (selectedType === "NOTE") {
         const payload = {
           type: selectedType,
@@ -96,14 +101,16 @@ export function EvidenceForm({ jobSites, workers, checklistItems, checklists, di
   }
 
   const formDisabled = disabled || pending;
-  const contextLocked = layout === "dialog" && Boolean(initialContext);
+  const contextLocked = Boolean(initialContext) && (layout === "dialog" || initialContext?.type === "job-site");
   const evidenceTypeOptions = evidenceTypes.map((value) => ({ label: evidenceTypeLabels[value], value }));
   const contextTypeOptions = availableContextTypes.map((value) => ({ label: value === "job-site" ? "Cantiere" : value === "worker" ? "Lavoratore" : "Voce checklist", value }));
   const jobSiteOptions = jobSites.map((item) => ({ label: item.name, value: item.id }));
+  const normalizedJobSiteSearch = jobSiteSearch.trim().toLocaleLowerCase("it-IT");
+  const filteredJobSites = normalizedJobSiteSearch ? jobSites.filter((item) => [item.name, item.clientName, item.address].some((value) => value?.toLocaleLowerCase("it-IT").includes(normalizedJobSiteSearch))) : jobSites;
   const workerOptions = workers.map((item) => ({ label: item.displayName, value: item.id }));
   const checklistItemOptions = checklistItems.map((item) => ({ label: checklistItemLabel(item, checklists), value: item.id }));
   const submitButton = (
-    <Button className="w-full sm:w-auto" disabled={formDisabled || !availableContextTypes.length} type="submit">
+    <Button className="w-full sm:w-auto" disabled={formDisabled || !availableContextTypes.length || (requireJobSite && !selectedJobSiteId)} type="submit">
       {pending ? <><Spinner />Salvataggio…</> : <><IconPhotoPlus aria-hidden="true" />Salva prova</>}
     </Button>
   );
@@ -131,9 +138,9 @@ export function EvidenceForm({ jobSites, workers, checklistItems, checklists, di
           </Field>
         </div>
 
-        {!initialContext ? <Field><FieldLabel htmlFor="create-evidence-context-type">Registra per</FieldLabel><Select items={contextTypeOptions} onValueChange={(value) => value && setContextType(value as typeof contextType)} value={contextType}><SelectTrigger className="h-10 w-full" disabled={formDisabled} id="create-evidence-context-type"><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{contextTypeOptions.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectGroup></SelectContent></Select></Field> : null}
+        {!initialContext && !requireJobSite ? <Field><FieldLabel htmlFor="create-evidence-context-type">Registra per</FieldLabel><Select items={contextTypeOptions} onValueChange={(value) => value && setContextType(value as typeof contextType)} value={contextType}><SelectTrigger className="h-10 w-full" disabled={formDisabled} id="create-evidence-context-type"><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{contextTypeOptions.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectGroup></SelectContent></Select></Field> : null}
 
-        {contextType === "job-site" && !contextLocked ? <Field><FieldLabel htmlFor="create-evidence-job-site">Cantiere</FieldLabel><Select defaultValue={initialContext?.type === "job-site" ? initialContext.id : undefined} items={jobSiteOptions} name={initialContext?.type === "job-site" ? undefined : "jobSiteId"} required><SelectTrigger className="h-10 w-full" disabled={formDisabled || initialContext?.type === "job-site"} id="create-evidence-job-site"><SelectValue placeholder="Seleziona cantiere" /></SelectTrigger><SelectContent><SelectGroup>{jobSites.map((jobSite) => <SelectItem key={jobSite.id} value={jobSite.id}>{jobSite.name}</SelectItem>)}</SelectGroup></SelectContent></Select></Field> : null}
+        {contextType === "job-site" && !contextLocked ? <Field><FieldLabel htmlFor="create-evidence-job-site">Cantiere</FieldLabel>{requireJobSite ? <SearchField aria-label="Cerca cantiere" onChange={(event) => setJobSiteSearch(event.target.value)} onClear={() => setJobSiteSearch("")} placeholder="Cerca per nome, cliente o località" value={jobSiteSearch} /> : null}<Select items={jobSiteOptions} name="jobSiteId" onValueChange={(value) => setSelectedJobSiteId(value ?? "")} required value={selectedJobSiteId || undefined}><SelectTrigger className="h-10 w-full" disabled={formDisabled} id="create-evidence-job-site"><SelectValue placeholder="Seleziona cantiere" /></SelectTrigger><SelectContent><SelectGroup>{filteredJobSites.map((jobSite) => <SelectItem key={jobSite.id} value={jobSite.id}><span className="grid min-w-0"><span className="truncate">{jobSite.name}</span>{jobSite.clientName || jobSite.address ? <span className="truncate text-xs text-muted-foreground">{[jobSite.clientName, jobSite.address].filter(Boolean).join(" · ")}</span> : null}</span></SelectItem>)}</SelectGroup></SelectContent></Select>{requireJobSite ? <FieldDescription>La prova non può essere salvata senza un cantiere associato.</FieldDescription> : null}</Field> : null}
         {contextType === "worker" && !contextLocked ? <Field><FieldLabel htmlFor="create-evidence-worker">Lavoratore</FieldLabel><Select defaultValue={initialContext?.type === "worker" ? initialContext.id : undefined} items={workerOptions} name={initialContext?.type === "worker" ? undefined : "workerId"} required><SelectTrigger className="h-10 w-full" disabled={formDisabled || initialContext?.type === "worker"} id="create-evidence-worker"><SelectValue placeholder="Seleziona lavoratore" /></SelectTrigger><SelectContent><SelectGroup>{workers.map((worker) => <SelectItem key={worker.id} value={worker.id}>{worker.displayName}</SelectItem>)}</SelectGroup></SelectContent></Select></Field> : null}
         {contextType === "checklist-item" && !contextLocked ? <Field><FieldLabel htmlFor="create-evidence-checklist-item">Voce checklist</FieldLabel><Select defaultValue={initialContext?.type === "checklist-item" ? initialContext.id : undefined} items={checklistItemOptions} name={initialContext?.type === "checklist-item" ? undefined : "checklistItemId"} required><SelectTrigger className="h-10 w-full" disabled={formDisabled || initialContext?.type === "checklist-item"} id="create-evidence-checklist-item"><SelectValue placeholder="Seleziona voce" /></SelectTrigger><SelectContent><SelectGroup>{checklistItems.map((item) => <SelectItem key={item.id} value={item.id}>{checklistItemLabel(item, checklists)}</SelectItem>)}</SelectGroup></SelectContent></Select></Field> : null}
 

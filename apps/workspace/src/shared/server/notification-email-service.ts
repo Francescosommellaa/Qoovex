@@ -25,7 +25,7 @@ export const EMAIL_DIGEST_LIMIT = 10;
 const EMAIL_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const DIGEST_SUBJECT = "Qoovex - Promemoria documenti e scadenze";
 const DIGEST_INTRO = "Riepilogo sintetico delle notifiche interne da controllare nel workspace Qoovex.";
-const DIGEST_FOOTER = "Le informazioni dipendono dai dati registrati in Qoovex e vanno confermate con il responsabile o consulente.";
+const DIGEST_FOOTER = "Le informazioni dipendono dai dati registrati in Qoovex e vanno confermate con il referente autorizzato dell'azienda.";
 
 const notificationEmailSelect = {
   id: true,

@@ -253,6 +253,9 @@ describe("job site service", () => {
     mocks.db.jobSite.create.mockResolvedValue({ ...jobSiteRecord, userAssignments: [{ id: "assignment-user-1" }], workerAssignments: [{ id: "assignment-worker-1" }] });
 
     await expect(createJobSite({ name: "Cantiere Centro", operationalPhase: "PREPARATION", managerUserIds: ["manager-1"], workerIds: ["worker-1"] })).resolves.toMatchObject({ id: "jobsite-1", operationalPhase: "IN_PROGRESS" });
+    expect(mocks.db.organizationMembership.findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: expect.objectContaining({ role: "COLLABORATOR", permissionKeys: { has: "jobSites:read" }, userId: { in: ["manager-1"] } }),
+    }));
     expect(mocks.db.jobSite.create).toHaveBeenCalledWith(expect.objectContaining({
       data: expect.objectContaining({
         operationalPhase: "PREPARATION",

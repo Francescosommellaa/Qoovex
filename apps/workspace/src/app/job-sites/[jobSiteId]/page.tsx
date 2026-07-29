@@ -1,5 +1,5 @@
 import { jobSiteDetailSections } from "@qoovex/types";
-import type { ContextTimelineEventResponse, JobSiteDetailSection, JobSiteUserAssignmentResponse, JobSiteWorkerAssignmentResponse, MissingDocumentRequirementItem, OperationalRequestResponse } from "@qoovex/types";
+import type { ContextMessageResponse, ContextTimelineEventResponse, JobSiteDetailSection, JobSiteUserAssignmentResponse, JobSiteWorkerAssignmentResponse, MissingDocumentRequirementItem, OperationalRequestResponse } from "@qoovex/types";
 import { listChecklistsWithItems } from "@shared/server/checklist-service";
 import { listDeadlines } from "@shared/server/deadline-service";
 import { listDocumentPackagesWithDetails } from "@shared/server/document-package-service";
@@ -9,7 +9,7 @@ import { listEvidence } from "@shared/server/evidence-service";
 import { getJobSiteShell } from "@shared/server/job-site-read-model-service";
 import { listJobSiteUserAssignments, listJobSiteWorkerAssignments } from "@shared/server/resource-assignment-service";
 import { listContextTimeline } from "@shared/server/context-timeline-service";
-import { listOperationalRequests } from "@shared/server/operational-request-service";
+import { listContextMessages, listOperationalRequests } from "@shared/server/operational-request-service";
 import { jobSiteRouteId } from "@shared/lib/job-site-routes";
 import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
 import { JobSiteDetailSegmentedView } from "@/views/admin-core/job-sites/JobSiteDetailSegmentedView";
@@ -24,7 +24,7 @@ export default async function JobSiteDetailPage({ params, searchParams }: { para
     const section: JobSiteDetailSection = jobSiteDetailSections.includes(query.section as JobSiteDetailSection) ? query.section as JobSiteDetailSection : "overview";
     const jobSite = await getJobSiteShell(jobSiteId, true);
     const rawCapabilities = await getWorkspaceCapabilities();
-    const capabilities = jobSite.archivedAt ? { ...rawCapabilities, canCreateDocuments: false, canCreateDeadlines: false, canManageCalendar: false, canManageChecklists: false, canCompleteChecklists: false, canUploadEvidence: false, canManagePackages: false, canSharePackages: false, canManageAssignments: false, canManageCore: false } : rawCapabilities;
+    const capabilities = jobSite.archivedAt ? { ...rawCapabilities, canCreateDocuments: false, canCreateDeadlines: false, canManageCalendar: false, canManageChecklists: false, canCompleteChecklists: false, canUploadEvidence: false, canManagePackages: false, canSharePackages: false, canManageAssignments: false, canManageCore: false, canCreateContextMessages: false, canManageRequests: false } : rawCapabilities;
     let documents: WorkspaceDocumentRecord[] = [];
     let missingDocuments: MissingDocumentRequirementItem[] = [];
     let deadlines: WorkspaceDeadlineRecord[] = [];
@@ -35,12 +35,22 @@ export default async function JobSiteDetailPage({ params, searchParams }: { para
     let workerAssignments: JobSiteWorkerAssignmentResponse[] = [];
     let requests: OperationalRequestResponse[] = [];
     let contextTimeline: ContextTimelineEventResponse[] = [];
+    let contextMessages: ContextMessageResponse[] = [];
 
     if (section === "overview") {
       const [requestRows, timelineRows] = await Promise.all([
-        listOperationalRequests({ targetType: "JOB_SITE", targetId: jobSiteId, take: 10 }),
-        listContextTimeline({ targetType: "JOB_SITE", targetId: jobSiteId, take: 10 }),
+        capabilities.canReadRequests ? listOperationalRequests({ targetType: "JOB_SITE", targetId: jobSiteId, take: 10 }) : [],
+        capabilities.canReadContextMessages ? listContextTimeline({ targetType: "JOB_SITE", targetId: jobSiteId, take: 10 }) : [],
       ]);
+      requests = serializeForClient<OperationalRequestResponse[]>(requestRows);
+      contextTimeline = serializeForClient<ContextTimelineEventResponse[]>(timelineRows);
+    } else if (section === "updates") {
+      const [messageRows, requestRows, timelineRows] = await Promise.all([
+        capabilities.canReadContextMessages ? listContextMessages({ targetType: "JOB_SITE", targetId: jobSiteId, take: 50 }) : [],
+        capabilities.canReadRequests ? listOperationalRequests({ targetType: "JOB_SITE", targetId: jobSiteId, take: 50 }) : [],
+        capabilities.canReadContextMessages ? listContextTimeline({ targetType: "JOB_SITE", targetId: jobSiteId, take: 100 }) : [],
+      ]);
+      contextMessages = serializeForClient<ContextMessageResponse[]>(messageRows);
       requests = serializeForClient<OperationalRequestResponse[]>(requestRows);
       contextTimeline = serializeForClient<ContextTimelineEventResponse[]>(timelineRows);
     } else if (section === "documents") {
@@ -63,7 +73,7 @@ export default async function JobSiteDetailPage({ params, searchParams }: { para
       packages = serializeForClient<WorkspaceDocumentPackageRecord[]>(detailed.map(({ shareLinks: _shareLinks, ...item }) => item));
     }
 
-    return <JobSiteDetailSegmentedView capabilities={capabilities} checklists={checklists} contextTimeline={contextTimeline} deadlines={deadlines} documents={documents} evidence={evidence} jobSite={jobSite} missingDocuments={missingDocuments} packages={packages} requests={requests} returnToDashboard={query.from === "dashboard"} section={section} userAssignments={serializeForClient(userAssignments)} workerAssignments={serializeForClient(workerAssignments)} />;
+    return <JobSiteDetailSegmentedView capabilities={capabilities} checklists={checklists} contextMessages={contextMessages} contextTimeline={contextTimeline} deadlines={deadlines} documents={documents} evidence={evidence} jobSite={jobSite} missingDocuments={missingDocuments} packages={packages} requests={requests} returnToDashboard={query.from === "dashboard"} section={section} userAssignments={serializeForClient(userAssignments)} workerAssignments={serializeForClient(workerAssignments)} />;
   } catch {
     return <WorkspaceAccessState title="Cantiere non disponibile" description="Il cantiere non esiste oppure non e accessibile per il ruolo corrente." />;
   }

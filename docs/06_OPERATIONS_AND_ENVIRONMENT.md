@@ -4,7 +4,7 @@
 
 Production, Preview, locale e CI/E2E usano target distinti e guardati. Il repository contiene diciassette migration, tutte applicate da zero e verificate senza drift sul solo database locale canonico in loopback alla porta `51225`. `20260728030000_operational_workspace_expansion` introduce il nuovo schema operativo; `20260728040000_operational_workspace_index_names` allinea in modo additivo cinque nomi indice al limite PostgreSQL di 63 byte e ai mapping Prisma espliciti. Nessun ambiente remoto e stato migrato o distribuito.
 
-Impatto query del nuovo percorso: il caricamento di una versione aggiunge una sola lettura checksum prima del Blob per evitare duplicati; profilo e contatti usano una join organizzazione; liste di richieste/timeline sono limitate e senza N+1; controlli fonte e revisioni usano transazioni a numero fisso di query. Nessun polling o cache condivisa e stato introdotto.
+Impatto query del nuovo percorso: il caricamento di una versione aggiunge una sola lettura checksum prima del Blob per evitare duplicati; profilo e contatti usano una join organizzazione; liste di richieste/timeline sono limitate e senza N+1; controlli fonte e revisioni usano transazioni a numero fisso di query. La shell aggiunge una lettura bounded per massimo sei cantieri e una lettura bounded degli eventi contestuali, raggruppati in memoria a massimo tre per cantiere; lo scope assegnato e il filtro `organizationId` restano server-side. Nessun polling o cache condivisa e stato introdotto.
 
 ## Rollout e rollback access model
 

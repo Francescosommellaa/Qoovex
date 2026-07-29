@@ -310,7 +310,7 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
   const secondary = (() => {
     if (input.template.kind === "auth-code") return "Scade tra 10 minuti e puo essere usato una sola volta.";
     if (input.template.kind === "notification-digest" || input.template.kind === "notification-single") {
-      return "Le informazioni dipendono dai dati registrati in Qoovex e vanno confermate con il responsabile o consulente. L'email non include file o link di download.";
+      return "Le informazioni dipendono dai dati registrati in Qoovex e vanno confermate con il referente autorizzato dell'azienda. L'email non include file o link di download.";
     }
     if (input.template.kind === "mfa-recovery-request") return "Approva solo se riconosci la richiesta. La decisione richiede il tuo fattore MFA corrente.";
     if (input.template.kind === "mfa-recovery-decision") return "La prima decisione valida chiude la richiesta per tutti gli OWNER.";

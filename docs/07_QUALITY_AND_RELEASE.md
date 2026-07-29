@@ -17,6 +17,7 @@
 - enqueue nella transazione di documento/versione/lavoratore/cantiere/pacchetto;
 - contratti API discriminati, route protette e permission mapping;
 - shell unica adattiva, ricerca consultiva metadata-only in modale separato e card Azioni rapide guidata dai permessi;
+- sidebar cantieri con limite, scope tenant-safe, massimo tre eventi per voce, route dinamiche/slug, stato raccolta distinto e drawer chiuso dopo la navigazione;
 - workflow scheduled con controllo JSON/logical failure;
 - revisioni immutabili, backfill legacy, review obbligatoria, conferma concorrente, revoca/scadenza idempotente e download opt-in;
 - ricerca esatta/prefisso/termine, tenant/resource scope, cursori stabili e indici PostgreSQL;

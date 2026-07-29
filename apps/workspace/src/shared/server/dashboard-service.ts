@@ -139,7 +139,7 @@ function responsibility(input: {
     const assignments = input.workerAssignments.get(input.workerId) ?? [];
     if (assignments.some((assignment) => assignment.userId === input.currentUserId)) return { label: "Intervieni tu", assignmentHref: null };
     if (assignments.length === 1) return { label: `Interviene: ${userLabel(assignments[0])}`, assignmentHref: null };
-    if (assignments.length > 1) return { label: `${assignments.length} responsabili assegnati`, assignmentHref: null };
+    if (assignments.length > 1) return { label: `${assignments.length} Collaboratori assegnati`, assignmentHref: null };
     if (input.workerLabel) return { label: `Interviene: ${input.workerLabel}`, assignmentHref };
   }
 
@@ -147,10 +147,10 @@ function responsibility(input: {
     const assignments = input.jobSiteAssignments.get(input.jobSiteId) ?? [];
     if (assignments.some((assignment) => assignment.userId === input.currentUserId)) return { label: "Intervieni tu", assignmentHref: null };
     if (assignments.length === 1) return { label: `Interviene: ${userLabel(assignments[0])}`, assignmentHref: null };
-    if (assignments.length > 1) return { label: `${assignments.length} responsabili assegnati`, assignmentHref: null };
+    if (assignments.length > 1) return { label: `${assignments.length} Collaboratori assegnati`, assignmentHref: null };
   }
 
-  return { label: "Responsabile non assegnato", assignmentHref };
+  return { label: "Collaboratore non assegnato", assignmentHref };
 }
 
 function priority(item: DashboardSituation) {

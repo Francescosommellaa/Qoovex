@@ -165,7 +165,7 @@ describe("dashboard service", () => {
       contextKind: "JOB_SITE",
       contextId: "jobsite-1",
       responsibility: {
-        label: "Responsabile non assegnato",
+        label: "Collaboratore non assegnato",
         assignmentHref: "/access?from=dashboard",
       },
     });
@@ -210,7 +210,7 @@ describe("dashboard service", () => {
     }));
   });
 
-  it("keeps packages reviewable by safety consultants without exposing share creation", async () => {
+  it("keeps packages reviewable by Collaborators with review permissions without exposing share creation", async () => {
     setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["documentPackages:read"]);
     primeDashboardMocks();
     const dashboard = await getDashboardData();

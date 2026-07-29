@@ -39,10 +39,10 @@ import {
 } from "@qoovex/ui/components/select";
 import { Skeleton } from "@qoovex/ui/components/skeleton";
 import { Spinner } from "@qoovex/ui/components/spinner";
-import type { DashboardContextKind } from "@qoovex/types";
+import type { DashboardContextKind, OrganizationAccessPreset, OrganizationPermission } from "@qoovex/types";
 
 interface AssignmentOptions {
-  users: Array<{ id: string; label: string; email: string; role: string }>;
+  users: Array<{ id: string; label: string; email: string; role: "COLLABORATOR"; preset: OrganizationAccessPreset | null; permissionKeys: OrganizationPermission[] }>;
 }
 
 interface WorkerUserLink {
@@ -81,12 +81,11 @@ export function DashboardAssignmentDialog({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [completed, setCompleted] = useState(false);
-  const targetRole = contextKind === "WORKER" ? "WORKER" : "SITE_MANAGER";
   const excludedUsers = new Set(excludedUserIds);
-  const assignees = options?.users.filter((user) => user.role === targetRole && !excludedUsers.has(user.id)) ?? [];
-  const personLabel = contextKind === "WORKER" ? "Utente lavoratore" : "Responsabile cantiere";
-  const dialogTitle = contextKind === "JOB_SITE" ? "Assegna Responsabile cantiere" : "Collega account lavoratore";
-  const completionTitle = contextKind === "JOB_SITE" ? "Responsabile cantiere assegnato" : "Account lavoratore collegato";
+  const assignees = options?.users.filter((user) => user.role === "COLLABORATOR" && (contextKind === "WORKER" ? user.preset === "LIMITED_UPLOAD" : user.permissionKeys.includes("jobSites:read")) && !excludedUsers.has(user.id)) ?? [];
+  const personLabel = contextKind === "WORKER" ? "Collaboratore collegato" : "Collaboratore del cantiere";
+  const dialogTitle = contextKind === "JOB_SITE" ? "Assegna un collaboratore al cantiere" : "Collega un collaboratore";
+  const completionTitle = contextKind === "JOB_SITE" ? "Collaboratore assegnato" : "Collaboratore collegato";
 
   async function loadOptions() {
     setLoading(true);
@@ -174,7 +173,7 @@ export function DashboardAssignmentDialog({
           <Alert role="status" variant="success">
             <IconCheck />
             <AlertTitle>{completionTitle}</AlertTitle>
-            <AlertDescription>La coda viene aggiornata con il nuovo responsabile.</AlertDescription>
+            <AlertDescription>La coda viene aggiornata con il nuovo collaboratore.</AlertDescription>
           </Alert>
         ) : (
           <form className="flex flex-col gap-4" onSubmit={submit}>
@@ -184,7 +183,7 @@ export function DashboardAssignmentDialog({
             </div>
 
             {loading && !options ? (
-              <div aria-label="Caricamento responsabili" className="flex flex-col gap-2" role="status">
+              <div aria-label="Caricamento collaboratori" className="flex flex-col gap-2" role="status">
                 <Skeleton className="h-4 w-32" />
                 <Skeleton className="h-8 w-full" />
               </div>
@@ -203,7 +202,7 @@ export function DashboardAssignmentDialog({
                 <EmptyHeader>
                   <EmptyMedia variant="icon"><IconUsers /></EmptyMedia>
                   <EmptyTitle>Nessuna persona disponibile</EmptyTitle>
-                  <EmptyDescription>Aggiungi una persona con il ruolo richiesto prima di assegnarla.</EmptyDescription>
+                  <EmptyDescription>Invita un Collaboratore con il profilo di accesso richiesto prima di assegnarlo.</EmptyDescription>
                 </EmptyHeader>
                 <Link className={buttonVariants({ size: "sm", variant: "outline" })} data-link="plain" href="/settings/people">Gestisci persone</Link>
               </Empty>
@@ -237,7 +236,7 @@ export function DashboardAssignmentDialog({
             <DialogFooter>
               <DialogClose render={<Button type="button" variant="outline" />}>Annulla</DialogClose>
               <Button disabled={!selectedUserId || submitting || !assignees.length} type="submit">
-                {submitting ? <><Spinner /> Assegnazione…</> : <><IconUserCheck data-icon="inline-start" />{contextKind === "JOB_SITE" ? "Assegna Responsabile cantiere" : "Collega account"}</>}
+                {submitting ? <><Spinner /> Assegnazione…</> : <><IconUserCheck data-icon="inline-start" />{contextKind === "JOB_SITE" ? "Assegna collaboratore" : "Collega collaboratore"}</>}
               </Button>
             </DialogFooter>
           </form>

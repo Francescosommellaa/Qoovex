@@ -129,7 +129,7 @@ export async function createJobSite(input: CreateJobSiteInput) {
   const operationalPhase = parseJobSiteOperationalPhase(input.operationalPhase);
   const dates = parseOptionalDateRange({ startDate: input.startDate, endDate: input.endDate });
   const notes = trimOptionalText(input.notes, "Note cantiere", 4000) ?? null;
-  const managerUserIds = parseIdList(input.managerUserIds, "Responsabili");
+  const managerUserIds = parseIdList(input.managerUserIds, "Collaboratori");
   const workerIds = parseIdList(input.workerIds, "Lavoratori");
 
   const duplicates = await db.jobSite.findMany({
@@ -151,13 +151,13 @@ export async function createJobSite(input: CreateJobSiteInput) {
 
   const [managerMemberships, workers] = await Promise.all([
     managerUserIds.length
-      ? db.organizationMembership.findMany({ where: { organizationId, revokedAt: null, role: "COLLABORATOR", preset: "SITE_MANAGER", userId: { in: managerUserIds } }, select: { userId: true } })
+      ? db.organizationMembership.findMany({ where: { organizationId, revokedAt: null, role: "COLLABORATOR", permissionKeys: { has: "jobSites:read" }, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }], userId: { in: managerUserIds } }, select: { userId: true } })
       : Promise.resolve([]),
     workerIds.length
       ? db.worker.findMany({ where: { organizationId, archivedAt: null, id: { in: workerIds } }, select: { id: true } })
       : Promise.resolve([]),
   ]);
-  if (managerMemberships.length !== managerUserIds.length) throw new AccessError("Uno o piu responsabili non sono disponibili per questa azienda.", 409);
+  if (managerMemberships.length !== managerUserIds.length) throw new AccessError("Uno o piu Collaboratori non sono disponibili o non dispongono dei permessi richiesti.", 409);
   if (workers.length !== workerIds.length) throw new AccessError("Uno o piu lavoratori non sono disponibili per questa azienda.", 409);
 
   const created = await db.$transaction(async (tx) => {

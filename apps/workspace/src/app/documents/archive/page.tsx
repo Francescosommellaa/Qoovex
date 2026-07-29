@@ -33,6 +33,6 @@ export default async function DocumentsArchivePage({ searchParams }: DocumentsAr
       />
     );
   } catch {
-    return <WorkspaceAccessState title="Archivio non disponibile" description="L’archivio documenti è disponibile soltanto agli amministratori autorizzati dell’azienda." />;
+    return <WorkspaceAccessState title="Archivio non disponibile" description="L’archivio documenti è disponibile soltanto ai Collaboratori autorizzati dall’Owner." />;
   }
 }

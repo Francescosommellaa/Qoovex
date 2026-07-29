@@ -62,7 +62,7 @@ export function PeopleOverviewView({ capabilities, overview }: { capabilities: W
                   <Link className="rounded-xl border p-4 transition-colors hover:border-primary/40 hover:bg-muted/40" data-link="plain" href="/people/access/invite">
                     <IconKey aria-hidden="true" className="size-5" />
                     <strong className="mt-3 block">Invita una persona in Qoovex</strong>
-                    <span className="mt-1 block text-sm text-muted-foreground">Invita amministratori, consulenti o responsabili.</span>
+                    <span className="mt-1 block text-sm text-muted-foreground">Invita Collaboratori e configura permessi, ambito e scadenza.</span>
                   </Link>
                 ) : null}
               </div>
@@ -74,7 +74,7 @@ export function PeopleOverviewView({ capabilities, overview }: { capabilities: W
       <div className="grid gap-4 lg:grid-cols-3">
         <AreaCard href="/workers" icon={IconUsers} title="Lavoratori" description="Profili, documenti, scadenze e stato operativo." metric={`${overview.cards.workers.total} profili attivi`} attention={overview.cards.workers.attention} />
         <AreaCard href="/people/access" icon={IconKey} title="Accessi" description="Account, ruoli, inviti e configurazioni incomplete." metric={overview.cards.access.pending === 1 ? "1 invito in attesa" : `${overview.cards.access.pending} inviti in attesa`} attention={overview.cards.access.attention} />
-        <AreaCard href="/people/assignments" icon={IconBuildingCommunity} title="Assegnazioni" description="Responsabili e lavoratori organizzati per cantiere." metric="Ambito operativo per cantiere" attention={overview.cards.assignments.attention} />
+        <AreaCard href="/people/assignments" icon={IconBuildingCommunity} title="Assegnazioni" description="Collaboratori e lavoratori organizzati per cantiere." metric="Ambito operativo per cantiere" attention={overview.cards.assignments.attention} />
       </div>
     </WorkspacePage>
   );

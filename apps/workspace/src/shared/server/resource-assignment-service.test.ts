@@ -114,7 +114,7 @@ beforeEach(() => {
   mocks.auditActorFromContext.mockReturnValue({ actorUserId: "user-owner", actorRole: "OWNER", supportSessionId: null });
   mocks.db.worker.findFirst.mockResolvedValue(worker);
   mocks.db.jobSite.findFirst.mockResolvedValue(jobSite);
-  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "COLLABORATOR", preset: "LIMITED_UPLOAD", user });
+  mocks.db.organizationMembership.findFirst.mockResolvedValue({ id: "member-worker", role: "COLLABORATOR", preset: "LIMITED_UPLOAD", permissionKeys: ["jobSites:read"], user });
   mocks.db.workerUserLink.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteUserAssignment.findFirst.mockResolvedValue(null);
   mocks.db.jobSiteWorkerAssignment.findFirst.mockResolvedValue(null);
@@ -133,16 +133,16 @@ describe("resource assignment service", () => {
     mocks.db.worker.findMany.mockResolvedValue([worker]);
     mocks.db.jobSite.findMany.mockResolvedValue([jobSite]);
     mocks.db.organizationMembership.findMany.mockResolvedValue([
-      { role: "COLLABORATOR", preset: "LIMITED_UPLOAD", user },
-      { role: "COLLABORATOR", preset: "SITE_MANAGER", user: { id: "manager-1", name: "Elena Mariani", email: "elena@example.com" } },
+      { role: "COLLABORATOR", preset: "LIMITED_UPLOAD", permissionKeys: ["documents:upload"], user },
+      { role: "COLLABORATOR", preset: "CUSTOM", permissionKeys: ["jobSites:read"], user: { id: "manager-1", name: "Elena Mariani", email: "elena@example.com" } },
     ]);
 
     await expect(getResourceAssignmentOptions()).resolves.toEqual({
       workers: [worker],
       jobSites: [jobSite],
       users: [
-        { id: "user-worker", label: "Mario Utente", email: "mario@example.com", role: "WORKER" },
-        { id: "manager-1", label: "Elena Mariani", email: "elena@example.com", role: "SITE_MANAGER" },
+        { id: "user-worker", label: "Mario Utente", email: "mario@example.com", role: "COLLABORATOR", preset: "LIMITED_UPLOAD", permissionKeys: ["documents:upload"] },
+        { id: "manager-1", label: "Elena Mariani", email: "elena@example.com", role: "COLLABORATOR", preset: "CUSTOM", permissionKeys: ["jobSites:read"] },
       ],
     });
     expect(mocks.db.worker.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { organizationId: "org-1", archivedAt: null } }));
@@ -200,8 +200,8 @@ describe("resource assignment service", () => {
     await expect(createWorkerUserLink({ workerId: "foreign-worker", userId: "user-worker" })).rejects.toMatchObject({ status: 404 });
   });
 
-  it("validates role-specific jobsite assignments and soft archives them", async () => {
-    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-manager", role: "COLLABORATOR", preset: "SITE_MANAGER", user });
+  it("uses persisted Collaborator permissions for job-site assignments and soft archives them", async () => {
+    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-collaborator", role: "COLLABORATOR", preset: "CUSTOM", permissionKeys: ["jobSites:read"], user });
     await expect(createJobSiteUserAssignment({ jobSiteId: "jobsite-1", userId: "user-worker" })).resolves.toMatchObject({
       jobSiteId: "jobsite-1",
       assignmentRole: "SITE_MANAGER",
@@ -217,6 +217,15 @@ describe("resource assignment service", () => {
     expect(mocks.db.jobSiteUserAssignment.update).toHaveBeenCalledWith(expect.objectContaining({
       data: expect.objectContaining({ archivedAt: expect.any(Date), endsAt: expect.any(Date), endedById: "user-owner", endReason: expect.any(String) }),
     }));
+  });
+
+  it("rejects a job-site assignment when the Collaborator lacks the required persisted permission", async () => {
+    mocks.db.organizationMembership.findFirst.mockResolvedValueOnce({ id: "member-collaborator", role: "COLLABORATOR", preset: "CUSTOM", permissionKeys: ["documents:read"], user });
+
+    await expect(createJobSiteUserAssignment({ jobSiteId: "jobsite-1", userId: "user-worker" })).rejects.toMatchObject({
+      status: 409,
+      message: "Il Collaboratore non dispone dei permessi richiesti per questa assegnazione.",
+    });
   });
 
   it("denies assignment management when the collaborator lacks the explicit permission", async () => {

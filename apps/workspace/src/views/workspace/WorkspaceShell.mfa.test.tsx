@@ -24,6 +24,7 @@ vi.mock("@shared/server/mfa-service", () => ({ getMfaStatusByUserId: mocks.getMf
 vi.mock("@shared/server/dev-auth", () => ({ getDevAuthSession: mocks.getDevAuthSession }));
 vi.mock("next/headers", () => ({ cookies: mocks.cookies }));
 vi.mock("@shared/server/notification-service", () => ({ getUnreadNotificationCount: vi.fn().mockResolvedValue(0) }));
+vi.mock("@shared/server/job-site-read-model-service", () => ({ listWorkspaceJobSiteNavigation: vi.fn().mockResolvedValue([]) }));
 vi.mock("@/views/account-security/AccountSecurityFlow", () => ({
   AccountSecurityFlow: () => <div>GLOBAL_MFA_GATE</div>,
 }));
@@ -39,7 +40,7 @@ import { WorkspaceShell } from "./WorkspaceShell";
 describe("WorkspaceShell MFA gate", () => {
   beforeEach(() => {
     mocks.getWorkspaceAccessContext.mockReset();
-    mocks.requirePrimaryIdentity.mockReset();
+    mocks.requirePrimaryIdentity.mockReset().mockResolvedValue({ id: "user-1", email: "utente@qoovex.test", platformRole: "USER" });
     mocks.getMfaStatusByUserId.mockReset();
     mocks.getDevAuthSession.mockReset().mockResolvedValue(null);
     mocks.cookies.mockReset().mockResolvedValue({ get: () => undefined });

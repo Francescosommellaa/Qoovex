@@ -22,6 +22,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import type {
   JobSiteUserAssignmentResponse,
   JobSiteWorkerAssignmentResponse,
+  OrganizationAccessPreset,
+  OrganizationPermission,
   WorkerUserLinkResponse,
 } from "@qoovex/types";
 import { submitJson } from "../admin-api-client";
@@ -30,7 +32,7 @@ import { WorkspacePage, WorkspacePageHeader } from "@/views/workspace/WorkspaceP
 interface AssignmentOptions {
   workers: Array<{ id: string; displayName: string; roleLabel?: string | null; status: string }>;
   jobSites: Array<{ id: string; name: string; status: string }>;
-  users: Array<{ id: string; label: string; email: string; role: string }>;
+  users: Array<{ id: string; label: string; email: string; role: "COLLABORATOR"; preset: OrganizationAccessPreset | null; permissionKeys: OrganizationPermission[] }>;
 }
 
 interface AccessAssignmentsPageViewProps {
@@ -115,7 +117,7 @@ function WorkerUserLinkForm({ options }: { options: AssignmentOptions }) {
   const [error, setError] = useState<string | null>(null);
   const workers = options.workers.map((worker) => ({ value: worker.id, label: worker.displayName }));
   const users = options.users
-    .filter((user) => user.role === "WORKER")
+    .filter((user) => user.role === "COLLABORATOR" && user.preset === "LIMITED_UPLOAD")
     .map((user) => ({ value: user.id, label: `${user.label} · ${user.email}` }));
 
   async function submit(formData: FormData) {
@@ -159,7 +161,7 @@ function JobSiteUserAssignmentForm({ options }: { options: AssignmentOptions }) 
   const [error, setError] = useState<string | null>(null);
   const jobSites = options.jobSites.map((jobSite) => ({ value: jobSite.id, label: jobSite.name }));
   const users = options.users
-    .filter((user) => user.role === "SITE_MANAGER")
+    .filter((user) => user.role === "COLLABORATOR" && user.permissionKeys.includes("jobSites:read"))
     .map((user) => ({ value: user.id, label: `${user.label} · ${user.email}` }));
 
   async function submit(formData: FormData) {
@@ -183,13 +185,13 @@ function JobSiteUserAssignmentForm({ options }: { options: AssignmentOptions }) 
       <FieldGroup>
         <div className="grid gap-4 lg:grid-cols-2">
           <AssignmentSelect id="job-site-user-site" label="Cantiere" name="jobSiteId" options={jobSites} placeholder="Seleziona cantiere" />
-          <AssignmentSelect id="job-site-user-manager" label="Responsabile cantiere" name="userId" options={users} placeholder="Seleziona responsabile" />
+          <AssignmentSelect id="job-site-user-manager" label="Collaboratore" name="userId" options={users} placeholder="Seleziona collaboratore" />
         </div>
         {error ? <FieldError>{error}</FieldError> : null}
         <div>
           <Button disabled={pending || !jobSites.length || !users.length} type="submit">
             <IconShieldCheck aria-hidden="true" />
-            {pending ? "Assegnazione..." : "Assegna responsabile"}
+            {pending ? "Assegnazione..." : "Assegna collaboratore"}
           </Button>
         </div>
       </FieldGroup>
@@ -252,7 +254,7 @@ export function AccessAssignmentsPageView({
       <WorkspacePageHeader
         title="Assegnazioni cantieri"
         description={canManage
-          ? "Assegna responsabili e lavoratori ai cantieri in cui devono operare."
+          ? "Assegna Collaboratori e lavoratori ai cantieri in cui devono operare."
           : "Consulta le persone assegnate ai cantieri visibili."}
         action={returnToDashboard ? (
           <Link className={buttonVariants({ variant: "outline" })} data-link="plain" href="/dashboard">
@@ -267,7 +269,7 @@ export function AccessAssignmentsPageView({
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-xl px-4 py-4 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden">
             <span className="min-w-0">
               <span className="block text-sm font-medium text-foreground">Associazione account al profilo</span>
-              <span className="mt-1 block text-sm text-muted-foreground">Controllo avanzato riservato agli account con ruolo Lavoratore.</span>
+              <span className="mt-1 block text-sm text-muted-foreground">Controllo avanzato per collegare un Collaboratore al relativo profilo operativo.</span>
             </span>
             <IconChevronDown aria-hidden="true" className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180 motion-reduce:transition-none" />
           </summary>
@@ -288,7 +290,7 @@ export function AccessAssignmentsPageView({
                     <EmptyHeader>
                       <EmptyMedia variant="icon"><IconLink aria-hidden="true" /></EmptyMedia>
                       <EmptyTitle>Nessun collegamento operativo</EmptyTitle>
-                      <EmptyDescription>Non risultano account con ruolo Lavoratore associati a un profilo operativo.</EmptyDescription>
+                      <EmptyDescription>Non risultano Collaboratori associati a un profilo operativo.</EmptyDescription>
                     </EmptyHeader>
                   </Empty>
                 ) : (
@@ -317,8 +319,8 @@ export function AccessAssignmentsPageView({
             <div className="mb-2 grid size-9 place-items-center rounded-lg bg-muted text-foreground">
               <IconShieldCheck aria-hidden="true" className="size-5" />
             </div>
-            <CardTitle><h2>Responsabili dei cantieri</h2></CardTitle>
-            <CardDescription>Assegna a ogni responsabile i cantieri che deve seguire.</CardDescription>
+            <CardTitle><h2>Collaboratori nei cantieri</h2></CardTitle>
+            <CardDescription>Assegna a ogni Collaboratore i cantieri che deve seguire.</CardDescription>
             <CardAction><Badge variant="outline">{resultLabel(jobSiteUserAssignments.length, "assegnazione", "assegnazioni")}</Badge></CardAction>
           </CardHeader>
           <CardContent className="grid gap-5">
@@ -328,11 +330,11 @@ export function AccessAssignmentsPageView({
                 <EmptyHeader>
                   <EmptyMedia variant="icon"><IconShieldCheck aria-hidden="true" /></EmptyMedia>
                   <EmptyTitle>Nessun cantiere assegnato</EmptyTitle>
-                  <EmptyDescription>Assegna un responsabile a un cantiere per definirne l'ambito operativo.</EmptyDescription>
+                  <EmptyDescription>Assegna un Collaboratore a un cantiere per definirne l'ambito operativo.</EmptyDescription>
                 </EmptyHeader>
               </Empty>
             ) : (
-              <ul aria-label="Responsabili assegnati ai cantieri" className="divide-y divide-border">
+              <ul aria-label="Collaboratori assegnati ai cantieri" className="divide-y divide-border">
                 {jobSiteUserAssignments.map((assignment) => (
                   <li className="py-4 first:pt-0 last:pb-0" key={assignment.id}>
                     <article className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-center gap-3 sm:grid-cols-[auto_minmax(0,1fr)_auto]">
@@ -340,7 +342,7 @@ export function AccessAssignmentsPageView({
                       <div className="min-w-0">
                         <div className="flex min-w-0 flex-wrap items-center gap-2">
                           <h3 className="truncate text-sm font-medium text-foreground">{assignment.jobSiteName}</h3>
-                          <Badge variant="outline">Responsabile cantiere</Badge>
+                          <Badge variant="outline">Collaboratore</Badge>
                         </div>
                         <p className="mt-1 truncate text-sm text-muted-foreground">{assignment.userLabel} · {assignment.userEmail}</p>
                       </div>

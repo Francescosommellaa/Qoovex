@@ -110,7 +110,7 @@ afterEach(() => {
 });
 
 describe("notification service", () => {
-  it("lets owners, admins and safety consultants list notifications", async () => {
+  it("lets Owners and authorized Collaborators list notifications", async () => {
     for (const role of ["OWNER", "COLLABORATOR"] as const) {
       setRole(role);
       await expect(listNotifications()).resolves.toMatchObject({ unreadCount: 1 });

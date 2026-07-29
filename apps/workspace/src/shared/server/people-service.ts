@@ -305,13 +305,13 @@ export async function getPeopleAccessOverview() {
     }),
   ]);
   const activeUsers = memberships.filter((item) => item.revokedAt === null);
-  const incomplete: Array<{ kind: "WORKER_LINK" | "SITE_MANAGER_SCOPE"; membershipId: string; userId: string; label: string; message: string }> = [];
+  const incomplete: Array<{ kind: "WORKER_LINK" | "JOB_SITE_SCOPE"; membershipId: string; userId: string; label: string; message: string }> = [];
   for (const membership of activeUsers) {
     if (membership.preset === "LIMITED_UPLOAD" && membership.user.workerUserLinks.length === 0) {
-      incomplete.push({ kind: "WORKER_LINK", membershipId: membership.id, userId: membership.user.id, label: membership.user.email, message: "Collega l'account a un profilo lavoratore." });
+      incomplete.push({ kind: "WORKER_LINK", membershipId: membership.id, userId: membership.user.id, label: membership.user.email, message: "Collega il Collaboratore a un profilo lavoratore." });
     }
     if (membership.preset === "SITE_MANAGER" && membership.user.jobSiteUserAssignments.length === 0) {
-      incomplete.push({ kind: "SITE_MANAGER_SCOPE", membershipId: membership.id, userId: membership.user.id, label: membership.user.email, message: "Assegna almeno un cantiere al responsabile." });
+      incomplete.push({ kind: "JOB_SITE_SCOPE", membershipId: membership.id, userId: membership.user.id, label: membership.user.email, message: "Assegna almeno un cantiere al Collaboratore." });
     }
   }
   return {
@@ -327,7 +327,7 @@ export async function getPeopleAccessOverview() {
 
 export async function getPeopleAssignmentsOverview() {
   const { organizationId } = await requireOrganizationDomainAccess("assignments:read", PEOPLE_ASSIGNMENT_ROLES);
-  const [jobSites, workers, siteManagers] = await Promise.all([
+  const [jobSites, workers, jobSiteCollaborators] = await Promise.all([
     db.jobSite.findMany({
       where: { organizationId, archivedAt: null },
       select: {
@@ -351,7 +351,7 @@ export async function getPeopleAssignmentsOverview() {
       orderBy: [{ displayName: "asc" }],
     }),
     db.organizationMembership.findMany({
-      where: { organizationId, revokedAt: null, role: "COLLABORATOR", preset: "SITE_MANAGER" },
+      where: { organizationId, revokedAt: null, role: "COLLABORATOR", permissionKeys: { has: "jobSites:read" }, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
       select: { user: { select: { id: true, name: true, email: true } } },
       orderBy: [{ createdAt: "asc" }],
     }),
@@ -360,7 +360,7 @@ export async function getPeopleAssignmentsOverview() {
     jobSites,
     options: {
       workers,
-      siteManagers: siteManagers.map(({ user }) => ({ id: user.id, label: user.name?.trim() || user.email, email: user.email })),
+      jobSiteCollaborators: jobSiteCollaborators.map(({ user }) => ({ id: user.id, label: user.name?.trim() || user.email, email: user.email })),
     },
   };
 }

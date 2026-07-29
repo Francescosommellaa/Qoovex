@@ -226,7 +226,7 @@ describe("checklist service", () => {
     }));
   });
 
-  it("lets safety consultants manage checklist items and site managers complete assigned items", async () => {
+  it("applies persisted Collaborator permissions and assigned-job-site scope to checklist operations", async () => {
     setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["checklists:read", "checklists:manage", "checklists:complete"], "FULL");
     mocks.db.checklistItem.create.mockResolvedValue({ ...itemRecord, status: "DONE", completedAt: now, completedById: "user-1" });
     await expect(createChecklistItem("checklist-1", { label: "Completa voce", status: "DONE" })).resolves.toMatchObject({
@@ -344,7 +344,7 @@ describe("evidence service", () => {
     expect(evidence).not.toHaveProperty("blobKey");
   });
 
-  it("lets safety consultants read, upload and download evidence but not archive", async () => {
+  it("lets Collaborators with document-review permissions read, upload and download evidence but not archive", async () => {
     setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["evidence:read", "evidence:file:read", "evidence:upload"], "FULL");
     mocks.db.evidence.findMany.mockResolvedValue([fileEvidenceRecord]);
     mocks.db.evidence.findFirst.mockResolvedValue(fileEvidenceRecord);

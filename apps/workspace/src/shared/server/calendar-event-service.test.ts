@@ -66,7 +66,7 @@ describe("calendar event service", () => {
     expect(mocks.calendarEvent.create).not.toHaveBeenCalled();
   });
 
-  it("scopes a site manager to their own and assigned-site events", async () => {
+  it("scopes a Collaborator with assigned-job-site access to their own and assigned-site events", async () => {
     mocks.role = "COLLABORATOR";
     mocks.preset = "SITE_MANAGER";
     mocks.userId = "manager-1";

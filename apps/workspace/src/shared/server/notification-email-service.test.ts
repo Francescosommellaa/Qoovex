@@ -115,7 +115,7 @@ beforeEach(() => {
 });
 
 describe("notification email service", () => {
-  it("lets owners, admins and safety consultants preview email digest", async () => {
+  it("lets Owners and Collaborators with notification permissions preview email digest", async () => {
     for (const role of ["OWNER", "COLLABORATOR"] as const) {
       setRole(role);
       await expect(previewNotificationEmailDigest()).resolves.toMatchObject({ unreadCount: 1 });

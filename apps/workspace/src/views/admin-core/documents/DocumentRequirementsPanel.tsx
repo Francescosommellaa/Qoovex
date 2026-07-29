@@ -90,7 +90,7 @@ export function DocumentRequirementsPanel({
   }
 
   if (!canManage) {
-    return <p className="text-muted-foreground">I requisiti documentali sono gestiti da proprietario o amministratore. Qui vedi solo gli eventuali documenti mancanti nel tuo scope.</p>;
+    return <p className="text-muted-foreground">I requisiti documentali sono gestiti dall'Owner o dai Collaboratori autorizzati. Qui vedi solo gli eventuali documenti mancanti nel tuo ambito.</p>;
   }
 
   const compatibleTypes = documentTypes.filter((type) => type.appliesTo === targetType);

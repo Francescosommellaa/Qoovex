@@ -271,7 +271,7 @@ describe("document service", () => {
     expect(mocks.db.document.create).not.toHaveBeenCalled();
   });
 
-  it("lets safety consultants read and update document metadata but not archive", async () => {
+  it("lets Collaborators with review permissions read and update document metadata but not archive", async () => {
     setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["documents:read", "documents:update"], "FULL");
     mocks.db.document.findFirst.mockResolvedValue({ id: "doc-1", ownerType: "ORGANIZATION", workerId: null, jobSiteId: null });
     mocks.db.document.update.mockResolvedValue({ ...documentRecord, status: "PRESENT" });
@@ -281,7 +281,7 @@ describe("document service", () => {
     await expect(listDocuments({ status: "ARCHIVED" })).rejects.toMatchObject({ status: 404 });
   });
 
-  it("scopes document reads for site managers and workers while destinatari esterni stay denied", async () => {
+  it("scopes document reads for Collaborators with assigned-job-site or linked-profile access while external recipients stay denied", async () => {
     setRole("COLLABORATOR", "SITE_MANAGER", ["documents:read"]);
     mocks.db.jobSiteUserAssignment.findMany.mockResolvedValue([{ jobSiteId: "jobsite-1" }]);
     mocks.db.document.findMany.mockResolvedValue([{ ...documentRecord, ownerType: "JOB_SITE", jobSiteId: "jobsite-1" }]);
@@ -391,7 +391,7 @@ describe("document service", () => {
 });
 
 describe("deadline service", () => {
-  it("lets safety consultants read deadlines but not manage them", async () => {
+  it("lets Collaborators with deadline read permission view deadlines but not manage them", async () => {
     setRole("COLLABORATOR", "DOCUMENT_REVIEWER", ["deadlines:read"], "FULL");
     mocks.db.deadline.findMany.mockResolvedValue([deadlineRecord]);
 

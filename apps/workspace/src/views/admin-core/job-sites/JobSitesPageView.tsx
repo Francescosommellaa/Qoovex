@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { IconAlertTriangle, IconBuilding, IconChevronLeft, IconChevronRight, IconSearch } from "@tabler/icons-react";
+import { IconAlertTriangle, IconArchive, IconBuilding, IconChevronLeft, IconChevronRight, IconSearch } from "@tabler/icons-react";
 import { Badge } from "@qoovex/ui/components/badge";
 import { buttonVariants } from "@qoovex/ui/components/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
@@ -8,7 +8,7 @@ import { cn } from "@qoovex/ui/lib/utils";
 import { jobSiteOperationalPhaseLabels, legacyJobSiteOperationalPhaseLabel } from "@qoovex/types";
 import type { JobSiteListResponse } from "@qoovex/types";
 import { JobSiteCreateDialog } from "./JobSiteCreateDialog";
-import { WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
+import { WorkspaceJobSitePhaseIcon, WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import type { WorkspaceCapabilities } from "@/views/workspace/workspace-records";
 import { formatDate } from "@/views/workspace/workspace-format";
 
@@ -19,10 +19,12 @@ const attentionLabels = {
   OPEN_CHECKLIST_ITEMS: "Checklist aperte",
   OVERDUE_DEADLINES: "Scadenze superate",
   UPCOMING_DEADLINES: "Scadenze vicine",
-  NO_MANAGER: "Responsabile assente",
+  NO_MANAGER: "Collaboratore non assegnato",
   NO_WORKERS: "Lavoratori assenti",
   READY_PACKAGES: "Pacchetto pronto",
 } as const;
+
+const phaseShortcuts = ["DRAFT", "PREPARATION", "IN_PROGRESS", "PAUSED", "CLOSING", "COMPLETED"] as const;
 
 function queryHref(basePath: string, query: Record<string, string | number | undefined>) {
   const params = new URLSearchParams();
@@ -41,6 +43,14 @@ export function JobSitesPageView({ response, capabilities, archived = false, fil
         action={!archived && capabilities.canCreateJobSites ? <JobSiteCreateDialog className="h-10 w-full sm:h-8 sm:w-auto" /> : undefined}
       />
 
+      <nav aria-label="Viste cantieri" className="-mx-1 overflow-x-auto px-1">
+        <div className="flex min-w-max gap-1 rounded-lg border bg-muted/30 p-1">
+          <Link aria-current={!archived && !filters.phase ? "page" : undefined} className={buttonVariants({ size: "sm", variant: !archived && !filters.phase ? "default" : "ghost" })} href={queryHref("/job-sites/all", { search: filters.search, attention: filters.attention })}>Tutti</Link>
+          {phaseShortcuts.map((phase) => <Link aria-current={!archived && filters.phase === phase ? "page" : undefined} className={buttonVariants({ size: "sm", variant: !archived && filters.phase === phase ? "default" : "ghost" })} href={queryHref("/job-sites/all", { search: filters.search, attention: filters.attention, phase })} key={phase}>{jobSiteOperationalPhaseLabels[phase]}</Link>)}
+          <Link aria-current={archived ? "page" : undefined} className={buttonVariants({ size: "sm", variant: archived ? "default" : "ghost" })} href="/job-sites/archive"><IconArchive aria-hidden="true" />Archiviati</Link>
+        </div>
+      </nav>
+
       <Card size="sm">
         <CardHeader className="border-b"><CardTitle><h2>Filtri server</h2></CardTitle><CardDescription>Nome, committente e indirizzo vengono cercati sul server.</CardDescription></CardHeader>
         <CardContent>
@@ -58,7 +68,7 @@ export function JobSitesPageView({ response, capabilities, archived = false, fil
         <CardContent>
           {!response.items.length ? <div className="rounded-lg border border-dashed p-8 text-center"><IconBuilding aria-hidden="true" className="mx-auto size-6 text-muted-foreground" /><p className="mt-3 font-medium">Nessun cantiere trovato</p><p className="mt-1 text-sm text-muted-foreground">Modifica i filtri oppure crea il primo cantiere operativo.</p></div> : (
             <ul aria-label="Cantieri disponibili" className="divide-y divide-border">
-              {response.items.map((item) => <li className="py-4 first:pt-0 last:pb-0" key={item.id}><article className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(19rem,1.1fr)_auto] lg:items-center"><div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><h3 className="[overflow-wrap:anywhere] font-medium">{item.name}</h3><WorkspaceState label={item.operationalPhase ? jobSiteOperationalPhaseLabels[item.operationalPhase] : legacyJobSiteOperationalPhaseLabel} tone={item.operationalPhase === "PAUSED" ? "warning" : item.operationalPhase === "COMPLETED" ? "good" : "info"} /></div><p className="mt-1 text-sm text-muted-foreground">{item.clientName || "Committente non indicato"} · {item.address || "Indirizzo non registrato"}</p></div><div className="min-w-0"><dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs sm:grid-cols-4"><div><dt className="text-muted-foreground">Documenti</dt><dd className="font-medium tabular-nums">{item.summary.missingDocuments + item.summary.expiredDocuments + item.summary.documentsToReview} da gestire</dd></div><div><dt className="text-muted-foreground">Checklist</dt><dd className="font-medium tabular-nums">{item.summary.openChecklistItems + item.summary.checklistItemsToReview} aperte</dd></div><div><dt className="text-muted-foreground">Persone</dt><dd className="font-medium tabular-nums">{item.summary.managerCount} resp. · {item.summary.workerCount} lav.</dd></div><div><dt className="text-muted-foreground">Prossima scadenza</dt><dd className="truncate font-medium">{item.summary.nextDeadline ? formatDate(item.summary.nextDeadline.dueDate) : "Nessuna"}</dd></div></dl><div className="mt-2 flex min-w-0 flex-wrap gap-1.5">{item.summary.attentionStates.length ? item.summary.attentionStates.slice(0, 3).map((state) => <Badge key={state} variant={state === "EXPIRED_DOCUMENTS" || state === "OVERDUE_DEADLINES" ? "destructive" : "outline"}>{attentionLabels[state]}</Badge>) : <Badge variant="success">Nessuna criticita rilevata</Badge>}{item.summary.attentionStates.length > 3 ? <Badge variant="outline">+{item.summary.attentionStates.length - 3}</Badge> : null}</div></div><Link className={cn(buttonVariants({ size: "sm", variant: "outline" }), "h-10 lg:h-8")} href={`/job-sites/${item.id}`}>{item.summary.attentionScore > 0 ? <IconAlertTriangle aria-hidden="true" /> : <IconBuilding aria-hidden="true" />}Apri</Link></article></li>)}
+              {response.items.map((item) => <li className="py-4 first:pt-0 last:pb-0" key={item.id}><article className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(19rem,1.1fr)_auto] lg:items-center"><div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><WorkspaceJobSitePhaseIcon phase={item.operationalPhase} /><h3 className="[overflow-wrap:anywhere] font-medium">{item.name}</h3><WorkspaceState label={item.operationalPhase ? jobSiteOperationalPhaseLabels[item.operationalPhase] : legacyJobSiteOperationalPhaseLabel} tone={item.operationalPhase === "PAUSED" ? "warning" : item.operationalPhase === "COMPLETED" ? "good" : "info"} /></div><p className="mt-1 text-sm text-muted-foreground">{item.clientName || "Committente non indicato"} · {item.address || "Indirizzo non registrato"}</p></div><div className="min-w-0"><dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs sm:grid-cols-4"><div><dt className="text-muted-foreground">Documenti</dt><dd className="font-medium tabular-nums">{item.summary.missingDocuments + item.summary.expiredDocuments + item.summary.documentsToReview} da gestire</dd></div><div><dt className="text-muted-foreground">Checklist</dt><dd className="font-medium tabular-nums">{item.summary.openChecklistItems + item.summary.checklistItemsToReview} aperte</dd></div><div><dt className="text-muted-foreground">Persone</dt><dd className="font-medium tabular-nums">{item.summary.managerCount} resp. · {item.summary.workerCount} lav.</dd></div><div><dt className="text-muted-foreground">Prossima scadenza</dt><dd className="truncate font-medium">{item.summary.nextDeadline ? formatDate(item.summary.nextDeadline.dueDate) : "Nessuna"}</dd></div></dl><div className="mt-2 flex min-w-0 flex-wrap gap-1.5">{item.summary.attentionStates.length ? item.summary.attentionStates.slice(0, 3).map((state) => <Badge key={state} variant={state === "EXPIRED_DOCUMENTS" || state === "OVERDUE_DEADLINES" ? "destructive" : "outline"}>{attentionLabels[state]}</Badge>) : <Badge variant="success">Nessuna criticita rilevata</Badge>}{item.summary.attentionStates.length > 3 ? <Badge variant="outline">+{item.summary.attentionStates.length - 3}</Badge> : null}</div></div><Link className={cn(buttonVariants({ size: "sm", variant: "outline" }), "h-10 lg:h-8")} href={`/job-sites/${item.id}`}>{item.summary.attentionScore > 0 ? <IconAlertTriangle aria-hidden="true" /> : <IconBuilding aria-hidden="true" />}Apri</Link></article></li>)}
             </ul>
           )}
         </CardContent>
