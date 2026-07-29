@@ -199,7 +199,10 @@ async function createDomainData(page: Page, runId: string) {
   return { documentPackage, jobSite, jobSiteDocument, jobSiteDocumentType, worker, workerDocument, workerDocumentType };
 }
 
-async function expectPrimaryNavigation(page: Page) {
+const primaryNavigationQuickActions = ["Aggiungi prova", "Carica documento", "Aggiungi collaboratore"] as const;
+type PrimaryNavigationQuickAction = (typeof primaryNavigationQuickActions)[number];
+
+async function expectPrimaryNavigation(page: Page, expectedQuickActions: readonly PrimaryNavigationQuickAction[]) {
   const navigation = page.getByRole("navigation", { name: "Navigazione workspace" });
   await expect(navigation.getByRole("link", { name: "Panoramica", exact: true })).toBeVisible();
   await expect(navigation.getByRole("link", { name: "Tutti i cantieri", exact: true })).toBeVisible();
@@ -210,11 +213,13 @@ async function expectPrimaryNavigation(page: Page) {
   await expect(navigation.getByText("Preferiti", { exact: true })).toHaveCount(0);
   await expect(navigation.getByText("Azioni rapide", { exact: true })).toBeVisible();
   const quickActions = navigation.getByRole("group", { name: "Azioni rapide" });
-  await expect(quickActions.getByRole("link", { name: "Aggiungi prova", exact: true })).toBeVisible();
-  await expect(quickActions.getByRole("link", { name: "Carica documento", exact: true })).toBeVisible();
-  await expect(quickActions.getByRole("link", { name: "Aggiungi collaboratore", exact: true })).toBeVisible();
+  for (const action of primaryNavigationQuickActions) {
+    const link = quickActions.getByRole("link", { name: action, exact: true });
+    if (expectedQuickActions.includes(action)) await expect(link).toBeVisible();
+    else await expect(link).toHaveCount(0);
+  }
   await expect(quickActions.getByRole("link", { name: "Crea cantiere", exact: true })).toHaveCount(0);
-  await expect(navigation.getByRole("button", { name: "Cerca", exact: true })).toBeVisible();
+  await expect(navigation.getByRole("button", { name: "Cerca nel workspace", exact: true })).toBeVisible();
   await expect(navigation.getByRole("link", { name: "Ricerca", exact: true })).toHaveCount(0);
   await expect(navigation.getByText("Analisi", { exact: true })).toHaveCount(0);
   await expect(navigation.getByRole("link", { name: "Notifiche", exact: true })).toHaveCount(0);
@@ -400,8 +405,8 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     const owner = fixture.owner as JsonRecord;
     await signInWithCredentials(page, String(owner.email), String(fixture.password));
     await satisfyMfaGate(page, String(owner.secret));
-    await expectPrimaryNavigation(page);
-    await page.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("button", { name: "Cerca", exact: true }).click();
+    await expectPrimaryNavigation(page, primaryNavigationQuickActions);
+    await page.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("button", { name: "Cerca nel workspace", exact: true }).click();
     await expect(page.getByRole("dialog", { name: "Cerca nel workspace" })).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(page.getByRole("button", { name: /^Apri notifiche(?:, \d+ non lett[ae])?$/ })).toBeVisible();
@@ -572,7 +577,7 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     const safetyPage = await safetyContext.newPage();
     await signInWithCredentials(safetyPage, String(safety.email), String(fixture.password));
     await satisfyMfaGate(safetyPage, String(safety.secret));
-    await expectPrimaryNavigation(safetyPage);
+    await expectPrimaryNavigation(safetyPage, ["Aggiungi prova"]);
     await expect(safetyPage.getByRole("button", { name: /^Apri notifiche(?:, \d+ non lett[ae])?$/ })).toBeVisible();
 
     expect((await sinkApi.delete(sinkUrl)).status()).toBe(200);
@@ -638,7 +643,7 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
 
     const siteManagerPage = await scopedSiteManagerContext.newPage();
     await signInWithCredentials(siteManagerPage, siteManagerEmail, siteManagerPassword);
-    await expectPrimaryNavigation(siteManagerPage);
+    await expectPrimaryNavigation(siteManagerPage, ["Aggiungi prova"]);
     const siteManagerJobSites = await expectJson(await siteManagerPage.request.get("/api/job-sites"), 200) as unknown as JsonRecord;
     expect((siteManagerJobSites.items as JsonRecord[]).map((jobSite) => jobSite.id)).toEqual([assignedJobSite.id]);
     await expectJson(await siteManagerPage.request.post("/api/job-sites", { data: { name: "Vietato" } }), 404);
@@ -646,7 +651,7 @@ test("invitation acceptance enforces SITE_MANAGER and WORKER resource scopes", a
     const workerPage = await workerContext.newPage();
     await signInWithCredentials(workerPage, String(worker.email), String(fixture.password));
     await satisfyMfaGate(workerPage, String(worker.secret));
-    await expectPrimaryNavigation(workerPage);
+    await expectPrimaryNavigation(workerPage, ["Aggiungi prova", "Carica documento"]);
     await expect(workerPage.getByRole("navigation", { name: "Navigazione workspace" }).getByRole("link", { name: "Condivisioni", exact: true })).toHaveCount(0);
     const workerRecords = await expectJson(await workerPage.request.get("/api/workers"), 200) as unknown as JsonRecord[];
     expect(workerRecords.map((record) => record.id)).toEqual([linkedWorker.id]);
