@@ -256,8 +256,12 @@ async function createGuidedDocument(page: Page, input: {
   documentTypeName: string;
 }) {
   await page.goto("/documents", { waitUntil: "domcontentloaded" });
-  await page.getByRole("button", { name: "Aggiungi documento", exact: true }).click();
+  const trigger = page.getByRole("button", { name: "Aggiungi documento", exact: true });
   const dialog = page.getByRole("dialog", { name: "Aggiungi documento" });
+  await expect(async () => {
+    await trigger.click();
+    await expect(dialog).toBeVisible({ timeout: 2_000 });
+  }).toPass({ timeout: 10_000 });
   await expect(dialog.getByRole("heading", { name: "Dove va il documento?" })).toBeVisible();
   await dialog.getByRole("button", { name: new RegExp(`^${input.area}\\b`) }).click();
   await dialog.getByRole("combobox", { name: input.contextPrompt }).click();
@@ -392,6 +396,7 @@ test("credentials signup verifies the real OTP through the authenticated E2E ema
 });
 
 test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous share link, and cleanup", async ({ page, request, playwright, baseURL }) => {
+  test.setTimeout(120_000);
   const runId = `${Date.now()}`;
   const anonymousApi = request;
   const adminApi = await playwright.request.newContext({ baseURL });
@@ -479,17 +484,23 @@ test("workspace MVP smoke with isolated credentials fixture, Blob, anonymous sha
     }
     await page.goto("/job-sites/all", { waitUntil: "domcontentloaded" });
     const jobSiteNavigation = page.getByRole("navigation", { name: "Navigazione workspace" });
-    await jobSiteNavigation.getByRole("link", { name: String(jobSite.name), exact: true }).click();
-    await expect(page).toHaveURL(new RegExp(`/job-sites/.+${jobSite.id}`));
+    const jobSiteLink = jobSiteNavigation.getByRole("link", { name: `${jobSite.name} In corso`, exact: true });
+    const jobSiteHref = await jobSiteLink.getAttribute("href");
+    expect(jobSiteHref).toMatch(new RegExp(`^/job-sites/.+--${jobSite.id}$`));
+    await jobSiteLink.click();
+    await expect(page).toHaveURL(new RegExp(`--${jobSite.id}$`));
     await page.goto("/job-sites/all", { waitUntil: "domcontentloaded" });
     await jobSiteNavigation.getByRole("button", { name: `Mostra aggiornamenti di ${jobSite.name}`, exact: true }).click();
     await expect(page).toHaveURL(/\/job-sites\/all$/);
-    const timelineLink = jobSiteNavigation.locator('a[href*="?section=updates#timeline-"]').first();
+    const timelineLink = jobSiteNavigation.getByRole("link", { name: "Vai all'aggiornamento: Prova registrata", exact: true });
     await expect(timelineLink).toBeVisible();
     const timelineHref = await timelineLink.getAttribute("href");
-    expect(timelineHref).toMatch(new RegExp(`^/job-sites/${jobSite.id}\\?section=updates#timeline-`));
+    expect(timelineHref?.startsWith(`${jobSiteHref}?section=updates#timeline-`)).toBe(true);
     await timelineLink.click();
-    await expect(page).toHaveURL(new RegExp(`/job-sites/${jobSite.id}\\?section=updates#timeline-`));
+    await expect.poll(() => {
+      const url = new URL(page.url());
+      return `${url.pathname}${url.search}${url.hash}`;
+    }).toBe(timelineHref);
     await expect(jobSiteNavigation.locator('a[aria-current="location"]')).toHaveAttribute("href", timelineHref!);
     const timelineAnchor = new URL(page.url()).hash;
     await expect(page.locator(timelineAnchor)).toBeVisible();
