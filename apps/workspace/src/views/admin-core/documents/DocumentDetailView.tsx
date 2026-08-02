@@ -56,7 +56,7 @@ export function DocumentDetailView({
         description={`${contextLabel} · Scadenza registrata: ${formatDate(document.expiryDate)}`}
         action={
           <Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} data-link="plain" href={returnToDashboard ? "/dashboard" : "/documents"}>
-            <IconArrowLeft />{returnToDashboard ? "Torna al Centro operativo" : "Torna ai documenti"}
+            <IconArrowLeft />{returnToDashboard ? "Torna alla Panoramica" : "Torna ai documenti"}
           </Link>
         }
       />

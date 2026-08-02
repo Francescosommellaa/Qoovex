@@ -30,7 +30,7 @@ I servizi dominio MVP restano app-specific finche dipendono da auth, policy work
 - lavoratori e cantieri;
 - checklist, voci checklist ed evidence.
 - pacchetti documentali, link di condivisione e accesso destinatario esterno tokenizzato.
-- dashboard operativa read-only, come aggregazione sintetica filtrata per Organization.
+- Panoramica operativa read-only, come proiezione bounded di decisioni, eccezioni, review ed eventi persistiti filtrati per Azienda, permessi e resource scope.
 
 I file Evidence usano l'adapter Blob esistente; le response pubbliche non espongono URL permanenti.
 

@@ -19,7 +19,7 @@ Ogni documento deve distinguere:
 - **Specifica concettuale non implementata**: direzione priva di contratto o runtime attivo.
 - **Decisione aperta / hard stop**: richiede approvazione e non puo essere risolta per deduzione.
 
-Processi persistenti, Centro operativo, cinque definizioni deterministiche, ricerca consultiva sui metadati autorizzati, timeline aggregate e condivisione revisionata sono implementati nelle Fasi 3-4. OCR, AI, ricerca nei file o semantica, cronologia/viste salvate, nuovi canali, retention automatica, SLA e limiti commerciali non sono capability attive.
+Processi persistenti, Panoramica exception-driven, cinque definizioni deterministiche, ricerca consultiva sui metadati autorizzati, timeline aggregate e condivisione revisionata sono implementati. OCR, AI, ricerca nei file o semantica, cronologia/viste salvate, nuovi canali, retention automatica, SLA e limiti commerciali non sono capability attive.
 
 ## Modifiche tecniche
 

@@ -118,7 +118,7 @@ const sirioFoundation = read("apps/sirio/src/app/page.tsx");
 const sirioDashboardOverview = read("apps/sirio/src/components/dashboard-overview.tsx");
 const sirioDashboardShell = read("apps/sirio/src/components/dashboard-shell.tsx");
 const workspaceLayout = read("apps/workspace/src/app/layout.tsx");
-const workspaceOperationalCenter = read("apps/workspace/src/views/operational-center/OperationalCenterView.tsx");
+const workspaceDashboardOverview = read("apps/workspace/src/views/dashboard/DashboardOverviewView.tsx");
 const workspaceShell = read("apps/workspace/src/views/workspace/WorkspaceShell.tsx");
 const workspaceSidebarFrame = read("apps/workspace/src/views/workspace/WorkspaceSidebarFrame.tsx");
 const workspaceNavigation = read("apps/workspace/src/views/workspace/WorkspaceNavigation.tsx");
@@ -161,7 +161,7 @@ for (const [name, source] of [["Button", button], ["Badge", badge]]) {
 assert(button.includes("cursor-pointer"), "Button e buttonVariants devono comunicare l'azione con il cursore pointer.");
 assert(sirioFoundation.includes('data-link="inline"') && sirioFoundation.includes('data-link="quiet"') && sirioFoundation.includes('data-link="plain"'), "Sirio deve mostrare tutti i ruoli semantici dei link.");
 assert(webChrome.includes('data-link="quiet"') && webChrome.includes('data-link-scope="inline"'), "Web deve distinguere link quiet e inline.");
-assert(workspaceOperationalCenter.includes("buttonVariants") && workspaceTopbar.includes('data-link="plain"'), "Workspace deve distinguere azioni e navigazione plain.");
+assert(workspaceDashboardOverview.includes("buttonVariants") && workspaceTopbar.includes('data-link="plain"'), "Workspace deve distinguere azioni e navigazione plain.");
 assert(!authStyles.includes("text-decoration: underline"), "Le azioni button delle pagine auth non devono simulare link sottolineati.");
 for (const required of ["OTPField", 'data-slot="otp-input"', "autoFocus={autoFocus && index === 0}", "transition-[border-color,box-shadow,background-color]", "ring-inset", "focus-visible:ring-1", "focus-visible:ring-ring/25"]) {
   assert(otpInput.includes(required), `OtpInput condiviso non contiene ${required}`);
@@ -222,14 +222,14 @@ for (const required of ['className="h-dvh min-h-0! overflow-hidden bg-sidebar"',
 }
 assert(workspaceTopbar.includes("<SidebarCollapseButton") && workspaceTopbar.includes("iconOnly"), "La topbar Workspace deve ospitare il toggle desktop iconico.");
 assert(workspaceTopbar.includes("<WorkspaceNotificationsPanel"), "La campanella Workspace deve aprire il pannello notifiche.");
-for (const required of ["Pagine recenti", "Navigazione mobile", "displayedPages", "BreadcrumbSeparator", 'render={<Link href="/dashboard" />}>Centro operativo</BreadcrumbLink>']) {
+for (const required of ["Pagine recenti", "Navigazione mobile", "displayedPages", "BreadcrumbSeparator", 'render={<Link href="/dashboard" />}>Panoramica</BreadcrumbLink>']) {
   assert(workspaceTopbar.includes(required), `Topbar Workspace non contiene il breadcrumb ${required}.`);
 }
 for (const required of ["MAX_RECENT_WORKSPACE_PAGES = 3", "window.sessionStorage", "pushRecentWorkspacePage", "parseRecentWorkspacePages", "specificPageLabels"]) {
   const source = required === "window.sessionStorage" ? workspaceTopbar : workspaceNavigationHistory;
   assert(source.includes(required), `Cronologia Workspace non contiene ${required}.`);
 }
-assert(!workspaceTopbar.includes("WorkspaceBrandMark"), "La topbar mobile non deve mostrare il logo al posto del breadcrumb Centro operativo.");
+assert(!workspaceTopbar.includes("WorkspaceBrandMark"), "La topbar mobile non deve mostrare il logo al posto del breadcrumb Panoramica.");
 for (const required of ["Ricerca rapida", "Analisi", "Calendario", "Persone", "Azioni rapide", "Preferiti", "Documenti da controllare", "IconFilePlus", "IconBuildingPlus", "Pagine recenti", "Navigazione mobile", "iconOnly", "overflow-y-auto"]) {
   assert(sirioDashboardShell.includes(required), `Sirio deve provare la nuova sidebar con ${required}.`);
 }

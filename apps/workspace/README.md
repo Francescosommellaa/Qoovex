@@ -1,6 +1,6 @@
 # Workspace App
 
-Runtime Next.js autenticato del prodotto Qoovex. Contiene Centro operativo, motore persistente exception-driven, Auth.js/NextAuth, MFA, inviti, autorizzazioni, API, servizi server, supporto auditato e Console Qoovex.
+Runtime Next.js autenticato del prodotto Qoovex. Contiene la Panoramica exception-driven, il motore persistente, Auth.js/NextAuth, MFA, inviti, autorizzazioni, API, servizi server, supporto auditato e Console Qoovex.
 
 ## Stato attuale verificato
 
@@ -8,7 +8,7 @@ Runtime Next.js autenticato del prodotto Qoovex. Contiene Centro operativo, moto
 
 Il dominio comprende lavoratori, cantieri, documenti e versioni private, tipi/requisiti, scadenze, calendario, checklist, prove, pacchetti, condivisioni, notifiche, audit, export, retention e data-control. Prisma salva dati e metadati; Vercel Blob privato salva file. Le response non espongono storage key, token hash o URL permanenti.
 
-`/dashboard` resta compatibile e presenta il Centro operativo. La navigazione primaria contiene soltanto destinazioni autorizzate. La ricerca metadata-only e un modale consultivo separato dalla navigazione e apribile anche con `Ctrl/Cmd+K`; `/search` non e una pagina prodotto. La card `Azioni rapide` nel footer raccoglie le principali mutazioni manuali consentite dai permessi. `/document-packages` resta la route delle Condivisioni; notifiche e account restano nella topbar.
+`/dashboard` resta compatibile e presenta la Panoramica: stato sintetico, soli interventi umani autorizzati e massimo cinque risultati significativi prodotti dal motore. I vecchi KPI, filtri `?view=`, processi normalmente in corso e duplicazioni tra decisioni/eccezioni non fanno piu parte della pagina. La navigazione primaria contiene soltanto destinazioni autorizzate. La ricerca metadata-only e un modale consultivo separato dalla navigazione e apribile anche con `Ctrl/Cmd+K`; `/search` non e una pagina prodotto. La card `Azioni rapide` nel footer raccoglie le principali mutazioni manuali consentite dai permessi. `/document-packages` resta la route delle Condivisioni; notifiche e account restano nella topbar.
 
 `/operations/[processId]` mostra step, timeline, decisioni, eccezioni e artifact autorizzati. Le viste dominio espongono lo stato operativo collegato e mantengono le route CRUD utili come controllo avanzato.
 

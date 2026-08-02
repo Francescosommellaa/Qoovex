@@ -15,16 +15,16 @@ Il workflow `scheduled-jobs.yml` include data-control, digest e il nuovo runner 
 ## Database operation impact Fase 4
 
 ```text
-Operazioni aggiunte: revisione e proposta di condivisione, riferimenti evento-artifact, ricerca metadata-only, timeline aggregate e work item condivisione
-Operazioni eliminate: doppia lettura del Centro operativo nella stessa request; il form di creazione link diretto non esegue piu la mutazione legacy
-Query per flusso prima: Centro letto due volte in alcune pagine; condivisione creava direttamente il link; nessuna ricerca multi-dominio o timeline artifact aggregata
-Query per flusso dopo: Centro legge una volta e pagina in memoria il read model autorizzato; la preparazione crea revisione/proposta/processo nella transazione; ricerca e timeline usano query SQL bounded e cursor-based
-Rischio N+1: Centro usa query sequenziali in numero fisso, ricerca una query bounded e timeline una query aggregata; nessuna query per card o risultato
+Operazioni aggiunte: revisione e proposta di condivisione, riferimenti evento-artifact, ricerca metadata-only, timeline aggregate e proiezione Panoramica su eventi operativi
+Operazioni eliminate: read model e count separati del Centro operativo, query di processi attivi/scadenze generiche e read endpoint legacy `/api/dashboard`, `/api/operations/center`, `/api/operations/inbox`; il form di creazione link diretto non esegue piu la mutazione legacy
+Query per flusso prima: il Centro eseguiva decisioni, eccezioni, processi attivi, risultati, scadenze, proposte e quattro count, oltre alle letture di scope
+Query per flusso dopo: la Panoramica esegue tre letture bounded per gli interventi autorizzati e una per gli eventi significativi; aggiunge una lettura fallback dei processi completati soltanto quando gli eventi sono meno di cinque
+Rischio N+1: Panoramica, ricerca e timeline usano query bounded in numero fisso; nessuna query per card o risultato
 Strategia cache: nessuna cache condivisa; dati autorizzativi e operativi letti request-scoped
 Strategia invalidazione: mutazioni e runner persistono stato; le revisioni approvate restano immutabili e la UI aggiorna esplicitamente dopo le azioni
 Impatto tenant isolation: tutte le query operative filtrano organizationId e, per ruoli limitati, resource scope/artifact
 Ambienti coinvolti: codice repository e solo database locale guardato; nessun Blob, Preview o Production modificato
-Misurazione eseguita: reset locale esplicitamente autorizzato, applicazione fresca di 17 migration, seed idempotente, 2 pacchetti, 10 item, 1 link e zero riferimenti Blob; test di query, piano GIN e verify:prisma locale
+Misurazione eseguita: reset locale esplicitamente autorizzato, applicazione fresca di 17 migration, seed idempotente, 2 pacchetti, 10 item, 1 link, 5 processi operativi dimostrativi, 2 interventi, 3 risultati system-generated e zero riferimenti Blob; test di query, piano GIN e verify:prisma locale
 ```
 
 ## Database operation impact correzione CI e fixture locale
@@ -37,7 +37,7 @@ Rischio N+1 e cache: invariati
 Impatto tenant isolation e autorizzazione: nessuno
 Ambiente modificato: esclusivamente database locale guardato
 Dati locali precedenti: eliminati dal reset autorizzato e sostituiti dalla nuova fixture sintetica
-Nuovi scenari fixture: profilo/contatti, fasi e assegnazioni, link documento-cantiere, revisioni evidenza, richieste, messaggi, timeline e fonti documentali
+Nuovi scenari fixture: profilo/contatti, fasi e assegnazioni, link documento-cantiere, revisioni evidenza, richieste, messaggi, timeline, fonti documentali e una Panoramica popolata da decisione, eccezione ed eventi operativi persistiti
 Blob e provider: nessun oggetto Blob creato e nessuna integrazione attivata
 ```
 
@@ -45,7 +45,7 @@ Sul Prisma Dev locale canonico in loopback alla porta `51225`, il client limita 
 
 ## Specifiche non implementate
 
-Non sono implementati coda esterna, provider aggiuntivi, retention automatica, SLA o monitoring commerciale. Non esiste polling client del Centro operativo, indicizzazione dei file, ricerca semantica o cronologia delle query.
+Non sono implementati coda esterna, provider aggiuntivi, retention automatica, SLA o monitoring commerciale. Non esiste polling client della Panoramica, indicizzazione dei file, ricerca semantica o cronologia delle query.
 
 ## Decisioni aperte e hard stop
 

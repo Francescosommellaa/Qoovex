@@ -110,7 +110,7 @@ export function WorkerDetailView({
             href={returnToDashboard ? "/dashboard" : "/workers"}
           >
             <IconArrowLeft aria-hidden="true" />
-            {returnToDashboard ? "Torna al Centro operativo" : "Torna ai lavoratori"}
+            {returnToDashboard ? "Torna alla Panoramica" : "Torna ai lavoratori"}
           </Link>
         )}
       />

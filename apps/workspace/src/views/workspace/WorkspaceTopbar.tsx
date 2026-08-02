@@ -98,9 +98,9 @@ export function WorkspaceTopbar({
         <BreadcrumbList className="flex-nowrap">
           <BreadcrumbItem>
             {pathname === "/dashboard" ? (
-              <BreadcrumbPage>Centro operativo</BreadcrumbPage>
+              <BreadcrumbPage>Panoramica</BreadcrumbPage>
             ) : (
-              <BreadcrumbLink data-link="plain" render={<Link href="/dashboard" />}>Centro operativo</BreadcrumbLink>
+              <BreadcrumbLink data-link="plain" render={<Link href="/dashboard" />}>Panoramica</BreadcrumbLink>
             )}
           </BreadcrumbItem>
         </BreadcrumbList>

@@ -55,7 +55,7 @@ export function DocumentPackageDetailView({
       <WorkspacePageHeader
         title={documentPackage.title}
         description={`${jobSiteLabel(documentPackage.jobSiteId, jobSites)} - Controlla ogni elemento prima di creare il link.`}
-        action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/document-packages"}>{returnToDashboard ? "Torna al Centro operativo" : "Torna alle condivisioni"}</Link>}
+        action={<Link className={styles.ghostButton} href={returnToDashboard ? "/dashboard" : "/document-packages"}>{returnToDashboard ? "Torna alla Panoramica" : "Torna alle condivisioni"}</Link>}
       />
       <OperationalArtifactStatus artifactId={documentPackage.id} artifactType="DOCUMENT_PACKAGE" />
       <div className={styles.grid}>

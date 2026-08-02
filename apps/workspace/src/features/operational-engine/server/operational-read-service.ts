@@ -2,12 +2,11 @@ import "server-only";
 
 import { db, Prisma } from "@qoovex/db";
 import type {
+  DashboardHandledResult,
+  DashboardIntervention,
+  DashboardOverview,
   OperationalArtifactReferenceDto,
   OperationalArtifactType,
-  OperationalCenterResponse,
-  OperationalCenterItemDto,
-  OperationalCenterFilters,
-  OperationalCenterPage,
   OperationalDecisionDto,
   OperationalEventDto,
   OperationalExceptionDto,
@@ -18,7 +17,6 @@ import type {
   OperationalProcessType,
   OperationalTimelinePage,
   OrganizationPermission,
-  OrganizationRole,
   ResolveOperationalDecisionInput,
   ResolveOperationalExceptionInput,
   RetryOperationalStepInput,
@@ -29,14 +27,20 @@ import { requirePermission } from "@shared/server/access-context-service";
 import { requireOrganizationDomainAccess } from "@shared/server/domain-access-service";
 import { getResourceScope, type ResourceScope } from "@shared/server/resource-scope-service";
 import { auditActorFromContext } from "@shared/server/product-audit-service";
+import {
+  canPerformDashboardAction,
+  dashboardHandledEventTypes,
+  dashboardContext,
+  deduplicateAndSortDashboardInterventions,
+  isDashboardHandledEvent,
+  requiredDashboardDecisionPermission,
+  requiredDashboardPermission,
+  selectDashboardHandledResults,
+} from "./dashboard-overview-model";
 import { getOperationalDefinition } from "./definitions";
 
 const READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const MANUAL_EXCEPTION_TYPES = ["DATA_TO_VERIFY", "PARTIAL_RESULT"] as const;
-const roleLabels: Record<OrganizationRole, string> = {
-  OWNER: "Titolare",
-  COLLABORATOR: "Collaboratore",
-};
 
 function jsonObject(value: Prisma.JsonValue | null): Record<string, unknown> {
   return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
@@ -80,33 +84,41 @@ async function operationalAccess() {
 
 export async function processScopeWhere(scope: ResourceScope): Promise<Prisma.OperationalProcessWhereInput> {
   if (scope.fullAccess) return { organizationId: scope.organizationId };
-  const jobSiteIds = scope.preset === "SITE_MANAGER" ? scope.siteManagerJobSiteIds : scope.workerJobSiteIds;
-  const workerIds = scope.linkedWorker ? [scope.linkedWorker.id] : [];
-  if (!jobSiteIds.length && !workerIds.length) return { organizationId: scope.organizationId, id: "__no_visible_process__" };
+  const grants = scope.grantedResourceIds;
+  const jobSiteIds = [...new Set(scope.visibleJobSiteIds)];
+  const workerIds = [...new Set([
+    ...(scope.linkedWorker ? [scope.linkedWorker.id] : []),
+    ...(grants.WORKER ?? []),
+  ])];
+  const documentIds = grants.DOCUMENT ?? [];
+  const documentTypeIds = grants.DOCUMENT_TYPE ?? [];
+  const checklistIds = grants.CHECKLIST ?? [];
+  const evidenceIds = grants.EVIDENCE ?? [];
+  const documentFilters: Prisma.DocumentWhereInput[] = [
+    ...(documentIds.length ? [{ id: { in: documentIds } }] : []),
+    ...(documentTypeIds.length ? [{ documentTypeId: { in: documentTypeIds } }] : []),
+    ...(workerIds.length ? [{ ownerType: "WORKER" as const, workerId: { in: workerIds } }] : []),
+    ...(jobSiteIds.length ? [{ ownerType: "JOB_SITE" as const, jobSiteId: { in: jobSiteIds } }] : []),
+  ];
+  const checklistFilters: Prisma.ChecklistWhereInput[] = [
+    ...(checklistIds.length ? [{ id: { in: checklistIds } }] : []),
+    ...(jobSiteIds.length ? [{ jobSiteId: { in: jobSiteIds } }] : []),
+  ];
+  const evidenceFilters: Prisma.EvidenceWhereInput[] = [
+    ...(evidenceIds.length ? [{ id: { in: evidenceIds } }] : []),
+    ...(workerIds.length ? [{ workerId: { in: workerIds } }] : []),
+    ...(jobSiteIds.length ? [{ jobSiteId: { in: jobSiteIds } }] : []),
+  ];
   const [documents, checklists, evidence] = await Promise.all([
-    db.document.findMany({
-      where: {
-        organizationId: scope.organizationId,
-        archivedAt: null,
-        OR: [
-          ...(workerIds.length ? [{ ownerType: "WORKER" as const, workerId: { in: workerIds } }] : []),
-          ...(jobSiteIds.length ? [{ ownerType: "JOB_SITE" as const, jobSiteId: { in: jobSiteIds } }] : []),
-        ],
-      },
-      select: { id: true },
-    }),
-    db.checklist.findMany({ where: { organizationId: scope.organizationId, archivedAt: null, jobSiteId: { in: jobSiteIds } }, select: { id: true } }),
-    db.evidence.findMany({
-      where: {
-        organizationId: scope.organizationId,
-        archivedAt: null,
-        OR: [
-          ...(workerIds.length ? [{ workerId: { in: workerIds } }] : []),
-          ...(jobSiteIds.length ? [{ jobSiteId: { in: jobSiteIds } }] : []),
-        ],
-      },
-      select: { id: true },
-    }),
+    documentFilters.length
+      ? db.document.findMany({ where: { organizationId: scope.organizationId, archivedAt: null, OR: documentFilters }, select: { id: true } })
+      : Promise.resolve([]),
+    checklistFilters.length
+      ? db.checklist.findMany({ where: { organizationId: scope.organizationId, archivedAt: null, OR: checklistFilters }, select: { id: true } })
+      : Promise.resolve([]),
+    evidenceFilters.length
+      ? db.evidence.findMany({ where: { organizationId: scope.organizationId, archivedAt: null, OR: evidenceFilters }, select: { id: true } })
+      : Promise.resolve([]),
   ]);
   const allowed = [
     ...workerIds.map((id) => ({ artifactType: "WORKER" as const, artifactId: id })),
@@ -114,6 +126,8 @@ export async function processScopeWhere(scope: ResourceScope): Promise<Prisma.Op
     ...documents.map(({ id }) => ({ artifactType: "DOCUMENT" as const, artifactId: id })),
     ...checklists.map(({ id }) => ({ artifactType: "CHECKLIST" as const, artifactId: id })),
     ...evidence.map(({ id }) => ({ artifactType: "EVIDENCE" as const, artifactId: id })),
+    ...(grants.DOCUMENT_PACKAGE ?? []).map((id) => ({ artifactType: "DOCUMENT_PACKAGE" as const, artifactId: id })),
+    ...(grants.SHARE_LINK ?? []).map((id) => ({ artifactType: "SHARE_LINK" as const, artifactId: id })),
   ];
   return {
     organizationId: scope.organizationId,
@@ -332,8 +346,8 @@ async function findVisibleProcess(processId: string) {
 export async function getOperationalProcess(processId: string): Promise<OperationalProcessDetail> {
   const { process, scope } = await findVisibleProcess(processId);
   const definition = getOperationalDefinition(process.type);
-  const canDecide = scope.context.permissions.includes("processes:decide");
-  const canManuallyResolve = scope.context.permissions.includes("processes:exceptions:resolve");
+  const supportSession = Boolean(scope.context.support);
+  const mutationPermission = requiredDashboardPermission(process.artifactRefs);
   const timelineItems = process.events.slice(0, 20);
   return {
     ...toProcessSummary(process),
@@ -346,8 +360,18 @@ export async function getOperationalProcess(processId: string): Promise<Operatio
       completedAt: step.completedAt?.toISOString() ?? null,
       canRetry: scope.context.permissions.includes("processes:retry") && step.status === "TECHNICAL_FAILURE",
     })),
-    decisions: process.decisions.map((decision) => toDecisionDto(decision, canDecide)),
-    exceptions: process.exceptions.map((exception) => toExceptionDto(exception, canManuallyResolve)),
+    decisions: process.decisions.map((decision) => toDecisionDto(
+      decision,
+      canPerformDashboardAction(
+        scope.context.permissions,
+        requiredDashboardDecisionPermission(decision.type, process.artifactRefs),
+        supportSession,
+      ),
+    )),
+    exceptions: process.exceptions.map((exception) => toExceptionDto(
+      exception,
+      canPerformDashboardAction(scope.context.permissions, mutationPermission, supportSession),
+    )),
     timeline: { items: timelineItems.map(toEventDto), nextCursor: process.events.length > 20 && timelineItems[19] ? encodeCursor({ v: 1, sort: "EVENT_OCCURRED", at: timelineItems[19].occurredAt.toISOString(), type: timelineItems[19].eventType, id: timelineItems[19].id }) : null },
   };
 }
@@ -415,265 +439,252 @@ export async function listOperationalArtifactEvents(
   };
 }
 
-export async function getOperationalCenter(): Promise<OperationalCenterResponse> {
+export async function getDashboardOverview(): Promise<DashboardOverview> {
   const { context, actorRole, scope } = await operationalAccess();
-  const where = await processScopeWhere(scope);
-  const activeStatuses: OperationalProcessStatus[] = ["RECEIVED", "READY", "RUNNING", "WAITING_FOR_DECISION", "BLOCKED", "RETRY_SCHEDULED", "TECHNICAL_FAILURE"];
-  const canShare = scope.fullAccess && context.permissions.includes("documentPackages:share");
-  const openDeadlineStatuses = ["SCHEDULED", "EXPIRING_SOON", "EXPIRED"] as const;
-  const deadlineWhere: Prisma.DeadlineWhereInput = scope.fullAccess
-    ? { organizationId: scope.organizationId, archivedAt: null, status: { in: [...openDeadlineStatuses] } }
-    : scope.preset === "SITE_MANAGER"
-      ? { organizationId: scope.organizationId, archivedAt: null, status: { in: [...openDeadlineStatuses] }, jobSiteId: { in: scope.siteManagerJobSiteIds } }
-      : { organizationId: scope.organizationId, archivedAt: null, status: { in: [...openDeadlineStatuses] }, OR: [
-          ...(scope.linkedWorker ? [{ workerId: scope.linkedWorker.id }] : []),
-          ...(scope.workerJobSiteIds.length ? [{ jobSiteId: { in: scope.workerJobSiteIds } }] : []),
-        ] };
-  // Keep the bounded read model sequential on one request. The local guarded
-  // PostgreSQL runtime has a ten-connection ceiling, while the shell also loads
-  // auth and notification data; issuing every center query concurrently can
-  // exhaust the pool before the page becomes actionable.
-  const decisions = await db.operationalDecision.findMany({ where: { organizationId: scope.organizationId, status: "OPEN", process: { is: where } }, select: { id: true, processId: true, type: true, status: true, question: true, explanation: true, options: true, proposedOptionKey: true, selectedOptionKey: true, selectedValue: true, impact: true, createdAt: true, decidedAt: true, process: { select: { artifactRefs: { select: { artifactType: true, artifactId: true, label: true }, orderBy: { createdAt: "asc" }, take: 1 } } } }, orderBy: { createdAt: "asc" }, take: 10 });
-  const exceptions = await db.operationalException.findMany({ where: { organizationId: scope.organizationId, status: "OPEN", process: { is: where } }, select: { id: true, processId: true, decisionId: true, type: true, severity: true, status: true, title: true, explanation: true, nextStep: true, dueAt: true, createdAt: true, resolvedAt: true, process: { select: { artifactRefs: { select: { artifactType: true, artifactId: true, label: true }, orderBy: { createdAt: "asc" }, take: 1 } } } }, orderBy: [{ severity: "desc" }, { createdAt: "asc" }], take: 10 });
-  const activeProcesses = await db.operationalProcess.findMany({ where: { AND: [where, { status: { in: activeStatuses } }] }, select: summarySelect, orderBy: { updatedAt: "desc" }, take: 10 });
-  const recentResults = await db.operationalProcess.findMany({ where: { AND: [where, { status: { in: ["COMPLETED", "COMPLETED_WITH_EXCEPTIONS"] } }] }, select: summarySelect, orderBy: { completedAt: "desc" }, take: 8 });
-  const deadlines = await db.deadline.findMany({ where: deadlineWhere, select: { id: true, title: true, status: true, dueDate: true, createdAt: true, documentId: true, workerId: true, jobSiteId: true }, orderBy: [{ dueDate: "asc" }, { id: "asc" }], take: 10 });
-  const shareProposals = canShare ? await db.documentPackageShareProposal.findMany({
-    where: { organizationId: scope.organizationId, status: { in: ["PREPARING", "READY_FOR_REVIEW", "BLOCKED", "APPROVED"] } },
-    select: { id: true, documentPackageId: true, processId: true, status: true, expiresAt: true, createdAt: true, documentPackage: { select: { title: true } }, revision: { select: { manifest: true } } },
-    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-    take: 10,
-  }) : [];
-  const decisionCount = await db.operationalDecision.count({ where: { organizationId: scope.organizationId, status: "OPEN", process: { is: where } } });
-  const exceptionCount = await db.operationalException.count({ where: { organizationId: scope.organizationId, status: "OPEN", process: { is: where } } });
-  const blocked = await db.operationalProcess.count({ where: { AND: [where, { status: { in: ["BLOCKED", "WAITING_FOR_DECISION", "TECHNICAL_FAILURE"] } }] } });
-  const running = await db.operationalProcess.count({ where: { AND: [where, { status: { in: ["RECEIVED", "READY", "RUNNING", "RETRY_SCHEDULED"] } }] } });
-  const canDecide = ["OWNER", "COLLABORATOR"].includes(actorRole);
-  const canManuallyResolve = ["OWNER", "COLLABORATOR"].includes(actorRole);
+  const processWhere = await processScopeWhere(scope);
+  const unavailableSections: DashboardOverview["unavailableSections"] = [];
+  const supportSession = Boolean(context.support);
+  const permissions = context.permissions;
   const now = Date.now();
-  const decisionItems: OperationalCenterItemDto[] = decisions.map((item) => ({
-    id: item.id,
-    kind: "DECISION",
-    title: item.question,
-    summary: item.explanation ?? "Conferma umana richiesta prima di continuare.",
-    status: item.status,
-    blocking: true,
-    overdue: false,
-    severity: null,
-    dueAt: null,
-    openedAt: item.createdAt.toISOString(),
-    artifact: item.process.artifactRefs[0] ? toArtifactDto(item.process.artifactRefs[0]) : null,
-    href: `/operations/${item.processId}`,
-    timelineHref: `/operations/${item.processId}#timeline`,
-    primaryActionLabel: canDecide ? "Decidi" : null,
-    priorityReason: "Decisione richiesta",
-  }));
-  const exceptionItems: OperationalCenterItemDto[] = exceptions.map((item) => ({
-    id: item.id,
-    kind: "EXCEPTION",
-    title: item.title,
-    summary: item.nextStep,
-    status: item.status,
-    blocking: item.severity === "BLOCKING",
-    overdue: Boolean(item.dueAt && item.dueAt.getTime() < now),
-    severity: item.severity,
-    dueAt: item.dueAt?.toISOString() ?? null,
-    openedAt: item.createdAt.toISOString(),
-    artifact: item.process.artifactRefs[0] ? toArtifactDto(item.process.artifactRefs[0]) : null,
-    href: `/operations/${item.processId}`,
-    timelineHref: `/operations/${item.processId}#timeline`,
-    primaryActionLabel: canManuallyResolve && !item.decisionId && (MANUAL_EXCEPTION_TYPES as readonly string[]).includes(item.type) ? "Risolvi" : null,
-    priorityReason: item.dueAt && item.dueAt.getTime() < now ? "Scaduto" : item.severity === "BLOCKING" ? "Bloccante" : "Da verificare",
-  }));
-  const processItems: OperationalCenterItemDto[] = activeProcesses.map((item) => ({
-    id: item.id,
-    kind: "PROCESS",
-    title: getOperationalDefinition(item.type).title,
-    summary: typeof jsonObject(item.resultSummary).summary === "string" ? String(jsonObject(item.resultSummary).summary) : "Processo operativo in corso.",
-    status: item.status,
-    blocking: ["BLOCKED", "WAITING_FOR_DECISION", "TECHNICAL_FAILURE"].includes(item.status),
-    overdue: false,
-    severity: null,
-    dueAt: null,
-    openedAt: item.createdAt.toISOString(),
-    artifact: null,
-    href: `/operations/${item.id}`,
-    timelineHref: `/operations/${item.id}#timeline`,
-    primaryActionLabel: "Apri",
-    priorityReason: ["BLOCKED", "WAITING_FOR_DECISION", "TECHNICAL_FAILURE"].includes(item.status) ? "Processo bloccato" : "In corso",
-  }));
-  const deadlineItems: OperationalCenterItemDto[] = deadlines.map((item) => {
-    const artifact = item.documentId
-      ? toArtifactDto({ artifactType: "DOCUMENT", artifactId: item.documentId, label: item.title })
-      : item.workerId
-        ? toArtifactDto({ artifactType: "WORKER", artifactId: item.workerId, label: item.title })
-        : item.jobSiteId
-          ? toArtifactDto({ artifactType: "JOB_SITE", artifactId: item.jobSiteId, label: item.title })
-          : toArtifactDto({ artifactType: "DEADLINE", artifactId: item.id, label: item.title });
-    const overdue = item.dueDate.getTime() < now;
-    return {
-      id: item.id,
-      kind: "DEADLINE" as const,
-      title: item.title,
-      summary: overdue ? "Scadenza superata." : "Scadenza operativa in avvicinamento.",
-      status: item.status,
-      blocking: overdue,
-      overdue,
-      severity: overdue ? "BLOCKING" as const : "ATTENTION" as const,
-      dueAt: item.dueDate.toISOString(),
-      openedAt: item.createdAt.toISOString(),
-      artifact,
-      href: `/deadlines/${item.id}`,
-      timelineHref: `${artifact.href ?? `/deadlines/${item.id}`}#timeline`,
-      primaryActionLabel: "Apri",
-      priorityReason: overdue ? "Scaduto" : "In scadenza",
-    };
-  });
-  const sharingItems: OperationalCenterItemDto[] = shareProposals.map((item) => {
-    const manifest = jsonObject(item.revision.manifest);
-    const issues = Array.isArray(manifest.issues) ? manifest.issues : [];
-    const blockingIssues = issues.filter((entry) => jsonObject(entry as Prisma.JsonValue).severity === "BLOCKING").length;
-    return {
-      id: item.id,
-      kind: "SHARING" as const,
-      title: item.documentPackage.title,
-      summary: blockingIssues ? `${blockingIssues} problemi bloccanti nella revisione.` : "Revisione pronta per il controllo umano.",
-      status: item.status,
-      blocking: item.status === "BLOCKED" || blockingIssues > 0,
-      overdue: item.expiresAt.getTime() < now,
-      severity: item.status === "BLOCKED" || blockingIssues > 0 ? "BLOCKING" as const : "ATTENTION" as const,
-      dueAt: item.expiresAt.toISOString(),
-      openedAt: item.createdAt.toISOString(),
-      artifact: toArtifactDto({ artifactType: "DOCUMENT_PACKAGE", artifactId: item.documentPackageId, label: item.documentPackage.title }),
-      href: `/document-packages/${item.documentPackageId}?proposal=${item.id}`,
-      timelineHref: `/operations/${item.processId}#timeline`,
-      primaryActionLabel: item.status === "READY_FOR_REVIEW" ? "Rivedi" : "Apri",
-      priorityReason: item.status === "BLOCKED" ? "Condivisione bloccata" : "Condivisione da controllare",
-    };
-  });
-  const resultItems: OperationalCenterItemDto[] = recentResults.map((item) => ({
-    id: item.id,
-    kind: "RESULT" as const,
-    title: getOperationalDefinition(item.type).title,
-    summary: typeof jsonObject(item.resultSummary).summary === "string" ? String(jsonObject(item.resultSummary).summary) : "Risultato operativo recente.",
-    status: item.status,
-    blocking: false,
-    overdue: false,
-    severity: null,
-    dueAt: item.completedAt?.toISOString() ?? null,
-    openedAt: item.createdAt.toISOString(),
-    artifact: null,
-    href: `/operations/${item.id}`,
-    timelineHref: `/operations/${item.id}#timeline`,
-    primaryActionLabel: "Apri",
-    priorityReason: "Completato di recente",
-  }));
+  let interventions: DashboardIntervention[] = [];
+  let handledResults: DashboardHandledResult[] = [];
+
+  try {
+    // Keep this bounded read model sequential: the guarded local runtime has a
+    // small connection ceiling and the shell performs its own authorized reads.
+    const decisions = await db.operationalDecision.findMany({
+      where: { organizationId: scope.organizationId, status: "OPEN", process: { is: processWhere } },
+      select: {
+        id: true,
+        processId: true,
+        type: true,
+        question: true,
+        explanation: true,
+        options: true,
+        createdAt: true,
+        process: { select: { artifactRefs: { select: { artifactType: true, artifactId: true, label: true }, orderBy: { createdAt: "asc" } } } },
+      },
+      orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+      take: 25,
+    });
+    const exceptions = await db.operationalException.findMany({
+      where: { organizationId: scope.organizationId, status: "OPEN", process: { is: processWhere } },
+      select: {
+        id: true,
+        processId: true,
+        decisionId: true,
+        type: true,
+        severity: true,
+        title: true,
+        explanation: true,
+        nextStep: true,
+        dueAt: true,
+        createdAt: true,
+        process: { select: { status: true, artifactRefs: { select: { artifactType: true, artifactId: true, label: true }, orderBy: { createdAt: "asc" } } } },
+      },
+      orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+      take: 25,
+    });
+    const canShare = canPerformDashboardAction(permissions, "documentPackages:share", supportSession);
+    const shareProposals = canShare
+      ? await db.documentPackageShareProposal.findMany({
+          where: {
+            organizationId: scope.organizationId,
+            status: { in: ["READY_FOR_REVIEW", "BLOCKED"] },
+            process: { is: processWhere },
+          },
+          select: {
+            id: true,
+            documentPackageId: true,
+            processId: true,
+            status: true,
+            expiresAt: true,
+            createdAt: true,
+            documentPackage: { select: { title: true } },
+            revision: { select: { manifest: true } },
+          },
+          orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+          take: 25,
+        })
+      : [];
+
+    const decisionItems = decisions.flatMap<DashboardIntervention>((item) => {
+      const permission = requiredDashboardDecisionPermission(item.type, item.process.artifactRefs);
+      if (!canPerformDashboardAction(permissions, permission, supportSession)) return [];
+      const contextArtifact = dashboardContext(item.process.artifactRefs[0], artifactHref);
+      const options = decisionOptions(item.options).map((option) => option.label).slice(0, 3);
+      return [{
+        id: item.id,
+        processId: item.processId,
+        kind: "DECISION",
+        title: item.question,
+        handledSummary: item.explanation ?? "Qoovex ha preparato il contesto disponibile e ha sospeso il processo.",
+        missingSummary: options.length ? `Scegli: ${options.join(" oppure ")}.` : "Scegli l'opzione corretta per continuare.",
+        context: contextArtifact,
+        blocking: true,
+        overdue: false,
+        severity: null,
+        openedAt: item.createdAt.toISOString(),
+        dueAt: null,
+        canResolve: true,
+        primaryAction: { label: "Scegli e continua", href: `/operations/${item.processId}` },
+      }];
+    });
+
+    const excludedExceptionTypes = new Set(["PERSISTENT_TECHNICAL_ERROR", "ACCESS_NOT_ALLOWED", "INVALID_ARTIFACT_REFERENCE"]);
+    const exceptionItems = exceptions.flatMap<DashboardIntervention>((item) => {
+      if (item.decisionId || excludedExceptionTypes.has(item.type)) return [];
+      const permission = requiredDashboardPermission(item.process.artifactRefs);
+      if (!canPerformDashboardAction(permissions, permission, supportSession)) return [];
+      const manuallyResolvable = (MANUAL_EXCEPTION_TYPES as readonly string[]).includes(item.type);
+      const overdue = Boolean(item.dueAt && item.dueAt.getTime() < now);
+      return [{
+        id: item.id,
+        processId: item.processId,
+        kind: "EXCEPTION",
+        title: item.title,
+        handledSummary: item.explanation,
+        missingSummary: item.nextStep,
+        context: dashboardContext(item.process.artifactRefs[0], artifactHref),
+        blocking: item.process.status === "BLOCKED" || item.severity === "BLOCKING",
+        overdue,
+        severity: item.severity,
+        openedAt: item.createdAt.toISOString(),
+        dueAt: item.dueAt?.toISOString() ?? null,
+        canResolve: manuallyResolvable,
+        primaryAction: {
+          label: manuallyResolvable ? "Verifica e risolvi" : "Vedi e completa",
+          href: `/operations/${item.processId}`,
+        },
+      }];
+    });
+
+    const sharingItems = shareProposals.map<DashboardIntervention>((item) => {
+      const manifest = jsonObject(item.revision.manifest);
+      const issues = Array.isArray(manifest.issues) ? manifest.issues : [];
+      const blockingIssues = issues.filter((entry) => jsonObject(entry as Prisma.JsonValue).severity === "BLOCKING").length;
+      const blocking = item.status === "BLOCKED" || blockingIssues > 0;
+      return {
+        id: item.id,
+        processId: item.processId,
+        kind: "SHARING",
+        title: item.documentPackage.title,
+        handledSummary: "Qoovex ha preparato una revisione persistita del pacchetto.",
+        missingSummary: blocking
+          ? `${blockingIssues || "Alcuni"} elementi impediscono la review finale.`
+          : "Manca la tua review esplicita prima della condivisione.",
+        context: toArtifactDto({ artifactType: "DOCUMENT_PACKAGE", artifactId: item.documentPackageId, label: item.documentPackage.title }),
+        blocking,
+        overdue: item.expiresAt.getTime() < now,
+        severity: blocking ? "BLOCKING" : "ATTENTION",
+        openedAt: item.createdAt.toISOString(),
+        dueAt: item.expiresAt.toISOString(),
+        canResolve: false,
+        primaryAction: {
+          label: item.status === "READY_FOR_REVIEW" ? "Rivedi la condivisione" : "Controlla cosa manca",
+          href: `/document-packages/${item.documentPackageId}?proposal=${item.id}`,
+        },
+      };
+    });
+    interventions = deduplicateAndSortDashboardInterventions([...decisionItems, ...exceptionItems, ...sharingItems]);
+  } catch {
+    unavailableSections.push("INTERVENTIONS");
+  }
+
+  try {
+    const events = await db.operationalEvent.findMany({
+      where: {
+        organizationId: scope.organizationId,
+        userVisible: true,
+        actorType: "SYSTEM",
+        sourceType: { in: ["ENGINE", "DOMAIN", "CONTINUOUS_CONTROL"] },
+        eventType: { in: [...dashboardHandledEventTypes] },
+        process: { is: processWhere },
+      },
+      select: {
+        ...eventSelect,
+        processId: true,
+        process: {
+          select: {
+            artifactRefs: {
+              select: { artifactType: true, artifactId: true, label: true },
+              orderBy: { createdAt: "asc" },
+              take: 1,
+            },
+          },
+        },
+      },
+      orderBy: [{ occurredAt: "desc" }, { id: "desc" }],
+      take: 15,
+    });
+    const eventResults = events.filter(isDashboardHandledEvent).map<DashboardHandledResult>((item) => {
+      const dto = toEventDto(item);
+      const contextArtifact = item.process.artifactRefs[0]
+        ? toArtifactDto(item.process.artifactRefs[0])
+        : null;
+      return {
+        id: item.id,
+        processId: item.processId,
+        title: item.title,
+        summary: item.summary ?? dto.result,
+        occurredAt: item.occurredAt.toISOString(),
+        href: `/operations/${item.processId}`,
+        context: contextArtifact,
+        source: "OPERATIONAL_EVENT",
+      };
+    });
+    let processResults: DashboardHandledResult[] = [];
+    if (eventResults.length < 5) {
+      const completed = await db.operationalProcess.findMany({
+        where: { AND: [processWhere, { status: { in: ["COMPLETED", "COMPLETED_WITH_EXCEPTIONS"] }, completedAt: { not: null } }] },
+        select: { ...summarySelect, artifactRefs: { select: { artifactType: true, artifactId: true, label: true }, orderBy: { createdAt: "asc" }, take: 1 } },
+        orderBy: [{ completedAt: "desc" }, { id: "desc" }],
+        take: 10,
+      });
+      processResults = completed.flatMap<DashboardHandledResult>((item) => {
+        const summary = jsonObject(item.resultSummary).summary;
+        if (typeof summary !== "string" || !item.completedAt) return [];
+        return [{
+          id: item.id,
+          processId: item.id,
+          title: getOperationalDefinition(item.type).title,
+          summary,
+          occurredAt: item.completedAt.toISOString(),
+          href: `/operations/${item.id}`,
+          context: dashboardContext(item.artifactRefs[0], artifactHref),
+          source: "COMPLETED_PROCESS",
+        }];
+      });
+    }
+    handledResults = selectDashboardHandledResults(eventResults, processResults);
+  } catch {
+    unavailableSections.push("HANDLED_RESULTS");
+  }
+
+  if (unavailableSections.length === 2) throw new Error("DASHBOARD_OVERVIEW_UNAVAILABLE");
+  const hasAssignedResources = scope.visibleJobSiteIds.length > 0
+    || Boolean(scope.linkedWorker)
+    || Object.values(scope.grantedResourceIds).some((ids) => Boolean(ids?.length));
   return {
     generatedAt: new Date().toISOString(),
     organization: {
       name: context.support?.organization.name ?? context.company?.organization.name ?? "Azienda",
-      role: actorRole,
-      roleLabel: roleLabels[actorRole],
-      viewLabel: scope.fullAccess ? "Tutta l'azienda" : scope.preset === "SITE_MANAGER" ? "Cantieri assegnati" : "I miei dati",
+      role: supportSession ? null : actorRole,
+      scopeLabel: supportSession
+        ? "Metadati autorizzati in sola lettura"
+        : scope.fullAccess
+          ? "Tutta l'azienda"
+          : hasAssignedResources
+            ? "Risorse assegnate"
+            : "Nessuna risorsa assegnata",
+      accessMode: supportSession ? "SUPPORT" : "MEMBER",
     },
-    counts: { decisions: decisionCount, exceptions: exceptionCount, blocked, running },
-    decisions: decisions.map((item) => toDecisionDto(item, canDecide)),
-    exceptions: exceptions.map((item) => toExceptionDto(item, canManuallyResolve)),
-    activeProcesses: activeProcesses.map(toProcessSummary),
-    recentResults: recentResults.map(toProcessSummary),
-    workItems: [...decisionItems, ...exceptionItems, ...deadlineItems, ...sharingItems, ...processItems, ...resultItems].sort(compareCenterItems),
+    interventionCount: interventions.length,
+    interventions,
+    handledResults,
+    completeness: unavailableSections.length ? "PARTIAL" : "COMPLETE",
+    unavailableSections,
   };
-}
-
-const severityPriority: Record<string, number> = { BLOCKING: 0, WARNING: 1, ATTENTION: 2, INFO: 3 };
-
-function centerSortTuple(item: OperationalCenterItemDto) {
-  return [
-    item.blocking ? 0 : 1,
-    item.overdue ? 0 : 1,
-    item.kind === "DECISION" ? 0 : 1,
-    item.dueAt ?? "9999-12-31T23:59:59.999Z",
-    severityPriority[item.severity ?? "INFO"] ?? 3,
-    item.openedAt,
-    item.kind,
-    item.id,
-  ] as const;
-}
-
-function compareCenterItems(a: OperationalCenterItemDto, b: OperationalCenterItemDto) {
-  const left = centerSortTuple(a);
-  const right = centerSortTuple(b);
-  for (let index = 0; index < left.length; index += 1) {
-    const comparison = String(left[index]).localeCompare(String(right[index]));
-    if (comparison) return comparison;
-  }
-  return 0;
-}
-
-function centerViewMatches(item: OperationalCenterItemDto, filters: OperationalCenterFilters) {
-  if (filters.view === "TO_DECIDE" && item.kind !== "DECISION") return false;
-  if (filters.view === "TO_VERIFY" && !(item.kind === "EXCEPTION" || item.status === "TO_REVIEW")) return false;
-  if (filters.view === "OVERDUE" && !item.overdue) return false;
-  if (filters.view === "EXPIRING" && (!item.dueAt || item.overdue)) return false;
-  if (filters.view === "BLOCKED" && !item.blocking) return false;
-  if (filters.view === "IN_PROGRESS" && item.kind !== "PROCESS") return false;
-  if (filters.view === "RECENTLY_COMPLETED" && item.kind !== "RESULT") return false;
-  if (filters.view === "SHARING" && item.kind !== "SHARING") return false;
-  if (filters.artifactType && item.artifact?.type !== filters.artifactType) return false;
-  if (filters.status && item.status !== filters.status) return false;
-  if (filters.from && item.openedAt < filters.from) return false;
-  if (filters.to && item.openedAt > filters.to) return false;
-  if (filters.workerId && !(item.artifact?.type === "WORKER" && item.artifact.id === filters.workerId)) return false;
-  if (filters.jobSiteId && !(item.artifact?.type === "JOB_SITE" && item.artifact.id === filters.jobSiteId)) return false;
-  return true;
-}
-
-function validateCenterFilters(filters: OperationalCenterFilters) {
-  const views = ["ALL", "TO_DECIDE", "TO_VERIFY", "OVERDUE", "EXPIRING", "BLOCKED", "IN_PROGRESS", "RECENTLY_COMPLETED", "SHARING"];
-  if (filters.view && !views.includes(filters.view)) throw new AccessError("Vista inbox non valida.", 400);
-  if (filters.artifactType && !(operationalArtifactTypes as readonly string[]).includes(filters.artifactType)) throw new AccessError("Filtro artifact non valido.", 400);
-  for (const value of [filters.workerId, filters.jobSiteId, filters.status]) {
-    if (value !== undefined && (typeof value !== "string" || !value.trim() || value.length > 200)) throw new AccessError("Filtro inbox non valido.", 400);
-  }
-  for (const value of [filters.from, filters.to]) {
-    if (value !== undefined && (typeof value !== "string" || Number.isNaN(Date.parse(value)))) throw new AccessError("Intervallo inbox non valido.", 400);
-  }
-}
-
-function compareCenterTuples(left: readonly unknown[], right: readonly unknown[]) {
-  for (let index = 0; index < left.length; index += 1) {
-    const comparison = String(left[index]).localeCompare(String(right[index]));
-    if (comparison) return comparison;
-  }
-  return 0;
-}
-
-export function paginateOperationalCenter(center: OperationalCenterResponse, input: { filters?: OperationalCenterFilters; cursor?: unknown; take?: unknown } = {}): OperationalCenterPage {
-  const take = parseTake(input.take);
-  const filters = input.filters ?? {};
-  validateCenterFilters(filters);
-  let items = center.workItems.filter((item) => centerViewMatches(item, filters));
-  if (input.cursor) {
-    if (typeof input.cursor !== "string" || input.cursor.length > 1000) throw new AccessError("Cursor inbox non valido.", 400);
-    try {
-      const tuple = JSON.parse(Buffer.from(input.cursor, "base64url").toString("utf8")) as unknown;
-      if (!Array.isArray(tuple) || tuple.length !== 8) throw new Error("invalid");
-      items = items.filter((item) => compareCenterTuples(centerSortTuple(item), tuple) > 0);
-    } catch {
-      throw new AccessError("Cursor inbox non valido.", 400);
-    }
-  }
-  const page = items.slice(0, take);
-  const last = page.at(-1);
-  return {
-    generatedAt: center.generatedAt,
-    items: page,
-    nextCursor: items.length > take && last ? Buffer.from(JSON.stringify(centerSortTuple(last)), "utf8").toString("base64url") : null,
-  };
-}
-
-export async function getOperationalInbox(input: { filters?: OperationalCenterFilters; cursor?: unknown; take?: unknown } = {}): Promise<OperationalCenterPage> {
-  return paginateOperationalCenter(await getOperationalCenter(), input);
 }
 
 function validateReason(value: unknown, required: boolean) {
@@ -688,14 +699,7 @@ function validateReason(value: unknown, required: boolean) {
 }
 
 function requiredPermissionForArtifacts(artifacts: Array<{ artifactType: string }>): OrganizationPermission {
-  if (artifacts.some((item) => item.artifactType === "DOCUMENT" || item.artifactType === "DOCUMENT_VERSION")) return "documents:update";
-  if (artifacts.some((item) => item.artifactType === "WORKER")) return "workers:update";
-  if (artifacts.some((item) => item.artifactType === "JOB_SITE")) return "jobSites:update";
-  if (artifacts.some((item) => item.artifactType === "DEADLINE")) return "deadlines:manage";
-  if (artifacts.some((item) => item.artifactType === "CHECKLIST")) return "checklists:manage";
-  if (artifacts.some((item) => item.artifactType === "EVIDENCE")) return "evidence:upload";
-  if (artifacts.some((item) => item.artifactType === "DOCUMENT_PACKAGE")) return "documentPackages:create";
-  return "organization:update";
+  return requiredDashboardPermission(artifacts);
 }
 
 async function mutationContextForProcess(processId: string) {

@@ -56,8 +56,8 @@ describe("workspace navigation policy", () => {
   });
 
   it("requires declared query parameters while ignoring unrelated query strings", () => {
-    expect(isWorkspaceNavigationItemCurrent("/dashboard", new URLSearchParams("view=TO_VERIFY&source=nav"), "/dashboard?view=TO_VERIFY")).toBe(true);
-    expect(isWorkspaceNavigationItemCurrent("/dashboard", new URLSearchParams("view=ALL"), "/dashboard?view=TO_VERIFY")).toBe(false);
+    expect(isWorkspaceNavigationItemCurrent("/documents", new URLSearchParams("view=attention&source=nav"), "/documents?view=attention")).toBe(true);
+    expect(isWorkspaceNavigationItemCurrent("/documents", new URLSearchParams("view=archive"), "/documents?view=attention")).toBe(false);
   });
 
   it("keeps notifications in the topbar when organization metadata is readable", () => {

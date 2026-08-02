@@ -35,9 +35,9 @@ I livelli implementati sono `VERIFIED/HIGH/MEDIUM/LOW/CONFLICT` e `LOW/CONTROLLE
 
 ## API e UI attive
 
-Sono attive le route `/api/operations/center`, `/inbox`, `/processes`, timeline processo/artifact cursor-based, risoluzione decisioni/eccezioni, retry step e runner protetto. `POST /api/search` applica query 2-120 caratteri, massimo 8 termini, timeout due secondi e ranking deterministico sui soli metadati. Le route share proposal applicano preparazione, review e conferma con fingerprint.
+Sono attive le route `/api/operations/processes`, timeline processo/artifact cursor-based, risoluzione decisioni/eccezioni, retry step e runner protetto. I read endpoint legacy `/api/operations/center`, `/api/operations/inbox` e `/api/dashboard` sono stati rimossi insieme ai relativi filtri e payload orfani; `/dashboard` compone il nuovo read model server-side. `POST /api/search` applica query 2-120 caratteri, massimo 8 termini, timeout due secondi e ranking deterministico sui soli metadati. Le route share proposal applicano preparazione, review e conferma con fingerprint.
 
-Il Centro operativo mostra decisioni, eccezioni, processi attivi e risultati; il dettaglio espone step, timeline, artifact e sole azioni consentite. Documenti, lavoratori, cantieri e pacchetti mostrano l'ultimo stato operativo collegato. L'ingresso universale compone i flussi esistenti.
+La Panoramica mostra soltanto interventi umani autorizzati, deduplicati per processo e artifact, e risultati significativi da eventi operativi system-generated; non mostra processi normalmente in corso. Il dettaglio espone step, timeline, artifact e sole azioni consentite. Documenti, lavoratori, cantieri e pacchetti mostrano l'ultimo stato operativo collegato. Le mutazioni principali restano nelle `Azioni rapide` della sidebar.
 
 ## Specifiche non implementate
 

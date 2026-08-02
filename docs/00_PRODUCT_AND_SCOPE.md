@@ -12,7 +12,7 @@ Il Workspace implementa il dominio protetto di Aziende, lavoratori, cantieri, do
 
 Le Fasi 3-4 implementano un motore operativo persistente con cinque definizioni versionate: `DOCUMENT_RECEIVED@1`, `WORKER_CREATED@1`, `JOB_SITE_CREATED@1`, `CONTINUOUS_CONTROL@1` e `DOCUMENT_PACKAGE_SHARING@1`. Il runner usa claim atomico, lease, fencing, retry limitato e riconciliazione.
 
-`/dashboard` e il Centro operativo; `/operations/[processId]` mostra step, timeline utente, decisioni, eccezioni e riferimenti autorizzati. La shell espone destinazioni autorizzate, una ricerca metadata-only in modale separato e la card `Azioni rapide` per le mutazioni manuali principali. Non esiste una pagina `/search`. `/document-packages` prepara una revisione immutabile, richiede review e crea il link soltanto dopo conferma umana.
+`/dashboard` e la Panoramica exception-driven: comunica lo stato sintetico, mostra soltanto decisioni/eccezioni/review che una persona autorizzata deve completare e presenta al massimo cinque risultati significativi prodotti dal motore. I vecchi KPI, filtri `?view=` e processi normalmente in corso sono rimossi. `/operations/[processId]` resta il controllo avanzato con step, timeline utente, decisioni, eccezioni e riferimenti autorizzati. La shell espone destinazioni autorizzate, una ricerca metadata-only in modale separato e la card `Azioni rapide` per le mutazioni manuali principali. Non esiste una pagina `/search`. `/document-packages` prepara una revisione immutabile, richiede review e crea il link soltanto dopo conferma umana.
 
 ## Direzione approvata
 

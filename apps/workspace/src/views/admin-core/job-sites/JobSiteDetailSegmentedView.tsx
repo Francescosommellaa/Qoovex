@@ -38,7 +38,7 @@ export function JobSiteDetailSegmentedView({ jobSite, section, capabilities, doc
   const managerLabel = userAssignments.length ? userAssignments.map((item) => item.userLabel).join(", ") : "Non assegnato";
   return <WorkspacePage>
     <WorkspacePageIdentity label={jobSite.name} />
-    <WorkspacePageHeader title={jobSite.name} description={jobSite.clientName || "Committente non indicato"} action={<Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} href={returnToDashboard ? "/dashboard" : "/job-sites"}><IconArrowLeft aria-hidden="true" />{returnToDashboard ? "Torna al Centro operativo" : "Torna ai cantieri"}</Link>} />
+    <WorkspacePageHeader title={jobSite.name} description={jobSite.clientName || "Committente non indicato"} action={<Link className={cn(buttonVariants({ variant: "outline" }), "h-10 sm:h-8")} href={returnToDashboard ? "/dashboard" : "/job-sites"}><IconArrowLeft aria-hidden="true" />{returnToDashboard ? "Torna alla Panoramica" : "Torna ai cantieri"}</Link>} />
     <OperationalArtifactStatus artifactId={jobSite.id} artifactType="JOB_SITE" />
     <nav aria-label="Sezioni cantiere" className="-mx-1 overflow-x-auto px-1"><div className="flex min-w-max gap-1 rounded-lg border bg-muted/30 p-1">{sections.filter((item) => item.id !== "settings" || capabilities.canManageCore).map((item) => <Link aria-current={section === item.id ? "page" : undefined} className={cn(buttonVariants({ size: "sm", variant: section === item.id ? "default" : "ghost" }), "whitespace-nowrap")} href={`/job-sites/${jobSite.id}?section=${item.id}`} key={item.id}>{item.label}</Link>)}</div></nav>
 

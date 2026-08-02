@@ -502,7 +502,7 @@ async function reconcileContinuousRequirements(tx: Prisma.TransactionClient, ste
 
 async function reconcileContinuousExceptions(tx: Prisma.TransactionClient, step: ClaimedStep) {
   const stale = await tx.operationalProcess.count({ where: { organizationId: step.organizationId, status: { in: ["BLOCKED", "TECHNICAL_FAILURE"] } } });
-  return { summary: `${stale} processi bloccati o falliti restano visibili nel Centro operativo.` };
+  return { summary: `${stale} processi bloccati o falliti richiedono attenzione nella Panoramica.` };
 }
 
 async function validateArtifactReferences(tx: Prisma.TransactionClient, step: ClaimedStep) {

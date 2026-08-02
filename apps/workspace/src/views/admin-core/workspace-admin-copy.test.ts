@@ -36,7 +36,8 @@ describe("workspace admin UI copy", () => {
   const authSource = collectCodeFiles(join(root, "auth")).map((file) => readFileSync(file, "utf8")).join("\n");
   const signInSource = readFileSync(join(appRoot, "sign-in", "page.tsx"), "utf8");
   const signUpSource = readFileSync(join(appRoot, "sign-up", "page.tsx"), "utf8");
-  const dashboardSource = readFileSync(join(root, "operational-center", "OperationalCenterView.tsx"), "utf8");
+  const dashboardSource = readFileSync(join(root, "dashboard", "DashboardOverviewView.tsx"), "utf8");
+  const dashboardListSource = readFileSync(join(root, "dashboard", "DashboardInterventionList.tsx"), "utf8");
   const documentListPageSource = readFileSync(join(appRoot, "documents", "page.tsx"), "utf8");
   const documentArchivePageSource = readFileSync(join(appRoot, "documents", "archive", "page.tsx"), "utf8");
   const documentDetailPageSource = readFileSync(join(appRoot, "documents", "[documentId]", "page.tsx"), "utf8");
@@ -103,6 +104,16 @@ describe("workspace admin UI copy", () => {
     for (const title of ["Notifiche", "Documenti", "Scadenze", "Lavoratori", "Cantieri", "Checklist", "Prove", "Pacchetti documentali", "Assegnazioni cantieri", "Audit", "Controllo dati"]) {
       expect(combinedSource).toContain(title);
     }
+  });
+
+  it("keeps the dashboard exception-driven and removes the legacy center composition", () => {
+    for (const heading of ["Panoramica", "Come lavora il motore Qoovex", "Cosa serve da te", "Cosa ha fatto Qoovex", "IA non attiva"]) expect(dashboardSource).toContain(heading);
+    for (const removed of ["Centro operativo", "Coda operativa", "Processi attivi", "Decisioni richieste", "Eccezioni aperte", "Risultati recenti"]) expect(dashboardSource).not.toContain(removed);
+    expect(dashboardSource).not.toContain("UniversalIntakeMenu");
+    expect(dashboardSource).not.toContain("grid-cols-4");
+    expect(dashboardListSource).toContain("INITIAL_INTERVENTION_COUNT = 5");
+    expect(dashboardListSource).toContain("aria-expanded={expanded}");
+    expect(dashboardListSource).toContain("firstRevealedItem.current?.focus()");
   });
 
   it("keeps the required empty states for admin core", () => {

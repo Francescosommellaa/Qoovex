@@ -6,7 +6,7 @@ Il Workspace autenticato esegue cinque processi persistenti e deterministici: ri
 
 ## Stato attuale verificato
 
-- `apps/workspace`: prodotto Next.js con Centro operativo, motore persistente, auth, MFA, inviti, API protette, supporto auditato e Console Qoovex.
+- `apps/workspace`: prodotto Next.js con Panoramica exception-driven, motore persistente, auth, MFA, inviti, API protette, supporto auditato e Console Qoovex.
 - `apps/web`: sito pubblico, contenuti marketing e pagine legali.
 - `apps/sirio`: catalogo e prova tecnica del design system, inclusa la proof Fase 4; non ospita logica operativa.
 - `apps/mobile`: placeholder per una futura app mobile.

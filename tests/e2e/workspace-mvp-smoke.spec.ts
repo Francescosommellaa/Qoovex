@@ -88,7 +88,11 @@ async function satisfyMfaGate(page: Page, secret: string) {
   await expect(page.getByRole("heading", { name: "Conferma MFA" })).toBeVisible();
   await page.locator("#mfa-gate-code").fill(currentTotp(secret));
   await page.getByRole("button", { name: "Apri il workspace" }).click();
-  await expect(page.getByRole("heading", { name: "Centro operativo", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Panoramica", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Come lavora il motore Qoovex", exact: true })).toBeVisible();
+  await expect(page.getByText("IA non attiva", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Cosa serve da te", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Cosa ha fatto Qoovex", exact: true })).toBeVisible();
 }
 
 async function openWorkspaceAccountMenu(page: Page) {

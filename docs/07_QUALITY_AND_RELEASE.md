@@ -23,7 +23,7 @@
 - ricerca esatta/prefisso/termine, tenant/resource scope, cursori stabili e indici PostgreSQL;
 - timeline tipizzata e aggregata, correzioni append-only, payload minimizzati e audit tecnico separato;
 - E2E Fase 3: documento incompleto -> decisione -> ripresa; lavoratore -> requisito mancante -> documento -> eccezione risolta;
-- E2E Fase 4: ricerca autorizzata -> artifact -> timeline; preparazione -> review -> link; aggiornamento immutabile; revoca/scadenza; Centro operativo.
+- E2E Fase 4: ricerca autorizzata -> artifact -> timeline; preparazione -> review -> link; aggiornamento immutabile; revoca/scadenza; Panoramica exception-driven.
 - access model: mapping expand/migrate/contract, backfill dry-run/idempotenza, Owner/Collaborator, permessi dipendenti, scope e grant cross-tenant, optimistic concurrency, scadenza/revoca, reinvio/rifiuto invito e separazione Support Agent/Platform Admin;
 - storia migration fresca e mapping espliciti per gli indici PostgreSQL al limite di 63 byte, verificati con `migrate reset`, `migrate status` e diff nullo;
 

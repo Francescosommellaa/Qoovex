@@ -8,15 +8,25 @@ const repositoryRoot = resolve(workspaceRoot, "../..");
 describe("operational API contracts", () => {
   it("exposes every protected Phase 3 route and only makes the cron runner public", () => {
     const routes = [
-      "center/route.ts", "inbox/route.ts", "processes/route.ts", "processes/[processId]/route.ts",
+      "processes/route.ts", "processes/[processId]/route.ts",
       "processes/[processId]/events/route.ts", "decisions/[decisionId]/resolve/route.ts",
       "exceptions/[exceptionId]/resolve/route.ts", "steps/[stepId]/retry/route.ts", "run/route.ts",
     ];
     for (const route of routes) expect(existsSync(resolve(workspaceRoot, "src/app/api/operations", route)), route).toBe(true);
+    for (const removedRoute of ["center/route.ts", "inbox/route.ts"]) {
+      expect(existsSync(resolve(workspaceRoot, "src/app/api/operations", removedRoute)), removedRoute).toBe(false);
+    }
+    expect(existsSync(resolve(workspaceRoot, "src/app/api/dashboard/route.ts"))).toBe(false);
     const publicRoutes = readFileSync(resolve(workspaceRoot, "src/shared/lib/public-api-routes.ts"), "utf8");
     expect(publicRoutes).toContain('pathname === "/api/operations/run"');
     expect(publicRoutes).not.toContain('pathname.startsWith("/api/operations/")');
     expect(readFileSync(resolve(workspaceRoot, "src/app/api/operations/run/route.ts"), "utf8")).toContain("isAuthorizedCronRequest");
+  });
+
+  it("keeps the compatible dashboard route independent from legacy queue views", () => {
+    const page = readFileSync(resolve(workspaceRoot, "src/app/dashboard/page.tsx"), "utf8");
+    expect(page).toContain("getDashboardOverview");
+    expect(page).not.toMatch(/searchParams|paginateOperationalCenter|OperationalCenterView/);
   });
 
   it("keeps mutation inputs discriminated and excludes free lifecycle controls", () => {
@@ -36,10 +46,11 @@ describe("operational API contracts", () => {
 
   it("enforces organization scope, artifact scope and underlying existing permissions", () => {
     const service = readFileSync(resolve(workspaceRoot, "src/features/operational-engine/server/operational-read-service.ts"), "utf8");
+    const overviewModel = readFileSync(resolve(workspaceRoot, "src/features/operational-engine/server/dashboard-overview-model.ts"), "utf8");
     expect(service).toContain('requireOrganizationDomainAccess("organization:read"');
     expect(service).toContain("processScopeWhere");
     expect(service).toContain("requiredPermissionForArtifacts");
-    for (const permission of ["documents:update", "workers:update", "jobSites:update", "deadlines:manage", "checklists:manage", "evidence:upload", "documentPackages:create"]) expect(service).toContain(`"${permission}"`);
+    for (const permission of ["documents:update", "workers:update", "jobSites:update", "deadlines:manage", "checklists:manage", "evidence:upload", "documentPackages:create", "documentPackages:share"]) expect(overviewModel).toContain(`"${permission}"`);
     expect(service).toContain("Questa eccezione viene chiusa solo da una condizione oggettiva");
   });
 });

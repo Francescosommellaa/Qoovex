@@ -1,6 +1,6 @@
 # Apps
 
-- `workspace`: runtime Next.js del prodotto, con Centro operativo, motore exception-driven, pagine, auth, MFA, API, servizi server, supporto e Console Qoovex.
+- `workspace`: runtime Next.js del prodotto, con Panoramica exception-driven, motore operativo, pagine, auth, MFA, API, servizi server, supporto e Console Qoovex.
 - `web`: sito marketing pubblico e pagine legali.
 - `sirio`: catalogo e superficie di verifica del design system, inclusa la proof operativa Fase 4 senza logica prodotto.
 - `mobile`: placeholder per una futura app mobile nativa.

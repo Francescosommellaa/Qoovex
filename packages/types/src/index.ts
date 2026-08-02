@@ -1829,102 +1829,6 @@ export interface DataRetentionOverviewResponse {
   candidates: DataRetentionCandidate[];
 }
 
-export interface DashboardOrganizationSummary {
-  name: string;
-  role: OrganizationRole;
-  roleLabel: string;
-  viewLabel: string;
-}
-
-export interface DashboardAttentionCounts {
-  missing: number;
-  expired: number;
-  expiringSoon: number;
-  toReview: number;
-}
-
-export type DashboardSituationKind = "EXPIRED" | "EXPIRING_SOON" | "MISSING" | "TO_REVIEW";
-export type DashboardContextKind = "ORGANIZATION" | "WORKER" | "JOB_SITE" | "DEADLINE";
-export type DashboardSection = "attention" | "sharing" | "deadlines" | "contexts";
-
-export interface DashboardAction {
-  label: string;
-  href: string;
-}
-
-export interface DashboardResponsibility {
-  label: string;
-  assignmentHref?: string | null;
-}
-
-export interface DashboardSituation {
-  id: EntityId;
-  kind: DashboardSituationKind;
-  statusLabel: string;
-  title: string;
-  reason: string;
-  consequence: string;
-  contextKind: DashboardContextKind;
-  contextId?: EntityId | null;
-  contextLabel: string;
-  responsibility: DashboardResponsibility;
-  action: DashboardAction;
-  date?: string | null;
-  updatedAt: string;
-}
-
-export interface DashboardDeadlineItem {
-  id: EntityId;
-  title: string;
-  dueDate: string;
-  timingLabel: string;
-  contextLabel: string;
-  action: DashboardAction;
-}
-
-export interface DashboardPackageItem {
-  id: EntityId;
-  title: string;
-  statusLabel: string;
-  itemCount: number;
-  hasActiveShareLink: boolean;
-  shareLabel: string;
-  updatedAt: string;
-  action: DashboardAction;
-}
-
-export interface DashboardContextItem {
-  id: EntityId;
-  kind: Exclude<DashboardContextKind, "DEADLINE">;
-  label: string;
-  situationCount: number;
-  action: DashboardAction;
-}
-
-export interface DashboardSectionError {
-  section: DashboardSection;
-  message: string;
-}
-
-export interface DashboardResponse {
-  generatedAt: string;
-  organization: DashboardOrganizationSummary;
-  attention: {
-    total: number;
-    counts: DashboardAttentionCounts;
-    situations: DashboardSituation[];
-  };
-  readyPackages: DashboardPackageItem[];
-  upcomingDeadlines: DashboardDeadlineItem[];
-  contexts: DashboardContextItem[];
-  availability: {
-    sharing: boolean;
-    contexts: boolean;
-  };
-  firstUse: boolean;
-  errors: DashboardSectionError[];
-}
-
 export const operationalProcessTypes = ["DOCUMENT_RECEIVED", "WORKER_CREATED", "JOB_SITE_CREATED", "CONTINUOUS_CONTROL", "DOCUMENT_PACKAGE_SHARING"] as const;
 export type OperationalProcessType = (typeof operationalProcessTypes)[number];
 
@@ -2197,57 +2101,55 @@ export interface OperationalProcessDetail extends OperationalProcessSummary {
   timeline: OperationalTimelinePage;
 }
 
-export interface OperationalCenterResponse {
-  generatedAt: string;
-  organization: DashboardOrganizationSummary;
-  counts: {
-    decisions: number;
-    exceptions: number;
-    blocked: number;
-    running: number;
-  };
-  decisions: OperationalDecisionDto[];
-  exceptions: OperationalExceptionDto[];
-  activeProcesses: OperationalProcessSummary[];
-  recentResults: OperationalProcessSummary[];
-  workItems: OperationalCenterItemDto[];
+export type DashboardInterventionKind = "DECISION" | "EXCEPTION" | "SHARING";
+export type DashboardOverviewSection = "INTERVENTIONS" | "HANDLED_RESULTS";
+
+export interface DashboardOverviewOrganization {
+  name: string;
+  role: OrganizationRole | null;
+  scopeLabel: string;
+  accessMode: "MEMBER" | "SUPPORT";
 }
 
-export type OperationalCenterView = "ALL" | "TO_DECIDE" | "TO_VERIFY" | "OVERDUE" | "EXPIRING" | "BLOCKED" | "IN_PROGRESS" | "RECENTLY_COMPLETED" | "SHARING";
-export type OperationalCenterItemKind = "DECISION" | "EXCEPTION" | "PROCESS" | "DEADLINE" | "SHARING" | "RESULT";
-
-export interface OperationalCenterFilters {
-  view?: OperationalCenterView;
-  artifactType?: OperationalArtifactType;
-  workerId?: EntityId;
-  jobSiteId?: EntityId;
-  status?: string;
-  from?: string;
-  to?: string;
-}
-
-export interface OperationalCenterItemDto {
+export interface DashboardIntervention {
   id: EntityId;
-  kind: OperationalCenterItemKind;
+  processId: EntityId;
+  kind: DashboardInterventionKind;
   title: string;
-  summary: string;
-  status: string;
+  handledSummary: string;
+  missingSummary: string;
+  context: OperationalArtifactReferenceDto | null;
   blocking: boolean;
   overdue: boolean;
   severity: OperationalExceptionSeverity | null;
-  dueAt: string | null;
   openedAt: string;
-  artifact: OperationalArtifactReferenceDto | null;
-  href: string;
-  timelineHref: string | null;
-  primaryActionLabel: string | null;
-  priorityReason: string;
+  dueAt: string | null;
+  canResolve: boolean;
+  primaryAction: {
+    label: string;
+    href: string;
+  };
 }
 
-export interface OperationalCenterPage {
+export interface DashboardHandledResult {
+  id: EntityId;
+  processId: EntityId;
+  title: string;
+  summary: string | null;
+  occurredAt: string;
+  href: string;
+  context: OperationalArtifactReferenceDto | null;
+  source: "OPERATIONAL_EVENT" | "COMPLETED_PROCESS";
+}
+
+export interface DashboardOverview {
   generatedAt: string;
-  items: OperationalCenterItemDto[];
-  nextCursor: string | null;
+  organization: DashboardOverviewOrganization;
+  interventionCount: number;
+  interventions: DashboardIntervention[];
+  handledResults: DashboardHandledResult[];
+  completeness: "COMPLETE" | "PARTIAL";
+  unavailableSections: DashboardOverviewSection[];
 }
 
 export const universalSearchResultTypes = ["DOCUMENT", "DOCUMENT_TYPE", "WORKER", "JOB_SITE", "DEADLINE", "CHECKLIST", "EVIDENCE", "DOCUMENT_PACKAGE", "OPERATIONAL_PROCESS", "OPERATIONAL_DECISION", "OPERATIONAL_EXCEPTION", "SHARE_LINK"] as const;

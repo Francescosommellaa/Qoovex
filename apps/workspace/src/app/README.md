@@ -10,7 +10,7 @@ Route frontend attive:
 - `/reset-password`: richiesta codice e impostazione nuova password;
 - `/invite?token=...`: ingresso destinatario per validare e accettare un invito Azienda;
 - `/shared/document-packages/[token]`: viewer pubblico in sola lettura per un pacchetto condiviso;
-- `/dashboard`: dashboard interna mobile-first per stato documentale, scadenze, cantieri, lavoratori, prove e pacchetti.
+- `/dashboard`: Panoramica exception-driven con stato sintetico, interventi realmente richiesti e risultati significativi prodotti dal motore; gli eventuali parametri `?view=` legacy vengono ignorati.
 - `/notifications`: notifiche interne e promemoria derivati da dati registrati;
 - `/documents`: panoramica documenti e coda `?view=attention`, con macroaree filtrabili;
 - `/documents/[documentId]`: dettaglio documento, versioni file e upload protetto;

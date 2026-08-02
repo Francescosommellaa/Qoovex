@@ -39,7 +39,7 @@ import {
 } from "@qoovex/ui/components/select";
 import { Skeleton } from "@qoovex/ui/components/skeleton";
 import { Spinner } from "@qoovex/ui/components/spinner";
-import type { DashboardContextKind, OrganizationAccessPreset, OrganizationPermission } from "@qoovex/types";
+import type { OrganizationAccessPreset, OrganizationPermission } from "@qoovex/types";
 
 interface AssignmentOptions {
   users: Array<{ id: string; label: string; email: string; role: "COLLABORATOR"; preset: OrganizationAccessPreset | null; permissionKeys: OrganizationPermission[] }>;
@@ -51,7 +51,7 @@ interface WorkerUserLink {
 
 interface DashboardAssignmentDialogProps {
   contextId: string;
-  contextKind: Extract<DashboardContextKind, "WORKER" | "JOB_SITE">;
+  contextKind: "WORKER" | "JOB_SITE";
   contextLabel: string;
   excludedUserIds?: string[];
   primaryAction?: boolean;

@@ -13,7 +13,7 @@ function formatDate(value: string) { return new Intl.DateTimeFormat("it-IT", { d
 
 export function OperationalProcessView({ process }: { process: OperationalProcessDetail }) {
   return <WorkspacePage>
-    <WorkspacePageHeader title={process.title} description="Dettaglio persistente del processo, separato dall'audit tecnico e limitato ai riferimenti che puoi consultare." action={<Link className={cn(buttonVariants({ variant: "outline" }), "min-h-10 sm:min-h-8")} href="/dashboard"><IconArrowLeft />Centro operativo</Link>} />
+    <WorkspacePageHeader title={process.title} description="Dettaglio persistente del processo, separato dall'audit tecnico e limitato ai riferimenti che puoi consultare." action={<Link className={cn(buttonVariants({ variant: "outline" }), "min-h-10 sm:min-h-8")} href="/dashboard"><IconArrowLeft />Panoramica</Link>} />
     <div className="flex flex-wrap gap-2"><WorkspaceState label={process.status.replace(/_/g, " ")} tone={process.status === "TECHNICAL_FAILURE" ? "danger" : process.status.includes("COMPLETED") ? "good" : process.status === "BLOCKED" || process.status === "WAITING_FOR_DECISION" ? "warning" : "info"} /><Badge variant="outline">Affidabilita {process.reliability}</Badge><Badge variant="outline">Impatto {process.impact}</Badge><Badge variant="outline">Definizione v{process.definitionVersion}</Badge></div>
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(20rem,.75fr)]">
       <div className="grid content-start gap-6">

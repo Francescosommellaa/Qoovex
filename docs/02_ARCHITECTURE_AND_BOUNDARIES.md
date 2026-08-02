@@ -10,7 +10,7 @@
 - `packages/ui`: foundation condivisa con primitive generiche search/timeline/work queue, senza dominio;
 - `packages/brand-resources`: asset SVG proprietari.
 
-Nel Workspace il registry e l'enqueue server-only vivono nel layer condiviso; read model e azioni operative vivono nella feature; il riepilogo artifact e un'entity; Centro operativo e dettaglio sono view; il routing resta in `app`. Il gate FSD impedisce import verso layer superiori.
+Nel Workspace il registry e l'enqueue server-only vivono nel layer condiviso; read model e azioni operative vivono nella feature; il riepilogo artifact e un'entity; Panoramica e dettaglio processo sono view separate; il routing resta in `app`. Il gate FSD impedisce import verso layer superiori. Il read model della Panoramica riusa `OperationalDecision`, `OperationalException`, proposte di condivisione ed eventi `userVisible` senza duplicare il motore.
 
 Le definizioni eseguibili sono un registry server-side versionato, non una tabella o un editor. Ricerca, timeline e condivisione sono servizi Workspace server-only; i route handler fanno parsing, auth e delega. PostgreSQL full-text usa indici di espressione e non replica il dominio in una tabella indice.
 
