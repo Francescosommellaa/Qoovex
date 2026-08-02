@@ -16,7 +16,6 @@ const mocks = vi.hoisted(() => ({
   requirePermission: vi.fn(),
   recordProductAuditEventBestEffort: vi.fn(),
   auditActorFromContext: vi.fn(),
-  appendContextTimelineEvent: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -38,7 +37,6 @@ vi.mock("./product-audit-service", () => ({
   recordProductAuditEventBestEffort: mocks.recordProductAuditEventBestEffort,
   auditActorFromContext: mocks.auditActorFromContext,
 }));
-vi.mock("./context-timeline-service", () => ({ appendContextTimelineEvent: mocks.appendContextTimelineEvent }));
 
 import {
   archiveJobSiteUserAssignment,
@@ -108,7 +106,6 @@ beforeEach(() => {
   for (const model of Object.values(mocks.db)) if (typeof model === "object") resetModel(model);
   vi.clearAllMocks();
   mocks.db.$transaction.mockImplementation(async (callback) => callback(mocks.db));
-  mocks.appendContextTimelineEvent.mockResolvedValue({ id: "timeline-1" });
   mocks.getContextOrganizationId.mockReturnValue("org-1");
   mocks.requirePermission.mockImplementation(() => undefined);
   mocks.auditActorFromContext.mockReturnValue({ actorUserId: "user-owner", actorRole: "OWNER", supportSessionId: null });

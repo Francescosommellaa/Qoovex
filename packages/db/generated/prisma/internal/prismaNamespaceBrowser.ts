@@ -63,41 +63,13 @@ export const ModelName = {
   WorkerUserLink: 'WorkerUserLink',
   JobSiteUserAssignment: 'JobSiteUserAssignment',
   JobSiteWorkerAssignment: 'JobSiteWorkerAssignment',
-  DocumentType: 'DocumentType',
   Document: 'Document',
   DocumentVersion: 'DocumentVersion',
   DocumentJobSiteLink: 'DocumentJobSiteLink',
-  DocumentRequirement: 'DocumentRequirement',
-  Deadline: 'Deadline',
-  CalendarEvent: 'CalendarEvent',
-  Checklist: 'Checklist',
-  ChecklistItem: 'ChecklistItem',
   Evidence: 'Evidence',
   EvidenceRevision: 'EvidenceRevision',
-  DocumentPackage: 'DocumentPackage',
-  DocumentPackageItem: 'DocumentPackageItem',
-  DocumentPackageRevision: 'DocumentPackageRevision',
-  OperationalRequest: 'OperationalRequest',
-  ContextMessage: 'ContextMessage',
-  ContextTimelineEvent: 'ContextTimelineEvent',
-  DocumentSourcePolicy: 'DocumentSourcePolicy',
-  DocumentSourceCheck: 'DocumentSourceCheck',
-  DocumentAcquisition: 'DocumentAcquisition',
-  DocumentPackageShareProposal: 'DocumentPackageShareProposal',
-  ShareLink: 'ShareLink',
   Notification: 'Notification',
-  NotificationPreference: 'NotificationPreference',
   DataControlJob: 'DataControlJob',
-  OperationalProcess: 'OperationalProcess',
-  OperationalStep: 'OperationalStep',
-  OperationalEvent: 'OperationalEvent',
-  OperationalDecision: 'OperationalDecision',
-  OperationalEventArtifactReference: 'OperationalEventArtifactReference',
-  OperationalException: 'OperationalException',
-  OperationalArtifactReference: 'OperationalArtifactReference',
-  OperationalRuleSnapshot: 'OperationalRuleSnapshot',
-  OperationalEffectReceipt: 'OperationalEffectReceipt',
-  NotificationEmailDelivery: 'NotificationEmailDelivery',
   OrganizationMembership: 'OrganizationMembership',
   OrganizationInvitation: 'OrganizationInvitation',
   OrganizationMembershipResourceGrant: 'OrganizationMembershipResourceGrant',
@@ -269,9 +241,7 @@ export const JobSiteScalarFieldEnum = {
   organizationId: 'organizationId',
   name: 'name',
   address: 'address',
-  clientName: 'clientName',
   status: 'status',
-  operationalPhase: 'operationalPhase',
   startDate: 'startDate',
   endDate: 'endDate',
   notes: 'notes',
@@ -338,36 +308,14 @@ export const JobSiteWorkerAssignmentScalarFieldEnum = {
 export type JobSiteWorkerAssignmentScalarFieldEnum = (typeof JobSiteWorkerAssignmentScalarFieldEnum)[keyof typeof JobSiteWorkerAssignmentScalarFieldEnum]
 
 
-export const DocumentTypeScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  name: 'name',
-  description: 'description',
-  appliesTo: 'appliesTo',
-  categoryKey: 'categoryKey',
-  sensitivity: 'sensitivity',
-  requiresExpiryDate: 'requiresExpiryDate',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type DocumentTypeScalarFieldEnum = (typeof DocumentTypeScalarFieldEnum)[keyof typeof DocumentTypeScalarFieldEnum]
-
-
 export const DocumentScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
-  documentTypeId: 'documentTypeId',
   currentVersionId: 'currentVersionId',
   ownerType: 'ownerType',
   workerId: 'workerId',
   jobSiteId: 'jobSiteId',
   title: 'title',
-  status: 'status',
-  expiryDate: 'expiryDate',
-  reviewedAt: 'reviewedAt',
-  reviewedById: 'reviewedById',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -387,10 +335,6 @@ export const DocumentVersionScalarFieldEnum = {
   size: 'size',
   checksum: 'checksum',
   uploadedById: 'uploadedById',
-  reviewStatus: 'reviewStatus',
-  reviewedById: 'reviewedById',
-  reviewedAt: 'reviewedAt',
-  reviewReason: 'reviewReason',
   createdAt: 'createdAt',
   archivedAt: 'archivedAt'
 } as const
@@ -417,113 +361,15 @@ export const DocumentJobSiteLinkScalarFieldEnum = {
 export type DocumentJobSiteLinkScalarFieldEnum = (typeof DocumentJobSiteLinkScalarFieldEnum)[keyof typeof DocumentJobSiteLinkScalarFieldEnum]
 
 
-export const DocumentRequirementScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  name: 'name',
-  description: 'description',
-  targetType: 'targetType',
-  documentTypeId: 'documentTypeId',
-  jobSiteId: 'jobSiteId',
-  isRequired: 'isRequired',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type DocumentRequirementScalarFieldEnum = (typeof DocumentRequirementScalarFieldEnum)[keyof typeof DocumentRequirementScalarFieldEnum]
-
-
-export const DeadlineScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  title: 'title',
-  dueDate: 'dueDate',
-  sourceType: 'sourceType',
-  documentId: 'documentId',
-  workerId: 'workerId',
-  jobSiteId: 'jobSiteId',
-  status: 'status',
-  remindAt: 'remindAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type DeadlineScalarFieldEnum = (typeof DeadlineScalarFieldEnum)[keyof typeof DeadlineScalarFieldEnum]
-
-
-export const CalendarEventScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  title: 'title',
-  description: 'description',
-  startAt: 'startAt',
-  endAt: 'endAt',
-  allDay: 'allDay',
-  kind: 'kind',
-  priority: 'priority',
-  status: 'status',
-  source: 'source',
-  externalUid: 'externalUid',
-  assignedToId: 'assignedToId',
-  jobSiteId: 'jobSiteId',
-  createdById: 'createdById',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type CalendarEventScalarFieldEnum = (typeof CalendarEventScalarFieldEnum)[keyof typeof CalendarEventScalarFieldEnum]
-
-
-export const ChecklistScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  jobSiteId: 'jobSiteId',
-  name: 'name',
-  description: 'description',
-  status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type ChecklistScalarFieldEnum = (typeof ChecklistScalarFieldEnum)[keyof typeof ChecklistScalarFieldEnum]
-
-
-export const ChecklistItemScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  checklistId: 'checklistId',
-  label: 'label',
-  description: 'description',
-  status: 'status',
-  completedAt: 'completedAt',
-  completedById: 'completedById',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ChecklistItemScalarFieldEnum = (typeof ChecklistItemScalarFieldEnum)[keyof typeof ChecklistItemScalarFieldEnum]
-
-
 export const EvidenceScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
   jobSiteId: 'jobSiteId',
   workerId: 'workerId',
-  checklistItemId: 'checklistItemId',
   type: 'type',
   title: 'title',
   description: 'description',
-  sensitivity: 'sensitivity',
-  reviewStatus: 'reviewStatus',
-  origin: 'origin',
   capturedAt: 'capturedAt',
-  reviewedById: 'reviewedById',
-  reviewedAt: 'reviewedAt',
-  reviewReason: 'reviewReason',
   blobKey: 'blobKey',
   originalFileName: 'originalFileName',
   mimeType: 'mimeType',
@@ -544,238 +390,13 @@ export const EvidenceRevisionScalarFieldEnum = {
   revisionNumber: 'revisionNumber',
   title: 'title',
   description: 'description',
-  sensitivity: 'sensitivity',
-  reviewStatus: 'reviewStatus',
   capturedAt: 'capturedAt',
-  origin: 'origin',
   reason: 'reason',
   createdById: 'createdById',
   createdAt: 'createdAt'
 } as const
 
 export type EvidenceRevisionScalarFieldEnum = (typeof EvidenceRevisionScalarFieldEnum)[keyof typeof EvidenceRevisionScalarFieldEnum]
-
-
-export const DocumentPackageScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  jobSiteId: 'jobSiteId',
-  title: 'title',
-  description: 'description',
-  status: 'status',
-  createdById: 'createdById',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type DocumentPackageScalarFieldEnum = (typeof DocumentPackageScalarFieldEnum)[keyof typeof DocumentPackageScalarFieldEnum]
-
-
-export const DocumentPackageItemScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  documentPackageId: 'documentPackageId',
-  itemType: 'itemType',
-  documentId: 'documentId',
-  documentVersionId: 'documentVersionId',
-  evidenceId: 'evidenceId',
-  checklistId: 'checklistId',
-  workerId: 'workerId',
-  jobSiteUserAssignmentId: 'jobSiteUserAssignmentId',
-  jobSiteWorkerAssignmentId: 'jobSiteWorkerAssignmentId',
-  operationalRequestId: 'operationalRequestId',
-  contextMessageId: 'contextMessageId',
-  contextTimelineEventId: 'contextTimelineEventId',
-  note: 'note',
-  position: 'position',
-  createdAt: 'createdAt'
-} as const
-
-export type DocumentPackageItemScalarFieldEnum = (typeof DocumentPackageItemScalarFieldEnum)[keyof typeof DocumentPackageItemScalarFieldEnum]
-
-
-export const DocumentPackageRevisionScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  documentPackageId: 'documentPackageId',
-  revisionNumber: 'revisionNumber',
-  origin: 'origin',
-  status: 'status',
-  manifest: 'manifest',
-  fingerprint: 'fingerprint',
-  preparedById: 'preparedById',
-  approvedById: 'approvedById',
-  preparedAt: 'preparedAt',
-  approvedAt: 'approvedAt',
-  createdAt: 'createdAt'
-} as const
-
-export type DocumentPackageRevisionScalarFieldEnum = (typeof DocumentPackageRevisionScalarFieldEnum)[keyof typeof DocumentPackageRevisionScalarFieldEnum]
-
-
-export const OperationalRequestScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  targetType: 'targetType',
-  targetId: 'targetId',
-  title: 'title',
-  description: 'description',
-  status: 'status',
-  assigneeUserId: 'assigneeUserId',
-  dueAt: 'dueAt',
-  outcome: 'outcome',
-  createdById: 'createdById',
-  completedById: 'completedById',
-  completedAt: 'completedAt',
-  cancelledAt: 'cancelledAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type OperationalRequestScalarFieldEnum = (typeof OperationalRequestScalarFieldEnum)[keyof typeof OperationalRequestScalarFieldEnum]
-
-
-export const ContextMessageScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  requestId: 'requestId',
-  targetType: 'targetType',
-  targetId: 'targetId',
-  visibility: 'visibility',
-  body: 'body',
-  authorId: 'authorId',
-  createdAt: 'createdAt'
-} as const
-
-export type ContextMessageScalarFieldEnum = (typeof ContextMessageScalarFieldEnum)[keyof typeof ContextMessageScalarFieldEnum]
-
-
-export const ContextTimelineEventScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  eventKey: 'eventKey',
-  targetType: 'targetType',
-  targetId: 'targetId',
-  eventType: 'eventType',
-  title: 'title',
-  summary: 'summary',
-  metadata: 'metadata',
-  actorUserId: 'actorUserId',
-  actorType: 'actorType',
-  actorRole: 'actorRole',
-  sourceType: 'sourceType',
-  sourceId: 'sourceId',
-  reliability: 'reliability',
-  impact: 'impact',
-  occurredAt: 'occurredAt'
-} as const
-
-export type ContextTimelineEventScalarFieldEnum = (typeof ContextTimelineEventScalarFieldEnum)[keyof typeof ContextTimelineEventScalarFieldEnum]
-
-
-export const DocumentSourcePolicyScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  documentTypeId: 'documentTypeId',
-  categoryKey: 'categoryKey',
-  sourceType: 'sourceType',
-  responsibleUserId: 'responsibleUserId',
-  label: 'label',
-  triggerKinds: 'triggerKinds',
-  allowSharing: 'allowSharing',
-  allowAi: 'allowAi',
-  enabled: 'enabled',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type DocumentSourcePolicyScalarFieldEnum = (typeof DocumentSourcePolicyScalarFieldEnum)[keyof typeof DocumentSourcePolicyScalarFieldEnum]
-
-
-export const DocumentSourceCheckScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  policyId: 'policyId',
-  documentId: 'documentId',
-  status: 'status',
-  triggerKind: 'triggerKind',
-  summary: 'summary',
-  errorCode: 'errorCode',
-  nextCheckAt: 'nextCheckAt',
-  requestedById: 'requestedById',
-  createdAt: 'createdAt',
-  completedAt: 'completedAt'
-} as const
-
-export type DocumentSourceCheckScalarFieldEnum = (typeof DocumentSourceCheckScalarFieldEnum)[keyof typeof DocumentSourceCheckScalarFieldEnum]
-
-
-export const DocumentAcquisitionScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  policyId: 'policyId',
-  checkId: 'checkId',
-  documentId: 'documentId',
-  documentVersionId: 'documentVersionId',
-  sourceType: 'sourceType',
-  status: 'status',
-  provenanceLabel: 'provenanceLabel',
-  checksum: 'checksum',
-  errorCode: 'errorCode',
-  confirmedById: 'confirmedById',
-  confirmedAt: 'confirmedAt',
-  createdAt: 'createdAt'
-} as const
-
-export type DocumentAcquisitionScalarFieldEnum = (typeof DocumentAcquisitionScalarFieldEnum)[keyof typeof DocumentAcquisitionScalarFieldEnum]
-
-
-export const DocumentPackageShareProposalScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  documentPackageId: 'documentPackageId',
-  revisionId: 'revisionId',
-  processId: 'processId',
-  decisionId: 'decisionId',
-  targetKind: 'targetKind',
-  recipientLabel: 'recipientLabel',
-  purpose: 'purpose',
-  expiresAt: 'expiresAt',
-  allowDownload: 'allowDownload',
-  status: 'status',
-  preparedAt: 'preparedAt',
-  approvedAt: 'approvedAt',
-  publishedAt: 'publishedAt',
-  createdById: 'createdById',
-  approvedById: 'approvedById',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type DocumentPackageShareProposalScalarFieldEnum = (typeof DocumentPackageShareProposalScalarFieldEnum)[keyof typeof DocumentPackageShareProposalScalarFieldEnum]
-
-
-export const ShareLinkScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  documentPackageId: 'documentPackageId',
-  revisionId: 'revisionId',
-  proposalId: 'proposalId',
-  tokenHash: 'tokenHash',
-  purpose: 'purpose',
-  recipientLabel: 'recipientLabel',
-  allowDownload: 'allowDownload',
-  expiresAt: 'expiresAt',
-  expiredAt: 'expiredAt',
-  revokedAt: 'revokedAt',
-  createdById: 'createdById',
-  createdAt: 'createdAt',
-  lastAccessedAt: 'lastAccessedAt'
-} as const
-
-export type ShareLinkScalarFieldEnum = (typeof ShareLinkScalarFieldEnum)[keyof typeof ShareLinkScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {
@@ -799,25 +420,6 @@ export const NotificationScalarFieldEnum = {
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
-export const NotificationPreferenceScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  userId: 'userId',
-  emailDigestEnabled: 'emailDigestEnabled',
-  emailDigestFrequency: 'emailDigestFrequency',
-  emailDigestHour: 'emailDigestHour',
-  deadlineNotificationsEnabled: 'deadlineNotificationsEnabled',
-  documentNotificationsEnabled: 'documentNotificationsEnabled',
-  packageNotificationsEnabled: 'packageNotificationsEnabled',
-  systemNotificationsEnabled: 'systemNotificationsEnabled',
-  lastDigestSentAt: 'lastDigestSentAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type NotificationPreferenceScalarFieldEnum = (typeof NotificationPreferenceScalarFieldEnum)[keyof typeof NotificationPreferenceScalarFieldEnum]
-
-
 export const DataControlJobScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -836,203 +438,6 @@ export const DataControlJobScalarFieldEnum = {
 } as const
 
 export type DataControlJobScalarFieldEnum = (typeof DataControlJobScalarFieldEnum)[keyof typeof DataControlJobScalarFieldEnum]
-
-
-export const OperationalProcessScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  type: 'type',
-  definitionVersion: 'definitionVersion',
-  status: 'status',
-  triggerKind: 'triggerKind',
-  idempotencyKey: 'idempotencyKey',
-  context: 'context',
-  reliability: 'reliability',
-  impact: 'impact',
-  resultSummary: 'resultSummary',
-  revision: 'revision',
-  startedAt: 'startedAt',
-  blockedAt: 'blockedAt',
-  completedAt: 'completedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type OperationalProcessScalarFieldEnum = (typeof OperationalProcessScalarFieldEnum)[keyof typeof OperationalProcessScalarFieldEnum]
-
-
-export const OperationalStepScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  processId: 'processId',
-  key: 'key',
-  position: 'position',
-  status: 'status',
-  attemptCount: 'attemptCount',
-  maxAttempts: 'maxAttempts',
-  nextAttemptAt: 'nextAttemptAt',
-  claimToken: 'claimToken',
-  claimedAt: 'claimedAt',
-  leaseExpiresAt: 'leaseExpiresAt',
-  lastErrorCode: 'lastErrorCode',
-  input: 'input',
-  resultSummary: 'resultSummary',
-  startedAt: 'startedAt',
-  completedAt: 'completedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type OperationalStepScalarFieldEnum = (typeof OperationalStepScalarFieldEnum)[keyof typeof OperationalStepScalarFieldEnum]
-
-
-export const OperationalEventScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  processId: 'processId',
-  stepId: 'stepId',
-  eventKey: 'eventKey',
-  kind: 'kind',
-  eventType: 'eventType',
-  userVisible: 'userVisible',
-  title: 'title',
-  summary: 'summary',
-  metadata: 'metadata',
-  actorUserId: 'actorUserId',
-  actorType: 'actorType',
-  actorRole: 'actorRole',
-  sourceType: 'sourceType',
-  sourceId: 'sourceId',
-  reliability: 'reliability',
-  impact: 'impact',
-  occurredAt: 'occurredAt'
-} as const
-
-export type OperationalEventScalarFieldEnum = (typeof OperationalEventScalarFieldEnum)[keyof typeof OperationalEventScalarFieldEnum]
-
-
-export const OperationalDecisionScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  processId: 'processId',
-  stepId: 'stepId',
-  type: 'type',
-  status: 'status',
-  question: 'question',
-  explanation: 'explanation',
-  options: 'options',
-  context: 'context',
-  proposedOptionKey: 'proposedOptionKey',
-  selectedOptionKey: 'selectedOptionKey',
-  selectedValue: 'selectedValue',
-  activeDedupeKey: 'activeDedupeKey',
-  decidedById: 'decidedById',
-  decidedAt: 'decidedAt',
-  reason: 'reason',
-  reliability: 'reliability',
-  impact: 'impact',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type OperationalDecisionScalarFieldEnum = (typeof OperationalDecisionScalarFieldEnum)[keyof typeof OperationalDecisionScalarFieldEnum]
-
-
-export const OperationalEventArtifactReferenceScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  eventId: 'eventId',
-  artifactType: 'artifactType',
-  artifactId: 'artifactId',
-  createdAt: 'createdAt'
-} as const
-
-export type OperationalEventArtifactReferenceScalarFieldEnum = (typeof OperationalEventArtifactReferenceScalarFieldEnum)[keyof typeof OperationalEventArtifactReferenceScalarFieldEnum]
-
-
-export const OperationalExceptionScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  processId: 'processId',
-  stepId: 'stepId',
-  decisionId: 'decisionId',
-  type: 'type',
-  severity: 'severity',
-  status: 'status',
-  title: 'title',
-  explanation: 'explanation',
-  nextStep: 'nextStep',
-  activeDedupeKey: 'activeDedupeKey',
-  dueAt: 'dueAt',
-  resolvedAt: 'resolvedAt',
-  resolvedById: 'resolvedById',
-  resolutionReason: 'resolutionReason',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type OperationalExceptionScalarFieldEnum = (typeof OperationalExceptionScalarFieldEnum)[keyof typeof OperationalExceptionScalarFieldEnum]
-
-
-export const OperationalArtifactReferenceScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  processId: 'processId',
-  artifactType: 'artifactType',
-  artifactId: 'artifactId',
-  label: 'label',
-  createdAt: 'createdAt'
-} as const
-
-export type OperationalArtifactReferenceScalarFieldEnum = (typeof OperationalArtifactReferenceScalarFieldEnum)[keyof typeof OperationalArtifactReferenceScalarFieldEnum]
-
-
-export const OperationalRuleSnapshotScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  processId: 'processId',
-  sourceType: 'sourceType',
-  sourceId: 'sourceId',
-  sourceVersion: 'sourceVersion',
-  snapshot: 'snapshot',
-  capturedAt: 'capturedAt'
-} as const
-
-export type OperationalRuleSnapshotScalarFieldEnum = (typeof OperationalRuleSnapshotScalarFieldEnum)[keyof typeof OperationalRuleSnapshotScalarFieldEnum]
-
-
-export const OperationalEffectReceiptScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  processId: 'processId',
-  stepId: 'stepId',
-  effectKey: 'effectKey',
-  type: 'type',
-  artifactType: 'artifactType',
-  artifactId: 'artifactId',
-  resultSummary: 'resultSummary',
-  createdAt: 'createdAt'
-} as const
-
-export type OperationalEffectReceiptScalarFieldEnum = (typeof OperationalEffectReceiptScalarFieldEnum)[keyof typeof OperationalEffectReceiptScalarFieldEnum]
-
-
-export const NotificationEmailDeliveryScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  userId: 'userId',
-  notificationId: 'notificationId',
-  type: 'type',
-  recipientEmail: 'recipientEmail',
-  notificationCount: 'notificationCount',
-  status: 'status',
-  providerMessageId: 'providerMessageId',
-  errorCode: 'errorCode',
-  sentAt: 'sentAt',
-  createdAt: 'createdAt'
-} as const
-
-export type NotificationEmailDeliveryScalarFieldEnum = (typeof NotificationEmailDeliveryScalarFieldEnum)[keyof typeof NotificationEmailDeliveryScalarFieldEnum]
 
 
 export const OrganizationMembershipScalarFieldEnum = {
@@ -1287,13 +692,6 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const NullableJsonNullValueInput = {

@@ -25,11 +25,11 @@ Una stessa direzione puo essere approvata e contemporaneamente non implementata.
 
 ## Stato implementato e vNext
 
-Processi persistenti, Panoramica exception-driven, cinque definizioni deterministiche, ricerca consultiva sui metadati aziendali autorizzati, timeline interne e condivisione revisionata sono implementati. La partecipazione cliente account, gli immobili, la timeline condivisa Azienda-cliente, le negoziazioni, i pagamenti documentati e la chiusura reciproca appartengono a vNext e sono `conceptual_not_implemented`.
+D-VNEXT-46 ha eliminato il prodotto precedente. Lo stato corrente è foundation-only: identità, sicurezza, Aziende/accessi, Worker/assegnazioni, JobSite minimo, file/versioni private, prove, audit, supporto e data-control.
 
-Il modello corrente mantiene `OWNER`/`COLLABORATOR`, una sola membership per User, `JobSite.clientName`, `JobSiteOperationalPhase` e messaggi `INTERNAL`. Non reinterpretare questi contratti come se il pivot fosse gia distribuito.
+Il modello mantiene `OWNER`/`COLLABORATOR` e una sola membership per User, ma non contiene più `JobSite.clientName`, `JobSiteOperationalPhase`, timeline prodotto, processi, deadline, checklist, pacchetti o share link.
 
-D-VNEXT-18-45 rendono decision-complete la Fase A documentale per contesti, partecipanti, authorization, privacy, lifecycle, compatibilita e rollout. Non rendono implementato lo schema target. Il task tecnico successivo deve rispettare D-VNEXT-45: un prompt coordinato, una branch/PR e una sola migration additiva, salvo hard stop tecnico provato.
+D-VNEXT-41–45 sono `SUPERSEDED`. D-VNEXT-47 approva lo stato intermedio foundation-only; D-VNEXT-48 riserva l’implementazione completa di vNext a un prompt separato. Non anticipare entità, lifecycle, route o UI del Prompt B.
 
 ## Modifiche tecniche e memoria
 

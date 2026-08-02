@@ -21,8 +21,8 @@ describe("canonical single-membership history", () => {
   it("creates the full baseline and migrates forward without replaying it", () => {
     expect(baselineSql).toContain('CREATE TABLE "Organization"');
     expect(baselineSql).toContain('CREATE TABLE "OrganizationInvitation"');
-    expect(baselineSql).toContain('CREATE TABLE "DocumentPackage"');
-    expect(baselineSql).toContain('CREATE TABLE "ShareLink"');
+    expect(baselineSql).toContain('CREATE TABLE "Document"');
+    expect(baselineSql).toContain('CREATE TABLE "Evidence"');
     expect(baselineSql).toContain('"organizationId" TEXT NOT NULL');
     expect(baselineSql).not.toContain('"Structure"');
     expect(baselineSql).not.toContain('"StructureMembership"');

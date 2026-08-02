@@ -1,316 +1,71 @@
 {
-  "meta": {
-    "format": "brain-pointer",
-    "canonical_brain_root": "A:/Qoovex-Brain",
-    "canonical_index": "A:/Qoovex-Brain/00_System/index.json",
-    "canonical_task_routing": "A:/Qoovex-Brain/00_System/task-routing.md",
-    "read_rule": "Use Qoovex-Brain as canonical operational memory and repository code as truth for implemented state.",
-    "status_model": [
-      "verified_current_state",
-      "implemented_decision",
-      "approved_product_direction",
-      "conceptual_not_implemented",
-      "open_decision",
-      "hard_stop"
-    ]
-  },
-  "project": {
-    "name": "Qoovex",
-    "type": "SaaS",
-    "audience": "small construction businesses, their collaborators and private clients invited to construction projects",
-    "positioning": "Approved vNext direction: the shared space where a construction business and its client document work, changes, evidence and payments from project creation to closure.",
-    "promise": "The business documents work once and reuses the same authorized updates to inform the client, manage changes and present payment requests; the client follows work on their properties and retains what was shared.",
-    "direction_status": "approved_product_direction",
-    "implementation_status": "conceptual_not_implemented",
-    "country": "Italy",
-    "legal_limit": "Qoovex does not guarantee compliance, certify people or documents, or replace professional, technical, medical or legal judgment."
-  },
+  "project": "Qoovex",
+  "updated_at": "2026-08-02",
+  "state_taxonomy": [
+    "verified_current_state",
+    "implemented_decision",
+    "approved_product_direction",
+    "conceptual_not_implemented",
+    "open_decision",
+    "hard_stop"
+  ],
   "verified_current_state": {
-    "summary": "The authenticated Workspace contains a persistent operational engine, metadata-only search, artifact timelines and revision-based controlled sharing over the existing domain.",
-    "active_domain": [
-      "organizations and single-company memberships",
-      "workers and job sites",
-      "document types, requirements, documents and private versions",
-      "deadlines and calendar events",
-      "checklists and evidence",
-      "document packages, immutable revisions, proposals and controlled share links",
-      "notifications, reminders and email digests",
-      "product audit, support and data control"
-    ],
-    "operational_engine": {
-      "definitions": [
-        "DOCUMENT_RECEIVED@1",
-        "WORKER_CREATED@1",
-        "JOB_SITE_CREATED@1",
-        "CONTINUOUS_CONTROL@1",
-        "DOCUMENT_PACKAGE_SHARING@1"
-      ],
-      "persistence": [
-        "OperationalProcess",
-        "OperationalStep",
-        "OperationalEvent",
-        "OperationalDecision",
-        "OperationalException",
-        "OperationalArtifactReference",
-        "OperationalEventArtifactReference",
-        "OperationalRuleSnapshot",
-        "OperationalEffectReceipt",
-        "DocumentPackageRevision",
-        "DocumentPackageShareProposal"
-      ],
-      "runtime": "Server-side versioned process registry plus a four-action allow-listed Operational Intelligence registry limited to deterministic domain reconciliation. Decisions, exceptions and notifications are internal runner effects, not generic adapter commands. The provider-neutral executor is dry-run only, defaults to OFF, applies the execution policy after permission, scope and tenant checks, and blocks AUTO_LOW_RISK without an approved evaluation threshold. The deterministic runner retains atomic claim, five-minute lease, fencing, at most five attempts and 1/5/15/60-minute backoff.",
-      "entrypoint": "Authenticated Workspace only; universal intake composes existing authorized flows and is not a generic mutation endpoint."
+    "classification": "foundation-only repository after legacy eradication",
+    "decision": "D-VNEXT-47",
+    "identity_and_security": ["User", "Account", "Session", "Auth.js", "credentials", "email verification", "MFA", "recovery", "session invalidation", "security audit", "rate limiting", "HTTP protections"],
+    "platform": ["PlatformRole", "Support Agent", "Platform Admin", "support sessions", "runtime error handling"],
+    "organization_access": {
+      "roles": ["OWNER", "COLLABORATOR"],
+      "single_membership_per_user": true,
+      "features": ["Organization", "OrganizationProfile", "OrganizationContact", "OrganizationMembership", "company invitations", "permission keys", "FULL/ASSIGNED scope", "resource grants", "expiry", "accessVersion", "revocation"]
     },
-    "search": "POST /api/search queries only authorized metadata with PostgreSQL simple full-text search, deterministic ranking, bounded input, a two-second timeout and opaque tuple cursors. Queries are not persisted or placed in URLs.",
-    "timeline": "OperationalEvent is the primary product timeline source. Typed events aggregate through artifact references and remain separate from ProductAuditEvent; corrections and revocations append events.",
-    "sharing": "Document packages use immutable minimized revisions and a preparation-review-confirmation flow. A link is created only after human approval, binds to the approved revision and defaults to no download.",
-    "security": "Authorization, organizationId and resource scope are server-derived and default-deny. Prisma stores data and metadata; private Vercel Blob stores binaries. Operational/search/timeline payloads exclude file content, Blob keys, signed URLs, tokens, IP and user-agent.",
-    "migration_history": "The repository contains seventeen canonical migration directories through 20260728040000_operational_workspace_index_names. All seventeen were applied from a clean reset and verified with no drift only on the guarded local database; the final additive migration stabilizes five PostgreSQL index names with explicit Prisma mappings. Every remote environment requires separate verification and authorization.",
-    "access_model": "Organization roles are only OWNER and COLLABORATOR. Editable presets READ_ONLY, OPERATIONAL_COLLABORATION, SITE_MANAGER, DOCUMENT_REVIEWER, LIMITED_UPLOAD and CUSTOM initialize persisted permission keys and FULL or ASSIGNED scope; tenant-safe resource grants and optional access expiry remain separate from role. Owner can invite, reissue, revoke and atomically update Collaborator access with accessVersion concurrency; permission dependencies are normalized server-side and session invalidation makes changes immediate. Worker is an operational record, never an account role. Internal platform roles USER, SUPPORT_AGENT and PLATFORM_ADMIN are separate from organization membership.",
-    "identity_and_membership": "User currently has zero or one OrganizationMembership because OrganizationMembership.userId is unique. There is no CLIENT organization role and no job-site customer participation model.",
-    "job_site_customer_state": "JobSite currently stores clientName as optional text and JobSiteOperationalPhase as the implemented lifecycle. It has no account-backed primary client, participant, property, shared-customer timeline, negotiated proposal, documented payment or mutual closure relation.",
-    "context_state": "ContextMessage visibility is INTERNAL and ContextTimelineEvent is an organization-scoped contextual timeline. Current package share links are not the authenticated vNext client surface.",
-    "workspace": "The compatible /dashboard route presents Panoramica: a conservative status, only permission- and scope-authorized human interventions, and up to five significant system-generated OperationalEvent results. Legacy KPI, queue views, ?view= filters, normally running processes and duplicate decision/exception sections are removed. Primary navigation contains authorized destinations only. Search is a metadata-only modal separated from navigation and available with Ctrl/Cmd+K; /search is not a product page. A permission-derived Azioni rapide card in the sidebar footer remains the only location for the main mandatory manual mutations. Notifications and account keep their existing placement. Local development uses one topbar dropdown for OWNER, SUPPORT_AGENT and PLATFORM_ADMIN; the legacy view-switch banner is removed.",
-    "design_system": "Unchanged in Phase 4: shadcn base-nova, Base UI, Geist/Geist Mono, Tabler, current tokens, motion and light/dark/system theme. packages/ui adds only generic search, timeline and work-queue primitives proved in Sirio."
+    "foundation_domain": ["Worker", "WorkerUserLink", "JobSiteUserAssignment", "JobSiteWorkerAssignment", "minimal JobSite", "Document", "DocumentVersion", "Evidence", "EvidenceRevision", "private Blob", "system notifications", "ProductAuditEvent", "data-control"],
+    "job_site": { "neutral": true, "has_client_name": false, "has_operational_phase": false, "has_vnext_lifecycle": false },
+    "operational_engine": { "product_processes_registered": 0, "automatic_enqueue": false, "legacy_intelligence": false },
+    "migration_history": { "count": 18, "new_migration": "20260802010000_remove_legacy_product_foundation", "previous_migrations_rewritten": false, "preview_applied": false, "production_applied": false }
   },
-  "implemented_decisions": {
-    "product": [
-      "Qoovex is exception-driven while the existing domain remains rich.",
-      "Processes are first-class and existing records remain sources and outputs.",
-      "Exceptions and decisions are the primary human work.",
-      "Metadata search is consultative and never authorizes a mutation.",
-      "OperationalEvent is the product timeline; technical audit remains separate.",
-      "External sharing is explicit, revision-bound and human-approved.",
-      "Manual correction and advanced domain control remain available."
-    ],
-    "execution_policy": {
-      "automatic": "Only LOW-impact, deterministic, reversible and authorized actions with VERIFIED or HIGH reliability.",
-      "decision_required": "CONTROLLED impact or MEDIUM, LOW or CONFLICT reliability.",
-      "forbidden": "IRREVERSIBLE or unauthorized actions. SENSITIVE actions are never automatic and require an explicit existing authorized flow; access expansion, disclosure and legal operations are not delegated to Operational Intelligence."
-    },
-    "process_guarantees": [
-      "tenant- and resource-scoped",
-      "persistent, resumable and idempotent",
-      "atomic claim and completion fencing",
-      "append-only typed operational events with allow-listed payloads",
-      "immutable minimized rule and package snapshots",
-      "effect receipts prevent duplicate output",
-      "opaque validated tuple cursors",
-      "operational timeline remains distinct from technical audit"
-    ],
-    "authorization": "Authorization uses OWNER or COLLABORATOR plus persisted permissions, editable presets, optional expiry and explicit resource grants. OWNER alone manages organization access. Reading requires the relevant permission plus artifact scope; decisions, resolution and retry require the permission for the underlying effect; sharing remains limited to documentPackages:share. Empty assigned scope never widens automatically. SUPPORT_AGENT can open temporary audited support sessions with metadata-only read permissions and no file or mutation access; PLATFORM_ADMIN alone can use global platform management.",
-    "runner": "GitHub Actions reuses CRON_SECRET and invokes the runner every five minutes; no queue or external dependency was added.",
-    "sharing_guarantees": "Legacy links retain their prior accessibility and download behavior through LEGACY_BACKFILL revisions. New links are idempotent per proposal, expose the token once, and never advance to newer document versions automatically.",
-    "public_routes": "Tokenized public routes return indistinguishable errors, private no-store, no-referrer, noindex/nofollow and nosniff headers; downloads are mediated attachments and honor allowDownload.",
-    "lifecycle": "Cancellation and undo are not exposed while their policy remains open. Technical exhaustion opens an exception; business uncertainty does not retry indefinitely."
-  },
+  "removed_capabilities": [
+    "DocumentRequirement", "Deadline", "CalendarEvent", "Checklist", "ChecklistItem",
+    "DocumentPackage", "DocumentPackageItem", "DocumentPackageRevision", "DocumentPackageShareProposal", "ShareLink",
+    "DocumentSourcePolicy", "DocumentSourceCheck", "DocumentAcquisition",
+    "OperationalRequest", "ContextMessage", "ContextTimelineEvent",
+    "JobSite.clientName", "JobSiteOperationalPhase",
+    "DOCUMENT_RECEIVED@1", "WORKER_CREATED@1", "JOB_SITE_CREATED@1", "CONTINUOUS_CONTROL@1", "DOCUMENT_PACKAGE_SHARING@1",
+    "legacy Operational Intelligence", "universal search", "legacy reminders and digests", "legacy dashboard and operational center"
+  ],
   "approved_product_direction": {
-    "status": "approved_product_direction",
-    "implementation_status": "conceptual_not_implemented",
-    "identity": "Qoovex is the shared space where a construction business manages work with its client and documents progress, optional steps, changes, evidence and payments from creation to closure.",
-    "business_promise": "Document the work once and reuse the same authorized updates to inform the client, manage changes and present payment requests.",
-    "client_promise": "Follow work on your properties, review every change and retain everything shared with you.",
-    "problem": "Agreements, progress, changes, photos, evidence, receipts, requests, payments and confirmations are fragmented across messages, calls, transfers, email, files and personal memory. vNext creates one structured, versioned, downloadable shared chronology.",
-    "commercial_model": {
-      "payer": "ORGANIZATION",
-      "collaborator_access": "included with the Organization",
-      "client_access": "free for invited job sites",
-      "undefined": "prices, plans, limits, commissions, trials, entitlements, storage and per-client or per-job-site costs",
-      "marketplace": "outside MVP"
-    },
-    "actors": {
-      "user": "personal identity that may act in different business and client contexts",
-      "organization_roles": [
-        "OWNER",
-        "COLLABORATOR"
-      ],
-      "client": "account holder invited to a job site, outside the owning Organization",
-      "participant_concept": [
-        "ORGANIZATION_MEMBER",
-        "CLIENT"
-      ],
-      "primary_client_mvp": "exactly one per job site"
-    },
-    "approved_decisions": [
-      "The client confirms the initial summary before future ACTIVE state",
-      "The first MVP has one primary client per job site",
-      "There is no automatic unilateral closure when the client does not respond",
-      "Partial payments use separate payment requests",
-      "Post-closure requests are append-only threads and do not rewrite the prior timeline",
-      "CLIENT never enters OrganizationRole",
-      "A client can organize authorized job sites from different isolated Organizations under private properties",
-      "Only the responsible person or an explicitly delegated Collaborator can negotiate economically for the Organization",
-      "The client sees only collaborator first name, last name and operational role",
-      "Qoovex documents but does not move, hold, refund, arbitrate or guarantee money"
-    ],
-    "shared_timeline": "A structured append-only, versioned and downloadable register with INTERNAL and SHARED_WITH_CLIENT visibility concepts; it is not a generic chat.",
-    "steps": "Optional. vNext has no separate product phases; progress derives from steps when present and no artificial percentage is shown without them.",
-    "changes": "Significant operational or economic changes are versioned proposals and counterproposals; the accepted revision is immutable.",
-    "payments": "Off-platform payment process documentation only. A client declaration and receipt do not automatically prove credit.",
-    "closure": "Requires reciprocal confirmation after shared open items are resolved; closure has no certification, conformity, waiver or warranty meaning.",
-    "post_closure": "Closed job sites are read-only; append-only requests do not automatically reopen them and Qoovex does not decide disputes.",
-    "archive_and_delete": "Logical archive of closed job sites is approved direction. Physical job-site deletion is a hard stop.",
-    "future_sequence": [
-      "A domain contract",
-      "B additive schema",
-      "C client account and invitations",
-      "D shared timeline",
-      "E steps and changes",
-      "F documented payments",
-      "G closure and exports"
-    ],
-    "technical_contract": {
-      "phase": "A",
-      "status": "approved_product_direction",
-      "implementation_status": "conceptual_not_implemented",
-      "decision_ids": [
-        "D-VNEXT-18",
-        "D-VNEXT-19",
-        "D-VNEXT-20",
-        "D-VNEXT-21",
-        "D-VNEXT-22",
-        "D-VNEXT-23",
-        "D-VNEXT-24",
-        "D-VNEXT-25",
-        "D-VNEXT-26",
-        "D-VNEXT-27",
-        "D-VNEXT-28",
-        "D-VNEXT-29",
-        "D-VNEXT-30",
-        "D-VNEXT-31",
-        "D-VNEXT-32",
-        "D-VNEXT-33",
-        "D-VNEXT-34",
-        "D-VNEXT-35",
-        "D-VNEXT-36",
-        "D-VNEXT-37",
-        "D-VNEXT-38",
-        "D-VNEXT-39",
-        "D-VNEXT-40",
-        "D-VNEXT-41",
-        "D-VNEXT-42",
-        "D-VNEXT-43",
-        "D-VNEXT-44",
-        "D-VNEXT-45"
-      ],
-      "decisions": {
-        "D-VNEXT-18": "User operates in explicit PLATFORM, ORGANIZATION and CLIENT_JOB_SITE contexts; switching context never transfers authority.",
-        "D-VNEXT-19": "JobSiteParticipant separates ORGANIZATION_MEMBER and CLIENT and has an explicit job-site-scoped lifecycle.",
-        "D-VNEXT-20": "Future memberships are multiple with uniqueness per organization and user; client participation is excluded.",
-        "D-VNEXT-21": "ClientProperty is a private client organizer, not a tenant or proof of legal ownership.",
-        "D-VNEXT-22": "Authorization is default-deny and follows the canonical actor by capability matrix.",
-        "D-VNEXT-23": "Economic authority uses explicit site-scoped, capability-specific, revocable grants revalidated at effect time.",
-        "D-VNEXT-24": "Client invitations are distinct from organization invitations, one-time hashed, email-bound, valid for fourteen days and create participation only.",
-        "D-VNEXT-25": "One append-only story produces internal and shared read models with explicit audience and disclosure; audit and processes remain separate.",
-        "D-VNEXT-26": "Attachments remain private, immutable and provenance-bound; sharing creates a separate disclosure and downloads are mediated.",
-        "D-VNEXT-27": "Proposals and counterproposals are immutable versions with optimistic concurrency and exact-version acceptance.",
-        "D-VNEXT-28": "Organization payment profiles are versioned and protected; payment requests snapshot the indicated IBAN profile version.",
-        "D-VNEXT-29": "Receipts are restricted commercial content and do not prove credit automatically.",
-        "D-VNEXT-30": "Notifications use event-specific recipients, immediate versus digest delivery, deduplication and sensitive-data minimization.",
-        "D-VNEXT-31": "Client and organization exports are distinct authenticated immutable snapshots with fingerprint and bounded delivery artifacts.",
-        "D-VNEXT-32": "Canonical job-site data has no automatic deletion in MVP; invitations, signed URLs and export binaries have defined technical expiries.",
-        "D-VNEXT-33": "Dispute preservation and legal hold block destructive operations without expanding visibility.",
-        "D-VNEXT-34": "First release supports logical archive only; physical job-site deletion is disabled.",
-        "D-VNEXT-35": "Client portability includes private client data and authorized shared records but excludes organization-internal data and access transfer.",
-        "D-VNEXT-36": "Client account deletion revokes access and may pseudonymize historical identity without rewriting shared history.",
-        "D-VNEXT-37": "Disputes are append-only party threads with preservation and scoped blockers; Qoovex does not arbitrate.",
-        "D-VNEXT-38": "Reopening requires mutual confirmation and starts a new episode without rewriting prior closure or exports.",
-        "D-VNEXT-39": "PRIMARY_CLIENT is the only MVP client role; future client roles never enter OrganizationRole.",
-        "D-VNEXT-40": "The commercial model is B2B SaaS paid by the Organization; collaborator included, client free, no transaction fee or marketplace.",
-        "D-VNEXT-41": "Legacy clientName is preserved as a snapshot and never creates or matches an account automatically.",
-        "D-VNEXT-42": "JobSiteOperationalPhase remains for legacy compatibility and COMPLETED never means mutual vNext closure.",
-        "D-VNEXT-43": "The five @1 processes remain semantically immutable; vNext uses new versioned processes and the engine never grants access.",
-        "D-VNEXT-44": "Rollout separates LEGACY and VNEXT, requires explicit conversion and supports lossless application rollback.",
-        "D-VNEXT-45": "Future implementation is one prompt, one branch and PR, and one additive Prisma migration unless evidence triggers a safety stop."
-      },
-      "canonical_matrices": {
-        "count": 20,
-        "authorization": "docs/01_DOMAIN_AND_AUTHORIZATION.md",
-        "security_and_retention": "docs/03_DATA_STORAGE_AND_SECURITY.md",
-        "lifecycles_and_receipts": "docs/04_RUNTIME_AND_FEATURES.md",
-        "legacy_and_migration": "docs/06_OPERATIONS_AND_ENVIRONMENT.md",
-        "data_control": "docs/08_SUPPORT_AND_DATA_CONTROL.md",
-        "index": "docs/07_QUALITY_AND_RELEASE.md"
-      },
-      "threat_model": "docs/03_DATA_STORAGE_AND_SECURITY.md",
-      "future_single_migration_plan": "docs/06_OPERATIONS_AND_ENVIRONMENT.md",
-      "compatibility": [
-        "current single membership remains verified current state",
-        "CLIENT never enters OrganizationRole",
-        "client participation never implies membership",
-        "current job-site assignments are preserved",
-        "clientName never causes automatic identity matching",
-        "JobSiteOperationalPhase.COMPLETED never implies mutual closure",
-        "current @1 processes are not reinterpreted",
-        "share links never imply authenticated participation"
-      ]
-    }
+    "classification": "approved_product_direction",
+    "decision": "D-VNEXT-48",
+    "name": "Qoovex vNext",
+    "statement": "Shared company-client space for managing a construction job from creation to closure.",
+    "implementation_status": "conceptual_not_implemented"
   },
-  "conceptual_not_implemented": {
-    "items": [
-      "JobSiteParticipant with ORGANIZATION_MEMBER and CLIENT contexts",
-      "ClientProperty and cross-company private property organization",
-      "account-backed primary client and client invitation lifecycle",
-      "client confirmation before activation",
-      "INTERNAL versus SHARED_WITH_CLIENT job-site timeline",
-      "optional vNext steps and their lifecycle",
-      "versioned proposals, counterproposals and acceptance",
-      "delegated economic authority",
-      "documented payment requests, declarations, receipts and confirmations",
-      "separate authenticated client home and job-site detail",
-      "reciprocal closure, post-closure request threads and final client export",
-      "explicit account context selection and multiple organization memberships",
-      "participant, client invitation and authority-grant lifecycles",
-      "timeline audience and disclosure enforcement",
-      "payment profile, restricted receipt access and documented payment lifecycle",
-      "notification matrix and client-scoped preferences",
-      "legal hold, dispute preservation, portability and client account deletion",
-      "LEGACY and VNEXT modes, explicit conversion and coordinated additive migration",
-      "OCR or provider-backed AI extraction, classification or matching; only the disabled provider-neutral dry-run foundation exists",
-      "file-content indexing or semantic search",
-      "saved searches or search history",
-      "new intake or notification channels",
-      "automatic external sharing",
-      "automatic retention or deletion",
-      "additional access tracking such as IP or user-agent",
-      "compliance, certification or regulatory determination",
-      "SLA, monitoring commitments or commercial entitlements"
-    ],
-    "warning": "These items are future directions only and do not authorize enums, fields, providers, schema, migrations, jobs, routes, permissions, disclosure, retention, UI or legal claims."
-  },
-  "open_hard_stops": [
-    "definitive canonical-data retention validated for legal and privacy requirements",
-    "technical IBAN protection at rest, key management, rotation, recovery and authorized operational access",
-    "commercial prices, limits, trial and subscription tolerance period"
+  "conceptual_not_implemented": [
+    "multiple organization memberships per User", "JobSiteParticipant", "ClientProperty", "client account surfaces",
+    "shared client timeline", "vNext steps", "versioned proposals", "documented payments", "disputes",
+    "mutual closure", "post-closure requests", "client export", "client home"
   ],
-  "operational_gates": [
-    "remote database fingerprint, migration state, backup and restore proof, and explicit deployment authorization",
-    "technical evidence that a single coordinated additive migration is safe; otherwise stop without autonomously splitting it"
+  "decisions": [
+    { "id": "D-VNEXT-41", "status": "SUPERSEDED", "reason": "clientName compatibility removed" },
+    { "id": "D-VNEXT-42", "status": "SUPERSEDED", "reason": "JobSiteOperationalPhase compatibility removed" },
+    { "id": "D-VNEXT-43", "status": "SUPERSEDED", "reason": "five legacy product processes removed" },
+    { "id": "D-VNEXT-44", "status": "SUPERSEDED", "reason": "no LEGACY/VNEXT dual mode" },
+    { "id": "D-VNEXT-45", "status": "SUPERSEDED", "reason": "single implementation prompt replaced by two coordinated tasks" },
+    { "id": "D-VNEXT-46", "status": "IMPLEMENTED_DECISION", "title": "Legacy Eradication" },
+    { "id": "D-VNEXT-47", "status": "IMPLEMENTED_DECISION", "title": "Foundation-only intermediate state" },
+    { "id": "D-VNEXT-48", "status": "APPROVED_PRODUCT_DIRECTION", "title": "Full vNext implementation in a separate prompt" }
   ],
-  "standing_non_vnext_hard_stops": [
-    "OCR or AI provider, evaluation policy and sensitive-document treatment",
-    "file-content indexing and semantic search",
-    "saved-search visibility, privacy and history retention",
-    "additional intake channels or access telemetry",
-    "service-level and monitoring commitments"
+  "hard_stops": [
+    "No vNext capability before Prompt B",
+    "No Preview or Production migration/deploy without separate authorization",
+    "No physical JobSite deletion before verified retention and legal-hold policy",
+    "CLIENT must never enter OrganizationRole",
+    "No db push, migrate resolve, remote reset or manual SQL outside canonical migrations"
   ],
-  "recommended_future_sequence": [
-    "Phase A complete as documentation only: D-VNEXT-18-45 define entities, invariants, lifecycles, permissions, privacy, threat model and legacy compatibility",
-    "Next authorized implementation task: one prompt, one branch and PR, and one coordinated additive Prisma migration covering schema, backfill, DTO, server services, tests and docs",
-    "Phase C: implement client authentication, participation, invitations, home and properties",
-    "Phase D: implement authorized shared timeline, comments, evidence, downloads and metadata-only search",
-    "Phase E: implement optional steps, versioned changes, negotiation, acceptance and economic authority",
-    "Phase F: implement documented payment requests, declarations, receipts and confirmations",
-    "Phase G: implement reciprocal closure, archive, final exports and post-closure requests",
-    "exclude AI and marketplace from this initial sequence"
-  ],
-  "technical_state": {
-    "authentication": "Auth.js/NextAuth remains confined to apps/workspace.",
-    "styling": "Tailwind CSS v4 uses CSS-first configuration in the Next.js apps.",
-    "typography": "Sirio, Web and Workspace load Geist and Geist Mono through next/font; @qoovex/brand-resources is asset-only.",
-    "design_system": "@qoovex/ui remains the shared shadcn base-nova foundation with Base UI, Tabler and the current light/dark/system theme; generic Phase 4 primitives contain no domain, auth or API logic.",
-    "workspace_architecture": "FSD placement: shared server infrastructure, operational/search/sharing feature services and actions, entity read widgets, view compositions and app routing.",
-    "database_environments": "Production, Preview, local development and CI use distinct guarded targets. The seventeen-migration history, including the operational workspace expansion and index-name stabilization, was applied and verified only on local; remote state is not claimed.",
-    "database_operations": "Every database-sensitive task applies docs/OperationalProtocol.md#database-operation-impact and preserves correctness, authorization and tenant isolation."
+  "next_task": {
+    "decision": "D-VNEXT-48",
+    "name": "Qoovex vNext full implementation",
+    "prerequisite": "explicit separate prompt",
+    "must_not_reintroduce": ["legacy compatibility", "clientName", "JobSiteOperationalPhase", "legacy product processes"]
   }
 }

@@ -1,45 +1,4 @@
-import { getDocumentWithVersions } from "@shared/server/document-service";
-import { listDocumentTypes } from "@shared/server/document-type-service";
-import { listDeadlines } from "@shared/server/deadline-service";
-import { listJobSites } from "@shared/server/job-site-service";
-import { listWorkers } from "@shared/server/worker-service";
-import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
-import { DocumentDetailView } from "@/views/admin-core/documents/DocumentDetailView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
-import type { WorkspaceDeadlineRecord, WorkspaceDocumentRecord, WorkspaceDocumentTypeRecord, WorkspaceDocumentVersionRecord, WorkspaceJobSiteRecord, WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
-import { documentRouteId } from "@shared/lib/document-routes";
-
-interface DocumentDetailPageProps {
-  params: Promise<{ documentId: string }>;
-  searchParams: Promise<{ from?: string }>;
-}
-
-export default async function DocumentDetailPage({ params, searchParams }: DocumentDetailPageProps) {
-  try {
-    const [{ documentId: documentRouteParam }, { from }] = await Promise.all([params, searchParams]);
-    const documentId = documentRouteId(documentRouteParam);
-    const capabilities = await getWorkspaceCapabilities();
-    const [documentReadModel, deadlines, workers, jobSites] = await Promise.all([
-      getDocumentWithVersions(documentId),
-      listDeadlines({ documentId }),
-      listWorkers(),
-      listJobSites(),
-    ]);
-    const { document, versions } = documentReadModel;
-    const documentTypes = capabilities.canReadDocumentSettings ? await listDocumentTypes() : [];
-    return (
-      <DocumentDetailView
-        capabilities={capabilities}
-        document={serializeForClient<WorkspaceDocumentRecord>(document)}
-        versions={serializeForClient<WorkspaceDocumentVersionRecord[]>(versions)}
-        deadlines={serializeForClient<WorkspaceDeadlineRecord[]>(deadlines)}
-        documentTypes={serializeForClient<WorkspaceDocumentTypeRecord[]>(documentTypes)}
-        workers={serializeForClient<WorkspaceWorkerRecord[]>(workers)}
-        jobSites={serializeForClient<WorkspaceJobSiteRecord[]>(jobSites)}
-        returnToDashboard={from === "dashboard"}
-      />
-    );
-  } catch {
-    return <WorkspaceAccessState title="Documento non disponibile" description="Il documento non esiste, e archiviato o non e accessibile." />;
-  }
-}
+import Link from "next/link";
+import { getDocument } from "@shared/server/document-service";
+import { WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
+export default async function DocumentPage({ params }: { params: Promise<{ documentId: string }> }) { const value = await getDocument((await params).documentId); return <WorkspacePage><WorkspacePageHeader title={value.title} description="Metadati e versioni private del file foundation." /><WorkspacePanel title="Versioni">{value.versions.length ? <ul className="divide-y">{value.versions.map((version) => <li className="flex items-center justify-between gap-3 py-3" key={version.id}><span>{version.originalFileName}</span><Link className="text-sm underline" href={`/api/documents/${value.id}/versions/${version.id}/download`}>Scarica</Link></li>)}</ul> : <p className="text-sm text-muted-foreground">Nessuna versione disponibile.</p>}</WorkspacePanel></WorkspacePage>; }

@@ -6,7 +6,6 @@ export interface WorkspaceNavigationModel {
   primary: WorkspaceNavigationItem[];
   actions: WorkspaceNavigationItem[];
   account: WorkspaceNavigationItem[];
-  searchEnabled: boolean;
 }
 
 function has(permissions: readonly OrganizationPermission[], permission: OrganizationPermission) {
@@ -17,13 +16,18 @@ export function buildWorkspaceNavigation(access: readonly OrganizationPermission
   const permissions = Array.isArray(access) ? access : getPermissionsForRole(access as OrganizationRole | null);
   const primary: WorkspaceNavigationItem[] = [];
   if (has(permissions, "organization:read")) primary.push({ label: "Panoramica", href: "/dashboard" });
-  if (has(permissions, "jobSites:read")) primary.push({ label: "Tutti i cantieri", href: "/job-sites/all" });
+  if (has(permissions, "jobSites:read")) primary.push({ label: "Cantieri", href: "/job-sites" });
+  if (has(permissions, "workers:read")) primary.push({ label: "Persone operative", href: "/workers" });
+  if (has(permissions, "documents:read")) primary.push({ label: "File", href: "/documents" });
+  if (has(permissions, "evidence:read")) primary.push({ label: "Prove", href: "/evidence" });
+  if (has(permissions, "members:read")) primary.push({ label: "Collaboratori", href: "/people/access" });
+  if (has(permissions, "assignments:read")) primary.push({ label: "Assegnazioni", href: "/access" });
 
   const actions: WorkspaceNavigationItem[] = [];
-  if (has(permissions, "evidence:upload")) actions.push({ label: "Aggiungi prova", href: "/evidence/new?intent=quick-job-site" });
+  if (has(permissions, "evidence:upload")) actions.push({ label: "Aggiungi prova", href: "/evidence/new" });
   if (has(permissions, "jobSites:create")) actions.push({ label: "Crea cantiere", href: "/job-sites/new" });
-  if (has(permissions, "documents:upload")) actions.push({ label: "Carica documento", href: "/documents?intent=upload" });
-  if (has(permissions, "members:manage")) actions.push({ label: "Aggiungi collaboratore", href: "/people/access/invite" });
+  if (has(permissions, "documents:upload")) actions.push({ label: "Carica file", href: "/documents/new" });
+  if (has(permissions, "members:manage")) actions.push({ label: "Aggiungi collaboratore", href: "/settings/people/invite" });
 
   const account: WorkspaceNavigationItem[] = [];
   if (has(permissions, "organization:read")) account.push({ label: "Gestisci azienda", href: "/settings/organization-profile" });
@@ -32,14 +36,7 @@ export function buildWorkspaceNavigation(access: readonly OrganizationPermission
   if (has(permissions, "settings:update") || has(permissions, "members:read")) account.push({ label: "Impostazioni", href: "/settings" });
   if (platformRole === "SUPPORT_AGENT") account.unshift({ label: "Console supporto", href: "/qoovex-admin" });
   if (platformRole === "PLATFORM_ADMIN") account.unshift({ label: "Console Qoovex", href: "/qoovex-admin" });
-  return { primary, actions: actions.slice(0, 4), account, searchEnabled: has(permissions, "organization:read") };
-}
-
-export function isJobSiteCollectionPathCurrent(pathname: string) {
-  return pathname === "/job-sites"
-    || pathname === "/job-sites/all"
-    || pathname === "/job-sites/archive"
-    || pathname === "/job-sites/new";
+  return { primary, actions: actions.slice(0, 4), account };
 }
 
 export function isWorkspaceNavigationItemCurrent(pathname: string, searchParams: Pick<URLSearchParams, "get">, href: string, activePath?: string) {

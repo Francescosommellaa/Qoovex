@@ -29,9 +29,7 @@ export type JobSiteMinAggregateOutputType = {
   organizationId: string | null
   name: string | null
   address: string | null
-  clientName: string | null
   status: $Enums.RecordStatus | null
-  operationalPhase: $Enums.JobSiteOperationalPhase | null
   startDate: Date | null
   endDate: Date | null
   notes: string | null
@@ -45,9 +43,7 @@ export type JobSiteMaxAggregateOutputType = {
   organizationId: string | null
   name: string | null
   address: string | null
-  clientName: string | null
   status: $Enums.RecordStatus | null
-  operationalPhase: $Enums.JobSiteOperationalPhase | null
   startDate: Date | null
   endDate: Date | null
   notes: string | null
@@ -61,9 +57,7 @@ export type JobSiteCountAggregateOutputType = {
   organizationId: number
   name: number
   address: number
-  clientName: number
   status: number
-  operationalPhase: number
   startDate: number
   endDate: number
   notes: number
@@ -79,9 +73,7 @@ export type JobSiteMinAggregateInputType = {
   organizationId?: true
   name?: true
   address?: true
-  clientName?: true
   status?: true
-  operationalPhase?: true
   startDate?: true
   endDate?: true
   notes?: true
@@ -95,9 +87,7 @@ export type JobSiteMaxAggregateInputType = {
   organizationId?: true
   name?: true
   address?: true
-  clientName?: true
   status?: true
-  operationalPhase?: true
   startDate?: true
   endDate?: true
   notes?: true
@@ -111,9 +101,7 @@ export type JobSiteCountAggregateInputType = {
   organizationId?: true
   name?: true
   address?: true
-  clientName?: true
   status?: true
-  operationalPhase?: true
   startDate?: true
   endDate?: true
   notes?: true
@@ -200,9 +188,7 @@ export type JobSiteGroupByOutputType = {
   organizationId: string
   name: string
   address: string | null
-  clientName: string | null
   status: $Enums.RecordStatus
-  operationalPhase: $Enums.JobSiteOperationalPhase
   startDate: Date | null
   endDate: Date | null
   notes: string | null
@@ -237,9 +223,7 @@ export type JobSiteWhereInput = {
   organizationId?: Prisma.StringFilter<"JobSite"> | string
   name?: Prisma.StringFilter<"JobSite"> | string
   address?: Prisma.StringNullableFilter<"JobSite"> | string | null
-  clientName?: Prisma.StringNullableFilter<"JobSite"> | string | null
   status?: Prisma.EnumRecordStatusFilter<"JobSite"> | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFilter<"JobSite"> | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.DateTimeNullableFilter<"JobSite"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"JobSite"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"JobSite"> | string | null
@@ -248,12 +232,7 @@ export type JobSiteWhereInput = {
   archivedAt?: Prisma.DateTimeNullableFilter<"JobSite"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   documents?: Prisma.DocumentListRelationFilter
-  requirements?: Prisma.DocumentRequirementListRelationFilter
-  deadlines?: Prisma.DeadlineListRelationFilter
-  calendarEvents?: Prisma.CalendarEventListRelationFilter
-  checklists?: Prisma.ChecklistListRelationFilter
   evidence?: Prisma.EvidenceListRelationFilter
-  documentPackages?: Prisma.DocumentPackageListRelationFilter
   userAssignments?: Prisma.JobSiteUserAssignmentListRelationFilter
   workerAssignments?: Prisma.JobSiteWorkerAssignmentListRelationFilter
   documentLinks?: Prisma.DocumentJobSiteLinkListRelationFilter
@@ -264,9 +243,7 @@ export type JobSiteOrderByWithRelationInput = {
   organizationId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  clientName?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  operationalPhase?: Prisma.SortOrder
   startDate?: Prisma.SortOrderInput | Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -275,12 +252,7 @@ export type JobSiteOrderByWithRelationInput = {
   archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   documents?: Prisma.DocumentOrderByRelationAggregateInput
-  requirements?: Prisma.DocumentRequirementOrderByRelationAggregateInput
-  deadlines?: Prisma.DeadlineOrderByRelationAggregateInput
-  calendarEvents?: Prisma.CalendarEventOrderByRelationAggregateInput
-  checklists?: Prisma.ChecklistOrderByRelationAggregateInput
   evidence?: Prisma.EvidenceOrderByRelationAggregateInput
-  documentPackages?: Prisma.DocumentPackageOrderByRelationAggregateInput
   userAssignments?: Prisma.JobSiteUserAssignmentOrderByRelationAggregateInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentOrderByRelationAggregateInput
   documentLinks?: Prisma.DocumentJobSiteLinkOrderByRelationAggregateInput
@@ -294,9 +266,7 @@ export type JobSiteWhereUniqueInput = Prisma.AtLeast<{
   organizationId?: Prisma.StringFilter<"JobSite"> | string
   name?: Prisma.StringFilter<"JobSite"> | string
   address?: Prisma.StringNullableFilter<"JobSite"> | string | null
-  clientName?: Prisma.StringNullableFilter<"JobSite"> | string | null
   status?: Prisma.EnumRecordStatusFilter<"JobSite"> | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFilter<"JobSite"> | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.DateTimeNullableFilter<"JobSite"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"JobSite"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"JobSite"> | string | null
@@ -305,12 +275,7 @@ export type JobSiteWhereUniqueInput = Prisma.AtLeast<{
   archivedAt?: Prisma.DateTimeNullableFilter<"JobSite"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   documents?: Prisma.DocumentListRelationFilter
-  requirements?: Prisma.DocumentRequirementListRelationFilter
-  deadlines?: Prisma.DeadlineListRelationFilter
-  calendarEvents?: Prisma.CalendarEventListRelationFilter
-  checklists?: Prisma.ChecklistListRelationFilter
   evidence?: Prisma.EvidenceListRelationFilter
-  documentPackages?: Prisma.DocumentPackageListRelationFilter
   userAssignments?: Prisma.JobSiteUserAssignmentListRelationFilter
   workerAssignments?: Prisma.JobSiteWorkerAssignmentListRelationFilter
   documentLinks?: Prisma.DocumentJobSiteLinkListRelationFilter
@@ -321,9 +286,7 @@ export type JobSiteOrderByWithAggregationInput = {
   organizationId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  clientName?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  operationalPhase?: Prisma.SortOrder
   startDate?: Prisma.SortOrderInput | Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -343,9 +306,7 @@ export type JobSiteScalarWhereWithAggregatesInput = {
   organizationId?: Prisma.StringWithAggregatesFilter<"JobSite"> | string
   name?: Prisma.StringWithAggregatesFilter<"JobSite"> | string
   address?: Prisma.StringNullableWithAggregatesFilter<"JobSite"> | string | null
-  clientName?: Prisma.StringNullableWithAggregatesFilter<"JobSite"> | string | null
   status?: Prisma.EnumRecordStatusWithAggregatesFilter<"JobSite"> | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseWithAggregatesFilter<"JobSite"> | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.DateTimeNullableWithAggregatesFilter<"JobSite"> | Date | string | null
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"JobSite"> | Date | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"JobSite"> | string | null
@@ -358,9 +319,7 @@ export type JobSiteCreateInput = {
   id?: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -369,12 +328,7 @@ export type JobSiteCreateInput = {
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
@@ -385,9 +339,7 @@ export type JobSiteUncheckedCreateInput = {
   organizationId: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -395,12 +347,7 @@ export type JobSiteUncheckedCreateInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
@@ -410,9 +357,7 @@ export type JobSiteUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -421,12 +366,7 @@ export type JobSiteUpdateInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
@@ -437,9 +377,7 @@ export type JobSiteUncheckedUpdateInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -447,12 +385,7 @@ export type JobSiteUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -463,9 +396,7 @@ export type JobSiteCreateManyInput = {
   organizationId: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -478,9 +409,7 @@ export type JobSiteUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -494,9 +423,7 @@ export type JobSiteUncheckedUpdateManyInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -520,9 +447,7 @@ export type JobSiteCountOrderByAggregateInput = {
   organizationId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  clientName?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  operationalPhase?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -536,9 +461,7 @@ export type JobSiteMaxOrderByAggregateInput = {
   organizationId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  clientName?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  operationalPhase?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -552,9 +475,7 @@ export type JobSiteMinOrderByAggregateInput = {
   organizationId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  clientName?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  operationalPhase?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -615,10 +536,6 @@ export type JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput = {
   deleteMany?: Prisma.JobSiteScalarWhereInput | Prisma.JobSiteScalarWhereInput[]
 }
 
-export type EnumJobSiteOperationalPhaseFieldUpdateOperationsInput = {
-  set?: $Enums.JobSiteOperationalPhase
-}
-
 export type JobSiteCreateNestedOneWithoutUserAssignmentsInput = {
   create?: Prisma.XOR<Prisma.JobSiteCreateWithoutUserAssignmentsInput, Prisma.JobSiteUncheckedCreateWithoutUserAssignmentsInput>
   connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutUserAssignmentsInput
@@ -677,70 +594,6 @@ export type JobSiteUpdateOneRequiredWithoutDocumentLinksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutDocumentLinksInput, Prisma.JobSiteUpdateWithoutDocumentLinksInput>, Prisma.JobSiteUncheckedUpdateWithoutDocumentLinksInput>
 }
 
-export type JobSiteCreateNestedOneWithoutRequirementsInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutRequirementsInput, Prisma.JobSiteUncheckedCreateWithoutRequirementsInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutRequirementsInput
-  connect?: Prisma.JobSiteWhereUniqueInput
-}
-
-export type JobSiteUpdateOneWithoutRequirementsNestedInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutRequirementsInput, Prisma.JobSiteUncheckedCreateWithoutRequirementsInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutRequirementsInput
-  upsert?: Prisma.JobSiteUpsertWithoutRequirementsInput
-  disconnect?: Prisma.JobSiteWhereInput | boolean
-  delete?: Prisma.JobSiteWhereInput | boolean
-  connect?: Prisma.JobSiteWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutRequirementsInput, Prisma.JobSiteUpdateWithoutRequirementsInput>, Prisma.JobSiteUncheckedUpdateWithoutRequirementsInput>
-}
-
-export type JobSiteCreateNestedOneWithoutDeadlinesInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutDeadlinesInput, Prisma.JobSiteUncheckedCreateWithoutDeadlinesInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutDeadlinesInput
-  connect?: Prisma.JobSiteWhereUniqueInput
-}
-
-export type JobSiteUpdateOneWithoutDeadlinesNestedInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutDeadlinesInput, Prisma.JobSiteUncheckedCreateWithoutDeadlinesInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutDeadlinesInput
-  upsert?: Prisma.JobSiteUpsertWithoutDeadlinesInput
-  disconnect?: Prisma.JobSiteWhereInput | boolean
-  delete?: Prisma.JobSiteWhereInput | boolean
-  connect?: Prisma.JobSiteWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutDeadlinesInput, Prisma.JobSiteUpdateWithoutDeadlinesInput>, Prisma.JobSiteUncheckedUpdateWithoutDeadlinesInput>
-}
-
-export type JobSiteCreateNestedOneWithoutCalendarEventsInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedCreateWithoutCalendarEventsInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutCalendarEventsInput
-  connect?: Prisma.JobSiteWhereUniqueInput
-}
-
-export type JobSiteUpdateOneWithoutCalendarEventsNestedInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedCreateWithoutCalendarEventsInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutCalendarEventsInput
-  upsert?: Prisma.JobSiteUpsertWithoutCalendarEventsInput
-  disconnect?: Prisma.JobSiteWhereInput | boolean
-  delete?: Prisma.JobSiteWhereInput | boolean
-  connect?: Prisma.JobSiteWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutCalendarEventsInput, Prisma.JobSiteUpdateWithoutCalendarEventsInput>, Prisma.JobSiteUncheckedUpdateWithoutCalendarEventsInput>
-}
-
-export type JobSiteCreateNestedOneWithoutChecklistsInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutChecklistsInput, Prisma.JobSiteUncheckedCreateWithoutChecklistsInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutChecklistsInput
-  connect?: Prisma.JobSiteWhereUniqueInput
-}
-
-export type JobSiteUpdateOneWithoutChecklistsNestedInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutChecklistsInput, Prisma.JobSiteUncheckedCreateWithoutChecklistsInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutChecklistsInput
-  upsert?: Prisma.JobSiteUpsertWithoutChecklistsInput
-  disconnect?: Prisma.JobSiteWhereInput | boolean
-  delete?: Prisma.JobSiteWhereInput | boolean
-  connect?: Prisma.JobSiteWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutChecklistsInput, Prisma.JobSiteUpdateWithoutChecklistsInput>, Prisma.JobSiteUncheckedUpdateWithoutChecklistsInput>
-}
-
 export type JobSiteCreateNestedOneWithoutEvidenceInput = {
   create?: Prisma.XOR<Prisma.JobSiteCreateWithoutEvidenceInput, Prisma.JobSiteUncheckedCreateWithoutEvidenceInput>
   connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutEvidenceInput
@@ -757,29 +610,11 @@ export type JobSiteUpdateOneWithoutEvidenceNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutEvidenceInput, Prisma.JobSiteUpdateWithoutEvidenceInput>, Prisma.JobSiteUncheckedUpdateWithoutEvidenceInput>
 }
 
-export type JobSiteCreateNestedOneWithoutDocumentPackagesInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentPackagesInput, Prisma.JobSiteUncheckedCreateWithoutDocumentPackagesInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutDocumentPackagesInput
-  connect?: Prisma.JobSiteWhereUniqueInput
-}
-
-export type JobSiteUpdateOneWithoutDocumentPackagesNestedInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentPackagesInput, Prisma.JobSiteUncheckedCreateWithoutDocumentPackagesInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutDocumentPackagesInput
-  upsert?: Prisma.JobSiteUpsertWithoutDocumentPackagesInput
-  disconnect?: Prisma.JobSiteWhereInput | boolean
-  delete?: Prisma.JobSiteWhereInput | boolean
-  connect?: Prisma.JobSiteWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutDocumentPackagesInput, Prisma.JobSiteUpdateWithoutDocumentPackagesInput>, Prisma.JobSiteUncheckedUpdateWithoutDocumentPackagesInput>
-}
-
 export type JobSiteCreateWithoutOrganizationInput = {
   id?: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -787,12 +622,7 @@ export type JobSiteCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
@@ -802,9 +632,7 @@ export type JobSiteUncheckedCreateWithoutOrganizationInput = {
   id?: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -812,12 +640,7 @@ export type JobSiteUncheckedCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
@@ -857,9 +680,7 @@ export type JobSiteScalarWhereInput = {
   organizationId?: Prisma.StringFilter<"JobSite"> | string
   name?: Prisma.StringFilter<"JobSite"> | string
   address?: Prisma.StringNullableFilter<"JobSite"> | string | null
-  clientName?: Prisma.StringNullableFilter<"JobSite"> | string | null
   status?: Prisma.EnumRecordStatusFilter<"JobSite"> | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFilter<"JobSite"> | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.DateTimeNullableFilter<"JobSite"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"JobSite"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"JobSite"> | string | null
@@ -872,9 +693,7 @@ export type JobSiteCreateWithoutUserAssignmentsInput = {
   id?: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -883,12 +702,7 @@ export type JobSiteCreateWithoutUserAssignmentsInput = {
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
 }
@@ -898,9 +712,7 @@ export type JobSiteUncheckedCreateWithoutUserAssignmentsInput = {
   organizationId: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -908,12 +720,7 @@ export type JobSiteUncheckedCreateWithoutUserAssignmentsInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
 }
@@ -938,9 +745,7 @@ export type JobSiteUpdateWithoutUserAssignmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -949,12 +754,7 @@ export type JobSiteUpdateWithoutUserAssignmentsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
 }
@@ -964,9 +764,7 @@ export type JobSiteUncheckedUpdateWithoutUserAssignmentsInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -974,12 +772,7 @@ export type JobSiteUncheckedUpdateWithoutUserAssignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
 }
@@ -988,9 +781,7 @@ export type JobSiteCreateWithoutWorkerAssignmentsInput = {
   id?: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -999,12 +790,7 @@ export type JobSiteCreateWithoutWorkerAssignmentsInput = {
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
 }
@@ -1014,9 +800,7 @@ export type JobSiteUncheckedCreateWithoutWorkerAssignmentsInput = {
   organizationId: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -1024,12 +808,7 @@ export type JobSiteUncheckedCreateWithoutWorkerAssignmentsInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
 }
@@ -1054,9 +833,7 @@ export type JobSiteUpdateWithoutWorkerAssignmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1065,12 +842,7 @@ export type JobSiteUpdateWithoutWorkerAssignmentsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
 }
@@ -1080,9 +852,7 @@ export type JobSiteUncheckedUpdateWithoutWorkerAssignmentsInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1090,12 +860,7 @@ export type JobSiteUncheckedUpdateWithoutWorkerAssignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
 }
@@ -1104,9 +869,7 @@ export type JobSiteCreateWithoutDocumentsInput = {
   id?: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -1114,12 +877,7 @@ export type JobSiteCreateWithoutDocumentsInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
@@ -1130,21 +888,14 @@ export type JobSiteUncheckedCreateWithoutDocumentsInput = {
   organizationId: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
-  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
@@ -1170,9 +921,7 @@ export type JobSiteUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1180,12 +929,7 @@ export type JobSiteUpdateWithoutDocumentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
@@ -1196,21 +940,14 @@ export type JobSiteUncheckedUpdateWithoutDocumentsInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -1220,9 +957,7 @@ export type JobSiteCreateWithoutDocumentLinksInput = {
   id?: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -1231,12 +966,7 @@ export type JobSiteCreateWithoutDocumentLinksInput = {
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
 }
@@ -1246,9 +976,7 @@ export type JobSiteUncheckedCreateWithoutDocumentLinksInput = {
   organizationId: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -1256,12 +984,7 @@ export type JobSiteUncheckedCreateWithoutDocumentLinksInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
 }
@@ -1286,9 +1009,7 @@ export type JobSiteUpdateWithoutDocumentLinksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1297,12 +1018,7 @@ export type JobSiteUpdateWithoutDocumentLinksInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
 }
@@ -1312,9 +1028,7 @@ export type JobSiteUncheckedUpdateWithoutDocumentLinksInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1322,487 +1036,16 @@ export type JobSiteUncheckedUpdateWithoutDocumentLinksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteCreateWithoutRequirementsInput = {
-  id?: string
-  name: string
-  address?: string | null
-  clientName?: string | null
-  status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
-  userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteUncheckedCreateWithoutRequirementsInput = {
-  id?: string
-  organizationId: string
-  name: string
-  address?: string | null
-  clientName?: string | null
-  status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteCreateOrConnectWithoutRequirementsInput = {
-  where: Prisma.JobSiteWhereUniqueInput
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutRequirementsInput, Prisma.JobSiteUncheckedCreateWithoutRequirementsInput>
-}
-
-export type JobSiteUpsertWithoutRequirementsInput = {
-  update: Prisma.XOR<Prisma.JobSiteUpdateWithoutRequirementsInput, Prisma.JobSiteUncheckedUpdateWithoutRequirementsInput>
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutRequirementsInput, Prisma.JobSiteUncheckedCreateWithoutRequirementsInput>
-  where?: Prisma.JobSiteWhereInput
-}
-
-export type JobSiteUpdateToOneWithWhereWithoutRequirementsInput = {
-  where?: Prisma.JobSiteWhereInput
-  data: Prisma.XOR<Prisma.JobSiteUpdateWithoutRequirementsInput, Prisma.JobSiteUncheckedUpdateWithoutRequirementsInput>
-}
-
-export type JobSiteUpdateWithoutRequirementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteUncheckedUpdateWithoutRequirementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteCreateWithoutDeadlinesInput = {
-  id?: string
-  name: string
-  address?: string | null
-  clientName?: string | null
-  status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
-  userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteUncheckedCreateWithoutDeadlinesInput = {
-  id?: string
-  organizationId: string
-  name: string
-  address?: string | null
-  clientName?: string | null
-  status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteCreateOrConnectWithoutDeadlinesInput = {
-  where: Prisma.JobSiteWhereUniqueInput
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutDeadlinesInput, Prisma.JobSiteUncheckedCreateWithoutDeadlinesInput>
-}
-
-export type JobSiteUpsertWithoutDeadlinesInput = {
-  update: Prisma.XOR<Prisma.JobSiteUpdateWithoutDeadlinesInput, Prisma.JobSiteUncheckedUpdateWithoutDeadlinesInput>
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutDeadlinesInput, Prisma.JobSiteUncheckedCreateWithoutDeadlinesInput>
-  where?: Prisma.JobSiteWhereInput
-}
-
-export type JobSiteUpdateToOneWithWhereWithoutDeadlinesInput = {
-  where?: Prisma.JobSiteWhereInput
-  data: Prisma.XOR<Prisma.JobSiteUpdateWithoutDeadlinesInput, Prisma.JobSiteUncheckedUpdateWithoutDeadlinesInput>
-}
-
-export type JobSiteUpdateWithoutDeadlinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteUncheckedUpdateWithoutDeadlinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteCreateWithoutCalendarEventsInput = {
-  id?: string
-  name: string
-  address?: string | null
-  clientName?: string | null
-  status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
-  userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteUncheckedCreateWithoutCalendarEventsInput = {
-  id?: string
-  organizationId: string
-  name: string
-  address?: string | null
-  clientName?: string | null
-  status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteCreateOrConnectWithoutCalendarEventsInput = {
-  where: Prisma.JobSiteWhereUniqueInput
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedCreateWithoutCalendarEventsInput>
-}
-
-export type JobSiteUpsertWithoutCalendarEventsInput = {
-  update: Prisma.XOR<Prisma.JobSiteUpdateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedUpdateWithoutCalendarEventsInput>
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedCreateWithoutCalendarEventsInput>
-  where?: Prisma.JobSiteWhereInput
-}
-
-export type JobSiteUpdateToOneWithWhereWithoutCalendarEventsInput = {
-  where?: Prisma.JobSiteWhereInput
-  data: Prisma.XOR<Prisma.JobSiteUpdateWithoutCalendarEventsInput, Prisma.JobSiteUncheckedUpdateWithoutCalendarEventsInput>
-}
-
-export type JobSiteUpdateWithoutCalendarEventsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteUncheckedUpdateWithoutCalendarEventsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteCreateWithoutChecklistsInput = {
-  id?: string
-  name: string
-  address?: string | null
-  clientName?: string | null
-  status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
-  userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteUncheckedCreateWithoutChecklistsInput = {
-  id?: string
-  organizationId: string
-  name: string
-  address?: string | null
-  clientName?: string | null
-  status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteCreateOrConnectWithoutChecklistsInput = {
-  where: Prisma.JobSiteWhereUniqueInput
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutChecklistsInput, Prisma.JobSiteUncheckedCreateWithoutChecklistsInput>
-}
-
-export type JobSiteUpsertWithoutChecklistsInput = {
-  update: Prisma.XOR<Prisma.JobSiteUpdateWithoutChecklistsInput, Prisma.JobSiteUncheckedUpdateWithoutChecklistsInput>
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutChecklistsInput, Prisma.JobSiteUncheckedCreateWithoutChecklistsInput>
-  where?: Prisma.JobSiteWhereInput
-}
-
-export type JobSiteUpdateToOneWithWhereWithoutChecklistsInput = {
-  where?: Prisma.JobSiteWhereInput
-  data: Prisma.XOR<Prisma.JobSiteUpdateWithoutChecklistsInput, Prisma.JobSiteUncheckedUpdateWithoutChecklistsInput>
-}
-
-export type JobSiteUpdateWithoutChecklistsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteUncheckedUpdateWithoutChecklistsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
 }
 
 export type JobSiteCreateWithoutEvidenceInput = {
   id?: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -1811,11 +1054,6 @@ export type JobSiteCreateWithoutEvidenceInput = {
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
@@ -1826,9 +1064,7 @@ export type JobSiteUncheckedCreateWithoutEvidenceInput = {
   organizationId: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -1836,11 +1072,6 @@ export type JobSiteUncheckedCreateWithoutEvidenceInput = {
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
-  documentPackages?: Prisma.DocumentPackageUncheckedCreateNestedManyWithoutJobSiteInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
@@ -1866,9 +1097,7 @@ export type JobSiteUpdateWithoutEvidenceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1877,11 +1106,6 @@ export type JobSiteUpdateWithoutEvidenceInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
@@ -1892,9 +1116,7 @@ export type JobSiteUncheckedUpdateWithoutEvidenceInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1902,127 +1124,6 @@ export type JobSiteUncheckedUpdateWithoutEvidenceInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteCreateWithoutDocumentPackagesInput = {
-  id?: string
-  name: string
-  address?: string | null
-  clientName?: string | null
-  status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  userAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteUncheckedCreateWithoutDocumentPackagesInput = {
-  id?: string
-  organizationId: string
-  name: string
-  address?: string | null
-  clientName?: string | null
-  status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  requirements?: Prisma.DocumentRequirementUncheckedCreateNestedManyWithoutJobSiteInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutJobSiteInput
-  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutJobSiteInput
-  checklists?: Prisma.ChecklistUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteCreateOrConnectWithoutDocumentPackagesInput = {
-  where: Prisma.JobSiteWhereUniqueInput
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentPackagesInput, Prisma.JobSiteUncheckedCreateWithoutDocumentPackagesInput>
-}
-
-export type JobSiteUpsertWithoutDocumentPackagesInput = {
-  update: Prisma.XOR<Prisma.JobSiteUpdateWithoutDocumentPackagesInput, Prisma.JobSiteUncheckedUpdateWithoutDocumentPackagesInput>
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentPackagesInput, Prisma.JobSiteUncheckedCreateWithoutDocumentPackagesInput>
-  where?: Prisma.JobSiteWhereInput
-}
-
-export type JobSiteUpdateToOneWithWhereWithoutDocumentPackagesInput = {
-  where?: Prisma.JobSiteWhereInput
-  data: Prisma.XOR<Prisma.JobSiteUpdateWithoutDocumentPackagesInput, Prisma.JobSiteUncheckedUpdateWithoutDocumentPackagesInput>
-}
-
-export type JobSiteUpdateWithoutDocumentPackagesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteUncheckedUpdateWithoutDocumentPackagesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -2032,9 +1133,7 @@ export type JobSiteCreateManyOrganizationInput = {
   id?: string
   name: string
   address?: string | null
-  clientName?: string | null
   status?: $Enums.RecordStatus
-  operationalPhase?: $Enums.JobSiteOperationalPhase
   startDate?: Date | string | null
   endDate?: Date | string | null
   notes?: string | null
@@ -2047,9 +1146,7 @@ export type JobSiteUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2057,12 +1154,7 @@ export type JobSiteUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
@@ -2072,9 +1164,7 @@ export type JobSiteUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2082,12 +1172,7 @@ export type JobSiteUncheckedUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requirements?: Prisma.DocumentRequirementUncheckedUpdateManyWithoutJobSiteNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutJobSiteNestedInput
-  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  checklists?: Prisma.ChecklistUncheckedUpdateManyWithoutJobSiteNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentPackages?: Prisma.DocumentPackageUncheckedUpdateManyWithoutJobSiteNestedInput
   userAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
   documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -2097,9 +1182,7 @@ export type JobSiteUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
-  operationalPhase?: Prisma.EnumJobSiteOperationalPhaseFieldUpdateOperationsInput | $Enums.JobSiteOperationalPhase
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2115,12 +1198,7 @@ export type JobSiteUncheckedUpdateManyWithoutOrganizationInput = {
 
 export type JobSiteCountOutputType = {
   documents: number
-  requirements: number
-  deadlines: number
-  calendarEvents: number
-  checklists: number
   evidence: number
-  documentPackages: number
   userAssignments: number
   workerAssignments: number
   documentLinks: number
@@ -2128,12 +1206,7 @@ export type JobSiteCountOutputType = {
 
 export type JobSiteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documents?: boolean | JobSiteCountOutputTypeCountDocumentsArgs
-  requirements?: boolean | JobSiteCountOutputTypeCountRequirementsArgs
-  deadlines?: boolean | JobSiteCountOutputTypeCountDeadlinesArgs
-  calendarEvents?: boolean | JobSiteCountOutputTypeCountCalendarEventsArgs
-  checklists?: boolean | JobSiteCountOutputTypeCountChecklistsArgs
   evidence?: boolean | JobSiteCountOutputTypeCountEvidenceArgs
-  documentPackages?: boolean | JobSiteCountOutputTypeCountDocumentPackagesArgs
   userAssignments?: boolean | JobSiteCountOutputTypeCountUserAssignmentsArgs
   workerAssignments?: boolean | JobSiteCountOutputTypeCountWorkerAssignmentsArgs
   documentLinks?: boolean | JobSiteCountOutputTypeCountDocumentLinksArgs
@@ -2159,43 +1232,8 @@ export type JobSiteCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Typ
 /**
  * JobSiteCountOutputType without action
  */
-export type JobSiteCountOutputTypeCountRequirementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DocumentRequirementWhereInput
-}
-
-/**
- * JobSiteCountOutputType without action
- */
-export type JobSiteCountOutputTypeCountDeadlinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DeadlineWhereInput
-}
-
-/**
- * JobSiteCountOutputType without action
- */
-export type JobSiteCountOutputTypeCountCalendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CalendarEventWhereInput
-}
-
-/**
- * JobSiteCountOutputType without action
- */
-export type JobSiteCountOutputTypeCountChecklistsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ChecklistWhereInput
-}
-
-/**
- * JobSiteCountOutputType without action
- */
 export type JobSiteCountOutputTypeCountEvidenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EvidenceWhereInput
-}
-
-/**
- * JobSiteCountOutputType without action
- */
-export type JobSiteCountOutputTypeCountDocumentPackagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DocumentPackageWhereInput
 }
 
 /**
@@ -2225,9 +1263,7 @@ export type JobSiteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   organizationId?: boolean
   name?: boolean
   address?: boolean
-  clientName?: boolean
   status?: boolean
-  operationalPhase?: boolean
   startDate?: boolean
   endDate?: boolean
   notes?: boolean
@@ -2236,12 +1272,7 @@ export type JobSiteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   archivedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.JobSite$documentsArgs<ExtArgs>
-  requirements?: boolean | Prisma.JobSite$requirementsArgs<ExtArgs>
-  deadlines?: boolean | Prisma.JobSite$deadlinesArgs<ExtArgs>
-  calendarEvents?: boolean | Prisma.JobSite$calendarEventsArgs<ExtArgs>
-  checklists?: boolean | Prisma.JobSite$checklistsArgs<ExtArgs>
   evidence?: boolean | Prisma.JobSite$evidenceArgs<ExtArgs>
-  documentPackages?: boolean | Prisma.JobSite$documentPackagesArgs<ExtArgs>
   userAssignments?: boolean | Prisma.JobSite$userAssignmentsArgs<ExtArgs>
   workerAssignments?: boolean | Prisma.JobSite$workerAssignmentsArgs<ExtArgs>
   documentLinks?: boolean | Prisma.JobSite$documentLinksArgs<ExtArgs>
@@ -2253,9 +1284,7 @@ export type JobSiteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   organizationId?: boolean
   name?: boolean
   address?: boolean
-  clientName?: boolean
   status?: boolean
-  operationalPhase?: boolean
   startDate?: boolean
   endDate?: boolean
   notes?: boolean
@@ -2270,9 +1299,7 @@ export type JobSiteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   organizationId?: boolean
   name?: boolean
   address?: boolean
-  clientName?: boolean
   status?: boolean
-  operationalPhase?: boolean
   startDate?: boolean
   endDate?: boolean
   notes?: boolean
@@ -2287,9 +1314,7 @@ export type JobSiteSelectScalar = {
   organizationId?: boolean
   name?: boolean
   address?: boolean
-  clientName?: boolean
   status?: boolean
-  operationalPhase?: boolean
   startDate?: boolean
   endDate?: boolean
   notes?: boolean
@@ -2298,16 +1323,11 @@ export type JobSiteSelectScalar = {
   archivedAt?: boolean
 }
 
-export type JobSiteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "name" | "address" | "clientName" | "status" | "operationalPhase" | "startDate" | "endDate" | "notes" | "createdAt" | "updatedAt" | "archivedAt", ExtArgs["result"]["jobSite"]>
+export type JobSiteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "name" | "address" | "status" | "startDate" | "endDate" | "notes" | "createdAt" | "updatedAt" | "archivedAt", ExtArgs["result"]["jobSite"]>
 export type JobSiteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.JobSite$documentsArgs<ExtArgs>
-  requirements?: boolean | Prisma.JobSite$requirementsArgs<ExtArgs>
-  deadlines?: boolean | Prisma.JobSite$deadlinesArgs<ExtArgs>
-  calendarEvents?: boolean | Prisma.JobSite$calendarEventsArgs<ExtArgs>
-  checklists?: boolean | Prisma.JobSite$checklistsArgs<ExtArgs>
   evidence?: boolean | Prisma.JobSite$evidenceArgs<ExtArgs>
-  documentPackages?: boolean | Prisma.JobSite$documentPackagesArgs<ExtArgs>
   userAssignments?: boolean | Prisma.JobSite$userAssignmentsArgs<ExtArgs>
   workerAssignments?: boolean | Prisma.JobSite$workerAssignmentsArgs<ExtArgs>
   documentLinks?: boolean | Prisma.JobSite$documentLinksArgs<ExtArgs>
@@ -2325,12 +1345,7 @@ export type $JobSitePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs>
     documents: Prisma.$DocumentPayload<ExtArgs>[]
-    requirements: Prisma.$DocumentRequirementPayload<ExtArgs>[]
-    deadlines: Prisma.$DeadlinePayload<ExtArgs>[]
-    calendarEvents: Prisma.$CalendarEventPayload<ExtArgs>[]
-    checklists: Prisma.$ChecklistPayload<ExtArgs>[]
     evidence: Prisma.$EvidencePayload<ExtArgs>[]
-    documentPackages: Prisma.$DocumentPackagePayload<ExtArgs>[]
     userAssignments: Prisma.$JobSiteUserAssignmentPayload<ExtArgs>[]
     workerAssignments: Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>[]
     documentLinks: Prisma.$DocumentJobSiteLinkPayload<ExtArgs>[]
@@ -2340,9 +1355,7 @@ export type $JobSitePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     organizationId: string
     name: string
     address: string | null
-    clientName: string | null
     status: $Enums.RecordStatus
-    operationalPhase: $Enums.JobSiteOperationalPhase
     startDate: Date | null
     endDate: Date | null
     notes: string | null
@@ -2745,12 +1758,7 @@ export interface Prisma__JobSiteClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   documents<T extends Prisma.JobSite$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  requirements<T extends Prisma.JobSite$requirementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$requirementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentRequirementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  deadlines<T extends Prisma.JobSite$deadlinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$deadlinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeadlinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  calendarEvents<T extends Prisma.JobSite$calendarEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$calendarEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  checklists<T extends Prisma.JobSite$checklistsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$checklistsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChecklistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   evidence<T extends Prisma.JobSite$evidenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$evidenceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  documentPackages<T extends Prisma.JobSite$documentPackagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$documentPackagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userAssignments<T extends Prisma.JobSite$userAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$userAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteUserAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   workerAssignments<T extends Prisma.JobSite$workerAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$workerAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documentLinks<T extends Prisma.JobSite$documentLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$documentLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentJobSiteLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2787,9 +1795,7 @@ export interface JobSiteFieldRefs {
   readonly organizationId: Prisma.FieldRef<"JobSite", 'String'>
   readonly name: Prisma.FieldRef<"JobSite", 'String'>
   readonly address: Prisma.FieldRef<"JobSite", 'String'>
-  readonly clientName: Prisma.FieldRef<"JobSite", 'String'>
   readonly status: Prisma.FieldRef<"JobSite", 'RecordStatus'>
-  readonly operationalPhase: Prisma.FieldRef<"JobSite", 'JobSiteOperationalPhase'>
   readonly startDate: Prisma.FieldRef<"JobSite", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"JobSite", 'DateTime'>
   readonly notes: Prisma.FieldRef<"JobSite", 'String'>
@@ -3221,102 +2227,6 @@ export type JobSite$documentsArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * JobSite.requirements
- */
-export type JobSite$requirementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the DocumentRequirement
-   */
-  select?: Prisma.DocumentRequirementSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the DocumentRequirement
-   */
-  omit?: Prisma.DocumentRequirementOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DocumentRequirementInclude<ExtArgs> | null
-  where?: Prisma.DocumentRequirementWhereInput
-  orderBy?: Prisma.DocumentRequirementOrderByWithRelationInput | Prisma.DocumentRequirementOrderByWithRelationInput[]
-  cursor?: Prisma.DocumentRequirementWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DocumentRequirementScalarFieldEnum | Prisma.DocumentRequirementScalarFieldEnum[]
-}
-
-/**
- * JobSite.deadlines
- */
-export type JobSite$deadlinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Deadline
-   */
-  select?: Prisma.DeadlineSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Deadline
-   */
-  omit?: Prisma.DeadlineOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DeadlineInclude<ExtArgs> | null
-  where?: Prisma.DeadlineWhereInput
-  orderBy?: Prisma.DeadlineOrderByWithRelationInput | Prisma.DeadlineOrderByWithRelationInput[]
-  cursor?: Prisma.DeadlineWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DeadlineScalarFieldEnum | Prisma.DeadlineScalarFieldEnum[]
-}
-
-/**
- * JobSite.calendarEvents
- */
-export type JobSite$calendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CalendarEvent
-   */
-  select?: Prisma.CalendarEventSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CalendarEvent
-   */
-  omit?: Prisma.CalendarEventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CalendarEventInclude<ExtArgs> | null
-  where?: Prisma.CalendarEventWhereInput
-  orderBy?: Prisma.CalendarEventOrderByWithRelationInput | Prisma.CalendarEventOrderByWithRelationInput[]
-  cursor?: Prisma.CalendarEventWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CalendarEventScalarFieldEnum | Prisma.CalendarEventScalarFieldEnum[]
-}
-
-/**
- * JobSite.checklists
- */
-export type JobSite$checklistsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Checklist
-   */
-  select?: Prisma.ChecklistSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Checklist
-   */
-  omit?: Prisma.ChecklistOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ChecklistInclude<ExtArgs> | null
-  where?: Prisma.ChecklistWhereInput
-  orderBy?: Prisma.ChecklistOrderByWithRelationInput | Prisma.ChecklistOrderByWithRelationInput[]
-  cursor?: Prisma.ChecklistWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ChecklistScalarFieldEnum | Prisma.ChecklistScalarFieldEnum[]
-}
-
-/**
  * JobSite.evidence
  */
 export type JobSite$evidenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3338,30 +2248,6 @@ export type JobSite$evidenceArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.EvidenceScalarFieldEnum | Prisma.EvidenceScalarFieldEnum[]
-}
-
-/**
- * JobSite.documentPackages
- */
-export type JobSite$documentPackagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the DocumentPackage
-   */
-  select?: Prisma.DocumentPackageSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the DocumentPackage
-   */
-  omit?: Prisma.DocumentPackageOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DocumentPackageInclude<ExtArgs> | null
-  where?: Prisma.DocumentPackageWhereInput
-  orderBy?: Prisma.DocumentPackageOrderByWithRelationInput | Prisma.DocumentPackageOrderByWithRelationInput[]
-  cursor?: Prisma.DocumentPackageWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DocumentPackageScalarFieldEnum | Prisma.DocumentPackageScalarFieldEnum[]
 }
 
 /**

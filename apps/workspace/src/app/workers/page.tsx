@@ -1,22 +1,9 @@
-import { listPeopleWorkers } from "@shared/server/people-service";
-import { listJobSites } from "@shared/server/job-site-service";
-import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
-import { WorkersPageView } from "@/views/admin-core/workers/WorkersPageView";
-import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
+import Link from "next/link";
+import { listWorkers } from "@shared/server/worker-service";
+import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceEmptyState } from "@/views/workspace/WorkspacePrimitives";
+import { buttonVariants } from "@qoovex/ui/components/button";
 
-interface WorkersPageProps {
-  searchParams: Promise<{ intent?: string; q?: string; attention?: string; access?: string; page?: string }>;
-}
-
-export default async function WorkersPage({ searchParams }: WorkersPageProps) {
-  try {
-    const [capabilities, params] = await Promise.all([getWorkspaceCapabilities(), searchParams]);
-    const [directory, jobSites] = await Promise.all([
-      listPeopleWorkers(params),
-      capabilities.canCreateWorkers ? listJobSites() : Promise.resolve([]),
-    ]);
-    return <WorkersPageView capabilities={capabilities} directory={serializeForClient(directory)} initialCreateOpen={params.intent === "create" && capabilities.canCreateWorkers} jobSites={serializeForClient(jobSites.map((site) => ({ id: site.id, name: site.name })))} />;
-  } catch {
-    return <WorkspaceAccessState title="Lavoratori non disponibili" description="Verifica accesso e azienda configurata." />;
-  }
+export default async function WorkersPage() {
+  const workers = await listWorkers();
+  return <WorkspacePage><WorkspacePageHeader title="Persone operative" description="Profili operativi foundation, distinti dagli account e dalle membership." action={<Link className={buttonVariants()} href="/workers/new">Aggiungi</Link>} />{workers.length ? <WorkspacePanel><ul className="divide-y">{workers.map((worker) => <li className="py-3" key={worker.id}><strong>{worker.displayName}</strong><span className="ml-2 text-sm text-muted-foreground">{worker.roleLabel ?? "Ruolo non indicato"}</span></li>)}</ul></WorkspacePanel> : <WorkspaceEmptyState title="Nessuna persona operativa" description="Aggiungi un profilo quando serve alla foundation aziendale." />}</WorkspacePage>;
 }

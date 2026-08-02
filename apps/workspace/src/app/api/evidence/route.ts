@@ -2,8 +2,7 @@ import { AccessError, asAccessResponse } from "@shared/server/access-errors";
 import { createEvidenceNote, listEvidence, uploadEvidenceFile } from "@shared/server/evidence-service";
 
 const EVIDENCE_FORM_FIELDS = new Set([
-  "file", "type", "title", "description", "jobSiteId", "workerId", "checklistItemId",
-  "sensitivity", "reviewStatus", "capturedAt", "origin",
+  "file", "type", "title", "description", "jobSiteId", "workerId", "capturedAt",
 ]);
 
 function formDataToEvidenceInput(formData: FormData) {
@@ -25,7 +24,6 @@ export async function GET(request: Request) {
       type: searchParams.get("type") ?? undefined,
       jobSiteId: searchParams.get("jobSiteId") ?? undefined,
       workerId: searchParams.get("workerId") ?? undefined,
-      checklistItemId: searchParams.get("checklistItemId") ?? undefined,
     }));
   } catch (error) { return asAccessResponse(error); }
 }

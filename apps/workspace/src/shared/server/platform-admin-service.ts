@@ -60,16 +60,15 @@ async function getManageableUser(actorId: string, targetUserId: string) {
 export async function getPlatformAdminOverview() {
   await requireQoovexOperator();
   const now = new Date();
-  const [users, suspendedUsers, organizations, activeSupportSessions, openErrors, failedJobs, failedEmails] = await Promise.all([
+  const [users, suspendedUsers, organizations, activeSupportSessions, openErrors, failedJobs] = await Promise.all([
     db.user.count(),
     db.user.count({ where: { suspendedAt: { not: null } } }),
     db.organization.count(),
     db.supportSession.count({ where: { endedAt: null, expiresAt: { gt: now } } }),
     db.runtimeErrorEvent.count({ where: { status: "OPEN" } }),
     db.dataControlJob.count({ where: { status: "FAILED" } }),
-    db.notificationEmailDelivery.count({ where: { status: "FAILED" } }),
   ]);
-  return { users, suspendedUsers, organizations, activeSupportSessions, openErrors, failedJobs, failedEmails, generatedAt: now.toISOString() };
+  return { users, suspendedUsers, organizations, activeSupportSessions, openErrors, failedJobs, generatedAt: now.toISOString() };
 }
 
 export async function listPlatformUsers(input: { q?: string | null; status?: string | null; cursor?: string | null; limit?: string | number | null }) {

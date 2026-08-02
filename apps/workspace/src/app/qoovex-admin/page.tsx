@@ -32,7 +32,6 @@ export default async function QoovexAdminPage() {
       ["Supporti attivi", data.activeSupportSessions, "/qoovex-admin/organizations"],
       ["Errori aperti", data.openErrors, "/qoovex-admin/errors?status=OPEN"],
       ["Job falliti", data.failedJobs, "/qoovex-admin/errors"],
-      ["Email fallite", data.failedEmails, "/qoovex-admin/errors"],
     ] as const;
     return (
       <WorkspacePage>

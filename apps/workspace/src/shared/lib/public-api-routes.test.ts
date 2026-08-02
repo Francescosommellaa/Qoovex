@@ -7,9 +7,6 @@ describe("public API route allowlist", () => {
       "/api/auth/session",
       "/api/dev-auth",
       "/api/data/jobs/run",
-      "/api/reminders/email-digest/run",
-      "/api/shared/document-packages/raw-token",
-      "/api/shared/document-packages/raw-token/items/item-1/download",
     ];
 
     for (const pathname of publicPaths) {
@@ -21,10 +18,9 @@ describe("public API route allowlist", () => {
     const protectedPaths = [
       "/api/context",
       "/api/documents",
-      "/api/document-packages/package-1/share-links",
-      "/api/shared",
-      "/api/shared/document-packages",
-      "/api/shared/other",
+      "/api/operations/run",
+      "/api/reminders/email-digest/run",
+      "/api/shared/removed",
     ];
 
     for (const pathname of protectedPaths) {

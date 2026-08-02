@@ -20,7 +20,6 @@ import { isEnumValue, parseOptionalDate, trimOptionalId, trimOptionalText } from
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { getResourceScope, toMyResourceScopeResponse } from "./resource-scope-service";
-import { appendContextTimelineEvent } from "./context-timeline-service";
 
 const ASSIGNMENT_MANAGE_ROLES = ["OWNER", "COLLABORATOR"] as const;
 const ASSIGNMENT_READ_ROLES = ["OWNER", "COLLABORATOR"] as const;
@@ -382,7 +381,6 @@ export async function createJobSiteUserAssignment(input: CreateJobSiteUserAssign
 
   const assignment = await db.$transaction(async (tx) => {
     const created = await tx.jobSiteUserAssignment.create({ data: { organizationId, jobSiteId, userId, assignmentRole, operationalRoleLabel, taskLabel, ...period, assignedById: context.userId }, select: jobSiteUserAssignmentSelect });
-    await appendContextTimelineEvent({ organizationId, eventKey: `job-site-user-assignment:${created.id}:started`, targetType: "JOB_SITE", targetId: jobSiteId, eventType: "ASSIGNMENT_STARTED", title: "Assegnazione utente registrata", summary: operationalRoleLabel || taskLabel || assignmentRole, metadata: { assignmentId: created.id, userId, startsAt: created.startsAt }, actorUserId: context.userId, actorRole, sourceType: "USER_ACTION", sourceId: created.id }, tx);
     return created;
   });
   await recordProductAuditEventBestEffort({
@@ -405,7 +403,6 @@ export async function archiveJobSiteUserAssignment(assignmentId: string): Promis
   const endReason = cancelled ? "Assegnazione pianificata annullata manualmente." : "Assegnazione conclusa manualmente.";
   const assignment = await db.$transaction(async (tx) => {
     const updated = await tx.jobSiteUserAssignment.update({ where: { id: existing.id }, data: { endsAt: endedAt, endedById: context.userId, endReason, archivedAt: endedAt }, select: jobSiteUserAssignmentSelect });
-    await appendContextTimelineEvent({ organizationId, eventKey: `job-site-user-assignment:${updated.id}:ended`, targetType: "JOB_SITE", targetId: existing.jobSiteId, eventType: "ASSIGNMENT_ENDED", title: cancelled ? "Assegnazione utente annullata" : "Assegnazione utente conclusa", summary: endReason, metadata: { assignmentId: updated.id, userId: updated.userId }, actorUserId: context.userId, actorRole, sourceType: "USER_ACTION", sourceId: updated.id }, tx);
     return updated;
   });
   await recordProductAuditEventBestEffort({
@@ -454,7 +451,6 @@ export async function createJobSiteWorkerAssignment(input: CreateJobSiteWorkerAs
 
   const assignment = await db.$transaction(async (tx) => {
     const created = await tx.jobSiteWorkerAssignment.create({ data: { organizationId, jobSiteId, workerId, operationalRoleLabel, taskLabel, ...period, assignedById: context.userId }, select: jobSiteWorkerAssignmentSelect });
-    await appendContextTimelineEvent({ organizationId, eventKey: `job-site-worker-assignment:${created.id}:started`, targetType: "JOB_SITE", targetId: jobSiteId, eventType: "ASSIGNMENT_STARTED", title: "Assegnazione lavoratore registrata", summary: operationalRoleLabel || taskLabel || created.worker.displayName, metadata: { assignmentId: created.id, workerId, startsAt: created.startsAt }, actorUserId: context.userId, actorRole, sourceType: "USER_ACTION", sourceId: created.id }, tx);
     return created;
   });
   await recordProductAuditEventBestEffort({
@@ -477,7 +473,6 @@ export async function archiveJobSiteWorkerAssignment(assignmentId: string): Prom
   const endReason = cancelled ? "Assegnazione pianificata annullata manualmente." : "Assegnazione conclusa manualmente.";
   const assignment = await db.$transaction(async (tx) => {
     const updated = await tx.jobSiteWorkerAssignment.update({ where: { id: existing.id }, data: { endsAt: endedAt, endedById: context.userId, endReason, archivedAt: endedAt }, select: jobSiteWorkerAssignmentSelect });
-    await appendContextTimelineEvent({ organizationId, eventKey: `job-site-worker-assignment:${updated.id}:ended`, targetType: "JOB_SITE", targetId: existing.jobSiteId, eventType: "ASSIGNMENT_ENDED", title: cancelled ? "Assegnazione lavoratore annullata" : "Assegnazione lavoratore conclusa", summary: endReason, metadata: { assignmentId: updated.id, workerId: updated.workerId }, actorUserId: context.userId, actorRole, sourceType: "USER_ACTION", sourceId: updated.id }, tx);
     return updated;
   });
   await recordProductAuditEventBestEffort({

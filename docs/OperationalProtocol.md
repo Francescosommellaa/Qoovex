@@ -16,7 +16,7 @@ Un task esclusivamente documentale:
 
 Non interrogare database o Blob per provare una specifica concettuale. Non eseguire reset, seed, `db push`, migration, deploy, cancellazioni Azienda o cleanup Blob.
 
-Un contratto tecnico documentale non autorizza il prompt di implementazione. Per vNext, D-VNEXT-45 richiede un task successivo esplicito e coordinato; stato/autorizzazione del database remoto e sicurezza della migration unica restano gate operativi.
+Un contratto tecnico documentale non autorizza implementazione. D-VNEXT-46 ha autorizzato una sola migration locale di rimozione; D-VNEXT-48 richiede un prompt separato per implementare vNext. Preview e Production restano hard stop fino ad autorizzazione e verifica specifiche.
 
 ## Database operation impact
 

@@ -122,17 +122,17 @@ export async function getMemberAccess(memberId: string) {
 
 export async function getAccessResourceOptions() {
   const { organizationId } = await requireOwnerAccessManager();
-  const [jobSites, workers, documentTypes, documentPackages] = await Promise.all([
+  const [jobSites, workers, documents, evidence] = await Promise.all([
     db.jobSite.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, name: true }, orderBy: { name: "asc" }, take: 100 }),
     db.worker.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, displayName: true }, orderBy: { displayName: "asc" }, take: 100 }),
-    db.documentType.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, name: true }, orderBy: { name: "asc" }, take: 100 }),
-    db.documentPackage.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, title: true }, orderBy: { title: "asc" }, take: 100 }),
+    db.document.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, title: true }, orderBy: { title: "asc" }, take: 100 }),
+    db.evidence.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, title: true }, orderBy: { title: "asc" }, take: 100 }),
   ]);
   return {
     jobSites: jobSites.map((item) => ({ id: item.id, label: item.name, resourceType: "JOB_SITE" as const })),
     workers: workers.map((item) => ({ id: item.id, label: item.displayName, resourceType: "WORKER" as const })),
-    documentTypes: documentTypes.map((item) => ({ id: item.id, label: item.name, resourceType: "DOCUMENT_TYPE" as const })),
-    documentPackages: documentPackages.map((item) => ({ id: item.id, label: item.title, resourceType: "DOCUMENT_PACKAGE" as const })),
+    documents: documents.map((item) => ({ id: item.id, label: item.title, resourceType: "DOCUMENT" as const })),
+    evidence: evidence.map((item) => ({ id: item.id, label: item.title, resourceType: "EVIDENCE" as const })),
   };
 }
 

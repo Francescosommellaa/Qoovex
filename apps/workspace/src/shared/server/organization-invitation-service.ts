@@ -28,17 +28,13 @@ export async function validateOrganizationResourceGrants(organizationId: string,
   if (unique.length > 100) throw new AccessError("Troppe risorse assegnate.", 409);
   for (const grant of unique) {
     const where = { id: grant.resourceId, organizationId };
-    const found = grant.resourceType === "JOB_SITE" ? await db.jobSite.findFirst({ where, select: { id: true } })
-      : grant.resourceType === "WORKER" ? await db.worker.findFirst({ where, select: { id: true } })
-        : grant.resourceType === "DOCUMENT" ? await db.document.findFirst({ where, select: { id: true } })
-          : grant.resourceType === "DOCUMENT_TYPE" ? await db.documentType.findFirst({ where, select: { id: true } })
-            : grant.resourceType === "DOCUMENT_PACKAGE" ? await db.documentPackage.findFirst({ where, select: { id: true } })
-              : grant.resourceType === "OPERATIONAL_PROCESS" ? await db.operationalProcess.findFirst({ where, select: { id: true } })
-                : grant.resourceType === "OPERATIONAL_DECISION" ? await db.operationalDecision.findFirst({ where, select: { id: true } })
-                  : grant.resourceType === "OPERATIONAL_EXCEPTION" ? await db.operationalException.findFirst({ where, select: { id: true } })
-                    : grant.resourceType === "EVIDENCE" ? await db.evidence.findFirst({ where, select: { id: true } })
-                      : grant.resourceType === "CHECKLIST" ? await db.checklist.findFirst({ where, select: { id: true } })
-                        : await db.shareLink.findFirst({ where, select: { id: true } });
+    const found = grant.resourceType === "JOB_SITE"
+      ? await db.jobSite.findFirst({ where, select: { id: true } })
+      : grant.resourceType === "WORKER"
+        ? await db.worker.findFirst({ where, select: { id: true } })
+        : grant.resourceType === "DOCUMENT"
+          ? await db.document.findFirst({ where, select: { id: true } })
+          : await db.evidence.findFirst({ where, select: { id: true } });
     if (!found) throw new AccessError("Una risorsa assegnata non è disponibile.", 409);
   }
   return unique;

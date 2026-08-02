@@ -7,8 +7,7 @@ export function SettingsHubView({ capabilities }: { capabilities: WorkspaceCapab
   const areas = [
     capabilities.canReadOrganizationProfile ? { title: "Profilo azienda", description: "Dati societari, sede, attivita e contatti operativi.", href: "/settings/organization-profile" } : null,
     capabilities.canReadMembers ? { title: "Utenti e inviti", description: "Account abilitati, ruolo assegnato e inviti in attesa.", href: "/settings/people" } : null,
-    capabilities.canReadDocumentSettings ? { title: "Impostazioni documenti", description: "Tipi documento e requisiti documentali.", href: "/settings/documents" } : null,
-    capabilities.canReadNotifications ? { title: "Notifiche ed email", description: "Preferenze, riepilogo e invii recenti.", href: "/settings/notifications" } : null,
+    capabilities.canReadNotifications ? { title: "Notifiche", description: "Avvisi di sistema disponibili per l'account.", href: "/notifications" } : null,
     { title: "Sicurezza account", description: "MFA, codici di recupero e sessione account.", href: "/account/security" },
     capabilities.canReadAudit ? { title: "Audit", description: "Consulta gli eventi registrati per l'azienda.", href: "/audit-log" } : null,
     capabilities.canReadDataControl ? { title: "Controllo dati", description: "Retention, inventario ed export delle informazioni.", href: "/data-control" } : null,

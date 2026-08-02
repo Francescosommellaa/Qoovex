@@ -29,5 +29,21 @@ export const proxy = auth(async (request) => {
 });
 
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: [
+    "/api/account/:path*",
+    "/api/audit-log",
+    "/api/context",
+    "/api/data/:path*",
+    "/api/documents/:path*",
+    "/api/evidence/:path*",
+    "/api/job-sites/:path*",
+    "/api/notifications/:path*",
+    "/api/organization-profile/:path*",
+    "/api/organization/:path*",
+    "/api/organizations",
+    "/api/platform-admin/:path*",
+    "/api/resource-assignments/:path*",
+    "/api/support/:path*",
+    "/api/workers/:path*",
+  ],
 };

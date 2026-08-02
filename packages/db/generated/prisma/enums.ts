@@ -81,14 +81,7 @@ export const OrganizationResourceType = {
   JOB_SITE: 'JOB_SITE',
   WORKER: 'WORKER',
   DOCUMENT: 'DOCUMENT',
-  DOCUMENT_TYPE: 'DOCUMENT_TYPE',
-  DOCUMENT_PACKAGE: 'DOCUMENT_PACKAGE',
-  OPERATIONAL_PROCESS: 'OPERATIONAL_PROCESS',
-  OPERATIONAL_DECISION: 'OPERATIONAL_DECISION',
-  OPERATIONAL_EXCEPTION: 'OPERATIONAL_EXCEPTION',
-  EVIDENCE: 'EVIDENCE',
-  CHECKLIST: 'CHECKLIST',
-  SHARE_LINK: 'SHARE_LINK'
+  EVIDENCE: 'EVIDENCE'
 } as const
 
 export type OrganizationResourceType = (typeof OrganizationResourceType)[keyof typeof OrganizationResourceType]
@@ -111,39 +104,18 @@ export const AuditAction = {
   DOCUMENT_VERSION_UPLOADED: 'DOCUMENT_VERSION_UPLOADED',
   DOCUMENT_VERSION_DOWNLOADED: 'DOCUMENT_VERSION_DOWNLOADED',
   DOCUMENT_VERSION_ARCHIVED: 'DOCUMENT_VERSION_ARCHIVED',
-  DEADLINE_CREATED: 'DEADLINE_CREATED',
-  DEADLINE_UPDATED: 'DEADLINE_UPDATED',
-  DEADLINE_ARCHIVED: 'DEADLINE_ARCHIVED',
-  CALENDAR_EVENT_CREATED: 'CALENDAR_EVENT_CREATED',
-  CALENDAR_EVENT_UPDATED: 'CALENDAR_EVENT_UPDATED',
-  CALENDAR_EVENT_ARCHIVED: 'CALENDAR_EVENT_ARCHIVED',
   WORKER_CREATED: 'WORKER_CREATED',
   WORKER_UPDATED: 'WORKER_UPDATED',
   WORKER_ARCHIVED: 'WORKER_ARCHIVED',
   JOB_SITE_CREATED: 'JOB_SITE_CREATED',
   JOB_SITE_UPDATED: 'JOB_SITE_UPDATED',
   JOB_SITE_ARCHIVED: 'JOB_SITE_ARCHIVED',
-  CHECKLIST_CREATED: 'CHECKLIST_CREATED',
-  CHECKLIST_UPDATED: 'CHECKLIST_UPDATED',
-  CHECKLIST_ARCHIVED: 'CHECKLIST_ARCHIVED',
-  CHECKLIST_ITEM_COMPLETED: 'CHECKLIST_ITEM_COMPLETED',
   EVIDENCE_CREATED: 'EVIDENCE_CREATED',
+  EVIDENCE_UPDATED: 'EVIDENCE_UPDATED',
   EVIDENCE_DOWNLOADED: 'EVIDENCE_DOWNLOADED',
   EVIDENCE_ARCHIVED: 'EVIDENCE_ARCHIVED',
-  DOCUMENT_PACKAGE_CREATED: 'DOCUMENT_PACKAGE_CREATED',
-  DOCUMENT_PACKAGE_UPDATED: 'DOCUMENT_PACKAGE_UPDATED',
-  DOCUMENT_PACKAGE_ARCHIVED: 'DOCUMENT_PACKAGE_ARCHIVED',
-  DOCUMENT_PACKAGE_ITEM_ADDED: 'DOCUMENT_PACKAGE_ITEM_ADDED',
-  DOCUMENT_PACKAGE_ITEM_REMOVED: 'DOCUMENT_PACKAGE_ITEM_REMOVED',
-  SHARE_LINK_CREATED: 'SHARE_LINK_CREATED',
-  SHARE_LINK_REVOKED: 'SHARE_LINK_REVOKED',
-  SHARE_LINK_ACCESSED: 'SHARE_LINK_ACCESSED',
   NOTIFICATION_READ: 'NOTIFICATION_READ',
   NOTIFICATION_DISMISSED: 'NOTIFICATION_DISMISSED',
-  EMAIL_DIGEST_SENT: 'EMAIL_DIGEST_SENT',
-  EMAIL_DIGEST_FAILED: 'EMAIL_DIGEST_FAILED',
-  NOTIFICATION_PREFERENCES_UPDATED: 'NOTIFICATION_PREFERENCES_UPDATED',
-  SCHEDULED_EMAIL_DIGEST_RUN: 'SCHEDULED_EMAIL_DIGEST_RUN',
   WORKER_USER_LINK_CREATED: 'WORKER_USER_LINK_CREATED',
   WORKER_USER_LINK_ARCHIVED: 'WORKER_USER_LINK_ARCHIVED',
   JOB_SITE_USER_ASSIGNMENT_CREATED: 'JOB_SITE_USER_ASSIGNMENT_CREATED',
@@ -156,18 +128,6 @@ export const AuditAction = {
   ORGANIZATION_CONTACT_ARCHIVED: 'ORGANIZATION_CONTACT_ARCHIVED',
   DOCUMENT_JOB_SITE_LINK_CREATED: 'DOCUMENT_JOB_SITE_LINK_CREATED',
   DOCUMENT_JOB_SITE_LINK_ARCHIVED: 'DOCUMENT_JOB_SITE_LINK_ARCHIVED',
-  DOCUMENT_VERSION_REVIEWED: 'DOCUMENT_VERSION_REVIEWED',
-  EVIDENCE_UPDATED: 'EVIDENCE_UPDATED',
-  EVIDENCE_REVIEWED: 'EVIDENCE_REVIEWED',
-  OPERATIONAL_REQUEST_CREATED: 'OPERATIONAL_REQUEST_CREATED',
-  OPERATIONAL_REQUEST_UPDATED: 'OPERATIONAL_REQUEST_UPDATED',
-  CONTEXT_MESSAGE_CREATED: 'CONTEXT_MESSAGE_CREATED',
-  DOCUMENT_SOURCE_POLICY_CREATED: 'DOCUMENT_SOURCE_POLICY_CREATED',
-  DOCUMENT_SOURCE_POLICY_UPDATED: 'DOCUMENT_SOURCE_POLICY_UPDATED',
-  DOCUMENT_SOURCE_CHECK_CREATED: 'DOCUMENT_SOURCE_CHECK_CREATED',
-  DOCUMENT_SOURCE_CHECK_UPDATED: 'DOCUMENT_SOURCE_CHECK_UPDATED',
-  DOCUMENT_ACQUISITION_CREATED: 'DOCUMENT_ACQUISITION_CREATED',
-  JOB_SITE_PHASE_CHANGED: 'JOB_SITE_PHASE_CHANGED',
   ORGANIZATION_INVITATION_CREATED: 'ORGANIZATION_INVITATION_CREATED',
   ORGANIZATION_INVITATION_REVOKED: 'ORGANIZATION_INVITATION_REVOKED',
   ORGANIZATION_INVITATION_ACCEPTED: 'ORGANIZATION_INVITATION_ACCEPTED',
@@ -179,21 +139,6 @@ export const AuditAction = {
   ORPHAN_BLOB_CLEANUP_RUN: 'ORPHAN_BLOB_CLEANUP_RUN',
   ORGANIZATION_DELETE_REQUESTED: 'ORGANIZATION_DELETE_REQUESTED',
   ORGANIZATION_DELETE_RUN: 'ORGANIZATION_DELETE_RUN',
-  DOCUMENT_REQUIREMENT_CREATED: 'DOCUMENT_REQUIREMENT_CREATED',
-  DOCUMENT_REQUIREMENT_UPDATED: 'DOCUMENT_REQUIREMENT_UPDATED',
-  DOCUMENT_REQUIREMENT_ARCHIVED: 'DOCUMENT_REQUIREMENT_ARCHIVED',
-  OPERATIONAL_PROCESS_CREATED: 'OPERATIONAL_PROCESS_CREATED',
-  OPERATIONAL_PROCESS_DEDUPLICATED: 'OPERATIONAL_PROCESS_DEDUPLICATED',
-  OPERATIONAL_STEP_CLAIMED: 'OPERATIONAL_STEP_CLAIMED',
-  OPERATIONAL_STEP_COMPLETED: 'OPERATIONAL_STEP_COMPLETED',
-  OPERATIONAL_RETRY_SCHEDULED: 'OPERATIONAL_RETRY_SCHEDULED',
-  OPERATIONAL_PROCESS_BLOCKED: 'OPERATIONAL_PROCESS_BLOCKED',
-  OPERATIONAL_PROCESS_COMPLETED: 'OPERATIONAL_PROCESS_COMPLETED',
-  OPERATIONAL_DECISION_CREATED: 'OPERATIONAL_DECISION_CREATED',
-  OPERATIONAL_DECISION_RESOLVED: 'OPERATIONAL_DECISION_RESOLVED',
-  OPERATIONAL_EXCEPTION_OPENED: 'OPERATIONAL_EXCEPTION_OPENED',
-  OPERATIONAL_EXCEPTION_RESOLVED: 'OPERATIONAL_EXCEPTION_RESOLVED',
-  OPERATIONAL_CONTROL_RUN: 'OPERATIONAL_CONTROL_RUN',
   SECURITY_DENIED: 'SECURITY_DENIED'
 } as const
 
@@ -203,25 +148,11 @@ export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction]
 export const AuditEntityType = {
   DOCUMENT: 'DOCUMENT',
   DOCUMENT_VERSION: 'DOCUMENT_VERSION',
-  DEADLINE: 'DEADLINE',
-  CALENDAR_EVENT: 'CALENDAR_EVENT',
   WORKER: 'WORKER',
   JOB_SITE: 'JOB_SITE',
-  CHECKLIST: 'CHECKLIST',
-  CHECKLIST_ITEM: 'CHECKLIST_ITEM',
   EVIDENCE: 'EVIDENCE',
-  DOCUMENT_PACKAGE: 'DOCUMENT_PACKAGE',
-  DOCUMENT_PACKAGE_ITEM: 'DOCUMENT_PACKAGE_ITEM',
-  SHARE_LINK: 'SHARE_LINK',
   NOTIFICATION: 'NOTIFICATION',
-  EMAIL_DELIVERY: 'EMAIL_DELIVERY',
-  NOTIFICATION_PREFERENCE: 'NOTIFICATION_PREFERENCE',
   DATA_CONTROL_JOB: 'DATA_CONTROL_JOB',
-  DOCUMENT_REQUIREMENT: 'DOCUMENT_REQUIREMENT',
-  OPERATIONAL_PROCESS: 'OPERATIONAL_PROCESS',
-  OPERATIONAL_STEP: 'OPERATIONAL_STEP',
-  OPERATIONAL_DECISION: 'OPERATIONAL_DECISION',
-  OPERATIONAL_EXCEPTION: 'OPERATIONAL_EXCEPTION',
   WORKER_USER_LINK: 'WORKER_USER_LINK',
   JOB_SITE_USER_ASSIGNMENT: 'JOB_SITE_USER_ASSIGNMENT',
   JOB_SITE_WORKER_ASSIGNMENT: 'JOB_SITE_WORKER_ASSIGNMENT',
@@ -232,12 +163,6 @@ export const AuditEntityType = {
   ORGANIZATION_CONTACT: 'ORGANIZATION_CONTACT',
   DOCUMENT_JOB_SITE_LINK: 'DOCUMENT_JOB_SITE_LINK',
   EVIDENCE_REVISION: 'EVIDENCE_REVISION',
-  OPERATIONAL_REQUEST: 'OPERATIONAL_REQUEST',
-  CONTEXT_MESSAGE: 'CONTEXT_MESSAGE',
-  CONTEXT_TIMELINE_EVENT: 'CONTEXT_TIMELINE_EVENT',
-  DOCUMENT_SOURCE_POLICY: 'DOCUMENT_SOURCE_POLICY',
-  DOCUMENT_SOURCE_CHECK: 'DOCUMENT_SOURCE_CHECK',
-  DOCUMENT_ACQUISITION: 'DOCUMENT_ACQUISITION',
   USER: 'USER',
   SYSTEM: 'SYSTEM'
 } as const
@@ -262,106 +187,6 @@ export const RecordStatus = {
 export type RecordStatus = (typeof RecordStatus)[keyof typeof RecordStatus]
 
 
-export const JobSiteOperationalPhase = {
-  DRAFT: 'DRAFT',
-  PREPARATION: 'PREPARATION',
-  IN_PROGRESS: 'IN_PROGRESS',
-  PAUSED: 'PAUSED',
-  CLOSING: 'CLOSING',
-  COMPLETED: 'COMPLETED'
-} as const
-
-export type JobSiteOperationalPhase = (typeof JobSiteOperationalPhase)[keyof typeof JobSiteOperationalPhase]
-
-
-export const DocumentStatus = {
-  PRESENT: 'PRESENT',
-  MISSING: 'MISSING',
-  EXPIRED: 'EXPIRED',
-  EXPIRING_SOON: 'EXPIRING_SOON',
-  TO_REVIEW: 'TO_REVIEW',
-  ARCHIVED: 'ARCHIVED'
-} as const
-
-export type DocumentStatus = (typeof DocumentStatus)[keyof typeof DocumentStatus]
-
-
-export const DocumentVersionReviewStatus = {
-  TO_REVIEW: 'TO_REVIEW',
-  CURRENT: 'CURRENT',
-  SUPERSEDED: 'SUPERSEDED',
-  REJECTED: 'REJECTED'
-} as const
-
-export type DocumentVersionReviewStatus = (typeof DocumentVersionReviewStatus)[keyof typeof DocumentVersionReviewStatus]
-
-
-export const DeadlineStatus = {
-  SCHEDULED: 'SCHEDULED',
-  EXPIRING_SOON: 'EXPIRING_SOON',
-  EXPIRED: 'EXPIRED',
-  DONE: 'DONE',
-  ARCHIVED: 'ARCHIVED'
-} as const
-
-export type DeadlineStatus = (typeof DeadlineStatus)[keyof typeof DeadlineStatus]
-
-
-export const ChecklistItemStatus = {
-  OPEN: 'OPEN',
-  DONE: 'DONE',
-  TO_REVIEW: 'TO_REVIEW',
-  ARCHIVED: 'ARCHIVED'
-} as const
-
-export type ChecklistItemStatus = (typeof ChecklistItemStatus)[keyof typeof ChecklistItemStatus]
-
-
-export const DocumentPackageStatus = {
-  DRAFT: 'DRAFT',
-  READY_FOR_REVIEW: 'READY_FOR_REVIEW',
-  SHARED: 'SHARED',
-  ARCHIVED: 'ARCHIVED'
-} as const
-
-export type DocumentPackageStatus = (typeof DocumentPackageStatus)[keyof typeof DocumentPackageStatus]
-
-
-export const DocumentPackageRevisionOrigin = {
-  AUTOMATED_PREPARATION: 'AUTOMATED_PREPARATION',
-  LEGACY_BACKFILL: 'LEGACY_BACKFILL'
-} as const
-
-export type DocumentPackageRevisionOrigin = (typeof DocumentPackageRevisionOrigin)[keyof typeof DocumentPackageRevisionOrigin]
-
-
-export const DocumentPackageRevisionStatus = {
-  PREPARED: 'PREPARED',
-  APPROVED: 'APPROVED'
-} as const
-
-export type DocumentPackageRevisionStatus = (typeof DocumentPackageRevisionStatus)[keyof typeof DocumentPackageRevisionStatus]
-
-
-export const DocumentPackageShareProposalTarget = {
-  NAMED_RECIPIENT: 'NAMED_RECIPIENT',
-  LINK_PURPOSE: 'LINK_PURPOSE'
-} as const
-
-export type DocumentPackageShareProposalTarget = (typeof DocumentPackageShareProposalTarget)[keyof typeof DocumentPackageShareProposalTarget]
-
-
-export const DocumentPackageShareProposalStatus = {
-  PREPARING: 'PREPARING',
-  READY_FOR_REVIEW: 'READY_FOR_REVIEW',
-  BLOCKED: 'BLOCKED',
-  APPROVED: 'APPROVED',
-  PUBLISHED: 'PUBLISHED'
-} as const
-
-export type DocumentPackageShareProposalStatus = (typeof DocumentPackageShareProposalStatus)[keyof typeof DocumentPackageShareProposalStatus]
-
-
 export const DocumentOwnerType = {
   ORGANIZATION: 'ORGANIZATION',
   WORKER: 'WORKER',
@@ -371,107 +196,6 @@ export const DocumentOwnerType = {
 export type DocumentOwnerType = (typeof DocumentOwnerType)[keyof typeof DocumentOwnerType]
 
 
-export const DocumentTypeAppliesTo = {
-  ORGANIZATION: 'ORGANIZATION',
-  WORKER: 'WORKER',
-  JOB_SITE: 'JOB_SITE',
-  EVIDENCE: 'EVIDENCE',
-  OTHER: 'OTHER'
-} as const
-
-export type DocumentTypeAppliesTo = (typeof DocumentTypeAppliesTo)[keyof typeof DocumentTypeAppliesTo]
-
-
-export const DocumentCategoryKey = {
-  COMPANY_IDENTITY_REGISTRATIONS: 'COMPANY_IDENTITY_REGISTRATIONS',
-  COMPANY_REGULARITY_QUALIFICATIONS: 'COMPANY_REGULARITY_QUALIFICATIONS',
-  COMPANY_SAFETY: 'COMPANY_SAFETY',
-  COMPANY_INSURANCE: 'COMPANY_INSURANCE',
-  COMPANY_ROLES_ORGANIZATION: 'COMPANY_ROLES_ORGANIZATION',
-  WORKER_IDENTITY_ACCESS: 'WORKER_IDENTITY_ACCESS',
-  WORKER_TRAINING_QUALIFICATIONS: 'WORKER_TRAINING_QUALIFICATIONS',
-  WORKER_FITNESS_JUDGMENT: 'WORKER_FITNESS_JUDGMENT',
-  WORKER_PPE_DELIVERIES: 'WORKER_PPE_DELIVERIES',
-  WORKER_ROLES_ASSIGNMENTS: 'WORKER_ROLES_ASSIGNMENTS',
-  WORKER_RESTRICTED_ADMINISTRATION: 'WORKER_RESTRICTED_ADMINISTRATION',
-  SITE_START_AUTHORIZATIONS: 'SITE_START_AUTHORIZATIONS',
-  SITE_SAFETY_COORDINATION: 'SITE_SAFETY_COORDINATION',
-  SITE_COMPANIES_SUBCONTRACTS: 'SITE_COMPANIES_SUBCONTRACTS',
-  SITE_WORKERS_ACCESS: 'SITE_WORKERS_ACCESS',
-  SITE_EQUIPMENT_SYSTEMS: 'SITE_EQUIPMENT_SYSTEMS',
-  SITE_REPORTS_INSPECTIONS: 'SITE_REPORTS_INSPECTIONS',
-  SITE_CLOSURE_HANDOVER: 'SITE_CLOSURE_HANDOVER',
-  UNCLASSIFIED: 'UNCLASSIFIED'
-} as const
-
-export type DocumentCategoryKey = (typeof DocumentCategoryKey)[keyof typeof DocumentCategoryKey]
-
-
-export const DocumentSensitivity = {
-  STANDARD: 'STANDARD',
-  RESTRICTED: 'RESTRICTED',
-  HEALTH_JUDGMENT: 'HEALTH_JUDGMENT'
-} as const
-
-export type DocumentSensitivity = (typeof DocumentSensitivity)[keyof typeof DocumentSensitivity]
-
-
-export const RequirementTargetType = {
-  ORGANIZATION: 'ORGANIZATION',
-  WORKER: 'WORKER',
-  JOB_SITE: 'JOB_SITE'
-} as const
-
-export type RequirementTargetType = (typeof RequirementTargetType)[keyof typeof RequirementTargetType]
-
-
-export const DeadlineSourceType = {
-  DOCUMENT: 'DOCUMENT',
-  CHECKLIST: 'CHECKLIST',
-  MANUAL: 'MANUAL',
-  OTHER: 'OTHER'
-} as const
-
-export type DeadlineSourceType = (typeof DeadlineSourceType)[keyof typeof DeadlineSourceType]
-
-
-export const CalendarEventKind = {
-  EVENT: 'EVENT',
-  TASK: 'TASK'
-} as const
-
-export type CalendarEventKind = (typeof CalendarEventKind)[keyof typeof CalendarEventKind]
-
-
-export const CalendarEventPriority = {
-  LOW: 'LOW',
-  MEDIUM: 'MEDIUM',
-  HIGH: 'HIGH',
-  URGENT: 'URGENT'
-} as const
-
-export type CalendarEventPriority = (typeof CalendarEventPriority)[keyof typeof CalendarEventPriority]
-
-
-export const CalendarEventStatus = {
-  PLANNED: 'PLANNED',
-  IN_PROGRESS: 'IN_PROGRESS',
-  DONE: 'DONE',
-  CANCELLED: 'CANCELLED',
-  ARCHIVED: 'ARCHIVED'
-} as const
-
-export type CalendarEventStatus = (typeof CalendarEventStatus)[keyof typeof CalendarEventStatus]
-
-
-export const CalendarEventSource = {
-  QOOVEX: 'QOOVEX',
-  ICALENDAR_IMPORT: 'ICALENDAR_IMPORT'
-} as const
-
-export type CalendarEventSource = (typeof CalendarEventSource)[keyof typeof CalendarEventSource]
-
-
 export const EvidenceType = {
   PHOTO: 'PHOTO',
   FILE: 'FILE',
@@ -479,51 +203,6 @@ export const EvidenceType = {
 } as const
 
 export type EvidenceType = (typeof EvidenceType)[keyof typeof EvidenceType]
-
-
-export const EvidenceSensitivity = {
-  INTERNAL: 'INTERNAL',
-  SHAREABLE: 'SHAREABLE',
-  RESTRICTED: 'RESTRICTED'
-} as const
-
-export type EvidenceSensitivity = (typeof EvidenceSensitivity)[keyof typeof EvidenceSensitivity]
-
-
-export const EvidenceReviewStatus = {
-  RECORDED: 'RECORDED',
-  TO_REVIEW: 'TO_REVIEW',
-  ACCEPTED: 'ACCEPTED',
-  REJECTED: 'REJECTED'
-} as const
-
-export type EvidenceReviewStatus = (typeof EvidenceReviewStatus)[keyof typeof EvidenceReviewStatus]
-
-
-export const EvidenceOrigin = {
-  DIRECT_UPLOAD: 'DIRECT_UPLOAD',
-  GUIDED_MANUAL: 'GUIDED_MANUAL',
-  AUTHORIZED_INTEGRATION: 'AUTHORIZED_INTEGRATION'
-} as const
-
-export type EvidenceOrigin = (typeof EvidenceOrigin)[keyof typeof EvidenceOrigin]
-
-
-export const DocumentPackageItemType = {
-  DOCUMENT: 'DOCUMENT',
-  DOCUMENT_VERSION: 'DOCUMENT_VERSION',
-  EVIDENCE: 'EVIDENCE',
-  CHECKLIST: 'CHECKLIST',
-  NOTE: 'NOTE',
-  WORKER: 'WORKER',
-  JOB_SITE_USER_ASSIGNMENT: 'JOB_SITE_USER_ASSIGNMENT',
-  JOB_SITE_WORKER_ASSIGNMENT: 'JOB_SITE_WORKER_ASSIGNMENT',
-  OPERATIONAL_REQUEST: 'OPERATIONAL_REQUEST',
-  CONTEXT_MESSAGE: 'CONTEXT_MESSAGE',
-  CONTEXT_TIMELINE_EVENT: 'CONTEXT_TIMELINE_EVENT'
-} as const
-
-export type DocumentPackageItemType = (typeof DocumentPackageItemType)[keyof typeof DocumentPackageItemType]
 
 
 export const OrganizationContactKind = {
@@ -536,60 +215,7 @@ export const OrganizationContactKind = {
 export type OrganizationContactKind = (typeof OrganizationContactKind)[keyof typeof OrganizationContactKind]
 
 
-export const OperationalRequestStatus = {
-  OPEN: 'OPEN',
-  IN_PROGRESS: 'IN_PROGRESS',
-  COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED'
-} as const
-
-export type OperationalRequestStatus = (typeof OperationalRequestStatus)[keyof typeof OperationalRequestStatus]
-
-
-export const ContextMessageVisibility = {
-  INTERNAL: 'INTERNAL'
-} as const
-
-export type ContextMessageVisibility = (typeof ContextMessageVisibility)[keyof typeof ContextMessageVisibility]
-
-
-export const DocumentSourceType = {
-  DIRECT_UPLOAD: 'DIRECT_UPLOAD',
-  GUIDED_MANUAL: 'GUIDED_MANUAL',
-  AUTHORIZED_INTEGRATION: 'AUTHORIZED_INTEGRATION'
-} as const
-
-export type DocumentSourceType = (typeof DocumentSourceType)[keyof typeof DocumentSourceType]
-
-
-export const DocumentSourceCheckStatus = {
-  PENDING: 'PENDING',
-  COMPLETED: 'COMPLETED',
-  FAILED: 'FAILED',
-  NEEDS_ACTION: 'NEEDS_ACTION'
-} as const
-
-export type DocumentSourceCheckStatus = (typeof DocumentSourceCheckStatus)[keyof typeof DocumentSourceCheckStatus]
-
-
-export const DocumentAcquisitionStatus = {
-  PENDING_REVIEW: 'PENDING_REVIEW',
-  COMPLETED: 'COMPLETED',
-  FAILED: 'FAILED'
-} as const
-
-export type DocumentAcquisitionStatus = (typeof DocumentAcquisitionStatus)[keyof typeof DocumentAcquisitionStatus]
-
-
 export const NotificationType = {
-  DEADLINE_OVERDUE: 'DEADLINE_OVERDUE',
-  DEADLINE_UPCOMING: 'DEADLINE_UPCOMING',
-  DOCUMENT_TO_REVIEW: 'DOCUMENT_TO_REVIEW',
-  DOCUMENT_EXPIRED: 'DOCUMENT_EXPIRED',
-  DOCUMENT_EXPIRING_SOON: 'DOCUMENT_EXPIRING_SOON',
-  PACKAGE_READY_FOR_REVIEW: 'PACKAGE_READY_FOR_REVIEW',
-  SHARE_LINK_EXPIRING: 'SHARE_LINK_EXPIRING',
-  SHARE_LINK_REVOKED: 'SHARE_LINK_REVOKED',
   SYSTEM: 'SYSTEM'
 } as const
 
@@ -606,44 +232,10 @@ export type NotificationSeverity = (typeof NotificationSeverity)[keyof typeof No
 
 
 export const NotificationSourceType = {
-  DOCUMENT: 'DOCUMENT',
-  DEADLINE: 'DEADLINE',
-  WORKER: 'WORKER',
-  JOB_SITE: 'JOB_SITE',
-  CHECKLIST: 'CHECKLIST',
-  EVIDENCE: 'EVIDENCE',
-  DOCUMENT_PACKAGE: 'DOCUMENT_PACKAGE',
-  SHARE_LINK: 'SHARE_LINK',
   SYSTEM: 'SYSTEM'
 } as const
 
 export type NotificationSourceType = (typeof NotificationSourceType)[keyof typeof NotificationSourceType]
-
-
-export const EmailDigestFrequency = {
-  OFF: 'OFF',
-  DAILY: 'DAILY',
-  WEEKLY: 'WEEKLY'
-} as const
-
-export type EmailDigestFrequency = (typeof EmailDigestFrequency)[keyof typeof EmailDigestFrequency]
-
-
-export const NotificationEmailDeliveryType = {
-  DIGEST: 'DIGEST',
-  SINGLE_NOTIFICATION: 'SINGLE_NOTIFICATION'
-} as const
-
-export type NotificationEmailDeliveryType = (typeof NotificationEmailDeliveryType)[keyof typeof NotificationEmailDeliveryType]
-
-
-export const NotificationEmailDeliveryStatus = {
-  SENT: 'SENT',
-  FAILED: 'FAILED',
-  SKIPPED: 'SKIPPED'
-} as const
-
-export type NotificationEmailDeliveryStatus = (typeof NotificationEmailDeliveryStatus)[keyof typeof NotificationEmailDeliveryStatus]
 
 
 export const JobSiteUserAssignmentRole = {
@@ -680,238 +272,3 @@ export const RuntimeErrorStatus = {
 } as const
 
 export type RuntimeErrorStatus = (typeof RuntimeErrorStatus)[keyof typeof RuntimeErrorStatus]
-
-
-export const OperationalProcessType = {
-  DOCUMENT_RECEIVED: 'DOCUMENT_RECEIVED',
-  WORKER_CREATED: 'WORKER_CREATED',
-  JOB_SITE_CREATED: 'JOB_SITE_CREATED',
-  CONTINUOUS_CONTROL: 'CONTINUOUS_CONTROL',
-  DOCUMENT_PACKAGE_SHARING: 'DOCUMENT_PACKAGE_SHARING'
-} as const
-
-export type OperationalProcessType = (typeof OperationalProcessType)[keyof typeof OperationalProcessType]
-
-
-export const OperationalProcessStatus = {
-  RECEIVED: 'RECEIVED',
-  READY: 'READY',
-  RUNNING: 'RUNNING',
-  WAITING_FOR_DECISION: 'WAITING_FOR_DECISION',
-  BLOCKED: 'BLOCKED',
-  RETRY_SCHEDULED: 'RETRY_SCHEDULED',
-  COMPLETED: 'COMPLETED',
-  COMPLETED_WITH_EXCEPTIONS: 'COMPLETED_WITH_EXCEPTIONS',
-  TECHNICAL_FAILURE: 'TECHNICAL_FAILURE'
-} as const
-
-export type OperationalProcessStatus = (typeof OperationalProcessStatus)[keyof typeof OperationalProcessStatus]
-
-
-export const OperationalStepStatus = {
-  WAITING: 'WAITING',
-  READY: 'READY',
-  RUNNING: 'RUNNING',
-  COMPLETED: 'COMPLETED',
-  BLOCKED: 'BLOCKED',
-  RETRY_SCHEDULED: 'RETRY_SCHEDULED',
-  TECHNICAL_FAILURE: 'TECHNICAL_FAILURE',
-  SKIPPED: 'SKIPPED'
-} as const
-
-export type OperationalStepStatus = (typeof OperationalStepStatus)[keyof typeof OperationalStepStatus]
-
-
-export const OperationalEventKind = {
-  INPUT: 'INPUT',
-  DOMAIN: 'DOMAIN',
-  TEMPORAL: 'TEMPORAL',
-  DECISION: 'DECISION',
-  TECHNICAL: 'TECHNICAL',
-  RETRY: 'RETRY',
-  COMPLETION: 'COMPLETION',
-  BLOCKED: 'BLOCKED',
-  RECONCILIATION: 'RECONCILIATION'
-} as const
-
-export type OperationalEventKind = (typeof OperationalEventKind)[keyof typeof OperationalEventKind]
-
-
-export const OperationalEventType = {
-  LEGACY_EVENT: 'LEGACY_EVENT',
-  PROCESS_STARTED: 'PROCESS_STARTED',
-  STEP_STARTED: 'STEP_STARTED',
-  RULE_APPLIED: 'RULE_APPLIED',
-  PROPOSAL_PREPARED: 'PROPOSAL_PREPARED',
-  AUTOMATION_COMPLETED: 'AUTOMATION_COMPLETED',
-  DOCUMENT_LINKED: 'DOCUMENT_LINKED',
-  DOCUMENT_VERSION_ADDED: 'DOCUMENT_VERSION_ADDED',
-  REQUIREMENT_SATISFIED: 'REQUIREMENT_SATISFIED',
-  EXCEPTION_OPENED: 'EXCEPTION_OPENED',
-  EXCEPTION_RESOLVED: 'EXCEPTION_RESOLVED',
-  DECISION_REQUESTED: 'DECISION_REQUESTED',
-  DECISION_RESOLVED: 'DECISION_RESOLVED',
-  VALUE_CORRECTED: 'VALUE_CORRECTED',
-  RETRY_SCHEDULED: 'RETRY_SCHEDULED',
-  PROCESS_BLOCKED: 'PROCESS_BLOCKED',
-  PROCESS_RESUMED: 'PROCESS_RESUMED',
-  RESULT_CREATED: 'RESULT_CREATED',
-  PACKAGE_PREPARED: 'PACKAGE_PREPARED',
-  PACKAGE_UPDATED: 'PACKAGE_UPDATED',
-  SHARE_APPROVED: 'SHARE_APPROVED',
-  SHARE_LINK_CREATED: 'SHARE_LINK_CREATED',
-  SHARE_LINK_OPENED: 'SHARE_LINK_OPENED',
-  SHARE_DOWNLOAD_REQUESTED: 'SHARE_DOWNLOAD_REQUESTED',
-  SHARE_LINK_REVOKED: 'SHARE_LINK_REVOKED',
-  SHARE_LINK_EXPIRED: 'SHARE_LINK_EXPIRED',
-  PROCESS_COMPLETED: 'PROCESS_COMPLETED',
-  PROCESS_COMPLETED_WITH_EXCEPTIONS: 'PROCESS_COMPLETED_WITH_EXCEPTIONS',
-  PROCESS_TECHNICAL_FAILURE: 'PROCESS_TECHNICAL_FAILURE',
-  JOB_SITE_PHASE_CHANGED: 'JOB_SITE_PHASE_CHANGED',
-  ASSIGNMENT_STARTED: 'ASSIGNMENT_STARTED',
-  ASSIGNMENT_ENDED: 'ASSIGNMENT_ENDED',
-  EVIDENCE_RECORDED: 'EVIDENCE_RECORDED',
-  EVIDENCE_REVIEWED: 'EVIDENCE_REVIEWED',
-  REQUEST_CREATED: 'REQUEST_CREATED',
-  REQUEST_UPDATED: 'REQUEST_UPDATED',
-  CONTEXT_MESSAGE_ADDED: 'CONTEXT_MESSAGE_ADDED',
-  DOCUMENT_SOURCE_CHECKED: 'DOCUMENT_SOURCE_CHECKED',
-  DOCUMENT_LINKED_TO_JOB_SITE: 'DOCUMENT_LINKED_TO_JOB_SITE',
-  DOCUMENT_UNLINKED_FROM_JOB_SITE: 'DOCUMENT_UNLINKED_FROM_JOB_SITE',
-  DOCUMENT_VERSION_REVIEWED: 'DOCUMENT_VERSION_REVIEWED'
-} as const
-
-export type OperationalEventType = (typeof OperationalEventType)[keyof typeof OperationalEventType]
-
-
-export const OperationalActorType = {
-  SYSTEM: 'SYSTEM',
-  USER: 'USER',
-  SUPPORT: 'SUPPORT',
-  EXTERNAL: 'EXTERNAL'
-} as const
-
-export type OperationalActorType = (typeof OperationalActorType)[keyof typeof OperationalActorType]
-
-
-export const OperationalEventSourceType = {
-  ENGINE: 'ENGINE',
-  DOMAIN: 'DOMAIN',
-  USER_ACTION: 'USER_ACTION',
-  SHARING_ACCESS: 'SHARING_ACCESS',
-  CONTINUOUS_CONTROL: 'CONTINUOUS_CONTROL'
-} as const
-
-export type OperationalEventSourceType = (typeof OperationalEventSourceType)[keyof typeof OperationalEventSourceType]
-
-
-export const OperationalDecisionType = {
-  CONFIRM_DOCUMENT_TYPE: 'CONFIRM_DOCUMENT_TYPE',
-  CONFIRM_DOCUMENT_OWNER: 'CONFIRM_DOCUMENT_OWNER',
-  CONFIRM_EXPIRY_DATE: 'CONFIRM_EXPIRY_DATE',
-  RESOLVE_CONFLICT: 'RESOLVE_CONFLICT',
-  APPROVE_DOCUMENT_PACKAGE_SHARE: 'APPROVE_DOCUMENT_PACKAGE_SHARE'
-} as const
-
-export type OperationalDecisionType = (typeof OperationalDecisionType)[keyof typeof OperationalDecisionType]
-
-
-export const OperationalDecisionStatus = {
-  OPEN: 'OPEN',
-  RESOLVED: 'RESOLVED',
-  SUPERSEDED: 'SUPERSEDED'
-} as const
-
-export type OperationalDecisionStatus = (typeof OperationalDecisionStatus)[keyof typeof OperationalDecisionStatus]
-
-
-export const OperationalExceptionType = {
-  MISSING_INFORMATION: 'MISSING_INFORMATION',
-  DATA_TO_VERIFY: 'DATA_TO_VERIFY',
-  CONFLICT: 'CONFLICT',
-  REQUIREMENT_NOT_SATISFIED: 'REQUIREMENT_NOT_SATISFIED',
-  DOCUMENT_MISSING: 'DOCUMENT_MISSING',
-  DOCUMENT_EXPIRED: 'DOCUMENT_EXPIRED',
-  DOCUMENT_EXPIRING: 'DOCUMENT_EXPIRING',
-  PROCESS_BLOCKED: 'PROCESS_BLOCKED',
-  PERSISTENT_TECHNICAL_ERROR: 'PERSISTENT_TECHNICAL_ERROR',
-  ACCESS_NOT_ALLOWED: 'ACCESS_NOT_ALLOWED',
-  SENSITIVE_ACTION_REQUIRED: 'SENSITIVE_ACTION_REQUIRED',
-  PARTIAL_RESULT: 'PARTIAL_RESULT',
-  INVALID_ARTIFACT_REFERENCE: 'INVALID_ARTIFACT_REFERENCE'
-} as const
-
-export type OperationalExceptionType = (typeof OperationalExceptionType)[keyof typeof OperationalExceptionType]
-
-
-export const OperationalExceptionSeverity = {
-  INFO: 'INFO',
-  ATTENTION: 'ATTENTION',
-  WARNING: 'WARNING',
-  BLOCKING: 'BLOCKING'
-} as const
-
-export type OperationalExceptionSeverity = (typeof OperationalExceptionSeverity)[keyof typeof OperationalExceptionSeverity]
-
-
-export const OperationalExceptionStatus = {
-  OPEN: 'OPEN',
-  RESOLVED: 'RESOLVED'
-} as const
-
-export type OperationalExceptionStatus = (typeof OperationalExceptionStatus)[keyof typeof OperationalExceptionStatus]
-
-
-export const OperationalArtifactType = {
-  ORGANIZATION: 'ORGANIZATION',
-  DOCUMENT: 'DOCUMENT',
-  DOCUMENT_VERSION: 'DOCUMENT_VERSION',
-  DOCUMENT_REQUIREMENT: 'DOCUMENT_REQUIREMENT',
-  WORKER: 'WORKER',
-  JOB_SITE: 'JOB_SITE',
-  DEADLINE: 'DEADLINE',
-  CHECKLIST: 'CHECKLIST',
-  EVIDENCE: 'EVIDENCE',
-  DOCUMENT_PACKAGE: 'DOCUMENT_PACKAGE',
-  SHARE_LINK: 'SHARE_LINK',
-  OPERATIONAL_REQUEST: 'OPERATIONAL_REQUEST',
-  CONTEXT_MESSAGE: 'CONTEXT_MESSAGE',
-  DOCUMENT_SOURCE: 'DOCUMENT_SOURCE'
-} as const
-
-export type OperationalArtifactType = (typeof OperationalArtifactType)[keyof typeof OperationalArtifactType]
-
-
-export const OperationalReliability = {
-  VERIFIED: 'VERIFIED',
-  HIGH: 'HIGH',
-  MEDIUM: 'MEDIUM',
-  LOW: 'LOW',
-  CONFLICT: 'CONFLICT'
-} as const
-
-export type OperationalReliability = (typeof OperationalReliability)[keyof typeof OperationalReliability]
-
-
-export const OperationalImpact = {
-  LOW: 'LOW',
-  CONTROLLED: 'CONTROLLED',
-  SENSITIVE: 'SENSITIVE',
-  IRREVERSIBLE: 'IRREVERSIBLE'
-} as const
-
-export type OperationalImpact = (typeof OperationalImpact)[keyof typeof OperationalImpact]
-
-
-export const OperationalEffectType = {
-  DOCUMENT_STATUS_RECONCILED: 'DOCUMENT_STATUS_RECONCILED',
-  DEADLINE_RECONCILED: 'DEADLINE_RECONCILED',
-  REMINDERS_RECONCILED: 'REMINDERS_RECONCILED',
-  PACKAGE_REVIEW_RESET: 'PACKAGE_REVIEW_RESET',
-  EXCEPTION_OPENED: 'EXCEPTION_OPENED',
-  EXCEPTION_RESOLVED: 'EXCEPTION_RESOLVED',
-  DECISION_OPENED: 'DECISION_OPENED',
-  NOTIFICATION_CREATED: 'NOTIFICATION_CREATED'
-} as const
-
-export type OperationalEffectType = (typeof OperationalEffectType)[keyof typeof OperationalEffectType]

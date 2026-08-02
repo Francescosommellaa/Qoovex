@@ -8,8 +8,7 @@ export async function GET(request: Request) {
       ownerType: searchParams.get("ownerType") ?? undefined,
       workerId: searchParams.get("workerId") ?? undefined,
       jobSiteId: searchParams.get("jobSiteId") ?? undefined,
-      status: searchParams.get("status") ?? undefined,
-      categoryKey: searchParams.get("categoryKey") ?? undefined,
+      archived: searchParams.get("archived") === "true",
     }));
   } catch (error) { return asAccessResponse(error); }
 }
