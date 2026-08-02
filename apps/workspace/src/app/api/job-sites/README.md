@@ -11,3 +11,5 @@ Permessi:
 - creazione: `jobSites:create`.
 
 Questa API non deduce la fase dalle date e non gestisce geolocalizzazione continua, presenze o prove di cantiere.
+
+Questi endpoint sono il contratto `LEGACY` corrente: `clientName` e `JobSiteOperationalPhase` restano attivi. Non creano `JobSiteParticipant`, non richiedono conferma cliente e `COMPLETED` non equivale alla futura chiusura reciproca.

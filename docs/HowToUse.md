@@ -12,23 +12,31 @@ La documentazione canonica e la sequenza continua `00_PRODUCT_AND_SCOPE.md`-`08_
 
 ## Classificazione obbligatoria
 
-Ogni documento deve distinguere:
+Ogni affermazione sostanziale deve essere classificabile come:
 
-- **Stato attuale verificato**: esiste nel codice, schema o runtime verificato.
-- **Decisione implementata**: scelta approvata e realizzata con contratti verificabili.
-- **Specifica concettuale non implementata**: direzione priva di contratto o runtime attivo.
-- **Decisione aperta / hard stop**: richiede approvazione e non puo essere risolta per deduzione.
+- `verified_current_state`: esiste nel codice, schema o runtime verificato;
+- `implemented_decision`: scelta approvata e realizzata con contratti verificabili;
+- `approved_product_direction`: direzione prodotto approvata che non prova una capability;
+- `conceptual_not_implemented`: entita, lifecycle, permesso, route o UI futura;
+- `open_decision`: richiede una decisione;
+- `hard_stop`: blocca schema o implementazione.
 
-Processi persistenti, Panoramica exception-driven, cinque definizioni deterministiche, ricerca consultiva sui metadati autorizzati, timeline aggregate e condivisione revisionata sono implementati. OCR, AI, ricerca nei file o semantica, cronologia/viste salvate, nuovi canali, retention automatica, SLA e limiti commerciali non sono capability attive.
+Una stessa direzione puo essere approvata e contemporaneamente non implementata. Usare formule esplicite, per esempio: “Nella direzione vNext approvata... Questa capacita non e implementata nello stato corrente.”
 
-## Modifiche tecniche
+## Stato implementato e vNext
 
-Per schema, autorizzazioni, storage, API o UI, il codice e `packages/db/prisma/schema.prisma` prevalgono. Aggiornare i documenti canonici coinvolti, Qoovex-Brain e il session log; la Memory si aggiorna soltanto su richiesta esplicita.
+Processi persistenti, Panoramica exception-driven, cinque definizioni deterministiche, ricerca consultiva sui metadati aziendali autorizzati, timeline interne e condivisione revisionata sono implementati. La partecipazione cliente account, gli immobili, la timeline condivisa Azienda-cliente, le negoziazioni, i pagamenti documentati e la chiusura reciproca appartengono a vNext e sono `conceptual_not_implemented`.
 
-La direzione grafica resta quella canonica: Geist/Geist Mono, Tabler, tema light/dark/system e primitive `@qoovex/ui`. Modifiche a token, font, tema, motion, iconografia o foundation richiedono un task separato.
+Il modello corrente mantiene `OWNER`/`COLLABORATOR`, una sola membership per User, `JobSite.clientName`, `JobSiteOperationalPhase` e messaggi `INTERNAL`. Non reinterpretare questi contratti come se il pivot fosse gia distribuito.
 
-## Preflight automatico Operations database
+D-VNEXT-18-45 rendono decision-complete la Fase A documentale per contesti, partecipanti, authorization, privacy, lifecycle, compatibilita e rollout. Non rendono implementato lo schema target. Il task tecnico successivo deve rispettare D-VNEXT-45: un prompt coordinato, una branch/PR e una sola migration additiva, salvo hard stop tecnico provato.
 
-Classificare come database-sensitive qualunque modifica a route, server action, servizio, query, dashboard, widget dati, polling, reminder, job, notifiche, audit, liste, ricerca, filtri, export, supporto, retention o workflow documentali. Applicare `Database operation impact` di `OperationalProtocol.md`: ricostruire il flusso reale, misurare o stimare con evidenza le chiamate Prisma prima/dopo e verificare duplicazioni, N+1, polling, scansioni, over-fetching e accessi cloud evitabili.
+## Modifiche tecniche e memoria
 
-Schema, migration, provider, auth, permessi, tenant isolation, frequenze job, audit, retention, servizi esterni e configurazioni cloud sono hard stop fuori da un piano esplicitamente approvato. La Fase 4 ha autorizzato soltanto le migration additive e le prove sul database locale guardato; non autorizza deploy remoti.
+Schema, autorizzazioni, storage, API, servizi, UI e operazioni richiedono un task esplicitamente approvato. Aggiornare documenti e Brain quando il contratto cambia. La Qoovex-Memory si aggiorna soltanto su richiesta esplicita, tramite nota ad hoc, senza modificare direttamente la memoria consolidata.
+
+La direzione grafica resta quella canonica: Geist/Geist Mono, Tabler, tema light/dark/system e primitive `@qoovex/ui`.
+
+## Database operation impact
+
+Per un task esclusivamente documentale dichiarare zero operazioni aggiunte/eliminate e non interrogare database o Blob. Per route, servizi, query, runner, audit, ricerca, export, retention o workflow applicare `OperationalProtocol.md` prima di qualunque modifica.

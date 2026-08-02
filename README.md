@@ -1,58 +1,46 @@
 # Qoovex
 
-Qoovex e il sistema operativo exception-driven per documenti, scadenze, prove di cantiere e condivisioni verificabili destinato a piccole imprese, subappaltatori, artigiani e consulenti.
+## `approved_product_direction`
 
-Il Workspace autenticato esegue cinque processi persistenti e deterministici: ricezione documento, creazione lavoratore, creazione cantiere, controllo continuo e preparazione di una condivisione. Le persone lavorano soprattutto su eccezioni, decisioni, review e risultati. Qoovex organizza e prepara contenuti per revisione: non garantisce conformita, non certifica persone o documenti e non sostituisce valutazioni professionali.
+Qoovex vNext e lo spazio condiviso in cui un'impresa gestisce un lavoro edile con il cliente, documentando avanzamento, step, modifiche, prove e pagamenti dalla creazione del cantiere alla chiusura.
 
-## Stato attuale verificato
+Promessa all'Azienda: documenta il lavoro una volta e usa gli stessi aggiornamenti per informare il cliente, gestire le modifiche e presentare le richieste di pagamento.
 
-- `apps/workspace`: prodotto Next.js con Panoramica exception-driven, motore persistente, auth, MFA, inviti, API protette, supporto auditato e Console Qoovex.
-- `apps/web`: sito pubblico, contenuti marketing e pagine legali.
-- `apps/sirio`: catalogo e prova tecnica del design system, inclusa la proof Fase 4; non ospita logica operativa.
-- `apps/mobile`: placeholder per una futura app mobile.
-- `packages/db`: Prisma, client, schema e diciassette migration canoniche nel repository; `20260728030000_operational_workspace_expansion` e `20260728040000_operational_workspace_index_names` sono applicate e senza drift soltanto sul database locale guardato.
-- `packages/types`: ruoli, permessi e DTO platform-neutral, inclusi i contratti operativi minimizzati.
-- `packages/ui`: foundation condivisa shadcn `base-nova`, Base UI, Tabler, Geist e tema light/dark/system; la Fase 4 aggiunge solo primitive generiche per ricerca, timeline e work queue.
-- `packages/brand-resources`: asset SVG proprietari condivisi.
+Promessa al cliente: segui i lavori sulle tue case, controlla ogni modifica e conserva tutto cio che e stato condiviso.
 
-Il dominio attivo comprende Aziende, lavoratori, cantieri, documenti e versioni private, requisiti, scadenze, calendario, checklist, prove, pacchetti, share link, notifiche, audit, supporto e data-control. Il motore aggiunge processi, step, eventi, decisioni, eccezioni, artifact reference, snapshot di regole ed effect receipt senza duplicare i contenuti file.
+Nei lavori tra piccole imprese e clienti privati, accordi, avanzamento, modifiche, fotografie, prove, scontrini, richieste, pagamenti e conferme restano spesso distribuiti tra messaggi, telefonate, bonifici, email, file e memoria delle persone. La direzione vNext approvata crea un'unica cronologia condivisa, strutturata, versionata e scaricabile del lavoro.
 
-## Stato Fase 4
+Questa direzione e `conceptual_not_implemented`: non dichiara attivi account cliente per cantiere, immobili, timeline condivisa, step vNext, negoziazioni, pagamenti documentati, chiusura reciproca o nuove route.
 
-- Registry server-side versionato con `DOCUMENT_RECEIVED@1`, `WORKER_CREATED@1`, `JOB_SITE_CREATED@1`, `CONTINUOUS_CONTROL@1` e `DOCUMENT_PACKAGE_SHARING@1`.
-- Profilo azienda e contatti operativi, versioni documentali revisionate, documenti centrali collegabili a piu cantieri, assegnazioni storicizzate, prove classificate, richieste, messaggi e timeline contestuale.
-- Fonti documentali v1 limitate a upload diretto e procedura manuale guidata; integrazioni generiche e AI restano disabilitate.
-- Runner protetto da `CRON_SECRET`, claim atomico, lease di cinque minuti, fencing, cinque tentativi massimi e backoff 1/5/15/60 minuti.
-- Automazione solo per azioni `LOW`, deterministiche e reversibili con affidabilita `VERIFIED/HIGH`; gli altri casi aprono decisioni, eccezioni o restano vietati.
-- Ricerca server-side limitata ai metadati autorizzati; nessuna query e salvata negli URL o nel database.
-- Timeline operativa tipizzata e append-only, aggregata per artifact e separata dall'audit tecnico minimizzato.
-- Condivisioni basate su revisione immutabile, review umana, download opt-in e link legato alla revisione approvata.
-- Ingresso universale come composizione dei flussi autorizzati esistenti, non come endpoint generico.
-- OCR/AI, ricerca nei file o semantica, viste salvate, nuovi canali, retention automatica, SLA e limiti commerciali restano decisioni aperte.
+Il contratto tecnico di Fase A D-VNEXT-18-45 e approvato: definisce contesti account, partecipazione, membership multiple, privacy, lifecycle, deleghe economiche, timeline/disclosure, proposte, pagamenti, export, data-control, compatibilita legacy e rollout. Anche questo contratto resta `conceptual_not_implemented` e non autorizza schema o runtime.
 
-## Foundation Operational Intelligence — Tranche 1
+## `verified_current_state`
 
-- Registry di quattro azioni deterministiche server-side allow-listed `@1`, separato dal registry dei processi, con schema input/output runtime, permesso, scope, impatto, reversibilita, idempotenza, servizio dominio, receipt ed evento. Decisioni, eccezioni e notifiche non sono comandi IA generici.
-- Executor esclusivamente dry-run collegato alla execution policy esistente; verifica permission, resource scope e tenant prima di produrre un piano.
-- Modalita server-side `OFF`, `SHADOW`, `SUGGEST_ONLY`, `AUTO_LOW_RISK`; il default e `OFF` e `AUTO_LOW_RISK` rifiuta l'avvio senza soglia evaluation esplicitamente approvata.
-- Adapter provider-neutral disabilitato e privo di qualunque metodo di scrittura. Nessun provider, chiamata esterna, upload o analisi di file e attivo.
-- Output `@1` validati a runtime, provenienza tipizzata e confidence specifica per task; evaluation harness soltanto con fixture sintetiche.
-- Data-control inventaria ed esporta i modelli operativi esistenti con metadati minimizzati. Nessun contenuto file, Blob key, token o URL firmato entra nell'export.
-- `DOCUMENT_PACKAGE_SHARING@1` resta gestito dal servizio canonico: prepara revisione e review, attende conferma autorizzata e crea il link solo nel flusso di condivisione esistente.
-- Tipi receipt dedicati per applicazione decisioni documento, snapshot regole e scadenza share link richiedono una futura migration Prisma e non sono simulati con enum impropri.
+Il Workspace autenticato implementa oggi Aziende, `OWNER` e `COLLABORATOR`, Worker, cantieri, documenti e versioni private, requisiti, scadenze, calendario, checklist, prove, richieste, messaggi interni, timeline contestuale, pacchetti, condivisioni, processi, decisioni, eccezioni, audit, export e data-control.
 
-## Regole
+- `OrganizationRole` contiene soltanto `OWNER` e `COLLABORATOR`; `CLIENT` non e un ruolo Azienda.
+- `User`, `Worker`, `OrganizationMembership` e assegnazioni sono distinti. Lo schema corrente consente a un User zero o una sola membership tramite `OrganizationMembership.userId @unique`.
+- `JobSite` contiene ancora `clientName` testuale, `JobSiteOperationalPhase` e nessuna partecipazione cliente account.
+- `ContextMessage.visibility` e soltanto `INTERNAL`; la timeline contestuale corrente e aziendale, non la timeline Azienda-cliente vNext.
+- Il motore persistente usa `DOCUMENT_RECEIVED@1`, `WORKER_CREATED@1`, `JOB_SITE_CREATED@1`, `CONTINUOUS_CONTROL@1` e `DOCUMENT_PACKAGE_SHARING@1`.
+- Prisma conserva dati e metadati; Vercel Blob privato conserva i binari.
+- Il repository contiene 17 migration canoniche, applicate da zero e verificate senza drift soltanto sul database locale guardato. Nessun ambiente remoto e attestato.
 
-- Il codice, `packages/db/prisma/schema.prisma` e i manifest descrivono lo stato implementato.
-- La documentazione canonica e la sequenza `docs/00_PRODUCT_AND_SCOPE.md`-`docs/08_SUPPORT_AND_DATA_CONTROL.md`.
-- Auth e Azienda derivano sempre dal server; ruolo organizzativo, preset, permessi persistiti, scadenza e resource grant restano separati e default-deny.
-- Le app non si importano tra loro; le composizioni di dominio restano app-locali.
-- Prisma conserva dati e metadati; Vercel Blob privato conserva file binari.
-- Nessun requisito normativo, scadenza ufficiale, provider o promessa legale viene inventato.
+## Modello commerciale approvato
 
-## Comandi
+- Azienda: paga Qoovex.
+- Collaborator: accesso incluso nell'Azienda.
+- Cliente: accesso gratuito ai cantieri in cui e invitato.
 
-`pnpm dev` avvia o riusa Prisma Postgres locale `qoovex-local` prima delle app e rifiuta target remoti.
+Prezzi, piani, limiti, commissioni, trial, entitlement, spazio disponibile e costi per cliente o cantiere restano da definire. Il marketplace e fuori dal nuovo MVP.
+
+## Confini
+
+La direzione vNext non autorizza schema, migration, API, servizi, route, permessi, UI, retention, provider, deploy o operazioni database/Blob. Qoovex documentera il processo di pagamento ma non incassera, custodira, trasferira, tratterra, rimborsera, arbitrera o garantira pagamenti. Non garantisce conformita, non certifica e non sostituisce valutazioni professionali, tecniche o legali.
+
+La documentazione canonica e `docs/00_PRODUCT_AND_SCOPE.md`-`docs/08_SUPPORT_AND_DATA_CONTROL.md`. Il codice, `packages/db/prisma/schema.prisma`, le migration e i manifest restano la fonte dello stato implementato.
+
+Tre hard stop decisionali restano aperti: retention canonica definitiva, protezione IBAN/key management e modello commerciale definitivo. Stato/autorizzazione del database remoto e sicurezza di una sola migration sono gate operativi. L'eventuale implementazione vNext dovra avvenire in un prompt, una branch/PR e una sola migration additiva; non e iniziata in questo repository.
 
 ```bash
 pnpm install

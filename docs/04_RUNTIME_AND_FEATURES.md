@@ -1,71 +1,157 @@
 # Runtime and active features
 
-## Stato attuale verificato
+## `verified_current_state`
 
-Il Workspace mantiene auth, MFA, inviti, supporto, dominio documentale, scadenze/calendario, checklist/prove, pacchetti/condivisioni, notifiche, audit e data-control. Gli inviti creano soltanto `COLLABORATOR`; preset, permessi normalizzati, scope, grant tenant-safe e scadenza vengono persistiti. L'`OWNER` puo modificarli con optimistic concurrency, reinviare o revocare inviti e accessi; aggiornamento e revoca invalidano le sessioni del destinatario.
+Il Workspace mantiene auth/MFA, inviti Azienda, documenti/versioni, scadenze, checklist, prove, pacchetti/share link, richieste, messaggi `INTERNAL`, timeline contestuale, notifiche, audit e data-control. Il cantiere corrente usa `DRAFT -> PREPARATION -> IN_PROGRESS <-> PAUSED -> CLOSING -> COMPLETED`; l'override Owner e l'archiviazione correnti non implementano chiusura reciproca o archive-only-after-closure.
 
-Il motore operativo implementa cinque definizioni:
+Il motore esegue le cinque definizioni `@1` correnti con claim, lease, fencing, retry e receipt. Nessun record corrente e una proposta commerciale, una richiesta di pagamento, una partecipazione cliente o una chiusura vNext.
 
-| Definizione | Trigger | Effetti deterministici |
-|---|---|---|
-| `DOCUMENT_RECEIVED@1` | documento, aggiornamento o nuova versione | contesto, dati mancanti, requisiti, deadline/reminder, pacchetti interni |
-| `WORKER_CREATED@1` | creazione o aggiornamento lavoratore | snapshot requisiti WORKER, documenti mancanti, reminder |
-| `JOB_SITE_CREATED@1` | creazione o aggiornamento cantiere | requisiti globali/specifici, documenti/checklist esistenti, reminder |
-| `CONTINUOUS_CONTROL@1` | una volta per Azienda/finestra oraria | stati temporali a 30 giorni, requisiti, processi fermi, reminder e artifact |
-| `DOCUMENT_PACKAGE_SHARING@1` | preparazione esplicita pacchetto | manifest deterministico, problemi, decisione umana e pubblicazione idempotente |
+## `approved_product_direction`
 
-Una nuova versione riporta da `READY_FOR_REVIEW` a `DRAFT` soltanto pacchetti interni non condivisi. I pacchetti `SHARED` non vengono modificati. I problemi tecnici sono ritentati; i dati mancanti o ambigui aprono decisioni/eccezioni senza retry infinito.
+### Attivazione e partecipazione
 
-## Spazio operativo contestuale
+```text
+Azienda crea il cantiere
+-> invita Collaborator
+-> invita il cliente
+-> il cliente accede o crea un account
+-> accetta la partecipazione
+-> conferma il riepilogo iniziale
+-> il cantiere vNext diventa ACTIVE
+```
 
-Il Workspace espone servizi tenant-safe per profilo azienda e contatti, link non duplicanti documento-cantiere, revisione delle versioni, assegnazioni con ruolo/periodo/storico, prove classificate e revisionate, richieste, messaggi e timeline contestuale append-only. La timeline utente resta separata da `ProductAuditEvent` e accetta solo metadati minimizzati.
+Il riepilogo iniziale e uno snapshot versionato dei dati condivisi. Nessuna partecipazione cliente diventa `ACTIVE` senza la conferma prevista da D-VNEXT-05.
 
-La fase cantiere segue `DRAFT -> PREPARATION -> IN_PROGRESS <-> PAUSED -> CLOSING -> COMPLETED`. Il cambio usa una route dedicata: apertura e completamento calcolano richieste, checklist e documenti bloccanti; override e riapertura richiedono Owner e motivazione. L'editing generico non puo cambiare fase.
+Matrice transizioni invito cliente D-VNEXT-24:
 
-Le fonti v1 sono `DIRECT_UPLOAD` e `GUIDED_MANUAL`. Un controllo deterministico puo aprire una richiesta guidata ma non degrada documenti approvati. `AUTHORIZED_INTEGRATION`, scraping, password conservate e AI restano disabilitati.
+| Stato | Azioni valide | Stato successivo | Fallimenti obbligatori |
+| --- | --- | --- | --- |
+| `PENDING` | accetta con token one-time e email verificata | `ACCEPTED` | scaduto, revocato, superseded, email diversa, replay |
+| `PENDING` | revoca Owner/responsabile autorizzato | `REVOKED` | gia consumato o non nello stesso cantiere |
+| `PENDING` | scadenza a 14 giorni | `EXPIRED` | nessuna estensione silenziosa |
+| `PENDING` | nuovo invito per stesso slot | `SUPERSEDED` | token precedente subito inutilizzabile |
+| `ACCEPTED` | crea/collega partecipante | terminale invito | non crea membership; idempotenza obbligatoria |
+| `REVOKED`, `EXPIRED`, `SUPERSEDED` | nessuna accettazione | terminale | nuovo accesso richiede nuovo invito |
 
-## Affidabilita e impatto
+Dopo l'attivazione il cliente non viene rimosso silenziosamente: sospensione, fine o revoca della partecipazione sono eventi documentati e non eliminano la storia.
 
-I livelli implementati sono `VERIFIED/HIGH/MEDIUM/LOW/CONFLICT` e `LOW/CONTROLLED/SENSITIVE/IRREVERSIBLE`. La policy non usa soglie numeriche:
+### Step opzionali
 
-- automatico: affidabilita `VERIFIED/HIGH`, impatto `LOW`, effetto deterministico, reversibile e autorizzato;
-- decisione: impatto `CONTROLLED` o affidabilita `MEDIUM/LOW/CONFLICT`;
-- vietato: `IRREVERSIBLE`, effetto non autorizzato, ampliamento accesso, disclosure o azione legale;
-- `SENSITIVE` non e automatico.
+In vNext non esistono fasi prodotto separate. Un cantiere puo non avere step; quando esistono, avanzamento e dipendenze derivano dagli step. Uno step contiene concettualmente titolo, descrizione, risultato atteso, ordine, stato, data indicativa, conclusione stimata, eventuale valore economico, Collaborator/ruoli, dipendenze, prove, modifiche e pagamenti collegati. Stati concettuali: `NOT_STARTED`, `IN_PROGRESS`, `WAITING`, `READY_FOR_REVIEW`, `CHANGES_REQUESTED`, `CONFIRMED`, `COMPLETED`, `CANCELLED`. La conferma cliente non e collaudo, conformita o certificazione. Senza step non si mostra una percentuale artificiale e Qoovex non predice la fine del lavoro.
 
-## Foundation Operational Intelligence — Tranche 1
+### D-VNEXT-27 - proposte e negoziazione
 
-Il runtime espone un registry azioni server-side allow-listed, versione 1:
+Concetti futuri: `JobSiteChangeProposal`, `JobSiteChangeProposalVersion`, `JobSiteChangeAcceptance`. L'aggregate negoziazione e separato dalle versioni immutabili e conserva una sola versione corrente. Ogni comando usa `expectedCurrentVersion`; un conflitto non sovrascrive il lavoro concorrente. Conseguenze economiche: `NO_PRICE_CHANGE`, `FIXED_DELTA`, `BOUNDED_RANGE`; un range contiene minimo e massimo. Un costo indefinito non e accettabile come versione finale.
 
-| Azione | Permesso | Scope | Receipt |
-|---|---|---|---|
-| `DOCUMENT_STATUS_RECONCILE@1` | `documents:update` | documento | `DOCUMENT_STATUS_RECONCILED` |
-| `DEADLINE_RECONCILE@1` | `documents:expiry:manage` | documento/scadenza | `DEADLINE_RECONCILED` |
-| `REMINDERS_RECONCILE@1` | `documents:expiry:manage` | Azienda/scadenza | `REMINDERS_RECONCILED` |
-| `PACKAGE_REVIEW_RESET@1` | `documentPackages:update` | pacchetto | `PACKAGE_REVIEW_RESET` |
+Ogni versione espone almeno: cosa cambia, motivazione, step interessati, prezzo precedente, variazione o intervallo economico, impatto sui tempi, nuova conclusione stimata, Collaborator/ruoli coinvolti, dipendenze, allegati, condizioni, prove richieste, autore, parte rappresentata e data. Puo aggiungere, modificare o rimuovere step e cambiare risultato atteso, materiali, prezzo, tempi, persone o condizioni senza riscrivere la versione precedente.
 
-Decisioni, eccezioni e notifiche sono prodotte soltanto dai servizi interni gia autorizzati del runner: non sono comandi generici proponibili da un adapter.
+| Stato | Operazioni ammesse | Transizione | Invarianti/fallimenti |
+| --- | --- | --- | --- |
+| `DRAFT` | modifica autore autorizzato, propone, ritira | `PROPOSED`, `WITHDRAWN` | nessun effetto; grant valido all'invio |
+| `PROPOSED` | contropropone, accetta, rifiuta, ritira, scade | `COUNTERED`, `ACCEPTED`, `REJECTED`, `WITHDRAWN`, `EXPIRED` | solo versione corrente; la parte proponente e implicitamente favorevole |
+| `COUNTERED` | nuova revisione e invio, accetta, rifiuta, ritira, scade | `PROPOSED`, `ACCEPTED`, `REJECTED`, `WITHDRAWN`, `EXPIRED` | la controproposta supersede la versione precedente |
+| `ACCEPTED` | sola lettura; nuova modifica separata | terminale | snapshot/fingerprint e conseguenze immutabili; effect receipt idempotente |
+| `REJECTED`, `WITHDRAWN`, `SUPERSEDED`, `EXPIRED` | sola lettura | terminale | nessun effetto operativo/economico |
 
-L'executor della Tranche 1 non muta il dominio: valida envelope, action key, schema, tenant, permission e scope, applica `execution-policy.ts` e restituisce output/receipt/event preview `@1`. `OFF` e il default; `SHADOW` e `SUGGEST_ONLY` restano non scriventi; anche `AUTO_LOW_RISK` e dry-run e non puo essere selezionata senza una soglia evaluation approvata lato server. Il provider-neutral adapter e disabilitato e non espone metodi di scrittura.
+L'accettazione registra versione, fingerprint, autore, parte rappresentata, capability rivalidata, conseguenze economiche/temporali/operative, persone, condizioni e timestamp. `expiresAt` e opzionale e non esiste scadenza predefinita. Errori: versione stale `409`, parte errata `403`, grant revocato `403`, conseguenza incompleta `409`, doppia accettazione idempotente se identica e conflitto se differente.
 
-La provenienza distingue osservato, estratto, inferito, confermato dall'utente, confermato dal sistema, conflittuale e sconosciuto. La confidence e obbligatoriamente riferita a un task e a una versione di soglia. L'evaluation harness rifiuta fixture non sintetiche.
+| Concorrenza proposta | Esito richiesto |
+| --- | --- |
+| due revisioni sulla stessa `expectedCurrentVersion` | una sola vince; l'altra riceve conflitto e ricarica la versione corrente |
+| accettazione mentre arriva una controproposta | vale soltanto l'operazione che blocca per prima la versione corrente; nessuna accettazione stale |
+| doppia accettazione identica della stessa parte/versione | risposta idempotente, un solo receipt |
+| accettazioni differenti o parte errata | conflitto/forbidden senza effetto |
+| revoca grant tra preview e conferma | conferma negata dopo rivalidazione |
 
-I receipt coprono gli effetti del runner rappresentabili dall'enum esistente: stato documento, deadline, reminder, reset review pacchetto, apertura/risoluzione eccezione e apertura decisione. Servono tipi Prisma aggiuntivi, quindi una migration futura, per rappresentare semanticamente applicazione delle decisioni ai campi documento, snapshot regole e scadenza share link senza riusare tipi impropri.
+### Pagamenti documentati
 
-### Database operation impact
+Qoovex non incassa, custodisce, trasferisce, trattiene, rimborsa, arbitra o garantisce denaro.
 
-Questa tranche non modifica schema, migration, permessi o relazioni. Il runner aggiunge un `upsert` idempotente per ciascun effetto reale gia rappresentabile da `OperationalEffectType`; la chiave unica Azienda/effetto rende il replay non duplicante. Inventario ed export eseguono query tenant-scoped aggiuntive soltanto quando un Owner avvia quei flussi di data-control; il proxy budget testato dell'inventario passa da 57 a 77 operazioni per includere tutti i modelli operativi. Nessun nuovo polling, cache, provider, upload o operazione bulk distruttiva e introdotto.
+| Stato | Attore/azione | Stato successivo | Invarianti |
+| --- | --- | --- | --- |
+| `DRAFT` | Azienda autorizzata prepara/annulla | `REQUESTED`, `CANCELLED` | IBAN snapshot e importo completo |
+| `REQUESTED` | cliente dichiara invio; Azienda annulla | `TRANSFER_DECLARED`, `CANCELLED` | richiesta immutabile dopo invio |
+| `TRANSFER_DECLARED` | cliente allega/rivede dichiarazione; Azienda prende in esame | `UNDER_REVIEW`, `DISPUTED` | dichiarazione non prova accredito |
+| `UNDER_REVIEW` | Azienda conferma o contesta | `CONFIRMED`, `DISPUTED` | capability rivalidata; receipt idempotente |
+| `DISPUTED` | thread disputa o accordo separato | resta o nuova richiesta | Qoovex non arbitra |
+| `CONFIRMED`, `CANCELLED` | sola lettura | terminale | correzioni tramite nuovo record |
 
-## API e UI attive
+I pagamenti parziali usano richieste separate. Una richiesta include importo, motivazione, step/proposte, prove, payment-profile snapshot, causale, data, termine e allegati; la dichiarazione cliente include data, importo, metodo, riferimento, ricevuta e nota.
 
-Sono attive le route `/api/operations/processes`, timeline processo/artifact cursor-based, risoluzione decisioni/eccezioni, retry step e runner protetto. I read endpoint legacy `/api/operations/center`, `/api/operations/inbox` e `/api/dashboard` sono stati rimossi insieme ai relativi filtri e payload orfani; `/dashboard` compone il nuovo read model server-side. `POST /api/search` applica query 2-120 caratteri, massimo 8 termini, timeout due secondi e ranking deterministico sui soli metadati. Le route share proposal applicano preparazione, review e conferma con fingerprint.
+### D-VNEXT-30 - notifiche
 
-La Panoramica mostra soltanto interventi umani autorizzati, deduplicati per processo e artifact, e risultati significativi da eventi operativi system-generated; non mostra processi normalmente in corso. Il dettaglio espone step, timeline, artifact e sole azioni consentite. Documenti, lavoratori, cantieri e pacchetti mostrano l'ultimo stato operativo collegato. Le mutazioni principali restano nelle `Azioni rapide` della sidebar.
+Le notifiche usano dedupe key, destinatario user-scoped, deep link autenticato e copy minimizzata. Nessuna email contiene file, ricevute, IBAN completo o dati sensibili nel subject. Preferenze disabilitano solo eventi non critici.
 
-## Specifiche non implementate
+| Evento | Destinatari | Canale/frequenza | Disabilitabile |
+| --- | --- | --- | --- |
+| invito cliente, scadenza/supersede | cliente; Azienda per esito | immediata in-app/email minimizzata | no per sicurezza/accesso |
+| conferma iniziale richiesta/completata | cliente; responsabile | immediata | no |
+| proposta/controproposta/accettazione/rifiuto/ritiro/scadenza | controparte e delegati necessari | immediata | no per azioni pendenti/economiche |
+| richiesta pagamento, invio dichiarato, ricevuta mancante, conferma, disputa | parti economiche autorizzate | immediata | no |
+| chiusura, post-chiusura, sospensione/revoca accesso | parti coinvolte | immediata | no |
+| export pronto/scaduto | richiedente | immediata | no |
+| modifica payment profile | Owner e destinatari di sicurezza definiti | immediata, senza IBAN completo | no |
+| aggiornamento lavoro/foto/commento non urgente/progresso step | partecipanti autorizzati | digest | si |
 
-Nessun OCR, provider IA, analisi di file, ricerca nei file/semantica, query salvata, template inventato, nuovo canale, annullamento, undo, condivisione automatica o deduzione normativa e attivo. La foundation provider-neutral e spenta e non simula queste capacita.
+### D-VNEXT-37 - dispute
 
-## Decisioni aperte e hard stop
+Scope concettuali: step, proposta, pagamento, allegato, chiusura o attivita. Stati: `OPEN`, `IN_DISCUSSION`, `RESOLVED_BY_AGREEMENT`, `WITHDRAWN`, `CLOSED_WITHOUT_AGREEMENT`.
 
-Restano aperti OCR/AI, retention, ricerca nei file o semantica, viste salvate e cronologia, nuovi canali, compensazioni/undo, SLA e limiti commerciali. Cancellazione e undo non sono esposti finche la policy resta aperta.
+| Stato | Azioni | Stato successivo | Blocco |
+| --- | --- | --- | --- |
+| `OPEN` | entrambe le parti possono aprire e rispondere; preservation automatica | `IN_DISCUSSION`, `WITHDRAWN` | elemento collegato e chiusura se rilevante |
+| `IN_DISCUSSION` | accordo reciproco, ritiro autore, chiusura senza accordo riconosciuta | `RESOLVED_BY_AGREEMENT`, `WITHDRAWN`, `CLOSED_WITHOUT_AGREEMENT` | minimo scope possibile; mai arbitrato Qoovex |
+| `RESOLVED_BY_AGREEMENT` | sola lettura; conseguenze in proposta separata | terminale | richiede conferma delle parti |
+| `WITHDRAWN` | sola lettura | terminale | solo autore; preservation termina secondo policy |
+| `CLOSED_WITHOUT_AGREEMENT` | sola lettura | terminale | entrambe le parti riconoscono la chiusura del thread, non il merito |
+
+Matrice blocchi: una disputa step blocca conferma/chiusura correlata; proposta blocca gli effetti della proposta; pagamento blocca la sua conferma e la chiusura; allegato blocca l'uso dell'allegato; chiusura blocca la chiusura; attivita blocca solo l'elemento quando isolabile.
+
+### Chiusura e D-VNEXT-38 riapertura
+
+| Stato chiusura | Azione | Stato successivo | Precondizioni |
+| --- | --- | --- | --- |
+| `OPEN` | Azienda propone | `CLOSURE_PROPOSED` | nessuno step, proposta, richiesta, pagamento, chiarimento o disputa bloccante aperti |
+| `CLOSURE_PROPOSED` | cliente conferma o apre richiesta | `CLIENT_CONFIRMED` o ritorno a `OPEN` | riepilogo immutabile |
+| `CLIENT_CONFIRMED` | Azienda conferma | `CLOSED` | capability e precondizioni rivalidate |
+| `CLOSED` | sola lettura; richiesta post-chiusura | resta `CLOSED` | nessuna chiusura unilaterale o automatica |
+
+La chiusura registra soltanto l'assenza, alla data indicata, di elementi aperti nello spazio condiviso. Non certifica assenza di difetti, conformita, collaudo, rinuncia o termine garanzie.
+
+| Stato riapertura | Azione | Stato successivo | Invariante |
+| --- | --- | --- | --- |
+| `POST_CLOSURE_REQUESTED` | discussione | `IN_DISCUSSION`, `RESOLVED_WITHOUT_REOPEN` | timeline precedente immutata |
+| `IN_DISCUSSION` | proposta di riapertura | `REOPEN_PROPOSED` | scope e motivo espliciti |
+| `REOPEN_PROPOSED` | conferma reciproca o rifiuto | `REOPENED`, `RESOLVED_WITHOUT_REOPEN` | nessuna riapertura unilaterale |
+| `REOPENED` | evento `REOPENED`, nuovo episodio, nuovi/reopened step tramite proposta | nuova chiusura futura | chiusura ed export precedenti restano storia |
+
+### D-VNEXT-43 - processi ed effect receipt
+
+| Processo corrente | Semantica corrente | Compatibilita vNext |
+| --- | --- | --- |
+| `DOCUMENT_RECEIVED@1` | riconcilia documento | invariato; eventuale disclosure usa nuovo processo |
+| `WORKER_CREATED@1` | requisiti Worker | invariato e mai esposto al cliente |
+| `JOB_SITE_CREATED@1` | requisiti del cantiere legacy | non equivale ad invito o conferma iniziale vNext |
+| `CONTINUOUS_CONTROL@1` | controlli Azienda | invariato; non produce azioni cliente implicite |
+| `DOCUMENT_PACKAGE_SHARING@1` | review e share link | invariato; share link non e partecipazione autenticata |
+
+Processi futuri concettuali: `CLIENT_INVITATION`, `JOB_SITE_INITIAL_CONFIRMATION`, `CHANGE_NEGOTIATION`, `PAYMENT_REQUEST`, `JOB_SITE_CLOSURE`, `JOB_SITE_EXPORT`, `POST_CLOSURE_REQUEST`, `JOB_SITE_REOPENING`, tutti con versioni nuove. Il motore non concede accesso; authorization precede l'enqueue e ogni effetto economico usa policy, registry e receipt.
+
+| Operazione futura | Effect receipt minimo | Chiave idempotente |
+| --- | --- | --- |
+| accettazione invito | partecipante creato/collegato | invito + versione |
+| conferma iniziale | snapshot confermato | cantiere + summary version + parte |
+| accettazione proposta | versione accettata + effetti applicati | proposta + versione + parte |
+| richiesta pagamento inviata | richiesta + payment-profile version | richiesta + versione |
+| ricezione pagamento confermata | conferma + attore | richiesta + dichiarazione version |
+| chiusura confermata | closure snapshot | cantiere + closure version + parte |
+| export generato | manifest/fingerprint | tipo export + closure/version |
+| riapertura confermata | nuovo episodio | cantiere + reopen proposal version |
+
+## `conceptual_not_implemented`
+
+Tutti gli stati, processi, capability, receipt e matrici vNext sono concettuali. Non sono enum Prisma, DTO, route, notifiche, job o permission key attivi. I lifecycle correnti restano invariati.
+
+## `hard_stop`
+
+Nessuna capability vNext puo essere attivata prima della futura migration coordinata e dei gate descritti in `06` e `07`.

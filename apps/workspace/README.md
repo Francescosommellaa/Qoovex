@@ -1,38 +1,29 @@
 # Workspace App
 
-Runtime Next.js autenticato del prodotto Qoovex. Contiene la Panoramica exception-driven, il motore persistente, Auth.js/NextAuth, MFA, inviti, autorizzazioni, API, servizi server, supporto auditato e Console Qoovex.
+Runtime Next.js autenticato del prodotto Qoovex. Contiene la Panoramica exception-driven, il motore persistente, Auth.js/NextAuth, MFA, inviti Azienda, autorizzazioni, API, servizi server, supporto auditato e Console Qoovex.
 
-## Stato attuale verificato
+## `verified_current_state`
 
-`Organization` e il tenant canonico e Azienda la label prodotto. Ogni account usa zero o una sola `OrganizationMembership`. Il ruolo organizzativo e `OWNER` o `COLLABORATOR`; preset, permessi persistiti, scadenza e resource grant restano separati e derivano dal server. `Worker` non e un account. `SUPPORT_AGENT` e `PLATFORM_ADMIN` sono ruoli piattaforma separati. Gli esterni usano soltanto share link tokenizzati.
+- `Organization` e il tenant canonico e Azienda la label prodotto.
+- Ogni account usa attualmente zero o una sola `OrganizationMembership`; il ruolo organizzativo e soltanto `OWNER` o `COLLABORATOR`.
+- Preset, permessi persistiti, scadenza e resource grant sono distinti e server-derived.
+- `Worker` e un profilo operativo, non un ruolo account. `SUPPORT_AGENT` e `PLATFORM_ADMIN` sono ruoli piattaforma separati.
+- `JobSite` conserva `clientName` testuale e `JobSiteOperationalPhase`; non esistono `JobSiteParticipant`, `CLIENT`, `ClientProperty` o inviti cliente per cantiere.
+- `ContextMessage` e interno e la timeline contestuale attiva e aziendale. Gli esterni accedono soltanto a share link tokenizzati di pacchetti approvati.
+- Il dominio implementa lavoratori, cantieri, documenti/versioni, scadenze, checklist, prove/revisioni, richieste, pacchetti, condivisioni, processi, decisioni, eccezioni, audit, export e data-control.
 
-Il dominio comprende lavoratori, cantieri, documenti e versioni private, tipi/requisiti, scadenze, calendario, checklist, prove, pacchetti, condivisioni, notifiche, audit, export, retention e data-control. Prisma salva dati e metadati; Vercel Blob privato salva file. Le response non espongono storage key, token hash o URL permanenti.
+`/dashboard` presenta la Panoramica Azienda; `/operations/[processId]` mostra il dettaglio processo; `/document-packages` gestisce le Condivisioni. La ricerca metadata-only corrente e aziendale, usa un Dialog `Ctrl/Cmd+K` e non ha una pagina `/search`.
 
-`/dashboard` resta compatibile e presenta la Panoramica: stato sintetico, soli interventi umani autorizzati e massimo cinque risultati significativi prodotti dal motore. I vecchi KPI, filtri `?view=`, processi normalmente in corso e duplicazioni tra decisioni/eccezioni non fanno piu parte della pagina. La navigazione primaria contiene soltanto destinazioni autorizzate. La ricerca metadata-only e un modale consultivo separato dalla navigazione e apribile anche con `Ctrl/Cmd+K`; `/search` non e una pagina prodotto. La card `Azioni rapide` nel footer raccoglie le principali mutazioni manuali consentite dai permessi. `/document-packages` resta la route delle Condivisioni; notifiche e account restano nella topbar.
+## `approved_product_direction` / `conceptual_not_implemented`
 
-`/operations/[processId]` mostra step, timeline, decisioni, eccezioni e artifact autorizzati. Le viste dominio espongono lo stato operativo collegato e mantengono le route CRUD utili come controllo avanzato.
+La direzione vNext aggiungera un contesto cliente separato dalla membership Azienda: un cliente autenticato partecipera ai soli cantieri in cui e invitato, organizzera privatamente i cantieri per immobile e vedra soltanto contenuti `SHARED_WITH_CLIENT`. Un cantiere avra un solo cliente principale nel primo MVP e richiedera la sua conferma iniziale prima dell'attivazione.
 
-## Motore operativo
+Timeline condivisa, step vNext, proposte versionate, pagamenti documentati, home cliente, chiusura reciproca, richieste post-chiusura ed export cliente non sono route o capability attive. I nomi futuri non autorizzano tipi, permessi o servizi.
 
-Il registry server-side versionato contiene `DOCUMENT_RECEIVED@1`, `WORKER_CREATED@1`, `JOB_SITE_CREATED@1`, `CONTINUOUS_CONTROL@1` e `DOCUMENT_PACKAGE_SHARING@1`. Il lifecycle centralizzato usa idempotenza, claim atomico, lease di cinque minuti, fencing, massimo cinque tentativi, backoff 1/5/15/60 minuti, snapshot minimizzati ed effect receipt.
+D-VNEXT-18-45 definiscono il futuro contratto tecnico: contesto esplicito, membership multiple, partecipanti job-site-scoped, inviti cliente separati, audience/disclosure, deleghe economiche rivalidate, lifecycle versionati, export e rollout `LEGACY/VNEXT`. Nessuna di queste strutture e presente nel Workspace corrente.
 
-Lo spazio operativo contestuale aggiunge profilo e contatti azienda, lifecycle esplicito delle versioni, link documento-cantiere, assegnazioni storiche, prove classificate/revisionate, richieste, messaggi, timeline e fonti manuali guidate. File e sensibilita richiedono permessi distinti; Support resta metadata-only. La migration `20260728030000_operational_workspace_expansion` e presente ma non va dichiarata distribuita finche il wrapper, Prisma e i workflow remoti non sono verdi.
+## Confini invariati
 
-Il runner usa l'infrastruttura scheduled esistente e `CRON_SECRET`. Affidabilita e impatto sono derivati dal server: il client non puo impostare liberamente stati o transizioni. Le decisioni e i retry richiedono il permesso della mutazione sottostante; le eccezioni oggettive non sono chiudibili manualmente.
-
-## Confini
-
-- route handler: parsing HTTP, auth, delega al servizio e risposta;
-- `src/shared/server`: infrastruttura server-only riusabile nell'app;
-- `src/features/operational-engine`: lifecycle, policy, automazioni e read model;
-- `src/entities`, `src/views` e `src/app`: read model, composizioni e routing;
-- primitive e foundation da `@qoovex/ui` tramite subpath espliciti;
-- DTO condivisi in `packages/types`; Prisma e migration in `packages/db`;
-- nessun `organizationId`, ruolo o permesso proveniente dal client e autorevole;
-- nessuna promessa di conformita, certificazione o validita legale.
-
-OCR, AI, ricerca nei file o semantica, nuovi canali, retention automatica, SLA e limiti commerciali restano fuori perimetro. La foundation Geist/Tabler/light-dark-system resta invariata.
-
-La ricerca attiva consulta soltanto metadati autorizzati e non persiste le query. Le timeline aggregate usano `OperationalEvent` e restano separate dall'audit tecnico. La condivisione richiede preparazione, review e conferma umana; revisioni e link approvati non vengono riscritti da mutazioni successive. Ricerca nei file/semantica, condivisione automatica e tracking aggiuntivo restano fuori perimetro.
+Le composizioni restano app-local; DTO condivisi in `packages/types`; Prisma e migration in `packages/db`; primitive in `@qoovex/ui`. Prisma salva dati/metadati e Vercel Blob privato salva file. La foundation Geist/Tabler/light-dark-system resta invariata.
 
 Per le fonti canoniche leggere `docs/HowToUse.md` e `docs/00_PRODUCT_AND_SCOPE.md`-`docs/08_SUPPORT_AND_DATA_CONTROL.md`.

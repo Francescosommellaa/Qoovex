@@ -11,3 +11,7 @@ La Foundation Operational Intelligence aggiunge un secondo registry, dedicato a 
 Le modalita sono `OFF`, `SHADOW`, `SUGGEST_ONLY` e `AUTO_LOW_RISK`. `OFF` e il default. `AUTO_LOW_RISK` resta bloccata senza attestazione, versione soglia e score minimo di evaluation approvati. Il solo adapter presente e provider-neutral, disabilitato e non effettua chiamate esterne. Provenienza e confidence sono per campo/task; non esiste una confidence globale.
 
 Il client non sceglie stati, affidabilita, impatto o transizioni. Decisioni, risoluzioni consentite e retry sono input discriminati e richiedono permessi gia esistenti.
+
+## Compatibilita vNext
+
+Le cinque definizioni `@1` restano immutate e non vengono reinterpretate come invito cliente, timeline condivisa, negoziazione, pagamento o chiusura reciproca. I processi vNext descritti da D-VNEXT-43 sono nuove definizioni/versioni concettuali; il motore non concede partecipazione o autorita economica.

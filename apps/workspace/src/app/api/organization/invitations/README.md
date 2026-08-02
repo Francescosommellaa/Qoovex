@@ -5,3 +5,5 @@
 Un invito usa sempre il ruolo `COLLABORATOR`. Il preset `LIMITED_UPLOAD` richiede `workerId`, appartenente alla stessa Azienda, attivo, non gia collegato e con email coerente; gli altri preset rifiutano `workerId`. All'accettazione, membership e `WorkerUserLink` vengono creati o riattivati nella stessa transazione Serializable. Gli inviti preesistenti senza `workerId` restano accettabili e producono uno stato di configurazione da completare, senza associazioni dedotte dall'email.
 
 Token ed email body non entrano nell'audit prodotto. OWNER non e invitabile.
+
+`OrganizationInvitation` non e il futuro invito cliente D-VNEXT-24: crea una membership Azienda, usa il lifecycle corrente e dura sette giorni. L'invito cliente concettuale e job-site-scoped, dura 14 giorni e crea una partecipazione, mai una membership.
