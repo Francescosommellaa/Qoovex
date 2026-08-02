@@ -1595,6 +1595,25 @@ export interface DataInventoryResponse {
     mfaBackupCodes: DataRecordCount;
     securityAuditEvents: DataRecordCount;
     authRateLimits: DataRecordCount;
+    operationalProcesses: DataRecordCount;
+    operationalSteps: DataRecordCount;
+    operationalEvents: DataRecordCount;
+    operationalDecisions: DataRecordCount;
+    operationalExceptions: DataRecordCount;
+    operationalArtifactReferences: DataRecordCount;
+    operationalEventArtifactReferences: DataRecordCount;
+    operationalRuleSnapshots: DataRecordCount;
+    operationalEffectReceipts: DataRecordCount;
+    documentJobSiteLinks: DataRecordCount;
+    evidenceRevisions: DataRecordCount;
+    documentPackageRevisions: DataRecordCount;
+    operationalRequests: DataRecordCount;
+    contextMessages: DataRecordCount;
+    contextTimelineEvents: DataRecordCount;
+    documentSourcePolicies: DataRecordCount;
+    documentSourceChecks: DataRecordCount;
+    documentAcquisitions: DataRecordCount;
+    documentPackageShareProposals: DataRecordCount;
   };
 }
 
@@ -1749,6 +1768,27 @@ export interface DataExportResponse {
   dataControlJobs: DataExportDataControlJob[];
   supportSessions: DataExportSupportSession[];
   supportEvents: DataExportSupportEvent[];
+  operational: {
+    processes: Array<Record<string, unknown>>;
+    steps: Array<Record<string, unknown>>;
+    events: Array<Record<string, unknown>>;
+    decisions: Array<Record<string, unknown>>;
+    exceptions: Array<Record<string, unknown>>;
+    artifactReferences: Array<Record<string, unknown>>;
+    eventArtifactReferences: Array<Record<string, unknown>>;
+    ruleSnapshots: Array<Record<string, unknown>>;
+    effectReceipts: Array<Record<string, unknown>>;
+    documentJobSiteLinks: Array<Record<string, unknown>>;
+    evidenceRevisions: Array<Record<string, unknown>>;
+    documentPackageRevisions: Array<Record<string, unknown>>;
+    requests: Array<Record<string, unknown>>;
+    contextMessages: Array<Record<string, unknown>>;
+    contextTimelineEvents: Array<Record<string, unknown>>;
+    documentSourcePolicies: Array<Record<string, unknown>>;
+    documentSourceChecks: Array<Record<string, unknown>>;
+    documentAcquisitions: Array<Record<string, unknown>>;
+    documentPackageShareProposals: Array<Record<string, unknown>>;
+  };
   auth: DataExportAuthData;
   assignments: {
     workerUserLinks: Array<{ id: EntityId; workerId: EntityId; userId: EntityId; linkedById: EntityId; createdAt: string; updatedAt: string; archivedAt?: string | null }>;

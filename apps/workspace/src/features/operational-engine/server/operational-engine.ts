@@ -82,6 +82,23 @@ async function appendEvent(tx: Prisma.TransactionClient, input: {
   });
 }
 
+async function appendEffectReceipt(tx: Prisma.TransactionClient, input: {
+  organizationId: string;
+  processId: string;
+  stepId: string;
+  effectKey: string;
+  type: "DOCUMENT_STATUS_RECONCILED" | "DEADLINE_RECONCILED" | "REMINDERS_RECONCILED" | "PACKAGE_REVIEW_RESET" | "EXCEPTION_OPENED" | "EXCEPTION_RESOLVED" | "DECISION_OPENED" | "NOTIFICATION_CREATED";
+  artifactType?: "ORGANIZATION" | "DOCUMENT" | "DOCUMENT_VERSION" | "DOCUMENT_REQUIREMENT" | "WORKER" | "JOB_SITE" | "DEADLINE" | "CHECKLIST" | "EVIDENCE" | "DOCUMENT_PACKAGE" | "SHARE_LINK" | "OPERATIONAL_REQUEST" | "CONTEXT_MESSAGE" | "DOCUMENT_SOURCE";
+  artifactId?: string;
+  resultSummary?: Prisma.InputJsonValue;
+}) {
+  await tx.operationalEffectReceipt.upsert({
+    where: { organizationId_effectKey: { organizationId: input.organizationId, effectKey: input.effectKey } },
+    update: {},
+    create: input,
+  });
+}
+
 async function openException(tx: Prisma.TransactionClient, input: {
   organizationId: string;
   processId: string;
@@ -125,6 +142,7 @@ async function openException(tx: Prisma.TransactionClient, input: {
     title: input.title,
     summary: input.nextStep,
   });
+  if (input.stepId) await appendEffectReceipt(tx, { organizationId: input.organizationId, processId: input.processId, stepId: input.stepId, effectKey: `exception-opened:${created.id}`, type: "EXCEPTION_OPENED", resultSummary: { dedupeKey: input.dedupeKey } });
   return created;
 }
 
@@ -152,6 +170,7 @@ async function resolveExceptionByKey(tx: Prisma.TransactionClient, organizationI
     title: "Eccezione risolta",
     summary: "La condizione registrata non richiede più attenzione.",
   });
+  await appendEffectReceipt(tx, { organizationId, processId, stepId, effectKey: `exception-resolved:${open.id}`, type: "EXCEPTION_RESOLVED", resultSummary: { dedupeKey } });
   return true;
 }
 
@@ -192,6 +211,7 @@ async function openDecision(tx: Prisma.TransactionClient, input: {
     title: "Decisione richiesta",
     summary: input.question,
   });
+  await appendEffectReceipt(tx, { organizationId: input.organizationId, processId: input.processId, stepId: input.stepId, effectKey: `decision-opened:${decision.id}`, type: "DECISION_OPENED", resultSummary: { dedupeKey: input.dedupeKey } });
   return decision;
 }
 
@@ -385,7 +405,10 @@ async function reconcileDocumentDeadline(tx: Prisma.TransactionClient, step: Cla
   if (!document?.expiryDate) return { summary: "Nessuna scadenza confermata da registrare." };
   const now = new Date();
   const nextStatus = temporalDocumentStatus(document.expiryDate, now);
-  if (document.reviewedAt && document.status !== nextStatus) await tx.document.update({ where: { id: document.id }, data: { status: nextStatus } });
+  if (document.reviewedAt && document.status !== nextStatus) {
+    await tx.document.update({ where: { id: document.id }, data: { status: nextStatus } });
+    await appendEffectReceipt(tx, { organizationId: step.organizationId, processId: step.processId, stepId: step.id, effectKey: `document-status:${document.id}:${nextStatus}`, type: "DOCUMENT_STATUS_RECONCILED", artifactType: "DOCUMENT", artifactId: document.id, resultSummary: { status: nextStatus } });
+  }
   const deadlines = await tx.deadline.findMany({ where: { organizationId: step.organizationId, documentId: document.id, archivedAt: null }, select: { id: true }, take: 2 });
   if (deadlines.length > 1) {
     await openException(tx, { organizationId: step.organizationId, processId: step.processId, stepId: step.id, type: "CONFLICT", severity: "WARNING", title: "Scadenze duplicate da verificare", explanation: "Più scadenze registrate fanno riferimento allo stesso documento.", nextStep: "Verifica le scadenze e conserva quella corretta.", dedupeKey: `deadline-conflict:${document.id}` });
@@ -395,11 +418,7 @@ async function reconcileDocumentDeadline(tx: Prisma.TransactionClient, step: Cla
   const deadline = deadlines[0]
     ? await tx.deadline.update({ where: { id: deadlines[0].id }, data: { dueDate: document.expiryDate, status: deadlineStatus, title: document.title }, select: { id: true } })
     : await tx.deadline.create({ data: { organizationId: step.organizationId, title: document.title, dueDate: document.expiryDate, sourceType: "DOCUMENT", documentId: document.id, workerId: document.workerId, jobSiteId: document.jobSiteId, status: deadlineStatus }, select: { id: true } });
-  await tx.operationalEffectReceipt.upsert({
-    where: { organizationId_effectKey: { organizationId: step.organizationId, effectKey: `deadline:document:${document.id}:${document.expiryDate.toISOString()}` } },
-    update: {},
-    create: { organizationId: step.organizationId, processId: step.processId, stepId: step.id, effectKey: `deadline:document:${document.id}:${document.expiryDate.toISOString()}`, type: "DEADLINE_RECONCILED", artifactType: "DEADLINE", artifactId: deadline.id },
-  });
+  await appendEffectReceipt(tx, { organizationId: step.organizationId, processId: step.processId, stepId: step.id, effectKey: `deadline:document:${document.id}:${document.expiryDate.toISOString()}`, type: "DEADLINE_RECONCILED", artifactType: "DEADLINE", artifactId: deadline.id });
   return { summary: "Scadenza e stato temporale riconciliati dai dati confermati." };
 }
 
@@ -414,11 +433,7 @@ async function reconcilePackages(tx: Prisma.TransactionClient, step: ClaimedStep
   const ready = packages.filter((item) => item.status === "READY_FOR_REVIEW").map((item) => item.id);
   if (ready.length) await tx.documentPackage.updateMany({ where: { organizationId: step.organizationId, id: { in: ready }, status: "READY_FOR_REVIEW" }, data: { status: "DRAFT" } });
   for (const packageId of ready) {
-    await tx.operationalEffectReceipt.upsert({
-      where: { organizationId_effectKey: { organizationId: step.organizationId, effectKey: `package-review-reset:${packageId}:${documentId}` } },
-      update: {},
-      create: { organizationId: step.organizationId, processId: step.processId, stepId: step.id, effectKey: `package-review-reset:${packageId}:${documentId}`, type: "PACKAGE_REVIEW_RESET", artifactType: "DOCUMENT_PACKAGE", artifactId: packageId },
-    });
+    await appendEffectReceipt(tx, { organizationId: step.organizationId, processId: step.processId, stepId: step.id, effectKey: `package-review-reset:${packageId}:${documentId}`, type: "PACKAGE_REVIEW_RESET", artifactType: "DOCUMENT_PACKAGE", artifactId: packageId });
   }
   return { summary: ready.length ? `${ready.length} pacchetti interni richiedono una nuova revisione.` : "Nessun pacchetto interno da aggiornare." };
 }
@@ -440,6 +455,7 @@ async function reconcileTemporalStatuses(tx: Prisma.TransactionClient, step: Cla
     if (!document.expiryDate) continue;
     const status = temporalDocumentStatus(document.expiryDate, now);
     await tx.document.update({ where: { id: document.id }, data: { status } });
+    await appendEffectReceipt(tx, { organizationId: step.organizationId, processId: step.processId, stepId: step.id, effectKey: `document-status:${document.id}:${status}`, type: "DOCUMENT_STATUS_RECONCILED", artifactType: "DOCUMENT", artifactId: document.id, resultSummary: { status } });
     const key = `temporal:${document.id}`;
     if (status === "PRESENT") await resolveExceptionByKey(tx, step.organizationId, key, step.processId, step.id);
     else await openException(tx, {
@@ -508,7 +524,7 @@ async function reconcileContinuousExceptions(tx: Prisma.TransactionClient, step:
 async function validateArtifactReferences(tx: Prisma.TransactionClient, step: ClaimedStep) {
   const refs = await tx.operationalArtifactReference.findMany({ where: { organizationId: step.organizationId }, select: { id: true, processId: true, artifactType: true, artifactId: true }, orderBy: { id: "asc" }, take: 100 });
   const ids = (type: (typeof refs)[number]["artifactType"]) => [...new Set(refs.filter((ref) => ref.artifactType === type).map((ref) => ref.artifactId))];
-  const [organizations, documents, versions, requirements, workers, sites, deadlines, checklists, evidence, packages, shareLinks] = await Promise.all([
+  const [organizations, documents, versions, requirements, workers, sites, deadlines, checklists, evidence, packages, shareLinks, requests, messages, sources] = await Promise.all([
     tx.organization.findMany({ where: { id: { in: ids("ORGANIZATION") } }, select: { id: true } }),
     tx.document.findMany({ where: { organizationId: step.organizationId, id: { in: ids("DOCUMENT") } }, select: { id: true } }),
     tx.documentVersion.findMany({ where: { organizationId: step.organizationId, id: { in: ids("DOCUMENT_VERSION") } }, select: { id: true } }),
@@ -520,6 +536,9 @@ async function validateArtifactReferences(tx: Prisma.TransactionClient, step: Cl
     tx.evidence.findMany({ where: { organizationId: step.organizationId, id: { in: ids("EVIDENCE") } }, select: { id: true } }),
     tx.documentPackage.findMany({ where: { organizationId: step.organizationId, id: { in: ids("DOCUMENT_PACKAGE") } }, select: { id: true } }),
     tx.shareLink.findMany({ where: { organizationId: step.organizationId, id: { in: ids("SHARE_LINK") } }, select: { id: true } }),
+    tx.operationalRequest.findMany({ where: { organizationId: step.organizationId, id: { in: ids("OPERATIONAL_REQUEST") } }, select: { id: true } }),
+    tx.contextMessage.findMany({ where: { organizationId: step.organizationId, id: { in: ids("CONTEXT_MESSAGE") } }, select: { id: true } }),
+    tx.documentSourcePolicy.findMany({ where: { organizationId: step.organizationId, id: { in: ids("DOCUMENT_SOURCE") } }, select: { id: true } }),
   ]);
   const available = new Map<(typeof refs)[number]["artifactType"], Set<string>>([
     ["ORGANIZATION", new Set(organizations.filter((item) => item.id === step.organizationId).map((item) => item.id))],
@@ -533,6 +552,9 @@ async function validateArtifactReferences(tx: Prisma.TransactionClient, step: Cl
     ["EVIDENCE", new Set(evidence.map((item) => item.id))],
     ["DOCUMENT_PACKAGE", new Set(packages.map((item) => item.id))],
     ["SHARE_LINK", new Set(shareLinks.map((item) => item.id))],
+    ["OPERATIONAL_REQUEST", new Set(requests.map((item) => item.id))],
+    ["CONTEXT_MESSAGE", new Set(messages.map((item) => item.id))],
+    ["DOCUMENT_SOURCE", new Set(sources.map((item) => item.id))],
   ]);
   let invalid = 0;
   for (const ref of refs) {
@@ -545,9 +567,14 @@ async function validateArtifactReferences(tx: Prisma.TransactionClient, step: Cl
   return { summary: `${refs.length} riferimenti verificati, ${invalid} da controllare.` };
 }
 
-async function executeClaimedStep(step: ClaimedStep) {
+export async function executeClaimedStep(step: ClaimedStep) {
   if (step.key === "reconcile-reminders" || step.key === "reconcile-deadlines") {
     const result = await syncOrganizationReminderRecords(step.organizationId);
+    await db.operationalEffectReceipt.upsert({
+      where: { organizationId_effectKey: { organizationId: step.organizationId, effectKey: `reminders:step:${step.id}` } },
+      update: {},
+      create: { organizationId: step.organizationId, processId: step.processId, stepId: step.id, effectKey: `reminders:step:${step.id}`, type: "REMINDERS_RECONCILED", artifactType: "ORGANIZATION", artifactId: step.organizationId, resultSummary: { created: result.created, updated: result.updated, skipped: result.skipped } },
+    });
     return { summary: `${result.created} promemoria creati, ${result.updated} aggiornati, ${result.skipped} invariati.` };
   }
   return db.$transaction(async (tx) => {

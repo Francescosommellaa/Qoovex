@@ -47,6 +47,9 @@ async function artifactExists(client: OperationalDb, organizationId: string, art
   if (artifact.type === "EVIDENCE") return Boolean(await client.evidence.findFirst({ where: { id: artifact.id, organizationId }, select: { id: true } }));
   if (artifact.type === "DOCUMENT_PACKAGE") return Boolean(await client.documentPackage.findFirst({ where: { id: artifact.id, organizationId }, select: { id: true } }));
   if (artifact.type === "SHARE_LINK") return Boolean(await client.shareLink.findFirst({ where: { id: artifact.id, organizationId }, select: { id: true } }));
+  if (artifact.type === "OPERATIONAL_REQUEST") return Boolean(await client.operationalRequest.findFirst({ where: { id: artifact.id, organizationId }, select: { id: true } }));
+  if (artifact.type === "CONTEXT_MESSAGE") return Boolean(await client.contextMessage.findFirst({ where: { id: artifact.id, organizationId }, select: { id: true } }));
+  if (artifact.type === "DOCUMENT_SOURCE") return Boolean(await client.documentSourcePolicy.findFirst({ where: { id: artifact.id, organizationId }, select: { id: true } }));
   return false;
 }
 

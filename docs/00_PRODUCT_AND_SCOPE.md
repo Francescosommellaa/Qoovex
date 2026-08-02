@@ -27,6 +27,8 @@ Le Fasi 3-4 implementano un motore operativo persistente con cinque definizioni 
 
 Non sono implementati OCR, AI documentale, ricerca nei file o semantica, viste salvate o cronologia query, editor visuale di processi, nuovi canali di ingresso/notifica, condivisione automatica, annullamento/undo o retention automatica dedicata.
 
+La Tranche 1 di Operational Intelligence implementa soltanto foundation server-side provider-neutral: registry azioni allow-listed, validazione runtime, provenienza, confidence per task, modalita con default `OFF`, dry-run executor ed evaluation sintetica. Non sceglie provider, non analizza contenuti, non trasmette file e non abilita scritture proposte da IA.
+
 I nomi concettuali delle Fasi 1-2 restano storia decisionale; i contratti implementati usano i nomi `Operational*` descritti dal codice e dallo schema.
 
 ## Decisioni aperte e hard stop

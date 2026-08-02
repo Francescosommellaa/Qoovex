@@ -30,6 +30,17 @@ Il dominio attivo comprende Aziende, lavoratori, cantieri, documenti e versioni 
 - Ingresso universale come composizione dei flussi autorizzati esistenti, non come endpoint generico.
 - OCR/AI, ricerca nei file o semantica, viste salvate, nuovi canali, retention automatica, SLA e limiti commerciali restano decisioni aperte.
 
+## Foundation Operational Intelligence — Tranche 1
+
+- Registry di quattro azioni deterministiche server-side allow-listed `@1`, separato dal registry dei processi, con schema input/output runtime, permesso, scope, impatto, reversibilita, idempotenza, servizio dominio, receipt ed evento. Decisioni, eccezioni e notifiche non sono comandi IA generici.
+- Executor esclusivamente dry-run collegato alla execution policy esistente; verifica permission, resource scope e tenant prima di produrre un piano.
+- Modalita server-side `OFF`, `SHADOW`, `SUGGEST_ONLY`, `AUTO_LOW_RISK`; il default e `OFF` e `AUTO_LOW_RISK` rifiuta l'avvio senza soglia evaluation esplicitamente approvata.
+- Adapter provider-neutral disabilitato e privo di qualunque metodo di scrittura. Nessun provider, chiamata esterna, upload o analisi di file e attivo.
+- Output `@1` validati a runtime, provenienza tipizzata e confidence specifica per task; evaluation harness soltanto con fixture sintetiche.
+- Data-control inventaria ed esporta i modelli operativi esistenti con metadati minimizzati. Nessun contenuto file, Blob key, token o URL firmato entra nell'export.
+- `DOCUMENT_PACKAGE_SHARING@1` resta gestito dal servizio canonico: prepara revisione e review, attende conferma autorizzata e crea il link solo nel flusso di condivisione esistente.
+- Tipi receipt dedicati per applicazione decisioni documento, snapshot regole e scadenza share link richiedono una futura migration Prisma e non sono simulati con enum impropri.
+
 ## Regole
 
 - Il codice, `packages/db/prisma/schema.prisma` e i manifest descrivono lo stato implementato.

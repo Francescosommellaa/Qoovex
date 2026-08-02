@@ -40,6 +40,25 @@ const mocks = vi.hoisted(() => {
     "workerUserLink",
     "jobSiteUserAssignment",
     "jobSiteWorkerAssignment",
+    "operationalProcess",
+    "operationalStep",
+    "operationalEvent",
+    "operationalDecision",
+    "operationalException",
+    "operationalArtifactReference",
+    "operationalEventArtifactReference",
+    "operationalRuleSnapshot",
+    "operationalEffectReceipt",
+    "documentJobSiteLink",
+    "evidenceRevision",
+    "documentPackageRevision",
+    "operationalRequest",
+    "contextMessage",
+    "contextTimelineEvent",
+    "documentSourcePolicy",
+    "documentSourceCheck",
+    "documentAcquisition",
+    "documentPackageShareProposal",
   ] as const;
   const db = Object.fromEntries(modelNames.map((model) => [model, {
     count: vi.fn(),
@@ -116,17 +135,17 @@ describe("data control services", () => {
     await expect(getDataInventory()).rejects.toMatchObject({ status: 404 });
   });
 
-  it("builds the inventory with the 57-operation proxy budget", async () => {
+  it("builds the complete operational inventory with the 77-operation proxy budget", async () => {
     await getDataInventory();
 
     const countCalls = mocks.modelNames.reduce((total, model) => total + mocks.db[model].count.mock.calls.length, 0);
     const groupByCalls = mocks.modelNames.reduce((total, model) => total + mocks.db[model].groupBy.mock.calls.length, 0);
     const identityReads = mocks.db.user.findMany.mock.calls.length;
     expect({ countCalls, groupByCalls, identityReads, total: countCalls + groupByCalls + identityReads }).toEqual({
-      countCalls: 55,
+      countCalls: 75,
       groupByCalls: 1,
       identityReads: 1,
-      total: 57,
+      total: 77,
     });
   });
 
@@ -138,6 +157,7 @@ describe("data control services", () => {
     mocks.db.productAuditEvent.findMany.mockResolvedValue([{ id: "audit-1", actorUserId: "user-1", actorRole: "OWNER", action: "DOCUMENT_VERSION_DOWNLOADED", entityType: "DOCUMENT_VERSION", entityId: "version-1", outcome: "SUCCESS", metadata: { mimeType: "application/pdf", blobKey: "private", tokenHash: "hash", emailBody: "body" }, requestId: null, supportSessionId: null, createdAt: now }]);
     mocks.db.authCode.findMany.mockResolvedValue([{ id: "code-1", userId: "user-1", email: "mario@example.test", purpose: "MFA_ENROLLMENT", attempts: 1, maxAttempts: 5, expiresAt: now, consumedAt: now, metadata: { token: "private", reasonCode: "verified" }, createdAt: now }]);
     mocks.db.authRateLimit.findMany.mockResolvedValue([{ userId: "user-1", bucket: "signin", count: 2, resetAt: now, createdAt: now, updatedAt: now }]);
+    mocks.db.operationalEffectReceipt.findMany.mockResolvedValue([{ id: "receipt-1", processId: "process-1", stepId: "step-1", effectKey: "deadline:doc-1", type: "DEADLINE_RECONCILED", artifactType: "DEADLINE", artifactId: "deadline-1", resultSummary: { status: "SCHEDULED", token: "private" }, createdAt: now }]);
 
     const result = await buildDataExport();
     const serialized = JSON.stringify(result);
@@ -148,7 +168,7 @@ describe("data control services", () => {
     expect(mocks.db.user.findMany.mock.calls[1][0].select).not.toHaveProperty("totpSecretEncrypted");
     expect(mocks.db.authCode.findMany.mock.calls[0][0].select).not.toHaveProperty("codeHash");
     expect(mocks.db.authRateLimit.findMany.mock.calls[0][0].select).not.toHaveProperty("key");
-    expect(result).toMatchObject({ memberProfiles: [{ id: "user-1", hasAvatar: true }], auth: { rateLimits: [{ bucket: "signin", count: 2 }] } });
+    expect(result).toMatchObject({ memberProfiles: [{ id: "user-1", hasAvatar: true }], auth: { rateLimits: [{ bucket: "signin", count: 2 }] }, operational: { effectReceipts: [{ id: "receipt-1", type: "DEADLINE_RECONCILED", resultSummary: { status: "SCHEDULED" } }] } });
     expect(serialized).not.toMatch(/blobKey|tokenHash|rawToken|downloadUrl|emailBody|fileContent|password|secret|private|hash|body/);
     expect(mocks.recordProductAuditEventBestEffort).toHaveBeenCalledWith(expect.objectContaining({ action: "DATA_EXPORT_GENERATED" }));
   });

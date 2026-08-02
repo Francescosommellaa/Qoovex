@@ -3,11 +3,14 @@ import { assertOperationalProcessTransition, assertOperationalStepTransition, ge
 import { getOperationalExecutionMode } from "./execution-policy";
 
 describe("operational definitions", () => {
-  it("keeps four deterministic versioned definitions", () => {
+  it("keeps five versioned definitions aligned with the canonical package-sharing service", () => {
     expect(getOperationalDefinition("DOCUMENT_RECEIVED")).toMatchObject({ version: 1, steps: expect.any(Array) });
     expect(getOperationalDefinition("WORKER_CREATED").steps).toHaveLength(3);
     expect(getOperationalDefinition("JOB_SITE_CREATED").steps).toHaveLength(3);
     expect(getOperationalDefinition("CONTINUOUS_CONTROL").steps).toHaveLength(5);
+    expect(getOperationalDefinition("DOCUMENT_PACKAGE_SHARING").steps.map((step) => step.key)).toEqual([
+      "capture-package", "validate-artifacts", "prepare-revision", "wait-for-approval", "activate-share",
+    ]);
   });
 
   it("rejects impossible lifecycle transitions", () => {

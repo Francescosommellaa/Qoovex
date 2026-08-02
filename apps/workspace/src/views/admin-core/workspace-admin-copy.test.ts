@@ -107,7 +107,8 @@ describe("workspace admin UI copy", () => {
   });
 
   it("keeps the dashboard exception-driven and removes the legacy center composition", () => {
-    for (const heading of ["Panoramica", "Come lavora il motore Qoovex", "Cosa serve da te", "Cosa ha fatto Qoovex", "IA non attiva"]) expect(dashboardSource).toContain(heading);
+    for (const heading of ["Panoramica", "Come lavora il motore Qoovex", "Cosa serve da te", "Cosa ha fatto Qoovex", "Operational Intelligence: OFF", "Nessun provider, analisi IA o scrittura IA è attivo."]) expect(dashboardSource).toContain(heading);
+    expect(dashboardSource).not.toContain("Collega documenti, registra prove e prepara pacchetti.");
     for (const removed of ["Centro operativo", "Coda operativa", "Processi attivi", "Decisioni richieste", "Eccezioni aperte", "Risultati recenti"]) expect(dashboardSource).not.toContain(removed);
     expect(dashboardSource).not.toContain("UniversalIntakeMenu");
     expect(dashboardSource).not.toContain("grid-cols-4");

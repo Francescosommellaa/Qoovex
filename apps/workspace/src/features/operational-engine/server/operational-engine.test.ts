@@ -4,16 +4,18 @@ const mocks = vi.hoisted(() => ({
   db: {
     operationalStep: { findMany: vi.fn(), updateMany: vi.fn(), findUnique: vi.fn() },
     operationalProcess: { updateMany: vi.fn() },
+    operationalEffectReceipt: { upsert: vi.fn() },
     $transaction: vi.fn(),
   },
+  syncOrganizationReminderRecords: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
 vi.mock("@qoovex/db", () => ({ db: mocks.db, Prisma: { TransactionIsolationLevel: { Serializable: "Serializable" } } }));
-vi.mock("@shared/server/reminder-service", () => ({ syncOrganizationReminderRecords: vi.fn() }));
+vi.mock("@shared/server/reminder-service", () => ({ syncOrganizationReminderRecords: mocks.syncOrganizationReminderRecords }));
 vi.mock("./operational-process-service", () => ({ captureRequirementSnapshots: vi.fn(), enqueueOperationalProcess: vi.fn() }));
 
-import { claimNextOperationalStep, finalizeClaimedOperationalStep, retryOrFailClaimedOperationalStep } from "./operational-engine";
+import { claimNextOperationalStep, executeClaimedStep, finalizeClaimedOperationalStep, retryOrFailClaimedOperationalStep } from "./operational-engine";
 
 const now = new Date("2026-07-26T12:00:00.000Z");
 const claimedStep = {
@@ -27,6 +29,8 @@ const claimedStep = {
 beforeEach(() => {
   for (const model of [mocks.db.operationalStep, mocks.db.operationalProcess]) for (const method of Object.values(model)) method.mockReset();
   mocks.db.$transaction.mockReset();
+  mocks.db.operationalEffectReceipt.upsert.mockReset();
+  mocks.syncOrganizationReminderRecords.mockReset();
 });
 
 describe("operational runner concurrency", () => {
@@ -66,5 +70,21 @@ describe("operational runner concurrency", () => {
     await expect(retryOrFailClaimedOperationalStep(claimedStep as never, new Error("DB_TEMPORARY"))).resolves.toBe("RETRY");
     expect(tx.operationalStep.updateMany).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ status: "RETRY_SCHEDULED", nextAttemptAt: new Date(now.getTime() + 60_000) }) }));
     vi.useRealTimers();
+  });
+
+  it("writes one stable reminder receipt and reuses its idempotency key on replay", async () => {
+    const reminderStep = { ...claimedStep, key: "reconcile-reminders" };
+    mocks.syncOrganizationReminderRecords.mockResolvedValue({ created: 2, updated: 1, skipped: 3 });
+    mocks.db.operationalEffectReceipt.upsert.mockResolvedValue({ id: "receipt-1" });
+
+    await executeClaimedStep(reminderStep as never);
+    await executeClaimedStep(reminderStep as never);
+
+    expect(mocks.db.operationalEffectReceipt.upsert).toHaveBeenCalledTimes(2);
+    expect(mocks.db.operationalEffectReceipt.upsert.mock.calls[0][0]).toEqual(mocks.db.operationalEffectReceipt.upsert.mock.calls[1][0]);
+    expect(mocks.db.operationalEffectReceipt.upsert).toHaveBeenCalledWith(expect.objectContaining({
+      where: { organizationId_effectKey: { organizationId: "org-1", effectKey: "reminders:step:step-1" } },
+      create: expect.objectContaining({ type: "REMINDERS_RECONCILED", artifactType: "ORGANIZATION", artifactId: "org-1" }),
+    }));
   });
 });

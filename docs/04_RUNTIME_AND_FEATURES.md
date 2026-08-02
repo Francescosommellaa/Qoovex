@@ -33,6 +33,29 @@ I livelli implementati sono `VERIFIED/HIGH/MEDIUM/LOW/CONFLICT` e `LOW/CONTROLLE
 - vietato: `IRREVERSIBLE`, effetto non autorizzato, ampliamento accesso, disclosure o azione legale;
 - `SENSITIVE` non e automatico.
 
+## Foundation Operational Intelligence — Tranche 1
+
+Il runtime espone un registry azioni server-side allow-listed, versione 1:
+
+| Azione | Permesso | Scope | Receipt |
+|---|---|---|---|
+| `DOCUMENT_STATUS_RECONCILE@1` | `documents:update` | documento | `DOCUMENT_STATUS_RECONCILED` |
+| `DEADLINE_RECONCILE@1` | `documents:expiry:manage` | documento/scadenza | `DEADLINE_RECONCILED` |
+| `REMINDERS_RECONCILE@1` | `documents:expiry:manage` | Azienda/scadenza | `REMINDERS_RECONCILED` |
+| `PACKAGE_REVIEW_RESET@1` | `documentPackages:update` | pacchetto | `PACKAGE_REVIEW_RESET` |
+
+Decisioni, eccezioni e notifiche sono prodotte soltanto dai servizi interni gia autorizzati del runner: non sono comandi generici proponibili da un adapter.
+
+L'executor della Tranche 1 non muta il dominio: valida envelope, action key, schema, tenant, permission e scope, applica `execution-policy.ts` e restituisce output/receipt/event preview `@1`. `OFF` e il default; `SHADOW` e `SUGGEST_ONLY` restano non scriventi; anche `AUTO_LOW_RISK` e dry-run e non puo essere selezionata senza una soglia evaluation approvata lato server. Il provider-neutral adapter e disabilitato e non espone metodi di scrittura.
+
+La provenienza distingue osservato, estratto, inferito, confermato dall'utente, confermato dal sistema, conflittuale e sconosciuto. La confidence e obbligatoriamente riferita a un task e a una versione di soglia. L'evaluation harness rifiuta fixture non sintetiche.
+
+I receipt coprono gli effetti del runner rappresentabili dall'enum esistente: stato documento, deadline, reminder, reset review pacchetto, apertura/risoluzione eccezione e apertura decisione. Servono tipi Prisma aggiuntivi, quindi una migration futura, per rappresentare semanticamente applicazione delle decisioni ai campi documento, snapshot regole e scadenza share link senza riusare tipi impropri.
+
+### Database operation impact
+
+Questa tranche non modifica schema, migration, permessi o relazioni. Il runner aggiunge un `upsert` idempotente per ciascun effetto reale gia rappresentabile da `OperationalEffectType`; la chiave unica Azienda/effetto rende il replay non duplicante. Inventario ed export eseguono query tenant-scoped aggiuntive soltanto quando un Owner avvia quei flussi di data-control; il proxy budget testato dell'inventario passa da 57 a 77 operazioni per includere tutti i modelli operativi. Nessun nuovo polling, cache, provider, upload o operazione bulk distruttiva e introdotto.
+
 ## API e UI attive
 
 Sono attive le route `/api/operations/processes`, timeline processo/artifact cursor-based, risoluzione decisioni/eccezioni, retry step e runner protetto. I read endpoint legacy `/api/operations/center`, `/api/operations/inbox` e `/api/dashboard` sono stati rimossi insieme ai relativi filtri e payload orfani; `/dashboard` compone il nuovo read model server-side. `POST /api/search` applica query 2-120 caratteri, massimo 8 termini, timeout due secondi e ranking deterministico sui soli metadati. Le route share proposal applicano preparazione, review e conferma con fingerprint.
@@ -41,7 +64,7 @@ La Panoramica mostra soltanto interventi umani autorizzati, deduplicati per proc
 
 ## Specifiche non implementate
 
-Nessun OCR, AI, ricerca nei file/semantica, query salvata, template inventato, nuovo canale, annullamento, undo, condivisione automatica o deduzione normativa e attivo.
+Nessun OCR, provider IA, analisi di file, ricerca nei file/semantica, query salvata, template inventato, nuovo canale, annullamento, undo, condivisione automatica o deduzione normativa e attivo. La foundation provider-neutral e spenta e non simula queste capacita.
 
 ## Decisioni aperte e hard stop
 

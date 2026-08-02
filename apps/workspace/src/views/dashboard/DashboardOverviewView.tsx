@@ -62,13 +62,13 @@ export function DashboardOverviewView({ data }: { data: DashboardOverview }) {
               </div>
             </div>
             <div className="w-fit rounded-lg bg-muted px-3 py-2">
-              <p className="inline-flex items-center gap-2 text-xs font-semibold"><IconRobotOff aria-hidden="true" className="size-4" />IA non attiva</p>
-              <p className="mt-1 text-xs text-muted-foreground">Non analizza contenuti e non decide.</p>
+              <p className="inline-flex items-center gap-2 text-xs font-semibold"><IconRobotOff aria-hidden="true" className="size-4" />Operational Intelligence: OFF</p>
+              <p className="mt-1 text-xs text-muted-foreground">Nessun provider, analisi IA o scrittura IA è attivo.</p>
             </div>
           </div>
           <ol className="grid grid-cols-3 divide-x">
             <li className="flex flex-col gap-2 px-3 py-4 sm:flex-row sm:gap-3 sm:px-5"><IconChecklist aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" /><div><p className="text-sm font-semibold">1. Trova problemi</p><p className="sr-only mt-1 text-sm text-muted-foreground sm:not-sr-only">Documenti mancanti, scadenze e dati da verificare.</p></div></li>
-            <li className="flex flex-col gap-2 px-3 py-4 sm:flex-row sm:gap-3 sm:px-5"><IconPlayerPlay aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" /><div><p className="text-sm font-semibold">2. Esegue in sicurezza</p><p className="sr-only mt-1 text-sm text-muted-foreground sm:not-sr-only">Collega documenti, registra prove e prepara pacchetti.</p></div></li>
+            <li className="flex flex-col gap-2 px-3 py-4 sm:flex-row sm:gap-3 sm:px-5"><IconPlayerPlay aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" /><div><p className="text-sm font-semibold">2. Aggiorna ciò che è certo</p><p className="sr-only mt-1 text-sm text-muted-foreground sm:not-sr-only">Riconcilia stati, scadenze, promemoria e revisioni usando dati già confermati.</p></div></li>
             <li className="flex flex-col gap-2 px-3 py-4 sm:flex-row sm:gap-3 sm:px-5"><IconHandStop aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" /><div><p className="text-sm font-semibold">3. Chiede conferma</p><p className="sr-only mt-1 text-sm text-muted-foreground sm:not-sr-only">Solo per le scelte che non può fare in sicurezza.</p></div></li>
           </ol>
         </section>

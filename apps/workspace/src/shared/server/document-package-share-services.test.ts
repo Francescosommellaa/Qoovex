@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
@@ -174,5 +176,16 @@ describe("share token storage", () => {
 
   it("produces different hashes for different one-time tokens", () => {
     expect(hashShareToken("token-one")).not.toBe(hashShareToken("token-two"));
+  });
+});
+
+describe("DOCUMENT_PACKAGE_SHARING@1 implementation contract", () => {
+  it("keeps every declared step owned by the canonical sharing service", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/shared/server/document-package-share-proposal-service.ts"), "utf8");
+    for (const stepKey of ["capture-package", "validate-artifacts", "prepare-revision", "wait-for-approval", "activate-share"]) {
+      expect(source).toContain(`\"${stepKey}\"`);
+    }
+    expect(source).toContain("Conferma autorizzata registrata.");
+    expect(source).toContain("Link creato dalla revisione approvata.");
   });
 });

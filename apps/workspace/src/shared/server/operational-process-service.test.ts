@@ -48,4 +48,19 @@ describe("operational process enqueue", () => {
     await expect(enqueueOperationalProcess({ organizationId: "org-1", type: "DOCUMENT_RECEIVED", triggerKind: "TEST", idempotencyKey: "test", artifacts: [{ type: "DOCUMENT", id: "foreign-document" }] }, client as never)).rejects.toThrow("INVALID_OPERATIONAL_ARTIFACT:DOCUMENT");
     expect(client.operationalProcess.upsert).not.toHaveBeenCalled();
   });
+
+  it("accepts the operational request, context message and document source artifact families", async () => {
+    const client = {
+      operationalRequest: { findFirst: vi.fn().mockResolvedValue({ id: "request-1" }) },
+      contextMessage: { findFirst: vi.fn().mockResolvedValue({ id: "message-1" }) },
+      documentSourcePolicy: { findFirst: vi.fn().mockResolvedValue({ id: "source-1" }) },
+      operationalProcess: { upsert: vi.fn().mockResolvedValue({ id: "process-1" }) },
+    };
+    await enqueueOperationalProcess({ organizationId: "org-1", type: "CONTINUOUS_CONTROL", triggerKind: "TEST", idempotencyKey: "phase4-artifacts", artifacts: [
+      { type: "OPERATIONAL_REQUEST", id: "request-1" },
+      { type: "CONTEXT_MESSAGE", id: "message-1" },
+      { type: "DOCUMENT_SOURCE", id: "source-1" },
+    ] }, client as never);
+    expect(client.operationalProcess.upsert).toHaveBeenCalledOnce();
+  });
 });

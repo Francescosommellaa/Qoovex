@@ -54,7 +54,7 @@
         "DocumentPackageRevision",
         "DocumentPackageShareProposal"
       ],
-      "runtime": "Server-side versioned registry, centralized lifecycle, atomic claim, five-minute lease, fencing, at most five attempts and 1/5/15/60-minute backoff.",
+      "runtime": "Server-side versioned process registry plus a four-action allow-listed Operational Intelligence registry limited to deterministic domain reconciliation. Decisions, exceptions and notifications are internal runner effects, not generic adapter commands. The provider-neutral executor is dry-run only, defaults to OFF, applies the execution policy after permission, scope and tenant checks, and blocks AUTO_LOW_RISK without an approved evaluation threshold. The deterministic runner retains atomic claim, five-minute lease, fencing, at most five attempts and 1/5/15/60-minute backoff.",
       "entrypoint": "Authenticated Workspace only; universal intake composes existing authorized flows and is not a generic mutation endpoint."
     },
     "search": "POST /api/search queries only authorized metadata with PostgreSQL simple full-text search, deterministic ranking, bounded input, a two-second timeout and opaque tuple cursors. Queries are not persisted or placed in URLs.",
@@ -79,7 +79,7 @@
     "execution_policy": {
       "automatic": "Only LOW-impact, deterministic, reversible and authorized actions with VERIFIED or HIGH reliability.",
       "decision_required": "CONTROLLED impact or MEDIUM, LOW or CONFLICT reliability.",
-      "forbidden": "SENSITIVE or IRREVERSIBLE actions, access expansion, disclosure and legal operations unless an explicit existing authorized flow handles them."
+      "forbidden": "IRREVERSIBLE or unauthorized actions. SENSITIVE actions are never automatic and require an explicit existing authorized flow; access expansion, disclosure and legal operations are not delegated to Operational Intelligence."
     },
     "process_guarantees": [
       "tenant- and resource-scoped",
@@ -99,7 +99,7 @@
   },
   "conceptual_not_implemented": {
     "items": [
-      "OCR or AI extraction, classification or matching",
+      "OCR or provider-backed AI extraction, classification or matching; only the disabled provider-neutral dry-run foundation exists",
       "file-content indexing or semantic search",
       "saved searches or search history",
       "new intake or notification channels",
