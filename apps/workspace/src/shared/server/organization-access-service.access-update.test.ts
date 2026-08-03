@@ -66,7 +66,7 @@ describe("organization collaborator access updates", () => {
     await expect(updateMemberAccess("member-1", {
       expectedVersion: 2,
       preset: "DOCUMENT_REVIEWER",
-      permissions: ["documents:verify"],
+      permissions: ["documents:update"],
       scopeMode: "ASSIGNED",
       grants: [{ resourceType: "JOB_SITE", resourceId: "site-1" }],
     })).resolves.toEqual({ updated: true, accessVersion: 3 });

@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export function RouteError({
   reset,
-  backHref = "/dashboard",
+  backHref = "/contexts",
   backLabel = "Dashboard",
 }: {
   error: Error & { digest?: string };

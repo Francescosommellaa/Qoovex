@@ -8,7 +8,7 @@ const mocks = vi.hoisted(() => ({
     }
   },
   db: {
-    organizationMembership: { findUnique: vi.fn() },
+    organizationMembership: { findUnique: vi.fn(), findFirst: vi.fn() },
     organizationInvitation: { findUnique: vi.fn(), updateMany: vi.fn() },
     $transaction: vi.fn(),
   },
@@ -58,6 +58,7 @@ beforeEach(() => {
   mocks.requireIdentity.mockResolvedValue({ id: "user-1", email: "user@example.com", emailVerified: new Date() });
   mocks.db.$transaction.mockImplementation(async (callback: (tx: typeof mocks.tx) => unknown) => callback(mocks.tx));
   mocks.tx.organization.create.mockResolvedValue({ id: "org-new", name: "Nuova Azienda", code: "QVX-NEW" });
+  mocks.tx.organizationMembership.create.mockResolvedValue({ id: "membership-created" });
   mocks.tx.organizationMembership.updateMany.mockResolvedValue({ count: 1 });
   mocks.tx.organizationInvitation.updateMany.mockResolvedValue({ count: 1 });
   mocks.tx.user.update.mockResolvedValue({ id: "user-1" });
@@ -67,7 +68,7 @@ beforeEach(() => {
   mocks.db.organizationInvitation.updateMany.mockResolvedValue({ count: 1 });
 });
 
-describe("single organization membership lifecycle", () => {
+describe("multi-organization membership lifecycle", () => {
   it("returns only safe preview data for an active invitation", async () => {
     const expiresAt = new Date(Date.now() + 60_000);
     mocks.db.organizationInvitation.findUnique.mockResolvedValue({
@@ -111,21 +112,17 @@ describe("single organization membership lifecycle", () => {
     expect(JSON.stringify(mocks.db.organizationInvitation.updateMany.mock.calls)).not.toContain("raw-recipient-token");
   });
 
-  it("rejects a second active membership", async () => {
-    mocks.tx.organizationMembership.findUnique.mockResolvedValue({ id: "membership-1", revokedAt: null });
-    await expect(createOrganization("Nuova Azienda")).rejects.toMatchObject({ status: 409 });
+  it("allows the same account to create another organization", async () => {
+    await expect(createOrganization("Nuova Azienda")).resolves.toMatchObject({ id: "org-new" });
     expect(mocks.db.$transaction).toHaveBeenCalledWith(expect.any(Function), { isolationLevel: "Serializable" });
-    expect(mocks.tx.organization.create).not.toHaveBeenCalled();
+    expect(mocks.tx.organizationMembership.create).toHaveBeenCalledWith({ data: { organizationId: "org-new", userId: "user-1", role: "OWNER", scopeMode: "FULL" } });
   });
 
-  it("reuses a revoked row when creating an organization", async () => {
+  it("does not repurpose a membership from another organization", async () => {
     mocks.tx.organizationMembership.findUnique.mockResolvedValue({ id: "membership-1", revokedAt: new Date() });
     await expect(createOrganization("Nuova Azienda")).resolves.toMatchObject({ id: "org-new" });
-    expect(mocks.tx.organizationMembership.updateMany).toHaveBeenCalledWith({
-      where: { id: "membership-1", userId: "user-1", revokedAt: { not: null } },
-      data: { organizationId: "org-new", role: "OWNER", scopeMode: "FULL", revokedAt: null },
-    });
-    expect(mocks.tx.organizationMembership.create).not.toHaveBeenCalled();
+    expect(mocks.tx.organizationMembership.updateMany).not.toHaveBeenCalled();
+    expect(mocks.tx.organizationMembership.create).toHaveBeenCalled();
   });
 
   it("creates an OWNER membership with full organization scope", async () => {
@@ -279,7 +276,7 @@ describe("single organization membership lifecycle", () => {
 
   it("maps a membership P2002 race to 409 without retrying", async () => {
     mocks.db.$transaction.mockRejectedValue(new mocks.PrismaClientKnownRequestError("P2002"));
-    mocks.db.organizationMembership.findUnique.mockResolvedValue({ revokedAt: null });
+    mocks.db.organizationMembership.findFirst.mockResolvedValue({ revokedAt: null });
 
     await expect(acceptInvitation("token")).rejects.toMatchObject({ status: 409 });
     expect(mocks.db.$transaction).toHaveBeenCalledTimes(1);

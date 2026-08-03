@@ -19,6 +19,8 @@ export interface ResourceScope {
   siteManagerJobSiteIds: string[];
   workerJobSiteIds: string[];
   visibleJobSiteIds: string[];
+  visibleWorkerIds: string[];
+  visibleDocumentIds: string[];
   grantedResourceIds: Partial<Record<OrganizationResourceType, string[]>>;
 }
 
@@ -59,12 +61,12 @@ export async function getResourceScope(context?: WorkspaceAccessContext): Promis
   let workerJobSiteIds: string[] = [];
 
   if (preset === "SITE_MANAGER") {
-    const assignments = await db.jobSiteUserAssignment.findMany({
+    const assignments = await db.jobSiteParticipant.findMany({
       where: {
         organizationId,
         userId: scopeUserId,
-        assignmentRole: "SITE_MANAGER",
-        archivedAt: null,
+        kind: "ORGANIZATION_MEMBER",
+        status: "ACTIVE",
         jobSite: { archivedAt: null },
       },
       select: { jobSiteId: true },
@@ -103,6 +105,8 @@ export async function getResourceScope(context?: WorkspaceAccessContext): Promis
     siteManagerJobSiteIds: uniqueIds(siteManagerJobSiteIds),
     workerJobSiteIds: uniqueIds(workerJobSiteIds),
     visibleJobSiteIds: uniqueIds([...grantedJobSiteIds, ...siteManagerJobSiteIds, ...workerJobSiteIds]),
+    visibleWorkerIds: uniqueIds([...grantedWorkerIds, ...(linkedWorker ? [linkedWorker.id] : [])]),
+    visibleDocumentIds: uniqueIds(grantedResourceIds.DOCUMENT ?? []),
     grantedResourceIds,
   };
 }
@@ -136,36 +140,23 @@ export function canReadSiteManagerWorker(scope: ResourceScope, workerJobSiteIds:
   return scope.preset === "SITE_MANAGER" && workerJobSiteIds.some((jobSiteId) => scope.siteManagerJobSiteIds.includes(jobSiteId));
 }
 
-export function canReadDocument(scope: ResourceScope, document: { id?: string; documentTypeId?: string | null; ownerType: string; workerId: string | null; jobSiteId: string | null }) {
+export function canReadDocument(scope: ResourceScope, document: { id?: string; ownerType: string; workerId: string | null; jobSiteId: string | null }) {
   if (scope.fullAccess) return true;
-  if (hasResourceGrant(scope, "DOCUMENT", document.id) || hasResourceGrant(scope, "DOCUMENT_TYPE", document.documentTypeId)) return true;
+  if (hasResourceGrant(scope, "DOCUMENT", document.id)) return true;
   if (scope.preset === "SITE_MANAGER") return document.ownerType === "JOB_SITE" && !!document.jobSiteId && scope.siteManagerJobSiteIds.includes(document.jobSiteId);
   if (scope.preset === "LIMITED_UPLOAD") return document.ownerType === "WORKER" && !!document.workerId && scope.linkedWorker?.id === document.workerId;
   return false;
 }
 
-export function canReadDeadline(scope: ResourceScope, deadline: { workerId: string | null; jobSiteId: string | null; document?: { ownerType: string; workerId: string | null; jobSiteId: string | null } | null }) {
-  if (scope.fullAccess) return true;
-  if (scope.preset === "SITE_MANAGER") return !!deadline.jobSiteId && scope.siteManagerJobSiteIds.includes(deadline.jobSiteId);
-  if (scope.preset === "LIMITED_UPLOAD") {
-    if (deadline.workerId && deadline.workerId === scope.linkedWorker?.id) return true;
-    return Boolean(deadline.document && canReadDocument(scope, deadline.document));
-  }
-  return false;
-}
-
-export function canReadEvidence(scope: ResourceScope, evidence: { id?: string; workerId: string | null; jobSiteId: string | null; checklistItem?: { checklist: { jobSiteId: string | null } } | null }) {
+export function canReadEvidence(scope: ResourceScope, evidence: { id?: string; workerId: string | null; jobSiteId: string | null }) {
   if (scope.fullAccess) return true;
   if (hasResourceGrant(scope, "EVIDENCE", evidence.id)) return true;
-  const checklistJobSiteId = evidence.checklistItem?.checklist.jobSiteId ?? null;
   if (scope.preset === "SITE_MANAGER") {
-    const jobSiteId = evidence.jobSiteId ?? checklistJobSiteId;
-    return !!jobSiteId && scope.siteManagerJobSiteIds.includes(jobSiteId);
+    return !!evidence.jobSiteId && scope.siteManagerJobSiteIds.includes(evidence.jobSiteId);
   }
   if (scope.preset === "LIMITED_UPLOAD") {
     if (evidence.workerId && evidence.workerId === scope.linkedWorker?.id) return true;
-    const jobSiteId = evidence.jobSiteId ?? checklistJobSiteId;
-    return !!jobSiteId && scope.workerJobSiteIds.includes(jobSiteId);
+    return !!evidence.jobSiteId && scope.workerJobSiteIds.includes(evidence.jobSiteId);
   }
   return false;
 }

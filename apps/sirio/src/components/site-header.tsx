@@ -11,11 +11,7 @@ import {
 
 export type SectionTag = FloatingNavigationSection;
 
-const surfaceLinks = [
-  { href: "/", label: "Catalogo" },
-  { href: "/marketing", label: "Marketing" },
-  { href: "/dashboard", label: "Dashboard" },
-];
+const surfaceLinks = [{ href: "/", label: "Foundation visuale" }];
 
 export function SiteHeader({
   action = true,
@@ -27,7 +23,7 @@ export function SiteHeader({
   sections?: SectionTag[];
 }) {
   const pathname = usePathname();
-  const homeHref = brand === "marketing" ? "/marketing" : "/";
+  const homeHref = "/";
 
   return (
     <FloatingNavigation
@@ -38,11 +34,11 @@ export function SiteHeader({
               className={buttonVariants()}
               data-cursor-label="Apri"
               data-cursor-magnetic="true"
-              href="/dashboard"
+              href="/"
             >
-              <span className="hidden lg:inline">Apri la demo</span>
+              <span className="hidden lg:inline">Apri il catalogo</span>
               <IconArrowRight aria-hidden="true" />
-              <span className="sr-only lg:hidden">Apri la demo</span>
+              <span className="sr-only lg:hidden">Apri il catalogo</span>
             </a>
           </span>
         ) : undefined

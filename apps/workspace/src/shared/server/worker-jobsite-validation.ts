@@ -1,7 +1,7 @@
 import "server-only";
 
-import type { JobSiteOperationalPhase, RecordStatus } from "@qoovex/types";
-import { jobSiteOperationalPhases, recordStatuses } from "@qoovex/types";
+import type { RecordStatus } from "@qoovex/types";
+import { recordStatuses } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 import { isEnumValue, parseOptionalDate, trimOptionalText } from "./document-domain-validation";
 
@@ -21,11 +21,6 @@ export function parseEditableRecordStatus(value: unknown): RecordStatus {
   const status = parseRecordStatus(value);
   if (status === "ARCHIVED") throw new AccessError("Usa l'archiviazione per archiviare il record.", 409);
   return status;
-}
-
-export function parseJobSiteOperationalPhase(value: unknown): JobSiteOperationalPhase {
-  if (!isEnumValue(jobSiteOperationalPhases, value)) throw new AccessError("Fase operativa non valida.", 409);
-  return value;
 }
 
 export function normalizeOptionalEmail(value: unknown): string | null | undefined {

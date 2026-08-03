@@ -3,5 +3,5 @@
 import { RouteError } from "../_components/route-error";
 
 export default function Error(props: { error: Error & { digest?: string }; reset: () => void }) {
-  return <RouteError {...props} backHref="/dashboard" backLabel="Dashboard" />;
+  return <RouteError {...props} backHref="/contexts" backLabel="Contesti" />;
 }

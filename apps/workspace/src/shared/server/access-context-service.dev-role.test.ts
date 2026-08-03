@@ -13,7 +13,7 @@ vi.mock("@shared/server/dev-auth", () => ({ bootstrapDevUser: mocks.bootstrapDev
 vi.mock("@qoovex/db", () => ({
   db: {
     user: { findUnique: vi.fn() },
-    organizationMembership: { findUnique: mocks.findMembership },
+    organizationMembership: { findMany: mocks.findMembership },
   },
 }));
 vi.mock("@shared/server/mfa-service", () => ({ isMfaSatisfiedForUser: vi.fn() }));
@@ -39,11 +39,11 @@ beforeEach(() => {
     mfaEnabled: false,
     devView: "OWNER",
   });
-  mocks.findMembership.mockReset().mockResolvedValue({
+  mocks.findMembership.mockReset().mockResolvedValue([{
     id: "membership-1",
     role: "OWNER",
     organization: { id: "org-1", name: "Azienda Dev", code: "DEV" },
-  });
+  }]);
   mocks.getActiveSupportSession.mockReset().mockResolvedValue(null);
   mocks.getPermissionsForRole.mockReset().mockReturnValue(["organization:read", "documents:read"]);
 });
@@ -58,6 +58,6 @@ describe("workspace dev role simulation", () => {
     });
     expect(context.platformRole).toBe("USER");
     expect(mocks.getPermissionsForRole).toHaveBeenCalledWith("OWNER");
-    expect(mocks.findMembership).toHaveBeenCalledWith(expect.objectContaining({ where: { userId: "dev-user", revokedAt: null } }));
+    expect(mocks.findMembership).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ userId: "dev-user", revokedAt: null }) }));
   });
 });

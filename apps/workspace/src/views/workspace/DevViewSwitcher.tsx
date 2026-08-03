@@ -32,7 +32,7 @@ export function DevViewSwitcher({ view }: { view: DevWorkspaceView }) {
     }
 
     setPending(false);
-    router.push(nextView === "OWNER" ? "/dashboard" : "/qoovex-admin");
+    router.push(nextView === "OWNER" ? "/contexts" : "/qoovex-admin");
     router.refresh();
   }
 

@@ -1,32 +1,29 @@
-# Data, storage and security
+# 03 — Data storage and security
 
-## Stato attuale verificato
+## verified_current_state
 
-Prisma conserva record, relazioni, stati e audit; Vercel Blob privato conserva i binari. Il motore non salva contenuto file, Blob key, token, URL firmati, credenziali, stack trace o dati sensibili non necessari.
+La migration `20260803010000_implement_qoovex_vnext` porta la history a 19 migration. Blob è privato; upload e download passano dal server, applicano autorizzazione oggetto, audit, pathname generato, checksum SHA-256, MIME reale e limite tecnico 4 MiB.
 
-Il repository contiene sedici migration canoniche. `20260728010000_access_model_expand` e `20260728020000_access_model_contract` sono applicate soltanto al database locale guardato. La migration additiva `20260728030000_operational_workspace_expansion` introduce profilo e contatti, lifecycle versioni, collegamenti documento-cantiere, storico assegnazioni, prove revisionate, richieste/messaggi/timeline, fonti manuali e snapshot estesi; al termine di questa implementazione resta pendente perche il wrapper richiede un backup reference esplicito. Nessun ambiente Preview o Production e dichiarato allineato.
+## Timeline, snapshot e allegati
 
-`OperationalEvent` e append-only per servizio e usa `eventKey` idempotente. `OperationalEventArtifactReference` aggrega timeline senza duplicare eventi. `DocumentPackageRevision` congela manifest minimizzato e fingerprint SHA-256; una mutazione successiva non riscrive revisioni o link. I link legacy sono associati a revisioni `LEGACY_BACKFILL` preservando accesso, scadenza e download preesistenti.
+La timeline è append-only, sequenziata atomicamente e paginata a cursore. Audience: `INTERNAL | SHARED`; disclosure: `GENERAL | COMMERCIAL | RESTRICTED_COMMERCIAL`. Correzioni, ritiri e sostituzioni aggiungono eventi o metadata senza riscrivere versioni precedenti.
 
-## Garanzie runtime implementate
+JSON è limitato a payload versionati di agreement, closure, timeline ed effect. Ogni payload è validato da Zod e fingerprint SHA-256. Allegati e publication conservano origine, audience, categoria, checksum e metadata fotografati; il binario non viene duplicato.
 
-- idempotency key univoca per Azienda e processo;
-- step univoci per processo;
-- claim token, lease di cinque minuti e fencing al completamento;
-- massimo cinque tentativi e backoff 1/5/15/60 minuti;
-- eventi e payload allow-listed/minimizzati;
-- query e mutazioni sempre tenant-scoped;
-- timeline utente separata dall'audit tecnico.
-- download documenti subordinato a `documents:file:read` e, per categorie sensibili, a `documents:sensitive:read`;
-- download prove subordinato a `evidence:file:read` e, per classificazione `RESTRICTED`, a `evidence:sensitive:read`;
-- sessioni Support sempre metadata-only, senza file documentali o prove;
-- versione corrente approvata puntata da `Document.currentVersionId`, con revisioni condivise immutabili;
-- prove `INTERNAL` per default, condivisibili soltanto se `ACCEPTED` e `SHAREABLE`.
+## IBAN e ricevute
 
-## Specifiche non implementate
+Il profilo pagamento è versionato. L’IBAN è cifrato AES-256-GCM con `QOOVEX_DATA_ENCRYPTION_KEYS` e `QOOVEX_DATA_ENCRYPTION_ACTIVE_KEY_ID`; ciphertext, nonce, auth tag e key id sono separati. AAD lega organizzazione, profilo e versione. È vietato il fallback su segreti Auth/MFA. La modifica richiede MFA attiva e soddisfatta.
 
-Non sono implementati retention automatica dedicata, cifratura applicativa aggiuntiva, indicizzazione del contenuto file, OCR/AI, ricerca semantica, compensazioni generali o export di processo.
+Una ricevuta `PAYMENT_RECEIPT` è collegata a una precisa richiesta. È visibile al cliente principale e agli attori Azienda con autorità commerciale; non prova automaticamente l’accredito.
 
-## Decisioni aperte e hard stop
+## Threat controls
 
-Retention, ricerca, provider, trattamento ulteriore dei dati sensibili e deploy remoto restano decisioni separate. Non usare `db push`, reset o `migrate resolve` per aggirare cronologia o drift.
+Tenant/participant isolation, IDOR protection, token hash monouso, rate limit, `accessVersion`, optimistic concurrency, idempotency fingerprint, transazioni Serializable, MIME spoofing/path traversal/oversize rejection, grant scaduti, cache per contesto, export audience-specific e audit minimizzato. Token hash, Blob key, IBAN completo e URL permanenti non entrano nei DTO client.
+
+## Retention e legal hold
+
+Inviti cliente 14 giorni; pagina link export 7 giorni; grant download 15 minuti; archivio ZIP 30 giorni. Record canonici, timeline, proposte, pagamenti e dispute seguono il JobSite. `LegalHold` e dispute preservation bloccano cleanup pertinente senza ampliare la visibilità.
+
+## hard_stop
+
+Nessuna cancellazione fisica automatica; nessun cleanup di contenuti soggetti a hold; nessuna chiave reale versionata; nessuna operazione Blob remota in questo task.

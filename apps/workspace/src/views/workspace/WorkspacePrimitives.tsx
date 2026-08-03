@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import { IconBuilding, IconCircleCheck, IconClipboardCheck, IconCrane, IconLock, IconMoodEmpty, IconPencil, IconPlayerPause, IconTool } from "@tabler/icons-react";
-import type { JobSiteOperationalPhase } from "@qoovex/types";
+import { IconLock, IconMoodEmpty } from "@tabler/icons-react";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
 import { Badge } from "@qoovex/ui/components/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
@@ -29,21 +28,4 @@ export function WorkspaceAccessState({ title = "Area non disponibile", descripti
 export function WorkspaceState({ label, tone = "neutral" }: { label: string; tone?: "danger" | "warning" | "info" | "good" | "neutral" }) {
   const variant = tone === "danger" ? "destructive" : tone === "good" ? "success" : tone === "neutral" ? "outline" : tone;
   return <Badge variant={variant}>{label}</Badge>;
-}
-
-const jobSiteVisualByPhase = {
-  DRAFT: { icon: IconPencil, tone: "bg-muted text-muted-foreground" },
-  PREPARATION: { icon: IconTool, tone: "bg-warning/15 text-warning-foreground" },
-  IN_PROGRESS: { icon: IconCrane, tone: "bg-info/10 text-info" },
-  PAUSED: { icon: IconPlayerPause, tone: "bg-warning/15 text-warning-foreground" },
-  CLOSING: { icon: IconClipboardCheck, tone: "bg-primary/10 text-primary" },
-  COMPLETED: { icon: IconCircleCheck, tone: "bg-success/10 text-success" },
-} satisfies Record<JobSiteOperationalPhase, { icon: typeof IconBuilding; tone: string }>;
-
-export function WorkspaceJobSitePhaseIcon({ phase }: { phase?: JobSiteOperationalPhase | null }) {
-  const visual = phase
-    ? jobSiteVisualByPhase[phase]
-    : { icon: IconBuilding, tone: "bg-muted text-muted-foreground" };
-  const Icon = visual.icon;
-  return <span aria-hidden="true" className={`grid size-5 shrink-0 place-items-center rounded-md ${visual.tone}`}><Icon className="size-3.5" /></span>;
 }

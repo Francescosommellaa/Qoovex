@@ -1,34 +1,33 @@
-# Product and scope
+# 00 — Product and scope
 
-## Identita e promessa prudente
+## verified_current_state
 
-Qoovex e il sistema operativo exception-driven per documenti, scadenze e prove di cantiere di piccole imprese, subappaltatori, artigiani e consulenti. Organizza informazioni operative, esegue verifiche deterministiche consentite e presenta eccezioni, decisioni e risultati agli attori autorizzati.
+Qoovex vNext è lo spazio condiviso in cui un’impresa gestisce un lavoro edile con il cliente, documentando avanzamento, step, modifiche, prove e pagamenti dalla creazione del cantiere alla chiusura.
 
-Qoovex non garantisce conformita, non certifica persone, documenti o cantieri e non sostituisce valutazioni professionali, tecniche, sanitarie o legali. Le regole configurate descrivono aspettative aziendali, non obblighi normativi.
+Promessa all’Azienda: documenta il lavoro una volta e usa gli stessi aggiornamenti per informare il cliente, gestire le modifiche e presentare richieste di pagamento.
 
-## Stato attuale verificato
+Promessa al cliente: segui i lavori sulle tue case, controlla ogni modifica e conserva tutto ciò che è stato condiviso.
 
-Il Workspace implementa il dominio protetto di Aziende, lavoratori, cantieri, documenti/versioni private, requisiti, scadenze, calendario, checklist, prove, pacchetti, condivisioni, notifiche, audit, supporto e data-control.
+Il prodotto riunisce accordi, avanzamento, fotografie, prove, scontrini, richieste, pagamenti e conferme in una cronologia condivisa, strutturata, versionata e scaricabile.
 
-Le Fasi 3-4 implementano un motore operativo persistente con cinque definizioni versionate: `DOCUMENT_RECEIVED@1`, `WORKER_CREATED@1`, `JOB_SITE_CREATED@1`, `CONTINUOUS_CONTROL@1` e `DOCUMENT_PACKAGE_SHARING@1`. Il runner usa claim atomico, lease, fencing, retry limitato e riconciliazione.
+## implemented_decision
 
-`/dashboard` e il Centro operativo; `/operations/[processId]` mostra step, timeline utente, decisioni, eccezioni e riferimenti autorizzati. La shell espone destinazioni autorizzate, una ricerca metadata-only in modale separato e la card `Azioni rapide` per le mutazioni manuali principali. Non esiste una pagina `/search`. `/document-packages` prepara una revisione immutabile, richiede review e crea il link soltanto dopo conferma umana.
+- D-VNEXT-18–40: contratto tecnico vNext implementato.
+- D-VNEXT-46: legacy eradication completata.
+- D-VNEXT-47: foundation-only completata come stato intermedio storico.
+- D-VNEXT-48: implementazione integrale vNext completata nel repository.
+- D-VNEXT-41–45: `SUPERSEDED`; nessun `clientName`, fase operativa, processo legacy o dual-mode è stato reintrodotto.
 
-## Direzione approvata
+Modello commerciale approvato: paga soltanto l’Azienda; Collaborator incluso nell’Azienda; cliente gratuito per i cantieri invitati. Il repository non implementa billing e non definisce prezzi, piani, trial, limiti, commissioni o entitlement.
 
-- Il lavoro quotidiano dell'utente coincide principalmente con eccezioni e decisioni.
-- Il dominio rimane ricco e continua a essere fonte, output e controllo avanzato dei processi.
-- Solo azioni `LOW`, deterministiche, reversibili, autorizzate e con affidabilita `VERIFIED/HIGH` possono essere automatiche.
-- Condivisioni, ampliamenti di accesso, azioni sensibili/irreversibili e valutazioni legali restano esplicite o vietate.
-- Timeline operativa e `ProductAuditEvent` restano separati.
-- Il successo si misura attraverso lavoro manuale evitato e condizioni risolte, non tramite il numero di record.
+## MVP disponibile
 
-## Specifiche non implementate
+Account multi-contesto, membership multiple, cantiere vNext, partecipanti, inviti cliente, immobili, agreement iniziale, timeline interna/condivisa, allegati, step opzionali, richieste, proposte e controproposte versionate, deleghe economiche, pagamenti documentati, dispute, chiusura reciproca, export, archivio, richieste post-chiusura, riapertura, ricerca metadata-only e notifiche.
 
-Non sono implementati OCR, AI documentale, ricerca nei file o semantica, viste salvate o cronologia query, editor visuale di processi, nuovi canali di ingresso/notifica, condivisione automatica, annullamento/undo o retention automatica dedicata.
+## conceptual_not_implemented
 
-I nomi concettuali delle Fasi 1-2 restano storia decisionale; i contratti implementati usano i nomi `Operational*` descritti dal codice e dallo schema.
+Più clienti principali o ruoli cliente differenziati, tecnici/delegati del cliente, pricing e billing, marketplace, ricerca imprese, preventivi comparativi, commissioni, pagamenti in-app, escrow, rimborsi, arbitrato, KYC, firma elettronica qualificata, fatturazione, contabilità, paghe, BIM, geolocalizzazione continua, sorveglianza, IA/OCR, portfolio e recensioni pubbliche.
 
-## Decisioni aperte e hard stop
+## hard_stop
 
-Restano aperti provider e policy OCR/AI, retention di processi/eventi, ricerca nei file/semantica, privacy di viste salvate e cronologia, nuovi canali, annullamento/compensazioni, trattamento ulteriore dei documenti sensibili, SLA/monitoraggio e limiti commerciali. Qualunque deploy o migration fuori dal database locale richiede verifica e autorizzazione separate.
+Nessuna cancellazione fisica di cantiere o account; nessuna promessa di conformità, collaudo, assenza difetti o validità legale; nessun deploy o migration remoto senza un task separato autorizzato.

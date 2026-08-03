@@ -27,7 +27,7 @@ export function SupportSessionForm({ organizationCode }: { organizationCode?: st
       setError(body?.message ?? "Sessione supporto non disponibile.");
       return;
     }
-    router.push("/dashboard");
+    router.push("/qoovex-admin");
     router.refresh();
   }
 

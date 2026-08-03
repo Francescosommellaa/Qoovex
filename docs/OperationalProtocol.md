@@ -2,29 +2,37 @@
 
 Questo indice rimanda alle fonti canoniche `06_OPERATIONS_AND_ENVIRONMENT.md`, `07_QUALITY_AND_RELEASE.md` e `08_SUPPORT_AND_DATA_CONTROL.md`.
 
-Non eseguire reset, seed, `db push`, migration, cancellazioni Azienda o cleanup Blob senza classificare database e storage. Una direzione prodotto o una specifica concettuale non autorizza operazioni runtime, schema, provider, retention o frequenze.
+Codice, schema, migration e manifest sono la fonte di `verified_current_state`. Una `approved_product_direction` e una specifica `conceptual_not_implemented` non autorizzano operazioni runtime, schema, provider, retention, frequenze, permessi, route o UI.
+
+## Task documentale canonico
+
+Un task esclusivamente documentale:
+
+1. valida JSON, riferimenti, link, terminologia e classificazioni;
+2. aggiorna i documenti canonici e il Qoovex-Brain tramite MCP;
+3. aggiorna la Memory solo se richiesto esplicitamente, tramite nota ad hoc;
+4. esegue `pnpm check:fast` e `git diff --check`;
+5. appende il session log soltanto dopo i gate.
+
+Non interrogare database o Blob per provare una specifica concettuale. Non eseguire reset, seed, `db push`, migration, deploy, cancellazioni Azienda o cleanup Blob.
+
+Un contratto tecnico documentale non autorizza implementazione. D-VNEXT-46 ha autorizzato la migration locale di rimozione e D-VNEXT-48 la migration locale vNext. Preview e Production restano hard stop fino a un task separato con target identity, backup/restore, chiavi ambiente e rollback verificati.
 
 ## Database operation impact
 
-Il controllo e automatico per route, server action, servizi dati, query, dashboard, widget, polling, reminder, job, notifiche, audit, liste, ricerca, filtri, export, supporto, retention e workflow documentali. Se il task e soltanto documentale, dichiarare zero operazioni aggiunte/eliminate e non interrogare database o Blob.
-
-Ogni task database-sensitive deve riportare:
+Per un task soltanto documentale riportare:
 
 ```text
-Operazioni aggiunte:
-Operazioni eliminate:
-Query per flusso prima:
-Query per flusso dopo:
-Rischio N+1:
-Strategia cache:
-Strategia invalidazione:
-Impatto tenant isolation:
-Ambienti coinvolti:
-Misurazione eseguita:
+Operazioni aggiunte: 0
+Operazioni eliminate: 0
+Query per flusso prima: invariato
+Query per flusso dopo: invariato
+Rischio N+1: invariato
+Strategia cache: invariata
+Strategia invalidazione: invariata
+Impatto tenant isolation: nessuno
+Ambienti coinvolti: soli file documentali locali e Brain
+Misurazione eseguita: non applicabile; database e Blob non interrogati
 ```
 
-Il conteggio Prisma Client e una proxy, non una metrica ufficiale Prisma Postgres. Verificare caso normale e peggiore, N+1, duplicazioni request-scoped, polling, paginazione, batch, cache tenant-aware e invalidazione. Autorizzazione e `organizationId` server-derived non possono essere rimossi.
-
-Le ottimizzazioni semplici e dimostrate nel perimetro vanno incluse nello stesso task. Schema, migration, provider, auth, ruoli, tenant isolation, audit, retention, frequenze, servizi esterni e configurazioni cloud richiedono approvazione esplicita.
-
-Per ricerca e condivisione, non inserire query di ricerca, token, hash, Blob key, URL firmati, IP o user-agent in payload, audit o log applicativi. Le route pubbliche devono usare risposte indistinguibili, `private, no-store`, `no-referrer`, `noindex, nofollow` e `nosniff`; il download resta mediato e in attachment.
+Ogni task database-sensitive deve invece ricostruire e misurare il flusso reale, preservando autorizzazione e `organizationId` server-derived. Per vNext sono obbligatori fresh, upgrade da 18 migration, drift, conteggi foundation, FK/unique/enum/orfani e restore. Non inserire query, token, hash, Blob key, URL firmati, IBAN, IP o user-agent in payload, audit o log.

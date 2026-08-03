@@ -12,13 +12,13 @@ const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://qoovex.com"),
-  title: "Qoovex - Documenti, scadenze e prove di cantiere",
+  title: "Qoovex - Lavori condivisi",
   description:
-    "Qoovex aiuta piccole imprese e subappaltatori a organizzare documenti, scadenze, checklist, prove e pacchetti documentali pronti per revisione.",
+    "Qoovex è lo spazio condiviso tra Azienda e cliente per documentare lavori, modifiche, prove e pagamenti.",
   openGraph: {
-    title: "Qoovex - Documenti, scadenze e prove di cantiere",
+    title: "Qoovex - Lavori condivisi",
     description:
-      "Organizza documenti, scadenze, checklist, prove e pacchetti documentali pronti per revisione.",
+      "Spazio condiviso tra Azienda e cliente per documentare un lavoro edile dalla creazione alla chiusura.",
     type: "website",
   },
 };

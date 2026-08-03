@@ -1,44 +1,28 @@
-# Quality and release
+# 07 — Quality and release
 
-## Gate standard
+## Acceptance contract
 
-`pnpm check` esegue type-check, test unitari, build, audit dipendenze, verifica Prisma e `git diff --check`; `pnpm check:ci` aggiunge E2E. `verify:prisma` resta bloccante su migration, checksum e drift.
+- `OrganizationRole` resta `OWNER | COLLABORATOR`; client membership impossibile.
+- route, navigation, API, service, mutation, permission e test sono collegati dal capability manifest.
+- tenant/participant isolation, revision, accessVersion, authority e receipt sono server-side.
+- timeline interna e condivisa non perdono audience; ricevute e file non perdono visibilità.
+- proposte, agreement, closure ed effect rifiutano versioni stale.
+- nessuna cancellazione fisica, provider live, marketplace, billing o IA.
 
-## Copertura Fasi 3-4 implementata
+## Test canonici
 
-- cinque definizioni registry e transizioni invalide;
-- transizioni cantiere valide/invalide, blocchi, override e riapertura;
-- ID noto e negazioni per file, sensibilita, scope assegnato e sessione Support;
-- lifecycle versioni e prove, checksum duplicato e snapshot selettivi dei pacchetti;
-- richieste, messaggi, timeline e controlli fonte tenant-safe;
-- matrice affidabilita x impatto;
-- payload minimizzati, artifact tenant-scoped e idempotency key;
-- claim concorrente, lease di cinque minuti, fencing e backoff;
-- enqueue nella transazione di documento/versione/lavoratore/cantiere/pacchetto;
-- contratti API discriminati, route protette e permission mapping;
-- shell unica adattiva, ricerca consultiva metadata-only in modale separato e card Azioni rapide guidata dai permessi;
-- sidebar cantieri con limite, scope tenant-safe, massimo tre eventi per voce, route dinamiche/slug, stato raccolta distinto e drawer chiuso dopo la navigazione;
-- workflow scheduled con controllo JSON/logical failure;
-- revisioni immutabili, backfill legacy, review obbligatoria, conferma concorrente, revoca/scadenza idempotente e download opt-in;
-- ricerca esatta/prefisso/termine, tenant/resource scope, cursori stabili e indici PostgreSQL;
-- timeline tipizzata e aggregata, correzioni append-only, payload minimizzati e audit tecnico separato;
-- E2E Fase 3: documento incompleto -> decisione -> ripresa; lavoratore -> requisito mancante -> documento -> eccezione risolta;
-- E2E Fase 4: ricerca autorizzata -> artifact -> timeline; preparazione -> review -> link; aggiornamento immutabile; revoca/scadenza; Centro operativo.
-- access model: mapping expand/migrate/contract, backfill dry-run/idempotenza, Owner/Collaborator, permessi dipendenti, scope e grant cross-tenant, optimistic concurrency, scadenza/revoca, reinvio/rifiuto invito e separazione Support Agent/Platform Admin;
-- storia migration fresca e mapping espliciti per gli indici PostgreSQL al limite di 63 byte, verificati con `migrate reset`, `migrate status` e diff nullo;
+Prisma format/validate/generate/status/diff, fresh e upgrade; type-check; unit; integration quando attestata; build Workspace/Web/Sirio; route/capability registry; dependency audit; `pnpm check:fast`; `pnpm check`; `pnpm check:ci` soltanto con database, email sink, Blob adapter e chiavi sintetiche locali attestati; `git diff --check`.
 
-I conteggi esatti delle suite vengono riportati dal gate finale della sessione; restano prove locali e non attestano Preview o Production.
+Le suite devono includere due Aziende, Owner/Collaborator/cliente, inviti/replay, participant e tenant isolation, authority revocata, stale revision/version, receipt idempotenti, receipt visibility, export/search leakage, hold e minimizzazione audit.
 
-Il gate locale del 28 luglio 2026 ha verificato 19 test DB e 328 test Workspace superati, con 3 test di concorrenza skipped, build Web/Sirio/Workspace, 17 migration senza drift e 5 test E2E superati. Il test inviti/resource scope e stato inoltre ripetuto isolatamente dopo la correzione del cleanup fixture. L'E2E usa un server Workspace dedicato in modalita E2E; al termine il profilo dev normale viene ripristinato.
+## Performance budget
 
-## Gate prima di release
+Dataset target: almeno 3 Aziende, 200 JobSite, 20.000 eventi, 1.000 step e 500 record per proposte/pagamenti. Home e dettaglio iniziale ≤12 query; timeline ≤4 query per pagina da 50; search ≤8 query bounded; nessun N+1.
 
-Eseguire Prisma validate/generate, migration status/diff sul target autorizzato, test mirati, `pnpm check:fast`, `pnpm check`, E2E e `git diff --check`. Per la UI verificare desktop/mobile, loading/empty/error, tastiera, touch, zoom 200%, temi, reduced motion, forced colors, overflow e console.
+## Browser QA
 
-## Specifiche non implementate
+Viewport 320/390/768/1024/1440, zoom 200%, light/dark/system, tastiera, focus, console, hydration, reduced motion e overflow. Un gate non eseguito non può essere dichiarato verde.
 
-Nessun deploy Preview/Production, commit, branch, push o PR fa parte delle Fasi 3-4 locali. Un workflow nel repository non prova esecuzione remota.
+## Release hard stop
 
-## Decisioni aperte e hard stop
-
-Non dichiarare un ambiente allineato senza verifica specifica. OCR/AI, ricerca nei file o semantica, retention, nuovi canali, SLA e limiti commerciali richiederanno test e gate propri.
+Il repository può essere pronto localmente senza autorizzare release. Preview/Production, migration remota, Blob remoto, push e PR restano fuori da questo task.

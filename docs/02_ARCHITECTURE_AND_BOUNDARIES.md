@@ -1,27 +1,27 @@
-# Architecture and boundaries
+# 02 — Architecture and boundaries
 
-## Stato attuale verificato
+## verified_current_state
 
-- `apps/workspace`: runtime prodotto, auth/MFA, route, motore, runner, read model e UI operativa;
-- `apps/web`: marketing pubblico e pagine legali;
-- `apps/sirio`: catalogo/proof del design system con scenario operativo Fase 4, senza logica prodotto;
-- `packages/db`: Prisma, sedici migration canoniche, client e guardrail; l'ultima migration additiva e presente nel repository ma non ancora applicata al target locale corrente;
-- `packages/types`: contratti platform-neutral inclusi i DTO `Operational*`;
-- `packages/ui`: foundation condivisa con primitive generiche search/timeline/work queue, senza dominio;
-- `packages/brand-resources`: asset SVG proprietari.
+`apps/web` è marketing, `apps/workspace` è il prodotto autenticato, `apps/sirio` documenta la foundation visuale, `packages/ui` contiene primitive generiche, `packages/db` schema/client e `packages/types` contratti platform-neutral.
 
-Nel Workspace il registry e l'enqueue server-only vivono nel layer condiviso; read model e azioni operative vivono nella feature; il riepilogo artifact e un'entity; Centro operativo e dettaglio sono view; il routing resta in `app`. Il gate FSD impedisce import verso layer superiori.
+Workspace usa route esplicite `/org/[organizationId]/...` e `/client/...`. I route handler fanno parsing, auth, risoluzione contesto, delega al servizio ed error mapping uniforme. La business logic e Prisma restano server-only.
 
-Le definizioni eseguibili sono un registry server-side versionato, non una tabella o un editor. Ricerca, timeline e condivisione sono servizi Workspace server-only; i route handler fanno parsing, auth e delega. PostgreSQL full-text usa indici di espressione e non replica il dominio in una tabella indice.
+## Confini
 
-## Direzione approvata
+- L’Azienda possiede il `JobSite` e vede timeline interna più contenuti condivisi del proprio tenant.
+- Il cliente possiede privatamente `ClientProperty` e collega i propri cantieri; l’immobile non è tenant e non prova proprietà legale.
+- Aziende differenti sullo stesso immobile non si scoprono, non condividono contenuti e vedono soltanto il proprio JobSite.
+- Un allegato foundation viene condiviso solo tramite `JobSiteAttachment` e `JobSiteAttachmentPublication`; nessun file Worker è pubblicato automaticamente.
+- Un share link esterno legacy non esiste e non equivale a partecipazione autenticata.
 
-Documenti, lavoratori, cantieri, scadenze, checklist, prove e pacchetti restano entita dominio. I processi conservano riferimenti, snapshot di regole e receipt idempotenti. Prisma salva dati/metadati; Blob privato resta l'unico storage dei binari.
+## ProductCapabilityManifest
 
-## Specifiche non implementate
+Il manifest app-local collega capability, audience, route, navigation source, API, permission, servizio, mutation, stato e test. Un test enumera le route prodotto e rifiuta route/API/action orfane. Gli endpoint runner e finalize sono `INTERNAL_ONLY` e protetti da segreto cron.
 
-Non esistono editor processi, plugin provider, coda esterna, ricerca semantica/nei file o runtime in Web/Sirio. `packages/ui` non contiene logica operativa, permessi o API.
+## Processi
 
-## Decisioni aperte e hard stop
+Otto processi persistenti `@1`: invito cliente, conferma iniziale, negoziazione modifica, richiesta pagamento, chiusura, export, richiesta post-chiusura e riapertura. Usano claim atomico, lease, fencing, retry limitato, step/eventi e receipt; non esiste un Centro operativo generico.
 
-Provider OCR/AI, indicizzazione, nuove infrastrutture, retention e osservabilita esterna richiedono approvazione. Le app non si importano tra loro e i package non acquisiscono business logic app-specific.
+## Compatibilità
+
+Non esiste dual-mode. `clientName`, `JobSiteOperationalPhase`, processi legacy e route implicite non vengono reinterpretati. `Document`, `DocumentVersion`, `Evidence` ed `EvidenceRevision` restano librerie interne foundation.

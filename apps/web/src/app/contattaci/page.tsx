@@ -6,7 +6,7 @@ import { SiteShell } from "../site-chrome";
 
 export const metadata: Metadata = {
   title: "Contattaci | Qoovex",
-  description: "Contatta Qoovex per parlare del tuo flusso documentale operativo.",
+  description: "Contatta Qoovex per parlare della direzione prodotto vNext.",
 };
 
 export default function ContactPage() {
@@ -21,7 +21,7 @@ export default function ContactPage() {
                 Partiamo dal modo in cui lavorate oggi.
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-                Raccontaci come gestite documenti, scadenze e prove di cantiere.
+                Raccontaci come gestite il lavoro condiviso tra Azienda e cliente.
                 Ti risponderemo sul perimetro che Qoovex può organizzare, senza
                 promesse di conformità o validità legale.
               </p>

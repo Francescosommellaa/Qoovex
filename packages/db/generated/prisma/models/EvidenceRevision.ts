@@ -41,10 +41,7 @@ export type EvidenceRevisionMinAggregateOutputType = {
   revisionNumber: number | null
   title: string | null
   description: string | null
-  sensitivity: $Enums.EvidenceSensitivity | null
-  reviewStatus: $Enums.EvidenceReviewStatus | null
   capturedAt: Date | null
-  origin: $Enums.EvidenceOrigin | null
   reason: string | null
   createdById: string | null
   createdAt: Date | null
@@ -57,10 +54,7 @@ export type EvidenceRevisionMaxAggregateOutputType = {
   revisionNumber: number | null
   title: string | null
   description: string | null
-  sensitivity: $Enums.EvidenceSensitivity | null
-  reviewStatus: $Enums.EvidenceReviewStatus | null
   capturedAt: Date | null
-  origin: $Enums.EvidenceOrigin | null
   reason: string | null
   createdById: string | null
   createdAt: Date | null
@@ -73,10 +67,7 @@ export type EvidenceRevisionCountAggregateOutputType = {
   revisionNumber: number
   title: number
   description: number
-  sensitivity: number
-  reviewStatus: number
   capturedAt: number
-  origin: number
   reason: number
   createdById: number
   createdAt: number
@@ -99,10 +90,7 @@ export type EvidenceRevisionMinAggregateInputType = {
   revisionNumber?: true
   title?: true
   description?: true
-  sensitivity?: true
-  reviewStatus?: true
   capturedAt?: true
-  origin?: true
   reason?: true
   createdById?: true
   createdAt?: true
@@ -115,10 +103,7 @@ export type EvidenceRevisionMaxAggregateInputType = {
   revisionNumber?: true
   title?: true
   description?: true
-  sensitivity?: true
-  reviewStatus?: true
   capturedAt?: true
-  origin?: true
   reason?: true
   createdById?: true
   createdAt?: true
@@ -131,10 +116,7 @@ export type EvidenceRevisionCountAggregateInputType = {
   revisionNumber?: true
   title?: true
   description?: true
-  sensitivity?: true
-  reviewStatus?: true
   capturedAt?: true
-  origin?: true
   reason?: true
   createdById?: true
   createdAt?: true
@@ -234,10 +216,7 @@ export type EvidenceRevisionGroupByOutputType = {
   revisionNumber: number
   title: string
   description: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt: Date | null
-  origin: $Enums.EvidenceOrigin
   reason: string | null
   createdById: string
   createdAt: Date
@@ -273,10 +252,7 @@ export type EvidenceRevisionWhereInput = {
   revisionNumber?: Prisma.IntFilter<"EvidenceRevision"> | number
   title?: Prisma.StringFilter<"EvidenceRevision"> | string
   description?: Prisma.StringNullableFilter<"EvidenceRevision"> | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFilter<"EvidenceRevision"> | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFilter<"EvidenceRevision"> | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.DateTimeNullableFilter<"EvidenceRevision"> | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFilter<"EvidenceRevision"> | $Enums.EvidenceOrigin
   reason?: Prisma.StringNullableFilter<"EvidenceRevision"> | string | null
   createdById?: Prisma.StringFilter<"EvidenceRevision"> | string
   createdAt?: Prisma.DateTimeFilter<"EvidenceRevision"> | Date | string
@@ -292,10 +268,7 @@ export type EvidenceRevisionOrderByWithRelationInput = {
   revisionNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  sensitivity?: Prisma.SortOrder
-  reviewStatus?: Prisma.SortOrder
   capturedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  origin?: Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -315,10 +288,7 @@ export type EvidenceRevisionWhereUniqueInput = Prisma.AtLeast<{
   revisionNumber?: Prisma.IntFilter<"EvidenceRevision"> | number
   title?: Prisma.StringFilter<"EvidenceRevision"> | string
   description?: Prisma.StringNullableFilter<"EvidenceRevision"> | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFilter<"EvidenceRevision"> | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFilter<"EvidenceRevision"> | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.DateTimeNullableFilter<"EvidenceRevision"> | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFilter<"EvidenceRevision"> | $Enums.EvidenceOrigin
   reason?: Prisma.StringNullableFilter<"EvidenceRevision"> | string | null
   createdById?: Prisma.StringFilter<"EvidenceRevision"> | string
   createdAt?: Prisma.DateTimeFilter<"EvidenceRevision"> | Date | string
@@ -334,10 +304,7 @@ export type EvidenceRevisionOrderByWithAggregationInput = {
   revisionNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  sensitivity?: Prisma.SortOrder
-  reviewStatus?: Prisma.SortOrder
   capturedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  origin?: Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -358,10 +325,7 @@ export type EvidenceRevisionScalarWhereWithAggregatesInput = {
   revisionNumber?: Prisma.IntWithAggregatesFilter<"EvidenceRevision"> | number
   title?: Prisma.StringWithAggregatesFilter<"EvidenceRevision"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"EvidenceRevision"> | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityWithAggregatesFilter<"EvidenceRevision"> | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusWithAggregatesFilter<"EvidenceRevision"> | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EvidenceRevision"> | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginWithAggregatesFilter<"EvidenceRevision"> | $Enums.EvidenceOrigin
   reason?: Prisma.StringNullableWithAggregatesFilter<"EvidenceRevision"> | string | null
   createdById?: Prisma.StringWithAggregatesFilter<"EvidenceRevision"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"EvidenceRevision"> | Date | string
@@ -372,10 +336,7 @@ export type EvidenceRevisionCreateInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutEvidenceRevisionsInput
@@ -390,10 +351,7 @@ export type EvidenceRevisionUncheckedCreateInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdById: string
   createdAt?: Date | string
@@ -404,10 +362,7 @@ export type EvidenceRevisionUpdateInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutEvidenceRevisionsNestedInput
@@ -422,10 +377,7 @@ export type EvidenceRevisionUncheckedUpdateInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -438,10 +390,7 @@ export type EvidenceRevisionCreateManyInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdById: string
   createdAt?: Date | string
@@ -452,10 +401,7 @@ export type EvidenceRevisionUpdateManyMutationInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -467,10 +413,7 @@ export type EvidenceRevisionUncheckedUpdateManyInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -498,10 +441,7 @@ export type EvidenceRevisionCountOrderByAggregateInput = {
   revisionNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  sensitivity?: Prisma.SortOrder
-  reviewStatus?: Prisma.SortOrder
   capturedAt?: Prisma.SortOrder
-  origin?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -518,10 +458,7 @@ export type EvidenceRevisionMaxOrderByAggregateInput = {
   revisionNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  sensitivity?: Prisma.SortOrder
-  reviewStatus?: Prisma.SortOrder
   capturedAt?: Prisma.SortOrder
-  origin?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -534,10 +471,7 @@ export type EvidenceRevisionMinOrderByAggregateInput = {
   revisionNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  sensitivity?: Prisma.SortOrder
-  reviewStatus?: Prisma.SortOrder
   capturedAt?: Prisma.SortOrder
-  origin?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -678,10 +612,7 @@ export type EvidenceRevisionCreateWithoutCreatedByInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutEvidenceRevisionsInput
@@ -695,10 +626,7 @@ export type EvidenceRevisionUncheckedCreateWithoutCreatedByInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdAt?: Date | string
 }
@@ -739,10 +667,7 @@ export type EvidenceRevisionScalarWhereInput = {
   revisionNumber?: Prisma.IntFilter<"EvidenceRevision"> | number
   title?: Prisma.StringFilter<"EvidenceRevision"> | string
   description?: Prisma.StringNullableFilter<"EvidenceRevision"> | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFilter<"EvidenceRevision"> | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFilter<"EvidenceRevision"> | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.DateTimeNullableFilter<"EvidenceRevision"> | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFilter<"EvidenceRevision"> | $Enums.EvidenceOrigin
   reason?: Prisma.StringNullableFilter<"EvidenceRevision"> | string | null
   createdById?: Prisma.StringFilter<"EvidenceRevision"> | string
   createdAt?: Prisma.DateTimeFilter<"EvidenceRevision"> | Date | string
@@ -753,10 +678,7 @@ export type EvidenceRevisionCreateWithoutOrganizationInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdAt?: Date | string
   evidence: Prisma.EvidenceCreateNestedOneWithoutRevisionsInput
@@ -769,10 +691,7 @@ export type EvidenceRevisionUncheckedCreateWithoutOrganizationInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdById: string
   createdAt?: Date | string
@@ -809,10 +728,7 @@ export type EvidenceRevisionCreateWithoutEvidenceInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutEvidenceRevisionsInput
@@ -825,10 +741,7 @@ export type EvidenceRevisionUncheckedCreateWithoutEvidenceInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdById: string
   createdAt?: Date | string
@@ -867,10 +780,7 @@ export type EvidenceRevisionCreateManyCreatedByInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdAt?: Date | string
 }
@@ -880,10 +790,7 @@ export type EvidenceRevisionUpdateWithoutCreatedByInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutEvidenceRevisionsNestedInput
@@ -897,10 +804,7 @@ export type EvidenceRevisionUncheckedUpdateWithoutCreatedByInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -912,10 +816,7 @@ export type EvidenceRevisionUncheckedUpdateManyWithoutCreatedByInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -926,10 +827,7 @@ export type EvidenceRevisionCreateManyOrganizationInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdById: string
   createdAt?: Date | string
@@ -940,10 +838,7 @@ export type EvidenceRevisionUpdateWithoutOrganizationInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   evidence?: Prisma.EvidenceUpdateOneRequiredWithoutRevisionsNestedInput
@@ -956,10 +851,7 @@ export type EvidenceRevisionUncheckedUpdateWithoutOrganizationInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -971,10 +863,7 @@ export type EvidenceRevisionUncheckedUpdateManyWithoutOrganizationInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -986,10 +875,7 @@ export type EvidenceRevisionCreateManyEvidenceInput = {
   revisionNumber: number
   title: string
   description?: string | null
-  sensitivity: $Enums.EvidenceSensitivity
-  reviewStatus: $Enums.EvidenceReviewStatus
   capturedAt?: Date | string | null
-  origin: $Enums.EvidenceOrigin
   reason?: string | null
   createdById: string
   createdAt?: Date | string
@@ -1000,10 +886,7 @@ export type EvidenceRevisionUpdateWithoutEvidenceInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutEvidenceRevisionsNestedInput
@@ -1016,10 +899,7 @@ export type EvidenceRevisionUncheckedUpdateWithoutEvidenceInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1031,10 +911,7 @@ export type EvidenceRevisionUncheckedUpdateManyWithoutEvidenceInput = {
   revisionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sensitivity?: Prisma.EnumEvidenceSensitivityFieldUpdateOperationsInput | $Enums.EvidenceSensitivity
-  reviewStatus?: Prisma.EnumEvidenceReviewStatusFieldUpdateOperationsInput | $Enums.EvidenceReviewStatus
   capturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  origin?: Prisma.EnumEvidenceOriginFieldUpdateOperationsInput | $Enums.EvidenceOrigin
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1049,10 +926,7 @@ export type EvidenceRevisionSelect<ExtArgs extends runtime.Types.Extensions.Inte
   revisionNumber?: boolean
   title?: boolean
   description?: boolean
-  sensitivity?: boolean
-  reviewStatus?: boolean
   capturedAt?: boolean
-  origin?: boolean
   reason?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1068,10 +942,7 @@ export type EvidenceRevisionSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   revisionNumber?: boolean
   title?: boolean
   description?: boolean
-  sensitivity?: boolean
-  reviewStatus?: boolean
   capturedAt?: boolean
-  origin?: boolean
   reason?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1087,10 +958,7 @@ export type EvidenceRevisionSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   revisionNumber?: boolean
   title?: boolean
   description?: boolean
-  sensitivity?: boolean
-  reviewStatus?: boolean
   capturedAt?: boolean
-  origin?: boolean
   reason?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1106,16 +974,13 @@ export type EvidenceRevisionSelectScalar = {
   revisionNumber?: boolean
   title?: boolean
   description?: boolean
-  sensitivity?: boolean
-  reviewStatus?: boolean
   capturedAt?: boolean
-  origin?: boolean
   reason?: boolean
   createdById?: boolean
   createdAt?: boolean
 }
 
-export type EvidenceRevisionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "evidenceId" | "revisionNumber" | "title" | "description" | "sensitivity" | "reviewStatus" | "capturedAt" | "origin" | "reason" | "createdById" | "createdAt", ExtArgs["result"]["evidenceRevision"]>
+export type EvidenceRevisionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "evidenceId" | "revisionNumber" | "title" | "description" | "capturedAt" | "reason" | "createdById" | "createdAt", ExtArgs["result"]["evidenceRevision"]>
 export type EvidenceRevisionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   evidence?: boolean | Prisma.EvidenceDefaultArgs<ExtArgs>
@@ -1146,10 +1011,7 @@ export type $EvidenceRevisionPayload<ExtArgs extends runtime.Types.Extensions.In
     revisionNumber: number
     title: string
     description: string | null
-    sensitivity: $Enums.EvidenceSensitivity
-    reviewStatus: $Enums.EvidenceReviewStatus
     capturedAt: Date | null
-    origin: $Enums.EvidenceOrigin
     reason: string | null
     createdById: string
     createdAt: Date
@@ -1585,10 +1447,7 @@ export interface EvidenceRevisionFieldRefs {
   readonly revisionNumber: Prisma.FieldRef<"EvidenceRevision", 'Int'>
   readonly title: Prisma.FieldRef<"EvidenceRevision", 'String'>
   readonly description: Prisma.FieldRef<"EvidenceRevision", 'String'>
-  readonly sensitivity: Prisma.FieldRef<"EvidenceRevision", 'EvidenceSensitivity'>
-  readonly reviewStatus: Prisma.FieldRef<"EvidenceRevision", 'EvidenceReviewStatus'>
   readonly capturedAt: Prisma.FieldRef<"EvidenceRevision", 'DateTime'>
-  readonly origin: Prisma.FieldRef<"EvidenceRevision", 'EvidenceOrigin'>
   readonly reason: Prisma.FieldRef<"EvidenceRevision", 'String'>
   readonly createdById: Prisma.FieldRef<"EvidenceRevision", 'String'>
   readonly createdAt: Prisma.FieldRef<"EvidenceRevision", 'DateTime'>

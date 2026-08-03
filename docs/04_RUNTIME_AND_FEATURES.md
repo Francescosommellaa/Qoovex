@@ -1,48 +1,31 @@
-# Runtime and active features
+# 04 — Runtime and features
 
-## Stato attuale verificato
+## Lifecycle JobSite
 
-Il Workspace mantiene auth, MFA, inviti, supporto, dominio documentale, scadenze/calendario, checklist/prove, pacchetti/condivisioni, notifiche, audit e data-control. Gli inviti creano soltanto `COLLABORATOR`; preset, permessi normalizzati, scope, grant tenant-safe e scadenza vengono persistiti. L'`OWNER` puo modificarli con optimistic concurrency, reinviare o revocare inviti e accessi; aggiornamento e revoca invalidano le sessioni del destinatario.
+`DRAFT → WAITING_FOR_CLIENT → PENDING_INITIAL_CONFIRMATION → ACTIVE → CLOSURE_PROPOSED → CLOSED → ARCHIVED`.
 
-Il motore operativo implementa cinque definizioni:
+Il cliente accetta un invito job-site-scoped e resta pending. Solo la conferma della versione corrente del riepilogo iniziale attiva il cantiere. `CLOSED` e `ARCHIVED` sono read-only salvo post-chiusura, riapertura ed export. L’archiviazione è ammessa soltanto da `CLOSED`.
 
-| Definizione | Trigger | Effetti deterministici |
-|---|---|---|
-| `DOCUMENT_RECEIVED@1` | documento, aggiornamento o nuova versione | contesto, dati mancanti, requisiti, deadline/reminder, pacchetti interni |
-| `WORKER_CREATED@1` | creazione o aggiornamento lavoratore | snapshot requisiti WORKER, documenti mancanti, reminder |
-| `JOB_SITE_CREATED@1` | creazione o aggiornamento cantiere | requisiti globali/specifici, documenti/checklist esistenti, reminder |
-| `CONTINUOUS_CONTROL@1` | una volta per Azienda/finestra oraria | stati temporali a 30 giorni, requisiti, processi fermi, reminder e artifact |
-| `DOCUMENT_PACKAGE_SHARING@1` | preparazione esplicita pacchetto | manifest deterministico, problemi, decisione umana e pubblicazione idempotente |
+## Timeline, step e richieste
 
-Una nuova versione riporta da `READY_FOR_REVIEW` a `DRAFT` soltanto pacchetti interni non condivisi. I pacchetti `SHARED` non vengono modificati. I problemi tecnici sono ritentati; i dati mancanti o ambigui aprono decisioni/eccezioni senza retry infinito.
+Timeline interna e condivisa sono proiezioni della stessa storia canonica con audience. Gli step sono opzionali; senza step non viene inventata una percentuale. Stati step: `NOT_STARTED`, `IN_PROGRESS`, `WAITING`, `READY_FOR_REVIEW`, `CHANGES_REQUESTED`, `WORK_COMPLETED`, `CONFIRMED`, `CANCELLED`. La conferma cliente non equivale a collaudo.
 
-## Spazio operativo contestuale
+Le richieste strutturate e i thread post-chiusura sono append-only. La ricerca è metadata-only e limitata al JobSite autorizzato; niente OCR, ricerca nel file o semantica.
 
-Il Workspace espone servizi tenant-safe per profilo azienda e contatti, link non duplicanti documento-cantiere, revisione delle versioni, assegnazioni con ruolo/periodo/storico, prove classificate e revisionate, richieste, messaggi e timeline contestuale append-only. La timeline utente resta separata da `ProductAuditEvent` e accetta solo metadati minimizzati.
+## Proposte
 
-La fase cantiere segue `DRAFT -> PREPARATION -> IN_PROGRESS <-> PAUSED -> CLOSING -> COMPLETED`. Il cambio usa una route dedicata: apertura e completamento calcolano richieste, checklist e documenti bloccanti; override e riapertura richiedono Owner e motivazione. L'editing generico non puo cambiare fase.
+Proposte e controproposte creano versioni immutabili. Lifecycle: `DRAFT`, `PROPOSED`, `COUNTERED`, `ACCEPTED`, `REJECTED`, `WITHDRAWN`, `SUPERSEDED`, `EXPIRED`. Consenso e effect sono legati alla versione precisa; expected revision/current version rifiutano input stale. Accettare registra quanto mostrato, non costituisce firma qualificata o approvazione tecnica.
 
-Le fonti v1 sono `DIRECT_UPLOAD` e `GUIDED_MANUAL`. Un controllo deterministico puo aprire una richiesta guidata ma non degrada documenti approvati. `AUTHORIZED_INTEGRATION`, scraping, password conservate e AI restano disabilitati.
+## Pagamenti documentati
 
-## Affidabilita e impatto
+`DRAFT → REQUESTED → TRANSFER_DECLARED → UNDER_REVIEW → CONFIRMED | DISPUTED | CANCELLED`. Qoovex non movimenta denaro. Il cliente dichiara l’intero importo della richiesta e può collegare una ricevuta; l’Azienda registra l’esito. Pagamenti parziali richiedono record separati.
 
-I livelli implementati sono `VERIFIED/HIGH/MEDIUM/LOW/CONFLICT` e `LOW/CONTROLLED/SENSITIVE/IRREVERSIBLE`. La policy non usa soglie numeriche:
+## Dispute, chiusura e riapertura
 
-- automatico: affidabilita `VERIFIED/HIGH`, impatto `LOW`, effetto deterministico, reversibile e autorizzato;
-- decisione: impatto `CONTROLLED` o affidabilita `MEDIUM/LOW/CONFLICT`;
-- vietato: `IRREVERSIBLE`, effetto non autorizzato, ampliamento accesso, disclosure o azione legale;
-- `SENSITIVE` non e automatico.
+Le dispute producono preservation e possono concludersi con accordo, ritiro o chiusura senza accordo; Qoovex non arbitra. La chiusura richiede precondizioni senza elementi aperti, snapshot fingerprinted, conferma cliente e conferma Azienda. Non esiste chiusura unilaterale automatica.
 
-## API e UI attive
+Una richiesta post-chiusura non riscrive la timeline precedente e non riapre automaticamente. La riapertura richiede consensi reciproci sulla proposta corrente.
 
-Sono attive le route `/api/operations/center`, `/inbox`, `/processes`, timeline processo/artifact cursor-based, risoluzione decisioni/eccezioni, retry step e runner protetto. `POST /api/search` applica query 2-120 caratteri, massimo 8 termini, timeout due secondi e ranking deterministico sui soli metadati. Le route share proposal applicano preparazione, review e conferma con fingerprint.
+## Receipt e concorrenza
 
-Il Centro operativo mostra decisioni, eccezioni, processi attivi e risultati; il dettaglio espone step, timeline, artifact e sole azioni consentite. Documenti, lavoratori, cantieri e pacchetti mostrano l'ultimo stato operativo collegato. L'ingresso universale compone i flussi esistenti.
-
-## Specifiche non implementate
-
-Nessun OCR, AI, ricerca nei file/semantica, query salvata, template inventato, nuovo canale, annullamento, undo, condivisione automatica o deduzione normativa e attivo.
-
-## Decisioni aperte e hard stop
-
-Restano aperti OCR/AI, retention, ricerca nei file o semantica, viste salvate e cronologia, nuovi canali, compensazioni/undo, SLA e limiti commerciali. Cancellazione e undo non sono esposti finche la policy resta aperta.
+Le action critiche sono versionate `@1`, richiedono `Idempotency-Key` ed `expectedRevision`. Il receipt è unico per organizzazione/action/key; replay identico restituisce lo stesso risultato, riuso con fingerprint diverso restituisce 409.

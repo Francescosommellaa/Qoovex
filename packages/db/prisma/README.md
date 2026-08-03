@@ -1,23 +1,9 @@
-# Prisma Schema
+# Prisma Qoovex vNext
 
-Scopo: definizione canonica del database Qoovex.
+History immutabile: 19 migration. `OrganizationRole` contiene soltanto `OWNER` e `COLLABORATOR`; membership unica per `(organizationId,userId)`; il cliente è `JobSiteParticipant`, mai membership Azienda.
 
-Metti qui:
-- `schema.prisma` e, quando presenti, migration o file strettamente legati allo schema.
-- `seed.ts` per righe demo minime e idempotenti.
-- modelli Prisma dominio MVP per metadati documenti, scadenze, cantieri, prove e pacchetti.
-- baseline canonica immutabile e migration incrementali con tabelle fisiche `Organization*`.
+`JobSite` usa il lifecycle vNext e non contiene `clientName` o fase operativa. `JobSiteUserAssignment` è stato migrato in participant Azienda; `JobSiteWorkerAssignment` resta per Worker senza account.
 
-Non mettere qui:
-- query runtime;
-- script applicativi che non definiscono la struttura dati.
-- file binari, PDF, immagini o contenuti Blob.
+La migration vNext non inventa cliente, agreement o timeline condivise per i record foundation: conserva i dati, assegna `DRAFT revision=1` e registra in audit l’eventuale `archivedAt` legacy prima di azzerarlo.
 
-Regole:
-- ordine file e model secondo `docs/02_ARCHITECTURE_AND_BOUNDARIES.md`;
-- non duplicare regole business applicative nello schema.
-- ogni modello dominio deve riferirsi a `Organization`;
-- ogni `User` ha zero o una sola `OrganizationMembership`, univoca per `userId` e riutilizzata dopo revoca;
-- non introdurre mapping tenant legacy o colonne tenant con nomi non canonici.
-- `DATABASE_URL` deve restare in `.env` e non va loggato o committato.
-- modifiche enum audit addittive devono avere migration dedicata e non implicano reset DB.
+Usare i guardrail locali e `pnpm --filter @qoovex/db verify:prisma`; mai `db push`, `migrate resolve` o SQL manuale fuori migration.

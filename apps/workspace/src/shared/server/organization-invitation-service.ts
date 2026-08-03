@@ -28,17 +28,13 @@ export async function validateOrganizationResourceGrants(organizationId: string,
   if (unique.length > 100) throw new AccessError("Troppe risorse assegnate.", 409);
   for (const grant of unique) {
     const where = { id: grant.resourceId, organizationId };
-    const found = grant.resourceType === "JOB_SITE" ? await db.jobSite.findFirst({ where, select: { id: true } })
-      : grant.resourceType === "WORKER" ? await db.worker.findFirst({ where, select: { id: true } })
-        : grant.resourceType === "DOCUMENT" ? await db.document.findFirst({ where, select: { id: true } })
-          : grant.resourceType === "DOCUMENT_TYPE" ? await db.documentType.findFirst({ where, select: { id: true } })
-            : grant.resourceType === "DOCUMENT_PACKAGE" ? await db.documentPackage.findFirst({ where, select: { id: true } })
-              : grant.resourceType === "OPERATIONAL_PROCESS" ? await db.operationalProcess.findFirst({ where, select: { id: true } })
-                : grant.resourceType === "OPERATIONAL_DECISION" ? await db.operationalDecision.findFirst({ where, select: { id: true } })
-                  : grant.resourceType === "OPERATIONAL_EXCEPTION" ? await db.operationalException.findFirst({ where, select: { id: true } })
-                    : grant.resourceType === "EVIDENCE" ? await db.evidence.findFirst({ where, select: { id: true } })
-                      : grant.resourceType === "CHECKLIST" ? await db.checklist.findFirst({ where, select: { id: true } })
-                        : await db.shareLink.findFirst({ where, select: { id: true } });
+    const found = grant.resourceType === "JOB_SITE"
+      ? await db.jobSite.findFirst({ where, select: { id: true } })
+      : grant.resourceType === "WORKER"
+        ? await db.worker.findFirst({ where, select: { id: true } })
+        : grant.resourceType === "DOCUMENT"
+          ? await db.document.findFirst({ where, select: { id: true } })
+          : await db.evidence.findFirst({ where, select: { id: true } });
     if (!found) throw new AccessError("Una risorsa assegnata non è disponibile.", 409);
   }
   return unique;
@@ -94,8 +90,8 @@ export async function createInvitation(input: { recipientName?: string | null; e
 
   const existingUser = await db.user.findUnique({ where: { email }, select: { id: true } });
   if (existingUser) {
-    const membership = await db.organizationMembership.findUnique({ where: { userId: existingUser.id }, select: { revokedAt: true } });
-    if (membership?.revokedAt === null) throw new AccessError("Questo utente appartiene gia a una azienda.", 409);
+    const membership = await db.organizationMembership.findUnique({ where: { organizationId_userId: { organizationId, userId: existingUser.id } }, select: { revokedAt: true } });
+    if (membership?.revokedAt === null) throw new AccessError("Questo utente appartiene gia a questa Azienda.", 409);
   }
 
   const rawToken = crypto.randomBytes(32).toString("base64url");
@@ -245,11 +241,12 @@ export async function acceptInvitation(rawToken: string) {
       const invitationGrants = invitation.resourceGrants ?? [];
 
       const membership = await tx.organizationMembership.findUnique({
-        where: { userId: user.id },
+        where: { organizationId_userId: { organizationId: invitation.organizationId, userId: user.id } },
         select: { id: true, revokedAt: true },
       });
-      if (membership?.revokedAt === null) throw new AccessError("Appartieni gia a una azienda.", 409);
+      if (membership?.revokedAt === null) throw new AccessError("Appartieni gia a questa Azienda.", 409);
 
+      let acceptedMembershipId: string;
       if (membership) {
         const claimed = await tx.organizationMembership.updateMany({
           where: { id: membership.id, userId: user.id, revokedAt: { not: null } },
@@ -260,10 +257,18 @@ export async function acceptInvitation(rawToken: string) {
         if (invitationGrants.length) {
           await tx.organizationMembershipResourceGrant.createMany({ data: invitationGrants.map((grant) => ({ membershipId: membership.id, organizationId: invitation.organizationId, resourceType: grant.resourceType, resourceId: grant.resourceId })) });
         }
+        acceptedMembershipId = membership.id;
       } else {
-        await tx.organizationMembership.create({
+        const createdMembership = await tx.organizationMembership.create({
           data: { organizationId: invitation.organizationId, userId: user.id, role: invitation.role, preset: invitationPreset, permissionKeys: invitation.permissionKeys ?? [], scopeMode: invitation.scopeMode ?? "ASSIGNED", expiresAt: invitation.accessExpiresAt ?? null, accessUpdatedById: invitation.invitedById, resourceGrants: { create: invitationGrants.map((grant) => ({ organizationId: invitation.organizationId, resourceType: grant.resourceType, resourceId: grant.resourceId })) } },
+          select: { id: true },
         });
+        acceptedMembershipId = createdMembership.id;
+      }
+      for (const grant of invitationGrants.filter((value) => value.resourceType === "JOB_SITE")) {
+        const jobSite = await tx.jobSite.findFirst({ where: { id: grant.resourceId, organizationId: invitation.organizationId }, select: { id: true } });
+        if (!jobSite) throw new AccessError("Cantiere assegnato non più disponibile.", 409);
+        await tx.jobSiteParticipant.upsert({ where: { userSideKey: `${jobSite.id}:${user.id}` }, create: { organizationId: invitation.organizationId, jobSiteId: jobSite.id, userId: user.id, membershipId: acceptedMembershipId, kind: "ORGANIZATION_MEMBER", status: "ACTIVE", publicRoleLabel: "Collaborator", activeKey: `${jobSite.id}:${user.id}:ORGANIZATION_MEMBER`, userSideKey: `${jobSite.id}:${user.id}`, activatedAt: now, createdByUserId: invitation.invitedById }, update: { membershipId: acceptedMembershipId, status: "ACTIVE", accessVersion: { increment: 1 }, publicRoleLabel: "Collaborator", activeKey: `${jobSite.id}:${user.id}:ORGANIZATION_MEMBER`, activatedAt: now, revokedAt: null, endedAt: null, endedByUserId: null, endReason: null } });
       }
       if (invitationPreset === "LIMITED_UPLOAD" && invitation.workerId) {
         const worker = await tx.worker.findFirst({
@@ -327,8 +332,8 @@ export async function acceptInvitation(rawToken: string) {
       throw new AccessError("Operazione concorrente. Riprova.", 409);
     }
     if (!isPrismaKnownRequestError(error, "P2002")) throw error;
-    const active = await db.organizationMembership.findUnique({ where: { userId: user.id }, select: { revokedAt: true } });
-    if (active?.revokedAt === null) throw new AccessError("Appartieni gia a una azienda.", 409);
+    const active = await db.organizationMembership.findFirst({ where: { userId: user.id, revokedAt: null }, select: { revokedAt: true } });
+    if (active?.revokedAt === null) throw new AccessError("Sei gia membro di questa Azienda.", 409);
     throw new AccessError("Operazione concorrente. Riprova.", 409);
   }
   return { accepted: true };

@@ -127,7 +127,7 @@ export function InvitationAcceptancePageView({
   if (declined) {
     return (
       <AuthPageShell description={<p>L'invito a <strong>{organizationName}</strong> non e piu utilizzabile. Nessun accesso e stato aggiunto.</p>} kicker="Invito rifiutato" title="Invito rifiutato" titleId="invitation-declined-title">
-        <AuthStage><Link className={cn(buttonVariants({ variant: "outline" }), "h-11 w-full")} href="/dashboard">Torna al workspace</Link></AuthStage>
+        <AuthStage><Link className={cn(buttonVariants({ variant: "outline" }), "h-11 w-full")} href="/contexts">Torna al workspace</Link></AuthStage>
       </AuthPageShell>
     );
   }

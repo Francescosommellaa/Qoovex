@@ -1,21 +1,23 @@
-# Support and data control
+# 08 — Support and data control
 
-## Stato attuale verificato
+## verified_current_state
 
-Supporto, Qoovex Admin e data-control conservano i guardrail esistenti. `SUPPORT_AGENT` e `PLATFORM_ADMIN` sono ruoli piattaforma separati dalle membership. Il Support Agent apre una sessione temporanea e motivata tramite codice Azienda e riceve soltanto permessi metadata/read-only: nessuna lettura file, upload, gestione accessi o condivisione. La gestione globale resta esclusiva del Platform Admin. Il motore non espone credenziali, token, Blob key, URL permanenti, contenuti file o stack trace.
+L’inventory e gli export includono i modelli vNext senza token, hash, Blob key o IBAN completo. Gli owner Blob comprendono versioni file, prove, attachment, export, immagini immobili e avatar autorizzati. L’orphan scan pagina tutti gli oggetti e fallisce chiuso se manca un cursore.
 
-`OperationalEvent` alimenta la timeline funzionale tipizzata e append-only; `ProductAuditEvent` resta il registro tecnico/prodotto separato. Gli accessi esterni registrano solo `LINK_OPENED` e `DOWNLOAD_REQUESTED`: non dichiarano lettura o download completato e non includono token, IP, user-agent, Blob key o URL firmato.
+## Export
 
-Le eccezioni oggettive vengono riconciliate quando la condizione dominio e soddisfatta. Le eccezioni `DATA_TO_VERIFY` e `PARTIAL_RESULT` possono essere chiuse manualmente con motivazione e permesso sottostante; eccezioni tecniche, oggettive o collegate a decisioni non possono esserlo.
+Export `CLIENT` e `ORGANIZATION` sono distinti. Il cliente riceve timeline condivisa, step, richieste/proposte/consensi, pagamenti/ricevute autorizzate, documenti condivisi e riepilogo chiusura; l’Azienda può includere contenuti interni autorizzati. ZIP e manifest sono streammati direttamente a Blob privato.
 
-## Direzione approvata
+L’email non allega archivi pesanti: contiene riepilogo, identificatore e link opaco autenticato di 7 giorni. Lo scambio produce un grant hashato di 15 minuti. L’archivio Blob scade dopo 30 giorni salvo hold/preservation.
 
-Timeline e audit devono restare separati, minimizzati e tenant-scoped. Supporto e data-control non sono scorciatoie per retry, override, condivisione o ampliamento accesso.
+## Portabilità cliente
 
-## Specifiche non implementate
+`/api/client/data-export` esporta profilo, immobili privati, collegamenti e partecipazioni dell’utente senza dati interni delle Aziende. L’eliminazione account fisica non è disponibile; restano export, revoca sessioni e sospensione secondo i flussi correnti.
 
-Non esistono retention dedicata, export di processo, strumenti supporto per modificare run/step, nuovi canali di notifica o compensazioni generali.
+## Supporto e dispute
 
-## Decisioni aperte e hard stop
+Support Agent resta metadata-only e non legge file, note immobili private, IBAN o ricevute. Platform Admin non è scorciatoia prodotto. Le dispute generano preservation; legal hold non amplia la visibilità e impedisce cleanup pertinente.
 
-Retention/cancellazione, accesso supporto dedicato, export, SLA, notifiche aggiuntive e policy sensibili richiedono approvazione. Nessuna promessa normativa deriva dalla timeline o dall'audit.
+## Cancellazione
+
+Archiviazione logica conserva dati, timeline ed export e rende il JobSite read-only. Cancellazione fisica di JobSite o account è `hard_stop` fino a policy verificata su retention, legal hold, contenzioso, dati fiscali, prove, diritti e portabilità.

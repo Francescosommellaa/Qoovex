@@ -1,31 +1,21 @@
-# UI, brand and surfaces
+# 05 — UI, brand and surfaces
 
-## Stato attuale verificato
+## verified_current_state
 
-La direzione grafica e invariata. Qoovex usa shadcn `base-nova`, Base UI, Tabler Icons, Tailwind CSS v4 CSS-first, Geist/Geist Mono e tema Vercel light/dark/system. Token, font, tema, iconografia, motion e stile base non sono stati modificati. `packages/ui` aggiunge solo primitive generiche per search field/results, timeline e work queue; `apps/sirio` ne dimostra loading, empty, error, timeline lunga, ricerca multi-tipo e review.
+La foundation visiva corrente resta invariata: shadcn base-nova, Base UI, Tabler, Tailwind v4, Geist/Geist Mono e token Qoovex. Le composizioni dominio sono app-local nel Workspace; nessun nuovo design system o brand è stato introdotto.
 
-Il Workspace usa una sola shell adattiva. La zona superiore resta `Panoramica`, `Analytics` disattivato e `Calendario` disattivato; `Cerca` e il controllo iconico accanto al nome Qoovex e apre il modale consultivo (`Ctrl/Cmd+K`). La zona centrale mostra fino a sei cantieri recenti accessibili, espandibili per tre aggiornamenti reali, seguiti da `Tutti i cantieri`; Lavoratori e Azienda non sono duplicati nella navigazione principale. La card `Azioni rapide`, nel footer sopra l'account, espone quattro mutazioni iconiche derivate dai permessi. Notifiche e tema mantengono la collocazione esistente; azienda, collaboratori e account sono raggiungibili dalla card account.
+## Superficie Azienda
 
-In locale, un solo dropdown nella topbar passa tra le viste `Owner`, `Support Agent` e `Platform Admin`; il vecchio banner di cambio vista e stato eliminato. Il profilo dev e il comando `Accedi come dev` restano invariati. La sezione Accessi usa un invito progressivo in quattro passaggi con preset, scope `FULL/ASSIGNED`, risorse selezionate, permessi raggruppati e riepilogo; la modifica di un Collaborator mostra differenze prima della conferma.
+Home con cantieri aperti, in attesa e chiusi; lista cantieri; dettaglio con Riepilogo, Timeline, Step, Richieste, Modifiche, Pagamenti, Persone, File, Chiusura e Impostazioni. Sono raggiungibili creazione, Collaborator, invito cliente, agreement, deleghe, profilo pagamento, allegati, proposte, pagamenti, dispute, chiusura, export e archivio secondo stato e permessi.
 
-Sirio include la prova `/dashboard/operational-workspace` per profilo, cantiere, prova mobile, richieste, review pacchetto e timeline. Workspace promuove il profilo azienda in `/settings/organization-profile`, la state machine e il lavoro contestuale nel dettaglio cantiere, e gli stati di revisione su versioni e prove. Il dettaglio cantiere include otto sezioni reali: Riepilogo, Aggiornamenti, Documenti, Prove, Collaboratori, Checklist, Condivisioni e Impostazioni; `people` e `activities` restano identificatori compatibili per i deep link.
+## Superficie cliente
 
-`/dashboard` conserva compatibilita URL ma presenta “Centro operativo”. L'ingresso universale responsive apre i flussi controllati esistenti; `/operations/[processId]` mostra stato reale, step, timeline, decisioni, eccezioni e artifact. Le viste di dominio restano controllo avanzato.
+Home separata con immobili, cantieri collegati/non collegati e azioni richieste. Il dettaglio espone soltanto la proiezione condivisa: riepilogo, timeline, step, richieste, modifiche, pagamenti, persone minimizzate, documenti condivisi e archivio. Prima della conferma iniziale mostra soltanto il riepilogo e le decisioni consentite.
 
-Le nuove composizioni usano esclusivamente primitive canoniche gia presenti. Restano vincolanti focus visibile, tastiera, touch, zoom 200%, contenuti lunghi, reduced motion, forced colors, light/dark/system e nessuna capability simulata.
+## Form e stati
 
-## Direzione approvata
+Le form hanno validazione runtime server-side, errori field-level, focus sul primo campo errato, prevenzione double-submit, feedback e conferme critiche. Pagine e pannelli usano loading/error/access-denied/empty state reali. Nessuna card `Presto`, route placeholder o capability futura è mostrata.
 
-La UI primaria resta exception-driven: problema, motivo, prossimo passo e attore autorizzato sono visibili nello stesso contesto. Progressi e risultati derivano dallo stato persistito; non vengono inventate percentuali o metriche.
+## Copy prudente
 
-## Specifiche non implementate
-
-Ricerca nei file o semantica, OCR/AI, viste salvate, nuovi canali di intake e visual editor non sono attivi. La ricerca Fase 4 e consultiva e limitata ai metadati autorizzati.
-
-## Decisioni aperte e hard stop
-
-Ricerca nei file o semantica, viste salvate/cronologia, nuovi canali, disclosure sensibile e modifiche alle primitive o alla foundation richiedono approvazione. Non adottare Satoshi, Chillax, Phosphor o una foundation visuale parallela.
-
-## Verifica visuale
-
-Le superfici operative devono essere provate a 320/390/768/1024/1440, light/dark/system, zoom 200%, tastiera, touch, reduced motion, forced colors, hydration, console e overflow prima di una dichiarazione di release.
+Il prodotto usa “confermato dalle parti”, “invio dichiarato”, “ricezione confermata dall’Azienda”, “conclusione stimata” e “IBAN indicato dall’Azienda”. Non promette conformità, collaudo, assenza difetti, pagamento garantito o validità legale.
