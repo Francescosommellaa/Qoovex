@@ -21,11 +21,16 @@ if (new Set(timestamps).size !== timestamps.length) {
 }
 
 for (const entry of ledger.migrations) {
-  const sql = await readFile(join(migrationsRoot, entry.name, "migration.sql"));
-  const actual = createHash("sha256").update(sql).digest("hex");
+  const sql = await readFile(join(migrationsRoot, entry.name, "migration.sql"), "utf8");
+  const canonicalSql = sql.replace(/\r\n?/g, "\n");
+  const actual = createHash("sha256").update(canonicalSql, "utf8").digest("hex");
   if (actual !== entry.sha256) {
     throw new Error(`Protected migration hash mismatch: ${entry.name}`);
   }
+}
+
+if (ledger.hashCanonicalization !== "utf8_lf") {
+  throw new Error("Migration ledger must declare UTF-8/LF hash canonicalization.");
 }
 
 if (ledger.protectedProductionHead !== ledgerNames.at(-1)) {

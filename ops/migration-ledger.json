@@ -1,25 +1,26 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "hashCanonicalization": "utf8_lf",
   "protectedProductionHead": "20260720010000_calendar_events",
   "migrations": [
     {
       "name": "20260712010000_single_company_baseline",
-      "sha256": "08522949f5b157b52803f5cc8991ae2537260ec5a2173611fdcfde7293449493",
+      "sha256": "0ddaf6bcd73f97498085d1d2fd4ce745d83d8126ec0c42705264988f7c1f28a5",
       "productionApplied": true
     },
     {
       "name": "20260712020000_single_membership_forward",
-      "sha256": "813713553e290ab9b4b125dc663690b72b6c4505805888fee48d8ad7cb705cc2",
+      "sha256": "3c92023b3d3621b8b920f326cfdb3eaf2fc533dd15e849ff453e88f4c5bc71f3",
       "productionApplied": true
     },
     {
       "name": "20260713010000_mfa_hardening",
-      "sha256": "c68dc686c00451a943ab4a97f03bf796bb9a7e463f305aaad2af354f62627374",
+      "sha256": "11b575863668ee45487793af9c8bc3020ce7d486061b2e733cf7616c5347aec9",
       "productionApplied": true
     },
     {
       "name": "20260713020000_rate_limit_privacy_atomicity",
-      "sha256": "ebd26dab2f13d740c02d4c2951c374eeb072e5f3b85f1b93c7003ed7a6df005b",
+      "sha256": "40d835ca361898531bf70e35f934b25c363a2686555431dab1c56034fbc53984",
       "productionApplied": true
     },
     {
