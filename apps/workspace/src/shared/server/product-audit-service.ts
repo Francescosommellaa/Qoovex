@@ -23,8 +23,6 @@ const MAX_LIMIT = 100;
 const ALLOWED_METADATA_KEYS = new Set([
   "previousStatus",
   "nextStatus",
-  "previousPhase",
-  "nextPhase",
   "mimeType",
   "size",
   "itemType",
@@ -41,9 +39,6 @@ const ALLOWED_METADATA_KEYS = new Set([
   "failed",
   "skipped",
   "hasFile",
-  "role",
-  "accessState",
-  "automatic",
 ]);
 
 const SENSITIVE_METADATA_KEY_PARTS = [
@@ -227,28 +222,6 @@ export async function recordProductAuditEvent(input: {
 export async function recordProductAuditEventBestEffort(input: Parameters<typeof recordProductAuditEvent>[0]) {
   try {
     await recordProductAuditEvent(input);
-  } catch {
-    // Audit prodotto ordinario e best-effort: non blocca il flusso utente.
-  }
-}
-
-export async function recordProductAuditEventsBestEffort(inputs: Array<Parameters<typeof recordProductAuditEvent>[0]>) {
-  if (!inputs.length) return;
-  try {
-    await db.productAuditEvent.createMany({
-      data: inputs.map((input) => ({
-        organizationId: input.organizationId,
-        actorUserId: input.actorUserId ?? null,
-        actorRole: input.actorRole ?? null,
-        action: input.action,
-        entityType: input.entityType,
-        entityId: input.entityId ?? null,
-        outcome: input.outcome ?? "SUCCESS",
-        metadata: sanitizeAuditMetadata(input.metadata) as Prisma.InputJsonValue | undefined,
-        requestId: input.requestId ?? null,
-        supportSessionId: input.supportSessionId ?? null,
-      })),
-    });
   } catch {
     // Audit prodotto ordinario e best-effort: non blocca il flusso utente.
   }

@@ -30,9 +30,9 @@ export default async function PlatformUsersPage({ searchParams }: { searchParams
                 <article className={styles.record} key={user.id}>
                   <div className={styles.recordHeader}>
                     <div><h2>{[user.firstName, user.lastName].filter(Boolean).join(" ") || user.username}</h2><p className={styles.meta}>{user.email} · @{user.username}</p></div>
-                    <WorkspaceState label={user.suspendedAt ? "Sospeso" : user.platformRole === "SUPPORT_AGENT" ? "Support Agent" : user.platformRole === "PLATFORM_ADMIN" ? "Platform Admin" : "Attivo"} tone={user.suspendedAt ? "danger" : user.platformRole === "SUPPORT_AGENT" || user.platformRole === "PLATFORM_ADMIN" ? "info" : "good"} />
+                    <WorkspaceState label={user.suspendedAt ? "Sospeso" : user.platformRole === "SUPER_ADMIN" ? "Operatore Qoovex" : "Attivo"} tone={user.suspendedAt ? "danger" : user.platformRole === "SUPER_ADMIN" ? "info" : "good"} />
                   </div>
-                  <p className="text-muted-foreground">{user.organizationMemberships.filter((membership) => membership.revokedAt === null).map((membership) => `${membership.organization.name} (${membership.role})`).join(", ") || "Nessuna azienda attiva"}</p>
+                  <p className="text-muted-foreground">{user.organizationMembership?.revokedAt === null ? `${user.organizationMembership.organization.name} (${user.organizationMembership.role})` : "Nessuna azienda attiva"}</p>
                   <div className={styles.actions}><Link className={styles.linkButton} href={`/qoovex-admin/users/${user.id}`}>Apri dettaglio</Link></div>
                 </article>
               ))}

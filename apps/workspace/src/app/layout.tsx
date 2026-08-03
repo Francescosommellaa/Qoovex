@@ -11,7 +11,7 @@ const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono"
 
 export const metadata = {
   title: "Qoovex",
-  description: "Spazio condiviso tra impresa e cliente per documentare lavori, modifiche, prove e pagamenti.",
+  description: "Dashboard operativa per documenti, scadenze e prove di cantiere.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

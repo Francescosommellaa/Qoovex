@@ -1,4 +1,0 @@
-"use client";
-import { useState } from "react";
-import { Button } from "@qoovex/ui/components/button";
-export function ExportAccessButton({ token }: { token: string }) { const [state, setState] = useState<"idle" | "pending" | "error">("idle"); async function open() { setState("pending"); const response = await fetch(`/api/exports/access/${encodeURIComponent(token)}`, { method: "POST" }); const body = await response.json().catch(() => null) as { downloadGrant?: string; error?: { message?: string } } | null; if (!response.ok || !body?.downloadGrant) { setState("error"); return; } window.location.assign(`/api/exports/download/${encodeURIComponent(body.downloadGrant)}`); setState("idle"); } return <div><Button disabled={state === "pending"} onClick={() => void open()}>{state === "pending" ? "Preparazione…" : "Scarica export"}</Button>{state === "error" ? <p className="mt-2 text-sm text-destructive" role="alert">Link scaduto o non disponibile.</p> : null}</div>; }

@@ -58,12 +58,12 @@ export async function bootstrapDevUser() {
     const verifiedUser = await ensureDevUserEmailVerified(existingUser);
     return {
       ...verifiedUser,
-      platformRole: devSession.view === "OWNER" ? "USER" as const : devSession.view,
+      platformRole: "SUPER_ADMIN" as const,
       suspendedAt: null,
       suspensionReason: null,
       imageUrl: null,
       isAdmin: true,
-      devView: devSession.view,
+      devRole: devSession.role,
     };
   }
 
@@ -75,12 +75,12 @@ export async function bootstrapDevUser() {
 
   return {
     ...verifiedUser,
-    platformRole: devSession.view === "OWNER" ? "USER" as const : devSession.view,
+    platformRole: "SUPER_ADMIN" as const,
     suspendedAt: null,
     suspensionReason: null,
     imageUrl: null,
     isAdmin: true,
-    devView: devSession.view,
+    devRole: devSession.role,
   };
 }
 

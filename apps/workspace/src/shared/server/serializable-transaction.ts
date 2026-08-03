@@ -17,14 +17,6 @@ export function isPrismaKnownRequestError(error: unknown, code: string) {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === code;
 }
 
-function isTransactionStartConflict(error: unknown) {
-  if (!(error instanceof Prisma.PrismaClientKnownRequestError) || error.code !== "P2039") return false;
-  const driverAdapterError = error.meta?.driverAdapterError;
-  if (!driverAdapterError || typeof driverAdapterError !== "object" || !("cause" in driverAdapterError)) return false;
-  const cause = driverAdapterError.cause;
-  return Boolean(cause && typeof cause === "object" && "originalCode" in cause && cause.originalCode === "25001");
-}
-
 function waitBeforeRetry(attempt: number) {
   const exponentialDelay = Math.min(BASE_RETRY_DELAY_MS * 2 ** (attempt - 1), MAX_RETRY_DELAY_MS);
   const jitter = Math.floor(Math.random() * BASE_RETRY_DELAY_MS);
@@ -43,11 +35,11 @@ export async function runSerializableTransaction<T>(
         isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
       });
     } catch (error) {
-      const transactionConflict = isPrismaKnownRequestError(error, "P2034") || isTransactionStartConflict(error);
-      const retryable = transactionConflict || (await options.shouldRetry?.(error)) === true;
+      const serializationConflict = isPrismaKnownRequestError(error, "P2034");
+      const retryable = serializationConflict || (await options.shouldRetry?.(error)) === true;
       if (!retryable) throw error;
       if (attempt === MAX_SERIALIZABLE_ATTEMPTS) {
-        if (transactionConflict) throw new SerializableTransactionConflictError();
+        if (serializationConflict) throw new SerializableTransactionConflictError();
         throw error;
       }
       await waitBeforeRetry(attempt);

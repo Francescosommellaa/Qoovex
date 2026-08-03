@@ -5,6 +5,8 @@ import type {
   BlobOrphanCleanupResponse,
   BlobOrphanDryRunResponse,
   CreateDataExportJobResponse,
+  CreateOrganizationDeletionJobInput,
+  CreateOrganizationDeletionJobResponse,
   DataControlJobListResponse,
   DataControlJobResponse,
   DataControlJobType,
@@ -14,14 +16,15 @@ import { AccessError } from "@shared/server/access-errors";
 import { deletePrivateBlobs, getPrivateBlob, listPrivateBlobs, putPrivateBlob } from "./blob-storage-service";
 import { requireDataControlAccess } from "./data-control-access";
 import { buildDataExportForOrganization } from "./data-export-service";
+import { trimRequiredText } from "./document-domain-validation";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { recordSupportAccess } from "./support-access-service";
-import { canonicalize } from "./vnext-contracts";
 
 const MAX_EXPORT_SIZE_BYTES = 50 * 1024 * 1024;
 const BLOB_CLEANUP_MIN_AGE_MS = 24 * 60 * 60 * 1000;
 const DEFAULT_ORPHAN_SCAN_LIMIT = 500;
 const DEFAULT_CLEANUP_LIMIT = 50;
+const DELETE_CONFIRMATION = "ELIMINA DEFINITIVAMENTE";
 const STALE_JOB_AFTER_MS = 30 * 60 * 1000;
 const MAX_JOB_ATTEMPTS = 5;
 const RETRY_DELAYS_MS = [60_000, 5 * 60_000, 15 * 60_000, 60 * 60_000] as const;
@@ -143,18 +146,12 @@ export async function getDataExportJobBlob(jobId: string) {
 }
 
 async function collectReferencedBlobPathnames(organizationId: string) {
-  const [versions, evidence, exports, jobSiteAttachments, jobSiteExports, propertyImages, avatarUsers] = await Promise.all([
+  const [versions, evidence, exports, avatarUsers] = await Promise.all([
     db.documentVersion.findMany({ where: { organizationId }, select: { blobKey: true } }),
     db.evidence.findMany({ where: { organizationId, blobKey: { not: null } }, select: { blobKey: true } }),
     db.dataControlJob.findMany({ where: { organizationId, blobKey: { not: null } }, select: { blobKey: true } }),
-    db.jobSiteAttachment.findMany({ where: { organizationId }, select: { blobKey: true } }),
-    db.jobSiteExport.findMany({ where: { organizationId, blobKey: { not: null } }, select: { blobKey: true } }),
-    db.clientProperty.findMany({
-      where: { imageBlobKey: { not: null }, jobSites: { some: { organizationId, archivedAt: null } } },
-      select: { imageBlobKey: true },
-    }),
     db.user.findMany({
-      where: { organizationMemberships: { some: { organizationId, revokedAt: null } }, avatarBlobPathname: { not: null } },
+      where: { organizationMembership: { is: { organizationId, revokedAt: null } }, avatarBlobPathname: { not: null } },
       select: { avatarBlobPathname: true },
     }),
   ]);
@@ -162,9 +159,6 @@ async function collectReferencedBlobPathnames(organizationId: string) {
     ...versions.map((item) => item.blobKey),
     ...evidence.flatMap((item) => item.blobKey ? [item.blobKey] : []),
     ...exports.flatMap((item) => item.blobKey ? [item.blobKey] : []),
-    ...jobSiteAttachments.map((item) => item.blobKey),
-    ...jobSiteExports.flatMap((item) => item.blobKey ? [item.blobKey] : []),
-    ...propertyImages.flatMap((item) => item.imageBlobKey ? [item.imageBlobKey] : []),
     ...avatarUsers.flatMap((item) => item.avatarBlobPathname ? [item.avatarBlobPathname] : []),
   ]);
 }
@@ -214,6 +208,50 @@ export async function createBlobOrphanCleanupJob(): Promise<BlobOrphanCleanupRes
     organizationId,
     ...auditActorFromContext(context, actorRole),
     action: "DATA_CONTROL_JOB_CREATED",
+    entityType: "DATA_CONTROL_JOB",
+    entityId: job.id,
+    metadata: { type: job.type },
+  });
+  return { job: toJobResponse(job), created: true };
+}
+
+function isUniqueConstraintError(error: unknown) {
+  return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
+}
+
+export async function createOrganizationDeletionJob(
+  input: CreateOrganizationDeletionJobInput | Record<string, unknown>,
+): Promise<CreateOrganizationDeletionJobResponse> {
+  const { context, organizationId, actorRole } = await requireDataControlAccess();
+  const organization = await db.organization.findUnique({ where: { id: organizationId }, select: { code: true } });
+  if (!organization) throw new AccessError("Azienda non trovata.", 404);
+  const organizationCode = trimRequiredText(input.organizationCode, "Codice azienda", 1, 160);
+  const confirmation = trimRequiredText(input.confirmation, "Conferma cancellazione", 1, 160);
+  if (organizationCode !== organization.code || confirmation !== DELETE_CONFIRMATION) {
+    throw new AccessError("Conferma cancellazione non valida.", 409);
+  }
+
+  const activeKey = `organization-delete:${organizationId}`;
+  let job: JobRecord;
+  try {
+    job = await createJob({
+      organizationId,
+      requestedById: context.userId,
+      type: "ORGANIZATION_DELETE",
+      activeKey,
+      resultSummary: { organizationCode },
+    });
+  } catch (error) {
+    if (!isUniqueConstraintError(error)) throw error;
+    const existing = await db.dataControlJob.findUnique({ where: { activeKey }, select: jobSelect });
+    if (!existing) throw error;
+    return { job: toJobResponse(existing), created: false };
+  }
+
+  await recordProductAuditEventBestEffort({
+    organizationId,
+    ...auditActorFromContext(context, actorRole),
+    action: "ORGANIZATION_DELETE_REQUESTED",
     entityType: "DATA_CONTROL_JOB",
     entityId: job.id,
     metadata: { type: job.type },
@@ -290,7 +328,7 @@ async function retryOrFailJob(job: JobRecord) {
 
 async function runMetadataExportJob(job: JobRecord): Promise<JobResult> {
   const exportPayload = await buildDataExportForOrganization(job.organizationId);
-  const body = Buffer.from(JSON.stringify(canonicalize(exportPayload), null, 2), "utf8");
+  const body = Buffer.from(JSON.stringify(exportPayload, null, 2), "utf8");
   const blobKey = `organizations/${job.organizationId}/exports/${job.id}/metadata.json`;
   await putPrivateBlob({
     pathname: blobKey,
@@ -316,9 +354,28 @@ async function runOrphanBlobCleanupJob(job: JobRecord): Promise<JobResult> {
   };
 }
 
+async function runOrganizationDeleteJob(job: JobRecord): Promise<JobResult> {
+  const prefix = `organizations/${job.organizationId}/`;
+  await db.organization.deleteMany({ where: { id: job.organizationId } });
+  let deletedBlobs = 0;
+
+  while (true) {
+    const page = await listPrivateBlobs({ prefix, limit: 100 });
+    const pathnames = page.blobs
+      .filter((blob) => blob.pathname.startsWith(prefix))
+      .map((blob) => blob.pathname);
+    if (!pathnames.length) break;
+    await deletePrivateBlobs(pathnames);
+    deletedBlobs += pathnames.length;
+  }
+
+  return { resultSummary: { deletedBlobs, organizationDeleted: true } };
+}
+
 async function executeJob(job: JobRecord): Promise<JobResult> {
   if (job.type === "METADATA_EXPORT") return runMetadataExportJob(job);
   if (job.type === "ORPHAN_BLOB_CLEANUP") return runOrphanBlobCleanupJob(job);
+  if (job.type === "ORGANIZATION_DELETE") return runOrganizationDeleteJob(job);
   throw new Error("UNSUPPORTED_DATA_CONTROL_JOB");
 }
 
@@ -333,7 +390,8 @@ export async function runDataControlJobs(): Promise<RunDataControlJobsResponse> 
       result.skipped += 1;
       return { ...result, generatedAt: new Date().toISOString() };
     }
-    await recordProductAuditEventBestEffort({
+    if (runningJob.type !== "ORGANIZATION_DELETE") {
+      await recordProductAuditEventBestEffort({
         organizationId: runningJob.organizationId,
         actorUserId: runningJob.requestedById,
         action: runningJob.type === "ORPHAN_BLOB_CLEANUP" ? "ORPHAN_BLOB_CLEANUP_RUN" : "DATA_CONTROL_JOB_RUN",
@@ -341,14 +399,16 @@ export async function runDataControlJobs(): Promise<RunDataControlJobsResponse> 
         entityId: runningJob.id,
         outcome: "SUCCESS",
         metadata: { type: runningJob.type },
-    });
+      });
+    }
     result.completed += 1;
   } catch {
     if (!(await retryOrFailJob(runningJob))) {
       result.skipped += 1;
       return { ...result, generatedAt: new Date().toISOString() };
     }
-    await recordProductAuditEventBestEffort({
+    if (runningJob.type !== "ORGANIZATION_DELETE") {
+      await recordProductAuditEventBestEffort({
         organizationId: runningJob.organizationId,
         actorUserId: runningJob.requestedById,
         action: "DATA_CONTROL_JOB_RUN",
@@ -356,7 +416,8 @@ export async function runDataControlJobs(): Promise<RunDataControlJobsResponse> 
         entityId: runningJob.id,
         outcome: "FAILED",
         metadata: { type: runningJob.type },
-    });
+      });
+    }
     result.failed += 1;
   }
 

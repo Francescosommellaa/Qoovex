@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "protectedProductionHead": "20260720010000_calendar_events",
+  "migrations": [
+    {
+      "name": "20260712010000_single_company_baseline",
+      "sha256": "08522949f5b157b52803f5cc8991ae2537260ec5a2173611fdcfde7293449493",
+      "productionApplied": true
+    },
+    {
+      "name": "20260712020000_single_membership_forward",
+      "sha256": "813713553e290ab9b4b125dc663690b72b6c4505805888fee48d8ad7cb705cc2",
+      "productionApplied": true
+    },
+    {
+      "name": "20260713010000_mfa_hardening",
+      "sha256": "c68dc686c00451a943ab4a97f03bf796bb9a7e463f305aaad2af354f62627374",
+      "productionApplied": true
+    },
+    {
+      "name": "20260713020000_rate_limit_privacy_atomicity",
+      "sha256": "ebd26dab2f13d740c02d4c2951c374eeb072e5f3b85f1b93c7003ed7a6df005b",
+      "productionApplied": true
+    },
+    {
+      "name": "20260720010000_calendar_events",
+      "sha256": "663ccdc847ce252a892fd93166ae6a0d44398ea5b5d2a6bd9fc081d548ced7ce",
+      "productionApplied": true
+    }
+  ]
+}

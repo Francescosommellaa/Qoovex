@@ -9,12 +9,9 @@ const environment = vi.hoisted(() => {
   if (!value) return { isLocalCiDatabase: false };
   try {
     const url = new URL(value);
-    const isAttestedLocalE2e = process.env.QOOVEX_E2E_MODE === "1"
-      && process.env.QOOVEX_E2E_DATABASE_TARGET === value
-      && process.env.QOOVEX_E2E_RUN_ATTESTATION === "I_ACKNOWLEDGE_FIXTURE_SCOPED_CLEANUP";
     return {
       isLocalCiDatabase: new Set(["localhost", "127.0.0.1", "::1"]).has(url.hostname)
-        && (url.pathname.replace(/^\//, "") === "qoovex_ci" || isAttestedLocalE2e),
+        && url.pathname.replace(/^\//, "") === "qoovex_ci",
     };
   } catch {
     return { isLocalCiDatabase: false };
@@ -115,7 +112,7 @@ async function createInvitationFixture(input: {
     data: {
       organizationId: input.organizationId,
       email: input.email,
-      role: "COLLABORATOR",
+      role: "WORKER",
       tokenHash: invitationTokenHash(input.token),
       invitedById: input.invitedById,
       expiresAt: new Date(Date.now() + 60_000),
@@ -140,8 +137,8 @@ afterEach(async () => {
   createdUserIds.length = 0;
 });
 
-describeOnLocalCi("multi-organization membership concurrency on PostgreSQL", () => {
-  it("preserves both organization creation and invitation acceptance", async () => {
+describeOnLocalCi("single membership concurrency on PostgreSQL", () => {
+  it("allows only one winner between organization creation and invitation acceptance", async () => {
     const inviter = await createUser("inviter");
     const user = await createUser("subject");
     const invitedOrganization = await createOrganizationFixture("Invited organization", inviter.id);
@@ -159,14 +156,16 @@ describeOnLocalCi("multi-organization membership concurrency on PostgreSQL", () 
       acceptInvitation(token),
     ]);
 
-    expect(creation.status).toBe("fulfilled");
-    expect(acceptance.status).toBe("fulfilled");
-    const memberships = await db.organizationMembership.findMany({
+    expect([creation, acceptance].filter((result) => result.status === "fulfilled")).toHaveLength(1);
+    const loser = [creation, acceptance].find((result) => result.status === "rejected");
+    expect(loser).toMatchObject({ reason: { status: 409 } });
+
+    const membership = await db.organizationMembership.findUnique({
       where: { userId: user.id },
       select: { organizationId: true, revokedAt: true },
     });
-    expect(memberships).toHaveLength(2);
-    expect(memberships.every((membership) => membership.revokedAt === null)).toBe(true);
+    expect(membership?.revokedAt).toBeNull();
+    expect(await db.organizationMembership.count({ where: { userId: user.id, revokedAt: null } })).toBe(1);
 
     const storedInvitation = await db.organizationInvitation.findUnique({
       where: { id: invitation.id },
@@ -176,12 +175,19 @@ describeOnLocalCi("multi-organization membership concurrency on PostgreSQL", () 
       where: { createdById: user.id, name: "Concurrent organization" },
       select: { id: true },
     });
-    expect(storedInvitation?.acceptedAt).toBeInstanceOf(Date);
-    expect(createdOrganizations).toHaveLength(1);
-    expect(memberships.map((membership) => membership.organizationId).sort()).toEqual([createdOrganizations[0]!.id, invitedOrganization.id].sort());
+    if (creation.status === "fulfilled") {
+      expect(membership?.organizationId).toBe(creation.value.id);
+      expect(storedInvitation?.acceptedAt).toBeNull();
+      expect(createdOrganizations).toEqual([{ id: creation.value.id }]);
+    } else {
+      expect(acceptance.status).toBe("fulfilled");
+      expect(membership?.organizationId).toBe(invitedOrganization.id);
+      expect(storedInvitation?.acceptedAt).toBeInstanceOf(Date);
+      expect(createdOrganizations).toHaveLength(0);
+    }
   });
 
-  it("accepts invitations from two distinct organizations without reusing a revoked row", async () => {
+  it("reuses one revoked row and consumes only the winning invitation", async () => {
     const inviter = await createUser("inviter");
     const user = await createUser("subject");
     const previousOrganization = await createOrganizationFixture("Previous organization", inviter.id);
@@ -191,8 +197,7 @@ describeOnLocalCi("multi-organization membership concurrency on PostgreSQL", () 
       data: {
         organizationId: previousOrganization.id,
         userId: user.id,
-        role: "COLLABORATOR",
-        preset: "CUSTOM",
+        role: "WORKER",
         revokedAt: new Date(),
       },
     });
@@ -217,21 +222,23 @@ describeOnLocalCi("multi-organization membership concurrency on PostgreSQL", () 
       acceptInvitation(secondToken),
     ]);
 
-    expect(results.every((result) => result.status === "fulfilled")).toBe(true);
-    const memberships = await db.organizationMembership.findMany({
+    expect(results.filter((result) => result.status === "fulfilled")).toHaveLength(1);
+    expect(results.find((result) => result.status === "rejected")).toMatchObject({ reason: { status: 409 } });
+
+    const membership = await db.organizationMembership.findUniqueOrThrow({
       where: { userId: user.id },
       select: { organizationId: true, revokedAt: true },
     });
-    expect(memberships.filter((membership) => membership.revokedAt === null)).toHaveLength(2);
-    expect(memberships.find((membership) => membership.organizationId === previousOrganization.id)?.revokedAt).toBeInstanceOf(Date);
+    expect(membership.revokedAt).toBeNull();
     const invitations = await db.organizationInvitation.findMany({
       where: { id: { in: [firstInvitation.id, secondInvitation.id] } },
       select: { organizationId: true, acceptedAt: true },
     });
     const accepted = invitations.filter((invitation) => invitation.acceptedAt !== null);
-    expect(accepted).toHaveLength(2);
-    expect(await db.organizationMembership.count({ where: { userId: user.id } })).toBe(3);
+    expect(accepted).toHaveLength(1);
+    expect(accepted[0]?.organizationId).toBe(membership.organizationId);
+    expect(await db.organizationMembership.count({ where: { userId: user.id } })).toBe(1);
     await expect(db.user.findUniqueOrThrow({ where: { id: user.id }, select: { authVersion: true } }))
-      .resolves.toEqual({ authVersion: 3 });
+      .resolves.toEqual({ authVersion: 2 });
   });
 });

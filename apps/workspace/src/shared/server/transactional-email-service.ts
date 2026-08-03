@@ -13,7 +13,7 @@ export type SecurityEmailEvent =
   | "MFA_RECOVERY_DENIED"
   | "NEW_DEVICE";
 
-type InviteRole = "COLLABORATOR";
+type InviteRole = "ADMIN" | "SAFETY_CONSULTANT" | "SITE_MANAGER" | "WORKER";
 
 export interface NotificationEmailItem {
   title: string;
@@ -39,19 +39,6 @@ export type TransactionalEmailTemplate =
       organizationName?: string;
       role: InviteRole;
       acceptUrl: string;
-      expiresAt: Date;
-    }
-  | {
-      kind: "client-invitation";
-      organizationName: string;
-      jobSiteName: string;
-      acceptUrl: string;
-      expiresAt: Date;
-    }
-  | {
-      kind: "export-ready";
-      jobSiteName: string;
-      accessUrl: string;
       expiresAt: Date;
     }
   | {
@@ -267,24 +254,10 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
         intro: `Sei stato invitato a collaborare in ${organizationName}. Apri ${input.template.acceptUrl} entro ${formatSecurityDate(input.template.expiresAt)}.`,
       };
     }
-    if (input.template.kind === "client-invitation") {
-      return {
-        subject: `${input.template.organizationName} ti ha invitato su Qoovex`,
-        title: "Invito al cantiere",
-        intro: `Accedi per partecipare al cantiere ${input.template.jobSiteName}. Apri ${input.template.acceptUrl} entro ${formatSecurityDate(input.template.expiresAt)}.`,
-      };
-    }
-    if (input.template.kind === "export-ready") {
-      return {
-        subject: `Export Qoovex pronto - ${input.template.jobSiteName}`,
-        title: "Export pronto",
-        intro: `Apri ${input.template.accessUrl} entro ${formatSecurityDate(input.template.expiresAt)}. L'archivio non e allegato a questa email.`,
-      };
-    }
     if (input.template.kind === "notification-digest") {
       return {
-        subject: "Qoovex - Attivita da controllare",
-        title: "Attivita da controllare",
+        subject: "Qoovex - Promemoria documenti e scadenze",
+        title: "Elementi da controllare",
         intro: `${input.template.unreadCount} notifiche non lette da controllare nel workspace Qoovex.`,
       };
     }
@@ -337,7 +310,7 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
   const secondary = (() => {
     if (input.template.kind === "auth-code") return "Scade tra 10 minuti e puo essere usato una sola volta.";
     if (input.template.kind === "notification-digest" || input.template.kind === "notification-single") {
-      return "Le informazioni dipendono dai dati registrati in Qoovex e vanno confermate con il referente autorizzato dell'azienda. L'email non include file o link di download.";
+      return "Le informazioni dipendono dai dati registrati in Qoovex e vanno confermate con il responsabile o consulente. L'email non include file o link di download.";
     }
     if (input.template.kind === "mfa-recovery-request") return "Approva solo se riconosci la richiesta. La decisione richiede il tuo fattore MFA corrente.";
     if (input.template.kind === "mfa-recovery-decision") return "La prima decisione valida chiude la richiesta per tutti gli OWNER.";
@@ -438,15 +411,14 @@ export async function sendTransactionalEmail(input: {
   template: TransactionalEmailTemplate;
   idempotencyKey?: string;
 }): Promise<{ providerMessageId: string | null }> {
-  const sink = getE2eEmailSink();
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const from = process.env.RESEND_FROM_EMAIL?.trim();
   const replyTo = process.env.RESEND_REPLY_TO_EMAIL?.trim();
   const rendered = renderEmail(input);
 
-  if (sink) return sendToE2eEmailSink({ sink, ...input, rendered });
-
   if (!apiKey || !from) {
+    const sink = getE2eEmailSink();
+    if (sink) return sendToE2eEmailSink({ sink, ...input, rendered });
     throw new TransactionalEmailError("Email transazionali non configurate.");
   }
 

@@ -11,29 +11,30 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "tsx scripts/migrate-deploy.ts",
-    "db:access:backfill": "tsx scripts/access-model-backfill.ts",
+    "db:preview:recreate": "tsx scripts/recreate-preview-database.ts",
     "db:seed": "prisma db seed",
     "db:fixtures:inventory:local": "tsx scripts/fixture-inventory.ts local",
     "db:fixtures:inventory:production": "tsx scripts/fixture-inventory.ts production",
     "db:start:local": "tsx scripts/start-local-database.ts",
     "verify:prisma": "tsx scripts/verify-prisma.ts",
+    "verify:head": "tsx scripts/verify-database-head.ts",
     "test": "tsx --test scripts/*.test.ts",
     "test:upgrade": "tsx scripts/rate-limit-upgrade.integration.ts",
     "db:workspace": "prisma workspace",
     "db:studio": "tsx scripts/assert-local-database.ts prisma-studio && prisma studio",
     "guard:local": "tsx scripts/assert-local-database.ts local-development",
-    "postinstall": "(prisma generate && node scripts/normalize-generated.mjs) || true"
+    "postinstall": "prisma generate && node scripts/normalize-generated.mjs"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.9.1",
-    "@prisma/client": "^7.9.1",
+    "@prisma/adapter-pg": "7.9.0",
+    "@prisma/client": "7.9.0",
     "dotenv": "^17.4.2",
-    "pg": "^8.22.0"
+    "pg": "8.21.0"
   },
   "devDependencies": {
     "@types/node": "^25.9.5",
     "@types/pg": "^8.20.0",
-    "prisma": "^7.9.1",
+    "prisma": "7.9.0",
     "tsx": "^4.23.1",
     "typescript": "^6.0.3"
   }

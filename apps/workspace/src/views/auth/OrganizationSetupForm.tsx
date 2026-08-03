@@ -34,7 +34,7 @@ export function OrganizationSetupForm() {
       return;
     }
 
-    router.push("/contexts");
+    router.push("/dashboard");
     router.refresh();
   }
 

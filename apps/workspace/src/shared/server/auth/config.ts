@@ -81,9 +81,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.sub ?? "";
-        session.user.platformRole = token.platformRole === "SUPPORT_AGENT" || token.platformRole === "PLATFORM_ADMIN"
-          ? token.platformRole
-          : "USER";
+        session.user.platformRole = token.platformRole === "SUPER_ADMIN" ? "SUPER_ADMIN" : "USER";
         session.user.authSessionId = typeof token.authSessionId === "string" ? token.authSessionId : "";
       }
 

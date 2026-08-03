@@ -9,7 +9,6 @@ export default async function PlatformUserDetailPage({ params }: { params: Promi
   try {
     const [{ userId }, actor] = await Promise.all([params, requireQoovexOperator()]);
     const user = await getPlatformUserDetail(userId);
-    const activeMemberships = user.organizationMemberships.filter((membership) => membership.revokedAt === null);
     return (
       <WorkspacePage>
         <WorkspacePageHeader title={[user.firstName, user.lastName].filter(Boolean).join(" ") || user.username} description={`${user.email} · @${user.username}`} />
@@ -22,11 +21,11 @@ export default async function PlatformUserDetailPage({ params }: { params: Promi
               <WorkspaceState label={`${user._count.sessions} sessioni persistenti`} />
             </div>
             {user.suspensionReason ? <p className={styles.error}>{user.suspensionReason}</p> : null}
-            <PlatformUserActions userId={user.id} suspended={Boolean(user.suspendedAt)} protectedAccount={user.id === actor.id || user.platformRole === "SUPPORT_AGENT" || user.platformRole === "PLATFORM_ADMIN"} />
+            <PlatformUserActions userId={user.id} suspended={Boolean(user.suspendedAt)} protectedAccount={user.id === actor.id || user.platformRole === "SUPER_ADMIN"} />
           </div>
         </WorkspacePanel>
         <WorkspacePanel title="Membership attive">
-          <div className={styles.recordList}>{activeMemberships.length ? activeMemberships.map((membership) => <div className={styles.record} key={membership.id}><strong>{membership.organization.name}</strong><span className={styles.meta}>{membership.organization.code} · {membership.role}</span></div>) : <p className="text-muted-foreground">Nessuna azienda attiva</p>}</div>
+          <div className={styles.recordList}>{user.organizationMembership?.revokedAt === null ? <div className={styles.record}><strong>{user.organizationMembership.organization.name}</strong><span className={styles.meta}>{user.organizationMembership.organization.code} · {user.organizationMembership.role}</span></div> : <p className="text-muted-foreground">Nessuna azienda attiva</p>}</div>
         </WorkspacePanel>
         <WorkspacePanel title="Eventi sicurezza recenti">
           <div className={styles.recordList}>{user.securityEvents.map((event) => <div className={styles.record} key={event.id}><strong>{event.type}</strong><span className={styles.meta}>{event.createdAt.toLocaleString("it-IT")}</span></div>)}</div>

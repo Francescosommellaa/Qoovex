@@ -7,6 +7,9 @@ describe("public API route allowlist", () => {
       "/api/auth/session",
       "/api/dev-auth",
       "/api/data/jobs/run",
+      "/api/reminders/email-digest/run",
+      "/api/shared/document-packages/raw-token",
+      "/api/shared/document-packages/raw-token/items/item-1/download",
     ];
 
     for (const pathname of publicPaths) {
@@ -16,11 +19,12 @@ describe("public API route allowlist", () => {
 
   it("keeps workspace and non-token shared APIs protected", () => {
     const protectedPaths = [
-      "/api/contexts",
-      "/api/org/org-1/job-sites",
-      "/api/client/job-sites",
-      "/api/exports/download/grant",
-      "/api/shared/removed",
+      "/api/context",
+      "/api/documents",
+      "/api/document-packages/package-1/share-links",
+      "/api/shared",
+      "/api/shared/document-packages",
+      "/api/shared/other",
     ];
 
     for (const pathname of protectedPaths) {

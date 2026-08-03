@@ -3,7 +3,7 @@ packages:
   - "packages/*"
 overrides:
   # Prisma's AJV range accepts this patched release; covers both fast-uri advisories.
-  fast-uri: "3.1.4"
+  fast-uri: "3.1.5"
   # Temporary leaf pins until Prisma 7 ships @prisma/dev with the patched releases.
   # Recheck and remove when upstream catches up; review no later than 2026-08-26.
   find-my-way: "9.7.0"
@@ -26,4 +26,4 @@ minimumReleaseAgeExclude:
   - '@full-ui/headless-calendar@7.0.1'
   - '@fullcalendar/core@7.0.1'
   - '@fullcalendar/react@7.0.1'
-  - fast-uri@3.1.4
+  - fast-uri@3.1.5

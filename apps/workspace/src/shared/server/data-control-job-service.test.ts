@@ -17,9 +17,6 @@ const mocks = vi.hoisted(() => {
       organization: { findUnique: vi.fn(), deleteMany: vi.fn() },
       documentVersion: { findMany: vi.fn() },
       evidence: { findMany: vi.fn() },
-      jobSiteAttachment: { findMany: vi.fn() },
-      jobSiteExport: { findMany: vi.fn() },
-      clientProperty: { findMany: vi.fn() },
       user: { findMany: vi.fn() },
     },
     requireDataControlAccess: vi.fn(),
@@ -60,13 +57,14 @@ vi.mock("./product-audit-service", () => ({
 }));
 
 import {
+  createOrganizationDeletionJob,
   getBlobOrphanDryRun,
   runDataControlJobs,
 } from "./data-control-job-service";
 
 const now = new Date("2026-07-12T10:00:00.000Z");
 
-function job(type: "METADATA_EXPORT" | "ORPHAN_BLOB_CLEANUP" = "METADATA_EXPORT") {
+function job(type: "METADATA_EXPORT" | "ORGANIZATION_DELETE" | "ORPHAN_BLOB_CLEANUP" = "METADATA_EXPORT") {
   return {
     id: `job-${type}`,
     organizationId: "org-1",
@@ -75,7 +73,7 @@ function job(type: "METADATA_EXPORT" | "ORPHAN_BLOB_CLEANUP" = "METADATA_EXPORT"
     status: "RUNNING" as const,
     attemptCount: 1,
     nextAttemptAt: now,
-    activeKey: null,
+    activeKey: type === "ORGANIZATION_DELETE" ? "organization-delete:org-1" : null,
     blobKey: null,
     resultSummary: null,
     errorCode: null,
@@ -96,9 +94,6 @@ beforeEach(() => {
   mocks.db.organization.deleteMany.mockResolvedValue({ count: 1 });
   mocks.db.documentVersion.findMany.mockResolvedValue([]);
   mocks.db.evidence.findMany.mockResolvedValue([]);
-  mocks.db.jobSiteAttachment.findMany.mockResolvedValue([]);
-  mocks.db.jobSiteExport.findMany.mockResolvedValue([]);
-  mocks.db.clientProperty.findMany.mockResolvedValue([]);
   mocks.db.user.findMany.mockResolvedValue([]);
   mocks.listPrivateBlobs.mockResolvedValue({ cursor: undefined, hasMore: false, blobs: [] });
   mocks.putPrivateBlob.mockResolvedValue({ pathname: "organizations/org-1/exports/job-METADATA_EXPORT/metadata.json" });
@@ -148,6 +143,18 @@ describe("data-control job service", () => {
     await expect(getBlobOrphanDryRun()).rejects.toThrow("BLOB_LIST_CURSOR_MISSING");
   });
 
+  it("returns the existing deletion job when the active key races", async () => {
+    const existing = job("ORGANIZATION_DELETE");
+    mocks.db.dataControlJob.create.mockRejectedValue(new mocks.PrismaClientKnownRequestError("P2002"));
+    mocks.db.dataControlJob.findUnique.mockResolvedValue(existing);
+
+    const response = await createOrganizationDeletionJob({ organizationCode: "QVX-1", confirmation: "ELIMINA DEFINITIVAMENTE" });
+
+    expect(response.created).toBe(false);
+    expect(response.job.id).toBe(existing.id);
+    expect(JSON.stringify(response)).not.toContain("blobKey");
+  });
+
   it("claims a pending export once across concurrent runners and overwrites its deterministic Blob", async () => {
     const running = job("METADATA_EXPORT");
     mocks.db.dataControlJob.findMany.mockResolvedValue([{ id: running.id }]);
@@ -166,6 +173,59 @@ describe("data-control job service", () => {
     expect(mocks.db.dataControlJob.updateMany.mock.calls[2][0].where).toMatchObject({
       id: running.id, status: "RUNNING", startedAt: now,
     });
+  });
+
+  it("deletes the organization before draining Blob pages and accepts an already missing organization", async () => {
+    const running = job("ORGANIZATION_DELETE");
+    mocks.db.dataControlJob.findMany.mockResolvedValue([{ id: running.id }]);
+    mocks.db.dataControlJob.updateMany.mockResolvedValue({ count: 1 });
+    mocks.db.dataControlJob.findUnique.mockResolvedValue(running);
+    mocks.db.organization.deleteMany.mockResolvedValue({ count: 0 });
+    mocks.listPrivateBlobs
+      .mockResolvedValueOnce({ cursor: undefined, hasMore: true, blobs: [{ pathname: "organizations/org-1/a.pdf" }] })
+      .mockResolvedValueOnce({ cursor: undefined, hasMore: false, blobs: [] });
+
+    await expect(runDataControlJobs()).resolves.toMatchObject({ completed: 1 });
+
+    expect(mocks.db.organization.deleteMany).toHaveBeenCalledWith({ where: { id: "org-1" } });
+    expect(mocks.deletePrivateBlobs).toHaveBeenCalledWith(["organizations/org-1/a.pdf"]);
+    expect(mocks.db.organization.deleteMany.mock.invocationCallOrder[0]).toBeLessThan(mocks.deletePrivateBlobs.mock.invocationCallOrder[0]);
+    expect(mocks.recordProductAuditEventBestEffort).not.toHaveBeenCalled();
+  });
+
+  it("does not delete Blob when the database deletion fails and requeues with a safe code", async () => {
+    const running = job("ORGANIZATION_DELETE");
+    mocks.db.dataControlJob.findMany.mockResolvedValue([{ id: running.id }]);
+    mocks.db.dataControlJob.updateMany.mockResolvedValue({ count: 1 });
+    mocks.db.dataControlJob.findUnique.mockResolvedValue(running);
+    mocks.db.organization.deleteMany.mockRejectedValue(new Error("database details must not leak"));
+
+    await expect(runDataControlJobs()).resolves.toMatchObject({ failed: 1, completed: 0 });
+
+    expect(mocks.deletePrivateBlobs).not.toHaveBeenCalled();
+    const retry = mocks.db.dataControlJob.updateMany.mock.calls[1][0];
+    expect(retry.data).toMatchObject({ status: "PENDING", errorCode: "ORGANIZATION_DELETE_FAILED" });
+    expect(JSON.stringify(retry.data)).not.toContain("database details");
+  });
+
+  it("requeues a deletion when Blob cleanup fails after the database commit", async () => {
+    const running = job("ORGANIZATION_DELETE");
+    mocks.db.dataControlJob.findMany.mockResolvedValue([{ id: running.id }]);
+    mocks.db.dataControlJob.updateMany.mockResolvedValue({ count: 1 });
+    mocks.db.dataControlJob.findUnique.mockResolvedValue(running);
+    mocks.listPrivateBlobs.mockResolvedValue({
+      cursor: undefined,
+      hasMore: false,
+      blobs: [{ pathname: "organizations/org-1/a.pdf" }],
+    });
+    mocks.deletePrivateBlobs.mockRejectedValue(new Error("storage provider detail"));
+
+    await expect(runDataControlJobs()).resolves.toMatchObject({ failed: 1, completed: 0 });
+
+    expect(mocks.db.organization.deleteMany).toHaveBeenCalledTimes(1);
+    const retry = mocks.db.dataControlJob.updateMany.mock.calls[1][0];
+    expect(retry.data).toMatchObject({ status: "PENDING", errorCode: "ORGANIZATION_DELETE_FAILED" });
+    expect(JSON.stringify(retry.data)).not.toContain("storage provider detail");
   });
 
   it("does not let a worker complete after losing its fencing token", async () => {

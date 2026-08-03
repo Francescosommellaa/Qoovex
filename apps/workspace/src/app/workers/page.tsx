@@ -1,9 +1,25 @@
-import Link from "next/link";
+import type { OrganizationRole } from "@qoovex/types";
+import { canInviteRole } from "@shared/server/authorization-policy";
 import { listWorkers } from "@shared/server/worker-service";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceEmptyState } from "@/views/workspace/WorkspacePrimitives";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
+import { WorkersPageView } from "@/views/admin-core/workers/WorkersPageView";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
+import type { WorkspaceWorkerRecord } from "@/views/workspace/workspace-records";
 
-export default async function WorkersPage() {
-  const workers = await listWorkers();
-  return <WorkspacePage><WorkspacePageHeader title="Persone operative" description="Profili operativi foundation, distinti dagli account e dalle membership." action={<Link className={buttonVariants()} href="/workers/new">Aggiungi</Link>} />{workers.length ? <WorkspacePanel><ul className="divide-y">{workers.map((worker) => <li className="py-3" key={worker.id}><strong>{worker.displayName}</strong><span className="ml-2 text-sm text-muted-foreground">{worker.roleLabel ?? "Ruolo non indicato"}</span></li>)}</ul></WorkspacePanel> : <WorkspaceEmptyState title="Nessuna persona operativa" description="Aggiungi un profilo quando serve alla foundation aziendale." />}</WorkspacePage>;
+const candidateRoles: Array<Exclude<OrganizationRole, "OWNER">> = ["ADMIN", "SAFETY_CONSULTANT", "SITE_MANAGER", "WORKER"];
+
+interface WorkersPageProps {
+  searchParams: Promise<{ intent?: string }>;
+}
+
+export default async function WorkersPage({ searchParams }: WorkersPageProps) {
+  try {
+    const [workers, capabilities, params] = await Promise.all([listWorkers(), getWorkspaceCapabilities(), searchParams]);
+    const invitableRoles = capabilities.canManageMembers && capabilities.role
+      ? candidateRoles.filter((role) => canInviteRole(capabilities.role as OrganizationRole, role))
+      : [];
+    return <WorkersPageView capabilities={capabilities} initialCreateOpen={params.intent === "create" && capabilities.canCreateWorkers} invitableRoles={invitableRoles} workers={serializeForClient<WorkspaceWorkerRecord[]>(workers)} />;
+  } catch {
+    return <WorkspaceAccessState title="Lavoratori non disponibili" description="Verifica accesso e azienda configurata." />;
+  }
 }

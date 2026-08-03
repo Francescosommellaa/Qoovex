@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { spawnSync } from "node:child_process";
 import pg from "pg";
+import { spawnPrisma } from "./prisma-cli";
 
 const databaseUrl = process.env.DATABASE_URL ?? "";
 const target = new URL(databaseUrl);
@@ -15,47 +15,68 @@ const migrationNames = [
   "20260712020000_single_membership_forward",
   "20260713010000_mfa_hardening",
   "20260713020000_rate_limit_privacy_atomicity",
+  "20260720010000_calendar_events",
 ] as const;
-const client = new pg.Client({ connectionString: databaseUrl });
+async function main() {
+  const client = new pg.Client({ connectionString: databaseUrl });
 
-try {
+  try {
   await client.connect();
   await client.query('DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public');
-  for (const migrationName of migrationNames.slice(0, -1)) {
+  const applyMigration = async (migrationName: (typeof migrationNames)[number]) => {
     const sql = await readFile(resolve("prisma/migrations", migrationName, "migration.sql"), "utf8");
     await client.query(sql);
-  }
+  };
+
+  await applyMigration(migrationNames[0]);
 
   await client.query(`
-    INSERT INTO "User" (id, email, username, "firstName", "createdAt", "updatedAt")
-    VALUES ('upgrade-user', 'upgrade@example.test', 'upgrade_user', 'Upgrade', NOW(), NOW());
+    INSERT INTO "User" (id, email, username, "firstName", "organizationRole", "createdAt", "updatedAt")
+    VALUES ('upgrade-user', 'upgrade@example.test', 'upgrade_user', 'Upgrade', 'OWNER', NOW(), NOW());
     INSERT INTO "Organization" (id, name, code, "createdById", "createdAt", "updatedAt")
     VALUES ('upgrade-org', 'Upgrade fixture', 'UPGRADE-CI', 'upgrade-user', NOW(), NOW());
-    INSERT INTO "OrganizationMembership" (id, "organizationId", "userId", role, "createdAt", "updatedAt")
-    VALUES ('upgrade-membership', 'upgrade-org', 'upgrade-user', 'OWNER', NOW(), NOW());
+    UPDATE "User" SET "organizationId" = 'upgrade-org' WHERE id = 'upgrade-user';
+  `);
+
+  await applyMigration(migrationNames[1]);
+  await applyMigration(migrationNames[2]);
+
+  await client.query(`
     INSERT INTO "AuthRateLimit" (key, bucket, count, "resetAt")
     VALUES ('auth:signin:upgrade@example.test', 'auth:signin', 3, NOW() + INTERVAL '1 hour');
   `);
 
-  const privacySql = await readFile(resolve("prisma/migrations", migrationNames.at(-1)!, "migration.sql"), "utf8");
-  await client.query(privacySql);
+  await applyMigration(migrationNames[3]);
+  await applyMigration(migrationNames[4]);
   const checks = await client.query(`
     SELECT
-      (SELECT COUNT(*)::int FROM "OrganizationMembership" WHERE id = 'upgrade-membership') AS memberships,
+      (SELECT COUNT(*)::int FROM "OrganizationMembership" WHERE "userId" = 'upgrade-user') AS memberships,
       (SELECT COUNT(*)::int FROM "AuthRateLimit") AS rate_limits,
       EXISTS (
         SELECT 1 FROM information_schema.columns
         WHERE table_schema = 'public' AND table_name = 'AuthRateLimit' AND column_name = 'userId'
-      ) AS has_user_id;
+      ) AS has_user_id,
+      to_regclass('public."CalendarEvent"') IS NOT NULL AS has_calendar_event;
   `);
-  const row = checks.rows[0] as { memberships: number; rate_limits: number; has_user_id: boolean };
-  if (row.memberships !== 1 || row.rate_limits !== 0 || !row.has_user_id) throw new Error("Verifica upgrade rate-limit fallita.");
+  const row = checks.rows[0] as {
+    memberships: number;
+    rate_limits: number;
+    has_user_id: boolean;
+    has_calendar_event: boolean;
+  };
+  if (row.memberships !== 1 || row.rate_limits !== 0 || !row.has_user_id || !row.has_calendar_event) {
+    throw new Error("Verifica upgrade baseline -> head Production fallita.");
+  }
 
-  const diff = spawnSync("pnpm", ["exec", "prisma", "migrate", "diff", "--from-config-datasource", "--to-schema", "prisma/schema.prisma", "--exit-code"], {
-    cwd: process.cwd(), env: { ...process.env, DATABASE_URL: databaseUrl }, encoding: "utf8", shell: true,
-  });
+  const diff = spawnPrisma(["migrate", "diff", "--from-config-datasource", "--to-schema", "prisma/schema.prisma", "--exit-code"]);
   if (diff.status !== 0) throw new Error(`Schema finale con drift: ${diff.stdout || diff.stderr}`);
-} finally {
-  await client.query('DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public').catch(() => undefined);
-  await client.end().catch(() => undefined);
+  } finally {
+    await client.query('DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public').catch(() => undefined);
+    await client.end().catch(() => undefined);
+  }
 }
+
+main().catch((error) => {
+  console.error(error instanceof Error ? error.message : error);
+  process.exitCode = 1;
+});

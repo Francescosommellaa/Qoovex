@@ -1,10 +1,9 @@
 import { asAccessResponse } from "@shared/server/access-errors";
 import { createJobSiteWorkerAssignment, listJobSiteWorkerAssignments } from "@shared/server/resource-assignment-service";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const searchParams = new URL(request.url).searchParams;
-    return Response.json(await listJobSiteWorkerAssignments({ jobSiteId: searchParams.get("jobSiteId") ?? undefined, workerId: searchParams.get("workerId") ?? undefined, includeHistory: searchParams.get("includeHistory") ?? undefined }));
+    return Response.json(await listJobSiteWorkerAssignments());
   } catch (error) { return asAccessResponse(error); }
 }
 

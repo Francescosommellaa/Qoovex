@@ -64,13 +64,13 @@ export function SignInPageView({
       setError(body?.error ?? "Accesso dev non disponibile.");
       return;
     }
-    router.push("/contexts");
+    router.push("/dashboard");
     router.refresh();
   }
 
   return (
     <AuthPageShell
-      description={<p>Rientra nel workspace per gestire i cantieri e collaborare nel contesto autorizzato.</p>}
+      description={<p>Rientra nel workspace per organizzare documenti, scadenze e prove di cantiere.</p>}
       footer={(
         <div className="grid gap-2">
           <p>Non hai un account? <Link data-link="inline" href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link></p>

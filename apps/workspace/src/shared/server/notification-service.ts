@@ -6,8 +6,9 @@ import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
+import { syncOrganizationReminderRecords } from "./reminder-service";
 
-const NOTIFICATION_ACCESS_ROLES = ["OWNER", "COLLABORATOR"] as const;
+const NOTIFICATION_ACCESS_ROLES = ["OWNER", "ADMIN", "SAFETY_CONSULTANT"] as const;
 
 export interface ListNotificationsInput {
   filter?: unknown;
@@ -97,6 +98,8 @@ function parseSort(sort: unknown): "priority" | "recent" {
 
 export async function listNotifications(input: ListNotificationsInput = {}): Promise<NotificationListResponse> {
   const { context, organizationId } = await requireOrganizationDomainAccess("organization:read", NOTIFICATION_ACCESS_ROLES);
+  await syncOrganizationReminderRecords(organizationId);
+
   const filter = parseFilter(input.filter);
   const limit = parseLimit(input.limit);
   const sort = parseSort(input.sort);
