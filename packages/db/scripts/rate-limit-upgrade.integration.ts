@@ -16,6 +16,7 @@ const migrationNames = [
   "20260713010000_mfa_hardening",
   "20260713020000_rate_limit_privacy_atomicity",
   "20260720010000_calendar_events",
+  "20260803230000_qoovex_vnext_from_zero",
 ] as const;
 async function main() {
   const client = new pg.Client({ connectionString: databaseUrl });
@@ -65,7 +66,33 @@ async function main() {
     has_calendar_event: boolean;
   };
   if (row.memberships !== 1 || row.rate_limits !== 0 || !row.has_user_id || !row.has_calendar_event) {
-    throw new Error("Verifica upgrade baseline -> head Production fallita.");
+    throw new Error("Verifica baseline a cinque migration fallita.");
+  }
+
+  await applyMigration(migrationNames[5]);
+  const vnext = await client.query(`
+    SELECT
+      (SELECT COUNT(*)::int FROM "User") AS users,
+      to_regclass('public."JobSiteParticipant"') IS NOT NULL AS has_participant,
+      to_regclass('public."JobSiteActionReceipt"') IS NOT NULL AS has_receipt,
+      to_regclass('public."CalendarEvent"') IS NULL AS removed_calendar,
+      to_regclass('public."JobSiteUserAssignment"') IS NULL AS removed_legacy_assignment;
+  `);
+  const final = vnext.rows[0] as {
+    users: number;
+    has_participant: boolean;
+    has_receipt: boolean;
+    removed_calendar: boolean;
+    removed_legacy_assignment: boolean;
+  };
+  if (
+    final.users !== 0 ||
+    !final.has_participant ||
+    !final.has_receipt ||
+    !final.removed_calendar ||
+    !final.removed_legacy_assignment
+  ) {
+    throw new Error("Verifica upgrade distruttivo baseline -> Qoovex vNext fallita.");
   }
 
   const diff = spawnPrisma(["migrate", "diff", "--from-config-datasource", "--to-schema", "prisma/schema.prisma", "--exit-code"]);

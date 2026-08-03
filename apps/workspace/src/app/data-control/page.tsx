@@ -7,10 +7,9 @@ import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 
 export default async function DataControlPage() {
   try {
-    const access = await requireDataControlAccess();
+    await requireDataControlAccess();
     const [inventory, retention, jobs, orphans] = await Promise.all([getDataInventory(), getDataRetentionOverview(), listDataControlJobs(), getBlobOrphanDryRun()]);
-    const organizationCode = access.context.support?.organization.code ?? access.context.company?.organization.code ?? "";
-    return <DataControlPageView inventory={inventory} jobs={jobs} orphans={orphans} organizationCode={organizationCode} retention={retention} />;
+    return <DataControlPageView inventory={inventory} jobs={jobs} orphans={orphans} retention={retention} />;
   } catch {
     return <WorkspaceAccessState title="Controllo dati non disponibile" description="Solo il proprietario dell'azienda puo consultare inventario, export e retention." />;
   }

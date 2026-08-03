@@ -7,40 +7,16 @@ import type { WorkspaceCapabilities } from "@/views/workspace/workspace-records"
 
 export async function getWorkspaceCapabilities(): Promise<WorkspaceCapabilities> {
   const context = await getWorkspaceAccessContext();
-  const role = getEffectiveOrganizationRole(context);
+  const can = (permission: (typeof context.permissions)[number]) => context.permissions.includes(permission);
   return {
-    role,
-    canManageCore: role === "OWNER" || role === "ADMIN",
-    canCreateDocuments: role === "OWNER" || role === "ADMIN",
-    canCreateWorkers: role === "OWNER" || role === "ADMIN",
-    canCreateJobSites: role === "OWNER" || role === "ADMIN",
-    canCreateDeadlines: role === "OWNER" || role === "ADMIN",
-    canManageCalendar: role === "OWNER" || role === "ADMIN",
-    canUpdateDocuments: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    canManageArchivedDocuments: role === "OWNER" || role === "ADMIN",
-    canUploadDocumentVersions: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT" || role === "WORKER",
-    canManageChecklists: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    canCompleteChecklists: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT" || role === "SITE_MANAGER",
-    canUploadEvidence: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT" || role === "SITE_MANAGER" || role === "WORKER",
-    canDeleteEvidence: role === "OWNER" || role === "ADMIN",
-    canManagePackages: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    canSharePackages: role === "OWNER" || role === "ADMIN",
-    canReadAssignments: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    canManageAssignments: role === "OWNER" || role === "ADMIN",
-    canReadMembers: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    canManageMembers: role === "OWNER" || role === "ADMIN",
-    canReadDocumentSettings: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    canManageDocumentSettings: role === "OWNER" || role === "ADMIN",
-    canReadNotifications: role === "OWNER" || role === "ADMIN" || role === "SAFETY_CONSULTANT",
-    canReadAudit: role === "OWNER",
-    canReadDataControl: role === "OWNER",
+    role: getEffectiveOrganizationRole(context), accessPreset: context.company?.preset ?? null,
+    canManageCore: can("organization:update"), canCreateDocuments: can("documents:upload"), canCreateWorkers: can("workers:create"), canCreateJobSites: can("jobSites:create"),
+    canUpdateDocuments: can("documents:update"), canManageArchivedDocuments: can("documents:archive"), canUploadDocumentVersions: can("documents:upload"), canReadDocumentFiles: can("documents:file:read"),
+    canUploadEvidence: can("evidence:upload"), canDeleteEvidence: can("evidence:delete"), canReadEvidenceFiles: can("evidence:file:read"),
+    canReadAssignments: can("assignments:read"), canManageAssignments: can("assignments:manage"), canReadMembers: can("members:read"), canManageMembers: can("members:manage"),
+    canReadNotifications: can("organization:read"), canReadAudit: can("auditLog:read"), canReadDataControl: can("auditLog:read"),
+    canReadOrganizationProfile: can("organizationProfile:read"), canUpdateOrganizationProfile: can("organizationProfile:update"),
   };
 }
-
-export function isWorkspaceRole(role: OrganizationRole | null): role is OrganizationRole {
-  return role !== null;
-}
-
-export function serializeForClient<T>(value: unknown): T {
-  return JSON.parse(JSON.stringify(value)) as T;
-}
+export function isWorkspaceRole(role: OrganizationRole | null): role is OrganizationRole { return role !== null; }
+export function serializeForClient<T>(value: unknown): T { return JSON.parse(JSON.stringify(value)) as T; }

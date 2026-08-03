@@ -24,11 +24,12 @@ vi.mock("@shared/server/mfa-service", () => ({ getMfaStatusByUserId: mocks.getMf
 vi.mock("@shared/server/dev-auth", () => ({ getDevAuthSession: mocks.getDevAuthSession }));
 vi.mock("next/headers", () => ({ cookies: mocks.cookies }));
 vi.mock("@shared/server/notification-service", () => ({ getUnreadNotificationCount: vi.fn().mockResolvedValue(0) }));
+vi.mock("@shared/server/job-site-read-model-service", () => ({ listWorkspaceJobSiteNavigation: vi.fn().mockResolvedValue([]) }));
 vi.mock("@/views/account-security/AccountSecurityFlow", () => ({
   AccountSecurityFlow: () => <div>GLOBAL_MFA_GATE</div>,
 }));
 vi.mock("./WorkspaceNavigation", () => ({ WorkspaceNavigation: () => <nav>NAVIGATION</nav> }));
-vi.mock("./DevRoleSwitcher", () => ({ DevRoleSwitcher: ({ role }: { role: string }) => <div>DEV_ROLE_{role}</div> }));
+vi.mock("./DevViewSwitcher", () => ({ DevViewSwitcher: ({ view }: { view: string }) => <div>DEV_VIEW_{view}</div> }));
 vi.mock("./WorkspaceSessionControls", () => ({
   SupportSessionBanner: () => <div>SUPPORT</div>,
   WorkspaceLogoutButton: () => <button type="button">LOGOUT</button>,
@@ -39,7 +40,7 @@ import { WorkspaceShell } from "./WorkspaceShell";
 describe("WorkspaceShell MFA gate", () => {
   beforeEach(() => {
     mocks.getWorkspaceAccessContext.mockReset();
-    mocks.requirePrimaryIdentity.mockReset();
+    mocks.requirePrimaryIdentity.mockReset().mockResolvedValue({ id: "user-1", email: "utente@qoovex.test", platformRole: "USER" });
     mocks.getMfaStatusByUserId.mockReset();
     mocks.getDevAuthSession.mockReset().mockResolvedValue(null);
     mocks.cookies.mockReset().mockResolvedValue({ get: () => undefined });
@@ -77,16 +78,16 @@ describe("WorkspaceShell MFA gate", () => {
   it("shows the selected dev role after the server context succeeds", async () => {
     mocks.getWorkspaceAccessContext.mockResolvedValue({
       userId: "dev-user",
-      platformRole: "SUPER_ADMIN",
-      company: { role: "WORKER", organization: { id: "org-1", name: "Azienda", code: "DEV" } },
+      platformRole: "PLATFORM_ADMIN",
+      company: { role: "COLLABORATOR", organization: { id: "org-1", name: "Azienda", code: "DEV" } },
       support: null,
       permissions: [],
     });
-    mocks.getDevAuthSession.mockResolvedValue({ role: "WORKER" });
+    mocks.getDevAuthSession.mockResolvedValue({ view: "PLATFORM_ADMIN" });
 
     const html = renderToStaticMarkup(await WorkspaceShell({ children: <div>WORKSPACE_CHILD</div> }));
 
-    expect(html).toContain("DEV_ROLE_WORKER");
+    expect(html).toContain("DEV_VIEW_PLATFORM_ADMIN");
     expect(html).toContain("WORKSPACE_CHILD");
   });
 

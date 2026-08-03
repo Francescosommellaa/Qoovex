@@ -1,7 +1,8 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "hashCanonicalization": "utf8_lf",
-  "protectedProductionHead": "20260720010000_calendar_events",
+  "baselineProductionHead": "20260720010000_calendar_events",
+  "protectedProductionHead": "20260803230000_qoovex_vnext_from_zero",
   "migrations": [
     {
       "name": "20260712010000_single_company_baseline",
@@ -27,6 +28,13 @@
       "name": "20260720010000_calendar_events",
       "sha256": "663ccdc847ce252a892fd93166ae6a0d44398ea5b5d2a6bd9fc081d548ced7ce",
       "productionApplied": true
+    },
+    {
+      "name": "20260803230000_qoovex_vnext_from_zero",
+      "sha256": "c513429408fe5387b2c3918caaced28abf5c0d85d70b1884af9a015fc664f1ae",
+      "productionApplied": false,
+      "destructiveApproved": true,
+      "approvalRef": "QOOVEX_VNEXT_FROM_ZERO_USER_AUTHORIZATION_2026_08_03"
     }
   ]
 }

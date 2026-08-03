@@ -267,7 +267,7 @@ export type DocumentVersionWhereInput = {
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   document?: Prisma.XOR<Prisma.DocumentScalarRelationFilter, Prisma.DocumentWhereInput>
   uploadedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  packageItems?: Prisma.DocumentPackageItemListRelationFilter
+  currentForDocument?: Prisma.XOR<Prisma.DocumentNullableScalarRelationFilter, Prisma.DocumentWhereInput> | null
 }
 
 export type DocumentVersionOrderByWithRelationInput = {
@@ -285,7 +285,7 @@ export type DocumentVersionOrderByWithRelationInput = {
   organization?: Prisma.OrganizationOrderByWithRelationInput
   document?: Prisma.DocumentOrderByWithRelationInput
   uploadedBy?: Prisma.UserOrderByWithRelationInput
-  packageItems?: Prisma.DocumentPackageItemOrderByRelationAggregateInput
+  currentForDocument?: Prisma.DocumentOrderByWithRelationInput
 }
 
 export type DocumentVersionWhereUniqueInput = Prisma.AtLeast<{
@@ -306,7 +306,7 @@ export type DocumentVersionWhereUniqueInput = Prisma.AtLeast<{
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   document?: Prisma.XOR<Prisma.DocumentScalarRelationFilter, Prisma.DocumentWhereInput>
   uploadedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  packageItems?: Prisma.DocumentPackageItemListRelationFilter
+  currentForDocument?: Prisma.XOR<Prisma.DocumentNullableScalarRelationFilter, Prisma.DocumentWhereInput> | null
 }, "id">
 
 export type DocumentVersionOrderByWithAggregationInput = {
@@ -357,7 +357,7 @@ export type DocumentVersionCreateInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentVersionsInput
   document: Prisma.DocumentCreateNestedOneWithoutVersionsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutUploadedDocumentVersionsInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentVersionInput
+  currentForDocument?: Prisma.DocumentCreateNestedOneWithoutCurrentVersionInput
 }
 
 export type DocumentVersionUncheckedCreateInput = {
@@ -372,7 +372,7 @@ export type DocumentVersionUncheckedCreateInput = {
   uploadedById: string
   createdAt?: Date | string
   archivedAt?: Date | string | null
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentVersionInput
+  currentForDocument?: Prisma.DocumentUncheckedCreateNestedOneWithoutCurrentVersionInput
 }
 
 export type DocumentVersionUpdateInput = {
@@ -387,7 +387,7 @@ export type DocumentVersionUpdateInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentVersionsNestedInput
   document?: Prisma.DocumentUpdateOneRequiredWithoutVersionsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutUploadedDocumentVersionsNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentVersionNestedInput
+  currentForDocument?: Prisma.DocumentUpdateOneWithoutCurrentVersionNestedInput
 }
 
 export type DocumentVersionUncheckedUpdateInput = {
@@ -402,7 +402,7 @@ export type DocumentVersionUncheckedUpdateInput = {
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentVersionNestedInput
+  currentForDocument?: Prisma.DocumentUncheckedUpdateOneWithoutCurrentVersionNestedInput
 }
 
 export type DocumentVersionCreateManyInput = {
@@ -454,6 +454,11 @@ export type DocumentVersionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type DocumentVersionNullableScalarRelationFilter = {
+  is?: Prisma.DocumentVersionWhereInput | null
+  isNot?: Prisma.DocumentVersionWhereInput | null
+}
+
 export type DocumentVersionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
@@ -502,11 +507,6 @@ export type DocumentVersionMinOrderByAggregateInput = {
 
 export type DocumentVersionSumOrderByAggregateInput = {
   size?: Prisma.SortOrder
-}
-
-export type DocumentVersionNullableScalarRelationFilter = {
-  is?: Prisma.DocumentVersionWhereInput | null
-  isNot?: Prisma.DocumentVersionWhereInput | null
 }
 
 export type DocumentVersionCreateNestedManyWithoutUploadedByInput = {
@@ -593,6 +593,12 @@ export type DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput = {
   deleteMany?: Prisma.DocumentVersionScalarWhereInput | Prisma.DocumentVersionScalarWhereInput[]
 }
 
+export type DocumentVersionCreateNestedOneWithoutCurrentForDocumentInput = {
+  create?: Prisma.XOR<Prisma.DocumentVersionCreateWithoutCurrentForDocumentInput, Prisma.DocumentVersionUncheckedCreateWithoutCurrentForDocumentInput>
+  connectOrCreate?: Prisma.DocumentVersionCreateOrConnectWithoutCurrentForDocumentInput
+  connect?: Prisma.DocumentVersionWhereUniqueInput
+}
+
 export type DocumentVersionCreateNestedManyWithoutDocumentInput = {
   create?: Prisma.XOR<Prisma.DocumentVersionCreateWithoutDocumentInput, Prisma.DocumentVersionUncheckedCreateWithoutDocumentInput> | Prisma.DocumentVersionCreateWithoutDocumentInput[] | Prisma.DocumentVersionUncheckedCreateWithoutDocumentInput[]
   connectOrCreate?: Prisma.DocumentVersionCreateOrConnectWithoutDocumentInput | Prisma.DocumentVersionCreateOrConnectWithoutDocumentInput[]
@@ -605,6 +611,16 @@ export type DocumentVersionUncheckedCreateNestedManyWithoutDocumentInput = {
   connectOrCreate?: Prisma.DocumentVersionCreateOrConnectWithoutDocumentInput | Prisma.DocumentVersionCreateOrConnectWithoutDocumentInput[]
   createMany?: Prisma.DocumentVersionCreateManyDocumentInputEnvelope
   connect?: Prisma.DocumentVersionWhereUniqueInput | Prisma.DocumentVersionWhereUniqueInput[]
+}
+
+export type DocumentVersionUpdateOneWithoutCurrentForDocumentNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentVersionCreateWithoutCurrentForDocumentInput, Prisma.DocumentVersionUncheckedCreateWithoutCurrentForDocumentInput>
+  connectOrCreate?: Prisma.DocumentVersionCreateOrConnectWithoutCurrentForDocumentInput
+  upsert?: Prisma.DocumentVersionUpsertWithoutCurrentForDocumentInput
+  disconnect?: Prisma.DocumentVersionWhereInput | boolean
+  delete?: Prisma.DocumentVersionWhereInput | boolean
+  connect?: Prisma.DocumentVersionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentVersionUpdateToOneWithWhereWithoutCurrentForDocumentInput, Prisma.DocumentVersionUpdateWithoutCurrentForDocumentInput>, Prisma.DocumentVersionUncheckedUpdateWithoutCurrentForDocumentInput>
 }
 
 export type DocumentVersionUpdateManyWithoutDocumentNestedInput = {
@@ -635,22 +651,6 @@ export type DocumentVersionUncheckedUpdateManyWithoutDocumentNestedInput = {
   deleteMany?: Prisma.DocumentVersionScalarWhereInput | Prisma.DocumentVersionScalarWhereInput[]
 }
 
-export type DocumentVersionCreateNestedOneWithoutPackageItemsInput = {
-  create?: Prisma.XOR<Prisma.DocumentVersionCreateWithoutPackageItemsInput, Prisma.DocumentVersionUncheckedCreateWithoutPackageItemsInput>
-  connectOrCreate?: Prisma.DocumentVersionCreateOrConnectWithoutPackageItemsInput
-  connect?: Prisma.DocumentVersionWhereUniqueInput
-}
-
-export type DocumentVersionUpdateOneWithoutPackageItemsNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentVersionCreateWithoutPackageItemsInput, Prisma.DocumentVersionUncheckedCreateWithoutPackageItemsInput>
-  connectOrCreate?: Prisma.DocumentVersionCreateOrConnectWithoutPackageItemsInput
-  upsert?: Prisma.DocumentVersionUpsertWithoutPackageItemsInput
-  disconnect?: Prisma.DocumentVersionWhereInput | boolean
-  delete?: Prisma.DocumentVersionWhereInput | boolean
-  connect?: Prisma.DocumentVersionWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentVersionUpdateToOneWithWhereWithoutPackageItemsInput, Prisma.DocumentVersionUpdateWithoutPackageItemsInput>, Prisma.DocumentVersionUncheckedUpdateWithoutPackageItemsInput>
-}
-
 export type DocumentVersionCreateWithoutUploadedByInput = {
   id?: string
   blobKey: string
@@ -662,7 +662,7 @@ export type DocumentVersionCreateWithoutUploadedByInput = {
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentVersionsInput
   document: Prisma.DocumentCreateNestedOneWithoutVersionsInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentVersionInput
+  currentForDocument?: Prisma.DocumentCreateNestedOneWithoutCurrentVersionInput
 }
 
 export type DocumentVersionUncheckedCreateWithoutUploadedByInput = {
@@ -676,7 +676,7 @@ export type DocumentVersionUncheckedCreateWithoutUploadedByInput = {
   checksum?: string | null
   createdAt?: Date | string
   archivedAt?: Date | string | null
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentVersionInput
+  currentForDocument?: Prisma.DocumentUncheckedCreateNestedOneWithoutCurrentVersionInput
 }
 
 export type DocumentVersionCreateOrConnectWithoutUploadedByInput = {
@@ -733,7 +733,7 @@ export type DocumentVersionCreateWithoutOrganizationInput = {
   archivedAt?: Date | string | null
   document: Prisma.DocumentCreateNestedOneWithoutVersionsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutUploadedDocumentVersionsInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentVersionInput
+  currentForDocument?: Prisma.DocumentCreateNestedOneWithoutCurrentVersionInput
 }
 
 export type DocumentVersionUncheckedCreateWithoutOrganizationInput = {
@@ -747,7 +747,7 @@ export type DocumentVersionUncheckedCreateWithoutOrganizationInput = {
   uploadedById: string
   createdAt?: Date | string
   archivedAt?: Date | string | null
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentVersionInput
+  currentForDocument?: Prisma.DocumentUncheckedCreateNestedOneWithoutCurrentVersionInput
 }
 
 export type DocumentVersionCreateOrConnectWithoutOrganizationInput = {
@@ -776,6 +776,39 @@ export type DocumentVersionUpdateManyWithWhereWithoutOrganizationInput = {
   data: Prisma.XOR<Prisma.DocumentVersionUpdateManyMutationInput, Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationInput>
 }
 
+export type DocumentVersionCreateWithoutCurrentForDocumentInput = {
+  id?: string
+  blobKey: string
+  originalFileName: string
+  mimeType: string
+  size: number
+  checksum?: string | null
+  createdAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentVersionsInput
+  document: Prisma.DocumentCreateNestedOneWithoutVersionsInput
+  uploadedBy: Prisma.UserCreateNestedOneWithoutUploadedDocumentVersionsInput
+}
+
+export type DocumentVersionUncheckedCreateWithoutCurrentForDocumentInput = {
+  id?: string
+  organizationId: string
+  documentId: string
+  blobKey: string
+  originalFileName: string
+  mimeType: string
+  size: number
+  checksum?: string | null
+  uploadedById: string
+  createdAt?: Date | string
+  archivedAt?: Date | string | null
+}
+
+export type DocumentVersionCreateOrConnectWithoutCurrentForDocumentInput = {
+  where: Prisma.DocumentVersionWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentVersionCreateWithoutCurrentForDocumentInput, Prisma.DocumentVersionUncheckedCreateWithoutCurrentForDocumentInput>
+}
+
 export type DocumentVersionCreateWithoutDocumentInput = {
   id?: string
   blobKey: string
@@ -787,7 +820,7 @@ export type DocumentVersionCreateWithoutDocumentInput = {
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentVersionsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutUploadedDocumentVersionsInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentVersionInput
+  currentForDocument?: Prisma.DocumentCreateNestedOneWithoutCurrentVersionInput
 }
 
 export type DocumentVersionUncheckedCreateWithoutDocumentInput = {
@@ -801,7 +834,7 @@ export type DocumentVersionUncheckedCreateWithoutDocumentInput = {
   uploadedById: string
   createdAt?: Date | string
   archivedAt?: Date | string | null
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentVersionInput
+  currentForDocument?: Prisma.DocumentUncheckedCreateNestedOneWithoutCurrentVersionInput
 }
 
 export type DocumentVersionCreateOrConnectWithoutDocumentInput = {
@@ -812,6 +845,45 @@ export type DocumentVersionCreateOrConnectWithoutDocumentInput = {
 export type DocumentVersionCreateManyDocumentInputEnvelope = {
   data: Prisma.DocumentVersionCreateManyDocumentInput | Prisma.DocumentVersionCreateManyDocumentInput[]
   skipDuplicates?: boolean
+}
+
+export type DocumentVersionUpsertWithoutCurrentForDocumentInput = {
+  update: Prisma.XOR<Prisma.DocumentVersionUpdateWithoutCurrentForDocumentInput, Prisma.DocumentVersionUncheckedUpdateWithoutCurrentForDocumentInput>
+  create: Prisma.XOR<Prisma.DocumentVersionCreateWithoutCurrentForDocumentInput, Prisma.DocumentVersionUncheckedCreateWithoutCurrentForDocumentInput>
+  where?: Prisma.DocumentVersionWhereInput
+}
+
+export type DocumentVersionUpdateToOneWithWhereWithoutCurrentForDocumentInput = {
+  where?: Prisma.DocumentVersionWhereInput
+  data: Prisma.XOR<Prisma.DocumentVersionUpdateWithoutCurrentForDocumentInput, Prisma.DocumentVersionUncheckedUpdateWithoutCurrentForDocumentInput>
+}
+
+export type DocumentVersionUpdateWithoutCurrentForDocumentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  blobKey?: Prisma.StringFieldUpdateOperationsInput | string
+  originalFileName?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentVersionsNestedInput
+  document?: Prisma.DocumentUpdateOneRequiredWithoutVersionsNestedInput
+  uploadedBy?: Prisma.UserUpdateOneRequiredWithoutUploadedDocumentVersionsNestedInput
+}
+
+export type DocumentVersionUncheckedUpdateWithoutCurrentForDocumentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  documentId?: Prisma.StringFieldUpdateOperationsInput | string
+  blobKey?: Prisma.StringFieldUpdateOperationsInput | string
+  originalFileName?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type DocumentVersionUpsertWithWhereUniqueWithoutDocumentInput = {
@@ -828,78 +900,6 @@ export type DocumentVersionUpdateWithWhereUniqueWithoutDocumentInput = {
 export type DocumentVersionUpdateManyWithWhereWithoutDocumentInput = {
   where: Prisma.DocumentVersionScalarWhereInput
   data: Prisma.XOR<Prisma.DocumentVersionUpdateManyMutationInput, Prisma.DocumentVersionUncheckedUpdateManyWithoutDocumentInput>
-}
-
-export type DocumentVersionCreateWithoutPackageItemsInput = {
-  id?: string
-  blobKey: string
-  originalFileName: string
-  mimeType: string
-  size: number
-  checksum?: string | null
-  createdAt?: Date | string
-  archivedAt?: Date | string | null
-  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentVersionsInput
-  document: Prisma.DocumentCreateNestedOneWithoutVersionsInput
-  uploadedBy: Prisma.UserCreateNestedOneWithoutUploadedDocumentVersionsInput
-}
-
-export type DocumentVersionUncheckedCreateWithoutPackageItemsInput = {
-  id?: string
-  organizationId: string
-  documentId: string
-  blobKey: string
-  originalFileName: string
-  mimeType: string
-  size: number
-  checksum?: string | null
-  uploadedById: string
-  createdAt?: Date | string
-  archivedAt?: Date | string | null
-}
-
-export type DocumentVersionCreateOrConnectWithoutPackageItemsInput = {
-  where: Prisma.DocumentVersionWhereUniqueInput
-  create: Prisma.XOR<Prisma.DocumentVersionCreateWithoutPackageItemsInput, Prisma.DocumentVersionUncheckedCreateWithoutPackageItemsInput>
-}
-
-export type DocumentVersionUpsertWithoutPackageItemsInput = {
-  update: Prisma.XOR<Prisma.DocumentVersionUpdateWithoutPackageItemsInput, Prisma.DocumentVersionUncheckedUpdateWithoutPackageItemsInput>
-  create: Prisma.XOR<Prisma.DocumentVersionCreateWithoutPackageItemsInput, Prisma.DocumentVersionUncheckedCreateWithoutPackageItemsInput>
-  where?: Prisma.DocumentVersionWhereInput
-}
-
-export type DocumentVersionUpdateToOneWithWhereWithoutPackageItemsInput = {
-  where?: Prisma.DocumentVersionWhereInput
-  data: Prisma.XOR<Prisma.DocumentVersionUpdateWithoutPackageItemsInput, Prisma.DocumentVersionUncheckedUpdateWithoutPackageItemsInput>
-}
-
-export type DocumentVersionUpdateWithoutPackageItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  blobKey?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFileName?: Prisma.StringFieldUpdateOperationsInput | string
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.IntFieldUpdateOperationsInput | number
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentVersionsNestedInput
-  document?: Prisma.DocumentUpdateOneRequiredWithoutVersionsNestedInput
-  uploadedBy?: Prisma.UserUpdateOneRequiredWithoutUploadedDocumentVersionsNestedInput
-}
-
-export type DocumentVersionUncheckedUpdateWithoutPackageItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentId?: Prisma.StringFieldUpdateOperationsInput | string
-  blobKey?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFileName?: Prisma.StringFieldUpdateOperationsInput | string
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.IntFieldUpdateOperationsInput | number
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type DocumentVersionCreateManyUploadedByInput = {
@@ -926,7 +926,7 @@ export type DocumentVersionUpdateWithoutUploadedByInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentVersionsNestedInput
   document?: Prisma.DocumentUpdateOneRequiredWithoutVersionsNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentVersionNestedInput
+  currentForDocument?: Prisma.DocumentUpdateOneWithoutCurrentVersionNestedInput
 }
 
 export type DocumentVersionUncheckedUpdateWithoutUploadedByInput = {
@@ -940,7 +940,7 @@ export type DocumentVersionUncheckedUpdateWithoutUploadedByInput = {
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentVersionNestedInput
+  currentForDocument?: Prisma.DocumentUncheckedUpdateOneWithoutCurrentVersionNestedInput
 }
 
 export type DocumentVersionUncheckedUpdateManyWithoutUploadedByInput = {
@@ -980,7 +980,7 @@ export type DocumentVersionUpdateWithoutOrganizationInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   document?: Prisma.DocumentUpdateOneRequiredWithoutVersionsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutUploadedDocumentVersionsNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentVersionNestedInput
+  currentForDocument?: Prisma.DocumentUpdateOneWithoutCurrentVersionNestedInput
 }
 
 export type DocumentVersionUncheckedUpdateWithoutOrganizationInput = {
@@ -994,7 +994,7 @@ export type DocumentVersionUncheckedUpdateWithoutOrganizationInput = {
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentVersionNestedInput
+  currentForDocument?: Prisma.DocumentUncheckedUpdateOneWithoutCurrentVersionNestedInput
 }
 
 export type DocumentVersionUncheckedUpdateManyWithoutOrganizationInput = {
@@ -1034,7 +1034,7 @@ export type DocumentVersionUpdateWithoutDocumentInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentVersionsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutUploadedDocumentVersionsNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentVersionNestedInput
+  currentForDocument?: Prisma.DocumentUpdateOneWithoutCurrentVersionNestedInput
 }
 
 export type DocumentVersionUncheckedUpdateWithoutDocumentInput = {
@@ -1048,7 +1048,7 @@ export type DocumentVersionUncheckedUpdateWithoutDocumentInput = {
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentVersionNestedInput
+  currentForDocument?: Prisma.DocumentUncheckedUpdateOneWithoutCurrentVersionNestedInput
 }
 
 export type DocumentVersionUncheckedUpdateManyWithoutDocumentInput = {
@@ -1064,35 +1064,6 @@ export type DocumentVersionUncheckedUpdateManyWithoutDocumentInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-
-/**
- * Count Type DocumentVersionCountOutputType
- */
-
-export type DocumentVersionCountOutputType = {
-  packageItems: number
-}
-
-export type DocumentVersionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  packageItems?: boolean | DocumentVersionCountOutputTypeCountPackageItemsArgs
-}
-
-/**
- * DocumentVersionCountOutputType without action
- */
-export type DocumentVersionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the DocumentVersionCountOutputType
-   */
-  select?: Prisma.DocumentVersionCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * DocumentVersionCountOutputType without action
- */
-export type DocumentVersionCountOutputTypeCountPackageItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DocumentPackageItemWhereInput
-}
 
 
 export type DocumentVersionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1110,8 +1081,7 @@ export type DocumentVersionSelect<ExtArgs extends runtime.Types.Extensions.Inter
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   document?: boolean | Prisma.DocumentDefaultArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  packageItems?: boolean | Prisma.DocumentVersion$packageItemsArgs<ExtArgs>
-  _count?: boolean | Prisma.DocumentVersionCountOutputTypeDefaultArgs<ExtArgs>
+  currentForDocument?: boolean | Prisma.DocumentVersion$currentForDocumentArgs<ExtArgs>
 }, ExtArgs["result"]["documentVersion"]>
 
 export type DocumentVersionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1167,8 +1137,7 @@ export type DocumentVersionInclude<ExtArgs extends runtime.Types.Extensions.Inte
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   document?: boolean | Prisma.DocumentDefaultArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  packageItems?: boolean | Prisma.DocumentVersion$packageItemsArgs<ExtArgs>
-  _count?: boolean | Prisma.DocumentVersionCountOutputTypeDefaultArgs<ExtArgs>
+  currentForDocument?: boolean | Prisma.DocumentVersion$currentForDocumentArgs<ExtArgs>
 }
 export type DocumentVersionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -1187,7 +1156,7 @@ export type $DocumentVersionPayload<ExtArgs extends runtime.Types.Extensions.Int
     organization: Prisma.$OrganizationPayload<ExtArgs>
     document: Prisma.$DocumentPayload<ExtArgs>
     uploadedBy: Prisma.$UserPayload<ExtArgs>
-    packageItems: Prisma.$DocumentPackageItemPayload<ExtArgs>[]
+    currentForDocument: Prisma.$DocumentPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1598,7 +1567,7 @@ export interface Prisma__DocumentVersionClient<T, Null = never, ExtArgs extends 
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   document<T extends Prisma.DocumentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentDefaultArgs<ExtArgs>>): Prisma.Prisma__DocumentClient<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   uploadedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  packageItems<T extends Prisma.DocumentVersion$packageItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentVersion$packageItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPackageItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  currentForDocument<T extends Prisma.DocumentVersion$currentForDocumentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentVersion$currentForDocumentArgs<ExtArgs>>): Prisma.Prisma__DocumentClient<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2040,27 +2009,22 @@ export type DocumentVersionDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
- * DocumentVersion.packageItems
+ * DocumentVersion.currentForDocument
  */
-export type DocumentVersion$packageItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type DocumentVersion$currentForDocumentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the DocumentPackageItem
+   * Select specific fields to fetch from the Document
    */
-  select?: Prisma.DocumentPackageItemSelect<ExtArgs> | null
+  select?: Prisma.DocumentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the DocumentPackageItem
+   * Omit specific fields from the Document
    */
-  omit?: Prisma.DocumentPackageItemOmit<ExtArgs> | null
+  omit?: Prisma.DocumentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.DocumentPackageItemInclude<ExtArgs> | null
-  where?: Prisma.DocumentPackageItemWhereInput
-  orderBy?: Prisma.DocumentPackageItemOrderByWithRelationInput | Prisma.DocumentPackageItemOrderByWithRelationInput[]
-  cursor?: Prisma.DocumentPackageItemWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DocumentPackageItemScalarFieldEnum | Prisma.DocumentPackageItemScalarFieldEnum[]
+  include?: Prisma.DocumentInclude<ExtArgs> | null
+  where?: Prisma.DocumentWhereInput
 }
 
 /**

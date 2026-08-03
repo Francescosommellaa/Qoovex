@@ -1,6 +1,7 @@
 "use client";
 
 import type { SupportContext } from "@qoovex/types";
+import { IconLogout } from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -9,7 +10,7 @@ import { Field, FieldLabel } from "@qoovex/ui/components/field";
 import { Input } from "@qoovex/ui/components/input";
 import { Spinner } from "@qoovex/ui/components/spinner";
 
-export function WorkspaceLogoutButton() {
+function useWorkspaceLogout() {
   const [loading, setLoading] = useState(false);
   async function logout() {
     setLoading(true);
@@ -18,7 +19,16 @@ export function WorkspaceLogoutButton() {
     await signOut({ redirect: false });
     window.location.assign("/sign-in");
   }
-  return <Button className="w-full justify-start" disabled={loading} onClick={logout} type="button" variant="ghost">{loading ? <><Spinner data-icon="inline-start" /> Uscita</> : "Esci"}</Button>;
+  return { loading, logout };
+}
+
+export function WorkspaceLogoutButton() {
+  const { loading, logout } = useWorkspaceLogout();
+  return (
+    <Button className="w-full justify-start" disabled={loading} onClick={logout} type="button" variant="ghost">
+      {loading ? <Spinner data-icon="inline-start" /> : <IconLogout aria-hidden="true" />}{loading ? "Uscita" : "Esci"}
+    </Button>
+  );
 }
 
 export function SupportSessionBanner({ support }: { support: SupportContext }) {

@@ -3,7 +3,7 @@ import "server-only";
 import { db, Prisma, type RuntimeErrorStatus } from "@qoovex/db";
 import { AccessError } from "@shared/server/access-errors";
 import { requireIdentity } from "@shared/server/access-context-service";
-import { requireQoovexOperatorById } from "@shared/server/qoovex-operator-access";
+import { requirePlatformAdminById } from "@shared/server/qoovex-operator-access";
 
 const DEFAULT_LIMIT = 25;
 const MAX_LIMIT = 50;
@@ -24,7 +24,7 @@ function parseReason(value: string | null | undefined) {
 
 export async function requireQoovexOperator() {
   const identity = await requireIdentity();
-  return requireQoovexOperatorById(identity.id);
+  return requirePlatformAdminById(identity.id);
 }
 
 async function recordPlatformUserAction(input: {
@@ -51,7 +51,7 @@ async function getManageableUser(actorId: string, targetUserId: string) {
     select: { id: true, email: true, platformRole: true, suspendedAt: true },
   });
   if (!target) throw new AccessError("Utente non trovato.", 404);
-  if (target.id === actorId || target.platformRole === "SUPER_ADMIN") {
+  if (target.id === actorId || target.platformRole === "SUPPORT_AGENT" || target.platformRole === "PLATFORM_ADMIN") {
     throw new AccessError("Questo account operatore non puo essere modificato dalla console.", 409);
   }
   return target;
@@ -60,16 +60,15 @@ async function getManageableUser(actorId: string, targetUserId: string) {
 export async function getPlatformAdminOverview() {
   await requireQoovexOperator();
   const now = new Date();
-  const [users, suspendedUsers, organizations, activeSupportSessions, openErrors, failedJobs, failedEmails] = await Promise.all([
+  const [users, suspendedUsers, organizations, activeSupportSessions, openErrors, failedJobs] = await Promise.all([
     db.user.count(),
     db.user.count({ where: { suspendedAt: { not: null } } }),
     db.organization.count(),
     db.supportSession.count({ where: { endedAt: null, expiresAt: { gt: now } } }),
     db.runtimeErrorEvent.count({ where: { status: "OPEN" } }),
     db.dataControlJob.count({ where: { status: "FAILED" } }),
-    db.notificationEmailDelivery.count({ where: { status: "FAILED" } }),
   ]);
-  return { users, suspendedUsers, organizations, activeSupportSessions, openErrors, failedJobs, failedEmails, generatedAt: now.toISOString() };
+  return { users, suspendedUsers, organizations, activeSupportSessions, openErrors, failedJobs, generatedAt: now.toISOString() };
 }
 
 export async function listPlatformUsers(input: { q?: string | null; status?: string | null; cursor?: string | null; limit?: string | number | null }) {
@@ -85,7 +84,7 @@ export async function listPlatformUsers(input: { q?: string | null; status?: str
       { username: { contains: q, mode: "insensitive" } },
       { firstName: { contains: q, mode: "insensitive" } },
       { lastName: { contains: q, mode: "insensitive" } },
-      { organizationMembership: { is: { revokedAt: null, organization: { OR: [
+      { organizationMemberships: { some: { revokedAt: null, organization: { OR: [
         { name: { contains: q, mode: "insensitive" } },
         { code: { contains: q, mode: "insensitive" } },
       ] } } } },
@@ -96,7 +95,7 @@ export async function listPlatformUsers(input: { q?: string | null; status?: str
     select: {
       id: true, email: true, username: true, firstName: true, lastName: true, platformRole: true,
       emailVerified: true, mfaEnabled: true, suspendedAt: true, suspensionReason: true, createdAt: true,
-      organizationMembership: {
+      organizationMemberships: {
         select: { role: true, revokedAt: true, organization: { select: { id: true, name: true, code: true } } },
       },
     },
@@ -117,7 +116,7 @@ export async function getPlatformUserDetail(userId: string) {
       id: true, email: true, username: true, firstName: true, lastName: true, platformRole: true,
       emailVerified: true, mfaEnabled: true, suspendedAt: true, suspensionReason: true, createdAt: true, updatedAt: true,
       _count: { select: { sessions: true } },
-      organizationMembership: {
+      organizationMemberships: {
         select: { id: true, role: true, revokedAt: true, createdAt: true, organization: { select: { id: true, name: true, code: true } } },
       },
       securityEvents: {

@@ -1,37 +1,25 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  isDevAuthRole,
-  readDevAuthCookieValue,
-  signDevAuthCookieValue,
-  verifyDevAuthCookieValue,
-} from "./dev-auth-cookie";
+import { isDevAuthView, readDevAuthCookieValue, signDevAuthCookieValue, verifyDevAuthCookieValue } from "./dev-auth-cookie";
 
-beforeEach(() => {
-  vi.stubEnv("DEV_AUTH_SECRET", "dev-auth-secret-with-at-least-32-characters");
-});
+beforeEach(() => vi.stubEnv("DEV_AUTH_SECRET", "dev-auth-secret-with-at-least-32-characters"));
+afterEach(() => vi.unstubAllEnvs());
 
-afterEach(() => {
-  vi.unstubAllEnvs();
-});
-
-describe("dev auth cookie role", () => {
-  it("signs and reads the selected organization role", async () => {
-    const cookie = await signDevAuthCookieValue("SITE_MANAGER");
-
-    await expect(readDevAuthCookieValue(cookie.value)).resolves.toMatchObject({ role: "SITE_MANAGER" });
+describe("dev auth cookie view", () => {
+  it("signs and reads the selected view", async () => {
+    const cookie = await signDevAuthCookieValue("SUPPORT_AGENT");
+    await expect(readDevAuthCookieValue(cookie.value)).resolves.toMatchObject({ view: "SUPPORT_AGENT" });
     await expect(verifyDevAuthCookieValue(cookie.value)).resolves.toBe(true);
   });
 
-  it("rejects a role changed after signing", async () => {
+  it("rejects a view changed after signing", async () => {
     const cookie = await signDevAuthCookieValue("OWNER");
-    const tampered = cookie.value.replace(".OWNER.", ".WORKER.");
-
-    await expect(readDevAuthCookieValue(tampered)).resolves.toBeNull();
+    await expect(readDevAuthCookieValue(cookie.value.replace(".OWNER.", ".PLATFORM_ADMIN."))).resolves.toBeNull();
   });
 
-  it("accepts only canonical roles", () => {
-    expect(isDevAuthRole("WORKER")).toBe(true);
-    expect(isDevAuthRole("SUPER_ADMIN")).toBe(false);
-    expect(isDevAuthRole("UNKNOWN")).toBe(false);
+  it("accepts only canonical views", () => {
+    expect(isDevAuthView("OWNER")).toBe(true);
+    expect(isDevAuthView("SUPPORT_AGENT")).toBe(true);
+    expect(isDevAuthView("PLATFORM_ADMIN")).toBe(true);
+    expect(isDevAuthView("WORKER")).toBe(false);
   });
 });

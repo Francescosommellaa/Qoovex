@@ -19,11 +19,12 @@ if (manifest.database.migrationCount !== ledger.migrations.length) {
 }
 
 const expectedJobs = new Map([
-  ["data-control", "/api/data/jobs/run"],
-  ["digest", "/api/reminders/email-digest/run"],
+  ["data-control", { method: "GET", path: "/api/data/jobs/run" }],
+  ["vnext-processes", { method: "POST", path: "/api/internal/vnext/processes/run" }],
 ]);
 for (const job of manifest.scheduler.jobs) {
-  if (job.method !== "GET" || expectedJobs.get(job.id) !== job.path) {
+  const expected = expectedJobs.get(job.id);
+  if (!expected || job.method !== expected.method || job.path !== expected.path) {
     throw new Error(`Unexpected scheduler contract for ${job.id}.`);
   }
   if (!scheduler.includes(job.path)) {
@@ -31,11 +32,21 @@ for (const job of manifest.scheduler.jobs) {
   }
   expectedJobs.delete(job.id);
 }
-if (expectedJobs.size > 0 || /\boperational\b/.test(scheduler) || scheduler.includes("/api/operations/run")) {
-  throw new Error("Scheduled workflow must contain only the two legacy job families.");
+if (
+  expectedJobs.size > 0 ||
+  scheduler.includes("/api/reminders/email-digest/run") ||
+  scheduler.includes("/api/operations/run")
+) {
+  throw new Error("Scheduled workflow must contain only data-control and the vNext process queue.");
 }
-if (manifest.application.runtimeTrack !== "legacy" || manifest.application.vNext !== "conceptual_not_implemented") {
-  throw new Error("Runtime track must remain legacy with vNext inactive.");
+if (manifest.application.runtimeTrack !== "vnext" || manifest.application.vNext !== "implemented") {
+  throw new Error("Runtime track must be the implemented Qoovex vNext release.");
+}
+if (
+  manifest.blob?.access !== "private" ||
+  manifest.blob?.resetScript !== "apps/workspace/scripts/reset-vnext-blob-store.mjs"
+) {
+  throw new Error("vNext private Blob reset contract is incomplete.");
 }
 if (manifest.http.anonymousProtectedPage !== "307_sign_in_with_sanitized_relative_callback") {
   throw new Error("Protected page redirect contract must match the runtime 307 response.");
