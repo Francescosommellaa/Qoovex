@@ -48,14 +48,14 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
     <WorkspaceSidebarProvider defaultOpen={sidebarDefaultOpen}>
       <WorkspaceSidebarSurface>
         <nav aria-label="Navigazione workspace" className="contents">
-          <SidebarHeader><div className="flex items-center gap-1"><Link className="flex h-10 min-w-0 flex-1 items-center px-2 text-lg font-semibold" href={isWorkspace ? "/dashboard" : "/account/security"}>Qoovex</Link><SidebarTrigger className="md:hidden" /></div></SidebarHeader>
+          <SidebarHeader><div className="flex items-center gap-1"><Link className="flex h-10 min-w-0 flex-1 items-center px-2 text-lg font-semibold" href={isWorkspace ? "/contexts" : "/account/security"}>Qoovex</Link><SidebarTrigger className="md:hidden" /></div></SidebarHeader>
           {isWorkspace ? <WorkspaceNavigation account={state.account} authenticated navigation={state.navigation} platformRole={state.context.platformRole} support={state.context.support} /> : <div className="mt-auto p-3"><WorkspaceLogoutButton /></div>}
         </nav>
         <WorkspaceSidebarResizeHandle />
       </WorkspaceSidebarSurface>
       <SidebarInset className="h-dvh min-h-0 min-w-0 overflow-hidden">
         <WorkspacePageIdentityProvider>
-          <WorkspaceTopbar fallbackLabel={isWorkspace ? "Foundation Azienda" : "Sicurezza account"} platformRole={isWorkspace ? state.context.platformRole : state.platformRole} devView={isWorkspace ? state.devView : null} navigation={isWorkspace ? state.navigation.primary : []} showNotifications={isWorkspace && canReadWorkspaceNotifications(state.context.permissions)} unreadNotificationCount={isWorkspace ? state.unreadNotificationCount : 0} />
+          <WorkspaceTopbar fallbackLabel={isWorkspace ? "Qoovex vNext" : "Sicurezza account"} platformRole={isWorkspace ? state.context.platformRole : state.platformRole} devView={isWorkspace ? state.devView : null} navigation={isWorkspace ? state.navigation.primary : []} showNotifications={isWorkspace && canReadWorkspaceNotifications(state.context.permissions)} unreadNotificationCount={isWorkspace ? state.unreadNotificationCount : 0} />
           {isWorkspace && state.context.support ? <SupportSessionBanner support={state.context.support} /> : null}
           <main className="min-h-0 min-w-0 flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">{isWorkspace ? children : <AccountSecurityFlow initialStatus={state.status} mode="gate" />}</main>
         </WorkspacePageIdentityProvider>

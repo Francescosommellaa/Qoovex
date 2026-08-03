@@ -30,8 +30,7 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
       ...existingUser,
       imageUrl: getUserAvatarUrl(existingUser),
       isAdmin: existingUser.platformRole === "PLATFORM_ADMIN" || (
-        existingUser.organizationMembership?.revokedAt === null &&
-        existingUser.organizationMembership.role === "OWNER"
+        existingUser.organizationMemberships.some((membership) => membership.revokedAt === null && membership.role === "OWNER")
       ),
     };
   }
@@ -61,8 +60,7 @@ export async function bootstrapUser(options?: BootstrapUserOptions) {
     ...workspaceUser,
     imageUrl: getUserAvatarUrl(workspaceUser),
     isAdmin: workspaceUser.platformRole === "PLATFORM_ADMIN" || (
-      workspaceUser.organizationMembership?.revokedAt === null &&
-      workspaceUser.organizationMembership.role === "OWNER"
+      workspaceUser.organizationMemberships.some((membership) => membership.revokedAt === null && membership.role === "OWNER")
     ),
   };
 }

@@ -1,5 +1,0 @@
-import Link from "next/link";
-import { listJobSites } from "@shared/server/job-site-service";
-import { buttonVariants } from "@qoovex/ui/components/button";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
-export default async function JobSitesPage() { const values = await listJobSites(); return <WorkspacePage><WorkspacePageHeader title="Cantieri" description="Aggregate minimi foundation, senza lifecycle o funzioni vNext." action={<Link className={buttonVariants()} href="/job-sites/new">Crea</Link>} />{values.length ? <WorkspacePanel><ul className="divide-y">{values.map((value) => <li className="py-3" key={value.id}><Link className="font-medium underline-offset-4 hover:underline" href={`/job-sites/${value.id}`}>{value.name}</Link><span className="ml-2 text-sm text-muted-foreground">{value.address ?? "Indirizzo non indicato"}</span></li>)}</ul></WorkspacePanel> : <WorkspaceEmptyState title="Nessun cantiere" description="La foundation non simula cantieri vNext." />}</WorkspacePage>; }

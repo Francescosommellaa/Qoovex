@@ -23,13 +23,13 @@ Ogni affermazione sostanziale deve essere classificabile come:
 
 Una stessa direzione puo essere approvata e contemporaneamente non implementata. Usare formule esplicite, per esempio: “Nella direzione vNext approvata... Questa capacita non e implementata nello stato corrente.”
 
-## Stato implementato e vNext
+## Stato implementato
 
-D-VNEXT-46 ha eliminato il prodotto precedente. Lo stato corrente è foundation-only: identità, sicurezza, Aziende/accessi, Worker/assegnazioni, JobSite minimo, file/versioni private, prove, audit, supporto e data-control.
+D-VNEXT-46 ha eliminato il prodotto precedente; D-VNEXT-48 ha introdotto il prodotto vNext sullo stato foundation-only D-VNEXT-47. Lo stato corrente include account multi-contesto, membership multiple, partecipazione cliente, immobili, agreement, timeline, step, richieste, proposte, deleghe, pagamenti documentati, dispute, chiusura, export, post-chiusura e riapertura.
 
-Il modello mantiene `OWNER`/`COLLABORATOR` e una sola membership per User, ma non contiene più `JobSite.clientName`, `JobSiteOperationalPhase`, timeline prodotto, processi, deadline, checklist, pacchetti o share link.
+Il modello mantiene `OWNER`/`COLLABORATOR` e usa l’unicità membership `(organizationId,userId)`. `CLIENT` è un participant del singolo JobSite, mai un ruolo Azienda. Non sono stati reintrodotti `JobSite.clientName`, `JobSiteOperationalPhase`, deadline, checklist, pacchetti o share link.
 
-D-VNEXT-41–45 sono `SUPERSEDED`. D-VNEXT-47 approva lo stato intermedio foundation-only; D-VNEXT-48 riserva l’implementazione completa di vNext a un prompt separato. Non anticipare entità, lifecycle, route o UI del Prompt B.
+D-VNEXT-41–45 restano `SUPERSEDED`. D-VNEXT-18–40 e D-VNEXT-48 sono `implemented_decision`. Pricing/billing, marketplace, denaro in-app, IA, ruoli cliente futuri e cancellazione fisica restano non implementati o hard stop.
 
 ## Modifiche tecniche e memoria
 

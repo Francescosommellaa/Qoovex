@@ -61,7 +61,6 @@ export const ModelName = {
   Worker: 'Worker',
   JobSite: 'JobSite',
   WorkerUserLink: 'WorkerUserLink',
-  JobSiteUserAssignment: 'JobSiteUserAssignment',
   JobSiteWorkerAssignment: 'JobSiteWorkerAssignment',
   Document: 'Document',
   DocumentVersion: 'DocumentVersion',
@@ -70,6 +69,53 @@ export const ModelName = {
   EvidenceRevision: 'EvidenceRevision',
   Notification: 'Notification',
   DataControlJob: 'DataControlJob',
+  JobSiteParticipant: 'JobSiteParticipant',
+  JobSiteClientInvitation: 'JobSiteClientInvitation',
+  ClientProperty: 'ClientProperty',
+  ClientPropertyJobSiteLink: 'ClientPropertyJobSiteLink',
+  JobSiteAuthorityGrant: 'JobSiteAuthorityGrant',
+  JobSiteInitialAgreement: 'JobSiteInitialAgreement',
+  JobSiteInitialAgreementVersion: 'JobSiteInitialAgreementVersion',
+  JobSiteInitialAgreementConsent: 'JobSiteInitialAgreementConsent',
+  JobSiteStep: 'JobSiteStep',
+  JobSiteStepUserAssignment: 'JobSiteStepUserAssignment',
+  JobSiteStepWorkerAssignment: 'JobSiteStepWorkerAssignment',
+  JobSiteTimelineEvent: 'JobSiteTimelineEvent',
+  JobSiteTimelineArtifactReference: 'JobSiteTimelineArtifactReference',
+  JobSiteAttachment: 'JobSiteAttachment',
+  JobSiteAttachmentPublication: 'JobSiteAttachmentPublication',
+  JobSiteTimelineEventAttachment: 'JobSiteTimelineEventAttachment',
+  JobSiteRequest: 'JobSiteRequest',
+  JobSiteChangeProposal: 'JobSiteChangeProposal',
+  JobSiteChangeProposalVersion: 'JobSiteChangeProposalVersion',
+  JobSiteChangeProposalEffect: 'JobSiteChangeProposalEffect',
+  JobSiteChangeProposalConsent: 'JobSiteChangeProposalConsent',
+  OrganizationPaymentProfile: 'OrganizationPaymentProfile',
+  OrganizationPaymentProfileVersion: 'OrganizationPaymentProfileVersion',
+  JobSitePaymentRequest: 'JobSitePaymentRequest',
+  JobSitePaymentRequestStepLink: 'JobSitePaymentRequestStepLink',
+  JobSitePaymentRequestProposalLink: 'JobSitePaymentRequestProposalLink',
+  JobSitePaymentTransferDeclaration: 'JobSitePaymentTransferDeclaration',
+  JobSitePaymentReview: 'JobSitePaymentReview',
+  JobSiteDispute: 'JobSiteDispute',
+  JobSiteDisputeArtifactReference: 'JobSiteDisputeArtifactReference',
+  JobSiteDisputeConsent: 'JobSiteDisputeConsent',
+  JobSiteDisputePreservation: 'JobSiteDisputePreservation',
+  JobSiteClosure: 'JobSiteClosure',
+  JobSiteClosureConsent: 'JobSiteClosureConsent',
+  JobSitePostClosureRequest: 'JobSitePostClosureRequest',
+  JobSiteReopeningProposal: 'JobSiteReopeningProposal',
+  JobSiteReopeningConsent: 'JobSiteReopeningConsent',
+  JobSiteExport: 'JobSiteExport',
+  JobSiteExportAccessLink: 'JobSiteExportAccessLink',
+  JobSiteExportDownloadGrant: 'JobSiteExportDownloadGrant',
+  LegalHold: 'LegalHold',
+  JobSiteActionReceipt: 'JobSiteActionReceipt',
+  JobSiteProcess: 'JobSiteProcess',
+  JobSiteProcessStep: 'JobSiteProcessStep',
+  JobSiteProcessEvent: 'JobSiteProcessEvent',
+  NotificationPreference: 'NotificationPreference',
+  NotificationDelivery: 'NotificationDelivery',
   OrganizationMembership: 'OrganizationMembership',
   OrganizationInvitation: 'OrganizationInvitation',
   OrganizationMembershipResourceGrant: 'OrganizationMembershipResourceGrant',
@@ -241,13 +287,22 @@ export const JobSiteScalarFieldEnum = {
   organizationId: 'organizationId',
   name: 'name',
   address: 'address',
+  description: 'description',
   status: 'status',
+  revision: 'revision',
+  timelineSequence: 'timelineSequence',
+  historicalCreatorUserId: 'historicalCreatorUserId',
+  responsibleParticipantId: 'responsibleParticipantId',
+  estimatedCompletionAt: 'estimatedCompletionAt',
+  estimatedCompletionAuthorId: 'estimatedCompletionAuthorId',
+  estimatedCompletionSetAt: 'estimatedCompletionSetAt',
   startDate: 'startDate',
   endDate: 'endDate',
+  closedAt: 'closedAt',
+  archivedAt: 'archivedAt',
   notes: 'notes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  archivedAt: 'archivedAt'
+  updatedAt: 'updatedAt'
 } as const
 
 export type JobSiteScalarFieldEnum = (typeof JobSiteScalarFieldEnum)[keyof typeof JobSiteScalarFieldEnum]
@@ -265,27 +320,6 @@ export const WorkerUserLinkScalarFieldEnum = {
 } as const
 
 export type WorkerUserLinkScalarFieldEnum = (typeof WorkerUserLinkScalarFieldEnum)[keyof typeof WorkerUserLinkScalarFieldEnum]
-
-
-export const JobSiteUserAssignmentScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  jobSiteId: 'jobSiteId',
-  userId: 'userId',
-  assignmentRole: 'assignmentRole',
-  operationalRoleLabel: 'operationalRoleLabel',
-  taskLabel: 'taskLabel',
-  startsAt: 'startsAt',
-  endsAt: 'endsAt',
-  endedById: 'endedById',
-  endReason: 'endReason',
-  assignedById: 'assignedById',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type JobSiteUserAssignmentScalarFieldEnum = (typeof JobSiteUserAssignmentScalarFieldEnum)[keyof typeof JobSiteUserAssignmentScalarFieldEnum]
 
 
 export const JobSiteWorkerAssignmentScalarFieldEnum = {
@@ -438,6 +472,785 @@ export const DataControlJobScalarFieldEnum = {
 } as const
 
 export type DataControlJobScalarFieldEnum = (typeof DataControlJobScalarFieldEnum)[keyof typeof DataControlJobScalarFieldEnum]
+
+
+export const JobSiteParticipantScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  userId: 'userId',
+  membershipId: 'membershipId',
+  kind: 'kind',
+  status: 'status',
+  accessVersion: 'accessVersion',
+  publicRoleLabel: 'publicRoleLabel',
+  activeKey: 'activeKey',
+  primaryClientKey: 'primaryClientKey',
+  userSideKey: 'userSideKey',
+  invitedAt: 'invitedAt',
+  activatedAt: 'activatedAt',
+  suspendedAt: 'suspendedAt',
+  endedAt: 'endedAt',
+  revokedAt: 'revokedAt',
+  createdByUserId: 'createdByUserId',
+  endedByUserId: 'endedByUserId',
+  endReason: 'endReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JobSiteParticipantScalarFieldEnum = (typeof JobSiteParticipantScalarFieldEnum)[keyof typeof JobSiteParticipantScalarFieldEnum]
+
+
+export const JobSiteClientInvitationScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  emailNormalized: 'emailNormalized',
+  tokenHash: 'tokenHash',
+  activeKey: 'activeKey',
+  status: 'status',
+  invitedByUserId: 'invitedByUserId',
+  acceptedByParticipantId: 'acceptedByParticipantId',
+  expiresAt: 'expiresAt',
+  acceptedAt: 'acceptedAt',
+  revokedAt: 'revokedAt',
+  supersededAt: 'supersededAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JobSiteClientInvitationScalarFieldEnum = (typeof JobSiteClientInvitationScalarFieldEnum)[keyof typeof JobSiteClientInvitationScalarFieldEnum]
+
+
+export const ClientPropertyScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  displayName: 'displayName',
+  addressLine: 'addressLine',
+  city: 'city',
+  postalCode: 'postalCode',
+  countryCode: 'countryCode',
+  imageBlobKey: 'imageBlobKey',
+  privateNotes: 'privateNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  archivedAt: 'archivedAt'
+} as const
+
+export type ClientPropertyScalarFieldEnum = (typeof ClientPropertyScalarFieldEnum)[keyof typeof ClientPropertyScalarFieldEnum]
+
+
+export const ClientPropertyJobSiteLinkScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  propertyId: 'propertyId',
+  jobSiteId: 'jobSiteId',
+  linkedByUserId: 'linkedByUserId',
+  createdAt: 'createdAt',
+  archivedAt: 'archivedAt'
+} as const
+
+export type ClientPropertyJobSiteLinkScalarFieldEnum = (typeof ClientPropertyJobSiteLinkScalarFieldEnum)[keyof typeof ClientPropertyJobSiteLinkScalarFieldEnum]
+
+
+export const JobSiteAuthorityGrantScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  participantId: 'participantId',
+  participantAccessVersion: 'participantAccessVersion',
+  capability: 'capability',
+  status: 'status',
+  activeKey: 'activeKey',
+  grantedByUserId: 'grantedByUserId',
+  revokedByUserId: 'revokedByUserId',
+  validFrom: 'validFrom',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  reason: 'reason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JobSiteAuthorityGrantScalarFieldEnum = (typeof JobSiteAuthorityGrantScalarFieldEnum)[keyof typeof JobSiteAuthorityGrantScalarFieldEnum]
+
+
+export const JobSiteInitialAgreementScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  status: 'status',
+  currentVersionId: 'currentVersionId',
+  createdByUserId: 'createdByUserId',
+  confirmedAt: 'confirmedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JobSiteInitialAgreementScalarFieldEnum = (typeof JobSiteInitialAgreementScalarFieldEnum)[keyof typeof JobSiteInitialAgreementScalarFieldEnum]
+
+
+export const JobSiteInitialAgreementVersionScalarFieldEnum = {
+  id: 'id',
+  agreementId: 'agreementId',
+  version: 'version',
+  schemaVersion: 'schemaVersion',
+  payload: 'payload',
+  fingerprint: 'fingerprint',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteInitialAgreementVersionScalarFieldEnum = (typeof JobSiteInitialAgreementVersionScalarFieldEnum)[keyof typeof JobSiteInitialAgreementVersionScalarFieldEnum]
+
+
+export const JobSiteInitialAgreementConsentScalarFieldEnum = {
+  id: 'id',
+  versionId: 'versionId',
+  participantId: 'participantId',
+  decision: 'decision',
+  fingerprint: 'fingerprint',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteInitialAgreementConsentScalarFieldEnum = (typeof JobSiteInitialAgreementConsentScalarFieldEnum)[keyof typeof JobSiteInitialAgreementConsentScalarFieldEnum]
+
+
+export const JobSiteStepScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  title: 'title',
+  description: 'description',
+  expectedOutcome: 'expectedOutcome',
+  sortOrder: 'sortOrder',
+  status: 'status',
+  revision: 'revision',
+  indicativeDate: 'indicativeDate',
+  estimatedCompletionAt: 'estimatedCompletionAt',
+  economicValueMinor: 'economicValueMinor',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  cancelledAt: 'cancelledAt'
+} as const
+
+export type JobSiteStepScalarFieldEnum = (typeof JobSiteStepScalarFieldEnum)[keyof typeof JobSiteStepScalarFieldEnum]
+
+
+export const JobSiteStepUserAssignmentScalarFieldEnum = {
+  id: 'id',
+  stepId: 'stepId',
+  participantId: 'participantId',
+  roleLabel: 'roleLabel',
+  assignedByUserId: 'assignedByUserId',
+  createdAt: 'createdAt',
+  endedAt: 'endedAt'
+} as const
+
+export type JobSiteStepUserAssignmentScalarFieldEnum = (typeof JobSiteStepUserAssignmentScalarFieldEnum)[keyof typeof JobSiteStepUserAssignmentScalarFieldEnum]
+
+
+export const JobSiteStepWorkerAssignmentScalarFieldEnum = {
+  id: 'id',
+  stepId: 'stepId',
+  workerId: 'workerId',
+  roleLabel: 'roleLabel',
+  assignedByUserId: 'assignedByUserId',
+  createdAt: 'createdAt',
+  endedAt: 'endedAt'
+} as const
+
+export type JobSiteStepWorkerAssignmentScalarFieldEnum = (typeof JobSiteStepWorkerAssignmentScalarFieldEnum)[keyof typeof JobSiteStepWorkerAssignmentScalarFieldEnum]
+
+
+export const JobSiteTimelineEventScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  sequence: 'sequence',
+  type: 'type',
+  audience: 'audience',
+  disclosure: 'disclosure',
+  actorKind: 'actorKind',
+  actorUserId: 'actorUserId',
+  actorParticipantId: 'actorParticipantId',
+  stepId: 'stepId',
+  title: 'title',
+  body: 'body',
+  replyToEventId: 'replyToEventId',
+  schemaVersion: 'schemaVersion',
+  payload: 'payload',
+  fingerprint: 'fingerprint',
+  supersedesEventId: 'supersedesEventId',
+  withdrawnAt: 'withdrawnAt',
+  createdAt: 'createdAt',
+  occurredAt: 'occurredAt'
+} as const
+
+export type JobSiteTimelineEventScalarFieldEnum = (typeof JobSiteTimelineEventScalarFieldEnum)[keyof typeof JobSiteTimelineEventScalarFieldEnum]
+
+
+export const JobSiteTimelineArtifactReferenceScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  type: 'type',
+  targetId: 'targetId',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteTimelineArtifactReferenceScalarFieldEnum = (typeof JobSiteTimelineArtifactReferenceScalarFieldEnum)[keyof typeof JobSiteTimelineArtifactReferenceScalarFieldEnum]
+
+
+export const JobSiteAttachmentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  category: 'category',
+  sourceKind: 'sourceKind',
+  sourceId: 'sourceId',
+  blobKey: 'blobKey',
+  originalFileName: 'originalFileName',
+  mimeType: 'mimeType',
+  size: 'size',
+  checksumSha256: 'checksumSha256',
+  uploadedByUserId: 'uploadedByUserId',
+  createdAt: 'createdAt',
+  archivedAt: 'archivedAt'
+} as const
+
+export type JobSiteAttachmentScalarFieldEnum = (typeof JobSiteAttachmentScalarFieldEnum)[keyof typeof JobSiteAttachmentScalarFieldEnum]
+
+
+export const JobSiteAttachmentPublicationScalarFieldEnum = {
+  id: 'id',
+  attachmentId: 'attachmentId',
+  eventId: 'eventId',
+  audience: 'audience',
+  disclosure: 'disclosure',
+  publishedByUserId: 'publishedByUserId',
+  createdAt: 'createdAt',
+  withdrawnAt: 'withdrawnAt'
+} as const
+
+export type JobSiteAttachmentPublicationScalarFieldEnum = (typeof JobSiteAttachmentPublicationScalarFieldEnum)[keyof typeof JobSiteAttachmentPublicationScalarFieldEnum]
+
+
+export const JobSiteTimelineEventAttachmentScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  attachmentId: 'attachmentId',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteTimelineEventAttachmentScalarFieldEnum = (typeof JobSiteTimelineEventAttachmentScalarFieldEnum)[keyof typeof JobSiteTimelineEventAttachmentScalarFieldEnum]
+
+
+export const JobSiteRequestScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  openedByParticipantId: 'openedByParticipantId',
+  type: 'type',
+  assignedSide: 'assignedSide',
+  title: 'title',
+  body: 'body',
+  status: 'status',
+  blocking: 'blocking',
+  stepId: 'stepId',
+  proposalId: 'proposalId',
+  paymentRequestId: 'paymentRequestId',
+  timelineEventId: 'timelineEventId',
+  revision: 'revision',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  resolvedAt: 'resolvedAt'
+} as const
+
+export type JobSiteRequestScalarFieldEnum = (typeof JobSiteRequestScalarFieldEnum)[keyof typeof JobSiteRequestScalarFieldEnum]
+
+
+export const JobSiteChangeProposalScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  status: 'status',
+  currentVersionId: 'currentVersionId',
+  representedSide: 'representedSide',
+  createdByParticipantId: 'createdByParticipantId',
+  activeKey: 'activeKey',
+  expiresAt: 'expiresAt',
+  acceptedAt: 'acceptedAt',
+  rejectedAt: 'rejectedAt',
+  withdrawnAt: 'withdrawnAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JobSiteChangeProposalScalarFieldEnum = (typeof JobSiteChangeProposalScalarFieldEnum)[keyof typeof JobSiteChangeProposalScalarFieldEnum]
+
+
+export const JobSiteChangeProposalVersionScalarFieldEnum = {
+  id: 'id',
+  proposalId: 'proposalId',
+  version: 'version',
+  schemaVersion: 'schemaVersion',
+  payload: 'payload',
+  fingerprint: 'fingerprint',
+  previousPriceMinor: 'previousPriceMinor',
+  economicDeltaMinor: 'economicDeltaMinor',
+  rangeMinimumMinor: 'rangeMinimumMinor',
+  rangeMaximumMinor: 'rangeMaximumMinor',
+  estimatedCompletionAt: 'estimatedCompletionAt',
+  createdByParticipantId: 'createdByParticipantId',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteChangeProposalVersionScalarFieldEnum = (typeof JobSiteChangeProposalVersionScalarFieldEnum)[keyof typeof JobSiteChangeProposalVersionScalarFieldEnum]
+
+
+export const JobSiteChangeProposalEffectScalarFieldEnum = {
+  id: 'id',
+  versionId: 'versionId',
+  ordinal: 'ordinal',
+  type: 'type',
+  schemaVersion: 'schemaVersion',
+  payload: 'payload',
+  fingerprint: 'fingerprint',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  beforeSnapshot: 'beforeSnapshot',
+  afterSnapshot: 'afterSnapshot',
+  receiptFingerprint: 'receiptFingerprint',
+  appliedAt: 'appliedAt'
+} as const
+
+export type JobSiteChangeProposalEffectScalarFieldEnum = (typeof JobSiteChangeProposalEffectScalarFieldEnum)[keyof typeof JobSiteChangeProposalEffectScalarFieldEnum]
+
+
+export const JobSiteChangeProposalConsentScalarFieldEnum = {
+  id: 'id',
+  versionId: 'versionId',
+  participantId: 'participantId',
+  decision: 'decision',
+  fingerprint: 'fingerprint',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteChangeProposalConsentScalarFieldEnum = (typeof JobSiteChangeProposalConsentScalarFieldEnum)[keyof typeof JobSiteChangeProposalConsentScalarFieldEnum]
+
+
+export const OrganizationPaymentProfileScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  currentVersionId: 'currentVersionId',
+  activeKey: 'activeKey',
+  revision: 'revision',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  archivedAt: 'archivedAt'
+} as const
+
+export type OrganizationPaymentProfileScalarFieldEnum = (typeof OrganizationPaymentProfileScalarFieldEnum)[keyof typeof OrganizationPaymentProfileScalarFieldEnum]
+
+
+export const OrganizationPaymentProfileVersionScalarFieldEnum = {
+  id: 'id',
+  profileId: 'profileId',
+  version: 'version',
+  accountHolder: 'accountHolder',
+  ibanCiphertext: 'ibanCiphertext',
+  ibanNonce: 'ibanNonce',
+  ibanAuthTag: 'ibanAuthTag',
+  encryptionKeyId: 'encryptionKeyId',
+  ibanLast4: 'ibanLast4',
+  aadVersion: 'aadVersion',
+  fingerprint: 'fingerprint',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type OrganizationPaymentProfileVersionScalarFieldEnum = (typeof OrganizationPaymentProfileVersionScalarFieldEnum)[keyof typeof OrganizationPaymentProfileVersionScalarFieldEnum]
+
+
+export const JobSitePaymentRequestScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  paymentProfileId: 'paymentProfileId',
+  paymentProfileVersionId: 'paymentProfileVersionId',
+  status: 'status',
+  revision: 'revision',
+  amountMinor: 'amountMinor',
+  reason: 'reason',
+  transferReference: 'transferReference',
+  requestedByParticipantId: 'requestedByParticipantId',
+  requestedAt: 'requestedAt',
+  dueAt: 'dueAt',
+  confirmedAt: 'confirmedAt',
+  cancelledAt: 'cancelledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JobSitePaymentRequestScalarFieldEnum = (typeof JobSitePaymentRequestScalarFieldEnum)[keyof typeof JobSitePaymentRequestScalarFieldEnum]
+
+
+export const JobSitePaymentRequestStepLinkScalarFieldEnum = {
+  id: 'id',
+  paymentRequestId: 'paymentRequestId',
+  stepId: 'stepId'
+} as const
+
+export type JobSitePaymentRequestStepLinkScalarFieldEnum = (typeof JobSitePaymentRequestStepLinkScalarFieldEnum)[keyof typeof JobSitePaymentRequestStepLinkScalarFieldEnum]
+
+
+export const JobSitePaymentRequestProposalLinkScalarFieldEnum = {
+  id: 'id',
+  paymentRequestId: 'paymentRequestId',
+  proposalId: 'proposalId'
+} as const
+
+export type JobSitePaymentRequestProposalLinkScalarFieldEnum = (typeof JobSitePaymentRequestProposalLinkScalarFieldEnum)[keyof typeof JobSitePaymentRequestProposalLinkScalarFieldEnum]
+
+
+export const JobSitePaymentTransferDeclarationScalarFieldEnum = {
+  id: 'id',
+  paymentRequestId: 'paymentRequestId',
+  declaredByParticipantId: 'declaredByParticipantId',
+  amountMinor: 'amountMinor',
+  transferredAt: 'transferredAt',
+  method: 'method',
+  reference: 'reference',
+  note: 'note',
+  receiptAttachmentId: 'receiptAttachmentId',
+  fingerprint: 'fingerprint',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSitePaymentTransferDeclarationScalarFieldEnum = (typeof JobSitePaymentTransferDeclarationScalarFieldEnum)[keyof typeof JobSitePaymentTransferDeclarationScalarFieldEnum]
+
+
+export const JobSitePaymentReviewScalarFieldEnum = {
+  id: 'id',
+  paymentRequestId: 'paymentRequestId',
+  reviewedByParticipantId: 'reviewedByParticipantId',
+  outcome: 'outcome',
+  note: 'note',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSitePaymentReviewScalarFieldEnum = (typeof JobSitePaymentReviewScalarFieldEnum)[keyof typeof JobSitePaymentReviewScalarFieldEnum]
+
+
+export const JobSiteDisputeScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  openedByParticipantId: 'openedByParticipantId',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  revision: 'revision',
+  relatedType: 'relatedType',
+  relatedId: 'relatedId',
+  openedAt: 'openedAt',
+  resolvedAt: 'resolvedAt',
+  withdrawnAt: 'withdrawnAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JobSiteDisputeScalarFieldEnum = (typeof JobSiteDisputeScalarFieldEnum)[keyof typeof JobSiteDisputeScalarFieldEnum]
+
+
+export const JobSiteDisputeArtifactReferenceScalarFieldEnum = {
+  id: 'id',
+  disputeId: 'disputeId',
+  type: 'type',
+  targetId: 'targetId',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteDisputeArtifactReferenceScalarFieldEnum = (typeof JobSiteDisputeArtifactReferenceScalarFieldEnum)[keyof typeof JobSiteDisputeArtifactReferenceScalarFieldEnum]
+
+
+export const JobSiteDisputeConsentScalarFieldEnum = {
+  id: 'id',
+  disputeId: 'disputeId',
+  participantId: 'participantId',
+  decision: 'decision',
+  resolutionFingerprint: 'resolutionFingerprint',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteDisputeConsentScalarFieldEnum = (typeof JobSiteDisputeConsentScalarFieldEnum)[keyof typeof JobSiteDisputeConsentScalarFieldEnum]
+
+
+export const JobSiteDisputePreservationScalarFieldEnum = {
+  id: 'id',
+  disputeId: 'disputeId',
+  snapshot: 'snapshot',
+  schemaVersion: 'schemaVersion',
+  fingerprint: 'fingerprint',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteDisputePreservationScalarFieldEnum = (typeof JobSiteDisputePreservationScalarFieldEnum)[keyof typeof JobSiteDisputePreservationScalarFieldEnum]
+
+
+export const JobSiteClosureScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  status: 'status',
+  revision: 'revision',
+  jobSiteRevision: 'jobSiteRevision',
+  timelineSequence: 'timelineSequence',
+  schemaVersion: 'schemaVersion',
+  snapshot: 'snapshot',
+  fingerprint: 'fingerprint',
+  proposedByParticipantId: 'proposedByParticipantId',
+  proposedAt: 'proposedAt',
+  closedAt: 'closedAt',
+  withdrawnAt: 'withdrawnAt'
+} as const
+
+export type JobSiteClosureScalarFieldEnum = (typeof JobSiteClosureScalarFieldEnum)[keyof typeof JobSiteClosureScalarFieldEnum]
+
+
+export const JobSiteClosureConsentScalarFieldEnum = {
+  id: 'id',
+  closureId: 'closureId',
+  participantId: 'participantId',
+  decision: 'decision',
+  fingerprint: 'fingerprint',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteClosureConsentScalarFieldEnum = (typeof JobSiteClosureConsentScalarFieldEnum)[keyof typeof JobSiteClosureConsentScalarFieldEnum]
+
+
+export const JobSitePostClosureRequestScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  openedByParticipantId: 'openedByParticipantId',
+  title: 'title',
+  body: 'body',
+  status: 'status',
+  revision: 'revision',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  resolvedAt: 'resolvedAt'
+} as const
+
+export type JobSitePostClosureRequestScalarFieldEnum = (typeof JobSitePostClosureRequestScalarFieldEnum)[keyof typeof JobSitePostClosureRequestScalarFieldEnum]
+
+
+export const JobSiteReopeningProposalScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  postClosureRequestId: 'postClosureRequestId',
+  status: 'status',
+  revision: 'revision',
+  reason: 'reason',
+  fingerprint: 'fingerprint',
+  proposedByParticipantId: 'proposedByParticipantId',
+  proposedAt: 'proposedAt',
+  appliedAt: 'appliedAt',
+  withdrawnAt: 'withdrawnAt'
+} as const
+
+export type JobSiteReopeningProposalScalarFieldEnum = (typeof JobSiteReopeningProposalScalarFieldEnum)[keyof typeof JobSiteReopeningProposalScalarFieldEnum]
+
+
+export const JobSiteReopeningConsentScalarFieldEnum = {
+  id: 'id',
+  proposalId: 'proposalId',
+  participantId: 'participantId',
+  decision: 'decision',
+  fingerprint: 'fingerprint',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteReopeningConsentScalarFieldEnum = (typeof JobSiteReopeningConsentScalarFieldEnum)[keyof typeof JobSiteReopeningConsentScalarFieldEnum]
+
+
+export const JobSiteExportScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  audience: 'audience',
+  status: 'status',
+  requestedByUserId: 'requestedByUserId',
+  requestedByParticipantId: 'requestedByParticipantId',
+  schemaVersion: 'schemaVersion',
+  manifestFingerprint: 'manifestFingerprint',
+  blobKey: 'blobKey',
+  size: 'size',
+  checksumSha256: 'checksumSha256',
+  availableUntil: 'availableUntil',
+  errorCode: 'errorCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type JobSiteExportScalarFieldEnum = (typeof JobSiteExportScalarFieldEnum)[keyof typeof JobSiteExportScalarFieldEnum]
+
+
+export const JobSiteExportAccessLinkScalarFieldEnum = {
+  id: 'id',
+  exportId: 'exportId',
+  tokenHash: 'tokenHash',
+  activeKey: 'activeKey',
+  expiresAt: 'expiresAt',
+  consumedAt: 'consumedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteExportAccessLinkScalarFieldEnum = (typeof JobSiteExportAccessLinkScalarFieldEnum)[keyof typeof JobSiteExportAccessLinkScalarFieldEnum]
+
+
+export const JobSiteExportDownloadGrantScalarFieldEnum = {
+  id: 'id',
+  exportId: 'exportId',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  activeKey: 'activeKey',
+  expiresAt: 'expiresAt',
+  consumedAt: 'consumedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteExportDownloadGrantScalarFieldEnum = (typeof JobSiteExportDownloadGrantScalarFieldEnum)[keyof typeof JobSiteExportDownloadGrantScalarFieldEnum]
+
+
+export const LegalHoldScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  status: 'status',
+  reason: 'reason',
+  placedByUserId: 'placedByUserId',
+  placedAt: 'placedAt',
+  releasedByUserId: 'releasedByUserId',
+  releasedAt: 'releasedAt',
+  releaseReason: 'releaseReason'
+} as const
+
+export type LegalHoldScalarFieldEnum = (typeof LegalHoldScalarFieldEnum)[keyof typeof LegalHoldScalarFieldEnum]
+
+
+export const JobSiteActionReceiptScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  action: 'action',
+  idempotencyKey: 'idempotencyKey',
+  inputFingerprint: 'inputFingerprint',
+  result: 'result',
+  resultFingerprint: 'resultFingerprint',
+  actorUserId: 'actorUserId',
+  actorParticipantId: 'actorParticipantId',
+  expectedRevision: 'expectedRevision',
+  resultingRevision: 'resultingRevision',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteActionReceiptScalarFieldEnum = (typeof JobSiteActionReceiptScalarFieldEnum)[keyof typeof JobSiteActionReceiptScalarFieldEnum]
+
+
+export const JobSiteProcessScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  jobSiteId: 'jobSiteId',
+  definitionKey: 'definitionKey',
+  status: 'status',
+  activeKey: 'activeKey',
+  input: 'input',
+  inputFingerprint: 'inputFingerprint',
+  attemptCount: 'attemptCount',
+  maxAttempts: 'maxAttempts',
+  nextAttemptAt: 'nextAttemptAt',
+  claimedBy: 'claimedBy',
+  leaseExpiresAt: 'leaseExpiresAt',
+  fencingToken: 'fencingToken',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type JobSiteProcessScalarFieldEnum = (typeof JobSiteProcessScalarFieldEnum)[keyof typeof JobSiteProcessScalarFieldEnum]
+
+
+export const JobSiteProcessStepScalarFieldEnum = {
+  id: 'id',
+  processId: 'processId',
+  key: 'key',
+  ordinal: 'ordinal',
+  status: 'status',
+  attemptCount: 'attemptCount',
+  input: 'input',
+  output: 'output',
+  errorCode: 'errorCode',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type JobSiteProcessStepScalarFieldEnum = (typeof JobSiteProcessStepScalarFieldEnum)[keyof typeof JobSiteProcessStepScalarFieldEnum]
+
+
+export const JobSiteProcessEventScalarFieldEnum = {
+  id: 'id',
+  processId: 'processId',
+  sequence: 'sequence',
+  type: 'type',
+  payload: 'payload',
+  fencingToken: 'fencingToken',
+  createdAt: 'createdAt'
+} as const
+
+export type JobSiteProcessEventScalarFieldEnum = (typeof JobSiteProcessEventScalarFieldEnum)[keyof typeof JobSiteProcessEventScalarFieldEnum]
+
+
+export const NotificationPreferenceScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  type: 'type',
+  channel: 'channel',
+  frequency: 'frequency',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationPreferenceScalarFieldEnum = (typeof NotificationPreferenceScalarFieldEnum)[keyof typeof NotificationPreferenceScalarFieldEnum]
+
+
+export const NotificationDeliveryScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  notificationId: 'notificationId',
+  channel: 'channel',
+  status: 'status',
+  dedupeKey: 'dedupeKey',
+  templateKey: 'templateKey',
+  safePayload: 'safePayload',
+  attemptCount: 'attemptCount',
+  nextAttemptAt: 'nextAttemptAt',
+  sentAt: 'sentAt',
+  failedAt: 'failedAt',
+  errorCode: 'errorCode',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationDeliveryScalarFieldEnum = (typeof NotificationDeliveryScalarFieldEnum)[keyof typeof NotificationDeliveryScalarFieldEnum]
 
 
 export const OrganizationMembershipScalarFieldEnum = {
@@ -700,6 +1513,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

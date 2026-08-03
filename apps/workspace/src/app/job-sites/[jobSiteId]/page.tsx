@@ -1,3 +1,0 @@
-import { getJobSite } from "@shared/server/job-site-service";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
-export default async function JobSitePage({ params }: { params: Promise<{ jobSiteId: string }> }) { const value = await getJobSite((await params).jobSiteId); return <WorkspacePage><WorkspacePageHeader title={value.name} description="Record cantiere foundation: nessun cliente account, fase o lifecycle vNext." /><WorkspacePanel><dl className="grid gap-3 text-sm"><div><dt className="text-muted-foreground">Indirizzo</dt><dd>{value.address ?? "Non indicato"}</dd></div><div><dt className="text-muted-foreground">Note</dt><dd>{value.notes ?? "Nessuna nota"}</dd></div></dl></WorkspacePanel></WorkspacePage>; }

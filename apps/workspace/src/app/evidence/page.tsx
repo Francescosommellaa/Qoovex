@@ -1,5 +1,0 @@
-import Link from "next/link";
-import { listEvidence } from "@shared/server/evidence-service";
-import { buttonVariants } from "@qoovex/ui/components/button";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
-export default async function EvidencePage() { const values = await listEvidence(); return <WorkspacePage><WorkspacePageHeader title="Prove" description="Note e file probatori generici della foundation." action={<Link className={buttonVariants()} href="/evidence/new">Aggiungi</Link>} />{values.length ? <WorkspacePanel><ul className="divide-y">{values.map((value) => <li className="flex items-center justify-between gap-3 py-3" key={value.id}><span><strong>{value.title}</strong><small className="ml-2 text-muted-foreground">{value.type}</small></span>{value.blobKey ? <Link className="text-sm underline" href={`/api/evidence/${value.id}/download`}>Scarica</Link> : null}</li>)}</ul></WorkspacePanel> : <WorkspaceEmptyState title="Nessuna prova" description="La foundation conserva soltanto primitive generiche." />}</WorkspacePage>; }

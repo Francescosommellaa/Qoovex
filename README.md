@@ -1,22 +1,26 @@
-# Qoovex
+# Qoovex vNext
 
 ## Stato canonico
 
-- `verified_current_state`: repository foundation-only dopo D-VNEXT-46 Legacy Eradication.
-- `approved_product_direction`: Qoovex vNext, spazio condiviso Azienda-cliente per il lavoro edile.
-- `conceptual_not_implemented`: tutte le capacità prodotto vNext.
+- `verified_current_state`: il monorepo implementa Qoovex vNext come prodotto autenticato Azienda-cliente.
+- `implemented_decision`: D-VNEXT-18–40, D-VNEXT-46, D-VNEXT-47 e D-VNEXT-48 sono verificabili in schema, migration, servizi, route, manifest e superfici.
+- `approved_product_direction`: l’Azienda documenta il lavoro una volta e usa la stessa storia per cliente, modifiche e richieste di pagamento; il cliente segue i lavori sulle proprie case e conserva quanto condiviso.
+- `conceptual_not_implemented`: ruoli cliente ulteriori, pricing/billing, marketplace, pagamenti in-app, IA e cancellazione fisica.
+- `hard_stop`: nessuna migration o operazione Blob remota; nessuna cancellazione fisica di cantieri o account.
 
-La build corrente conserva identità, Auth.js, MFA, sicurezza, Aziende, `OWNER`/`COLLABORATOR`, inviti aziendali, scope e grant, Worker e assegnazioni, `JobSite` minimo, file/versioni private, prove, notifiche di sistema, audit, supporto e data-control. Non contiene timeline prodotto, deadline, checklist, pacchetti, share link, richieste contestuali, fasi cantiere o processi prodotto.
+Qoovex è lo spazio condiviso in cui un’impresa gestisce un lavoro edile con il cliente dalla creazione del cantiere alla chiusura. Il prodotto registra timeline append-only, step opzionali, richieste, proposte versionate, deleghe economiche esplicite, pagamenti soltanto documentati, dispute, chiusura reciproca, richieste post-chiusura, riapertura, immobili cliente ed export distinti.
 
-`CLIENT` non è e non diventa un `OrganizationRole`. Account cliente, immobili, partecipazione al cantiere, timeline condivisa, step, proposte, pagamenti, dispute, chiusura reciproca ed export cliente saranno oggetto del Prompt B e non sono disponibili qui.
+`OrganizationRole` contiene esclusivamente `OWNER` e `COLLABORATOR`. Il cliente usa un account Qoovex e una `JobSiteParticipant` separata dalla membership Azienda. Qoovex non incassa, custodisce, trasferisce o garantisce denaro.
 
 ## Applicazioni
 
-- `apps/workspace`: runtime autenticato foundation-only.
-- `apps/web`: sito pubblico che distingue direzione approvata e capacità disponibile.
-- `apps/sirio`: catalogo della sola foundation visuale; nessuna demo prodotto.
-- `packages/db`, `packages/types`, `packages/ui`: persistence, contratti foundation e UI condivisa.
+- `apps/workspace`: prodotto autenticato con contesti `/org/[organizationId]` e `/client`.
+- `apps/web`: sito pubblico allineato al prodotto disponibile, senza pricing o promesse legali.
+- `apps/sirio`: catalogo della foundation visuale condivisa.
+- `packages/db`: Prisma, 19 migration e client generato.
+- `packages/types`: contratti platform-neutral; importi serializzati come stringhe minor-unit.
+- `packages/ui`: primitive visuali generiche.
 
 ## Operazioni
 
-Leggere [docs/HowToUse.md](docs/HowToUse.md) e [docs/OperationalProtocol.md](docs/OperationalProtocol.md). Database operation impact del task D-VNEXT-46: una migration locale distruttiva; Preview e Production non applicate.
+Leggere [HowToUse](docs/HowToUse.md), [OperationalProtocol](docs/OperationalProtocol.md) e i documenti canonici [00–08](docs/README.md). La migration vNext è `20260803010000_implement_qoovex_vnext`: è stata provata soltanto su database locali isolati fresh e upgrade. Preview e Production non sono state toccate.

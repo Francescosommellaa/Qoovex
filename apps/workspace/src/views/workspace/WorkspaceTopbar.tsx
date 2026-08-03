@@ -19,7 +19,7 @@ export function WorkspaceTopbar({ fallbackLabel, platformRole, devView, navigati
   const pageLabel = useWorkspacePageIdentity(pathname) ?? configured?.label ?? fallbackLabel;
   return <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b bg-background/90 px-3 backdrop-blur-xl sm:px-4">
     <SidebarTrigger aria-label="Apri navigazione" className="md:hidden" /><SidebarCollapseButton className="hidden md:flex" iconOnly /><Separator className="hidden h-4 md:block" orientation="vertical" />
-    <Breadcrumb className="min-w-0 flex-1"><BreadcrumbList><BreadcrumbItem>{pathname === "/dashboard" ? <BreadcrumbPage>{pageLabel}</BreadcrumbPage> : <BreadcrumbLink render={<Link href="/dashboard" />}>Ambiente Azienda</BreadcrumbLink>}</BreadcrumbItem>{pathname !== "/dashboard" ? <BreadcrumbItem><BreadcrumbPage>{pageLabel}</BreadcrumbPage></BreadcrumbItem> : null}</BreadcrumbList></Breadcrumb>
+    <Breadcrumb className="min-w-0 flex-1"><BreadcrumbList><BreadcrumbItem>{pathname === "/contexts" ? <BreadcrumbPage>{pageLabel}</BreadcrumbPage> : <BreadcrumbLink render={<Link href="/contexts" />}>Contesti</BreadcrumbLink>}</BreadcrumbItem>{pathname !== "/contexts" ? <BreadcrumbItem><BreadcrumbPage>{pageLabel}</BreadcrumbPage></BreadcrumbItem> : null}</BreadcrumbList></Breadcrumb>
     <div className="ml-auto flex items-center gap-1">{showNotifications ? <WorkspaceNotificationsPanel unreadNotificationCount={unreadNotificationCount} /> : null}{platformRole !== "USER" ? <Badge variant="outline"><IconShieldLock className="size-3" />{platformRole === "PLATFORM_ADMIN" ? "Admin" : "Supporto"}</Badge> : null}{devView ? <DevViewSwitcher view={devView} /> : null}<ThemeToggle /></div>
   </header>;
 }

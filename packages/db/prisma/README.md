@@ -1,7 +1,9 @@
-# Prisma foundation
+# Prisma Qoovex vNext
 
-History immutabile: 18 migration. `20260802010000_remove_legacy_product_foundation` elimina il dominio precedente e preserva identità/sicurezza, piattaforma, Aziende/accessi, Worker/assegnazioni, JobSite minimo, file/versioni, prove, audit, notifiche `SYSTEM` e data-control.
+History immutabile: 19 migration. `OrganizationRole` contiene soltanto `OWNER` e `COLLABORATOR`; membership unica per `(organizationId,userId)`; il cliente è `JobSiteParticipant`, mai membership Azienda.
 
-`JobSite` non contiene `clientName` o fase operativa. `OrganizationRole` contiene soltanto `OWNER` e `COLLABORATOR`. Nessun modello vNext è anticipato.
+`JobSite` usa il lifecycle vNext e non contiene `clientName` o fase operativa. `JobSiteUserAssignment` è stato migrato in participant Azienda; `JobSiteWorkerAssignment` resta per Worker senza account.
+
+La migration vNext non inventa cliente, agreement o timeline condivise per i record foundation: conserva i dati, assegna `DRAFT revision=1` e registra in audit l’eventuale `archivedAt` legacy prima di azzerarlo.
 
 Usare i guardrail locali e `pnpm --filter @qoovex/db verify:prisma`; mai `db push`, `migrate resolve` o SQL manuale fuori migration.

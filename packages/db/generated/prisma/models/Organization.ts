@@ -206,12 +206,33 @@ export type OrganizationWhereInput = {
   evidence?: Prisma.EvidenceListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   workerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentListRelationFilter
+  jobSiteParticipants?: Prisma.JobSiteParticipantListRelationFilter
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentListRelationFilter
   profile?: Prisma.XOR<Prisma.OrganizationProfileNullableScalarRelationFilter, Prisma.OrganizationProfileWhereInput> | null
   contacts?: Prisma.OrganizationContactListRelationFilter
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkListRelationFilter
   evidenceRevisions?: Prisma.EvidenceRevisionListRelationFilter
+  clientInvitations?: Prisma.JobSiteClientInvitationListRelationFilter
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkListRelationFilter
+  authorityGrants?: Prisma.JobSiteAuthorityGrantListRelationFilter
+  initialAgreements?: Prisma.JobSiteInitialAgreementListRelationFilter
+  jobSiteSteps?: Prisma.JobSiteStepListRelationFilter
+  timelineEvents?: Prisma.JobSiteTimelineEventListRelationFilter
+  jobSiteAttachments?: Prisma.JobSiteAttachmentListRelationFilter
+  jobSiteRequests?: Prisma.JobSiteRequestListRelationFilter
+  changeProposals?: Prisma.JobSiteChangeProposalListRelationFilter
+  paymentProfiles?: Prisma.OrganizationPaymentProfileListRelationFilter
+  paymentRequests?: Prisma.JobSitePaymentRequestListRelationFilter
+  disputes?: Prisma.JobSiteDisputeListRelationFilter
+  closures?: Prisma.JobSiteClosureListRelationFilter
+  postClosureRequests?: Prisma.JobSitePostClosureRequestListRelationFilter
+  reopeningProposals?: Prisma.JobSiteReopeningProposalListRelationFilter
+  jobSiteExports?: Prisma.JobSiteExportListRelationFilter
+  legalHolds?: Prisma.LegalHoldListRelationFilter
+  actionReceipts?: Prisma.JobSiteActionReceiptListRelationFilter
+  jobSiteProcesses?: Prisma.JobSiteProcessListRelationFilter
+  notificationPreferences?: Prisma.NotificationPreferenceListRelationFilter
+  notificationDeliveries?: Prisma.NotificationDeliveryListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -237,12 +258,33 @@ export type OrganizationOrderByWithRelationInput = {
   evidence?: Prisma.EvidenceOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   workerUserLinks?: Prisma.WorkerUserLinkOrderByRelationAggregateInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentOrderByRelationAggregateInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantOrderByRelationAggregateInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentOrderByRelationAggregateInput
   profile?: Prisma.OrganizationProfileOrderByWithRelationInput
   contacts?: Prisma.OrganizationContactOrderByRelationAggregateInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkOrderByRelationAggregateInput
   evidenceRevisions?: Prisma.EvidenceRevisionOrderByRelationAggregateInput
+  clientInvitations?: Prisma.JobSiteClientInvitationOrderByRelationAggregateInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkOrderByRelationAggregateInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantOrderByRelationAggregateInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementOrderByRelationAggregateInput
+  jobSiteSteps?: Prisma.JobSiteStepOrderByRelationAggregateInput
+  timelineEvents?: Prisma.JobSiteTimelineEventOrderByRelationAggregateInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentOrderByRelationAggregateInput
+  jobSiteRequests?: Prisma.JobSiteRequestOrderByRelationAggregateInput
+  changeProposals?: Prisma.JobSiteChangeProposalOrderByRelationAggregateInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileOrderByRelationAggregateInput
+  paymentRequests?: Prisma.JobSitePaymentRequestOrderByRelationAggregateInput
+  disputes?: Prisma.JobSiteDisputeOrderByRelationAggregateInput
+  closures?: Prisma.JobSiteClosureOrderByRelationAggregateInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestOrderByRelationAggregateInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalOrderByRelationAggregateInput
+  jobSiteExports?: Prisma.JobSiteExportOrderByRelationAggregateInput
+  legalHolds?: Prisma.LegalHoldOrderByRelationAggregateInput
+  actionReceipts?: Prisma.JobSiteActionReceiptOrderByRelationAggregateInput
+  jobSiteProcesses?: Prisma.JobSiteProcessOrderByRelationAggregateInput
+  notificationPreferences?: Prisma.NotificationPreferenceOrderByRelationAggregateInput
+  notificationDeliveries?: Prisma.NotificationDeliveryOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -271,12 +313,33 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   evidence?: Prisma.EvidenceListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   workerUserLinks?: Prisma.WorkerUserLinkListRelationFilter
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentListRelationFilter
+  jobSiteParticipants?: Prisma.JobSiteParticipantListRelationFilter
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentListRelationFilter
   profile?: Prisma.XOR<Prisma.OrganizationProfileNullableScalarRelationFilter, Prisma.OrganizationProfileWhereInput> | null
   contacts?: Prisma.OrganizationContactListRelationFilter
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkListRelationFilter
   evidenceRevisions?: Prisma.EvidenceRevisionListRelationFilter
+  clientInvitations?: Prisma.JobSiteClientInvitationListRelationFilter
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkListRelationFilter
+  authorityGrants?: Prisma.JobSiteAuthorityGrantListRelationFilter
+  initialAgreements?: Prisma.JobSiteInitialAgreementListRelationFilter
+  jobSiteSteps?: Prisma.JobSiteStepListRelationFilter
+  timelineEvents?: Prisma.JobSiteTimelineEventListRelationFilter
+  jobSiteAttachments?: Prisma.JobSiteAttachmentListRelationFilter
+  jobSiteRequests?: Prisma.JobSiteRequestListRelationFilter
+  changeProposals?: Prisma.JobSiteChangeProposalListRelationFilter
+  paymentProfiles?: Prisma.OrganizationPaymentProfileListRelationFilter
+  paymentRequests?: Prisma.JobSitePaymentRequestListRelationFilter
+  disputes?: Prisma.JobSiteDisputeListRelationFilter
+  closures?: Prisma.JobSiteClosureListRelationFilter
+  postClosureRequests?: Prisma.JobSitePostClosureRequestListRelationFilter
+  reopeningProposals?: Prisma.JobSiteReopeningProposalListRelationFilter
+  jobSiteExports?: Prisma.JobSiteExportListRelationFilter
+  legalHolds?: Prisma.LegalHoldListRelationFilter
+  actionReceipts?: Prisma.JobSiteActionReceiptListRelationFilter
+  jobSiteProcesses?: Prisma.JobSiteProcessListRelationFilter
+  notificationPreferences?: Prisma.NotificationPreferenceListRelationFilter
+  notificationDeliveries?: Prisma.NotificationDeliveryListRelationFilter
 }, "id" | "code">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -325,12 +388,33 @@ export type OrganizationCreateInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -355,12 +439,33 @@ export type OrganizationUncheckedCreateInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -385,12 +490,33 @@ export type OrganizationUpdateInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -415,12 +541,33 @@ export type OrganizationUncheckedUpdateInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -608,20 +755,6 @@ export type OrganizationUpdateOneRequiredWithoutWorkerUserLinksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutWorkerUserLinksInput, Prisma.OrganizationUpdateWithoutWorkerUserLinksInput>, Prisma.OrganizationUncheckedUpdateWithoutWorkerUserLinksInput>
 }
 
-export type OrganizationCreateNestedOneWithoutJobSiteUserAssignmentsInput = {
-  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteUserAssignmentsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteUserAssignmentsInput>
-  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteUserAssignmentsInput
-  connect?: Prisma.OrganizationWhereUniqueInput
-}
-
-export type OrganizationUpdateOneRequiredWithoutJobSiteUserAssignmentsNestedInput = {
-  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteUserAssignmentsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteUserAssignmentsInput>
-  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteUserAssignmentsInput
-  upsert?: Prisma.OrganizationUpsertWithoutJobSiteUserAssignmentsInput
-  connect?: Prisma.OrganizationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutJobSiteUserAssignmentsInput, Prisma.OrganizationUpdateWithoutJobSiteUserAssignmentsInput>, Prisma.OrganizationUncheckedUpdateWithoutJobSiteUserAssignmentsInput>
-}
-
 export type OrganizationCreateNestedOneWithoutJobSiteWorkerAssignmentsInput = {
   create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteWorkerAssignmentsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteWorkerAssignmentsInput>
   connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteWorkerAssignmentsInput
@@ -718,6 +851,314 @@ export type OrganizationUpdateOneRequiredWithoutNotificationsNestedInput = {
   upsert?: Prisma.OrganizationUpsertWithoutNotificationsInput
   connect?: Prisma.OrganizationWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutNotificationsInput, Prisma.OrganizationUpdateWithoutNotificationsInput>, Prisma.OrganizationUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutJobSiteParticipantsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteParticipantsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteParticipantsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteParticipantsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutJobSiteParticipantsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteParticipantsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteParticipantsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteParticipantsInput
+  upsert?: Prisma.OrganizationUpsertWithoutJobSiteParticipantsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutJobSiteParticipantsInput, Prisma.OrganizationUpdateWithoutJobSiteParticipantsInput>, Prisma.OrganizationUncheckedUpdateWithoutJobSiteParticipantsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutClientInvitationsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutClientInvitationsInput, Prisma.OrganizationUncheckedCreateWithoutClientInvitationsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutClientInvitationsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutClientInvitationsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutClientInvitationsInput, Prisma.OrganizationUncheckedCreateWithoutClientInvitationsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutClientInvitationsInput
+  upsert?: Prisma.OrganizationUpsertWithoutClientInvitationsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutClientInvitationsInput, Prisma.OrganizationUpdateWithoutClientInvitationsInput>, Prisma.OrganizationUncheckedUpdateWithoutClientInvitationsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutClientPropertyLinksInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutClientPropertyLinksInput, Prisma.OrganizationUncheckedCreateWithoutClientPropertyLinksInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutClientPropertyLinksInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutClientPropertyLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutClientPropertyLinksInput, Prisma.OrganizationUncheckedCreateWithoutClientPropertyLinksInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutClientPropertyLinksInput
+  upsert?: Prisma.OrganizationUpsertWithoutClientPropertyLinksInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutClientPropertyLinksInput, Prisma.OrganizationUpdateWithoutClientPropertyLinksInput>, Prisma.OrganizationUncheckedUpdateWithoutClientPropertyLinksInput>
+}
+
+export type OrganizationCreateNestedOneWithoutAuthorityGrantsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutAuthorityGrantsInput, Prisma.OrganizationUncheckedCreateWithoutAuthorityGrantsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutAuthorityGrantsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutAuthorityGrantsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutAuthorityGrantsInput, Prisma.OrganizationUncheckedCreateWithoutAuthorityGrantsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutAuthorityGrantsInput
+  upsert?: Prisma.OrganizationUpsertWithoutAuthorityGrantsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutAuthorityGrantsInput, Prisma.OrganizationUpdateWithoutAuthorityGrantsInput>, Prisma.OrganizationUncheckedUpdateWithoutAuthorityGrantsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutInitialAgreementsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutInitialAgreementsInput, Prisma.OrganizationUncheckedCreateWithoutInitialAgreementsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutInitialAgreementsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutInitialAgreementsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutInitialAgreementsInput, Prisma.OrganizationUncheckedCreateWithoutInitialAgreementsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutInitialAgreementsInput
+  upsert?: Prisma.OrganizationUpsertWithoutInitialAgreementsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutInitialAgreementsInput, Prisma.OrganizationUpdateWithoutInitialAgreementsInput>, Prisma.OrganizationUncheckedUpdateWithoutInitialAgreementsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutJobSiteStepsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteStepsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteStepsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteStepsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutJobSiteStepsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteStepsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteStepsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteStepsInput
+  upsert?: Prisma.OrganizationUpsertWithoutJobSiteStepsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutJobSiteStepsInput, Prisma.OrganizationUpdateWithoutJobSiteStepsInput>, Prisma.OrganizationUncheckedUpdateWithoutJobSiteStepsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutTimelineEventsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutTimelineEventsInput, Prisma.OrganizationUncheckedCreateWithoutTimelineEventsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutTimelineEventsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutTimelineEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutTimelineEventsInput, Prisma.OrganizationUncheckedCreateWithoutTimelineEventsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutTimelineEventsInput
+  upsert?: Prisma.OrganizationUpsertWithoutTimelineEventsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutTimelineEventsInput, Prisma.OrganizationUpdateWithoutTimelineEventsInput>, Prisma.OrganizationUncheckedUpdateWithoutTimelineEventsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutJobSiteAttachmentsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteAttachmentsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteAttachmentsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteAttachmentsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutJobSiteAttachmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteAttachmentsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteAttachmentsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteAttachmentsInput
+  upsert?: Prisma.OrganizationUpsertWithoutJobSiteAttachmentsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutJobSiteAttachmentsInput, Prisma.OrganizationUpdateWithoutJobSiteAttachmentsInput>, Prisma.OrganizationUncheckedUpdateWithoutJobSiteAttachmentsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutJobSiteRequestsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteRequestsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteRequestsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteRequestsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutJobSiteRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteRequestsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteRequestsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteRequestsInput
+  upsert?: Prisma.OrganizationUpsertWithoutJobSiteRequestsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutJobSiteRequestsInput, Prisma.OrganizationUpdateWithoutJobSiteRequestsInput>, Prisma.OrganizationUncheckedUpdateWithoutJobSiteRequestsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutChangeProposalsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutChangeProposalsInput, Prisma.OrganizationUncheckedCreateWithoutChangeProposalsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutChangeProposalsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutChangeProposalsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutChangeProposalsInput, Prisma.OrganizationUncheckedCreateWithoutChangeProposalsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutChangeProposalsInput
+  upsert?: Prisma.OrganizationUpsertWithoutChangeProposalsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutChangeProposalsInput, Prisma.OrganizationUpdateWithoutChangeProposalsInput>, Prisma.OrganizationUncheckedUpdateWithoutChangeProposalsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutPaymentProfilesInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentProfilesInput, Prisma.OrganizationUncheckedCreateWithoutPaymentProfilesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPaymentProfilesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutPaymentProfilesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentProfilesInput, Prisma.OrganizationUncheckedCreateWithoutPaymentProfilesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPaymentProfilesInput
+  upsert?: Prisma.OrganizationUpsertWithoutPaymentProfilesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutPaymentProfilesInput, Prisma.OrganizationUpdateWithoutPaymentProfilesInput>, Prisma.OrganizationUncheckedUpdateWithoutPaymentProfilesInput>
+}
+
+export type OrganizationCreateNestedOneWithoutPaymentRequestsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentRequestsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentRequestsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPaymentRequestsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutPaymentRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentRequestsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentRequestsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPaymentRequestsInput
+  upsert?: Prisma.OrganizationUpsertWithoutPaymentRequestsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutPaymentRequestsInput, Prisma.OrganizationUpdateWithoutPaymentRequestsInput>, Prisma.OrganizationUncheckedUpdateWithoutPaymentRequestsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutDisputesInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutDisputesInput, Prisma.OrganizationUncheckedCreateWithoutDisputesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutDisputesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutDisputesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutDisputesInput, Prisma.OrganizationUncheckedCreateWithoutDisputesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutDisputesInput
+  upsert?: Prisma.OrganizationUpsertWithoutDisputesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutDisputesInput, Prisma.OrganizationUpdateWithoutDisputesInput>, Prisma.OrganizationUncheckedUpdateWithoutDisputesInput>
+}
+
+export type OrganizationCreateNestedOneWithoutClosuresInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutClosuresInput, Prisma.OrganizationUncheckedCreateWithoutClosuresInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutClosuresInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutClosuresNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutClosuresInput, Prisma.OrganizationUncheckedCreateWithoutClosuresInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutClosuresInput
+  upsert?: Prisma.OrganizationUpsertWithoutClosuresInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutClosuresInput, Prisma.OrganizationUpdateWithoutClosuresInput>, Prisma.OrganizationUncheckedUpdateWithoutClosuresInput>
+}
+
+export type OrganizationCreateNestedOneWithoutPostClosureRequestsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPostClosureRequestsInput, Prisma.OrganizationUncheckedCreateWithoutPostClosureRequestsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPostClosureRequestsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutPostClosureRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPostClosureRequestsInput, Prisma.OrganizationUncheckedCreateWithoutPostClosureRequestsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPostClosureRequestsInput
+  upsert?: Prisma.OrganizationUpsertWithoutPostClosureRequestsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutPostClosureRequestsInput, Prisma.OrganizationUpdateWithoutPostClosureRequestsInput>, Prisma.OrganizationUncheckedUpdateWithoutPostClosureRequestsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutReopeningProposalsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutReopeningProposalsInput, Prisma.OrganizationUncheckedCreateWithoutReopeningProposalsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutReopeningProposalsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutReopeningProposalsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutReopeningProposalsInput, Prisma.OrganizationUncheckedCreateWithoutReopeningProposalsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutReopeningProposalsInput
+  upsert?: Prisma.OrganizationUpsertWithoutReopeningProposalsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutReopeningProposalsInput, Prisma.OrganizationUpdateWithoutReopeningProposalsInput>, Prisma.OrganizationUncheckedUpdateWithoutReopeningProposalsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutJobSiteExportsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteExportsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteExportsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteExportsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutJobSiteExportsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteExportsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteExportsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteExportsInput
+  upsert?: Prisma.OrganizationUpsertWithoutJobSiteExportsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutJobSiteExportsInput, Prisma.OrganizationUpdateWithoutJobSiteExportsInput>, Prisma.OrganizationUncheckedUpdateWithoutJobSiteExportsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutLegalHoldsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutLegalHoldsInput, Prisma.OrganizationUncheckedCreateWithoutLegalHoldsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutLegalHoldsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutLegalHoldsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutLegalHoldsInput, Prisma.OrganizationUncheckedCreateWithoutLegalHoldsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutLegalHoldsInput
+  upsert?: Prisma.OrganizationUpsertWithoutLegalHoldsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutLegalHoldsInput, Prisma.OrganizationUpdateWithoutLegalHoldsInput>, Prisma.OrganizationUncheckedUpdateWithoutLegalHoldsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutActionReceiptsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutActionReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutActionReceiptsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutActionReceiptsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutActionReceiptsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutActionReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutActionReceiptsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutActionReceiptsInput
+  upsert?: Prisma.OrganizationUpsertWithoutActionReceiptsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutActionReceiptsInput, Prisma.OrganizationUpdateWithoutActionReceiptsInput>, Prisma.OrganizationUncheckedUpdateWithoutActionReceiptsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutJobSiteProcessesInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteProcessesInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteProcessesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteProcessesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutJobSiteProcessesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteProcessesInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteProcessesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutJobSiteProcessesInput
+  upsert?: Prisma.OrganizationUpsertWithoutJobSiteProcessesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutJobSiteProcessesInput, Prisma.OrganizationUpdateWithoutJobSiteProcessesInput>, Prisma.OrganizationUncheckedUpdateWithoutJobSiteProcessesInput>
+}
+
+export type OrganizationCreateNestedOneWithoutNotificationPreferencesInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationPreferencesInput, Prisma.OrganizationUncheckedCreateWithoutNotificationPreferencesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutNotificationPreferencesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutNotificationPreferencesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationPreferencesInput, Prisma.OrganizationUncheckedCreateWithoutNotificationPreferencesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutNotificationPreferencesInput
+  upsert?: Prisma.OrganizationUpsertWithoutNotificationPreferencesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutNotificationPreferencesInput, Prisma.OrganizationUpdateWithoutNotificationPreferencesInput>, Prisma.OrganizationUncheckedUpdateWithoutNotificationPreferencesInput>
+}
+
+export type OrganizationCreateNestedOneWithoutNotificationDeliveriesInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationDeliveriesInput, Prisma.OrganizationUncheckedCreateWithoutNotificationDeliveriesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutNotificationDeliveriesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutNotificationDeliveriesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationDeliveriesInput, Prisma.OrganizationUncheckedCreateWithoutNotificationDeliveriesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutNotificationDeliveriesInput
+  upsert?: Prisma.OrganizationUpsertWithoutNotificationDeliveriesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutNotificationDeliveriesInput, Prisma.OrganizationUpdateWithoutNotificationDeliveriesInput>, Prisma.OrganizationUncheckedUpdateWithoutNotificationDeliveriesInput>
 }
 
 export type OrganizationCreateNestedOneWithoutMembershipsInput = {
@@ -855,12 +1296,33 @@ export type OrganizationCreateWithoutCreatedByInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutCreatedByInput = {
@@ -884,12 +1346,33 @@ export type OrganizationUncheckedCreateWithoutCreatedByInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutCreatedByInput = {
@@ -952,11 +1435,32 @@ export type OrganizationCreateWithoutProfileInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutProfileInput = {
@@ -981,11 +1485,32 @@ export type OrganizationUncheckedCreateWithoutProfileInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutProfileInput = {
@@ -1026,11 +1551,32 @@ export type OrganizationUpdateWithoutProfileInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutProfileInput = {
@@ -1055,11 +1601,32 @@ export type OrganizationUncheckedUpdateWithoutProfileInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutContactsInput = {
@@ -1084,11 +1651,32 @@ export type OrganizationCreateWithoutContactsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutContactsInput = {
@@ -1113,11 +1701,32 @@ export type OrganizationUncheckedCreateWithoutContactsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutContactsInput = {
@@ -1158,11 +1767,32 @@ export type OrganizationUpdateWithoutContactsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutContactsInput = {
@@ -1187,11 +1817,32 @@ export type OrganizationUncheckedUpdateWithoutContactsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutWorkersInput = {
@@ -1215,12 +1866,33 @@ export type OrganizationCreateWithoutWorkersInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutWorkersInput = {
@@ -1244,12 +1916,33 @@ export type OrganizationUncheckedCreateWithoutWorkersInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutWorkersInput = {
@@ -1289,12 +1982,33 @@ export type OrganizationUpdateWithoutWorkersInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutWorkersInput = {
@@ -1318,12 +2032,33 @@ export type OrganizationUncheckedUpdateWithoutWorkersInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutJobSitesInput = {
@@ -1347,12 +2082,33 @@ export type OrganizationCreateWithoutJobSitesInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutJobSitesInput = {
@@ -1376,12 +2132,33 @@ export type OrganizationUncheckedCreateWithoutJobSitesInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutJobSitesInput = {
@@ -1421,12 +2198,33 @@ export type OrganizationUpdateWithoutJobSitesInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutJobSitesInput = {
@@ -1450,12 +2248,33 @@ export type OrganizationUncheckedUpdateWithoutJobSitesInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutWorkerUserLinksInput = {
@@ -1479,12 +2298,33 @@ export type OrganizationCreateWithoutWorkerUserLinksInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutWorkerUserLinksInput = {
@@ -1508,12 +2348,33 @@ export type OrganizationUncheckedCreateWithoutWorkerUserLinksInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutWorkerUserLinksInput = {
@@ -1553,12 +2414,33 @@ export type OrganizationUpdateWithoutWorkerUserLinksInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutWorkerUserLinksInput = {
@@ -1582,144 +2464,33 @@ export type OrganizationUncheckedUpdateWithoutWorkerUserLinksInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
-}
-
-export type OrganizationCreateWithoutJobSiteUserAssignmentsInput = {
-  id?: string
-  name: string
-  code: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
-  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
-  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
-  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
-  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
-  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
-  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
-  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
-  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
-  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
-  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
-  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
-  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
-  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
-  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
-}
-
-export type OrganizationUncheckedCreateWithoutJobSiteUserAssignmentsInput = {
-  id?: string
-  name: string
-  code: string
-  createdById?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
-  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
-  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
-  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
-  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
-  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
-  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
-  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
-  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
-  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
-  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
-}
-
-export type OrganizationCreateOrConnectWithoutJobSiteUserAssignmentsInput = {
-  where: Prisma.OrganizationWhereUniqueInput
-  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteUserAssignmentsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteUserAssignmentsInput>
-}
-
-export type OrganizationUpsertWithoutJobSiteUserAssignmentsInput = {
-  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteUserAssignmentsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteUserAssignmentsInput>
-  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteUserAssignmentsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteUserAssignmentsInput>
-  where?: Prisma.OrganizationWhereInput
-}
-
-export type OrganizationUpdateToOneWithWhereWithoutJobSiteUserAssignmentsInput = {
-  where?: Prisma.OrganizationWhereInput
-  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteUserAssignmentsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteUserAssignmentsInput>
-}
-
-export type OrganizationUpdateWithoutJobSiteUserAssignmentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
-  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
-  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
-  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
-  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
-  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
-  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
-  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
-  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
-  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
-  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
-  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
-  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
-}
-
-export type OrganizationUncheckedUpdateWithoutJobSiteUserAssignmentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
-  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
-  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
-  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
-  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
-  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
-  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
-  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
-  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
-  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
-  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutJobSiteWorkerAssignmentsInput = {
@@ -1744,11 +2515,32 @@ export type OrganizationCreateWithoutJobSiteWorkerAssignmentsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutJobSiteWorkerAssignmentsInput = {
@@ -1773,11 +2565,32 @@ export type OrganizationUncheckedCreateWithoutJobSiteWorkerAssignmentsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutJobSiteWorkerAssignmentsInput = {
@@ -1818,11 +2631,32 @@ export type OrganizationUpdateWithoutJobSiteWorkerAssignmentsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutJobSiteWorkerAssignmentsInput = {
@@ -1847,11 +2681,32 @@ export type OrganizationUncheckedUpdateWithoutJobSiteWorkerAssignmentsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutDocumentsInput = {
@@ -1875,12 +2730,33 @@ export type OrganizationCreateWithoutDocumentsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDocumentsInput = {
@@ -1904,12 +2780,33 @@ export type OrganizationUncheckedCreateWithoutDocumentsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDocumentsInput = {
@@ -1949,12 +2846,33 @@ export type OrganizationUpdateWithoutDocumentsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDocumentsInput = {
@@ -1978,12 +2896,33 @@ export type OrganizationUncheckedUpdateWithoutDocumentsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutDocumentVersionsInput = {
@@ -2007,12 +2946,33 @@ export type OrganizationCreateWithoutDocumentVersionsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDocumentVersionsInput = {
@@ -2036,12 +2996,33 @@ export type OrganizationUncheckedCreateWithoutDocumentVersionsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDocumentVersionsInput = {
@@ -2081,12 +3062,33 @@ export type OrganizationUpdateWithoutDocumentVersionsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDocumentVersionsInput = {
@@ -2110,12 +3112,33 @@ export type OrganizationUncheckedUpdateWithoutDocumentVersionsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutDocumentJobSiteLinksInput = {
@@ -2140,11 +3163,32 @@ export type OrganizationCreateWithoutDocumentJobSiteLinksInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDocumentJobSiteLinksInput = {
@@ -2169,11 +3213,32 @@ export type OrganizationUncheckedCreateWithoutDocumentJobSiteLinksInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDocumentJobSiteLinksInput = {
@@ -2214,11 +3279,32 @@ export type OrganizationUpdateWithoutDocumentJobSiteLinksInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDocumentJobSiteLinksInput = {
@@ -2243,11 +3329,32 @@ export type OrganizationUncheckedUpdateWithoutDocumentJobSiteLinksInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutEvidenceInput = {
@@ -2271,12 +3378,33 @@ export type OrganizationCreateWithoutEvidenceInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutEvidenceInput = {
@@ -2300,12 +3428,33 @@ export type OrganizationUncheckedCreateWithoutEvidenceInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutEvidenceInput = {
@@ -2345,12 +3494,33 @@ export type OrganizationUpdateWithoutEvidenceInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutEvidenceInput = {
@@ -2374,12 +3544,33 @@ export type OrganizationUncheckedUpdateWithoutEvidenceInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutEvidenceRevisionsInput = {
@@ -2404,11 +3595,32 @@ export type OrganizationCreateWithoutEvidenceRevisionsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutEvidenceRevisionsInput = {
@@ -2433,11 +3645,32 @@ export type OrganizationUncheckedCreateWithoutEvidenceRevisionsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutEvidenceRevisionsInput = {
@@ -2478,11 +3711,32 @@ export type OrganizationUpdateWithoutEvidenceRevisionsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutEvidenceRevisionsInput = {
@@ -2507,11 +3761,32 @@ export type OrganizationUncheckedUpdateWithoutEvidenceRevisionsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutNotificationsInput = {
@@ -2535,12 +3810,33 @@ export type OrganizationCreateWithoutNotificationsInput = {
   documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutNotificationsInput = {
@@ -2564,12 +3860,33 @@ export type OrganizationUncheckedCreateWithoutNotificationsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutNotificationsInput = {
@@ -2609,12 +3926,33 @@ export type OrganizationUpdateWithoutNotificationsInput = {
   documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
@@ -2638,12 +3976,4785 @@ export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
   documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutJobSiteParticipantsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutJobSiteParticipantsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutJobSiteParticipantsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteParticipantsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteParticipantsInput>
+}
+
+export type OrganizationUpsertWithoutJobSiteParticipantsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteParticipantsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteParticipantsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteParticipantsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteParticipantsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutJobSiteParticipantsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteParticipantsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteParticipantsInput>
+}
+
+export type OrganizationUpdateWithoutJobSiteParticipantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutJobSiteParticipantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutClientInvitationsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutClientInvitationsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutClientInvitationsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutClientInvitationsInput, Prisma.OrganizationUncheckedCreateWithoutClientInvitationsInput>
+}
+
+export type OrganizationUpsertWithoutClientInvitationsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutClientInvitationsInput, Prisma.OrganizationUncheckedUpdateWithoutClientInvitationsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutClientInvitationsInput, Prisma.OrganizationUncheckedCreateWithoutClientInvitationsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutClientInvitationsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutClientInvitationsInput, Prisma.OrganizationUncheckedUpdateWithoutClientInvitationsInput>
+}
+
+export type OrganizationUpdateWithoutClientInvitationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutClientInvitationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutClientPropertyLinksInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutClientPropertyLinksInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutClientPropertyLinksInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutClientPropertyLinksInput, Prisma.OrganizationUncheckedCreateWithoutClientPropertyLinksInput>
+}
+
+export type OrganizationUpsertWithoutClientPropertyLinksInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutClientPropertyLinksInput, Prisma.OrganizationUncheckedUpdateWithoutClientPropertyLinksInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutClientPropertyLinksInput, Prisma.OrganizationUncheckedCreateWithoutClientPropertyLinksInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutClientPropertyLinksInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutClientPropertyLinksInput, Prisma.OrganizationUncheckedUpdateWithoutClientPropertyLinksInput>
+}
+
+export type OrganizationUpdateWithoutClientPropertyLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutClientPropertyLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutAuthorityGrantsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutAuthorityGrantsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutAuthorityGrantsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutAuthorityGrantsInput, Prisma.OrganizationUncheckedCreateWithoutAuthorityGrantsInput>
+}
+
+export type OrganizationUpsertWithoutAuthorityGrantsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutAuthorityGrantsInput, Prisma.OrganizationUncheckedUpdateWithoutAuthorityGrantsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutAuthorityGrantsInput, Prisma.OrganizationUncheckedCreateWithoutAuthorityGrantsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutAuthorityGrantsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutAuthorityGrantsInput, Prisma.OrganizationUncheckedUpdateWithoutAuthorityGrantsInput>
+}
+
+export type OrganizationUpdateWithoutAuthorityGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutAuthorityGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutInitialAgreementsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutInitialAgreementsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutInitialAgreementsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutInitialAgreementsInput, Prisma.OrganizationUncheckedCreateWithoutInitialAgreementsInput>
+}
+
+export type OrganizationUpsertWithoutInitialAgreementsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutInitialAgreementsInput, Prisma.OrganizationUncheckedUpdateWithoutInitialAgreementsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutInitialAgreementsInput, Prisma.OrganizationUncheckedCreateWithoutInitialAgreementsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutInitialAgreementsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutInitialAgreementsInput, Prisma.OrganizationUncheckedUpdateWithoutInitialAgreementsInput>
+}
+
+export type OrganizationUpdateWithoutInitialAgreementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutInitialAgreementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutJobSiteStepsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutJobSiteStepsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutJobSiteStepsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteStepsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteStepsInput>
+}
+
+export type OrganizationUpsertWithoutJobSiteStepsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteStepsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteStepsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteStepsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteStepsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutJobSiteStepsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteStepsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteStepsInput>
+}
+
+export type OrganizationUpdateWithoutJobSiteStepsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutJobSiteStepsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutTimelineEventsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutTimelineEventsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutTimelineEventsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutTimelineEventsInput, Prisma.OrganizationUncheckedCreateWithoutTimelineEventsInput>
+}
+
+export type OrganizationUpsertWithoutTimelineEventsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutTimelineEventsInput, Prisma.OrganizationUncheckedUpdateWithoutTimelineEventsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutTimelineEventsInput, Prisma.OrganizationUncheckedCreateWithoutTimelineEventsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutTimelineEventsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutTimelineEventsInput, Prisma.OrganizationUncheckedUpdateWithoutTimelineEventsInput>
+}
+
+export type OrganizationUpdateWithoutTimelineEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutTimelineEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutJobSiteAttachmentsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutJobSiteAttachmentsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutJobSiteAttachmentsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteAttachmentsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteAttachmentsInput>
+}
+
+export type OrganizationUpsertWithoutJobSiteAttachmentsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteAttachmentsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteAttachmentsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteAttachmentsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteAttachmentsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutJobSiteAttachmentsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteAttachmentsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteAttachmentsInput>
+}
+
+export type OrganizationUpdateWithoutJobSiteAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutJobSiteAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutJobSiteRequestsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutJobSiteRequestsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutJobSiteRequestsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteRequestsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteRequestsInput>
+}
+
+export type OrganizationUpsertWithoutJobSiteRequestsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteRequestsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteRequestsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteRequestsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteRequestsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutJobSiteRequestsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteRequestsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteRequestsInput>
+}
+
+export type OrganizationUpdateWithoutJobSiteRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutJobSiteRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutChangeProposalsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutChangeProposalsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutChangeProposalsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutChangeProposalsInput, Prisma.OrganizationUncheckedCreateWithoutChangeProposalsInput>
+}
+
+export type OrganizationUpsertWithoutChangeProposalsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutChangeProposalsInput, Prisma.OrganizationUncheckedUpdateWithoutChangeProposalsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutChangeProposalsInput, Prisma.OrganizationUncheckedCreateWithoutChangeProposalsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutChangeProposalsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutChangeProposalsInput, Prisma.OrganizationUncheckedUpdateWithoutChangeProposalsInput>
+}
+
+export type OrganizationUpdateWithoutChangeProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutChangeProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutPaymentProfilesInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutPaymentProfilesInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutPaymentProfilesInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentProfilesInput, Prisma.OrganizationUncheckedCreateWithoutPaymentProfilesInput>
+}
+
+export type OrganizationUpsertWithoutPaymentProfilesInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutPaymentProfilesInput, Prisma.OrganizationUncheckedUpdateWithoutPaymentProfilesInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentProfilesInput, Prisma.OrganizationUncheckedCreateWithoutPaymentProfilesInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutPaymentProfilesInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutPaymentProfilesInput, Prisma.OrganizationUncheckedUpdateWithoutPaymentProfilesInput>
+}
+
+export type OrganizationUpdateWithoutPaymentProfilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutPaymentProfilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutPaymentRequestsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutPaymentRequestsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutPaymentRequestsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentRequestsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentRequestsInput>
+}
+
+export type OrganizationUpsertWithoutPaymentRequestsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutPaymentRequestsInput, Prisma.OrganizationUncheckedUpdateWithoutPaymentRequestsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentRequestsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentRequestsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutPaymentRequestsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutPaymentRequestsInput, Prisma.OrganizationUncheckedUpdateWithoutPaymentRequestsInput>
+}
+
+export type OrganizationUpdateWithoutPaymentRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutPaymentRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutDisputesInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutDisputesInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutDisputesInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutDisputesInput, Prisma.OrganizationUncheckedCreateWithoutDisputesInput>
+}
+
+export type OrganizationUpsertWithoutDisputesInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutDisputesInput, Prisma.OrganizationUncheckedUpdateWithoutDisputesInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutDisputesInput, Prisma.OrganizationUncheckedCreateWithoutDisputesInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutDisputesInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutDisputesInput, Prisma.OrganizationUncheckedUpdateWithoutDisputesInput>
+}
+
+export type OrganizationUpdateWithoutDisputesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutDisputesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutClosuresInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutClosuresInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutClosuresInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutClosuresInput, Prisma.OrganizationUncheckedCreateWithoutClosuresInput>
+}
+
+export type OrganizationUpsertWithoutClosuresInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutClosuresInput, Prisma.OrganizationUncheckedUpdateWithoutClosuresInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutClosuresInput, Prisma.OrganizationUncheckedCreateWithoutClosuresInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutClosuresInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutClosuresInput, Prisma.OrganizationUncheckedUpdateWithoutClosuresInput>
+}
+
+export type OrganizationUpdateWithoutClosuresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutClosuresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutPostClosureRequestsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutPostClosureRequestsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutPostClosureRequestsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPostClosureRequestsInput, Prisma.OrganizationUncheckedCreateWithoutPostClosureRequestsInput>
+}
+
+export type OrganizationUpsertWithoutPostClosureRequestsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutPostClosureRequestsInput, Prisma.OrganizationUncheckedUpdateWithoutPostClosureRequestsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPostClosureRequestsInput, Prisma.OrganizationUncheckedCreateWithoutPostClosureRequestsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutPostClosureRequestsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutPostClosureRequestsInput, Prisma.OrganizationUncheckedUpdateWithoutPostClosureRequestsInput>
+}
+
+export type OrganizationUpdateWithoutPostClosureRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutPostClosureRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutReopeningProposalsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutReopeningProposalsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutReopeningProposalsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutReopeningProposalsInput, Prisma.OrganizationUncheckedCreateWithoutReopeningProposalsInput>
+}
+
+export type OrganizationUpsertWithoutReopeningProposalsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutReopeningProposalsInput, Prisma.OrganizationUncheckedUpdateWithoutReopeningProposalsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutReopeningProposalsInput, Prisma.OrganizationUncheckedCreateWithoutReopeningProposalsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutReopeningProposalsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutReopeningProposalsInput, Prisma.OrganizationUncheckedUpdateWithoutReopeningProposalsInput>
+}
+
+export type OrganizationUpdateWithoutReopeningProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutReopeningProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutJobSiteExportsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutJobSiteExportsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutJobSiteExportsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteExportsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteExportsInput>
+}
+
+export type OrganizationUpsertWithoutJobSiteExportsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteExportsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteExportsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteExportsInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteExportsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutJobSiteExportsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteExportsInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteExportsInput>
+}
+
+export type OrganizationUpdateWithoutJobSiteExportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutJobSiteExportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutLegalHoldsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutLegalHoldsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutLegalHoldsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutLegalHoldsInput, Prisma.OrganizationUncheckedCreateWithoutLegalHoldsInput>
+}
+
+export type OrganizationUpsertWithoutLegalHoldsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutLegalHoldsInput, Prisma.OrganizationUncheckedUpdateWithoutLegalHoldsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutLegalHoldsInput, Prisma.OrganizationUncheckedCreateWithoutLegalHoldsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutLegalHoldsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutLegalHoldsInput, Prisma.OrganizationUncheckedUpdateWithoutLegalHoldsInput>
+}
+
+export type OrganizationUpdateWithoutLegalHoldsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutLegalHoldsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutActionReceiptsInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutActionReceiptsInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutActionReceiptsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutActionReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutActionReceiptsInput>
+}
+
+export type OrganizationUpsertWithoutActionReceiptsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutActionReceiptsInput, Prisma.OrganizationUncheckedUpdateWithoutActionReceiptsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutActionReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutActionReceiptsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutActionReceiptsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutActionReceiptsInput, Prisma.OrganizationUncheckedUpdateWithoutActionReceiptsInput>
+}
+
+export type OrganizationUpdateWithoutActionReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutActionReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutJobSiteProcessesInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutJobSiteProcessesInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutJobSiteProcessesInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteProcessesInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteProcessesInput>
+}
+
+export type OrganizationUpsertWithoutJobSiteProcessesInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteProcessesInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteProcessesInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutJobSiteProcessesInput, Prisma.OrganizationUncheckedCreateWithoutJobSiteProcessesInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutJobSiteProcessesInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutJobSiteProcessesInput, Prisma.OrganizationUncheckedUpdateWithoutJobSiteProcessesInput>
+}
+
+export type OrganizationUpdateWithoutJobSiteProcessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutJobSiteProcessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutNotificationPreferencesInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutNotificationPreferencesInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutNotificationPreferencesInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationPreferencesInput, Prisma.OrganizationUncheckedCreateWithoutNotificationPreferencesInput>
+}
+
+export type OrganizationUpsertWithoutNotificationPreferencesInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutNotificationPreferencesInput, Prisma.OrganizationUncheckedUpdateWithoutNotificationPreferencesInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationPreferencesInput, Prisma.OrganizationUncheckedCreateWithoutNotificationPreferencesInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutNotificationPreferencesInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutNotificationPreferencesInput, Prisma.OrganizationUncheckedUpdateWithoutNotificationPreferencesInput>
+}
+
+export type OrganizationUpdateWithoutNotificationPreferencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutNotificationPreferencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutNotificationDeliveriesInput = {
+  id?: string
+  name: string
+  code: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedOrganizationsInput
+  memberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutNotificationDeliveriesInput = {
+  id?: string
+  name: string
+  code: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutOrganizationInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSites?: Prisma.JobSiteUncheckedCreateNestedManyWithoutOrganizationInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutOrganizationInput
+  documentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutOrganizationInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
+  contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutNotificationDeliveriesInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationDeliveriesInput, Prisma.OrganizationUncheckedCreateWithoutNotificationDeliveriesInput>
+}
+
+export type OrganizationUpsertWithoutNotificationDeliveriesInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutNotificationDeliveriesInput, Prisma.OrganizationUncheckedUpdateWithoutNotificationDeliveriesInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationDeliveriesInput, Prisma.OrganizationUncheckedCreateWithoutNotificationDeliveriesInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutNotificationDeliveriesInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutNotificationDeliveriesInput, Prisma.OrganizationUncheckedUpdateWithoutNotificationDeliveriesInput>
+}
+
+export type OrganizationUpdateWithoutNotificationDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedOrganizationsNestedInput
+  memberships?: Prisma.OrganizationMembershipUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutNotificationDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  membershipResourceGrants?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitationResourceGrants?: Prisma.OrganizationInvitationResourceGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+  supportEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSites?: Prisma.JobSiteUncheckedUpdateManyWithoutOrganizationNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
+  contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
+  documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutMembershipsInput = {
@@ -2667,12 +8778,33 @@ export type OrganizationCreateWithoutMembershipsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembershipsInput = {
@@ -2696,12 +8828,33 @@ export type OrganizationUncheckedCreateWithoutMembershipsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembershipsInput = {
@@ -2741,12 +8894,33 @@ export type OrganizationUpdateWithoutMembershipsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
@@ -2770,12 +8944,33 @@ export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvitationsInput = {
@@ -2799,12 +8994,33 @@ export type OrganizationCreateWithoutInvitationsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvitationsInput = {
@@ -2828,12 +9044,33 @@ export type OrganizationUncheckedCreateWithoutInvitationsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvitationsInput = {
@@ -2873,12 +9110,33 @@ export type OrganizationUpdateWithoutInvitationsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
@@ -2902,12 +9160,33 @@ export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutMembershipResourceGrantsInput = {
@@ -2931,12 +9210,33 @@ export type OrganizationCreateWithoutMembershipResourceGrantsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembershipResourceGrantsInput = {
@@ -2960,12 +9260,33 @@ export type OrganizationUncheckedCreateWithoutMembershipResourceGrantsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembershipResourceGrantsInput = {
@@ -3005,12 +9326,33 @@ export type OrganizationUpdateWithoutMembershipResourceGrantsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembershipResourceGrantsInput = {
@@ -3034,12 +9376,33 @@ export type OrganizationUncheckedUpdateWithoutMembershipResourceGrantsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvitationResourceGrantsInput = {
@@ -3063,12 +9426,33 @@ export type OrganizationCreateWithoutInvitationResourceGrantsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvitationResourceGrantsInput = {
@@ -3092,12 +9476,33 @@ export type OrganizationUncheckedCreateWithoutInvitationResourceGrantsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvitationResourceGrantsInput = {
@@ -3137,12 +9542,33 @@ export type OrganizationUpdateWithoutInvitationResourceGrantsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvitationResourceGrantsInput = {
@@ -3166,12 +9592,33 @@ export type OrganizationUncheckedUpdateWithoutInvitationResourceGrantsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutSupportSessionsInput = {
@@ -3195,12 +9642,33 @@ export type OrganizationCreateWithoutSupportSessionsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutSupportSessionsInput = {
@@ -3224,12 +9692,33 @@ export type OrganizationUncheckedCreateWithoutSupportSessionsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutSupportSessionsInput = {
@@ -3269,12 +9758,33 @@ export type OrganizationUpdateWithoutSupportSessionsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutSupportSessionsInput = {
@@ -3298,12 +9808,33 @@ export type OrganizationUncheckedUpdateWithoutSupportSessionsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutSupportEventsInput = {
@@ -3327,12 +9858,33 @@ export type OrganizationCreateWithoutSupportEventsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutSupportEventsInput = {
@@ -3356,12 +9908,33 @@ export type OrganizationUncheckedCreateWithoutSupportEventsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutSupportEventsInput = {
@@ -3401,12 +9974,33 @@ export type OrganizationUpdateWithoutSupportEventsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutSupportEventsInput = {
@@ -3430,12 +10024,33 @@ export type OrganizationUncheckedUpdateWithoutSupportEventsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutProductAuditEventsInput = {
@@ -3459,12 +10074,33 @@ export type OrganizationCreateWithoutProductAuditEventsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutProductAuditEventsInput = {
@@ -3488,12 +10124,33 @@ export type OrganizationUncheckedCreateWithoutProductAuditEventsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutProductAuditEventsInput = {
@@ -3533,12 +10190,33 @@ export type OrganizationUpdateWithoutProductAuditEventsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutProductAuditEventsInput = {
@@ -3562,12 +10240,33 @@ export type OrganizationUncheckedUpdateWithoutProductAuditEventsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutMfaRecoveryRequestsInput = {
@@ -3591,12 +10290,33 @@ export type OrganizationCreateWithoutMfaRecoveryRequestsInput = {
   evidence?: Prisma.EvidenceCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMfaRecoveryRequestsInput = {
@@ -3620,12 +10340,33 @@ export type OrganizationUncheckedCreateWithoutMfaRecoveryRequestsInput = {
   evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutOrganizationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutOrganizationInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutOrganizationInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
   profile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutOrganizationInput
   contacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutOrganizationInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutOrganizationInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutOrganizationInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutOrganizationInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOrganizationInput
+  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutOrganizationInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutOrganizationInput
+  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutOrganizationInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutOrganizationInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMfaRecoveryRequestsInput = {
@@ -3665,12 +10406,33 @@ export type OrganizationUpdateWithoutMfaRecoveryRequestsInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMfaRecoveryRequestsInput = {
@@ -3694,12 +10456,33 @@ export type OrganizationUncheckedUpdateWithoutMfaRecoveryRequestsInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyCreatedByInput = {
@@ -3731,12 +10514,33 @@ export type OrganizationUpdateWithoutCreatedByInput = {
   evidence?: Prisma.EvidenceUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutCreatedByInput = {
@@ -3760,12 +10564,33 @@ export type OrganizationUncheckedUpdateWithoutCreatedByInput = {
   evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutOrganizationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-  jobSiteUserAssignments?: Prisma.JobSiteUserAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutOrganizationNestedInput
   jobSiteWorkerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
   profile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutOrganizationNestedInput
   contacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutOrganizationNestedInput
   documentJobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  clientPropertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutOrganizationNestedInput
+  initialAgreements?: Prisma.JobSiteInitialAgreementUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteSteps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutOrganizationNestedInput
+  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteAttachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentProfiles?: Prisma.OrganizationPaymentProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOrganizationNestedInput
+  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutOrganizationNestedInput
+  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteExports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutOrganizationNestedInput
+  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutOrganizationNestedInput
+  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  jobSiteProcesses?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutOrganizationNestedInput
+  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateManyWithoutCreatedByInput = {
@@ -3797,11 +10622,32 @@ export type OrganizationCountOutputType = {
   evidence: number
   notifications: number
   workerUserLinks: number
-  jobSiteUserAssignments: number
+  jobSiteParticipants: number
   jobSiteWorkerAssignments: number
   contacts: number
   documentJobSiteLinks: number
   evidenceRevisions: number
+  clientInvitations: number
+  clientPropertyLinks: number
+  authorityGrants: number
+  initialAgreements: number
+  jobSiteSteps: number
+  timelineEvents: number
+  jobSiteAttachments: number
+  jobSiteRequests: number
+  changeProposals: number
+  paymentProfiles: number
+  paymentRequests: number
+  disputes: number
+  closures: number
+  postClosureRequests: number
+  reopeningProposals: number
+  jobSiteExports: number
+  legalHolds: number
+  actionReceipts: number
+  jobSiteProcesses: number
+  notificationPreferences: number
+  notificationDeliveries: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3820,11 +10666,32 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   evidence?: boolean | OrganizationCountOutputTypeCountEvidenceArgs
   notifications?: boolean | OrganizationCountOutputTypeCountNotificationsArgs
   workerUserLinks?: boolean | OrganizationCountOutputTypeCountWorkerUserLinksArgs
-  jobSiteUserAssignments?: boolean | OrganizationCountOutputTypeCountJobSiteUserAssignmentsArgs
+  jobSiteParticipants?: boolean | OrganizationCountOutputTypeCountJobSiteParticipantsArgs
   jobSiteWorkerAssignments?: boolean | OrganizationCountOutputTypeCountJobSiteWorkerAssignmentsArgs
   contacts?: boolean | OrganizationCountOutputTypeCountContactsArgs
   documentJobSiteLinks?: boolean | OrganizationCountOutputTypeCountDocumentJobSiteLinksArgs
   evidenceRevisions?: boolean | OrganizationCountOutputTypeCountEvidenceRevisionsArgs
+  clientInvitations?: boolean | OrganizationCountOutputTypeCountClientInvitationsArgs
+  clientPropertyLinks?: boolean | OrganizationCountOutputTypeCountClientPropertyLinksArgs
+  authorityGrants?: boolean | OrganizationCountOutputTypeCountAuthorityGrantsArgs
+  initialAgreements?: boolean | OrganizationCountOutputTypeCountInitialAgreementsArgs
+  jobSiteSteps?: boolean | OrganizationCountOutputTypeCountJobSiteStepsArgs
+  timelineEvents?: boolean | OrganizationCountOutputTypeCountTimelineEventsArgs
+  jobSiteAttachments?: boolean | OrganizationCountOutputTypeCountJobSiteAttachmentsArgs
+  jobSiteRequests?: boolean | OrganizationCountOutputTypeCountJobSiteRequestsArgs
+  changeProposals?: boolean | OrganizationCountOutputTypeCountChangeProposalsArgs
+  paymentProfiles?: boolean | OrganizationCountOutputTypeCountPaymentProfilesArgs
+  paymentRequests?: boolean | OrganizationCountOutputTypeCountPaymentRequestsArgs
+  disputes?: boolean | OrganizationCountOutputTypeCountDisputesArgs
+  closures?: boolean | OrganizationCountOutputTypeCountClosuresArgs
+  postClosureRequests?: boolean | OrganizationCountOutputTypeCountPostClosureRequestsArgs
+  reopeningProposals?: boolean | OrganizationCountOutputTypeCountReopeningProposalsArgs
+  jobSiteExports?: boolean | OrganizationCountOutputTypeCountJobSiteExportsArgs
+  legalHolds?: boolean | OrganizationCountOutputTypeCountLegalHoldsArgs
+  actionReceipts?: boolean | OrganizationCountOutputTypeCountActionReceiptsArgs
+  jobSiteProcesses?: boolean | OrganizationCountOutputTypeCountJobSiteProcessesArgs
+  notificationPreferences?: boolean | OrganizationCountOutputTypeCountNotificationPreferencesArgs
+  notificationDeliveries?: boolean | OrganizationCountOutputTypeCountNotificationDeliveriesArgs
 }
 
 /**
@@ -3945,8 +10812,8 @@ export type OrganizationCountOutputTypeCountWorkerUserLinksArgs<ExtArgs extends 
 /**
  * OrganizationCountOutputType without action
  */
-export type OrganizationCountOutputTypeCountJobSiteUserAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.JobSiteUserAssignmentWhereInput
+export type OrganizationCountOutputTypeCountJobSiteParticipantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteParticipantWhereInput
 }
 
 /**
@@ -3977,6 +10844,153 @@ export type OrganizationCountOutputTypeCountEvidenceRevisionsArgs<ExtArgs extend
   where?: Prisma.EvidenceRevisionWhereInput
 }
 
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountClientInvitationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteClientInvitationWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountClientPropertyLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClientPropertyJobSiteLinkWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountAuthorityGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteAuthorityGrantWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountInitialAgreementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteInitialAgreementWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountJobSiteStepsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteStepWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountTimelineEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteTimelineEventWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountJobSiteAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteAttachmentWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountJobSiteRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteRequestWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountChangeProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteChangeProposalWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountPaymentProfilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrganizationPaymentProfileWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountPaymentRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSitePaymentRequestWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountDisputesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteDisputeWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountClosuresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteClosureWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountPostClosureRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSitePostClosureRequestWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountReopeningProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteReopeningProposalWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountJobSiteExportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteExportWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountLegalHoldsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LegalHoldWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountActionReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteActionReceiptWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountJobSiteProcessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteProcessWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountNotificationPreferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationPreferenceWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountNotificationDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationDeliveryWhereInput
+}
+
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4001,12 +11015,33 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   evidence?: boolean | Prisma.Organization$evidenceArgs<ExtArgs>
   notifications?: boolean | Prisma.Organization$notificationsArgs<ExtArgs>
   workerUserLinks?: boolean | Prisma.Organization$workerUserLinksArgs<ExtArgs>
-  jobSiteUserAssignments?: boolean | Prisma.Organization$jobSiteUserAssignmentsArgs<ExtArgs>
+  jobSiteParticipants?: boolean | Prisma.Organization$jobSiteParticipantsArgs<ExtArgs>
   jobSiteWorkerAssignments?: boolean | Prisma.Organization$jobSiteWorkerAssignmentsArgs<ExtArgs>
   profile?: boolean | Prisma.Organization$profileArgs<ExtArgs>
   contacts?: boolean | Prisma.Organization$contactsArgs<ExtArgs>
   documentJobSiteLinks?: boolean | Prisma.Organization$documentJobSiteLinksArgs<ExtArgs>
   evidenceRevisions?: boolean | Prisma.Organization$evidenceRevisionsArgs<ExtArgs>
+  clientInvitations?: boolean | Prisma.Organization$clientInvitationsArgs<ExtArgs>
+  clientPropertyLinks?: boolean | Prisma.Organization$clientPropertyLinksArgs<ExtArgs>
+  authorityGrants?: boolean | Prisma.Organization$authorityGrantsArgs<ExtArgs>
+  initialAgreements?: boolean | Prisma.Organization$initialAgreementsArgs<ExtArgs>
+  jobSiteSteps?: boolean | Prisma.Organization$jobSiteStepsArgs<ExtArgs>
+  timelineEvents?: boolean | Prisma.Organization$timelineEventsArgs<ExtArgs>
+  jobSiteAttachments?: boolean | Prisma.Organization$jobSiteAttachmentsArgs<ExtArgs>
+  jobSiteRequests?: boolean | Prisma.Organization$jobSiteRequestsArgs<ExtArgs>
+  changeProposals?: boolean | Prisma.Organization$changeProposalsArgs<ExtArgs>
+  paymentProfiles?: boolean | Prisma.Organization$paymentProfilesArgs<ExtArgs>
+  paymentRequests?: boolean | Prisma.Organization$paymentRequestsArgs<ExtArgs>
+  disputes?: boolean | Prisma.Organization$disputesArgs<ExtArgs>
+  closures?: boolean | Prisma.Organization$closuresArgs<ExtArgs>
+  postClosureRequests?: boolean | Prisma.Organization$postClosureRequestsArgs<ExtArgs>
+  reopeningProposals?: boolean | Prisma.Organization$reopeningProposalsArgs<ExtArgs>
+  jobSiteExports?: boolean | Prisma.Organization$jobSiteExportsArgs<ExtArgs>
+  legalHolds?: boolean | Prisma.Organization$legalHoldsArgs<ExtArgs>
+  actionReceipts?: boolean | Prisma.Organization$actionReceiptsArgs<ExtArgs>
+  jobSiteProcesses?: boolean | Prisma.Organization$jobSiteProcessesArgs<ExtArgs>
+  notificationPreferences?: boolean | Prisma.Organization$notificationPreferencesArgs<ExtArgs>
+  notificationDeliveries?: boolean | Prisma.Organization$notificationDeliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -4057,12 +11092,33 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   evidence?: boolean | Prisma.Organization$evidenceArgs<ExtArgs>
   notifications?: boolean | Prisma.Organization$notificationsArgs<ExtArgs>
   workerUserLinks?: boolean | Prisma.Organization$workerUserLinksArgs<ExtArgs>
-  jobSiteUserAssignments?: boolean | Prisma.Organization$jobSiteUserAssignmentsArgs<ExtArgs>
+  jobSiteParticipants?: boolean | Prisma.Organization$jobSiteParticipantsArgs<ExtArgs>
   jobSiteWorkerAssignments?: boolean | Prisma.Organization$jobSiteWorkerAssignmentsArgs<ExtArgs>
   profile?: boolean | Prisma.Organization$profileArgs<ExtArgs>
   contacts?: boolean | Prisma.Organization$contactsArgs<ExtArgs>
   documentJobSiteLinks?: boolean | Prisma.Organization$documentJobSiteLinksArgs<ExtArgs>
   evidenceRevisions?: boolean | Prisma.Organization$evidenceRevisionsArgs<ExtArgs>
+  clientInvitations?: boolean | Prisma.Organization$clientInvitationsArgs<ExtArgs>
+  clientPropertyLinks?: boolean | Prisma.Organization$clientPropertyLinksArgs<ExtArgs>
+  authorityGrants?: boolean | Prisma.Organization$authorityGrantsArgs<ExtArgs>
+  initialAgreements?: boolean | Prisma.Organization$initialAgreementsArgs<ExtArgs>
+  jobSiteSteps?: boolean | Prisma.Organization$jobSiteStepsArgs<ExtArgs>
+  timelineEvents?: boolean | Prisma.Organization$timelineEventsArgs<ExtArgs>
+  jobSiteAttachments?: boolean | Prisma.Organization$jobSiteAttachmentsArgs<ExtArgs>
+  jobSiteRequests?: boolean | Prisma.Organization$jobSiteRequestsArgs<ExtArgs>
+  changeProposals?: boolean | Prisma.Organization$changeProposalsArgs<ExtArgs>
+  paymentProfiles?: boolean | Prisma.Organization$paymentProfilesArgs<ExtArgs>
+  paymentRequests?: boolean | Prisma.Organization$paymentRequestsArgs<ExtArgs>
+  disputes?: boolean | Prisma.Organization$disputesArgs<ExtArgs>
+  closures?: boolean | Prisma.Organization$closuresArgs<ExtArgs>
+  postClosureRequests?: boolean | Prisma.Organization$postClosureRequestsArgs<ExtArgs>
+  reopeningProposals?: boolean | Prisma.Organization$reopeningProposalsArgs<ExtArgs>
+  jobSiteExports?: boolean | Prisma.Organization$jobSiteExportsArgs<ExtArgs>
+  legalHolds?: boolean | Prisma.Organization$legalHoldsArgs<ExtArgs>
+  actionReceipts?: boolean | Prisma.Organization$actionReceiptsArgs<ExtArgs>
+  jobSiteProcesses?: boolean | Prisma.Organization$jobSiteProcessesArgs<ExtArgs>
+  notificationPreferences?: boolean | Prisma.Organization$notificationPreferencesArgs<ExtArgs>
+  notificationDeliveries?: boolean | Prisma.Organization$notificationDeliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4091,12 +11147,33 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     evidence: Prisma.$EvidencePayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     workerUserLinks: Prisma.$WorkerUserLinkPayload<ExtArgs>[]
-    jobSiteUserAssignments: Prisma.$JobSiteUserAssignmentPayload<ExtArgs>[]
+    jobSiteParticipants: Prisma.$JobSiteParticipantPayload<ExtArgs>[]
     jobSiteWorkerAssignments: Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>[]
     profile: Prisma.$OrganizationProfilePayload<ExtArgs> | null
     contacts: Prisma.$OrganizationContactPayload<ExtArgs>[]
     documentJobSiteLinks: Prisma.$DocumentJobSiteLinkPayload<ExtArgs>[]
     evidenceRevisions: Prisma.$EvidenceRevisionPayload<ExtArgs>[]
+    clientInvitations: Prisma.$JobSiteClientInvitationPayload<ExtArgs>[]
+    clientPropertyLinks: Prisma.$ClientPropertyJobSiteLinkPayload<ExtArgs>[]
+    authorityGrants: Prisma.$JobSiteAuthorityGrantPayload<ExtArgs>[]
+    initialAgreements: Prisma.$JobSiteInitialAgreementPayload<ExtArgs>[]
+    jobSiteSteps: Prisma.$JobSiteStepPayload<ExtArgs>[]
+    timelineEvents: Prisma.$JobSiteTimelineEventPayload<ExtArgs>[]
+    jobSiteAttachments: Prisma.$JobSiteAttachmentPayload<ExtArgs>[]
+    jobSiteRequests: Prisma.$JobSiteRequestPayload<ExtArgs>[]
+    changeProposals: Prisma.$JobSiteChangeProposalPayload<ExtArgs>[]
+    paymentProfiles: Prisma.$OrganizationPaymentProfilePayload<ExtArgs>[]
+    paymentRequests: Prisma.$JobSitePaymentRequestPayload<ExtArgs>[]
+    disputes: Prisma.$JobSiteDisputePayload<ExtArgs>[]
+    closures: Prisma.$JobSiteClosurePayload<ExtArgs>[]
+    postClosureRequests: Prisma.$JobSitePostClosureRequestPayload<ExtArgs>[]
+    reopeningProposals: Prisma.$JobSiteReopeningProposalPayload<ExtArgs>[]
+    jobSiteExports: Prisma.$JobSiteExportPayload<ExtArgs>[]
+    legalHolds: Prisma.$LegalHoldPayload<ExtArgs>[]
+    actionReceipts: Prisma.$JobSiteActionReceiptPayload<ExtArgs>[]
+    jobSiteProcesses: Prisma.$JobSiteProcessPayload<ExtArgs>[]
+    notificationPreferences: Prisma.$NotificationPreferencePayload<ExtArgs>[]
+    notificationDeliveries: Prisma.$NotificationDeliveryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4515,12 +11592,33 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   evidence<T extends Prisma.Organization$evidenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$evidenceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.Organization$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   workerUserLinks<T extends Prisma.Organization$workerUserLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$workerUserLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkerUserLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  jobSiteUserAssignments<T extends Prisma.Organization$jobSiteUserAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$jobSiteUserAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteUserAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobSiteParticipants<T extends Prisma.Organization$jobSiteParticipantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$jobSiteParticipantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   jobSiteWorkerAssignments<T extends Prisma.Organization$jobSiteWorkerAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$jobSiteWorkerAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   profile<T extends Prisma.Organization$profileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$profileArgs<ExtArgs>>): Prisma.Prisma__OrganizationProfileClient<runtime.Types.Result.GetResult<Prisma.$OrganizationProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   contacts<T extends Prisma.Organization$contactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documentJobSiteLinks<T extends Prisma.Organization$documentJobSiteLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$documentJobSiteLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentJobSiteLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   evidenceRevisions<T extends Prisma.Organization$evidenceRevisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$evidenceRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidenceRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  clientInvitations<T extends Prisma.Organization$clientInvitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$clientInvitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteClientInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  clientPropertyLinks<T extends Prisma.Organization$clientPropertyLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$clientPropertyLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPropertyJobSiteLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  authorityGrants<T extends Prisma.Organization$authorityGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$authorityGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteAuthorityGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  initialAgreements<T extends Prisma.Organization$initialAgreementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$initialAgreementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteInitialAgreementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobSiteSteps<T extends Prisma.Organization$jobSiteStepsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$jobSiteStepsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  timelineEvents<T extends Prisma.Organization$timelineEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$timelineEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteTimelineEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobSiteAttachments<T extends Prisma.Organization$jobSiteAttachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$jobSiteAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobSiteRequests<T extends Prisma.Organization$jobSiteRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$jobSiteRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  changeProposals<T extends Prisma.Organization$changeProposalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$changeProposalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteChangeProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  paymentProfiles<T extends Prisma.Organization$paymentProfilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$paymentProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationPaymentProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  paymentRequests<T extends Prisma.Organization$paymentRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$paymentRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSitePaymentRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  disputes<T extends Prisma.Organization$disputesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$disputesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteDisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  closures<T extends Prisma.Organization$closuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$closuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteClosurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  postClosureRequests<T extends Prisma.Organization$postClosureRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$postClosureRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSitePostClosureRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reopeningProposals<T extends Prisma.Organization$reopeningProposalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$reopeningProposalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteReopeningProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobSiteExports<T extends Prisma.Organization$jobSiteExportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$jobSiteExportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteExportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  legalHolds<T extends Prisma.Organization$legalHoldsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$legalHoldsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LegalHoldPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  actionReceipts<T extends Prisma.Organization$actionReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$actionReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteActionReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobSiteProcesses<T extends Prisma.Organization$jobSiteProcessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$jobSiteProcessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteProcessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notificationPreferences<T extends Prisma.Organization$notificationPreferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$notificationPreferencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPreferencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notificationDeliveries<T extends Prisma.Organization$notificationDeliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$notificationDeliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5336,27 +12434,27 @@ export type Organization$workerUserLinksArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
- * Organization.jobSiteUserAssignments
+ * Organization.jobSiteParticipants
  */
-export type Organization$jobSiteUserAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Organization$jobSiteParticipantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the JobSiteUserAssignment
+   * Select specific fields to fetch from the JobSiteParticipant
    */
-  select?: Prisma.JobSiteUserAssignmentSelect<ExtArgs> | null
+  select?: Prisma.JobSiteParticipantSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the JobSiteUserAssignment
+   * Omit specific fields from the JobSiteParticipant
    */
-  omit?: Prisma.JobSiteUserAssignmentOmit<ExtArgs> | null
+  omit?: Prisma.JobSiteParticipantOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.JobSiteUserAssignmentInclude<ExtArgs> | null
-  where?: Prisma.JobSiteUserAssignmentWhereInput
-  orderBy?: Prisma.JobSiteUserAssignmentOrderByWithRelationInput | Prisma.JobSiteUserAssignmentOrderByWithRelationInput[]
-  cursor?: Prisma.JobSiteUserAssignmentWhereUniqueInput
+  include?: Prisma.JobSiteParticipantInclude<ExtArgs> | null
+  where?: Prisma.JobSiteParticipantWhereInput
+  orderBy?: Prisma.JobSiteParticipantOrderByWithRelationInput | Prisma.JobSiteParticipantOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteParticipantWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.JobSiteUserAssignmentScalarFieldEnum | Prisma.JobSiteUserAssignmentScalarFieldEnum[]
+  distinct?: Prisma.JobSiteParticipantScalarFieldEnum | Prisma.JobSiteParticipantScalarFieldEnum[]
 }
 
 /**
@@ -5472,6 +12570,510 @@ export type Organization$evidenceRevisionsArgs<ExtArgs extends runtime.Types.Ext
   take?: number
   skip?: number
   distinct?: Prisma.EvidenceRevisionScalarFieldEnum | Prisma.EvidenceRevisionScalarFieldEnum[]
+}
+
+/**
+ * Organization.clientInvitations
+ */
+export type Organization$clientInvitationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteClientInvitation
+   */
+  select?: Prisma.JobSiteClientInvitationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteClientInvitation
+   */
+  omit?: Prisma.JobSiteClientInvitationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteClientInvitationInclude<ExtArgs> | null
+  where?: Prisma.JobSiteClientInvitationWhereInput
+  orderBy?: Prisma.JobSiteClientInvitationOrderByWithRelationInput | Prisma.JobSiteClientInvitationOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteClientInvitationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteClientInvitationScalarFieldEnum | Prisma.JobSiteClientInvitationScalarFieldEnum[]
+}
+
+/**
+ * Organization.clientPropertyLinks
+ */
+export type Organization$clientPropertyLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClientPropertyJobSiteLink
+   */
+  select?: Prisma.ClientPropertyJobSiteLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClientPropertyJobSiteLink
+   */
+  omit?: Prisma.ClientPropertyJobSiteLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientPropertyJobSiteLinkInclude<ExtArgs> | null
+  where?: Prisma.ClientPropertyJobSiteLinkWhereInput
+  orderBy?: Prisma.ClientPropertyJobSiteLinkOrderByWithRelationInput | Prisma.ClientPropertyJobSiteLinkOrderByWithRelationInput[]
+  cursor?: Prisma.ClientPropertyJobSiteLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClientPropertyJobSiteLinkScalarFieldEnum | Prisma.ClientPropertyJobSiteLinkScalarFieldEnum[]
+}
+
+/**
+ * Organization.authorityGrants
+ */
+export type Organization$authorityGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteAuthorityGrant
+   */
+  select?: Prisma.JobSiteAuthorityGrantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteAuthorityGrant
+   */
+  omit?: Prisma.JobSiteAuthorityGrantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteAuthorityGrantInclude<ExtArgs> | null
+  where?: Prisma.JobSiteAuthorityGrantWhereInput
+  orderBy?: Prisma.JobSiteAuthorityGrantOrderByWithRelationInput | Prisma.JobSiteAuthorityGrantOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteAuthorityGrantWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteAuthorityGrantScalarFieldEnum | Prisma.JobSiteAuthorityGrantScalarFieldEnum[]
+}
+
+/**
+ * Organization.initialAgreements
+ */
+export type Organization$initialAgreementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteInitialAgreement
+   */
+  select?: Prisma.JobSiteInitialAgreementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteInitialAgreement
+   */
+  omit?: Prisma.JobSiteInitialAgreementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteInitialAgreementInclude<ExtArgs> | null
+  where?: Prisma.JobSiteInitialAgreementWhereInput
+  orderBy?: Prisma.JobSiteInitialAgreementOrderByWithRelationInput | Prisma.JobSiteInitialAgreementOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteInitialAgreementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteInitialAgreementScalarFieldEnum | Prisma.JobSiteInitialAgreementScalarFieldEnum[]
+}
+
+/**
+ * Organization.jobSiteSteps
+ */
+export type Organization$jobSiteStepsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteStep
+   */
+  select?: Prisma.JobSiteStepSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteStep
+   */
+  omit?: Prisma.JobSiteStepOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteStepInclude<ExtArgs> | null
+  where?: Prisma.JobSiteStepWhereInput
+  orderBy?: Prisma.JobSiteStepOrderByWithRelationInput | Prisma.JobSiteStepOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteStepWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteStepScalarFieldEnum | Prisma.JobSiteStepScalarFieldEnum[]
+}
+
+/**
+ * Organization.timelineEvents
+ */
+export type Organization$timelineEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteTimelineEvent
+   */
+  select?: Prisma.JobSiteTimelineEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteTimelineEvent
+   */
+  omit?: Prisma.JobSiteTimelineEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteTimelineEventInclude<ExtArgs> | null
+  where?: Prisma.JobSiteTimelineEventWhereInput
+  orderBy?: Prisma.JobSiteTimelineEventOrderByWithRelationInput | Prisma.JobSiteTimelineEventOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteTimelineEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteTimelineEventScalarFieldEnum | Prisma.JobSiteTimelineEventScalarFieldEnum[]
+}
+
+/**
+ * Organization.jobSiteAttachments
+ */
+export type Organization$jobSiteAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteAttachment
+   */
+  select?: Prisma.JobSiteAttachmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteAttachment
+   */
+  omit?: Prisma.JobSiteAttachmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteAttachmentInclude<ExtArgs> | null
+  where?: Prisma.JobSiteAttachmentWhereInput
+  orderBy?: Prisma.JobSiteAttachmentOrderByWithRelationInput | Prisma.JobSiteAttachmentOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteAttachmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteAttachmentScalarFieldEnum | Prisma.JobSiteAttachmentScalarFieldEnum[]
+}
+
+/**
+ * Organization.jobSiteRequests
+ */
+export type Organization$jobSiteRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteRequest
+   */
+  select?: Prisma.JobSiteRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteRequest
+   */
+  omit?: Prisma.JobSiteRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteRequestInclude<ExtArgs> | null
+  where?: Prisma.JobSiteRequestWhereInput
+  orderBy?: Prisma.JobSiteRequestOrderByWithRelationInput | Prisma.JobSiteRequestOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteRequestScalarFieldEnum | Prisma.JobSiteRequestScalarFieldEnum[]
+}
+
+/**
+ * Organization.changeProposals
+ */
+export type Organization$changeProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteChangeProposal
+   */
+  select?: Prisma.JobSiteChangeProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteChangeProposal
+   */
+  omit?: Prisma.JobSiteChangeProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteChangeProposalInclude<ExtArgs> | null
+  where?: Prisma.JobSiteChangeProposalWhereInput
+  orderBy?: Prisma.JobSiteChangeProposalOrderByWithRelationInput | Prisma.JobSiteChangeProposalOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteChangeProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteChangeProposalScalarFieldEnum | Prisma.JobSiteChangeProposalScalarFieldEnum[]
+}
+
+/**
+ * Organization.paymentProfiles
+ */
+export type Organization$paymentProfilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrganizationPaymentProfile
+   */
+  select?: Prisma.OrganizationPaymentProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrganizationPaymentProfile
+   */
+  omit?: Prisma.OrganizationPaymentProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationPaymentProfileInclude<ExtArgs> | null
+  where?: Prisma.OrganizationPaymentProfileWhereInput
+  orderBy?: Prisma.OrganizationPaymentProfileOrderByWithRelationInput | Prisma.OrganizationPaymentProfileOrderByWithRelationInput[]
+  cursor?: Prisma.OrganizationPaymentProfileWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrganizationPaymentProfileScalarFieldEnum | Prisma.OrganizationPaymentProfileScalarFieldEnum[]
+}
+
+/**
+ * Organization.paymentRequests
+ */
+export type Organization$paymentRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSitePaymentRequest
+   */
+  select?: Prisma.JobSitePaymentRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSitePaymentRequest
+   */
+  omit?: Prisma.JobSitePaymentRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSitePaymentRequestInclude<ExtArgs> | null
+  where?: Prisma.JobSitePaymentRequestWhereInput
+  orderBy?: Prisma.JobSitePaymentRequestOrderByWithRelationInput | Prisma.JobSitePaymentRequestOrderByWithRelationInput[]
+  cursor?: Prisma.JobSitePaymentRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSitePaymentRequestScalarFieldEnum | Prisma.JobSitePaymentRequestScalarFieldEnum[]
+}
+
+/**
+ * Organization.disputes
+ */
+export type Organization$disputesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteDispute
+   */
+  select?: Prisma.JobSiteDisputeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteDispute
+   */
+  omit?: Prisma.JobSiteDisputeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteDisputeInclude<ExtArgs> | null
+  where?: Prisma.JobSiteDisputeWhereInput
+  orderBy?: Prisma.JobSiteDisputeOrderByWithRelationInput | Prisma.JobSiteDisputeOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteDisputeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteDisputeScalarFieldEnum | Prisma.JobSiteDisputeScalarFieldEnum[]
+}
+
+/**
+ * Organization.closures
+ */
+export type Organization$closuresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteClosure
+   */
+  select?: Prisma.JobSiteClosureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteClosure
+   */
+  omit?: Prisma.JobSiteClosureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteClosureInclude<ExtArgs> | null
+  where?: Prisma.JobSiteClosureWhereInput
+  orderBy?: Prisma.JobSiteClosureOrderByWithRelationInput | Prisma.JobSiteClosureOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteClosureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteClosureScalarFieldEnum | Prisma.JobSiteClosureScalarFieldEnum[]
+}
+
+/**
+ * Organization.postClosureRequests
+ */
+export type Organization$postClosureRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSitePostClosureRequest
+   */
+  select?: Prisma.JobSitePostClosureRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSitePostClosureRequest
+   */
+  omit?: Prisma.JobSitePostClosureRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSitePostClosureRequestInclude<ExtArgs> | null
+  where?: Prisma.JobSitePostClosureRequestWhereInput
+  orderBy?: Prisma.JobSitePostClosureRequestOrderByWithRelationInput | Prisma.JobSitePostClosureRequestOrderByWithRelationInput[]
+  cursor?: Prisma.JobSitePostClosureRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSitePostClosureRequestScalarFieldEnum | Prisma.JobSitePostClosureRequestScalarFieldEnum[]
+}
+
+/**
+ * Organization.reopeningProposals
+ */
+export type Organization$reopeningProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteReopeningProposal
+   */
+  select?: Prisma.JobSiteReopeningProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteReopeningProposal
+   */
+  omit?: Prisma.JobSiteReopeningProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteReopeningProposalInclude<ExtArgs> | null
+  where?: Prisma.JobSiteReopeningProposalWhereInput
+  orderBy?: Prisma.JobSiteReopeningProposalOrderByWithRelationInput | Prisma.JobSiteReopeningProposalOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteReopeningProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteReopeningProposalScalarFieldEnum | Prisma.JobSiteReopeningProposalScalarFieldEnum[]
+}
+
+/**
+ * Organization.jobSiteExports
+ */
+export type Organization$jobSiteExportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteExport
+   */
+  select?: Prisma.JobSiteExportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteExport
+   */
+  omit?: Prisma.JobSiteExportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteExportInclude<ExtArgs> | null
+  where?: Prisma.JobSiteExportWhereInput
+  orderBy?: Prisma.JobSiteExportOrderByWithRelationInput | Prisma.JobSiteExportOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteExportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteExportScalarFieldEnum | Prisma.JobSiteExportScalarFieldEnum[]
+}
+
+/**
+ * Organization.legalHolds
+ */
+export type Organization$legalHoldsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LegalHold
+   */
+  select?: Prisma.LegalHoldSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LegalHold
+   */
+  omit?: Prisma.LegalHoldOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LegalHoldInclude<ExtArgs> | null
+  where?: Prisma.LegalHoldWhereInput
+  orderBy?: Prisma.LegalHoldOrderByWithRelationInput | Prisma.LegalHoldOrderByWithRelationInput[]
+  cursor?: Prisma.LegalHoldWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LegalHoldScalarFieldEnum | Prisma.LegalHoldScalarFieldEnum[]
+}
+
+/**
+ * Organization.actionReceipts
+ */
+export type Organization$actionReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteActionReceipt
+   */
+  select?: Prisma.JobSiteActionReceiptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteActionReceipt
+   */
+  omit?: Prisma.JobSiteActionReceiptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteActionReceiptInclude<ExtArgs> | null
+  where?: Prisma.JobSiteActionReceiptWhereInput
+  orderBy?: Prisma.JobSiteActionReceiptOrderByWithRelationInput | Prisma.JobSiteActionReceiptOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteActionReceiptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteActionReceiptScalarFieldEnum | Prisma.JobSiteActionReceiptScalarFieldEnum[]
+}
+
+/**
+ * Organization.jobSiteProcesses
+ */
+export type Organization$jobSiteProcessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteProcess
+   */
+  select?: Prisma.JobSiteProcessSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteProcess
+   */
+  omit?: Prisma.JobSiteProcessOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteProcessInclude<ExtArgs> | null
+  where?: Prisma.JobSiteProcessWhereInput
+  orderBy?: Prisma.JobSiteProcessOrderByWithRelationInput | Prisma.JobSiteProcessOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteProcessWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteProcessScalarFieldEnum | Prisma.JobSiteProcessScalarFieldEnum[]
+}
+
+/**
+ * Organization.notificationPreferences
+ */
+export type Organization$notificationPreferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NotificationPreference
+   */
+  select?: Prisma.NotificationPreferenceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NotificationPreference
+   */
+  omit?: Prisma.NotificationPreferenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationPreferenceInclude<ExtArgs> | null
+  where?: Prisma.NotificationPreferenceWhereInput
+  orderBy?: Prisma.NotificationPreferenceOrderByWithRelationInput | Prisma.NotificationPreferenceOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationPreferenceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationPreferenceScalarFieldEnum | Prisma.NotificationPreferenceScalarFieldEnum[]
+}
+
+/**
+ * Organization.notificationDeliveries
+ */
+export type Organization$notificationDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NotificationDelivery
+   */
+  select?: Prisma.NotificationDeliverySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NotificationDelivery
+   */
+  omit?: Prisma.NotificationDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationDeliveryInclude<ExtArgs> | null
+  where?: Prisma.NotificationDeliveryWhereInput
+  orderBy?: Prisma.NotificationDeliveryOrderByWithRelationInput | Prisma.NotificationDeliveryOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationDeliveryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationDeliveryScalarFieldEnum | Prisma.NotificationDeliveryScalarFieldEnum[]
 }
 
 /**

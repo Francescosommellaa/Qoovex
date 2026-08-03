@@ -85,7 +85,9 @@ export async function createMfaRecoveryRequest(input: { userId: string; emailCod
       emailVerified: true,
       mfaEnabled: true,
       platformRole: true,
-      organizationMembership: {
+      organizationMemberships: {
+        where: { revokedAt: null },
+        orderBy: { createdAt: "asc" },
         select: { organizationId: true, role: true, revokedAt: true, organization: { select: { name: true } } },
       },
     },
@@ -98,7 +100,7 @@ export async function createMfaRecoveryRequest(input: { userId: string; emailCod
     throw error;
   }
 
-  const membership = user.organizationMembership?.revokedAt ? null : user.organizationMembership;
+  const membership = user.organizationMemberships[0] ?? null;
   const needsOwner = Boolean(membership && membership.role !== "OWNER" && user.platformRole !== "PLATFORM_ADMIN");
   const now = new Date();
   const expiresAt = new Date(now.getTime() + RECOVERY_TTL_MS);
@@ -189,8 +191,8 @@ export async function getCurrentMfaRecovery(userId: string) {
 
 export async function listMfaRecoveryInbox(ownerUserId: string) {
   await expireStaleRequests();
-  const membership = await db.organizationMembership.findUnique({
-    where: { userId: ownerUserId },
+  const membership = await db.organizationMembership.findFirst({
+    where: { userId: ownerUserId, role: "OWNER", revokedAt: null },
     select: { organizationId: true, role: true, revokedAt: true },
   });
   if (!membership || membership.revokedAt || membership.role !== "OWNER") throw new MfaError("Risorsa non disponibile.", 403);
@@ -218,18 +220,19 @@ export async function decideMfaRecoveryRequest(input: {
 }) {
   const owner = await db.user.findUnique({
     where: { id: input.ownerUserId },
-    select: { id: true, email: true, authVersion: true, organizationMembership: { select: { organizationId: true, role: true, revokedAt: true } } },
+    select: { id: true, email: true, authVersion: true },
   });
-  const membership = owner?.organizationMembership;
-  if (!owner || !membership || membership.revokedAt || membership.role !== "OWNER") throw new MfaError("Risorsa non disponibile.", 403);
+  if (!owner) throw new MfaError("Risorsa non disponibile.", 403);
   if (!(await verifyCurrentFactorForUser({ userId: owner.id, code: input.currentCode, ipHash: input.ipHash, purpose: "mfa-recovery-decision" }))) {
     throw new MfaError("Fattore OWNER non valido.", 403);
   }
   const request = await db.mfaRecoveryRequest.findFirst({
-    where: { id: input.requestId, organizationId: membership.organizationId, mode: "OWNER_APPROVAL", status: "PENDING", expiresAt: { gt: new Date() } },
-    select: { id: true, userId: true, user: { select: { email: true } } },
+    where: { id: input.requestId, organizationId: { not: null }, mode: "OWNER_APPROVAL", status: "PENDING", expiresAt: { gt: new Date() } },
+    select: { id: true, userId: true, organizationId: true, user: { select: { email: true } } },
   });
-  if (!request || request.userId === owner.id) throw new MfaError("Richiesta non disponibile.", 409);
+  if (!request?.organizationId || request.userId === owner.id) throw new MfaError("Richiesta non disponibile.", 409);
+  const membership = await db.organizationMembership.findFirst({ where: { organizationId: request.organizationId, userId: owner.id, role: "OWNER", revokedAt: null }, select: { organizationId: true, role: true, revokedAt: true } });
+  if (!membership) throw new MfaError("Richiesta non disponibile.", 409);
   const now = new Date();
   const nextStatus = input.decision === "approve" ? "APPROVED" : "DENIED";
   const decided = await db.$transaction(async (tx) => {

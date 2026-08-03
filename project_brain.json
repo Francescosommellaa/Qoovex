@@ -1,6 +1,6 @@
 {
   "project": "Qoovex",
-  "updated_at": "2026-08-02",
+  "updated_at": "2026-08-03",
   "state_taxonomy": [
     "verified_current_state",
     "implemented_decision",
@@ -10,62 +10,111 @@
     "hard_stop"
   ],
   "verified_current_state": {
-    "classification": "foundation-only repository after legacy eradication",
-    "decision": "D-VNEXT-47",
-    "identity_and_security": ["User", "Account", "Session", "Auth.js", "credentials", "email verification", "MFA", "recovery", "session invalidation", "security audit", "rate limiting", "HTTP protections"],
-    "platform": ["PlatformRole", "Support Agent", "Platform Admin", "support sessions", "runtime error handling"],
-    "organization_access": {
-      "roles": ["OWNER", "COLLABORATOR"],
-      "single_membership_per_user": true,
-      "features": ["Organization", "OrganizationProfile", "OrganizationContact", "OrganizationMembership", "company invitations", "permission keys", "FULL/ASSIGNED scope", "resource grants", "expiry", "accessVersion", "revocation"]
+    "classification": "Qoovex vNext MVP implemented locally",
+    "product": "Shared company-client construction job workspace from creation through mutual closure",
+    "identity_and_context": {
+      "organization_roles": ["OWNER", "COLLABORATOR"],
+      "client_is_organization_role": false,
+      "membership_unique": ["organizationId", "userId"],
+      "contexts": ["PLATFORM", "ORGANIZATION", "CLIENT"],
+      "route_is_authorization_context": true
     },
-    "foundation_domain": ["Worker", "WorkerUserLink", "JobSiteUserAssignment", "JobSiteWorkerAssignment", "minimal JobSite", "Document", "DocumentVersion", "Evidence", "EvidenceRevision", "private Blob", "system notifications", "ProductAuditEvent", "data-control"],
-    "job_site": { "neutral": true, "has_client_name": false, "has_operational_phase": false, "has_vnext_lifecycle": false },
-    "operational_engine": { "product_processes_registered": 0, "automatic_enqueue": false, "legacy_intelligence": false },
-    "migration_history": { "count": 18, "new_migration": "20260802010000_remove_legacy_product_foundation", "previous_migrations_rewritten": false, "preview_applied": false, "production_applied": false }
+    "job_site": {
+      "states": ["DRAFT", "WAITING_FOR_CLIENT", "PENDING_INITIAL_CONFIRMATION", "ACTIVE", "CLOSURE_PROPOSED", "CLOSED", "ARCHIVED"],
+      "client_participation": "JobSiteParticipant CLIENT, separate from OrganizationMembership",
+      "single_primary_client": true,
+      "timeline_audiences": ["INTERNAL", "SHARED"],
+      "optional_steps": true,
+      "physical_delete": false
+    },
+    "implemented_domains": [
+      "multiple memberships", "context hub", "JobSiteParticipant", "JobSiteClientInvitation", "ClientProperty",
+      "initial agreement versions and consents", "append-only timeline", "attachments and publications", "optional steps",
+      "structured requests", "versioned proposals, effects and consents", "economic authority grants",
+      "encrypted payment profile", "documented payment requests, declarations and reviews", "disputes and preservation",
+      "mutual closure", "post-closure requests", "mutual reopening", "client and organization exports",
+      "legal hold", "notification preferences and delivery", "persistent vNext processes", "data-control"
+    ],
+    "security": {
+      "critical_mutations": "Idempotency-Key + expectedRevision + fingerprinted receipt",
+      "transaction_isolation": "Serializable with bounded retry",
+      "iban": "AES-256-GCM dedicated application key ring with AAD",
+      "blob": "private, server-mediated, MIME checked, SHA-256, 4 MiB maximum",
+      "money": "BigInt minor units; public DTO values are strings"
+    },
+    "migration_history": {
+      "count": 19,
+      "new_migration": "20260803010000_implement_qoovex_vnext",
+      "previous_migrations_rewritten": false,
+      "fresh_local": "verified, seed verified, no drift",
+      "upgrade_local": "verified from 18 migrations and restored Prompt-A snapshot, no drift",
+      "preview_applied": false,
+      "production_applied": false
+    }
   },
-  "removed_capabilities": [
-    "DocumentRequirement", "Deadline", "CalendarEvent", "Checklist", "ChecklistItem",
-    "DocumentPackage", "DocumentPackageItem", "DocumentPackageRevision", "DocumentPackageShareProposal", "ShareLink",
-    "DocumentSourcePolicy", "DocumentSourceCheck", "DocumentAcquisition",
-    "OperationalRequest", "ContextMessage", "ContextTimelineEvent",
-    "JobSite.clientName", "JobSiteOperationalPhase",
-    "DOCUMENT_RECEIVED@1", "WORKER_CREATED@1", "JOB_SITE_CREATED@1", "CONTINUOUS_CONTROL@1", "DOCUMENT_PACKAGE_SHARING@1",
-    "legacy Operational Intelligence", "universal search", "legacy reminders and digests", "legacy dashboard and operational center"
+  "implemented_decisions": [
+    { "id": "D-VNEXT-18", "title": "Account contexts", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-19", "title": "JobSiteParticipant", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-20", "title": "Multiple organization memberships", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-21", "title": "ClientProperty", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-22", "title": "Contextual authorization matrix", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-23", "title": "Explicit economic authority", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-24", "title": "Client invitations and revocation", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-25", "title": "Canonical append-only timeline", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-26", "title": "Attachments and publications", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-27", "title": "Versioned proposals and negotiation", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-28", "title": "Encrypted IBAN profile", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-29", "title": "Restricted payment receipts", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-30", "title": "Context-scoped notifications", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-31", "title": "Distinct authenticated exports", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-32", "title": "Approved retention windows", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-33", "title": "Legal hold", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-34", "title": "Logical archive and physical deletion block", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-35", "title": "Client portability", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-36", "title": "Account deletion hard stop", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-37", "title": "Disputes and preservation", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-38", "title": "Mutual reopening", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-39", "title": "Single primary client MVP", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-40", "title": "Company-paid commercial model without billing", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-46", "title": "Legacy Eradication", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-47", "title": "Foundation-only intermediate state", "status": "IMPLEMENTED_DECISION" },
+    { "id": "D-VNEXT-48", "title": "Full vNext implementation", "status": "IMPLEMENTED_DECISION" }
+  ],
+  "superseded_decisions": [
+    { "id": "D-VNEXT-41", "status": "SUPERSEDED", "reason": "clientName compatibility was removed without creating accounts" },
+    { "id": "D-VNEXT-42", "status": "SUPERSEDED", "reason": "JobSiteOperationalPhase compatibility was removed" },
+    { "id": "D-VNEXT-43", "status": "SUPERSEDED", "reason": "legacy product process definitions were removed" },
+    { "id": "D-VNEXT-44", "status": "SUPERSEDED", "reason": "no LEGACY/VNEXT dual mode exists" },
+    { "id": "D-VNEXT-45", "status": "SUPERSEDED", "reason": "the coordinated Prompt A and Prompt B strategy replaced the former migration plan" }
+  ],
+  "process_registry": [
+    "CLIENT_INVITATION@1", "JOB_SITE_INITIAL_CONFIRMATION@1", "CHANGE_NEGOTIATION@1", "PAYMENT_REQUEST@1",
+    "JOB_SITE_CLOSURE@1", "JOB_SITE_EXPORT@1", "POST_CLOSURE_REQUEST@1", "JOB_SITE_REOPENING@1"
   ],
   "approved_product_direction": {
     "classification": "approved_product_direction",
-    "decision": "D-VNEXT-48",
     "name": "Qoovex vNext",
-    "statement": "Shared company-client space for managing a construction job from creation to closure.",
-    "implementation_status": "conceptual_not_implemented"
+    "company_promise": "Document the work once and use the same updates for the client, changes and payment requests.",
+    "client_promise": "Follow work on your properties, review each change and retain everything shared.",
+    "commercial_model": { "payer": "ORGANIZATION", "collaborator_access": "included", "client_access": "free for invited job sites", "billing_implemented": false }
   },
   "conceptual_not_implemented": [
-    "multiple organization memberships per User", "JobSiteParticipant", "ClientProperty", "client account surfaces",
-    "shared client timeline", "vNext steps", "versioned proposals", "documented payments", "disputes",
-    "mutual closure", "post-closure requests", "client export", "client home"
-  ],
-  "decisions": [
-    { "id": "D-VNEXT-41", "status": "SUPERSEDED", "reason": "clientName compatibility removed" },
-    { "id": "D-VNEXT-42", "status": "SUPERSEDED", "reason": "JobSiteOperationalPhase compatibility removed" },
-    { "id": "D-VNEXT-43", "status": "SUPERSEDED", "reason": "five legacy product processes removed" },
-    { "id": "D-VNEXT-44", "status": "SUPERSEDED", "reason": "no LEGACY/VNEXT dual mode" },
-    { "id": "D-VNEXT-45", "status": "SUPERSEDED", "reason": "single implementation prompt replaced by two coordinated tasks" },
-    { "id": "D-VNEXT-46", "status": "IMPLEMENTED_DECISION", "title": "Legacy Eradication" },
-    { "id": "D-VNEXT-47", "status": "IMPLEMENTED_DECISION", "title": "Foundation-only intermediate state" },
-    { "id": "D-VNEXT-48", "status": "APPROVED_PRODUCT_DIRECTION", "title": "Full vNext implementation in a separate prompt" }
+    "multiple primary clients or differentiated client roles", "pricing, plans, trial, limits and billing",
+    "marketplace and public company search", "in-app payment, escrow, refunds and arbitration", "KYC",
+    "qualified electronic signature", "invoicing, accounting and payroll", "BIM", "continuous geolocation and surveillance",
+    "AI and OCR", "public portfolio and reviews", "physical JobSite deletion", "physical account deletion"
   ],
   "hard_stops": [
-    "No vNext capability before Prompt B",
-    "No Preview or Production migration/deploy without separate authorization",
-    "No physical JobSite deletion before verified retention and legal-hold policy",
     "CLIENT must never enter OrganizationRole",
-    "No db push, migrate resolve, remote reset or manual SQL outside canonical migrations"
+    "No physical JobSite or account deletion before an independently approved policy",
+    "No Preview or Production migration, deploy or Blob operation without separate authorization",
+    "No db push, migrate resolve, remote reset or manual SQL outside canonical migrations",
+    "No fallback from the data-encryption key ring to Auth or MFA secrets",
+    "No pricing, legal guarantee or money movement may be inferred from the MVP"
   ],
   "next_task": {
-    "decision": "D-VNEXT-48",
-    "name": "Qoovex vNext full implementation",
-    "prerequisite": "explicit separate prompt",
-    "must_not_reintroduce": ["legacy compatibility", "clientName", "JobSiteOperationalPhase", "legacy product processes"]
+    "name": "Remote rollout only after separate authorization",
+    "requirements": ["exact target identity", "backup and restore proof", "environment encryption key ring", "synthetic smoke data", "rollback plan"],
+    "not_authorized_here": ["deployment", "remote migration", "remote Blob", "push", "pull request"]
   }
 }

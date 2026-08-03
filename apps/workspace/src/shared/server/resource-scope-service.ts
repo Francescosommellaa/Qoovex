@@ -61,12 +61,12 @@ export async function getResourceScope(context?: WorkspaceAccessContext): Promis
   let workerJobSiteIds: string[] = [];
 
   if (preset === "SITE_MANAGER") {
-    const assignments = await db.jobSiteUserAssignment.findMany({
+    const assignments = await db.jobSiteParticipant.findMany({
       where: {
         organizationId,
         userId: scopeUserId,
-        assignmentRole: "SITE_MANAGER",
-        archivedAt: null,
+        kind: "ORGANIZATION_MEMBER",
+        status: "ACTIVE",
         jobSite: { archivedAt: null },
       },
       select: { jobSiteId: true },

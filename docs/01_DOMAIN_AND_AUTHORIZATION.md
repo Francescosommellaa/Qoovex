@@ -1,15 +1,35 @@
-# 01 — Dominio e autorizzazione
+# 01 — Domain and authorization
 
 ## verified_current_state
 
-`User` è identità personale. Ogni User ha al massimo una `OrganizationMembership` (`userId @unique`). I soli ruoli Azienda sono `OWNER` e `COLLABORATOR`. `Worker`, `WorkerUserLink`, `JobSiteUserAssignment` e `JobSiteWorkerAssignment` restano distinti. Scope `FULL/ASSIGNED`, grant, expiry, `accessVersion`, revoca e support session restano attivi.
+`User` è l’identità personale unica. `OrganizationMembership` è multi-azienda con unicità `(organizationId,userId)`. `OrganizationRole` contiene soltanto `OWNER | COLLABORATOR`; `CLIENT` usa `JobSiteParticipant.kind=CLIENT` e non ottiene membership o permessi Azienda.
 
-Le risorse assegnabili sono soltanto `JOB_SITE`, `WORKER`, `DOCUMENT`, `EVIDENCE`. I permessi riguardano esclusivamente foundation disponibili. Support Agent non legge file; Platform Admin non bypassa l’autorizzazione Azienda.
+I resolver server-side sono distinti:
 
-## approved_product_direction / conceptual_not_implemented
+| Contesto | Fonte di autorizzazione | Confine |
+| --- | --- | --- |
+| `PLATFORM` | `PlatformRole` e support session | funzioni piattaforma |
+| `ORGANIZATION` | route, membership attiva, scope, permission, `accessVersion` | una Azienda |
+| `CLIENT` | identity e participant del JobSite | soli cantieri partecipati |
 
-Il futuro account multi-contesto, membership multiple, `JobSiteParticipant`, `ClientProperty`, cliente principale e deleghe economiche appartengono a D-VNEXT-48. `CLIENT` non entra mai in `OrganizationRole` e non è presente nello schema corrente.
+La route è la fonte del contesto. Ogni mutation ricontrolla tenant, resource ownership, membership/participant, stato, revisione e permesso. Un participant sospeso, terminato o revocato non può mutare.
 
-## Hard stop
+## Partecipanti
 
-Nessuna membership multipla, partecipazione cliente, permesso economico o ruolo cliente viene anticipato. Il contratto dominio/permission matrix del Prompt B deve precedere Prisma.
+`JobSiteParticipant` separa `ORGANIZATION_MEMBER` e `CLIENT`. Il primo richiede una membership attiva; il secondo non può avere membership o Worker. Un vincolo `userSideKey` impedisce allo stesso account di rappresentare entrambe le parti nello stesso cantiere. Il primo MVP ammette un solo cliente principale non revocato.
+
+`JobSiteWorkerAssignment` resta per Worker senza account. Le assegnazioni account precedenti sono state migrate deterministicamente in participant Azienda e il modello precedente è stato eliminato.
+
+## Autorità economica
+
+Owner e responsabile non ricevono autorità economica implicita. Un Owner concede e revoca `JobSiteAuthorityGrant`, anche a sé stesso. Le capability persistite sono negoziazione, accettazione commerciale, richiesta pagamento, conferma ricezione e proposta chiusura; `validFrom`, scadenza, stato e revoca sono ricontrollati alla mutation finale.
+
+Il creatore storico nullable e il responsabile corrente sono concetti separati. Il responsabile può essere riassegnato; non è possibile terminare il participant responsabile prima della riassegnazione.
+
+## Privacy Collaborator
+
+La proiezione cliente espone dei Collaborator soltanto nome, cognome e ruolo operativo pubblico. Non espone email, telefono, indirizzo, dati fiscali, documenti, attestati, scadenze, dati sanitari, note interne, permessi o altri cantieri.
+
+## hard_stop
+
+Mai aggiungere `CLIENT` a `OrganizationRole`; nessuna scorciatoia Platform Admin o Support consente accesso prodotto o file; i futuri ruoli cliente richiedono un nuovo contratto.

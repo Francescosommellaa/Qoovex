@@ -39,7 +39,7 @@ function AccessStateCard({
   );
 }
 
-export function SignInRequiredState({ callbackUrl = "/dashboard" }: { callbackUrl?: string }) {
+export function SignInRequiredState({ callbackUrl = "/contexts" }: { callbackUrl?: string }) {
   return (
     <AccessStateCard
       actions={(

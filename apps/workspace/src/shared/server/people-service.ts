@@ -15,7 +15,7 @@ export async function getPeopleAccessOverview() {
           select: {
             id: true, email: true, firstName: true, lastName: true,
             workerUserLinks: { where: { organizationId, archivedAt: null }, select: { worker: { select: { id: true, displayName: true } } } },
-            jobSiteUserAssignments: { where: { organizationId, archivedAt: null }, select: { jobSite: { select: { id: true, name: true } } } },
+            jobSiteParticipants: { where: { organizationId, kind: "ORGANIZATION_MEMBER", status: "ACTIVE" }, select: { jobSite: { select: { id: true, name: true } } } },
           },
         },
       },
@@ -27,7 +27,7 @@ export async function getPeopleAccessOverview() {
   const incomplete: Array<{ kind: "WORKER_LINK" | "JOB_SITE_SCOPE"; membershipId: string; userId: string; label: string; message: string }> = [];
   for (const membership of activeUsers) {
     if (membership.preset === "LIMITED_UPLOAD" && !membership.user.workerUserLinks.length) incomplete.push({ kind: "WORKER_LINK", membershipId: membership.id, userId: membership.user.id, label: membership.user.email, message: "Collega il Collaborator a un profilo operativo." });
-    if (membership.preset === "SITE_MANAGER" && !membership.user.jobSiteUserAssignments.length) incomplete.push({ kind: "JOB_SITE_SCOPE", membershipId: membership.id, userId: membership.user.id, label: membership.user.email, message: "Assegna almeno un cantiere al Collaborator." });
+    if (membership.preset === "SITE_MANAGER" && !membership.user.jobSiteParticipants.length) incomplete.push({ kind: "JOB_SITE_SCOPE", membershipId: membership.id, userId: membership.user.id, label: membership.user.email, message: "Aggiungi il Collaborator ad almeno un cantiere." });
   }
   return { generatedAt: now.toISOString(), activeUsers, revokedUsers: memberships.filter((item) => item.revokedAt !== null), pendingInvitations: invitations.filter((item) => !item.acceptedAt && !item.declinedAt && !item.revokedAt && item.expiresAt > now), expiredInvitations: invitations.filter((item) => !item.acceptedAt && !item.declinedAt && !item.revokedAt && item.expiresAt <= now), revokedInvitations: invitations.filter((item) => Boolean(item.revokedAt || item.declinedAt)), incomplete };
 }

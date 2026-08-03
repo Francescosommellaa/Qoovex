@@ -12,13 +12,13 @@ const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://qoovex.com"),
-  title: "Qoovex - Direzione vNext",
+  title: "Qoovex - Lavori condivisi",
   description:
-    "Qoovex vNext è la direzione approvata per uno spazio condiviso Azienda-cliente; la capacità non è ancora implementata.",
+    "Qoovex è lo spazio condiviso tra Azienda e cliente per documentare lavori, modifiche, prove e pagamenti.",
   openGraph: {
-    title: "Qoovex - Direzione vNext",
+    title: "Qoovex - Lavori condivisi",
     description:
-      "Direzione prodotto approvata per il lavoro condiviso Azienda-cliente, non ancora implementata.",
+      "Spazio condiviso tra Azienda e cliente per documentare un lavoro edile dalla creazione alla chiusura.",
     type: "website",
   },
 };

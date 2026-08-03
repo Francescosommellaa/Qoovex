@@ -8,6 +8,6 @@ Composizione app-local basata sulle primitive condivise `Card`, `Field`, `Select
 
 Form, liste, errori e stati vuoti ripetono la stessa gerarchia. L'associazione account-profilo resta in progressive disclosure: identifica il profilo personale usato dallo scope server-side, ma non assegna o modifica il ruolo della membership.
 
-`WORKER` non e un ruolo account e `CLIENT` non e un ruolo Azienda. Inviti cliente e partecipazione per cantiere appartengono alla direzione vNext e non sono implementati in questa superficie.
+`WORKER` non è un ruolo account e `CLIENT` non è un ruolo Azienda. Inviti cliente e partecipazione sono gestiti nel dettaglio vNext del singolo cantiere, non in questa superficie amministrativa Azienda.
 
-Membership multiple, context switching e deleghe economiche D-VNEXT-18-23 sono concetti futuri; la vista corrente continua a gestire soltanto accessi Azienda e assegnazioni esistenti.
+Membership multiple e context switching D-VNEXT-18/20 sono implementati. Le deleghe economiche D-VNEXT-23 sono `JobSiteAuthorityGrant` job-site-scoped e non modificano membership, preset o scope amministrativi.

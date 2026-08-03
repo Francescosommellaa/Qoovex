@@ -1,26 +1,31 @@
-# 04 — Runtime e feature
+# 04 — Runtime and features
 
-## verified_current_state
+## Lifecycle JobSite
 
-Superfici raggiungibili: dashboard foundation, Worker, cantieri minimi, file/versioni, prove, Collaborator/inviti, assegnazioni, profilo Azienda, sicurezza account, notifiche di sistema, audit, data-control e console piattaforma autorizzate.
+`DRAFT → WAITING_FOR_CLIENT → PENDING_INITIAL_CONFIRMATION → ACTIVE → CLOSURE_PROPOSED → CLOSED → ARCHIVED`.
 
-Il runner data-control è infrastrutturale. Non esistono processi prodotto registrati, enqueue automatici o branch runner sul dominio rimosso. Non esistono ricerca, cron di reminder, email digest prodotto o feature AI.
+Il cliente accetta un invito job-site-scoped e resta pending. Solo la conferma della versione corrente del riepilogo iniziale attiva il cantiere. `CLOSED` e `ARCHIVED` sono read-only salvo post-chiusura, riapertura ed export. L’archiviazione è ammessa soltanto da `CLOSED`.
 
-## Audit percorso conservato
+## Timeline, step e richieste
 
-| Route/UI | Mutation | Servizio | Authorization | Persistence | Audit |
-|---|---|---|---|---|---|
-| Worker | `/api/workers` | `worker-service` | tenant + permission | `Worker` | Product/support audit |
-| Cantiere | `/api/job-sites` | `job-site-service` | tenant + scope | `JobSite` | Product audit |
-| File/versione | `/api/documents` | document services | tenant + scope + file permission | Document/Version + private Blob | upload/download audit |
-| Prova | `/api/evidence` | `evidence-service` | tenant + scope | Evidence/Revision + private Blob | audit |
-| Accessi | organization/resource APIs | access/assignment services | Owner o permission | membership/grant/assignment | security/product audit |
-| Data-control | `/api/data/*` | data-control services | Owner/data-control | job/export/private Blob | audit/receipt |
+Timeline interna e condivisa sono proiezioni della stessa storia canonica con audience. Gli step sono opzionali; senza step non viene inventata una percentuale. Stati step: `NOT_STARTED`, `IN_PROGRESS`, `WAITING`, `READY_FOR_REVIEW`, `CHANGES_REQUESTED`, `WORK_COMPLETED`, `CONFIRMED`, `CANCELLED`. La conferma cliente non equivale a collaudo.
 
-## Negative contract
+Le richieste strutturate e i thread post-chiusura sono append-only. La ricerca è metadata-only e limitata al JobSite autorizzato; niente OCR, ricerca nel file o semantica.
 
-Route e API di calendario, deadline, checklist, pacchetti/share, source/acquisition, richieste, timeline, ricerca, fase e processi devono restituire 404 senza redirect.
+## Proposte
 
-## conceptual_not_implemented
+Proposte e controproposte creano versioni immutabili. Lifecycle: `DRAFT`, `PROPOSED`, `COUNTERED`, `ACCEPTED`, `REJECTED`, `WITHDRAWN`, `SUPERSEDED`, `EXPIRED`. Consenso e effect sono legati alla versione precisa; expected revision/current version rifiutano input stale. Accettare registra quanto mostrato, non costituisce firma qualificata o approvazione tecnica.
 
-Tutti i lifecycle vNext sono assenti; nessuna UI nascosta o placeholder li simula.
+## Pagamenti documentati
+
+`DRAFT → REQUESTED → TRANSFER_DECLARED → UNDER_REVIEW → CONFIRMED | DISPUTED | CANCELLED`. Qoovex non movimenta denaro. Il cliente dichiara l’intero importo della richiesta e può collegare una ricevuta; l’Azienda registra l’esito. Pagamenti parziali richiedono record separati.
+
+## Dispute, chiusura e riapertura
+
+Le dispute producono preservation e possono concludersi con accordo, ritiro o chiusura senza accordo; Qoovex non arbitra. La chiusura richiede precondizioni senza elementi aperti, snapshot fingerprinted, conferma cliente e conferma Azienda. Non esiste chiusura unilaterale automatica.
+
+Una richiesta post-chiusura non riscrive la timeline precedente e non riapre automaticamente. La riapertura richiede consensi reciproci sulla proposta corrente.
+
+## Receipt e concorrenza
+
+Le action critiche sono versionate `@1`, richiedono `Idempotency-Key` ed `expectedRevision`. Il receipt è unico per organizzazione/action/key; replay identico restituisce lo stesso risultato, riuso con fingerprint diverso restituisce 409.

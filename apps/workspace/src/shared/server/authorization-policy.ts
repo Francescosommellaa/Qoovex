@@ -1,7 +1,7 @@
 import { organizationPermissions, type OrganizationAccessPreset, type OrganizationPermission, type OrganizationRole } from "@qoovex/types";
 
-const READ: readonly OrganizationPermission[] = ["organization:read", "organizationProfile:read", "workers:read", "jobSites:read", "documents:read", "documents:file:read", "evidence:read", "evidence:file:read", "assignments:read"];
-const OPERATE: readonly OrganizationPermission[] = [...READ, "workers:create", "workers:update", "jobSites:create", "jobSites:update", "documents:upload", "documents:update", "evidence:upload"];
+const READ: readonly OrganizationPermission[] = ["organization:read", "organizationProfile:read", "workers:read", "jobSites:read", "documents:read", "documents:file:read", "evidence:read", "evidence:file:read", "assignments:read", "jobSite:view", "jobSite:steps:read", "jobSite:payments:read"];
+const OPERATE: readonly OrganizationPermission[] = [...READ, "workers:create", "workers:update", "jobSites:create", "jobSites:update", "documents:upload", "documents:update", "evidence:upload", "jobSite:update", "jobSite:publish", "jobSite:participants:manage", "jobSite:manageParticipants", "jobSite:steps:manage", "jobSite:steps:updateStatus", "jobSite:requests:create", "jobSite:requests:respond", "jobSite:changes:propose", "jobSite:commercial:negotiate", "jobSite:commercial:accept", "jobSite:payments:request", "jobSite:payments:confirmReceipt", "jobSite:disputes:create", "jobSite:disputes:respond", "jobSite:closure:propose", "jobSite:closure:confirm", "jobSite:export"];
 const PRESET_PERMISSIONS: Record<OrganizationAccessPreset, readonly OrganizationPermission[]> = {
   READ_ONLY: READ,
   OPERATIONAL_COLLABORATION: OPERATE,

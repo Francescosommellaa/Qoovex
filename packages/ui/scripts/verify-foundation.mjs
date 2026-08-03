@@ -33,14 +33,16 @@ const tokens = read("packages/ui/styles/tokens.css");
 for (const value of ["prefers-reduced-motion", "@custom-variant dark", "data-link=", "scrollbar-width: thin"]) assert(base.includes(value), `base.css non contiene ${value}`);
 for (const value of ["--info", "--success", "--warning", "--destructive", "--sidebar", "oklch("]) assert(tokens.includes(value), `tokens.css non contiene ${value}`);
 
-const workspace = read("apps/workspace/src/app/dashboard/page.tsx");
+const workspaceOrganization = read("apps/workspace/src/app/org/[organizationId]/job-sites/[jobSiteId]/page.tsx");
+const workspaceClient = read("apps/workspace/src/app/client/job-sites/[jobSiteId]/page.tsx");
 const web = read("apps/web/src/app/page.tsx");
 const sirio = read("apps/sirio/src/app/page.tsx");
-assert(workspace.toLowerCase().includes("foundation") && workspace.includes("non sono incluse"), "Workspace deve dichiarare lo stato foundation-only.");
-assert(web.includes("non implementata") && !web.includes("Checklist"), "Web non deve simulare il prodotto rimosso.");
+assert(workspaceOrganization.includes("Timeline") && workspaceOrganization.includes("Pagamenti documentati"), "Workspace Azienda non espone il contratto vNext.");
+assert(workspaceClient.includes("Timeline condivisa") && workspaceClient.includes("I tuoi lavori") === false, "Workspace cliente non applica la projection vNext.");
+assert(web.includes("Qoovex vNext disponibile") && !web.includes("non implementata"), "Web non descrive lo stato vNext implementato.");
 assert(sirio.includes("foundation visuale") && !sirio.includes("Dashboard"), "Sirio deve conservare soltanto la foundation visuale.");
 for (const removed of ["apps/workspace/src/views/dashboard/DashboardOverviewView.tsx", "apps/sirio/src/components/dashboard-shell.tsx", "apps/web/src/components/marketing-dashboard-preview.tsx"]) assert(!existsSync(join(root, removed)), `Superficie prodotto rimossa ancora presente: ${removed}`);
 
 const notice = read("packages/ui/THIRD_PARTY_NOTICES.md");
 assert(/MIT License/i.test(notice), "Licenza MIT mancante negli avvisi.");
-console.log("Canonical Qoovex foundation-only visual system verified.");
+console.log("Canonical Qoovex vNext visual foundation verified.");

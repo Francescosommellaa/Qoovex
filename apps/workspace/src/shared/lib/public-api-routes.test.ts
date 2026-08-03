@@ -16,10 +16,10 @@ describe("public API route allowlist", () => {
 
   it("keeps workspace and non-token shared APIs protected", () => {
     const protectedPaths = [
-      "/api/context",
-      "/api/documents",
-      "/api/operations/run",
-      "/api/reminders/email-digest/run",
+      "/api/contexts",
+      "/api/org/org-1/job-sites",
+      "/api/client/job-sites",
+      "/api/exports/download/grant",
       "/api/shared/removed",
     ];
 

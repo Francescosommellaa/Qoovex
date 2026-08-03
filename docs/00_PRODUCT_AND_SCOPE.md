@@ -1,26 +1,33 @@
-# 00 — Prodotto e perimetro
+# 00 — Product and scope
 
 ## verified_current_state
 
-Qoovex è in uno stato intermedio `foundation-only repository after legacy eradication`. Sono disponibili soltanto foundation tecniche e amministrative. Il precedente posizionamento documentale/exception-driven è stato eliminato e non è più commercialmente o tecnicamente attivo.
-
-## approved_product_direction
-
 Qoovex vNext è lo spazio condiviso in cui un’impresa gestisce un lavoro edile con il cliente, documentando avanzamento, step, modifiche, prove e pagamenti dalla creazione del cantiere alla chiusura.
 
-Promessa Azienda: documentare il lavoro una volta e usare gli stessi aggiornamenti per informare il cliente, gestire modifiche e presentare richieste di pagamento. Promessa cliente: seguire i lavori sui propri immobili, controllare le modifiche e conservare ciò che è condiviso.
+Promessa all’Azienda: documenta il lavoro una volta e usa gli stessi aggiornamenti per informare il cliente, gestire le modifiche e presentare richieste di pagamento.
+
+Promessa al cliente: segui i lavori sulle tue case, controlla ogni modifica e conserva tutto ciò che è stato condiviso.
+
+Il prodotto riunisce accordi, avanzamento, fotografie, prove, scontrini, richieste, pagamenti e conferme in una cronologia condivisa, strutturata, versionata e scaricabile.
+
+## implemented_decision
+
+- D-VNEXT-18–40: contratto tecnico vNext implementato.
+- D-VNEXT-46: legacy eradication completata.
+- D-VNEXT-47: foundation-only completata come stato intermedio storico.
+- D-VNEXT-48: implementazione integrale vNext completata nel repository.
+- D-VNEXT-41–45: `SUPERSEDED`; nessun `clientName`, fase operativa, processo legacy o dual-mode è stato reintrodotto.
+
+Modello commerciale approvato: paga soltanto l’Azienda; Collaborator incluso nell’Azienda; cliente gratuito per i cantieri invitati. Il repository non implementa billing e non definisce prezzi, piani, trial, limiti, commissioni o entitlement.
+
+## MVP disponibile
+
+Account multi-contesto, membership multiple, cantiere vNext, partecipanti, inviti cliente, immobili, agreement iniziale, timeline interna/condivisa, allegati, step opzionali, richieste, proposte e controproposte versionate, deleghe economiche, pagamenti documentati, dispute, chiusura reciproca, export, archivio, richieste post-chiusura, riapertura, ricerca metadata-only e notifiche.
 
 ## conceptual_not_implemented
 
-Account cliente, immobili, partecipazione, timeline condivisa, step, proposte, pagamenti documentati, dispute, chiusura reciproca, post-chiusura ed export cliente non sono presenti nella build.
+Più clienti principali o ruoli cliente differenziati, tecnici/delegati del cliente, pricing e billing, marketplace, ricerca imprese, preventivi comparativi, commissioni, pagamenti in-app, escrow, rimborsi, arbitrato, KYC, firma elettronica qualificata, fatturazione, contabilità, paghe, BIM, geolocalizzazione continua, sorveglianza, IA/OCR, portfolio e recensioni pubbliche.
 
-## Decisioni
+## hard_stop
 
-- D-VNEXT-41–45: `SUPERSEDED` dalla strategia di eradication; nessuna modalità `LEGACY/VNEXT`, nessuna conversione `clientName`, nessun compatibility layer di fase o processo.
-- D-VNEXT-46: `APPROVED_AND_IMPLEMENTED` — Legacy Eradication.
-- D-VNEXT-47: `APPROVED_AND_IMPLEMENTED` — stato intermedio foundation-only.
-- D-VNEXT-48: `APPROVED_PRODUCT_DIRECTION` — implementazione completa vNext in un prompt separato.
-
-## Hard stop
-
-Non iniziare capacità vNext in questa fase. Nessuna promessa legale, prezzo o funzionalità futura è dichiarata disponibile. Marketplace, pagamento in app, escrow, KYC, fatturazione, BIM, sorveglianza e IA normativa restano fuori MVP.
+Nessuna cancellazione fisica di cantiere o account; nessuna promessa di conformità, collaudo, assenza difetti o validità legale; nessun deploy o migration remoto senza un task separato autorizzato.

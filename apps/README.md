@@ -1,7 +1,7 @@
 # Applicazioni Qoovex
 
-- `workspace`: runtime autenticato foundation-only.
-- `web`: sito informativo che separa direzione vNext e capacità disponibili.
-- `sirio`: catalogo della foundation visuale, senza demo prodotto.
+- `workspace`: runtime autenticato Qoovex vNext con contesti Azienda e cliente.
+- `web`: sito informativo allineato alle capacità vNext disponibili.
+- `sirio`: catalogo della foundation visuale condivisa.
 
-Nessuna app contiene funzionalità vNext o superfici del prodotto rimosso.
+Il prodotto rimosso non è stato reintrodotto. Le composizioni vNext restano nel Workspace; Web non inventa pricing o promesse legali e Sirio non contiene business logic.

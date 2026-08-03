@@ -5,7 +5,7 @@ const removedApis = ["/api/calendar/events", "/api/deadlines", "/api/checklists"
 
 test("authentication surface remains available", async ({ page }) => {
   await page.goto("/sign-in");
-  await expect(page.getByRole("heading", { name: /accedi/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Bentornato", level: 1 })).toBeVisible();
 });
 
 test("removed legacy pages return 404 without redirects", async ({ request }) => {

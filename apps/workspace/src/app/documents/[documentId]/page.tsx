@@ -1,4 +1,0 @@
-import Link from "next/link";
-import { getDocument } from "@shared/server/document-service";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
-export default async function DocumentPage({ params }: { params: Promise<{ documentId: string }> }) { const value = await getDocument((await params).documentId); return <WorkspacePage><WorkspacePageHeader title={value.title} description="Metadati e versioni private del file foundation." /><WorkspacePanel title="Versioni">{value.versions.length ? <ul className="divide-y">{value.versions.map((version) => <li className="flex items-center justify-between gap-3 py-3" key={version.id}><span>{version.originalFileName}</span><Link className="text-sm underline" href={`/api/documents/${value.id}/versions/${version.id}/download`}>Scarica</Link></li>)}</ul> : <p className="text-sm text-muted-foreground">Nessuna versione disponibile.</p>}</WorkspacePanel></WorkspacePage>; }

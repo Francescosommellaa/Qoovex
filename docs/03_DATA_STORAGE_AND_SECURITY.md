@@ -1,15 +1,29 @@
-# 03 — Dati, storage e sicurezza
+# 03 — Data storage and security
 
 ## verified_current_state
 
-Una sola migration additiva alla history, `20260802010000_remove_legacy_product_foundation`, elimina tabelle, FK, indici, colonne ed enum legacy. Le 17 migration precedenti restano immutate. `Document`, `DocumentVersion`, `Evidence` ed `EvidenceRevision` conservano soltanto primitive generiche; upload/download sono autorizzati server-side con Blob privato, checksum, MIME e limiti dimensionali.
+La migration `20260803010000_implement_qoovex_vnext` porta la history a 19 migration. Blob è privato; upload e download passano dal server, applicano autorizzazione oggetto, audit, pathname generato, checksum SHA-256, MIME reale e limite tecnico 4 MiB.
 
-Gli export metadata non includono `blobKey`, token, hash, segreti o contenuti file. Audit di sicurezza, auth, accessi e file resta attivo. Le notifiche sono soltanto `SYSTEM`.
+## Timeline, snapshot e allegati
 
-## Migration safety
+La timeline è append-only, sequenziata atomicamente e paginata a cursore. Audience: `INTERNAL | SHARED`; disclosure: `GENERAL | COMMERCIAL | RESTRICTED_COMMERCIAL`. Correzioni, ritiri e sostituzioni aggiungono eventi o metadata senza riscrivere versioni precedenti.
 
-Backup locale prima dell’upgrade: JSON privato in directory temporanea, 63 tabelle/179 righe, SHA-256 registrato nel report task. La history completa e l’upgrade 17→18 sono stati provati su database locali distinti. Preview e Production non sono stati interrogati né modificati.
+JSON è limitato a payload versionati di agreement, closure, timeline ed effect. Ogni payload è validato da Zod e fingerprint SHA-256. Allegati e publication conservano origine, audience, categoria, checksum e metadata fotografati; il binario non viene duplicato.
 
-## Hard stop
+## IBAN e ricevute
 
-Retention definitiva, legal hold e cancellazione richiedono policy verificata. Nessuna cancellazione fisica del cantiere è autorizzata. Le future audience `INTERNAL/SHARED_WITH_CLIENT`, ricevute e IBAN non sono implementate.
+Il profilo pagamento è versionato. L’IBAN è cifrato AES-256-GCM con `QOOVEX_DATA_ENCRYPTION_KEYS` e `QOOVEX_DATA_ENCRYPTION_ACTIVE_KEY_ID`; ciphertext, nonce, auth tag e key id sono separati. AAD lega organizzazione, profilo e versione. È vietato il fallback su segreti Auth/MFA. La modifica richiede MFA attiva e soddisfatta.
+
+Una ricevuta `PAYMENT_RECEIPT` è collegata a una precisa richiesta. È visibile al cliente principale e agli attori Azienda con autorità commerciale; non prova automaticamente l’accredito.
+
+## Threat controls
+
+Tenant/participant isolation, IDOR protection, token hash monouso, rate limit, `accessVersion`, optimistic concurrency, idempotency fingerprint, transazioni Serializable, MIME spoofing/path traversal/oversize rejection, grant scaduti, cache per contesto, export audience-specific e audit minimizzato. Token hash, Blob key, IBAN completo e URL permanenti non entrano nei DTO client.
+
+## Retention e legal hold
+
+Inviti cliente 14 giorni; pagina link export 7 giorni; grant download 15 minuti; archivio ZIP 30 giorni. Record canonici, timeline, proposte, pagamenti e dispute seguono il JobSite. `LegalHold` e dispute preservation bloccano cleanup pertinente senza ampliare la visibilità.
+
+## hard_stop
+
+Nessuna cancellazione fisica automatica; nessun cleanup di contenuti soggetti a hold; nessuna chiave reale versionata; nessuna operazione Blob remota in questo task.

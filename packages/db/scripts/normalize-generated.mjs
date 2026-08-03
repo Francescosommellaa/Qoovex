@@ -13,6 +13,7 @@ const generatedFilesWithPrismaWhitespace = [
   "../generated/prisma/browser.ts",
   "../generated/prisma/client.ts",
   "../generated/prisma/internal/prismaNamespace.ts",
+  "../generated/prisma/models/JobSite.ts",
   "../generated/prisma/models/OrganizationInvitation.ts",
   "../generated/prisma/models/OrganizationMembership.ts",
   "../generated/prisma/models/Organization.ts",

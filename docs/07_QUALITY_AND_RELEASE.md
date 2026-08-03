@@ -1,17 +1,28 @@
-# 07 — Qualità e release
+# 07 — Quality and release
 
-## Acceptance foundation-only
+## Acceptance contract
 
-- schema, tipi, route, navigazione, servizi, audit, notifiche e data-control non contengono contratti legacy;
-- route eliminate sono 404 senza redirect;
-- auth, MFA, Azienda, accessi, Worker, assegnazioni, JobSite minimo, file/prove private, audit, supporto e tenant isolation restano coperti;
-- nessuna capability vNext è implementata o simulata;
-- Web e Sirio non presentano il prodotto precedente come attivo.
+- `OrganizationRole` resta `OWNER | COLLABORATOR`; client membership impossibile.
+- route, navigation, API, service, mutation, permission e test sono collegati dal capability manifest.
+- tenant/participant isolation, revision, accessVersion, authority e receipt sono server-side.
+- timeline interna e condivisa non perdono audience; ricevute e file non perdono visibilità.
+- proposte, agreement, closure ed effect rifiutano versioni stale.
+- nessuna cancellazione fisica, provider live, marketplace, billing o IA.
 
-## Gate
+## Test canonici
 
-Richiesti: Prisma format/validate/generate/status/diff/verify, migration fresh e upgrade, type-check, unit/integration, build Workspace/Web/Sirio, audit dipendenze, route manifest, `pnpm check:fast`, `pnpm check`, `git diff --check`; `pnpm check:ci` solo con ambiente E2E locale attestato.
+Prisma format/validate/generate/status/diff, fresh e upgrade; type-check; unit; integration quando attestata; build Workspace/Web/Sirio; route/capability registry; dependency audit; `pnpm check:fast`; `pnpm check`; `pnpm check:ci` soltanto con database, email sink, Blob adapter e chiavi sintetiche locali attestati; `git diff --check`.
+
+Le suite devono includere due Aziende, Owner/Collaborator/cliente, inviti/replay, participant e tenant isolation, authority revocata, stale revision/version, receipt idempotenti, receipt visibility, export/search leakage, hold e minimizzazione audit.
+
+## Performance budget
+
+Dataset target: almeno 3 Aziende, 200 JobSite, 20.000 eventi, 1.000 step e 500 record per proposte/pagamenti. Home e dettaglio iniziale ≤12 query; timeline ≤4 query per pagina da 50; search ≤8 query bounded; nessun N+1.
+
+## Browser QA
+
+Viewport 320/390/768/1024/1440, zoom 200%, light/dark/system, tastiera, focus, console, hydration, reduced motion e overflow. Un gate non eseguito non può essere dichiarato verde.
 
 ## Release hard stop
 
-Preview e Production non ricevono la migration in questo task. Nessun commit finale, push, PR o deploy senza autorizzazione separata.
+Il repository può essere pronto localmente senza autorizzare release. Preview/Production, migration remota, Blob remoto, push e PR restano fuori da questo task.

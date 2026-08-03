@@ -36,13 +36,24 @@ export function WorkspaceNavigation({ account, authenticated, navigation, platfo
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const platformOnly = (platformRole === "SUPPORT_AGENT" || platformRole === "PLATFORM_ADMIN") && !support;
-  const primary = platformOnly ? platformItems : navigation.primary;
+  const organizationId = /^\/org\/([^/]+)/.exec(pathname)?.[1];
+  const contextItems = organizationId ? [
+    { label: "Panoramica Azienda", href: `/org/${organizationId}` },
+    { label: "Cantieri", href: `/org/${organizationId}/job-sites` },
+    { label: "Collaboratori", href: `/org/${organizationId}/people` },
+    { label: "Profilo pagamento", href: `/org/${organizationId}/payment-profile` },
+    { label: "Cambia contesto", href: "/contexts" },
+  ] : pathname.startsWith("/client") ? [
+    { label: "I tuoi lavori", href: "/client" },
+    { label: "Cambia contesto", href: "/contexts" },
+  ] : navigation.primary;
+  const primary = platformOnly ? platformItems : contextItems;
 
   return (
     <>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>{platformOnly ? "Piattaforma" : "Foundation"}</SidebarGroupLabel>
+          <SidebarGroupLabel>{platformOnly ? "Piattaforma" : organizationId ? "Azienda" : pathname.startsWith("/client") ? "Cliente" : "Qoovex"}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {primary.map((item) => (

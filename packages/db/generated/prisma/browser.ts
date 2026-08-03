@@ -68,11 +68,6 @@ export type JobSite = Prisma.JobSiteModel
  */
 export type WorkerUserLink = Prisma.WorkerUserLinkModel
 /**
- * Model JobSiteUserAssignment
- *
- */
-export type JobSiteUserAssignment = Prisma.JobSiteUserAssignmentModel
-/**
  * Model JobSiteWorkerAssignment
  *
  */
@@ -112,6 +107,241 @@ export type Notification = Prisma.NotificationModel
  *
  */
 export type DataControlJob = Prisma.DataControlJobModel
+/**
+ * Model JobSiteParticipant
+ *
+ */
+export type JobSiteParticipant = Prisma.JobSiteParticipantModel
+/**
+ * Model JobSiteClientInvitation
+ *
+ */
+export type JobSiteClientInvitation = Prisma.JobSiteClientInvitationModel
+/**
+ * Model ClientProperty
+ *
+ */
+export type ClientProperty = Prisma.ClientPropertyModel
+/**
+ * Model ClientPropertyJobSiteLink
+ *
+ */
+export type ClientPropertyJobSiteLink = Prisma.ClientPropertyJobSiteLinkModel
+/**
+ * Model JobSiteAuthorityGrant
+ *
+ */
+export type JobSiteAuthorityGrant = Prisma.JobSiteAuthorityGrantModel
+/**
+ * Model JobSiteInitialAgreement
+ *
+ */
+export type JobSiteInitialAgreement = Prisma.JobSiteInitialAgreementModel
+/**
+ * Model JobSiteInitialAgreementVersion
+ *
+ */
+export type JobSiteInitialAgreementVersion = Prisma.JobSiteInitialAgreementVersionModel
+/**
+ * Model JobSiteInitialAgreementConsent
+ *
+ */
+export type JobSiteInitialAgreementConsent = Prisma.JobSiteInitialAgreementConsentModel
+/**
+ * Model JobSiteStep
+ *
+ */
+export type JobSiteStep = Prisma.JobSiteStepModel
+/**
+ * Model JobSiteStepUserAssignment
+ *
+ */
+export type JobSiteStepUserAssignment = Prisma.JobSiteStepUserAssignmentModel
+/**
+ * Model JobSiteStepWorkerAssignment
+ *
+ */
+export type JobSiteStepWorkerAssignment = Prisma.JobSiteStepWorkerAssignmentModel
+/**
+ * Model JobSiteTimelineEvent
+ *
+ */
+export type JobSiteTimelineEvent = Prisma.JobSiteTimelineEventModel
+/**
+ * Model JobSiteTimelineArtifactReference
+ *
+ */
+export type JobSiteTimelineArtifactReference = Prisma.JobSiteTimelineArtifactReferenceModel
+/**
+ * Model JobSiteAttachment
+ *
+ */
+export type JobSiteAttachment = Prisma.JobSiteAttachmentModel
+/**
+ * Model JobSiteAttachmentPublication
+ *
+ */
+export type JobSiteAttachmentPublication = Prisma.JobSiteAttachmentPublicationModel
+/**
+ * Model JobSiteTimelineEventAttachment
+ *
+ */
+export type JobSiteTimelineEventAttachment = Prisma.JobSiteTimelineEventAttachmentModel
+/**
+ * Model JobSiteRequest
+ *
+ */
+export type JobSiteRequest = Prisma.JobSiteRequestModel
+/**
+ * Model JobSiteChangeProposal
+ *
+ */
+export type JobSiteChangeProposal = Prisma.JobSiteChangeProposalModel
+/**
+ * Model JobSiteChangeProposalVersion
+ *
+ */
+export type JobSiteChangeProposalVersion = Prisma.JobSiteChangeProposalVersionModel
+/**
+ * Model JobSiteChangeProposalEffect
+ *
+ */
+export type JobSiteChangeProposalEffect = Prisma.JobSiteChangeProposalEffectModel
+/**
+ * Model JobSiteChangeProposalConsent
+ *
+ */
+export type JobSiteChangeProposalConsent = Prisma.JobSiteChangeProposalConsentModel
+/**
+ * Model OrganizationPaymentProfile
+ *
+ */
+export type OrganizationPaymentProfile = Prisma.OrganizationPaymentProfileModel
+/**
+ * Model OrganizationPaymentProfileVersion
+ *
+ */
+export type OrganizationPaymentProfileVersion = Prisma.OrganizationPaymentProfileVersionModel
+/**
+ * Model JobSitePaymentRequest
+ *
+ */
+export type JobSitePaymentRequest = Prisma.JobSitePaymentRequestModel
+/**
+ * Model JobSitePaymentRequestStepLink
+ *
+ */
+export type JobSitePaymentRequestStepLink = Prisma.JobSitePaymentRequestStepLinkModel
+/**
+ * Model JobSitePaymentRequestProposalLink
+ *
+ */
+export type JobSitePaymentRequestProposalLink = Prisma.JobSitePaymentRequestProposalLinkModel
+/**
+ * Model JobSitePaymentTransferDeclaration
+ *
+ */
+export type JobSitePaymentTransferDeclaration = Prisma.JobSitePaymentTransferDeclarationModel
+/**
+ * Model JobSitePaymentReview
+ *
+ */
+export type JobSitePaymentReview = Prisma.JobSitePaymentReviewModel
+/**
+ * Model JobSiteDispute
+ *
+ */
+export type JobSiteDispute = Prisma.JobSiteDisputeModel
+/**
+ * Model JobSiteDisputeArtifactReference
+ *
+ */
+export type JobSiteDisputeArtifactReference = Prisma.JobSiteDisputeArtifactReferenceModel
+/**
+ * Model JobSiteDisputeConsent
+ *
+ */
+export type JobSiteDisputeConsent = Prisma.JobSiteDisputeConsentModel
+/**
+ * Model JobSiteDisputePreservation
+ *
+ */
+export type JobSiteDisputePreservation = Prisma.JobSiteDisputePreservationModel
+/**
+ * Model JobSiteClosure
+ *
+ */
+export type JobSiteClosure = Prisma.JobSiteClosureModel
+/**
+ * Model JobSiteClosureConsent
+ *
+ */
+export type JobSiteClosureConsent = Prisma.JobSiteClosureConsentModel
+/**
+ * Model JobSitePostClosureRequest
+ *
+ */
+export type JobSitePostClosureRequest = Prisma.JobSitePostClosureRequestModel
+/**
+ * Model JobSiteReopeningProposal
+ *
+ */
+export type JobSiteReopeningProposal = Prisma.JobSiteReopeningProposalModel
+/**
+ * Model JobSiteReopeningConsent
+ *
+ */
+export type JobSiteReopeningConsent = Prisma.JobSiteReopeningConsentModel
+/**
+ * Model JobSiteExport
+ *
+ */
+export type JobSiteExport = Prisma.JobSiteExportModel
+/**
+ * Model JobSiteExportAccessLink
+ *
+ */
+export type JobSiteExportAccessLink = Prisma.JobSiteExportAccessLinkModel
+/**
+ * Model JobSiteExportDownloadGrant
+ *
+ */
+export type JobSiteExportDownloadGrant = Prisma.JobSiteExportDownloadGrantModel
+/**
+ * Model LegalHold
+ *
+ */
+export type LegalHold = Prisma.LegalHoldModel
+/**
+ * Model JobSiteActionReceipt
+ *
+ */
+export type JobSiteActionReceipt = Prisma.JobSiteActionReceiptModel
+/**
+ * Model JobSiteProcess
+ *
+ */
+export type JobSiteProcess = Prisma.JobSiteProcessModel
+/**
+ * Model JobSiteProcessStep
+ *
+ */
+export type JobSiteProcessStep = Prisma.JobSiteProcessStepModel
+/**
+ * Model JobSiteProcessEvent
+ *
+ */
+export type JobSiteProcessEvent = Prisma.JobSiteProcessEventModel
+/**
+ * Model NotificationPreference
+ *
+ */
+export type NotificationPreference = Prisma.NotificationPreferenceModel
+/**
+ * Model NotificationDelivery
+ *
+ */
+export type NotificationDelivery = Prisma.NotificationDeliveryModel
 /**
  * Model OrganizationMembership
  *

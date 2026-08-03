@@ -42,6 +42,19 @@ export type TransactionalEmailTemplate =
       expiresAt: Date;
     }
   | {
+      kind: "client-invitation";
+      organizationName: string;
+      jobSiteName: string;
+      acceptUrl: string;
+      expiresAt: Date;
+    }
+  | {
+      kind: "export-ready";
+      jobSiteName: string;
+      accessUrl: string;
+      expiresAt: Date;
+    }
+  | {
       kind: "support-opened" | "support-closed";
       organizationName?: string;
       employeeEmail: string;
@@ -254,10 +267,24 @@ function renderEmail(input: { to: string; template: TransactionalEmailTemplate }
         intro: `Sei stato invitato a collaborare in ${organizationName}. Apri ${input.template.acceptUrl} entro ${formatSecurityDate(input.template.expiresAt)}.`,
       };
     }
+    if (input.template.kind === "client-invitation") {
+      return {
+        subject: `${input.template.organizationName} ti ha invitato su Qoovex`,
+        title: "Invito al cantiere",
+        intro: `Accedi per partecipare al cantiere ${input.template.jobSiteName}. Apri ${input.template.acceptUrl} entro ${formatSecurityDate(input.template.expiresAt)}.`,
+      };
+    }
+    if (input.template.kind === "export-ready") {
+      return {
+        subject: `Export Qoovex pronto - ${input.template.jobSiteName}`,
+        title: "Export pronto",
+        intro: `Apri ${input.template.accessUrl} entro ${formatSecurityDate(input.template.expiresAt)}. L'archivio non e allegato a questa email.`,
+      };
+    }
     if (input.template.kind === "notification-digest") {
       return {
-        subject: "Qoovex - Promemoria documenti e scadenze",
-        title: "Elementi da controllare",
+        subject: "Qoovex - Attivita da controllare",
+        title: "Attivita da controllare",
         intro: `${input.template.unreadCount} notifiche non lette da controllare nel workspace Qoovex.`,
       };
     }

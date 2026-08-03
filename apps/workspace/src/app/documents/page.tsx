@@ -1,5 +1,0 @@
-import Link from "next/link";
-import { listDocuments } from "@shared/server/document-service";
-import { buttonVariants } from "@qoovex/ui/components/button";
-import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
-export default async function DocumentsPage() { const values = await listDocuments(); return <WorkspacePage><WorkspacePageHeader title="File" description="File privati generici e versionati della foundation." action={<Link className={buttonVariants()} href="/documents/new">Carica</Link>} />{values.length ? <WorkspacePanel><ul className="divide-y">{values.map((value) => <li className="py-3" key={value.id}><Link className="font-medium underline-offset-4 hover:underline" href={`/documents/${value.id}`}>{value.title}</Link><span className="ml-2 text-sm text-muted-foreground">{value.currentVersion?.originalFileName ?? "Nessuna versione"}</span></li>)}</ul></WorkspacePanel> : <WorkspaceEmptyState title="Nessun file" description="Carica un file foundation quando necessario." />}</WorkspacePage>; }

@@ -84,7 +84,7 @@ export async function listPlatformUsers(input: { q?: string | null; status?: str
       { username: { contains: q, mode: "insensitive" } },
       { firstName: { contains: q, mode: "insensitive" } },
       { lastName: { contains: q, mode: "insensitive" } },
-      { organizationMembership: { is: { revokedAt: null, organization: { OR: [
+      { organizationMemberships: { some: { revokedAt: null, organization: { OR: [
         { name: { contains: q, mode: "insensitive" } },
         { code: { contains: q, mode: "insensitive" } },
       ] } } } },
@@ -95,7 +95,7 @@ export async function listPlatformUsers(input: { q?: string | null; status?: str
     select: {
       id: true, email: true, username: true, firstName: true, lastName: true, platformRole: true,
       emailVerified: true, mfaEnabled: true, suspendedAt: true, suspensionReason: true, createdAt: true,
-      organizationMembership: {
+      organizationMemberships: {
         select: { role: true, revokedAt: true, organization: { select: { id: true, name: true, code: true } } },
       },
     },
@@ -116,7 +116,7 @@ export async function getPlatformUserDetail(userId: string) {
       id: true, email: true, username: true, firstName: true, lastName: true, platformRole: true,
       emailVerified: true, mfaEnabled: true, suspendedAt: true, suspensionReason: true, createdAt: true, updatedAt: true,
       _count: { select: { sessions: true } },
-      organizationMembership: {
+      organizationMemberships: {
         select: { id: true, role: true, revokedAt: true, createdAt: true, organization: { select: { id: true, name: true, code: true } } },
       },
       securityEvents: {
