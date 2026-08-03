@@ -1,20 +1,27 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "application": {
     "name": "qoovex-workspace",
-    "version": "legacy-production-alignment-v1",
-    "runtimeTrack": "legacy",
-    "vNext": "conceptual_not_implemented"
+    "version": "vnext-from-zero-v1",
+    "runtimeTrack": "vnext",
+    "vNext": "implemented"
   },
   "database": {
-    "migrationHead": "20260720010000_calendar_events",
-    "migrationCount": 5,
-    "productionMutationRequiredForAlignment": false,
+    "baselineHead": "20260720010000_calendar_events",
+    "migrationHead": "20260803230000_qoovex_vnext_from_zero",
+    "migrationCount": 6,
+    "productionMutationRequiredForAlignment": true,
+    "rolloutMode": "authorized_empty_database_reset",
     "ledger": "ops/migration-ledger.json"
   },
+  "blob": {
+    "access": "private",
+    "rolloutMode": "one_time_store_reset_before_database_migration",
+    "targetIdentity": "BLOB_STORE_ID",
+    "resetScript": "apps/workspace/scripts/reset-vnext-blob-store.mjs"
+  },
   "scheduler": {
-    "recoveryCheckpointRequiredState": "suspended_until_permanent_release",
-    "permanentReleaseState": "enabled_legacy_only",
+    "permanentReleaseState": "enabled_vnext",
     "jobs": [
       {
         "id": "data-control",
@@ -22,12 +29,12 @@
         "path": "/api/data/jobs/run"
       },
       {
-        "id": "digest",
-        "method": "GET",
-        "path": "/api/reminders/email-digest/run"
+        "id": "vnext-processes",
+        "method": "POST",
+        "path": "/api/internal/vnext/processes/run"
       }
     ],
-    "forbiddenJobs": ["operational", "vnext-runner"]
+    "forbiddenJobs": ["digest", "legacy-operational"]
   },
   "http": {
     "anonymousProtectedPage": "307_sign_in_with_sanitized_relative_callback",
@@ -38,13 +45,16 @@
   },
   "environmentContract": "ops/environment-contract.json",
   "previewRelease": {
-    "automaticGitDeployment": "disabled",
-    "workflow": ".github/workflows/rehearse-workspace-preview.yml"
+    "automaticGitDeployment": "workflow_on_non_master_push",
+    "workflow": ".github/workflows/rehearse-workspace-preview.yml",
+    "database": "isolated_reset",
+    "blob": "isolated_reset"
   },
   "productionRelease": {
-    "domainAssignment": "manual",
-    "deploymentMode": "staged",
+    "trigger": "successful_ci_on_master",
+    "deploymentMode": "staged_then_promoted",
     "workflow": ".github/workflows/release-workspace.yml",
+    "migrationCommand": "prisma migrate deploy",
     "promotionCommand": "vercel promote"
   }
 }

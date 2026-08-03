@@ -2,7 +2,7 @@
 
 ## verified_current_state
 
-La migration `20260803010000_implement_qoovex_vnext` porta la history a 19 migration. Blob è privato; upload e download passano dal server, applicano autorizzazione oggetto, audit, pathname generato, checksum SHA-256, MIME reale e limite tecnico 4 MiB.
+La migration `20260803230000_qoovex_vnext_from_zero` porta la history a 6 migration e rimuove fisicamente il dominio legacy partendo dal baseline Production a 5. Blob è privato; upload e download passano dal server, applicano autorizzazione oggetto, audit, pathname generato, checksum SHA-256, MIME reale e limite tecnico 4 MiB.
 
 ## Timeline, snapshot e allegati
 
@@ -26,4 +26,4 @@ Inviti cliente 14 giorni; pagina link export 7 giorni; grant download 15 minuti;
 
 ## hard_stop
 
-Nessuna cancellazione fisica automatica; nessun cleanup di contenuti soggetti a hold; nessuna chiave reale versionata; nessuna operazione Blob remota in questo task.
+Nessuna cancellazione fisica automatica di record vNext; nessun cleanup di contenuti soggetti a hold; nessuna chiave reale versionata. L'unica cancellazione Blob remota autorizzata è il reset one-shot empty-store eseguito dal workflow prima della migration vNext.

@@ -10,7 +10,7 @@
     "hard_stop"
   ],
   "verified_current_state": {
-    "classification": "Qoovex vNext MVP implemented locally",
+    "classification": "Qoovex vNext MVP implemented locally with guarded remote rollout prepared",
     "product": "Shared company-client construction job workspace from creation through mutual closure",
     "identity_and_context": {
       "organization_roles": ["OWNER", "COLLABORATOR"],
@@ -43,13 +43,15 @@
       "money": "BigInt minor units; public DTO values are strings"
     },
     "migration_history": {
-      "count": 19,
-      "new_migration": "20260803010000_implement_qoovex_vnext",
+      "count": 6,
+      "baseline_head": "20260720010000_calendar_events",
+      "new_migration": "20260803230000_qoovex_vnext_from_zero",
       "previous_migrations_rewritten": false,
-      "fresh_local": "verified, seed verified, no drift",
-      "upgrade_local": "verified from 18 migrations and restored Prompt-A snapshot, no drift",
+      "fresh_local": "verified from zero, no drift",
+      "upgrade_local": "verified from the five-migration Production baseline, destructive reset applied, no drift",
       "preview_applied": false,
-      "production_applied": false
+      "production_applied": false,
+      "remote_trigger": "Preview on non-master push; Production after successful CI on master"
     }
   },
   "implemented_decisions": [
@@ -107,14 +109,14 @@
   "hard_stops": [
     "CLIENT must never enter OrganizationRole",
     "No physical JobSite or account deletion before an independently approved policy",
-    "No Preview or Production migration, deploy or Blob operation without separate authorization",
-    "No db push, migrate resolve, remote reset or manual SQL outside canonical migrations",
+    "No Preview or Production migration, deploy or Blob operation outside the guarded workflows and exact target identity",
+    "No db push, migrate resolve or manual SQL outside canonical migrations",
     "No fallback from the data-encryption key ring to Auth or MFA secrets",
     "No pricing, legal guarantee or money movement may be inferred from the MVP"
   ],
   "next_task": {
-    "name": "Remote rollout only after separate authorization",
-    "requirements": ["exact target identity", "backup and restore proof", "environment encryption key ring", "synthetic smoke data", "rollback plan"],
-    "not_authorized_here": ["deployment", "remote migration", "remote Blob", "push", "pull request"]
+    "name": "Push and monitor the guarded vNext rollout",
+    "requirements": ["push branch for isolated Preview", "green Preview and CI", "merge or push master for Production", "verify release evidence artifact"],
+    "not_authorized_here": ["physical JobSite deletion", "physical account deletion", "db push", "manual remote SQL"]
   }
 }

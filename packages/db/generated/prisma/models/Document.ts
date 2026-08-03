@@ -27,15 +27,11 @@ export type AggregateDocument = {
 export type DocumentMinAggregateOutputType = {
   id: string | null
   organizationId: string | null
-  documentTypeId: string | null
+  currentVersionId: string | null
   ownerType: $Enums.DocumentOwnerType | null
   workerId: string | null
   jobSiteId: string | null
   title: string | null
-  status: $Enums.DocumentStatus | null
-  expiryDate: Date | null
-  reviewedAt: Date | null
-  reviewedById: string | null
   notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -45,15 +41,11 @@ export type DocumentMinAggregateOutputType = {
 export type DocumentMaxAggregateOutputType = {
   id: string | null
   organizationId: string | null
-  documentTypeId: string | null
+  currentVersionId: string | null
   ownerType: $Enums.DocumentOwnerType | null
   workerId: string | null
   jobSiteId: string | null
   title: string | null
-  status: $Enums.DocumentStatus | null
-  expiryDate: Date | null
-  reviewedAt: Date | null
-  reviewedById: string | null
   notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -63,15 +55,11 @@ export type DocumentMaxAggregateOutputType = {
 export type DocumentCountAggregateOutputType = {
   id: number
   organizationId: number
-  documentTypeId: number
+  currentVersionId: number
   ownerType: number
   workerId: number
   jobSiteId: number
   title: number
-  status: number
-  expiryDate: number
-  reviewedAt: number
-  reviewedById: number
   notes: number
   createdAt: number
   updatedAt: number
@@ -83,15 +71,11 @@ export type DocumentCountAggregateOutputType = {
 export type DocumentMinAggregateInputType = {
   id?: true
   organizationId?: true
-  documentTypeId?: true
+  currentVersionId?: true
   ownerType?: true
   workerId?: true
   jobSiteId?: true
   title?: true
-  status?: true
-  expiryDate?: true
-  reviewedAt?: true
-  reviewedById?: true
   notes?: true
   createdAt?: true
   updatedAt?: true
@@ -101,15 +85,11 @@ export type DocumentMinAggregateInputType = {
 export type DocumentMaxAggregateInputType = {
   id?: true
   organizationId?: true
-  documentTypeId?: true
+  currentVersionId?: true
   ownerType?: true
   workerId?: true
   jobSiteId?: true
   title?: true
-  status?: true
-  expiryDate?: true
-  reviewedAt?: true
-  reviewedById?: true
   notes?: true
   createdAt?: true
   updatedAt?: true
@@ -119,15 +99,11 @@ export type DocumentMaxAggregateInputType = {
 export type DocumentCountAggregateInputType = {
   id?: true
   organizationId?: true
-  documentTypeId?: true
+  currentVersionId?: true
   ownerType?: true
   workerId?: true
   jobSiteId?: true
   title?: true
-  status?: true
-  expiryDate?: true
-  reviewedAt?: true
-  reviewedById?: true
   notes?: true
   createdAt?: true
   updatedAt?: true
@@ -210,15 +186,11 @@ export type DocumentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type DocumentGroupByOutputType = {
   id: string
   organizationId: string
-  documentTypeId: string | null
+  currentVersionId: string | null
   ownerType: $Enums.DocumentOwnerType
   workerId: string | null
   jobSiteId: string | null
   title: string
-  status: $Enums.DocumentStatus
-  expiryDate: Date | null
-  reviewedAt: Date | null
-  reviewedById: string | null
   notes: string | null
   createdAt: Date
   updatedAt: Date
@@ -249,96 +221,74 @@ export type DocumentWhereInput = {
   NOT?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
   id?: Prisma.StringFilter<"Document"> | string
   organizationId?: Prisma.StringFilter<"Document"> | string
-  documentTypeId?: Prisma.StringNullableFilter<"Document"> | string | null
+  currentVersionId?: Prisma.StringNullableFilter<"Document"> | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFilter<"Document"> | $Enums.DocumentOwnerType
   workerId?: Prisma.StringNullableFilter<"Document"> | string | null
   jobSiteId?: Prisma.StringNullableFilter<"Document"> | string | null
   title?: Prisma.StringFilter<"Document"> | string
-  status?: Prisma.EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
-  expiryDate?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  reviewedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  reviewedById?: Prisma.StringNullableFilter<"Document"> | string | null
   notes?: Prisma.StringNullableFilter<"Document"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   archivedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
-  documentType?: Prisma.XOR<Prisma.DocumentTypeNullableScalarRelationFilter, Prisma.DocumentTypeWhereInput> | null
+  currentVersion?: Prisma.XOR<Prisma.DocumentVersionNullableScalarRelationFilter, Prisma.DocumentVersionWhereInput> | null
   worker?: Prisma.XOR<Prisma.WorkerNullableScalarRelationFilter, Prisma.WorkerWhereInput> | null
   jobSite?: Prisma.XOR<Prisma.JobSiteNullableScalarRelationFilter, Prisma.JobSiteWhereInput> | null
-  reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   versions?: Prisma.DocumentVersionListRelationFilter
-  deadlines?: Prisma.DeadlineListRelationFilter
-  packageItems?: Prisma.DocumentPackageItemListRelationFilter
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkListRelationFilter
 }
 
 export type DocumentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
-  documentTypeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   ownerType?: Prisma.SortOrder
   workerId?: Prisma.SortOrderInput | Prisma.SortOrder
   jobSiteId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  expiryDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
-  documentType?: Prisma.DocumentTypeOrderByWithRelationInput
+  currentVersion?: Prisma.DocumentVersionOrderByWithRelationInput
   worker?: Prisma.WorkerOrderByWithRelationInput
   jobSite?: Prisma.JobSiteOrderByWithRelationInput
-  reviewedBy?: Prisma.UserOrderByWithRelationInput
   versions?: Prisma.DocumentVersionOrderByRelationAggregateInput
-  deadlines?: Prisma.DeadlineOrderByRelationAggregateInput
-  packageItems?: Prisma.DocumentPackageItemOrderByRelationAggregateInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkOrderByRelationAggregateInput
 }
 
 export type DocumentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  currentVersionId?: string
   AND?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
   OR?: Prisma.DocumentWhereInput[]
   NOT?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
   organizationId?: Prisma.StringFilter<"Document"> | string
-  documentTypeId?: Prisma.StringNullableFilter<"Document"> | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFilter<"Document"> | $Enums.DocumentOwnerType
   workerId?: Prisma.StringNullableFilter<"Document"> | string | null
   jobSiteId?: Prisma.StringNullableFilter<"Document"> | string | null
   title?: Prisma.StringFilter<"Document"> | string
-  status?: Prisma.EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
-  expiryDate?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  reviewedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  reviewedById?: Prisma.StringNullableFilter<"Document"> | string | null
   notes?: Prisma.StringNullableFilter<"Document"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   archivedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
-  documentType?: Prisma.XOR<Prisma.DocumentTypeNullableScalarRelationFilter, Prisma.DocumentTypeWhereInput> | null
+  currentVersion?: Prisma.XOR<Prisma.DocumentVersionNullableScalarRelationFilter, Prisma.DocumentVersionWhereInput> | null
   worker?: Prisma.XOR<Prisma.WorkerNullableScalarRelationFilter, Prisma.WorkerWhereInput> | null
   jobSite?: Prisma.XOR<Prisma.JobSiteNullableScalarRelationFilter, Prisma.JobSiteWhereInput> | null
-  reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   versions?: Prisma.DocumentVersionListRelationFilter
-  deadlines?: Prisma.DeadlineListRelationFilter
-  packageItems?: Prisma.DocumentPackageItemListRelationFilter
-}, "id">
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkListRelationFilter
+}, "id" | "currentVersionId">
 
 export type DocumentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
-  documentTypeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   ownerType?: Prisma.SortOrder
   workerId?: Prisma.SortOrderInput | Prisma.SortOrder
   jobSiteId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  expiryDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -354,15 +304,11 @@ export type DocumentScalarWhereWithAggregatesInput = {
   NOT?: Prisma.DocumentScalarWhereWithAggregatesInput | Prisma.DocumentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Document"> | string
   organizationId?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  documentTypeId?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
+  currentVersionId?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeWithAggregatesFilter<"Document"> | $Enums.DocumentOwnerType
   workerId?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   jobSiteId?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   title?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  status?: Prisma.EnumDocumentStatusWithAggregatesFilter<"Document"> | $Enums.DocumentStatus
-  expiryDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Document"> | Date | string | null
-  reviewedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Document"> | Date | string | null
-  reviewedById?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Document"> | Date | string
@@ -373,98 +319,74 @@ export type DocumentCreateInput = {
   id?: string
   ownerType: $Enums.DocumentOwnerType
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentsInput
-  documentType?: Prisma.DocumentTypeCreateNestedOneWithoutDocumentsInput
+  currentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutCurrentForDocumentInput
   worker?: Prisma.WorkerCreateNestedOneWithoutDocumentsInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentsInput
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedDocumentsInput
   versions?: Prisma.DocumentVersionCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentUncheckedCreateInput = {
   id?: string
   organizationId: string
-  documentTypeId?: string | null
+  currentVersionId?: string | null
   ownerType: $Enums.DocumentOwnerType
   workerId?: string | null
   jobSiteId?: string | null
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   versions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentsNestedInput
-  documentType?: Prisma.DocumentTypeUpdateOneWithoutDocumentsNestedInput
+  currentVersion?: Prisma.DocumentVersionUpdateOneWithoutCurrentForDocumentNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutDocumentsNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentsNestedInput
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedDocumentsNestedInput
   versions?: Prisma.DocumentVersionUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   versions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentCreateManyInput = {
   id?: string
   organizationId: string
-  documentTypeId?: string | null
+  currentVersionId?: string | null
   ownerType: $Enums.DocumentOwnerType
   workerId?: string | null
   jobSiteId?: string | null
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -475,9 +397,6 @@ export type DocumentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -487,15 +406,11 @@ export type DocumentUpdateManyMutationInput = {
 export type DocumentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -515,15 +430,11 @@ export type DocumentOrderByRelationAggregateInput = {
 export type DocumentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
-  documentTypeId?: Prisma.SortOrder
+  currentVersionId?: Prisma.SortOrder
   ownerType?: Prisma.SortOrder
   workerId?: Prisma.SortOrder
   jobSiteId?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  expiryDate?: Prisma.SortOrder
-  reviewedAt?: Prisma.SortOrder
-  reviewedById?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -533,15 +444,11 @@ export type DocumentCountOrderByAggregateInput = {
 export type DocumentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
-  documentTypeId?: Prisma.SortOrder
+  currentVersionId?: Prisma.SortOrder
   ownerType?: Prisma.SortOrder
   workerId?: Prisma.SortOrder
   jobSiteId?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  expiryDate?: Prisma.SortOrder
-  reviewedAt?: Prisma.SortOrder
-  reviewedById?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -551,15 +458,11 @@ export type DocumentMaxOrderByAggregateInput = {
 export type DocumentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
-  documentTypeId?: Prisma.SortOrder
+  currentVersionId?: Prisma.SortOrder
   ownerType?: Prisma.SortOrder
   workerId?: Prisma.SortOrder
   jobSiteId?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  expiryDate?: Prisma.SortOrder
-  reviewedAt?: Prisma.SortOrder
-  reviewedById?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -574,48 +477,6 @@ export type DocumentScalarRelationFilter = {
 export type DocumentNullableScalarRelationFilter = {
   is?: Prisma.DocumentWhereInput | null
   isNot?: Prisma.DocumentWhereInput | null
-}
-
-export type DocumentCreateNestedManyWithoutReviewedByInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutReviewedByInput, Prisma.DocumentUncheckedCreateWithoutReviewedByInput> | Prisma.DocumentCreateWithoutReviewedByInput[] | Prisma.DocumentUncheckedCreateWithoutReviewedByInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutReviewedByInput | Prisma.DocumentCreateOrConnectWithoutReviewedByInput[]
-  createMany?: Prisma.DocumentCreateManyReviewedByInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-}
-
-export type DocumentUncheckedCreateNestedManyWithoutReviewedByInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutReviewedByInput, Prisma.DocumentUncheckedCreateWithoutReviewedByInput> | Prisma.DocumentCreateWithoutReviewedByInput[] | Prisma.DocumentUncheckedCreateWithoutReviewedByInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutReviewedByInput | Prisma.DocumentCreateOrConnectWithoutReviewedByInput[]
-  createMany?: Prisma.DocumentCreateManyReviewedByInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-}
-
-export type DocumentUpdateManyWithoutReviewedByNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutReviewedByInput, Prisma.DocumentUncheckedCreateWithoutReviewedByInput> | Prisma.DocumentCreateWithoutReviewedByInput[] | Prisma.DocumentUncheckedCreateWithoutReviewedByInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutReviewedByInput | Prisma.DocumentCreateOrConnectWithoutReviewedByInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutReviewedByInput | Prisma.DocumentUpsertWithWhereUniqueWithoutReviewedByInput[]
-  createMany?: Prisma.DocumentCreateManyReviewedByInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutReviewedByInput | Prisma.DocumentUpdateWithWhereUniqueWithoutReviewedByInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutReviewedByInput | Prisma.DocumentUpdateManyWithWhereWithoutReviewedByInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-}
-
-export type DocumentUncheckedUpdateManyWithoutReviewedByNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutReviewedByInput, Prisma.DocumentUncheckedCreateWithoutReviewedByInput> | Prisma.DocumentCreateWithoutReviewedByInput[] | Prisma.DocumentUncheckedCreateWithoutReviewedByInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutReviewedByInput | Prisma.DocumentCreateOrConnectWithoutReviewedByInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutReviewedByInput | Prisma.DocumentUpsertWithWhereUniqueWithoutReviewedByInput[]
-  createMany?: Prisma.DocumentCreateManyReviewedByInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutReviewedByInput | Prisma.DocumentUpdateWithWhereUniqueWithoutReviewedByInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutReviewedByInput | Prisma.DocumentUpdateManyWithWhereWithoutReviewedByInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
 }
 
 export type DocumentCreateNestedManyWithoutOrganizationInput = {
@@ -744,59 +605,25 @@ export type DocumentUncheckedUpdateManyWithoutJobSiteNestedInput = {
   deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
 }
 
-export type DocumentCreateNestedManyWithoutDocumentTypeInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutDocumentTypeInput, Prisma.DocumentUncheckedCreateWithoutDocumentTypeInput> | Prisma.DocumentCreateWithoutDocumentTypeInput[] | Prisma.DocumentUncheckedCreateWithoutDocumentTypeInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutDocumentTypeInput | Prisma.DocumentCreateOrConnectWithoutDocumentTypeInput[]
-  createMany?: Prisma.DocumentCreateManyDocumentTypeInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-}
-
-export type DocumentUncheckedCreateNestedManyWithoutDocumentTypeInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutDocumentTypeInput, Prisma.DocumentUncheckedCreateWithoutDocumentTypeInput> | Prisma.DocumentCreateWithoutDocumentTypeInput[] | Prisma.DocumentUncheckedCreateWithoutDocumentTypeInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutDocumentTypeInput | Prisma.DocumentCreateOrConnectWithoutDocumentTypeInput[]
-  createMany?: Prisma.DocumentCreateManyDocumentTypeInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-}
-
-export type DocumentUpdateManyWithoutDocumentTypeNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutDocumentTypeInput, Prisma.DocumentUncheckedCreateWithoutDocumentTypeInput> | Prisma.DocumentCreateWithoutDocumentTypeInput[] | Prisma.DocumentUncheckedCreateWithoutDocumentTypeInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutDocumentTypeInput | Prisma.DocumentCreateOrConnectWithoutDocumentTypeInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutDocumentTypeInput | Prisma.DocumentUpsertWithWhereUniqueWithoutDocumentTypeInput[]
-  createMany?: Prisma.DocumentCreateManyDocumentTypeInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutDocumentTypeInput | Prisma.DocumentUpdateWithWhereUniqueWithoutDocumentTypeInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutDocumentTypeInput | Prisma.DocumentUpdateManyWithWhereWithoutDocumentTypeInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-}
-
-export type DocumentUncheckedUpdateManyWithoutDocumentTypeNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutDocumentTypeInput, Prisma.DocumentUncheckedCreateWithoutDocumentTypeInput> | Prisma.DocumentCreateWithoutDocumentTypeInput[] | Prisma.DocumentUncheckedCreateWithoutDocumentTypeInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutDocumentTypeInput | Prisma.DocumentCreateOrConnectWithoutDocumentTypeInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutDocumentTypeInput | Prisma.DocumentUpsertWithWhereUniqueWithoutDocumentTypeInput[]
-  createMany?: Prisma.DocumentCreateManyDocumentTypeInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutDocumentTypeInput | Prisma.DocumentUpdateWithWhereUniqueWithoutDocumentTypeInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutDocumentTypeInput | Prisma.DocumentUpdateManyWithWhereWithoutDocumentTypeInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-}
-
 export type EnumDocumentOwnerTypeFieldUpdateOperationsInput = {
   set?: $Enums.DocumentOwnerType
-}
-
-export type EnumDocumentStatusFieldUpdateOperationsInput = {
-  set?: $Enums.DocumentStatus
 }
 
 export type DocumentCreateNestedOneWithoutVersionsInput = {
   create?: Prisma.XOR<Prisma.DocumentCreateWithoutVersionsInput, Prisma.DocumentUncheckedCreateWithoutVersionsInput>
   connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutVersionsInput
+  connect?: Prisma.DocumentWhereUniqueInput
+}
+
+export type DocumentCreateNestedOneWithoutCurrentVersionInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutCurrentVersionInput, Prisma.DocumentUncheckedCreateWithoutCurrentVersionInput>
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutCurrentVersionInput
+  connect?: Prisma.DocumentWhereUniqueInput
+}
+
+export type DocumentUncheckedCreateNestedOneWithoutCurrentVersionInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutCurrentVersionInput, Prisma.DocumentUncheckedCreateWithoutCurrentVersionInput>
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutCurrentVersionInput
   connect?: Prisma.DocumentWhereUniqueInput
 }
 
@@ -808,163 +635,68 @@ export type DocumentUpdateOneRequiredWithoutVersionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentUpdateToOneWithWhereWithoutVersionsInput, Prisma.DocumentUpdateWithoutVersionsInput>, Prisma.DocumentUncheckedUpdateWithoutVersionsInput>
 }
 
-export type DocumentCreateNestedOneWithoutDeadlinesInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutDeadlinesInput, Prisma.DocumentUncheckedCreateWithoutDeadlinesInput>
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutDeadlinesInput
-  connect?: Prisma.DocumentWhereUniqueInput
-}
-
-export type DocumentUpdateOneWithoutDeadlinesNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutDeadlinesInput, Prisma.DocumentUncheckedCreateWithoutDeadlinesInput>
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutDeadlinesInput
-  upsert?: Prisma.DocumentUpsertWithoutDeadlinesInput
+export type DocumentUpdateOneWithoutCurrentVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutCurrentVersionInput, Prisma.DocumentUncheckedCreateWithoutCurrentVersionInput>
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutCurrentVersionInput
+  upsert?: Prisma.DocumentUpsertWithoutCurrentVersionInput
   disconnect?: Prisma.DocumentWhereInput | boolean
   delete?: Prisma.DocumentWhereInput | boolean
   connect?: Prisma.DocumentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentUpdateToOneWithWhereWithoutDeadlinesInput, Prisma.DocumentUpdateWithoutDeadlinesInput>, Prisma.DocumentUncheckedUpdateWithoutDeadlinesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentUpdateToOneWithWhereWithoutCurrentVersionInput, Prisma.DocumentUpdateWithoutCurrentVersionInput>, Prisma.DocumentUncheckedUpdateWithoutCurrentVersionInput>
 }
 
-export type DocumentCreateNestedOneWithoutPackageItemsInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutPackageItemsInput, Prisma.DocumentUncheckedCreateWithoutPackageItemsInput>
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutPackageItemsInput
-  connect?: Prisma.DocumentWhereUniqueInput
-}
-
-export type DocumentUpdateOneWithoutPackageItemsNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutPackageItemsInput, Prisma.DocumentUncheckedCreateWithoutPackageItemsInput>
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutPackageItemsInput
-  upsert?: Prisma.DocumentUpsertWithoutPackageItemsInput
+export type DocumentUncheckedUpdateOneWithoutCurrentVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutCurrentVersionInput, Prisma.DocumentUncheckedCreateWithoutCurrentVersionInput>
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutCurrentVersionInput
+  upsert?: Prisma.DocumentUpsertWithoutCurrentVersionInput
   disconnect?: Prisma.DocumentWhereInput | boolean
   delete?: Prisma.DocumentWhereInput | boolean
   connect?: Prisma.DocumentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentUpdateToOneWithWhereWithoutPackageItemsInput, Prisma.DocumentUpdateWithoutPackageItemsInput>, Prisma.DocumentUncheckedUpdateWithoutPackageItemsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentUpdateToOneWithWhereWithoutCurrentVersionInput, Prisma.DocumentUpdateWithoutCurrentVersionInput>, Prisma.DocumentUncheckedUpdateWithoutCurrentVersionInput>
 }
 
-export type DocumentCreateWithoutReviewedByInput = {
-  id?: string
-  ownerType: $Enums.DocumentOwnerType
-  title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentsInput
-  documentType?: Prisma.DocumentTypeCreateNestedOneWithoutDocumentsInput
-  worker?: Prisma.WorkerCreateNestedOneWithoutDocumentsInput
-  jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentsInput
-  versions?: Prisma.DocumentVersionCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentInput
+export type DocumentCreateNestedOneWithoutJobSiteLinksInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutJobSiteLinksInput, Prisma.DocumentUncheckedCreateWithoutJobSiteLinksInput>
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutJobSiteLinksInput
+  connect?: Prisma.DocumentWhereUniqueInput
 }
 
-export type DocumentUncheckedCreateWithoutReviewedByInput = {
-  id?: string
-  organizationId: string
-  documentTypeId?: string | null
-  ownerType: $Enums.DocumentOwnerType
-  workerId?: string | null
-  jobSiteId?: string | null
-  title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  versions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentInput
-}
-
-export type DocumentCreateOrConnectWithoutReviewedByInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutReviewedByInput, Prisma.DocumentUncheckedCreateWithoutReviewedByInput>
-}
-
-export type DocumentCreateManyReviewedByInputEnvelope = {
-  data: Prisma.DocumentCreateManyReviewedByInput | Prisma.DocumentCreateManyReviewedByInput[]
-  skipDuplicates?: boolean
-}
-
-export type DocumentUpsertWithWhereUniqueWithoutReviewedByInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  update: Prisma.XOR<Prisma.DocumentUpdateWithoutReviewedByInput, Prisma.DocumentUncheckedUpdateWithoutReviewedByInput>
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutReviewedByInput, Prisma.DocumentUncheckedCreateWithoutReviewedByInput>
-}
-
-export type DocumentUpdateWithWhereUniqueWithoutReviewedByInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  data: Prisma.XOR<Prisma.DocumentUpdateWithoutReviewedByInput, Prisma.DocumentUncheckedUpdateWithoutReviewedByInput>
-}
-
-export type DocumentUpdateManyWithWhereWithoutReviewedByInput = {
-  where: Prisma.DocumentScalarWhereInput
-  data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutReviewedByInput>
-}
-
-export type DocumentScalarWhereInput = {
-  AND?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-  OR?: Prisma.DocumentScalarWhereInput[]
-  NOT?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-  id?: Prisma.StringFilter<"Document"> | string
-  organizationId?: Prisma.StringFilter<"Document"> | string
-  documentTypeId?: Prisma.StringNullableFilter<"Document"> | string | null
-  ownerType?: Prisma.EnumDocumentOwnerTypeFilter<"Document"> | $Enums.DocumentOwnerType
-  workerId?: Prisma.StringNullableFilter<"Document"> | string | null
-  jobSiteId?: Prisma.StringNullableFilter<"Document"> | string | null
-  title?: Prisma.StringFilter<"Document"> | string
-  status?: Prisma.EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
-  expiryDate?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  reviewedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  reviewedById?: Prisma.StringNullableFilter<"Document"> | string | null
-  notes?: Prisma.StringNullableFilter<"Document"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
-  archivedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
+export type DocumentUpdateOneRequiredWithoutJobSiteLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutJobSiteLinksInput, Prisma.DocumentUncheckedCreateWithoutJobSiteLinksInput>
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutJobSiteLinksInput
+  upsert?: Prisma.DocumentUpsertWithoutJobSiteLinksInput
+  connect?: Prisma.DocumentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentUpdateToOneWithWhereWithoutJobSiteLinksInput, Prisma.DocumentUpdateWithoutJobSiteLinksInput>, Prisma.DocumentUncheckedUpdateWithoutJobSiteLinksInput>
 }
 
 export type DocumentCreateWithoutOrganizationInput = {
   id?: string
   ownerType: $Enums.DocumentOwnerType
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
-  documentType?: Prisma.DocumentTypeCreateNestedOneWithoutDocumentsInput
+  currentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutCurrentForDocumentInput
   worker?: Prisma.WorkerCreateNestedOneWithoutDocumentsInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentsInput
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedDocumentsInput
   versions?: Prisma.DocumentVersionCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentUncheckedCreateWithoutOrganizationInput = {
   id?: string
-  documentTypeId?: string | null
+  currentVersionId?: string | null
   ownerType: $Enums.DocumentOwnerType
   workerId?: string | null
   jobSiteId?: string | null
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   versions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentCreateOrConnectWithoutOrganizationInput = {
@@ -993,44 +725,51 @@ export type DocumentUpdateManyWithWhereWithoutOrganizationInput = {
   data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutOrganizationInput>
 }
 
+export type DocumentScalarWhereInput = {
+  AND?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
+  OR?: Prisma.DocumentScalarWhereInput[]
+  NOT?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
+  id?: Prisma.StringFilter<"Document"> | string
+  organizationId?: Prisma.StringFilter<"Document"> | string
+  currentVersionId?: Prisma.StringNullableFilter<"Document"> | string | null
+  ownerType?: Prisma.EnumDocumentOwnerTypeFilter<"Document"> | $Enums.DocumentOwnerType
+  workerId?: Prisma.StringNullableFilter<"Document"> | string | null
+  jobSiteId?: Prisma.StringNullableFilter<"Document"> | string | null
+  title?: Prisma.StringFilter<"Document"> | string
+  notes?: Prisma.StringNullableFilter<"Document"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
+  archivedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
+}
+
 export type DocumentCreateWithoutWorkerInput = {
   id?: string
   ownerType: $Enums.DocumentOwnerType
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentsInput
-  documentType?: Prisma.DocumentTypeCreateNestedOneWithoutDocumentsInput
+  currentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutCurrentForDocumentInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentsInput
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedDocumentsInput
   versions?: Prisma.DocumentVersionCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentUncheckedCreateWithoutWorkerInput = {
   id?: string
   organizationId: string
-  documentTypeId?: string | null
+  currentVersionId?: string | null
   ownerType: $Enums.DocumentOwnerType
   jobSiteId?: string | null
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   versions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentCreateOrConnectWithoutWorkerInput = {
@@ -1063,40 +802,30 @@ export type DocumentCreateWithoutJobSiteInput = {
   id?: string
   ownerType: $Enums.DocumentOwnerType
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentsInput
-  documentType?: Prisma.DocumentTypeCreateNestedOneWithoutDocumentsInput
+  currentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutCurrentForDocumentInput
   worker?: Prisma.WorkerCreateNestedOneWithoutDocumentsInput
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedDocumentsInput
   versions?: Prisma.DocumentVersionCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentUncheckedCreateWithoutJobSiteInput = {
   id?: string
   organizationId: string
-  documentTypeId?: string | null
+  currentVersionId?: string | null
   ownerType: $Enums.DocumentOwnerType
   workerId?: string | null
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   versions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentCreateOrConnectWithoutJobSiteInput = {
@@ -1125,115 +854,74 @@ export type DocumentUpdateManyWithWhereWithoutJobSiteInput = {
   data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutJobSiteInput>
 }
 
-export type DocumentCreateWithoutDocumentTypeInput = {
-  id?: string
-  ownerType: $Enums.DocumentOwnerType
-  title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentsInput
-  worker?: Prisma.WorkerCreateNestedOneWithoutDocumentsInput
-  jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentsInput
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedDocumentsInput
-  versions?: Prisma.DocumentVersionCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentInput
-}
-
-export type DocumentUncheckedCreateWithoutDocumentTypeInput = {
-  id?: string
-  organizationId: string
-  ownerType: $Enums.DocumentOwnerType
-  workerId?: string | null
-  jobSiteId?: string | null
-  title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  versions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentInput
-}
-
-export type DocumentCreateOrConnectWithoutDocumentTypeInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutDocumentTypeInput, Prisma.DocumentUncheckedCreateWithoutDocumentTypeInput>
-}
-
-export type DocumentCreateManyDocumentTypeInputEnvelope = {
-  data: Prisma.DocumentCreateManyDocumentTypeInput | Prisma.DocumentCreateManyDocumentTypeInput[]
-  skipDuplicates?: boolean
-}
-
-export type DocumentUpsertWithWhereUniqueWithoutDocumentTypeInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  update: Prisma.XOR<Prisma.DocumentUpdateWithoutDocumentTypeInput, Prisma.DocumentUncheckedUpdateWithoutDocumentTypeInput>
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutDocumentTypeInput, Prisma.DocumentUncheckedCreateWithoutDocumentTypeInput>
-}
-
-export type DocumentUpdateWithWhereUniqueWithoutDocumentTypeInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  data: Prisma.XOR<Prisma.DocumentUpdateWithoutDocumentTypeInput, Prisma.DocumentUncheckedUpdateWithoutDocumentTypeInput>
-}
-
-export type DocumentUpdateManyWithWhereWithoutDocumentTypeInput = {
-  where: Prisma.DocumentScalarWhereInput
-  data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutDocumentTypeInput>
-}
-
 export type DocumentCreateWithoutVersionsInput = {
   id?: string
   ownerType: $Enums.DocumentOwnerType
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentsInput
-  documentType?: Prisma.DocumentTypeCreateNestedOneWithoutDocumentsInput
+  currentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutCurrentForDocumentInput
   worker?: Prisma.WorkerCreateNestedOneWithoutDocumentsInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentsInput
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedDocumentsInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentUncheckedCreateWithoutVersionsInput = {
   id?: string
   organizationId: string
-  documentTypeId?: string | null
+  currentVersionId?: string | null
   ownerType: $Enums.DocumentOwnerType
   workerId?: string | null
   jobSiteId?: string | null
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentCreateOrConnectWithoutVersionsInput = {
   where: Prisma.DocumentWhereUniqueInput
   create: Prisma.XOR<Prisma.DocumentCreateWithoutVersionsInput, Prisma.DocumentUncheckedCreateWithoutVersionsInput>
+}
+
+export type DocumentCreateWithoutCurrentVersionInput = {
+  id?: string
+  ownerType: $Enums.DocumentOwnerType
+  title: string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentsInput
+  worker?: Prisma.WorkerCreateNestedOneWithoutDocumentsInput
+  jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentsInput
+  versions?: Prisma.DocumentVersionCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutDocumentInput
+}
+
+export type DocumentUncheckedCreateWithoutCurrentVersionInput = {
+  id?: string
+  organizationId: string
+  ownerType: $Enums.DocumentOwnerType
+  workerId?: string | null
+  jobSiteId?: string | null
+  title: string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  versions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutDocumentInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutDocumentInput
+}
+
+export type DocumentCreateOrConnectWithoutCurrentVersionInput = {
+  where: Prisma.DocumentWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentCreateWithoutCurrentVersionInput, Prisma.DocumentUncheckedCreateWithoutCurrentVersionInput>
 }
 
 export type DocumentUpsertWithoutVersionsInput = {
@@ -1251,319 +939,156 @@ export type DocumentUpdateWithoutVersionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentsNestedInput
-  documentType?: Prisma.DocumentTypeUpdateOneWithoutDocumentsNestedInput
+  currentVersion?: Prisma.DocumentVersionUpdateOneWithoutCurrentForDocumentNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutDocumentsNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentsNestedInput
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedDocumentsNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateWithoutVersionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
-export type DocumentCreateWithoutDeadlinesInput = {
+export type DocumentUpsertWithoutCurrentVersionInput = {
+  update: Prisma.XOR<Prisma.DocumentUpdateWithoutCurrentVersionInput, Prisma.DocumentUncheckedUpdateWithoutCurrentVersionInput>
+  create: Prisma.XOR<Prisma.DocumentCreateWithoutCurrentVersionInput, Prisma.DocumentUncheckedCreateWithoutCurrentVersionInput>
+  where?: Prisma.DocumentWhereInput
+}
+
+export type DocumentUpdateToOneWithWhereWithoutCurrentVersionInput = {
+  where?: Prisma.DocumentWhereInput
+  data: Prisma.XOR<Prisma.DocumentUpdateWithoutCurrentVersionInput, Prisma.DocumentUncheckedUpdateWithoutCurrentVersionInput>
+}
+
+export type DocumentUpdateWithoutCurrentVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentsNestedInput
+  worker?: Prisma.WorkerUpdateOneWithoutDocumentsNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentsNestedInput
+  versions?: Prisma.DocumentVersionUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutDocumentNestedInput
+}
+
+export type DocumentUncheckedUpdateWithoutCurrentVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
+  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  versions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutDocumentNestedInput
+}
+
+export type DocumentCreateWithoutJobSiteLinksInput = {
   id?: string
   ownerType: $Enums.DocumentOwnerType
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutDocumentsInput
-  documentType?: Prisma.DocumentTypeCreateNestedOneWithoutDocumentsInput
+  currentVersion?: Prisma.DocumentVersionCreateNestedOneWithoutCurrentForDocumentInput
   worker?: Prisma.WorkerCreateNestedOneWithoutDocumentsInput
   jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentsInput
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedDocumentsInput
   versions?: Prisma.DocumentVersionCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemCreateNestedManyWithoutDocumentInput
 }
 
-export type DocumentUncheckedCreateWithoutDeadlinesInput = {
+export type DocumentUncheckedCreateWithoutJobSiteLinksInput = {
   id?: string
   organizationId: string
-  documentTypeId?: string | null
+  currentVersionId?: string | null
   ownerType: $Enums.DocumentOwnerType
   workerId?: string | null
   jobSiteId?: string | null
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   archivedAt?: Date | string | null
   versions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutDocumentInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedCreateNestedManyWithoutDocumentInput
 }
 
-export type DocumentCreateOrConnectWithoutDeadlinesInput = {
+export type DocumentCreateOrConnectWithoutJobSiteLinksInput = {
   where: Prisma.DocumentWhereUniqueInput
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutDeadlinesInput, Prisma.DocumentUncheckedCreateWithoutDeadlinesInput>
+  create: Prisma.XOR<Prisma.DocumentCreateWithoutJobSiteLinksInput, Prisma.DocumentUncheckedCreateWithoutJobSiteLinksInput>
 }
 
-export type DocumentUpsertWithoutDeadlinesInput = {
-  update: Prisma.XOR<Prisma.DocumentUpdateWithoutDeadlinesInput, Prisma.DocumentUncheckedUpdateWithoutDeadlinesInput>
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutDeadlinesInput, Prisma.DocumentUncheckedCreateWithoutDeadlinesInput>
+export type DocumentUpsertWithoutJobSiteLinksInput = {
+  update: Prisma.XOR<Prisma.DocumentUpdateWithoutJobSiteLinksInput, Prisma.DocumentUncheckedUpdateWithoutJobSiteLinksInput>
+  create: Prisma.XOR<Prisma.DocumentCreateWithoutJobSiteLinksInput, Prisma.DocumentUncheckedCreateWithoutJobSiteLinksInput>
   where?: Prisma.DocumentWhereInput
 }
 
-export type DocumentUpdateToOneWithWhereWithoutDeadlinesInput = {
+export type DocumentUpdateToOneWithWhereWithoutJobSiteLinksInput = {
   where?: Prisma.DocumentWhereInput
-  data: Prisma.XOR<Prisma.DocumentUpdateWithoutDeadlinesInput, Prisma.DocumentUncheckedUpdateWithoutDeadlinesInput>
+  data: Prisma.XOR<Prisma.DocumentUpdateWithoutJobSiteLinksInput, Prisma.DocumentUncheckedUpdateWithoutJobSiteLinksInput>
 }
 
-export type DocumentUpdateWithoutDeadlinesInput = {
+export type DocumentUpdateWithoutJobSiteLinksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentsNestedInput
-  documentType?: Prisma.DocumentTypeUpdateOneWithoutDocumentsNestedInput
+  currentVersion?: Prisma.DocumentVersionUpdateOneWithoutCurrentForDocumentNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutDocumentsNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentsNestedInput
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedDocumentsNestedInput
   versions?: Prisma.DocumentVersionUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentNestedInput
 }
 
-export type DocumentUncheckedUpdateWithoutDeadlinesInput = {
+export type DocumentUncheckedUpdateWithoutJobSiteLinksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   versions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentNestedInput
-}
-
-export type DocumentCreateWithoutPackageItemsInput = {
-  id?: string
-  ownerType: $Enums.DocumentOwnerType
-  title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  organization: Prisma.OrganizationCreateNestedOneWithoutDocumentsInput
-  documentType?: Prisma.DocumentTypeCreateNestedOneWithoutDocumentsInput
-  worker?: Prisma.WorkerCreateNestedOneWithoutDocumentsInput
-  jobSite?: Prisma.JobSiteCreateNestedOneWithoutDocumentsInput
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedDocumentsInput
-  versions?: Prisma.DocumentVersionCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineCreateNestedManyWithoutDocumentInput
-}
-
-export type DocumentUncheckedCreateWithoutPackageItemsInput = {
-  id?: string
-  organizationId: string
-  documentTypeId?: string | null
-  ownerType: $Enums.DocumentOwnerType
-  workerId?: string | null
-  jobSiteId?: string | null
-  title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-  versions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutDocumentInput
-  deadlines?: Prisma.DeadlineUncheckedCreateNestedManyWithoutDocumentInput
-}
-
-export type DocumentCreateOrConnectWithoutPackageItemsInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutPackageItemsInput, Prisma.DocumentUncheckedCreateWithoutPackageItemsInput>
-}
-
-export type DocumentUpsertWithoutPackageItemsInput = {
-  update: Prisma.XOR<Prisma.DocumentUpdateWithoutPackageItemsInput, Prisma.DocumentUncheckedUpdateWithoutPackageItemsInput>
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutPackageItemsInput, Prisma.DocumentUncheckedCreateWithoutPackageItemsInput>
-  where?: Prisma.DocumentWhereInput
-}
-
-export type DocumentUpdateToOneWithWhereWithoutPackageItemsInput = {
-  where?: Prisma.DocumentWhereInput
-  data: Prisma.XOR<Prisma.DocumentUpdateWithoutPackageItemsInput, Prisma.DocumentUncheckedUpdateWithoutPackageItemsInput>
-}
-
-export type DocumentUpdateWithoutPackageItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentsNestedInput
-  documentType?: Prisma.DocumentTypeUpdateOneWithoutDocumentsNestedInput
-  worker?: Prisma.WorkerUpdateOneWithoutDocumentsNestedInput
-  jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentsNestedInput
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedDocumentsNestedInput
-  versions?: Prisma.DocumentVersionUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutDocumentNestedInput
-}
-
-export type DocumentUncheckedUpdateWithoutPackageItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
-  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  versions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutDocumentNestedInput
-}
-
-export type DocumentCreateManyReviewedByInput = {
-  id?: string
-  organizationId: string
-  documentTypeId?: string | null
-  ownerType: $Enums.DocumentOwnerType
-  workerId?: string | null
-  jobSiteId?: string | null
-  title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-}
-
-export type DocumentUpdateWithoutReviewedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentsNestedInput
-  documentType?: Prisma.DocumentTypeUpdateOneWithoutDocumentsNestedInput
-  worker?: Prisma.WorkerUpdateOneWithoutDocumentsNestedInput
-  jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentsNestedInput
-  versions?: Prisma.DocumentVersionUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentNestedInput
-}
-
-export type DocumentUncheckedUpdateWithoutReviewedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
-  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  versions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentNestedInput
-}
-
-export type DocumentUncheckedUpdateManyWithoutReviewedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
-  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type DocumentCreateManyOrganizationInput = {
   id?: string
-  documentTypeId?: string | null
+  currentVersionId?: string | null
   ownerType: $Enums.DocumentOwnerType
   workerId?: string | null
   jobSiteId?: string | null
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1574,53 +1099,39 @@ export type DocumentUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  documentType?: Prisma.DocumentTypeUpdateOneWithoutDocumentsNestedInput
+  currentVersion?: Prisma.DocumentVersionUpdateOneWithoutCurrentForDocumentNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutDocumentsNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentsNestedInput
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedDocumentsNestedInput
   versions?: Prisma.DocumentVersionUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   versions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1630,14 +1141,10 @@ export type DocumentUncheckedUpdateManyWithoutOrganizationInput = {
 export type DocumentCreateManyWorkerInput = {
   id?: string
   organizationId: string
-  documentTypeId?: string | null
+  currentVersionId?: string | null
   ownerType: $Enums.DocumentOwnerType
   jobSiteId?: string | null
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1648,53 +1155,39 @@ export type DocumentUpdateWithoutWorkerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentsNestedInput
-  documentType?: Prisma.DocumentTypeUpdateOneWithoutDocumentsNestedInput
+  currentVersion?: Prisma.DocumentVersionUpdateOneWithoutCurrentForDocumentNestedInput
   jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentsNestedInput
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedDocumentsNestedInput
   versions?: Prisma.DocumentVersionUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateWithoutWorkerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   versions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateManyWithoutWorkerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1704,14 +1197,10 @@ export type DocumentUncheckedUpdateManyWithoutWorkerInput = {
 export type DocumentCreateManyJobSiteInput = {
   id?: string
   organizationId: string
-  documentTypeId?: string | null
+  currentVersionId?: string | null
   ownerType: $Enums.DocumentOwnerType
   workerId?: string | null
   title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1722,127 +1211,39 @@ export type DocumentUpdateWithoutJobSiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentsNestedInput
-  documentType?: Prisma.DocumentTypeUpdateOneWithoutDocumentsNestedInput
+  currentVersion?: Prisma.DocumentVersionUpdateOneWithoutCurrentForDocumentNestedInput
   worker?: Prisma.WorkerUpdateOneWithoutDocumentsNestedInput
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedDocumentsNestedInput
   versions?: Prisma.DocumentVersionUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateWithoutJobSiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   versions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentNestedInput
+  jobSiteLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateManyWithoutJobSiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  documentTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
   workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type DocumentCreateManyDocumentTypeInput = {
-  id?: string
-  organizationId: string
-  ownerType: $Enums.DocumentOwnerType
-  workerId?: string | null
-  jobSiteId?: string | null
-  title: string
-  status?: $Enums.DocumentStatus
-  expiryDate?: Date | string | null
-  reviewedAt?: Date | string | null
-  reviewedById?: string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  archivedAt?: Date | string | null
-}
-
-export type DocumentUpdateWithoutDocumentTypeInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDocumentsNestedInput
-  worker?: Prisma.WorkerUpdateOneWithoutDocumentsNestedInput
-  jobSite?: Prisma.JobSiteUpdateOneWithoutDocumentsNestedInput
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedDocumentsNestedInput
-  versions?: Prisma.DocumentVersionUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUpdateManyWithoutDocumentNestedInput
-}
-
-export type DocumentUncheckedUpdateWithoutDocumentTypeInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
-  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  versions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutDocumentNestedInput
-  deadlines?: Prisma.DeadlineUncheckedUpdateManyWithoutDocumentNestedInput
-  packageItems?: Prisma.DocumentPackageItemUncheckedUpdateManyWithoutDocumentNestedInput
-}
-
-export type DocumentUncheckedUpdateManyWithoutDocumentTypeInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerType?: Prisma.EnumDocumentOwnerTypeFieldUpdateOperationsInput | $Enums.DocumentOwnerType
-  workerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobSiteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1856,14 +1257,12 @@ export type DocumentUncheckedUpdateManyWithoutDocumentTypeInput = {
 
 export type DocumentCountOutputType = {
   versions: number
-  deadlines: number
-  packageItems: number
+  jobSiteLinks: number
 }
 
 export type DocumentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   versions?: boolean | DocumentCountOutputTypeCountVersionsArgs
-  deadlines?: boolean | DocumentCountOutputTypeCountDeadlinesArgs
-  packageItems?: boolean | DocumentCountOutputTypeCountPackageItemsArgs
+  jobSiteLinks?: boolean | DocumentCountOutputTypeCountJobSiteLinksArgs
 }
 
 /**
@@ -1886,160 +1285,123 @@ export type DocumentCountOutputTypeCountVersionsArgs<ExtArgs extends runtime.Typ
 /**
  * DocumentCountOutputType without action
  */
-export type DocumentCountOutputTypeCountDeadlinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DeadlineWhereInput
-}
-
-/**
- * DocumentCountOutputType without action
- */
-export type DocumentCountOutputTypeCountPackageItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DocumentPackageItemWhereInput
+export type DocumentCountOutputTypeCountJobSiteLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DocumentJobSiteLinkWhereInput
 }
 
 
 export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   organizationId?: boolean
-  documentTypeId?: boolean
+  currentVersionId?: boolean
   ownerType?: boolean
   workerId?: boolean
   jobSiteId?: boolean
   title?: boolean
-  status?: boolean
-  expiryDate?: boolean
-  reviewedAt?: boolean
-  reviewedById?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   archivedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
-  documentType?: boolean | Prisma.Document$documentTypeArgs<ExtArgs>
+  currentVersion?: boolean | Prisma.Document$currentVersionArgs<ExtArgs>
   worker?: boolean | Prisma.Document$workerArgs<ExtArgs>
   jobSite?: boolean | Prisma.Document$jobSiteArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Document$reviewedByArgs<ExtArgs>
   versions?: boolean | Prisma.Document$versionsArgs<ExtArgs>
-  deadlines?: boolean | Prisma.Document$deadlinesArgs<ExtArgs>
-  packageItems?: boolean | Prisma.Document$packageItemsArgs<ExtArgs>
+  jobSiteLinks?: boolean | Prisma.Document$jobSiteLinksArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   organizationId?: boolean
-  documentTypeId?: boolean
+  currentVersionId?: boolean
   ownerType?: boolean
   workerId?: boolean
   jobSiteId?: boolean
   title?: boolean
-  status?: boolean
-  expiryDate?: boolean
-  reviewedAt?: boolean
-  reviewedById?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   archivedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
-  documentType?: boolean | Prisma.Document$documentTypeArgs<ExtArgs>
+  currentVersion?: boolean | Prisma.Document$currentVersionArgs<ExtArgs>
   worker?: boolean | Prisma.Document$workerArgs<ExtArgs>
   jobSite?: boolean | Prisma.Document$jobSiteArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Document$reviewedByArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   organizationId?: boolean
-  documentTypeId?: boolean
+  currentVersionId?: boolean
   ownerType?: boolean
   workerId?: boolean
   jobSiteId?: boolean
   title?: boolean
-  status?: boolean
-  expiryDate?: boolean
-  reviewedAt?: boolean
-  reviewedById?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   archivedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
-  documentType?: boolean | Prisma.Document$documentTypeArgs<ExtArgs>
+  currentVersion?: boolean | Prisma.Document$currentVersionArgs<ExtArgs>
   worker?: boolean | Prisma.Document$workerArgs<ExtArgs>
   jobSite?: boolean | Prisma.Document$jobSiteArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Document$reviewedByArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectScalar = {
   id?: boolean
   organizationId?: boolean
-  documentTypeId?: boolean
+  currentVersionId?: boolean
   ownerType?: boolean
   workerId?: boolean
   jobSiteId?: boolean
   title?: boolean
-  status?: boolean
-  expiryDate?: boolean
-  reviewedAt?: boolean
-  reviewedById?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   archivedAt?: boolean
 }
 
-export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "documentTypeId" | "ownerType" | "workerId" | "jobSiteId" | "title" | "status" | "expiryDate" | "reviewedAt" | "reviewedById" | "notes" | "createdAt" | "updatedAt" | "archivedAt", ExtArgs["result"]["document"]>
+export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "currentVersionId" | "ownerType" | "workerId" | "jobSiteId" | "title" | "notes" | "createdAt" | "updatedAt" | "archivedAt", ExtArgs["result"]["document"]>
 export type DocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
-  documentType?: boolean | Prisma.Document$documentTypeArgs<ExtArgs>
+  currentVersion?: boolean | Prisma.Document$currentVersionArgs<ExtArgs>
   worker?: boolean | Prisma.Document$workerArgs<ExtArgs>
   jobSite?: boolean | Prisma.Document$jobSiteArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Document$reviewedByArgs<ExtArgs>
   versions?: boolean | Prisma.Document$versionsArgs<ExtArgs>
-  deadlines?: boolean | Prisma.Document$deadlinesArgs<ExtArgs>
-  packageItems?: boolean | Prisma.Document$packageItemsArgs<ExtArgs>
+  jobSiteLinks?: boolean | Prisma.Document$jobSiteLinksArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DocumentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
-  documentType?: boolean | Prisma.Document$documentTypeArgs<ExtArgs>
+  currentVersion?: boolean | Prisma.Document$currentVersionArgs<ExtArgs>
   worker?: boolean | Prisma.Document$workerArgs<ExtArgs>
   jobSite?: boolean | Prisma.Document$jobSiteArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Document$reviewedByArgs<ExtArgs>
 }
 export type DocumentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
-  documentType?: boolean | Prisma.Document$documentTypeArgs<ExtArgs>
+  currentVersion?: boolean | Prisma.Document$currentVersionArgs<ExtArgs>
   worker?: boolean | Prisma.Document$workerArgs<ExtArgs>
   jobSite?: boolean | Prisma.Document$jobSiteArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Document$reviewedByArgs<ExtArgs>
 }
 
 export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Document"
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs>
-    documentType: Prisma.$DocumentTypePayload<ExtArgs> | null
+    currentVersion: Prisma.$DocumentVersionPayload<ExtArgs> | null
     worker: Prisma.$WorkerPayload<ExtArgs> | null
     jobSite: Prisma.$JobSitePayload<ExtArgs> | null
-    reviewedBy: Prisma.$UserPayload<ExtArgs> | null
     versions: Prisma.$DocumentVersionPayload<ExtArgs>[]
-    deadlines: Prisma.$DeadlinePayload<ExtArgs>[]
-    packageItems: Prisma.$DocumentPackageItemPayload<ExtArgs>[]
+    jobSiteLinks: Prisma.$DocumentJobSiteLinkPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     organizationId: string
-    documentTypeId: string | null
+    currentVersionId: string | null
     ownerType: $Enums.DocumentOwnerType
     workerId: string | null
     jobSiteId: string | null
     title: string
-    status: $Enums.DocumentStatus
-    expiryDate: Date | null
-    reviewedAt: Date | null
-    reviewedById: string | null
     notes: string | null
     createdAt: Date
     updatedAt: Date
@@ -2439,13 +1801,11 @@ readonly fields: DocumentFieldRefs;
 export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  documentType<T extends Prisma.Document$documentTypeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$documentTypeArgs<ExtArgs>>): Prisma.Prisma__DocumentTypeClient<runtime.Types.Result.GetResult<Prisma.$DocumentTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  currentVersion<T extends Prisma.Document$currentVersionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$currentVersionArgs<ExtArgs>>): Prisma.Prisma__DocumentVersionClient<runtime.Types.Result.GetResult<Prisma.$DocumentVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   worker<T extends Prisma.Document$workerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$workerArgs<ExtArgs>>): Prisma.Prisma__WorkerClient<runtime.Types.Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   jobSite<T extends Prisma.Document$jobSiteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$jobSiteArgs<ExtArgs>>): Prisma.Prisma__JobSiteClient<runtime.Types.Result.GetResult<Prisma.$JobSitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  reviewedBy<T extends Prisma.Document$reviewedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$reviewedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   versions<T extends Prisma.Document$versionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$versionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  deadlines<T extends Prisma.Document$deadlinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$deadlinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeadlinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  packageItems<T extends Prisma.Document$packageItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$packageItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPackageItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobSiteLinks<T extends Prisma.Document$jobSiteLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$jobSiteLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentJobSiteLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2477,15 +1837,11 @@ export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends runtime
 export interface DocumentFieldRefs {
   readonly id: Prisma.FieldRef<"Document", 'String'>
   readonly organizationId: Prisma.FieldRef<"Document", 'String'>
-  readonly documentTypeId: Prisma.FieldRef<"Document", 'String'>
+  readonly currentVersionId: Prisma.FieldRef<"Document", 'String'>
   readonly ownerType: Prisma.FieldRef<"Document", 'DocumentOwnerType'>
   readonly workerId: Prisma.FieldRef<"Document", 'String'>
   readonly jobSiteId: Prisma.FieldRef<"Document", 'String'>
   readonly title: Prisma.FieldRef<"Document", 'String'>
-  readonly status: Prisma.FieldRef<"Document", 'DocumentStatus'>
-  readonly expiryDate: Prisma.FieldRef<"Document", 'DateTime'>
-  readonly reviewedAt: Prisma.FieldRef<"Document", 'DateTime'>
-  readonly reviewedById: Prisma.FieldRef<"Document", 'String'>
   readonly notes: Prisma.FieldRef<"Document", 'String'>
   readonly createdAt: Prisma.FieldRef<"Document", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Document", 'DateTime'>
@@ -2891,22 +2247,22 @@ export type DocumentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * Document.documentType
+ * Document.currentVersion
  */
-export type Document$documentTypeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Document$currentVersionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the DocumentType
+   * Select specific fields to fetch from the DocumentVersion
    */
-  select?: Prisma.DocumentTypeSelect<ExtArgs> | null
+  select?: Prisma.DocumentVersionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the DocumentType
+   * Omit specific fields from the DocumentVersion
    */
-  omit?: Prisma.DocumentTypeOmit<ExtArgs> | null
+  omit?: Prisma.DocumentVersionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.DocumentTypeInclude<ExtArgs> | null
-  where?: Prisma.DocumentTypeWhereInput
+  include?: Prisma.DocumentVersionInclude<ExtArgs> | null
+  where?: Prisma.DocumentVersionWhereInput
 }
 
 /**
@@ -2948,25 +2304,6 @@ export type Document$jobSiteArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Document.reviewedBy
- */
-export type Document$reviewedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
-}
-
-/**
  * Document.versions
  */
 export type Document$versionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2991,51 +2328,27 @@ export type Document$versionsArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Document.deadlines
+ * Document.jobSiteLinks
  */
-export type Document$deadlinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Document$jobSiteLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Deadline
+   * Select specific fields to fetch from the DocumentJobSiteLink
    */
-  select?: Prisma.DeadlineSelect<ExtArgs> | null
+  select?: Prisma.DocumentJobSiteLinkSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Deadline
+   * Omit specific fields from the DocumentJobSiteLink
    */
-  omit?: Prisma.DeadlineOmit<ExtArgs> | null
+  omit?: Prisma.DocumentJobSiteLinkOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.DeadlineInclude<ExtArgs> | null
-  where?: Prisma.DeadlineWhereInput
-  orderBy?: Prisma.DeadlineOrderByWithRelationInput | Prisma.DeadlineOrderByWithRelationInput[]
-  cursor?: Prisma.DeadlineWhereUniqueInput
+  include?: Prisma.DocumentJobSiteLinkInclude<ExtArgs> | null
+  where?: Prisma.DocumentJobSiteLinkWhereInput
+  orderBy?: Prisma.DocumentJobSiteLinkOrderByWithRelationInput | Prisma.DocumentJobSiteLinkOrderByWithRelationInput[]
+  cursor?: Prisma.DocumentJobSiteLinkWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.DeadlineScalarFieldEnum | Prisma.DeadlineScalarFieldEnum[]
-}
-
-/**
- * Document.packageItems
- */
-export type Document$packageItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the DocumentPackageItem
-   */
-  select?: Prisma.DocumentPackageItemSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the DocumentPackageItem
-   */
-  omit?: Prisma.DocumentPackageItemOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DocumentPackageItemInclude<ExtArgs> | null
-  where?: Prisma.DocumentPackageItemWhereInput
-  orderBy?: Prisma.DocumentPackageItemOrderByWithRelationInput | Prisma.DocumentPackageItemOrderByWithRelationInput[]
-  cursor?: Prisma.DocumentPackageItemWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DocumentPackageItemScalarFieldEnum | Prisma.DocumentPackageItemScalarFieldEnum[]
+  distinct?: Prisma.DocumentJobSiteLinkScalarFieldEnum | Prisma.DocumentJobSiteLinkScalarFieldEnum[]
 }
 
 /**

@@ -63,7 +63,6 @@ jobs:
 
   quality-gate:
     name: CI / quality-gate
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -87,12 +86,12 @@ jobs:
           node-version-file: package.json
           cache: pnpm
       - run: pnpm ci:install
-      - name: Apply five-migration chain from zero
+      - name: Apply six-migration vNext chain from zero
         run: pnpm ci:db:prepare
       - name: Verify fresh database drift
         working-directory: packages/db
         run: pnpm exec prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --exit-code
-      - name: Verify baseline upgrade to Production head
+      - name: Verify baseline upgrade to vNext head
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/qoovex_upgrade_ci
           QOOVEX_UPGRADE_CI_MODE: "1"
@@ -103,7 +102,6 @@ jobs:
 
   workspace-e2e:
     name: CI / workspace-e2e
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     services:
       postgres:

@@ -10,4 +10,4 @@ Tassonomia obbligatoria:
 - `conceptual_not_implemented`: esclusioni future dichiarate nei documenti 00–08;
 - `open_decision` e `hard_stop`: decisioni non autorizzate.
 
-Le migration storiche sono immutabili. `20260802010000_remove_legacy_product_foundation` elimina il precedente dominio e `20260803010000_implement_qoovex_vnext` introduce vNext. Entrambe sono state verificate soltanto localmente; nessun ambiente remoto è stato toccato.
+Le prime 5 migration sono il baseline Production immutabile. `20260803230000_qoovex_vnext_from_zero` azzera il baseline e introduce vNext senza compatibilità legacy. Fresh e upgrade sono verificati localmente; i target remoti restano invariati fino al push e vengono gestiti solo dai workflow guarded.

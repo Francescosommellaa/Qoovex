@@ -65,20 +65,20 @@ try {
   if (!ready) throw new Error(`Workspace smoke server did not become ready. ${redact(diagnostics)}`);
 
   const checks = [
-    ["/sign-in", 200],
-    ["/dashboard", 307],
-    ["/documents", 307],
-    ["/calendar", 307],
-    ["/workers", 307],
-    ["/api/workers", 401],
-    ["/api/does-not-exist", 404],
-    ["/api/data/jobs/run", 404],
-    ["/api/reminders/email-digest/run", 404],
+    { path: "/sign-in", expected: 200 },
+    { path: "/contexts", expected: 307 },
+    { path: "/client", expected: 307 },
+    { path: "/workers", expected: 307 },
+    { path: "/api/contexts", expected: 401 },
+    { path: "/api/client/job-sites", expected: 401 },
+    { path: "/api/does-not-exist", expected: 404 },
+    { path: "/api/data/jobs/run", expected: 404 },
+    { path: "/api/internal/vnext/processes/run", expected: 404, method: "POST" },
   ];
-  for (const [path, expected] of checks) {
-    const response = await fetch(`http://127.0.0.1:3101${path}`, { redirect: "manual" });
+  for (const { path, expected, method = "GET" } of checks) {
+    const response = await fetch(`http://127.0.0.1:3101${path}`, { redirect: "manual", method });
     if (response.status !== expected) {
-      throw new Error(`${path}: expected ${expected}, received ${response.status}.`);
+      throw new Error(`${path}: expected ${expected}, received ${response.status}. ${redact(diagnostics)}`);
     }
     if (expected === 307) {
       const location = response.headers.get("location") ?? "";

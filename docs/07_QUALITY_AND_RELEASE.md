@@ -25,4 +25,4 @@ Viewport 320/390/768/1024/1440, zoom 200%, light/dark/system, tastiera, focus, c
 
 ## Release hard stop
 
-Il repository può essere pronto localmente senza autorizzare release. Preview/Production, migration remota, Blob remoto, push e PR restano fuori da questo task.
+Un push non-`master` ricrea database e Blob Preview soltanto dopo la prova di isolamento. Un push su `master` attende CI completa, verifica l'head database, azzera il Blob store solo nel passaggio baseline→vNext, esegue `prisma migrate deploy`, verifica head/drift, pubblica un artifact staged, esegue smoke e solo dopo promuove il deployment. Qualsiasi head inatteso o l'assenza del secret GitHub environment `VERCEL_TOKEN` interrompe il rollout prima di mutare i target.

@@ -5,13 +5,13 @@
   "scripts": {
     "dev": "pnpm --filter @qoovex/db guard:local && next dev --port 3001",
     "build": "next build",
+    "blob:vnext:reset": "node scripts/reset-vnext-blob-store.mjs",
     "start": "next start",
     "type-check": "tsc --noEmit",
     "test": "node scripts/verify-fsd-boundaries.mjs && vitest run"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
-    "@fullcalendar/react": "7.0.1",
     "@qoovex/brand-resources": "workspace:*",
     "@qoovex/db": "workspace:*",
     "@qoovex/types": "workspace:*",

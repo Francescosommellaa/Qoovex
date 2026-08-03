@@ -1,38 +1,9 @@
 "use client";
 
-import {
-  IconActivity,
-  IconBuilding,
-  IconBuildingPlus,
-  IconCalendar,
-  IconChevronRight,
-  IconClipboardCheck,
-  IconFile,
-  IconFilePlus,
-  IconHome,
-  IconPackageExport,
-  IconPhotoPlus,
-  IconSearch,
-  IconSettings,
-  IconShieldLock,
-  IconUserPlus,
-  IconUsers,
-} from "@tabler/icons-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Fragment, useEffect, useState } from "react";
-import type { SupportContext } from "@qoovex/types";
+import { usePathname, useSearchParams } from "next/navigation";
+import type { PlatformRole, SupportContext } from "@qoovex/types";
 import { Badge } from "@qoovex/ui/components/badge";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@qoovex/ui/components/collapsible";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@qoovex/ui/components/dropdown-menu";
 import {
   SidebarContent,
   SidebarFooter,
@@ -40,280 +11,78 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-  useSidebar,
 } from "@qoovex/ui/components/sidebar";
 import { WorkspaceLogoutButton } from "./WorkspaceSessionControls";
-import { WorkspaceQuickLinks } from "./WorkspaceQuickLinks";
-import type { WorkspaceNavigationModel, WorkspaceNavigationItem } from "./workspace-navigation-policy";
+import { isWorkspaceNavigationItemCurrent, type WorkspaceNavigationModel } from "./workspace-navigation-policy";
 
-const platformNavItems = [
+const platformItems = [
   { label: "Panoramica", href: "/qoovex-admin" },
   { label: "Utenti", href: "/qoovex-admin/users" },
   { label: "Aziende", href: "/qoovex-admin/organizations" },
   { label: "Errori", href: "/qoovex-admin/errors" },
-  { label: "Sicurezza", href: "/account/security" },
 ] as const;
 
-const iconByHref = {
-  "/dashboard": IconHome,
-  "/documents": IconFile,
-  "/calendar": IconCalendar,
-  "/job-sites": IconBuilding,
-  "/workers": IconUsers,
-  "/settings": IconSettings,
-  "/account/security": IconShieldLock,
-  "/qoovex-admin": IconClipboardCheck,
-} as const;
-
-interface WorkspaceNavigationProps {
+export interface WorkspaceNavigationProps {
+  account: { email: string | null; organizationName: string | null };
   authenticated: boolean;
   navigation: WorkspaceNavigationModel;
-  platformRole: "USER" | "SUPER_ADMIN" | null;
+  platformRole: PlatformRole | null;
   support: SupportContext | null;
 }
 
-function NavigationLink({
-  current,
-  item,
-}: {
-  current: (href: string) => boolean;
-  item: WorkspaceNavigationItem;
-}) {
-  const { isMobile, setOpenMobile } = useSidebar();
-  const Icon = iconByHref[item.href as keyof typeof iconByHref] ?? IconFile;
-  return (
-    <SidebarMenuItem>
-      <SidebarMenuButton
-        isActive={current(item.href)}
-        render={<Link href={item.href} onClick={() => { if (isMobile) setOpenMobile(false); }} />}
-        tooltip={item.label}
-      >
-        <Icon /><span>{item.label}</span>
-      </SidebarMenuButton>
-    </SidebarMenuItem>
-  );
-}
-
-function PeopleNavigation({
-  current,
-  items,
-}: {
-  current: (href: string) => boolean;
-  items: readonly WorkspaceNavigationItem[];
-}) {
-  const { isMobile, setOpenMobile, state } = useSidebar();
-  const active = items.some((item) => current(item.href));
-  const [open, setOpen] = useState(active);
-
-  useEffect(() => {
-    if (active) setOpen(true);
-  }, [active]);
-
-  if (!items.length) return null;
-  const firstItem = items[0]!;
-
-  if (items.length === 1) return <NavigationLink current={current} item={firstItem} />;
-
-  if (state === "collapsed" && !isMobile) {
-    return <NavigationLink current={current} item={firstItem} />;
-  }
-
-  return (
-    <SidebarMenuItem>
-      <Collapsible onOpenChange={setOpen} open={open}>
-        <CollapsibleTrigger
-          render={<SidebarMenuButton isActive={active} tooltip="Persone" />}
-        >
-          <IconUsers /><span>Persone</span>
-          <IconChevronRight className="ml-auto transition-transform duration-200 group-data-panel-open/menu-button:rotate-90 motion-reduce:transition-none" />
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <SidebarMenuSub>
-            {items.map((item) => (
-              <SidebarMenuSubItem key={item.href}>
-                <SidebarMenuSubButton
-                  isActive={current(item.href)}
-                  render={<Link href={item.href} onClick={() => { if (isMobile) setOpenMobile(false); }} />}
-                >
-                  <span>{item.label}</span>
-                </SidebarMenuSubButton>
-              </SidebarMenuSubItem>
-            ))}
-          </SidebarMenuSub>
-        </CollapsibleContent>
-      </Collapsible>
-    </SidebarMenuItem>
-  );
-}
-
-function CreationActions({ items }: { items: readonly WorkspaceNavigationItem[] }) {
-  const { isMobile, setOpenMobile, state } = useSidebar();
-  if (!items.length) return null;
-
-  function actionIcon(item: WorkspaceNavigationItem) {
-    if (item.href.startsWith("/documents")) return IconFilePlus;
-    if (item.href.startsWith("/job-sites")) return IconBuildingPlus;
-    if (item.href.startsWith("/workers")) return IconUserPlus;
-    if (item.href.startsWith("/evidence")) return IconPhotoPlus;
-    if (item.href.startsWith("/document-packages")) return IconPackageExport;
-    return IconClipboardCheck;
-  }
-
-  function actionLabel(item: WorkspaceNavigationItem) {
-    if (item.href.includes("intent=upload")) return "Aggiungi file a un documento";
-    if (item.label === "Prova") return "Aggiungi prova";
-    return `Crea ${item.label.toLowerCase()}`;
-  }
-
-  return (
-    <div
-      aria-label="Azioni rapide"
-      className="rounded-lg bg-sidebar-accent/55 p-1.5 ring-1 ring-sidebar-border/70 transition-[padding,background-color] duration-200 ease-[var(--ease-standard)] group-data-[collapsible=icon]:p-1 motion-reduce:transition-none"
-      data-slot="workspace-quick-actions"
-      role="group"
-    >
-      <div className="flex h-6 items-center px-1 text-xs font-medium text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
-        Azioni rapide
-      </div>
-      <SidebarMenu
-        aria-label="Crea un nuovo elemento"
-        className={isMobile ? "grid grid-cols-2 gap-1" : "grid grid-cols-4 gap-1 group-data-[collapsible=icon]:grid-cols-1"}
-      >
-        {items.map((item) => {
-          const Icon = actionIcon(item);
-          const label = actionLabel(item);
-          return (
-            <SidebarMenuItem key={`${item.href}-${item.label}`}>
-              <SidebarMenuButton
-                aria-label={label}
-                className={isMobile ? "bg-sidebar/45" : "justify-center bg-sidebar/45 px-0"}
-                render={<Link href={item.href} onClick={() => { if (isMobile) setOpenMobile(false); }} />}
-                tooltip={isMobile ? undefined : { children: label, hidden: false, side: state === "collapsed" ? "right" : "top" }}
-              >
-                <Icon /><span className={isMobile ? undefined : "sr-only"}>{item.label}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          );
-        })}
-      </SidebarMenu>
-    </div>
-  );
-}
-
-export function WorkspaceNavigation({ navigation, platformRole, support, authenticated }: WorkspaceNavigationProps) {
-  const { isMobile, setOpenMobile } = useSidebar();
+export function WorkspaceNavigation({ account, authenticated, navigation, platformRole, support }: WorkspaceNavigationProps) {
   const pathname = usePathname();
-  const isPlatformConsole = pathname.startsWith("/qoovex-admin");
-  const current = (href: string) => pathname === href || (href !== "/dashboard" && pathname.startsWith(`${href}/`));
-
-  if (isPlatformConsole && platformRole === "SUPER_ADMIN") {
-    return (
-      <>
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Console Qoovex</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>{platformNavItems.map((item) => <NavigationLink current={current} item={item} key={item.href} />)}</SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-        <SidebarFooter>
-          <SidebarMenu><SidebarMenuItem>
-            <SidebarMenuButton render={<Link href="/dashboard" onClick={() => { if (isMobile) setOpenMobile(false); }} />} tooltip="Torna al workspace">
-              <IconHome /><span>Torna al workspace</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem></SidebarMenu>
-          <SidebarMenu><SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<SidebarMenuButton size="lg" />}>
-                <IconSettings /><span className="min-w-0 flex-1 truncate text-left">Azienda e account</span>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" side="right" className="min-w-56">
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>Account</DropdownMenuLabel>
-                  {navigation.account.map((item) => <DropdownMenuItem key={item.href} render={<Link href={item.href} onClick={() => { if (isMobile) setOpenMobile(false); }} />}>{item.label}</DropdownMenuItem>)}
-                  {support ? <DropdownMenuItem render={<Link href="/dashboard" onClick={() => { if (isMobile) setOpenMobile(false); }} />}>Azienda assistita</DropdownMenuItem> : null}
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup><WorkspaceLogoutButton /></DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem></SidebarMenu>
-        </SidebarFooter>
-      </>
-    );
-  }
-
-  const home = navigation.primary.find((item) => item.href === "/dashboard");
-  const workspaceItems = navigation.primary.filter((item) => item.href !== "/dashboard");
+  const searchParams = useSearchParams();
+  const platformOnly = (platformRole === "SUPPORT_AGENT" || platformRole === "PLATFORM_ADMIN") && !support;
+  const organizationId = /^\/org\/([^/]+)/.exec(pathname)?.[1];
+  const contextItems = organizationId ? [
+    { label: "Panoramica Azienda", href: `/org/${organizationId}` },
+    { label: "Cantieri", href: `/org/${organizationId}/job-sites` },
+    { label: "Collaboratori", href: `/org/${organizationId}/people` },
+    { label: "Profilo pagamento", href: `/org/${organizationId}/payment-profile` },
+    { label: "Cambia contesto", href: "/contexts" },
+  ] : pathname.startsWith("/client") ? [
+    { label: "I tuoi lavori", href: "/client" },
+    { label: "Cambia contesto", href: "/contexts" },
+  ] : navigation.primary;
+  const primary = platformOnly ? platformItems : contextItems;
 
   return (
     <>
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel>{platformOnly ? "Piattaforma" : organizationId ? "Azienda" : pathname.startsWith("/client") ? "Cliente" : "Qoovex"}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton aria-label="Ricerca rapida, in preparazione" aria-disabled="true" tooltip="Ricerca rapida · in preparazione">
-                  <IconSearch /><span>Ricerca</span>
-                </SidebarMenuButton>
-                <SidebarMenuBadge>Presto</SidebarMenuBadge>
-              </SidebarMenuItem>
-              {home ? <NavigationLink current={current} item={home} /> : null}
-              {navigation.showAnalytics ? (
-                <SidebarMenuItem>
-                  <SidebarMenuButton aria-label="Analisi, in preparazione" aria-disabled="true" tooltip="Analisi · in preparazione">
-                    <IconActivity /><span>Analisi</span>
+              {primary.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton render={<Link href={item.href} />} isActive={isWorkspaceNavigationItemCurrent(pathname, searchParams, item.href)}>
+                    {item.label}
                   </SidebarMenuButton>
-                  <SidebarMenuBadge>Presto</SidebarMenuBadge>
                 </SidebarMenuItem>
-              ) : null}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {workspaceItems.map((item) => (
-                <Fragment key={item.href}>
-                  {item.href === "/job-sites" ? <PeopleNavigation current={current} items={navigation.people} /> : null}
-                  <NavigationLink current={current} item={item} />
-                </Fragment>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        <WorkspaceQuickLinks candidates={navigation.quickLinks} current={current} />
+        {!platformOnly && navigation.actions.length ? (
+          <SidebarGroup>
+            <SidebarGroupLabel>Azioni</SidebarGroupLabel>
+            <SidebarGroupContent><SidebarMenu>{navigation.actions.map((item) => (
+              <SidebarMenuItem key={item.href}><SidebarMenuButton render={<Link href={item.href} />}>{item.label}</SidebarMenuButton></SidebarMenuItem>
+            ))}</SidebarMenu></SidebarGroupContent>
+          </SidebarGroup>
+        ) : null}
       </SidebarContent>
-
-      <SidebarFooter className="gap-2">
-        <CreationActions items={navigation.add} />
-        {authenticated ? (
-          <SidebarMenu><SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<SidebarMenuButton size="lg" />}>
-                <IconSettings /><span className="min-w-0 flex-1 truncate text-left">Azienda e account</span>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" side="right" className="min-w-56">
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>Account</DropdownMenuLabel>
-                  {navigation.account.map((item) => <DropdownMenuItem key={item.href} render={<Link href={item.href} onClick={() => { if (isMobile) setOpenMobile(false); }} />}>{item.label}</DropdownMenuItem>)}
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup><WorkspaceLogoutButton /></DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem></SidebarMenu>
-        ) : <Badge variant="outline">Sessione pubblica</Badge>}
+      <SidebarFooter>
+        {!platformOnly && navigation.account.length ? <SidebarMenu>{navigation.account.map((item) => <SidebarMenuItem key={item.href}><SidebarMenuButton render={<Link href={item.href} />}>{item.label}</SidebarMenuButton></SidebarMenuItem>)}</SidebarMenu> : null}
+        <div className="space-y-2 rounded-lg border border-sidebar-border p-2 text-xs text-sidebar-foreground/70">
+          <div className="truncate font-medium text-sidebar-foreground">{account.organizationName ?? "Qoovex"}</div>
+          <div className="truncate">{account.email}</div>
+          {support ? <Badge variant="outline">Supporto attivo</Badge> : null}
+        </div>
+        {authenticated ? <WorkspaceLogoutButton /> : null}
       </SidebarFooter>
     </>
   );
