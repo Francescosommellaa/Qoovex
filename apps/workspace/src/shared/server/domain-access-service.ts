@@ -16,11 +16,11 @@ export function getEffectiveOrganizationRole(context: WorkspaceAccessContext): O
 
 export async function requireOrganizationDomainAccess(
   permission: OrganizationPermission,
-  _allowedRoles?: readonly string[],
+  allowedRoles: readonly OrganizationRole[],
 ): Promise<DomainAccessContext> {
   const context = await getWorkspaceAccessContext();
   requirePermission(context, permission);
   const actorRole = getEffectiveOrganizationRole(context);
-  if (!actorRole) throw new AccessError("Risorsa non disponibile.", 404);
+  if (!actorRole || !allowedRoles.includes(actorRole)) throw new AccessError("Risorsa non disponibile.", 404);
   return { context, organizationId: getContextOrganizationId(context), actorRole };
 }

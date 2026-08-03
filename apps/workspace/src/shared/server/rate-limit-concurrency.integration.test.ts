@@ -6,12 +6,9 @@ const environment = vi.hoisted(() => {
   if (!value) return { isLocalCiDatabase: false };
   try {
     const url = new URL(value);
-    const isAttestedLocalE2e = process.env.QOOVEX_E2E_MODE === "1"
-      && process.env.QOOVEX_E2E_DATABASE_TARGET === value
-      && process.env.QOOVEX_E2E_RUN_ATTESTATION === "I_ACKNOWLEDGE_FIXTURE_SCOPED_CLEANUP";
     return {
       isLocalCiDatabase: new Set(["localhost", "127.0.0.1", "::1"]).has(url.hostname)
-        && (url.pathname.replace(/^\//, "") === "qoovex_ci" || isAttestedLocalE2e),
+        && url.pathname.replace(/^\//, "") === "qoovex_ci",
     };
   } catch {
     return { isLocalCiDatabase: false };

@@ -1,8 +1,0 @@
-import { addExistingCollaboratorToJobSite, endCollaboratorJobSiteParticipation } from "@shared/server/vnext-organization-member-service";
-import { asVNextApiError } from "@shared/server/vnext-api-response";
-import { requireIdempotencyKey } from "@shared/server/vnext-api-response";
-import { changeJobSiteResponsible } from "@shared/server/vnext-collaboration-service";
-import { resolveOrganizationJobSiteActor } from "@shared/server/vnext-authorization-service";
-export async function POST(request: Request, { params }: { params: Promise<{ organizationId: string; jobSiteId: string }> }) { try { const value = await params; return Response.json(await addExistingCollaboratorToJobSite(value.organizationId, value.jobSiteId, await request.json()), { status: 201 }); } catch (error) { return asVNextApiError(error); } }
-export async function DELETE(request: Request, { params }: { params: Promise<{ organizationId: string; jobSiteId: string }> }) { try { const value = await params; const body = await request.json() as { participantId?: string; reason?: string }; return Response.json(await endCollaboratorJobSiteParticipation(value.organizationId, value.jobSiteId, String(body.participantId ?? ""), String(body.reason ?? ""))); } catch (error) { return asVNextApiError(error); } }
-export async function PATCH(request: Request, { params }: { params: Promise<{ organizationId: string; jobSiteId: string }> }) { try { const value = await params; const actor = await resolveOrganizationJobSiteActor({ ...value, permission: "jobSite:participants:manage" }); return Response.json(await changeJobSiteResponsible({ actor, idempotencyKey: requireIdempotencyKey(request), body: await request.json() })); } catch (error) { return asVNextApiError(error); } }

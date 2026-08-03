@@ -1,5 +1,0 @@
-import { getOrganizationPeople, inviteOrganizationCollaborator, revokeOrganizationCollaborator } from "@shared/server/vnext-organization-member-service";
-import { asVNextApiError } from "@shared/server/vnext-api-response";
-export async function GET(_: Request, { params }: { params: Promise<{ organizationId: string }> }) { try { return Response.json(await getOrganizationPeople((await params).organizationId)); } catch (error) { return asVNextApiError(error); } }
-export async function POST(request: Request, { params }: { params: Promise<{ organizationId: string }> }) { try { return Response.json(await inviteOrganizationCollaborator((await params).organizationId, await request.json()), { status: 201 }); } catch (error) { return asVNextApiError(error); } }
-export async function DELETE(request: Request, { params }: { params: Promise<{ organizationId: string }> }) { try { return Response.json(await revokeOrganizationCollaborator((await params).organizationId, new URL(request.url).searchParams.get("membershipId") ?? "")); } catch (error) { return asVNextApiError(error); } }

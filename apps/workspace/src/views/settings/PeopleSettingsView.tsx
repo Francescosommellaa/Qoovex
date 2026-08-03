@@ -10,7 +10,10 @@ import { WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/work
 
 const roleLabels: Record<OrganizationRole, string> = {
   OWNER: "Proprietario",
-  COLLABORATOR: "Collaboratore",
+  ADMIN: "Amministratore",
+  SAFETY_CONSULTANT: "Consulente sicurezza",
+  SITE_MANAGER: "Responsabile cantiere",
+  WORKER: "Lavoratore",
 };
 
 interface Member {

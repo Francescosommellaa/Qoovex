@@ -1,3 +1,14 @@
-import { WorkerCreateForm } from "@/views/foundation/WorkerCreateForm";
-import { WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
-export default function NewWorkerPage() { return <WorkspacePage><WorkspacePageHeader title="Nuova persona operativa" description="Crea un profilo Worker neutro; non crea un ruolo account." /><WorkspacePanel><WorkerCreateForm /></WorkspacePanel></WorkspacePage>; }
+import { redirect } from "next/navigation";
+import { getWorkspaceCapabilities } from "@/views/admin-core/admin-core-server";
+import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
+
+export default async function NewWorkerPage() {
+  let canCreateWorkers = false;
+  try {
+    canCreateWorkers = (await getWorkspaceCapabilities()).canCreateWorkers;
+  } catch {
+    return <WorkspaceAccessState title="Creazione non disponibile" description="Verifica accesso e autorizzazioni." />;
+  }
+  if (!canCreateWorkers) return <WorkspaceAccessState />;
+  redirect("/workers?intent=create");
+}

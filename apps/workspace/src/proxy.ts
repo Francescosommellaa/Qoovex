@@ -7,6 +7,7 @@ import {
 } from "@shared/lib/dev-auth-cookie";
 import { isDevAuthAllowedForHost } from "@shared/lib/dev-auth-guard";
 import { isPublicApiPath } from "@shared/lib/public-api-routes";
+import { buildRequestCallbackUrl } from "@shared/lib/auth-routing";
 
 const { auth } = NextAuth(authConfig);
 
@@ -22,26 +23,59 @@ export const proxy = auth(async (request) => {
 
   if (hasDevAuthSession || request.auth) return;
 
-  return NextResponse.json(
-    { message: "Sessione non valida." },
-    { status: 401 },
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.json(
+      { message: "Sessione non valida." },
+      { status: 401 },
+    );
+  }
+
+  const signInUrl = new URL("/sign-in", request.url);
+  signInUrl.searchParams.set(
+    "callbackUrl",
+    buildRequestCallbackUrl(pathname, request.nextUrl.search),
   );
+  return NextResponse.redirect(signInUrl);
 });
 
 export const config = {
   matcher: [
+    "/access/:path*",
+    "/account/:path*",
+    "/audit-log/:path*",
+    "/calendar/:path*",
+    "/checklists/:path*",
+    "/dashboard/:path*",
+    "/data-control/:path*",
+    "/deadlines/:path*",
+    "/document-packages/:path*",
+    "/documents/:path*",
+    "/evidence/:path*",
+    "/job-sites/:path*",
+    "/notifications/:path*",
+    "/qoovex-admin/:path*",
+    "/search/:path*",
+    "/settings/:path*",
+    "/workers/:path*",
     "/api/account/:path*",
     "/api/audit-log",
-    "/api/contexts",
-    "/api/client/:path*",
+    "/api/calendar/:path*",
+    "/api/checklists/:path*",
+    "/api/context",
+    "/api/dashboard",
     "/api/data/:path*",
-    "/api/exports/:path*",
-    "/api/org/:path*",
+    "/api/deadlines/:path*",
+    "/api/document-packages/:path*",
+    "/api/document-requirements/:path*",
+    "/api/document-types/:path*",
+    "/api/documents/:path*",
+    "/api/evidence/:path*",
+    "/api/job-sites/:path*",
     "/api/notifications/:path*",
-    "/api/organization-profile/:path*",
     "/api/organization/:path*",
     "/api/organizations",
     "/api/platform-admin/:path*",
+    "/api/reminders/:path*",
     "/api/resource-assignments/:path*",
     "/api/support/:path*",
     "/api/workers/:path*",

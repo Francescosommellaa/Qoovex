@@ -18,9 +18,11 @@ async function submitJson<T>(url: string, body?: unknown): Promise<T> {
 export function DataControlActionsPanel({
   initialJobs,
   initialOrphans,
+  organizationCode,
 }: {
   initialJobs: DataControlJobListResponse;
   initialOrphans: BlobOrphanDryRunResponse;
+  organizationCode: string;
 }) {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -38,6 +40,13 @@ export function DataControlActionsPanel({
     } finally {
       setPendingAction(null);
     }
+  }
+
+  async function createDeletionJob(formData: FormData) {
+    await run("delete", () => submitJson("/api/data/deletion-jobs", {
+      organizationCode: formData.get("organizationCode"),
+      confirmation: formData.get("confirmation"),
+    }));
   }
 
   return (
@@ -68,6 +77,29 @@ export function DataControlActionsPanel({
             Crea job cleanup
           </button>
         </div>
+      </article>
+
+      <article className={styles.record}>
+        <div className={styles.recordMain}>
+          <strong>Cancellazione definitiva azienda</strong>
+          <span>Crea un job pending. La cancellazione non parte nella request UI.</span>
+          <small>Codice azienda richiesto: {organizationCode}. Conferma esatta: ELIMINA DEFINITIVAMENTE.</small>
+        </div>
+        <form action={createDeletionJob} className={styles.form}>
+          <div className={styles.fieldGrid}>
+            <label className={styles.field}>
+              <span>Codice azienda</span>
+              <input autoComplete="off" name="organizationCode" placeholder={organizationCode} />
+            </label>
+            <label className={styles.field}>
+              <span>Conferma testuale</span>
+              <input autoComplete="off" name="confirmation" placeholder="ELIMINA DEFINITIVAMENTE" />
+            </label>
+          </div>
+          <button className={styles.dangerButton} disabled={pendingAction !== null} type="submit">
+            Crea job cancellazione definitiva
+          </button>
+        </form>
       </article>
 
       <article className={styles.record}>

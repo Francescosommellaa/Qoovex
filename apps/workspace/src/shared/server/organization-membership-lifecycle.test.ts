@@ -8,16 +8,13 @@ const mocks = vi.hoisted(() => ({
     }
   },
   db: {
-    organizationMembership: { findUnique: vi.fn(), findFirst: vi.fn() },
-    organizationInvitation: { findUnique: vi.fn(), updateMany: vi.fn() },
+    organizationMembership: { findUnique: vi.fn() },
+    organizationInvitation: { findUnique: vi.fn() },
     $transaction: vi.fn(),
   },
   tx: {
     organization: { create: vi.fn() },
-    worker: { findFirst: vi.fn() },
-    workerUserLink: { findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
     organizationMembership: { findUnique: vi.fn(), create: vi.fn(), updateMany: vi.fn() },
-    organizationMembershipResourceGrant: { deleteMany: vi.fn(), createMany: vi.fn() },
     organizationInvitation: { findUnique: vi.fn(), updateMany: vi.fn() },
     user: { update: vi.fn() },
   },
@@ -51,28 +48,23 @@ vi.mock("@shared/server/transactional-email-service", () => ({ sendTransactional
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: vi.fn() }));
 
 import { createOrganization } from "./organization-access-service";
-import { acceptInvitation, declineInvitation, getInvitationPreview } from "./organization-invitation-service";
+import { acceptInvitation, getInvitationPreview } from "./organization-invitation-service";
 
 beforeEach(() => {
   vi.resetAllMocks();
   mocks.requireIdentity.mockResolvedValue({ id: "user-1", email: "user@example.com", emailVerified: new Date() });
   mocks.db.$transaction.mockImplementation(async (callback: (tx: typeof mocks.tx) => unknown) => callback(mocks.tx));
   mocks.tx.organization.create.mockResolvedValue({ id: "org-new", name: "Nuova Azienda", code: "QVX-NEW" });
-  mocks.tx.organizationMembership.create.mockResolvedValue({ id: "membership-created" });
   mocks.tx.organizationMembership.updateMany.mockResolvedValue({ count: 1 });
   mocks.tx.organizationInvitation.updateMany.mockResolvedValue({ count: 1 });
   mocks.tx.user.update.mockResolvedValue({ id: "user-1" });
-  mocks.tx.worker.findFirst.mockResolvedValue({ id: "worker-1" });
-  mocks.tx.workerUserLink.findFirst.mockResolvedValue(null);
-  mocks.tx.workerUserLink.create.mockResolvedValue({ id: "link-1" });
-  mocks.db.organizationInvitation.updateMany.mockResolvedValue({ count: 1 });
 });
 
-describe("multi-organization membership lifecycle", () => {
+describe("single organization membership lifecycle", () => {
   it("returns only safe preview data for an active invitation", async () => {
     const expiresAt = new Date(Date.now() + 60_000);
     mocks.db.organizationInvitation.findUnique.mockResolvedValue({
-      role: "COLLABORATOR",
+      role: "WORKER",
       expiresAt,
       acceptedAt: null,
       revokedAt: null,
@@ -81,14 +73,14 @@ describe("multi-organization membership lifecycle", () => {
 
     await expect(getInvitationPreview("token")).resolves.toEqual({
       organizationName: "Azienda Demo",
-      role: "COLLABORATOR",
+      role: "WORKER",
       expiresAt,
     });
   });
 
   it("does not preview expired or already used invitations", async () => {
     mocks.db.organizationInvitation.findUnique.mockResolvedValue({
-      role: "COLLABORATOR",
+      role: "WORKER",
       expiresAt: new Date(Date.now() - 60_000),
       acceptedAt: null,
       revokedAt: null,
@@ -97,46 +89,21 @@ describe("multi-organization membership lifecycle", () => {
     await expect(getInvitationPreview("token")).resolves.toBeNull();
   });
 
-  it("lets only the authenticated recipient decline an active invitation without exposing the token", async () => {
-    await expect(declineInvitation("raw-recipient-token")).resolves.toEqual({ declined: true });
-    expect(mocks.db.organizationInvitation.updateMany).toHaveBeenCalledWith({
-      where: expect.objectContaining({
-        tokenHash: expect.stringMatching(/^[a-f0-9]{64}$/),
-        email: "user@example.com",
-        acceptedAt: null,
-        declinedAt: null,
-        revokedAt: null,
-      }),
-      data: { declinedAt: expect.any(Date), activeKey: null, accessVersion: { increment: 1 } },
-    });
-    expect(JSON.stringify(mocks.db.organizationInvitation.updateMany.mock.calls)).not.toContain("raw-recipient-token");
-  });
-
-  it("allows the same account to create another organization", async () => {
-    await expect(createOrganization("Nuova Azienda")).resolves.toMatchObject({ id: "org-new" });
+  it("rejects a second active membership", async () => {
+    mocks.tx.organizationMembership.findUnique.mockResolvedValue({ id: "membership-1", revokedAt: null });
+    await expect(createOrganization("Nuova Azienda")).rejects.toMatchObject({ status: 409 });
     expect(mocks.db.$transaction).toHaveBeenCalledWith(expect.any(Function), { isolationLevel: "Serializable" });
-    expect(mocks.tx.organizationMembership.create).toHaveBeenCalledWith({ data: { organizationId: "org-new", userId: "user-1", role: "OWNER", scopeMode: "FULL" } });
+    expect(mocks.tx.organization.create).not.toHaveBeenCalled();
   });
 
-  it("does not repurpose a membership from another organization", async () => {
+  it("reuses a revoked row when creating an organization", async () => {
     mocks.tx.organizationMembership.findUnique.mockResolvedValue({ id: "membership-1", revokedAt: new Date() });
     await expect(createOrganization("Nuova Azienda")).resolves.toMatchObject({ id: "org-new" });
-    expect(mocks.tx.organizationMembership.updateMany).not.toHaveBeenCalled();
-    expect(mocks.tx.organizationMembership.create).toHaveBeenCalled();
-  });
-
-  it("creates an OWNER membership with full organization scope", async () => {
-    mocks.tx.organizationMembership.findUnique.mockResolvedValue(null);
-
-    await expect(createOrganization("Nuova Azienda")).resolves.toMatchObject({ id: "org-new" });
-    expect(mocks.tx.organizationMembership.create).toHaveBeenCalledWith({
-      data: {
-        organizationId: "org-new",
-        userId: "user-1",
-        role: "OWNER",
-        scopeMode: "FULL",
-      },
+    expect(mocks.tx.organizationMembership.updateMany).toHaveBeenCalledWith({
+      where: { id: "membership-1", userId: "user-1", revokedAt: { not: null } },
+      data: { organizationId: "org-new", role: "OWNER", revokedAt: null },
     });
+    expect(mocks.tx.organizationMembership.create).not.toHaveBeenCalled();
   });
 
   it("reassigns a revoked membership when accepting an invitation", async () => {
@@ -144,13 +111,7 @@ describe("multi-organization membership lifecycle", () => {
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-1",
       email: "user@example.com",
-      role: "COLLABORATOR",
-      preset: "CUSTOM",
-      permissionKeys: [],
-      scopeMode: "ASSIGNED",
-      accessExpiresAt: null,
-      invitedById: "owner-1",
-      resourceGrants: [],
+      role: "WORKER",
       organizationId: "org-invite",
       expiresAt: new Date(Date.now() + 60_000),
       acceptedAt: null,
@@ -160,72 +121,12 @@ describe("multi-organization membership lifecycle", () => {
     await expect(acceptInvitation("token")).resolves.toEqual({ accepted: true });
     expect(mocks.tx.organizationMembership.updateMany).toHaveBeenCalledWith({
       where: { id: "membership-1", userId: "user-1", revokedAt: { not: null } },
-      data: expect.objectContaining({ organizationId: "org-invite", role: "COLLABORATOR", preset: "CUSTOM", scopeMode: "ASSIGNED", revokedAt: null }),
+      data: { organizationId: "org-invite", role: "WORKER", revokedAt: null },
     });
     expect(mocks.tx.organizationInvitation.updateMany).toHaveBeenCalledWith({
-      where: { id: "invite-1", acceptedAt: null, declinedAt: null, revokedAt: null, expiresAt: { gt: expect.any(Date) } },
-      data: { acceptedAt: expect.any(Date), activeKey: null },
+      where: { id: "invite-1", acceptedAt: null, revokedAt: null, expiresAt: { gt: expect.any(Date) } },
+      data: { acceptedAt: expect.any(Date) },
     });
-  });
-
-  it("creates the WORKER profile link in the same Serializable acceptance transaction", async () => {
-    mocks.tx.organizationMembership.findUnique.mockResolvedValue(null);
-    mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
-      id: "invite-worker",
-      email: "user@example.com",
-      role: "COLLABORATOR",
-      preset: "LIMITED_UPLOAD",
-      permissionKeys: ["organization:read", "documents:read", "documents:upload"],
-      scopeMode: "ASSIGNED",
-      accessExpiresAt: null,
-      resourceGrants: [],
-      organizationId: "org-invite",
-      workerId: "worker-1",
-      invitedById: "owner-1",
-      expiresAt: new Date(Date.now() + 60_000),
-      acceptedAt: null,
-      revokedAt: null,
-    });
-
-    await expect(acceptInvitation("token")).resolves.toEqual({ accepted: true });
-    expect(mocks.tx.worker.findFirst).toHaveBeenCalledWith(expect.objectContaining({
-      where: { id: "worker-1", organizationId: "org-invite", archivedAt: null },
-    }));
-    expect(mocks.tx.workerUserLink.create).toHaveBeenCalledWith({
-      data: {
-        organizationId: "org-invite",
-        workerId: "worker-1",
-        userId: "user-1",
-        linkedById: "owner-1",
-      },
-    });
-    expect(mocks.tx.organizationInvitation.updateMany).toHaveBeenCalled();
-  });
-
-  it("does not consume the invitation when the automatic WORKER link fails", async () => {
-    mocks.tx.organizationMembership.findUnique.mockResolvedValue(null);
-    mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
-      id: "invite-worker",
-      email: "user@example.com",
-      role: "COLLABORATOR",
-      preset: "LIMITED_UPLOAD",
-      permissionKeys: ["organization:read", "documents:read", "documents:upload"],
-      scopeMode: "ASSIGNED",
-      accessExpiresAt: null,
-      resourceGrants: [],
-      organizationId: "org-invite",
-      workerId: "worker-1",
-      invitedById: "owner-1",
-      expiresAt: new Date(Date.now() + 60_000),
-      acceptedAt: null,
-      revokedAt: null,
-    });
-    const linkError = new Error("link failed");
-    mocks.tx.workerUserLink.create.mockRejectedValue(linkError);
-
-    await expect(acceptInvitation("token")).rejects.toBe(linkError);
-    expect(mocks.tx.organizationInvitation.updateMany).not.toHaveBeenCalled();
-    expect(mocks.tx.user.update).not.toHaveBeenCalled();
   });
 
   it("rejects a concurrent claim of a revoked membership", async () => {
@@ -233,7 +134,7 @@ describe("multi-organization membership lifecycle", () => {
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-1",
       email: "user@example.com",
-      role: "COLLABORATOR",
+      role: "WORKER",
       organizationId: "org-invite",
       expiresAt: new Date(Date.now() + 60_000),
       acceptedAt: null,
@@ -276,7 +177,7 @@ describe("multi-organization membership lifecycle", () => {
 
   it("maps a membership P2002 race to 409 without retrying", async () => {
     mocks.db.$transaction.mockRejectedValue(new mocks.PrismaClientKnownRequestError("P2002"));
-    mocks.db.organizationMembership.findFirst.mockResolvedValue({ revokedAt: null });
+    mocks.db.organizationMembership.findUnique.mockResolvedValue({ revokedAt: null });
 
     await expect(acceptInvitation("token")).rejects.toMatchObject({ status: 409 });
     expect(mocks.db.$transaction).toHaveBeenCalledTimes(1);
@@ -298,7 +199,7 @@ describe("multi-organization membership lifecycle", () => {
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-1",
       email: "user@example.com",
-      role: "COLLABORATOR",
+      role: "WORKER",
       organizationId: "org-invite",
       expiresAt: new Date(Date.now() + 60_000),
       acceptedAt: null,

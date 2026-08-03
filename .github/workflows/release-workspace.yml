@@ -1,0 +1,229 @@
+name: Release Workspace
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Exact commit SHA to release
+        required: true
+        type: string
+      expected_current_head:
+        description: Migration head currently present in Production
+        required: true
+        default: 20260720010000_calendar_events
+        type: string
+      expected_target_head:
+        description: Migration head required by the staged application
+        required: true
+        default: 20260720010000_calendar_events
+        type: string
+      migration_plan:
+        description: Explicit release phase
+        required: true
+        default: none
+        type: choice
+        options:
+          - none
+          - expand
+          - backfill
+          - switch
+          - contract
+      backup_ref:
+        description: Verified backup reference (required for database changes)
+        required: false
+        type: string
+      restore_drill_ref:
+        description: Verified restore drill reference (required for database changes)
+        required: false
+        type: string
+
+permissions:
+  actions: write
+  checks: read
+  contents: read
+
+concurrency:
+  group: workspace-production-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release Workspace / staged promotion
+    runs-on: ubuntu-latest
+    environment: workspace-production
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WORKSPACE_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE || 'fra-project' }}
+      VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+      CRON_SECRET: ${{ secrets.CRON_SECRET }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.sha }}
+          fetch-depth: 0
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: package.json
+          cache: pnpm
+
+      - name: Verify exact SHA and master ancestry
+        env:
+          RELEASE_SHA: ${{ inputs.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$RELEASE_SHA"
+          git fetch origin master
+          git merge-base --is-ancestor "$RELEASE_SHA" origin/master
+
+      - name: Verify required checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ inputs.sha }}
+        run: |
+          for check in "CI / push-gate" "CI / quality-gate" "CI / workspace-e2e"; do
+            conclusion="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${RELEASE_SHA}/check-runs" \
+              --jq ".check_runs[] | select(.name == \"${check}\") | .conclusion" | tail -n 1)"
+            test "$conclusion" = "success"
+          done
+
+      - run: pnpm ci:install
+      - run: pnpm check:push
+
+      - name: Verify release inputs against manifest
+        env:
+          EXPECTED_CURRENT_HEAD: ${{ inputs.expected_current_head }}
+          EXPECTED_TARGET_HEAD: ${{ inputs.expected_target_head }}
+          MIGRATION_PLAN: ${{ inputs.migration_plan }}
+          BACKUP_REF: ${{ inputs.backup_ref }}
+          RESTORE_DRILL_REF: ${{ inputs.restore_drill_ref }}
+        run: |
+          manifest_head="$(node -p "require('./ops/workspace-release-manifest.json').database.migrationHead")"
+          test "$EXPECTED_TARGET_HEAD" = "$manifest_head"
+          if [ "$MIGRATION_PLAN" = "none" ]; then
+            test "$EXPECTED_CURRENT_HEAD" = "$EXPECTED_TARGET_HEAD"
+          else
+            test -n "$BACKUP_REF"
+            test -n "$RESTORE_DRILL_REF"
+          fi
+
+      - name: Pull and verify Production environment without printing values
+        run: |
+          pnpm dlx vercel@50.17.1 pull --yes --environment=production --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE"
+          node scripts/verify-environment-contract.mjs production .vercel/.env.production.local
+          auto_assign="$(pnpm dlx vercel@50.17.1 api "/v9/projects/${VERCEL_PROJECT_ID}" \
+            --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --silent | jq -r '.autoAssignCustomDomains')"
+          test "$auto_assign" = "false"
+
+      - name: Verify current Production migration head
+        run: >-
+          pnpm dlx vercel@50.17.1 env run -e production
+          --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
+          pnpm --filter @qoovex/db verify:head "${{ inputs.expected_current_head }}"
+
+      - name: Apply explicitly approved migration phase
+        if: inputs.migration_plan != 'none'
+        env:
+          QOOVEX_MIGRATE_DEPLOY_APPROVED: "1"
+          QOOVEX_MIGRATION_BACKUP_REF: ${{ inputs.backup_ref }}
+          QOOVEX_EXPECTED_LAST_MIGRATION: ${{ inputs.expected_target_head }}
+        run: >-
+          pnpm dlx vercel@50.17.1 env run -e production
+          --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
+          pnpm --filter @qoovex/db db:migrate:deploy
+
+      - name: Verify target migration head
+        run: >-
+          pnpm dlx vercel@50.17.1 env run -e production
+          --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
+          pnpm --filter @qoovex/db verify:head "${{ inputs.expected_target_head }}"
+
+      - name: Build and deploy staged Production artifact
+        id: staged
+        env:
+          RELEASE_SHA: ${{ inputs.sha }}
+        run: |
+          pnpm dlx vercel@50.17.1 build --prod --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE"
+          deployment_url="$(pnpm dlx vercel@50.17.1 deploy --prebuilt --prod --skip-domain --yes \
+            --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --meta "releaseSha=${RELEASE_SHA}")"
+          test -n "$deployment_url"
+          echo "url=$deployment_url" >> "$GITHUB_OUTPUT"
+
+      - name: Smoke staged deployment
+        env:
+          DEPLOYMENT_URL: ${{ steps.staged.outputs.url }}
+        run: |
+          auth_header=()
+          if [ -n "$VERCEL_AUTOMATION_BYPASS_SECRET" ]; then
+            auth_header=(-H "x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET")
+          fi
+          expect_status() {
+            expected="$1"
+            path="$2"
+            actual="$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' \
+              "${auth_header[@]}" "${DEPLOYMENT_URL}${path}")"
+            test "$actual" = "$expected"
+          }
+          expect_status 200 /sign-in
+          expect_status 307 /dashboard
+          expect_status 307 /documents
+          expect_status 307 /calendar
+          expect_status 307 /workers
+          expect_status 401 /api/workers
+          expect_status 404 /api/does-not-exist
+
+      - name: Inspect and promote exact staged deployment
+        id: promotion
+        env:
+          DEPLOYMENT_URL: ${{ steps.staged.outputs.url }}
+        run: |
+          deployment_id="$(pnpm dlx vercel@50.17.1 inspect "$DEPLOYMENT_URL" --json \
+            --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" | jq -r '.id')"
+          test -n "$deployment_id"
+          pnpm dlx vercel@50.17.1 promote "$deployment_id" --yes \
+            --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE"
+          echo "deployment_id=$deployment_id" >> "$GITHUB_OUTPUT"
+
+      - name: Verify promoted legacy scheduler endpoints and enable workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          test -n "$CRON_SECRET"
+          for path in /api/data/jobs/run /api/reminders/email-digest/run; do
+            curl --fail-with-body --silent --show-error --max-time 240 \
+              --header "Authorization: Bearer $CRON_SECRET" \
+              "https://app.qoovex.com${path}" | jq -e 'type == "object" and ((.failed | type) == "number") and .failed == 0' >/dev/null
+          done
+          gh workflow enable scheduled-jobs.yml
+
+      - name: Write secret-free release evidence
+        env:
+          RELEASE_SHA: ${{ inputs.sha }}
+          MIGRATION_HEAD: ${{ inputs.expected_target_head }}
+          MIGRATION_PLAN: ${{ inputs.migration_plan }}
+          DEPLOYMENT_ID: ${{ steps.promotion.outputs.deployment_id }}
+          DEPLOYMENT_URL: ${{ steps.staged.outputs.url }}
+          APPROVER: ${{ github.actor }}
+        run: |
+          jq -n \
+            --arg sha "$RELEASE_SHA" \
+            --arg migrationHead "$MIGRATION_HEAD" \
+            --arg migrationClassification "$MIGRATION_PLAN" \
+            --arg deploymentId "$DEPLOYMENT_ID" \
+            --arg deploymentUrl "$DEPLOYMENT_URL" \
+            --arg alias "https://app.qoovex.com" \
+            --arg smoke "passed" \
+            --arg schedulerContract "legacy-only-enabled" \
+            --arg approver "$APPROVER" \
+            --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{sha:$sha,migrationHead:$migrationHead,migrationClassification:$migrationClassification,deploymentId:$deploymentId,deploymentUrl:$deploymentUrl,alias:$alias,smoke:$smoke,schedulerContract:$schedulerContract,approver:$approver,timestamp:$timestamp}' \
+            > workspace-release-evidence.json
+
+      - name: Upload release evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: workspace-release-${{ inputs.sha }}
+          path: workspace-release-evidence.json
+          if-no-files-found: error
+          retention-days: 90

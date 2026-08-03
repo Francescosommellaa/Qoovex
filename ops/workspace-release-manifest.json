@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "application": {
+    "name": "qoovex-workspace",
+    "version": "legacy-production-alignment-v1",
+    "runtimeTrack": "legacy",
+    "vNext": "conceptual_not_implemented"
+  },
+  "database": {
+    "migrationHead": "20260720010000_calendar_events",
+    "migrationCount": 5,
+    "productionMutationRequiredForAlignment": false,
+    "ledger": "ops/migration-ledger.json"
+  },
+  "scheduler": {
+    "recoveryCheckpointRequiredState": "suspended_until_permanent_release",
+    "permanentReleaseState": "enabled_legacy_only",
+    "jobs": [
+      {
+        "id": "data-control",
+        "method": "GET",
+        "path": "/api/data/jobs/run"
+      },
+      {
+        "id": "digest",
+        "method": "GET",
+        "path": "/api/reminders/email-digest/run"
+      }
+    ],
+    "forbiddenJobs": ["operational", "vnext-runner"]
+  },
+  "http": {
+    "anonymousProtectedPage": "307_sign_in_with_sanitized_relative_callback",
+    "staleSession": "controlled_application_state",
+    "anonymousProtectedApi": 401,
+    "forbiddenProtectedApi": 403,
+    "unknownApi": 404
+  },
+  "environmentContract": "ops/environment-contract.json",
+  "previewRelease": {
+    "automaticGitDeployment": "disabled",
+    "workflow": ".github/workflows/rehearse-workspace-preview.yml"
+  },
+  "productionRelease": {
+    "domainAssignment": "manual",
+    "deploymentMode": "staged",
+    "workflow": ".github/workflows/release-workspace.yml",
+    "promotionCommand": "vercel promote"
+  }
+}

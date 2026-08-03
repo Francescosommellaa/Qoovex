@@ -3,7 +3,6 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [master]
 
 permissions:
   contents: read
@@ -14,6 +13,7 @@ concurrency:
 
 env:
   DATABASE_URL: postgresql://postgres:postgres@localhost:5432/qoovex_ci
+  QOOVEX_DATABASE_ENVIRONMENT: test
   AUTH_URL: http://localhost:3001
   AUTH_SECRET: ci-auth-secret-at-least-32-characters
   DEV_AUTH_SECRET: ci-dev-auth-secret-at-least-32-characters
@@ -25,8 +25,45 @@ env:
   CRON_SECRET: ci-cron-secret-at-least-32-characters
 
 jobs:
+  push-gate:
+    name: CI / push-gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: package.json
+          cache: pnpm
+      - name: Verify committed diff whitespace
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            base="$PR_BASE"
+          else
+            base="$PUSH_BEFORE"
+          fi
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
+            base="$(git merge-base origin/master HEAD)"
+          fi
+          git diff --check "$base" HEAD
+      - run: pnpm ci:install
+      - run: pnpm check:push
+      - name: Verify Prisma format and generated client
+        run: |
+          pnpm --filter @qoovex/db exec prisma format
+          git diff --exit-code -- packages/db/prisma/schema.prisma
+          pnpm --filter @qoovex/db db:generate
+          git diff --exit-code -- packages/db/generated
+
   quality-gate:
     name: CI / quality-gate
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -50,11 +87,23 @@ jobs:
           node-version-file: package.json
           cache: pnpm
       - run: pnpm ci:install
-      - run: pnpm ci:db:prepare
+      - name: Apply five-migration chain from zero
+        run: pnpm ci:db:prepare
+      - name: Verify fresh database drift
+        working-directory: packages/db
+        run: pnpm exec prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --exit-code
+      - name: Verify baseline upgrade to Production head
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/qoovex_upgrade_ci
+          QOOVEX_UPGRADE_CI_MODE: "1"
+        run: |
+          psql postgresql://postgres:postgres@localhost:5432/postgres --set ON_ERROR_STOP=1 --command 'CREATE DATABASE qoovex_upgrade_ci TEMPLATE template0'
+          pnpm --filter @qoovex/db test:upgrade
       - run: pnpm check
 
   workspace-e2e:
     name: CI / workspace-e2e
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     services:
       postgres:

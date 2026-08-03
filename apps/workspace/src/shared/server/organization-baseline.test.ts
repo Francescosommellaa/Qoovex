@@ -6,13 +6,13 @@ const schema = readFileSync(resolve(process.cwd(), "../../packages/db/prisma/sch
 const baselineSql = readFileSync(resolve(process.cwd(), "../../packages/db/prisma/migrations/20260712010000_single_company_baseline/migration.sql"), "utf8");
 const forwardSql = readFileSync(resolve(process.cwd(), "../../packages/db/prisma/migrations/20260712020000_single_membership_forward/migration.sql"), "utf8");
 
-describe("canonical multi-membership state over immutable history", () => {
-  it("uses Organization naming and a multi-organization user relation", () => {
+describe("canonical single-membership history", () => {
+  it("uses Organization naming and a singular user relation", () => {
     expect(schema).toContain("model Organization");
     expect(schema).toContain("model OrganizationMembership");
     expect(schema).toContain("model OrganizationInvitation");
-    expect(schema).toMatch(/organizationMemberships\s+OrganizationMembership\[\]/);
-    expect(schema).toMatch(/@@unique\(\[organizationId, userId\]\)/);
+    expect(schema).toMatch(/organizationMembership\s+OrganizationMembership\?/);
+    expect(schema).toMatch(/userId\s+String\s+@unique/);
     expect(schema).not.toContain("@@map(\"Structure");
     expect(schema).not.toContain("@map(\"structureId\")");
     expect(schema).not.toMatch(/\bStructureRole\b/);
@@ -21,8 +21,8 @@ describe("canonical multi-membership state over immutable history", () => {
   it("creates the full baseline and migrates forward without replaying it", () => {
     expect(baselineSql).toContain('CREATE TABLE "Organization"');
     expect(baselineSql).toContain('CREATE TABLE "OrganizationInvitation"');
-    expect(baselineSql).toContain('CREATE TABLE "Document"');
-    expect(baselineSql).toContain('CREATE TABLE "Evidence"');
+    expect(baselineSql).toContain('CREATE TABLE "DocumentPackage"');
+    expect(baselineSql).toContain('CREATE TABLE "ShareLink"');
     expect(baselineSql).toContain('"organizationId" TEXT NOT NULL');
     expect(baselineSql).not.toContain('"Structure"');
     expect(baselineSql).not.toContain('"StructureMembership"');

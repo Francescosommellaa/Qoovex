@@ -2,10 +2,10 @@ import "server-only";
 
 import { cache } from "react";
 import { db } from "@qoovex/db";
-import type { ContextHubResponse, OrganizationContext, Permission, WorkspaceAccessContext } from "@qoovex/types";
+import type { Permission, WorkspaceAccessContext } from "@qoovex/types";
 import { auth } from "@shared/server/auth/config";
 import { AccessError } from "@shared/server/access-errors";
-import { getPermissionsForRole, getSupportSessionPermissions, sanitizeOrganizationPermissions } from "@shared/server/authorization-policy";
+import { getPermissionsForRole } from "@shared/server/authorization-policy";
 import { getActiveSupportSession } from "@shared/server/support-access-service";
 import { bootstrapDevUser } from "@shared/server/dev-auth";
 import { isMfaSatisfiedForUser } from "@shared/server/mfa-service";
@@ -23,7 +23,7 @@ async function requirePrimaryIdentityUncached() {
       suspendedAt: null,
       authSessionId: `dev:${devUser.id}`,
       isDev: true,
-      devView: devUser.devView,
+      devRole: devUser.devRole,
     };
   }
 
@@ -37,7 +37,7 @@ async function requirePrimaryIdentityUncached() {
     select: { id: true, email: true, emailVerified: true, platformRole: true, authVersion: true, mfaEnabled: true, suspendedAt: true },
   });
   if (!user || user.suspendedAt) throw new AccessError("Sessione non valida.", 401);
-  return { ...user, authSessionId, isDev: false, devView: null };
+  return { ...user, authSessionId, isDev: false, devRole: null };
 }
 
 export const requirePrimaryIdentity = cache(requirePrimaryIdentityUncached);
@@ -60,31 +60,20 @@ export async function requireIdentity() {
 
 async function getWorkspaceAccessContextUncached(): Promise<WorkspaceAccessContext> {
   const user = await requireIdentity();
-  const [memberships, support] = await Promise.all([
-    db.organizationMembership.findMany({
-      where: { userId: user.id, revokedAt: null, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
-      orderBy: [{ organization: { name: "asc" } }, { createdAt: "asc" }],
-      select: { id: true, role: true, preset: true, permissionKeys: true, scopeMode: true, expiresAt: true, organization: { select: { id: true, name: true, code: true } } },
+  const [membership, support] = await Promise.all([
+    db.organizationMembership.findUnique({
+      where: { userId: user.id, revokedAt: null },
+      select: { id: true, role: true, organization: { select: { id: true, name: true, code: true } } },
     }),
-    user.platformRole === "SUPPORT_AGENT" || user.platformRole === "PLATFORM_ADMIN"
-      ? getActiveSupportSession(user.id)
-      : Promise.resolve(null),
+    user.platformRole === "SUPER_ADMIN" ? getActiveSupportSession(user.id) : Promise.resolve(null),
   ]);
 
-  const membership = memberships.length === 1 ? memberships[0] : null;
-  const internalDevView = user.isDev && user.devView !== "OWNER";
-  const company = !internalDevView && membership ? {
-    role: membership.role,
-    preset: membership.preset,
-    scopeMode: membership.scopeMode,
-    expiresAt: membership.expiresAt?.toISOString() ?? null,
-    organization: membership.organization,
-  } : null;
+  const companyRole = membership ? user.devRole ?? membership.role : null;
+  const effectiveRole = support ? "OWNER" : companyRole;
   return {
     userId: user.id,
     platformRole: user.platformRole,
-    devView: user.devView,
-    company,
+    company: membership ? { role: companyRole ?? membership.role, organization: membership.organization } : null,
     support: support ? {
       sessionId: support.id,
       reason: support.reason,
@@ -92,85 +81,11 @@ async function getWorkspaceAccessContextUncached(): Promise<WorkspaceAccessConte
       sensitiveConfirmedUntil: support.sensitiveConfirmedUntil?.toISOString() ?? null,
       organization: support.organization,
     } : null,
-    permissions: support
-      ? getSupportSessionPermissions()
-      : company?.role === "OWNER"
-        ? getPermissionsForRole("OWNER")
-        : company
-          ? sanitizeOrganizationPermissions(membership?.permissionKeys ?? [])
-          : [],
+    permissions: getPermissionsForRole(effectiveRole),
   };
 }
 
 export const getWorkspaceAccessContext = cache(getWorkspaceAccessContextUncached);
-
-export async function requireOrganizationContext(organizationId: string): Promise<OrganizationContext & { userId: string; platformRole: WorkspaceAccessContext["platformRole"] }> {
-  const user = await requireIdentity();
-  const membership = await db.organizationMembership.findFirst({
-    where: { organizationId, userId: user.id, revokedAt: null, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
-    select: { id: true, role: true, preset: true, permissionKeys: true, scopeMode: true, expiresAt: true, accessVersion: true, organization: { select: { id: true, name: true, code: true } } },
-  });
-  if (!membership) throw new AccessError("Risorsa non disponibile.", 404);
-  const permissions = membership.role === "OWNER" ? getPermissionsForRole("OWNER") : sanitizeOrganizationPermissions(membership.permissionKeys);
-  return {
-    userId: user.id,
-    platformRole: user.platformRole,
-    membershipId: membership.id,
-    accessVersion: membership.accessVersion,
-    role: membership.role,
-    preset: membership.preset,
-    scopeMode: membership.scopeMode,
-    expiresAt: membership.expiresAt?.toISOString() ?? null,
-    organization: membership.organization,
-    permissions,
-  };
-}
-
-export async function requireClientJobSiteContext(jobSiteId: string) {
-  const user = await requireIdentity();
-  const participant = await db.jobSiteParticipant.findFirst({
-    where: { jobSiteId, userId: user.id, kind: "CLIENT", status: { in: ["PENDING", "ACTIVE"] } },
-    select: { id: true, userId: true, jobSiteId: true, organizationId: true, status: true, accessVersion: true, jobSite: { select: { revision: true, status: true } } },
-  });
-  if (!participant) throw new AccessError("Risorsa non disponibile.", 404);
-  return participant;
-}
-
-export async function getContextHub(): Promise<ContextHubResponse> {
-  const user = await requireIdentity();
-  const [memberships, clientParticipants] = await Promise.all([
-    db.organizationMembership.findMany({
-      where: { userId: user.id, revokedAt: null, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
-      orderBy: { organization: { name: "asc" } },
-      select: { id: true, role: true, preset: true, permissionKeys: true, scopeMode: true, expiresAt: true, accessVersion: true, organization: { select: { id: true, name: true, code: true } } },
-    }),
-    db.jobSiteParticipant.findMany({
-      where: { userId: user.id, kind: "CLIENT", status: { in: ["PENDING", "ACTIVE"] } },
-      orderBy: { jobSite: { name: "asc" } },
-      select: { id: true, jobSiteId: true, status: true, jobSite: { select: { name: true, organization: { select: { id: true, name: true, code: true } } } } },
-    }),
-  ]);
-  return {
-    platform: user.platformRole === "USER" ? null : { role: user.platformRole },
-    organizations: memberships.map((membership) => ({
-      membershipId: membership.id,
-      accessVersion: membership.accessVersion,
-      role: membership.role,
-      preset: membership.preset,
-      scopeMode: membership.scopeMode,
-      expiresAt: membership.expiresAt?.toISOString() ?? null,
-      organization: membership.organization,
-      permissions: membership.role === "OWNER" ? getPermissionsForRole("OWNER") : sanitizeOrganizationPermissions(membership.permissionKeys),
-    })),
-    clientJobSites: clientParticipants.map((participant) => ({
-      participantId: participant.id,
-      jobSiteId: participant.jobSiteId,
-      jobSiteName: participant.jobSite.name,
-      organization: participant.jobSite.organization,
-      status: participant.status,
-    })),
-  };
-}
 
 export function requirePermission(context: WorkspaceAccessContext, permission: Permission) {
   if (!context.permissions.includes(permission)) throw new AccessError("Risorsa non disponibile.", 404);

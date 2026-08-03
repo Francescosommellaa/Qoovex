@@ -1,3 +1,0 @@
-import { downloadJobSiteAttachment, resolveClientAttachmentActor } from "@shared/server/vnext-attachment-service";
-import { asVNextApiError } from "@shared/server/vnext-api-response";
-export async function GET(_: Request, { params }: { params: Promise<{ jobSiteId: string; attachmentId: string }> }) { try { const value = await params; const actor = await resolveClientAttachmentActor(value.jobSiteId); const file = await downloadJobSiteAttachment({ actor, attachmentId: value.attachmentId }); return new Response(file.stream, { headers: { "Content-Type": file.mimeType, "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(file.fileName)}`, "Cache-Control": "private, no-store" } }); } catch (error) { return asVNextApiError(error); } }

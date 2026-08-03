@@ -6,7 +6,6 @@ const mocks = vi.hoisted(() => ({
   updateRecoveries: vi.fn(),
   createAudit: vi.fn(),
   createNotification: vi.fn(),
-  findOwnerMembership: vi.fn(),
   verifyCurrentFactorForUser: vi.fn(),
 }));
 
@@ -36,7 +35,7 @@ vi.mock("@qoovex/db", () => {
       user: { findUnique: mocks.findUser },
       organization: { findUnique: vi.fn(async () => ({ name: "Azienda Test" })) },
       mfaRecoveryRequest: { findFirst: mocks.findRecovery, updateMany: vi.fn() },
-      organizationMembership: { findUnique: vi.fn(), findFirst: mocks.findOwnerMembership, findMany: vi.fn(async () => []) },
+      organizationMembership: { findUnique: vi.fn(), findMany: vi.fn(async () => []) },
       notification: { create: mocks.createNotification },
       $transaction: vi.fn(async (callback: (client: typeof tx) => unknown) => callback(tx)),
     },
@@ -50,13 +49,12 @@ beforeEach(() => {
     id: "owner-1",
     email: "owner@example.com",
     authVersion: 2,
-    organizationMemberships: [{ organizationId: "org-1", role: "OWNER", revokedAt: null }],
+    organizationMembership: { organizationId: "org-1", role: "OWNER", revokedAt: null },
   });
   mocks.findRecovery.mockReset();
   mocks.updateRecoveries.mockReset().mockResolvedValue({ count: 1 });
   mocks.createAudit.mockReset().mockResolvedValue({});
   mocks.createNotification.mockReset().mockResolvedValue({});
-  mocks.findOwnerMembership.mockReset().mockResolvedValue({ organizationId: "org-1", role: "OWNER", revokedAt: null });
   mocks.verifyCurrentFactorForUser.mockReset().mockResolvedValue(true);
 });
 
@@ -72,11 +70,11 @@ describe("OWNER MFA recovery decision", () => {
   });
 
   it("cannot self-approve and atomically claims the first valid decision", async () => {
-    mocks.findRecovery.mockResolvedValueOnce({ id: "request-1", userId: "owner-1", organizationId: "org-1", user: { email: "owner@example.com" } });
+    mocks.findRecovery.mockResolvedValueOnce({ id: "request-1", userId: "owner-1", user: { email: "owner@example.com" } });
     await expect(decideMfaRecoveryRequest({ ownerUserId: "owner-1", requestId: "request-1", decision: "approve", currentCode: "123456" }))
       .rejects.toMatchObject({ status: 409 });
 
-    mocks.findRecovery.mockResolvedValueOnce({ id: "request-2", userId: "member-1", organizationId: "org-1", user: { email: "member@example.com" } });
+    mocks.findRecovery.mockResolvedValueOnce({ id: "request-2", userId: "member-1", user: { email: "member@example.com" } });
     await expect(decideMfaRecoveryRequest({ ownerUserId: "owner-1", requestId: "request-2", decision: "approve", currentCode: "123456" }))
       .resolves.toEqual({ id: "request-2", status: "APPROVED" });
     expect(mocks.updateRecoveries).toHaveBeenCalledWith(expect.objectContaining({

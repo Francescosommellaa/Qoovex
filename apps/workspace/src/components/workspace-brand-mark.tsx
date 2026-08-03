@@ -7,7 +7,7 @@ export function WorkspaceBrandMark({ compact = false }: { compact?: boolean }) {
     <BrandMark
       compact={compact}
       label="Qoovex"
-      mark={<Image alt="" aria-hidden="true" className="size-full object-contain" height={28} loading="eager" src={workspaceIcon} unoptimized width={28} />}
+      mark={<Image alt="" aria-hidden="true" className="size-full object-contain" height={28} src={workspaceIcon} unoptimized width={28} />}
     />
   );
 }
