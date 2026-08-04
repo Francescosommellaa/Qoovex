@@ -6,15 +6,15 @@ La foundation visiva corrente resta invariata: shadcn base-nova, Base UI, Tabler
 
 ## Superficie Azienda
 
-Home con cantieri aperti, in attesa e chiusi; lista cantieri; dettaglio con Riepilogo, Timeline, Step, Richieste, Modifiche, Pagamenti, Persone, File, Chiusura e Impostazioni. Sono raggiungibili creazione, Collaborator, invito cliente, agreement, deleghe, profilo pagamento, allegati, proposte, pagamenti, dispute, chiusura, export e archivio secondo stato e permessi.
+Home, lista cantieri e dettaglio vNext sono presenti e raggiungibili nel routing con Riepilogo, Timeline, Step, Richieste, Modifiche, Pagamenti, Persone, File, Chiusura e Impostazioni. La presenza delle azioni non prova l'uso end-to-end: la creazione produce oggi un responsabile `PENDING`, che blocca l'invito cliente protetto da actor `ACTIVE`.
 
 ## Superficie cliente
 
-Home separata con immobili, cantieri collegati/non collegati e azioni richieste. Il dettaglio espone soltanto la proiezione condivisa: riepilogo, timeline, step, richieste, modifiche, pagamenti, persone minimizzate, documenti condivisi e archivio. Prima della conferma iniziale mostra soltanto il riepilogo e le decisioni consentite.
+Home separata e dettaglio cliente sono presenti. Le query del dettaglio filtrano timeline e allegati condivisi, ma il lifecycle non è conforme al contratto perché l'accettazione dell'invito persiste oggi il participant cliente come `ACTIVE` prima della conferma iniziale. La UI non deve essere considerata verificata finché la vertical slice dedicata resta rossa.
 
 ## Form e stati
 
-Le form hanno validazione runtime server-side, errori field-level, focus sul primo campo errato, prevenzione double-submit, feedback e conferme critiche. Pagine e pannelli usano loading/error/access-denied/empty state reali. Nessuna card `Presto`, route placeholder o capability futura è mostrata.
+La validazione server-side e diversi stati UI sono presenti, ma errori field-level, focus, prevenzione double-submit e completezza degli stati non sono stati provati sistematicamente end-to-end. Nessuna capability deve essere classificata pronta sulla sola presenza di route, componenti o `testId` nel registry.
 
 ## Copy prudente
 

@@ -15,14 +15,14 @@ Il prodotto riunisce accordi, avanzamento, fotografie, prove, scontrini, richies
 - D-VNEXT-18–40: contratto tecnico vNext implementato.
 - D-VNEXT-46: legacy eradication completata.
 - D-VNEXT-47: foundation-only completata come stato intermedio storico.
-- D-VNEXT-48: implementazione integrale vNext completata nel repository.
+- D-VNEXT-48: ampiezza vNext presente nel repository, ma non ancora verificata end-to-end e con la prima vertical slice bloccata da difetti lifecycle noti.
 - D-VNEXT-41–45: `SUPERSEDED`; nessun `clientName`, fase operativa, processo legacy o dual-mode è stato reintrodotto.
 
 Modello commerciale approvato: paga soltanto l’Azienda; Collaborator incluso nell’Azienda; cliente gratuito per i cantieri invitati. Il repository non implementa billing e non definisce prezzi, piani, trial, limiti, commissioni o entitlement.
 
-## MVP disponibile
+## Implementato ma non ancora provato end-to-end
 
-Account multi-contesto, membership multiple, cantiere vNext, partecipanti, inviti cliente, immobili, agreement iniziale, timeline interna/condivisa, allegati, step opzionali, richieste, proposte e controproposte versionate, deleghe economiche, pagamenti documentati, dispute, chiusura reciproca, export, archivio, richieste post-chiusura, riapertura, ricerca metadata-only e notifiche.
+Account multi-contesto, membership multiple, cantiere vNext, partecipanti, inviti cliente, immobili, agreement iniziale, timeline interna/condivisa, allegati, step opzionali, richieste, proposte e controproposte versionate, deleghe economiche, pagamenti documentati, dispute, chiusura reciproca, export, archivio, richieste post-chiusura, riapertura, ricerca metadata-only e notifiche hanno schema, servizi, route o superfici presenti. Non sono una dichiarazione di readiness. La sequenza creazione cantiere → invito cliente → conferma iniziale è `present_but_blocked` finché i test rossi sul participant creatore e sul cliente attivato troppo presto non diventano verdi tramite un task runtime separato.
 
 ## conceptual_not_implemented
 

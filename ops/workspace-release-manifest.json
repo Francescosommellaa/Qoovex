@@ -4,19 +4,19 @@
     "name": "qoovex-workspace",
     "version": "vnext-from-zero-v1",
     "runtimeTrack": "vnext",
-    "vNext": "implemented"
+    "vNext": "implemented_not_end_to_end_verified"
   },
   "database": {
     "baselineHead": "20260720010000_calendar_events",
     "migrationHead": "20260803230000_qoovex_vnext_from_zero",
     "migrationCount": 6,
     "productionMutationRequiredForAlignment": true,
-    "rolloutMode": "authorized_empty_database_reset",
+    "rolloutMode": "manual_only_destructive_alignment_blocked",
     "ledger": "ops/migration-ledger.json"
   },
   "blob": {
     "access": "private",
-    "rolloutMode": "one_time_store_reset_before_database_migration",
+    "rolloutMode": "manual_only_one_time_store_reset_blocked",
     "targetIdentity": "BLOB_STORE_ID",
     "resetScript": "apps/workspace/scripts/reset-vnext-blob-store.mjs"
   },
@@ -45,13 +45,14 @@
   },
   "environmentContract": "ops/environment-contract.json",
   "previewRelease": {
-    "automaticGitDeployment": "workflow_on_non_master_push",
+    "automaticGitDeployment": "disabled",
+    "trigger": "manual_workflow_dispatch_exact_confirmation",
     "workflow": ".github/workflows/rehearse-workspace-preview.yml",
     "database": "isolated_reset",
     "blob": "isolated_reset"
   },
   "productionRelease": {
-    "trigger": "successful_ci_on_master",
+    "trigger": "manual_workflow_dispatch_after_green_ci_exact_confirmation",
     "deploymentMode": "staged_then_promoted",
     "workflow": ".github/workflows/release-workspace.yml",
     "migrationCommand": "prisma migrate deploy",

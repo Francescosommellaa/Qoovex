@@ -15,27 +15,17 @@ Regole:
 - nome cartella coerente con la risorsa o il caso d'uso;
 - ordine file secondo `docs/02_ARCHITECTURE_AND_BOUNDARIES.md`.
 
-Endpoint dominio MVP attivi:
+Endpoint infrastrutturali e vNext presenti:
 - `auth/credentials`: registrazione credentials verify-first, verifica email e reset password;
-- `dashboard`: payload sintetico per la dashboard operativa interna;
-- `document-types`: tipi documento configurabili, senza preset normativi;
-- `documents`: documenti logici e versioni file con Blob privato;
-- `deadlines`: scadenze registrate dall'utente o collegate a documenti;
-- `calendar`: CRUD di eventi e task, import iCalendar locale ed export autenticato;
-- `workers`: lavoratori con metadati operativi minimi;
-- `job-sites`: cantieri senza geolocalizzazione o presenze;
-- `checklists`: checklist operative configurabili e voci completabili;
-- `evidence`: note, foto e file operativi con Blob privato e download autorizzato;
-- `document-packages`: pacchetti documentali, item inclusi e share link revocabili;
-- `shared/document-packages`: accesso destinatario esterno tokenizzato e limitato al singolo pacchetto.
-- `notifications`: notifiche interne filtrate per azienda, lettura e dismiss;
-- `notifications/preferences`: preferenze email dell'utente corrente, opt-in e filtrate per azienda;
-- `notifications/email-deliveries`: ultimi invii email dell'utente corrente senza body o dettagli sensibili;
-- `notifications/email-digest`: anteprima digest email e invio manuale a se stessi, senza destinatari client-side;
-- `notifications/[notificationId]/send-to-me`: invio manuale di una singola notifica all'utente corrente;
-- `reminders/sync`: sync idempotente dei promemoria interni da dati registrati.
-- `GET reminders/email-digest/run`: endpoint schedulato protetto da `Authorization: Bearer` e `CRON_SECRET`.
+- `contexts`: contesti Azienda, cliente e piattaforma derivati server-side;
+- `org/[organizationId]`: cantieri, participant, inviti, agreement, timeline, step, richieste, proposte, pagamenti documentati, dispute, allegati, chiusura, post-chiusura, export e impostazioni vNext;
+- `client`: inviti, immobili privati, cantieri partecipati e proiezioni condivise participant-scoped;
+- `exports`: scambio autenticato di token opachi con grant brevi;
+- `internal/vnext`: runner processi e finalize allegati protetti da segreto interno;
+- `notifications`: preferenze e delivery del runtime vNext;
 - `GET data/jobs/run`: runner data-control con lo stesso contratto cron; secret in query e header custom non sono accettati.
 - `audit-log`: audit prodotto owner-only con metadata redatti e paginazione semplice.
 - `data`: inventario dati, export metadata JSON e retention operativa owner-only.
-- `resource-assignments`: collegamenti operativi e assegnazioni risorsa per scope granulare.
+- `resource-assignments`: infrastruttura accessi legacy ancora presente come foundation, non superficie prodotto autonoma.
+
+Le route prodotto implicite legacy non sono endpoint attivi. La presenza delle route vNext non prova la vertical slice end-to-end, che resta bloccata dai test lifecycle dedicati.

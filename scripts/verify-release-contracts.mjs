@@ -8,6 +8,8 @@ const manifest = await readJson("ops/workspace-release-manifest.json");
 const environment = await readJson("ops/environment-contract.json");
 const ledger = await readJson("ops/migration-ledger.json");
 const scheduler = await readFile(join(root, ".github/workflows/scheduled-jobs.yml"), "utf8");
+const productionRelease = await readFile(join(root, ".github/workflows/release-workspace.yml"), "utf8");
+const previewRelease = await readFile(join(root, ".github/workflows/rehearse-workspace-preview.yml"), "utf8");
 const turbo = await readJson("turbo.json");
 const vercel = await readJson("apps/workspace/vercel.json");
 
@@ -16,6 +18,15 @@ if (manifest.database.migrationHead !== ledger.protectedProductionHead) {
 }
 if (manifest.database.migrationCount !== ledger.migrations.length) {
   throw new Error("Release manifest migration count is stale.");
+}
+const vNextMigration = ledger.migrations.find((entry) => entry.name === manifest.database.migrationHead);
+if (
+  !vNextMigration ||
+  vNextMigration.productionApplied !== false ||
+  vNextMigration.destructiveApproved !== false ||
+  vNextMigration.executionPolicy !== "MANUAL_REAUTHORIZATION_REQUIRED"
+) {
+  throw new Error("Pending destructive vNext migration must remain frozen pending manual reauthorization.");
 }
 
 const expectedJobs = new Map([
@@ -39,8 +50,8 @@ if (
 ) {
   throw new Error("Scheduled workflow must contain only data-control and the vNext process queue.");
 }
-if (manifest.application.runtimeTrack !== "vnext" || manifest.application.vNext !== "implemented") {
-  throw new Error("Runtime track must be the implemented Qoovex vNext release.");
+if (manifest.application.runtimeTrack !== "vnext" || manifest.application.vNext !== "implemented_not_end_to_end_verified") {
+  throw new Error("Runtime track must identify vNext without claiming end-to-end verification.");
 }
 if (
   manifest.blob?.access !== "private" ||
@@ -53,6 +64,43 @@ if (manifest.http.anonymousProtectedPage !== "307_sign_in_with_sanitized_relativ
 }
 if (vercel.ignoreCommand !== "node scripts/vercel-ignore-build.mjs") {
   throw new Error("Workspace Git deployments must use the repository preview guard.");
+}
+
+function assertManualDestructiveWorkflow({ name, source, confirmation }) {
+  if (!source.includes("workflow_dispatch:")) {
+    throw new Error(`${name} must be manually dispatched.`);
+  }
+  if (/^\s{2}(?:push|pull_request|workflow_run|schedule):/m.test(source)) {
+    throw new Error(`${name} may not have an automatic trigger.`);
+  }
+  if (!source.includes(`test \"$CONFIRMATION\" = \"${confirmation}\"`)) {
+    throw new Error(`${name} must require the exact manual confirmation phrase.`);
+  }
+}
+
+assertManualDestructiveWorkflow({
+  name: "Production release",
+  source: productionRelease,
+  confirmation: "RELEASE_QOOVEX_PRODUCTION_MANUALLY",
+});
+assertManualDestructiveWorkflow({
+  name: "Preview rehearsal",
+  source: previewRelease,
+  confirmation: "RECREATE_ISOLATED_PREVIEW",
+});
+
+if (
+  manifest.previewRelease.automaticGitDeployment !== "disabled" ||
+  manifest.previewRelease.trigger !== "manual_workflow_dispatch_exact_confirmation" ||
+  manifest.productionRelease.trigger !== "manual_workflow_dispatch_after_green_ci_exact_confirmation"
+) {
+  throw new Error("Release manifest must keep Preview and Production destructive paths manual-only.");
+}
+
+for (const [name, source] of [["Production release", productionRelease], ["Preview rehearsal", previewRelease]]) {
+  if (/\bprisma\s+(?:db\s+push|migrate\s+(?:reset|resolve))\b/i.test(source) || /\b(?:db:push|migrate:reset|migrate:resolve)\b/i.test(source)) {
+    throw new Error(`${name} may not invoke unguarded schema mutation or migration-history commands.`);
+  }
 }
 
 const ignoreScript = join(root, "apps/workspace/scripts/vercel-ignore-build.mjs");

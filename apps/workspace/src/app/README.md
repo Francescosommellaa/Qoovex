@@ -1,5 +1,5 @@
-# Route Workspace foundation
+# Route Workspace vNext
 
-Route prodotto disponibili: dashboard foundation, Worker, JobSite minimo, file/versioni, prove, accessi Collaborator, assegnazioni, impostazioni Azienda, sicurezza, notifiche `SYSTEM`, audit, data-control e console piattaforma.
+Route prodotto presenti: contesti, superfici Azienda `/org/[organizationId]`, superfici cliente `/client`, dettaglio cantiere, export autenticati, auth, supporto, sicurezza, audit, data-control e console piattaforma.
 
-Le route del prodotto precedente sono fisicamente assenti e devono restituire 404. Nessuna route cliente o vNext è implementata.
+Le route implicite del prodotto precedente `/dashboard`, `/job-sites`, `/documents` e `/evidence` sono fisicamente assenti e devono restituire 404. Le route vNext esistono, ma la loro presenza non equivale a flusso end-to-end verificato.

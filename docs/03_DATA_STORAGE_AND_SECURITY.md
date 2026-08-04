@@ -26,4 +26,4 @@ Inviti cliente 14 giorni; pagina link export 7 giorni; grant download 15 minuti;
 
 ## hard_stop
 
-Nessuna cancellazione fisica automatica di record vNext; nessun cleanup di contenuti soggetti a hold; nessuna chiave reale versionata. L'unica cancellazione Blob remota autorizzata è il reset one-shot empty-store eseguito dal workflow prima della migration vNext.
+Nessuna cancellazione fisica automatica di record vNext; nessun cleanup di contenuti soggetti a hold; nessuna chiave reale versionata. Il reset one-shot empty-store esiste soltanto nel workflow manuale vNext ed è congelato in attesa di una nuova autorizzazione esplicita; non è un'operazione ordinaria né implicitamente autorizzata.
