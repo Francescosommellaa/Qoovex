@@ -19,7 +19,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html data-scroll-behavior="smooth" data-theme="vercel" lang="it" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <TooltipProvider><ScrollbarController /><MarketingCursor pathnames={["/marketing"]} />{children}</TooltipProvider>
+          <TooltipProvider><ScrollbarController /><MarketingCursor pathnames={["/marketing", "/", "/dashboard"]} />{children}</TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
