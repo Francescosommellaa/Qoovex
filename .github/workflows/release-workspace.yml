@@ -1,14 +1,14 @@
 name: Release Workspace
 
 on:
-  workflow_run:
-    workflows: [CI]
-    types: [completed]
-    branches: [master]
   workflow_dispatch:
     inputs:
       sha:
         description: Exact commit SHA to release
+        required: true
+        type: string
+      confirmation:
+        description: Type RELEASE_QOOVEX_PRODUCTION_MANUALLY
         required: true
         type: string
 
@@ -24,11 +24,10 @@ concurrency:
 jobs:
   release:
     name: Release Workspace / vNext staged promotion
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     environment: Production – qoovex-workspace
     env:
-      RELEASE_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.sha || github.event.workflow_run.head_sha }}
+      RELEASE_SHA: ${{ inputs.sha }}
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ vars.VERCEL_WORKSPACE_PROJECT_ID }}
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -36,6 +35,11 @@ jobs:
       VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
       CRON_SECRET: ${{ secrets.CRON_SECRET }}
     steps:
+      - name: Verify manual Production checkpoint
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: test "$CONFIRMATION" = "RELEASE_QOOVEX_PRODUCTION_MANUALLY"
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.RELEASE_SHA }}
@@ -59,7 +63,6 @@ jobs:
           git merge-base --is-ancestor "$RELEASE_SHA" origin/master
 
       - name: Verify required checks for manual dispatch
-        if: github.event_name == 'workflow_dispatch'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

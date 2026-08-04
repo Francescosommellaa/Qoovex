@@ -114,13 +114,18 @@ async function executeActionBody(tx: Prisma.TransactionClient, actor: VNextActor
     case "INITIAL_AGREEMENT_CONFIRM@1": {
       requireStatus("PENDING_INITIAL_CONFIRMATION");
       if (actor.side !== "CLIENT") throw new AccessError("Conferma riservata al cliente principale.", 403);
-      const version = await tx.jobSiteInitialAgreementVersion.findFirst({ where: { id: input.agreementVersionId, agreement: { jobSiteId: actor.jobSiteId, currentVersionId: input.agreementVersionId, status: "PENDING_CLIENT_CONFIRMATION" } }, select: { id: true, fingerprint: true, agreementId: true } });
+      const participant = await tx.jobSiteParticipant.findFirst({ where: { id: actor.participantId, userId: actor.userId, organizationId: actor.organizationId, jobSiteId: actor.jobSiteId, kind: "CLIENT", status: "PENDING", accessVersion: actor.participantAccessVersion }, select: { id: true } });
+      if (!participant) throw new AccessError("Partecipazione cliente non disponibile per la conferma.", 409);
+      const version = await tx.jobSiteInitialAgreementVersion.findFirst({ where: { id: input.agreementVersionId, agreement: { organizationId: actor.organizationId, jobSiteId: actor.jobSiteId, currentVersionId: input.agreementVersionId, status: "PENDING_CLIENT_CONFIRMATION" } }, select: { id: true, fingerprint: true, agreementId: true } });
       if (!version) throw new AccessError("Versione del riepilogo non disponibile.", 409);
       await tx.jobSiteInitialAgreementConsent.create({ data: { versionId: version.id, participantId: actor.participantId, decision: input.decision, fingerprint: version.fingerprint } });
-      await tx.jobSiteInitialAgreement.update({ where: { id: version.agreementId }, data: input.decision === "ACCEPTED" ? { status: "CONFIRMED", confirmedAt: new Date() } : { status: "DRAFT" } });
+      const agreement = await tx.jobSiteInitialAgreement.updateMany({ where: { id: version.agreementId, organizationId: actor.organizationId, jobSiteId: actor.jobSiteId, currentVersionId: version.id, status: "PENDING_CLIENT_CONFIRMATION" }, data: input.decision === "ACCEPTED" ? { status: "CONFIRMED", confirmedAt: new Date() } : { status: "DRAFT" } });
+      if (agreement.count !== 1) throw new AccessError("Versione del riepilogo non disponibile.", 409);
       if (input.decision === "ACCEPTED") {
-        await tx.jobSiteParticipant.update({ where: { id: actor.participantId }, data: { status: "ACTIVE", activatedAt: new Date() } });
-        await tx.jobSite.update({ where: { id: actor.jobSiteId }, data: { status: "ACTIVE" } });
+        const activated = await tx.jobSiteParticipant.updateMany({ where: { id: actor.participantId, userId: actor.userId, organizationId: actor.organizationId, jobSiteId: actor.jobSiteId, kind: "CLIENT", status: "PENDING", accessVersion: actor.participantAccessVersion }, data: { status: "ACTIVE", accessVersion: { increment: 1 }, activeKey: `${actor.jobSiteId}:${actor.userId}:CLIENT`, primaryClientKey: `${actor.jobSiteId}:PRIMARY_CLIENT`, activatedAt: new Date() } });
+        if (activated.count !== 1) throw new AccessError("Partecipazione cliente gia attivata o non disponibile.", 409);
+        const activatedJobSite = await tx.jobSite.updateMany({ where: { id: actor.jobSiteId, organizationId: actor.organizationId, status: "PENDING_INITIAL_CONFIRMATION" }, data: { status: "ACTIVE" } });
+        if (activatedJobSite.count !== 1) throw new AccessError("Il cantiere non e disponibile per l'attivazione.", 409);
       }
       await appendTimelineEvent(tx, { actor, type: input.decision === "ACCEPTED" ? "WORK_UPDATE" : "CLARIFICATION_REQUESTED", payload: { schemaVersion: 1, agreementVersionId: version.id, decision: input.decision } });
       return { agreementVersionId: version.id, decision: input.decision };

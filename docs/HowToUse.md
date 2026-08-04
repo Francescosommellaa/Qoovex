@@ -25,11 +25,11 @@ Una stessa direzione puo essere approvata e contemporaneamente non implementata.
 
 ## Stato implementato
 
-D-VNEXT-46 ha eliminato il prodotto precedente; D-VNEXT-48 ha introdotto il prodotto vNext sullo stato foundation-only D-VNEXT-47. Lo stato corrente include account multi-contesto, membership multiple, partecipazione cliente, immobili, agreement, timeline, step, richieste, proposte, deleghe, pagamenti documentati, dispute, chiusura, export, post-chiusura e riapertura.
+D-VNEXT-46 ha eliminato il prodotto precedente come direzione attiva; D-VNEXT-48 ha introdotto nel repository schema, servizi, route e superfici vNext sullo stato foundation-only D-VNEXT-47. Questo è `implemented_but_not_end_to_end_verified`, non equivale a prodotto pronto: la prima vertical slice ha due blocchi lifecycle noti sul participant creatore e sull'attivazione anticipata del cliente.
 
 Il modello mantiene `OWNER`/`COLLABORATOR` e usa l’unicità membership `(organizationId,userId)`. `CLIENT` è un participant del singolo JobSite, mai un ruolo Azienda. Non sono stati reintrodotti `JobSite.clientName`, `JobSiteOperationalPhase`, deadline, checklist, pacchetti o share link.
 
-D-VNEXT-41–45 restano `SUPERSEDED`. D-VNEXT-18–40 e D-VNEXT-48 sono `implemented_decision`. Pricing/billing, marketplace, denaro in-app, IA, ruoli cliente futuri e cancellazione fisica restano non implementati o hard stop.
+D-VNEXT-41–45 restano `SUPERSEDED`. D-VNEXT-18–40 e D-VNEXT-48 sono `implemented_decision` come decisioni e artefatti presenti; ogni capability deve essere classificata separatamente come verificata, implementata ma non provata end-to-end, bloccata, non implementata, decisione aperta o hard stop. Pricing/billing, marketplace, denaro in-app, IA, ruoli cliente futuri e cancellazione fisica restano non implementati o hard stop.
 
 ## Modifiche tecniche e memoria
 

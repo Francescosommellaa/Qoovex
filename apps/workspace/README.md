@@ -1,6 +1,6 @@
 # Workspace Qoovex vNext
 
-`verified_current_state`: Workspace è il runtime autenticato del prodotto vNext.
+`verified_current_state`: Workspace contiene il runtime autenticato vNext e le route elencate sotto. `implemented_but_not_end_to_end_verified`: la prima vertical slice è bloccata dal participant creatore `PENDING` e dall'attivazione anticipata del cliente; il registry non prova da solo la readiness.
 
 ## Contesti e route
 
@@ -21,7 +21,7 @@ Le azioni critiche usano `Idempotency-Key`, fingerprint e receipt; gli aggiornam
 
 ## Capability manifest
 
-`src/shared/server/vnext-registry.ts` dichiara route, navigazione, permesso, servizio, mutation, stato e test. Sono ammessi solo `ACTIVE` e `INTERNAL_ONLY`; il contract test impedisce API prodotto orfane e processi non registrati.
+`src/shared/server/vnext-registry.ts` dichiara route, navigazione, permesso, servizio, mutation, stato e riferimenti di test. Sono ammessi solo `ACTIVE` e `INTERNAL_ONLY`; il contract test impedisce API prodotto orfane e processi non registrati, ma non sostituisce test comportamentali o end-to-end.
 
 ## Esclusioni
 

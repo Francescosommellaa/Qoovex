@@ -25,4 +25,4 @@ Viewport 320/390/768/1024/1440, zoom 200%, light/dark/system, tastiera, focus, c
 
 ## Release hard stop
 
-Un push non-`master` ricrea database e Blob Preview soltanto dopo la prova di isolamento. Un push su `master` attende CI completa, verifica l'head database, azzera il Blob store solo nel passaggio baseline→vNext, esegue `prisma migrate deploy`, verifica head/drift, pubblica un artifact staged, esegue smoke e solo dopo promuove il deployment. Qualsiasi head inatteso o l'assenza del secret GitHub environment `VERCEL_TOKEN` interrompe il rollout prima di mutare i target.
+Nessun push o completamento CI può avviare reset, migration o deploy. Preview e Production usano workflow `workflow_dispatch` separati con SHA esatto, conferma testuale esatta, GitHub Environment e controlli statici che vietano trigger automatici e comandi non protetti `db push`, `migrate reset` e `migrate resolve`. CI verde resta prerequisito verificato dal workflow Production, ma non costituisce autorizzazione alla mutazione. Qualsiasi head inatteso, conferma errata o credenziale mancante interrompe il rollout prima di mutare i target.

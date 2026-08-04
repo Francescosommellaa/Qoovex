@@ -1,8 +1,6 @@
 name: Rehearse Workspace Preview
 
 on:
-  push:
-    branches-ignore: [master]
   workflow_dispatch:
     inputs:
       sha:
@@ -31,14 +29,19 @@ jobs:
     runs-on: ubuntu-latest
     environment: Preview – qoovex-workspace
     env:
-      RELEASE_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.sha || github.sha }}
-      PREVIEW_BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.preview_branch || github.ref_name }}
+      RELEASE_SHA: ${{ inputs.sha }}
+      PREVIEW_BRANCH: ${{ inputs.preview_branch }}
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ vars.VERCEL_WORKSPACE_PROJECT_ID }}
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE || 'fra-project' }}
       VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
     steps:
+      - name: Verify manual Preview checkpoint
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: test "$CONFIRMATION" = "RECREATE_ISOLATED_PREVIEW"
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.RELEASE_SHA }}
@@ -56,14 +59,8 @@ jobs:
           test -n "$VERCEL_TOKEN"
 
       - name: Verify exact Preview checkpoint
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          CONFIRMATION: ${{ inputs.confirmation }}
         run: |
           test "$(git rev-parse HEAD)" = "$RELEASE_SHA"
-          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
-            test "$CONFIRMATION" = "RECREATE_ISOLATED_PREVIEW"
-          fi
 
       - run: pnpm ci:install
       - run: pnpm check:push

@@ -10,7 +10,7 @@ const destructivePatterns = [
   ["RENAME", /\bRENAME\s+(COLUMN|TABLE|TO)\b/i],
 ];
 const findings = [];
-const approvedDestructiveRef = "QOOVEX_VNEXT_FROM_ZERO_USER_AUTHORIZATION_2026_08_03";
+const frozenExecutionPolicy = "MANUAL_REAUTHORIZATION_REQUIRED";
 
 for (const entry of ledger.migrations) {
   const sql = await readFile(
@@ -20,9 +20,9 @@ for (const entry of ledger.migrations) {
   const matches = destructivePatterns
     .filter(([, pattern]) => pattern.test(sql))
     .map(([label]) => label);
-  const explicitlyApproved =
-    entry.destructiveApproved === true && entry.approvalRef === approvedDestructiveRef;
-  if (matches.length > 0 && !entry.productionApplied && !explicitlyApproved) {
+  const explicitlyFrozen =
+    entry.destructiveApproved === false && entry.executionPolicy === frozenExecutionPolicy;
+  if (matches.length > 0 && !entry.productionApplied && !explicitlyFrozen) {
     findings.push(`${entry.name}: ${matches.join(", ")}`);
   }
 }
@@ -31,4 +31,4 @@ if (findings.length > 0) {
   throw new Error(`Destructive migrations are blocked by the ordinary gate:\n${findings.join("\n")}`);
 }
 
-console.log("Migration SQL classifier passed; destructive SQL is either Production-applied or explicitly approved for the vNext empty-database rollout.");
+console.log("Migration SQL classifier passed; destructive SQL is either Production-applied or frozen pending manual reauthorization.");

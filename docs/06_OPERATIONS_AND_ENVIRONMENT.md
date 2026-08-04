@@ -8,11 +8,11 @@ La history contiene 6 migration. Le prime 5 coincidono con il baseline Productio
 
 - fresh: istanza Prisma Dev locale ricreata, 6 migration applicate, head vNext e drift nullo;
 - upgrade: database loopback isolato con le prime 5 migration, applicazione della sola migration vNext, record baseline azzerati, tabelle vNext presenti, tabelle legacy assenti e drift nullo;
-- target remoto: nessuna mutazione eseguita prima del push; identity e isolamento vengono verificati dal workflow.
+- target remoto: Production è stata verificata in sola lettura alla head `20260720010000_calendar_events`; la head Preview resta non verificata perché le variabili database integrate non sono state restituite dal pull CLI. Nessuna mutazione remota è stata eseguita.
 
-I target usati per le prove locali sono PostgreSQL loopback porta 51225 e un'istanza upgrade isolata. Preview viene ricreata su push non-`master`; Production applica `migrate deploy` soltanto dopo CI verde su `master` e soltanto se l'head è baseline o già vNext.
+Il target Local verificato è PostgreSQL loopback porta 51225 ed è alla head vNext senza differenze rispetto a `schema.prisma`. Preview e Production non vengono più mutate da push o completamento CI: i relativi workflow sono `workflow_dispatch` manuali, richiedono SHA esatto e conferma testuale esatta, oltre ai gate ambiente e ai controlli già presenti.
 
-I workflow usano gli environment GitHub `Preview – qoovex-workspace` e `Production – qoovex-workspace`. `VERCEL_ORG_ID`, `VERCEL_WORKSPACE_PROJECT_ID` e `VERCEL_SCOPE` sono variabili di environment; `VERCEL_TOKEN` deve essere un secret presente in entrambi gli environment prima del push. `VERCEL_AUTOMATION_BYPASS_SECRET` è opzionale e serve soltanto quando la protezione deployment lo richiede.
+I workflow usano gli environment GitHub `Preview – qoovex-workspace` e `Production – qoovex-workspace`. `VERCEL_ORG_ID`, `VERCEL_WORKSPACE_PROJECT_ID` e `VERCEL_SCOPE` sono variabili di environment; `VERCEL_TOKEN` deve essere un secret presente in entrambi gli environment prima del dispatch manuale. Gli ultimi workflow osservati sono falliti sul controllo di questa credenziale prima di qualsiasi reset, migration o deploy. `VERCEL_AUTOMATION_BYPASS_SECRET` è opzionale e serve soltanto quando la protezione deployment lo richiede.
 
 ## Env
 
@@ -24,4 +24,4 @@ Il workflow schedulato invoca data-control via GET e il runner vNext via POST, e
 
 ## hard_stop
 
-Nessun `db push`, `migrate resolve` o SQL manuale fuori migration. Il reset remoto è autorizzato esclusivamente per `20260803230000_qoovex_vnext_from_zero`, con attestazione esatta, target identity, isolamento Preview/Production e reset Blob one-shot.
+Nessun `db push`, `migrate reset`, `migrate resolve` o SQL manuale nei workflow di release. Il reset remoto per `20260803230000_qoovex_vnext_from_zero` resta tecnicamente disponibile soltanto dietro dispatch manuale, conferma testuale esatta, target identity, isolamento Preview/Production e reset Blob one-shot; l'esecuzione non è autorizzata da questo documento né dallo stato corrente del repository.

@@ -1,6 +1,6 @@
 {
   "project": "Qoovex",
-  "updated_at": "2026-08-03",
+  "updated_at": "2026-08-04",
   "state_taxonomy": [
     "verified_current_state",
     "implemented_decision",
@@ -9,9 +9,23 @@
     "open_decision",
     "hard_stop"
   ],
+  "capability_verification_taxonomy": [
+    "implemented_and_verified",
+    "implemented_but_not_end_to_end_verified",
+    "present_but_blocked",
+    "not_implemented",
+    "open_decision",
+    "hard_stop"
+  ],
   "verified_current_state": {
-    "classification": "Qoovex vNext MVP implemented locally with guarded remote rollout prepared",
+    "classification": "Qoovex vNext is the only active product direction; implementation breadth exists but is not end-to-end verified",
     "product": "Shared company-client construction job workspace from creation through mutual closure",
+    "verification_status": "IMPLEMENTED_BUT_NOT_END_TO_END_VERIFIED",
+    "legacy_product_status": "NOT_AN_ACTIVE_PRODUCT_TRACK",
+    "known_blockers": [
+      "JobSite creator participant is persisted PENDING while organization actor resolution requires ACTIVE",
+      "Accepted primary client participant is persisted ACTIVE before initial agreement confirmation"
+    ],
     "identity_and_context": {
       "organization_roles": ["OWNER", "COLLABORATOR"],
       "client_is_organization_role": false,
@@ -49,9 +63,10 @@
       "previous_migrations_rewritten": false,
       "fresh_local": "verified from zero, no drift",
       "upgrade_local": "verified from the five-migration Production baseline, destructive reset applied, no drift",
-      "preview_applied": false,
+      "preview_applied": "UNKNOWN_NOT_VERIFIED",
       "production_applied": false,
-      "remote_trigger": "Preview on non-master push; Production after successful CI on master"
+      "production_verified_head": "20260720010000_calendar_events",
+      "remote_trigger": "Preview and Production are manual workflow_dispatch only with exact confirmation"
     }
   },
   "implemented_decisions": [
@@ -80,7 +95,7 @@
     { "id": "D-VNEXT-40", "title": "Company-paid commercial model without billing", "status": "IMPLEMENTED_DECISION" },
     { "id": "D-VNEXT-46", "title": "Legacy Eradication", "status": "IMPLEMENTED_DECISION" },
     { "id": "D-VNEXT-47", "title": "Foundation-only intermediate state", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-48", "title": "Full vNext implementation", "status": "IMPLEMENTED_DECISION" }
+    { "id": "D-VNEXT-48", "title": "vNext implementation breadth", "status": "IMPLEMENTED_DECISION", "verification": "NOT_END_TO_END_VERIFIED" }
   ],
   "superseded_decisions": [
     { "id": "D-VNEXT-41", "status": "SUPERSEDED", "reason": "clientName compatibility was removed without creating accounts" },
@@ -110,13 +125,13 @@
     "CLIENT must never enter OrganizationRole",
     "No physical JobSite or account deletion before an independently approved policy",
     "No Preview or Production migration, deploy or Blob operation outside the guarded workflows and exact target identity",
-    "No db push, migrate resolve or manual SQL outside canonical migrations",
+    "No db push, migrate reset, migrate resolve or manual SQL outside canonical migrations",
     "No fallback from the data-encryption key ring to Auth or MFA secrets",
     "No pricing, legal guarantee or money movement may be inferred from the MVP"
   ],
   "next_task": {
-    "name": "Push and monitor the guarded vNext rollout",
-    "requirements": ["push branch for isolated Preview", "green Preview and CI", "merge or push master for Production", "verify release evidence artifact"],
-    "not_authorized_here": ["physical JobSite deletion", "physical account deletion", "db push", "manual remote SQL"]
+    "name": "Fix creator participant activation in the first vNext vertical slice",
+    "requirements": ["make the creator participant ACTIVE atomically at JobSite creation", "preserve server-derived actor and permission", "turn the dedicated creator lifecycle test green", "do not alter client activation in the same task"],
+    "not_authorized_here": ["Preview or Production mutation", "physical deletion", "new Prisma baseline", "published migration edits", "db push", "migrate reset", "manual remote SQL"]
   }
 }

@@ -2,7 +2,7 @@
 
 Package condivisi attivi:
 
-- `db`: schema Prisma, dodici migration canoniche, client e guardrail database server-only;
+- `db`: schema Prisma, sei migration canoniche, client e guardrail database server-only;
 - `types`: ruoli, permessi, enum e DTO platform-neutral, inclusi i contratti operativi minimizzati;
 - `ui`: foundation condivisa shadcn `base-nova`, Base UI, Tabler, token, CSS, tema, hook e utility;
 - `brand-resources`: asset SVG proprietari, senza tipografia o comportamento.
