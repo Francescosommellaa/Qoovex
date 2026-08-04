@@ -4,7 +4,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { db, Prisma } from "@qoovex/db";
 import { z } from "zod";
 import { AccessError } from "./access-errors";
-import { requireOrganizationContext } from "./access-context-service";
+import { requireClientJobSiteDetailContext, requireOrganizationContext } from "./access-context-service";
 import { fingerprintPayload, initialAgreementPayloadSchema } from "./vnext-contracts";
 import { enqueueVNextProcess } from "./vnext-process-service";
 import { runSerializableTransaction } from "./serializable-transaction";
@@ -134,8 +134,9 @@ export async function acceptPrimaryClientInvitation(rawToken: string) {
   if (!identity.emailVerified) throw new AccessError("Email verificata richiesta.", 403);
   const tokenHash = createHash("sha256").update(rawToken).digest("hex");
   return runSerializableTransaction(async (tx) => {
-    const invitation = await tx.jobSiteClientInvitation.findUnique({ where: { tokenHash }, include: { jobSite: { select: { id: true, revision: true, status: true } } } });
+    const invitation = await tx.jobSiteClientInvitation.findUnique({ where: { tokenHash }, include: { jobSite: { select: { id: true, organizationId: true, revision: true, status: true } } } });
     if (!invitation || invitation.status !== "PENDING" || invitation.expiresAt <= new Date()) throw new AccessError("Invito scaduto o non disponibile.", 410);
+    if (invitation.organizationId !== invitation.jobSite.organizationId || invitation.jobSite.status !== "WAITING_FOR_CLIENT") throw new AccessError("Invito non disponibile nello stato corrente.", 410);
     if (identity.email.toLowerCase() !== invitation.emailNormalized) throw new AccessError("L'invito appartiene a un'altra email.", 403);
     if (await tx.jobSiteParticipant.findFirst({ where: { jobSiteId: invitation.jobSiteId, userId: identity.id }, select: { id: true } })) throw new AccessError("Lo stesso account non puo rappresentare entrambe le parti.", 409);
     const participant = await tx.jobSiteParticipant.create({
@@ -144,18 +145,19 @@ export async function acceptPrimaryClientInvitation(rawToken: string) {
         jobSiteId: invitation.jobSiteId,
         userId: identity.id,
         kind: "CLIENT",
-        status: "ACTIVE",
+        status: "PENDING",
         publicRoleLabel: "Cliente principale",
-        activeKey: `${invitation.jobSiteId}:${identity.id}:CLIENT`,
+        activeKey: null,
         primaryClientKey: `${invitation.jobSiteId}:PRIMARY_CLIENT`,
         userSideKey: `${invitation.jobSiteId}:${identity.id}`,
         invitedAt: invitation.createdAt,
-        activatedAt: new Date(),
+        activatedAt: null,
         createdByUserId: invitation.invitedByUserId,
       },
-      select: { id: true, jobSiteId: true },
+      select: { id: true, jobSiteId: true, status: true, activatedAt: true },
     });
-    await tx.jobSiteClientInvitation.update({ where: { id: invitation.id }, data: { status: "ACCEPTED", activeKey: null, acceptedAt: new Date(), acceptedByParticipantId: participant.id } });
+    const accepted = await tx.jobSiteClientInvitation.updateMany({ where: { id: invitation.id, status: "PENDING" }, data: { status: "ACCEPTED", activeKey: null, acceptedAt: new Date(), acceptedByParticipantId: participant.id } });
+    if (accepted.count !== 1) throw new AccessError("Invito scaduto o non disponibile.", 410);
     const updated = await tx.jobSite.updateMany({ where: { id: invitation.jobSiteId, revision: invitation.jobSite.revision }, data: { status: "PENDING_INITIAL_CONFIRMATION", revision: { increment: 1 } } });
     if (updated.count !== 1) throw new AccessError("Il cantiere e stato modificato. Riprova.", 409, "STALE_REVISION");
     return participant;
@@ -251,10 +253,24 @@ export async function linkClientProperty(propertyId: string, jobSiteId: string) 
 }
 
 export async function getClientJobSiteDetail(jobSiteId: string) {
-  const { requireClientJobSiteContext } = await import("./access-context-service");
-  await requireClientJobSiteContext(jobSiteId);
-  const jobSite = await db.jobSite.findUnique({
-    where: { id: jobSiteId },
+  const participant = await requireClientJobSiteDetailContext(jobSiteId);
+  if (participant.status === "PENDING") {
+    const pendingJobSite = await db.jobSite.findFirst({
+      where: { id: jobSiteId, organizationId: participant.organizationId, status: "PENDING_INITIAL_CONFIRMATION" },
+      select: {
+        id: true, name: true, address: true, description: true, status: true, revision: true, estimatedCompletionAt: true, closedAt: true,
+        organization: { select: { id: true, name: true, code: true } },
+        initialAgreement: { select: { status: true, currentVersion: { select: { id: true, version: true, payload: true, fingerprint: true } } } },
+      },
+    });
+    if (!pendingJobSite) throw new AccessError("Cantiere non trovato.", 404);
+    return {
+      ...pendingJobSite,
+      participants: [], steps: [], requests: [], timelineEvents: [], changeProposals: [], paymentRequests: [], disputes: [], closures: [], postClosureRequests: [], reopeningProposals: [], attachments: [],
+    };
+  }
+  const jobSite = await db.jobSite.findFirst({
+    where: { id: jobSiteId, organizationId: participant.organizationId },
     select: {
       id: true, name: true, address: true, description: true, status: true, revision: true, estimatedCompletionAt: true, closedAt: true,
       organization: { select: { id: true, name: true, code: true } },

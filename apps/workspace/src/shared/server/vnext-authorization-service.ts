@@ -3,7 +3,7 @@ import "server-only";
 import { db, type AuthorityCapability } from "@qoovex/db";
 import type { OrganizationPermission } from "@qoovex/types";
 import { AccessError } from "./access-errors";
-import { requireClientJobSiteContext, requireIdentity, requireOrganizationContext } from "./access-context-service";
+import { requireClientInitialAgreementContext, requireClientJobSiteContext, requireIdentity, requireOrganizationContext } from "./access-context-service";
 
 export type VNextActor = {
   userId: string;
@@ -52,6 +52,21 @@ export async function resolveOrganizationJobSiteActor(input: {
 
 export async function resolveClientJobSiteActor(jobSiteId: string): Promise<VNextActor> {
   const participant = await requireClientJobSiteContext(jobSiteId);
+  return {
+    userId: participant.userId,
+    organizationId: participant.organizationId,
+    jobSiteId,
+    side: "CLIENT",
+    participantId: participant.id,
+    participantAccessVersion: participant.accessVersion,
+    membershipId: null,
+    accessVersion: null,
+    role: null,
+  };
+}
+
+export async function resolveClientInitialAgreementActor(jobSiteId: string): Promise<VNextActor> {
+  const participant = await requireClientInitialAgreementContext(jobSiteId);
   return {
     userId: participant.userId,
     organizationId: participant.organizationId,

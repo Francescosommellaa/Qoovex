@@ -129,7 +129,41 @@ export async function requireOrganizationContext(organizationId: string): Promis
 export async function requireClientJobSiteContext(jobSiteId: string) {
   const user = await requireIdentity();
   const participant = await db.jobSiteParticipant.findFirst({
-    where: { jobSiteId, userId: user.id, kind: "CLIENT", status: { in: ["PENDING", "ACTIVE"] } },
+    where: { jobSiteId, userId: user.id, kind: "CLIENT", status: "ACTIVE" },
+    select: { id: true, userId: true, jobSiteId: true, organizationId: true, status: true, accessVersion: true, jobSite: { select: { revision: true, status: true } } },
+  });
+  if (!participant) throw new AccessError("Risorsa non disponibile.", 404);
+  return participant;
+}
+
+export async function requireClientInitialAgreementContext(jobSiteId: string) {
+  const user = await requireIdentity();
+  const participant = await db.jobSiteParticipant.findFirst({
+    where: {
+      jobSiteId,
+      userId: user.id,
+      kind: "CLIENT",
+      status: { in: ["PENDING", "ACTIVE"] },
+      jobSite: { status: { in: ["PENDING_INITIAL_CONFIRMATION", "ACTIVE"] } },
+    },
+    select: { id: true, userId: true, jobSiteId: true, organizationId: true, status: true, accessVersion: true, jobSite: { select: { revision: true, status: true } } },
+  });
+  if (!participant) throw new AccessError("Riepilogo iniziale non disponibile.", 404);
+  return participant;
+}
+
+export async function requireClientJobSiteDetailContext(jobSiteId: string) {
+  const user = await requireIdentity();
+  const participant = await db.jobSiteParticipant.findFirst({
+    where: {
+      jobSiteId,
+      userId: user.id,
+      kind: "CLIENT",
+      OR: [
+        { status: "ACTIVE" },
+        { status: "PENDING", jobSite: { status: "PENDING_INITIAL_CONFIRMATION" } },
+      ],
+    },
     select: { id: true, userId: true, jobSiteId: true, organizationId: true, status: true, accessVersion: true, jobSite: { select: { revision: true, status: true } } },
   });
   if (!participant) throw new AccessError("Risorsa non disponibile.", 404);

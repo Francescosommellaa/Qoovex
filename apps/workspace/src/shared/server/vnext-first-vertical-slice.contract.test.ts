@@ -43,15 +43,19 @@ describe("first vertical slice - verified green guardrails", () => {
     expect(accept).toContain('status: "PENDING_INITIAL_CONFIRMATION"');
     expect(actionService).toContain('allowPendingClient: action.action === "INITIAL_AGREEMENT_CONFIRM@1"');
     expect(actionService).toContain('case "INITIAL_AGREEMENT_CONFIRM@1"');
-    expect(actionService).toContain('data: { status: "ACTIVE", activatedAt: new Date() }');
+    expect(actionService).toContain('status: "ACTIVE", accessVersion: { increment: 1 }');
+    expect(actionService).toContain('activeKey: `${actor.jobSiteId}:${actor.userId}:CLIENT`');
     expect(actionService).toContain('data: { status: "ACTIVE" }');
   });
 
   it("binds client access to the authenticated user and exact JobSite", () => {
-    const clientContext = between(accessContext, "export async function requireClientJobSiteContext", "export async function getContextHub");
-    expect(clientContext).toContain('where: { jobSiteId, userId: user.id, kind: "CLIENT", status: { in: ["PENDING", "ACTIVE"] } }');
+    const clientContext = between(accessContext, "export async function requireClientJobSiteContext", "export async function requireClientInitialAgreementContext");
+    expect(clientContext).toContain('where: { jobSiteId, userId: user.id, kind: "CLIENT", status: "ACTIVE" }');
     expect(authorization).toContain("const participant = await requireClientJobSiteContext(jobSiteId)");
-    expect(clientActionRoute).toContain("resolveClientJobSiteActor((await params).jobSiteId)");
+    expect(authorization).toContain("const participant = await requireClientInitialAgreementContext(jobSiteId)");
+    expect(clientActionRoute).toContain('action.action === "INITIAL_AGREEMENT_CONFIRM@1"');
+    expect(clientActionRoute).toContain("resolveClientInitialAgreementActor(jobSiteId)");
+    expect(clientActionRoute).toContain("resolveClientJobSiteActor(jobSiteId)");
     expect(clientTimelineRoute).toContain("resolveClientJobSiteActor((await params).jobSiteId)");
   });
 
@@ -82,10 +86,10 @@ describe("first vertical slice - creator lifecycle", () => {
 
 });
 
-describe.skip("first vertical slice - next client lifecycle task", () => {
+describe("first vertical slice - client lifecycle", () => {
   it("keeps the accepted client participant PENDING until agreement confirmation", () => {
     const accept = between(jobSiteService, "export async function acceptPrimaryClientInvitation", "export async function invitePrimaryClientIdempotent");
-    const participant = between(accept, "const participant = await tx.jobSiteParticipant.create", "select: { id: true, jobSiteId: true }");
+    const participant = between(accept, "const participant = await tx.jobSiteParticipant.create", "await tx.jobSiteClientInvitation.updateMany");
     expect(participant).toContain('status: "PENDING"');
     expect(participant).toContain("activeKey: null");
     expect(participant).toContain("activatedAt: null");
