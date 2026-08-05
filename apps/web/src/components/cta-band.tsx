@@ -22,7 +22,10 @@ export function CtaBand({ title, description }: CtaBandProps) {
         <div className="flex flex-wrap items-center gap-3">
           <a className={cn(buttonVariants({ size: "lg" }))} href={primaryCtaHref}>
             {primaryCtaLabel}
-            <IconArrowRight data-icon="inline-end" />
+            <IconArrowRight
+              data-icon="inline-end"
+              className="transition-transform duration-200 group-hover/button:translate-x-0.5"
+            />
           </a>
           <a className={cn(buttonVariants({ variant: "ghost", size: "lg" }))} href={signInUrl}>
             {signInLabel}

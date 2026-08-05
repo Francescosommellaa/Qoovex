@@ -125,7 +125,10 @@ export default function HomePage() {
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a className={cn(buttonVariants({ size: "lg" }))} href={primaryCtaHref}>
                 {primaryCtaLabel}
-                <IconArrowRight data-icon="inline-end" />
+                <IconArrowRight
+                  data-icon="inline-end"
+                  className="transition-transform duration-200 group-hover/button:translate-x-0.5"
+                />
               </a>
               <a className={cn(buttonVariants({ variant: "ghost", size: "lg" }))} href={signInUrl}>
                 {signInLabel}
@@ -154,7 +157,7 @@ export default function HomePage() {
         <div className="mt-12 grid gap-4 sm:grid-cols-3">
           {problems.map((problem, index) => (
             <Reveal key={problem.title} delay={index * 80}>
-              <Card className="h-full">
+              <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
                 <CardHeader>
                   <problem.icon aria-hidden className="size-5 text-muted-foreground" />
                   <CardTitle className="mt-2">{problem.title}</CardTitle>
@@ -195,7 +198,7 @@ export default function HomePage() {
         <ol className="mt-12 grid gap-4 md:grid-cols-3">
           {howItWorks.map((item, index) => (
             <Reveal as="li" key={item.step} delay={index * 80}>
-              <Card className="h-full">
+              <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
                 <CardHeader>
                   <span className="font-mono text-sm text-muted-foreground">{item.step}</span>
                   <CardTitle className="mt-2">{item.title}</CardTitle>
@@ -213,7 +216,7 @@ export default function HomePage() {
             href="/come-funziona"
           >
             Vedi il flusso completo
-            <IconArrowRight data-icon="inline-end" />
+            <IconArrowRight data-icon="inline-end" className="transition-transform duration-200 group-hover/button:translate-x-0.5" />
           </a>
         </div>
       </Section>
@@ -227,7 +230,7 @@ export default function HomePage() {
         />
         <div className="mt-12 grid gap-4 lg:grid-cols-2">
           <Reveal>
-            <Card className="h-full">
+            <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
               <CardHeader>
                 <Badge variant="secondary" className="w-fit">
                   Per le imprese
@@ -240,17 +243,17 @@ export default function HomePage() {
                   modifiche e rendere evidente il prossimo passo.
                 </p>
                 <a
-                  className="inline-flex items-center gap-1 text-sm font-medium hover:underline"
+                  className="group inline-flex items-center gap-1 text-sm font-medium hover:underline"
                   href="/imprese"
                 >
                   Per le imprese
-                  <IconArrowRight className="size-4" />
+                  <IconArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </a>
               </CardContent>
             </Card>
           </Reveal>
           <Reveal delay={80}>
-            <Card className="h-full">
+            <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
               <CardHeader>
                 <Badge variant="secondary" className="w-fit">
                   Per i clienti
@@ -263,11 +266,11 @@ export default function HomePage() {
                   informazioni in un unico posto.
                 </p>
                 <a
-                  className="inline-flex items-center gap-1 text-sm font-medium hover:underline"
+                  className="group inline-flex items-center gap-1 text-sm font-medium hover:underline"
                   href="/clienti"
                 >
                   Per i clienti
-                  <IconArrowRight className="size-4" />
+                  <IconArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </a>
               </CardContent>
             </Card>
@@ -332,7 +335,7 @@ export default function HomePage() {
             },
           ].map((item, index) => (
             <Reveal key={item.title} delay={index * 80}>
-              <Card className="h-full">
+              <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
                 <CardHeader>
                   <item.icon aria-hidden className="size-5 text-muted-foreground" />
                   <CardTitle className="mt-2">{item.title}</CardTitle>
@@ -347,7 +350,7 @@ export default function HomePage() {
         <div className="mt-8">
           <a className={cn(buttonVariants({ variant: "outline" }))} href="/fiducia">
             Fiducia e privacy
-            <IconArrowRight data-icon="inline-end" />
+            <IconArrowRight data-icon="inline-end" className="transition-transform duration-200 group-hover/button:translate-x-0.5" />
           </a>
         </div>
       </Section>
@@ -401,11 +404,11 @@ export default function HomePage() {
             <FaqAccordion items={homeFaq} />
             <div className="mt-6">
               <a
-                className="inline-flex items-center gap-1 text-sm font-medium hover:underline"
+                className="group inline-flex items-center gap-1 text-sm font-medium hover:underline"
                 href="/faq"
               >
                 Tutte le domande frequenti
-                <IconArrowRight className="size-4" />
+                <IconArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </a>
             </div>
           </div>

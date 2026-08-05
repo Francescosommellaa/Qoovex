@@ -41,7 +41,10 @@ function HeaderAction() {
       </a>
       <a className={cn(buttonVariants({ size: "sm" }))} href={primaryCtaHref}>
         {primaryCtaLabel}
-        <IconArrowRight data-icon="inline-end" />
+        <IconArrowRight
+          data-icon="inline-end"
+          className="transition-transform duration-200 group-hover/button:translate-x-0.5"
+        />
       </a>
     </div>
   );
@@ -81,7 +84,7 @@ export function SiteFooter() {
               certifica conformità e non sostituisce il giudizio di professionisti e tecnici.
             </p>
             <a
-              className="mt-4 inline-block text-sm text-muted-foreground hover:text-foreground"
+              className="mt-4 inline-block text-sm text-muted-foreground transition-colors hover:text-foreground"
               href={contactHref}
             >
               {contactEmail}
@@ -92,7 +95,7 @@ export function SiteFooter() {
               <p className="text-sm font-medium text-foreground">{column.title}</p>
               {column.links.map((link) => (
                 <a
-                  className="text-sm text-muted-foreground hover:text-foreground"
+                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   href={link.href}
                   key={link.href}
                 >
@@ -106,7 +109,7 @@ export function SiteFooter() {
           <nav className="flex flex-wrap gap-4 text-sm" aria-label="Link legali">
             {legalLinks.map((link) => (
               <a
-                className="text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground transition-colors hover:text-foreground"
                 href={link.href}
                 key={link.href}
               >

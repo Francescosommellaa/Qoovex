@@ -88,7 +88,7 @@ export default function FunzionalitaPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {current.map((item, index) => (
             <Reveal key={item.title} delay={index * 50}>
-              <Card className="h-full">
+              <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
                 <CardHeader>
                   <div className="mb-2 flex size-9 items-center justify-center rounded-md border border-border bg-muted/40 text-foreground">
                     <item.icon className="size-5" aria-hidden />
@@ -138,11 +138,14 @@ export default function FunzionalitaPage() {
               </p>
             </div>
             <a
-              className="inline-flex items-center gap-2 text-sm font-medium text-foreground underline-offset-4 hover:underline"
+              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground underline-offset-4 hover:underline"
               href="/come-funziona"
             >
               Vai a Come funziona
-              <IconArrowRight className="size-4" aria-hidden />
+              <IconArrowRight
+                className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                aria-hidden
+              />
             </a>
           </div>
         </Reveal>

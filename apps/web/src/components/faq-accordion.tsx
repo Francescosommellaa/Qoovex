@@ -14,11 +14,11 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
     <div className="divide-y rounded-2xl border bg-card">
       {items.map((item) => (
         <Collapsible key={item.question} className="group px-4 sm:px-5">
-          <CollapsibleTrigger className="flex w-full items-center justify-between gap-4 py-4 text-left text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card">
+          <CollapsibleTrigger className="flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg py-4 text-left text-sm font-medium text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card group-data-[panel-open]:text-foreground">
             <span className="text-pretty">{item.question}</span>
             <IconChevronDown
               aria-hidden
-              className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[panel-open]:rotate-180"
+              className="size-4 shrink-0 text-muted-foreground transition-[transform,color] duration-200 group-hover:text-foreground group-data-[panel-open]:rotate-180 group-data-[panel-open]:text-foreground"
             />
           </CollapsibleTrigger>
           <CollapsibleContent className="h-[var(--collapsible-panel-height)] overflow-hidden text-sm leading-relaxed text-muted-foreground transition-[height] duration-200 ease-out data-[ending-style]:h-0 data-[starting-style]:h-0">
