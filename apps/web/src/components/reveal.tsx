@@ -43,10 +43,20 @@ export function Reveal({ children, delay = 0, className, as = "div" }: RevealPro
           }
         }
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
+      // threshold 0: qualsiasi pixel visibile rivela l'elemento, così nulla resta
+      // bloccato "nascosto" se si trova già sul fold al momento del mount.
+      { rootMargin: "0px 0px -5% 0px", threshold: 0 },
     );
     observer.observe(node);
-    return () => observer.disconnect();
+
+    // Rete di sicurezza: se per qualsiasi motivo l'observer non scatta
+    // (elemento già interamente visibile, layout tardivo), rivela comunque.
+    const fallback = window.setTimeout(() => setVisible(true), 700);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+    };
   }, []);
 
   const Tag = as;

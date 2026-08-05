@@ -32,12 +32,12 @@ import { primaryCtaHref, primaryCtaLabel, publicSiteUrl, signInLabel, signInUrl 
 export const metadata: Metadata = {
   title: "Qoovex - Uno spazio condiviso per impresa e cliente",
   description:
-    "Qoovex raccoglie aggiornamenti, modifiche, prove, richieste e pagamenti documentati in una cronologia chiara per l'impresa e per il cliente.",
+    "Qoovex raccoglie aggiornamenti, modifiche, prove e richieste in una cronologia chiara per l'impresa e per il cliente.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Qoovex - Uno spazio condiviso per impresa e cliente",
     description:
-      "Aggiornamenti, modifiche, prove e pagamenti documentati restano nello stesso posto, per l'impresa e per il cliente.",
+      "Aggiornamenti, modifiche e prove restano nello stesso posto, per l'impresa e per il cliente.",
     url: publicSiteUrl,
     type: "website",
   },
@@ -82,8 +82,28 @@ const howItWorks = [
 const linkedInfo = [
   { icon: IconCamera, label: "Fotografie collegate all'aggiornamento" },
   { icon: IconPencil, label: "Modifiche con lo stato della decisione" },
-  { icon: IconFileInvoice, label: "Pagamenti documentati dalle parti" },
+  { icon: IconFileInvoice, label: "Prove e documenti allegati agli step" },
   { icon: IconHistory, label: "Cronologia di ciò che è stato condiviso" },
+];
+
+// Direzione di prodotto approvata, non ancora disponibile nel prodotto.
+const vNextDirection = [
+  {
+    title: "Timeline condivisa in tempo reale",
+    body: "Impresa e cliente sulla stessa cronologia del lavoro, con ciò che è stato condiviso sempre allineato.",
+  },
+  {
+    title: "Negoziazioni tracciate",
+    body: "Richieste e controproposte con lo stato della decisione, collegate allo step a cui si riferiscono.",
+  },
+  {
+    title: "Pagamenti documentati",
+    body: "Riepiloghi pronti per revisione che collegano un importo dichiarato al lavoro documentato.",
+  },
+  {
+    title: "Chiusura reciproca",
+    body: "Un momento condiviso in cui entrambe le parti confermano ciò che risulta dal lavoro.",
+  },
 ];
 
 export default function HomePage() {
@@ -99,8 +119,8 @@ export default function HomePage() {
               Il lavoro è in cantiere. Tutto ciò che lo racconta resta in ordine.
             </h1>
             <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
-              Qoovex raccoglie aggiornamenti, modifiche, prove, richieste e pagamenti documentati in
-              una cronologia chiara per l&apos;impresa e per il cliente.
+              Qoovex raccoglie aggiornamenti, modifiche, prove e richieste in una cronologia chiara
+              per l&apos;impresa e per il cliente.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a className={cn(buttonVariants({ size: "lg" }))} href={primaryCtaHref}>
@@ -275,10 +295,10 @@ export default function HomePage() {
             </ul>
           </div>
           <Reveal>
-            <ProductFrame title="Richieste e pagamenti" subtitle="Cosa richiede attenzione">
+            <ProductFrame title="Richieste" subtitle="Cosa richiede attenzione">
               <div className="grid gap-3">
                 <RequestAwaitingReply />
-                <ReceiptCard />
+                <ConfirmedUpdateCard />
               </div>
             </ProductFrame>
           </Reveal>
@@ -332,8 +352,44 @@ export default function HomePage() {
         </div>
       </Section>
 
+      {/* Direzione di prodotto (vNext) - non ancora disponibile */}
+      <Section bordered aria-labelledby="vnext-title">
+        <div className="grid gap-12 lg:grid-cols-[1fr_1.05fr] lg:items-center">
+          <div>
+            <SectionHeading
+              titleId="vnext-title"
+              eyebrow="Direzione di prodotto"
+              title="Dove sta andando Qoovex"
+              description="Qoovex vNext è la direzione approvata del prodotto. Queste capacità sono in sviluppo e non sono ancora disponibili: le raccontiamo per trasparenza, non come funzioni attive."
+            />
+            <div className="mt-6">
+              <Badge variant="secondary">In sviluppo · non ancora disponibile</Badge>
+            </div>
+            <ul className="mt-8 grid gap-4">
+              {vNextDirection.map((item) => (
+                <li key={item.title} className="border-l-2 border-border pl-4">
+                  <p className="text-sm font-medium">{item.title}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <Reveal>
+            <ProductFrame
+              title="Anteprima direzione"
+              subtitle="Esempio illustrativo, non una funzione attiva"
+            >
+              <div className="grid gap-3">
+                <ReceiptCard />
+                <ConfirmedUpdateCard />
+              </div>
+            </ProductFrame>
+          </Reveal>
+        </div>
+      </Section>
+
       {/* FAQ essenziali */}
-      <Section bordered aria-labelledby="faq-title">
+      <Section bordered tone="muted" aria-labelledby="faq-title">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <SectionHeading
             titleId="faq-title"
