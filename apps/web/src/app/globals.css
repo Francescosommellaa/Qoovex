@@ -28,6 +28,30 @@
   contain-intrinsic-size: auto 48rem;
 }
 
+/* Scroll reveal: sobrio, basato su transform/opacity. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.6s var(--ease-standard),
+    transform 0.6s var(--ease-standard);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+[data-reveal="visible"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 .marketing-dashboard-fade {
   -webkit-mask-image: linear-gradient(
     to bottom,
