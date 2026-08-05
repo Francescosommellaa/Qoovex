@@ -30,7 +30,10 @@ export default function CommunityPage() {
             href="/manuale-operativo"
           >
             <IconBook2 aria-hidden="true" /> Leggi il manuale
-            <IconArrowRight data-icon="inline-end" />
+            <IconArrowRight
+              data-icon="inline-end"
+              className="transition-transform duration-200 group-hover/button:translate-x-0.5"
+            />
           </a>
         </div>
       </section>

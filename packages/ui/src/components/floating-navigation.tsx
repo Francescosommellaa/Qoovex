@@ -268,7 +268,7 @@ function NavigationLinks({
           <a
             aria-current={active ? (sectionMode ? "location" : "page") : undefined}
             className={cn(
-              "relative z-10 rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none",
+              "relative z-10 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none",
               active && "bg-foreground text-background hover:text-background focus-visible:text-background",
             )}
             data-link="plain"
@@ -308,7 +308,7 @@ function NavigationLinks({
               onFocus={(event) => moveNavFocus(event.currentTarget)}
               render={
                 <button
-                  className="group/resources relative z-10 flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
+                  className="group/resources relative z-10 flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
                   data-link="plain"
                   type="button"
                 />
@@ -381,6 +381,7 @@ export function FloatingNavigation({
   action,
   activeHref,
   brand,
+  desktopBreakpoint = "md",
   homeHref,
   resourceLabel = "Risorse",
   resourceLinks = [],
@@ -391,6 +392,11 @@ export function FloatingNavigation({
   action?: React.ReactNode;
   activeHref?: string;
   brand: (compact: boolean) => React.ReactNode;
+  /**
+   * Breakpoint a cui la barra orizzontale sostituisce il menu hamburger.
+   * Usa "lg" quando i link sono numerosi/lunghi e a "md" non c'è spazio.
+   */
+  desktopBreakpoint?: "md" | "lg";
   homeHref: string;
   resourceLabel?: string;
   resourceLinks?: FloatingNavigationLink[];
@@ -540,6 +546,11 @@ export function FloatingNavigation({
     ? sections.map((section) => ({ href: `#${section.id}`, label: section.label }))
     : surfaceLinks;
 
+  // Classi literali (necessarie perché Tailwind rileva solo stringhe complete).
+  const isLg = desktopBreakpoint === "lg";
+  const desktopNavVisibility = isLg ? "hidden lg:block" : "hidden md:block";
+  const belowDesktopVisibility = isLg ? "lg:hidden" : "md:hidden";
+
   return (
     <header className="pointer-events-none sticky top-0 z-40 h-20 px-3 pt-3">
       <div
@@ -558,7 +569,10 @@ export function FloatingNavigation({
         {showSections && activeLabel ? (
           <nav
             aria-label="Sezioni vicine"
-            className="floating-navigation__mobile-sections mx-auto flex min-w-0 flex-1 items-center justify-center gap-1 animate-in fade-in-0 zoom-in-95 duration-200 md:hidden"
+            className={cn(
+              "floating-navigation__mobile-sections mx-auto flex min-w-0 flex-1 items-center justify-center gap-1 animate-in fade-in-0 zoom-in-95 duration-200",
+              belowDesktopVisibility,
+            )}
           >
             {previousSection ? (
               <a
@@ -596,7 +610,7 @@ export function FloatingNavigation({
           </nav>
         ) : null}
 
-        <div className="mx-auto hidden min-w-0 md:block">
+        <div className={cn("mx-auto min-w-0", desktopNavVisibility)}>
           <NavigationLinks
             activeHref={showSections ? `#${activeSection}` : activeHref}
             links={desktopLinks}
@@ -615,7 +629,7 @@ export function FloatingNavigation({
               render={
                 <Button
                   aria-label="Apri navigazione"
-                  className="md:hidden"
+                  className={belowDesktopVisibility}
                   size="icon"
                   variant="ghost"
                 />

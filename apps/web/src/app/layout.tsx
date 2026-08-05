@@ -12,14 +12,27 @@ const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://qoovex.com"),
-  title: "Qoovex - Lavori condivisi",
+  title: {
+    default: "Qoovex - Documenta un lavoro edile con chiarezza",
+    template: "%s | Qoovex",
+  },
   description:
-    "Qoovex è lo spazio condiviso tra Azienda e cliente per documentare lavori, modifiche, prove e pagamenti.",
+    "Qoovex aiuta le piccole imprese edili e i clienti a documentare un lavoro: avanzamento, step, modifiche, prove e richieste restano collegati al cantiere.",
+  applicationName: "Qoovex",
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Qoovex - Lavori condivisi",
+    title: "Qoovex - Documenta un lavoro edile con chiarezza",
     description:
-      "Spazio condiviso tra Azienda e cliente per documentare un lavoro edile dalla creazione alla chiusura.",
+      "Organizza il cantiere, raccogli gli aggiornamenti e condividi con il cliente solo ciò che serve.",
     type: "website",
+    locale: "it_IT",
+    siteName: "Qoovex",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Qoovex - Documenta un lavoro edile con chiarezza",
+    description:
+      "Organizza il cantiere, raccogli gli aggiornamenti e condividi con il cliente solo ciò che serve.",
   },
 };
 

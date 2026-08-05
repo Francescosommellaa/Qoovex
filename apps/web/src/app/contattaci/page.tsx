@@ -33,7 +33,11 @@ export default function ContactPage() {
               <p className="mt-5 text-sm text-muted-foreground">Scrivici a</p>
               <p className="mt-1 font-medium">{contactEmail}</p>
               <a className={buttonVariants({ className: "mt-6" })} href={contactHref}>
-                Invia un&apos;email <IconArrowRight data-icon="inline-end" />
+                Invia un&apos;email{" "}
+                <IconArrowRight
+                  data-icon="inline-end"
+                  className="transition-transform duration-200 group-hover/button:translate-x-0.5"
+                />
               </a>
             </div>
           </div>
