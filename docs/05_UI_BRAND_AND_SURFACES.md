@@ -19,3 +19,14 @@ La validazione server-side e diversi stati UI sono presenti, ma errori field-lev
 ## Copy prudente
 
 Il prodotto usa “confermato dalle parti”, “invio dichiarato”, “ricezione confermata dall’Azienda”, “conclusione stimata” e “IBAN indicato dall’Azienda”. Non promette conformità, collaudo, assenza difetti, pagamento garantito o validità legale.
+
+## Marketing (apps/web) — polish microinterazioni
+
+`verified_current_state`. Il sito marketing usa la stessa foundation (token Qoovex, Geist, Tabler) senza nuovi design system. Le microinterazioni sono sobrie e basate solo su `transform`/`opacity`:
+
+- Scroll reveal (`components/reveal.tsx` + `[data-reveal]` in `globals.css`): entrata unica con `--ease-standard`, stagger via `--reveal-delay`, rete di sicurezza a 700ms, disattivato con `prefers-reduced-motion` e nessun contenuto nascosto senza JavaScript.
+- Card di contenuto: lift discreto in hover (`-translate-y-0.5`, ombra e ring del token `foreground`).
+- Frecce inline e dei bottoni primari: micro-spostamento in hover tramite `group`/`group-hover/button`.
+- FAQ (Base UI Collapsible): trigger con transizione colore e chevron ruotato su `data-panel-open`.
+
+Verifica: `apps/web` compila come 16 route statiche, `verify-foundation` passa, Web Vitals su `/` con CLS 0.0. Nessuna modifica a `packages/ui`, schema, auth o confini app/package. Il perimetro resta la vetrina pubblica: nessuna capability vNext è presentata come disponibile.
