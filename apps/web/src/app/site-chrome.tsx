@@ -57,6 +57,7 @@ export function SiteHeader({ sections = [] }: { sections?: FloatingNavigationSec
       action={<HeaderAction />}
       activeHref={pathname}
       brand={(compact) => <BrandMark compact={compact} />}
+      desktopBreakpoint="lg"
       homeHref="/"
       resourceLabel="Esplora"
       resourceLinks={resourceLinks}
