@@ -30,23 +30,14 @@ const resourceLinks = secondaryNavLinks.map((link) => ({
   description: link.description,
 }));
 
+// Una sola azione persistente nella topbar: "Accedi" (utility di login).
+// La CTA primaria "Scopri come funziona" vive nella hero e nella CtaBand,
+// così non ci sono CTA duplicate nella stessa schermata.
 function HeaderAction() {
   return (
-    <div className="flex items-center gap-1 sm:gap-2">
-      <a
-        className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "hidden sm:inline-flex")}
-        href={signInUrl}
-      >
-        {signInLabel}
-      </a>
-      <a className={cn(buttonVariants({ size: "sm" }))} href={primaryCtaHref}>
-        {primaryCtaLabel}
-        <IconArrowRight
-          data-icon="inline-end"
-          className="transition-transform duration-200 group-hover/button:translate-x-0.5"
-        />
-      </a>
-    </div>
+    <a className={cn(buttonVariants({ variant: "outline", size: "sm" }))} href={signInUrl}>
+      {signInLabel}
+    </a>
   );
 }
 

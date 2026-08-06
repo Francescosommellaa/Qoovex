@@ -27,7 +27,7 @@ import { Reveal } from "@/components/reveal";
 import { Section, SectionHeading } from "@/components/section";
 import { homeFaq } from "./content";
 import { SiteShell } from "./site-chrome";
-import { primaryCtaHref, primaryCtaLabel, publicSiteUrl, signInLabel, signInUrl } from "./site-config";
+import { primaryCtaHref, primaryCtaLabel, publicSiteUrl } from "./site-config";
 
 export const metadata: Metadata = {
   title: "Qoovex - Uno spazio condiviso per impresa e cliente",
@@ -109,8 +109,9 @@ const vNextDirection = [
 export default function HomePage() {
   return (
     <SiteShell>
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b">
+      {/* Hero: sale dietro la topbar flottante (-mt-20) e ripristina lo spazio con pt-20,
+          così il pattern riempie l'area attorno alla pill senza fasce nere. */}
+      <section className="relative -mt-20 overflow-hidden border-b pt-20">
         <div aria-hidden className="marketing-hero-grid pointer-events-none absolute inset-0" />
         <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:py-28">
           <div className="max-w-2xl">
@@ -122,16 +123,13 @@ export default function HomePage() {
               Qoovex raccoglie aggiornamenti, modifiche, prove e richieste in una cronologia chiara
               per l&apos;impresa e per il cliente.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-8">
               <a className={cn(buttonVariants({ size: "lg" }))} href={primaryCtaHref}>
                 {primaryCtaLabel}
                 <IconArrowRight
                   data-icon="inline-end"
                   className="transition-transform duration-200 group-hover/button:translate-x-0.5"
                 />
-              </a>
-              <a className={cn(buttonVariants({ variant: "ghost", size: "lg" }))} href={signInUrl}>
-                {signInLabel}
               </a>
             </div>
           </div>
