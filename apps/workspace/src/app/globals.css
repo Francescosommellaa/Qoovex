@@ -1,3 +1,19 @@
 @import "@qoovex/ui/styles/base.css";
 
 @source "../**/*.{ts,tsx}";
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.font-accent {
+  font-family: 'Chakra Petch', sans-serif !important;
+}
+
+.font-grotesk {
+  font-family: 'Space Grotesk', sans-serif !important;
+}

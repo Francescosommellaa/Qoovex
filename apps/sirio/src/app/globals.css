@@ -2,4 +2,20 @@
 
 @source "../**/*.{ts,tsx}";
 
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.font-accent {
+  font-family: 'Chakra Petch', sans-serif !important;
+}
+
+.font-grotesk {
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+
 /* Sirio mantiene soltanto le composizioni di catalogo, marketing e dashboard. */
