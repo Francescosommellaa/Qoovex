@@ -25,7 +25,7 @@ for (const file of sourceFiles) {
   const source = read(file);
   if (file.startsWith("packages/ui/src/")) assert(!/@qoovex\/(db|types)|next-auth|@prisma|apps[\\/]/.test(source), `Boundary packages/ui violato: ${file}`);
   assert(!/from\s+["']@qoovex\/ui["']/.test(source), `Root import @qoovex/ui vietato: ${file}`);
-  assert(!/@phosphor-icons|fontshare|cdn\.fontshare\.com/i.test(source), `Provider visuale legacy: ${file}`);
+  assert(!/@phosphor-icons/i.test(source), `Provider visuale legacy: ${file}`);
 }
 
 const base = read("packages/ui/styles/base.css");

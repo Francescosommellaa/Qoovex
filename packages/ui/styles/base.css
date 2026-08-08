@@ -2,6 +2,26 @@
 @import "tw-animate-css";
 @import "./tokens.css";
 
+.font-sans {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.font-accent {
+  font-family: 'Chakra Petch', sans-serif !important;
+}
+
+.font-grotesk {
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+
+@utility font-sans {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+@utility font-accent {
+  font-family: 'Chakra Petch', sans-serif;
+}
+
 @source "../src/**/*.{ts,tsx}";
 @custom-variant dark (&:is(.dark *));
 
