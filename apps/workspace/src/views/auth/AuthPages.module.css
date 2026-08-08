@@ -126,7 +126,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--background);
-  font-family: var(--font-mono);
+  font-family: var(--font-accent);
   font-size: 0.6875rem;
   transition:
     border-color 160ms var(--ease-standard),

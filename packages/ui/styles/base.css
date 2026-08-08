@@ -1,26 +1,7 @@
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=array@400,600,700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./tokens.css";
-
-.font-sans {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
-}
-
-.font-accent {
-  font-family: 'Chakra Petch', sans-serif !important;
-}
-
-.font-grotesk {
-  font-family: 'Space Grotesk', sans-serif !important;
-}
-
-@utility font-sans {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
-@utility font-accent {
-  font-family: 'Chakra Petch', sans-serif;
-}
 
 @source "../src/**/*.{ts,tsx}";
 @custom-variant dark (&:is(.dark *));
@@ -298,7 +279,7 @@
 }
 
 .marketing-cursor__label {
-  font-family: var(--font-mono);
+  font-family: var(--font-accent);
   font-size: 0.625rem;
   font-weight: 600;
   line-height: 1;

@@ -33,7 +33,7 @@ Il modello mantiene `OWNER`/`COLLABORATOR` e usa lâ€™unicitÃ  membership 
 
 Schema, autorizzazioni, storage, API, servizi, UI e operazioni richiedono un task esplicitamente approvato. Aggiornare documenti e Brain quando il contratto cambia. La Qoovex-Memory si aggiorna soltanto su richiesta esplicita, tramite nota ad hoc, senza modificare direttamente la memoria consolidata.
 
-La direzione grafica resta quella canonica: Geist/Geist Mono, Tabler, tema light/dark/system e primitive `@qoovex/ui`.
+La direzione grafica resta quella canonica: General Sans (font principale) e ARRAY (accent), Tabler, tema light/dark/system e primitive `@qoovex/ui`.
 
 ## Database operation impact
 

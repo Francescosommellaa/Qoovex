@@ -126,7 +126,7 @@ function MetaRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-2 text-xs">
       <span className="text-muted-foreground min-w-24">{label}</span>
-      <span className="font-mono text-foreground">{value}</span>
+      <span className="font-accent text-foreground">{value}</span>
     </div>
   );
 }
@@ -147,56 +147,28 @@ export default function TypographyPage() {
             <div className="rounded-lg border p-6">
               <div className="mb-2 flex items-baseline justify-between">
                 <span className="text-base font-semibold">General Sans</span>
-                <code className="text-xs text-muted-foreground">--font-sans (90%)</code>
+                <code className="text-xs text-muted-foreground">--font-sans</code>
               </div>
-              <p className="text-xs text-muted-foreground mb-4">Fontshare • Sans-Serif Geometrica</p>
-              <p className="text-3xl tracking-tight mb-3" style={{ fontFamily: "var(--font-sans)" }}>
+              <p className="text-xs text-muted-foreground mb-4">Fontshare • Sans-serif geometrica</p>
+              <p className="font-sans text-3xl tracking-tight mb-3" style={{ fontFamily: "var(--font-sans)" }}>
                 AaBbCc 0123
               </p>
               <p className="text-sm text-muted-foreground">
-                Usata per tutto il testo di prodotto: titoli, paragrafi, form, pulsanti, navigazione e schede.
+                Font principale di Qoovex. Usata per testi, titoli, paragrafi, form, pulsanti, navigazione e contenuto operativo.
               </p>
             </div>
 
             <div className="rounded-lg border p-6 bg-accent/20">
               <div className="mb-2 flex items-baseline justify-between">
-                <span className="text-base font-semibold font-accent tracking-wider">ARRAY (Fontshare)</span>
-                <code className="text-xs text-muted-foreground">.font-accent</code>
+                <span className="text-base font-semibold font-accent tracking-wider">ARRAY</span>
+                <code className="text-xs text-muted-foreground">--font-accent</code>
               </div>
               <p className="text-xs text-muted-foreground mb-4">Fontshare • Display Accent</p>
-              <p className="font-accent text-3xl tracking-wider mb-3">
+              <p className="font-accent text-3xl tracking-wider mb-3" style={{ fontFamily: "var(--font-accent)" }}>
                 AABBCC 0123
               </p>
               <p className="text-sm text-muted-foreground">
-                Font d'accento riservata a: ID cantiere, etichette uppercase, cifre salienti, timestamp e badge.
-              </p>
-            </div>
-
-            <div className="rounded-lg border p-6 bg-accent/20">
-              <div className="mb-2 flex items-baseline justify-between">
-                <span className="text-base font-semibold font-pixelify tracking-wider">PIXELIFY SANS (Google Fonts)</span>
-                <code className="text-xs text-muted-foreground">.font-pixelify</code>
-              </div>
-              <p className="text-xs text-muted-foreground mb-4">Google Fonts • Pixel/Dot Matrix Display</p>
-              <p className="font-pixelify text-3xl tracking-wider mb-3">
-                AABBCC 0123
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Alternativa Google Fonts a matrice di punti / pixel.
-              </p>
-            </div>
-
-            <div className="rounded-lg border p-6 bg-accent/20">
-              <div className="mb-2 flex items-baseline justify-between">
-                <span className="text-base font-semibold font-chakra tracking-wider">CHAKRA PETCH (Google Fonts)</span>
-                <code className="text-xs text-muted-foreground">.font-chakra</code>
-              </div>
-              <p className="text-xs text-muted-foreground mb-4">Google Fonts • Technical Geometric Accent</p>
-              <p className="font-chakra text-3xl tracking-wider mb-3">
-                AABBCC 0123
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Alternativa Google Fonts moderna e tecnica.
+                Font d'accento riservata a ID cantiere, etichette uppercase, cifre salienti, timestamp, badge e metadati brevi.
               </p>
             </div>
           </div>
@@ -246,7 +218,7 @@ export default function TypographyPage() {
                     <span style={{ fontWeight: Number(w) }} className="text-base">
                       Cantiere Ristrutturazione
                     </span>
-                    <span className="text-xs text-muted-foreground font-mono">{w} ({desc.split(" ")[0]})</span>
+                    <span className="text-xs text-muted-foreground font-accent">{w} ({desc.split(" ")[0]})</span>
                   </div>
                 ))}
               </div>

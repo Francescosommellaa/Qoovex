@@ -26,12 +26,16 @@ for (const file of sourceFiles) {
   if (file.startsWith("packages/ui/src/")) assert(!/@qoovex\/(db|types)|next-auth|@prisma|apps[\\/]/.test(source), `Boundary packages/ui violato: ${file}`);
   assert(!/from\s+["']@qoovex\/ui["']/.test(source), `Root import @qoovex/ui vietato: ${file}`);
   assert(!/@phosphor-icons/i.test(source), `Provider visuale legacy: ${file}`);
+  assert(!/next\/font\/google|fonts\.googleapis\.com|fonts\.gstatic\.com|Geist_Mono|--font-geist-(sans|mono)/i.test(source), `Font Google/Geist legacy trovato: ${file}`);
+  assert(!/Plus Jakarta Sans|Chakra Petch|Space Grotesk|Pixelify/i.test(source), `Font legacy non approvato trovato: ${file}`);
 }
 
 const base = read("packages/ui/styles/base.css");
 const tokens = read("packages/ui/styles/tokens.css");
 for (const value of ["prefers-reduced-motion", "@custom-variant dark", "data-link=", "scrollbar-width: thin"]) assert(base.includes(value), `base.css non contiene ${value}`);
+assert(base.includes("general-sans") && base.includes("array"), "base.css deve importare le famiglie Fontshare General Sans e ARRAY.");
 for (const value of ["--info", "--success", "--warning", "--destructive", "--sidebar", "oklch("]) assert(tokens.includes(value), `tokens.css non contiene ${value}`);
+assert(tokens.includes("--font-sans: var(--ff-sans);") && tokens.includes("--font-accent: var(--ff-accent);"), "tokens.css deve esporre i token --font-sans e --font-accent.");
 
 const workspaceOrganization = read("apps/workspace/src/app/org/[organizationId]/job-sites/[jobSiteId]/page.tsx");
 const workspaceClient = read("apps/workspace/src/app/client/job-sites/[jobSiteId]/page.tsx");

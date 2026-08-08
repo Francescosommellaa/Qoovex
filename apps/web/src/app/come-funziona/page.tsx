@@ -100,7 +100,7 @@ export default function ComeFunzionaPage() {
             <Reveal as="li" key={item.step} delay={(index % 3) * 80}>
               <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
                 <CardHeader>
-                  <span className="font-mono text-sm text-muted-foreground">{item.step}</span>
+                  <span className="font-accent text-sm text-muted-foreground">{item.step}</span>
                   <CardTitle className="mt-2">{item.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
