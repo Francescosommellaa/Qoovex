@@ -78,7 +78,7 @@ async function main() {
       to_regclass('public."CalendarEvent"') IS NULL AS removed_calendar,
       to_regclass('public."JobSiteUserAssignment"') IS NULL AS removed_legacy_assignment;
   `);
-  const final = job-site.rows[0] as {
+  const final = jobSite.rows[0] as {
     users: number;
     has_participant: boolean;
     has_receipt: boolean;

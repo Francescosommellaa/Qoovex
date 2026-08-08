@@ -1,4 +1,6 @@
-import { Badge } from "@qoovex/ui/components/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
-import { SiteHeader } from "@/components/site-header";
-export default function SirioPage() { return <div className="min-h-dvh bg-background"><SiteHeader action={false} /><main className="mx-auto grid max-w-6xl gap-8 px-4 py-20 sm:px-6"><header><Badge variant="outline">Foundation-only</Badge><h1 className="mt-4 text-4xl font-semibold tracking-tight">Catalogo visuale Qoovex</h1><p className="mt-3 max-w-2xl text-muted-foreground">Sirio conserva esclusivamente la foundation visuale condivisa. Le prove del prodotto precedente sono state rimosse; nessuna superficie current è simulata.</p></header><section className="grid gap-4 sm:grid-cols-3"><Card><CardHeader><CardTitle>Identità</CardTitle><CardDescription>Tipografia e brand.</CardDescription></CardHeader><CardContent><p className="text-sm text-muted-foreground">Foundation corrente invariata.</p></CardContent></Card><Card><CardHeader><CardTitle>Componenti</CardTitle><CardDescription>Primitive accessibili condivise.</CardDescription></CardHeader><CardContent><p className="text-sm text-muted-foreground">Nessun contratto prodotto incorporato.</p></CardContent></Card><Card><CardHeader><CardTitle>Stato</CardTitle><CardDescription>Intermedio e verificabile.</CardDescription></CardHeader><CardContent><Badge>Foundation</Badge></CardContent></Card></section></main></div>; }
+import { redirect } from "next/navigation";
+
+export default function SirioPage() {
+  // Sirio conserva esclusivamente la foundation visuale condivisa.
+  redirect("/foundations/colors");
+}
