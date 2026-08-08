@@ -6,4 +6,3 @@ Un invito usa sempre il ruolo `COLLABORATOR`. Il preset `LIMITED_UPLOAD` richied
 
 Token ed email body non entrano nell'audit prodotto. OWNER non e invitabile.
 
-`OrganizationInvitation` non e il futuro invito cliente D-VNEXT-24: crea una membership Azienda, usa il lifecycle corrente e dura sette giorni. L'invito cliente concettuale e job-site-scoped, dura 14 giorni e crea una partecipazione, mai una membership.

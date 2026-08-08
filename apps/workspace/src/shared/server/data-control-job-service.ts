@@ -16,7 +16,7 @@ import { requireDataControlAccess } from "./data-control-access";
 import { buildDataExportForOrganization } from "./data-export-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { recordSupportAccess } from "./support-access-service";
-import { canonicalize } from "./vnext-contracts";
+import { canonicalize } from "./job-site-contracts";
 
 const MAX_EXPORT_SIZE_BYTES = 50 * 1024 * 1024;
 const BLOB_CLEANUP_MIN_AGE_MS = 24 * 60 * 60 * 1000;

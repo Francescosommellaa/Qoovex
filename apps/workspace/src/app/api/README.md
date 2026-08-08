@@ -15,17 +15,17 @@ Regole:
 - nome cartella coerente con la risorsa o il caso d'uso;
 - ordine file secondo `docs/02_ARCHITECTURE_AND_BOUNDARIES.md`.
 
-Endpoint infrastrutturali e vNext presenti:
+Endpoint infrastrutturali e attuale presenti:
 - `auth/credentials`: registrazione credentials verify-first, verifica email e reset password;
 - `contexts`: contesti Azienda, cliente e piattaforma derivati server-side;
-- `org/[organizationId]`: cantieri, participant, inviti, agreement, timeline, step, richieste, proposte, pagamenti documentati, dispute, allegati, chiusura, post-chiusura, export e impostazioni vNext;
+- `org/[organizationId]`: cantieri, participant, inviti, agreement, timeline, step, richieste, proposte, pagamenti documentati, dispute, allegati, chiusura, post-chiusura, export e impostazioni attuale;
 - `client`: inviti, immobili privati, cantieri partecipati e proiezioni condivise participant-scoped;
 - `exports`: scambio autenticato di token opachi con grant brevi;
-- `internal/vnext`: runner processi e finalize allegati protetti da segreto interno;
-- `notifications`: preferenze e delivery del runtime vNext;
+- `internal/job-site`: runner processi e finalize allegati protetti da segreto interno;
+- `notifications`: preferenze e delivery del runtime attuale;
 - `GET data/jobs/run`: runner data-control con lo stesso contratto cron; secret in query e header custom non sono accettati.
 - `audit-log`: audit prodotto owner-only con metadata redatti e paginazione semplice.
 - `data`: inventario dati, export metadata JSON e retention operativa owner-only.
-- `resource-assignments`: infrastruttura accessi legacy ancora presente come foundation, non superficie prodotto autonoma.
+- `resource-assignments`: infrastruttura accessi precedente ancora presente come foundation, non superficie prodotto autonoma.
 
-Le route prodotto implicite legacy non sono endpoint attivi. La presenza delle route vNext non prova la vertical slice end-to-end, che resta bloccata dai test lifecycle dedicati.
+Le route prodotto implicite precedente non sono endpoint attivi. La presenza delle route attuale non prova la vertical slice end-to-end, che resta bloccata dai test lifecycle dedicati.

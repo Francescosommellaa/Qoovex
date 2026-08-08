@@ -1,5 +1,5 @@
 import { listNotifications } from "@shared/server/notification-service";
-import { NotificationsPageView } from "@/views/admin-core/notifications/NotificationsPageView";
+import { NotificationsPageView } from "@/views/administration/notifications/NotificationsPageView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 
 interface NotificationsPageProps {

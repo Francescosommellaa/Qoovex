@@ -10,7 +10,7 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@qo
 import { Input } from "@qoovex/ui/components/input";
 import { Textarea } from "@qoovex/ui/components/textarea";
 import type { OrganizationContactResponse, OrganizationProfileResponse, OrganizationSummary } from "@qoovex/types";
-import { submitJson } from "@/views/admin-core/admin-api-client";
+import { submitJson } from "@/views/administration/admin-api-client";
 import { WorkspacePage, WorkspacePageHeader } from "@/views/workspace/WorkspacePrimitives";
 
 interface ProfileData { organization: OrganizationSummary; profile: OrganizationProfileResponse | null; contacts: OrganizationContactResponse[]; }

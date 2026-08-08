@@ -1,6 +1,6 @@
 import { asAccessResponse } from "@shared/server/access-errors";
 import { buildDataExportForOrganization } from "@shared/server/data-export-service";
-import { canonicalize } from "@shared/server/vnext-contracts";
+import { canonicalize } from "@shared/server/job-site-contracts";
 import { requireDataControlAccess } from "@shared/server/data-control-access";
 
 export async function GET() {

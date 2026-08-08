@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { buttonVariants } from "@qoovex/ui/components/button";
-import { listNotificationPreferences } from "@shared/server/vnext-notification-preference-service";
-import { NotificationPreferencesForm } from "@/views/vnext/NotificationPreferencesForm";
+import { listNotificationPreferences } from "@shared/server/job-site-notification-preference-service";
+import { NotificationPreferencesForm } from "@/views/job-site/NotificationPreferencesForm";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
 
 export default async function NotificationPreferencesPage() {

@@ -14,7 +14,7 @@ import type {
   WorkerUserLinkResponse,
 } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
-import { parseOptionalDate, trimOptionalId, trimOptionalText } from "./document-domain-validation";
+import { parseOptionalDate, trimOptionalId, trimOptionalText } from "./input-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { getResourceScope, toMyResourceScopeResponse } from "./resource-scope-service";

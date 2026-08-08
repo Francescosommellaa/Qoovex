@@ -4,7 +4,7 @@ import { db } from "@qoovex/db";
 import type { OrganizationContactKind } from "@qoovex/types";
 import { organizationContactKinds } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
-import { isEnumValue, trimOptionalId, trimOptionalText, trimRequiredText } from "./document-domain-validation";
+import { isEnumValue, trimOptionalId, trimOptionalText, trimRequiredText } from "./input-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 

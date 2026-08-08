@@ -16,7 +16,6 @@ Un task esclusivamente documentale:
 
 Non interrogare database o Blob per provare una specifica concettuale. Non eseguire reset, seed, `db push`, migration, deploy, cancellazioni Azienda o cleanup Blob.
 
-Un contratto tecnico documentale non autorizza implementazione. D-VNEXT-46 ha autorizzato la rimozione legacy e D-VNEXT-48 il runtime vNext. Il task vNext-from-zero del 2026-08-03 autorizza il reset di database e Blob privi di dati reali; Preview e Production possono essere mutate soltanto dai workflow con target identity, isolamento e head esatto.
 
 ## Database operation impact
 
@@ -35,4 +34,4 @@ Ambienti coinvolti: soli file documentali locali e Brain
 Misurazione eseguita: non applicabile; database e Blob non interrogati
 ```
 
-Ogni task database-sensitive deve invece ricostruire e misurare il flusso reale, preservando autorizzazione e `organizationId` server-derived. Per vNext sono obbligatori fresh, upgrade dal baseline a 5 migration, drift, presenza delle tabelle vNext, assenza delle tabelle legacy, FK/unique/enum/orfani e prova dell'head. Non inserire query, token, hash, Blob key, URL firmati, IBAN, IP o user-agent in payload, audit o log.
+Ogni task database-sensitive deve invece ricostruire e misurare il flusso reale, preservando autorizzazione e `organizationId` server-derived. Per attuale sono obbligatori fresh, upgrade dal baseline a 5 migration, drift, presenza delle tabelle attuale, assenza delle tabelle precedente, FK/unique/enum/orfani e prova dell'head. Non inserire query, token, hash, Blob key, URL firmati, IBAN, IP o user-agent in payload, audit o log.

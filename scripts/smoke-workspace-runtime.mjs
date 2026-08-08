@@ -73,7 +73,7 @@ try {
     { path: "/api/client/job-sites", expected: 401 },
     { path: "/api/does-not-exist", expected: 404 },
     { path: "/api/data/jobs/run", expected: 404 },
-    { path: "/api/internal/vnext/processes/run", expected: 404, method: "POST" },
+    { path: "/api/internal/job-sites/processes/run", expected: 404, method: "POST" },
   ];
   for (const { path, expected, method = "GET" } of checks) {
     const response = await fetch(`http://127.0.0.1:3101${path}`, { redirect: "manual", method });

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "pnpm --filter @qoovex/db guard:local && next dev --port 3001",
     "build": "next build",
-    "blob:vnext:reset": "node scripts/reset-vnext-blob-store.mjs",
+    "blob:private:reset": "node scripts/reset-private-blob-store.mjs",
     "start": "next start",
     "type-check": "tsc --noEmit",
     "test": "node scripts/verify-fsd-boundaries.mjs && vitest run"

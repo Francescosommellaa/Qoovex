@@ -4,7 +4,7 @@ import { db } from "@qoovex/db";
 import type { RecordStatus } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 import { recordSupportAccess } from "@shared/server/support-access-service";
-import { trimOptionalText, trimRequiredText } from "./document-domain-validation";
+import { trimOptionalText, trimRequiredText } from "./input-validation";
 import { requireOrganizationDomainAccess } from "./domain-access-service";
 import { auditActorFromContext, recordProductAuditEventBestEffort } from "./product-audit-service";
 import { canReadSiteManagerWorker, canReadWorker, getResourceScope } from "./resource-scope-service";

@@ -1,5 +1,5 @@
-import { appendTimeline, listTimeline } from "@shared/server/vnext-collaboration-service";
-import { resolveClientJobSiteActor } from "@shared/server/vnext-authorization-service";
-import { asVNextApiError, requireIdempotencyKey } from "@shared/server/vnext-api-response";
-export async function POST(request: Request, { params }: { params: Promise<{ jobSiteId: string }> }) { try { const actor = await resolveClientJobSiteActor((await params).jobSiteId); return Response.json(await appendTimeline({ actor, idempotencyKey: requireIdempotencyKey(request), body: await request.json() }), { status: 201 }); } catch (error) { return asVNextApiError(error); } }
-export async function GET(request: Request, { params }: { params: Promise<{ jobSiteId: string }> }) { try { const actor = await resolveClientJobSiteActor((await params).jobSiteId); return Response.json(await listTimeline({ actor, cursor: new URL(request.url).searchParams.get("cursor") }), { headers: { "Cache-Control": "no-store" } }); } catch (error) { return asVNextApiError(error); } }
+import { appendTimeline, listTimeline } from "@shared/server/job-site-collaboration-service";
+import { resolveClientJobSiteActor } from "@shared/server/job-site-authorization-service";
+import { asJobSiteApiError, requireIdempotencyKey } from "@shared/server/job-site-api-response";
+export async function POST(request: Request, { params }: { params: Promise<{ jobSiteId: string }> }) { try { const actor = await resolveClientJobSiteActor((await params).jobSiteId); return Response.json(await appendTimeline({ actor, idempotencyKey: requireIdempotencyKey(request), body: await request.json() }), { status: 201 }); } catch (error) { return asJobSiteApiError(error); } }
+export async function GET(request: Request, { params }: { params: Promise<{ jobSiteId: string }> }) { try { const actor = await resolveClientJobSiteActor((await params).jobSiteId); return Response.json(await listTimeline({ actor, cursor: new URL(request.url).searchParams.get("cursor") }), { headers: { "Cache-Control": "no-store" } }); } catch (error) { return asJobSiteApiError(error); } }

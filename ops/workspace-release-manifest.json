@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "application": {
     "name": "qoovex-workspace",
-    "version": "vnext-from-zero-v1",
-    "runtimeTrack": "vnext",
-    "vNext": "implemented_not_end_to_end_verified"
+    "version": "job-site-from-zero-v1",
+    "runtimeTrack": "job-site",
+    "current": "implemented_not_end_to_end_verified"
   },
   "database": {
     "baselineHead": "20260720010000_calendar_events",
@@ -18,10 +18,10 @@
     "access": "private",
     "rolloutMode": "manual_only_one_time_store_reset_blocked",
     "targetIdentity": "BLOB_STORE_ID",
-    "resetScript": "apps/workspace/scripts/reset-vnext-blob-store.mjs"
+    "resetScript": "apps/workspace/scripts/reset-private-blob-store.mjs"
   },
   "scheduler": {
-    "permanentReleaseState": "enabled_vnext",
+    "permanentReleaseState": "enabled_job-site",
     "jobs": [
       {
         "id": "data-control",
@@ -29,9 +29,9 @@
         "path": "/api/data/jobs/run"
       },
       {
-        "id": "vnext-processes",
+        "id": "job-site-processes",
         "method": "POST",
-        "path": "/api/internal/vnext/processes/run"
+        "path": "/api/internal/job-sites/processes/run"
       }
     ],
     "forbiddenJobs": ["digest", "legacy-operational"]

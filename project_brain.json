@@ -1,6 +1,6 @@
 {
   "project": "Qoovex",
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-08",
   "state_taxonomy": [
     "verified_current_state",
     "implemented_decision",
@@ -18,14 +18,8 @@
     "hard_stop"
   ],
   "verified_current_state": {
-    "classification": "Qoovex vNext is the only active product direction; implementation breadth exists but is not end-to-end verified",
-    "product": "Shared company-client construction job workspace from creation through mutual closure",
+    "product": "Shared workspace for a construction company and its client to manage a job site from creation through mutual closure",
     "verification_status": "IMPLEMENTED_BUT_NOT_END_TO_END_VERIFIED",
-    "legacy_product_status": "NOT_AN_ACTIVE_PRODUCT_TRACK",
-    "known_blockers": [
-      "JobSite creator participant is persisted PENDING while organization actor resolution requires ACTIVE",
-      "Accepted primary client participant is persisted ACTIVE before initial agreement confirmation"
-    ],
     "identity_and_context": {
       "organization_roles": ["OWNER", "COLLABORATOR"],
       "client_is_organization_role": false,
@@ -42,96 +36,48 @@
       "physical_delete": false
     },
     "implemented_domains": [
-      "multiple memberships", "context hub", "JobSiteParticipant", "JobSiteClientInvitation", "ClientProperty",
-      "initial agreement versions and consents", "append-only timeline", "attachments and publications", "optional steps",
-      "structured requests", "versioned proposals, effects and consents", "economic authority grants",
-      "encrypted payment profile", "documented payment requests, declarations and reviews", "disputes and preservation",
-      "mutual closure", "post-closure requests", "mutual reopening", "client and organization exports",
-      "legal hold", "notification preferences and delivery", "persistent vNext processes", "data-control"
+      "multiple memberships", "context hub", "client participation and properties", "initial agreement",
+      "append-only timeline", "contextual attachments", "optional steps", "requests", "versioned proposals",
+      "economic authority", "documented payments", "disputes", "mutual closure and reopening",
+      "authenticated exports", "notifications", "audit", "data-control"
     ],
     "security": {
       "critical_mutations": "Idempotency-Key + expectedRevision + fingerprinted receipt",
       "transaction_isolation": "Serializable with bounded retry",
       "iban": "AES-256-GCM dedicated application key ring with AAD",
-      "blob": "private, server-mediated, MIME checked, SHA-256, 4 MiB maximum",
-      "money": "BigInt minor units; public DTO values are strings"
+      "blob": "private, server-mediated, MIME checked, SHA-256, 4 MiB maximum"
     },
-    "migration_history": {
-      "count": 6,
-      "baseline_head": "20260720010000_calendar_events",
-      "new_migration": "20260803230000_qoovex_vnext_from_zero",
-      "previous_migrations_rewritten": false,
-      "fresh_local": "verified from zero, no drift",
-      "upgrade_local": "verified from the five-migration Production baseline, destructive reset applied, no drift",
-      "preview_applied": "UNKNOWN_NOT_VERIFIED",
-      "production_applied": false,
-      "production_verified_head": "20260720010000_calendar_events",
-      "remote_trigger": "Preview and Production are manual workflow_dispatch only with exact confirmation"
-    }
+    "known_blockers": [
+      "JobSite creator participant is persisted PENDING while organization actor resolution requires ACTIVE",
+      "Accepted primary client participant is persisted ACTIVE before initial agreement confirmation"
+    ]
   },
-  "implemented_decisions": [
-    { "id": "D-VNEXT-18", "title": "Account contexts", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-19", "title": "JobSiteParticipant", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-20", "title": "Multiple organization memberships", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-21", "title": "ClientProperty", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-22", "title": "Contextual authorization matrix", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-23", "title": "Explicit economic authority", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-24", "title": "Client invitations and revocation", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-25", "title": "Canonical append-only timeline", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-26", "title": "Attachments and publications", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-27", "title": "Versioned proposals and negotiation", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-28", "title": "Encrypted IBAN profile", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-29", "title": "Restricted payment receipts", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-30", "title": "Context-scoped notifications", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-31", "title": "Distinct authenticated exports", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-32", "title": "Approved retention windows", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-33", "title": "Legal hold", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-34", "title": "Logical archive and physical deletion block", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-35", "title": "Client portability", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-36", "title": "Account deletion hard stop", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-37", "title": "Disputes and preservation", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-38", "title": "Mutual reopening", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-39", "title": "Single primary client MVP", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-40", "title": "Company-paid commercial model without billing", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-46", "title": "Legacy Eradication", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-47", "title": "Foundation-only intermediate state", "status": "IMPLEMENTED_DECISION" },
-    { "id": "D-VNEXT-48", "title": "vNext implementation breadth", "status": "IMPLEMENTED_DECISION", "verification": "NOT_END_TO_END_VERIFIED" }
-  ],
-  "superseded_decisions": [
-    { "id": "D-VNEXT-41", "status": "SUPERSEDED", "reason": "clientName compatibility was removed without creating accounts" },
-    { "id": "D-VNEXT-42", "status": "SUPERSEDED", "reason": "JobSiteOperationalPhase compatibility was removed" },
-    { "id": "D-VNEXT-43", "status": "SUPERSEDED", "reason": "legacy product process definitions were removed" },
-    { "id": "D-VNEXT-44", "status": "SUPERSEDED", "reason": "no LEGACY/VNEXT dual mode exists" },
-    { "id": "D-VNEXT-45", "status": "SUPERSEDED", "reason": "the coordinated Prompt A and Prompt B strategy replaced the former migration plan" }
-  ],
-  "process_registry": [
-    "CLIENT_INVITATION@1", "JOB_SITE_INITIAL_CONFIRMATION@1", "CHANGE_NEGOTIATION@1", "PAYMENT_REQUEST@1",
-    "JOB_SITE_CLOSURE@1", "JOB_SITE_EXPORT@1", "POST_CLOSURE_REQUEST@1", "JOB_SITE_REOPENING@1"
-  ],
   "approved_product_direction": {
-    "classification": "approved_product_direction",
-    "name": "Qoovex vNext",
-    "company_promise": "Document the work once and use the same updates for the client, changes and payment requests.",
-    "client_promise": "Follow work on your properties, review each change and retain everything shared.",
-    "commercial_model": { "payer": "ORGANIZATION", "collaborator_access": "included", "client_access": "free for invited job sites", "billing_implemented": false }
+    "product_promise": "A construction company and its client share the work history, updates, requests, changes, contextual files, decisions and closure of a job site.",
+    "commercial_model": "The company pays; collaborator access is included and invited client access is free. Pricing and billing are not implemented."
   },
   "conceptual_not_implemented": [
-    "multiple primary clients or differentiated client roles", "pricing, plans, trial, limits and billing",
-    "marketplace and public company search", "in-app payment, escrow, refunds and arbitration", "KYC",
-    "qualified electronic signature", "invoicing, accounting and payroll", "BIM", "continuous geolocation and surveillance",
-    "AI and OCR", "public portfolio and reviews", "physical JobSite deletion", "physical account deletion"
+    "pricing, plans, trials, limits and billing", "marketplace", "in-app payment, escrow, refunds and arbitration",
+    "AI or OCR", "multiple client roles", "physical JobSite deletion", "physical account deletion"
   ],
   "hard_stops": [
     "CLIENT must never enter OrganizationRole",
-    "No physical JobSite or account deletion before an independently approved policy",
-    "No Preview or Production migration, deploy or Blob operation outside the guarded workflows and exact target identity",
-    "No db push, migrate reset, migrate resolve or manual SQL outside canonical migrations",
-    "No fallback from the data-encryption key ring to Auth or MFA secrets",
-    "No pricing, legal guarantee or money movement may be inferred from the MVP"
+    "Qoovex does not move, custody or guarantee money",
+    "No db push, migrate reset, migrate resolve or manual SQL",
+    "No Preview or Production mutation outside guarded workflows with exact target identity",
+    "No published migration rewrite",
+    "No fallback from the data-encryption key ring to Auth or MFA secrets"
   ],
+  "historical_immutable": {
+    "migration_ledger": "ops/migration-ledger.json is the sole source for published migration identifiers and checksums."
+  },
   "next_task": {
-    "name": "Fix creator participant activation in the first vNext vertical slice",
-    "requirements": ["make the creator participant ACTIVE atomically at JobSite creation", "preserve server-derived actor and permission", "turn the dedicated creator lifecycle test green", "do not alter client activation in the same task"],
-    "not_authorized_here": ["Preview or Production mutation", "physical deletion", "new Prisma baseline", "published migration edits", "db push", "migrate reset", "manual remote SQL"]
+    "name": "Fix creator participant activation",
+    "requirements": [
+      "Persist the creator participant ACTIVE atomically at JobSite creation",
+      "Preserve server-derived actor and permission",
+      "Turn the dedicated lifecycle test green",
+      "Do not alter client activation in the same task"
+    ]
   }
 }

@@ -1,4 +1,4 @@
-import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
+import { getWorkspaceCapabilities, serializeForClient } from "@/views/administration/administration-server";
 import { OrganizationProfileView } from "@/views/settings/OrganizationProfileView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 import { getOrganizationProfile } from "@shared/server/organization-profile-service";

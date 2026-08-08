@@ -25,7 +25,7 @@ concurrency:
 
 jobs:
   rehearsal:
-    name: Preview / isolated vNext rehearsal
+    name: Preview / isolated current rehearsal
     runs-on: ubuntu-latest
     environment: Preview – qoovex-workspace
     env:
@@ -86,13 +86,13 @@ jobs:
 
       - name: Reset isolated Preview Blob store
         env:
-          QOOVEX_VNEXT_BLOB_RESET_APPROVED: RESET_QOOVEX_VNEXT_EMPTY_BLOB_STORE_2026_08_03
+          QOOVEX_JOB_SITE_BLOB_RESET_APPROVED: RESET_QOOVEX_JOB_SITE_EMPTY_BLOB_STORE_2026_08_03
         run: >-
           pnpm dlx vercel@50.17.1 env run -e preview --git-branch="$PREVIEW_BRANCH"
           --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
-          pnpm --filter @qoovex/workspace blob:vnext:reset
+          pnpm --filter @qoovex/workspace blob:private:reset
 
-      - name: Recreate isolated Preview database from vNext migrations
+      - name: Recreate isolated Preview database from current migrations
         env:
           QOOVEX_PREVIEW_RECREATE_APPROVED: RECREATE_ISOLATED_PREVIEW
         run: >-
@@ -162,7 +162,7 @@ jobs:
             --arg migrationHead "20260803230000_qoovex_vnext_from_zero" \
             --arg deploymentUrl "$DEPLOYMENT_URL" \
             --arg isolation "verified" \
-            --arg database "recreated-vnext" \
+            --arg database "recreated-job-site" \
             --arg blob "reset-private" \
             --arg e2e "passed" \
             --arg rollbackProof "production-alias-unchanged" \

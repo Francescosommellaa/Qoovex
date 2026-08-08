@@ -28,7 +28,7 @@
       "required": ["RESEND_API_KEY", "RESEND_FROM_EMAIL"],
       "optional": ["RESEND_REPLY_TO_EMAIL"]
     },
-    "vnextData": {
+    "jobSiteData": {
       "inactiveOptional": ["QOOVEX_DATA_ENCRYPTION_KEYS", "QOOVEX_DATA_ENCRYPTION_ACTIVE_KEY_ID"]
     }
   },
@@ -36,32 +36,32 @@
     "local": {
       "databaseMarker": "local",
       "requiredGroups": ["database", "auth", "mfa", "credentials", "audit", "scheduler"],
-      "optionalGroups": ["blob", "email", "vnextData"],
+      "optionalGroups": ["blob", "email", "jobSiteData"],
       "devAuth": "allowed_loopback_only"
     },
     "test": {
       "databaseMarker": "test",
       "requiredGroups": ["database", "auth", "mfa", "credentials", "audit", "scheduler"],
-      "optionalGroups": ["blob", "email", "vnextData"],
+      "optionalGroups": ["blob", "email", "jobSiteData"],
       "externalDelivery": "mock_only"
     },
     "ci": {
       "databaseMarker": "test",
       "requiredGroups": ["database", "auth", "mfa", "credentials", "audit", "scheduler"],
-      "optionalGroups": ["blob", "email", "vnextData"],
+      "optionalGroups": ["blob", "email", "jobSiteData"],
       "externalDelivery": "isolated_mock_or_sink"
     },
     "preview": {
       "databaseMarker": "preview",
       "requiredGroups": ["database", "auth", "mfa", "credentials", "audit", "scheduler", "blob", "email"],
-      "optionalGroups": ["vnextData"],
+      "optionalGroups": ["jobSiteData"],
       "dataPolicy": "synthetic_only",
       "isolation": ["database", "blob", "auth_callback", "secrets", "email_sink"]
     },
     "production": {
       "databaseMarker": "production",
       "requiredGroups": ["database", "auth", "mfa", "credentials", "audit", "scheduler", "blob", "email"],
-      "optionalGroups": ["vnextData"],
+      "optionalGroups": ["jobSiteData"],
       "authUrl": "https://app.qoovex.com",
       "devAuth": "forbidden"
     }

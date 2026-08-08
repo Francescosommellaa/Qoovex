@@ -70,7 +70,7 @@ async function main() {
   }
 
   await applyMigration(migrationNames[5]);
-  const vnext = await client.query(`
+  const jobSite = await client.query(`
     SELECT
       (SELECT COUNT(*)::int FROM "User") AS users,
       to_regclass('public."JobSiteParticipant"') IS NOT NULL AS has_participant,
@@ -78,7 +78,7 @@ async function main() {
       to_regclass('public."CalendarEvent"') IS NULL AS removed_calendar,
       to_regclass('public."JobSiteUserAssignment"') IS NULL AS removed_legacy_assignment;
   `);
-  const final = vnext.rows[0] as {
+  const final = job-site.rows[0] as {
     users: number;
     has_participant: boolean;
     has_receipt: boolean;
@@ -92,7 +92,7 @@ async function main() {
     !final.removed_calendar ||
     !final.removed_legacy_assignment
   ) {
-    throw new Error("Verifica upgrade distruttivo baseline -> Qoovex vNext fallita.");
+    throw new Error("Verifica upgrade distruttivo baseline -> Qoovex current fallita.");
   }
 
   const diff = spawnPrisma(["migrate", "diff", "--from-config-datasource", "--to-schema", "prisma/schema.prisma", "--exit-code"]);

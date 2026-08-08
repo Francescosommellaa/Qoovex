@@ -1,3 +1,3 @@
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
-import { ActionButton } from "@/views/vnext/VNextForms";
+import { ActionButton } from "@/views/job-site/JobSiteForms";
 export default async function ClientInvitationPage({ params }: { params: Promise<{ token: string }> }) { const { token } = await params; return <WorkspacePage><WorkspacePageHeader title="Invito al cantiere" description="Accetta con l'account Qoovex associato all'indirizzo invitato." /><WorkspacePanel title="Partecipazione cliente"><ActionButton endpoint={`/api/client/invitations/${encodeURIComponent(token)}/accept`} body={{}} label="Accetta invito" success="Invito accettato." confirmMessage="Accetti di partecipare come cliente principale?" /></WorkspacePanel></WorkspacePage>; }

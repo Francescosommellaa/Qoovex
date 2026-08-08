@@ -1,6 +1,6 @@
 import type { AuditLogFilters } from "@qoovex/types";
 import { listProductAuditEvents } from "@shared/server/product-audit-service";
-import { AuditLogPageView } from "@/views/admin-core/audit-log/AuditLogPageView";
+import { AuditLogPageView } from "@/views/administration/audit-log/AuditLogPageView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 
 interface AuditLogPageProps {
