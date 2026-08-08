@@ -2,7 +2,7 @@
 
 ## verified_current_state
 
-La foundation visiva corrente resta invariata: shadcn base-nova, Base UI, Tabler, Tailwind v4, Geist/Geist Mono e token Qoovex. Le composizioni dominio sono app-local nel Workspace; nessun nuovo design system o brand Ã¨ stato introdotto.
+La foundation visiva corrente resta invariata: shadcn base-nova, Base UI, Tabler, Tailwind v4, General Sans (principale), ARRAY (accent) e token Qoovex. Le composizioni dominio sono app-local nel Workspace; nessun nuovo design system o brand è stato introdotto.
 
 ## Superficie Azienda
 
@@ -22,7 +22,7 @@ Il prodotto usa â€œconfermato dalle partiâ€, â€œinvio dichiaratoâ�
 
 ## Marketing (apps/web) â€” polish microinterazioni
 
-`verified_current_state`. Il sito marketing usa la stessa foundation (token Qoovex, Geist, Tabler) senza nuovi design system. Le microinterazioni sono sobrie e basate solo su `transform`/`opacity`:
+`verified_current_state`. Il sito marketing usa la stessa foundation (token Qoovex, General Sans / ARRAY, Tabler) senza nuovi design system. Le microinterazioni sono sobrie e basate solo su `transform`/`opacity`:
 
 - Scroll reveal (`components/reveal.tsx` + `[data-reveal]` in `globals.css`): entrata unica con `--ease-standard`, stagger via `--reveal-delay`, rete di sicurezza a 700ms, disattivato con `prefers-reduced-motion` e nessun contenuto nascosto senza JavaScript.
 - Card di contenuto: lift discreto in hover (`-translate-y-0.5`, ombra e ring del token `foreground`).

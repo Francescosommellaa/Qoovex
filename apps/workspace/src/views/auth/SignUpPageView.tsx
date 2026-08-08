@@ -183,7 +183,7 @@ export function SignUpPageView({
 
       {step === "verify" ? (
         <AuthStage>
-          <Badge className="w-fit max-w-full truncate font-mono font-normal" variant="secondary">{email}</Badge>
+          <Badge className="w-fit max-w-full truncate font-normal" variant="secondary">{email}</Badge>
           {message ? <Alert role="status" variant="info"><AlertDescription>{message}</AlertDescription></Alert> : null}
           <form aria-busy={loading} className={styles.form} onSubmit={submitCode}>
             <Field>

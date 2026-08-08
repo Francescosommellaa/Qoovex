@@ -47,6 +47,9 @@
       "iban": "AES-256-GCM dedicated application key ring with AAD",
       "blob": "private, server-mediated, MIME checked, SHA-256, 4 MiB maximum"
     },
+    "visual_foundation": {
+      "typography": "General Sans (primary, ~90-95%) and ARRAY (Fontshare display accent)"
+    },
     "known_blockers": [
       "JobSite creator participant is persisted PENDING while organization actor resolution requires ACTIVE",
       "Accepted primary client participant is persisted ACTIVE before initial agreement confirmation"
