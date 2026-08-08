@@ -1,4 +1,4 @@
-import { getWorkspaceCapabilities } from "@/views/admin-core/admin-core-server";
+import { getWorkspaceCapabilities } from "@/views/administration/administration-server";
 import { SettingsHubView } from "@/views/settings/SettingsHubView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 

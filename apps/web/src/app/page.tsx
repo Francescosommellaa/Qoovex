@@ -87,7 +87,7 @@ const linkedInfo = [
 ];
 
 // Direzione di prodotto approvata, non ancora disponibile nel prodotto.
-const vNextDirection = [
+const currentDirection = [
   {
     title: "Timeline condivisa in tempo reale",
     body: "Impresa e cliente sulla stessa cronologia del lavoro, con ciò che è stato condiviso sempre allineato.",
@@ -355,21 +355,21 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {/* Direzione di prodotto (vNext) - non ancora disponibile */}
-      <Section bordered aria-labelledby="vnext-title">
+      {/* Direzione di prodotto (current) - non ancora disponibile */}
+      <Section bordered aria-labelledby="job-site-title">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.05fr] lg:items-center">
           <div>
             <SectionHeading
-              titleId="vnext-title"
+              titleId="job-site-title"
               eyebrow="Direzione di prodotto"
               title="Dove sta andando Qoovex"
-              description="Qoovex vNext è la direzione approvata del prodotto. Queste capacità sono in sviluppo e non sono ancora disponibili: le raccontiamo per trasparenza, non come funzioni attive."
+              description="Qoovex current è la direzione approvata del prodotto. Queste capacità sono in sviluppo e non sono ancora disponibili: le raccontiamo per trasparenza, non come funzioni attive."
             />
             <div className="mt-6">
               <Badge variant="secondary">In sviluppo · non ancora disponibile</Badge>
             </div>
             <ul className="mt-8 grid gap-4">
-              {vNextDirection.map((item) => (
+              {currentDirection.map((item) => (
                 <li key={item.title} className="border-l-2 border-border pl-4">
                   <p className="text-sm font-medium">{item.title}</p>
                   <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.body}</p>

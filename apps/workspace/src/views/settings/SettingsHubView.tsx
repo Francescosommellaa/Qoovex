@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
 import type { WorkspaceCapabilities } from "@/views/workspace/workspace-records";
-import styles from "@/views/admin-core/AdminCore.module.css";
+import styles from "@/views/administration/AdminCore.module.css";
 
 export function SettingsHubView({ capabilities }: { capabilities: WorkspaceCapabilities }) {
   const areas = [

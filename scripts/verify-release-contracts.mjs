@@ -19,19 +19,19 @@ if (manifest.database.migrationHead !== ledger.protectedProductionHead) {
 if (manifest.database.migrationCount !== ledger.migrations.length) {
   throw new Error("Release manifest migration count is stale.");
 }
-const vNextMigration = ledger.migrations.find((entry) => entry.name === manifest.database.migrationHead);
+const currentMigration = ledger.migrations.find((entry) => entry.name === manifest.database.migrationHead);
 if (
-  !vNextMigration ||
-  vNextMigration.productionApplied !== false ||
-  vNextMigration.destructiveApproved !== false ||
-  vNextMigration.executionPolicy !== "MANUAL_REAUTHORIZATION_REQUIRED"
+  !currentMigration ||
+  currentMigration.productionApplied !== false ||
+  currentMigration.destructiveApproved !== false ||
+  currentMigration.executionPolicy !== "MANUAL_REAUTHORIZATION_REQUIRED"
 ) {
-  throw new Error("Pending destructive vNext migration must remain frozen pending manual reauthorization.");
+  throw new Error("Pending destructive current migration must remain frozen pending manual reauthorization.");
 }
 
 const expectedJobs = new Map([
   ["data-control", { method: "GET", path: "/api/data/jobs/run" }],
-  ["vnext-processes", { method: "POST", path: "/api/internal/vnext/processes/run" }],
+  ["job-site-processes", { method: "POST", path: "/api/internal/job-sites/processes/run" }],
 ]);
 for (const job of manifest.scheduler.jobs) {
   const expected = expectedJobs.get(job.id);
@@ -48,16 +48,16 @@ if (
   scheduler.includes("/api/reminders/email-digest/run") ||
   scheduler.includes("/api/operations/run")
 ) {
-  throw new Error("Scheduled workflow must contain only data-control and the vNext process queue.");
+  throw new Error("Scheduled workflow must contain only data-control and the current process queue.");
 }
-if (manifest.application.runtimeTrack !== "vnext" || manifest.application.vNext !== "implemented_not_end_to_end_verified") {
-  throw new Error("Runtime track must identify vNext without claiming end-to-end verification.");
+if (manifest.application.runtimeTrack !== "job-site" || manifest.application.current !== "implemented_not_end_to_end_verified") {
+  throw new Error("Runtime track must identify current without claiming end-to-end verification.");
 }
 if (
   manifest.blob?.access !== "private" ||
-  manifest.blob?.resetScript !== "apps/workspace/scripts/reset-vnext-blob-store.mjs"
+  manifest.blob?.resetScript !== "apps/workspace/scripts/reset-private-blob-store.mjs"
 ) {
-  throw new Error("vNext private Blob reset contract is incomplete.");
+  throw new Error("current private Blob reset contract is incomplete.");
 }
 if (manifest.http.anonymousProtectedPage !== "307_sign_in_with_sanitized_relative_callback") {
   throw new Error("Protected page redirect contract must match the runtime 307 response.");

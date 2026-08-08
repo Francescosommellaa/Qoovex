@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireOrganizationContext } from "@shared/server/access-context-service";
-import { listOrganizationJobSites } from "@shared/server/vnext-job-site-service";
+import { listOrganizationJobSites } from "@shared/server/job-site-lifecycle-service";
 import { buttonVariants } from "@qoovex/ui/components/button";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 

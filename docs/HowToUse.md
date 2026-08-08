@@ -21,15 +21,13 @@ Ogni affermazione sostanziale deve essere classificabile come:
 - `open_decision`: richiede una decisione;
 - `hard_stop`: blocca schema o implementazione.
 
-Una stessa direzione puo essere approvata e contemporaneamente non implementata. Usare formule esplicite, per esempio: “Nella direzione vNext approvata... Questa capacita non e implementata nello stato corrente.”
+Una stessa direzione puo essere approvata e contemporaneamente non implementata. Usare formule esplicite, per esempio: â€œNella direzione attuale approvata... Questa capacita non e implementata nello stato corrente.â€
 
 ## Stato implementato
 
-D-VNEXT-46 ha eliminato il prodotto precedente come direzione attiva; D-VNEXT-48 ha introdotto nel repository schema, servizi, route e superfici vNext sullo stato foundation-only D-VNEXT-47. Questo è `implemented_but_not_end_to_end_verified`, non equivale a prodotto pronto: la prima vertical slice ha due blocchi lifecycle noti sul participant creatore e sull'attivazione anticipata del cliente.
 
-Il modello mantiene `OWNER`/`COLLABORATOR` e usa l’unicità membership `(organizationId,userId)`. `CLIENT` è un participant del singolo JobSite, mai un ruolo Azienda. Non sono stati reintrodotti `JobSite.clientName`, `JobSiteOperationalPhase`, deadline, checklist, pacchetti o share link.
+Il modello mantiene `OWNER`/`COLLABORATOR` e usa lâ€™unicitÃ  membership `(organizationId,userId)`. `CLIENT` Ã¨ un participant del singolo JobSite, mai un ruolo Azienda. Non sono stati reintrodotti `JobSite.clientName`, `JobSiteOperationalPhase`, deadline, checklist, pacchetti o share link.
 
-D-VNEXT-41–45 restano `SUPERSEDED`. D-VNEXT-18–40 e D-VNEXT-48 sono `implemented_decision` come decisioni e artefatti presenti; ogni capability deve essere classificata separatamente come verificata, implementata ma non provata end-to-end, bloccata, non implementata, decisione aperta o hard stop. Pricing/billing, marketplace, denaro in-app, IA, ruoli cliente futuri e cancellazione fisica restano non implementati o hard stop.
 
 ## Modifiche tecniche e memoria
 

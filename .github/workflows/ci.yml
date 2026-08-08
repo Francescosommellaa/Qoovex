@@ -3,6 +3,7 @@ name: CI
 on:
   pull_request:
   push:
+    branches: [master]
 
 permissions:
   contents: read
@@ -26,7 +27,7 @@ env:
 
 jobs:
   push-gate:
-    name: CI / push-gate
+    name: push-gate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -62,7 +63,7 @@ jobs:
           git diff --exit-code -- packages/db/generated
 
   quality-gate:
-    name: CI / quality-gate
+    name: quality-gate
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -86,12 +87,12 @@ jobs:
           node-version-file: package.json
           cache: pnpm
       - run: pnpm ci:install
-      - name: Apply six-migration vNext chain from zero
+      - name: Apply six-migration current chain from zero
         run: pnpm ci:db:prepare
       - name: Verify fresh database drift
         working-directory: packages/db
         run: pnpm exec prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --exit-code
-      - name: Verify baseline upgrade to vNext head
+      - name: Verify baseline upgrade to current head
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/qoovex_upgrade_ci
           QOOVEX_UPGRADE_CI_MODE: "1"
@@ -101,7 +102,7 @@ jobs:
       - run: pnpm check
 
   workspace-e2e:
-    name: CI / workspace-e2e
+    name: workspace-e2e
     runs-on: ubuntu-latest
     services:
       postgres:

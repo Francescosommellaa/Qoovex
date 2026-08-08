@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { getOrganizationJobSiteDetail } from "@shared/server/vnext-job-site-service";
-import { getOrganizationPaymentProfile } from "@shared/server/vnext-payment-profile-service";
+import { getOrganizationJobSiteDetail } from "@shared/server/job-site-lifecycle-service";
+import { getOrganizationPaymentProfile } from "@shared/server/job-site-payment-profile-service";
 import { buttonVariants } from "@qoovex/ui/components/button";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
-import { ActionButton, AgreementForm, AttachmentForm, AuthorityGrantForm, CollaboratorInviteForm, DeleteActionButton, DisputeForm, InviteClientForm, LegalHoldForm, ParticipantForm, PaymentRequestForm, PaymentReviewForm, PostClosureForm, ProposalCounterForm, ProposalForm, RecordTransitionForm, ReopeningForm, ReleaseLegalHoldButton, RequestForm, StepForm, TimelineForm } from "@/views/vnext/VNextForms";
-import { JobSiteSearch } from "@/views/vnext/JobSiteSearch";
+import { ActionButton, AgreementForm, AttachmentForm, AuthorityGrantForm, CollaboratorInviteForm, DeleteActionButton, DisputeForm, InviteClientForm, LegalHoldForm, ParticipantForm, PaymentRequestForm, PaymentReviewForm, PostClosureForm, ProposalCounterForm, ProposalForm, RecordTransitionForm, ReopeningForm, ReleaseLegalHoldButton, RequestForm, StepForm, TimelineForm } from "@/views/job-site/JobSiteForms";
+import { JobSiteSearch } from "@/views/job-site/JobSiteSearch";
 
 const sections = ["riepilogo", "timeline", "step", "richieste", "modifiche", "pagamenti", "persone", "file", "chiusura", "impostazioni"] as const;
 function date(value: Date | string | null | undefined) { return value ? new Intl.DateTimeFormat("it-IT", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)) : "Non indicata"; }

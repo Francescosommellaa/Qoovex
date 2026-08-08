@@ -23,7 +23,7 @@ concurrency:
 
 jobs:
   release:
-    name: Release Workspace / vNext staged promotion
+    name: Release Workspace / current staged promotion
     runs-on: ubuntu-latest
     environment: Production – qoovex-workspace
     env:
@@ -88,7 +88,7 @@ jobs:
             --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --silent | jq -r '.autoAssignCustomDomains')"
           test "$auto_assign" = "false"
 
-      - name: Detect one-time vNext rollout state
+      - name: Detect one-time current rollout state
         id: rollout
         run: |
           if pnpm dlx vercel@50.17.1 env run -e production \
@@ -105,16 +105,16 @@ jobs:
       - name: Reset Production Blob store for the one-time empty-data rollout
         if: steps.rollout.outputs.required == 'true'
         env:
-          QOOVEX_VNEXT_BLOB_RESET_APPROVED: RESET_QOOVEX_VNEXT_EMPTY_BLOB_STORE_2026_08_03
+          QOOVEX_JOB_SITE_BLOB_RESET_APPROVED: RESET_QOOVEX_JOB_SITE_EMPTY_BLOB_STORE_2026_08_03
         run: >-
           pnpm dlx vercel@50.17.1 env run -e production
           --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
-          pnpm --filter @qoovex/workspace blob:vnext:reset
+          pnpm --filter @qoovex/workspace blob:private:reset
 
-      - name: Apply vNext migration with explicit empty-database authorization
+      - name: Apply current migration with explicit empty-database authorization
         env:
           QOOVEX_MIGRATE_DEPLOY_APPROVED: "1"
-          QOOVEX_VNEXT_DESTRUCTIVE_RESET_REF: QOOVEX_VNEXT_FROM_ZERO_USER_AUTHORIZATION_2026_08_03
+          QOOVEX_JOB_SITE_DESTRUCTIVE_RESET_REF: QOOVEX_JOB_SITE_FROM_ZERO_USER_AUTHORIZATION_2026_08_03
           QOOVEX_EXPECTED_LAST_MIGRATION: 20260803230000_qoovex_vnext_from_zero
         run: >-
           pnpm dlx vercel@50.17.1 env run -e production
@@ -136,7 +136,7 @@ jobs:
           test -n "$deployment_url"
           echo "url=$deployment_url" >> "$GITHUB_OUTPUT"
 
-      - name: Smoke staged vNext deployment
+      - name: Smoke staged current deployment
         env:
           DEPLOYMENT_URL: ${{ steps.staged.outputs.url }}
         run: |
@@ -170,7 +170,7 @@ jobs:
             --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE"
           echo "deployment_id=$deployment_id" >> "$GITHUB_OUTPUT"
 
-      - name: Verify promoted vNext scheduler endpoints and enable workflow
+      - name: Verify promoted current scheduler endpoints and enable workflow
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -182,7 +182,7 @@ jobs:
           process_response="$(curl --fail-with-body --silent --show-error --max-time 240 \
             --request POST \
             --header "Authorization: Bearer $CRON_SECRET" \
-            "https://app.qoovex.com/api/internal/vnext/processes/run")"
+            "https://app.qoovex.com/api/internal/job-sites/processes/run")"
           jq -e 'type == "object" and ((.failed | type) == "number") and .failed == 0' <<<"$process_response" >/dev/null
           gh workflow enable scheduled-jobs.yml
 
@@ -201,7 +201,7 @@ jobs:
             --arg deploymentUrl "$DEPLOYMENT_URL" \
             --arg alias "https://app.qoovex.com" \
             --arg smoke "passed" \
-            --arg schedulerContract "vnext-enabled" \
+            --arg schedulerContract "job-site-enabled" \
             --arg approver "$APPROVER" \
             --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
             '{sha:$sha,migrationHead:$migrationHead,resetApplied:$resetApplied,deploymentId:$deploymentId,deploymentUrl:$deploymentUrl,alias:$alias,smoke:$smoke,schedulerContract:$schedulerContract,approver:$approver,timestamp:$timestamp}' \

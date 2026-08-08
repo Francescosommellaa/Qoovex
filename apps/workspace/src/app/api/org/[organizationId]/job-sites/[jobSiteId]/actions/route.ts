@@ -1,6 +1,6 @@
-import { executeVNextAction } from "@shared/server/vnext-action-service";
-import { resolveOrganizationJobSiteActor } from "@shared/server/vnext-authorization-service";
-import { asVNextApiError, requireIdempotencyKey } from "@shared/server/vnext-api-response";
+import { executeJobSiteAction } from "@shared/server/job-site-action-service";
+import { resolveOrganizationJobSiteActor } from "@shared/server/job-site-authorization-service";
+import { asJobSiteApiError, requireIdempotencyKey } from "@shared/server/job-site-api-response";
 
 export async function POST(request: Request, { params }: { params: Promise<{ organizationId: string; jobSiteId: string }> }) {
   try {
@@ -14,6 +14,6 @@ export async function POST(request: Request, { params }: { params: Promise<{ org
       : action.action === "STEP_STATUS_TRANSITION@1" ? "jobSite:steps:updateStatus"
       : "jobSite:update";
     const actor = await resolveOrganizationJobSiteActor({ organizationId: value.organizationId, jobSiteId: value.jobSiteId, permission });
-    return Response.json(await executeVNextAction({ actor, idempotencyKey: requireIdempotencyKey(request), action }));
-  } catch (error) { return asVNextApiError(error); }
+    return Response.json(await executeJobSiteAction({ actor, idempotencyKey: requireIdempotencyKey(request), action }));
+  } catch (error) { return asJobSiteApiError(error); }
 }

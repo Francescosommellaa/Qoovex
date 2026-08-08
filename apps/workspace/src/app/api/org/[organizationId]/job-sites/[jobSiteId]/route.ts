@@ -1,6 +1,6 @@
-import { getOrganizationJobSiteDetail } from "@shared/server/vnext-job-site-service";
-import { asVNextApiError } from "@shared/server/vnext-api-response";
+import { getOrganizationJobSiteDetail } from "@shared/server/job-site-lifecycle-service";
+import { asJobSiteApiError } from "@shared/server/job-site-api-response";
 
 export async function GET(_: Request, { params }: { params: Promise<{ organizationId: string; jobSiteId: string }> }) {
-  try { const value = await params; return Response.json(await getOrganizationJobSiteDetail(value.organizationId, value.jobSiteId)); } catch (error) { return asVNextApiError(error); }
+  try { const value = await params; return Response.json(await getOrganizationJobSiteDetail(value.organizationId, value.jobSiteId)); } catch (error) { return asJobSiteApiError(error); }
 }

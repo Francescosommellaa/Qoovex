@@ -1,6 +1,6 @@
-import { executeVNextAction } from "@shared/server/vnext-action-service";
-import { resolveClientInitialAgreementActor, resolveClientJobSiteActor } from "@shared/server/vnext-authorization-service";
-import { asVNextApiError, requireIdempotencyKey } from "@shared/server/vnext-api-response";
+import { executeJobSiteAction } from "@shared/server/job-site-action-service";
+import { resolveClientInitialAgreementActor, resolveClientJobSiteActor } from "@shared/server/job-site-authorization-service";
+import { asJobSiteApiError, requireIdempotencyKey } from "@shared/server/job-site-api-response";
 export async function POST(request: Request, { params }: { params: Promise<{ jobSiteId: string }> }) {
   try {
     const jobSiteId = (await params).jobSiteId;
@@ -9,8 +9,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ job
     const actor = initialAgreementConfirmation
       ? await resolveClientInitialAgreementActor(jobSiteId)
       : await resolveClientJobSiteActor(jobSiteId);
-    return Response.json(await executeVNextAction({ actor, idempotencyKey: requireIdempotencyKey(request), action }));
+    return Response.json(await executeJobSiteAction({ actor, idempotencyKey: requireIdempotencyKey(request), action }));
   } catch (error) {
-    return asVNextApiError(error);
+    return asJobSiteApiError(error);
   }
 }

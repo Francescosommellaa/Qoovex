@@ -1,4 +1,4 @@
-import { transitionPostClosureRequest } from "@shared/server/vnext-collaboration-service";
-import { resolveOrganizationJobSiteActor } from "@shared/server/vnext-authorization-service";
-import { asVNextApiError, requireIdempotencyKey } from "@shared/server/vnext-api-response";
-export async function POST(request: Request, { params }: { params: Promise<{ organizationId: string; jobSiteId: string; requestId: string }> }) { try { const value = await params; const actor = await resolveOrganizationJobSiteActor({ ...value, permission: "jobSite:requests:respond" }); return Response.json(await transitionPostClosureRequest({ actor, postClosureRequestId: value.requestId, idempotencyKey: requireIdempotencyKey(request), body: await request.json() })); } catch (error) { return asVNextApiError(error); } }
+import { transitionPostClosureRequest } from "@shared/server/job-site-collaboration-service";
+import { resolveOrganizationJobSiteActor } from "@shared/server/job-site-authorization-service";
+import { asJobSiteApiError, requireIdempotencyKey } from "@shared/server/job-site-api-response";
+export async function POST(request: Request, { params }: { params: Promise<{ organizationId: string; jobSiteId: string; requestId: string }> }) { try { const value = await params; const actor = await resolveOrganizationJobSiteActor({ ...value, permission: "jobSite:requests:respond" }); return Response.json(await transitionPostClosureRequest({ actor, postClosureRequestId: value.requestId, idempotencyKey: requireIdempotencyKey(request), body: await request.json() })); } catch (error) { return asJobSiteApiError(error); } }

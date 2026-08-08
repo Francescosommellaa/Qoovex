@@ -1,6 +1,6 @@
 import { getContextHub } from "@shared/server/access-context-service";
-import { asVNextApiError } from "@shared/server/vnext-api-response";
+import { asJobSiteApiError } from "@shared/server/job-site-api-response";
 
 export async function GET() {
-  try { return Response.json(await getContextHub()); } catch (error) { return asVNextApiError(error); }
+  try { return Response.json(await getContextHub()); } catch (error) { return asJobSiteApiError(error); }
 }

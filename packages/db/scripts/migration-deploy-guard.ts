@@ -1,6 +1,6 @@
-export const VNEXT_EMPTY_DATABASE_RESET_REF =
-  "QOOVEX_VNEXT_FROM_ZERO_USER_AUTHORIZATION_2026_08_03";
-export const VNEXT_EMPTY_DATABASE_MIGRATION =
+export const JOB_SITE_EMPTY_DATABASE_RESET_REF =
+  "QOOVEX_JOB_SITE_FROM_ZERO_USER_AUTHORIZATION_2026_08_03";
+export const JOB_SITE_EMPTY_DATABASE_MIGRATION =
   "20260803230000_qoovex_vnext_from_zero";
 
 export function assertCiEphemeralDatabase(databaseUrl: string) {
@@ -23,11 +23,11 @@ export function assertProductionApproval(input: {
   }
   const hasBackup = Boolean(input.backupRef?.trim());
   const hasAuthorizedEmptyReset =
-    input.destructiveResetRef === VNEXT_EMPTY_DATABASE_RESET_REF &&
-    input.lastMigration === VNEXT_EMPTY_DATABASE_MIGRATION;
+    input.destructiveResetRef === JOB_SITE_EMPTY_DATABASE_RESET_REF &&
+    input.lastMigration === JOB_SITE_EMPTY_DATABASE_MIGRATION;
   if (!hasBackup && !hasAuthorizedEmptyReset) {
     throw new Error(
-      "[migrate-deploy] Serve QOOVEX_MIGRATION_BACKUP_REF oppure l'attestazione vNext empty-database esatta.",
+      "[migrate-deploy] Serve QOOVEX_MIGRATION_BACKUP_REF oppure l'attestazione current empty-database esatta.",
     );
   }
   const expected = input.expectedLastMigration?.trim();

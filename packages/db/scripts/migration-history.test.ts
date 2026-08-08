@@ -4,8 +4,8 @@ import test from "node:test";
 import {
   assertCiEphemeralDatabase,
   assertProductionApproval,
-  VNEXT_EMPTY_DATABASE_MIGRATION,
-  VNEXT_EMPTY_DATABASE_RESET_REF,
+  JOB_SITE_EMPTY_DATABASE_MIGRATION,
+  JOB_SITE_EMPTY_DATABASE_RESET_REF,
 } from "./migration-deploy-guard";
 import { calculateMigrationChecksum, calculateMigrationChecksums, validateMigrationHistory } from "./migration-history";
 
@@ -112,9 +112,9 @@ test("richiede approvazione, prova di ripristino o reset vuoto e target esatto i
     () => assertProductionApproval({
       approved: "1",
       backupRef: undefined,
-      destructiveResetRef: VNEXT_EMPTY_DATABASE_RESET_REF,
-      expectedLastMigration: VNEXT_EMPTY_DATABASE_MIGRATION,
-      lastMigration: VNEXT_EMPTY_DATABASE_MIGRATION,
+      destructiveResetRef: JOB_SITE_EMPTY_DATABASE_RESET_REF,
+      expectedLastMigration: JOB_SITE_EMPTY_DATABASE_MIGRATION,
+      lastMigration: JOB_SITE_EMPTY_DATABASE_MIGRATION,
     }),
   );
 });

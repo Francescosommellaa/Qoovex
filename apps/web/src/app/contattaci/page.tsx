@@ -6,7 +6,7 @@ import { SiteShell } from "../site-chrome";
 
 export const metadata: Metadata = {
   title: "Contattaci | Qoovex",
-  description: "Contatta Qoovex per parlare della direzione prodotto vNext.",
+  description: "Contatta Qoovex per parlare della direzione prodotto current.",
 };
 
 export default function ContactPage() {

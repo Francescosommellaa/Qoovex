@@ -3,7 +3,7 @@ import "server-only";
 import type { RecordStatus } from "@qoovex/types";
 import { recordStatuses } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
-import { isEnumValue, parseOptionalDate, trimOptionalText } from "./document-domain-validation";
+import { isEnumValue, parseOptionalDate, trimOptionalText } from "./input-validation";
 
 const SENSITIVE_FIELD_NAMES = ["taxCode", "fiscalCode", "healthData", "medicalData", "medicalNotes", "gps", "latitude", "longitude", "coordinates"] as const;
 

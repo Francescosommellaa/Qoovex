@@ -24,7 +24,7 @@ vi.mock("@shared/server/mfa-service", () => ({ getMfaStatusByUserId: mocks.getMf
 vi.mock("@shared/server/dev-auth", () => ({ getDevAuthSession: mocks.getDevAuthSession }));
 vi.mock("next/headers", () => ({ cookies: mocks.cookies }));
 vi.mock("@shared/server/notification-service", () => ({ getUnreadNotificationCount: vi.fn().mockResolvedValue(0) }));
-vi.mock("@shared/server/job-site-read-model-service", () => ({ listWorkspaceJobSiteNavigation: vi.fn().mockResolvedValue([]) }));
+vi.mock("@shared/server/job-site-lifecycle-service", () => ({ listWorkspaceJobSiteNavigation: vi.fn().mockResolvedValue([]) }));
 vi.mock("@/views/account-security/AccountSecurityFlow", () => ({
   AccountSecurityFlow: () => <div>GLOBAL_MFA_GATE</div>,
 }));

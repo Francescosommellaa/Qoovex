@@ -9,7 +9,7 @@ import { Button, buttonVariants } from "@qoovex/ui/components/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
 import type { OrganizationAccessPreset, OrganizationPermission, OrganizationRole, OrganizationScopeMode } from "@qoovex/types";
-import { submitJson } from "@/views/admin-core/admin-api-client";
+import { submitJson } from "@/views/administration/admin-api-client";
 import { WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 
 const roleLabels: Record<OrganizationRole, string> = {

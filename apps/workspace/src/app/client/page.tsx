@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { buttonVariants } from "@qoovex/ui/components/button";
-import { listClientHome } from "@shared/server/vnext-job-site-service";
+import { listClientHome } from "@shared/server/job-site-lifecycle-service";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
-import { LinkPropertyForm, PropertyForm } from "@/views/vnext/VNextForms";
+import { LinkPropertyForm, PropertyForm } from "@/views/job-site/JobSiteForms";
 
 export default async function ClientHomePage() {
   const home = await listClientHome();

@@ -1,7 +1,7 @@
 import type { OrganizationRole } from "@qoovex/types";
 import { canInviteRole } from "@shared/server/authorization-policy";
 import { getPeopleAccessOverview } from "@shared/server/people-service";
-import { getWorkspaceCapabilities, serializeForClient } from "@/views/admin-core/admin-core-server";
+import { getWorkspaceCapabilities, serializeForClient } from "@/views/administration/administration-server";
 import { PeopleAccessView } from "@/views/people/PeopleAccessView";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspaceAccessState";
 

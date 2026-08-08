@@ -37,12 +37,12 @@ const workspaceOrganization = read("apps/workspace/src/app/org/[organizationId]/
 const workspaceClient = read("apps/workspace/src/app/client/job-sites/[jobSiteId]/page.tsx");
 const web = read("apps/web/src/app/page.tsx");
 const sirio = read("apps/sirio/src/app/page.tsx");
-assert(workspaceOrganization.includes("Timeline") && workspaceOrganization.includes("Pagamenti documentati"), "Workspace Azienda non espone il contratto vNext.");
-assert(workspaceClient.includes("Timeline condivisa") && workspaceClient.includes("I tuoi lavori") === false, "Workspace cliente non applica la projection vNext.");
-assert(web.includes("Qoovex vNext") && !web.includes("vNext disponibile") && !web.includes("non implementata"), "Web deve indicare la direzione vNext senza presentarla come disponibile.");
+assert(workspaceOrganization.includes("Timeline") && workspaceOrganization.includes("Pagamenti documentati"), "Workspace Azienda non espone il contratto current.");
+assert(workspaceClient.includes("Timeline condivisa") && workspaceClient.includes("I tuoi lavori") === false, "Workspace cliente non applica la projection current.");
+assert(web.includes("Qoovex current") && !web.includes("current disponibile") && !web.includes("non implementata"), "Web deve indicare la direzione current senza presentarla come disponibile.");
 assert(sirio.includes("foundation visuale") && !sirio.includes("Dashboard"), "Sirio deve conservare soltanto la foundation visuale.");
 for (const removed of ["apps/workspace/src/views/dashboard/DashboardOverviewView.tsx", "apps/sirio/src/components/dashboard-shell.tsx", "apps/web/src/components/marketing-dashboard-preview.tsx"]) assert(!existsSync(join(root, removed)), `Superficie prodotto rimossa ancora presente: ${removed}`);
 
 const notice = read("packages/ui/THIRD_PARTY_NOTICES.md");
 assert(/MIT License/i.test(notice), "Licenza MIT mancante negli avvisi.");
-console.log("Canonical Qoovex vNext visual foundation verified.");
+console.log("Canonical Qoovex current visual foundation verified.");

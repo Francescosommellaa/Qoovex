@@ -1,4 +1,4 @@
-/** Platform-neutral contracts for Qoovex vNext. */
+/** Platform-neutral contracts for Qoovex current. */
 export type EntityId = string;
 
 export const platformRoles = ["USER", "SUPPORT_AGENT", "PLATFORM_ADMIN"] as const;
@@ -138,7 +138,7 @@ export interface AuditLogListResponse { events: AuditLogEventResponse[]; nextCur
 export interface DataRecordCount { total: number; active?: number; archived?: number }
 export type FoundationDataInventoryCounts = Record<string, DataRecordCount>;
 export interface DataInventoryResponse { generatedAt: string; counts: FoundationDataInventoryCounts }
-export interface DataExportResponse { organization: Record<string, unknown>; members: Array<Record<string, unknown>>; workers: Array<Record<string, unknown>>; jobSites: Array<Record<string, unknown>>; documents: Array<Record<string, unknown>>; documentVersions: Array<Record<string, unknown>>; evidence: Array<Record<string, unknown>>; evidenceRevisions: Array<Record<string, unknown>>; documentJobSiteLinks: Array<Record<string, unknown>>; workerUserLinks: Array<Record<string, unknown>>; jobSiteParticipants: Array<Record<string, unknown>>; jobSiteWorkerAssignments: Array<Record<string, unknown>>; invitations: Array<Record<string, unknown>>; notifications: Array<Record<string, unknown>>; auditEvents: Array<Record<string, unknown>>; vnext?: Record<string, Array<Record<string, unknown>>>; exportedAt: string }
+export interface DataExportResponse { organization: Record<string, unknown>; members: Array<Record<string, unknown>>; workers: Array<Record<string, unknown>>; jobSites: Array<Record<string, unknown>>; documents: Array<Record<string, unknown>>; documentVersions: Array<Record<string, unknown>>; evidence: Array<Record<string, unknown>>; evidenceRevisions: Array<Record<string, unknown>>; documentJobSiteLinks: Array<Record<string, unknown>>; workerUserLinks: Array<Record<string, unknown>>; jobSiteParticipants: Array<Record<string, unknown>>; jobSiteWorkerAssignments: Array<Record<string, unknown>>; invitations: Array<Record<string, unknown>>; notifications: Array<Record<string, unknown>>; auditEvents: Array<Record<string, unknown>>; jobSite?: Record<string, Array<Record<string, unknown>>>; exportedAt: string }
 export interface DataRetentionCandidate { key: string; title: string; description: string; count: number }
 export interface DataRetentionOverviewResponse { generatedAt: string; notice: string; thresholds: Record<string, never>; candidates: DataRetentionCandidate[] }
 

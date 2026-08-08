@@ -1,3 +1,3 @@
-import { listClientHome } from "@shared/server/vnext-job-site-service";
-import { asVNextApiError } from "@shared/server/vnext-api-response";
-export async function GET() { try { return Response.json(await listClientHome()); } catch (error) { return asVNextApiError(error); } }
+import { listClientHome } from "@shared/server/job-site-lifecycle-service";
+import { asJobSiteApiError } from "@shared/server/job-site-api-response";
+export async function GET() { try { return Response.json(await listClientHome()); } catch (error) { return asJobSiteApiError(error); } }

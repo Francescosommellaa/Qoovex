@@ -1,8 +1,8 @@
-import { getClientJobSiteDetail } from "@shared/server/vnext-job-site-service";
+import { getClientJobSiteDetail } from "@shared/server/job-site-lifecycle-service";
 import { buttonVariants } from "@qoovex/ui/components/button";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
-import { ActionButton, AttachmentForm, DeleteActionButton, DisputeForm, PaymentDeclarationForm, PostClosureForm, ProposalCounterForm, ProposalForm, RecordTransitionForm, ReopeningForm, RequestForm, TimelineForm } from "@/views/vnext/VNextForms";
-import { JobSiteSearch } from "@/views/vnext/JobSiteSearch";
+import { ActionButton, AttachmentForm, DeleteActionButton, DisputeForm, PaymentDeclarationForm, PostClosureForm, ProposalCounterForm, ProposalForm, RecordTransitionForm, ReopeningForm, RequestForm, TimelineForm } from "@/views/job-site/JobSiteForms";
+import { JobSiteSearch } from "@/views/job-site/JobSiteSearch";
 
 const sections = ["riepilogo", "timeline", "step", "richieste", "modifiche", "pagamenti", "persone", "documenti", "archivio"] as const;
 function date(value: Date | string | null | undefined) { return value ? new Intl.DateTimeFormat("it-IT", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)) : "Non indicata"; }
