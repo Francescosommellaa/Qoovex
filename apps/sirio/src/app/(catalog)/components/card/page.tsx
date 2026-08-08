@@ -35,7 +35,7 @@ export default function CardPage() {
             </Specimen>
           </SpecimenGrid>
         </section>
-        
+
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Casi d'uso</h2>
           <SpecimenGrid cols={2}>

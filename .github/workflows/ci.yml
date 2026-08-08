@@ -3,6 +3,7 @@ name: CI
 on:
   pull_request:
   push:
+    branches: [master]
 
 permissions:
   contents: read
@@ -26,7 +27,7 @@ env:
 
 jobs:
   push-gate:
-    name: CI / push-gate
+    name: push-gate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -62,7 +63,7 @@ jobs:
           git diff --exit-code -- packages/db/generated
 
   quality-gate:
-    name: CI / quality-gate
+    name: quality-gate
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -101,7 +102,7 @@ jobs:
       - run: pnpm check
 
   workspace-e2e:
-    name: CI / workspace-e2e
+    name: workspace-e2e
     runs-on: ubuntu-latest
     services:
       postgres:

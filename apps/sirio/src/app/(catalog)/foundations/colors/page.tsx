@@ -59,7 +59,7 @@ export default function ColorsPage() {
             <ColorSwatch name="Ring" variable="--ring" />
           </ColorGrid>
         </section>
-        
+
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Sidebar</h2>
           <ColorGrid>

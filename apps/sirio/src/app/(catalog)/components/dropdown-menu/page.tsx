@@ -32,7 +32,7 @@ export default function DropdownMenuPage() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </Specimen>
-            
+
             <Specimen title="Con Icone">
               <DropdownMenu>
                 <DropdownMenuTrigger render={<Button variant="ghost" size="icon" />}>
