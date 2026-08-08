@@ -150,7 +150,7 @@ export default function TypographyPage() {
                 <code className="text-xs text-muted-foreground">--font-sans</code>
               </div>
               <p className="text-xs text-muted-foreground mb-4">Fontshare • Sans-serif geometrica</p>
-              <p className="font-sans text-3xl tracking-tight mb-3" style={{ fontFamily: "var(--font-sans)" }}>
+              <p className="font-sans text-3xl tracking-tight mb-3">
                 AaBbCc 0123
               </p>
               <p className="text-sm text-muted-foreground">
@@ -164,7 +164,7 @@ export default function TypographyPage() {
                 <code className="text-xs text-muted-foreground">--font-accent</code>
               </div>
               <p className="text-xs text-muted-foreground mb-4">Fontshare • Display Accent</p>
-              <p className="font-accent text-3xl tracking-wider mb-3" style={{ fontFamily: "var(--font-accent)" }}>
+              <p className="font-accent text-3xl tracking-wider mb-3">
                 AABBCC 0123
               </p>
               <p className="text-sm text-muted-foreground">

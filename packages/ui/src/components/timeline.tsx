@@ -47,18 +47,18 @@ function TimelineMarker({
   variant?: "default" | "active" | "success" | "warning" | "destructive"
 }) {
   const variantStyles = {
-    default: "border-border bg-muted text-muted-foreground",
-    active: "border-primary bg-primary/10 text-primary ring-4 ring-primary/10",
-    success: "border-success/40 bg-success/10 text-success ring-4 ring-success/10",
-    warning: "border-warning/40 bg-warning/10 text-warning ring-4 ring-warning/10",
-    destructive: "border-destructive/40 bg-destructive/10 text-destructive ring-4 ring-destructive/10",
+    default: "border-border/80 bg-muted/60 text-muted-foreground",
+    active: "border-primary/80 bg-primary/10 text-primary shadow-2xs",
+    success: "border-success/60 bg-success/15 text-success shadow-2xs",
+    warning: "border-warning/60 bg-warning/15 text-warning shadow-2xs",
+    destructive: "border-destructive/60 bg-destructive/15 text-destructive shadow-2xs",
   }
 
   return (
     <span
       aria-hidden
       className={cn(
-        "mt-0.5 flex size-7 items-center justify-center rounded-full border text-xs font-medium transition-colors [&_svg]:size-3.5",
+        "mt-0.5 flex size-7 items-center justify-center rounded-full border text-xs font-medium transition-colors overflow-hidden shrink-0 [&_svg]:size-3.5 [&_svg]:shrink-0",
         variantStyles[variant],
         className
       )}
@@ -75,7 +75,7 @@ function TimelineContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "min-w-0 rounded-xl border bg-card p-4 shadow-2xs transition-all duration-150 hover:border-foreground/20 hover:shadow-xs",
+        "min-w-0 rounded-xl border bg-card p-4 shadow-2xs",
         className
       )}
       data-slot="timeline-content"

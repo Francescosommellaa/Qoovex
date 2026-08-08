@@ -59,6 +59,31 @@ function Table({
   )
 }
 
+/* ─── Context for Sliding Hover Indicator ─────────────────────── */
+
+type TableHoverIndicator = {
+  height: number
+  visible: boolean
+  x: number
+  y: number
+  width: number
+}
+
+const hiddenTableIndicator: TableHoverIndicator = {
+  height: 0,
+  visible: false,
+  width: 0,
+  x: 0,
+  y: 0,
+}
+
+type TableHoverContextValue = {
+  moveHoverIndicator: (element: HTMLElement) => void
+  clearHoverIndicator: () => void
+}
+
+const TableHoverContext = React.createContext<TableHoverContextValue | null>(null)
+
 function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
     <thead
@@ -69,13 +94,90 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   )
 }
 
-function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
+function TableBody({
+  className,
+  children,
+  onMouseLeave: onMouseLeaveProp,
+  onBlur: onBlurProp,
+  ...props
+}: React.ComponentProps<"tbody">) {
+  const bodyRef = React.useRef<HTMLTableSectionElement>(null)
+  const [hover, setHover] = React.useState(hiddenTableIndicator)
+
+  const moveHoverIndicator = React.useCallback((element: HTMLElement) => {
+    const body = bodyRef.current
+    if (!body) return
+    const bodyRect = body.getBoundingClientRect()
+    const elRect = element.getBoundingClientRect()
+    setHover({
+      height: elRect.height,
+      visible: true,
+      width: elRect.width,
+      x: elRect.left - bodyRect.left,
+      y: elRect.top - bodyRect.top,
+    })
+  }, [])
+
+  const clearHoverIndicator = React.useCallback(() => {
+    setHover((prev) => ({ ...prev, visible: false }))
+  }, [])
+
+  const handleMouseLeave = React.useCallback(
+    (event: React.MouseEvent<HTMLTableSectionElement>) => {
+      onMouseLeaveProp?.(event)
+      clearHoverIndicator()
+    },
+    [onMouseLeaveProp, clearHoverIndicator]
+  )
+
+  const handleBlur = React.useCallback(
+    (event: React.FocusEvent<HTMLTableSectionElement>) => {
+      onBlurProp?.(event)
+      if (
+        event.relatedTarget instanceof Node &&
+        event.currentTarget.contains(event.relatedTarget)
+      ) {
+        return
+      }
+      clearHoverIndicator()
+    },
+    [onBlurProp, clearHoverIndicator]
+  )
+
+  const indicatorStyle: React.CSSProperties = {
+    height: hover.height,
+    opacity: hover.visible ? 1 : 0,
+    transform: `translate3d(${hover.x}px, ${hover.y}px, 0)`,
+    width: hover.width,
+  }
+
+  const ctxValue = React.useMemo<TableHoverContextValue>(
+    () => ({ moveHoverIndicator, clearHoverIndicator }),
+    [moveHoverIndicator, clearHoverIndicator]
+  )
+
   return (
-    <tbody
-      data-slot="table-body"
-      className={cn("divide-y divide-border/60 [&_tr:last-child]:border-0", className)}
-      {...props}
-    />
+    <TableHoverContext.Provider value={ctxValue}>
+      <tbody
+        ref={bodyRef}
+        data-slot="table-body"
+        className={cn("relative divide-y divide-border/60 [&_tr:last-child]:border-0", className)}
+        onMouseLeave={handleMouseLeave}
+        onBlur={handleBlur}
+        {...props}
+      >
+        <tr aria-hidden className="pointer-events-none border-0 p-0 m-0">
+          <td className="p-0 border-0 m-0" colSpan={999}>
+            <span
+              aria-hidden="true"
+              className="table__hover-indicator rounded-md"
+              style={indicatorStyle}
+            />
+          </td>
+        </tr>
+        {children}
+      </tbody>
+    </TableHoverContext.Provider>
   )
 }
 
@@ -92,12 +194,49 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
   )
 }
 
-function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
+function TableRow({
+  className,
+  onClick,
+  onMouseEnter: onMouseEnterProp,
+  onFocus: onFocusProp,
+  ...props
+}: React.ComponentProps<"tr">) {
+  const tableHoverCtx = React.useContext(TableHoverContext)
+  const isSelected = (props as Record<string, any>)["data-state"] === "selected" || props["aria-selected"] === true
+  const isInteractive = Boolean(onClick || props["aria-selected"] !== undefined || (props as Record<string, any>)["data-state"] !== undefined)
+
+  const handleMouseEnter = (event: React.MouseEvent<HTMLTableRowElement>) => {
+    onMouseEnterProp?.(event)
+    if (isInteractive) {
+      if (isSelected) {
+        tableHoverCtx?.clearHoverIndicator()
+      } else {
+        tableHoverCtx?.moveHoverIndicator(event.currentTarget)
+      }
+    }
+  }
+
+  const handleFocus = (event: React.FocusEvent<HTMLTableRowElement>) => {
+    onFocusProp?.(event)
+    if (isInteractive) {
+      if (isSelected) {
+        tableHoverCtx?.clearHoverIndicator()
+      } else {
+        tableHoverCtx?.moveHoverIndicator(event.currentTarget)
+      }
+    }
+  }
+
   return (
     <tr
       data-slot="table-row"
+      onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onFocus={handleFocus}
       className={cn(
-        "transition-colors duration-150 hover:bg-muted/40 has-aria-expanded:bg-muted/40 data-[state=selected]:bg-primary/5 dark:data-[state=selected]:bg-primary/10",
+        "relative z-10 transition-colors duration-150 has-aria-expanded:bg-muted/40",
+        "data-[state=selected]:bg-muted/50 data-[state=selected]:hover:bg-muted/70 dark:data-[state=selected]:bg-muted/40 dark:data-[state=selected]:hover:bg-muted/60",
+        isInteractive && "cursor-pointer active:scale-[0.995]",
         className
       )}
       {...props}
@@ -132,7 +271,7 @@ function TableHeadSort({
     <th
       data-slot="table-head-sort"
       className={cn(
-        "h-10 px-4 text-left align-middle font-accent text-[0.6875rem] font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap select-none cursor-pointer hover:text-foreground transition-colors",
+        "h-10 px-4 text-left align-middle font-accent text-[0.6875rem] font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap select-none cursor-pointer transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] hover:text-foreground active:scale-[0.98]",
         className
       )}
       onClick={onSort}

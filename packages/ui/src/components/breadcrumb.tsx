@@ -5,14 +5,68 @@ import { useRender } from "@base-ui/react/use-render"
 import { cn } from "#lib/utils"
 import { IconChevronRight, IconDots } from "@tabler/icons-react"
 
-function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
+export interface BreadcrumbItemSpec {
+  label: React.ReactNode
+  href?: string
+  icon?: React.ReactNode
+  isCurrent?: boolean
+  render?: useRender.ComponentProps<"a">["render"]
+  className?: string
+}
+
+export interface BreadcrumbProps extends React.ComponentProps<"nav"> {
+  items?: BreadcrumbItemSpec[]
+  separator?: React.ReactNode
+}
+
+function Breadcrumb({ className, items, separator, children, ...props }: BreadcrumbProps) {
+  if (items && items.length > 0) {
+    return (
+      <nav
+        aria-label="breadcrumb"
+        data-slot="breadcrumb"
+        className={cn("w-full min-w-0", className)}
+        {...props}
+      >
+        <BreadcrumbList>
+          {items.map((item, index) => {
+            const isLast = index === items.length - 1
+            const isCurrentPage = item.isCurrent ?? isLast
+            return (
+              <React.Fragment key={index}>
+                {index > 0 ? (
+                  <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>
+                ) : null}
+                <BreadcrumbItem className={item.className}>
+                  {isCurrentPage ? (
+                    <BreadcrumbPage>
+                      {item.icon}
+                      {item.label}
+                    </BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink href={item.href} render={item.render}>
+                      {item.icon}
+                      {item.label}
+                    </BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+              </React.Fragment>
+            )
+          })}
+        </BreadcrumbList>
+      </nav>
+    )
+  }
+
   return (
     <nav
       aria-label="breadcrumb"
       data-slot="breadcrumb"
       className={cn("w-full min-w-0", className)}
       {...props}
-    />
+    >
+      {children}
+    </nav>
   )
 }
 

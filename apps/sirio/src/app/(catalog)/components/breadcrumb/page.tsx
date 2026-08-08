@@ -31,6 +31,24 @@ export default function BreadcrumbCatalogPage() {
       />
 
       <div className="flex flex-col gap-12">
+        {/* ── Sezione 0: Uso Dichiarativo Unificato (items prop) ─────────────────── */}
+        <section>
+          <h2 className="mb-4 text-2xl font-semibold tracking-tight">Utilizzo Dichiarativo Unificato (Prop items)</h2>
+          <SpecimenGrid cols={1}>
+            <Specimen title="Breadcrumb Completo con Prop items (Separatori ed Impaginazione Automatici)">
+              <div className="w-full py-2">
+                <Breadcrumb
+                  items={[
+                    { label: "Azienda", href: "/", icon: <IconHome /> },
+                    { label: "Cantieri Attivi", href: "/", icon: <IconBuildingStore /> },
+                    { label: "JOB-SITE #8942-2026", className: "font-accent text-primary" },
+                  ]}
+                />
+              </div>
+            </Specimen>
+          </SpecimenGrid>
+        </section>
+
         {/* ── Sezione 1: Gerarchia Cantiere con Icone e Font Accent ────────────────────────────── */}
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Gerarchia Cantiere con Icone</h2>

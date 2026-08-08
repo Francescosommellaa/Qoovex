@@ -32,7 +32,7 @@ export default function FloatingNavigationPage() {
     <div className="mx-auto w-full max-w-6xl">
       <PageHeader
         title="Floating Navigation"
-        description="Barra di navigazione sticky fluttuante con indicatore hover scorrevole, resource dropdown, sezioni mobili, e sheet hamburger. I link di navigazione al suo interno utilizzano il componente Tabs (TabsList + TabsTrigger)."
+        description="Barra di navigazione sticky fluttuante con indicatore hover scorrevole, resource dropdown, sezioni mobili, e pannello mobile fluttuante. I link di navigazione al suo interno utilizzano il componente Tabs (TabsList + TabsTrigger)."
         importPath="import { FloatingNavigation } from '@qoovex/ui/components/floating-navigation'"
       />
 

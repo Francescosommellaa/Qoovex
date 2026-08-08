@@ -157,7 +157,7 @@ export default function HomePage() {
         <div className="mt-12 grid gap-4 sm:grid-cols-3">
           {problems.map((problem, index) => (
             <Reveal key={problem.title} delay={index * 80}>
-              <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
+              <Card className="h-full">
                 <CardHeader>
                   <problem.icon aria-hidden className="size-5 text-muted-foreground" />
                   <CardTitle className="mt-2">{problem.title}</CardTitle>
@@ -198,7 +198,7 @@ export default function HomePage() {
         <ol className="mt-12 grid gap-4 md:grid-cols-3">
           {howItWorks.map((item, index) => (
             <Reveal as="li" key={item.step} delay={index * 80}>
-              <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
+              <Card className="h-full">
                 <CardHeader>
                   <span className="font-accent text-sm text-muted-foreground">{item.step}</span>
                   <CardTitle className="mt-2">{item.title}</CardTitle>
@@ -230,7 +230,7 @@ export default function HomePage() {
         />
         <div className="mt-12 grid gap-4 lg:grid-cols-2">
           <Reveal>
-            <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
+            <Card className="h-full">
               <CardHeader>
                 <Badge variant="secondary" className="w-fit">
                   Per le imprese
@@ -253,7 +253,7 @@ export default function HomePage() {
             </Card>
           </Reveal>
           <Reveal delay={80}>
-            <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
+            <Card className="h-full">
               <CardHeader>
                 <Badge variant="secondary" className="w-fit">
                   Per i clienti
@@ -335,7 +335,7 @@ export default function HomePage() {
             },
           ].map((item, index) => (
             <Reveal key={item.title} delay={index * 80}>
-              <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
+              <Card className="h-full">
                 <CardHeader>
                   <item.icon aria-hidden className="size-5 text-muted-foreground" />
                   <CardTitle className="mt-2">{item.title}</CardTitle>

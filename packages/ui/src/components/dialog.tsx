@@ -136,7 +136,7 @@ function DialogIcon({
     <div
       data-slot="dialog-icon"
       className={cn(
-        "flex size-10 shrink-0 items-center justify-center rounded-xl border font-medium [&_svg]:size-5 mb-1 transition-all duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] hover:scale-110",
+        "flex size-10 shrink-0 items-center justify-center rounded-xl border font-medium [&_svg]:size-5 mb-1",
         variantStyles[variant],
         className
       )}

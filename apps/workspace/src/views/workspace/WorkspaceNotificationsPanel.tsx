@@ -22,15 +22,14 @@ import {
 } from "@qoovex/ui/components/empty";
 import { Separator } from "@qoovex/ui/components/separator";
 import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@qoovex/ui/components/sheet";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@qoovex/ui/components/dialog";
 import { Skeleton } from "@qoovex/ui/components/skeleton";
 import { Spinner } from "@qoovex/ui/components/spinner";
 import { cn } from "@qoovex/ui/lib/utils";
@@ -129,22 +128,19 @@ export function WorkspaceNotificationsPanel({ unreadNotificationCount }: { unrea
   }
 
   return (
-    <Sheet onOpenChange={handleOpenChange} open={open}>
-      <SheetTrigger render={<Button aria-label={notificationLabel} className="relative" size="icon-sm" variant="ghost" />}>
+    <Dialog onOpenChange={handleOpenChange} open={open}>
+      <DialogTrigger render={<Button aria-label={notificationLabel} className="relative" size="icon-sm" variant="ghost" />}>
         <IconBell />
         {currentUnreadCount > 0 ? <span aria-hidden="true" className="absolute top-0 right-0 size-2 rounded-full bg-destructive ring-2 ring-background" /> : null}
-      </SheetTrigger>
-      <SheetContent className="data-[side=right]:w-full data-[side=right]:sm:max-w-md" showCloseButton={false}>
-        <SheetHeader className="pr-12">
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
           <div className="flex items-center gap-2">
-            <SheetTitle>Notifiche</SheetTitle>
+            <DialogTitle>Notifiche</DialogTitle>
             {currentUnreadCount > 0 ? <Badge variant="secondary">{currentUnreadCount} non {currentUnreadCount === 1 ? "letta" : "lette"}</Badge> : null}
           </div>
-          <SheetDescription>Controlla gli ultimi aggiornamenti senza lasciare ciò che stai facendo.</SheetDescription>
-        </SheetHeader>
-        <SheetClose render={<Button aria-label="Chiudi notifiche" className="absolute top-3 right-3" size="icon-sm" variant="ghost" />}>
-          <IconX />
-        </SheetClose>
+          <DialogDescription>Controlla gli ultimi aggiornamenti senza lasciare ciò che stai facendo.</DialogDescription>
+        </DialogHeader>
         <Separator />
         <div className="min-h-0 flex-1 overflow-y-auto">
           {!data && loading ? <NotificationsLoading /> : null}
@@ -175,11 +171,11 @@ export function WorkspaceNotificationsPanel({ unreadNotificationCount }: { unrea
           ))}
         </div>
         <Separator />
-        <SheetFooter>
+        <div className="mt-auto flex items-center justify-between gap-2 pt-2">
           {loading && data ? <span className="flex items-center gap-2 text-xs text-muted-foreground"><Spinner /> Aggiornamento…</span> : null}
           <Link className={buttonVariants({ variant: "outline" })} data-link="plain" href="/notifications">Vedi tutte le notifiche</Link>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

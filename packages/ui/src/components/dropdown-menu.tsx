@@ -4,6 +4,7 @@ import * as React from "react"
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 
 import { cn } from "#lib/utils"
+import { usePlatform } from "#hooks/use-platform"
 import { IconChevronRight, IconCheck } from "@tabler/icons-react"
 
 /* ─── Context for Sliding Hover Indicator ─────────────────────── */
@@ -14,6 +15,7 @@ type MenuHoverIndicator = {
   x: number
   y: number
   width: number
+  variant?: "default" | "destructive"
 }
 
 const hiddenMenuIndicator: MenuHoverIndicator = {
@@ -22,10 +24,11 @@ const hiddenMenuIndicator: MenuHoverIndicator = {
   width: 0,
   x: 0,
   y: 0,
+  variant: "default",
 }
 
 type MenuHoverContextValue = {
-  moveHoverIndicator: (element: HTMLElement) => void
+  moveHoverIndicator: (element: HTMLElement, variant?: "default" | "destructive") => void
   clearHoverIndicator: () => void
 }
 
@@ -63,26 +66,30 @@ function DropdownMenuContent({
   const contentRef = React.useRef<HTMLDivElement>(null)
   const [hover, setHover] = React.useState(hiddenMenuIndicator)
 
-  const moveHoverIndicator = React.useCallback((element: HTMLElement) => {
-    const content = contentRef.current
-    if (!content) return
-    const contentRect = content.getBoundingClientRect()
-    const elRect = element.getBoundingClientRect()
-    setHover({
-      height: elRect.height,
-      visible: true,
-      width: elRect.width,
-      x: elRect.left - contentRect.left,
-      y: elRect.top - contentRect.top,
-    })
-  }, [])
+  const moveHoverIndicator = React.useCallback(
+    (element: HTMLElement, variant: "default" | "destructive" = "default") => {
+      const content = contentRef.current
+      if (!content) return
+      const contentRect = content.getBoundingClientRect()
+      const elRect = element.getBoundingClientRect()
+      setHover({
+        height: elRect.height,
+        visible: true,
+        width: elRect.width,
+        x: elRect.left - contentRect.left,
+        y: elRect.top - contentRect.top,
+        variant,
+      })
+    },
+    []
+  )
 
   const clearHoverIndicator = React.useCallback(() => {
     setHover((prev) => ({ ...prev, visible: false }))
   }, [])
 
   const handleMouseLeave = React.useCallback(
-    (event: React.MouseEvent<HTMLDivElement>) => {
+    (event: any) => {
       onMouseLeaveProp?.(event)
       clearHoverIndicator()
     },
@@ -90,7 +97,7 @@ function DropdownMenuContent({
   )
 
   const handleBlur = React.useCallback(
-    (event: React.FocusEvent<HTMLDivElement>) => {
+    (event: any) => {
       onBlurProp?.(event)
       if (
         event.relatedTarget instanceof Node &&
@@ -139,6 +146,7 @@ function DropdownMenuContent({
             <span
               aria-hidden="true"
               className="dropdown-menu__hover-indicator rounded-lg"
+              data-variant={hover.variant ?? "default"}
               style={indicatorStyle}
             />
             {children}
@@ -186,14 +194,14 @@ function DropdownMenuItem({
 }) {
   const menuHoverCtx = React.useContext(MenuHoverContext)
 
-  const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseEnter = (event: any) => {
     onMouseEnterProp?.(event)
-    menuHoverCtx?.moveHoverIndicator(event.currentTarget)
+    menuHoverCtx?.moveHoverIndicator(event.currentTarget, variant)
   }
 
-  const handleFocus = (event: React.FocusEvent<HTMLDivElement>) => {
+  const handleFocus = (event: any) => {
     onFocusProp?.(event)
-    menuHoverCtx?.moveHoverIndicator(event.currentTarget)
+    menuHoverCtx?.moveHoverIndicator(event.currentTarget, variant)
   }
 
   return (
@@ -202,7 +210,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "group/dropdown-menu-item relative z-10 flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-medium outline-none select-none transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus:bg-transparent focus:text-accent-foreground data-highlighted:bg-transparent data-inset:pl-8 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-foreground/90",
+        "group/dropdown-menu-item relative z-10 flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-medium outline-none select-none transition-colors duration-200 data-inset:pl-8 data-[variant=destructive]:text-destructive data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-foreground/90",
         className
       )}
       onMouseEnter={handleMouseEnter}
@@ -228,12 +236,12 @@ function DropdownMenuSubTrigger({
 }) {
   const menuHoverCtx = React.useContext(MenuHoverContext)
 
-  const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseEnter = (event: any) => {
     onMouseEnterProp?.(event)
     menuHoverCtx?.moveHoverIndicator(event.currentTarget)
   }
 
-  const handleFocus = (event: React.FocusEvent<HTMLDivElement>) => {
+  const handleFocus = (event: any) => {
     onFocusProp?.(event)
     menuHoverCtx?.moveHoverIndicator(event.currentTarget)
   }
@@ -290,12 +298,12 @@ function DropdownMenuCheckboxItem({
 }) {
   const menuHoverCtx = React.useContext(MenuHoverContext)
 
-  const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseEnter = (event: any) => {
     onMouseEnterProp?.(event)
     menuHoverCtx?.moveHoverIndicator(event.currentTarget)
   }
 
-  const handleFocus = (event: React.FocusEvent<HTMLDivElement>) => {
+  const handleFocus = (event: any) => {
     onFocusProp?.(event)
     menuHoverCtx?.moveHoverIndicator(event.currentTarget)
   }
@@ -347,12 +355,12 @@ function DropdownMenuRadioItem({
 }) {
   const menuHoverCtx = React.useContext(MenuHoverContext)
 
-  const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseEnter = (event: any) => {
     onMouseEnterProp?.(event)
     menuHoverCtx?.moveHoverIndicator(event.currentTarget)
   }
 
-  const handleFocus = (event: React.FocusEvent<HTMLDivElement>) => {
+  const handleFocus = (event: any) => {
     onFocusProp?.(event)
     menuHoverCtx?.moveHoverIndicator(event.currentTarget)
   }
@@ -397,17 +405,38 @@ function DropdownMenuSeparator({
 
 function DropdownMenuShortcut({
   className,
+  children,
   ...props
 }: React.ComponentProps<"span">) {
+  const platform = usePlatform()
+
+  if (platform === "mobile") {
+    return null
+  }
+
+  const formattedChildren = React.useMemo(() => {
+    if (typeof children !== "string") return children
+    if (platform === "windows") {
+      return children
+        .replace(/⌘/g, "Ctrl+")
+        .replace(/⌫/g, "Del")
+        .replace(/⌥/g, "Alt+")
+        .replace(/⇧/g, "Shift+")
+    }
+    return children
+  }, [children, platform])
+
   return (
     <span
       data-slot="dropdown-menu-shortcut"
       className={cn(
-        "ml-auto font-accent text-[0.6875rem] font-semibold text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded-md border border-border/40 tracking-wider",
+        "ml-auto hidden md:inline-block font-mono text-[0.6875rem] tracking-wider text-muted-foreground/70 font-medium select-none truncate max-w-[5rem]",
         className
       )}
       {...props}
-    />
+    >
+      {formattedChildren}
+    </span>
   )
 }
 

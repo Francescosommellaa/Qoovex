@@ -14,14 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "#components/dropdown-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "#components/sheet";
+import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { TabsList, TabsTrigger, useTabsList } from "#components/tabs";
 import { ThemeToggle } from "#components/theme-toggle";
 import { cn } from "#lib/utils";
@@ -38,24 +31,6 @@ export type FloatingNavigationLink = {
 export type FloatingNavigationSection = {
   id: string;
   label: string;
-};
-
-/* ─── Hover indicator per il resource dropdown ───────────────── */
-
-type ResourceFocus = {
-  height: number;
-  visible: boolean;
-  x: number;
-  y: number;
-  width: number;
-};
-
-const hiddenResourceFocus: ResourceFocus = {
-  height: 0,
-  visible: false,
-  width: 0,
-  x: 0,
-  y: 0,
 };
 
 /* ─── Scroll animato ─────────────────────────────────────────── */
@@ -124,7 +99,7 @@ function animatePageScroll(top: number, reduceMotion: boolean) {
 /**
  * Dropdown "Risorse" che vive dentro `<TabsList>` e sfrutta
  * `useTabsList()` per guidare lo stesso indicatore hover delle
- * voci di navigazione.
+ * voci di navigazione, mentre l'interno usa il `DropdownMenu` standard.
  */
 function NavigationResourceDropdown({
   resourceLabel,
@@ -138,140 +113,38 @@ function NavigationResourceDropdown({
   setResourcesOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const tabsList = useTabsList();
-  const resourceContentRef = React.useRef<HTMLDivElement>(null);
-  const resourceCloseTimerRef = React.useRef<number | null>(null);
-  const resourceTriggerRef = React.useRef<HTMLSpanElement>(null);
-  const [resourceFocus, setResourceFocus] = React.useState(hiddenResourceFocus);
-
-  const clearResourceCloseTimer = React.useCallback(() => {
-    if (resourceCloseTimerRef.current === null) return;
-    window.clearTimeout(resourceCloseTimerRef.current);
-    resourceCloseTimerRef.current = null;
-  }, []);
-
-  React.useEffect(() => clearResourceCloseTimer, [clearResourceCloseTimer]);
-
-  const moveResourceFocus = React.useCallback((element: HTMLElement) => {
-    const content = resourceContentRef.current;
-    if (!content) return;
-    const contentRect = content.getBoundingClientRect();
-    const elementRect = element.getBoundingClientRect();
-    setResourceFocus({
-      height: elementRect.height,
-      visible: true,
-      width: elementRect.width,
-      x: elementRect.left - contentRect.left,
-      y: elementRect.top - contentRect.top,
-    });
-  }, []);
-
-  const openResources = React.useCallback(() => {
-    clearResourceCloseTimer();
-    setResourcesOpen(true);
-  }, [clearResourceCloseTimer, setResourcesOpen]);
-
-  const scheduleResourceClose = React.useCallback(() => {
-    if (resourceCloseTimerRef.current !== null) return;
-    resourceCloseTimerRef.current = window.setTimeout(() => {
-      resourceCloseTimerRef.current = null;
-      setResourcesOpen(false);
-      setResourceFocus((prev) => ({ ...prev, visible: false }));
-      tabsList?.clearHoverIndicator();
-    }, 120);
-  }, [setResourcesOpen, tabsList]);
-
-  React.useEffect(() => {
-    if (!resourcesOpen) return;
-
-    const trackResourcePointer = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse") return;
-      const pointed = document.elementFromPoint(event.clientX, event.clientY);
-      const insideTrigger =
-        pointed !== null && resourceTriggerRef.current?.contains(pointed);
-      const insideContent =
-        pointed !== null && resourceContentRef.current?.contains(pointed);
-
-      if (insideTrigger || insideContent) clearResourceCloseTimer();
-      else scheduleResourceClose();
-    };
-
-    document.addEventListener("pointermove", trackResourcePointer, { passive: true });
-    return () => document.removeEventListener("pointermove", trackResourcePointer);
-  }, [clearResourceCloseTimer, resourcesOpen, scheduleResourceClose]);
-
-  const resourceFocusStyle: React.CSSProperties = {
-    height: resourceFocus.height,
-    opacity: resourceFocus.visible ? 1 : 0,
-    transform: `translate3d(${resourceFocus.x}px, ${resourceFocus.y}px, 0)`,
-    width: resourceFocus.width,
-  };
 
   return (
     <DropdownMenu
-      onOpenChange={(open) => {
-        clearResourceCloseTimer();
-        setResourcesOpen(open);
-        if (!open) {
-          setResourceFocus((prev) => ({ ...prev, visible: false }));
-        }
-      }}
+      onOpenChange={setResourcesOpen}
       open={resourcesOpen}
     >
-      <span
-        className="relative z-10"
-        onMouseMove={(event) => {
-          const trigger = event.currentTarget.querySelector("button");
-          if (trigger) tabsList?.moveHoverIndicator(trigger);
-          openResources();
-        }}
-        onMouseLeave={scheduleResourceClose}
-        ref={resourceTriggerRef}
-      >
-        <DropdownMenuTrigger
-          onFocus={(event) => tabsList?.moveHoverIndicator(event.currentTarget)}
-          render={
-            <button
-              className="group/resources relative z-10 flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
-              data-link="plain"
-              type="button"
-            />
-          }
-        >
-          {resourceLabel}
-          <IconChevronDown
-            aria-hidden="true"
-            className="size-3.5 transition-transform duration-200 group-data-popup-open/resources:rotate-180"
+      <DropdownMenuTrigger
+        onFocus={(event) => tabsList?.moveHoverIndicator(event.currentTarget)}
+        onMouseEnter={(event) => tabsList?.moveHoverIndicator(event.currentTarget)}
+        render={
+          <button
+            className="group/resources relative z-10 flex cursor-pointer items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
+            data-link="plain"
+            type="button"
           />
-        </DropdownMenuTrigger>
-      </span>
+        }
+      >
+        {resourceLabel}
+        <IconChevronDown
+          aria-hidden="true"
+          className="size-3.5 transition-transform duration-200 group-data-popup-open/resources:rotate-180"
+        />
+      </DropdownMenuTrigger>
       <DropdownMenuContent
         align="center"
-        className="floating-navigation__resource-menu w-80 rounded-2xl p-2 duration-200"
-        onBlur={(event) => {
-          if (
-            event.relatedTarget instanceof Node &&
-            event.currentTarget.contains(event.relatedTarget)
-          ) {
-            return;
-          }
-          setResourceFocus((prev) => ({ ...prev, visible: false }));
-        }}
-        onMouseEnter={clearResourceCloseTimer}
-        onMouseLeave={scheduleResourceClose}
-        ref={resourceContentRef}
+        className="w-80 rounded-2xl p-2 duration-200"
         sideOffset={10}
       >
-        <span
-          aria-hidden="true"
-          className="floating-navigation__resource-focus"
-          style={resourceFocusStyle}
-        />
         {resourceLinks.map((link) => (
           <DropdownMenuItem
-            className="relative z-10 min-h-14 gap-3 rounded-xl px-3 py-2 focus:bg-transparent"
+            className="relative z-10 min-h-14 gap-3 rounded-xl px-3 py-2"
             key={link.href}
-            onFocus={(event) => moveResourceFocus(event.currentTarget)}
-            onMouseEnter={(event) => moveResourceFocus(event.currentTarget)}
             render={<a data-link="plain" href={link.href} />}
           >
             {link.icon ? (
@@ -639,8 +512,8 @@ export function FloatingNavigation({
         <div className="ml-auto flex shrink-0 items-center gap-1">
           <ThemeToggle />
           {action}
-          <Sheet onOpenChange={setMobileOpen} open={mobileOpen}>
-            <SheetTrigger
+          <DialogPrimitive.Root onOpenChange={setMobileOpen} open={mobileOpen}>
+            <DialogPrimitive.Trigger
               render={
                 <Button
                   aria-label="Apri navigazione"
@@ -651,72 +524,80 @@ export function FloatingNavigation({
               }
             >
               <IconMenu2 />
-            </SheetTrigger>
-            <SheetContent className="w-[min(22rem,calc(100vw-1rem))]">
-              <SheetHeader>
-                <SheetTitle>{brand(false)}</SheetTitle>
-                <SheetDescription>Naviga tra sezioni e destinazioni disponibili.</SheetDescription>
-              </SheetHeader>
-              {sections.length > 0 ? (
-                <nav aria-label="Sezioni della pagina" className="grid gap-1 px-4">
-                  <p className="px-3 pb-1 text-xs font-medium text-muted-foreground">
-                    In questa pagina
+            </DialogPrimitive.Trigger>
+            <DialogPrimitive.Portal>
+              <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0" />
+              <DialogPrimitive.Popup className="fixed top-18 inset-x-3 z-50 max-h-[calc(100vh-5.5rem)] overflow-y-auto rounded-2xl border border-border/80 bg-popover/95 p-4 text-popover-foreground shadow-2xl backdrop-blur-xl transition-all duration-200 ease-out data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 space-y-4">
+                <div className="flex items-center justify-between border-b border-border/60 pb-3 px-1">
+                  <span className="font-semibold text-sm font-accent">{brand(false)}</span>
+                  <DialogPrimitive.Close render={<Button size="icon-xs" variant="ghost" />}>
+                    <IconChevronLeft className="size-4" />
+                  </DialogPrimitive.Close>
+                </div>
+
+                {sections.length > 0 ? (
+                  <nav aria-label="Sezioni della pagina" className="grid gap-1">
+                    <p className="px-2 pb-1 text-xs font-accent uppercase tracking-wider text-muted-foreground">
+                      In questa pagina
+                    </p>
+                    {sections.map((section) => (
+                      <a
+                        aria-current={section.id === activeSection ? "location" : undefined}
+                        className={cn(
+                          "rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring transition-colors",
+                          section.id === activeSection && "bg-accent text-accent-foreground font-semibold",
+                        )}
+                        data-link="plain"
+                        href={`#${section.id}`}
+                        key={section.id}
+                        onClick={(event) => navigateToSection(event, section.id)}
+                      >
+                        {section.label}
+                      </a>
+                    ))}
+                  </nav>
+                ) : null}
+
+                <nav aria-label={surfaceLabel} className="grid gap-1">
+                  <p className="px-2 pb-1 text-xs font-accent uppercase tracking-wider text-muted-foreground">
+                    {surfaceLabel}
                   </p>
-                  {sections.map((section) => (
+                  {surfaceLinks.map((link) => (
                     <a
-                      aria-current={section.id === activeSection ? "location" : undefined}
-                      className={cn(
-                        "rounded-lg px-3 py-3 text-sm font-medium hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring",
-                        section.id === activeSection && "bg-accent",
-                      )}
-                      data-link="plain"
-                      href={`#${section.id}`}
-                      key={section.id}
-                      onClick={(event) => navigateToSection(event, section.id)}
-                    >
-                      {section.label}
-                    </a>
-                  ))}
-                </nav>
-              ) : null}
-              <nav aria-label={surfaceLabel} className="grid gap-1 px-4">
-                <p className="px-3 pb-1 text-xs font-medium text-muted-foreground">
-                  {surfaceLabel}
-                </p>
-                {surfaceLinks.map((link) => (
-                  <a
-                    aria-current={link.href === activeHref ? "page" : undefined}
-                    className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
-                    data-link="plain"
-                    href={link.href}
-                    key={link.href}
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </nav>
-              {resourceLinks.length > 0 ? (
-                <nav aria-label={resourceLabel} className="grid gap-1 px-4">
-                  <p className="px-3 pb-1 text-xs font-medium text-muted-foreground">
-                    {resourceLabel}
-                  </p>
-                  {resourceLinks.map((link) => (
-                    <a
-                      className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
+                      aria-current={link.href === activeHref ? "page" : undefined}
+                      className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring transition-colors"
                       data-link="plain"
                       href={link.href}
                       key={link.href}
                       onClick={() => setMobileOpen(false)}
                     >
-                      {link.icon}
-                      <span>{link.label}</span>
+                      {link.label}
                     </a>
                   ))}
                 </nav>
-              ) : null}
-            </SheetContent>
-          </Sheet>
+
+                {resourceLinks.length > 0 ? (
+                  <nav aria-label={resourceLabel} className="grid gap-1">
+                    <p className="px-2 pb-1 text-xs font-accent uppercase tracking-wider text-muted-foreground">
+                      {resourceLabel}
+                    </p>
+                    {resourceLinks.map((link) => (
+                      <a
+                        className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring transition-colors"
+                        data-link="plain"
+                        href={link.href}
+                        key={link.href}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {link.icon}
+                        <span>{link.label}</span>
+                      </a>
+                    ))}
+                  </nav>
+                ) : null}
+              </DialogPrimitive.Popup>
+            </DialogPrimitive.Portal>
+          </DialogPrimitive.Root>
         </div>
       </div>
     </header>

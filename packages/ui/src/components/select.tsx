@@ -121,7 +121,7 @@ function SelectContent({
   }, [])
 
   const handleMouseLeave = React.useCallback(
-    (event: React.MouseEvent<HTMLDivElement>) => {
+    (event: any) => {
       onMouseLeaveProp?.(event)
       clearHoverIndicator()
     },
@@ -129,7 +129,7 @@ function SelectContent({
   )
 
   const handleBlur = React.useCallback(
-    (event: React.FocusEvent<HTMLDivElement>) => {
+    (event: any) => {
       onBlurProp?.(event)
       if (
         event.relatedTarget instanceof Node &&
@@ -214,12 +214,12 @@ function SelectItem({
 }: SelectPrimitive.Item.Props) {
   const selectHoverCtx = React.useContext(SelectHoverContext)
 
-  const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseEnter = (event: any) => {
     onMouseEnterProp?.(event)
     selectHoverCtx?.moveHoverIndicator(event.currentTarget)
   }
 
-  const handleFocus = (event: React.FocusEvent<HTMLDivElement>) => {
+  const handleFocus = (event: any) => {
     onFocusProp?.(event)
     selectHoverCtx?.moveHoverIndicator(event.currentTarget)
   }

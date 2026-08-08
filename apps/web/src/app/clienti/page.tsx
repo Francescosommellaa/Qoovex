@@ -64,7 +64,7 @@ export default function ClientiPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           {benefits.map((item, index) => (
             <Reveal key={item.title} delay={index * 60}>
-              <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-foreground/20">
+              <Card className="h-full">
                 <CardHeader>
                   <div className="mb-2 flex size-9 items-center justify-center rounded-md border border-border bg-muted/40 text-foreground">
                     <item.icon className="size-5" aria-hidden />
