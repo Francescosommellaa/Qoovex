@@ -22,8 +22,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "#components/sheet";
+import { TabsList, TabsTrigger, useTabsList } from "#components/tabs";
 import { ThemeToggle } from "#components/theme-toggle";
 import { cn } from "#lib/utils";
+
+/* ─── Tipi pubblici ──────────────────────────────────────────── */
 
 export type FloatingNavigationLink = {
   href: string;
@@ -37,7 +40,9 @@ export type FloatingNavigationSection = {
   label: string;
 };
 
-type FocusIndicator = {
+/* ─── Hover indicator per il resource dropdown ───────────────── */
+
+type ResourceFocus = {
   height: number;
   visible: boolean;
   x: number;
@@ -45,13 +50,15 @@ type FocusIndicator = {
   width: number;
 };
 
-const hiddenFocus: FocusIndicator = {
+const hiddenResourceFocus: ResourceFocus = {
   height: 0,
   visible: false,
   width: 0,
   x: 0,
   y: 0,
 };
+
+/* ─── Scroll animato ─────────────────────────────────────────── */
 
 function navigationOffset() {
   const value = Number.parseFloat(
@@ -112,31 +119,29 @@ function animatePageScroll(top: number, reduceMotion: boolean) {
   return cancel;
 }
 
-function NavigationLinks({
-  activeHref,
-  links,
-  onNavigateToSection,
+/* ─── Resource Dropdown ──────────────────────────────────────── */
+
+/**
+ * Dropdown "Risorse" che vive dentro `<TabsList>` e sfrutta
+ * `useTabsList()` per guidare lo stesso indicatore hover delle
+ * voci di navigazione.
+ */
+function NavigationResourceDropdown({
   resourceLabel,
   resourceLinks,
-  sectionMode,
+  resourcesOpen,
+  setResourcesOpen,
 }: {
-  activeHref?: string;
-  links: FloatingNavigationLink[];
-  onNavigateToSection: (
-    event: React.MouseEvent<HTMLAnchorElement>,
-    sectionId: string,
-  ) => void;
   resourceLabel: string;
   resourceLinks: FloatingNavigationLink[];
-  sectionMode: boolean;
+  resourcesOpen: boolean;
+  setResourcesOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const navRef = React.useRef<HTMLElement>(null);
+  const tabsList = useTabsList();
   const resourceContentRef = React.useRef<HTMLDivElement>(null);
   const resourceCloseTimerRef = React.useRef<number | null>(null);
   const resourceTriggerRef = React.useRef<HTMLSpanElement>(null);
-  const [navFocus, setNavFocus] = React.useState(hiddenFocus);
-  const [resourceFocus, setResourceFocus] = React.useState(hiddenFocus);
-  const [resourcesOpen, setResourcesOpen] = React.useState(false);
+  const [resourceFocus, setResourceFocus] = React.useState(hiddenResourceFocus);
 
   const clearResourceCloseTimer = React.useCallback(() => {
     if (resourceCloseTimerRef.current === null) return;
@@ -145,20 +150,6 @@ function NavigationLinks({
   }, []);
 
   React.useEffect(() => clearResourceCloseTimer, [clearResourceCloseTimer]);
-
-  const moveNavFocus = React.useCallback((element: HTMLElement) => {
-    const nav = navRef.current;
-    if (!nav) return;
-    const navRect = nav.getBoundingClientRect();
-    const elementRect = element.getBoundingClientRect();
-    setNavFocus({
-      height: elementRect.height,
-      visible: true,
-      width: elementRect.width,
-      x: elementRect.left - navRect.left,
-      y: elementRect.top - navRect.top,
-    });
-  }, []);
 
   const moveResourceFocus = React.useCallback((element: HTMLElement) => {
     const content = resourceContentRef.current;
@@ -177,28 +168,28 @@ function NavigationLinks({
   const openResources = React.useCallback(() => {
     clearResourceCloseTimer();
     setResourcesOpen(true);
-  }, [clearResourceCloseTimer]);
+  }, [clearResourceCloseTimer, setResourcesOpen]);
 
   const scheduleResourceClose = React.useCallback(() => {
     if (resourceCloseTimerRef.current !== null) return;
     resourceCloseTimerRef.current = window.setTimeout(() => {
       resourceCloseTimerRef.current = null;
       setResourcesOpen(false);
-      setResourceFocus((previous) => ({ ...previous, visible: false }));
-      setNavFocus((previous) => ({ ...previous, visible: false }));
+      setResourceFocus((prev) => ({ ...prev, visible: false }));
+      tabsList?.clearHoverIndicator();
     }, 120);
-  }, []);
+  }, [setResourcesOpen, tabsList]);
 
   React.useEffect(() => {
     if (!resourcesOpen) return;
 
     const trackResourcePointer = (event: PointerEvent) => {
       if (event.pointerType !== "mouse") return;
-      const pointedElement = document.elementFromPoint(event.clientX, event.clientY);
+      const pointed = document.elementFromPoint(event.clientX, event.clientY);
       const insideTrigger =
-        pointedElement !== null && resourceTriggerRef.current?.contains(pointedElement);
+        pointed !== null && resourceTriggerRef.current?.contains(pointed);
       const insideContent =
-        pointedElement !== null && resourceContentRef.current?.contains(pointedElement);
+        pointed !== null && resourceContentRef.current?.contains(pointed);
 
       if (insideTrigger || insideContent) clearResourceCloseTimer();
       else scheduleResourceClose();
@@ -208,20 +199,6 @@ function NavigationLinks({
     return () => document.removeEventListener("pointermove", trackResourcePointer);
   }, [clearResourceCloseTimer, resourcesOpen, scheduleResourceClose]);
 
-  React.useEffect(() => {
-    if (!sectionMode) return;
-    clearResourceCloseTimer();
-    setResourcesOpen(false);
-    setResourceFocus((previous) => ({ ...previous, visible: false }));
-    setNavFocus((previous) => ({ ...previous, visible: false }));
-  }, [clearResourceCloseTimer, sectionMode]);
-
-  const navFocusStyle: React.CSSProperties = {
-    height: navFocus.height,
-    opacity: navFocus.visible ? 1 : 0,
-    transform: `translate3d(${navFocus.x}px, ${navFocus.y}px, 0)`,
-    width: navFocus.width,
-  };
   const resourceFocusStyle: React.CSSProperties = {
     height: resourceFocus.height,
     opacity: resourceFocus.visible ? 1 : 0,
@@ -230,34 +207,142 @@ function NavigationLinks({
   };
 
   return (
-    <nav
-      aria-label={sectionMode ? "Sezioni della pagina" : "Navigazione principale"}
-      className="relative flex items-center gap-1 animate-in fade-in-0 zoom-in-95 duration-200"
-      onBlur={(event) => {
-        if (
-          resourcesOpen ||
-          (event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget))
-        ) {
-          return;
-        }
-        setNavFocus((previous) => ({ ...previous, visible: false }));
-      }}
-      onMouseLeave={() => {
-        if (!resourcesOpen) {
-          setNavFocus((previous) => ({ ...previous, visible: false }));
+    <DropdownMenu
+      onOpenChange={(open) => {
+        clearResourceCloseTimer();
+        setResourcesOpen(open);
+        if (!open) {
+          setResourceFocus((prev) => ({ ...prev, visible: false }));
         }
       }}
-      ref={navRef}
+      open={resourcesOpen}
     >
       <span
-        aria-hidden="true"
-        className="floating-navigation__focus-indicator"
-        style={navFocusStyle}
-      />
+        className="relative z-10"
+        onMouseMove={(event) => {
+          const trigger = event.currentTarget.querySelector("button");
+          if (trigger) tabsList?.moveHoverIndicator(trigger);
+          openResources();
+        }}
+        onMouseLeave={scheduleResourceClose}
+        ref={resourceTriggerRef}
+      >
+        <DropdownMenuTrigger
+          onFocus={(event) => tabsList?.moveHoverIndicator(event.currentTarget)}
+          render={
+            <button
+              className="group/resources relative z-10 flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
+              data-link="plain"
+              type="button"
+            />
+          }
+        >
+          {resourceLabel}
+          <IconChevronDown
+            aria-hidden="true"
+            className="size-3.5 transition-transform duration-200 group-data-popup-open/resources:rotate-180"
+          />
+        </DropdownMenuTrigger>
+      </span>
+      <DropdownMenuContent
+        align="center"
+        className="floating-navigation__resource-menu w-80 rounded-2xl p-2 duration-200"
+        onBlur={(event) => {
+          if (
+            event.relatedTarget instanceof Node &&
+            event.currentTarget.contains(event.relatedTarget)
+          ) {
+            return;
+          }
+          setResourceFocus((prev) => ({ ...prev, visible: false }));
+        }}
+        onMouseEnter={clearResourceCloseTimer}
+        onMouseLeave={scheduleResourceClose}
+        ref={resourceContentRef}
+        sideOffset={10}
+      >
+        <span
+          aria-hidden="true"
+          className="floating-navigation__resource-focus"
+          style={resourceFocusStyle}
+        />
+        {resourceLinks.map((link) => (
+          <DropdownMenuItem
+            className="relative z-10 min-h-14 gap-3 rounded-xl px-3 py-2 focus:bg-transparent"
+            key={link.href}
+            onFocus={(event) => moveResourceFocus(event.currentTarget)}
+            onMouseEnter={(event) => moveResourceFocus(event.currentTarget)}
+            render={<a data-link="plain" href={link.href} />}
+          >
+            {link.icon ? (
+              <span className="grid size-8 shrink-0 place-items-center rounded-lg border bg-background text-foreground shadow-xs">
+                {link.icon}
+              </span>
+            ) : null}
+            <span className="min-w-0">
+              <span className="block text-sm font-medium text-foreground">{link.label}</span>
+              {link.description ? (
+                <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+                  {link.description}
+                </span>
+              ) : null}
+            </span>
+            <IconChevronRight
+              aria-hidden="true"
+              className="ml-auto size-4 text-muted-foreground"
+            />
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+/* ─── Desktop Navigation Links (usa TabsList + TabsTrigger) ─── */
+
+function NavigationDesktopLinks({
+  activeHref,
+  links,
+  onNavigateToSection,
+  resourceLabel,
+  resourceLinks,
+  sectionMode,
+}: {
+  activeHref?: string;
+  links: FloatingNavigationLink[];
+  onNavigateToSection: (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: string,
+  ) => void;
+  resourceLabel: string;
+  resourceLinks: FloatingNavigationLink[];
+  sectionMode: boolean;
+}) {
+  const [resourcesOpen, setResourcesOpen] = React.useState(false);
+
+  // Reset del dropdown quando si entra in sezione-mode
+  // (NavigationResourceDropdown smonta, ma resettiamo lo stato
+  // qui per sicurezza).
+  React.useEffect(() => {
+    if (sectionMode) setResourcesOpen(false);
+  }, [sectionMode]);
+
+  const resolvedActiveValue = sectionMode
+    ? activeHref
+    : activeHref;
+
+  return (
+    <TabsList
+      activeValue={resolvedActiveValue}
+      aria-label={sectionMode ? "Sezioni della pagina" : "Navigazione principale"}
+      className="animate-in fade-in-0 zoom-in-95 duration-200"
+      preventHoverIndicatorAutoHide={resourcesOpen}
+      role="navigation"
+    >
       {links.map((link) => {
-        const active = sectionMode
-          ? link.href === activeHref
-          : link.href.split("#")[0] === activeHref;
+        const triggerValue = sectionMode
+          ? link.href
+          : link.href.split("#")[0];
         const sectionId = sectionMode
           ? link.href.slice(1)
           : link.href.startsWith("/#")
@@ -265,117 +350,47 @@ function NavigationLinks({
             : null;
 
         return (
-          <a
-            aria-current={active ? (sectionMode ? "location" : "page") : undefined}
-            className={cn(
-              "relative z-10 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none",
-              active && "bg-foreground text-background hover:text-background focus-visible:text-background",
-            )}
-            data-link="plain"
-            href={link.href}
+          <TabsTrigger
             key={link.href}
-            onClick={sectionId ? (event) => onNavigateToSection(event, sectionId) : undefined}
-            onFocus={(event) => moveNavFocus(event.currentTarget)}
-            onMouseEnter={(event) => moveNavFocus(event.currentTarget)}
+            value={triggerValue}
+            render={
+              <a
+                aria-current={
+                  triggerValue === activeHref
+                    ? sectionMode
+                      ? "location"
+                      : "page"
+                    : undefined
+                }
+                data-link="plain"
+                href={link.href}
+                onClick={
+                  sectionId
+                    ? (event: React.MouseEvent<HTMLAnchorElement>) =>
+                        onNavigateToSection(event, sectionId)
+                    : undefined
+                }
+              />
+            }
           >
             {link.label}
-          </a>
+          </TabsTrigger>
         );
       })}
 
       {!sectionMode && resourceLinks.length > 0 ? (
-        <DropdownMenu
-          onOpenChange={(open) => {
-            clearResourceCloseTimer();
-            setResourcesOpen(open);
-            if (!open) {
-              setResourceFocus((previous) => ({ ...previous, visible: false }));
-            }
-          }}
-          open={resourcesOpen}
-        >
-          <span
-            className="relative z-10"
-            onMouseMove={(event) => {
-              const trigger = event.currentTarget.querySelector("button");
-              if (trigger) moveNavFocus(trigger);
-              openResources();
-            }}
-            onMouseLeave={scheduleResourceClose}
-            ref={resourceTriggerRef}
-          >
-            <DropdownMenuTrigger
-              onFocus={(event) => moveNavFocus(event.currentTarget)}
-              render={
-                <button
-                  className="group/resources relative z-10 flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
-                  data-link="plain"
-                  type="button"
-                />
-              }
-            >
-              {resourceLabel}
-              <IconChevronDown
-                aria-hidden="true"
-                className="size-3.5 transition-transform duration-200 group-data-popup-open/resources:rotate-180"
-              />
-            </DropdownMenuTrigger>
-          </span>
-          <DropdownMenuContent
-            align="center"
-            className="floating-navigation__resource-menu w-80 rounded-2xl p-2 duration-200"
-            onBlur={(event) => {
-              if (
-                event.relatedTarget instanceof Node &&
-                event.currentTarget.contains(event.relatedTarget)
-              ) {
-                return;
-              }
-              setResourceFocus((previous) => ({ ...previous, visible: false }));
-            }}
-            onMouseEnter={clearResourceCloseTimer}
-            onMouseLeave={scheduleResourceClose}
-            ref={resourceContentRef}
-            sideOffset={10}
-          >
-            <span
-              aria-hidden="true"
-              className="floating-navigation__resource-focus"
-              style={resourceFocusStyle}
-            />
-            {resourceLinks.map((link) => (
-              <DropdownMenuItem
-                className="relative z-10 min-h-14 gap-3 rounded-xl px-3 py-2 focus:bg-transparent"
-                key={link.href}
-                onFocus={(event) => moveResourceFocus(event.currentTarget)}
-                onMouseEnter={(event) => moveResourceFocus(event.currentTarget)}
-                render={<a data-link="plain" href={link.href} />}
-              >
-                {link.icon ? (
-                  <span className="grid size-8 shrink-0 place-items-center rounded-lg border bg-background text-foreground shadow-xs">
-                    {link.icon}
-                  </span>
-                ) : null}
-                <span className="min-w-0">
-                  <span className="block text-sm font-medium text-foreground">{link.label}</span>
-                  {link.description ? (
-                    <span className="mt-0.5 block truncate text-xs text-muted-foreground">
-                      {link.description}
-                    </span>
-                  ) : null}
-                </span>
-                <IconChevronRight
-                  aria-hidden="true"
-                  className="ml-auto size-4 text-muted-foreground"
-                />
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <NavigationResourceDropdown
+          resourceLabel={resourceLabel}
+          resourceLinks={resourceLinks}
+          resourcesOpen={resourcesOpen}
+          setResourcesOpen={setResourcesOpen}
+        />
       ) : null}
-    </nav>
+    </TabsList>
   );
 }
+
+/* ─── FloatingNavigation (shell pubblica) ────────────────────── */
 
 export function FloatingNavigation({
   action,
@@ -611,7 +626,7 @@ export function FloatingNavigation({
         ) : null}
 
         <div className={cn("mx-auto min-w-0", desktopNavVisibility)}>
-          <NavigationLinks
+          <NavigationDesktopLinks
             activeHref={showSections ? `#${activeSection}` : activeHref}
             links={desktopLinks}
             onNavigateToSection={navigateToSection}

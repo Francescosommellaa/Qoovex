@@ -36,7 +36,10 @@
   display: none;
 }
 
-.floating-navigation__focus-indicator,
+.tabs__hover-indicator,
+.dropdown-menu__hover-indicator,
+.select__hover-indicator,
+.sidebar__hover-indicator,
 .floating-navigation__resource-focus {
   position: absolute;
   top: 0;
@@ -202,7 +205,10 @@
 @media (forced-colors: active) {
   :focus-visible { outline: 2px solid CanvasText; }
 
-  .floating-navigation__focus-indicator,
+  .tabs__hover-indicator,
+  .dropdown-menu__hover-indicator,
+  .select__hover-indicator,
+  .sidebar__hover-indicator,
   .floating-navigation__resource-focus {
     background: Highlight;
     box-shadow: none;

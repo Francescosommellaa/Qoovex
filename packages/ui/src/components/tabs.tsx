@@ -1,82 +1,397 @@
-"use client"
+"use client";
 
-import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react";
+import { cn } from "#lib/utils";
 
-import { cn } from "#lib/utils"
+/* ─── Tipi interni ───────────────────────────────────────────── */
 
+type HoverIndicator = {
+  height: number;
+  visible: boolean;
+  x: number;
+  y: number;
+  width: number;
+};
+
+const hiddenIndicator: HoverIndicator = {
+  height: 0,
+  visible: false,
+  width: 0,
+  x: 0,
+  y: 0,
+};
+
+/* ─── Context ────────────────────────────────────────────────── */
+
+type TabsContextValue = {
+  value: string;
+  onValueChange: (value: string) => void;
+};
+
+const TabsContext = React.createContext<TabsContextValue | null>(null);
+
+type TabsListContextValue = {
+  activeValue: string;
+  moveHoverIndicator: (element: HTMLElement) => void;
+  clearHoverIndicator: () => void;
+};
+
+const TabsListContext = React.createContext<TabsListContextValue | null>(null);
+
+/**
+ * Hook per accedere al contesto del `TabsList` corrente.
+ * Utile per componenti figli che devono guidare l'indicatore
+ * hover (ad esempio un DropdownMenuTrigger dentro una barra
+ * di navigazione che condivide lo stesso indicatore).
+ */
+function useTabsList() {
+  return React.useContext(TabsListContext);
+}
+
+/* ─── Utility ────────────────────────────────────────────────── */
+
+function chainHandlers<E>(
+  first?: ((event: E) => void) | null,
+  second?: ((event: E) => void) | null,
+): ((event: E) => void) | undefined {
+  if (!first && !second) return undefined;
+  if (!second) return first ?? undefined;
+  if (!first) return second ?? undefined;
+  return (event: E) => {
+    first(event);
+    second(event);
+  };
+}
+
+/* ─── Tabs (Root) ────────────────────────────────────────────── */
+
+/**
+ * Root del componente Tabs. Gestisce lo stato del valore attivo
+ * (controllato tramite `value` o non controllato tramite
+ * `defaultValue`).
+ */
 function Tabs({
+  value: controlledValue,
+  defaultValue = "",
+  onValueChange,
+  children,
   className,
-  orientation = "horizontal",
   ...props
-}: TabsPrimitive.Root.Props) {
+}: {
+  value?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+  children: React.ReactNode;
+  className?: string;
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "defaultValue">) {
+  const [internalValue, setInternalValue] = React.useState(defaultValue);
+  const isControlled = controlledValue !== undefined;
+  const currentValue = isControlled ? controlledValue : internalValue;
+
+  const handleValueChange = React.useCallback(
+    (next: string) => {
+      if (!isControlled) setInternalValue(next);
+      onValueChange?.(next);
+    },
+    [isControlled, onValueChange],
+  );
+
+  const ctx = React.useMemo<TabsContextValue>(
+    () => ({ value: currentValue, onValueChange: handleValueChange }),
+    [currentValue, handleValueChange],
+  );
+
   return (
-    <TabsPrimitive.Root
-      data-slot="tabs"
-      data-orientation={orientation}
-      className={cn(
-        "group/tabs flex gap-2 data-horizontal:flex-col",
-        className
-      )}
-      {...props}
-    />
-  )
+    <TabsContext value={ctx}>
+      <div data-slot="tabs" className={cn("flex flex-col gap-3", className)} {...props}>
+        {children}
+      </div>
+    </TabsContext>
+  );
 }
 
-const tabsListVariants = cva(
-  "group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground group-data-horizontal/tabs:h-8 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col data-[variant=line]:rounded-none",
-  {
-    variants: {
-      variant: {
-        default: "bg-muted",
-        line: "gap-1 bg-transparent",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-)
+/* ─── TabsList ───────────────────────────────────────────────── */
 
+/**
+ * Contenitore per i `TabsTrigger`. Include l'indicatore hover
+ * che scorre tra le voci tramite `getBoundingClientRect` +
+ * `translate3d`, con la stessa curva e durata della topbar di
+ * navigazione (`260ms cubic-bezier(0.16, 1, 0.3, 1)`).
+ *
+ * Supporta la navigazione da tastiera WAI-ARIA (Freccia Sx/Dx, Home, End).
+ */
 function TabsList({
+  children,
   className,
-  variant = "default",
+  activeValue: activeValueProp,
+  preventHoverIndicatorAutoHide = false,
+  onKeyDown: onKeyDownProp,
   ...props
-}: TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>) {
+}: {
+  children: React.ReactNode;
+  className?: string;
+  /** Valore attivo forzato dall'esterno (priorità su contesto). */
+  activeValue?: string;
+  /** Se `true`, mouse-leave e blur non nascondono l'indicatore. */
+  preventHoverIndicatorAutoHide?: boolean;
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "children">) {
+  const tabsContext = React.useContext(TabsContext);
+  const listRef = React.useRef<HTMLDivElement>(null);
+  const activeElementRef = React.useRef<HTMLElement | null>(null);
+  const [hover, setHover] = React.useState(hiddenIndicator);
+
+  const activeValue = activeValueProp ?? tabsContext?.value ?? "";
+
+  const moveHoverIndicator = React.useCallback((element: HTMLElement) => {
+    const list = listRef.current;
+    if (!list) return;
+    activeElementRef.current = element;
+    const listRect = list.getBoundingClientRect();
+    const elRect = element.getBoundingClientRect();
+    setHover({
+      height: elRect.height,
+      visible: true,
+      width: elRect.width,
+      x: elRect.left - listRect.left,
+      y: elRect.top - listRect.top,
+    });
+  }, []);
+
+  const clearHoverIndicator = React.useCallback(() => {
+    activeElementRef.current = null;
+    setHover((prev) => ({ ...prev, visible: false }));
+  }, []);
+
+  // Ricalcola la posizione dell'indicatore su resize per evitare disallineamenti
+  React.useEffect(() => {
+    if (!hover.visible || !activeElementRef.current) return;
+    const handleResize = () => {
+      if (activeElementRef.current) moveHoverIndicator(activeElementRef.current);
+    };
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, [hover.visible, moveHoverIndicator]);
+
+  const handleBlur = React.useCallback(
+    (event: React.FocusEvent<HTMLDivElement>) => {
+      if (preventHoverIndicatorAutoHide) return;
+      if (
+        event.relatedTarget instanceof Node &&
+        event.currentTarget.contains(event.relatedTarget)
+      ) {
+        return;
+      }
+      clearHoverIndicator();
+    },
+    [preventHoverIndicatorAutoHide, clearHoverIndicator],
+  );
+
+  const handleMouseLeave = React.useCallback(() => {
+    if (preventHoverIndicatorAutoHide) return;
+    clearHoverIndicator();
+  }, [preventHoverIndicatorAutoHide, clearHoverIndicator]);
+
+  // Tastiera WAI-ARIA per tablist (Freccia Sx/Dx/Su/Giù, Home, End)
+  const handleKeyDown = React.useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      onKeyDownProp?.(event);
+      if (event.defaultPrevented) return;
+
+      const list = listRef.current;
+      if (!list) return;
+      const triggers = Array.from(
+        list.querySelectorAll<HTMLElement>('[data-slot="tabs-trigger"]:not([disabled])'),
+      );
+      if (triggers.length === 0) return;
+
+      const currentIndex = triggers.findIndex((el) => el === document.activeElement);
+      if (currentIndex === -1) return;
+
+      let nextIndex = -1;
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        event.preventDefault();
+        nextIndex = (currentIndex + 1) % triggers.length;
+      } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        event.preventDefault();
+        nextIndex = (currentIndex - 1 + triggers.length) % triggers.length;
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        nextIndex = 0;
+      } else if (event.key === "End") {
+        event.preventDefault();
+        nextIndex = triggers.length - 1;
+      }
+
+      if (nextIndex !== -1 && triggers[nextIndex]) {
+        triggers[nextIndex].focus();
+        moveHoverIndicator(triggers[nextIndex]);
+      }
+    },
+    [moveHoverIndicator, onKeyDownProp],
+  );
+
+  const indicatorStyle: React.CSSProperties = {
+    height: hover.height,
+    opacity: hover.visible ? 1 : 0,
+    transform: `translate3d(${hover.x}px, ${hover.y}px, 0)`,
+    width: hover.width,
+  };
+
+  const listCtx = React.useMemo<TabsListContextValue>(
+    () => ({ activeValue, moveHoverIndicator, clearHoverIndicator }),
+    [activeValue, moveHoverIndicator, clearHoverIndicator],
+  );
+
   return (
-    <TabsPrimitive.List
-      data-slot="tabs-list"
-      data-variant={variant}
-      className={cn(tabsListVariants({ variant }), className)}
-      {...props}
-    />
-  )
+    <TabsListContext value={listCtx}>
+      <div
+        data-slot="tabs-list"
+        role={tabsContext ? "tablist" : undefined}
+        className={cn("relative flex items-center gap-1", className)}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        onMouseLeave={handleMouseLeave}
+        ref={listRef}
+        {...props}
+      >
+        <span aria-hidden="true" className="tabs__hover-indicator" style={indicatorStyle} />
+        {children}
+      </div>
+    </TabsListContext>
+  );
 }
 
-function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
+/* ─── TabsTrigger ─────────────────────────────────────────────── */
+
+/**
+ * Singola voce di un `TabsList`. Renderizza le icone a sinistra
+ * allineate al centro del testo con dimensione e spaziatura ottimali (`gap-1.5`, `size-3.5`).
+ *
+ * Per default renderizza un `<button>`. Con il prop `render` è possibile passare un
+ * elemento diverso (ad es. `<a href="…" />` per la navigazione).
+ */
+function TabsTrigger({
+  value,
+  children,
+  className,
+  render,
+  onClick: onClickProp,
+  onFocus: onFocusProp,
+  onMouseEnter: onMouseEnterProp,
+  ...props
+}: {
+  value: string;
+  children?: React.ReactNode;
+  className?: string;
+  /** Elemento polimorfico (es. `<a href />`) su cui fondere le props. */
+  render?: React.ReactElement<Record<string, any>>;
+} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "value">) {
+  const tabsContext = React.useContext(TabsContext);
+  const listContext = React.useContext(TabsListContext);
+  const active = listContext ? listContext.activeValue === value : false;
+
+  const computedClassName = cn(
+    "relative z-10 inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium cursor-pointer select-none",
+    "text-muted-foreground transition-colors hover:text-foreground",
+    "focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring/30",
+    "disabled:pointer-events-none disabled:opacity-50",
+    "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+    active && "bg-foreground text-background hover:text-background focus-visible:text-background",
+    className,
+  );
+
+  const handleClick = React.useCallback(
+    (event: React.MouseEvent) => {
+      tabsContext?.onValueChange(value);
+      onClickProp?.(event as React.MouseEvent<HTMLButtonElement>);
+    },
+    [tabsContext, value, onClickProp],
+  );
+
+  const handleFocus = React.useCallback(
+    (event: React.FocusEvent) => {
+      listContext?.moveHoverIndicator(event.currentTarget as HTMLElement);
+      onFocusProp?.(event as React.FocusEvent<HTMLButtonElement>);
+    },
+    [listContext, onFocusProp],
+  );
+
+  const handleMouseEnter = React.useCallback(
+    (event: React.MouseEvent) => {
+      listContext?.moveHoverIndicator(event.currentTarget as HTMLElement);
+      onMouseEnterProp?.(event as React.MouseEvent<HTMLButtonElement>);
+    },
+    [listContext, onMouseEnterProp],
+  );
+
+  // ─ Render polimorfico ─
+  if (render) {
+    const renderProps = render.props as Record<string, any>;
+    return React.cloneElement(
+      render,
+      {
+        "data-slot": "tabs-trigger",
+        "data-active": active ? "" : undefined,
+        className: cn(computedClassName, renderProps.className),
+        onClick: chainHandlers(handleClick, renderProps.onClick),
+        onFocus: chainHandlers(handleFocus, renderProps.onFocus),
+        onMouseEnter: chainHandlers(handleMouseEnter, renderProps.onMouseEnter),
+      } as React.HTMLAttributes<HTMLElement>,
+      children ?? renderProps.children,
+    );
+  }
+
+  // ─ Render <button> di default ─
   return (
-    <TabsPrimitive.Tab
+    <button
+      type="button"
+      role={tabsContext ? "tab" : undefined}
+      aria-selected={tabsContext ? active : undefined}
       data-slot="tabs-trigger"
-      className={cn(
-        "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent",
-        "data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground",
-        "after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
-        className
-      )}
+      data-active={active ? "" : undefined}
+      className={computedClassName}
+      onClick={handleClick}
+      onFocus={handleFocus}
+      onMouseEnter={handleMouseEnter}
       {...props}
-    />
-  )
+    >
+      {children}
+    </button>
+  );
 }
 
-function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
+/* ─── TabsContent ────────────────────────────────────────────── */
+
+/**
+ * Pannello di contenuto associato a un valore. Viene montato
+ * solo quando il valore corrisponde al valore attivo del
+ * contesto `<Tabs>`.
+ */
+function TabsContent({
+  value,
+  children,
+  className,
+  ...props
+}: {
+  value: string;
+  children?: React.ReactNode;
+  className?: string;
+} & React.HTMLAttributes<HTMLDivElement>) {
+  const tabsContext = React.useContext(TabsContext);
+  if (!tabsContext || tabsContext.value !== value) return null;
+
   return (
-    <TabsPrimitive.Panel
+    <div
+      role="tabpanel"
       data-slot="tabs-content"
-      className={cn("flex-1 text-sm outline-none", className)}
+      className={cn("flex-1 text-sm outline-none animate-in fade-in-0 duration-200", className)}
       {...props}
-    />
-  )
+    >
+      {children}
+    </div>
+  );
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }
+/* ─── Esportazioni ───────────────────────────────────────────── */
+
+export { Tabs, TabsList, TabsTrigger, TabsContent, useTabsList };

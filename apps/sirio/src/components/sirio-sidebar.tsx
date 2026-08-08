@@ -25,6 +25,15 @@ import {
   IconForms,
   IconTable,
   IconSquare,
+  IconAlertCircle,
+  IconUser,
+  IconRoute,
+  IconSelector,
+  IconFolderOff,
+  IconTimeline,
+  IconInfoSquare,
+  IconAdjustments,
+  IconFileText,
 } from "@tabler/icons-react";
 
 const navigation = {
@@ -34,13 +43,24 @@ const navigation = {
     { name: "Spaziatura e Raggio", href: "/foundations/spacing-and-radius", icon: IconRulerMeasure },
   ],
   components: [
+    { name: "Alert", href: "/components/alert", icon: IconAlertCircle },
+    { name: "Avatar", href: "/components/avatar", icon: IconUser },
+    { name: "Badge", href: "/components/badge", icon: IconSquare },
+    { name: "Breadcrumb", href: "/components/breadcrumb", icon: IconRoute },
     { name: "Button", href: "/components/button", icon: IconClick },
     { name: "Card", href: "/components/card", icon: IconLayoutCards },
+    { name: "Controlli & Input", href: "/components/controls", icon: IconAdjustments },
     { name: "Dialog", href: "/components/dialog", icon: IconWindowMaximize },
     { name: "Dropdown Menu", href: "/components/dropdown-menu", icon: IconForms },
+    { name: "Empty State", href: "/components/empty", icon: IconFolderOff },
     { name: "Field", href: "/components/field", icon: IconForms },
+    { name: "Floating Navigation", href: "/components/floating-navigation", icon: IconRoute },
+    { name: "Select", href: "/components/select", icon: IconSelector },
     { name: "Table", href: "/components/table", icon: IconTable },
-    { name: "Badge", href: "/components/badge", icon: IconSquare },
+    { name: "Tabs", href: "/components/tabs", icon: IconInfoSquare },
+    { name: "Textarea", href: "/components/textarea", icon: IconFileText },
+    { name: "Timeline", href: "/components/timeline", icon: IconTimeline },
+    { name: "Tooltip", href: "/components/tooltip", icon: IconInfoSquare },
   ],
 };
 
@@ -76,7 +96,7 @@ export function SirioSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Components</SidebarGroupLabel>
+          <SidebarGroupLabel>Componenti UI ({navigation.components.length})</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navigation.components.map((item) => (
