@@ -230,7 +230,7 @@ export default function ControlsCatalogPage() {
                   <span className="text-[0.6875rem] font-mono text-muted-foreground mb-1.5 block">
                     Stile testo
                   </span>
-                  <ToggleGroup toggleMultiple variant="outline" size="icon-sm">
+                  <ToggleGroup multiple variant="outline" size="icon-sm">
                     <Toggle aria-label="Bold" value="bold">
                       <IconBold />
                     </Toggle>
