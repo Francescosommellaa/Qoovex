@@ -88,7 +88,7 @@ const createdOrganizationIds: string[] = [];
 type OwnerFixture = Awaited<ReturnType<typeof createOwnerFixture>>;
 type ClientFixture = Awaited<ReturnType<typeof createClientFixture>>;
 
-async function createUser(label: string, domain: string) {
+async function createUser(label: string, domain: string, accountRole: "BUSINESS" | "CLIENT") {
   const suffix = crypto.randomUUID();
   const localPart = label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   const user = await db.user.create({
@@ -96,6 +96,7 @@ async function createUser(label: string, domain: string) {
       email: `${localPart}-${suffix}@${domain}`,
       username: `${localPart}-${suffix}`,
       emailVerified: new Date(),
+      accountRole,
     },
     select: { id: true, email: true },
   });
@@ -104,7 +105,7 @@ async function createUser(label: string, domain: string) {
 }
 
 async function createOwnerFixture(label: string) {
-  const user = await createUser(label, "job-site-client-owner-test.invalid");
+  const user = await createUser(label, "job-site-client-owner-test.invalid", "BUSINESS");
   const suffix = crypto.randomUUID();
   const organization = await db.organization.create({
     data: { name: `${label} ${suffix}`, code: `CLIENT-LIFECYCLE-${suffix}`, createdById: user.id },
@@ -119,7 +120,7 @@ async function createOwnerFixture(label: string) {
 }
 
 async function createClientFixture(label: string) {
-  return { user: await createUser(label, "job-site-client-lifecycle-test.invalid") };
+  return { user: await createUser(label, "job-site-client-lifecycle-test.invalid", "CLIENT") };
 }
 
 function createdJobSiteId(result: Awaited<ReturnType<typeof createJobSite>>) {

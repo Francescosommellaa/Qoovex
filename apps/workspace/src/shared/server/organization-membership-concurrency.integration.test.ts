@@ -78,13 +78,14 @@ const describeOnLocalCi = environment.isLocalCiDatabase ? describe : describe.sk
 const createdUserIds: string[] = [];
 const createdOrganizationIds: string[] = [];
 
-async function createUser(prefix: string) {
+async function createUser(prefix: string, accountRole?: "BUSINESS" | "PROFESSIONAL") {
   const suffix = crypto.randomUUID();
   const user = await db.user.create({
     data: {
       email: `${prefix}-${suffix}@membership-test.invalid`,
       username: `${prefix}-${suffix}`,
       emailVerified: new Date(),
+      accountRole,
     },
     select: { id: true, email: true, emailVerified: true },
   });
@@ -140,10 +141,10 @@ afterEach(async () => {
   createdUserIds.length = 0;
 });
 
-describeOnLocalCi("multi-organization membership concurrency on PostgreSQL", () => {
-  it("preserves both organization creation and invitation acceptance", async () => {
+describeOnLocalCi("single-organization membership concurrency on PostgreSQL", () => {
+  it("allows the selected BUSINESS path and rejects the incompatible collaborator invitation", async () => {
     const inviter = await createUser("inviter");
-    const user = await createUser("subject");
+    const user = await createUser("subject", "BUSINESS");
     const invitedOrganization = await createOrganizationFixture("Invited organization", inviter.id);
     const token = crypto.randomBytes(24).toString("base64url");
     const invitation = await createInvitationFixture({
@@ -160,12 +161,12 @@ describeOnLocalCi("multi-organization membership concurrency on PostgreSQL", () 
     ]);
 
     expect(creation.status).toBe("fulfilled");
-    expect(acceptance.status).toBe("fulfilled");
+    expect(acceptance.status).toBe("rejected");
     const memberships = await db.organizationMembership.findMany({
       where: { userId: user.id },
       select: { organizationId: true, revokedAt: true },
     });
-    expect(memberships).toHaveLength(2);
+    expect(memberships).toHaveLength(1);
     expect(memberships.every((membership) => membership.revokedAt === null)).toBe(true);
 
     const storedInvitation = await db.organizationInvitation.findUnique({
@@ -176,14 +177,14 @@ describeOnLocalCi("multi-organization membership concurrency on PostgreSQL", () 
       where: { createdById: user.id, name: "Concurrent organization" },
       select: { id: true },
     });
-    expect(storedInvitation?.acceptedAt).toBeInstanceOf(Date);
+    expect(storedInvitation?.acceptedAt).toBeNull();
     expect(createdOrganizations).toHaveLength(1);
-    expect(memberships.map((membership) => membership.organizationId).sort()).toEqual([createdOrganizations[0]!.id, invitedOrganization.id].sort());
+    expect(memberships.map((membership) => membership.organizationId)).toEqual([createdOrganizations[0]!.id]);
   });
 
-  it("accepts invitations from two distinct organizations without reusing a revoked row", async () => {
+  it("accepts only one concurrent invitation and preserves the revoked membership record", async () => {
     const inviter = await createUser("inviter");
-    const user = await createUser("subject");
+    const user = await createUser("subject", "PROFESSIONAL");
     const previousOrganization = await createOrganizationFixture("Previous organization", inviter.id);
     const firstOrganization = await createOrganizationFixture("First organization", inviter.id);
     const secondOrganization = await createOrganizationFixture("Second organization", inviter.id);
@@ -217,21 +218,22 @@ describeOnLocalCi("multi-organization membership concurrency on PostgreSQL", () 
       acceptInvitation(secondToken),
     ]);
 
-    expect(results.every((result) => result.status === "fulfilled")).toBe(true);
+    expect(results.filter((result) => result.status === "fulfilled")).toHaveLength(1);
+    expect(results.filter((result) => result.status === "rejected")).toHaveLength(1);
     const memberships = await db.organizationMembership.findMany({
       where: { userId: user.id },
       select: { organizationId: true, revokedAt: true },
     });
-    expect(memberships.filter((membership) => membership.revokedAt === null)).toHaveLength(2);
+    expect(memberships.filter((membership) => membership.revokedAt === null)).toHaveLength(1);
     expect(memberships.find((membership) => membership.organizationId === previousOrganization.id)?.revokedAt).toBeInstanceOf(Date);
     const invitations = await db.organizationInvitation.findMany({
       where: { id: { in: [firstInvitation.id, secondInvitation.id] } },
       select: { organizationId: true, acceptedAt: true },
     });
     const accepted = invitations.filter((invitation) => invitation.acceptedAt !== null);
-    expect(accepted).toHaveLength(2);
-    expect(await db.organizationMembership.count({ where: { userId: user.id } })).toBe(3);
+    expect(accepted).toHaveLength(1);
+    expect(await db.organizationMembership.count({ where: { userId: user.id } })).toBe(2);
     await expect(db.user.findUniqueOrThrow({ where: { id: user.id }, select: { authVersion: true } }))
-      .resolves.toEqual({ authVersion: 3 });
+      .resolves.toEqual({ authVersion: 2 });
   });
 });
