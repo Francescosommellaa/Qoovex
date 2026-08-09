@@ -5,6 +5,7 @@ const mocks = vi.hoisted(() => ({
   findMembership: vi.fn(),
   getActiveSupportSession: vi.fn(),
   getPermissionsForRole: vi.fn(),
+  getPermissionsForPreset: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -17,7 +18,12 @@ vi.mock("@qoovex/db", () => ({
   },
 }));
 vi.mock("@shared/server/mfa-service", () => ({ isMfaSatisfiedForUser: vi.fn() }));
-vi.mock("@shared/server/authorization-policy", () => ({ getPermissionsForRole: mocks.getPermissionsForRole }));
+vi.mock("@shared/server/authorization-policy", () => ({
+  getPermissionsForRole: mocks.getPermissionsForRole,
+  getPermissionsForPreset: mocks.getPermissionsForPreset,
+  getSupportSessionPermissions: vi.fn(() => []),
+  sanitizeOrganizationPermissions: vi.fn((values: string[]) => values),
+}));
 vi.mock("@shared/server/support-access-service", () => ({ getActiveSupportSession: mocks.getActiveSupportSession }));
 vi.mock("@shared/server/access-errors", () => ({
   AccessError: class AccessError extends Error {
@@ -37,7 +43,7 @@ beforeEach(() => {
     platformRole: "USER",
     authVersion: 1,
     mfaEnabled: false,
-    devView: "OWNER",
+    devView: "BUSINESS",
   });
   mocks.findMembership.mockReset().mockResolvedValue([{
     id: "membership-1",
@@ -45,7 +51,8 @@ beforeEach(() => {
     organization: { id: "org-1", name: "Azienda Dev", code: "DEV" },
   }]);
   mocks.getActiveSupportSession.mockReset().mockResolvedValue(null);
-  mocks.getPermissionsForRole.mockReset().mockReturnValue(["organization:read", "documents:read"]);
+  mocks.getPermissionsForRole.mockReset().mockReturnValue(["organization:read", "jobSites:read"]);
+  mocks.getPermissionsForPreset.mockReset().mockReturnValue(["organization:read", "jobSites:read"]);
 });
 
 describe("workspace dev role simulation", () => {
@@ -59,5 +66,22 @@ describe("workspace dev role simulation", () => {
     expect(context.platformRole).toBe("USER");
     expect(mocks.getPermissionsForRole).toHaveBeenCalledWith("OWNER");
     expect(mocks.findMembership).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ userId: "dev-user", revokedAt: null }) }));
+  });
+
+  it("projects the professional development view as a collaborator without changing the membership", async () => {
+    mocks.bootstrapDevUser.mockResolvedValueOnce({
+      id: "dev-user",
+      email: "dev@qoovex.local",
+      emailVerified: new Date(0),
+      platformRole: "USER",
+      authVersion: 1,
+      mfaEnabled: false,
+      devView: "PROFESSIONAL",
+    });
+
+    const context = await getWorkspaceAccessContext();
+
+    expect(context.company).toMatchObject({ role: "COLLABORATOR", preset: "OPERATIONAL_COLLABORATION", scopeMode: "ASSIGNED" });
+    expect(mocks.getPermissionsForPreset).toHaveBeenCalledWith("OPERATIONAL_COLLABORATION");
   });
 });

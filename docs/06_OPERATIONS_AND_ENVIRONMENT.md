@@ -2,12 +2,12 @@
 
 ## Migration
 
-La history contiene 6 migration. Le prime 5 coincidono con il baseline Production; la sesta migration pubblicata nel migration ledger Ã¨ il solo passaggio al nuovo dominio. La migration esegue un reset irreversibile dei record baseline esplicitamente autorizzato, elimina tabelle/enum/colonne precedente e crea membership multiple, participant cliente, immobili, agreement, timeline, allegati, step, richieste, proposte, autoritÃ  economica, pagamenti documentati, dispute, closure/export e processi attuale.
+La history contiene 8 migration. Le prime 6 sono evidenza storica immutabile; la settima migration forward aggiunge `AccountRole?` e rimuove le tabelle e i grant delle superfici documentali autonome. L'ottava vincola ogni account a una sola membership Azienda attiva. Non riscrive la history e non usa `db push`, `migrate reset` o `migrate resolve`.
 
 ## Prove locali
 
-- fresh: istanza Prisma Dev locale ricreata, 6 migration applicate, head attuale e drift nullo;
-- upgrade: database loopback isolato con le prime 5 migration, applicazione della sola migration attuale, record baseline azzerati, tabelle attuale presenti, tabelle precedente assenti e drift nullo;
+- fresh: istanza Prisma Dev locale ricreata, 8 migration applicate, head attuale e drift nullo;
+- upgrade: database loopback isolato con le prime 5 migration, applicazione delle migration forward, record baseline azzerati, tabelle attuali presenti, tabelle rimosse assenti e drift nullo;
 - target remoto: Production Ã¨ stata verificata in sola lettura alla head `20260720010000_calendar_events`; la head Preview resta non verificata perchÃ© le variabili database integrate non sono state restituite dal pull CLI. Nessuna mutazione remota Ã¨ stata eseguita.
 
 Il target Local verificato Ã¨ PostgreSQL loopback porta 51225 ed Ã¨ alla head attuale senza differenze rispetto a `schema.prisma`. Preview e Production non vengono piÃ¹ mutate da push o completamento CI: i relativi workflow sono `workflow_dispatch` manuali, richiedono SHA esatto e conferma testuale esatta, oltre ai gate ambiente e ai controlli giÃ  presenti.
@@ -24,4 +24,4 @@ Il workflow schedulato invoca data-control via GET e il runner attuale via POST,
 
 ## hard_stop
 
-Nessun `db push`, `migrate reset`, `migrate resolve` o SQL manuale nei workflow di release. Il reset remoto per la sesta migration pubblicata nel migration ledger resta tecnicamente disponibile soltanto dietro dispatch manuale, conferma testuale esatta, target identity, isolamento Preview/Production e reset Blob one-shot; l'esecuzione non Ã¨ autorizzata da questo documento nÃ© dallo stato corrente del repository.
+Nessun `db push`, `migrate reset`, `migrate resolve` o SQL manuale nei workflow di release. Il deploy remoto richiede dispatch manuale, conferma testuale esatta, target identity, isolamento Preview/Production, backup verificato e `prisma migrate deploy`; l'esecuzione non Ã¨ autorizzata da questo documento nÃ© dallo stato corrente del repository.

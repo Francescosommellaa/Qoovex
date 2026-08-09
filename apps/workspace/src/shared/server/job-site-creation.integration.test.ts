@@ -77,6 +77,7 @@ async function createOwnerFixture(label: string) {
       email: `${label}-${suffix}@job-site-creation-test.invalid`,
       username: `${label}-${suffix}`,
       emailVerified: new Date(),
+      accountRole: "BUSINESS",
     },
     select: { id: true },
   });

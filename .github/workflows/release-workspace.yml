@@ -75,10 +75,11 @@ jobs:
       - run: pnpm ci:install
       - run: pnpm check:push
 
-      - name: Verify release manifest
+      - name: Verify release manifest and derive migration heads
         run: |
-          test "$(node -p "require('./ops/workspace-release-manifest.json').database.baselineHead")" = "20260720010000_calendar_events"
-          test "$(node -p "require('./ops/workspace-release-manifest.json').database.migrationHead")" = "20260803230000_qoovex_vnext_from_zero"
+          node scripts/verify-release-contracts.mjs
+          test -n "$(node -p "require('./ops/workspace-release-manifest.json').database.baselineHead")"
+          test -n "$(node -p "require('./ops/workspace-release-manifest.json').database.migrationHead")"
 
       - name: Pull and verify Production environment without printing values
         run: |
@@ -88,35 +89,29 @@ jobs:
             --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --silent | jq -r '.autoAssignCustomDomains')"
           test "$auto_assign" = "false"
 
-      - name: Detect one-time current rollout state
+      - name: Detect required forward migration state
         id: rollout
         run: |
+          migration_head="$(node -p "require('./ops/workspace-release-manifest.json').database.migrationHead")"
+          previous_head="$(node -p "const ledger=require('./ops/migration-ledger.json'); ledger.migrations.at(-2).name")"
           if pnpm dlx vercel@50.17.1 env run -e production \
             --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" -- \
-            pnpm --filter @qoovex/db verify:head 20260803230000_qoovex_vnext_from_zero; then
+            pnpm --filter @qoovex/db verify:head "$migration_head"; then
             echo "required=false" >> "$GITHUB_OUTPUT"
           else
             pnpm dlx vercel@50.17.1 env run -e production \
               --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" -- \
-              pnpm --filter @qoovex/db verify:head 20260720010000_calendar_events
+              pnpm --filter @qoovex/db verify:head "$previous_head"
             echo "required=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Reset Production Blob store for the one-time empty-data rollout
+      - name: Apply approved forward migration
         if: steps.rollout.outputs.required == 'true'
         env:
-          QOOVEX_JOB_SITE_BLOB_RESET_APPROVED: RESET_QOOVEX_JOB_SITE_EMPTY_BLOB_STORE_2026_08_03
-        run: >-
-          pnpm dlx vercel@50.17.1 env run -e production
-          --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
-          pnpm --filter @qoovex/workspace blob:private:reset
-
-      - name: Apply current migration with explicit empty-database authorization
-        env:
           QOOVEX_MIGRATE_DEPLOY_APPROVED: "1"
-          QOOVEX_JOB_SITE_DESTRUCTIVE_RESET_REF: QOOVEX_JOB_SITE_FROM_ZERO_USER_AUTHORIZATION_2026_08_03
-          QOOVEX_EXPECTED_LAST_MIGRATION: 20260803230000_qoovex_vnext_from_zero
+          QOOVEX_MIGRATION_BACKUP_REF: ${{ vars.QOOVEX_MIGRATION_BACKUP_REF }}
         run: >-
+          QOOVEX_EXPECTED_LAST_MIGRATION="$(node -p "require('./ops/workspace-release-manifest.json').database.migrationHead")"
           pnpm dlx vercel@50.17.1 env run -e production
           --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
           pnpm --filter @qoovex/db db:migrate:deploy
@@ -125,7 +120,7 @@ jobs:
         run: >-
           pnpm dlx vercel@50.17.1 env run -e production
           --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
-          pnpm --filter @qoovex/db verify:head 20260803230000_qoovex_vnext_from_zero
+          pnpm --filter @qoovex/db verify:head "$(node -p "require('./ops/workspace-release-manifest.json').database.migrationHead")"
 
       - name: Build and deploy staged Production artifact
         id: staged
@@ -152,9 +147,9 @@ jobs:
             test "$actual" = "$expected"
           }
           expect_status 200 /sign-in
-          expect_status 307 /contexts
+          expect_status 307 /
           expect_status 307 /client
-          expect_status 401 /api/contexts
+          expect_status 401 /api/account/notification-preferences
           expect_status 401 /api/client/job-sites
           expect_status 404 /api/does-not-exist
 
@@ -195,7 +190,7 @@ jobs:
         run: |
           jq -n \
             --arg sha "$RELEASE_SHA" \
-            --arg migrationHead "20260803230000_qoovex_vnext_from_zero" \
+            --arg migrationHead "$(node -p "require('./ops/workspace-release-manifest.json').database.migrationHead")" \
             --arg resetApplied "$RESET_APPLIED" \
             --arg deploymentId "$DEPLOYMENT_ID" \
             --arg deploymentUrl "$DEPLOYMENT_URL" \

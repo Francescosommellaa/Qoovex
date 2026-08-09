@@ -40,7 +40,7 @@ vi.mock("@shared/server/access-context-service", () => ({
 }));
 vi.mock("@shared/server/authorization-policy", () => ({
   canInviteRole: mocks.canInviteRole,
-  getPermissionsForPreset: () => ["organization:read", "documents:upload"],
+  getPermissionsForPreset: () => ["organization:read", "jobSites:read"],
   getPermissionsForRole: () => ["organization:read"],
   normalizeCollaboratorPermissions: (values: string[]) => values,
 }));

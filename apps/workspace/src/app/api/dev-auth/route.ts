@@ -29,11 +29,11 @@ export async function POST(request: Request) {
     );
   }
 
-  let view: unknown = "OWNER";
+  let view: unknown = "BUSINESS";
   const rawBody = await request.text();
   if (rawBody) {
     try {
-      view = (JSON.parse(rawBody) as { view?: unknown }).view ?? "OWNER";
+      view = (JSON.parse(rawBody) as { view?: unknown }).view ?? "BUSINESS";
     } catch {
       return NextResponse.json({ error: "Richiesta dev non valida." }, { status: 400 });
     }

@@ -7,25 +7,14 @@ import { cn } from "#lib/utils"
 import { usePlatform } from "#hooks/use-platform"
 import { IconChevronRight, IconCheck } from "@tabler/icons-react"
 
+import {
+  useSlidingIndicatorState,
+  SlidingIndicatorProvider,
+  SlidingIndicator,
+  type SlidingIndicatorContextValue,
+} from "#components/sliding-indicator"
+
 /* ─── Context for Sliding Hover Indicator ─────────────────────── */
-
-type MenuHoverIndicator = {
-  height: number
-  visible: boolean
-  x: number
-  y: number
-  width: number
-  variant?: "default" | "destructive"
-}
-
-const hiddenMenuIndicator: MenuHoverIndicator = {
-  height: 0,
-  visible: false,
-  width: 0,
-  x: 0,
-  y: 0,
-  variant: "default",
-}
 
 type MenuHoverContextValue = {
   moveHoverIndicator: (element: HTMLElement, variant?: "default" | "destructive") => void
@@ -63,63 +52,31 @@ function DropdownMenuContent({
     MenuPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) {
-  const contentRef = React.useRef<HTMLDivElement>(null)
-  const [hover, setHover] = React.useState(hiddenMenuIndicator)
+  const {
+    containerRef,
+    indicator,
+    moveIndicator,
+    clearIndicator,
+    handleMouseLeave,
+    handleBlur,
+  } = useSlidingIndicatorState()
 
-  const moveHoverIndicator = React.useCallback(
-    (element: HTMLElement, variant: "default" | "destructive" = "default") => {
-      const content = contentRef.current
-      if (!content) return
-      const contentRect = content.getBoundingClientRect()
-      const elRect = element.getBoundingClientRect()
-      setHover({
-        height: elRect.height,
-        visible: true,
-        width: elRect.width,
-        x: elRect.left - contentRect.left,
-        y: elRect.top - contentRect.top,
-        variant,
-      })
-    },
-    []
+  const menuHoverCtxValue = React.useMemo<MenuHoverContextValue>(
+    () => ({
+      moveHoverIndicator: moveIndicator,
+      clearHoverIndicator: clearIndicator,
+    }),
+    [moveIndicator, clearIndicator]
   )
 
-  const clearHoverIndicator = React.useCallback(() => {
-    setHover((prev) => ({ ...prev, visible: false }))
-  }, [])
-
-  const handleMouseLeave = React.useCallback(
-    (event: any) => {
-      onMouseLeaveProp?.(event)
-      clearHoverIndicator()
-    },
-    [onMouseLeaveProp, clearHoverIndicator]
-  )
-
-  const handleBlur = React.useCallback(
-    (event: any) => {
-      onBlurProp?.(event)
-      if (
-        event.relatedTarget instanceof Node &&
-        event.currentTarget.contains(event.relatedTarget)
-      ) {
-        return
-      }
-      clearHoverIndicator()
-    },
-    [onBlurProp, clearHoverIndicator]
-  )
-
-  const indicatorStyle: React.CSSProperties = {
-    height: hover.height,
-    opacity: hover.visible ? 1 : 0,
-    transform: `translate3d(${hover.x}px, ${hover.y}px, 0)`,
-    width: hover.width,
-  }
-
-  const ctxValue = React.useMemo<MenuHoverContextValue>(
-    () => ({ moveHoverIndicator, clearHoverIndicator }),
-    [moveHoverIndicator, clearHoverIndicator]
+  const slidingCtxValue = React.useMemo<SlidingIndicatorContextValue>(
+    () => ({
+      indicator,
+      moveIndicator,
+      clearIndicator,
+      containerRef,
+    }),
+    [indicator, moveIndicator, clearIndicator, containerRef]
   )
 
   return (
@@ -131,26 +88,29 @@ function DropdownMenuContent({
         side={side}
         sideOffset={sideOffset}
       >
-        <MenuHoverContext.Provider value={ctxValue}>
-          <MenuPrimitive.Popup
-            ref={contentRef}
-            data-slot="dropdown-menu-content"
-            className={cn(
-              "relative z-50 max-h-(--available-height) min-w-44 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-xl border border-border bg-popover/95 p-1.5 text-popover-foreground shadow-lg backdrop-blur-md duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
-              className
-            )}
-            onMouseLeave={handleMouseLeave}
-            onBlur={handleBlur}
-            {...props}
-          >
-            <span
-              aria-hidden="true"
-              className="dropdown-menu__hover-indicator rounded-lg"
-              data-variant={hover.variant ?? "default"}
-              style={indicatorStyle}
-            />
-            {children}
-          </MenuPrimitive.Popup>
+        <MenuHoverContext.Provider value={menuHoverCtxValue}>
+          <SlidingIndicatorProvider value={slidingCtxValue}>
+            <MenuPrimitive.Popup
+              ref={containerRef as React.RefObject<HTMLDivElement>}
+              data-slot="dropdown-menu-content"
+              className={cn(
+                "relative z-50 max-h-(--available-height) min-w-44 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-xl border border-border bg-popover/95 p-1.5 text-popover-foreground shadow-lg backdrop-blur-md duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+                className
+              )}
+              onMouseLeave={(e) => {
+                onMouseLeaveProp?.(e)
+                handleMouseLeave()
+              }}
+              onBlur={(e) => {
+                onBlurProp?.(e)
+                handleBlur(e)
+              }}
+              {...props}
+            >
+              <SlidingIndicator rounded="lg" />
+              {children}
+            </MenuPrimitive.Popup>
+          </SlidingIndicatorProvider>
         </MenuHoverContext.Provider>
       </MenuPrimitive.Positioner>
     </MenuPrimitive.Portal>

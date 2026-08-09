@@ -143,9 +143,7 @@ export async function getDataExportJobBlob(jobId: string) {
 }
 
 async function collectReferencedBlobPathnames(organizationId: string) {
-  const [versions, evidence, exports, jobSiteAttachments, jobSiteExports, propertyImages, avatarUsers] = await Promise.all([
-    db.documentVersion.findMany({ where: { organizationId }, select: { blobKey: true } }),
-    db.evidence.findMany({ where: { organizationId, blobKey: { not: null } }, select: { blobKey: true } }),
+  const [exports, jobSiteAttachments, jobSiteExports, propertyImages, avatarUsers] = await Promise.all([
     db.dataControlJob.findMany({ where: { organizationId, blobKey: { not: null } }, select: { blobKey: true } }),
     db.jobSiteAttachment.findMany({ where: { organizationId }, select: { blobKey: true } }),
     db.jobSiteExport.findMany({ where: { organizationId, blobKey: { not: null } }, select: { blobKey: true } }),
@@ -159,8 +157,6 @@ async function collectReferencedBlobPathnames(organizationId: string) {
     }),
   ]);
   return new Set([
-    ...versions.map((item) => item.blobKey),
-    ...evidence.flatMap((item) => item.blobKey ? [item.blobKey] : []),
     ...exports.flatMap((item) => item.blobKey ? [item.blobKey] : []),
     ...jobSiteAttachments.map((item) => item.blobKey),
     ...jobSiteExports.flatMap((item) => item.blobKey ? [item.blobKey] : []),

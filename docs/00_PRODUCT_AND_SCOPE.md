@@ -17,7 +17,7 @@ Modello commerciale approvato: paga soltanto lâ€™Azienda; Collaborator incl
 
 ## Implementato ma non ancora provato end-to-end
 
-Account multi-contesto, membership multiple, cantiere attuale, partecipanti, inviti cliente, immobili, agreement iniziale, timeline interna/condivisa, allegati, step opzionali, richieste, proposte e controproposte versionate, deleghe economiche, pagamenti documentati, dispute, chiusura reciproca, export, archivio, richieste post-chiusura, riapertura, ricerca metadata-only e notifiche hanno schema, servizi, route o superfici presenti. Non sono una dichiarazione di readiness. La sequenza creazione cantiere â†’ invito cliente â†’ conferma iniziale Ã¨ `present_but_blocked` finchÃ© i test rossi sul participant creatore e sul cliente attivato troppo presto non diventano verdi tramite un task runtime separato.
+Account con una sola Azienda attiva, cantiere attuale, partecipanti, inviti cliente, immobili, agreement iniziale, timeline interna/condivisa, allegati, step opzionali, richieste, proposte e controproposte versionate, deleghe economiche, pagamenti documentati, dispute, chiusura reciproca, export, archivio, richieste post-chiusura, riapertura, ricerca metadata-only e notifiche hanno schema, servizi, route o superfici presenti. Non sono una dichiarazione di readiness. La sequenza creazione cantiere â†’ invito cliente â†’ conferma iniziale Ã¨ `present_but_blocked` finchÃ© i test rossi sul participant creatore e sul cliente attivato troppo presto non diventano verdi tramite un task runtime separato.
 
 ## conceptual_not_implemented
 

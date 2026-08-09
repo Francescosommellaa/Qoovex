@@ -180,7 +180,7 @@ export async function listPlatformOrganizations(input: { q?: string | null; curs
     ] } : undefined,
     select: {
       id: true, name: true, code: true, createdAt: true,
-      _count: { select: { memberships: true, workers: true, jobSites: true, documents: true } },
+      _count: { select: { memberships: true, workers: true, jobSites: true, jobSiteAttachments: true } },
       memberships: {
         where: { role: "OWNER", revokedAt: null },
         take: 3,

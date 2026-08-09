@@ -341,12 +341,9 @@ export type JobSiteWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"JobSite"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"JobSite"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
-  documents?: Prisma.DocumentListRelationFilter
-  evidence?: Prisma.EvidenceListRelationFilter
   participants?: Prisma.JobSiteParticipantListRelationFilter
   responsibleParticipant?: Prisma.XOR<Prisma.JobSiteParticipantNullableScalarRelationFilter, Prisma.JobSiteParticipantWhereInput> | null
   workerAssignments?: Prisma.JobSiteWorkerAssignmentListRelationFilter
-  documentLinks?: Prisma.DocumentJobSiteLinkListRelationFilter
   clientInvitations?: Prisma.JobSiteClientInvitationListRelationFilter
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkListRelationFilter
   authorityGrants?: Prisma.JobSiteAuthorityGrantListRelationFilter
@@ -389,12 +386,9 @@ export type JobSiteOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
-  documents?: Prisma.DocumentOrderByRelationAggregateInput
-  evidence?: Prisma.EvidenceOrderByRelationAggregateInput
   participants?: Prisma.JobSiteParticipantOrderByRelationAggregateInput
   responsibleParticipant?: Prisma.JobSiteParticipantOrderByWithRelationInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentOrderByRelationAggregateInput
-  documentLinks?: Prisma.DocumentJobSiteLinkOrderByRelationAggregateInput
   clientInvitations?: Prisma.JobSiteClientInvitationOrderByRelationAggregateInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkOrderByRelationAggregateInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantOrderByRelationAggregateInput
@@ -440,12 +434,9 @@ export type JobSiteWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"JobSite"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"JobSite"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
-  documents?: Prisma.DocumentListRelationFilter
-  evidence?: Prisma.EvidenceListRelationFilter
   participants?: Prisma.JobSiteParticipantListRelationFilter
   responsibleParticipant?: Prisma.XOR<Prisma.JobSiteParticipantNullableScalarRelationFilter, Prisma.JobSiteParticipantWhereInput> | null
   workerAssignments?: Prisma.JobSiteWorkerAssignmentListRelationFilter
-  documentLinks?: Prisma.DocumentJobSiteLinkListRelationFilter
   clientInvitations?: Prisma.JobSiteClientInvitationListRelationFilter
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkListRelationFilter
   authorityGrants?: Prisma.JobSiteAuthorityGrantListRelationFilter
@@ -540,12 +531,9 @@ export type JobSiteCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -587,11 +575,8 @@ export type JobSiteUncheckedCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -632,12 +617,9 @@ export type JobSiteUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -679,11 +661,8 @@ export type JobSiteUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -865,11 +844,6 @@ export type JobSiteScalarRelationFilter = {
   isNot?: Prisma.JobSiteWhereInput
 }
 
-export type JobSiteNullableScalarRelationFilter = {
-  is?: Prisma.JobSiteWhereInput | null
-  isNot?: Prisma.JobSiteWhereInput | null
-}
-
 export type JobSiteCreateNestedManyWithoutOrganizationInput = {
   create?: Prisma.XOR<Prisma.JobSiteCreateWithoutOrganizationInput, Prisma.JobSiteUncheckedCreateWithoutOrganizationInput> | Prisma.JobSiteCreateWithoutOrganizationInput[] | Prisma.JobSiteUncheckedCreateWithoutOrganizationInput[]
   connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutOrganizationInput | Prisma.JobSiteCreateOrConnectWithoutOrganizationInput[]
@@ -936,52 +910,6 @@ export type JobSiteUpdateOneRequiredWithoutWorkerAssignmentsNestedInput = {
   upsert?: Prisma.JobSiteUpsertWithoutWorkerAssignmentsInput
   connect?: Prisma.JobSiteWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutWorkerAssignmentsInput, Prisma.JobSiteUpdateWithoutWorkerAssignmentsInput>, Prisma.JobSiteUncheckedUpdateWithoutWorkerAssignmentsInput>
-}
-
-export type JobSiteCreateNestedOneWithoutDocumentsInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentsInput, Prisma.JobSiteUncheckedCreateWithoutDocumentsInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutDocumentsInput
-  connect?: Prisma.JobSiteWhereUniqueInput
-}
-
-export type JobSiteUpdateOneWithoutDocumentsNestedInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentsInput, Prisma.JobSiteUncheckedCreateWithoutDocumentsInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutDocumentsInput
-  upsert?: Prisma.JobSiteUpsertWithoutDocumentsInput
-  disconnect?: Prisma.JobSiteWhereInput | boolean
-  delete?: Prisma.JobSiteWhereInput | boolean
-  connect?: Prisma.JobSiteWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutDocumentsInput, Prisma.JobSiteUpdateWithoutDocumentsInput>, Prisma.JobSiteUncheckedUpdateWithoutDocumentsInput>
-}
-
-export type JobSiteCreateNestedOneWithoutDocumentLinksInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentLinksInput, Prisma.JobSiteUncheckedCreateWithoutDocumentLinksInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutDocumentLinksInput
-  connect?: Prisma.JobSiteWhereUniqueInput
-}
-
-export type JobSiteUpdateOneRequiredWithoutDocumentLinksNestedInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentLinksInput, Prisma.JobSiteUncheckedCreateWithoutDocumentLinksInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutDocumentLinksInput
-  upsert?: Prisma.JobSiteUpsertWithoutDocumentLinksInput
-  connect?: Prisma.JobSiteWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutDocumentLinksInput, Prisma.JobSiteUpdateWithoutDocumentLinksInput>, Prisma.JobSiteUncheckedUpdateWithoutDocumentLinksInput>
-}
-
-export type JobSiteCreateNestedOneWithoutEvidenceInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutEvidenceInput, Prisma.JobSiteUncheckedCreateWithoutEvidenceInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutEvidenceInput
-  connect?: Prisma.JobSiteWhereUniqueInput
-}
-
-export type JobSiteUpdateOneWithoutEvidenceNestedInput = {
-  create?: Prisma.XOR<Prisma.JobSiteCreateWithoutEvidenceInput, Prisma.JobSiteUncheckedCreateWithoutEvidenceInput>
-  connectOrCreate?: Prisma.JobSiteCreateOrConnectWithoutEvidenceInput
-  upsert?: Prisma.JobSiteUpsertWithoutEvidenceInput
-  disconnect?: Prisma.JobSiteWhereInput | boolean
-  delete?: Prisma.JobSiteWhereInput | boolean
-  connect?: Prisma.JobSiteWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteUpdateToOneWithWhereWithoutEvidenceInput, Prisma.JobSiteUpdateWithoutEvidenceInput>, Prisma.JobSiteUncheckedUpdateWithoutEvidenceInput>
 }
 
 export type JobSiteCreateNestedOneWithoutParticipantsInput = {
@@ -1311,12 +1239,9 @@ export type JobSiteCreateWithoutOrganizationInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -1357,11 +1282,8 @@ export type JobSiteUncheckedCreateWithoutOrganizationInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -1454,11 +1376,8 @@ export type JobSiteCreateWithoutWorkerAssignmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -1500,10 +1419,7 @@ export type JobSiteUncheckedCreateWithoutWorkerAssignmentsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -1560,11 +1476,8 @@ export type JobSiteUpdateWithoutWorkerAssignmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -1606,598 +1519,7 @@ export type JobSiteUncheckedUpdateWithoutWorkerAssignmentsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
-  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedUpdateOneWithoutJobSiteNestedInput
-  steps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutJobSiteNestedInput
-  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  attachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutJobSiteNestedInput
-  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutJobSiteNestedInput
-  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutJobSiteNestedInput
-  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutJobSiteNestedInput
-  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutJobSiteNestedInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutJobSiteNestedInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutJobSiteNestedInput
-  exports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutJobSiteNestedInput
-  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutJobSiteNestedInput
-  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutJobSiteNestedInput
-  processes?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteCreateWithoutDocumentsInput = {
-  id?: string
-  name: string
-  address?: string | null
-  description?: string | null
-  status?: $Enums.JobSiteStatus
-  revision?: number
-  timelineSequence?: bigint | number
-  historicalCreatorUserId?: string | null
-  estimatedCompletionAt?: Date | string | null
-  estimatedCompletionAuthorId?: string | null
-  estimatedCompletionSetAt?: Date | string | null
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  closedAt?: Date | string | null
-  archivedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
-  responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
-  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementCreateNestedOneWithoutJobSiteInput
-  steps?: Prisma.JobSiteStepCreateNestedManyWithoutJobSiteInput
-  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutJobSiteInput
-  attachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutJobSiteInput
-  requests?: Prisma.JobSiteRequestCreateNestedManyWithoutJobSiteInput
-  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutJobSiteInput
-  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutJobSiteInput
-  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutJobSiteInput
-  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutJobSiteInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutJobSiteInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutJobSiteInput
-  exports?: Prisma.JobSiteExportCreateNestedManyWithoutJobSiteInput
-  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutJobSiteInput
-  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutJobSiteInput
-  processes?: Prisma.JobSiteProcessCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteUncheckedCreateWithoutDocumentsInput = {
-  id?: string
-  organizationId: string
-  name: string
-  address?: string | null
-  description?: string | null
-  status?: $Enums.JobSiteStatus
-  revision?: number
-  timelineSequence?: bigint | number
-  historicalCreatorUserId?: string | null
-  responsibleParticipantId?: string | null
-  estimatedCompletionAt?: Date | string | null
-  estimatedCompletionAuthorId?: string | null
-  estimatedCompletionSetAt?: Date | string | null
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  closedAt?: Date | string | null
-  archivedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
-  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedOneWithoutJobSiteInput
-  steps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutJobSiteInput
-  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutJobSiteInput
-  attachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutJobSiteInput
-  requests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutJobSiteInput
-  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutJobSiteInput
-  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutJobSiteInput
-  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutJobSiteInput
-  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutJobSiteInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutJobSiteInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutJobSiteInput
-  exports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutJobSiteInput
-  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutJobSiteInput
-  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutJobSiteInput
-  processes?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteCreateOrConnectWithoutDocumentsInput = {
-  where: Prisma.JobSiteWhereUniqueInput
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentsInput, Prisma.JobSiteUncheckedCreateWithoutDocumentsInput>
-}
-
-export type JobSiteUpsertWithoutDocumentsInput = {
-  update: Prisma.XOR<Prisma.JobSiteUpdateWithoutDocumentsInput, Prisma.JobSiteUncheckedUpdateWithoutDocumentsInput>
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentsInput, Prisma.JobSiteUncheckedCreateWithoutDocumentsInput>
-  where?: Prisma.JobSiteWhereInput
-}
-
-export type JobSiteUpdateToOneWithWhereWithoutDocumentsInput = {
-  where?: Prisma.JobSiteWhereInput
-  data: Prisma.XOR<Prisma.JobSiteUpdateWithoutDocumentsInput, Prisma.JobSiteUncheckedUpdateWithoutDocumentsInput>
-}
-
-export type JobSiteUpdateWithoutDocumentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumJobSiteStatusFieldUpdateOperationsInput | $Enums.JobSiteStatus
-  revision?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSequence?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  historicalCreatorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  estimatedCompletionAuthorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionSetAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
-  responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
-  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementUpdateOneWithoutJobSiteNestedInput
-  steps?: Prisma.JobSiteStepUpdateManyWithoutJobSiteNestedInput
-  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutJobSiteNestedInput
-  attachments?: Prisma.JobSiteAttachmentUpdateManyWithoutJobSiteNestedInput
-  requests?: Prisma.JobSiteRequestUpdateManyWithoutJobSiteNestedInput
-  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutJobSiteNestedInput
-  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutJobSiteNestedInput
-  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutJobSiteNestedInput
-  closures?: Prisma.JobSiteClosureUpdateManyWithoutJobSiteNestedInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutJobSiteNestedInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutJobSiteNestedInput
-  exports?: Prisma.JobSiteExportUpdateManyWithoutJobSiteNestedInput
-  legalHolds?: Prisma.LegalHoldUpdateManyWithoutJobSiteNestedInput
-  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutJobSiteNestedInput
-  processes?: Prisma.JobSiteProcessUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteUncheckedUpdateWithoutDocumentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumJobSiteStatusFieldUpdateOperationsInput | $Enums.JobSiteStatus
-  revision?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSequence?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  historicalCreatorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  responsibleParticipantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  estimatedCompletionAuthorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionSetAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
-  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedUpdateOneWithoutJobSiteNestedInput
-  steps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutJobSiteNestedInput
-  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  attachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutJobSiteNestedInput
-  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutJobSiteNestedInput
-  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutJobSiteNestedInput
-  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutJobSiteNestedInput
-  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutJobSiteNestedInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutJobSiteNestedInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutJobSiteNestedInput
-  exports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutJobSiteNestedInput
-  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutJobSiteNestedInput
-  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutJobSiteNestedInput
-  processes?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteCreateWithoutDocumentLinksInput = {
-  id?: string
-  name: string
-  address?: string | null
-  description?: string | null
-  status?: $Enums.JobSiteStatus
-  revision?: number
-  timelineSequence?: bigint | number
-  historicalCreatorUserId?: string | null
-  estimatedCompletionAt?: Date | string | null
-  estimatedCompletionAuthorId?: string | null
-  estimatedCompletionSetAt?: Date | string | null
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  closedAt?: Date | string | null
-  archivedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
-  participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
-  responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementCreateNestedOneWithoutJobSiteInput
-  steps?: Prisma.JobSiteStepCreateNestedManyWithoutJobSiteInput
-  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutJobSiteInput
-  attachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutJobSiteInput
-  requests?: Prisma.JobSiteRequestCreateNestedManyWithoutJobSiteInput
-  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutJobSiteInput
-  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutJobSiteInput
-  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutJobSiteInput
-  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutJobSiteInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutJobSiteInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutJobSiteInput
-  exports?: Prisma.JobSiteExportCreateNestedManyWithoutJobSiteInput
-  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutJobSiteInput
-  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutJobSiteInput
-  processes?: Prisma.JobSiteProcessCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteUncheckedCreateWithoutDocumentLinksInput = {
-  id?: string
-  organizationId: string
-  name: string
-  address?: string | null
-  description?: string | null
-  status?: $Enums.JobSiteStatus
-  revision?: number
-  timelineSequence?: bigint | number
-  historicalCreatorUserId?: string | null
-  responsibleParticipantId?: string | null
-  estimatedCompletionAt?: Date | string | null
-  estimatedCompletionAuthorId?: string | null
-  estimatedCompletionSetAt?: Date | string | null
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  closedAt?: Date | string | null
-  archivedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
-  participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedOneWithoutJobSiteInput
-  steps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutJobSiteInput
-  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutJobSiteInput
-  attachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutJobSiteInput
-  requests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutJobSiteInput
-  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutJobSiteInput
-  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutJobSiteInput
-  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutJobSiteInput
-  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutJobSiteInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutJobSiteInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutJobSiteInput
-  exports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutJobSiteInput
-  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutJobSiteInput
-  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutJobSiteInput
-  processes?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteCreateOrConnectWithoutDocumentLinksInput = {
-  where: Prisma.JobSiteWhereUniqueInput
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentLinksInput, Prisma.JobSiteUncheckedCreateWithoutDocumentLinksInput>
-}
-
-export type JobSiteUpsertWithoutDocumentLinksInput = {
-  update: Prisma.XOR<Prisma.JobSiteUpdateWithoutDocumentLinksInput, Prisma.JobSiteUncheckedUpdateWithoutDocumentLinksInput>
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutDocumentLinksInput, Prisma.JobSiteUncheckedCreateWithoutDocumentLinksInput>
-  where?: Prisma.JobSiteWhereInput
-}
-
-export type JobSiteUpdateToOneWithWhereWithoutDocumentLinksInput = {
-  where?: Prisma.JobSiteWhereInput
-  data: Prisma.XOR<Prisma.JobSiteUpdateWithoutDocumentLinksInput, Prisma.JobSiteUncheckedUpdateWithoutDocumentLinksInput>
-}
-
-export type JobSiteUpdateWithoutDocumentLinksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumJobSiteStatusFieldUpdateOperationsInput | $Enums.JobSiteStatus
-  revision?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSequence?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  historicalCreatorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  estimatedCompletionAuthorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionSetAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
-  participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
-  responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementUpdateOneWithoutJobSiteNestedInput
-  steps?: Prisma.JobSiteStepUpdateManyWithoutJobSiteNestedInput
-  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutJobSiteNestedInput
-  attachments?: Prisma.JobSiteAttachmentUpdateManyWithoutJobSiteNestedInput
-  requests?: Prisma.JobSiteRequestUpdateManyWithoutJobSiteNestedInput
-  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutJobSiteNestedInput
-  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutJobSiteNestedInput
-  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutJobSiteNestedInput
-  closures?: Prisma.JobSiteClosureUpdateManyWithoutJobSiteNestedInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutJobSiteNestedInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutJobSiteNestedInput
-  exports?: Prisma.JobSiteExportUpdateManyWithoutJobSiteNestedInput
-  legalHolds?: Prisma.LegalHoldUpdateManyWithoutJobSiteNestedInput
-  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutJobSiteNestedInput
-  processes?: Prisma.JobSiteProcessUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteUncheckedUpdateWithoutDocumentLinksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumJobSiteStatusFieldUpdateOperationsInput | $Enums.JobSiteStatus
-  revision?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSequence?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  historicalCreatorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  responsibleParticipantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  estimatedCompletionAuthorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionSetAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
-  participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedUpdateOneWithoutJobSiteNestedInput
-  steps?: Prisma.JobSiteStepUncheckedUpdateManyWithoutJobSiteNestedInput
-  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedUpdateManyWithoutJobSiteNestedInput
-  attachments?: Prisma.JobSiteAttachmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  requests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutJobSiteNestedInput
-  changeProposals?: Prisma.JobSiteChangeProposalUncheckedUpdateManyWithoutJobSiteNestedInput
-  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutJobSiteNestedInput
-  disputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutJobSiteNestedInput
-  closures?: Prisma.JobSiteClosureUncheckedUpdateManyWithoutJobSiteNestedInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutJobSiteNestedInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutJobSiteNestedInput
-  exports?: Prisma.JobSiteExportUncheckedUpdateManyWithoutJobSiteNestedInput
-  legalHolds?: Prisma.LegalHoldUncheckedUpdateManyWithoutJobSiteNestedInput
-  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedUpdateManyWithoutJobSiteNestedInput
-  processes?: Prisma.JobSiteProcessUncheckedUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteCreateWithoutEvidenceInput = {
-  id?: string
-  name: string
-  address?: string | null
-  description?: string | null
-  status?: $Enums.JobSiteStatus
-  revision?: number
-  timelineSequence?: bigint | number
-  historicalCreatorUserId?: string | null
-  estimatedCompletionAt?: Date | string | null
-  estimatedCompletionAuthorId?: string | null
-  estimatedCompletionSetAt?: Date | string | null
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  closedAt?: Date | string | null
-  archivedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
-  responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
-  clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementCreateNestedOneWithoutJobSiteInput
-  steps?: Prisma.JobSiteStepCreateNestedManyWithoutJobSiteInput
-  timelineEvents?: Prisma.JobSiteTimelineEventCreateNestedManyWithoutJobSiteInput
-  attachments?: Prisma.JobSiteAttachmentCreateNestedManyWithoutJobSiteInput
-  requests?: Prisma.JobSiteRequestCreateNestedManyWithoutJobSiteInput
-  changeProposals?: Prisma.JobSiteChangeProposalCreateNestedManyWithoutJobSiteInput
-  paymentRequests?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutJobSiteInput
-  disputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutJobSiteInput
-  closures?: Prisma.JobSiteClosureCreateNestedManyWithoutJobSiteInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutJobSiteInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutJobSiteInput
-  exports?: Prisma.JobSiteExportCreateNestedManyWithoutJobSiteInput
-  legalHolds?: Prisma.LegalHoldCreateNestedManyWithoutJobSiteInput
-  actionReceipts?: Prisma.JobSiteActionReceiptCreateNestedManyWithoutJobSiteInput
-  processes?: Prisma.JobSiteProcessCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteUncheckedCreateWithoutEvidenceInput = {
-  id?: string
-  organizationId: string
-  name: string
-  address?: string | null
-  description?: string | null
-  status?: $Enums.JobSiteStatus
-  revision?: number
-  timelineSequence?: bigint | number
-  historicalCreatorUserId?: string | null
-  responsibleParticipantId?: string | null
-  estimatedCompletionAt?: Date | string | null
-  estimatedCompletionAuthorId?: string | null
-  estimatedCompletionSetAt?: Date | string | null
-  startDate?: Date | string | null
-  endDate?: Date | string | null
-  closedAt?: Date | string | null
-  archivedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
-  clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedOneWithoutJobSiteInput
-  steps?: Prisma.JobSiteStepUncheckedCreateNestedManyWithoutJobSiteInput
-  timelineEvents?: Prisma.JobSiteTimelineEventUncheckedCreateNestedManyWithoutJobSiteInput
-  attachments?: Prisma.JobSiteAttachmentUncheckedCreateNestedManyWithoutJobSiteInput
-  requests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutJobSiteInput
-  changeProposals?: Prisma.JobSiteChangeProposalUncheckedCreateNestedManyWithoutJobSiteInput
-  paymentRequests?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutJobSiteInput
-  disputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutJobSiteInput
-  closures?: Prisma.JobSiteClosureUncheckedCreateNestedManyWithoutJobSiteInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutJobSiteInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutJobSiteInput
-  exports?: Prisma.JobSiteExportUncheckedCreateNestedManyWithoutJobSiteInput
-  legalHolds?: Prisma.LegalHoldUncheckedCreateNestedManyWithoutJobSiteInput
-  actionReceipts?: Prisma.JobSiteActionReceiptUncheckedCreateNestedManyWithoutJobSiteInput
-  processes?: Prisma.JobSiteProcessUncheckedCreateNestedManyWithoutJobSiteInput
-}
-
-export type JobSiteCreateOrConnectWithoutEvidenceInput = {
-  where: Prisma.JobSiteWhereUniqueInput
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutEvidenceInput, Prisma.JobSiteUncheckedCreateWithoutEvidenceInput>
-}
-
-export type JobSiteUpsertWithoutEvidenceInput = {
-  update: Prisma.XOR<Prisma.JobSiteUpdateWithoutEvidenceInput, Prisma.JobSiteUncheckedUpdateWithoutEvidenceInput>
-  create: Prisma.XOR<Prisma.JobSiteCreateWithoutEvidenceInput, Prisma.JobSiteUncheckedCreateWithoutEvidenceInput>
-  where?: Prisma.JobSiteWhereInput
-}
-
-export type JobSiteUpdateToOneWithWhereWithoutEvidenceInput = {
-  where?: Prisma.JobSiteWhereInput
-  data: Prisma.XOR<Prisma.JobSiteUpdateWithoutEvidenceInput, Prisma.JobSiteUncheckedUpdateWithoutEvidenceInput>
-}
-
-export type JobSiteUpdateWithoutEvidenceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumJobSiteStatusFieldUpdateOperationsInput | $Enums.JobSiteStatus
-  revision?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSequence?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  historicalCreatorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  estimatedCompletionAuthorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionSetAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
-  responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
-  clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
-  propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
-  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
-  initialAgreement?: Prisma.JobSiteInitialAgreementUpdateOneWithoutJobSiteNestedInput
-  steps?: Prisma.JobSiteStepUpdateManyWithoutJobSiteNestedInput
-  timelineEvents?: Prisma.JobSiteTimelineEventUpdateManyWithoutJobSiteNestedInput
-  attachments?: Prisma.JobSiteAttachmentUpdateManyWithoutJobSiteNestedInput
-  requests?: Prisma.JobSiteRequestUpdateManyWithoutJobSiteNestedInput
-  changeProposals?: Prisma.JobSiteChangeProposalUpdateManyWithoutJobSiteNestedInput
-  paymentRequests?: Prisma.JobSitePaymentRequestUpdateManyWithoutJobSiteNestedInput
-  disputes?: Prisma.JobSiteDisputeUpdateManyWithoutJobSiteNestedInput
-  closures?: Prisma.JobSiteClosureUpdateManyWithoutJobSiteNestedInput
-  postClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutJobSiteNestedInput
-  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutJobSiteNestedInput
-  exports?: Prisma.JobSiteExportUpdateManyWithoutJobSiteNestedInput
-  legalHolds?: Prisma.LegalHoldUpdateManyWithoutJobSiteNestedInput
-  actionReceipts?: Prisma.JobSiteActionReceiptUpdateManyWithoutJobSiteNestedInput
-  processes?: Prisma.JobSiteProcessUpdateManyWithoutJobSiteNestedInput
-}
-
-export type JobSiteUncheckedUpdateWithoutEvidenceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumJobSiteStatusFieldUpdateOperationsInput | $Enums.JobSiteStatus
-  revision?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSequence?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  historicalCreatorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  responsibleParticipantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  estimatedCompletionAuthorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  estimatedCompletionSetAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
-  workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -2238,11 +1560,8 @@ export type JobSiteCreateWithoutParticipantsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -2284,10 +1603,7 @@ export type JobSiteUncheckedCreateWithoutParticipantsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -2333,11 +1649,8 @@ export type JobSiteCreateWithoutResponsibleParticipantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -2378,11 +1691,8 @@ export type JobSiteUncheckedCreateWithoutResponsibleParticipantInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -2444,11 +1754,8 @@ export type JobSiteUpdateWithoutParticipantsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -2490,10 +1797,7 @@ export type JobSiteUncheckedUpdateWithoutParticipantsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -2550,12 +1854,9 @@ export type JobSiteCreateWithoutClientInvitationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
   initialAgreement?: Prisma.JobSiteInitialAgreementCreateNestedOneWithoutJobSiteInput
@@ -2596,11 +1897,8 @@ export type JobSiteUncheckedCreateWithoutClientInvitationsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
   initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedOneWithoutJobSiteInput
@@ -2656,12 +1954,9 @@ export type JobSiteUpdateWithoutClientInvitationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
   initialAgreement?: Prisma.JobSiteInitialAgreementUpdateOneWithoutJobSiteNestedInput
@@ -2702,11 +1997,8 @@ export type JobSiteUncheckedUpdateWithoutClientInvitationsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
   initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedUpdateOneWithoutJobSiteNestedInput
@@ -2746,12 +2038,9 @@ export type JobSiteCreateWithoutPropertyLinksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
   initialAgreement?: Prisma.JobSiteInitialAgreementCreateNestedOneWithoutJobSiteInput
@@ -2792,11 +2081,8 @@ export type JobSiteUncheckedCreateWithoutPropertyLinksInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
   initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedOneWithoutJobSiteInput
@@ -2852,12 +2138,9 @@ export type JobSiteUpdateWithoutPropertyLinksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
   initialAgreement?: Prisma.JobSiteInitialAgreementUpdateOneWithoutJobSiteNestedInput
@@ -2898,11 +2181,8 @@ export type JobSiteUncheckedUpdateWithoutPropertyLinksInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
   initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedUpdateOneWithoutJobSiteNestedInput
@@ -2942,12 +2222,9 @@ export type JobSiteCreateWithoutAuthorityGrantsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   initialAgreement?: Prisma.JobSiteInitialAgreementCreateNestedOneWithoutJobSiteInput
@@ -2988,11 +2265,8 @@ export type JobSiteUncheckedCreateWithoutAuthorityGrantsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedCreateNestedOneWithoutJobSiteInput
@@ -3048,12 +2322,9 @@ export type JobSiteUpdateWithoutAuthorityGrantsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   initialAgreement?: Prisma.JobSiteInitialAgreementUpdateOneWithoutJobSiteNestedInput
@@ -3094,11 +2365,8 @@ export type JobSiteUncheckedUpdateWithoutAuthorityGrantsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   initialAgreement?: Prisma.JobSiteInitialAgreementUncheckedUpdateOneWithoutJobSiteNestedInput
@@ -3138,12 +2406,9 @@ export type JobSiteCreateWithoutInitialAgreementInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -3184,11 +2449,8 @@ export type JobSiteUncheckedCreateWithoutInitialAgreementInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -3244,12 +2506,9 @@ export type JobSiteUpdateWithoutInitialAgreementInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -3290,11 +2549,8 @@ export type JobSiteUncheckedUpdateWithoutInitialAgreementInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -3334,12 +2590,9 @@ export type JobSiteCreateWithoutStepsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -3380,11 +2633,8 @@ export type JobSiteUncheckedCreateWithoutStepsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -3440,12 +2690,9 @@ export type JobSiteUpdateWithoutStepsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -3486,11 +2733,8 @@ export type JobSiteUncheckedUpdateWithoutStepsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -3530,12 +2774,9 @@ export type JobSiteCreateWithoutTimelineEventsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -3576,11 +2817,8 @@ export type JobSiteUncheckedCreateWithoutTimelineEventsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -3636,12 +2874,9 @@ export type JobSiteUpdateWithoutTimelineEventsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -3682,11 +2917,8 @@ export type JobSiteUncheckedUpdateWithoutTimelineEventsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -3726,12 +2958,9 @@ export type JobSiteCreateWithoutAttachmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -3772,11 +3001,8 @@ export type JobSiteUncheckedCreateWithoutAttachmentsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -3832,12 +3058,9 @@ export type JobSiteUpdateWithoutAttachmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -3878,11 +3101,8 @@ export type JobSiteUncheckedUpdateWithoutAttachmentsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -3922,12 +3142,9 @@ export type JobSiteCreateWithoutRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -3968,11 +3185,8 @@ export type JobSiteUncheckedCreateWithoutRequestsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -4028,12 +3242,9 @@ export type JobSiteUpdateWithoutRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -4074,11 +3285,8 @@ export type JobSiteUncheckedUpdateWithoutRequestsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -4118,12 +3326,9 @@ export type JobSiteCreateWithoutChangeProposalsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -4164,11 +3369,8 @@ export type JobSiteUncheckedCreateWithoutChangeProposalsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -4224,12 +3426,9 @@ export type JobSiteUpdateWithoutChangeProposalsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -4270,11 +3469,8 @@ export type JobSiteUncheckedUpdateWithoutChangeProposalsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -4314,12 +3510,9 @@ export type JobSiteCreateWithoutPaymentRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -4360,11 +3553,8 @@ export type JobSiteUncheckedCreateWithoutPaymentRequestsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -4420,12 +3610,9 @@ export type JobSiteUpdateWithoutPaymentRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -4466,11 +3653,8 @@ export type JobSiteUncheckedUpdateWithoutPaymentRequestsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -4510,12 +3694,9 @@ export type JobSiteCreateWithoutDisputesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -4556,11 +3737,8 @@ export type JobSiteUncheckedCreateWithoutDisputesInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -4616,12 +3794,9 @@ export type JobSiteUpdateWithoutDisputesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -4662,11 +3837,8 @@ export type JobSiteUncheckedUpdateWithoutDisputesInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -4706,12 +3878,9 @@ export type JobSiteCreateWithoutClosuresInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -4752,11 +3921,8 @@ export type JobSiteUncheckedCreateWithoutClosuresInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -4812,12 +3978,9 @@ export type JobSiteUpdateWithoutClosuresInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -4858,11 +4021,8 @@ export type JobSiteUncheckedUpdateWithoutClosuresInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -4902,12 +4062,9 @@ export type JobSiteCreateWithoutPostClosureRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -4948,11 +4105,8 @@ export type JobSiteUncheckedCreateWithoutPostClosureRequestsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -5008,12 +4162,9 @@ export type JobSiteUpdateWithoutPostClosureRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -5054,11 +4205,8 @@ export type JobSiteUncheckedUpdateWithoutPostClosureRequestsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -5098,12 +4246,9 @@ export type JobSiteCreateWithoutReopeningProposalsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -5144,11 +4289,8 @@ export type JobSiteUncheckedCreateWithoutReopeningProposalsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -5204,12 +4346,9 @@ export type JobSiteUpdateWithoutReopeningProposalsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -5250,11 +4389,8 @@ export type JobSiteUncheckedUpdateWithoutReopeningProposalsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -5294,12 +4430,9 @@ export type JobSiteCreateWithoutExportsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -5340,11 +4473,8 @@ export type JobSiteUncheckedCreateWithoutExportsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -5400,12 +4530,9 @@ export type JobSiteUpdateWithoutExportsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -5446,11 +4573,8 @@ export type JobSiteUncheckedUpdateWithoutExportsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -5490,12 +4614,9 @@ export type JobSiteCreateWithoutLegalHoldsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -5536,11 +4657,8 @@ export type JobSiteUncheckedCreateWithoutLegalHoldsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -5596,12 +4714,9 @@ export type JobSiteUpdateWithoutLegalHoldsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -5642,11 +4757,8 @@ export type JobSiteUncheckedUpdateWithoutLegalHoldsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -5686,12 +4798,9 @@ export type JobSiteCreateWithoutActionReceiptsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -5732,11 +4841,8 @@ export type JobSiteUncheckedCreateWithoutActionReceiptsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -5792,12 +4898,9 @@ export type JobSiteUpdateWithoutActionReceiptsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -5838,11 +4941,8 @@ export type JobSiteUncheckedUpdateWithoutActionReceiptsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -5882,12 +4982,9 @@ export type JobSiteCreateWithoutProcessesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSitesInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantCreateNestedManyWithoutJobSiteInput
   responsibleParticipant?: Prisma.JobSiteParticipantCreateNestedOneWithoutResponsibleForInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutJobSiteInput
@@ -5928,11 +5025,8 @@ export type JobSiteUncheckedCreateWithoutProcessesInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutJobSiteInput
-  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutJobSiteInput
   participants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutJobSiteInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutJobSiteInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutJobSiteInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedCreateNestedManyWithoutJobSiteInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutJobSiteInput
@@ -5988,12 +5082,9 @@ export type JobSiteUpdateWithoutProcessesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -6034,11 +5125,8 @@ export type JobSiteUncheckedUpdateWithoutProcessesInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -6099,12 +5187,9 @@ export type JobSiteUpdateWithoutOrganizationInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   responsibleParticipant?: Prisma.JobSiteParticipantUpdateOneWithoutResponsibleForNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -6145,11 +5230,8 @@ export type JobSiteUncheckedUpdateWithoutOrganizationInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -6234,11 +5316,8 @@ export type JobSiteUpdateWithoutResponsibleParticipantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSitesNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutJobSiteNestedInput
@@ -6279,11 +5358,8 @@ export type JobSiteUncheckedUpdateWithoutResponsibleParticipantInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutJobSiteNestedInput
-  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutJobSiteNestedInput
   participants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutJobSiteNestedInput
   workerAssignments?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutJobSiteNestedInput
-  documentLinks?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   clientInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutJobSiteNestedInput
   propertyLinks?: Prisma.ClientPropertyJobSiteLinkUncheckedUpdateManyWithoutJobSiteNestedInput
   authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutJobSiteNestedInput
@@ -6332,11 +5408,8 @@ export type JobSiteUncheckedUpdateManyWithoutResponsibleParticipantInput = {
  */
 
 export type JobSiteCountOutputType = {
-  documents: number
-  evidence: number
   participants: number
   workerAssignments: number
-  documentLinks: number
   clientInvitations: number
   propertyLinks: number
   authorityGrants: number
@@ -6357,11 +5430,8 @@ export type JobSiteCountOutputType = {
 }
 
 export type JobSiteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  documents?: boolean | JobSiteCountOutputTypeCountDocumentsArgs
-  evidence?: boolean | JobSiteCountOutputTypeCountEvidenceArgs
   participants?: boolean | JobSiteCountOutputTypeCountParticipantsArgs
   workerAssignments?: boolean | JobSiteCountOutputTypeCountWorkerAssignmentsArgs
-  documentLinks?: boolean | JobSiteCountOutputTypeCountDocumentLinksArgs
   clientInvitations?: boolean | JobSiteCountOutputTypeCountClientInvitationsArgs
   propertyLinks?: boolean | JobSiteCountOutputTypeCountPropertyLinksArgs
   authorityGrants?: boolean | JobSiteCountOutputTypeCountAuthorityGrantsArgs
@@ -6394,20 +5464,6 @@ export type JobSiteCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * JobSiteCountOutputType without action
  */
-export type JobSiteCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DocumentWhereInput
-}
-
-/**
- * JobSiteCountOutputType without action
- */
-export type JobSiteCountOutputTypeCountEvidenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.EvidenceWhereInput
-}
-
-/**
- * JobSiteCountOutputType without action
- */
 export type JobSiteCountOutputTypeCountParticipantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.JobSiteParticipantWhereInput
 }
@@ -6417,13 +5473,6 @@ export type JobSiteCountOutputTypeCountParticipantsArgs<ExtArgs extends runtime.
  */
 export type JobSiteCountOutputTypeCountWorkerAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.JobSiteWorkerAssignmentWhereInput
-}
-
-/**
- * JobSiteCountOutputType without action
- */
-export type JobSiteCountOutputTypeCountDocumentLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DocumentJobSiteLinkWhereInput
 }
 
 /**
@@ -6568,12 +5617,9 @@ export type JobSiteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
-  documents?: boolean | Prisma.JobSite$documentsArgs<ExtArgs>
-  evidence?: boolean | Prisma.JobSite$evidenceArgs<ExtArgs>
   participants?: boolean | Prisma.JobSite$participantsArgs<ExtArgs>
   responsibleParticipant?: boolean | Prisma.JobSite$responsibleParticipantArgs<ExtArgs>
   workerAssignments?: boolean | Prisma.JobSite$workerAssignmentsArgs<ExtArgs>
-  documentLinks?: boolean | Prisma.JobSite$documentLinksArgs<ExtArgs>
   clientInvitations?: boolean | Prisma.JobSite$clientInvitationsArgs<ExtArgs>
   propertyLinks?: boolean | Prisma.JobSite$propertyLinksArgs<ExtArgs>
   authorityGrants?: boolean | Prisma.JobSite$authorityGrantsArgs<ExtArgs>
@@ -6671,12 +5717,9 @@ export type JobSiteSelectScalar = {
 export type JobSiteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "name" | "address" | "description" | "status" | "revision" | "timelineSequence" | "historicalCreatorUserId" | "responsibleParticipantId" | "estimatedCompletionAt" | "estimatedCompletionAuthorId" | "estimatedCompletionSetAt" | "startDate" | "endDate" | "closedAt" | "archivedAt" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["jobSite"]>
 export type JobSiteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
-  documents?: boolean | Prisma.JobSite$documentsArgs<ExtArgs>
-  evidence?: boolean | Prisma.JobSite$evidenceArgs<ExtArgs>
   participants?: boolean | Prisma.JobSite$participantsArgs<ExtArgs>
   responsibleParticipant?: boolean | Prisma.JobSite$responsibleParticipantArgs<ExtArgs>
   workerAssignments?: boolean | Prisma.JobSite$workerAssignmentsArgs<ExtArgs>
-  documentLinks?: boolean | Prisma.JobSite$documentLinksArgs<ExtArgs>
   clientInvitations?: boolean | Prisma.JobSite$clientInvitationsArgs<ExtArgs>
   propertyLinks?: boolean | Prisma.JobSite$propertyLinksArgs<ExtArgs>
   authorityGrants?: boolean | Prisma.JobSite$authorityGrantsArgs<ExtArgs>
@@ -6710,12 +5753,9 @@ export type $JobSitePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "JobSite"
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs>
-    documents: Prisma.$DocumentPayload<ExtArgs>[]
-    evidence: Prisma.$EvidencePayload<ExtArgs>[]
     participants: Prisma.$JobSiteParticipantPayload<ExtArgs>[]
     responsibleParticipant: Prisma.$JobSiteParticipantPayload<ExtArgs> | null
     workerAssignments: Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>[]
-    documentLinks: Prisma.$DocumentJobSiteLinkPayload<ExtArgs>[]
     clientInvitations: Prisma.$JobSiteClientInvitationPayload<ExtArgs>[]
     propertyLinks: Prisma.$ClientPropertyJobSiteLinkPayload<ExtArgs>[]
     authorityGrants: Prisma.$JobSiteAuthorityGrantPayload<ExtArgs>[]
@@ -7151,12 +6191,9 @@ readonly fields: JobSiteFieldRefs;
 export interface Prisma__JobSiteClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  documents<T extends Prisma.JobSite$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  evidence<T extends Prisma.JobSite$evidenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$evidenceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   participants<T extends Prisma.JobSite$participantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   responsibleParticipant<T extends Prisma.JobSite$responsibleParticipantArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$responsibleParticipantArgs<ExtArgs>>): Prisma.Prisma__JobSiteParticipantClient<runtime.Types.Result.GetResult<Prisma.$JobSiteParticipantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   workerAssignments<T extends Prisma.JobSite$workerAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$workerAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  documentLinks<T extends Prisma.JobSite$documentLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$documentLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentJobSiteLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   clientInvitations<T extends Prisma.JobSite$clientInvitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$clientInvitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteClientInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   propertyLinks<T extends Prisma.JobSite$propertyLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$propertyLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPropertyJobSiteLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   authorityGrants<T extends Prisma.JobSite$authorityGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSite$authorityGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteAuthorityGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7625,54 +6662,6 @@ export type JobSiteDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * JobSite.documents
- */
-export type JobSite$documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Document
-   */
-  select?: Prisma.DocumentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Document
-   */
-  omit?: Prisma.DocumentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DocumentInclude<ExtArgs> | null
-  where?: Prisma.DocumentWhereInput
-  orderBy?: Prisma.DocumentOrderByWithRelationInput | Prisma.DocumentOrderByWithRelationInput[]
-  cursor?: Prisma.DocumentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DocumentScalarFieldEnum | Prisma.DocumentScalarFieldEnum[]
-}
-
-/**
- * JobSite.evidence
- */
-export type JobSite$evidenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Evidence
-   */
-  select?: Prisma.EvidenceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Evidence
-   */
-  omit?: Prisma.EvidenceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.EvidenceInclude<ExtArgs> | null
-  where?: Prisma.EvidenceWhereInput
-  orderBy?: Prisma.EvidenceOrderByWithRelationInput | Prisma.EvidenceOrderByWithRelationInput[]
-  cursor?: Prisma.EvidenceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.EvidenceScalarFieldEnum | Prisma.EvidenceScalarFieldEnum[]
-}
-
-/**
  * JobSite.participants
  */
 export type JobSite$participantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -7737,30 +6726,6 @@ export type JobSite$workerAssignmentsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.JobSiteWorkerAssignmentScalarFieldEnum | Prisma.JobSiteWorkerAssignmentScalarFieldEnum[]
-}
-
-/**
- * JobSite.documentLinks
- */
-export type JobSite$documentLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the DocumentJobSiteLink
-   */
-  select?: Prisma.DocumentJobSiteLinkSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the DocumentJobSiteLink
-   */
-  omit?: Prisma.DocumentJobSiteLinkOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DocumentJobSiteLinkInclude<ExtArgs> | null
-  where?: Prisma.DocumentJobSiteLinkWhereInput
-  orderBy?: Prisma.DocumentJobSiteLinkOrderByWithRelationInput | Prisma.DocumentJobSiteLinkOrderByWithRelationInput[]
-  cursor?: Prisma.DocumentJobSiteLinkWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DocumentJobSiteLinkScalarFieldEnum | Prisma.DocumentJobSiteLinkScalarFieldEnum[]
 }
 
 /**

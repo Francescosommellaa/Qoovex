@@ -1,17 +1,19 @@
-/** Platform-neutral contracts for Qoovex current. */
+/** Platform-neutral contracts for Qoovex. */
 export type EntityId = string;
 
 export const platformRoles = ["USER", "SUPPORT_AGENT", "PLATFORM_ADMIN"] as const;
 export type PlatformRole = (typeof platformRoles)[number];
+export const accountRoles = ["BUSINESS", "PROFESSIONAL", "CLIENT"] as const;
+export type AccountRole = (typeof accountRoles)[number];
 export const organizationRoles = ["OWNER", "COLLABORATOR"] as const;
 export type OrganizationRole = (typeof organizationRoles)[number];
-export const organizationAccessPresets = ["READ_ONLY", "OPERATIONAL_COLLABORATION", "SITE_MANAGER", "DOCUMENT_REVIEWER", "LIMITED_UPLOAD", "CUSTOM"] as const;
+export const organizationAccessPresets = ["READ_ONLY", "OPERATIONAL_COLLABORATION", "SITE_MANAGER", "LIMITED_UPLOAD", "CUSTOM"] as const;
 export type OrganizationAccessPreset = (typeof organizationAccessPresets)[number];
-export const devWorkspaceViews = ["OWNER", "SUPPORT_AGENT", "PLATFORM_ADMIN"] as const;
+export const devWorkspaceViews = ["BUSINESS", "PROFESSIONAL", "CLIENT", "SUPPORT_AGENT", "PLATFORM_ADMIN"] as const;
 export type DevWorkspaceView = (typeof devWorkspaceViews)[number];
 export const organizationScopeModes = ["FULL", "ASSIGNED"] as const;
 export type OrganizationScopeMode = (typeof organizationScopeModes)[number];
-export const organizationResourceTypes = ["JOB_SITE", "WORKER", "DOCUMENT", "EVIDENCE"] as const;
+export const organizationResourceTypes = ["JOB_SITE", "WORKER"] as const;
 export type OrganizationResourceType = (typeof organizationResourceTypes)[number];
 
 export type SupportAuditAction = "READ" | "WRITE" | "SENSITIVE" | "EXPORT";
@@ -24,8 +26,6 @@ export const organizationPermissions = [
   "members:read", "members:invite", "members:manage",
   "workers:read", "workers:create", "workers:update", "workers:archive",
   "jobSites:read", "jobSites:create", "jobSites:update", "jobSites:archive",
-  "documents:read", "documents:file:read", "documents:upload", "documents:update", "documents:archive",
-  "evidence:read", "evidence:file:read", "evidence:upload", "evidence:delete",
   "auditLog:read", "assignments:read", "assignments:manage", "settings:update",
   "jobSite:view", "jobSite:update", "jobSite:publish", "jobSite:manageParticipants", "jobSite:participants:manage",
   "jobSite:steps:read", "jobSite:steps:manage", "jobSite:steps:updateStatus",
@@ -43,10 +43,6 @@ export const recordStatuses = ["ACTIVE", "ARCHIVED"] as const;
 export type RecordStatus = (typeof recordStatuses)[number];
 export const jobSiteStatuses = ["DRAFT", "WAITING_FOR_CLIENT", "PENDING_INITIAL_CONFIRMATION", "ACTIVE", "CLOSURE_PROPOSED", "CLOSED", "ARCHIVED"] as const;
 export type JobSiteStatus = (typeof jobSiteStatuses)[number];
-export const documentOwnerTypes = ["ORGANIZATION", "WORKER", "JOB_SITE"] as const;
-export type DocumentOwnerType = (typeof documentOwnerTypes)[number];
-export const evidenceTypes = ["PHOTO", "FILE", "NOTE"] as const;
-export type EvidenceType = (typeof evidenceTypes)[number];
 export const notificationTypes = ["SYSTEM", "JOB_SITE_ACTION_REQUIRED", "JOB_SITE_ACTIVITY", "PAYMENT_ACTIVITY", "DISPUTE_ACTIVITY", "EXPORT_READY"] as const;
 export type NotificationType = (typeof notificationTypes)[number];
 export const notificationSeverities = ["INFO", "ATTENTION", "WARNING"] as const;
@@ -65,21 +61,18 @@ export const dataControlJobStatuses = ["PENDING", "RUNNING", "COMPLETED", "FAILE
 export type DataControlJobStatus = (typeof dataControlJobStatuses)[number];
 
 export const auditActions = [
-  "DOCUMENT_CREATED", "DOCUMENT_UPDATED", "DOCUMENT_ARCHIVED", "DOCUMENT_VERSION_UPLOADED", "DOCUMENT_VERSION_DOWNLOADED", "DOCUMENT_VERSION_ARCHIVED",
   "WORKER_CREATED", "WORKER_UPDATED", "WORKER_ARCHIVED", "JOB_SITE_CREATED", "JOB_SITE_UPDATED", "JOB_SITE_ARCHIVED",
-  "EVIDENCE_CREATED", "EVIDENCE_UPDATED", "EVIDENCE_DOWNLOADED", "EVIDENCE_ARCHIVED",
   "NOTIFICATION_READ", "NOTIFICATION_DISMISSED",
   "WORKER_USER_LINK_CREATED", "WORKER_USER_LINK_ARCHIVED", "JOB_SITE_PARTICIPANT_CREATED", "JOB_SITE_PARTICIPANT_UPDATED", "JOB_SITE_PARTICIPANT_ENDED", "JOB_SITE_WORKER_ASSIGNMENT_CREATED", "JOB_SITE_WORKER_ASSIGNMENT_ARCHIVED",
   "ORGANIZATION_PROFILE_UPDATED", "ORGANIZATION_CONTACT_CREATED", "ORGANIZATION_CONTACT_UPDATED", "ORGANIZATION_CONTACT_ARCHIVED",
-  "DOCUMENT_JOB_SITE_LINK_CREATED", "DOCUMENT_JOB_SITE_LINK_ARCHIVED",
   "ORGANIZATION_INVITATION_CREATED", "ORGANIZATION_INVITATION_REVOKED", "ORGANIZATION_INVITATION_ACCEPTED", "ORGANIZATION_MEMBERSHIP_REVOKED",
   "DATA_EXPORT_GENERATED", "DATA_EXPORT_FAILED", "DATA_CONTROL_JOB_CREATED", "DATA_CONTROL_JOB_RUN", "ORPHAN_BLOB_CLEANUP_RUN", "JOB_SITE_ACTION_EXECUTED", "JOB_SITE_TIMELINE_APPENDED", "JOB_SITE_ATTACHMENT_DOWNLOADED", "JOB_SITE_ATTACHMENT_UPLOADED", "JOB_SITE_AUTHORITY_GRANTED", "JOB_SITE_AUTHORITY_REVOKED", "JOB_SITE_EXPORT_DOWNLOADED", "PAYMENT_PROFILE_UPDATED", "LEGAL_HOLD_PLACED", "LEGAL_HOLD_RELEASED", "SECURITY_DENIED",
 ] as const;
 export type AuditAction = (typeof auditActions)[number];
 export const auditEntityTypes = [
-  "DOCUMENT", "DOCUMENT_VERSION", "WORKER", "JOB_SITE", "EVIDENCE", "NOTIFICATION", "DATA_CONTROL_JOB",
+  "WORKER", "JOB_SITE", "NOTIFICATION", "DATA_CONTROL_JOB",
   "WORKER_USER_LINK", "JOB_SITE_PARTICIPANT", "JOB_SITE_WORKER_ASSIGNMENT", "JOB_SITE_ATTACHMENT", "JOB_SITE_TIMELINE_EVENT", "JOB_SITE_CHANGE_PROPOSAL", "JOB_SITE_PAYMENT_REQUEST", "JOB_SITE_DISPUTE", "JOB_SITE_CLOSURE", "JOB_SITE_EXPORT", "LEGAL_HOLD", "ORGANIZATION_PAYMENT_PROFILE", "ORGANIZATION_INVITATION", "ORGANIZATION_MEMBERSHIP",
-  "ORGANIZATION", "ORGANIZATION_PROFILE", "ORGANIZATION_CONTACT", "DOCUMENT_JOB_SITE_LINK", "EVIDENCE_REVISION", "USER", "SYSTEM",
+  "ORGANIZATION", "ORGANIZATION_PROFILE", "ORGANIZATION_CONTACT", "USER", "SYSTEM",
 ] as const;
 export type AuditEntityType = (typeof auditEntityTypes)[number];
 export const auditOutcomes = ["SUCCESS", "DENIED", "FAILED"] as const;
@@ -95,7 +88,6 @@ export interface OrganizationContactResponse { id: EntityId; organizationId: Ent
 export interface CompanyContext { role: OrganizationRole; preset?: OrganizationAccessPreset | null; scopeMode?: OrganizationScopeMode; expiresAt?: string | null; organization: OrganizationSummary }
 export interface OrganizationContext extends CompanyContext { membershipId: EntityId; accessVersion: number; permissions: OrganizationPermission[] }
 export interface ClientJobSiteContext { participantId: EntityId; jobSiteId: EntityId; jobSiteName: string; organization: OrganizationSummary; status: JobSiteParticipantStatus }
-export interface ContextHubResponse { platform: { role: PlatformRole } | null; organizations: OrganizationContext[]; clientJobSites: ClientJobSiteContext[] }
 export interface SupportContext { sessionId: EntityId; reason: string; expiresAt: string; sensitiveConfirmedUntil?: string | null; organization: OrganizationSummary }
 export interface WorkspaceAccessContext { userId: EntityId; platformRole: PlatformRole; devView?: DevWorkspaceView | null; company: CompanyContext | null; support: SupportContext | null; permissions: OrganizationPermission[] }
 
@@ -138,7 +130,7 @@ export interface AuditLogListResponse { events: AuditLogEventResponse[]; nextCur
 export interface DataRecordCount { total: number; active?: number; archived?: number }
 export type FoundationDataInventoryCounts = Record<string, DataRecordCount>;
 export interface DataInventoryResponse { generatedAt: string; counts: FoundationDataInventoryCounts }
-export interface DataExportResponse { organization: Record<string, unknown>; members: Array<Record<string, unknown>>; workers: Array<Record<string, unknown>>; jobSites: Array<Record<string, unknown>>; documents: Array<Record<string, unknown>>; documentVersions: Array<Record<string, unknown>>; evidence: Array<Record<string, unknown>>; evidenceRevisions: Array<Record<string, unknown>>; documentJobSiteLinks: Array<Record<string, unknown>>; workerUserLinks: Array<Record<string, unknown>>; jobSiteParticipants: Array<Record<string, unknown>>; jobSiteWorkerAssignments: Array<Record<string, unknown>>; invitations: Array<Record<string, unknown>>; notifications: Array<Record<string, unknown>>; auditEvents: Array<Record<string, unknown>>; jobSite?: Record<string, Array<Record<string, unknown>>>; exportedAt: string }
+export interface DataExportResponse { organization: Record<string, unknown>; members: Array<Record<string, unknown>>; workers: Array<Record<string, unknown>>; jobSites: Array<Record<string, unknown>>; workerUserLinks: Array<Record<string, unknown>>; jobSiteParticipants: Array<Record<string, unknown>>; jobSiteWorkerAssignments: Array<Record<string, unknown>>; invitations: Array<Record<string, unknown>>; notifications: Array<Record<string, unknown>>; auditEvents: Array<Record<string, unknown>>; jobSite?: Record<string, Array<Record<string, unknown>>>; exportedAt: string }
 export interface DataRetentionCandidate { key: string; title: string; description: string; count: number }
 export interface DataRetentionOverviewResponse { generatedAt: string; notice: string; thresholds: Record<string, never>; candidates: DataRetentionCandidate[] }
 

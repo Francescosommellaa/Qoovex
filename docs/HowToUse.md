@@ -26,7 +26,7 @@ Una stessa direzione puo essere approvata e contemporaneamente non implementata.
 ## Stato implementato
 
 
-Il modello mantiene `OWNER`/`COLLABORATOR` e usa lâ€™unicitÃ  membership `(organizationId,userId)`. `CLIENT` Ã¨ un participant del singolo JobSite, mai un ruolo Azienda. Non sono stati reintrodotti `JobSite.clientName`, `JobSiteOperationalPhase`, deadline, checklist, pacchetti o share link.
+Il modello mantiene `OWNER`/`COLLABORATOR`, con al massimo una membership Azienda attiva per account. `CLIENT` Ã¨ un participant del singolo JobSite, mai un ruolo Azienda. La history Prisma conserva soltanto prove tecniche immutabili delle superfici rimosse.
 
 
 ## Modifiche tecniche e memoria

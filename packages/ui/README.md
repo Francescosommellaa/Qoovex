@@ -8,7 +8,7 @@ Unica sorgente di verita del design system canonico Qoovex.
 - Base UI per comportamenti accessibili;
 - Tabler Icons;
 - Tailwind CSS v4 CSS-first;
-- General Sans (font principale) e ARRAY (font accent) caricati via Fontshare;
+- System font stack per font principale ed accent;
 - tema Vercel light/dark/system con token OKLCH;
 - ruoli semantici `info`, `success`, `warning` e `destructive`;
 - supporto a focus visibile, forced colors e reduced motion.

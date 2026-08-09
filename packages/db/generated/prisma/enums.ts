@@ -49,6 +49,15 @@ export const PlatformRole = {
 export type PlatformRole = (typeof PlatformRole)[keyof typeof PlatformRole]
 
 
+export const AccountRole = {
+  BUSINESS: 'BUSINESS',
+  PROFESSIONAL: 'PROFESSIONAL',
+  CLIENT: 'CLIENT'
+} as const
+
+export type AccountRole = (typeof AccountRole)[keyof typeof AccountRole]
+
+
 export const OrganizationRole = {
   OWNER: 'OWNER',
   COLLABORATOR: 'COLLABORATOR'
@@ -61,7 +70,6 @@ export const OrganizationAccessPreset = {
   READ_ONLY: 'READ_ONLY',
   OPERATIONAL_COLLABORATION: 'OPERATIONAL_COLLABORATION',
   SITE_MANAGER: 'SITE_MANAGER',
-  DOCUMENT_REVIEWER: 'DOCUMENT_REVIEWER',
   LIMITED_UPLOAD: 'LIMITED_UPLOAD',
   CUSTOM: 'CUSTOM'
 } as const
@@ -79,9 +87,7 @@ export type OrganizationScopeMode = (typeof OrganizationScopeMode)[keyof typeof 
 
 export const OrganizationResourceType = {
   JOB_SITE: 'JOB_SITE',
-  WORKER: 'WORKER',
-  DOCUMENT: 'DOCUMENT',
-  EVIDENCE: 'EVIDENCE'
+  WORKER: 'WORKER'
 } as const
 
 export type OrganizationResourceType = (typeof OrganizationResourceType)[keyof typeof OrganizationResourceType]
@@ -98,22 +104,12 @@ export type SupportAuditAction = (typeof SupportAuditAction)[keyof typeof Suppor
 
 
 export const AuditAction = {
-  DOCUMENT_CREATED: 'DOCUMENT_CREATED',
-  DOCUMENT_UPDATED: 'DOCUMENT_UPDATED',
-  DOCUMENT_ARCHIVED: 'DOCUMENT_ARCHIVED',
-  DOCUMENT_VERSION_UPLOADED: 'DOCUMENT_VERSION_UPLOADED',
-  DOCUMENT_VERSION_DOWNLOADED: 'DOCUMENT_VERSION_DOWNLOADED',
-  DOCUMENT_VERSION_ARCHIVED: 'DOCUMENT_VERSION_ARCHIVED',
   WORKER_CREATED: 'WORKER_CREATED',
   WORKER_UPDATED: 'WORKER_UPDATED',
   WORKER_ARCHIVED: 'WORKER_ARCHIVED',
   JOB_SITE_CREATED: 'JOB_SITE_CREATED',
   JOB_SITE_UPDATED: 'JOB_SITE_UPDATED',
   JOB_SITE_ARCHIVED: 'JOB_SITE_ARCHIVED',
-  EVIDENCE_CREATED: 'EVIDENCE_CREATED',
-  EVIDENCE_UPDATED: 'EVIDENCE_UPDATED',
-  EVIDENCE_DOWNLOADED: 'EVIDENCE_DOWNLOADED',
-  EVIDENCE_ARCHIVED: 'EVIDENCE_ARCHIVED',
   NOTIFICATION_READ: 'NOTIFICATION_READ',
   NOTIFICATION_DISMISSED: 'NOTIFICATION_DISMISSED',
   WORKER_USER_LINK_CREATED: 'WORKER_USER_LINK_CREATED',
@@ -127,8 +123,6 @@ export const AuditAction = {
   ORGANIZATION_CONTACT_CREATED: 'ORGANIZATION_CONTACT_CREATED',
   ORGANIZATION_CONTACT_UPDATED: 'ORGANIZATION_CONTACT_UPDATED',
   ORGANIZATION_CONTACT_ARCHIVED: 'ORGANIZATION_CONTACT_ARCHIVED',
-  DOCUMENT_JOB_SITE_LINK_CREATED: 'DOCUMENT_JOB_SITE_LINK_CREATED',
-  DOCUMENT_JOB_SITE_LINK_ARCHIVED: 'DOCUMENT_JOB_SITE_LINK_ARCHIVED',
   ORGANIZATION_INVITATION_CREATED: 'ORGANIZATION_INVITATION_CREATED',
   ORGANIZATION_INVITATION_REVOKED: 'ORGANIZATION_INVITATION_REVOKED',
   ORGANIZATION_INVITATION_ACCEPTED: 'ORGANIZATION_INVITATION_ACCEPTED',
@@ -155,11 +149,8 @@ export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction]
 
 
 export const AuditEntityType = {
-  DOCUMENT: 'DOCUMENT',
-  DOCUMENT_VERSION: 'DOCUMENT_VERSION',
   WORKER: 'WORKER',
   JOB_SITE: 'JOB_SITE',
-  EVIDENCE: 'EVIDENCE',
   NOTIFICATION: 'NOTIFICATION',
   DATA_CONTROL_JOB: 'DATA_CONTROL_JOB',
   WORKER_USER_LINK: 'WORKER_USER_LINK',
@@ -179,8 +170,6 @@ export const AuditEntityType = {
   ORGANIZATION: 'ORGANIZATION',
   ORGANIZATION_PROFILE: 'ORGANIZATION_PROFILE',
   ORGANIZATION_CONTACT: 'ORGANIZATION_CONTACT',
-  DOCUMENT_JOB_SITE_LINK: 'DOCUMENT_JOB_SITE_LINK',
-  EVIDENCE_REVISION: 'EVIDENCE_REVISION',
   USER: 'USER',
   SYSTEM: 'SYSTEM'
 } as const
@@ -203,24 +192,6 @@ export const RecordStatus = {
 } as const
 
 export type RecordStatus = (typeof RecordStatus)[keyof typeof RecordStatus]
-
-
-export const DocumentOwnerType = {
-  ORGANIZATION: 'ORGANIZATION',
-  WORKER: 'WORKER',
-  JOB_SITE: 'JOB_SITE'
-} as const
-
-export type DocumentOwnerType = (typeof DocumentOwnerType)[keyof typeof DocumentOwnerType]
-
-
-export const EvidenceType = {
-  PHOTO: 'PHOTO',
-  FILE: 'FILE',
-  NOTE: 'NOTE'
-} as const
-
-export type EvidenceType = (typeof EvidenceType)[keyof typeof EvidenceType]
 
 
 export const OrganizationContactKind = {

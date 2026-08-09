@@ -19,8 +19,7 @@ export async function buildDataInventoryForOrganization(organizationId: string, 
   const emails = members.map((value) => value.email);
   const counts = {} as FoundationDataInventoryCounts;
   const values = await Promise.all([
-    archived(db.worker, organizationId), archived(db.jobSite, organizationId), archived(db.document, organizationId), archived(db.documentVersion, organizationId), archived(db.evidence, organizationId),
-    total(db.evidenceRevision, organizationId), total(db.documentJobSiteLink, organizationId), total(db.notification, organizationId), total(db.productAuditEvent, organizationId), archived(db.workerUserLink, organizationId),
+    archived(db.worker, organizationId), archived(db.jobSite, organizationId), total(db.notification, organizationId), total(db.productAuditEvent, organizationId), archived(db.workerUserLink, organizationId),
     total(db.jobSiteParticipant, organizationId), archived(db.jobSiteWorkerAssignment, organizationId), total(db.jobSiteStep, organizationId), total(db.jobSiteTimelineEvent, organizationId), total(db.jobSiteAttachment, organizationId),
     total(db.jobSiteChangeProposal, organizationId), total(db.jobSitePaymentRequest, organizationId), total(db.jobSiteDispute, organizationId), total(db.jobSiteExport, organizationId), total(db.organizationMembership, organizationId),
     total(db.jobSiteClientInvitation, organizationId), db.clientProperty.count({ where: { jobSites: { some: { organizationId } } } }).then((total) => ({ total })), total(db.clientPropertyJobSiteLink, organizationId), total(db.jobSiteAuthorityGrant, organizationId),
@@ -41,7 +40,7 @@ export async function buildDataInventoryForOrganization(organizationId: string, 
     db.authRateLimit.count({ where: { userId: { in: userIds } } }).then((total) => ({ total })),
   ]);
   const keys: Array<keyof FoundationDataInventoryCounts> = [
-    "workers", "jobSites", "documents", "documentVersions", "evidence", "evidenceRevisions", "documentJobSiteLinks", "notifications", "auditEvents", "workerUserLinks",
+    "workers", "jobSites", "notifications", "auditEvents", "workerUserLinks",
     "jobSiteParticipants", "jobSiteWorkerAssignments", "jobSiteSteps", "timelineEvents", "attachments", "changeProposals", "paymentRequests", "disputes", "jobSiteExports", "memberships",
     "clientInvitations", "clientProperties", "clientPropertyLinks", "authorityGrants", "initialAgreements", "initialAgreementVersions", "initialAgreementConsents", "stepUserAssignments", "stepWorkerAssignments", "timelineReferences", "attachmentPublications", "timelineAttachments", "jobSiteRequests", "changeProposalVersions", "changeProposalEffects", "changeProposalConsents", "paymentProfiles", "paymentProfileVersions", "transferDeclarations", "paymentReviews", "disputeReferences", "disputeConsents", "disputePreservations", "closures", "closureConsents", "postClosureRequests", "reopeningProposals", "reopeningConsents", "exportAccessLinks", "exportDownloadGrants", "legalHolds", "actionReceipts", "jobSiteProcesses", "jobSiteProcessSteps", "jobSiteProcessEvents", "notificationPreferences", "notificationDeliveries",
     "invitations", "dataControlJobs", "supportSessions", "supportEvents", "authProviders", "authSessions", "authCredentials", "authCodes", "mfaRecoveryRequests", "authDevices", "mfaBackupCodes", "securityAuditEvents", "authRateLimits",

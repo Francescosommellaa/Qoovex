@@ -25,8 +25,16 @@ function useWorkspaceLogout() {
 export function WorkspaceLogoutButton() {
   const { loading, logout } = useWorkspaceLogout();
   return (
-    <Button className="w-full justify-start" disabled={loading} onClick={logout} type="button" variant="ghost">
-      {loading ? <Spinner data-icon="inline-start" /> : <IconLogout aria-hidden="true" />}{loading ? "Uscita" : "Esci"}
+    <Button
+      className="w-full justify-start group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center"
+      disabled={loading}
+      onClick={logout}
+      type="button"
+      variant="ghost"
+      title="Esci"
+    >
+      {loading ? <Spinner data-icon="inline-start" /> : <IconLogout aria-hidden="true" />}
+      <span className="group-data-[collapsible=icon]:hidden">{loading ? "Uscita" : "Esci"}</span>
     </Button>
   );
 }

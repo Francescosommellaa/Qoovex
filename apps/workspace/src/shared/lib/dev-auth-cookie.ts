@@ -45,7 +45,7 @@ export function isDevAuthView(value: unknown): value is DevWorkspaceView {
   return typeof value === "string" && devWorkspaceViews.includes(value as DevWorkspaceView);
 }
 
-export async function signDevAuthCookieValue(view: DevWorkspaceView = "OWNER") {
+export async function signDevAuthCookieValue(view: DevWorkspaceView = "BUSINESS") {
   const secret = getDevAuthSecret();
   if (!isDevAuthSecretConfigured()) {
     throw new Error("DEV_AUTH_SECRET is missing or too short");

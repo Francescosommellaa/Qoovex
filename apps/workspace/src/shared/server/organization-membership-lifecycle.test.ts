@@ -16,12 +16,13 @@ const mocks = vi.hoisted(() => ({
     organization: { create: vi.fn() },
     worker: { findFirst: vi.fn() },
     workerUserLink: { findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
-    organizationMembership: { findUnique: vi.fn(), create: vi.fn(), updateMany: vi.fn() },
+    organizationMembership: { findUnique: vi.fn(), findFirst: vi.fn(), create: vi.fn(), updateMany: vi.fn() },
     organizationMembershipResourceGrant: { deleteMany: vi.fn(), createMany: vi.fn() },
     organizationInvitation: { findUnique: vi.fn(), updateMany: vi.fn() },
     user: { update: vi.fn() },
   },
   requireIdentity: vi.fn(),
+  requireAccountRole: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -46,6 +47,7 @@ vi.mock("@shared/server/access-context-service", () => ({
   getWorkspaceAccessContext: vi.fn(),
   requirePermission: vi.fn(),
 }));
+vi.mock("./account-role-service", () => ({ requireAccountRole: mocks.requireAccountRole }));
 vi.mock("@shared/server/authorization-policy", () => ({ canInviteRole: vi.fn(), canRevokeRole: vi.fn() }));
 vi.mock("@shared/server/transactional-email-service", () => ({ sendTransactionalEmail: vi.fn() }));
 vi.mock("@shared/server/support-access-service", () => ({ recordSupportAccess: vi.fn() }));
@@ -56,9 +58,11 @@ import { acceptInvitation, declineInvitation, getInvitationPreview } from "./org
 beforeEach(() => {
   vi.resetAllMocks();
   mocks.requireIdentity.mockResolvedValue({ id: "user-1", email: "user@example.com", emailVerified: new Date() });
+  mocks.requireAccountRole.mockResolvedValue({ id: "user-1", email: "user@example.com", emailVerified: new Date(), accountRole: "BUSINESS" });
   mocks.db.$transaction.mockImplementation(async (callback: (tx: typeof mocks.tx) => unknown) => callback(mocks.tx));
   mocks.tx.organization.create.mockResolvedValue({ id: "org-new", name: "Nuova Azienda", code: "QVX-NEW" });
   mocks.tx.organizationMembership.create.mockResolvedValue({ id: "membership-created" });
+  mocks.tx.organizationMembership.findFirst.mockResolvedValue(null);
   mocks.tx.organizationMembership.updateMany.mockResolvedValue({ count: 1 });
   mocks.tx.organizationInvitation.updateMany.mockResolvedValue({ count: 1 });
   mocks.tx.user.update.mockResolvedValue({ id: "user-1" });
@@ -112,10 +116,17 @@ describe("multi-organization membership lifecycle", () => {
     expect(JSON.stringify(mocks.db.organizationInvitation.updateMany.mock.calls)).not.toContain("raw-recipient-token");
   });
 
-  it("allows the same account to create another organization", async () => {
+  it("creates the first organization for a BUSINESS account", async () => {
     await expect(createOrganization("Nuova Azienda")).resolves.toMatchObject({ id: "org-new" });
     expect(mocks.db.$transaction).toHaveBeenCalledWith(expect.any(Function), { isolationLevel: "Serializable" });
     expect(mocks.tx.organizationMembership.create).toHaveBeenCalledWith({ data: { organizationId: "org-new", userId: "user-1", role: "OWNER", scopeMode: "FULL" } });
+  });
+
+  it("blocks creating a second active organization", async () => {
+    mocks.tx.organizationMembership.findFirst.mockResolvedValue({ id: "membership-active" });
+
+    await expect(createOrganization("Seconda Azienda")).rejects.toMatchObject({ status: 409 });
+    expect(mocks.tx.organization.create).not.toHaveBeenCalled();
   });
 
   it("does not repurpose a membership from another organization", async () => {
@@ -140,6 +151,7 @@ describe("multi-organization membership lifecycle", () => {
   });
 
   it("reassigns a revoked membership when accepting an invitation", async () => {
+    mocks.requireAccountRole.mockResolvedValueOnce({ id: "user-1", email: "user@example.com", emailVerified: new Date(), accountRole: "PROFESSIONAL" });
     mocks.tx.organizationMembership.findUnique.mockResolvedValue({ id: "membership-1", revokedAt: new Date() });
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-1",
@@ -169,13 +181,14 @@ describe("multi-organization membership lifecycle", () => {
   });
 
   it("creates the WORKER profile link in the same Serializable acceptance transaction", async () => {
+    mocks.requireAccountRole.mockResolvedValueOnce({ id: "user-1", email: "user@example.com", emailVerified: new Date(), accountRole: "PROFESSIONAL" });
     mocks.tx.organizationMembership.findUnique.mockResolvedValue(null);
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-worker",
       email: "user@example.com",
       role: "COLLABORATOR",
       preset: "LIMITED_UPLOAD",
-      permissionKeys: ["organization:read", "documents:read", "documents:upload"],
+      permissionKeys: ["organization:read", "jobSites:read"],
       scopeMode: "ASSIGNED",
       accessExpiresAt: null,
       resourceGrants: [],
@@ -203,13 +216,14 @@ describe("multi-organization membership lifecycle", () => {
   });
 
   it("does not consume the invitation when the automatic WORKER link fails", async () => {
+    mocks.requireAccountRole.mockResolvedValueOnce({ id: "user-1", email: "user@example.com", emailVerified: new Date(), accountRole: "PROFESSIONAL" });
     mocks.tx.organizationMembership.findUnique.mockResolvedValue(null);
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-worker",
       email: "user@example.com",
       role: "COLLABORATOR",
       preset: "LIMITED_UPLOAD",
-      permissionKeys: ["organization:read", "documents:read", "documents:upload"],
+      permissionKeys: ["organization:read", "jobSites:read"],
       scopeMode: "ASSIGNED",
       accessExpiresAt: null,
       resourceGrants: [],
@@ -229,6 +243,7 @@ describe("multi-organization membership lifecycle", () => {
   });
 
   it("rejects a concurrent claim of a revoked membership", async () => {
+    mocks.requireAccountRole.mockResolvedValueOnce({ id: "user-1", email: "user@example.com", emailVerified: new Date(), accountRole: "PROFESSIONAL" });
     mocks.tx.organizationMembership.findUnique.mockResolvedValue({ id: "membership-1", revokedAt: new Date() });
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-1",
@@ -275,6 +290,7 @@ describe("multi-organization membership lifecycle", () => {
   });
 
   it("maps a membership P2002 race to 409 without retrying", async () => {
+    mocks.requireAccountRole.mockResolvedValueOnce({ id: "user-1", email: "user@example.com", emailVerified: new Date(), accountRole: "PROFESSIONAL" });
     mocks.db.$transaction.mockRejectedValue(new mocks.PrismaClientKnownRequestError("P2002"));
     mocks.db.organizationMembership.findFirst.mockResolvedValue({ revokedAt: null });
 
@@ -294,6 +310,7 @@ describe("multi-organization membership lifecycle", () => {
   });
 
   it("rolls back the membership claim when the invitation cannot be consumed", async () => {
+    mocks.requireAccountRole.mockResolvedValueOnce({ id: "user-1", email: "user@example.com", emailVerified: new Date(), accountRole: "PROFESSIONAL" });
     mocks.tx.organizationMembership.findUnique.mockResolvedValue({ id: "membership-1", revokedAt: new Date() });
     mocks.tx.organizationInvitation.findUnique.mockResolvedValue({
       id: "invite-1",

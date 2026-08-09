@@ -97,31 +97,6 @@ export type WorkerUserLink = Prisma.WorkerUserLinkModel
  */
 export type JobSiteWorkerAssignment = Prisma.JobSiteWorkerAssignmentModel
 /**
- * Model Document
- *
- */
-export type Document = Prisma.DocumentModel
-/**
- * Model DocumentVersion
- *
- */
-export type DocumentVersion = Prisma.DocumentVersionModel
-/**
- * Model DocumentJobSiteLink
- *
- */
-export type DocumentJobSiteLink = Prisma.DocumentJobSiteLinkModel
-/**
- * Model Evidence
- *
- */
-export type Evidence = Prisma.EvidenceModel
-/**
- * Model EvidenceRevision
- *
- */
-export type EvidenceRevision = Prisma.EvidenceRevisionModel
-/**
  * Model Notification
  *
  */

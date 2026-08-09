@@ -12,7 +12,6 @@ Workspace usa route esplicite `/org/[organizationId]/...` e `/client/...`. I rou
 - Il cliente possiede privatamente `ClientProperty` e collega i propri cantieri; lâ€™immobile non Ã¨ tenant e non prova proprietÃ  legale.
 - Aziende differenti sullo stesso immobile non si scoprono, non condividono contenuti e vedono soltanto il proprio JobSite.
 - Un allegato foundation viene condiviso solo tramite `JobSiteAttachment` e `JobSiteAttachmentPublication`; nessun file Worker Ã¨ pubblicato automaticamente.
-- Un share link esterno precedente non esiste e non equivale a partecipazione autenticata.
 
 ## ProductCapabilityManifest
 
@@ -24,4 +23,4 @@ Otto processi persistenti `@1`: invito cliente, conferma iniziale, negoziazione 
 
 ## CompatibilitÃ 
 
-Non esiste dual-mode. `clientName`, `JobSiteOperationalPhase`, processi precedente e route implicite non vengono reinterpretati. `Document`, `DocumentVersion`, `Evidence` ed `EvidenceRevision` restano librerie interne foundation.
+Non esiste dual-mode: i contratti correnti non introducono una seconda superficie prodotto. Gli unici file runtime sono `JobSiteAttachment` contestuali a timeline, step, richieste e proposte.

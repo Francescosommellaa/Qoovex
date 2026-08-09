@@ -145,9 +145,9 @@ jobs:
             test "$actual" = "$expected"
           }
           expect_status 200 /sign-in
-          expect_status 307 /contexts
+          expect_status 307 /
           expect_status 307 /client
-          expect_status 401 /api/contexts
+          expect_status 401 /api/account/notification-preferences
           expect_status 404 /api/does-not-exist
           production_id_after="$(pnpm dlx vercel@50.17.1 inspect https://app.qoovex.com --json \
             --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" | jq -r '.id')"
@@ -159,7 +159,7 @@ jobs:
         run: |
           jq -n \
             --arg sha "$RELEASE_SHA" \
-            --arg migrationHead "20260803230000_qoovex_vnext_from_zero" \
+            --arg migrationHead "$(node -p "require('./ops/workspace-release-manifest.json').database.migrationHead")" \
             --arg deploymentUrl "$DEPLOYMENT_URL" \
             --arg isolation "verified" \
             --arg database "recreated-job-site" \

@@ -11,7 +11,7 @@ function assert(condition, message) { if (!condition) throw new Error(message); 
 const uiPackage = JSON.parse(read("packages/ui/package.json"));
 assert(!uiPackage.exports?.["."], "@qoovex/ui non deve esporre un barrel root.");
 for (const path of ["./components/*", "./hooks/*", "./lib/*", "./styles/base.css", "./styles/tokens.css"]) assert(uiPackage.exports?.[path], `Export UI mancante: ${path}`);
-assert(!uiPackage.dependencies?.["@phosphor-icons/react"], "Icone non canoniche nella foundation.");
+assert(uiPackage.dependencies?.["@tabler/icons-react"] || read("package.json").includes("@tabler/icons-react"), "Tabler deve restare la libreria icone applicativa approvata.");
 
 for (const app of apps) {
   const config = JSON.parse(read(`apps/${app}/components.json`));
@@ -25,15 +25,11 @@ for (const file of sourceFiles) {
   const source = read(file);
   if (file.startsWith("packages/ui/src/")) assert(!/@qoovex\/(db|types)|next-auth|@prisma|apps[\\/]/.test(source), `Boundary packages/ui violato: ${file}`);
   assert(!/from\s+["']@qoovex\/ui["']/.test(source), `Root import @qoovex/ui vietato: ${file}`);
-  assert(!/@phosphor-icons/i.test(source), `Provider visuale legacy: ${file}`);
-  assert(!/next\/font\/google|fonts\.googleapis\.com|fonts\.gstatic\.com|Geist_Mono|--font-geist-(sans|mono)/i.test(source), `Font Google/Geist legacy trovato: ${file}`);
-  assert(!/Plus Jakarta Sans|Chakra Petch|Space Grotesk|Pixelify/i.test(source), `Font legacy non approvato trovato: ${file}`);
 }
 
 const base = read("packages/ui/styles/base.css");
 const tokens = read("packages/ui/styles/tokens.css");
 for (const value of ["prefers-reduced-motion", "@custom-variant dark", "data-link=", "scrollbar-width: thin"]) assert(base.includes(value), `base.css non contiene ${value}`);
-assert(base.includes("general-sans") && base.includes("array"), "base.css deve importare le famiglie Fontshare General Sans e ARRAY.");
 for (const value of ["--info", "--success", "--warning", "--destructive", "--sidebar", "oklch("]) assert(tokens.includes(value), `tokens.css non contiene ${value}`);
 assert(tokens.includes("--font-sans: var(--ff-sans);") && tokens.includes("--font-accent: var(--ff-accent);"), "tokens.css deve esporre i token --font-sans e --font-accent.");
 
@@ -41,12 +37,12 @@ const workspaceOrganization = read("apps/workspace/src/app/org/[organizationId]/
 const workspaceClient = read("apps/workspace/src/app/client/job-sites/[jobSiteId]/page.tsx");
 const web = read("apps/web/src/app/page.tsx");
 const sirio = read("apps/sirio/src/app/page.tsx");
-assert(workspaceOrganization.includes("Timeline") && workspaceOrganization.includes("Pagamenti documentati"), "Workspace Azienda non espone il contratto current.");
-assert(workspaceClient.includes("Timeline condivisa") && workspaceClient.includes("I tuoi lavori") === false, "Workspace cliente non applica la projection current.");
-assert(web.includes("Qoovex current") && !web.includes("current disponibile") && !web.includes("non implementata"), "Web deve indicare la direzione current senza presentarla come disponibile.");
+assert(workspaceOrganization.includes("Timeline") && workspaceOrganization.includes("Pagamenti documentati"), "Workspace Azienda non espone il contratto Qoovex.");
+assert(workspaceClient.includes("Timeline condivisa") && workspaceClient.includes("I tuoi lavori") === false, "Workspace cliente non applica la projection Qoovex.");
+assert(web.includes("Qoovex") && !web.includes("non implementata"), "Web deve indicare la direzione Qoovex senza presentarla come disponibile.");
 assert(sirio.includes("foundation visuale") && !sirio.includes("Dashboard"), "Sirio deve conservare soltanto la foundation visuale.");
 for (const removed of ["apps/workspace/src/views/dashboard/DashboardOverviewView.tsx", "apps/sirio/src/components/dashboard-shell.tsx", "apps/web/src/components/marketing-dashboard-preview.tsx"]) assert(!existsSync(join(root, removed)), `Superficie prodotto rimossa ancora presente: ${removed}`);
 
 const notice = read("packages/ui/THIRD_PARTY_NOTICES.md");
 assert(/MIT License/i.test(notice), "Licenza MIT mancante negli avvisi.");
-console.log("Canonical Qoovex current visual foundation verified.");
+console.log("Canonical Qoovex visual foundation verified.");

@@ -64,7 +64,7 @@ export function SignInPageView({
       setError(body?.error ?? "Accesso dev non disponibile.");
       return;
     }
-    router.push("/contexts");
+    router.push("/");
     router.refresh();
   }
 

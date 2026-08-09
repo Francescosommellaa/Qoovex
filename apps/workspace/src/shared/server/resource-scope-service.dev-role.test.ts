@@ -11,7 +11,7 @@ vi.mock("@qoovex/db", () => ({ db: {
 import { getResourceScope } from "./resource-scope-service";
 
 function context(): WorkspaceAccessContext {
-  return { userId: "dev-user", platformRole: "USER", devView: "OWNER", company: { role: "COLLABORATOR", preset: "LIMITED_UPLOAD", scopeMode: "ASSIGNED", organization: { id: "org-1", name: "Azienda", code: "DEV" } }, support: null, permissions: ["organization:read"] };
+  return { userId: "dev-user", platformRole: "USER", devView: "BUSINESS", company: { role: "COLLABORATOR", preset: "LIMITED_UPLOAD", scopeMode: "ASSIGNED", organization: { id: "org-1", name: "Azienda", code: "DEV" } }, support: null, permissions: ["organization:read"] };
 }
 
 beforeEach(() => {

@@ -4,8 +4,6 @@ import test from "node:test";
 import {
   assertCiEphemeralDatabase,
   assertProductionApproval,
-  JOB_SITE_EMPTY_DATABASE_MIGRATION,
-  JOB_SITE_EMPTY_DATABASE_RESET_REF,
 } from "./migration-deploy-guard";
 import { calculateMigrationChecksum, calculateMigrationChecksums, validateMigrationHistory } from "./migration-history";
 
@@ -92,14 +90,14 @@ test("limita la modalita CI al database locale qoovex_ci", () => {
   );
 });
 
-test("richiede approvazione, prova di ripristino o reset vuoto e target esatto in produzione", () => {
+test("richiede approvazione, prova di ripristino e target esatto in produzione", () => {
   assert.throws(
     () => assertProductionApproval({ approved: undefined, backupRef: undefined, expectedLastMigration: undefined, lastMigration: privacy.name }),
     /APPROVED/,
   );
   assert.throws(
     () => assertProductionApproval({ approved: "1", backupRef: undefined, expectedLastMigration: privacy.name, lastMigration: privacy.name }),
-    /BACKUP_REF|empty-database/,
+    /BACKUP_REF/,
   );
   assert.throws(
     () => assertProductionApproval({ approved: "1", backupRef: "dump-sha256", expectedLastMigration: baseline.name, lastMigration: privacy.name }),
@@ -107,14 +105,5 @@ test("richiede approvazione, prova di ripristino o reset vuoto e target esatto i
   );
   assert.doesNotThrow(
     () => assertProductionApproval({ approved: "1", backupRef: "dump-sha256", expectedLastMigration: privacy.name, lastMigration: privacy.name }),
-  );
-  assert.doesNotThrow(
-    () => assertProductionApproval({
-      approved: "1",
-      backupRef: undefined,
-      destructiveResetRef: JOB_SITE_EMPTY_DATABASE_RESET_REF,
-      expectedLastMigration: JOB_SITE_EMPTY_DATABASE_MIGRATION,
-      lastMigration: JOB_SITE_EMPTY_DATABASE_MIGRATION,
-    }),
   );
 });

@@ -29,16 +29,3 @@ The shared `OtpInput` composes the stable `OTPField` primitive from `@base-ui/re
 ## next-themes
 
 `@qoovex/ui` uses `next-themes` `0.4.6` under its MIT license. The temporary local patch `patches/next-themes@0.4.6.patch` incorporates the upstream proposal [`pacocoursey/next-themes#386`](https://github.com/pacocoursey/next-themes/pull/386), commit `f7c65bcf88a9a9198640ff658f50abcdd62330fb`, so the theme bootstrap script is emitted only during SSR and not re-rendered by React 19 on the client.
-
-## FullCalendar Standard
-
-The Workspace calendar and its Sirio proof use FullCalendar React Standard `7.0.1`: https://fullcalendar.io/. Only MIT-licensed standard plugins are used; no Scheduler/Premium package is included.
-
-Copyright (c) 2026 Adam Shaw. Distributed under the MIT License; the upstream license text is retained in the installed package.
-
-## Fontshare (General Sans & ARRAY)
-
-The Qoovex typography foundation uses General Sans and ARRAY fonts provided by Fontshare (Indian Type Foundry).
-Fontshare fonts are free for personal and commercial use under Fontshare's Free Font License.
-- General Sans: https://www.fontshare.com/fonts/general-sans
-- ARRAY: https://www.fontshare.com/fonts/array

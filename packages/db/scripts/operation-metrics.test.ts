@@ -10,7 +10,7 @@ test("operation metrics stay disabled by default", async () => {
   delete process.env.QOOVEX_DB_OPERATION_METRICS;
   try {
     const measured = await withDatabaseOperationMeasurement("dashboard", async () => {
-      recordDatabaseOperation({ model: "Document", operation: "findMany", durationMs: 2 });
+      recordDatabaseOperation({ model: "JobSiteAttachment", operation: "findMany", durationMs: 2 });
       return "ok";
     });
     assert.equal(measured.result, "ok");
@@ -25,10 +25,10 @@ test("operation metrics aggregate safe metadata inside one async flow", async ()
   const previous = process.env.QOOVEX_DB_OPERATION_METRICS;
   process.env.QOOVEX_DB_OPERATION_METRICS = "1";
   try {
-    const measured = await withDatabaseOperationMeasurement("document-package-detail", async () => {
-      recordDatabaseOperation({ model: "Document", operation: "findMany", durationMs: 2 });
+    const measured = await withDatabaseOperationMeasurement("job-site-attachment-detail", async () => {
+      recordDatabaseOperation({ model: "JobSiteAttachment", operation: "findMany", durationMs: 2 });
       await Promise.resolve();
-      recordDatabaseOperation({ model: "Document", operation: "findMany", durationMs: 3 });
+      recordDatabaseOperation({ model: "JobSiteAttachment", operation: "findMany", durationMs: 3 });
       recordDatabaseOperation({ model: "Worker", operation: "findMany", durationMs: 1 });
       return 42;
     });
@@ -36,7 +36,7 @@ test("operation metrics aggregate safe metadata inside one async flow", async ()
     assert.equal(measured.result, 42);
     assert.equal(measured.measurement?.total, 3);
     assert.deepEqual(measured.measurement?.operations.map(({ model, operation, count, durationMs }) => ({ model, operation, count, durationMs })), [
-      { model: "Document", operation: "findMany", count: 2, durationMs: 5 },
+      { model: "JobSiteAttachment", operation: "findMany", count: 2, durationMs: 5 },
       { model: "Worker", operation: "findMany", count: 1, durationMs: 1 },
     ]);
     assert.deepEqual(Object.keys(measured.measurement ?? {}).sort(), ["durationMs", "flow", "label", "operations", "total"]);

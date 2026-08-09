@@ -28,11 +28,11 @@ describe("runtime error registry", () => {
     await recordRuntimeError({
       error: new Error("token=very-secret-value mario@example.com"),
       source: "route",
-      routePath: "/api/documents?token=secret",
+      routePath: "/api/unknown?token=secret",
       requestMethod: "get",
     });
     expect(mocks.upsert).toHaveBeenCalledWith(expect.objectContaining({
-      create: expect.objectContaining({ routePath: "/api/documents", requestMethod: "GET" }),
+      create: expect.objectContaining({ routePath: "/api/unknown", requestMethod: "GET" }),
       update: expect.objectContaining({ status: "OPEN", occurrenceCount: { increment: 1 }, resolvedAt: null }),
     }));
     expect(JSON.stringify(mocks.upsert.mock.calls[0])).not.toContain("very-secret-value");

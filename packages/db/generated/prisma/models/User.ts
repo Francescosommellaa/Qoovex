@@ -48,6 +48,7 @@ export type UserMinAggregateOutputType = {
   avatarBlobPathname: string | null
   phoneNumber: string | null
   platformRole: $Enums.PlatformRole | null
+  accountRole: $Enums.AccountRole | null
   authVersion: number | null
   suspendedAt: Date | null
   suspensionReason: string | null
@@ -77,6 +78,7 @@ export type UserMaxAggregateOutputType = {
   avatarBlobPathname: string | null
   phoneNumber: string | null
   platformRole: $Enums.PlatformRole | null
+  accountRole: $Enums.AccountRole | null
   authVersion: number | null
   suspendedAt: Date | null
   suspensionReason: string | null
@@ -106,6 +108,7 @@ export type UserCountAggregateOutputType = {
   avatarBlobPathname: number
   phoneNumber: number
   platformRole: number
+  accountRole: number
   authVersion: number
   suspendedAt: number
   suspensionReason: number
@@ -145,6 +148,7 @@ export type UserMinAggregateInputType = {
   avatarBlobPathname?: true
   phoneNumber?: true
   platformRole?: true
+  accountRole?: true
   authVersion?: true
   suspendedAt?: true
   suspensionReason?: true
@@ -174,6 +178,7 @@ export type UserMaxAggregateInputType = {
   avatarBlobPathname?: true
   phoneNumber?: true
   platformRole?: true
+  accountRole?: true
   authVersion?: true
   suspendedAt?: true
   suspensionReason?: true
@@ -203,6 +208,7 @@ export type UserCountAggregateInputType = {
   avatarBlobPathname?: true
   phoneNumber?: true
   platformRole?: true
+  accountRole?: true
   authVersion?: true
   suspendedAt?: true
   suspensionReason?: true
@@ -319,6 +325,7 @@ export type UserGroupByOutputType = {
   avatarBlobPathname: string | null
   phoneNumber: string | null
   platformRole: $Enums.PlatformRole
+  accountRole: $Enums.AccountRole | null
   authVersion: number
   suspendedAt: Date | null
   suspensionReason: string | null
@@ -371,6 +378,7 @@ export type UserWhereInput = {
   avatarBlobPathname?: Prisma.StringNullableFilter<"User"> | string | null
   phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
   platformRole?: Prisma.EnumPlatformRoleFilter<"User"> | $Enums.PlatformRole
+  accountRole?: Prisma.EnumAccountRoleNullableFilter<"User"> | $Enums.AccountRole | null
   authVersion?: Prisma.IntFilter<"User"> | number
   suspendedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   suspensionReason?: Prisma.StringNullableFilter<"User"> | string | null
@@ -404,9 +412,6 @@ export type UserWhereInput = {
   supportSessions?: Prisma.SupportSessionListRelationFilter
   supportAuditEvents?: Prisma.SupportAuditEventListRelationFilter
   productAuditEvents?: Prisma.ProductAuditEventListRelationFilter
-  uploadedDocumentVersions?: Prisma.DocumentVersionListRelationFilter
-  createdEvidence?: Prisma.EvidenceListRelationFilter
-  evidenceRevisions?: Prisma.EvidenceRevisionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   requestedDataControlJobs?: Prisma.DataControlJobListRelationFilter
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventListRelationFilter
@@ -418,8 +423,6 @@ export type UserWhereInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryListRelationFilter
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentListRelationFilter
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentListRelationFilter
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkListRelationFilter
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkListRelationFilter
   organizationContacts?: Prisma.OrganizationContactListRelationFilter
 }
 
@@ -437,6 +440,7 @@ export type UserOrderByWithRelationInput = {
   avatarBlobPathname?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   platformRole?: Prisma.SortOrder
+  accountRole?: Prisma.SortOrderInput | Prisma.SortOrder
   authVersion?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   suspensionReason?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -470,9 +474,6 @@ export type UserOrderByWithRelationInput = {
   supportSessions?: Prisma.SupportSessionOrderByRelationAggregateInput
   supportAuditEvents?: Prisma.SupportAuditEventOrderByRelationAggregateInput
   productAuditEvents?: Prisma.ProductAuditEventOrderByRelationAggregateInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionOrderByRelationAggregateInput
-  createdEvidence?: Prisma.EvidenceOrderByRelationAggregateInput
-  evidenceRevisions?: Prisma.EvidenceRevisionOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   requestedDataControlJobs?: Prisma.DataControlJobOrderByRelationAggregateInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventOrderByRelationAggregateInput
@@ -484,8 +485,6 @@ export type UserOrderByWithRelationInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryOrderByRelationAggregateInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentOrderByRelationAggregateInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentOrderByRelationAggregateInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkOrderByRelationAggregateInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkOrderByRelationAggregateInput
   organizationContacts?: Prisma.OrganizationContactOrderByRelationAggregateInput
 }
 
@@ -506,6 +505,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   avatarBlobPathname?: Prisma.StringNullableFilter<"User"> | string | null
   phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
   platformRole?: Prisma.EnumPlatformRoleFilter<"User"> | $Enums.PlatformRole
+  accountRole?: Prisma.EnumAccountRoleNullableFilter<"User"> | $Enums.AccountRole | null
   authVersion?: Prisma.IntFilter<"User"> | number
   suspendedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   suspensionReason?: Prisma.StringNullableFilter<"User"> | string | null
@@ -539,9 +539,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   supportSessions?: Prisma.SupportSessionListRelationFilter
   supportAuditEvents?: Prisma.SupportAuditEventListRelationFilter
   productAuditEvents?: Prisma.ProductAuditEventListRelationFilter
-  uploadedDocumentVersions?: Prisma.DocumentVersionListRelationFilter
-  createdEvidence?: Prisma.EvidenceListRelationFilter
-  evidenceRevisions?: Prisma.EvidenceRevisionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   requestedDataControlJobs?: Prisma.DataControlJobListRelationFilter
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventListRelationFilter
@@ -553,8 +550,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notificationDeliveries?: Prisma.NotificationDeliveryListRelationFilter
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentListRelationFilter
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentListRelationFilter
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkListRelationFilter
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkListRelationFilter
   organizationContacts?: Prisma.OrganizationContactListRelationFilter
 }, "id" | "email" | "username">
 
@@ -572,6 +567,7 @@ export type UserOrderByWithAggregationInput = {
   avatarBlobPathname?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   platformRole?: Prisma.SortOrder
+  accountRole?: Prisma.SortOrderInput | Prisma.SortOrder
   authVersion?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   suspensionReason?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -609,6 +605,7 @@ export type UserScalarWhereWithAggregatesInput = {
   avatarBlobPathname?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phoneNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   platformRole?: Prisma.EnumPlatformRoleWithAggregatesFilter<"User"> | $Enums.PlatformRole
+  accountRole?: Prisma.EnumAccountRoleNullableWithAggregatesFilter<"User"> | $Enums.AccountRole | null
   authVersion?: Prisma.IntWithAggregatesFilter<"User"> | number
   suspendedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   suspensionReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -638,6 +635,7 @@ export type UserCreateInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -671,9 +669,6 @@ export type UserCreateInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -685,8 +680,6 @@ export type UserCreateInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -704,6 +697,7 @@ export type UserUncheckedCreateInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -737,9 +731,6 @@ export type UserUncheckedCreateInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -751,8 +742,6 @@ export type UserUncheckedCreateInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -770,6 +759,7 @@ export type UserUpdateInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -803,9 +793,6 @@ export type UserUpdateInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -817,8 +804,6 @@ export type UserUpdateInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -836,6 +821,7 @@ export type UserUncheckedUpdateInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -869,9 +855,6 @@ export type UserUncheckedUpdateInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -883,8 +866,6 @@ export type UserUncheckedUpdateInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -902,6 +883,7 @@ export type UserCreateManyInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -931,6 +913,7 @@ export type UserUpdateManyMutationInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -960,6 +943,7 @@ export type UserUncheckedUpdateManyInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -994,6 +978,7 @@ export type UserCountOrderByAggregateInput = {
   avatarBlobPathname?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   platformRole?: Prisma.SortOrder
+  accountRole?: Prisma.SortOrder
   authVersion?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrder
   suspensionReason?: Prisma.SortOrder
@@ -1027,6 +1012,7 @@ export type UserMaxOrderByAggregateInput = {
   avatarBlobPathname?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   platformRole?: Prisma.SortOrder
+  accountRole?: Prisma.SortOrder
   authVersion?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrder
   suspensionReason?: Prisma.SortOrder
@@ -1056,6 +1042,7 @@ export type UserMinOrderByAggregateInput = {
   avatarBlobPathname?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   platformRole?: Prisma.SortOrder
+  accountRole?: Prisma.SortOrder
   authVersion?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrder
   suspensionReason?: Prisma.SortOrder
@@ -1118,6 +1105,10 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type EnumPlatformRoleFieldUpdateOperationsInput = {
   set?: $Enums.PlatformRole
+}
+
+export type NullableEnumAccountRoleFieldUpdateOperationsInput = {
+  set?: $Enums.AccountRole | null
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -1216,78 +1207,6 @@ export type UserUpdateOneWithoutEndedJobSiteWorkersNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEndedJobSiteWorkersInput, Prisma.UserUpdateWithoutEndedJobSiteWorkersInput>, Prisma.UserUncheckedUpdateWithoutEndedJobSiteWorkersInput>
-}
-
-export type UserCreateNestedOneWithoutUploadedDocumentVersionsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutUploadedDocumentVersionsInput, Prisma.UserUncheckedCreateWithoutUploadedDocumentVersionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUploadedDocumentVersionsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutUploadedDocumentVersionsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutUploadedDocumentVersionsInput, Prisma.UserUncheckedCreateWithoutUploadedDocumentVersionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUploadedDocumentVersionsInput
-  upsert?: Prisma.UserUpsertWithoutUploadedDocumentVersionsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUploadedDocumentVersionsInput, Prisma.UserUpdateWithoutUploadedDocumentVersionsInput>, Prisma.UserUncheckedUpdateWithoutUploadedDocumentVersionsInput>
-}
-
-export type UserCreateNestedOneWithoutLinkedDocumentJobSitesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutLinkedDocumentJobSitesInput, Prisma.UserUncheckedCreateWithoutLinkedDocumentJobSitesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLinkedDocumentJobSitesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserCreateNestedOneWithoutUnlinkedDocumentJobSitesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutUnlinkedDocumentJobSitesInput, Prisma.UserUncheckedCreateWithoutUnlinkedDocumentJobSitesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUnlinkedDocumentJobSitesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutLinkedDocumentJobSitesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutLinkedDocumentJobSitesInput, Prisma.UserUncheckedCreateWithoutLinkedDocumentJobSitesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLinkedDocumentJobSitesInput
-  upsert?: Prisma.UserUpsertWithoutLinkedDocumentJobSitesInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLinkedDocumentJobSitesInput, Prisma.UserUpdateWithoutLinkedDocumentJobSitesInput>, Prisma.UserUncheckedUpdateWithoutLinkedDocumentJobSitesInput>
-}
-
-export type UserUpdateOneWithoutUnlinkedDocumentJobSitesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutUnlinkedDocumentJobSitesInput, Prisma.UserUncheckedCreateWithoutUnlinkedDocumentJobSitesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUnlinkedDocumentJobSitesInput
-  upsert?: Prisma.UserUpsertWithoutUnlinkedDocumentJobSitesInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUnlinkedDocumentJobSitesInput, Prisma.UserUpdateWithoutUnlinkedDocumentJobSitesInput>, Prisma.UserUncheckedUpdateWithoutUnlinkedDocumentJobSitesInput>
-}
-
-export type UserCreateNestedOneWithoutCreatedEvidenceInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedEvidenceInput, Prisma.UserUncheckedCreateWithoutCreatedEvidenceInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedEvidenceInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutCreatedEvidenceNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedEvidenceInput, Prisma.UserUncheckedCreateWithoutCreatedEvidenceInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedEvidenceInput
-  upsert?: Prisma.UserUpsertWithoutCreatedEvidenceInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedEvidenceInput, Prisma.UserUpdateWithoutCreatedEvidenceInput>, Prisma.UserUncheckedUpdateWithoutCreatedEvidenceInput>
-}
-
-export type UserCreateNestedOneWithoutEvidenceRevisionsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutEvidenceRevisionsInput, Prisma.UserUncheckedCreateWithoutEvidenceRevisionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEvidenceRevisionsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutEvidenceRevisionsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutEvidenceRevisionsInput, Prisma.UserUncheckedCreateWithoutEvidenceRevisionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEvidenceRevisionsInput
-  upsert?: Prisma.UserUpsertWithoutEvidenceRevisionsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEvidenceRevisionsInput, Prisma.UserUpdateWithoutEvidenceRevisionsInput>, Prisma.UserUncheckedUpdateWithoutEvidenceRevisionsInput>
 }
 
 export type UserCreateNestedOneWithoutNotificationsInput = {
@@ -1662,6 +1581,7 @@ export type UserCreateWithoutAccountsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -1694,9 +1614,6 @@ export type UserCreateWithoutAccountsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -1708,8 +1625,6 @@ export type UserCreateWithoutAccountsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -1727,6 +1642,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -1759,9 +1675,6 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -1773,8 +1686,6 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1808,6 +1719,7 @@ export type UserUpdateWithoutAccountsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1840,9 +1752,6 @@ export type UserUpdateWithoutAccountsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -1854,8 +1763,6 @@ export type UserUpdateWithoutAccountsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -1873,6 +1780,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1905,9 +1813,6 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -1919,8 +1824,6 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1938,6 +1841,7 @@ export type UserCreateWithoutSessionsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -1970,9 +1874,6 @@ export type UserCreateWithoutSessionsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -1984,8 +1885,6 @@ export type UserCreateWithoutSessionsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -2003,6 +1902,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -2035,9 +1935,6 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -2049,8 +1946,6 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -2084,6 +1979,7 @@ export type UserUpdateWithoutSessionsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2116,9 +2012,6 @@ export type UserUpdateWithoutSessionsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -2130,8 +2023,6 @@ export type UserUpdateWithoutSessionsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -2149,6 +2040,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2181,9 +2073,6 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -2195,8 +2084,6 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -2214,6 +2101,7 @@ export type UserCreateWithoutCreatedOrganizationsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -2246,9 +2134,6 @@ export type UserCreateWithoutCreatedOrganizationsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -2260,8 +2145,6 @@ export type UserCreateWithoutCreatedOrganizationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -2279,6 +2162,7 @@ export type UserUncheckedCreateWithoutCreatedOrganizationsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -2311,9 +2195,6 @@ export type UserUncheckedCreateWithoutCreatedOrganizationsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -2325,8 +2206,6 @@ export type UserUncheckedCreateWithoutCreatedOrganizationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -2360,6 +2239,7 @@ export type UserUpdateWithoutCreatedOrganizationsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2392,9 +2272,6 @@ export type UserUpdateWithoutCreatedOrganizationsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -2406,8 +2283,6 @@ export type UserUpdateWithoutCreatedOrganizationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -2425,6 +2300,7 @@ export type UserUncheckedUpdateWithoutCreatedOrganizationsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2457,9 +2333,6 @@ export type UserUncheckedUpdateWithoutCreatedOrganizationsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -2471,8 +2344,6 @@ export type UserUncheckedUpdateWithoutCreatedOrganizationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -2490,6 +2361,7 @@ export type UserCreateWithoutOrganizationContactsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -2523,9 +2395,6 @@ export type UserCreateWithoutOrganizationContactsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -2537,8 +2406,6 @@ export type UserCreateWithoutOrganizationContactsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
 }
 
 export type UserUncheckedCreateWithoutOrganizationContactsInput = {
@@ -2555,6 +2422,7 @@ export type UserUncheckedCreateWithoutOrganizationContactsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -2588,9 +2456,6 @@ export type UserUncheckedCreateWithoutOrganizationContactsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -2602,8 +2467,6 @@ export type UserUncheckedCreateWithoutOrganizationContactsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
 }
 
 export type UserCreateOrConnectWithoutOrganizationContactsInput = {
@@ -2636,6 +2499,7 @@ export type UserUpdateWithoutOrganizationContactsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2669,9 +2533,6 @@ export type UserUpdateWithoutOrganizationContactsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -2683,8 +2544,6 @@ export type UserUpdateWithoutOrganizationContactsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrganizationContactsInput = {
@@ -2701,6 +2560,7 @@ export type UserUncheckedUpdateWithoutOrganizationContactsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2734,9 +2594,6 @@ export type UserUncheckedUpdateWithoutOrganizationContactsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -2748,8 +2605,6 @@ export type UserUncheckedUpdateWithoutOrganizationContactsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
 }
 
 export type UserCreateWithoutWorkerUserLinksInput = {
@@ -2766,6 +2621,7 @@ export type UserCreateWithoutWorkerUserLinksInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -2799,9 +2655,6 @@ export type UserCreateWithoutWorkerUserLinksInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -2812,8 +2665,6 @@ export type UserCreateWithoutWorkerUserLinksInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -2831,6 +2682,7 @@ export type UserUncheckedCreateWithoutWorkerUserLinksInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -2864,9 +2716,6 @@ export type UserUncheckedCreateWithoutWorkerUserLinksInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -2877,8 +2726,6 @@ export type UserUncheckedCreateWithoutWorkerUserLinksInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -2901,6 +2748,7 @@ export type UserCreateWithoutLinkedWorkerUserLinksInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -2934,9 +2782,6 @@ export type UserCreateWithoutLinkedWorkerUserLinksInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -2947,8 +2792,6 @@ export type UserCreateWithoutLinkedWorkerUserLinksInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -2966,6 +2809,7 @@ export type UserUncheckedCreateWithoutLinkedWorkerUserLinksInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -2999,9 +2843,6 @@ export type UserUncheckedCreateWithoutLinkedWorkerUserLinksInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -3012,8 +2853,6 @@ export type UserUncheckedCreateWithoutLinkedWorkerUserLinksInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -3047,6 +2886,7 @@ export type UserUpdateWithoutWorkerUserLinksInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3080,9 +2920,6 @@ export type UserUpdateWithoutWorkerUserLinksInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -3093,8 +2930,6 @@ export type UserUpdateWithoutWorkerUserLinksInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -3112,6 +2947,7 @@ export type UserUncheckedUpdateWithoutWorkerUserLinksInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3145,9 +2981,6 @@ export type UserUncheckedUpdateWithoutWorkerUserLinksInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -3158,8 +2991,6 @@ export type UserUncheckedUpdateWithoutWorkerUserLinksInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -3188,6 +3019,7 @@ export type UserUpdateWithoutLinkedWorkerUserLinksInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3221,9 +3053,6 @@ export type UserUpdateWithoutLinkedWorkerUserLinksInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -3234,8 +3063,6 @@ export type UserUpdateWithoutLinkedWorkerUserLinksInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -3253,6 +3080,7 @@ export type UserUncheckedUpdateWithoutLinkedWorkerUserLinksInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3286,9 +3114,6 @@ export type UserUncheckedUpdateWithoutLinkedWorkerUserLinksInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -3299,8 +3124,6 @@ export type UserUncheckedUpdateWithoutLinkedWorkerUserLinksInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -3318,6 +3141,7 @@ export type UserCreateWithoutAssignedJobSiteWorkersInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -3351,9 +3175,6 @@ export type UserCreateWithoutAssignedJobSiteWorkersInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -3364,8 +3185,6 @@ export type UserCreateWithoutAssignedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -3383,6 +3202,7 @@ export type UserUncheckedCreateWithoutAssignedJobSiteWorkersInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -3416,9 +3236,6 @@ export type UserUncheckedCreateWithoutAssignedJobSiteWorkersInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -3429,8 +3246,6 @@ export type UserUncheckedCreateWithoutAssignedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -3453,6 +3268,7 @@ export type UserCreateWithoutEndedJobSiteWorkersInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -3486,9 +3302,6 @@ export type UserCreateWithoutEndedJobSiteWorkersInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -3499,8 +3312,6 @@ export type UserCreateWithoutEndedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -3518,6 +3329,7 @@ export type UserUncheckedCreateWithoutEndedJobSiteWorkersInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -3551,9 +3363,6 @@ export type UserUncheckedCreateWithoutEndedJobSiteWorkersInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -3564,8 +3373,6 @@ export type UserUncheckedCreateWithoutEndedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -3599,6 +3406,7 @@ export type UserUpdateWithoutAssignedJobSiteWorkersInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3632,9 +3440,6 @@ export type UserUpdateWithoutAssignedJobSiteWorkersInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -3645,8 +3450,6 @@ export type UserUpdateWithoutAssignedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -3664,6 +3467,7 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteWorkersInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3697,9 +3501,6 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteWorkersInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -3710,8 +3511,6 @@ export type UserUncheckedUpdateWithoutAssignedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -3740,6 +3539,7 @@ export type UserUpdateWithoutEndedJobSiteWorkersInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3773,9 +3573,6 @@ export type UserUpdateWithoutEndedJobSiteWorkersInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -3786,8 +3583,6 @@ export type UserUpdateWithoutEndedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -3805,6 +3600,7 @@ export type UserUncheckedUpdateWithoutEndedJobSiteWorkersInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3838,9 +3634,6 @@ export type UserUncheckedUpdateWithoutEndedJobSiteWorkersInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -3851,1388 +3644,6 @@ export type UserUncheckedUpdateWithoutEndedJobSiteWorkersInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
-  organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutUploadedDocumentVersionsInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
-  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutApprovedByInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutDeniedByInput
-  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
-  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutUserInput
-  clientProperties?: Prisma.ClientPropertyCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
-  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
-  organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutUploadedDocumentVersionsInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
-  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutApprovedByInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutDeniedByInput
-  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
-  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutUserInput
-  clientProperties?: Prisma.ClientPropertyUncheckedCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
-  organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutUploadedDocumentVersionsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutUploadedDocumentVersionsInput, Prisma.UserUncheckedCreateWithoutUploadedDocumentVersionsInput>
-}
-
-export type UserUpsertWithoutUploadedDocumentVersionsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutUploadedDocumentVersionsInput, Prisma.UserUncheckedUpdateWithoutUploadedDocumentVersionsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutUploadedDocumentVersionsInput, Prisma.UserUncheckedCreateWithoutUploadedDocumentVersionsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutUploadedDocumentVersionsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutUploadedDocumentVersionsInput, Prisma.UserUncheckedUpdateWithoutUploadedDocumentVersionsInput>
-}
-
-export type UserUpdateWithoutUploadedDocumentVersionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
-  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutApprovedByNestedInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutDeniedByNestedInput
-  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
-  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutUserNestedInput
-  clientProperties?: Prisma.ClientPropertyUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
-  organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutUploadedDocumentVersionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
-  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutDeniedByNestedInput
-  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
-  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutUserNestedInput
-  clientProperties?: Prisma.ClientPropertyUncheckedUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
-  organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutLinkedDocumentJobSitesInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
-  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutApprovedByInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutDeniedByInput
-  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
-  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutUserInput
-  clientProperties?: Prisma.ClientPropertyCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
-  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
-  organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutLinkedDocumentJobSitesInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
-  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutApprovedByInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutDeniedByInput
-  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
-  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutUserInput
-  clientProperties?: Prisma.ClientPropertyUncheckedCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
-  organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutLinkedDocumentJobSitesInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutLinkedDocumentJobSitesInput, Prisma.UserUncheckedCreateWithoutLinkedDocumentJobSitesInput>
-}
-
-export type UserCreateWithoutUnlinkedDocumentJobSitesInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
-  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutApprovedByInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutDeniedByInput
-  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
-  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutUserInput
-  clientProperties?: Prisma.ClientPropertyCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
-  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutUnlinkedDocumentJobSitesInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
-  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutApprovedByInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutDeniedByInput
-  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
-  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutUserInput
-  clientProperties?: Prisma.ClientPropertyUncheckedCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutUnlinkedDocumentJobSitesInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutUnlinkedDocumentJobSitesInput, Prisma.UserUncheckedCreateWithoutUnlinkedDocumentJobSitesInput>
-}
-
-export type UserUpsertWithoutLinkedDocumentJobSitesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutLinkedDocumentJobSitesInput, Prisma.UserUncheckedUpdateWithoutLinkedDocumentJobSitesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutLinkedDocumentJobSitesInput, Prisma.UserUncheckedCreateWithoutLinkedDocumentJobSitesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutLinkedDocumentJobSitesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutLinkedDocumentJobSitesInput, Prisma.UserUncheckedUpdateWithoutLinkedDocumentJobSitesInput>
-}
-
-export type UserUpdateWithoutLinkedDocumentJobSitesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
-  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutApprovedByNestedInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutDeniedByNestedInput
-  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
-  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutUserNestedInput
-  clientProperties?: Prisma.ClientPropertyUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
-  organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutLinkedDocumentJobSitesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
-  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutDeniedByNestedInput
-  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
-  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutUserNestedInput
-  clientProperties?: Prisma.ClientPropertyUncheckedUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
-  organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserUpsertWithoutUnlinkedDocumentJobSitesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutUnlinkedDocumentJobSitesInput, Prisma.UserUncheckedUpdateWithoutUnlinkedDocumentJobSitesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutUnlinkedDocumentJobSitesInput, Prisma.UserUncheckedCreateWithoutUnlinkedDocumentJobSitesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutUnlinkedDocumentJobSitesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutUnlinkedDocumentJobSitesInput, Prisma.UserUncheckedUpdateWithoutUnlinkedDocumentJobSitesInput>
-}
-
-export type UserUpdateWithoutUnlinkedDocumentJobSitesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
-  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutApprovedByNestedInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutDeniedByNestedInput
-  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
-  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutUserNestedInput
-  clientProperties?: Prisma.ClientPropertyUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutUnlinkedDocumentJobSitesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
-  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutDeniedByNestedInput
-  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
-  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutUserNestedInput
-  clientProperties?: Prisma.ClientPropertyUncheckedUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutCreatedEvidenceInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
-  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutApprovedByInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutDeniedByInput
-  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
-  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutUserInput
-  clientProperties?: Prisma.ClientPropertyCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
-  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
-  organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutCreatedEvidenceInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
-  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutApprovedByInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutDeniedByInput
-  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
-  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutUserInput
-  clientProperties?: Prisma.ClientPropertyUncheckedCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
-  organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutCreatedEvidenceInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedEvidenceInput, Prisma.UserUncheckedCreateWithoutCreatedEvidenceInput>
-}
-
-export type UserUpsertWithoutCreatedEvidenceInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedEvidenceInput, Prisma.UserUncheckedUpdateWithoutCreatedEvidenceInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedEvidenceInput, Prisma.UserUncheckedCreateWithoutCreatedEvidenceInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutCreatedEvidenceInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedEvidenceInput, Prisma.UserUncheckedUpdateWithoutCreatedEvidenceInput>
-}
-
-export type UserUpdateWithoutCreatedEvidenceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
-  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutApprovedByNestedInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutDeniedByNestedInput
-  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
-  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutUserNestedInput
-  clientProperties?: Prisma.ClientPropertyUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
-  organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutCreatedEvidenceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
-  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutDeniedByNestedInput
-  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
-  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutUserNestedInput
-  clientProperties?: Prisma.ClientPropertyUncheckedUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
-  organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutEvidenceRevisionsInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeCreateNestedManyWithoutUserInput
-  authRateLimits?: Prisma.AuthRateLimitCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeCreateNestedManyWithoutUserInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutUserInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutApprovedByInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestCreateNestedManyWithoutDeniedByInput
-  authDevices?: Prisma.AuthDeviceCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationCreateNestedManyWithoutInvitedByInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantCreateNestedManyWithoutGrantedByInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipCreateNestedManyWithoutAccessUpdatedByInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
-  supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutLinkedByInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantCreateNestedManyWithoutUserInput
-  clientProperties?: Prisma.ClientPropertyCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
-  notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
-  organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutEvidenceRevisionsInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  image?: string | null
-  firstName?: string
-  lastName?: string | null
-  username: string
-  usernameOnboarded?: boolean
-  profileOnboarded?: boolean
-  avatarBlobPathname?: string | null
-  phoneNumber?: string | null
-  platformRole?: $Enums.PlatformRole
-  authVersion?: number
-  suspendedAt?: Date | string | null
-  suspensionReason?: string | null
-  mfaEnabled?: boolean
-  totpSecretEncrypted?: string | null
-  totpSecretNonce?: string | null
-  totpPendingSecretEncrypted?: string | null
-  totpPendingSecretNonce?: string | null
-  totpPendingCreatedAt?: Date | string | null
-  totpVerifiedAt?: Date | string | null
-  usernameChangedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  credential?: Prisma.UserCredentialUncheckedCreateNestedOneWithoutUserInput
-  authCodes?: Prisma.AuthCodeUncheckedCreateNestedManyWithoutUserInput
-  authRateLimits?: Prisma.AuthRateLimitUncheckedCreateNestedManyWithoutUserInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedCreateNestedManyWithoutUserInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutUserInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutApprovedByInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedCreateNestedManyWithoutDeniedByInput
-  authDevices?: Prisma.AuthDeviceUncheckedCreateNestedManyWithoutUserInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutUserInput
-  createdOrganizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutCreatedByInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutInvitedByInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedCreateNestedManyWithoutGrantedByInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedCreateNestedManyWithoutAccessUpdatedByInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
-  supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedCreateNestedManyWithoutUserInput
-  clientProperties?: Prisma.ClientPropertyUncheckedCreateNestedManyWithoutUserInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
-  organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutEvidenceRevisionsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutEvidenceRevisionsInput, Prisma.UserUncheckedCreateWithoutEvidenceRevisionsInput>
-}
-
-export type UserUpsertWithoutEvidenceRevisionsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutEvidenceRevisionsInput, Prisma.UserUncheckedUpdateWithoutEvidenceRevisionsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutEvidenceRevisionsInput, Prisma.UserUncheckedCreateWithoutEvidenceRevisionsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutEvidenceRevisionsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutEvidenceRevisionsInput, Prisma.UserUncheckedUpdateWithoutEvidenceRevisionsInput>
-}
-
-export type UserUpdateWithoutEvidenceRevisionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUpdateManyWithoutUserNestedInput
-  authRateLimits?: Prisma.AuthRateLimitUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUpdateManyWithoutUserNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUpdateManyWithoutUserNestedInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutApprovedByNestedInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUpdateManyWithoutDeniedByNestedInput
-  authDevices?: Prisma.AuthDeviceUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUpdateManyWithoutInvitedByNestedInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUpdateManyWithoutGrantedByNestedInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUpdateManyWithoutAccessUpdatedByNestedInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
-  supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutLinkedByNestedInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUpdateManyWithoutUserNestedInput
-  clientProperties?: Prisma.ClientPropertyUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
-  organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutEvidenceRevisionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  usernameOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  profileOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  authVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingSecretNonce?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpPendingCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totpVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  credential?: Prisma.UserCredentialUncheckedUpdateOneWithoutUserNestedInput
-  authCodes?: Prisma.AuthCodeUncheckedUpdateManyWithoutUserNestedInput
-  authRateLimits?: Prisma.AuthRateLimitUncheckedUpdateManyWithoutUserNestedInput
-  securityEvents?: Prisma.SecurityAuditEventUncheckedUpdateManyWithoutUserNestedInput
-  mfaBackupCodes?: Prisma.MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput
-  mfaRecoveryRequests?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutUserNestedInput
-  approvedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutApprovedByNestedInput
-  deniedMfaRecoveries?: Prisma.MfaRecoveryRequestUncheckedUpdateManyWithoutDeniedByNestedInput
-  authDevices?: Prisma.AuthDeviceUncheckedUpdateManyWithoutUserNestedInput
-  organizationMemberships?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutUserNestedInput
-  createdOrganizations?: Prisma.OrganizationUncheckedUpdateManyWithoutCreatedByNestedInput
-  sentOrganizationInvitations?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutInvitedByNestedInput
-  grantedMembershipResources?: Prisma.OrganizationMembershipResourceGrantUncheckedUpdateManyWithoutGrantedByNestedInput
-  updatedMembershipAccesses?: Prisma.OrganizationMembershipUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
-  updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
-  supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
-  supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
-  resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
-  workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
-  linkedWorkerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  jobSiteParticipants?: Prisma.JobSiteParticipantUncheckedUpdateManyWithoutUserNestedInput
-  clientProperties?: Prisma.ClientPropertyUncheckedUpdateManyWithoutUserNestedInput
-  notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
-  notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
-  assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
-  endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -5250,6 +3661,7 @@ export type UserCreateWithoutNotificationsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -5283,9 +3695,6 @@ export type UserCreateWithoutNotificationsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
@@ -5296,8 +3705,6 @@ export type UserCreateWithoutNotificationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -5315,6 +3722,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -5348,9 +3756,6 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
@@ -5361,8 +3766,6 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -5396,6 +3799,7 @@ export type UserUpdateWithoutNotificationsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5429,9 +3833,6 @@ export type UserUpdateWithoutNotificationsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
@@ -5442,8 +3843,6 @@ export type UserUpdateWithoutNotificationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -5461,6 +3860,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5494,9 +3894,6 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
@@ -5507,8 +3904,6 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -5526,6 +3921,7 @@ export type UserCreateWithoutRequestedDataControlJobsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -5559,9 +3955,6 @@ export type UserCreateWithoutRequestedDataControlJobsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
@@ -5572,8 +3965,6 @@ export type UserCreateWithoutRequestedDataControlJobsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -5591,6 +3982,7 @@ export type UserUncheckedCreateWithoutRequestedDataControlJobsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -5624,9 +4016,6 @@ export type UserUncheckedCreateWithoutRequestedDataControlJobsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
@@ -5637,8 +4026,6 @@ export type UserUncheckedCreateWithoutRequestedDataControlJobsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -5672,6 +4059,7 @@ export type UserUpdateWithoutRequestedDataControlJobsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5705,9 +4093,6 @@ export type UserUpdateWithoutRequestedDataControlJobsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
@@ -5718,8 +4103,6 @@ export type UserUpdateWithoutRequestedDataControlJobsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -5737,6 +4120,7 @@ export type UserUncheckedUpdateWithoutRequestedDataControlJobsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5770,9 +4154,6 @@ export type UserUncheckedUpdateWithoutRequestedDataControlJobsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
@@ -5783,8 +4164,6 @@ export type UserUncheckedUpdateWithoutRequestedDataControlJobsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -5802,6 +4181,7 @@ export type UserCreateWithoutJobSiteParticipantsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -5835,9 +4215,6 @@ export type UserCreateWithoutJobSiteParticipantsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -5848,8 +4225,6 @@ export type UserCreateWithoutJobSiteParticipantsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -5867,6 +4242,7 @@ export type UserUncheckedCreateWithoutJobSiteParticipantsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -5900,9 +4276,6 @@ export type UserUncheckedCreateWithoutJobSiteParticipantsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -5913,8 +4286,6 @@ export type UserUncheckedCreateWithoutJobSiteParticipantsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -5948,6 +4319,7 @@ export type UserUpdateWithoutJobSiteParticipantsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5981,9 +4353,6 @@ export type UserUpdateWithoutJobSiteParticipantsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -5994,8 +4363,6 @@ export type UserUpdateWithoutJobSiteParticipantsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -6013,6 +4380,7 @@ export type UserUncheckedUpdateWithoutJobSiteParticipantsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6046,9 +4414,6 @@ export type UserUncheckedUpdateWithoutJobSiteParticipantsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -6059,8 +4424,6 @@ export type UserUncheckedUpdateWithoutJobSiteParticipantsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -6078,6 +4441,7 @@ export type UserCreateWithoutClientPropertiesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -6111,9 +4475,6 @@ export type UserCreateWithoutClientPropertiesInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -6124,8 +4485,6 @@ export type UserCreateWithoutClientPropertiesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -6143,6 +4502,7 @@ export type UserUncheckedCreateWithoutClientPropertiesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -6176,9 +4536,6 @@ export type UserUncheckedCreateWithoutClientPropertiesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -6189,8 +4546,6 @@ export type UserUncheckedCreateWithoutClientPropertiesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -6224,6 +4579,7 @@ export type UserUpdateWithoutClientPropertiesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6257,9 +4613,6 @@ export type UserUpdateWithoutClientPropertiesInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -6270,8 +4623,6 @@ export type UserUpdateWithoutClientPropertiesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -6289,6 +4640,7 @@ export type UserUncheckedUpdateWithoutClientPropertiesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6322,9 +4674,6 @@ export type UserUncheckedUpdateWithoutClientPropertiesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -6335,8 +4684,6 @@ export type UserUncheckedUpdateWithoutClientPropertiesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -6354,6 +4701,7 @@ export type UserCreateWithoutNotificationPreferencesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -6387,9 +4735,6 @@ export type UserCreateWithoutNotificationPreferencesInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -6400,8 +4745,6 @@ export type UserCreateWithoutNotificationPreferencesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -6419,6 +4762,7 @@ export type UserUncheckedCreateWithoutNotificationPreferencesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -6452,9 +4796,6 @@ export type UserUncheckedCreateWithoutNotificationPreferencesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -6465,8 +4806,6 @@ export type UserUncheckedCreateWithoutNotificationPreferencesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -6500,6 +4839,7 @@ export type UserUpdateWithoutNotificationPreferencesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6533,9 +4873,6 @@ export type UserUpdateWithoutNotificationPreferencesInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -6546,8 +4883,6 @@ export type UserUpdateWithoutNotificationPreferencesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -6565,6 +4900,7 @@ export type UserUncheckedUpdateWithoutNotificationPreferencesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6598,9 +4934,6 @@ export type UserUncheckedUpdateWithoutNotificationPreferencesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -6611,8 +4944,6 @@ export type UserUncheckedUpdateWithoutNotificationPreferencesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -6630,6 +4961,7 @@ export type UserCreateWithoutNotificationDeliveriesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -6663,9 +4995,6 @@ export type UserCreateWithoutNotificationDeliveriesInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -6676,8 +5005,6 @@ export type UserCreateWithoutNotificationDeliveriesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -6695,6 +5022,7 @@ export type UserUncheckedCreateWithoutNotificationDeliveriesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -6728,9 +5056,6 @@ export type UserUncheckedCreateWithoutNotificationDeliveriesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -6741,8 +5066,6 @@ export type UserUncheckedCreateWithoutNotificationDeliveriesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -6776,6 +5099,7 @@ export type UserUpdateWithoutNotificationDeliveriesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6809,9 +5133,6 @@ export type UserUpdateWithoutNotificationDeliveriesInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -6822,8 +5143,6 @@ export type UserUpdateWithoutNotificationDeliveriesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -6841,6 +5160,7 @@ export type UserUncheckedUpdateWithoutNotificationDeliveriesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6874,9 +5194,6 @@ export type UserUncheckedUpdateWithoutNotificationDeliveriesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -6887,8 +5204,6 @@ export type UserUncheckedUpdateWithoutNotificationDeliveriesInput = {
   notificationPreferences?: Prisma.NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -6906,6 +5221,7 @@ export type UserCreateWithoutOrganizationMembershipsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -6938,9 +5254,6 @@ export type UserCreateWithoutOrganizationMembershipsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -6952,8 +5265,6 @@ export type UserCreateWithoutOrganizationMembershipsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -6971,6 +5282,7 @@ export type UserUncheckedCreateWithoutOrganizationMembershipsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -7003,9 +5315,6 @@ export type UserUncheckedCreateWithoutOrganizationMembershipsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -7017,8 +5326,6 @@ export type UserUncheckedCreateWithoutOrganizationMembershipsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -7041,6 +5348,7 @@ export type UserCreateWithoutUpdatedMembershipAccessesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -7073,9 +5381,6 @@ export type UserCreateWithoutUpdatedMembershipAccessesInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -7087,8 +5392,6 @@ export type UserCreateWithoutUpdatedMembershipAccessesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -7106,6 +5409,7 @@ export type UserUncheckedCreateWithoutUpdatedMembershipAccessesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -7138,9 +5442,6 @@ export type UserUncheckedCreateWithoutUpdatedMembershipAccessesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -7152,8 +5453,6 @@ export type UserUncheckedCreateWithoutUpdatedMembershipAccessesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -7187,6 +5486,7 @@ export type UserUpdateWithoutOrganizationMembershipsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7219,9 +5519,6 @@ export type UserUpdateWithoutOrganizationMembershipsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -7233,8 +5530,6 @@ export type UserUpdateWithoutOrganizationMembershipsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -7252,6 +5547,7 @@ export type UserUncheckedUpdateWithoutOrganizationMembershipsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7284,9 +5580,6 @@ export type UserUncheckedUpdateWithoutOrganizationMembershipsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -7298,8 +5591,6 @@ export type UserUncheckedUpdateWithoutOrganizationMembershipsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -7328,6 +5619,7 @@ export type UserUpdateWithoutUpdatedMembershipAccessesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7360,9 +5652,6 @@ export type UserUpdateWithoutUpdatedMembershipAccessesInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -7374,8 +5663,6 @@ export type UserUpdateWithoutUpdatedMembershipAccessesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -7393,6 +5680,7 @@ export type UserUncheckedUpdateWithoutUpdatedMembershipAccessesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7425,9 +5713,6 @@ export type UserUncheckedUpdateWithoutUpdatedMembershipAccessesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -7439,8 +5724,6 @@ export type UserUncheckedUpdateWithoutUpdatedMembershipAccessesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -7458,6 +5741,7 @@ export type UserCreateWithoutSentOrganizationInvitationsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -7490,9 +5774,6 @@ export type UserCreateWithoutSentOrganizationInvitationsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -7504,8 +5785,6 @@ export type UserCreateWithoutSentOrganizationInvitationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -7523,6 +5802,7 @@ export type UserUncheckedCreateWithoutSentOrganizationInvitationsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -7555,9 +5835,6 @@ export type UserUncheckedCreateWithoutSentOrganizationInvitationsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -7569,8 +5846,6 @@ export type UserUncheckedCreateWithoutSentOrganizationInvitationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -7593,6 +5868,7 @@ export type UserCreateWithoutUpdatedInvitationAccessesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -7625,9 +5901,6 @@ export type UserCreateWithoutUpdatedInvitationAccessesInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -7639,8 +5912,6 @@ export type UserCreateWithoutUpdatedInvitationAccessesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -7658,6 +5929,7 @@ export type UserUncheckedCreateWithoutUpdatedInvitationAccessesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -7690,9 +5962,6 @@ export type UserUncheckedCreateWithoutUpdatedInvitationAccessesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -7704,8 +5973,6 @@ export type UserUncheckedCreateWithoutUpdatedInvitationAccessesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -7739,6 +6006,7 @@ export type UserUpdateWithoutSentOrganizationInvitationsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7771,9 +6039,6 @@ export type UserUpdateWithoutSentOrganizationInvitationsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -7785,8 +6050,6 @@ export type UserUpdateWithoutSentOrganizationInvitationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -7804,6 +6067,7 @@ export type UserUncheckedUpdateWithoutSentOrganizationInvitationsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7836,9 +6100,6 @@ export type UserUncheckedUpdateWithoutSentOrganizationInvitationsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -7850,8 +6111,6 @@ export type UserUncheckedUpdateWithoutSentOrganizationInvitationsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -7880,6 +6139,7 @@ export type UserUpdateWithoutUpdatedInvitationAccessesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7912,9 +6172,6 @@ export type UserUpdateWithoutUpdatedInvitationAccessesInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -7926,8 +6183,6 @@ export type UserUpdateWithoutUpdatedInvitationAccessesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -7945,6 +6200,7 @@ export type UserUncheckedUpdateWithoutUpdatedInvitationAccessesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7977,9 +6233,6 @@ export type UserUncheckedUpdateWithoutUpdatedInvitationAccessesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -7991,8 +6244,6 @@ export type UserUncheckedUpdateWithoutUpdatedInvitationAccessesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -8010,6 +6261,7 @@ export type UserCreateWithoutGrantedMembershipResourcesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -8042,9 +6294,6 @@ export type UserCreateWithoutGrantedMembershipResourcesInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -8056,8 +6305,6 @@ export type UserCreateWithoutGrantedMembershipResourcesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -8075,6 +6322,7 @@ export type UserUncheckedCreateWithoutGrantedMembershipResourcesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -8107,9 +6355,6 @@ export type UserUncheckedCreateWithoutGrantedMembershipResourcesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -8121,8 +6366,6 @@ export type UserUncheckedCreateWithoutGrantedMembershipResourcesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -8156,6 +6399,7 @@ export type UserUpdateWithoutGrantedMembershipResourcesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8188,9 +6432,6 @@ export type UserUpdateWithoutGrantedMembershipResourcesInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -8202,8 +6443,6 @@ export type UserUpdateWithoutGrantedMembershipResourcesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -8221,6 +6460,7 @@ export type UserUncheckedUpdateWithoutGrantedMembershipResourcesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8253,9 +6493,6 @@ export type UserUncheckedUpdateWithoutGrantedMembershipResourcesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -8267,8 +6504,6 @@ export type UserUncheckedUpdateWithoutGrantedMembershipResourcesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -8286,6 +6521,7 @@ export type UserCreateWithoutSupportSessionsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -8318,9 +6554,6 @@ export type UserCreateWithoutSupportSessionsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -8332,8 +6565,6 @@ export type UserCreateWithoutSupportSessionsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -8351,6 +6582,7 @@ export type UserUncheckedCreateWithoutSupportSessionsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -8383,9 +6615,6 @@ export type UserUncheckedCreateWithoutSupportSessionsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -8397,8 +6626,6 @@ export type UserUncheckedCreateWithoutSupportSessionsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -8432,6 +6659,7 @@ export type UserUpdateWithoutSupportSessionsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8464,9 +6692,6 @@ export type UserUpdateWithoutSupportSessionsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -8478,8 +6703,6 @@ export type UserUpdateWithoutSupportSessionsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -8497,6 +6720,7 @@ export type UserUncheckedUpdateWithoutSupportSessionsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8529,9 +6753,6 @@ export type UserUncheckedUpdateWithoutSupportSessionsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -8543,8 +6764,6 @@ export type UserUncheckedUpdateWithoutSupportSessionsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -8562,6 +6781,7 @@ export type UserCreateWithoutSupportAuditEventsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -8594,9 +6814,6 @@ export type UserCreateWithoutSupportAuditEventsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -8608,8 +6825,6 @@ export type UserCreateWithoutSupportAuditEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -8627,6 +6842,7 @@ export type UserUncheckedCreateWithoutSupportAuditEventsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -8659,9 +6875,6 @@ export type UserUncheckedCreateWithoutSupportAuditEventsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -8673,8 +6886,6 @@ export type UserUncheckedCreateWithoutSupportAuditEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -8708,6 +6919,7 @@ export type UserUpdateWithoutSupportAuditEventsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8740,9 +6952,6 @@ export type UserUpdateWithoutSupportAuditEventsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -8754,8 +6963,6 @@ export type UserUpdateWithoutSupportAuditEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -8773,6 +6980,7 @@ export type UserUncheckedUpdateWithoutSupportAuditEventsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8805,9 +7013,6 @@ export type UserUncheckedUpdateWithoutSupportAuditEventsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -8819,8 +7024,6 @@ export type UserUncheckedUpdateWithoutSupportAuditEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -8838,6 +7041,7 @@ export type UserCreateWithoutProductAuditEventsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -8870,9 +7074,6 @@ export type UserCreateWithoutProductAuditEventsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -8884,8 +7085,6 @@ export type UserCreateWithoutProductAuditEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -8903,6 +7102,7 @@ export type UserUncheckedCreateWithoutProductAuditEventsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -8935,9 +7135,6 @@ export type UserUncheckedCreateWithoutProductAuditEventsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedCreateNestedManyWithoutAccessUpdatedByInput
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -8949,8 +7146,6 @@ export type UserUncheckedCreateWithoutProductAuditEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -8984,6 +7179,7 @@ export type UserUpdateWithoutProductAuditEventsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9016,9 +7212,6 @@ export type UserUpdateWithoutProductAuditEventsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -9030,8 +7223,6 @@ export type UserUpdateWithoutProductAuditEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -9049,6 +7240,7 @@ export type UserUncheckedUpdateWithoutProductAuditEventsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9081,9 +7273,6 @@ export type UserUncheckedUpdateWithoutProductAuditEventsInput = {
   updatedInvitationAccesses?: Prisma.OrganizationInvitationUncheckedUpdateManyWithoutAccessUpdatedByNestedInput
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -9095,8 +7284,6 @@ export type UserUncheckedUpdateWithoutProductAuditEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -9114,6 +7301,7 @@ export type UserCreateWithoutCredentialInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -9146,9 +7334,6 @@ export type UserCreateWithoutCredentialInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -9160,8 +7345,6 @@ export type UserCreateWithoutCredentialInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -9179,6 +7362,7 @@ export type UserUncheckedCreateWithoutCredentialInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -9211,9 +7395,6 @@ export type UserUncheckedCreateWithoutCredentialInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -9225,8 +7406,6 @@ export type UserUncheckedCreateWithoutCredentialInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -9260,6 +7439,7 @@ export type UserUpdateWithoutCredentialInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9292,9 +7472,6 @@ export type UserUpdateWithoutCredentialInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -9306,8 +7483,6 @@ export type UserUpdateWithoutCredentialInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -9325,6 +7500,7 @@ export type UserUncheckedUpdateWithoutCredentialInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9357,9 +7533,6 @@ export type UserUncheckedUpdateWithoutCredentialInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -9371,8 +7544,6 @@ export type UserUncheckedUpdateWithoutCredentialInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -9390,6 +7561,7 @@ export type UserCreateWithoutAuthCodesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -9422,9 +7594,6 @@ export type UserCreateWithoutAuthCodesInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -9436,8 +7605,6 @@ export type UserCreateWithoutAuthCodesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -9455,6 +7622,7 @@ export type UserUncheckedCreateWithoutAuthCodesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -9487,9 +7655,6 @@ export type UserUncheckedCreateWithoutAuthCodesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -9501,8 +7666,6 @@ export type UserUncheckedCreateWithoutAuthCodesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -9536,6 +7699,7 @@ export type UserUpdateWithoutAuthCodesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9568,9 +7732,6 @@ export type UserUpdateWithoutAuthCodesInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -9582,8 +7743,6 @@ export type UserUpdateWithoutAuthCodesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -9601,6 +7760,7 @@ export type UserUncheckedUpdateWithoutAuthCodesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9633,9 +7793,6 @@ export type UserUncheckedUpdateWithoutAuthCodesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -9647,8 +7804,6 @@ export type UserUncheckedUpdateWithoutAuthCodesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -9666,6 +7821,7 @@ export type UserCreateWithoutMfaRecoveryRequestsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -9698,9 +7854,6 @@ export type UserCreateWithoutMfaRecoveryRequestsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -9712,8 +7865,6 @@ export type UserCreateWithoutMfaRecoveryRequestsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -9731,6 +7882,7 @@ export type UserUncheckedCreateWithoutMfaRecoveryRequestsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -9763,9 +7915,6 @@ export type UserUncheckedCreateWithoutMfaRecoveryRequestsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -9777,8 +7926,6 @@ export type UserUncheckedCreateWithoutMfaRecoveryRequestsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -9801,6 +7948,7 @@ export type UserCreateWithoutApprovedMfaRecoveriesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -9833,9 +7981,6 @@ export type UserCreateWithoutApprovedMfaRecoveriesInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -9847,8 +7992,6 @@ export type UserCreateWithoutApprovedMfaRecoveriesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -9866,6 +8009,7 @@ export type UserUncheckedCreateWithoutApprovedMfaRecoveriesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -9898,9 +8042,6 @@ export type UserUncheckedCreateWithoutApprovedMfaRecoveriesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -9912,8 +8053,6 @@ export type UserUncheckedCreateWithoutApprovedMfaRecoveriesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -9936,6 +8075,7 @@ export type UserCreateWithoutDeniedMfaRecoveriesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -9968,9 +8108,6 @@ export type UserCreateWithoutDeniedMfaRecoveriesInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -9982,8 +8119,6 @@ export type UserCreateWithoutDeniedMfaRecoveriesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -10001,6 +8136,7 @@ export type UserUncheckedCreateWithoutDeniedMfaRecoveriesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -10033,9 +8169,6 @@ export type UserUncheckedCreateWithoutDeniedMfaRecoveriesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -10047,8 +8180,6 @@ export type UserUncheckedCreateWithoutDeniedMfaRecoveriesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -10082,6 +8213,7 @@ export type UserUpdateWithoutMfaRecoveryRequestsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10114,9 +8246,6 @@ export type UserUpdateWithoutMfaRecoveryRequestsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -10128,8 +8257,6 @@ export type UserUpdateWithoutMfaRecoveryRequestsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -10147,6 +8274,7 @@ export type UserUncheckedUpdateWithoutMfaRecoveryRequestsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10179,9 +8307,6 @@ export type UserUncheckedUpdateWithoutMfaRecoveryRequestsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -10193,8 +8318,6 @@ export type UserUncheckedUpdateWithoutMfaRecoveryRequestsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -10223,6 +8346,7 @@ export type UserUpdateWithoutApprovedMfaRecoveriesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10255,9 +8379,6 @@ export type UserUpdateWithoutApprovedMfaRecoveriesInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -10269,8 +8390,6 @@ export type UserUpdateWithoutApprovedMfaRecoveriesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -10288,6 +8407,7 @@ export type UserUncheckedUpdateWithoutApprovedMfaRecoveriesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10320,9 +8440,6 @@ export type UserUncheckedUpdateWithoutApprovedMfaRecoveriesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -10334,8 +8451,6 @@ export type UserUncheckedUpdateWithoutApprovedMfaRecoveriesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -10364,6 +8479,7 @@ export type UserUpdateWithoutDeniedMfaRecoveriesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10396,9 +8512,6 @@ export type UserUpdateWithoutDeniedMfaRecoveriesInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -10410,8 +8523,6 @@ export type UserUpdateWithoutDeniedMfaRecoveriesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -10429,6 +8540,7 @@ export type UserUncheckedUpdateWithoutDeniedMfaRecoveriesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10461,9 +8573,6 @@ export type UserUncheckedUpdateWithoutDeniedMfaRecoveriesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -10475,8 +8584,6 @@ export type UserUncheckedUpdateWithoutDeniedMfaRecoveriesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -10494,6 +8601,7 @@ export type UserCreateWithoutAuthRateLimitsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -10526,9 +8634,6 @@ export type UserCreateWithoutAuthRateLimitsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -10540,8 +8645,6 @@ export type UserCreateWithoutAuthRateLimitsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -10559,6 +8662,7 @@ export type UserUncheckedCreateWithoutAuthRateLimitsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -10591,9 +8695,6 @@ export type UserUncheckedCreateWithoutAuthRateLimitsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -10605,8 +8706,6 @@ export type UserUncheckedCreateWithoutAuthRateLimitsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -10640,6 +8739,7 @@ export type UserUpdateWithoutAuthRateLimitsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10672,9 +8772,6 @@ export type UserUpdateWithoutAuthRateLimitsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -10686,8 +8783,6 @@ export type UserUpdateWithoutAuthRateLimitsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -10705,6 +8800,7 @@ export type UserUncheckedUpdateWithoutAuthRateLimitsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10737,9 +8833,6 @@ export type UserUncheckedUpdateWithoutAuthRateLimitsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -10751,8 +8844,6 @@ export type UserUncheckedUpdateWithoutAuthRateLimitsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -10770,6 +8861,7 @@ export type UserCreateWithoutSecurityEventsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -10802,9 +8894,6 @@ export type UserCreateWithoutSecurityEventsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -10816,8 +8905,6 @@ export type UserCreateWithoutSecurityEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -10835,6 +8922,7 @@ export type UserUncheckedCreateWithoutSecurityEventsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -10867,9 +8955,6 @@ export type UserUncheckedCreateWithoutSecurityEventsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -10881,8 +8966,6 @@ export type UserUncheckedCreateWithoutSecurityEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -10916,6 +8999,7 @@ export type UserUpdateWithoutSecurityEventsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10948,9 +9032,6 @@ export type UserUpdateWithoutSecurityEventsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -10962,8 +9043,6 @@ export type UserUpdateWithoutSecurityEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -10981,6 +9060,7 @@ export type UserUncheckedUpdateWithoutSecurityEventsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -11013,9 +9093,6 @@ export type UserUncheckedUpdateWithoutSecurityEventsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -11027,8 +9104,6 @@ export type UserUncheckedUpdateWithoutSecurityEventsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -11046,6 +9121,7 @@ export type UserCreateWithoutResolvedRuntimeErrorsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -11079,9 +9155,6 @@ export type UserCreateWithoutResolvedRuntimeErrorsInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkCreateNestedManyWithoutUserInput
@@ -11092,8 +9165,6 @@ export type UserCreateWithoutResolvedRuntimeErrorsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -11111,6 +9182,7 @@ export type UserUncheckedCreateWithoutResolvedRuntimeErrorsInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -11144,9 +9216,6 @@ export type UserUncheckedCreateWithoutResolvedRuntimeErrorsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedCreateNestedManyWithoutUserInput
@@ -11157,8 +9226,6 @@ export type UserUncheckedCreateWithoutResolvedRuntimeErrorsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -11192,6 +9259,7 @@ export type UserUpdateWithoutResolvedRuntimeErrorsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -11225,9 +9293,6 @@ export type UserUpdateWithoutResolvedRuntimeErrorsInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUpdateManyWithoutUserNestedInput
@@ -11238,8 +9303,6 @@ export type UserUpdateWithoutResolvedRuntimeErrorsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -11257,6 +9320,7 @@ export type UserUncheckedUpdateWithoutResolvedRuntimeErrorsInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -11290,9 +9354,6 @@ export type UserUncheckedUpdateWithoutResolvedRuntimeErrorsInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   workerUserLinks?: Prisma.WorkerUserLinkUncheckedUpdateManyWithoutUserNestedInput
@@ -11303,8 +9364,6 @@ export type UserUncheckedUpdateWithoutResolvedRuntimeErrorsInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -11322,6 +9381,7 @@ export type UserCreateWithoutAuthDevicesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -11354,9 +9414,6 @@ export type UserCreateWithoutAuthDevicesInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -11368,8 +9425,6 @@ export type UserCreateWithoutAuthDevicesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -11387,6 +9442,7 @@ export type UserUncheckedCreateWithoutAuthDevicesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -11419,9 +9475,6 @@ export type UserUncheckedCreateWithoutAuthDevicesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -11433,8 +9486,6 @@ export type UserUncheckedCreateWithoutAuthDevicesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -11468,6 +9519,7 @@ export type UserUpdateWithoutAuthDevicesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -11500,9 +9552,6 @@ export type UserUpdateWithoutAuthDevicesInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -11514,8 +9563,6 @@ export type UserUpdateWithoutAuthDevicesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -11533,6 +9580,7 @@ export type UserUncheckedUpdateWithoutAuthDevicesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -11565,9 +9613,6 @@ export type UserUncheckedUpdateWithoutAuthDevicesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -11579,8 +9624,6 @@ export type UserUncheckedUpdateWithoutAuthDevicesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -11598,6 +9641,7 @@ export type UserCreateWithoutMfaBackupCodesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -11630,9 +9674,6 @@ export type UserCreateWithoutMfaBackupCodesInput = {
   supportSessions?: Prisma.SupportSessionCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventCreateNestedManyWithoutResolvedByInput
@@ -11644,8 +9685,6 @@ export type UserCreateWithoutMfaBackupCodesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactCreateNestedManyWithoutUserInput
 }
 
@@ -11663,6 +9702,7 @@ export type UserUncheckedCreateWithoutMfaBackupCodesInput = {
   avatarBlobPathname?: string | null
   phoneNumber?: string | null
   platformRole?: $Enums.PlatformRole
+  accountRole?: $Enums.AccountRole | null
   authVersion?: number
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
@@ -11695,9 +9735,6 @@ export type UserUncheckedCreateWithoutMfaBackupCodesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedCreateNestedManyWithoutActorInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedCreateNestedManyWithoutActorInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedCreateNestedManyWithoutActorInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedCreateNestedManyWithoutUploadedByInput
-  createdEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutCreatedByInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedCreateNestedManyWithoutCreatedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedCreateNestedManyWithoutRequestedByInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedCreateNestedManyWithoutResolvedByInput
@@ -11709,8 +9746,6 @@ export type UserUncheckedCreateWithoutMfaBackupCodesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedCreateNestedManyWithoutUserInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedCreateNestedManyWithoutEndedByInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutLinkedByInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedCreateNestedManyWithoutUnlinkedByInput
   organizationContacts?: Prisma.OrganizationContactUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -11744,6 +9779,7 @@ export type UserUpdateWithoutMfaBackupCodesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -11776,9 +9812,6 @@ export type UserUpdateWithoutMfaBackupCodesInput = {
   supportSessions?: Prisma.SupportSessionUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUpdateManyWithoutResolvedByNestedInput
@@ -11790,8 +9823,6 @@ export type UserUpdateWithoutMfaBackupCodesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUpdateManyWithoutUserNestedInput
 }
 
@@ -11809,6 +9840,7 @@ export type UserUncheckedUpdateWithoutMfaBackupCodesInput = {
   avatarBlobPathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  accountRole?: Prisma.NullableEnumAccountRoleFieldUpdateOperationsInput | $Enums.AccountRole | null
   authVersion?: Prisma.IntFieldUpdateOperationsInput | number
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -11841,9 +9873,6 @@ export type UserUncheckedUpdateWithoutMfaBackupCodesInput = {
   supportSessions?: Prisma.SupportSessionUncheckedUpdateManyWithoutActorNestedInput
   supportAuditEvents?: Prisma.SupportAuditEventUncheckedUpdateManyWithoutActorNestedInput
   productAuditEvents?: Prisma.ProductAuditEventUncheckedUpdateManyWithoutActorNestedInput
-  uploadedDocumentVersions?: Prisma.DocumentVersionUncheckedUpdateManyWithoutUploadedByNestedInput
-  createdEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutCreatedByNestedInput
-  evidenceRevisions?: Prisma.EvidenceRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   requestedDataControlJobs?: Prisma.DataControlJobUncheckedUpdateManyWithoutRequestedByNestedInput
   resolvedRuntimeErrors?: Prisma.RuntimeErrorEventUncheckedUpdateManyWithoutResolvedByNestedInput
@@ -11855,8 +9884,6 @@ export type UserUncheckedUpdateWithoutMfaBackupCodesInput = {
   notificationDeliveries?: Prisma.NotificationDeliveryUncheckedUpdateManyWithoutUserNestedInput
   assignedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   endedJobSiteWorkers?: Prisma.JobSiteWorkerAssignmentUncheckedUpdateManyWithoutEndedByNestedInput
-  linkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutLinkedByNestedInput
-  unlinkedDocumentJobSites?: Prisma.DocumentJobSiteLinkUncheckedUpdateManyWithoutUnlinkedByNestedInput
   organizationContacts?: Prisma.OrganizationContactUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -11885,9 +9912,6 @@ export type UserCountOutputType = {
   supportSessions: number
   supportAuditEvents: number
   productAuditEvents: number
-  uploadedDocumentVersions: number
-  createdEvidence: number
-  evidenceRevisions: number
   notifications: number
   requestedDataControlJobs: number
   resolvedRuntimeErrors: number
@@ -11899,8 +9923,6 @@ export type UserCountOutputType = {
   notificationDeliveries: number
   assignedJobSiteWorkers: number
   endedJobSiteWorkers: number
-  linkedDocumentJobSites: number
-  unlinkedDocumentJobSites: number
   organizationContacts: number
 }
 
@@ -11924,9 +9946,6 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   supportSessions?: boolean | UserCountOutputTypeCountSupportSessionsArgs
   supportAuditEvents?: boolean | UserCountOutputTypeCountSupportAuditEventsArgs
   productAuditEvents?: boolean | UserCountOutputTypeCountProductAuditEventsArgs
-  uploadedDocumentVersions?: boolean | UserCountOutputTypeCountUploadedDocumentVersionsArgs
-  createdEvidence?: boolean | UserCountOutputTypeCountCreatedEvidenceArgs
-  evidenceRevisions?: boolean | UserCountOutputTypeCountEvidenceRevisionsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   requestedDataControlJobs?: boolean | UserCountOutputTypeCountRequestedDataControlJobsArgs
   resolvedRuntimeErrors?: boolean | UserCountOutputTypeCountResolvedRuntimeErrorsArgs
@@ -11938,8 +9957,6 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   notificationDeliveries?: boolean | UserCountOutputTypeCountNotificationDeliveriesArgs
   assignedJobSiteWorkers?: boolean | UserCountOutputTypeCountAssignedJobSiteWorkersArgs
   endedJobSiteWorkers?: boolean | UserCountOutputTypeCountEndedJobSiteWorkersArgs
-  linkedDocumentJobSites?: boolean | UserCountOutputTypeCountLinkedDocumentJobSitesArgs
-  unlinkedDocumentJobSites?: boolean | UserCountOutputTypeCountUnlinkedDocumentJobSitesArgs
   organizationContacts?: boolean | UserCountOutputTypeCountOrganizationContactsArgs
 }
 
@@ -12089,27 +10106,6 @@ export type UserCountOutputTypeCountProductAuditEventsArgs<ExtArgs extends runti
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountUploadedDocumentVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DocumentVersionWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountCreatedEvidenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.EvidenceWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountEvidenceRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.EvidenceRevisionWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
 export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.NotificationWhereInput
 }
@@ -12187,20 +10183,6 @@ export type UserCountOutputTypeCountEndedJobSiteWorkersArgs<ExtArgs extends runt
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountLinkedDocumentJobSitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DocumentJobSiteLinkWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountUnlinkedDocumentJobSitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DocumentJobSiteLinkWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
 export type UserCountOutputTypeCountOrganizationContactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OrganizationContactWhereInput
 }
@@ -12220,6 +10202,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   avatarBlobPathname?: boolean
   phoneNumber?: boolean
   platformRole?: boolean
+  accountRole?: boolean
   authVersion?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
@@ -12253,9 +10236,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   supportSessions?: boolean | Prisma.User$supportSessionsArgs<ExtArgs>
   supportAuditEvents?: boolean | Prisma.User$supportAuditEventsArgs<ExtArgs>
   productAuditEvents?: boolean | Prisma.User$productAuditEventsArgs<ExtArgs>
-  uploadedDocumentVersions?: boolean | Prisma.User$uploadedDocumentVersionsArgs<ExtArgs>
-  createdEvidence?: boolean | Prisma.User$createdEvidenceArgs<ExtArgs>
-  evidenceRevisions?: boolean | Prisma.User$evidenceRevisionsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   requestedDataControlJobs?: boolean | Prisma.User$requestedDataControlJobsArgs<ExtArgs>
   resolvedRuntimeErrors?: boolean | Prisma.User$resolvedRuntimeErrorsArgs<ExtArgs>
@@ -12267,8 +10247,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   notificationDeliveries?: boolean | Prisma.User$notificationDeliveriesArgs<ExtArgs>
   assignedJobSiteWorkers?: boolean | Prisma.User$assignedJobSiteWorkersArgs<ExtArgs>
   endedJobSiteWorkers?: boolean | Prisma.User$endedJobSiteWorkersArgs<ExtArgs>
-  linkedDocumentJobSites?: boolean | Prisma.User$linkedDocumentJobSitesArgs<ExtArgs>
-  unlinkedDocumentJobSites?: boolean | Prisma.User$unlinkedDocumentJobSitesArgs<ExtArgs>
   organizationContacts?: boolean | Prisma.User$organizationContactsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -12287,6 +10265,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   avatarBlobPathname?: boolean
   phoneNumber?: boolean
   platformRole?: boolean
+  accountRole?: boolean
   authVersion?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
@@ -12316,6 +10295,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   avatarBlobPathname?: boolean
   phoneNumber?: boolean
   platformRole?: boolean
+  accountRole?: boolean
   authVersion?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
@@ -12345,6 +10325,7 @@ export type UserSelectScalar = {
   avatarBlobPathname?: boolean
   phoneNumber?: boolean
   platformRole?: boolean
+  accountRole?: boolean
   authVersion?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
@@ -12360,7 +10341,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "firstName" | "lastName" | "username" | "usernameOnboarded" | "profileOnboarded" | "avatarBlobPathname" | "phoneNumber" | "platformRole" | "authVersion" | "suspendedAt" | "suspensionReason" | "mfaEnabled" | "totpSecretEncrypted" | "totpSecretNonce" | "totpPendingSecretEncrypted" | "totpPendingSecretNonce" | "totpPendingCreatedAt" | "totpVerifiedAt" | "usernameChangedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "firstName" | "lastName" | "username" | "usernameOnboarded" | "profileOnboarded" | "avatarBlobPathname" | "phoneNumber" | "platformRole" | "accountRole" | "authVersion" | "suspendedAt" | "suspensionReason" | "mfaEnabled" | "totpSecretEncrypted" | "totpSecretNonce" | "totpPendingSecretEncrypted" | "totpPendingSecretNonce" | "totpPendingCreatedAt" | "totpVerifiedAt" | "usernameChangedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -12382,9 +10363,6 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   supportSessions?: boolean | Prisma.User$supportSessionsArgs<ExtArgs>
   supportAuditEvents?: boolean | Prisma.User$supportAuditEventsArgs<ExtArgs>
   productAuditEvents?: boolean | Prisma.User$productAuditEventsArgs<ExtArgs>
-  uploadedDocumentVersions?: boolean | Prisma.User$uploadedDocumentVersionsArgs<ExtArgs>
-  createdEvidence?: boolean | Prisma.User$createdEvidenceArgs<ExtArgs>
-  evidenceRevisions?: boolean | Prisma.User$evidenceRevisionsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   requestedDataControlJobs?: boolean | Prisma.User$requestedDataControlJobsArgs<ExtArgs>
   resolvedRuntimeErrors?: boolean | Prisma.User$resolvedRuntimeErrorsArgs<ExtArgs>
@@ -12396,8 +10374,6 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   notificationDeliveries?: boolean | Prisma.User$notificationDeliveriesArgs<ExtArgs>
   assignedJobSiteWorkers?: boolean | Prisma.User$assignedJobSiteWorkersArgs<ExtArgs>
   endedJobSiteWorkers?: boolean | Prisma.User$endedJobSiteWorkersArgs<ExtArgs>
-  linkedDocumentJobSites?: boolean | Prisma.User$linkedDocumentJobSitesArgs<ExtArgs>
-  unlinkedDocumentJobSites?: boolean | Prisma.User$unlinkedDocumentJobSitesArgs<ExtArgs>
   organizationContacts?: boolean | Prisma.User$organizationContactsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -12427,9 +10403,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     supportSessions: Prisma.$SupportSessionPayload<ExtArgs>[]
     supportAuditEvents: Prisma.$SupportAuditEventPayload<ExtArgs>[]
     productAuditEvents: Prisma.$ProductAuditEventPayload<ExtArgs>[]
-    uploadedDocumentVersions: Prisma.$DocumentVersionPayload<ExtArgs>[]
-    createdEvidence: Prisma.$EvidencePayload<ExtArgs>[]
-    evidenceRevisions: Prisma.$EvidenceRevisionPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     requestedDataControlJobs: Prisma.$DataControlJobPayload<ExtArgs>[]
     resolvedRuntimeErrors: Prisma.$RuntimeErrorEventPayload<ExtArgs>[]
@@ -12441,8 +10414,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     notificationDeliveries: Prisma.$NotificationDeliveryPayload<ExtArgs>[]
     assignedJobSiteWorkers: Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>[]
     endedJobSiteWorkers: Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>[]
-    linkedDocumentJobSites: Prisma.$DocumentJobSiteLinkPayload<ExtArgs>[]
-    unlinkedDocumentJobSites: Prisma.$DocumentJobSiteLinkPayload<ExtArgs>[]
     organizationContacts: Prisma.$OrganizationContactPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -12459,6 +10430,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     avatarBlobPathname: string | null
     phoneNumber: string | null
     platformRole: $Enums.PlatformRole
+    accountRole: $Enums.AccountRole | null
     authVersion: number
     suspendedAt: Date | null
     suspensionReason: string | null
@@ -12886,9 +10858,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   supportSessions<T extends Prisma.User$supportSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   supportAuditEvents<T extends Prisma.User$supportAuditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportAuditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   productAuditEvents<T extends Prisma.User$productAuditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$productAuditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  uploadedDocumentVersions<T extends Prisma.User$uploadedDocumentVersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$uploadedDocumentVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  createdEvidence<T extends Prisma.User$createdEvidenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdEvidenceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  evidenceRevisions<T extends Prisma.User$evidenceRevisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$evidenceRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidenceRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   requestedDataControlJobs<T extends Prisma.User$requestedDataControlJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$requestedDataControlJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DataControlJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   resolvedRuntimeErrors<T extends Prisma.User$resolvedRuntimeErrorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$resolvedRuntimeErrorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RuntimeErrorEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -12900,8 +10869,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   notificationDeliveries<T extends Prisma.User$notificationDeliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationDeliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignedJobSiteWorkers<T extends Prisma.User$assignedJobSiteWorkersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedJobSiteWorkersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   endedJobSiteWorkers<T extends Prisma.User$endedJobSiteWorkersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$endedJobSiteWorkersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteWorkerAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  linkedDocumentJobSites<T extends Prisma.User$linkedDocumentJobSitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$linkedDocumentJobSitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentJobSiteLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  unlinkedDocumentJobSites<T extends Prisma.User$unlinkedDocumentJobSitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$unlinkedDocumentJobSitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentJobSiteLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   organizationContacts<T extends Prisma.User$organizationContactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$organizationContactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -12945,6 +10912,7 @@ export interface UserFieldRefs {
   readonly avatarBlobPathname: Prisma.FieldRef<"User", 'String'>
   readonly phoneNumber: Prisma.FieldRef<"User", 'String'>
   readonly platformRole: Prisma.FieldRef<"User", 'PlatformRole'>
+  readonly accountRole: Prisma.FieldRef<"User", 'AccountRole'>
   readonly authVersion: Prisma.FieldRef<"User", 'Int'>
   readonly suspendedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly suspensionReason: Prisma.FieldRef<"User", 'String'>
@@ -13826,78 +11794,6 @@ export type User$productAuditEventsArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
- * User.uploadedDocumentVersions
- */
-export type User$uploadedDocumentVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the DocumentVersion
-   */
-  select?: Prisma.DocumentVersionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the DocumentVersion
-   */
-  omit?: Prisma.DocumentVersionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DocumentVersionInclude<ExtArgs> | null
-  where?: Prisma.DocumentVersionWhereInput
-  orderBy?: Prisma.DocumentVersionOrderByWithRelationInput | Prisma.DocumentVersionOrderByWithRelationInput[]
-  cursor?: Prisma.DocumentVersionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DocumentVersionScalarFieldEnum | Prisma.DocumentVersionScalarFieldEnum[]
-}
-
-/**
- * User.createdEvidence
- */
-export type User$createdEvidenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Evidence
-   */
-  select?: Prisma.EvidenceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Evidence
-   */
-  omit?: Prisma.EvidenceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.EvidenceInclude<ExtArgs> | null
-  where?: Prisma.EvidenceWhereInput
-  orderBy?: Prisma.EvidenceOrderByWithRelationInput | Prisma.EvidenceOrderByWithRelationInput[]
-  cursor?: Prisma.EvidenceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.EvidenceScalarFieldEnum | Prisma.EvidenceScalarFieldEnum[]
-}
-
-/**
- * User.evidenceRevisions
- */
-export type User$evidenceRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the EvidenceRevision
-   */
-  select?: Prisma.EvidenceRevisionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the EvidenceRevision
-   */
-  omit?: Prisma.EvidenceRevisionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.EvidenceRevisionInclude<ExtArgs> | null
-  where?: Prisma.EvidenceRevisionWhereInput
-  orderBy?: Prisma.EvidenceRevisionOrderByWithRelationInput | Prisma.EvidenceRevisionOrderByWithRelationInput[]
-  cursor?: Prisma.EvidenceRevisionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.EvidenceRevisionScalarFieldEnum | Prisma.EvidenceRevisionScalarFieldEnum[]
-}
-
-/**
  * User.notifications
  */
 export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -14159,54 +12055,6 @@ export type User$endedJobSiteWorkersArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.JobSiteWorkerAssignmentScalarFieldEnum | Prisma.JobSiteWorkerAssignmentScalarFieldEnum[]
-}
-
-/**
- * User.linkedDocumentJobSites
- */
-export type User$linkedDocumentJobSitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the DocumentJobSiteLink
-   */
-  select?: Prisma.DocumentJobSiteLinkSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the DocumentJobSiteLink
-   */
-  omit?: Prisma.DocumentJobSiteLinkOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DocumentJobSiteLinkInclude<ExtArgs> | null
-  where?: Prisma.DocumentJobSiteLinkWhereInput
-  orderBy?: Prisma.DocumentJobSiteLinkOrderByWithRelationInput | Prisma.DocumentJobSiteLinkOrderByWithRelationInput[]
-  cursor?: Prisma.DocumentJobSiteLinkWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DocumentJobSiteLinkScalarFieldEnum | Prisma.DocumentJobSiteLinkScalarFieldEnum[]
-}
-
-/**
- * User.unlinkedDocumentJobSites
- */
-export type User$unlinkedDocumentJobSitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the DocumentJobSiteLink
-   */
-  select?: Prisma.DocumentJobSiteLinkSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the DocumentJobSiteLink
-   */
-  omit?: Prisma.DocumentJobSiteLinkOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DocumentJobSiteLinkInclude<ExtArgs> | null
-  where?: Prisma.DocumentJobSiteLinkWhereInput
-  orderBy?: Prisma.DocumentJobSiteLinkOrderByWithRelationInput | Prisma.DocumentJobSiteLinkOrderByWithRelationInput[]
-  cursor?: Prisma.DocumentJobSiteLinkWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DocumentJobSiteLinkScalarFieldEnum | Prisma.DocumentJobSiteLinkScalarFieldEnum[]
 }
 
 /**

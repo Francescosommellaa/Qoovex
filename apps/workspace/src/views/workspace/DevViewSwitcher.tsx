@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const VIEW_OPTIONS: Array<{ label: string; value: DevWorkspaceView }> = [
-  { label: "Owner", value: "OWNER" },
+  { label: "Azienda", value: "BUSINESS" },
+  { label: "Professionista", value: "PROFESSIONAL" },
+  { label: "Cliente", value: "CLIENT" },
   { label: "Support Agent", value: "SUPPORT_AGENT" },
   { label: "Platform Admin", value: "PLATFORM_ADMIN" },
 ];
@@ -32,13 +34,13 @@ export function DevViewSwitcher({ view }: { view: DevWorkspaceView }) {
     }
 
     setPending(false);
-    router.push(nextView === "OWNER" ? "/contexts" : "/qoovex-admin");
+    router.push(nextView === "BUSINESS" || nextView === "PROFESSIONAL" ? "/" : nextView === "CLIENT" ? "/client" : "/qoovex-admin");
     router.refresh();
   }
 
   return (
     <Select items={VIEW_OPTIONS} onValueChange={(value) => void changeView(value as DevWorkspaceView)} value={selectedView}>
-      <SelectTrigger aria-label="Vista di sviluppo" className="h-8 w-[9.5rem] sm:w-[10.5rem]" disabled={pending}>
+      <SelectTrigger aria-label="Vista di sviluppo" className="h-8 w-[10.5rem] sm:w-[12rem]" disabled={pending}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent align="end">

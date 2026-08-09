@@ -66,10 +66,9 @@ try {
 
   const checks = [
     { path: "/sign-in", expected: 200 },
-    { path: "/contexts", expected: 307 },
     { path: "/client", expected: 307 },
     { path: "/workers", expected: 307 },
-    { path: "/api/contexts", expected: 401 },
+    { path: "/api/account/notification-preferences", expected: 401 },
     { path: "/api/client/job-sites", expected: 401 },
     { path: "/api/does-not-exist", expected: 404 },
     { path: "/api/data/jobs/run", expected: 404 },

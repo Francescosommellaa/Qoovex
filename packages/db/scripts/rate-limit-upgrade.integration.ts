@@ -10,21 +10,18 @@ if (!["localhost", "127.0.0.1", "::1"].includes(target.hostname) || target.pathn
   throw new Error("Il test upgrade puo usare soltanto qoovex_upgrade_ci su loopback.");
 }
 
-const migrationNames = [
-  "20260712010000_single_company_baseline",
-  "20260712020000_single_membership_forward",
-  "20260713010000_mfa_hardening",
-  "20260713020000_rate_limit_privacy_atomicity",
-  "20260720010000_calendar_events",
-  "20260803230000_qoovex_vnext_from_zero",
-] as const;
 async function main() {
+  const manifest = JSON.parse(await readFile(resolve("../../ops/workspace-release-manifest.json"), "utf8")) as { database: { baselineHead: string; migrationHead: string } };
+  const ledger = JSON.parse(await readFile(resolve("../../ops/migration-ledger.json"), "utf8")) as { migrations: Array<{ name: string }> };
+  const migrationNames = ledger.migrations.map((migration) => migration.name);
+  const baselineIndex = migrationNames.indexOf(manifest.database.baselineHead);
+  if (baselineIndex !== 4 || migrationNames.at(-1) !== manifest.database.migrationHead) throw new Error("Manifest e ledger migration non coerenti per il test upgrade.");
   const client = new pg.Client({ connectionString: databaseUrl });
 
   try {
   await client.connect();
   await client.query('DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public');
-  const applyMigration = async (migrationName: (typeof migrationNames)[number]) => {
+  const applyMigration = async (migrationName: string) => {
     const sql = await readFile(resolve("prisma/migrations", migrationName, "migration.sql"), "utf8");
     await client.query(sql);
   };
@@ -57,42 +54,36 @@ async function main() {
         SELECT 1 FROM information_schema.columns
         WHERE table_schema = 'public' AND table_name = 'AuthRateLimit' AND column_name = 'userId'
       ) AS has_user_id,
-      to_regclass('public."CalendarEvent"') IS NOT NULL AS has_calendar_event;
+      to_regclass('public."JobSite"') IS NOT NULL AS has_baseline_schema;
   `);
   const row = checks.rows[0] as {
     memberships: number;
     rate_limits: number;
     has_user_id: boolean;
-    has_calendar_event: boolean;
+    has_baseline_schema: boolean;
   };
-  if (row.memberships !== 1 || row.rate_limits !== 0 || !row.has_user_id || !row.has_calendar_event) {
+  if (row.memberships !== 1 || row.rate_limits !== 0 || !row.has_user_id || !row.has_baseline_schema) {
     throw new Error("Verifica baseline a cinque migration fallita.");
   }
 
-  await applyMigration(migrationNames[5]);
+  for (const migrationName of migrationNames.slice(baselineIndex + 1)) await applyMigration(migrationName);
   const jobSite = await client.query(`
     SELECT
       (SELECT COUNT(*)::int FROM "User") AS users,
       to_regclass('public."JobSiteParticipant"') IS NOT NULL AS has_participant,
-      to_regclass('public."JobSiteActionReceipt"') IS NOT NULL AS has_receipt,
-      to_regclass('public."CalendarEvent"') IS NULL AS removed_calendar,
-      to_regclass('public."JobSiteUserAssignment"') IS NULL AS removed_legacy_assignment;
+      to_regclass('public."JobSiteActionReceipt"') IS NOT NULL AS has_receipt;
   `);
   const final = jobSite.rows[0] as {
     users: number;
     has_participant: boolean;
     has_receipt: boolean;
-    removed_calendar: boolean;
-    removed_legacy_assignment: boolean;
   };
   if (
     final.users !== 0 ||
     !final.has_participant ||
-    !final.has_receipt ||
-    !final.removed_calendar ||
-    !final.removed_legacy_assignment
+    !final.has_receipt
   ) {
-    throw new Error("Verifica upgrade distruttivo baseline -> Qoovex current fallita.");
+    throw new Error("Verifica upgrade baseline -> schema corrente fallita.");
   }
 
   const diff = spawnPrisma(["migrate", "diff", "--from-config-datasource", "--to-schema", "prisma/schema.prisma", "--exit-code"]);

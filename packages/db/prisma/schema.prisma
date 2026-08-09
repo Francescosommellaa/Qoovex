@@ -35,6 +35,12 @@ enum PlatformRole {
   PLATFORM_ADMIN
 }
 
+enum AccountRole {
+  BUSINESS
+  PROFESSIONAL
+  CLIENT
+}
+
 enum OrganizationRole {
   OWNER
   COLLABORATOR
@@ -44,7 +50,6 @@ enum OrganizationAccessPreset {
   READ_ONLY
   OPERATIONAL_COLLABORATION
   SITE_MANAGER
-  DOCUMENT_REVIEWER
   LIMITED_UPLOAD
   CUSTOM
 }
@@ -57,8 +62,6 @@ enum OrganizationScopeMode {
 enum OrganizationResourceType {
   JOB_SITE
   WORKER
-  DOCUMENT
-  EVIDENCE
 }
 
 enum SupportAuditAction {
@@ -69,22 +72,12 @@ enum SupportAuditAction {
 }
 
 enum AuditAction {
-  DOCUMENT_CREATED
-  DOCUMENT_UPDATED
-  DOCUMENT_ARCHIVED
-  DOCUMENT_VERSION_UPLOADED
-  DOCUMENT_VERSION_DOWNLOADED
-  DOCUMENT_VERSION_ARCHIVED
   WORKER_CREATED
   WORKER_UPDATED
   WORKER_ARCHIVED
   JOB_SITE_CREATED
   JOB_SITE_UPDATED
   JOB_SITE_ARCHIVED
-  EVIDENCE_CREATED
-  EVIDENCE_UPDATED
-  EVIDENCE_DOWNLOADED
-  EVIDENCE_ARCHIVED
   NOTIFICATION_READ
   NOTIFICATION_DISMISSED
   WORKER_USER_LINK_CREATED
@@ -98,8 +91,6 @@ enum AuditAction {
   ORGANIZATION_CONTACT_CREATED
   ORGANIZATION_CONTACT_UPDATED
   ORGANIZATION_CONTACT_ARCHIVED
-  DOCUMENT_JOB_SITE_LINK_CREATED
-  DOCUMENT_JOB_SITE_LINK_ARCHIVED
   ORGANIZATION_INVITATION_CREATED
   ORGANIZATION_INVITATION_REVOKED
   ORGANIZATION_INVITATION_ACCEPTED
@@ -123,11 +114,8 @@ enum AuditAction {
 }
 
 enum AuditEntityType {
-  DOCUMENT
-  DOCUMENT_VERSION
   WORKER
   JOB_SITE
-  EVIDENCE
   NOTIFICATION
   DATA_CONTROL_JOB
   WORKER_USER_LINK
@@ -147,8 +135,6 @@ enum AuditEntityType {
   ORGANIZATION
   ORGANIZATION_PROFILE
   ORGANIZATION_CONTACT
-  DOCUMENT_JOB_SITE_LINK
-  EVIDENCE_REVISION
   USER
   SYSTEM
 }
@@ -162,18 +148,6 @@ enum AuditOutcome {
 enum RecordStatus {
   ACTIVE
   ARCHIVED
-}
-
-enum DocumentOwnerType {
-  ORGANIZATION
-  WORKER
-  JOB_SITE
-}
-
-enum EvidenceType {
-  PHOTO
-  FILE
-  NOTE
 }
 
 enum OrganizationContactKind {
@@ -583,6 +557,7 @@ model User {
   avatarBlobPathname          String?
   phoneNumber                 String?
   platformRole                PlatformRole                          @default(USER)
+  accountRole                 AccountRole?
   authVersion                 Int                                   @default(1)
   suspendedAt                 DateTime?
   suspensionReason            String?
@@ -614,9 +589,6 @@ model User {
   supportSessions             SupportSession[]                      @relation("SupportActor")
   supportAuditEvents          SupportAuditEvent[]                   @relation("SupportAuditActor")
   productAuditEvents          ProductAuditEvent[]                   @relation("ProductAuditActor")
-  uploadedDocumentVersions    DocumentVersion[]                     @relation("DocumentVersionUploader")
-  createdEvidence             Evidence[]                            @relation("EvidenceCreator")
-  evidenceRevisions           EvidenceRevision[]                    @relation("EvidenceRevisionActor")
   notifications               Notification[]
   requestedDataControlJobs    DataControlJob[]                      @relation("DataControlJobRequester")
   resolvedRuntimeErrors       RuntimeErrorEvent[]                   @relation("RuntimeErrorResolver")
@@ -628,8 +600,6 @@ model User {
   notificationDeliveries      NotificationDelivery[]
   assignedJobSiteWorkers      JobSiteWorkerAssignment[]             @relation("JobSiteWorkerAssignmentCreator")
   endedJobSiteWorkers         JobSiteWorkerAssignment[]             @relation("JobSiteWorkerAssignmentEnder")
-  linkedDocumentJobSites      DocumentJobSiteLink[]                 @relation("DocumentJobSiteLinkCreator")
-  unlinkedDocumentJobSites    DocumentJobSiteLink[]                 @relation("DocumentJobSiteLinkEnder")
   organizationContacts        OrganizationContact[]
   createdAt                   DateTime                              @default(now())
   updatedAt                   DateTime                              @updatedAt
@@ -653,17 +623,12 @@ model Organization {
   mfaRecoveryRequests      MfaRecoveryRequest[]
   workers                  Worker[]
   jobSites                 JobSite[]
-  documents                Document[]
-  documentVersions         DocumentVersion[]
-  evidence                 Evidence[]
   notifications            Notification[]
   workerUserLinks          WorkerUserLink[]
   jobSiteParticipants      JobSiteParticipant[]
   jobSiteWorkerAssignments JobSiteWorkerAssignment[]
   profile                  OrganizationProfile?
   contacts                 OrganizationContact[]
-  documentJobSiteLinks     DocumentJobSiteLink[]
-  evidenceRevisions        EvidenceRevision[]
   clientInvitations        JobSiteClientInvitation[]
   clientPropertyLinks      ClientPropertyJobSiteLink[]
   authorityGrants          JobSiteAuthorityGrant[]
@@ -740,8 +705,6 @@ model Worker {
   updatedAt          DateTime                      @updatedAt
   archivedAt         DateTime?
   organization       Organization                  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  documents          Document[]
-  evidence           Evidence[]
   userLinks          WorkerUserLink[]
   jobSiteAssignments JobSiteWorkerAssignment[]
   stepAssignments    JobSiteStepWorkerAssignment[]
@@ -774,12 +737,9 @@ model JobSite {
   createdAt                   DateTime                    @default(now())
   updatedAt                   DateTime                    @updatedAt
   organization                Organization                @relation(fields: [organizationId], references: [id], onDelete: Restrict)
-  documents                   Document[]
-  evidence                    Evidence[]
   participants                JobSiteParticipant[]
   responsibleParticipant      JobSiteParticipant?         @relation("JobSiteResponsibleParticipant", fields: [responsibleParticipantId], references: [id], onDelete: SetNull)
   workerAssignments           JobSiteWorkerAssignment[]
-  documentLinks               DocumentJobSiteLink[]
   clientInvitations           JobSiteClientInvitation[]
   propertyLinks               ClientPropertyJobSiteLink[]
   authorityGrants             JobSiteAuthorityGrant[]
@@ -852,130 +812,6 @@ model JobSiteWorkerAssignment {
   @@index([assignedById])
   @@index([organizationId, startsAt, endsAt])
   @@index([endedById])
-}
-
-model Document {
-  id               String                @id @default(cuid())
-  organizationId   String
-  currentVersionId String?               @unique
-  ownerType        DocumentOwnerType
-  workerId         String?
-  jobSiteId        String?
-  title            String
-  notes            String?               @db.Text
-  createdAt        DateTime              @default(now())
-  updatedAt        DateTime              @updatedAt
-  archivedAt       DateTime?
-  organization     Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  currentVersion   DocumentVersion?      @relation("DocumentCurrentVersion", fields: [currentVersionId], references: [id], onDelete: SetNull)
-  worker           Worker?               @relation(fields: [workerId], references: [id], onDelete: SetNull)
-  jobSite          JobSite?              @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
-  versions         DocumentVersion[]
-  jobSiteLinks     DocumentJobSiteLink[]
-
-  @@index([organizationId, ownerType])
-  @@index([organizationId, workerId])
-  @@index([organizationId, jobSiteId])
-  @@index([organizationId, title])
-}
-
-model DocumentVersion {
-  id                 String       @id @default(cuid())
-  organizationId     String
-  documentId         String
-  blobKey            String
-  originalFileName   String
-  mimeType           String
-  size               Int
-  checksum           String?
-  uploadedById       String
-  createdAt          DateTime     @default(now())
-  archivedAt         DateTime?
-  organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  document           Document     @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  uploadedBy         User         @relation("DocumentVersionUploader", fields: [uploadedById], references: [id], onDelete: Restrict)
-  currentForDocument Document?    @relation("DocumentCurrentVersion")
-
-  @@index([organizationId, documentId, createdAt])
-  @@index([organizationId, uploadedById])
-  @@index([organizationId, blobKey])
-}
-
-model DocumentJobSiteLink {
-  id             String       @id @default(cuid())
-  organizationId String
-  documentId     String
-  jobSiteId      String
-  purpose        String?
-  validFrom      DateTime?
-  validTo        DateTime?
-  linkedById     String
-  unlinkedAt     DateTime?
-  unlinkedById   String?
-  unlinkReason   String?      @db.Text
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  document       Document     @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  jobSite        JobSite      @relation(fields: [jobSiteId], references: [id], onDelete: Cascade)
-  linkedBy       User         @relation("DocumentJobSiteLinkCreator", fields: [linkedById], references: [id], onDelete: Restrict)
-  unlinkedBy     User?        @relation("DocumentJobSiteLinkEnder", fields: [unlinkedById], references: [id], onDelete: SetNull)
-
-  @@index([organizationId, documentId, unlinkedAt])
-  @@index([organizationId, jobSiteId, unlinkedAt])
-  @@index([organizationId, validFrom, validTo])
-  @@index([linkedById])
-  @@index([unlinkedById])
-}
-
-model Evidence {
-  id               String             @id @default(cuid())
-  organizationId   String
-  jobSiteId        String?
-  workerId         String?
-  type             EvidenceType
-  title            String
-  description      String?            @db.Text
-  capturedAt       DateTime?
-  blobKey          String?
-  originalFileName String?
-  mimeType         String?
-  size             Int?
-  createdById      String
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-  archivedAt       DateTime?
-  organization     Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  jobSite          JobSite?           @relation(fields: [jobSiteId], references: [id], onDelete: SetNull)
-  worker           Worker?            @relation(fields: [workerId], references: [id], onDelete: SetNull)
-  createdBy        User               @relation("EvidenceCreator", fields: [createdById], references: [id], onDelete: Restrict)
-  revisions        EvidenceRevision[]
-
-  @@index([organizationId, type])
-  @@index([organizationId, jobSiteId])
-  @@index([organizationId, workerId])
-  @@index([organizationId, createdAt])
-  @@index([organizationId, title])
-}
-
-model EvidenceRevision {
-  id             String       @id @default(cuid())
-  organizationId String
-  evidenceId     String
-  revisionNumber Int
-  title          String
-  description    String?      @db.Text
-  capturedAt     DateTime?
-  reason         String?      @db.Text
-  createdById    String
-  createdAt      DateTime     @default(now())
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  evidence       Evidence     @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
-  createdBy      User         @relation("EvidenceRevisionActor", fields: [createdById], references: [id], onDelete: Restrict)
-
-  @@unique([evidenceId, revisionNumber])
-  @@index([organizationId, evidenceId, createdAt])
-  @@index([createdById])
 }
 
 model Notification {

@@ -15,8 +15,6 @@ const mocks = vi.hoisted(() => {
         create: vi.fn(), findMany: vi.fn(), findUnique: vi.fn(), findFirst: vi.fn(), updateMany: vi.fn(),
       },
       organization: { findUnique: vi.fn(), deleteMany: vi.fn() },
-      documentVersion: { findMany: vi.fn() },
-      evidence: { findMany: vi.fn() },
       jobSiteAttachment: { findMany: vi.fn() },
       jobSiteExport: { findMany: vi.fn() },
       clientProperty: { findMany: vi.fn() },
@@ -94,8 +92,6 @@ beforeEach(() => {
   mocks.recordProductAuditEventBestEffort.mockResolvedValue(undefined);
   mocks.db.organization.findUnique.mockResolvedValue({ code: "QVX-1" });
   mocks.db.organization.deleteMany.mockResolvedValue({ count: 1 });
-  mocks.db.documentVersion.findMany.mockResolvedValue([]);
-  mocks.db.evidence.findMany.mockResolvedValue([]);
   mocks.db.jobSiteAttachment.findMany.mockResolvedValue([]);
   mocks.db.jobSiteExport.findMany.mockResolvedValue([]);
   mocks.db.clientProperty.findMany.mockResolvedValue([]);
@@ -123,7 +119,7 @@ describe("data-control job service", () => {
 
   it("scans every Blob page and finds an orphan beyond the first 500 objects", async () => {
     const referenced = Array.from({ length: 500 }, (_, index) => ({ blobKey: `organizations/org-1/referenced-${index}.pdf` }));
-    mocks.db.documentVersion.findMany.mockResolvedValue(referenced);
+    mocks.db.jobSiteAttachment.findMany.mockResolvedValue(referenced);
     mocks.db.dataControlJob.findMany.mockResolvedValue([]);
     mocks.listPrivateBlobs
       .mockResolvedValueOnce({

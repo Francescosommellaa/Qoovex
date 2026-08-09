@@ -5,6 +5,7 @@ import { db } from "@qoovex/db";
 import type { OrganizationAccessPreset, OrganizationPermission, OrganizationResourceGrantInput, OrganizationRole, OrganizationScopeMode } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 import { getContextOrganizationId, getWorkspaceAccessContext, requireIdentity } from "@shared/server/access-context-service";
+import { requireAccountRole } from "@shared/server/account-role-service";
 import { canInviteRole, getPermissionsForPreset, normalizeCollaboratorPermissions } from "@shared/server/authorization-policy";
 import { buildOrganizationInvitationPath } from "../lib/workspace-link-routes";
 import { sendTransactionalEmail } from "@shared/server/transactional-email-service";
@@ -30,11 +31,7 @@ export async function validateOrganizationResourceGrants(organizationId: string,
     const where = { id: grant.resourceId, organizationId };
     const found = grant.resourceType === "JOB_SITE"
       ? await db.jobSite.findFirst({ where, select: { id: true } })
-      : grant.resourceType === "WORKER"
-        ? await db.worker.findFirst({ where, select: { id: true } })
-        : grant.resourceType === "DOCUMENT"
-          ? await db.document.findFirst({ where, select: { id: true } })
-          : await db.evidence.findFirst({ where, select: { id: true } });
+      : await db.worker.findFirst({ where, select: { id: true } });
     if (!found) throw new AccessError("Una risorsa assegnata non è disponibile.", 409);
   }
   return unique;
@@ -221,7 +218,7 @@ export async function resendInvitation(invitationId: string) {
 }
 
 export async function acceptInvitation(rawToken: string) {
-  const user = await requireIdentity();
+  const user = await requireAccountRole("PROFESSIONAL");
   if (!user.emailVerified) throw new AccessError("Verifica la tua email prima di accettare l'invito.", 403);
   const tokenHash = hashToken(rawToken);
 
@@ -245,6 +242,8 @@ export async function acceptInvitation(rawToken: string) {
         select: { id: true, revokedAt: true },
       });
       if (membership?.revokedAt === null) throw new AccessError("Appartieni gia a questa Azienda.", 409);
+      const activeMembership = await tx.organizationMembership.findFirst({ where: { userId: user.id, revokedAt: null }, select: { id: true } });
+      if (activeMembership) throw new AccessError("Il tuo account e gia collegato a un'Azienda.", 409, "ORGANIZATION_ALREADY_CONNECTED");
 
       let acceptedMembershipId: string;
       if (membership) {

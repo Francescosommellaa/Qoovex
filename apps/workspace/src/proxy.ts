@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
+import { db } from "@qoovex/db";
 import { authConfig } from "@shared/server/auth/auth.config";
 import {
   DEV_AUTH_COOKIE_NAME,
@@ -20,7 +21,22 @@ export const proxy = auth(async (request) => {
     isDevAuthAllowedForHost(host) &&
     (await verifyDevAuthCookieValue(devAuthCookie));
 
-  if (hasDevAuthSession || request.auth) return;
+  if (hasDevAuthSession || request.auth) {
+    if (pathname === "/account/role" || pathname === "/api/account/role") return;
+    const userId = request.auth?.user?.id;
+    if (userId) {
+      const user = await db.user.findUnique({ where: { id: userId }, select: { accountRole: true } });
+      if (!user?.accountRole) {
+        if (pathname.startsWith("/api/")) {
+          return NextResponse.json({ error: { code: "ACCOUNT_ROLE_REQUIRED", message: "Scegli il tipo di account prima di continuare." } }, { status: 403 });
+        }
+        const roleUrl = new URL("/account/role", request.url);
+        roleUrl.searchParams.set("returnTo", `${pathname}${request.nextUrl.search}`);
+        return NextResponse.redirect(roleUrl);
+      }
+    }
+    return;
+  }
 
   if (!pathname.startsWith("/api/")) {
     const signInUrl = new URL("/sign-in", request.url);
@@ -38,7 +54,6 @@ export const config = {
   matcher: [
     "/api/account/:path*",
     "/api/audit-log",
-    "/api/contexts",
     "/api/client/:path*",
     "/api/data/:path*",
     "/api/exports/:path*",
@@ -54,7 +69,6 @@ export const config = {
     "/account/:path*",
     "/audit-log",
     "/client/:path*",
-    "/contexts/:path*",
     "/data-control",
     "/notifications/:path*",
     "/org/:path*",

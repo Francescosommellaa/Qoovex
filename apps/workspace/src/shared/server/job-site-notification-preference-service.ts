@@ -27,8 +27,8 @@ export async function listNotificationPreferences() {
     db.jobSiteParticipant.findMany({ where: { userId: identity.id, kind: "CLIENT", status: { in: ["PENDING", "ACTIVE"] } }, select: { organization: { select: { id: true, name: true } } } }),
     db.notificationPreference.findMany({ where: { userId: identity.id }, select: { id: true, organizationId: true, type: true, channel: true, frequency: true }, orderBy: [{ organizationId: "asc" }, { type: "asc" }, { channel: "asc" }] }),
   ]);
-  const contexts = new Map([...memberships, ...participations].map((value) => [value.organization.id, value.organization]));
-  return { contexts: [...contexts.values()].sort((left, right) => left.name.localeCompare(right.name)), preferences: preferences.filter((value) => contexts.has(value.organizationId)) };
+  const organizations = new Map([...memberships, ...participations].map((value) => [value.organization.id, value.organization]));
+  return { organizations: [...organizations.values()].sort((left, right) => left.name.localeCompare(right.name)), preferences: preferences.filter((value) => organizations.has(value.organizationId)) };
 }
 
 export async function updateNotificationPreference(rawInput: unknown) {
