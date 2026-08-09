@@ -34,17 +34,10 @@ function HeaderAction() {
   return (
     <div className="flex items-center gap-1 sm:gap-2">
       <a
-        className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "hidden sm:inline-flex")}
+        className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
         href={signInUrl}
       >
         {signInLabel}
-      </a>
-      <a className={cn(buttonVariants({ size: "sm" }))} href={primaryCtaHref}>
-        {primaryCtaLabel}
-        <IconArrowRight
-          data-icon="inline-end"
-          className="transition-transform duration-200 group-hover/button:translate-x-0.5"
-        />
       </a>
     </div>
   );
@@ -85,7 +78,7 @@ export function SiteFooter() {
               certifica conformità e non sostituisce il giudizio di professionisti e tecnici.
             </p>
             <a
-              className="mt-4 inline-block text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className={cn(buttonVariants({ variant: "link" }), "h-auto w-fit p-0 justify-start mt-4 text-sm font-normal text-muted-foreground hover:text-foreground")}
               href={contactHref}
             >
               {contactEmail}
@@ -96,7 +89,7 @@ export function SiteFooter() {
               <p className="text-sm font-medium text-foreground">{column.title}</p>
               {column.links.map((link) => (
                 <a
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className={cn(buttonVariants({ variant: "link" }), "h-auto w-fit p-0 justify-start text-sm font-normal text-muted-foreground hover:text-foreground")}
                   href={link.href}
                   key={link.href}
                 >
@@ -110,7 +103,7 @@ export function SiteFooter() {
           <nav className="flex flex-wrap gap-4 text-sm" aria-label="Link legali">
             {legalLinks.map((link) => (
               <a
-                className="text-muted-foreground transition-colors hover:text-foreground"
+                className={cn(buttonVariants({ variant: "link" }), "h-auto w-fit p-0 justify-start font-normal text-muted-foreground hover:text-foreground")}
                 href={link.href}
                 key={link.href}
               >
@@ -138,8 +131,8 @@ export function SiteShell({ children, sections = [] }: SiteShellProps) {
 export function LegalPage({ children, eyebrow = "Bozza da validare", intro, title }: LegalPageProps) {
   return (
     <SiteShell>
-      <section className="border-b">
-        <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6">
+      <section className="border-b pt-20">
+        <div className="mx-auto max-w-4xl px-4 pb-14 pt-4 sm:px-6">
           <p className="text-sm font-medium text-muted-foreground">{eyebrow}</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight">{title}</h1>
           <p className="mt-5 text-lg text-muted-foreground">{intro}</p>

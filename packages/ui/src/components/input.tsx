@@ -205,7 +205,7 @@ function PhoneInput({
           render={
             <button
               type="button"
-              className="flex h-9 items-center gap-1.5 px-3 text-xs font-medium text-foreground select-none shrink-0 border-r border-input/60 rounded-l-lg bg-muted/30 hover:bg-muted/60 transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring/30"
+              className="flex h-9 items-center gap-1.5 px-3 text-xs font-medium text-foreground select-none shrink-0 border-r border-input/60 rounded-l-lg bg-muted/30 hover:bg-muted/60 transition-colors outline-none"
             />
           }
         >
@@ -295,7 +295,7 @@ function CurrencyInput({
           render={
             <button
               type="button"
-              className="flex h-9 items-center gap-1.5 px-3 text-xs font-medium text-foreground select-none shrink-0 border-r border-input/60 rounded-l-lg bg-muted/30 hover:bg-muted/60 transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring/30"
+              className="flex h-9 items-center gap-1.5 px-3 text-xs font-medium text-foreground select-none shrink-0 border-r border-input/60 rounded-l-lg bg-muted/30 hover:bg-muted/60 transition-colors outline-none"
             />
           }
         >

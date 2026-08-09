@@ -87,7 +87,7 @@ export function RequestAwaitingReply() {
     <WorkQueueItem priority="attention">
       <WorkQueueItemContent>
         <div className="flex items-center gap-2">
-          <IconClock aria-hidden className="size-4 text-warning-foreground" />
+          <IconClock aria-hidden className="size-4 text-warning-foreground dark:text-warning" />
           <p className="text-sm font-medium">La modifica richiede una risposta</p>
         </div>
         <p className="text-xs text-muted-foreground">

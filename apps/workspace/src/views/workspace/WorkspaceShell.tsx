@@ -87,7 +87,7 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
         <WorkspacePageIdentityProvider>
           <WorkspaceTopbar fallbackLabel={isWorkspace ? "Qoovex" : "Sicurezza account"} platformRole={isWorkspace ? state.context.platformRole : state.platformRole} devView={isWorkspace ? state.devView : null} navigation={isWorkspace ? state.navigation.primary : []} showNotifications={isWorkspace && canReadWorkspaceNotifications(state.context.permissions)} unreadNotificationCount={isWorkspace ? state.unreadNotificationCount : 0} />
           {isWorkspace && state.context.support ? <SupportSessionBanner support={state.context.support} /> : null}
-          <main className="min-h-0 min-w-0 flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">{isWorkspace ? children : <AccountSecurityFlow initialStatus={state.status} mode="gate" />}</main>
+          <div className="min-h-0 min-w-0 flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">{isWorkspace ? children : <AccountSecurityFlow initialStatus={state.status} mode="gate" />}</div>
         </WorkspacePageIdentityProvider>
       </SidebarInset>
     </WorkspaceSidebarProvider>

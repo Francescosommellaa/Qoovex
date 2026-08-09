@@ -440,7 +440,7 @@ export function FloatingNavigation({
   const belowDesktopVisibility = isLg ? "lg:hidden" : "md:hidden";
 
   return (
-    <header className="pointer-events-none sticky top-0 z-40 h-20 px-3 pt-3">
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-40 h-20 px-3 pt-3">
       <div
         className={cn(
           "pointer-events-auto mx-auto flex items-center gap-2 border bg-background/80 shadow-sm backdrop-blur-xl transition-[max-width,height,border-radius,padding,box-shadow] duration-300 ease-out supports-[backdrop-filter]:bg-background/70",
