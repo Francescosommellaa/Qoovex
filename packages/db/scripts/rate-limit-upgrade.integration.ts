@@ -10,12 +10,12 @@ if (!["localhost", "127.0.0.1", "::1"].includes(target.hostname) || target.pathn
   throw new Error("Il test upgrade puo usare soltanto qoovex_upgrade_ci su loopback.");
 }
 
-const manifest = JSON.parse(await readFile(resolve("../../ops/workspace-release-manifest.json"), "utf8")) as { database: { baselineHead: string; migrationHead: string } };
-const ledger = JSON.parse(await readFile(resolve("../../ops/migration-ledger.json"), "utf8")) as { migrations: Array<{ name: string }> };
-const migrationNames = ledger.migrations.map((migration) => migration.name);
-const baselineIndex = migrationNames.indexOf(manifest.database.baselineHead);
-if (baselineIndex !== 4 || migrationNames.at(-1) !== manifest.database.migrationHead) throw new Error("Manifest e ledger migration non coerenti per il test upgrade.");
 async function main() {
+  const manifest = JSON.parse(await readFile(resolve("../../ops/workspace-release-manifest.json"), "utf8")) as { database: { baselineHead: string; migrationHead: string } };
+  const ledger = JSON.parse(await readFile(resolve("../../ops/migration-ledger.json"), "utf8")) as { migrations: Array<{ name: string }> };
+  const migrationNames = ledger.migrations.map((migration) => migration.name);
+  const baselineIndex = migrationNames.indexOf(manifest.database.baselineHead);
+  if (baselineIndex !== 4 || migrationNames.at(-1) !== manifest.database.migrationHead) throw new Error("Manifest e ledger migration non coerenti per il test upgrade.");
   const client = new pg.Client({ connectionString: databaseUrl });
 
   try {
@@ -54,7 +54,7 @@ async function main() {
         SELECT 1 FROM information_schema.columns
         WHERE table_schema = 'public' AND table_name = 'AuthRateLimit' AND column_name = 'userId'
       ) AS has_user_id,
-      to_regclass('public."JobSite"') IS NULL AS has_baseline_schema;
+      to_regclass('public."JobSite"') IS NOT NULL AS has_baseline_schema;
   `);
   const row = checks.rows[0] as {
     memberships: number;
