@@ -27,7 +27,7 @@ export default function GlobalError({
             <IconRefresh />
             Riprova
           </Button>
-          <Button render={<Link href="/contexts" />}>Contesti</Button>
+          <Button render={<Link href="/" />}>Workspace</Button>
         </div>
       </div>
     </div>

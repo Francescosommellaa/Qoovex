@@ -13,8 +13,6 @@
     "db:migrate:deploy": "tsx scripts/migrate-deploy.ts",
     "db:preview:recreate": "tsx scripts/recreate-preview-database.ts",
     "db:seed": "prisma db seed",
-    "db:fixtures:inventory:local": "tsx scripts/fixture-inventory.ts local",
-    "db:fixtures:inventory:production": "tsx scripts/fixture-inventory.ts production",
     "db:start:local": "tsx scripts/start-local-database.ts",
     "verify:prisma": "tsx scripts/verify-prisma.ts",
     "verify:head": "tsx scripts/verify-database-head.ts",

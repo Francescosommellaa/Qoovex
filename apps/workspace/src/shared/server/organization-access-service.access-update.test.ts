@@ -51,7 +51,7 @@ beforeEach(() => {
   mocks.db.organizationMembership.findFirst.mockResolvedValue({
     id: "member-1",
     userId: "collaborator-1",
-    permissionKeys: ["organization:read", "documents:read"],
+    permissionKeys: ["organization:read", "jobSites:read"],
     scopeMode: "ASSIGNED",
     expiresAt: null,
     accessVersion: 2,
@@ -65,8 +65,8 @@ describe("organization collaborator access updates", () => {
   it("updates access atomically, replaces grants and invalidates sessions", async () => {
     await expect(updateMemberAccess("member-1", {
       expectedVersion: 2,
-      preset: "DOCUMENT_REVIEWER",
-      permissions: ["documents:update"],
+      preset: "READ_ONLY",
+      permissions: ["jobSites:read"],
       scopeMode: "ASSIGNED",
       grants: [{ resourceType: "JOB_SITE", resourceId: "site-1" }],
     })).resolves.toEqual({ updated: true, accessVersion: 3 });
@@ -85,7 +85,7 @@ describe("organization collaborator access updates", () => {
     await expect(updateMemberAccess("member-1", {
       expectedVersion: 1,
       preset: "READ_ONLY",
-      permissions: ["documents:read"],
+      permissions: ["jobSites:read"],
       scopeMode: "FULL",
     })).rejects.toMatchObject({ status: 409 });
     expect(mocks.db.organizationMembershipResourceGrant.deleteMany).not.toHaveBeenCalled();
@@ -96,7 +96,7 @@ describe("organization collaborator access updates", () => {
     await expect(updateMemberAccess("member-1", {
       expectedVersion: 2,
       preset: "READ_ONLY",
-      permissions: ["documents:read"],
+      permissions: ["jobSites:read"],
       scopeMode: "FULL",
     })).rejects.toMatchObject({ status: 404 });
     expect(mocks.db.organizationMembership.findFirst).not.toHaveBeenCalled();

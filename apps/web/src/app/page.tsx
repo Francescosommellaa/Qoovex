@@ -363,7 +363,7 @@ export default function HomePage() {
               titleId="job-site-title"
               eyebrow="Direzione di prodotto"
               title="Dove sta andando Qoovex"
-              description="Qoovex current è la direzione approvata del prodotto. Queste capacità sono in sviluppo e non sono ancora disponibili: le raccontiamo per trasparenza, non come funzioni attive."
+              description="Qoovex è la direzione approvata del prodotto. Queste capacità sono in sviluppo e non sono ancora disponibili: le raccontiamo per trasparenza, non come funzioni attive."
             />
             <div className="mt-6">
               <Badge variant="secondary">In sviluppo · non ancora disponibile</Badge>

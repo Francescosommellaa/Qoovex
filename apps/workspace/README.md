@@ -1,21 +1,22 @@
 # Workspace Qoovex
 
-`verified_current_state`: Workspace contiene il runtime autenticato attuale e le route elencate sotto. `implemented_but_not_end_to_end_verified`: la prima vertical slice Ã¨ bloccata dal participant creatore `PENDING` e dall'attivazione anticipata del cliente; il registry non prova da solo la readiness.
+`verified_current_state`: Workspace è il runtime autenticato del prodotto. L'account sceglie una sola volta il proprio ruolo; un account `BUSINESS` possiede una sola Azienda attiva, `PROFESSIONAL` accede tramite invito Collaborator e `CLIENT` tramite partecipazione al singolo cantiere. Le superfici sono presenti ma la prima vertical slice resta `implemented_but_not_end-to-end-verified` per i blocchi participant indicati nella documentazione canonica.
 
-## Contesti e route
+## Route
 
-- `/contexts`: seleziona il contesto quando lâ€™account dispone di piÃ¹ Aziende, lavori cliente o accesso piattaforma.
+- `/`: indirizza direttamente all'Azienda collegata, alla superficie Cliente, all'attesa invito Professionista o alla console Qoovex.
+- `/account/organization`: creazione dell'unica Azienda per un account `BUSINESS` senza membership attiva.
+- `/account/invitations`: attesa dell'invito Collaborator per un account `PROFESSIONAL`.
+- `/account/notifications`: preferenze personali di notifica.
 - `/org/[organizationId]`: home Azienda, cantieri, Collaborator e profilo pagamento.
 - `/org/[organizationId]/job-sites/[jobSiteId]`: riepilogo, timeline, step, richieste, modifiche, pagamenti, persone, file, chiusura e impostazioni.
 - `/client`: immobili privati, cantieri e azioni cliente.
 - `/client/job-sites/[jobSiteId]`: sola proiezione condivisa e azioni participant-scoped.
 - `/exports/access/[token]`: scambio autenticato del link opaco con un grant breve.
 
-Le route implicite precedente `/dashboard`, `/job-sites`, `/documents` e `/evidence` non esistono e restituiscono 404. Auth, supporto e console piattaforma restano context-neutral.
-
 ## Sicurezza
 
-La route identifica il contesto; cookie e input client non sono fonti di autorizzazione. Ogni mutation ricontrolla identity, tenant, membership o participant, scope, permission, `accessVersion`, revisione e delega economica quando richiesta. `CLIENT` non Ã¨ un `OrganizationRole`.
+La route identifica lo scope; cookie e input client non sono fonti di autorizzazione. Ogni mutation ricontrolla identity, tenant, membership o participant, scope, permission, `accessVersion`, revisione e delega economica quando richiesta. `CLIENT` non è un `OrganizationRole`.
 
 Le azioni critiche usano `Idempotency-Key`, fingerprint e receipt; gli aggiornamenti concorrenti usano revisione ottimistica e transazioni Serializable con retry. Blob resta privato. Upload e download sono mediati dal server, auditati e non espongono pathname. Il profilo IBAN richiede MFA e usa AES-256-GCM con key ring dedicato.
 
@@ -25,4 +26,4 @@ Le azioni critiche usano `Idempotency-Key`, fingerprint e receipt; gli aggiornam
 
 ## Esclusioni
 
-Non sono implementati pricing/billing, marketplace, pagamenti in-app, escrow, KYC, firma qualificata, IA, OCR o cancellazione fisica. Nessuna di queste capacitÃ  Ã¨ mostrata nella UI.
+Non sono implementati pricing/billing, marketplace, pagamenti in-app, escrow, KYC, firma qualificata, IA, OCR o cancellazione fisica. Nessuna di queste capacità è mostrata nella UI.

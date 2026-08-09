@@ -3,23 +3,12 @@
 import * as React from "react";
 import { cn } from "#lib/utils";
 
-/* ─── Tipi interni ───────────────────────────────────────────── */
-
-type HoverIndicator = {
-  height: number;
-  visible: boolean;
-  x: number;
-  y: number;
-  width: number;
-};
-
-const hiddenIndicator: HoverIndicator = {
-  height: 0,
-  visible: false,
-  width: 0,
-  x: 0,
-  y: 0,
-};
+import {
+  useSlidingIndicatorState,
+  SlidingIndicatorProvider,
+  SlidingIndicator,
+  type SlidingIndicatorContextValue,
+} from "#components/sliding-indicator";
 
 /* ─── Context ────────────────────────────────────────────────── */
 
@@ -126,6 +115,8 @@ function TabsList({
   activeValue: activeValueProp,
   preventHoverIndicatorAutoHide = false,
   onKeyDown: onKeyDownProp,
+  onBlur: onBlurProp,
+  onMouseLeave: onMouseLeaveProp,
   ...props
 }: {
   children: React.ReactNode;
@@ -136,60 +127,16 @@ function TabsList({
   preventHoverIndicatorAutoHide?: boolean;
 } & Omit<React.HTMLAttributes<HTMLDivElement>, "children">) {
   const tabsContext = React.useContext(TabsContext);
-  const listRef = React.useRef<HTMLDivElement>(null);
-  const activeElementRef = React.useRef<HTMLElement | null>(null);
-  const [hover, setHover] = React.useState(hiddenIndicator);
-
   const activeValue = activeValueProp ?? tabsContext?.value ?? "";
 
-  const moveHoverIndicator = React.useCallback((element: HTMLElement) => {
-    const list = listRef.current;
-    if (!list) return;
-    activeElementRef.current = element;
-    const listRect = list.getBoundingClientRect();
-    const elRect = element.getBoundingClientRect();
-    setHover({
-      height: elRect.height,
-      visible: true,
-      width: elRect.width,
-      x: elRect.left - listRect.left,
-      y: elRect.top - listRect.top,
-    });
-  }, []);
-
-  const clearHoverIndicator = React.useCallback(() => {
-    activeElementRef.current = null;
-    setHover((prev) => ({ ...prev, visible: false }));
-  }, []);
-
-  // Ricalcola la posizione dell'indicatore su resize per evitare disallineamenti
-  React.useEffect(() => {
-    if (!hover.visible || !activeElementRef.current) return;
-    const handleResize = () => {
-      if (activeElementRef.current) moveHoverIndicator(activeElementRef.current);
-    };
-    window.addEventListener("resize", handleResize, { passive: true });
-    return () => window.removeEventListener("resize", handleResize);
-  }, [hover.visible, moveHoverIndicator]);
-
-  const handleBlur = React.useCallback(
-    (event: React.FocusEvent<HTMLDivElement>) => {
-      if (preventHoverIndicatorAutoHide) return;
-      if (
-        event.relatedTarget instanceof Node &&
-        event.currentTarget.contains(event.relatedTarget)
-      ) {
-        return;
-      }
-      clearHoverIndicator();
-    },
-    [preventHoverIndicatorAutoHide, clearHoverIndicator],
-  );
-
-  const handleMouseLeave = React.useCallback(() => {
-    if (preventHoverIndicatorAutoHide) return;
-    clearHoverIndicator();
-  }, [preventHoverIndicatorAutoHide, clearHoverIndicator]);
+  const {
+    containerRef,
+    indicator,
+    moveIndicator,
+    clearIndicator,
+    handleMouseLeave,
+    handleBlur,
+  } = useSlidingIndicatorState({ preventAutoHide: preventHoverIndicatorAutoHide });
 
   // Tastiera WAI-ARIA per tablist (Freccia Sx/Dx/Su/Giù, Home, End)
   const handleKeyDown = React.useCallback(
@@ -197,7 +144,7 @@ function TabsList({
       onKeyDownProp?.(event);
       if (event.defaultPrevented) return;
 
-      const list = listRef.current;
+      const list = containerRef.current;
       if (!list) return;
       const triggers = Array.from(
         list.querySelectorAll<HTMLElement>('[data-slot="tabs-trigger"]:not([disabled])'),
@@ -224,39 +171,54 @@ function TabsList({
 
       if (nextIndex !== -1 && triggers[nextIndex]) {
         triggers[nextIndex].focus();
-        moveHoverIndicator(triggers[nextIndex]);
+        moveIndicator(triggers[nextIndex]);
       }
     },
-    [moveHoverIndicator, onKeyDownProp],
+    [moveIndicator, onKeyDownProp, containerRef],
   );
 
-  const indicatorStyle: React.CSSProperties = {
-    height: hover.height,
-    opacity: hover.visible ? 1 : 0,
-    transform: `translate3d(${hover.x}px, ${hover.y}px, 0)`,
-    width: hover.width,
-  };
-
   const listCtx = React.useMemo<TabsListContextValue>(
-    () => ({ activeValue, moveHoverIndicator, clearHoverIndicator }),
-    [activeValue, moveHoverIndicator, clearHoverIndicator],
+    () => ({
+      activeValue,
+      moveHoverIndicator: moveIndicator,
+      clearHoverIndicator: clearIndicator,
+    }),
+    [activeValue, moveIndicator, clearIndicator],
+  );
+
+  const slidingCtxValue = React.useMemo<SlidingIndicatorContextValue>(
+    () => ({
+      indicator,
+      moveIndicator,
+      clearIndicator,
+      containerRef,
+    }),
+    [indicator, moveIndicator, clearIndicator, containerRef],
   );
 
   return (
     <TabsListContext value={listCtx}>
-      <div
-        data-slot="tabs-list"
-        role={tabsContext ? "tablist" : undefined}
-        className={cn("relative flex items-center gap-1", className)}
-        onBlur={handleBlur}
-        onKeyDown={handleKeyDown}
-        onMouseLeave={handleMouseLeave}
-        ref={listRef}
-        {...props}
-      >
-        <span aria-hidden="true" className="tabs__hover-indicator" style={indicatorStyle} />
-        {children}
-      </div>
+      <SlidingIndicatorProvider value={slidingCtxValue}>
+        <div
+          data-slot="tabs-list"
+          role={tabsContext ? "tablist" : undefined}
+          className={cn("relative flex items-center gap-1", className)}
+          onBlur={(e) => {
+            onBlurProp?.(e);
+            handleBlur(e);
+          }}
+          onKeyDown={handleKeyDown}
+          onMouseLeave={(e) => {
+            onMouseLeaveProp?.(e);
+            handleMouseLeave();
+          }}
+          ref={containerRef as React.RefObject<HTMLDivElement>}
+          {...props}
+        >
+          <SlidingIndicator rounded="full" />
+          {children}
+        </div>
+      </SlidingIndicatorProvider>
     </TabsListContext>
   );
 }

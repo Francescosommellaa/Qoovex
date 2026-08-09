@@ -25,12 +25,11 @@ Senza secret valido, `POST` risponde `503`.
 ## Cookie
 
 - nome: `qv-dev-auth`
-- formato corrente: `v2.<expUnix>.<organizationRole>.<hmac-sha256-base64url>`
-- il formato legacy `v1.<expUnix>.<hmac-sha256-base64url>` resta valido fino alla scadenza e usa OWNER
+- formato corrente: `v2.<expUnix>.<developmentView>.<hmac-sha256-base64url>`
 - TTL: 8 ore
 - redirect `redirect_url` limitato allo stesso origin
 
-`POST /api/dev-auth` senza body crea la sessione con ruolo OWNER. Un body JSON `{ "role": "WORKER" }` rigenera il cookie con uno dei cinque ruoli Azienda canonici; input diversi ricevono `400`. Il valore client diventa attivo solo dopo validazione e firma server-side.
+`POST /api/dev-auth` senza body crea la sessione con vista `BUSINESS`. Un body JSON `{ "view": "PROFESSIONAL" }` rigenera il cookie con una delle cinque viste consentite: `BUSINESS`, `PROFESSIONAL`, `CLIENT`, `SUPPORT_AGENT` e `PLATFORM_ADMIN`; input diversi ricevono `400`. Il valore client diventa attivo solo dopo validazione e firma server-side.
 
 ## Sicurezza
 

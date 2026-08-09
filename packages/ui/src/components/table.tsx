@@ -6,6 +6,12 @@ import { IconChevronUp, IconChevronDown, IconSelector, IconChevronLeft, IconChev
 
 import { Button } from "#components/button"
 import { cn } from "#lib/utils"
+import {
+  useSlidingIndicatorState,
+  SlidingIndicatorProvider,
+  SlidingIndicator,
+  type SlidingIndicatorContextValue,
+} from "#components/sliding-indicator"
 
 const tableVariants = cva("w-full caption-bottom text-sm border-collapse", {
   variants: {
@@ -61,22 +67,6 @@ function Table({
 
 /* ─── Context for Sliding Hover Indicator ─────────────────────── */
 
-type TableHoverIndicator = {
-  height: number
-  visible: boolean
-  x: number
-  y: number
-  width: number
-}
-
-const hiddenTableIndicator: TableHoverIndicator = {
-  height: 0,
-  visible: false,
-  width: 0,
-  x: 0,
-  y: 0,
-}
-
 type TableHoverContextValue = {
   moveHoverIndicator: (element: HTMLElement) => void
   clearHoverIndicator: () => void
@@ -101,82 +91,58 @@ function TableBody({
   onBlur: onBlurProp,
   ...props
 }: React.ComponentProps<"tbody">) {
-  const bodyRef = React.useRef<HTMLTableSectionElement>(null)
-  const [hover, setHover] = React.useState(hiddenTableIndicator)
+  const {
+    containerRef,
+    indicator,
+    moveIndicator,
+    clearIndicator,
+    handleMouseLeave,
+    handleBlur,
+  } = useSlidingIndicatorState()
 
-  const moveHoverIndicator = React.useCallback((element: HTMLElement) => {
-    const body = bodyRef.current
-    if (!body) return
-    const bodyRect = body.getBoundingClientRect()
-    const elRect = element.getBoundingClientRect()
-    setHover({
-      height: elRect.height,
-      visible: true,
-      width: elRect.width,
-      x: elRect.left - bodyRect.left,
-      y: elRect.top - bodyRect.top,
-    })
-  }, [])
-
-  const clearHoverIndicator = React.useCallback(() => {
-    setHover((prev) => ({ ...prev, visible: false }))
-  }, [])
-
-  const handleMouseLeave = React.useCallback(
-    (event: React.MouseEvent<HTMLTableSectionElement>) => {
-      onMouseLeaveProp?.(event)
-      clearHoverIndicator()
-    },
-    [onMouseLeaveProp, clearHoverIndicator]
+  const tableHoverCtxValue = React.useMemo<TableHoverContextValue>(
+    () => ({
+      moveHoverIndicator: moveIndicator,
+      clearHoverIndicator: clearIndicator,
+    }),
+    [moveIndicator, clearIndicator]
   )
 
-  const handleBlur = React.useCallback(
-    (event: React.FocusEvent<HTMLTableSectionElement>) => {
-      onBlurProp?.(event)
-      if (
-        event.relatedTarget instanceof Node &&
-        event.currentTarget.contains(event.relatedTarget)
-      ) {
-        return
-      }
-      clearHoverIndicator()
-    },
-    [onBlurProp, clearHoverIndicator]
-  )
-
-  const indicatorStyle: React.CSSProperties = {
-    height: hover.height,
-    opacity: hover.visible ? 1 : 0,
-    transform: `translate3d(${hover.x}px, ${hover.y}px, 0)`,
-    width: hover.width,
-  }
-
-  const ctxValue = React.useMemo<TableHoverContextValue>(
-    () => ({ moveHoverIndicator, clearHoverIndicator }),
-    [moveHoverIndicator, clearHoverIndicator]
+  const slidingCtxValue = React.useMemo<SlidingIndicatorContextValue>(
+    () => ({
+      indicator,
+      moveIndicator,
+      clearIndicator,
+      containerRef,
+    }),
+    [indicator, moveIndicator, clearIndicator, containerRef]
   )
 
   return (
-    <TableHoverContext.Provider value={ctxValue}>
-      <tbody
-        ref={bodyRef}
-        data-slot="table-body"
-        className={cn("relative divide-y divide-border/60 [&_tr:last-child]:border-0", className)}
-        onMouseLeave={handleMouseLeave}
-        onBlur={handleBlur}
-        {...props}
-      >
-        <tr aria-hidden className="pointer-events-none border-0 p-0 m-0">
-          <td className="p-0 border-0 m-0" colSpan={999}>
-            <span
-              aria-hidden="true"
-              className="table__hover-indicator rounded-md"
-              style={indicatorStyle}
-            />
-          </td>
-        </tr>
-        {children}
-      </tbody>
+    <TableHoverContext.Provider value={tableHoverCtxValue}>
+      <SlidingIndicatorProvider value={slidingCtxValue}>
+        <tbody
+          ref={containerRef as React.RefObject<HTMLTableSectionElement>}
+          data-slot="table-body"
+          className={cn("relative divide-y divide-border/60 [&_tr:last-child]:border-0", className)}
+          onMouseLeave={(e) => {
+            onMouseLeaveProp?.(e)
+            handleMouseLeave()
+          }}
+          onBlur={(e) => {
+            onBlurProp?.(e)
+            handleBlur(e)
+          }}
+          {...props}
+        >
+          <tr aria-hidden className="pointer-events-none border-0 p-0 m-0">
+            <td className="p-0 border-0 m-0" colSpan={999}>
+              <SlidingIndicator rounded="md" />
+            </td>
+          </tr>
+          {children}
+        </tbody>
+      </SlidingIndicatorProvider>
     </TableHoverContext.Provider>
   )
 }

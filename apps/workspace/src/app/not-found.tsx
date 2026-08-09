@@ -22,8 +22,8 @@ export default function NotFound() {
             </EmptyHeader>
           </Empty>
           <div className="mt-4 flex justify-center">
-            <Link className={cn(buttonVariants(), "h-11")} href="/contexts">
-              Torna alla dashboard
+            <Link className={cn(buttonVariants(), "h-11")} href="/">
+              Torna al workspace
             </Link>
           </div>
         </CardContent>

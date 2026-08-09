@@ -21,11 +21,11 @@ export function WorkspaceTopbar({ fallbackLabel, platformRole, devView, navigati
   const pageLabel = useWorkspacePageIdentity(pathname) ?? configured?.label ?? fallbackLabel;
 
   const breadcrumbItems: BreadcrumbItemSpec[] = React.useMemo(() => {
-    if (pathname === "/contexts") {
+    if (pathname === "/") {
       return [{ label: pageLabel }]
     }
     return [
-      { label: "Workspace", href: "/contexts", render: <Link href="/contexts" /> },
+      { label: "Workspace", href: "/", render: <Link href="/" /> },
       { label: pageLabel },
     ]
   }, [pathname, pageLabel])

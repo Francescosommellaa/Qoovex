@@ -24,7 +24,6 @@ async function main() {
   else assertProductionApproval({
     approved: process.env.QOOVEX_MIGRATE_DEPLOY_APPROVED,
     backupRef: process.env.QOOVEX_MIGRATION_BACKUP_REF,
-    destructiveResetRef: process.env.QOOVEX_JOB_SITE_DESTRUCTIVE_RESET_REF,
     expectedLastMigration: process.env.QOOVEX_EXPECTED_LAST_MIGRATION,
     lastMigration: history.local.at(-1)?.name,
   });

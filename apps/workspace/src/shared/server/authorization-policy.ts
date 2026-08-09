@@ -1,13 +1,12 @@
 import { organizationPermissions, type OrganizationAccessPreset, type OrganizationPermission, type OrganizationRole } from "@qoovex/types";
 
-const READ: readonly OrganizationPermission[] = ["organization:read", "organizationProfile:read", "workers:read", "jobSites:read", "documents:read", "documents:file:read", "evidence:read", "evidence:file:read", "assignments:read", "jobSite:view", "jobSite:steps:read", "jobSite:payments:read"];
-const OPERATE: readonly OrganizationPermission[] = [...READ, "workers:create", "workers:update", "jobSites:create", "jobSites:update", "documents:upload", "documents:update", "evidence:upload", "jobSite:update", "jobSite:publish", "jobSite:participants:manage", "jobSite:manageParticipants", "jobSite:steps:manage", "jobSite:steps:updateStatus", "jobSite:requests:create", "jobSite:requests:respond", "jobSite:changes:propose", "jobSite:commercial:negotiate", "jobSite:commercial:accept", "jobSite:payments:request", "jobSite:payments:confirmReceipt", "jobSite:disputes:create", "jobSite:disputes:respond", "jobSite:closure:propose", "jobSite:closure:confirm", "jobSite:export"];
+const READ: readonly OrganizationPermission[] = ["organization:read", "organizationProfile:read", "workers:read", "jobSites:read", "assignments:read", "jobSite:view", "jobSite:steps:read", "jobSite:payments:read"];
+const OPERATE: readonly OrganizationPermission[] = [...READ, "workers:create", "workers:update", "jobSites:create", "jobSites:update", "jobSite:update", "jobSite:publish", "jobSite:participants:manage", "jobSite:manageParticipants", "jobSite:steps:manage", "jobSite:steps:updateStatus", "jobSite:requests:create", "jobSite:requests:respond", "jobSite:changes:propose", "jobSite:commercial:negotiate", "jobSite:commercial:accept", "jobSite:payments:request", "jobSite:payments:confirmReceipt", "jobSite:disputes:create", "jobSite:disputes:respond", "jobSite:closure:propose", "jobSite:closure:confirm", "jobSite:export"];
 const PRESET_PERMISSIONS: Record<OrganizationAccessPreset, readonly OrganizationPermission[]> = {
   READ_ONLY: READ,
   OPERATIONAL_COLLABORATION: OPERATE,
   SITE_MANAGER: OPERATE,
-  DOCUMENT_REVIEWER: [...READ, "documents:upload", "documents:update"],
-  LIMITED_UPLOAD: [...READ, "documents:upload", "evidence:upload"],
+  LIMITED_UPLOAD: [...READ],
   CUSTOM: [],
 };
 
@@ -20,8 +19,6 @@ const forbidden = new Set<OrganizationPermission>(["organization:update", "organ
 const dependencies: Partial<Record<OrganizationPermission, readonly OrganizationPermission[]>> = {
   "workers:create": ["workers:read"], "workers:update": ["workers:read"], "workers:archive": ["workers:read"],
   "jobSites:create": ["jobSites:read"], "jobSites:update": ["jobSites:read"], "jobSites:archive": ["jobSites:read"],
-  "documents:file:read": ["documents:read"], "documents:upload": ["documents:read"], "documents:update": ["documents:read"], "documents:archive": ["documents:read"],
-  "evidence:file:read": ["evidence:read"], "evidence:upload": ["evidence:read"], "evidence:delete": ["evidence:read"],
   "assignments:manage": ["assignments:read"], "organizationProfile:update": ["organizationProfile:read"],
 };
 export function normalizeCollaboratorPermissions(values: readonly string[]): OrganizationPermission[] {

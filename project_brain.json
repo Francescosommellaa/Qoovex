@@ -23,8 +23,8 @@
     "identity_and_context": {
       "organization_roles": ["OWNER", "COLLABORATOR"],
       "client_is_organization_role": false,
-      "membership_unique": ["organizationId", "userId"],
-      "contexts": ["PLATFORM", "ORGANIZATION", "CLIENT"],
+      "membership_unique": ["one active organization membership per user"],
+      "account_roles": ["BUSINESS", "PROFESSIONAL", "CLIENT"],
       "route_is_authorization_context": true
     },
     "job_site": {
@@ -36,7 +36,7 @@
       "physical_delete": false
     },
     "implemented_domains": [
-      "multiple memberships", "context hub", "client participation and properties", "initial agreement",
+      "single active organization membership", "client participation and properties", "initial agreement",
       "append-only timeline", "contextual attachments", "optional steps", "requests", "versioned proposals",
       "economic authority", "documented payments", "disputes", "mutual closure and reopening",
       "authenticated exports", "notifications", "audit", "data-control"
@@ -48,7 +48,7 @@
       "blob": "private, server-mediated, MIME checked, SHA-256, 4 MiB maximum"
     },
     "visual_foundation": {
-      "typography": "General Sans (primary, ~90-95%) and ARRAY (Fontshare display accent)"
+      "typography": "System font stack (primary and accent)"
     },
     "known_blockers": [
       "JobSite creator participant is persisted PENDING while organization actor resolution requires ACTIVE",

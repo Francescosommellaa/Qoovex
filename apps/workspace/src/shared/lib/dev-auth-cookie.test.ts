@@ -12,12 +12,12 @@ describe("dev auth cookie view", () => {
   });
 
   it("rejects a view changed after signing", async () => {
-    const cookie = await signDevAuthCookieValue("OWNER");
-    await expect(readDevAuthCookieValue(cookie.value.replace(".OWNER.", ".PLATFORM_ADMIN."))).resolves.toBeNull();
+    const cookie = await signDevAuthCookieValue("BUSINESS");
+    await expect(readDevAuthCookieValue(cookie.value.replace(".BUSINESS.", ".PLATFORM_ADMIN."))).resolves.toBeNull();
   });
 
   it("accepts only canonical views", () => {
-    expect(isDevAuthView("OWNER")).toBe(true);
+    expect(isDevAuthView("BUSINESS")).toBe(true);
     expect(isDevAuthView("SUPPORT_AGENT")).toBe(true);
     expect(isDevAuthView("PLATFORM_ADMIN")).toBe(true);
     expect(isDevAuthView("WORKER")).toBe(false);

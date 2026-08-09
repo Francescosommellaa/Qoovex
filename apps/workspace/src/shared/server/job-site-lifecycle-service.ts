@@ -4,6 +4,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { db, Prisma } from "@qoovex/db";
 import { z } from "zod";
 import { AccessError } from "./access-errors";
+import { requireAccountRole } from "./account-role-service";
 import { requireClientJobSiteDetailContext, requireOrganizationContext } from "./access-context-service";
 import { fingerprintPayload, initialAgreementPayloadSchema } from "./job-site-contracts";
 import { enqueueJobSiteProcess } from "./job-site-process-service";
@@ -44,6 +45,7 @@ export async function listOrganizationJobSites(organizationId: string) {
 }
 
 export async function createJobSite(organizationId: string, idempotencyKey: string, rawInput: unknown) {
+  await requireAccountRole("BUSINESS");
   const context = await requireOrganizationContext(organizationId);
   requireContextPermission(context, "jobSites:create");
   const input = createJobSiteSchema.parse(rawInput);
@@ -129,8 +131,7 @@ export async function getOrganizationJobSiteDetail(organizationId: string, jobSi
 }
 
 export async function acceptPrimaryClientInvitation(rawToken: string) {
-  const { requireIdentity } = await import("./access-context-service");
-  const identity = await requireIdentity();
+  const identity = await requireAccountRole("CLIENT");
   if (!identity.emailVerified) throw new AccessError("Email verificata richiesta.", 403);
   const tokenHash = createHash("sha256").update(rawToken).digest("hex");
   return runSerializableTransaction(async (tx) => {
@@ -225,8 +226,7 @@ export async function transitionClientParticipation(input: { actor: JobSiteActor
 }
 
 export async function listClientHome() {
-  const { requireIdentity } = await import("./access-context-service");
-  const identity = await requireIdentity();
+  const identity = await requireAccountRole("CLIENT");
   const [properties, participants] = await Promise.all([
     db.clientProperty.findMany({ where: { userId: identity.id, archivedAt: null }, include: { jobSites: { where: { archivedAt: null }, include: { jobSite: { select: { id: true, name: true, status: true, estimatedCompletionAt: true, organization: { select: { id: true, name: true, code: true } } } } } } }, orderBy: { displayName: "asc" } }),
     db.jobSiteParticipant.findMany({ where: { userId: identity.id, kind: "CLIENT", status: { in: ["PENDING", "ACTIVE"] } }, select: { id: true, jobSite: { select: { id: true, name: true, status: true, estimatedCompletionAt: true, organization: { select: { id: true, name: true, code: true } }, propertyLinks: { where: { archivedAt: null }, select: { id: true } } } } }, orderBy: { jobSite: { updatedAt: "desc" } } }),
@@ -235,15 +235,13 @@ export async function listClientHome() {
 }
 
 export async function createClientProperty(rawInput: unknown) {
-  const { requireIdentity } = await import("./access-context-service");
-  const identity = await requireIdentity();
+  const identity = await requireAccountRole("CLIENT");
   const input = propertySchema.parse(rawInput);
   return db.clientProperty.create({ data: { userId: identity.id, displayName: input.displayName, addressLine: input.addressLine ?? null, city: input.city ?? null, postalCode: input.postalCode ?? null, countryCode: input.countryCode ?? null, privateNotes: input.privateNotes ?? null }, select: { id: true, displayName: true, addressLine: true, city: true, postalCode: true, countryCode: true, privateNotes: true, createdAt: true } });
 }
 
 export async function linkClientProperty(propertyId: string, jobSiteId: string) {
-  const { requireIdentity } = await import("./access-context-service");
-  const identity = await requireIdentity();
+  const identity = await requireAccountRole("CLIENT");
   const [property, participant] = await Promise.all([
     db.clientProperty.findFirst({ where: { id: propertyId, userId: identity.id, archivedAt: null }, select: { id: true } }),
     db.jobSiteParticipant.findFirst({ where: { jobSiteId, userId: identity.id, kind: "CLIENT", status: "ACTIVE" }, select: { organizationId: true } }),

@@ -1,4 +1,4 @@
-const DEFAULT_CALLBACK_URL = "/contexts";
+const DEFAULT_CALLBACK_URL = "/";
 
 export function sanitizeCallbackUrl(value: string | null | undefined) {
   if (!value) return DEFAULT_CALLBACK_URL;

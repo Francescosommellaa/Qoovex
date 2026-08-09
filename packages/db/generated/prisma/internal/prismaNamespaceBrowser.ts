@@ -62,11 +62,6 @@ export const ModelName = {
   JobSite: 'JobSite',
   WorkerUserLink: 'WorkerUserLink',
   JobSiteWorkerAssignment: 'JobSiteWorkerAssignment',
-  Document: 'Document',
-  DocumentVersion: 'DocumentVersion',
-  DocumentJobSiteLink: 'DocumentJobSiteLink',
-  Evidence: 'Evidence',
-  EvidenceRevision: 'EvidenceRevision',
   Notification: 'Notification',
   DataControlJob: 'DataControlJob',
   JobSiteParticipant: 'JobSiteParticipant',
@@ -200,6 +195,7 @@ export const UserScalarFieldEnum = {
   avatarBlobPathname: 'avatarBlobPathname',
   phoneNumber: 'phoneNumber',
   platformRole: 'platformRole',
+  accountRole: 'accountRole',
   authVersion: 'authVersion',
   suspendedAt: 'suspendedAt',
   suspensionReason: 'suspensionReason',
@@ -340,97 +336,6 @@ export const JobSiteWorkerAssignmentScalarFieldEnum = {
 } as const
 
 export type JobSiteWorkerAssignmentScalarFieldEnum = (typeof JobSiteWorkerAssignmentScalarFieldEnum)[keyof typeof JobSiteWorkerAssignmentScalarFieldEnum]
-
-
-export const DocumentScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  currentVersionId: 'currentVersionId',
-  ownerType: 'ownerType',
-  workerId: 'workerId',
-  jobSiteId: 'jobSiteId',
-  title: 'title',
-  notes: 'notes',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
-
-
-export const DocumentVersionScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  documentId: 'documentId',
-  blobKey: 'blobKey',
-  originalFileName: 'originalFileName',
-  mimeType: 'mimeType',
-  size: 'size',
-  checksum: 'checksum',
-  uploadedById: 'uploadedById',
-  createdAt: 'createdAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type DocumentVersionScalarFieldEnum = (typeof DocumentVersionScalarFieldEnum)[keyof typeof DocumentVersionScalarFieldEnum]
-
-
-export const DocumentJobSiteLinkScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  documentId: 'documentId',
-  jobSiteId: 'jobSiteId',
-  purpose: 'purpose',
-  validFrom: 'validFrom',
-  validTo: 'validTo',
-  linkedById: 'linkedById',
-  unlinkedAt: 'unlinkedAt',
-  unlinkedById: 'unlinkedById',
-  unlinkReason: 'unlinkReason',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type DocumentJobSiteLinkScalarFieldEnum = (typeof DocumentJobSiteLinkScalarFieldEnum)[keyof typeof DocumentJobSiteLinkScalarFieldEnum]
-
-
-export const EvidenceScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  jobSiteId: 'jobSiteId',
-  workerId: 'workerId',
-  type: 'type',
-  title: 'title',
-  description: 'description',
-  capturedAt: 'capturedAt',
-  blobKey: 'blobKey',
-  originalFileName: 'originalFileName',
-  mimeType: 'mimeType',
-  size: 'size',
-  createdById: 'createdById',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type EvidenceScalarFieldEnum = (typeof EvidenceScalarFieldEnum)[keyof typeof EvidenceScalarFieldEnum]
-
-
-export const EvidenceRevisionScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  evidenceId: 'evidenceId',
-  revisionNumber: 'revisionNumber',
-  title: 'title',
-  description: 'description',
-  capturedAt: 'capturedAt',
-  reason: 'reason',
-  createdById: 'createdById',
-  createdAt: 'createdAt'
-} as const
-
-export type EvidenceRevisionScalarFieldEnum = (typeof EvidenceRevisionScalarFieldEnum)[keyof typeof EvidenceRevisionScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

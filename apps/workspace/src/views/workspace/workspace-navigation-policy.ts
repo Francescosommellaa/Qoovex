@@ -14,7 +14,7 @@ function has(permissions: readonly OrganizationPermission[], permission: Organiz
 
 export function buildWorkspaceNavigation(access: readonly OrganizationPermission[] | OrganizationRole | null, platformRole: PlatformRole | null): WorkspaceNavigationModel {
   const permissions = Array.isArray(access) ? access : getPermissionsForRole(access as OrganizationRole | null);
-  const primary: WorkspaceNavigationItem[] = [{ label: "Contesti", href: "/contexts" }];
+  const primary: WorkspaceNavigationItem[] = [];
   const actions: WorkspaceNavigationItem[] = [];
 
   const account: WorkspaceNavigationItem[] = [];
@@ -31,7 +31,7 @@ export function isWorkspaceNavigationItemCurrent(pathname: string, searchParams:
   const target = new URL(href, "https://workspace.qoovex.local");
   const matchPath = activePath ?? target.pathname;
   const pathMatches = pathname === matchPath
-    || (matchPath !== "/contexts" && pathname.startsWith(`${matchPath}/`));
+    || (matchPath !== "/" && pathname.startsWith(`${matchPath}/`));
   return pathMatches && [...target.searchParams].every(([key, value]) => searchParams.get(key) === value);
 }
 

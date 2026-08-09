@@ -56,6 +56,7 @@ export async function findWorkspaceUserById(userId: string) {
       phoneNumber: true,
       mfaEnabled: true,
       platformRole: true,
+      accountRole: true,
       authVersion: true,
       suspendedAt: true,
       suspensionReason: true,

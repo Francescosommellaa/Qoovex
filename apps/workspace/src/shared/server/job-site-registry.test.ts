@@ -25,17 +25,21 @@ describe("current product capability registry", () => {
 
   it("accounts for every current product API route", () => {
     const apiRoot = resolve(process.cwd(), "src/app/api");
-    const routeFiles = ["org", "client", "contexts", "exports", "internal/job-sites"].flatMap((root) => readdirSync(resolve(apiRoot, root), { recursive: true, withFileTypes: true })
+    const routeFiles = ["org", "client", "exports", "internal/job-sites"].flatMap((root) => readdirSync(resolve(apiRoot, root), { recursive: true, withFileTypes: true })
       .filter((entry) => entry.isFile() && entry.name === "route.ts")
-      .map((entry) => `/${["api", root, entry.parentPath.slice(resolve(apiRoot, root).length).replace(/\\/g, "/").replace(/^\//, "")].filter(Boolean).join("/")}`));
+      .map((entry) => `/${["api", root, entry.parentPath.slice(resolve(apiRoot, root).length).replace(/\\/g, "/").replace(/^\//, "")].filter(Boolean).join("/")}`))
+      .concat("/api/account/notification-preferences");
     const declared = new Set(PRODUCT_CAPABILITY_MANIFEST.map((capability) => capability.api));
     for (const route of routeFiles) expect(declared.has(route), `Missing capability for ${route}`).toBe(true);
   });
 
-  it("preserves organization roles and multi-context membership invariants", () => {
+  it("preserves organization roles and the single active membership invariant", () => {
     const schema = readFileSync(resolve(process.cwd(), "../../packages/db/prisma/schema.prisma"), "utf8");
+    const migration = readFileSync(resolve(process.cwd(), "../../packages/db/prisma/migrations/20260809020000_single_active_organization_membership/migration.sql"), "utf8");
     expect(schema.match(/enum OrganizationRole \{([\s\S]*?)\}/)?.[1]?.trim().split(/\s+/)).toEqual(["OWNER", "COLLABORATOR"]);
     expect(schema).toContain("@@unique([organizationId, userId])");
+    expect(migration).toContain('CREATE UNIQUE INDEX "OrganizationMembership_one_active_organization_per_user"');
+    expect(migration).toContain('WHERE "revokedAt" IS NULL');
     expect(schema).toContain("userSideKey");
     expect(schema).toContain("primaryClientKey");
     expect(schema).toContain("participantAccessVersion");

@@ -2,16 +2,16 @@
   "schemaVersion": 2,
   "application": {
     "name": "qoovex-workspace",
-    "version": "job-site-from-zero-v1",
+    "version": "single-organization-membership-v1",
     "runtimeTrack": "job-site",
     "current": "implemented_not_end_to_end_verified"
   },
   "database": {
     "baselineHead": "20260720010000_calendar_events",
-    "migrationHead": "20260803230000_qoovex_vnext_from_zero",
-    "migrationCount": 6,
+    "migrationHead": "20260809020000_single_active_organization_membership",
+    "migrationCount": 8,
     "productionMutationRequiredForAlignment": true,
-    "rolloutMode": "manual_only_destructive_alignment_blocked",
+    "rolloutMode": "manual_only_backup_and_reauthorization_required",
     "ledger": "ops/migration-ledger.json"
   },
   "blob": {

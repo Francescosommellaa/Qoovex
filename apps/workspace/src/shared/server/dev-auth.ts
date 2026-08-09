@@ -7,6 +7,7 @@ import {
 } from "@shared/lib/dev-auth-cookie";
 import { db } from "@qoovex/db";
 import { isDevAuthAllowedForHost } from "@shared/lib/dev-auth-guard";
+import type { DevWorkspaceView } from "@qoovex/types";
 import { findWorkspaceUserById } from "@shared/server/repositories/user-repository";
 import { syncWorkspaceUser } from "@shared/server/workspace-user-sync";
 
@@ -21,6 +22,10 @@ const DEV_USER = {
   firstName: "Mario",
   lastName: "Rossi",
 };
+
+function getDevAccountRole(view: DevWorkspaceView) {
+  return view === "BUSINESS" ? "BUSINESS" as const : view === "PROFESSIONAL" ? "PROFESSIONAL" as const : view === "CLIENT" ? "CLIENT" as const : null;
+}
 
 async function ensureDevUserEmailVerified(user: NonNullable<Awaited<ReturnType<typeof findWorkspaceUserById>>>) {
   if (user.emailVerified) return user;
@@ -58,7 +63,8 @@ export async function bootstrapDevUser() {
     const verifiedUser = await ensureDevUserEmailVerified(existingUser);
     return {
       ...verifiedUser,
-      platformRole: devSession.view === "OWNER" ? "USER" as const : devSession.view,
+      platformRole: devSession.view === "SUPPORT_AGENT" || devSession.view === "PLATFORM_ADMIN" ? devSession.view : "USER" as const,
+      accountRole: getDevAccountRole(devSession.view),
       suspendedAt: null,
       suspensionReason: null,
       imageUrl: null,
@@ -75,7 +81,8 @@ export async function bootstrapDevUser() {
 
   return {
     ...verifiedUser,
-    platformRole: devSession.view === "OWNER" ? "USER" as const : devSession.view,
+    platformRole: devSession.view === "SUPPORT_AGENT" || devSession.view === "PLATFORM_ADMIN" ? devSession.view : "USER" as const,
+    accountRole: getDevAccountRole(devSession.view),
     suspendedAt: null,
     suspensionReason: null,
     imageUrl: null,

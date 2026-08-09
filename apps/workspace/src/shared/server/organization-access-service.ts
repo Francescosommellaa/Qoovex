@@ -5,6 +5,7 @@ import { db } from "@qoovex/db";
 import type { OrganizationAccessPreset, OrganizationPermission, OrganizationResourceGrantInput, OrganizationScopeMode } from "@qoovex/types";
 import { AccessError } from "@shared/server/access-errors";
 import { getContextOrganizationId, getWorkspaceAccessContext, requireIdentity, requirePermission } from "@shared/server/access-context-service";
+import { requireAccountRole } from "@shared/server/account-role-service";
 import { canRevokeRole } from "@shared/server/authorization-policy";
 import { normalizeCollaboratorPermissions } from "@shared/server/authorization-policy";
 import { recordSupportAccess } from "@shared/server/support-access-service";
@@ -24,13 +25,15 @@ function generateOrganizationCode() {
 }
 
 export async function createOrganization(nameInput: string) {
-  const user = await requireIdentity();
+  const user = await requireAccountRole("BUSINESS");
   if (!user.emailVerified) throw new AccessError("Verifica la tua email prima di creare l'azienda.", 403);
   const name = nameInput.trim();
   if (name.length < 2 || name.length > 120) throw new AccessError("Inserisci un nome azienda valido.", 409);
 
   try {
     return await runSerializableTransaction(async (tx) => {
+      const activeMembership = await tx.organizationMembership.findFirst({ where: { userId: user.id, revokedAt: null }, select: { id: true } });
+      if (activeMembership) throw new AccessError("Il tuo account e gia collegato a un'Azienda.", 409, "ORGANIZATION_ALREADY_CONNECTED");
       const organization = await tx.organization.create({
         data: { name, code: generateOrganizationCode(), createdById: user.id },
       });
@@ -93,17 +96,13 @@ export async function getMemberAccess(memberId: string) {
 
 export async function getAccessResourceOptions() {
   const { organizationId } = await requireOwnerAccessManager();
-  const [jobSites, workers, documents, evidence] = await Promise.all([
+  const [jobSites, workers] = await Promise.all([
     db.jobSite.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, name: true }, orderBy: { name: "asc" }, take: 100 }),
     db.worker.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, displayName: true }, orderBy: { displayName: "asc" }, take: 100 }),
-    db.document.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, title: true }, orderBy: { title: "asc" }, take: 100 }),
-    db.evidence.findMany({ where: { organizationId, archivedAt: null }, select: { id: true, title: true }, orderBy: { title: "asc" }, take: 100 }),
   ]);
   return {
     jobSites: jobSites.map((item) => ({ id: item.id, label: item.name, resourceType: "JOB_SITE" as const })),
     workers: workers.map((item) => ({ id: item.id, label: item.displayName, resourceType: "WORKER" as const })),
-    documents: documents.map((item) => ({ id: item.id, label: item.title, resourceType: "DOCUMENT" as const })),
-    evidence: evidence.map((item) => ({ id: item.id, label: item.title, resourceType: "EVIDENCE" as const })),
   };
 }
 

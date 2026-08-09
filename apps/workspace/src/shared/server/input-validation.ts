@@ -2,7 +2,7 @@ import "server-only";
 
 import { AccessError } from "@shared/server/access-errors";
 
-const BINARY_PAYLOAD_FIELDS = ["blobKey", "blobUrl", "file", "files", "documentVersion", "content", "base64", "binary"] as const;
+const BINARY_PAYLOAD_FIELDS = ["blobKey", "blobUrl", "file", "files", "content", "base64", "binary"] as const;
 
 export function isEnumValue<T extends readonly string[]>(values: T, value: unknown): value is T[number] {
   return typeof value === "string" && (values as readonly string[]).includes(value);

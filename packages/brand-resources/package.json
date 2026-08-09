@@ -8,6 +8,10 @@
       "types": "./svg.d.ts",
       "default": "./qoovex-marketing-icon/qoovex-icona-nera-no-sfondo.svg"
     },
+    "./qoovex-worckspace-icon/qoovex-icona-bianca-no-sfondo.svg": {
+      "types": "./svg.d.ts",
+      "default": "./qoovex-worckspace-icon/qoovex-icona-bianca-no-sfondo.svg"
+    },
     "./qoovex-worckspace-icon/qoovex-icona-bianca-sfondo-arrotondato.svg": {
       "types": "./svg.d.ts",
       "default": "./qoovex-worckspace-icon/qoovex-icona-bianca-sfondo-arrotondato.svg"
@@ -19,6 +23,10 @@
     "./sirio-icon/sirio-white.svg": {
       "types": "./svg.d.ts",
       "default": "./sirio-icon/sirio-white.svg"
+    },
+    "./*": {
+      "types": "./svg.d.ts",
+      "default": "./*"
     }
   }
 }

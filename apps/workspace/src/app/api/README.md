@@ -17,7 +17,7 @@ Regole:
 
 Endpoint infrastrutturali e attuale presenti:
 - `auth/credentials`: registrazione credentials verify-first, verifica email e reset password;
-- `contexts`: contesti Azienda, cliente e piattaforma derivati server-side;
+- `account/notification-preferences`: preferenze personali di notifica collegate all'Azienda;
 - `org/[organizationId]`: cantieri, participant, inviti, agreement, timeline, step, richieste, proposte, pagamenti documentati, dispute, allegati, chiusura, post-chiusura, export e impostazioni attuale;
 - `client`: inviti, immobili privati, cantieri partecipati e proiezioni condivise participant-scoped;
 - `exports`: scambio autenticato di token opachi con grant brevi;
@@ -26,6 +26,6 @@ Endpoint infrastrutturali e attuale presenti:
 - `GET data/jobs/run`: runner data-control con lo stesso contratto cron; secret in query e header custom non sono accettati.
 - `audit-log`: audit prodotto owner-only con metadata redatti e paginazione semplice.
 - `data`: inventario dati, export metadata JSON e retention operativa owner-only.
-- `resource-assignments`: infrastruttura accessi precedente ancora presente come foundation, non superficie prodotto autonoma.
+- `resource-assignments`: foundation di accesso scoped, non superficie prodotto autonoma.
 
 Le route prodotto implicite precedente non sono endpoint attivi. La presenza delle route attuale non prova la vertical slice end-to-end, che resta bloccata dai test lifecycle dedicati.

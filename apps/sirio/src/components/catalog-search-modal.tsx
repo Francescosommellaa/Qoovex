@@ -8,6 +8,11 @@ import { Card } from "@qoovex/ui/components/card";
 import { Badge } from "@qoovex/ui/components/badge";
 import { KbdShortcut } from "@qoovex/ui/components/kbd-shortcut";
 import {
+  SlidingIndicatorContainer,
+  SlidingIndicator,
+  useSlidingIndicator,
+} from "@qoovex/ui/components/sliding-indicator";
+import {
   IconPalette,
   IconTypography,
   IconRulerMeasure,
@@ -75,6 +80,38 @@ export interface CatalogSearchModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
+function SearchResultItem({
+  item,
+  onSelect,
+}: {
+  item: (typeof catalogNavigation)[0];
+  onSelect: () => void;
+}) {
+  const slidingCtx = useSlidingIndicator();
+
+  return (
+    <Link
+      href={item.href}
+      onClick={onSelect}
+      onMouseEnter={(e) => slidingCtx?.moveIndicator(e.currentTarget)}
+      onFocus={(e) => slidingCtx?.moveIndicator(e.currentTarget)}
+      className="relative z-10 flex items-center justify-between p-2.5 rounded-lg border border-border/40 bg-card/40 transition-all duration-150 text-xs group"
+    >
+      <div className="flex items-center gap-3">
+        <div className="p-1.5 rounded-md bg-muted text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+          <item.icon className="size-4" />
+        </div>
+        <span className="font-semibold font-accent text-foreground group-hover:text-primary transition-colors">
+          {item.name}
+        </span>
+      </div>
+      <Badge variant="outline" size="sm" className="text-[0.65rem] opacity-70">
+        {item.category}
+      </Badge>
+    </Link>
+  );
+}
+
 export function CatalogSearchModal({ open, onOpenChange }: CatalogSearchModalProps) {
   const [query, setQuery] = React.useState("");
 
@@ -128,26 +165,15 @@ export function CatalogSearchModal({ open, onOpenChange }: CatalogSearchModalPro
             </div>
           ) : (
             <SearchResults>
-              {results.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => onOpenChange(false)}
-                  className="flex items-center justify-between p-2.5 rounded-lg border border-border/40 bg-card/40 hover:bg-accent/60 transition-all duration-150 text-xs group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-1.5 rounded-md bg-muted text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <item.icon className="size-4" />
-                    </div>
-                    <span className="font-semibold font-accent text-foreground group-hover:text-primary transition-colors">
-                      {item.name}
-                    </span>
-                  </div>
-                  <Badge variant="outline" size="sm" className="text-[0.65rem] opacity-70">
-                    {item.category}
-                  </Badge>
-                </Link>
-              ))}
+              <SlidingIndicatorContainer className="flex flex-col gap-1" rounded="lg">
+                {results.map((item) => (
+                  <SearchResultItem
+                    key={item.href}
+                    item={item}
+                    onSelect={() => onOpenChange(false)}
+                  />
+                ))}
+              </SlidingIndicatorContainer>
             </SearchResults>
           )}
         </div>
