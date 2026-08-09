@@ -6,6 +6,33 @@ import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { cn } from "#lib/utils"
 import { IconSelector, IconCheck, IconChevronUp, IconChevronDown } from "@tabler/icons-react"
 
+/* ─── Context for Sliding Hover Indicator ─────────────────────── */
+
+type SelectHoverIndicator = {
+  height: number
+  visible: boolean
+  x: number
+  y: number
+  width: number
+}
+
+const hiddenSelectIndicator: SelectHoverIndicator = {
+  height: 0,
+  visible: false,
+  width: 0,
+  x: 0,
+  y: 0,
+}
+
+type SelectHoverContextValue = {
+  moveHoverIndicator: (element: HTMLElement) => void
+  clearHoverIndicator: () => void
+}
+
+const SelectHoverContext = React.createContext<SelectHoverContextValue | null>(null)
+
+/* ─── Components ─────────────────────────────────────────────── */
+
 const Select = SelectPrimitive.Root
 
 function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
@@ -17,6 +44,7 @@ function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
     />
   )
 }
+
 function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
   return (
     <SelectPrimitive.Value
@@ -63,12 +91,69 @@ function SelectContent({
   align = "center",
   alignOffset = 0,
   alignItemWithTrigger = true,
+  onMouseLeave: onMouseLeaveProp,
+  onBlur: onBlurProp,
   ...props
 }: SelectPrimitive.Popup.Props &
   Pick<
     SelectPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger"
   >) {
+  const popupRef = React.useRef<HTMLDivElement>(null)
+  const [hover, setHover] = React.useState(hiddenSelectIndicator)
+
+  const moveHoverIndicator = React.useCallback((element: HTMLElement) => {
+    const popup = popupRef.current
+    if (!popup) return
+    const popupRect = popup.getBoundingClientRect()
+    const elRect = element.getBoundingClientRect()
+    setHover({
+      height: elRect.height,
+      visible: true,
+      width: elRect.width,
+      x: elRect.left - popupRect.left,
+      y: elRect.top - popupRect.top,
+    })
+  }, [])
+
+  const clearHoverIndicator = React.useCallback(() => {
+    setHover((prev) => ({ ...prev, visible: false }))
+  }, [])
+
+  const handleMouseLeave = React.useCallback(
+    (event: any) => {
+      onMouseLeaveProp?.(event)
+      clearHoverIndicator()
+    },
+    [onMouseLeaveProp, clearHoverIndicator]
+  )
+
+  const handleBlur = React.useCallback(
+    (event: any) => {
+      onBlurProp?.(event)
+      if (
+        event.relatedTarget instanceof Node &&
+        event.currentTarget.contains(event.relatedTarget)
+      ) {
+        return
+      }
+      clearHoverIndicator()
+    },
+    [onBlurProp, clearHoverIndicator]
+  )
+
+  const indicatorStyle: React.CSSProperties = {
+    height: hover.height,
+    opacity: hover.visible ? 1 : 0,
+    transform: `translate3d(${hover.x}px, ${hover.y}px, 0)`,
+    width: hover.width,
+  }
+
+  const ctxValue = React.useMemo<SelectHoverContextValue>(
+    () => ({ moveHoverIndicator, clearHoverIndicator }),
+    [moveHoverIndicator, clearHoverIndicator]
+  )
+
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Positioner
@@ -79,16 +164,29 @@ function SelectContent({
         alignItemWithTrigger={alignItemWithTrigger}
         className="isolate z-50"
       >
-        <SelectPrimitive.Popup
-          data-slot="select-content"
-          data-align-trigger={alignItemWithTrigger}
-          className={cn("relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95", className )}
-          {...props}
-        >
-          <SelectScrollUpButton />
-          <SelectPrimitive.List>{children}</SelectPrimitive.List>
-          <SelectScrollDownButton />
-        </SelectPrimitive.Popup>
+        <SelectHoverContext.Provider value={ctxValue}>
+          <SelectPrimitive.Popup
+            ref={popupRef}
+            data-slot="select-content"
+            data-align-trigger={alignItemWithTrigger}
+            className={cn(
+              "relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 p-1",
+              className
+            )}
+            onMouseLeave={handleMouseLeave}
+            onBlur={handleBlur}
+            {...props}
+          >
+            <span
+              aria-hidden="true"
+              className="select__hover-indicator rounded-md"
+              style={indicatorStyle}
+            />
+            <SelectScrollUpButton />
+            <SelectPrimitive.List>{children}</SelectPrimitive.List>
+            <SelectScrollDownButton />
+          </SelectPrimitive.Popup>
+        </SelectHoverContext.Provider>
       </SelectPrimitive.Positioner>
     </SelectPrimitive.Portal>
   )
@@ -110,15 +208,31 @@ function SelectLabel({
 function SelectItem({
   className,
   children,
+  onMouseEnter: onMouseEnterProp,
+  onFocus: onFocusProp,
   ...props
 }: SelectPrimitive.Item.Props) {
+  const selectHoverCtx = React.useContext(SelectHoverContext)
+
+  const handleMouseEnter = (event: any) => {
+    onMouseEnterProp?.(event)
+    selectHoverCtx?.moveHoverIndicator(event.currentTarget)
+  }
+
+  const handleFocus = (event: any) => {
+    onFocusProp?.(event)
+    selectHoverCtx?.moveHoverIndicator(event.currentTarget)
+  }
+
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+        "relative z-10 flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus:bg-transparent focus:text-accent-foreground data-highlighted:bg-transparent data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className
       )}
+      onMouseEnter={handleMouseEnter}
+      onFocus={handleFocus}
       {...props}
     >
       <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-nowrap">
@@ -161,8 +275,7 @@ function SelectScrollUpButton({
       )}
       {...props}
     >
-      <IconChevronUp
-      />
+      <IconChevronUp />
     </SelectPrimitive.ScrollUpArrow>
   )
 }
@@ -180,8 +293,7 @@ function SelectScrollDownButton({
       )}
       {...props}
     >
-      <IconChevronDown
-      />
+      <IconChevronDown />
     </SelectPrimitive.ScrollDownArrow>
   )
 }

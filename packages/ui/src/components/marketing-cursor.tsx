@@ -22,7 +22,6 @@ const magneticBlockingSurfaceSelector = [
   '[role="menu"]',
   '[data-slot="dropdown-menu-content"]',
   '[data-slot="popover-content"]',
-  '[data-slot="sheet-content"]',
 ].join(", ");
 const magneticDistance = 16;
 const magneticTargetRefreshInterval = 500;

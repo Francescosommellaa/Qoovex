@@ -7,16 +7,10 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { useIsMobile } from "#hooks/use-mobile"
 import { cn } from "#lib/utils"
+import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import { Button } from "#components/button"
 import { Input } from "#components/input"
 import { Separator } from "#components/separator"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "#components/sheet"
 import { Skeleton } from "#components/skeleton"
 import { SIDEBAR_COOKIE_MAX_AGE, SIDEBAR_COOKIE_NAME } from "#lib/sidebar-state"
 import {
@@ -182,27 +176,25 @@ function Sidebar({
 
   if (isMobile) {
     return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-        <SheetContent
-          dir={dir}
-          data-sidebar="sidebar"
-          data-slot="sidebar"
-          data-mobile="true"
-          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
-          style={
-            {
-              "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-            } as React.CSSProperties
-          }
-          side={side}
-        >
-          <SheetHeader className="sr-only">
-            <SheetTitle>Navigazione</SheetTitle>
-            <SheetDescription>Menu principale Qoovex.</SheetDescription>
-          </SheetHeader>
-          <div className="flex h-full w-full flex-col">{children}</div>
-        </SheetContent>
-      </Sheet>
+      <DialogPrimitive.Root open={openMobile} onOpenChange={setOpenMobile} {...props}>
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0" />
+          <DialogPrimitive.Popup
+            dir={dir}
+            data-sidebar="sidebar"
+            data-slot="sidebar"
+            data-mobile="true"
+            className="fixed inset-y-0 left-0 z-50 flex w-(--sidebar-width) max-w-[calc(100vw-2rem)] flex-col bg-sidebar p-0 text-sidebar-foreground shadow-2xl transition-transform duration-250 ease-out data-ending-style:-translate-x-full data-starting-style:-translate-x-full [&>button]:hidden"
+            style={
+              {
+                "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
+              } as React.CSSProperties
+            }
+          >
+            <div className="flex h-full w-full flex-col">{children}</div>
+          </DialogPrimitive.Popup>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
     )
   }
 
