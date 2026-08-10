@@ -52,7 +52,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "$RELEASE_SHA"
           git fetch origin master
           git merge-base --is-ancestor "$RELEASE_SHA" origin/master
-          for check in "CI / push-gate" "CI / quality-gate" "CI / workspace-e2e"; do
+          for check in "push-gate" "quality-gate" "workspace-e2e"; do
             conclusion="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${RELEASE_SHA}/check-runs" \
               --jq ".check_runs[] | select(.name == \"${check}\") | .conclusion" | tail -n 1)"
             test "$conclusion" = "success"
