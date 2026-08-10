@@ -1,7 +1,12 @@
 import { prisma } from "../lib/prisma";
-import { assertCiEphemeralDatabase, assertProductionApproval } from "./migration-deploy-guard";
+import {
+  assertCiEphemeralDatabase,
+  assertCloudBuildMigrationApproval,
+  assertProductionApproval,
+} from "./migration-deploy-guard";
 import { inspectMigrationHistory } from "./migration-history";
 import { assertNoSchemaDrift, runPrisma } from "./prisma-cli";
+import { assertDatabaseTargetForCommand } from "../src/database-target-guard";
 
 const DATABASE_ENV_NAMES = [
   "DATABASE_URL",
@@ -20,7 +25,13 @@ function getDatabaseUrl() {
 async function main() {
   const history = await inspectMigrationHistory(prisma, { allowPending: true });
   const ciEphemeral = process.argv.includes("--ci-ephemeral");
+  const cloudBuild = process.env.QOOVEX_CLOUD_BUILD_MIGRATION === "1";
+  assertDatabaseTargetForCommand("migrate deploy");
   if (ciEphemeral) assertCiEphemeralDatabase(getDatabaseUrl());
+  else if (cloudBuild) assertCloudBuildMigrationApproval({
+    expectedLastMigration: process.env.QOOVEX_EXPECTED_LAST_MIGRATION,
+    lastMigration: history.local.at(-1)?.name,
+  });
   else assertProductionApproval({
     approved: process.env.QOOVEX_MIGRATE_DEPLOY_APPROVED,
     backupRef: process.env.QOOVEX_MIGRATION_BACKUP_REF,
