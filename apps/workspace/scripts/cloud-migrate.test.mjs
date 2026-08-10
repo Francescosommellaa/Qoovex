@@ -1,19 +1,19 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { describe, expect, it } from "vitest";
 
 import { createCloudMigrationPlan } from "./cloud-migrate.mjs";
 
-test("ignora le build che non sono Preview o Production Vercel", () => {
-  assert.equal(createCloudMigrationPlan({}, "head"), null);
-  assert.equal(createCloudMigrationPlan({ VERCEL_ENV: "development" }, "head"), null);
-});
+describe("createCloudMigrationPlan", () => {
+  it("ignora le build che non sono Preview o Production Vercel", () => {
+    expect(createCloudMigrationPlan({}, "head")).toBeNull();
+    expect(createCloudMigrationPlan({ VERCEL_ENV: "development" }, "head")).toBeNull();
+  });
 
-test("prepara una migration cloud con la head dichiarata", () => {
-  assert.deepEqual(
-    createCloudMigrationPlan({ VERCEL_ENV: "production" }, "20260809020000_single_active_organization_membership"),
-    {
+  it("prepara una migration cloud con la head dichiarata", () => {
+    expect(
+      createCloudMigrationPlan({ VERCEL_ENV: "production" }, "20260809020000_single_active_organization_membership"),
+    ).toEqual({
       environment: "production",
       expectedLastMigration: "20260809020000_single_active_organization_membership",
-    },
-  );
+    });
+  });
 });
