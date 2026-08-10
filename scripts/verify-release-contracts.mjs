@@ -112,6 +112,11 @@ if (productionRelease.includes("vercel env run") || previewRelease.includes("ver
 if (!productionRelease.includes("vercel@50.17.1 deploy --prod") || !previewRelease.includes("vercel@50.17.1 deploy --yes")) {
   throw new Error("Release workflows must use Vercel cloud builds for guarded migrations.");
 }
+for (const [name, source] of [["Production release", productionRelease], ["Preview rehearsal", previewRelease]]) {
+  if (!source.includes("pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271")) {
+    throw new Error(`${name} must install pnpm before running the Vercel CLI.`);
+  }
+}
 
 const ignoreScript = join(root, "apps/workspace/scripts/vercel-ignore-build.mjs");
 const previewIgnore = spawnSync(process.execPath, [ignoreScript], {

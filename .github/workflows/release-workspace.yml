@@ -43,6 +43,8 @@ jobs:
           ref: ${{ env.RELEASE_SHA }}
           fetch-depth: 0
 
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
       - name: Verify exact SHA, master ancestry and green CI
         env:
           GH_TOKEN: ${{ github.token }}
