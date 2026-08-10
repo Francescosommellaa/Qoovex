@@ -11,7 +11,7 @@
     "migrationHead": "20260809020000_single_active_organization_membership",
     "migrationCount": 8,
     "productionMutationRequiredForAlignment": true,
-    "rolloutMode": "manual_only_backup_and_reauthorization_required",
+    "rolloutMode": "manual_cloud_build_forward_deploy",
     "ledger": "ops/migration-ledger.json"
   },
   "blob": {
@@ -48,14 +48,14 @@
     "automaticGitDeployment": "disabled",
     "trigger": "manual_workflow_dispatch_exact_confirmation",
     "workflow": ".github/workflows/rehearse-workspace-preview.yml",
-    "database": "isolated_reset",
-    "blob": "isolated_reset"
+    "database": "cloud_build_forward_deploy",
+    "blob": "unchanged"
   },
   "productionRelease": {
     "trigger": "manual_workflow_dispatch_after_green_ci_exact_confirmation",
     "deploymentMode": "staged_then_promoted",
     "workflow": ".github/workflows/release-workspace.yml",
-    "migrationCommand": "prisma migrate deploy",
+    "migrationCommand": "cloud-build:prisma-migrate-deploy",
     "promotionCommand": "vercel promote"
   }
 }

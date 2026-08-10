@@ -22,7 +22,10 @@ for (const file of packageFiles) {
     if ((name === "build" || name === "postinstall") && forbidden.test(command)) {
       throw new Error(`${file}#${name} may not execute migrations or schema mutation.`);
     }
+    if (name === "prebuild" && forbidden.test(command) && command !== "node scripts/cloud-migrate.mjs") {
+      throw new Error(`${file}#prebuild may only use the guarded cloud migration hook.`);
+    }
   }
 }
 
-console.log("Build and postinstall scripts are migration-free.");
+console.log("Build and postinstall scripts are migration-free; prebuild uses only the guarded cloud migration hook.");

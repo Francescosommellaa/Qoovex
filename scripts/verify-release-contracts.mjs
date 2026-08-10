@@ -12,6 +12,7 @@ const productionRelease = await readFile(join(root, ".github/workflows/release-w
 const previewRelease = await readFile(join(root, ".github/workflows/rehearse-workspace-preview.yml"), "utf8");
 const turbo = await readJson("turbo.json");
 const vercel = await readJson("apps/workspace/vercel.json");
+const workspacePackage = await readJson("apps/workspace/package.json");
 
 if (manifest.database.migrationHead !== ledger.protectedProductionHead) {
   throw new Error("Release manifest and migration ledger head differ.");
@@ -65,6 +66,9 @@ if (manifest.http.anonymousProtectedPage !== "307_sign_in_with_sanitized_relativ
 if (vercel.ignoreCommand !== "node scripts/vercel-ignore-build.mjs") {
   throw new Error("Workspace Git deployments must use the repository preview guard.");
 }
+if (workspacePackage.scripts?.prebuild !== "node scripts/cloud-migrate.mjs") {
+  throw new Error("Workspace cloud builds must run the guarded migration hook.");
+}
 
 function assertManualDestructiveWorkflow({ name, source, confirmation }) {
   if (!source.includes("workflow_dispatch:")) {
@@ -101,6 +105,12 @@ for (const [name, source] of [["Production release", productionRelease], ["Previ
   if (/\bprisma\s+(?:db\s+push|migrate\s+(?:reset|resolve))\b/i.test(source) || /\b(?:db:push|migrate:reset|migrate:resolve)\b/i.test(source)) {
     throw new Error(`${name} may not invoke unguarded schema mutation or migration-history commands.`);
   }
+}
+if (productionRelease.includes("vercel env run") || previewRelease.includes("vercel env run")) {
+  throw new Error("Release workflows must not try to export Vercel Sensitive variables to GitHub runners.");
+}
+if (!productionRelease.includes("vercel@50.17.1 deploy --prod") || !previewRelease.includes("vercel@50.17.1 deploy --yes")) {
+  throw new Error("Release workflows must use Vercel cloud builds for guarded migrations.");
 }
 
 const ignoreScript = join(root, "apps/workspace/scripts/vercel-ignore-build.mjs");
