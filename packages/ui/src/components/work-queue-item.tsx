@@ -15,7 +15,7 @@ function WorkQueueItem({
       data-slot="work-queue-item"
       data-priority={priority}
       className={cn(
-        "group relative grid gap-3.5 rounded-xl border p-4 shadow-2xs backdrop-blur-md transition-all duration-200 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center",
+        "group relative grid gap-4 rounded-xl border p-4 shadow-2xs backdrop-blur-md transition-all duration-200 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center",
         priority === "default" &&
           "border-border/80 bg-card/60 hover:border-border hover:bg-card/80 hover:shadow-xs",
         priority === "attention" &&

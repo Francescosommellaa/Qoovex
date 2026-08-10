@@ -21,7 +21,7 @@ const badgeVariants = cva(
         success:
           "bg-success/10 text-success border border-success/20 focus-visible:ring-success/20 [a]:hover:bg-success/20 [button]:hover:bg-success/20 data-interactive:hover:bg-success/20",
         warning:
-          "bg-warning/15 text-warning-foreground border border-warning/25 focus-visible:ring-warning/25 [a]:hover:bg-warning/25 [button]:hover:bg-warning/25 data-interactive:hover:bg-warning/25",
+          "bg-warning/15 text-warning-foreground dark:text-warning border border-warning/25 focus-visible:ring-warning/25 [a]:hover:bg-warning/25 [button]:hover:bg-warning/25 data-interactive:hover:bg-warning/25",
         ghost:
           "text-muted-foreground [a]:hover:bg-muted [a]:hover:text-foreground [button]:hover:bg-muted [button]:hover:text-foreground data-interactive:hover:bg-muted",
         glass:

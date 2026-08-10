@@ -10,6 +10,7 @@ import {
   IconPhoto,
   IconShare,
 } from "@tabler/icons-react";
+import { LinkCta } from "@/components/link-cta";
 import { Badge } from "@qoovex/ui/components/badge";
 import { buttonVariants } from "@qoovex/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@qoovex/ui/components/card";
@@ -112,7 +113,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden border-b">
         <div aria-hidden className="marketing-hero-grid pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:py-28">
+        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 pb-20 pt-32 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:pb-28 lg:pt-40">
           <div className="max-w-2xl">
             <Badge variant="outline">Uno spazio condiviso per impresa e cliente</Badge>
             <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
@@ -129,9 +130,6 @@ export default function HomePage() {
                   data-icon="inline-end"
                   className="transition-transform duration-200 group-hover/button:translate-x-0.5"
                 />
-              </a>
-              <a className={cn(buttonVariants({ variant: "ghost", size: "lg" }))} href={signInUrl}>
-                {signInLabel}
               </a>
             </div>
           </div>
@@ -242,13 +240,9 @@ export default function HomePage() {
                   Aggiorna una volta e usa gli stessi contenuti per informare il cliente, gestire le
                   modifiche e rendere evidente il prossimo passo.
                 </p>
-                <a
-                  className="group inline-flex items-center gap-1 text-sm font-medium hover:underline"
-                  href="/imprese"
-                >
+                <LinkCta href="/imprese">
                   Per le imprese
-                  <IconArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-                </a>
+                </LinkCta>
               </CardContent>
             </Card>
           </Reveal>
@@ -265,13 +259,9 @@ export default function HomePage() {
                   Segui i lavori sui tuoi immobili, capisci cosa è cambiato e ritrova file, prove e
                   informazioni in un unico posto.
                 </p>
-                <a
-                  className="group inline-flex items-center gap-1 text-sm font-medium hover:underline"
-                  href="/clienti"
-                >
+                <LinkCta href="/clienti">
                   Per i clienti
-                  <IconArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-                </a>
+                </LinkCta>
               </CardContent>
             </Card>
           </Reveal>
@@ -403,13 +393,9 @@ export default function HomePage() {
           <div>
             <FaqAccordion items={homeFaq} />
             <div className="mt-6">
-              <a
-                className="group inline-flex items-center gap-1 text-sm font-medium hover:underline"
-                href="/faq"
-              >
+              <LinkCta href="/faq">
                 Tutte le domande frequenti
-                <IconArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-              </a>
+              </LinkCta>
             </div>
           </div>
         </div>

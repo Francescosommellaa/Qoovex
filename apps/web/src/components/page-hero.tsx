@@ -19,8 +19,8 @@ type PageHeroProps = {
 
 export function PageHero({ eyebrow, title, description, current, children }: PageHeroProps) {
   return (
-    <section className="border-b">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:py-16">
+    <section className="border-b pt-20">
+      <div className="mx-auto max-w-7xl px-4 pb-14 pt-4 sm:px-6 lg:pb-16 lg:pt-6">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
