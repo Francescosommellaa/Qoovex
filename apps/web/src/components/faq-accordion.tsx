@@ -40,7 +40,7 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
                 <span className="text-sm font-semibold font-accent tracking-tight text-foreground text-pretty">
                   {item.question}
                 </span>
-                
+
                 <div
                   className={`flex size-7 shrink-0 items-center justify-center rounded-full border border-border/40 bg-background/50 text-muted-foreground transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                     isOpen ? "rotate-180 text-foreground bg-accent" : "group-hover:text-foreground"
