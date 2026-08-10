@@ -67,14 +67,13 @@ jobs:
 
       - name: Prove Preview environment isolation without printing values
         run: |
-          mkdir -p .release-tmp
-          pnpm dlx vercel@50.17.1 env pull .release-tmp/preview.env --yes --environment=preview \
+          pnpm dlx vercel@50.17.1 pull --yes --environment=preview \
             --git-branch="$PREVIEW_BRANCH" --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE"
-          pnpm dlx vercel@50.17.1 env pull .release-tmp/production.env --yes --environment=production \
+          pnpm dlx vercel@50.17.1 pull --yes --environment=production \
             --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE"
-          node scripts/verify-environment-contract.mjs preview .release-tmp/preview.env
-          node scripts/verify-environment-contract.mjs production .release-tmp/production.env
-          node scripts/verify-environment-isolation.mjs .release-tmp/preview.env .release-tmp/production.env
+          node scripts/verify-environment-contract.mjs preview .vercel/.env.preview.local
+          node scripts/verify-environment-contract.mjs production .vercel/.env.production.local
+          node scripts/verify-environment-isolation.mjs .vercel/.env.preview.local .vercel/.env.production.local
 
       - name: Capture current Production alias identity
         id: before
