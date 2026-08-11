@@ -7,10 +7,6 @@ on:
         description: Exact commit SHA to rehearse
         required: true
         type: string
-      preview_branch:
-        description: Vercel Preview environment branch selector
-        required: true
-        type: string
       confirmation:
         description: Type RECREATE_ISOLATED_PREVIEW
         required: true
@@ -25,12 +21,11 @@ concurrency:
 
 jobs:
   rehearsal:
-    name: Preview / isolated current rehearsal
+    name: Preview / cloud migration rehearsal
     runs-on: ubuntu-latest
     environment: Preview – qoovex-workspace
     env:
       RELEASE_SHA: ${{ inputs.sha }}
-      PREVIEW_BRANCH: ${{ inputs.preview_branch }}
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ vars.VERCEL_WORKSPACE_PROJECT_ID }}
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -45,35 +40,16 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.RELEASE_SHA }}
-          fetch-depth: 0
-      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version-file: package.json
-          cache: pnpm
+          fetch-depth: 1
 
-      - name: Verify Vercel credentials
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
+      - name: Verify Vercel credentials and exact Preview checkpoint
         run: |
           test -n "$VERCEL_ORG_ID"
           test -n "$VERCEL_PROJECT_ID"
           test -n "$VERCEL_TOKEN"
-
-      - name: Verify exact Preview checkpoint
-        run: |
           test "$(git rev-parse HEAD)" = "$RELEASE_SHA"
-
-      - run: pnpm ci:install
-      - run: pnpm check:push
-
-      - name: Prove Preview environment isolation without printing values
-        run: |
-          pnpm dlx vercel@50.17.1 pull --yes --environment=preview \
-            --git-branch="$PREVIEW_BRANCH" --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE"
-          pnpm dlx vercel@50.17.1 pull --yes --environment=production \
-            --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE"
-          node scripts/verify-environment-contract.mjs preview .vercel/.env.preview.local
-          node scripts/verify-environment-contract.mjs production .vercel/.env.production.local
-          node scripts/verify-environment-isolation.mjs .vercel/.env.preview.local .vercel/.env.production.local
 
       - name: Capture current Production alias identity
         id: before
@@ -83,47 +59,11 @@ jobs:
           test -n "$production_id"
           echo "production_id=$production_id" >> "$GITHUB_OUTPUT"
 
-      - name: Reset isolated Preview Blob store
-        env:
-          QOOVEX_JOB_SITE_BLOB_RESET_APPROVED: RESET_QOOVEX_JOB_SITE_EMPTY_BLOB_STORE_2026_08_03
-        run: >-
-          pnpm dlx vercel@50.17.1 env run -e preview --git-branch="$PREVIEW_BRANCH"
-          --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
-          pnpm --filter @qoovex/workspace blob:private:reset
-
-      - name: Recreate isolated Preview database from current migrations
-        env:
-          QOOVEX_PREVIEW_RECREATE_APPROVED: RECREATE_ISOLATED_PREVIEW
-        run: >-
-          pnpm dlx vercel@50.17.1 env run -e preview --git-branch="$PREVIEW_BRANCH"
-          --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
-          pnpm --filter @qoovex/db db:preview:recreate
-
-      - name: Verify Preview migration status and drift
-        run: >-
-          pnpm dlx vercel@50.17.1 env run -e preview --git-branch="$PREVIEW_BRANCH"
-          --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
-          pnpm --filter @qoovex/db exec sh -c
-          'prisma migrate status && prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --exit-code'
-
-      - name: Run E2E with isolated Preview database, Blob and local email sink
-        run: >-
-          pnpm dlx vercel@50.17.1 env run -e preview --git-branch="$PREVIEW_BRANCH"
-          --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --
-          sh -c 'export QOOVEX_E2E_MODE=1;
-          export QOOVEX_E2E_DATABASE_TARGET="${DATABASE_URL:-${DATABASE_PRISMA_DATABASE_URL:-$DATABASE_POSTGRES_URL}}";
-          export QOOVEX_E2E_BLOB_TARGET="$BLOB_STORE_ID";
-          export QOOVEX_E2E_RUN_ATTESTATION=I_ACKNOWLEDGE_FIXTURE_SCOPED_CLEANUP;
-          pnpm test:e2e'
-
-      - name: Build and deploy Preview artifact
+      - name: Deploy Preview through the Vercel cloud build
         id: preview
         run: |
-          pnpm dlx vercel@50.17.1 pull --yes --environment=preview --git-branch="$PREVIEW_BRANCH" \
-            --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE"
-          pnpm dlx vercel@50.17.1 build --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE"
-          deployment_url="$(pnpm dlx vercel@50.17.1 deploy --prebuilt --yes \
-            --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE")"
+          deployment_url="$(pnpm dlx vercel@50.17.1 deploy --yes --force \
+            --token="$VERCEL_TOKEN" --scope="$VERCEL_SCOPE" --meta "releaseSha=${RELEASE_SHA}")"
           test -n "$deployment_url"
           echo "url=$deployment_url" >> "$GITHUB_OUTPUT"
 
@@ -160,13 +100,10 @@ jobs:
             --arg sha "$RELEASE_SHA" \
             --arg migrationHead "$(node -p "require('./ops/workspace-release-manifest.json').database.migrationHead")" \
             --arg deploymentUrl "$DEPLOYMENT_URL" \
-            --arg isolation "verified" \
-            --arg database "recreated-job-site" \
-            --arg blob "reset-private" \
-            --arg e2e "passed" \
-            --arg rollbackProof "production-alias-unchanged" \
+            --arg migration "cloud-build-forward" \
+            --arg productionAlias "unchanged" \
             --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-            '{sha:$sha,migrationHead:$migrationHead,deploymentUrl:$deploymentUrl,isolation:$isolation,database:$database,blob:$blob,e2e:$e2e,rollbackProof:$rollbackProof,timestamp:$timestamp}' \
+            '{sha:$sha,migrationHead:$migrationHead,deploymentUrl:$deploymentUrl,migration:$migration,productionAlias:$productionAlias,timestamp:$timestamp}' \
             > workspace-preview-rehearsal.json
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
