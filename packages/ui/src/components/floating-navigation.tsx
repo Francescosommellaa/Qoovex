@@ -164,7 +164,7 @@ function NavigationResourceDropdown({
           }
         }}
         onBlur={(event) => {
-          // If we manually blurred it to prevent the focus glitch, 
+          // If we manually blurred it to prevent the focus glitch,
           // stop propagation so TabsList doesn't think the user tabbed out and clear the indicator.
           if (isClosingRef.current && closedByMouseRef.current) {
             event.stopPropagation();
