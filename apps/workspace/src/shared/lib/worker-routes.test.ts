@@ -7,7 +7,7 @@ describe("worker routes", () => {
     expect(workerDetailsHref({ id: "cm123", displayName: "Luca Verdì" })).toBe("/workers/luca-verdi--cm123");
   });
 
-  it("extracts identifiers from readable and legacy routes", () => {
+  it("extracts identifiers from readable and opaque routes", () => {
     expect(workerRouteId("luca-verdi--cm123")).toBe("cm123");
     expect(workerRouteId("cm123")).toBe("cm123");
   });

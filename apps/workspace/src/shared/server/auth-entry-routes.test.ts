@@ -102,7 +102,7 @@ describe("auth entry route handlers", () => {
     expect(mocks.clearVerifiedSignupEmailCookie).not.toHaveBeenCalled();
   });
 
-  it("routes a verified legacy credentials account to sign-in without a signup session", async () => {
+  it("routes a verified pre-verification credentials account to sign-in without a signup session", async () => {
     const { POST } = await import("../../app/api/auth/credentials/verify-email/route");
     mocks.verifyCredentialsSignupEmail.mockResolvedValue({ email: "mario@example.com", next: "sign-in" });
 

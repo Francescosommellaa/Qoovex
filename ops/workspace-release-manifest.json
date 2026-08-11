@@ -32,8 +32,7 @@
         "method": "POST",
         "path": "/api/internal/job-sites/processes/run"
       }
-    ],
-    "forbiddenJobs": ["digest", "legacy-operational"]
+    ]
   },
   "http": {
     "anonymousProtectedPage": "307_sign_in_with_sanitized_relative_callback",

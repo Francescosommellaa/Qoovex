@@ -87,7 +87,7 @@ jobs:
           node-version-file: package.json
           cache: pnpm
       - run: pnpm ci:install
-      - name: Apply six-migration current chain from zero
+      - name: Apply canonical migration chain to fresh database
         run: pnpm ci:db:prepare
       - name: Verify fresh database drift
         working-directory: packages/db

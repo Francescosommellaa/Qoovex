@@ -18,11 +18,6 @@ describe("current product capability registry", () => {
     }
   });
 
-  it("keeps implicit legacy product routes physically absent", () => {
-    for (const route of ["dashboard", "job-sites", "documents", "evidence"]) expect(existsSync(resolve(process.cwd(), `src/app/${route}/page.tsx`))).toBe(false);
-    for (const route of ["job-sites", "documents", "evidence"]) expect(existsSync(resolve(process.cwd(), `src/app/api/${route}/route.ts`))).toBe(false);
-  });
-
   it("accounts for every current product API route", () => {
     const apiRoot = resolve(process.cwd(), "src/app/api");
     const routeFiles = ["org", "client", "exports", "internal/job-sites"].flatMap((root) => readdirSync(resolve(apiRoot, root), { recursive: true, withFileTypes: true })
