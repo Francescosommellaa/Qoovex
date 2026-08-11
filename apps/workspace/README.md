@@ -1,6 +1,6 @@
 # Workspace Qoovex
 
-`verified_current_state`: Workspace è il runtime autenticato del prodotto. L'account sceglie una sola volta il proprio ruolo; un account `BUSINESS` possiede una sola Azienda attiva, `PROFESSIONAL` accede tramite invito Collaborator e `CLIENT` tramite partecipazione al singolo cantiere. Le superfici sono presenti ma la prima vertical slice resta `implemented_but_not_end-to-end-verified` per i blocchi participant indicati nella documentazione canonica.
+`verified_current_state`: Workspace è il runtime autenticato del prodotto. L'account sceglie una sola volta il proprio ruolo; un account `BUSINESS` possiede una sola Azienda attiva, `PROFESSIONAL` accede tramite invito Collaborator e `CLIENT` tramite partecipazione al singolo cantiere. La prima vertical slice è verificata: il creatore del cantiere è subito un participant Azienda `ACTIVE`, mentre il cliente invitato resta `PENDING` fino alla conferma del riepilogo iniziale. La copertura end-to-end delle capability più ampie resta valutata caso per caso.
 
 ## Route
 

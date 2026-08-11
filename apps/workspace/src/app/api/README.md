@@ -28,4 +28,4 @@ Endpoint infrastrutturali e attuale presenti:
 - `data`: inventario dati, export metadata JSON e retention operativa owner-only.
 - `resource-assignments`: foundation di accesso scoped, non superficie prodotto autonoma.
 
-Le route prodotto implicite precedente non sono endpoint attivi. La presenza delle route attuale non prova la vertical slice end-to-end, che resta bloccata dai test lifecycle dedicati.
+Le route non dichiarate dal registry corrente non sono endpoint attivi. I test lifecycle dedicati verificano l'attivazione immediata del participant Azienda creatore e il mantenimento del participant cliente in `PENDING` fino alla conferma iniziale.
