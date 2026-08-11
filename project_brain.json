@@ -25,6 +25,8 @@
       "client_is_organization_role": false,
       "membership_unique": ["one active organization membership per user"],
       "account_roles": ["BUSINESS", "PROFESSIONAL", "CLIENT"],
+      "account_role_selection": "required once before tenant or participant context",
+      "dev_workspace_views": ["BUSINESS", "PROFESSIONAL", "CLIENT", "SUPPORT_AGENT", "PLATFORM_ADMIN"],
       "route_is_authorization_context": true
     },
     "job_site": {
@@ -59,10 +61,7 @@
       "production_database": "aligned_zero_drift_via_cloud_build",
       "public_alias": "promoted_only_by_manual_guarded_workflow"
     },
-    "known_blockers": [
-      "JobSite creator participant is persisted PENDING while organization actor resolution requires ACTIVE",
-      "Accepted primary client participant is persisted ACTIVE before initial agreement confirmation"
-    ]
+    "known_blockers": []
   },
   "approved_product_direction": {
     "product_promise": "A construction company and its client share the work history, updates, requests, changes, contextual files, decisions and closure of a job site.",
@@ -83,13 +82,5 @@
   "historical_immutable": {
     "migration_ledger": "ops/migration-ledger.json is the sole source for published migration identifiers and checksums."
   },
-  "next_task": {
-    "name": "Fix creator participant activation",
-    "requirements": [
-      "Persist the creator participant ACTIVE atomically at JobSite creation",
-      "Preserve server-derived actor and permission",
-      "Turn the dedicated lifecycle test green",
-      "Do not alter client activation in the same task"
-    ]
-  }
+  "next_task": null
 }

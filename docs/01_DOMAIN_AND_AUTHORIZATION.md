@@ -2,7 +2,7 @@
 
 ## verified_current_state
 
-`User` è l’identità personale unica. `OrganizationMembership` è multi-azienda con unicità `(organizationId,userId)`. `OrganizationRole` contiene soltanto `OWNER | COLLABORATOR`; `CLIENT` usa `JobSiteParticipant.kind=CLIENT` e non ottiene membership o permessi Azienda.
+`User` è l’identità personale unica. Ogni account può avere al massimo una `OrganizationMembership` attiva; per questo il runtime indirizza direttamente all'unica Azienda collegata e non presenta un selettore di contesto Azienda. `OrganizationRole` contiene soltanto `OWNER | COLLABORATOR`; `CLIENT` usa `JobSiteParticipant.kind=CLIENT` e non ottiene membership o permessi Azienda.
 
 I resolver server-side sono distinti:
 
