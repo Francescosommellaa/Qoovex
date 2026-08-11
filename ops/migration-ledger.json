@@ -32,26 +32,32 @@
     {
       "name": "20260803230000_qoovex_vnext_from_zero",
       "sha256": "c513429408fe5387b2c3918caaced28abf5c0d85d70b1884af9a015fc664f1ae",
-      "productionApplied": false,
-      "destructiveApproved": false,
+      "productionApplied": true,
+      "destructiveApproved": true,
       "historicalApprovalRef": "QOOVEX_VNEXT_FROM_ZERO_USER_AUTHORIZATION_2026_08_03",
-      "executionPolicy": "MANUAL_REAUTHORIZATION_REQUIRED"
+      "executionPolicy": "APPLIED_VIA_GUARDED_CLOUD_BUILD",
+      "productionEvidence": "vercel:dpl_4dGNnXbQAhwgEZs5fuvwutxXKFUk",
+      "productionVerifiedAt": "2026-08-11T18:08:03Z"
     },
     {
       "name": "20260809010000_account_roles_and_contextual_attachments",
       "sha256": "655c76afc970814894658f70485cfc7ed04921b7c4b476718f291f7852bb0278",
-      "productionApplied": false,
-      "destructiveApproved": false,
+      "productionApplied": true,
+      "destructiveApproved": true,
       "historicalApprovalRef": "QOOVEX_ACCOUNT_ROLE_AND_DOCUMENT_CLEANUP_REQUIRES_REMOTE_REAUTHORIZATION",
-      "executionPolicy": "MANUAL_REAUTHORIZATION_REQUIRED"
+      "executionPolicy": "APPLIED_VIA_GUARDED_CLOUD_BUILD",
+      "productionEvidence": "vercel:dpl_4dGNnXbQAhwgEZs5fuvwutxXKFUk",
+      "productionVerifiedAt": "2026-08-11T18:08:03Z"
     },
     {
       "name": "20260809020000_single_active_organization_membership",
       "sha256": "cadc854a035a6762a343fc926bd2075f298685f556f3c9f1caa23fe6888fbc0f",
-      "productionApplied": false,
-      "destructiveApproved": false,
+      "productionApplied": true,
+      "destructiveApproved": true,
       "historicalApprovalRef": "QOOVEX_SINGLE_ORGANIZATION_MEMBERSHIP_REQUIRES_REMOTE_REAUTHORIZATION",
-      "executionPolicy": "MANUAL_REAUTHORIZATION_REQUIRED"
+      "executionPolicy": "APPLIED_VIA_GUARDED_CLOUD_BUILD",
+      "productionEvidence": "vercel:dpl_4dGNnXbQAhwgEZs5fuvwutxXKFUk",
+      "productionVerifiedAt": "2026-08-11T18:08:03Z"
     }
   ]
 }

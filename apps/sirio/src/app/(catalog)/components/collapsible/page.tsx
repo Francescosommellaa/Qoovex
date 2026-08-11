@@ -55,9 +55,9 @@ const faqItems: FAQItem[] = [
     id: "faq-3",
     category: "Sicurezza",
     icon: IconShieldCheck,
-    question: "Come vengono verificati i documenti di idoneità professionale (POS/DURC)?",
+    question: "Come vengono protetti gli allegati di cantiere?",
     answer:
-      "Il sistema OCR proprietario di Qoovex analizza automaticamente le scadenze dei certificati DURC, identificando eventuali irregolarità e bloccando preventivamente gli accessi al cantiere 15 giorni prima della scadenza.",
+      "Gli allegati restano privati e vengono scaricati tramite il server solo dopo la verifica dell'accesso al cantiere e della visibilità assegnata.",
   },
   {
     id: "faq-4",

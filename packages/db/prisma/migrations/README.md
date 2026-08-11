@@ -4,16 +4,17 @@ Questa cartella contiene l'unica cronologia Prisma canonica di Qoovex. Le migrat
 
 ## Stato corrente
 
-- migration 1-5: baseline effettivamente presente in Production prima del rollout vNext;
-- `20260803230000_qoovex_vnext_from_zero`: reset distruttivo tecnicamente attestato ma non autorizzato automaticamente; passaggio completo al dominio Qoovex vNext.
+- migration 1–5: baseline storico effettivamente presente in Production prima del rollout corrente;
+- `20260803230000_qoovex_vnext_from_zero`: passaggio distruttivo storico al dominio basato sul cantiere;
+- `20260809010000_account_roles_and_contextual_attachments`: aggiunge `AccountRole`, mantiene gli allegati contestuali e rimuove le tabelle autonome residue;
+- `20260809020000_single_active_organization_membership`: vincola ogni account a una sola membership Azienda attiva.
 
-La migration vNext azzera tutti i record applicativi della baseline, elimina tabelle, colonne, enum e relazioni legacy, quindi crea lo schema vNext. Local è stato verificato alla head vNext; Production è stata verificata alla baseline con conteggi applicativi principali pari a zero; Preview non è stato verificato. Nessun ambiente remoto può essere assunto vuoto senza un nuovo inventario read-only immediatamente precedente al rollout.
+Local, Preview e database Production sono verificati alla head `20260809020000_single_active_organization_membership` con otto migration e drift nullo. I nomi del prodotto precedente restano esclusivamente nel SQL storico necessario a ricostruire e aggiornare correttamente il database.
 
 ## Regole operative
 
-- Non modificare migration gia pubblicate e non usare `migrate resolve` per aggirare errori.
-- Non usare `db push` o `migrate reset` in Preview o Production: l'eventuale rollout usa il wrapper guarded di `prisma migrate deploy`.
-- Preview viene ricreata soltanto dopo aver provato l'isolamento da Production.
-- Production accetta il reset vNext soltanto da dispatch manuale con conferma esatta, inventario aggiornato e gate GitHub Environment.
-- Il Blob store resta privato e viene azzerato una sola volta insieme al passaggio dal vecchio head al nuovo.
+- Non modificare migration già pubblicate e non usare `migrate resolve` per aggirare errori.
+- Non usare `db push` o `migrate reset` in Preview o Production: il rollout usa il wrapper guardato di `prisma migrate deploy`.
+- Preview e Production devono mantenere database, Blob, callback e segreti distinti.
+- La promozione del dominio pubblico avviene soltanto dopo CI verde e smoke del deployment staged.
 - Dopo l'applicazione eseguire status, checksum, diff/drift, FK/unique/enum/orfani e `verify:prisma`.
