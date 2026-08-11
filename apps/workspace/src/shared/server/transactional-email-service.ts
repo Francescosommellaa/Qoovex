@@ -1,5 +1,11 @@
 import "server-only";
 
+import {
+  renderTransactionalEmailLayout,
+  type EmailPrimaryAction,
+  type TransactionalEmailLayoutInput,
+} from "./email/transactional-email-layout";
+
 type AuthCodePurpose = "EMAIL_VERIFICATION" | "PASSWORD_RESET" | "EMAIL_CHANGE" | "MFA_ENROLLMENT" | "MFA_RECOVERY";
 export type SecurityEmailEvent =
   | "EMAIL_CHANGED"
@@ -93,22 +99,21 @@ export class TransactionalEmailError extends Error {
   }
 }
 
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+function formatSecurityDate(value: Date) {
+  return new Intl.DateTimeFormat("it-IT", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "Europe/Rome",
+  }).format(value);
 }
 
-function getAuthCodeCopy(purpose: AuthCodePurpose, code: string) {
+function getAuthCodeCopy(purpose: AuthCodePurpose) {
   if (purpose === "MFA_ENROLLMENT") {
     return {
       subject: "Codice attivazione MFA Qoovex",
       title: "Attiva MFA",
       intro: "Usa questo codice per iniziare la configurazione MFA del tuo account Qoovex.",
-      code,
+      preheader: "Codice monouso per attivare l'autenticazione a due fattori.",
     };
   }
 
@@ -117,7 +122,7 @@ function getAuthCodeCopy(purpose: AuthCodePurpose, code: string) {
       subject: "Codice recupero MFA Qoovex",
       title: "Recupera MFA",
       intro: "Usa questo codice per avviare il recupero MFA del tuo account Qoovex.",
-      code,
+      preheader: "Codice monouso per avviare il recupero MFA.",
     };
   }
 
@@ -126,7 +131,7 @@ function getAuthCodeCopy(purpose: AuthCodePurpose, code: string) {
       subject: "Codice reset password Qoovex",
       title: "Reset password",
       intro: "Usa questo codice per impostare una nuova password Qoovex.",
-      code,
+      preheader: "Codice monouso per reimpostare la password.",
     };
   }
 
@@ -135,7 +140,7 @@ function getAuthCodeCopy(purpose: AuthCodePurpose, code: string) {
       subject: "Codice cambio email Qoovex",
       title: "Conferma nuova email",
       intro: "Usa questo codice per collegare questa email al tuo account Qoovex.",
-      code,
+      preheader: "Codice monouso per confermare la nuova email.",
     };
   }
 
@@ -143,16 +148,8 @@ function getAuthCodeCopy(purpose: AuthCodePurpose, code: string) {
     subject: "Codice verifica email Qoovex",
     title: "Verifica email",
     intro: "Usa questo codice per verificare la tua email e continuare.",
-    code,
+    preheader: "Codice monouso per verificare la tua email.",
   };
-}
-
-function formatSecurityDate(value: Date) {
-  return new Intl.DateTimeFormat("it-IT", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: "Europe/Rome",
-  }).format(value);
 }
 
 function getSecurityCopy(template: Extract<TransactionalEmailTemplate, { kind: "security-event" }>) {
@@ -165,60 +162,70 @@ function getSecurityCopy(template: Extract<TransactionalEmailTemplate, { kind: "
         subject: "Email account Qoovex aggiornata",
         title: "Email aggiornata",
         intro: `La email del tuo account Qoovex e stata aggiornata il ${occurredAt}.`,
+        preheader: "Conferma dell'aggiornamento email del tuo account.",
       };
     case "PASSWORD_CHANGED":
       return {
         subject: "Password Qoovex aggiornata",
         title: "Password aggiornata",
         intro: `La password del tuo account Qoovex e stata aggiornata il ${occurredAt}.`,
+        preheader: "Conferma dell'aggiornamento password del tuo account.",
       };
     case "USERNAME_CHANGED":
       return {
         subject: "Username Qoovex aggiornato",
         title: "Username aggiornato",
         intro: `Il tuo username Qoovex e stato modificato il ${occurredAt}.`,
+        preheader: "Conferma della modifica username del tuo account.",
       };
     case "MFA_ENABLED":
       return {
         subject: "A2F Qoovex attivata",
         title: "A2F attivata",
         intro: `L'autenticazione a due fattori e stata attivata il ${occurredAt}.`,
+        preheader: "Conferma dell'attivazione dell'autenticazione a due fattori.",
       };
     case "MFA_DISABLED":
       return {
         subject: "A2F Qoovex disattivata",
         title: "A2F disattivata",
         intro: `L'autenticazione a due fattori e stata disattivata il ${occurredAt}.`,
+        preheader: "Conferma della disattivazione dell'autenticazione a due fattori.",
       };
     case "MFA_REPLACED":
       return {
         subject: "MFA Qoovex sostituita",
         title: "MFA sostituita",
         intro: `Il fattore MFA del tuo account Qoovex e stato sostituito il ${occurredAt}.`,
+        preheader: "Conferma della sostituzione del fattore MFA.",
       };
     case "MFA_BACKUP_CODES_REGENERATED":
       return {
         subject: "Nuovi codici di recupero MFA Qoovex",
         title: "Codici di recupero rigenerati",
         intro: `I codici di recupero MFA sono stati rigenerati il ${occurredAt}.`,
+        preheader: "Conferma della rigenerazione dei codici di recupero MFA.",
       };
     case "MFA_RECOVERY_APPROVED":
       return {
         subject: "Recupero MFA Qoovex approvato",
         title: "Recupero MFA approvato",
         intro: `La richiesta di recupero MFA e stata approvata il ${occurredAt}. Accedi per configurare un nuovo fattore.`,
+        preheader: "La richiesta di recupero MFA e stata approvata.",
       };
     case "MFA_RECOVERY_DENIED":
       return {
         subject: "Recupero MFA Qoovex rifiutato",
         title: "Recupero MFA rifiutato",
         intro: `La richiesta di recupero MFA e stata rifiutata il ${occurredAt}.`,
+        preheader: "La richiesta di recupero MFA e stata rifiutata.",
       };
     case "NEW_DEVICE":
       return {
         subject: "Nuovo accesso a Qoovex",
         title: "Nuovo dispositivo rilevato",
         intro: `Abbiamo rilevato un accesso da ${deviceLabel} il ${occurredAt}.`,
+        preheader: "Nuovo accesso rilevato sul tuo account Qoovex.",
       };
   }
 }
@@ -227,165 +234,168 @@ function getOrganizationName(template: { organizationName?: string }) {
   return template.organizationName ?? "Qoovex";
 }
 
-function getNotificationSeverityLabel(severity: NotificationEmailItem["severity"]) {
-  if (severity === "WARNING") return "Priorita alta";
-  if (severity === "ATTENTION") return "Attenzione";
-  return "Informazione";
+function getSecondaryNote(template: TransactionalEmailTemplate) {
+  if (template.kind === "auth-code") {
+    return "Il codice scade tra 10 minuti e puo essere usato una sola volta.";
+  }
+  if (template.kind === "notification-digest" || template.kind === "notification-single") {
+    return "Le informazioni dipendono dai dati registrati in Qoovex e vanno confermate con il referente autorizzato dell'azienda. L'email non include file o link di download.";
+  }
+  if (template.kind === "mfa-recovery-request") {
+    return "Approva solo se riconosci la richiesta. La decisione richiede il tuo fattore MFA corrente.";
+  }
+  if (template.kind === "mfa-recovery-decision") {
+    return "La prima decisione valida chiude la richiesta per tutti gli OWNER.";
+  }
+  return "Se non riconosci questa attivita, cambia password e controlla la sicurezza del tuo account.";
 }
 
-function formatNotificationDate(value: Date) {
-  return new Intl.DateTimeFormat("it-IT", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: "Europe/Rome",
-  }).format(value);
-}
+function buildEmailContent(template: TransactionalEmailTemplate): {
+  subject: string;
+  layout: TransactionalEmailLayoutInput;
+} {
+  if (template.kind === "auth-code") {
+    const copy = getAuthCodeCopy(template.purpose);
+    return {
+      subject: copy.subject,
+      layout: {
+        title: copy.title,
+        intro: copy.intro,
+        preheader: copy.preheader,
+        code: template.code,
+        secondaryNote: getSecondaryNote(template),
+      },
+    };
+  }
 
-function renderNotificationItems(items: NotificationEmailItem[]) {
-  const html = items.length
-    ? `<ul style="margin:20px 0 0;padding:0;list-style:none;">${items.map((item) => `
-                  <li style="margin:0 0 12px;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:#171a21;">
-                    <div style="font-size:12px;color:#9ca3af;margin-bottom:6px;">${escapeHtml(getNotificationSeverityLabel(item.severity))} - ${escapeHtml(formatNotificationDate(item.createdAt))}</div>
-                    <div style="font-size:15px;color:#ffffff;font-weight:700;margin-bottom:4px;">${escapeHtml(item.title)}</div>
-                    <div style="font-size:14px;color:#cbd5e1;line-height:1.5;">${escapeHtml(item.message)}</div>
-                  </li>`).join("")}
-                </ul>`
-    : "";
-  const text = items.map((item) => `${getNotificationSeverityLabel(item.severity)} - ${formatNotificationDate(item.createdAt)}\n${item.title}\n${item.message}`).join("\n\n");
-  return { html, text };
-}
+  if (template.kind === "security-event") {
+    const copy = getSecurityCopy(template);
+    return {
+      subject: copy.subject,
+      layout: {
+        title: copy.title,
+        intro: copy.intro,
+        preheader: copy.preheader,
+        secondaryNote: getSecondaryNote(template),
+      },
+    };
+  }
 
-function renderEmail(input: { to: string; template: TransactionalEmailTemplate }) {
-  const copy = (() => {
-    if (input.template.kind === "auth-code") return getAuthCodeCopy(input.template.purpose, input.template.code);
-    if (input.template.kind === "security-event") return getSecurityCopy(input.template);
-    if (input.template.kind === "organization-invitation") {
-      const organizationName = getOrganizationName(input.template);
-      return {
-        subject: `Invito a ${organizationName}`,
-        title: "Invito all'azienda",
-        intro: `Sei stato invitato a collaborare in ${organizationName}. Apri ${input.template.acceptUrl} entro ${formatSecurityDate(input.template.expiresAt)}.`,
-      };
-    }
-    if (input.template.kind === "client-invitation") {
-      return {
-        subject: `${input.template.organizationName} ti ha invitato su Qoovex`,
-        title: "Invito al cantiere",
-        intro: `Accedi per partecipare al cantiere ${input.template.jobSiteName}. Apri ${input.template.acceptUrl} entro ${formatSecurityDate(input.template.expiresAt)}.`,
-      };
-    }
-    if (input.template.kind === "export-ready") {
-      return {
-        subject: `Export Qoovex pronto - ${input.template.jobSiteName}`,
-        title: "Export pronto",
-        intro: `Apri ${input.template.accessUrl} entro ${formatSecurityDate(input.template.expiresAt)}. L'archivio non e allegato a questa email.`,
-      };
-    }
-    if (input.template.kind === "notification-digest") {
-      return {
-        subject: "Qoovex - Attivita da controllare",
-        title: "Attivita da controllare",
-        intro: `${input.template.unreadCount} notifiche non lette da controllare nel workspace Qoovex.`,
-      };
-    }
-    if (input.template.kind === "notification-single") {
-      return {
-        subject: "Qoovex - Elementi da controllare",
-        title: input.template.item.title,
-        intro: input.template.item.message,
-      };
-    }
-    if (input.template.kind === "mfa-recovery-request") {
-      return {
-        subject: `Richiesta recupero MFA - ${input.template.organizationName}`,
-        title: "Recupero MFA da approvare",
-        intro: `${input.template.requesterEmail} ha verificato la propria email e chiede di sostituire il fattore MFA. Apri ${input.template.actionUrl} entro ${formatSecurityDate(input.template.expiresAt)}.`,
-      };
-    }
-    if (input.template.kind === "mfa-recovery-decision") {
-      const approved = input.template.decision === "approved";
-      return {
-        subject: `Recupero MFA ${approved ? "approvato" : "rifiutato"} - ${input.template.organizationName}`,
-        title: `Recupero MFA ${approved ? "approvato" : "rifiutato"}`,
-        intro: `La richiesta di ${input.template.requesterEmail} e stata ${approved ? "approvata" : "rifiutata"}.`,
-      };
-    }
-    const template = input.template as Extract<TransactionalEmailTemplate, { kind: "support-opened" | "support-closed" }>;
-    const opened = template.kind === "support-opened";
+  if (template.kind === "organization-invitation") {
     const organizationName = getOrganizationName(template);
     return {
-      subject: `Supporto Qoovex ${opened ? "avviato" : "terminato"} - ${organizationName}`,
+      subject: `Invito a ${organizationName}`,
+      layout: {
+        title: "Invito all'azienda",
+        intro: `Sei stato invitato a collaborare in ${organizationName} su Qoovex Workspace.`,
+        preheader: `Invito a collaborare in ${organizationName}.`,
+        primaryAction: { label: "Accetta invito", href: template.acceptUrl },
+        expiryNote: `Il link scade il ${formatSecurityDate(template.expiresAt)}.`,
+        secondaryNote: getSecondaryNote(template),
+      },
+    };
+  }
+
+  if (template.kind === "client-invitation") {
+    return {
+      subject: `${template.organizationName} ti ha invitato su Qoovex`,
+      layout: {
+        title: "Invito al cantiere",
+        intro: `${template.organizationName} ti ha invitato a partecipare al cantiere ${template.jobSiteName}.`,
+        preheader: `Invito al cantiere ${template.jobSiteName}.`,
+        primaryAction: { label: "Accetta invito", href: template.acceptUrl },
+        expiryNote: `Il link scade il ${formatSecurityDate(template.expiresAt)}.`,
+        secondaryNote: getSecondaryNote(template),
+      },
+    };
+  }
+
+  if (template.kind === "export-ready") {
+    return {
+      subject: `Export Qoovex pronto - ${template.jobSiteName}`,
+      layout: {
+        title: "Export pronto",
+        intro: `L'archivio del cantiere ${template.jobSiteName} e pronto per il download.`,
+        preheader: `Export pronto per ${template.jobSiteName}.`,
+        primaryAction: { label: "Scarica export", href: template.accessUrl },
+        expiryNote: `Il link scade il ${formatSecurityDate(template.expiresAt)}. L'archivio non e allegato a questa email.`,
+        secondaryNote: getSecondaryNote(template),
+      },
+    };
+  }
+
+  if (template.kind === "notification-digest") {
+    return {
+      subject: "Qoovex - Attivita da controllare",
+      layout: {
+        title: "Attivita da controllare",
+        intro: `${template.unreadCount} notifiche non lette da controllare nel workspace Qoovex.`,
+        preheader: `${template.unreadCount} notifiche da controllare nel workspace.`,
+        notificationItems: template.items,
+        notificationsUrl: template.notificationsUrl,
+        secondaryNote: getSecondaryNote(template),
+      },
+    };
+  }
+
+  if (template.kind === "notification-single") {
+    return {
+      subject: "Qoovex - Elementi da controllare",
+      layout: {
+        title: template.item.title,
+        intro: template.item.message,
+        preheader: template.item.title,
+        notificationItems: [template.item],
+        notificationsUrl: template.notificationsUrl,
+        secondaryNote: getSecondaryNote(template),
+      },
+    };
+  }
+
+  if (template.kind === "mfa-recovery-request") {
+    return {
+      subject: `Richiesta recupero MFA - ${template.organizationName}`,
+      layout: {
+        title: "Recupero MFA da approvare",
+        intro: `${template.requesterEmail} ha verificato la propria email e chiede di sostituire il fattore MFA.`,
+        preheader: `Richiesta recupero MFA da ${template.requesterEmail}.`,
+        primaryAction: { label: "Gestisci richiesta", href: template.actionUrl },
+        expiryNote: `La richiesta scade il ${formatSecurityDate(template.expiresAt)}.`,
+        secondaryNote: getSecondaryNote(template),
+      },
+    };
+  }
+
+  if (template.kind === "mfa-recovery-decision") {
+    const approved = template.decision === "approved";
+    return {
+      subject: `Recupero MFA ${approved ? "approvato" : "rifiutato"} - ${template.organizationName}`,
+      layout: {
+        title: `Recupero MFA ${approved ? "approvato" : "rifiutato"}`,
+        intro: `La richiesta di ${template.requesterEmail} e stata ${approved ? "approvata" : "rifiutata"}.`,
+        preheader: `Recupero MFA ${approved ? "approvato" : "rifiutato"} per ${template.organizationName}.`,
+        secondaryNote: getSecondaryNote(template),
+      },
+    };
+  }
+
+  const opened = template.kind === "support-opened";
+  const organizationName = getOrganizationName(template);
+  return {
+    subject: `Supporto Qoovex ${opened ? "avviato" : "terminato"} - ${organizationName}`,
+    layout: {
       title: `Supporto ${opened ? "attivo" : "terminato"}`,
       intro: `${template.employeeEmail} ha ${opened ? "aperto" : "chiuso"} una sessione di supporto il ${formatSecurityDate(template.occurredAt)}. Motivo: ${template.reason}`,
-    };
-  })();
+      preheader: `Sessione di supporto ${opened ? "avviata" : "terminata"} per ${organizationName}.`,
+      secondaryNote: getSecondaryNote(template),
+    },
+  };
+}
 
-  const codeBlock =
-    input.template.kind === "auth-code"
-      ? `<div style="font-size:32px;letter-spacing:8px;font-weight:700;margin:24px 0;color:#ffffff;">${escapeHtml(input.template.code)}</div>`
-      : "";
-  const notificationDetails =
-    input.template.kind === "notification-digest"
-      ? renderNotificationItems(input.template.items)
-      : input.template.kind === "notification-single"
-        ? renderNotificationItems([input.template.item])
-        : null;
-  const notificationsLink =
-    (input.template.kind === "notification-digest" || input.template.kind === "notification-single") && input.template.notificationsUrl
-      ? `<p style="margin:20px 0 0;"><a style="color:#7dd3fc;" href="${escapeHtml(input.template.notificationsUrl)}">Apri le notifiche nel workspace</a></p>`
-      : "";
-  const secondary = (() => {
-    if (input.template.kind === "auth-code") return "Scade tra 10 minuti e puo essere usato una sola volta.";
-    if (input.template.kind === "notification-digest" || input.template.kind === "notification-single") {
-      return "Le informazioni dipendono dai dati registrati in Qoovex e vanno confermate con il referente autorizzato dell'azienda. L'email non include file o link di download.";
-    }
-    if (input.template.kind === "mfa-recovery-request") return "Approva solo se riconosci la richiesta. La decisione richiede il tuo fattore MFA corrente.";
-    if (input.template.kind === "mfa-recovery-decision") return "La prima decisione valida chiude la richiesta per tutti gli OWNER.";
-    return "Se non riconosci questa attivita, cambia password e controlla la sicurezza del tuo account.";
-  })();
-
-  const html = `<!doctype html>
-<html lang="it">
-  <body style="margin:0;background:#08090c;color:#f4f4f5;font-family:Arial,Helvetica,sans-serif;">
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#08090c;padding:32px 16px;">
-      <tr>
-        <td align="center">
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:#101217;overflow:hidden;">
-            <tr>
-              <td style="padding:28px 28px 12px;font-size:14px;color:#9ca3af;">Qoovex</td>
-            </tr>
-            <tr>
-              <td style="padding:0 28px 28px;">
-                <h1 style="margin:0 0 12px;font-size:28px;line-height:1.15;color:#ffffff;">${escapeHtml(copy.title)}</h1>
-                <p style="margin:0;color:#cbd5e1;font-size:16px;line-height:1.6;">${escapeHtml(copy.intro)}</p>
-                ${codeBlock}
-                ${notificationDetails?.html ?? ""}
-                ${notificationsLink}
-                <p style="margin:0;color:#94a3b8;font-size:14px;line-height:1.6;">${escapeHtml(secondary)}</p>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
-</html>`;
-
-  const text = [
-    "Qoovex",
-    copy.title,
-    copy.intro,
-    input.template.kind === "auth-code" ? `Codice: ${input.template.code}` : "",
-    notificationDetails?.text ?? "",
-    (input.template.kind === "notification-digest" || input.template.kind === "notification-single") && input.template.notificationsUrl
-      ? `Notifiche: ${input.template.notificationsUrl}`
-      : "",
-    secondary,
-  ]
-    .filter(Boolean)
-    .join("\n\n");
-
-  return { subject: copy.subject, html, text };
+function renderEmail(input: { template: TransactionalEmailTemplate }) {
+  const content = buildEmailContent(input.template);
+  const rendered = renderTransactionalEmailLayout(content.layout);
+  return { subject: content.subject, html: rendered.html, text: rendered.text };
 }
 
 function getE2eEmailSink() {
@@ -442,7 +452,7 @@ export async function sendTransactionalEmail(input: {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const from = process.env.RESEND_FROM_EMAIL?.trim();
   const replyTo = process.env.RESEND_REPLY_TO_EMAIL?.trim();
-  const rendered = renderEmail(input);
+  const rendered = renderEmail({ template: input.template });
 
   if (sink) return sendToE2eEmailSink({ sink, ...input, rendered });
 
@@ -474,3 +484,5 @@ export async function sendTransactionalEmail(input: {
   const payload = await response.json().catch(() => null) as { id?: unknown } | null;
   return { providerMessageId: typeof payload?.id === "string" ? payload.id : null };
 }
+
+export { buildEmailContent, renderEmail, type EmailPrimaryAction };

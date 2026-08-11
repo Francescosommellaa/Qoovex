@@ -10,6 +10,9 @@ import {
   IconPhoto,
   IconShare,
 } from "@tabler/icons-react";
+import { BrandMark } from "@/components/brand-mark";
+import { HeroMockupScroll } from "@/components/hero-mockup-scroll";
+import { InteractiveAppMockup } from "@/components/interactive-app-mockup";
 import { LinkCta } from "@/components/link-cta";
 import { Badge } from "@qoovex/ui/components/badge";
 import { buttonVariants } from "@qoovex/ui/components/button";
@@ -110,41 +113,89 @@ const currentDirection = [
 export default function HomePage() {
   return (
     <SiteShell>
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b">
+      {/* Hero Vercel Style 3-Column Layout */}
+      <section className="relative overflow-hidden border-b pb-20 pt-28 sm:pt-36 lg:pb-28 lg:pt-40">
         <div aria-hidden className="marketing-hero-grid pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 pb-20 pt-32 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:pb-28 lg:pt-40">
-          <div className="max-w-2xl">
-            <Badge variant="outline">Uno spazio condiviso per impresa e cliente</Badge>
-            <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-              Il lavoro è in cantiere. Tutto ciò che lo racconta resta in ordine.
-            </h1>
-            <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
-              Qoovex raccoglie aggiornamenti, modifiche, prove e richieste in una cronologia chiara
-              per l&apos;impresa e per il cliente.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a className={cn(buttonVariants({ size: "lg" }))} href={primaryCtaHref}>
-                {primaryCtaLabel}
-                <IconArrowRight
-                  data-icon="inline-end"
-                  className="transition-transform duration-200 group-hover/button:translate-x-0.5"
-                />
-              </a>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          {/* 3-Column Vercel Header */}
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_auto_0.9fr] lg:items-center">
+            {/* Left Column: Headline & CTAs */}
+            <div className="max-w-xl">
+              <Badge variant="outline" className="px-3 py-0.5 text-[0.7rem] font-medium backdrop-blur-xs">
+                Uno spazio condiviso per impresa e cliente
+              </Badge>
+              <h1 className="mt-4 text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+                Il lavoro è in cantiere. <br className="hidden sm:inline" />
+                Tutto ciò che lo racconta resta in ordine.
+              </h1>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <a className={cn(buttonVariants({ size: "lg" }))} href="/come-funziona">
+                  Scopri come funziona
+                  <IconArrowRight
+                    data-icon="inline-end"
+                    className="transition-transform duration-200 group-hover/button:translate-x-0.5"
+                  />
+                </a>
+                <a className={cn(buttonVariants({ variant: "outline", size: "lg" }))} href={signInUrl}>
+                  {signInLabel}
+                </a>
+              </div>
+            </div>
+
+            {/* Center Column: Iconic Qoovex Hexagon Emblem with Backlight Glow (matching Vercel screenshot) */}
+            <div className="relative flex items-center justify-center py-8 lg:py-0 select-none">
+              <div
+                aria-hidden
+                className="absolute size-72 sm:size-80 lg:size-96 rounded-full bg-foreground/15 blur-3xl pointer-events-none"
+              />
+              <div className="relative flex items-center justify-center">
+                <svg
+                  className="size-36 sm:size-48 lg:size-56 text-foreground drop-shadow-2xl transition-transform duration-700 hover:scale-105"
+                  viewBox="0 0 1100 1100"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M494.574 234.885C528.872 215.038 571.128 215.038 605.426 234.885L794.574 344.335C828.872 364.181 850 400.858 850 440.55V659.45C850 699.142 828.872 735.819 794.574 755.665L605.426 865.115C571.128 884.962 528.872 884.962 494.574 865.115L305.426 755.665C271.128 735.819 250 699.142 250 659.45V440.55C250 400.858 271.128 364.181 305.426 344.335L494.574 234.885Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M524.135 402.946C540.14 393.685 559.86 393.685 575.865 402.946L664.135 454.023C680.14 463.284 690 480.4 690 498.923V601.077C690 619.6 680.14 636.716 664.135 645.977L575.865 697.054C559.86 706.315 540.14 706.315 524.135 697.054L435.865 645.977C419.86 636.716 410 619.6 410 601.077V498.923C410 480.4 419.86 463.284 435.865 454.023L524.135 402.946Z"
+                    fill="var(--background)"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Right Column: Clean 3-Line Feature Highlight List */}
+            <div className="space-y-3 lg:justify-self-end text-sm font-medium text-foreground">
+              <p className="flex items-center gap-2.5">
+                <span className="size-1.5 rounded-full bg-primary" />
+                Per l&apos;impresa e per il cliente
+              </p>
+              <p className="flex items-center gap-2.5">
+                <span className="size-1.5 rounded-full bg-primary" />
+                Aggiornamenti, modifiche e prove
+              </p>
+              <p className="flex items-center gap-2.5">
+                <span className="size-1.5 rounded-full bg-primary" />
+                Cronologia chiara e invariabile
+              </p>
             </div>
           </div>
-          <Reveal className="lg:pl-4">
-            <ProductFrame
-              title="Ristrutturazione appartamento"
-              subtitle="Vista condivisa · impresa e cliente"
-            >
-              <WorkspaceTimeline />
-            </ProductFrame>
-          </Reveal>
+
+          {/* Full-width Expanding Hero App Mockup */}
+          <div className="mt-16 sm:mt-20 lg:mt-24">
+            <Reveal className="w-full">
+              <HeroMockupScroll className="mx-auto max-w-4xl lg:max-w-5xl">
+                <InteractiveAppMockup />
+              </HeroMockupScroll>
+            </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* Problema */}
+      {/* Problema - Vercel Bento Grid Layout (like screenshot 3) */}
       <Section bordered aria-labelledby="problema-title">
         <SectionHeading
           titleId="problema-title"
@@ -152,40 +203,128 @@ export default function HomePage() {
           title="Le informazioni importanti finiscono in troppi posti"
           description="WhatsApp, telefonate, email, fotografie, ricevute e memoria delle persone. Quando serve ricostruire una decisione, il contesto non c'è più."
         />
-        <div className="mt-12 grid gap-4 sm:grid-cols-3">
-          {problems.map((problem, index) => (
-            <Reveal key={problem.title} delay={index * 80}>
-              <Card className="h-full">
-                <CardHeader>
-                  <problem.icon aria-hidden className="size-5 text-muted-foreground" />
-                  <CardTitle className="mt-2">{problem.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">{problem.body}</p>
-                </CardContent>
-              </Card>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
+        <div className="mt-12 bento-grid">
+          {/* Bento Card 1 (Span 2) */}
+          <Reveal className="bento-col-span-2">
+            <div className="vercel-card h-full p-6 sm:p-8 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <IconPhoto className="size-5" />
+                  </div>
+                  <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-1 text-[0.7rem] font-medium text-rose-600 dark:text-rose-400">
+                    Dispersione dati
+                  </span>
+                </div>
+                <h3 className="mt-4 text-xl font-bold tracking-tight text-foreground">
+                  Foto e documenti dispersi tra più telefoni
+                </h3>
+                <p className="mt-2 text-muted-foreground text-sm leading-relaxed max-w-lg">
+                  Le immagini del cantiere finiscono in chat diverse, email o gallerie personali. Diventa impossibile dimostrare esattamente quando e come è stato realizzato un lavoro.
+                </p>
+              </div>
 
-      {/* Cambio di prospettiva */}
-      <Section bordered tone="muted" aria-labelledby="prospettiva-title">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-          <SectionHeading
-            titleId="prospettiva-title"
-            eyebrow="Il cambio di prospettiva"
-            title="Aggiorni una volta. Il resto resta collegato."
-            description="Il cliente segue il lavoro senza rincorrere messaggi e fotografie. L'impresa lavora con più ordine senza introdurre un gestionale complicato."
-          />
-          <Reveal className="grid gap-3">
-            <ConfirmedUpdateCard />
-            <RequestAwaitingReply />
+              {/* Static visual chips inside card */}
+              <div className="mt-6 flex flex-wrap items-center gap-2 pt-4 border-t border-border/60">
+                <span className="inline-flex items-center gap-1.5 rounded-lg border bg-background px-3 py-1.5 text-xs text-muted-foreground shadow-2xs">
+                  💬 WhatsApp (Chat perse)
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-lg border bg-background px-3 py-1.5 text-xs text-muted-foreground shadow-2xs">
+                  📧 Email e allegati
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 shadow-2xs">
+                  ✓ Unificato in Qoovex
+                </span>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Bento Card 2 */}
+          <Reveal delay={80}>
+            <div className="vercel-card h-full p-6 flex flex-col justify-between">
+              <div>
+                <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <IconMessage2 className="size-5" />
+                </div>
+                <h3 className="mt-4 text-lg font-bold tracking-tight text-foreground">
+                  Modifiche nei messaggi
+                </h3>
+                <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
+                  Le decisioni prese a voce o in chat si dimenticano o generano contestazioni quando servono davvero.
+                </p>
+              </div>
+              <div className="mt-6 pt-3 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
+                <span>Stato accordi</span>
+                <span className="font-mono text-amber-600 dark:text-amber-400 font-semibold">Non tracciato</span>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Bento Card 3 */}
+          <Reveal delay={160}>
+            <div className="vercel-card h-full p-6 flex flex-col justify-between">
+              <div>
+                <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <IconFileInvoice className="size-5" />
+                </div>
+                <h3 className="mt-4 text-lg font-bold tracking-tight text-foreground">
+                  Ricevute scollegate
+                </h3>
+                <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
+                  Documenti e ricevute di pagamento restano isolati dal lavoro e dagli stati di avanzamento reali.
+                </p>
+              </div>
+              <div className="mt-6 pt-3 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
+                <span>Contesto</span>
+                <span className="font-mono text-foreground font-semibold">Scollegato</span>
+              </div>
+            </div>
           </Reveal>
         </div>
       </Section>
 
-      {/* Come funziona */}
+      {/* Cambio di prospettiva - Asymmetric Overlapping Cards (like screenshot 1) */}
+      <Section bordered tone="muted" aria-labelledby="prospettiva-title">
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div>
+            <SectionHeading
+              titleId="prospettiva-title"
+              eyebrow="Il cambio di prospettiva"
+              title="Aggiorni una volta. Il resto resta collegato."
+              description="Il cliente segue il lavoro senza rincorrere messaggi e fotografie. L'impresa lavora con più ordine senza introdurre un gestionale complicato."
+            />
+            <ul className="mt-8 space-y-3">
+              {[
+                { label: "Cronologia unificata per entrambe le parti", desc: "Un solo registro condiviso dove ogni aggiornamento ha il suo posto." },
+                { label: "Modifiche d'opera tracciate con decisione", desc: "Varianti e costi approvati o in attesa di risposta visibili chiaramente." },
+                { label: "Isolamento sicuro delle note interne", desc: "L'impresa lavora con il proprio team senza esporre bozze o promemoria privati." },
+              ].map((item) => (
+                <li key={item.label} className="rounded-xl border bg-background/80 p-3.5">
+                  <p className="font-semibold text-sm text-foreground flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-primary" />
+                    {item.label}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground pl-3.5">{item.desc}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Overlapping Vercel Card Stack (like screenshot 1) */}
+          <Reveal className="relative pt-6 pb-6">
+            <div className="relative mx-auto max-w-md space-y-3">
+              <div className="transform rotate-1">
+                <ConfirmedUpdateCard />
+              </div>
+              <div className="transform -rotate-2 -mt-4 shadow-2xl">
+                <RequestAwaitingReply />
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </Section>
+
+      {/* Come funziona - Interactive Step Cards */}
       <Section bordered aria-labelledby="come-funziona-title">
         <SectionHeading
           titleId="come-funziona-title"
@@ -196,15 +335,17 @@ export default function HomePage() {
         <ol className="mt-12 grid gap-4 md:grid-cols-3">
           {howItWorks.map((item, index) => (
             <Reveal as="li" key={item.step} delay={index * 80}>
-              <Card className="h-full">
-                <CardHeader>
-                  <span className="font-accent text-sm text-muted-foreground">{item.step}</span>
-                  <CardTitle className="mt-2">{item.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">{item.body}</p>
-                </CardContent>
-              </Card>
+              <div className="vercel-card h-full p-6">
+                <span className="font-accent text-xs font-bold text-primary tracking-widest uppercase">
+                  STEP {item.step}
+                </span>
+                <h3 className="mt-3 text-lg font-bold text-foreground">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  {item.body}
+                </p>
+              </div>
             </Reveal>
           ))}
         </ol>
@@ -219,51 +360,52 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {/* Esperienza impresa / cliente */}
+      {/* Esperienza impresa / cliente - Asymmetric Vercel Showcase (like screenshot 2) */}
       <Section bordered tone="muted" aria-labelledby="esperienza-title">
         <SectionHeading
           titleId="esperienza-title"
           eyebrow="Per chi lavora e per chi segue i lavori"
           title="Due punti di vista, lo stesso lavoro"
         />
-        <div className="mt-12 grid gap-4 lg:grid-cols-2">
+        <div className="mt-12 grid gap-6 lg:grid-cols-2">
           <Reveal>
-            <Card className="h-full">
-              <CardHeader>
+            <div className="vercel-card h-full p-6 sm:p-8 flex flex-col justify-between">
+              <div>
                 <Badge variant="secondary" className="w-fit">
                   Per le imprese
                 </Badge>
-                <CardTitle className="mt-3">Un solo registro del lavoro</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-muted-foreground">
+                <h3 className="mt-4 text-2xl font-bold text-foreground">Un solo registro del lavoro</h3>
+                <p className="mt-3 text-muted-foreground leading-relaxed">
                   Aggiorna una volta e usa gli stessi contenuti per informare il cliente, gestire le
-                  modifiche e rendere evidente il prossimo passo.
+                  modifiche e rendere evidente il prossimo passo senza dover ripetere tutto nei messaggi.
                 </p>
+              </div>
+              <div className="mt-8 pt-4 border-t border-border/60">
                 <LinkCta href="/imprese">
                   Per le imprese
                 </LinkCta>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </Reveal>
+
           <Reveal delay={80}>
-            <Card className="h-full">
-              <CardHeader>
+            <div className="vercel-card h-full p-6 sm:p-8 flex flex-col justify-between">
+              <div>
                 <Badge variant="secondary" className="w-fit">
                   Per i clienti
                 </Badge>
-                <CardTitle className="mt-3">Solo ciò che è condiviso</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-muted-foreground">
+                <h3 className="mt-4 text-2xl font-bold text-foreground">Solo ciò che è condiviso</h3>
+                <p className="mt-3 text-muted-foreground leading-relaxed">
                   Segui i lavori sui tuoi immobili, capisci cosa è cambiato e ritrova file, prove e
-                  informazioni in un unico posto.
+                  informazioni ufficiali in un unico posto pulito e sempre accessibile.
                 </p>
+              </div>
+              <div className="mt-8 pt-4 border-t border-border/60">
                 <LinkCta href="/clienti">
                   Per i clienti
                 </LinkCta>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </Reveal>
         </div>
       </Section>
