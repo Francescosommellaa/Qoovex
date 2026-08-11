@@ -34,4 +34,4 @@ Ambienti coinvolti: soli file documentali locali e Brain
 Misurazione eseguita: non applicabile; database e Blob non interrogati
 ```
 
-Ogni task database-sensitive deve invece ricostruire e misurare il flusso reale, preservando autorizzazione e `organizationId` server-derived. Per attuale sono obbligatori fresh, upgrade dal baseline a 5 migration, drift, presenza delle tabelle attuale, assenza delle tabelle precedente, FK/unique/enum/orfani e prova dell'head. Non inserire query, token, hash, Blob key, URL firmati, IBAN, IP o user-agent in payload, audit o log.
+Ogni task database-sensitive deve invece ricostruire e misurare il flusso reale, preservando autorizzazione e `organizationId` server-derived. Sono obbligatori fresh, upgrade dal baseline storico, drift, presenza delle tabelle correnti, assenza delle tabelle rimosse, FK/unique/enum/orfani e prova dell'head. Non inserire query, token, hash, Blob key, URL firmati, IBAN, IP o user-agent in payload, audit o log.

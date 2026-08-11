@@ -1,6 +1,6 @@
 {
   "project": "Qoovex",
-  "updated_at": "2026-08-08",
+  "updated_at": "2026-08-11",
   "state_taxonomy": [
     "verified_current_state",
     "implemented_decision",
@@ -48,7 +48,16 @@
       "blob": "private, server-mediated, MIME checked, SHA-256, 4 MiB maximum"
     },
     "visual_foundation": {
-      "typography": "System font stack (primary and accent)"
+      "typography": "General Sans primary and ARRAY accent",
+      "icons": "Tabler"
+    },
+    "database_release": {
+      "canonical_migration_count": 8,
+      "migration_head": "20260809020000_single_active_organization_membership",
+      "local": "aligned_zero_drift",
+      "preview": "aligned_via_guarded_rehearsal",
+      "production_database": "aligned_zero_drift_via_cloud_build",
+      "public_alias": "promoted_only_by_manual_guarded_workflow"
     },
     "known_blockers": [
       "JobSite creator participant is persisted PENDING while organization actor resolution requires ACTIVE",
@@ -61,7 +70,7 @@
   },
   "conceptual_not_implemented": [
     "pricing, plans, trials, limits and billing", "marketplace", "in-app payment, escrow, refunds and arbitration",
-    "AI or OCR", "multiple client roles", "physical JobSite deletion", "physical account deletion"
+    "AI-assisted automation", "multiple client roles", "physical JobSite deletion", "physical account deletion"
   ],
   "hard_stops": [
     "CLIENT must never enter OrganizationRole",

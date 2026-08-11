@@ -21,7 +21,7 @@ Account con una sola Azienda attiva, cantiere attuale, partecipanti, inviti clie
 
 ## conceptual_not_implemented
 
-PiÃ¹ clienti principali o ruoli cliente differenziati, tecnici/delegati del cliente, pricing e billing, marketplace, ricerca imprese, preventivi comparativi, commissioni, pagamenti in-app, escrow, rimborsi, arbitrato, KYC, firma elettronica qualificata, fatturazione, contabilitÃ , paghe, BIM, geolocalizzazione continua, sorveglianza, IA/OCR, portfolio e recensioni pubbliche.
+Più clienti principali o ruoli cliente differenziati, tecnici/delegati del cliente, pricing e billing, marketplace, ricerca imprese, preventivi comparativi, commissioni, pagamenti in-app, escrow, rimborsi, arbitrato, KYC, firma elettronica qualificata, fatturazione, contabilità, paghe, BIM, geolocalizzazione continua, sorveglianza, automazioni intelligenti, portfolio e recensioni pubbliche.
 
 ## hard_stop
 

@@ -1,7 +1,7 @@
 # @qoovex/db
 
-Prisma e accesso dati per Qoovex. Lo schema conserva identity/security, piattaforma, Aziende, membership multiple, Worker, JobSite attuale, partecipanti, immobili cliente, timeline, agreement, step, richieste, proposte, deleghe, pagamenti documentati, dispute, closure/export, file/prove foundation, notifiche, audit e data-control.
+Prisma e accesso dati per Qoovex. Lo schema conserva identity/security, piattaforma, Aziende, una sola membership attiva per account, Worker, JobSite, partecipanti, immobili cliente, timeline, agreement, allegati contestuali, step, richieste, proposte, deleghe, pagamenti documentati, dispute, closure/export, notifiche, audit e data-control.
 
-La history canonica contiene 6 migration. Le prime 5 sono il baseline Production; la sesta migration pubblicata nel migration ledger azzera i record del baseline, elimina il dominio precedente e crea Qoovex. Fresh e upgrade 5â†’6 sono verificati localmente. Production Ã¨ stata verificata in sola lettura alla quinta migration; Preview resta non verificata. Nessun push aggiorna target remoti: i workflow distruttivi sono manuali e bloccati da conferma esatta.
+La history canonica contiene otto migration. Le prime cinque sono il baseline storico immutabile; le tre migration forward successive portano lo schema al dominio corrente. Fresh, upgrade e drift sono verificati localmente; Preview e Production sono stati verificati alla stessa head tramite i workflow e i cloud build guardati.
 
-Il client generato Ã¨ normalizzato tramite `scripts/normalize-generated.mjs`. Comandi canonici: `db:generate`, `guard:local`, `verify:prisma`. Non usare `db push`, `migrate reset` o `migrate resolve` su target remoti. Il wrapper guarded di `migrate deploy` Ã¨ una protezione tecnica e non costituisce autorizzazione al rollout.
+Il client generato è normalizzato tramite `scripts/normalize-generated.mjs`. Comandi canonici: `db:generate`, `guard:local`, `verify:prisma`. Non usare `db push`, `migrate reset` o `migrate resolve` su target remoti. Il wrapper di `prisma migrate deploy` verifica environment, head e drift ma non sostituisce l'autorizzazione del workflow manuale.

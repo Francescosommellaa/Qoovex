@@ -63,7 +63,7 @@ export function NotificationsPageView({ data, activeFilter }: { data: Notificati
           {!data.notifications.length ? (
             <WorkspaceEmptyState
               title="Nessuna notifica da controllare"
-              description="Nessuna notifica da controllare. Le scadenze e gli stati documentali registrati appariranno qui quando richiedono attenzione."
+              description="Richieste, decisioni e cambi di stato appariranno qui quando richiedono attenzione."
             />
           ) : (
             data.notifications.map((notification) => <NotificationCard key={notification.id} notification={notification} />)

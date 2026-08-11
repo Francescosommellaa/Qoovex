@@ -63,8 +63,8 @@ export default function TabsCatalogPage() {
                     <CardContent className="p-5">
                       <h3 className="text-base font-semibold mb-1">Panoramica del Cantiere</h3>
                       <p className="text-sm text-muted-foreground">
-                        Riepilogo delle attività attive, stato di avanzamento lavori e scadenze
-                        imminenti per il cantiere selezionato.
+                        Riepilogo delle attività attive, stato di avanzamento, richieste e decisioni
+                        del cantiere selezionato.
                       </p>
                     </CardContent>
                   </Card>

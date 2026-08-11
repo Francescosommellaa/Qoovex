@@ -10,7 +10,7 @@ Il cliente accetta un invito job-site-scoped e resta pending. Solo la conferma d
 
 Timeline interna e condivisa sono proiezioni della stessa storia canonica con audience. Gli step sono opzionali; senza step non viene inventata una percentuale. Stati step: `NOT_STARTED`, `IN_PROGRESS`, `WAITING`, `READY_FOR_REVIEW`, `CHANGES_REQUESTED`, `WORK_COMPLETED`, `CONFIRMED`, `CANCELLED`. La conferma cliente non equivale a collaudo.
 
-Le richieste strutturate e i thread post-chiusura sono append-only. La ricerca è metadata-only e limitata al JobSite autorizzato; niente OCR, ricerca nel file o semantica.
+Le richieste strutturate e i thread post-chiusura sono append-only. La ricerca è metadata-only e limitata al JobSite autorizzato; non indicizza il contenuto dei file e non usa ricerca semantica.
 
 ## Proposte
 

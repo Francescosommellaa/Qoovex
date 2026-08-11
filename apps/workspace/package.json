@@ -6,7 +6,6 @@
     "dev": "pnpm --filter @qoovex/db guard:local && next dev --port 3001",
     "prebuild": "node scripts/cloud-migrate.mjs",
     "build": "next build",
-    "blob:private:reset": "node scripts/reset-private-blob-store.mjs",
     "start": "next start",
     "type-check": "tsc --noEmit",
     "test": "node scripts/verify-fsd-boundaries.mjs && vitest run"

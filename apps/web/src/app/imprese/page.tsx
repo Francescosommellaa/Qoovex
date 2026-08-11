@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IconChecklist, IconFolders, IconShieldLock, IconUsers } from "@tabler/icons-react";
+import { IconFolders, IconShieldLock, IconTimeline, IconUsers } from "@tabler/icons-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { CtaBand } from "@/components/cta-band";
 import { WorkspaceTimeline } from "@/components/demo-visuals";
@@ -30,7 +30,7 @@ const capabilities = [
     body: "Persone, step e aggiornamenti restano insieme, così ritrovi il contesto senza cercare tra chat e messaggi.",
   },
   {
-    icon: IconChecklist,
+    icon: IconTimeline,
     title: "Avanzamento sempre leggibile",
     body: "La cronologia mostra cosa è stato fatto, cosa è in attesa e cosa richiede attenzione.",
   },
