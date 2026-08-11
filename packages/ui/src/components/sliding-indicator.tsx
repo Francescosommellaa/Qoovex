@@ -76,6 +76,16 @@ export function useSlidingIndicatorState(options?: {
     return () => window.removeEventListener("resize", handleResize);
   }, [indicator.visible, indicator.variant, moveIndicator]);
 
+  React.useEffect(() => {
+    // If we just turned off preventAutoHide, and the mouse is ALREADY outside
+    // the container, we need to clear the indicator because onMouseLeave won't fire again.
+    if (!options?.preventAutoHide && indicator.visible) {
+      if (containerRef.current && !containerRef.current.matches(':hover')) {
+        clearIndicator();
+      }
+    }
+  }, [options?.preventAutoHide, indicator.visible, clearIndicator]);
+
   const handleMouseLeave = React.useCallback(() => {
     if (options?.preventAutoHide) return;
     clearIndicator();

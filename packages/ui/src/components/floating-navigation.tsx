@@ -113,15 +113,72 @@ function NavigationResourceDropdown({
   setResourcesOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const tabsList = useTabsList();
+  const closeTimeoutRef = React.useRef<any>(null);
+  const isClosingRef = React.useRef(false);
+  const closedByMouseRef = React.useRef(false);
+
+  const handleOpenChange = React.useCallback((open: boolean) => {
+    if (!open) {
+      isClosingRef.current = true;
+      setTimeout(() => {
+        isClosingRef.current = false;
+        closedByMouseRef.current = false;
+      }, 500);
+    }
+    setResourcesOpen(open);
+  }, [setResourcesOpen]);
+
+  const handleMouseEnter = React.useCallback(() => {
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    closedByMouseRef.current = false;
+    handleOpenChange(true);
+  }, [handleOpenChange]);
+
+  const handleMouseLeave = React.useCallback(() => {
+    closeTimeoutRef.current = setTimeout(() => {
+      closedByMouseRef.current = true;
+      handleOpenChange(false);
+    }, 300);
+  }, [handleOpenChange]);
+
+  // Clean up on unmount
+  React.useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    };
+  }, []);
 
   return (
     <DropdownMenu
-      onOpenChange={setResourcesOpen}
+      onOpenChange={handleOpenChange}
       open={resourcesOpen}
     >
       <DropdownMenuTrigger
-        onFocus={(event) => tabsList?.moveHoverIndicator(event.currentTarget)}
-        onMouseEnter={(event) => tabsList?.moveHoverIndicator(event.currentTarget)}
+        onFocus={(event) => {
+          if (isClosingRef.current && closedByMouseRef.current) {
+            event.currentTarget.blur();
+            return;
+          }
+          if (!isClosingRef.current && event.currentTarget.matches(":focus-visible")) {
+            tabsList?.moveHoverIndicator(event.currentTarget);
+          }
+        }}
+        onBlur={(event) => {
+          // If we manually blurred it to prevent the focus glitch,
+          // stop propagation so TabsList doesn't think the user tabbed out and clear the indicator.
+          if (isClosingRef.current && closedByMouseRef.current) {
+            event.stopPropagation();
+          }
+        }}
+        onMouseEnter={(event) => {
+          tabsList?.moveHoverIndicator(event.currentTarget);
+          handleMouseEnter();
+        }}
+        onMouseLeave={handleMouseLeave}
+        onClick={(e) => {
+          // If it's open via hover, prevent click from closing it immediately
+          if (resourcesOpen) e.preventDefault();
+        }}
         render={
           <button
             className="group/resources relative z-10 flex cursor-pointer items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
@@ -138,8 +195,10 @@ function NavigationResourceDropdown({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="center"
-        className="w-80 rounded-2xl p-2 duration-200"
+        className="w-80 rounded-2xl p-2 duration-200 before:absolute before:-top-4 before:left-0 before:h-4 before:w-full"
         sideOffset={10}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         {resourceLinks.map((link) => (
           <DropdownMenuItem
