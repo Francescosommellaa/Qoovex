@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   assertCiEphemeralDatabase,
+  assertCloudBuildMigrationApproval,
   assertProductionApproval,
 } from "./migration-deploy-guard";
 import { calculateMigrationChecksum, calculateMigrationChecksums, validateMigrationHistory } from "./migration-history";
@@ -105,5 +106,15 @@ test("richiede approvazione, prova di ripristino e target esatto in produzione",
   );
   assert.doesNotThrow(
     () => assertProductionApproval({ approved: "1", backupRef: "dump-sha256", expectedLastMigration: privacy.name, lastMigration: privacy.name }),
+  );
+});
+
+test("la build cloud richiede solo la migration head esatta", () => {
+  assert.throws(
+    () => assertCloudBuildMigrationApproval({ expectedLastMigration: baseline.name, lastMigration: privacy.name }),
+    /Target inatteso/,
+  );
+  assert.doesNotThrow(
+    () => assertCloudBuildMigrationApproval({ expectedLastMigration: privacy.name, lastMigration: privacy.name }),
   );
 });

@@ -26,3 +26,13 @@ export function assertProductionApproval(input: {
     throw new Error(`[migrate-deploy] Target inatteso: atteso=${expected || "mancante"}, locale=${input.lastMigration ?? "mancante"}.`);
   }
 }
+
+export function assertCloudBuildMigrationApproval(input: {
+  expectedLastMigration: string | undefined;
+  lastMigration: string | undefined;
+}) {
+  const expected = input.expectedLastMigration?.trim();
+  if (!expected || expected !== input.lastMigration) {
+    throw new Error(`[migrate-deploy] Target inatteso: atteso=${expected || "mancante"}, locale=${input.lastMigration ?? "mancante"}.`);
+  }
+}
