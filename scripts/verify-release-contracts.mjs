@@ -37,6 +37,9 @@ const expectedJobs = new Map([
   ["data-control", { method: "GET", path: "/api/data/jobs/run" }],
   ["job-site-processes", { method: "POST", path: "/api/internal/job-sites/processes/run" }],
 ]);
+if (manifest.scheduler.jobs.length !== expectedJobs.size) {
+  throw new Error("Scheduler manifest must contain exactly the canonical jobs.");
+}
 for (const job of manifest.scheduler.jobs) {
   const expected = expectedJobs.get(job.id);
   if (!expected || job.method !== expected.method || job.path !== expected.path) {
@@ -47,12 +50,8 @@ for (const job of manifest.scheduler.jobs) {
   }
   expectedJobs.delete(job.id);
 }
-if (
-  expectedJobs.size > 0 ||
-  scheduler.includes("/api/reminders/email-digest/run") ||
-  scheduler.includes("/api/operations/run")
-) {
-  throw new Error("Scheduled workflow must contain only data-control and the current process queue.");
+if (expectedJobs.size > 0) {
+  throw new Error("Scheduled workflow is missing a canonical job.");
 }
 if (manifest.application.runtimeTrack !== "job-site" || manifest.application.current !== "implemented_not_end_to_end_verified") {
   throw new Error("Runtime track must identify current without claiming end-to-end verification.");

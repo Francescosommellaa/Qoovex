@@ -48,7 +48,7 @@ describe("verified signup email session", () => {
     await expect(getVerifiedSignupEmailFromCookie()).resolves.toBeNull();
   });
 
-  it("clears the proof after account creation or legacy verification", async () => {
+  it("clears the proof after account creation or existing-account verification", async () => {
     const { clearVerifiedSignupEmailCookie, getVerifiedSignupEmailFromCookie } = await import("./signup-session-service");
 
     await clearVerifiedSignupEmailCookie();

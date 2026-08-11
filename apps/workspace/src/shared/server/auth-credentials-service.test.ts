@@ -86,19 +86,19 @@ describe("credentials lifecycle security", () => {
     expect(mocks.userUpdate).not.toHaveBeenCalled();
   });
 
-  it("allows an unverified legacy credentials account to request a new verification code", async () => {
+  it("allows a pre-verification credentials account to request a new verification code", async () => {
     const { requestCredentialsSignupEmail } = await import("./auth-credentials-service");
     mocks.userFindUnique.mockResolvedValue({
-      id: "legacy-user",
+      id: "existing-user",
       emailVerified: null,
-      credential: { userId: "legacy-user" },
+      credential: { userId: "existing-user" },
     });
 
-    await requestCredentialsSignupEmail({ email: "legacy@example.com", ipHash: "ip" });
+    await requestCredentialsSignupEmail({ email: "existing@example.com", ipHash: "ip" });
 
     expect(mocks.issueAuthCode).toHaveBeenCalledWith({
-      email: "legacy@example.com",
-      userId: "legacy-user",
+      email: "existing@example.com",
+      userId: "existing-user",
       purpose: "EMAIL_VERIFICATION",
       ipHash: "ip",
       metadata: { flow: "credentials_verification" },
@@ -153,22 +153,22 @@ describe("credentials lifecycle security", () => {
     expect(mocks.credentialCreate).not.toHaveBeenCalled();
   });
 
-  it("marks a legacy credentials account verified only after its bound code succeeds", async () => {
+  it("marks a pre-verification credentials account verified only after its bound code succeeds", async () => {
     const { verifyCredentialsSignupEmail } = await import("./auth-credentials-service");
-    mocks.verifyAuthCode.mockResolvedValue({ userId: "legacy-user", metadata: null });
+    mocks.verifyAuthCode.mockResolvedValue({ userId: "existing-user", metadata: null });
     mocks.userFindUnique.mockResolvedValue({
-      id: "legacy-user",
-      email: "legacy@example.com",
+      id: "existing-user",
+      email: "existing@example.com",
       emailVerified: null,
-      credential: { userId: "legacy-user" },
+      credential: { userId: "existing-user" },
     });
 
-    await expect(verifyCredentialsSignupEmail({ email: "legacy@example.com", code: "123456" }))
-      .resolves.toEqual({ email: "legacy@example.com", next: "sign-in" });
+    await expect(verifyCredentialsSignupEmail({ email: "existing@example.com", code: "123456" }))
+      .resolves.toEqual({ email: "existing@example.com", next: "sign-in" });
 
     expect(mocks.verifyAuthCode).toHaveBeenCalledBefore(mocks.userUpdate);
     expect(mocks.userUpdate).toHaveBeenCalledWith({
-      where: { id: "legacy-user" },
+      where: { id: "existing-user" },
       data: { emailVerified: expect.any(Date) },
     });
   });
@@ -216,8 +216,8 @@ describe("credentials lifecycle security", () => {
   it("does not send an unusable verification code during failed sign-in", async () => {
     const { authorizeCredentials } = await import("./auth-credentials-service");
     mocks.userFindFirst.mockResolvedValue({
-      id: "legacy-user",
-      email: "legacy@example.com",
+      id: "existing-user",
+      email: "existing@example.com",
       emailVerified: null,
       name: null,
       image: null,
@@ -226,7 +226,7 @@ describe("credentials lifecycle security", () => {
     });
     mocks.verifyPassword.mockResolvedValue(true);
 
-    await expect(authorizeCredentials({ identifier: "legacy@example.com", password: "Password123!" }))
+    await expect(authorizeCredentials({ identifier: "existing@example.com", password: "Password123!" }))
       .resolves.toBeNull();
 
     expect(mocks.issueAuthCode).not.toHaveBeenCalled();
