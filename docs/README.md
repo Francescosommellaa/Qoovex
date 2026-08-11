@@ -1,12 +1,13 @@
 # Contratto canonico Qoovex
 
-Ordine: `HowToUse.md`, `project_brain.json`, Brain MCP, `OperationalProtocol.md`, quindi `00`â€“`08`.
+Ordine: `HowToUse.md`, `project_brain.json`, Brain MCP, `OperationalProtocol.md`, quindi `00`–`08`.
 
 Tassonomia obbligatoria:
 
-- `verified_current_state`: Qoovex MVP implementato localmente;
-- `approved_product_direction`: spazio condiviso Azienda-cliente;
-- `conceptual_not_implemented`: esclusioni future dichiarate nei documenti 00â€“08;
-- `open_decision` e `hard_stop`: decisioni non autorizzate.
+- `verified_current_state`: esistenza provata da codice, schema, migration o runtime verificato;
+- `implemented_decision`: scelta realizzata e protetta da contratti verificabili;
+- `approved_product_direction`: direzione prodotto approvata;
+- `conceptual_not_implemented`: capacità futura non disponibile;
+- `open_decision` e `hard_stop`: decisioni mancanti o condizioni che interrompono l'esecuzione.
 
-Le prime 5 migration sono il baseline Production immutabile. la sesta migration pubblicata nel migration ledger azzera il baseline e introduce attuale senza compatibilitÃ  precedente. Fresh e upgrade sono verificati localmente; i target remoti restano invariati fino al push e vengono gestiti solo dai workflow guarded.
+La history Prisma contiene otto migration canoniche. Le prime cinque sono il baseline storico immutabile; le tre migration forward successive introducono il dominio corrente, `AccountRole`, gli allegati contestuali e il vincolo di una sola membership Azienda attiva. Local, Preview e database Production sono allineati alla head; i rilasci remoti restano manuali, verificabili e separati dalla CI ordinaria.

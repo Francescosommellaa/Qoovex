@@ -26,4 +26,4 @@ Le azioni critiche usano `Idempotency-Key`, fingerprint e receipt; gli aggiornam
 
 ## Esclusioni
 
-Non sono implementati pricing/billing, marketplace, pagamenti in-app, escrow, KYC, firma qualificata, IA, OCR o cancellazione fisica. Nessuna di queste capacità è mostrata nella UI.
+Non sono implementati pricing/billing, marketplace, pagamenti in-app, escrow, KYC, firma qualificata, automazioni intelligenti o cancellazione fisica. Nessuna di queste capacità è mostrata nella UI.

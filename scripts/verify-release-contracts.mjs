@@ -23,11 +23,14 @@ if (manifest.database.migrationCount !== ledger.migrations.length) {
 const currentMigration = ledger.migrations.find((entry) => entry.name === manifest.database.migrationHead);
 if (
   !currentMigration ||
-  currentMigration.productionApplied !== false ||
-  currentMigration.destructiveApproved !== false ||
-  currentMigration.executionPolicy !== "MANUAL_REAUTHORIZATION_REQUIRED"
+  currentMigration.productionApplied !== true ||
+  currentMigration.destructiveApproved !== true ||
+  currentMigration.executionPolicy !== "APPLIED_VIA_GUARDED_CLOUD_BUILD" ||
+  !currentMigration.productionEvidence ||
+  !currentMigration.productionVerifiedAt ||
+  manifest.database.productionMutationRequiredForAlignment !== false
 ) {
-  throw new Error("Pending destructive current migration must remain frozen pending manual reauthorization.");
+  throw new Error("Production migration head must be recorded as applied with guarded cloud-build evidence.");
 }
 
 const expectedJobs = new Map([
@@ -54,11 +57,8 @@ if (
 if (manifest.application.runtimeTrack !== "job-site" || manifest.application.current !== "implemented_not_end_to_end_verified") {
   throw new Error("Runtime track must identify current without claiming end-to-end verification.");
 }
-if (
-  manifest.blob?.access !== "private" ||
-  manifest.blob?.resetScript !== "apps/workspace/scripts/reset-private-blob-store.mjs"
-) {
-  throw new Error("current private Blob reset contract is incomplete.");
+if (manifest.blob?.access !== "private" || manifest.blob?.rolloutMode !== "forward_only_no_reset_required" || "resetScript" in manifest.blob) {
+  throw new Error("Private Blob must use the forward-only release contract without a reset hook.");
 }
 if (manifest.http.anonymousProtectedPage !== "307_sign_in_with_sanitized_relative_callback") {
   throw new Error("Protected page redirect contract must match the runtime 307 response.");

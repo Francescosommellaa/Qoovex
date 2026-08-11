@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "application": {
     "name": "qoovex-workspace",
-    "version": "single-organization-membership-v1",
+    "version": "account-role-single-organization-v1",
     "runtimeTrack": "job-site",
     "current": "implemented_not_end_to_end_verified"
   },
@@ -10,15 +10,14 @@
     "baselineHead": "20260720010000_calendar_events",
     "migrationHead": "20260809020000_single_active_organization_membership",
     "migrationCount": 8,
-    "productionMutationRequiredForAlignment": true,
+    "productionMutationRequiredForAlignment": false,
     "rolloutMode": "manual_cloud_build_forward_deploy",
     "ledger": "ops/migration-ledger.json"
   },
   "blob": {
     "access": "private",
-    "rolloutMode": "manual_only_one_time_store_reset_blocked",
-    "targetIdentity": "BLOB_STORE_ID",
-    "resetScript": "apps/workspace/scripts/reset-private-blob-store.mjs"
+    "rolloutMode": "forward_only_no_reset_required",
+    "targetIdentity": "BLOB_STORE_ID"
   },
   "scheduler": {
     "permanentReleaseState": "enabled_job-site",

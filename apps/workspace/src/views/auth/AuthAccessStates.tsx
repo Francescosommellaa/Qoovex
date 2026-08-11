@@ -48,7 +48,7 @@ export function SignInRequiredState({ callbackUrl = "/" }: { callbackUrl?: strin
           <Link className={cn(buttonVariants({ variant: "outline" }), "h-11")} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link>
         </>
       )}
-      description="Per usare Qoovex serve un account. Dopo l’accesso potrai organizzare documenti, scadenze e prove di cantiere."
+      description="Per usare Qoovex serve un account. Dopo l’accesso potrai seguire cantieri, aggiornamenti, richieste e decisioni."
       icon={IconLogin2}
       title="Accedi al workspace"
       titleId="signin-required-title"
@@ -59,7 +59,7 @@ export function SignInRequiredState({ callbackUrl = "/" }: { callbackUrl?: strin
 export function OrganizationRequiredState() {
   return (
     <AccessStateCard
-      description="Crea l’Azienda in cui organizzare documenti, scadenze e prove di cantiere. Potrai invitare le persone in seguito."
+      description="Crea l’Azienda con cui gestire i cantieri e collaborare con le persone coinvolte. Potrai invitarle in seguito."
       icon={IconBuilding}
       title="Configura la tua azienda"
       titleId="organization-required-title"
