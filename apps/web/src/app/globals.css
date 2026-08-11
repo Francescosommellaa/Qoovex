@@ -109,3 +109,87 @@
   gap: 0.5rem;
   padding-left: 1.25rem;
 }
+
+/* 3D Perspective & Hero Mockup Expand Animation */
+.perspective-container {
+  perspective: 1200px;
+  perspective-origin: 50% 0%;
+}
+
+@keyframes hero-mockup-grow {
+  from {
+    transform: rotateX(12deg) scale(0.88) translateY(20px);
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.12);
+  }
+  to {
+    transform: rotateX(0deg) scale(1) translateY(0);
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.25);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .native-scroll-expand {
+      animation: hero-mockup-grow auto ease-out forwards;
+      animation-timeline: view();
+      animation-range: entry 10% cover 45%;
+    }
+  }
+}
+
+.hero-mockup-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 1rem;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--foreground) 12%, transparent) 0%,
+    color-mix(in oklch, var(--foreground) 3%, transparent) 50%,
+    color-mix(in oklch, var(--foreground) 8%, transparent) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Vercel-Style Bento & Asymmetric Cards (Clean, stable, non-misleading UX) */
+.vercel-card {
+  position: relative;
+  background: color-mix(in oklch, var(--card) 96%, var(--foreground) 4%);
+  border: 1px solid color-mix(in oklch, var(--border) 80%, transparent);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+@keyframes float-subtle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float {
+  animation: float-subtle 4s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-subtle 4s ease-in-out infinite 2s;
+}
+
+.bento-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(1, 1fr);
+}
+
+@media (min-width: 768px) {
+  .bento-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .bento-col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+}
+
+

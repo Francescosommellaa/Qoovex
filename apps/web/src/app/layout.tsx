@@ -32,16 +32,6 @@ export const metadata: Metadata = {
   },
 };
 
-const marketingCursorPathnames = [
-  "/",
-  "/pricing",
-  "/contattaci",
-  "/community",
-  "/manuale-operativo",
-  "/storie",
-  "/novita",
-] as const;
-
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html data-scroll-behavior="smooth" data-theme="vercel" lang="it" suppressHydrationWarning>
@@ -49,7 +39,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
           <TooltipProvider>
             <ScrollbarController />
-            <MarketingCursor pathnames={marketingCursorPathnames} />
+            <MarketingCursor />
             {children}
             <CookieBanner />
           </TooltipProvider>
