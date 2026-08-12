@@ -98,7 +98,7 @@ export default function TimelineCatalogPage() {
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-semibold">Proposta di Variante #02</span>
-                          <Badge variant="outline" className="font-accent text-[0.6875rem] border-warning/50 text-warning">IN ATTESA</Badge>
+                          <Badge variant="outline" className="font-accent text-[0.6875rem] border-warning/50 text-warning-emphasis">IN ATTESA</Badge>
                         </div>
                         <span className="font-accent text-xs text-muted-foreground">16:45</span>
                       </div>
@@ -156,7 +156,7 @@ export default function TimelineCatalogPage() {
                 <TimelineMarker variant="warning">
                   <IconAlertTriangle />
                 </TimelineMarker>
-                <span className="text-xs text-warning font-medium">In Attesa</span>
+                <span className="text-xs text-warning-emphasis font-medium">In Attesa</span>
               </div>
             </Specimen>
 

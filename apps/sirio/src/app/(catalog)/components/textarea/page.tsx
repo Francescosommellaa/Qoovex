@@ -235,7 +235,7 @@ export default function TextareaPage() {
               <Field className="w-full">
                 <div className="flex items-center justify-between">
                   <FieldLabel>Feedback Intervento</FieldLabel>
-                  <div className="flex gap-1 text-warning">
+                  <div className="flex gap-1 text-warning-emphasis">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
                         key={star}
@@ -243,7 +243,7 @@ export default function TextareaPage() {
                         onClick={() => setRating(star)}
                         className="p-0.5 hover:scale-110 transition-transform"
                       >
-                        <IconStarFilled className={`size-4 ${star <= rating ? "text-warning" : "text-muted-foreground/30"}`} />
+                        <IconStarFilled className={`size-4 ${star <= rating ? "text-warning-emphasis" : "text-muted-foreground/30"}`} />
                       </button>
                     ))}
                   </div>

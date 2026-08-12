@@ -23,7 +23,7 @@ const checkboxVariants = cva(
         destructive:
           "border border-input hover:border-destructive/60 dark:bg-input/30 data-checked:border-destructive data-checked:bg-destructive data-checked:text-destructive-foreground data-checked:shadow-2xs dark:data-checked:bg-destructive data-indeterminate:border-destructive data-indeterminate:bg-destructive data-indeterminate:text-destructive-foreground",
         warning:
-          "border border-input hover:border-warning/60 dark:bg-input/30 data-checked:border-warning data-checked:bg-warning data-checked:text-warning-foreground data-checked:shadow-2xs dark:data-checked:bg-warning data-indeterminate:border-warning data-indeterminate:bg-warning data-indeterminate:text-warning-foreground",
+          "border border-input hover:border-warning-emphasis/60 dark:bg-input/30 data-checked:border-warning-emphasis data-checked:bg-warning data-checked:text-warning-foreground data-checked:shadow-2xs dark:data-checked:bg-warning data-indeterminate:border-warning-emphasis data-indeterminate:bg-warning data-indeterminate:text-warning-foreground",
       },
     },
     defaultVariants: {

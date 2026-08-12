@@ -131,7 +131,7 @@
 }
 
 .statePositive { color: var(--success); }
-.stateWarning { color: color-mix(in oklch, var(--warning) 76%, var(--foreground)); }
+.stateWarning { color: var(--warning-emphasis); }
 .stateDanger { color: var(--destructive); }
 .stateNeutral { color: var(--muted-foreground); }
 

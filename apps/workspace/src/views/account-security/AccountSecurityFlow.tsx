@@ -10,6 +10,7 @@ import { Input } from "@qoovex/ui/components/input";
 import { OtpInput } from "@qoovex/ui/components/otp-input";
 import { Spinner } from "@qoovex/ui/components/spinner";
 import { cn } from "@qoovex/ui/lib/utils";
+import { presentMfaRecoveryStatus } from "@shared/lib/product-state-presentation";
 import styles from "./AccountSecurity.module.css";
 
 function SecuritySection({ children, className, tone = "default", ...props }: { children: ReactNode; tone?: "default" | "info" | "warning" } & HTMLAttributes<HTMLElement>) {
@@ -46,15 +47,6 @@ type RecoveryRequest = {
   expiresAt: string;
 };
 type ApiError = { message?: string; code?: string };
-
-const recoveryStatusLabels: Record<Recovery["status"], string> = {
-  PENDING: "In attesa",
-  APPROVED: "Approvata",
-  DENIED: "Rifiutata",
-  SETUP_STARTED: "Configurazione avviata",
-  COMPLETED: "Completata",
-  EXPIRED: "Scaduta",
-};
 
 async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, init);
@@ -291,10 +283,10 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
         {recovery ? (
           <SecuritySection tone="warning">
             <div className={styles.section}>
-              <div className={styles.statusRow}><h2>Recupero MFA</h2><SecurityState tone={recovery.status === "APPROVED" ? "positive" : recovery.status === "DENIED" || recovery.status === "EXPIRED" ? "danger" : "warning"}>{recoveryStatusLabels[recovery.status]}</SecurityState></div>
-              {recovery.status === "PENDING" ? <Alert variant="warning"><AlertTitle>In attesa dell&apos;OWNER</AlertTitle><AlertDescription>Il workspace resta protetto. La richiesta scade alle {new Date(recovery.expiresAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}.</AlertDescription></Alert> : null}
+              <div className={styles.statusRow}><h2>Recupero MFA</h2><SecurityState tone={recovery.status === "APPROVED" ? "positive" : recovery.status === "DENIED" || recovery.status === "EXPIRED" ? "danger" : "warning"}>{presentMfaRecoveryStatus(recovery.status).label}</SecurityState></div>
+              {recovery.status === "PENDING" ? <Alert variant="warning"><AlertTitle>In attesa del Titolare dell&apos;Azienda</AlertTitle><AlertDescription>Il workspace resta protetto. La richiesta scade alle {new Date(recovery.expiresAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}.</AlertDescription></Alert> : null}
               {recovery.status === "APPROVED" ? <Alert variant="success"><AlertTitle>Richiesta approvata</AlertTitle><AlertDescription>Puoi configurare una sola volta un nuovo fattore.</AlertDescription></Alert> : null}
-              {recovery.status === "DENIED" ? <Alert variant="destructive"><AlertTitle>Richiesta rifiutata</AlertTitle><AlertDescription>Contatta un OWNER della tua Azienda e avvia una nuova richiesta se necessario.</AlertDescription></Alert> : null}
+              {recovery.status === "DENIED" ? <Alert variant="destructive"><AlertTitle>Richiesta rifiutata</AlertTitle><AlertDescription>Contatta un Titolare della tua Azienda e avvia una nuova richiesta se necessario.</AlertDescription></Alert> : null}
               {recovery.status === "EXPIRED" ? <Alert variant="destructive"><AlertTitle>Richiesta scaduta</AlertTitle><AlertDescription>Avvia un nuovo recupero e verifica nuovamente l&apos;email.</AlertDescription></Alert> : null}
               <div className={styles.actions}>
                 {recovery.status === "APPROVED" ? <Button onClick={startRecoverySetup}>Configura nuovo fattore</Button> : null}

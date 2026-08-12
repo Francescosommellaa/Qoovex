@@ -99,7 +99,7 @@
 }
 
 .toneDanger { color: var(--destructive); }
-.toneWarning { color: var(--warning); }
+.toneWarning { color: var(--warning-emphasis); }
 .toneInfo { color: var(--info); }
 .toneGood { color: var(--success); }
 .toneNeutral { color: var(--muted-foreground); }

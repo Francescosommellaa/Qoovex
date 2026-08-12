@@ -1,9 +1,17 @@
 import type { ReactNode } from "react";
-import { IconLock, IconMoodEmpty } from "@tabler/icons-react";
+import {
+  IconAlertCircle,
+  IconAlertTriangle,
+  IconCircleCheck,
+  IconInfoCircle,
+  IconLock,
+  IconMoodEmpty,
+} from "@tabler/icons-react";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
 import { Badge } from "@qoovex/ui/components/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
+import type { ProductStatePresentation } from "@shared/lib/product-state-presentation";
 
 export function WorkspacePage({ children }: { children: ReactNode }) {
   return <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">{children}</div>;
@@ -25,7 +33,21 @@ export function WorkspaceAccessState({ title = "Area non disponibile", descripti
   return <WorkspacePage><Alert variant="warning"><IconLock /><AlertTitle>{title}</AlertTitle><AlertDescription>{description}</AlertDescription></Alert></WorkspacePage>;
 }
 
-export function WorkspaceState({ label, tone = "neutral" }: { label: string; tone?: "danger" | "warning" | "info" | "good" | "neutral" }) {
-  const variant = tone === "danger" ? "destructive" : tone === "good" ? "success" : tone === "neutral" ? "outline" : tone;
-  return <Badge variant={variant}>{label}</Badge>;
+export function WorkspaceState({ state }: { state: ProductStatePresentation }) {
+  const variant = state.tone === "danger" ? "destructive" : state.tone === "good" ? "success" : state.tone === "neutral" ? "outline" : state.tone;
+  const StateIcon = state.tone === "danger"
+    ? IconAlertCircle
+    : state.tone === "warning"
+      ? IconAlertTriangle
+      : state.tone === "info"
+        ? IconInfoCircle
+        : state.tone === "good"
+          ? IconCircleCheck
+          : null;
+  return (
+    <Badge title={state.description} variant={variant}>
+      {StateIcon ? <StateIcon aria-hidden="true" data-slot="workspace-state-icon" /> : null}
+      {state.label}
+    </Badge>
+  );
 }

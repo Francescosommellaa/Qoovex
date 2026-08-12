@@ -4,6 +4,7 @@ import { listPlatformUsers } from "@shared/server/platform-admin-service";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceEmptyState, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import { PlatformAdminAccessState } from "@/views/platform-admin/PlatformAdminAccessState";
 import styles from "@/views/platform-admin/PlatformAdmin.module.css";
+import { presentOrganizationRole, presentPlatformRole } from "@shared/lib/product-state-presentation";
 
 export default async function PlatformUsersPage({ searchParams }: { searchParams: Promise<{ q?: string; status?: string; cursor?: string }> }) {
   const search = await searchParams;
@@ -30,9 +31,9 @@ export default async function PlatformUsersPage({ searchParams }: { searchParams
                 <article className={styles.record} key={user.id}>
                   <div className={styles.recordHeader}>
                     <div><h2>{[user.firstName, user.lastName].filter(Boolean).join(" ") || user.username}</h2><p className={styles.meta}>{user.email} · @{user.username}</p></div>
-                    <WorkspaceState label={user.suspendedAt ? "Sospeso" : user.platformRole === "SUPPORT_AGENT" ? "Support Agent" : user.platformRole === "PLATFORM_ADMIN" ? "Platform Admin" : "Attivo"} tone={user.suspendedAt ? "danger" : user.platformRole === "SUPPORT_AGENT" || user.platformRole === "PLATFORM_ADMIN" ? "info" : "good"} />
+                    <WorkspaceState state={user.suspendedAt ? { label: "Account sospeso", tone: "danger" } : user.platformRole === "USER" ? { label: "Account attivo", tone: "good" } : presentPlatformRole(user.platformRole)} />
                   </div>
-                  <p className="text-muted-foreground">{user.organizationMemberships.filter((membership) => membership.revokedAt === null).map((membership) => `${membership.organization.name} (${membership.role})`).join(", ") || "Nessuna azienda attiva"}</p>
+                  <p className="text-muted-foreground">{user.organizationMemberships.filter((membership) => membership.revokedAt === null).map((membership) => `${membership.organization.name} (${presentOrganizationRole(membership.role).label})`).join(", ") || "Nessuna azienda attiva"}</p>
                   <div className={styles.actions}><Link className={styles.linkButton} href={`/qoovex-admin/users/${user.id}`}>Apri dettaglio</Link></div>
                 </article>
               ))}

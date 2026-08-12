@@ -30,7 +30,7 @@ for (const file of sourceFiles) {
 const base = read("packages/ui/styles/base.css");
 const tokens = read("packages/ui/styles/tokens.css");
 for (const value of ["prefers-reduced-motion", "@custom-variant dark", "data-link=", "scrollbar-width: thin"]) assert(base.includes(value), `base.css non contiene ${value}`);
-for (const value of ["--info", "--success", "--warning", "--destructive", "--sidebar", "oklch("]) assert(tokens.includes(value), `tokens.css non contiene ${value}`);
+for (const value of ["--info", "--success", "--warning", "--warning-emphasis", "--destructive", "--sidebar", "oklch("]) assert(tokens.includes(value), `tokens.css non contiene ${value}`);
 assert(tokens.includes("--font-sans: var(--ff-sans);") && tokens.includes("--font-accent: var(--ff-accent);"), "tokens.css deve esporre i token --font-sans e --font-accent.");
 
 const workspaceOrganization = read("apps/workspace/src/app/org/[organizationId]/job-sites/[jobSiteId]/page.tsx");

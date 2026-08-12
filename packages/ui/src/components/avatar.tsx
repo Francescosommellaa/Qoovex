@@ -2,12 +2,13 @@
 
 import * as React from "react"
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar"
+import { IconCheck, IconCircle, IconClock, IconMinus } from "@tabler/icons-react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "#lib/utils"
 
 const avatarVariants = cva(
-  "group/avatar relative flex shrink-0 select-none overflow-hidden rounded-full border border-border/60 bg-muted transition-all duration-150",
+  "group/avatar relative flex shrink-0 select-none overflow-visible rounded-full border border-border/60 bg-muted transition-all duration-150",
   {
     variants: {
       size: {
@@ -76,18 +77,26 @@ function AvatarBadge({
   status?: "online" | "offline" | "busy" | "away"
 }) {
   const statusStyles = {
-    online: "bg-success border-background",
-    offline: "bg-muted-foreground/60 border-background",
-    busy: "bg-destructive border-background",
-    away: "bg-warning border-background",
+    online: "bg-success border-background text-success-foreground",
+    offline: "bg-muted-foreground/60 border-background text-background",
+    busy: "bg-destructive border-background text-destructive-foreground",
+    away: "bg-warning-emphasis border-background text-warning-foreground",
   }
+  const statusPresentation = {
+    online: { icon: IconCheck, label: "Online" },
+    offline: { icon: IconCircle, label: "Offline" },
+    busy: { icon: IconMinus, label: "Occupato" },
+    away: { icon: IconClock, label: "Assente" },
+  }
+  const StatusIcon = statusPresentation[status].icon
 
   return (
     <span
+      aria-label={statusPresentation[status].label}
       data-slot="avatar-badge"
       data-status={status}
       className={cn(
-        "absolute right-0 bottom-0 z-10 block rounded-full border-2 ring-1 ring-border/20 select-none",
+        "absolute right-0 bottom-0 z-10 flex items-center justify-center rounded-full border-2 ring-1 ring-border/20 select-none [&_svg]:size-[70%] [&_svg]:shrink-0",
         "group-data-[size=xs]/avatar:size-2 group-data-[size=xs]/avatar:border-1",
         "group-data-[size=sm]/avatar:size-2.5",
         "group-data-[size=default]/avatar:size-3",
@@ -97,7 +106,9 @@ function AvatarBadge({
         className
       )}
       {...props}
-    />
+    >
+      <StatusIcon aria-hidden="true" data-slot="avatar-status-icon" />
+    </span>
   )
 }
 

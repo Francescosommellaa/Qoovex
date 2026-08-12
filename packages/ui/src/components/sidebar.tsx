@@ -315,17 +315,25 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
   )
 }
 
-function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
-  return (
-    <main
-      data-slot="sidebar-inset"
-      className={cn(
-        "relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
-        className
-      )}
-      {...props}
-    />
+type SidebarInsetProps =
+  | ({ as: "div" } & React.ComponentProps<"div">)
+  | ({ as?: "main" } & React.ComponentProps<"main">)
+
+function sidebarInsetClassName(className?: string) {
+  return cn(
+    "relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
+    className
   )
+}
+
+function SidebarInset(props: SidebarInsetProps) {
+  if (props.as === "div") {
+    const { as: _as, className, ...divProps } = props
+    return <div data-slot="sidebar-inset" className={sidebarInsetClassName(className)} {...divProps} />
+  }
+
+  const { as: _as, className, ...mainProps } = props
+  return <main data-slot="sidebar-inset" className={sidebarInsetClassName(className)} {...mainProps} />
 }
 
 function SidebarInput({
@@ -965,7 +973,7 @@ function AdaptiveSidebar({
               >
                 {brand.logo}
                 {brand.title && (
-                  <span className="truncate font-accent text-lg font-bold tracking-tight group-data-[collapsible=icon]:hidden">
+                  <span className="truncate font-sans text-lg font-bold tracking-tight group-data-[collapsible=icon]:hidden">
                     {brand.title}
                   </span>
                 )}
@@ -974,7 +982,7 @@ function AdaptiveSidebar({
               <div className="flex h-9 min-w-0 flex-1 items-center gap-2 overflow-hidden text-lg font-bold tracking-tight group-data-[collapsible=icon]:flex-initial group-data-[collapsible=icon]:justify-center">
                 {brand.logo}
                 {brand.title && (
-                  <span className="truncate font-accent text-lg font-bold tracking-tight group-data-[collapsible=icon]:hidden">
+                  <span className="truncate font-sans text-lg font-bold tracking-tight group-data-[collapsible=icon]:hidden">
                     {brand.title}
                   </span>
                 )}

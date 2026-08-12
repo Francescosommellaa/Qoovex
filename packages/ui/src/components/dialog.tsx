@@ -127,7 +127,7 @@ function DialogIcon({
   const variantStyles = {
     default: "border-border bg-muted text-muted-foreground",
     destructive: "border-destructive/30 bg-destructive/10 text-destructive",
-    warning: "border-warning/30 bg-warning/10 text-warning",
+    warning: "border-warning/30 bg-warning/10 text-warning-emphasis",
     info: "border-info/30 bg-info/10 text-info",
     success: "border-success/30 bg-success/10 text-success",
   }

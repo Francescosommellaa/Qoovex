@@ -59,7 +59,7 @@ export default function WorkQueueItemCatalogPage() {
               <WorkQueueItem priority="attention">
                 <WorkQueueItemContent>
                   <div className="flex items-center gap-2">
-                    <IconClock className="size-4 text-warning" />
+                    <IconClock className="size-4 text-warning-emphasis" />
                     <WorkQueueItemTitle>La variante punti luce richiede risposta</WorkQueueItemTitle>
                   </div>
                   <WorkQueueItemDescription>
@@ -105,7 +105,7 @@ export default function WorkQueueItemCatalogPage() {
               <WorkQueueItem priority="attention" className="w-full">
                 <WorkQueueItemContent>
                   <div className="flex items-center gap-2">
-                    <IconBuildingStore className="size-4 text-warning" />
+                    <IconBuildingStore className="size-4 text-warning-emphasis" />
                     <WorkQueueItemTitle>Delega Spesa € 12.500</WorkQueueItemTitle>
                   </div>
                   <WorkQueueItemDescription>

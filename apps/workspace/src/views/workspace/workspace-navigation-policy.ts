@@ -30,8 +30,9 @@ export function buildWorkspaceNavigation(access: readonly OrganizationPermission
 export function isWorkspaceNavigationItemCurrent(pathname: string, searchParams: Pick<URLSearchParams, "get">, href: string, activePath?: string) {
   const target = new URL(href, "https://workspace.qoovex.local");
   const matchPath = activePath ?? target.pathname;
+  const isExactIndexRoute = matchPath === "/qoovex-admin" || matchPath === "/settings" || /^\/org\/[^/]+$/.test(matchPath);
   const pathMatches = pathname === matchPath
-    || (matchPath !== "/" && pathname.startsWith(`${matchPath}/`));
+    || (!isExactIndexRoute && matchPath !== "/" && pathname.startsWith(`${matchPath}/`));
   return pathMatches && [...target.searchParams].every(([key, value]) => searchParams.get(key) === value);
 }
 

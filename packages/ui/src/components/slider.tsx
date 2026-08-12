@@ -47,9 +47,9 @@ const colorStyles = {
     tooltip: "bg-destructive text-destructive-foreground",
   },
   warning: {
-    indicator: "bg-warning",
+    indicator: "bg-warning-emphasis",
     thumb:
-      "border-warning/80 focus-visible:border-warning focus-visible:ring-warning/50 hover:border-warning",
+      "border-warning-emphasis/80 focus-visible:border-warning-emphasis focus-visible:ring-warning-emphasis/50 hover:border-warning-emphasis",
     tooltip: "bg-warning text-warning-foreground",
   },
 }

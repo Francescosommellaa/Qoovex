@@ -5,6 +5,7 @@ import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceEmptyState
 import { PlatformAdminAccessState } from "@/views/platform-admin/PlatformAdminAccessState";
 import { RuntimeErrorAction } from "@/views/platform-admin/RuntimeErrorAction";
 import styles from "@/views/platform-admin/PlatformAdmin.module.css";
+import { presentRuntimeErrorStatus } from "@shared/lib/product-state-presentation";
 
 export default async function PlatformErrorsPage({ searchParams }: { searchParams: Promise<{ status?: string; source?: string; cursor?: string }> }) {
   const search = await searchParams;
@@ -24,7 +25,7 @@ export default async function PlatformErrorsPage({ searchParams }: { searchParam
           {data.errors.length === 0 ? <WorkspaceEmptyState title="Nessun errore" description="Non risultano eventi per il filtro selezionato." /> : (
             <div className={styles.recordList}>{data.errors.map((error) => (
               <article className={styles.record} key={error.id}>
-                <div className={styles.recordHeader}><div><h2>{error.errorName}</h2><p className={styles.meta}>{error.source} · {error.requestMethod ?? "-"} {error.routePath ?? "route non disponibile"}</p></div><WorkspaceState label={error.status === "OPEN" ? "Aperto" : "Risolto"} tone={error.status === "OPEN" ? "danger" : "good"} /></div>
+                <div className={styles.recordHeader}><div><h2>{error.errorName}</h2><p className={styles.meta}>{error.source} · {error.requestMethod ?? "-"} {error.routePath ?? "route non disponibile"}</p></div><WorkspaceState state={presentRuntimeErrorStatus(error.status)} /></div>
                 <p>{error.message}</p>
                 <p className="text-muted-foreground">{error.occurrenceCount} occorrenze · ultima {error.lastSeenAt.toLocaleString("it-IT")}</p>
                 {error.stackPreview ? <details><summary>Stack sanitizzato</summary><pre className={styles.codeBlock}>{error.stackPreview}</pre></details> : null}

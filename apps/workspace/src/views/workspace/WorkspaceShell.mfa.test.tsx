@@ -75,6 +75,29 @@ describe("WorkspaceShell MFA gate", () => {
     expect(html).not.toContain("GLOBAL_MFA_GATE");
   });
 
+  it("offers a first skip link that targets the focusable content landmark after navigation", async () => {
+    mocks.getWorkspaceAccessContext.mockResolvedValue({
+      userId: "user-1",
+      platformRole: "USER",
+      company: null,
+      support: null,
+      permissions: [],
+    });
+
+    const html = renderToStaticMarkup(await WorkspaceShell({ children: <div>WORKSPACE_CHILD</div> }));
+    const skipLinkIndex = html.indexOf('href="#workspace-main-content"');
+    const navigationIndex = html.indexOf('aria-label="Navigazione workspace"');
+    const topbarIndex = html.indexOf('data-slot="topbar"');
+    const mainIndex = html.indexOf('id="workspace-main-content"');
+
+    expect(skipLinkIndex).toBeGreaterThanOrEqual(0);
+    expect(html).toContain("Vai al contenuto principale");
+    expect(skipLinkIndex).toBeLessThan(navigationIndex);
+    expect(topbarIndex).toBeLessThan(mainIndex);
+    expect(html).toMatch(/<main[^>]*id="workspace-main-content"[^>]*tabindex="-1"/);
+    expect(html.match(/<main\b/g)).toHaveLength(1);
+  });
+
   it("shows the selected dev role after the server context succeeds", async () => {
     mocks.getWorkspaceAccessContext.mockResolvedValue({
       userId: "dev-user",

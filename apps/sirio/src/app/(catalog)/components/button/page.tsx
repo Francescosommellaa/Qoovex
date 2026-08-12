@@ -75,10 +75,10 @@ export default function ButtonPage() {
                   variant="outline"
                   onClick={() => setStarred(!starred)}
                   aria-label="Aggiungi ai preferiti"
-                  className={starred ? "text-warning border-warning/40 bg-warning/10" : ""}
+                  className={starred ? "text-warning-emphasis border-warning/40 bg-warning/10" : ""}
                 >
                   {starred ? (
-                    <IconStarFilled className="size-4 animate-in zoom-in-75 text-warning" />
+                    <IconStarFilled className="size-4 animate-in zoom-in-75 text-warning-emphasis" />
                   ) : (
                     <IconStar className="size-4" />
                   )}

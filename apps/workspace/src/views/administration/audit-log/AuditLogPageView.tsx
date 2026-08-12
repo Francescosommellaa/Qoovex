@@ -1,5 +1,6 @@
 import type { AuditLogFilters, AuditLogListResponse, AuditMetadata } from "@qoovex/types";
 import { auditActions, auditEntityTypes, auditOutcomes } from "@qoovex/types";
+import { presentAuditAction, presentAuditEntityType, presentAuditMetadataEntry, presentAuditOutcome, presentOrganizationRole } from "@shared/lib/product-state-presentation";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import styles from "../AdminCore.module.css";
 
@@ -15,7 +16,7 @@ function formatDate(value: string) {
 
 function metadataEntries(metadata: AuditMetadata | null) {
   if (!metadata) return [];
-  return Object.entries(metadata).filter(([, value]) => value !== undefined);
+  return Object.entries(metadata).filter(([, value]) => value !== undefined).map(([key, value]) => ({ key, ...presentAuditMetadataEntry(key, value) }));
 }
 
 function filterHref(nextFilters: AuditLogFilters) {
@@ -25,12 +26,6 @@ function filterHref(nextFilters: AuditLogFilters) {
   }
   const query = params.toString();
   return query ? `/audit-log?${query}` : "/audit-log";
-}
-
-function outcomeTone(outcome: string) {
-  if (outcome === "SUCCESS") return "good" as const;
-  if (outcome === "DENIED") return "warning" as const;
-  return "danger" as const;
 }
 
 export function AuditLogPageView({ data, filters }: { data: AuditLogListResponse; filters: AuditLogFilters }) {
@@ -49,7 +44,7 @@ export function AuditLogPageView({ data, filters }: { data: AuditLogListResponse
         </a>
         {auditOutcomes.map((outcome) => (
           <a key={outcome} href={filterHref({ ...filters, outcome, cursor: undefined })} aria-current={activeOutcome === outcome ? "page" : undefined}>
-            {outcome}
+            {presentAuditOutcome(outcome).label}
           </a>
         ))}
       </section>
@@ -63,18 +58,18 @@ export function AuditLogPageView({ data, filters }: { data: AuditLogListResponse
                 <option value="">Tutte</option>
                 {auditActions.map((action) => (
                   <option key={action} value={action}>
-                    {action}
+                    {presentAuditAction(action).label}
                   </option>
                 ))}
               </select>
             </label>
             <label className={styles.field}>
-              <span>Entita</span>
+              <span>Elemento</span>
               <select name="entityType" defaultValue={filters.entityType ?? ""}>
                 <option value="">Tutte</option>
                 {auditEntityTypes.map((entityType) => (
                   <option key={entityType} value={entityType}>
-                    {entityType}
+                    {presentAuditEntityType(entityType).label}
                   </option>
                 ))}
               </select>
@@ -100,7 +95,7 @@ export function AuditLogPageView({ data, filters }: { data: AuditLogListResponse
         </form>
       </WorkspacePanel>
 
-      <WorkspacePanel title="Eventi registrati" description="L'audit mostra metadata minimizzati e redatti.">
+      <WorkspacePanel title="Eventi registrati" description="Sono mostrati soltanto i dettagli utili, senza identificatori interni o dati sensibili.">
         {data.events.length ? (
           <div className={styles.list}>
             {data.events.map((event) => {
@@ -108,21 +103,20 @@ export function AuditLogPageView({ data, filters }: { data: AuditLogListResponse
               return (
                 <article className={styles.record} key={event.id}>
                   <div className={styles.recordMain}>
-                    <strong>{event.action}</strong>
+                    <strong>{presentAuditAction(event.action).label}</strong>
                     <span>
-                      {event.entityType}
-                      {event.entityId ? ` - ${event.entityId}` : ""}
+                      {presentAuditEntityType(event.entityType).label}
                     </span>
                     <small>
                       {formatDate(event.createdAt)}
-                      {event.actorRole ? ` - ${event.actorRole}` : ""}
+                      {event.actorRole ? ` - ${presentOrganizationRole(event.actorRole).label}` : ""}
                     </small>
                     {entries.length ? (
                       <ul className={styles.compactList}>
-                        {entries.map(([key, value]) => (
-                          <li key={key}>
-                            <span>{key}</span>
-                            <strong>{String(value)}</strong>
+                        {entries.map((entry) => (
+                          <li key={entry.key}>
+                            <span>{entry.label}</span>
+                            <strong>{entry.value}</strong>
                           </li>
                         ))}
                       </ul>
@@ -131,7 +125,7 @@ export function AuditLogPageView({ data, filters }: { data: AuditLogListResponse
                     )}
                   </div>
                   <div className={styles.actions}>
-                    <WorkspaceState label={event.outcome} tone={outcomeTone(event.outcome)} />
+                    <WorkspaceState state={presentAuditOutcome(event.outcome)} />
                   </div>
                 </article>
               );
