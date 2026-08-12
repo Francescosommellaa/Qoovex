@@ -1,20 +1,9 @@
 import Link from "next/link";
-import type { NotificationListResponse, NotificationResponse, NotificationSeverity } from "@qoovex/types";
+import type { NotificationListResponse, NotificationResponse } from "@qoovex/types";
+import { presentNotificationSeverity } from "@shared/lib/product-state-presentation";
 import styles from "../AdminCore.module.css";
 import { NotificationActionButtons } from "./NotificationActionButtons";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
-
-const severityLabels: Record<NotificationSeverity, string> = {
-  INFO: "Informazione",
-  ATTENTION: "Attenzione",
-  WARNING: "Priorita alta",
-};
-
-const severityTone: Record<NotificationSeverity, "info" | "warning" | "danger"> = {
-  INFO: "info",
-  ATTENTION: "warning",
-  WARNING: "danger",
-};
 
 const filters = [
   { label: "Tutte", href: "/notifications", key: "all" },
@@ -35,7 +24,7 @@ function NotificationCard({ notification }: { notification: NotificationResponse
         <small>{read ? `Letta il ${formatDate(notification.readAt ?? notification.updatedAt)}` : `Creata il ${formatDate(notification.createdAt)}`}</small>
       </div>
       <div className={styles.actions}>
-        <WorkspaceState label={severityLabels[notification.severity]} tone={severityTone[notification.severity]} />
+        <WorkspaceState state={presentNotificationSeverity(notification.severity)} />
         {notification.actionHref ? <Link className={styles.linkButton} href={notification.actionHref}>Apri</Link> : null}
         <NotificationActionButtons notificationId={notification.id} read={read} />
       </div>
@@ -59,7 +48,7 @@ export function NotificationsPageView({ data, activeFilter }: { data: Notificati
             </Link>
           ))}
         </div>
-        <div className={styles.list}>
+        <div className={`${styles.list} scroll-mt-20 outline-none focus-visible:ring-2 focus-visible:ring-ring`} data-focus-refresh-fallback="true" id="notifications-list" tabIndex={-1}>
           {!data.notifications.length ? (
             <WorkspaceEmptyState
               title="Nessuna notifica da controllare"

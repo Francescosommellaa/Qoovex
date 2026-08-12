@@ -22,7 +22,7 @@ export function fingerprintPayload(value: unknown) {
 }
 
 const id = z.string().trim().min(1).max(191);
-const minorUnit = z.string().regex(/^\d+$/, "L'importo deve usare minor unit intere.").transform((value) => BigInt(value));
+const minorUnit = z.string().regex(/^\d+$/, "Inserisci un importo valido.").transform((value) => BigInt(value));
 const optionalMinorUnit = z.string().regex(/^-?\d+$/).nullable().optional().transform((value) => value == null ? null : BigInt(value));
 
 export const initialAgreementPayloadSchema = z.object({

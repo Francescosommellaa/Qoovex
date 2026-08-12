@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { BlobOrphanDryRunResponse, DataControlJobListResponse } from "@qoovex/types";
+import { presentDataControlJobStatus, presentDataControlJobType } from "@shared/lib/product-state-presentation";
 import styles from "../AdminCore.module.css";
 
 async function submitJson<T>(url: string, body?: unknown): Promise<T> {
@@ -32,7 +33,7 @@ export function DataControlActionsPanel({
     setMessage(null);
     try {
       await callback();
-      setMessage("Job creato. Il runner cron lo eseguira alla prossima esecuzione.");
+      setMessage("Richiesta registrata. La preparazione inizierà automaticamente.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Operazione non disponibile.");
     } finally {
@@ -47,41 +48,41 @@ export function DataControlActionsPanel({
 
       <article className={styles.record}>
         <div className={styles.recordMain}>
-          <strong>Export metadata asincrono</strong>
-          <span>Genera un file JSON privato su Blob. Non include file, token, hash, URL permanenti o body email.</span>
+          <strong>Prepara un archivio dei dati</strong>
+          <span>Prepara un archivio privato delle informazioni disponibili, senza includere file caricati o dati sensibili.</span>
         </div>
         <div className={styles.actions}>
           <button className={styles.button} disabled={pendingAction !== null} onClick={() => run("export", () => submitJson("/api/data/export-jobs"))} type="button">
-            Crea job export
+            Prepara archivio
           </button>
         </div>
       </article>
 
       <article className={styles.record}>
         <div className={styles.recordMain}>
-          <strong>Blob orfani</strong>
-          <span>Verifica riferimenti storage completata.</span>
-          <small>Scansionati {initialOrphans.scanned}. Orfani {initialOrphans.orphanCount}. Eliminabili dopo 24h: {initialOrphans.deletableCount}.</small>
+          <strong>File non collegati</strong>
+          <span>La verifica dei file conservati è completata.</span>
+          <small>File verificati: {initialOrphans.scanned}. Non collegati: {initialOrphans.orphanCount}. Eliminabili dopo 24 ore: {initialOrphans.deletableCount}.</small>
         </div>
         <div className={styles.actions}>
           <button className={styles.button} disabled={pendingAction !== null || initialOrphans.deletableCount === 0} onClick={() => run("cleanup", () => submitJson("/api/data/blob-orphans/cleanup"))} type="button">
-            Crea job cleanup
+            Avvia pulizia
           </button>
         </div>
       </article>
 
       <article className={styles.record}>
         <div className={styles.recordMain}>
-          <strong>Job recenti</strong>
-          <span>{initialJobs.jobs.length ? "Ultimi job Data Control." : "Nessun job Data Control ancora creato."}</span>
+          <strong>Operazioni recenti</strong>
+          <span>{initialJobs.jobs.length ? "Ultime operazioni sui dati." : "Nessuna operazione sui dati ancora richiesta."}</span>
         </div>
       </article>
       {initialJobs.jobs.map((job) => (
         <article className={styles.record} key={job.id}>
           <div className={styles.recordMain}>
-            <strong>{job.type}</strong>
-            <span>Stato: {job.status} - creato {new Date(job.createdAt).toLocaleString("it-IT")}</span>
-            {job.errorCode ? <small>Errore: {job.errorCode}</small> : null}
+            <strong>{presentDataControlJobType(job.type).label}</strong>
+            <span>Stato: {presentDataControlJobStatus(job.status).label} - creato {new Date(job.createdAt).toLocaleString("it-IT")}</span>
+            {job.errorCode ? <small>L'operazione non è riuscita. Riprova o contatta l'assistenza.</small> : null}
           </div>
           <div className={styles.actions}>
             {job.type === "METADATA_EXPORT" && job.status === "COMPLETED" ? (

@@ -18,7 +18,7 @@ const switchVariants = cva(
         primary: "data-checked:bg-primary",
         success: "data-checked:bg-success",
         destructive: "data-checked:bg-destructive",
-        warning: "data-checked:bg-warning",
+        warning: "data-checked:border-warning-emphasis data-checked:bg-warning",
       },
     },
     defaultVariants: {

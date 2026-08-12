@@ -11,12 +11,9 @@ import { Button, buttonVariants } from "@qoovex/ui/components/button";
 import { Spinner } from "@qoovex/ui/components/spinner";
 import { cn } from "@qoovex/ui/lib/utils";
 import { buildOrganizationInvitationPath } from "@shared/lib/workspace-link-routes";
+import { presentOrganizationRole } from "@shared/lib/product-state-presentation";
 import { AuthPageShell, AuthStage } from "./AuthPageShell";
 import styles from "./AuthPages.module.css";
-
-const roleLabels: Record<Exclude<OrganizationRole, "OWNER">, string> = {
-  COLLABORATOR: "Collaboratore",
-};
 
 function invitationCallbackUrl(token: string) {
   return buildOrganizationInvitationPath(token);
@@ -142,7 +139,7 @@ export function InvitationAcceptancePageView({
       <AuthStage>
         <div className="flex flex-wrap gap-2">
           <Badge variant="secondary">{organizationName}</Badge>
-          <Badge variant="outline">{roleLabels[role]}</Badge>
+          <Badge variant="outline">{presentOrganizationRole(role).label}</Badge>
         </div>
         <Alert className="mt-4" variant="info"><IconClock /><AlertDescription>Il link scade il {new Intl.DateTimeFormat("it-IT", { dateStyle: "medium", timeStyle: "short" }).format(new Date(expiresAt))}.</AlertDescription></Alert>
         {error ? <Alert className="mt-4" variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}

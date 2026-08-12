@@ -93,7 +93,7 @@ function Spinner({
     if (status === "success") {
       return (
         <span className="flex size-full items-center justify-center rounded-full bg-success/15 text-success animate-in zoom-in-75 duration-300">
-          <IconCheck className="size-3.5 stroke-[2.5]" />
+          <IconCheck aria-hidden="true" className="size-3.5 stroke-[2.5]" data-slot="spinner-status-icon" />
         </span>
       )
     }
@@ -101,7 +101,7 @@ function Spinner({
     if (status === "error") {
       return (
         <span className="flex size-full items-center justify-center rounded-full bg-destructive/15 text-destructive animate-in zoom-in-75 duration-300">
-          <IconX className="size-3.5 stroke-[2.5]" />
+          <IconX aria-hidden="true" className="size-3.5 stroke-[2.5]" data-slot="spinner-status-icon" />
         </span>
       )
     }
@@ -259,7 +259,7 @@ function Spinner({
     <span
       data-slot="spinner"
       role="status"
-      aria-label="Caricamento in corso..."
+      aria-label={status === "success" ? "Operazione completata" : status === "error" ? "Operazione non riuscita" : "Caricamento in corso..."}
       className={cn(
         containerSizeClass,
         glow && "drop-shadow-[0_0_8px_rgba(var(--primary-rgb),0.5)]",

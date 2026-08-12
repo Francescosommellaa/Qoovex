@@ -112,7 +112,7 @@ export default function BadgePage() {
             <Specimen title="Large (lg)">
               <div className="flex items-center gap-2">
                 <Badge size="lg" variant="glass">
-                  <IconFlame className="text-warning" /> Feature In Evidenza
+                  <IconFlame className="text-warning-emphasis" /> Feature In Evidenza
                 </Badge>
               </div>
             </Specimen>

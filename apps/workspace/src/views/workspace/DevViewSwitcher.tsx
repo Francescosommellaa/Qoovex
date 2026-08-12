@@ -4,13 +4,14 @@ import type { DevWorkspaceView } from "@qoovex/types";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { presentAccountRole, presentPlatformRole } from "@shared/lib/product-state-presentation";
 
 const VIEW_OPTIONS: Array<{ label: string; value: DevWorkspaceView }> = [
-  { label: "Azienda", value: "BUSINESS" },
-  { label: "Professionista", value: "PROFESSIONAL" },
-  { label: "Cliente", value: "CLIENT" },
-  { label: "Support Agent", value: "SUPPORT_AGENT" },
-  { label: "Platform Admin", value: "PLATFORM_ADMIN" },
+  { label: presentAccountRole("BUSINESS").label, value: "BUSINESS" },
+  { label: presentAccountRole("PROFESSIONAL").label, value: "PROFESSIONAL" },
+  { label: presentAccountRole("CLIENT").label, value: "CLIENT" },
+  { label: presentPlatformRole("SUPPORT_AGENT").label, value: "SUPPORT_AGENT" },
+  { label: presentPlatformRole("PLATFORM_ADMIN").label, value: "PLATFORM_ADMIN" },
 ];
 
 export function DevViewSwitcher({ view }: { view: DevWorkspaceView }) {

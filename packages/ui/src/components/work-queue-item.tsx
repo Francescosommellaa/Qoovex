@@ -1,4 +1,5 @@
 import * as React from "react"
+import { IconAlertTriangle, IconLock } from "@tabler/icons-react"
 import { cn } from "#lib/utils"
 
 export interface WorkQueueItemProps extends React.ComponentProps<"article"> {
@@ -10,6 +11,12 @@ function WorkQueueItem({
   priority = "default",
   ...props
 }: WorkQueueItemProps) {
+  const priorityPresentation = priority === "attention"
+    ? { icon: IconAlertTriangle, label: "Richiede attenzione" }
+    : priority === "blocking"
+      ? { icon: IconLock, label: "Bloccante" }
+      : null
+
   return (
     <article
       data-slot="work-queue-item"
@@ -19,13 +26,27 @@ function WorkQueueItem({
         priority === "default" &&
           "border-border/80 bg-card/60 hover:border-border hover:bg-card/80 hover:shadow-xs",
         priority === "attention" &&
-          "border-warning/45 bg-warning-surface/30 hover:border-warning/70 hover:bg-warning-surface/50 hover:shadow-xs",
+          "border-warning-emphasis/70 bg-warning-surface/30 hover:border-warning-emphasis hover:bg-warning-surface/50 hover:shadow-xs",
         priority === "blocking" &&
-          "border-destructive/45 bg-destructive-surface/30 hover:border-destructive/70 hover:bg-destructive-surface/50 hover:shadow-xs",
+          "border-destructive/70 bg-destructive-surface/30 hover:border-destructive hover:bg-destructive-surface/50 hover:shadow-xs",
         className
       )}
       {...props}
-    />
+    >
+      {priorityPresentation ? (
+        <span
+          className={cn(
+            "col-span-full inline-flex w-fit items-center gap-1.5 text-xs font-semibold",
+            priority === "attention" ? "text-warning-emphasis" : "text-destructive"
+          )}
+          data-slot="work-queue-item-priority"
+        >
+          <priorityPresentation.icon aria-hidden="true" data-slot="work-queue-item-priority-icon" />
+          {priorityPresentation.label}
+        </span>
+      ) : null}
+      {props.children}
+    </article>
   )
 }
 

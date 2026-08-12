@@ -4,6 +4,7 @@ import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } fr
 import { PlatformAdminAccessState } from "@/views/platform-admin/PlatformAdminAccessState";
 import { PlatformUserActions } from "@/views/platform-admin/PlatformUserActions";
 import styles from "@/views/platform-admin/PlatformAdmin.module.css";
+import { presentOrganizationRole, presentSecurityEventType } from "@shared/lib/product-state-presentation";
 
 export default async function PlatformUserDetailPage({ params }: { params: Promise<{ userId: string }> }) {
   try {
@@ -16,20 +17,20 @@ export default async function PlatformUserDetailPage({ params }: { params: Promi
         <WorkspacePanel title="Stato account">
           <div className={styles.stack}>
             <div className={styles.actions}>
-              <WorkspaceState label={user.suspendedAt ? "Sospeso" : "Attivo"} tone={user.suspendedAt ? "danger" : "good"} />
-              <WorkspaceState label={user.emailVerified ? "Email verificata" : "Email non verificata"} tone={user.emailVerified ? "good" : "warning"} />
-              <WorkspaceState label={user.mfaEnabled ? "MFA attiva" : "MFA non attiva"} tone={user.mfaEnabled ? "good" : "neutral"} />
-              <WorkspaceState label={`${user._count.sessions} sessioni persistenti`} />
+              <WorkspaceState state={{ label: user.suspendedAt ? "Account sospeso" : "Account attivo", tone: user.suspendedAt ? "danger" : "good" }} />
+              <WorkspaceState state={{ label: user.emailVerified ? "Email verificata" : "Email non verificata", tone: user.emailVerified ? "good" : "warning" }} />
+              <WorkspaceState state={{ label: user.mfaEnabled ? "MFA attiva" : "MFA non attiva", tone: user.mfaEnabled ? "good" : "neutral" }} />
+              <WorkspaceState state={{ label: `${user._count.sessions} sessioni persistenti`, tone: "neutral" }} />
             </div>
             {user.suspensionReason ? <p className={styles.error}>{user.suspensionReason}</p> : null}
             <PlatformUserActions userId={user.id} suspended={Boolean(user.suspendedAt)} protectedAccount={user.id === actor.id || user.platformRole === "SUPPORT_AGENT" || user.platformRole === "PLATFORM_ADMIN"} />
           </div>
         </WorkspacePanel>
         <WorkspacePanel title="Membership attive">
-          <div className={styles.recordList}>{activeMemberships.length ? activeMemberships.map((membership) => <div className={styles.record} key={membership.id}><strong>{membership.organization.name}</strong><span className={styles.meta}>{membership.organization.code} · {membership.role}</span></div>) : <p className="text-muted-foreground">Nessuna azienda attiva</p>}</div>
+          <div className={styles.recordList}>{activeMemberships.length ? activeMemberships.map((membership) => <div className={styles.record} key={membership.id}><strong>{membership.organization.name}</strong><span className={styles.meta}>Codice Azienda: {membership.organization.code} · {presentOrganizationRole(membership.role).label}</span></div>) : <p className="text-muted-foreground">Nessuna azienda attiva</p>}</div>
         </WorkspacePanel>
         <WorkspacePanel title="Eventi sicurezza recenti">
-          <div className={styles.recordList}>{user.securityEvents.map((event) => <div className={styles.record} key={event.id}><strong>{event.type}</strong><span className={styles.meta}>{event.createdAt.toLocaleString("it-IT")}</span></div>)}</div>
+          <div className={styles.recordList}>{user.securityEvents.map((event) => <div className={styles.record} key={event.id}><strong>{presentSecurityEventType(event.type).label}</strong><span className={styles.meta}>{event.createdAt.toLocaleString("it-IT")}</span></div>)}</div>
         </WorkspacePanel>
       </WorkspacePage>
     );

@@ -17,7 +17,7 @@ export default async function PlatformOrganizationsPage({ searchParams }: { sear
         <WorkspacePanel title="Risultati">
           {data.organizations.length === 0 ? <WorkspaceEmptyState title="Nessuna azienda" description="Modifica i criteri di ricerca." /> : <div className={styles.recordList}>{data.organizations.map((organization) => (
             <article className={styles.record} key={organization.id}>
-              <div className={styles.recordHeader}><div><h2>{organization.name}</h2><p className={styles.meta}>{organization.code}</p></div></div>
+              <div className={styles.recordHeader}><div><h2>{organization.name}</h2><p className={styles.meta}>Codice Azienda: {organization.code}</p></div></div>
               <p className="text-muted-foreground">{organization._count.memberships} membri · {organization._count.workers} lavoratori · {organization._count.jobSites} cantieri · {organization._count.jobSiteAttachments} allegati</p>
               <p className="text-muted-foreground">Owner: {organization.memberships.map((membership) => membership.user.email).join(", ") || "non disponibile"}</p>
               <SupportSessionForm organizationCode={organization.code} />

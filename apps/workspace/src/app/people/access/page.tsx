@@ -15,6 +15,6 @@ export default async function PeopleAccessPage() {
       : [];
     return <PeopleAccessView canManage={capabilities.canManageMembers} canRevoke={capabilities.role === "OWNER"} invitableRoles={invitableRoles} overview={serializeForClient(overview)} />;
   } catch {
-    return <WorkspaceAccessState title="Accessi non disponibili" description="Questa sezione e riservata all'Owner dell'azienda." />;
+    return <WorkspaceAccessState title="Accessi non disponibili" description="Questa sezione è riservata al Titolare dell'Azienda." />;
   }
 }

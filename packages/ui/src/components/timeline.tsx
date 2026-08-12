@@ -50,7 +50,7 @@ function TimelineMarker({
     default: "border-border/80 bg-muted/60 text-muted-foreground",
     active: "border-primary/80 bg-primary/10 text-primary shadow-2xs",
     success: "border-success/60 bg-success/15 text-success shadow-2xs",
-    warning: "border-warning/60 bg-warning/15 text-warning shadow-2xs",
+    warning: "border-warning-emphasis/60 bg-warning/15 text-warning-emphasis shadow-2xs",
     destructive: "border-destructive/60 bg-destructive/15 text-destructive shadow-2xs",
   }
 

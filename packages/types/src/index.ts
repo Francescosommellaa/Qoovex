@@ -111,6 +111,7 @@ export type JobSiteStepStatus = "NOT_STARTED" | "IN_PROGRESS" | "WAITING" | "WOR
 export type ChangeProposalStatus = "DRAFT" | "PROPOSED" | "COUNTERED" | "ACCEPTED" | "REJECTED" | "WITHDRAWN" | "SUPERSEDED" | "EXPIRED";
 export type PaymentRequestStatus = "DRAFT" | "REQUESTED" | "TRANSFER_DECLARED" | "UNDER_REVIEW" | "CONFIRMED" | "DISPUTED" | "CANCELLED";
 export type DisputeStatus = "OPEN" | "IN_DISCUSSION" | "RESOLVED_BY_AGREEMENT" | "WITHDRAWN" | "CLOSED_WITHOUT_AGREEMENT";
+export type PostClosureRequestStatus = "OPEN" | "IN_DISCUSSION" | "RESOLVED" | "WITHDRAWN" | "CLOSED_WITHOUT_AGREEMENT";
 export interface ApiErrorResponse { error: { code: string; message: string; fieldErrors?: Record<string, string[]>; currentRevision?: number } }
 export interface CursorListResponse<T> { items: T[]; nextCursor: string | null }
 export interface JobSiteSummaryResponse { id: EntityId; organizationId: EntityId; name: string; address: string | null; description: string | null; status: JobSiteStatus; revision: number; estimatedCompletionAt: string | null; createdAt: string; updatedAt: string }

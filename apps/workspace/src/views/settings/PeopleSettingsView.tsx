@@ -6,12 +6,8 @@ import { buttonVariants } from "@qoovex/ui/components/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
 import type { OrganizationRole } from "@qoovex/types";
+import { presentOrganizationRole } from "@shared/lib/product-state-presentation";
 import { WorkspacePage, WorkspacePageHeader, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
-
-const roleLabels: Record<OrganizationRole, string> = {
-  OWNER: "Proprietario",
-  COLLABORATOR: "Collaboratore",
-};
 
 interface Member {
   id: string;
@@ -100,7 +96,7 @@ export function PeopleSettingsView({ members, invitations, canManage }: { member
                           <h3 className="truncate text-sm font-medium text-foreground">{name}</h3>
                           <a className="mt-1 block truncate text-sm text-muted-foreground" data-link="quiet" href={`mailto:${member.user.email}`}>{member.user.email}</a>
                         </div>
-                        <div className="col-start-2 sm:col-start-auto"><WorkspaceState label={roleLabels[member.role]} /></div>
+                        <div className="col-start-2 sm:col-start-auto"><WorkspaceState state={presentOrganizationRole(member.role)} /></div>
                       </article>
                     </li>
                   );
@@ -133,7 +129,7 @@ export function PeopleSettingsView({ members, invitations, canManage }: { member
                       <article className="min-w-0">
                         <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
                           <h3 className="min-w-0 truncate text-sm font-medium text-foreground">{invitation.email}</h3>
-                          <WorkspaceState label={roleLabels[invitation.role]} />
+                          <WorkspaceState state={presentOrganizationRole(invitation.role)} />
                         </div>
                         <p className="mt-2 text-xs text-muted-foreground">
                           Scade il <time dateTime={new Date(invitation.expiresAt).toISOString()}>{formatDate(invitation.expiresAt)}</time>

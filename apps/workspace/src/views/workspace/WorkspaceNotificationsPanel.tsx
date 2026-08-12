@@ -1,6 +1,7 @@
 "use client";
 
 import type { NotificationListResponse, NotificationResponse, NotificationSeverity } from "@qoovex/types";
+import { presentNotificationSeverity } from "@shared/lib/product-state-presentation";
 import {
   IconAlertTriangle,
   IconBell,
@@ -33,16 +34,13 @@ import {
 import { Skeleton } from "@qoovex/ui/components/skeleton";
 import { Spinner } from "@qoovex/ui/components/spinner";
 import { cn } from "@qoovex/ui/lib/utils";
+import { WorkspaceState } from "./WorkspacePrimitives";
 
-const severity = {
-  INFO: { icon: IconInfoCircle, label: "Informazione", variant: "info" },
-  ATTENTION: { icon: IconBell, label: "Attenzione", variant: "warning" },
-  WARNING: { icon: IconAlertTriangle, label: "Priorità alta", variant: "destructive" },
-} satisfies Record<NotificationSeverity, {
-  icon: typeof IconBell;
-  label: string;
-  variant: "info" | "warning" | "destructive";
-}>;
+const severityIcon = {
+  INFO: IconInfoCircle,
+  ATTENTION: IconBell,
+  WARNING: IconAlertTriangle,
+} satisfies Record<NotificationSeverity, typeof IconBell>;
 
 const dateFormatter = new Intl.DateTimeFormat("it-IT", {
   day: "numeric",
@@ -52,8 +50,7 @@ const dateFormatter = new Intl.DateTimeFormat("it-IT", {
 });
 
 function NotificationPreviewItem({ notification }: { notification: NotificationResponse }) {
-  const itemSeverity = severity[notification.severity];
-  const Icon = itemSeverity.icon;
+  const Icon = severityIcon[notification.severity];
   const unread = !notification.readAt;
 
   return (
@@ -68,7 +65,7 @@ function NotificationPreviewItem({ notification }: { notification: NotificationR
         </div>
         <p className="mt-0.5 line-clamp-2 text-sm/5 text-muted-foreground">{notification.message}</p>
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <Badge variant={itemSeverity.variant}>{itemSeverity.label}</Badge>
+          <WorkspaceState state={presentNotificationSeverity(notification.severity)} />
           <time className="text-xs text-muted-foreground" dateTime={notification.createdAt}>{dateFormatter.format(new Date(notification.createdAt))}</time>
           {notification.actionHref ? (
             <Link className="ml-auto inline-flex items-center gap-1 rounded-md text-xs font-medium text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring" data-link="plain" href={notification.actionHref}>

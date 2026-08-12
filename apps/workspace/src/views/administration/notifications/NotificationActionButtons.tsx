@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { submitJson } from "../admin-api-client";
 import styles from "../AdminCore.module.css";
+import { captureRefreshFocus, updateWithFocusGuard } from "@shared/lib/focus-management";
 
 export function NotificationActionButtons({ notificationId, read }: { notificationId: string; read: boolean }) {
   const router = useRouter();
@@ -12,7 +13,8 @@ export function NotificationActionButtons({ notificationId, read }: { notificati
   const [message, setMessage] = useState<string | null>(null);
 
   async function submit(action: "read" | "dismiss" | "email") {
-    setPendingAction(action);
+    const focusSnapshot = captureRefreshFocus(document, "notifications-list");
+    updateWithFocusGuard(() => setPendingAction(action), { snapshot: focusSnapshot });
     setError(null);
     setMessage(null);
     try {

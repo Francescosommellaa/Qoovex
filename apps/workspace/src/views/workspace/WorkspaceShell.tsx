@@ -49,11 +49,17 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
   const isWorkspace = state.kind === "workspace";
   return (
     <WorkspaceSidebarProvider defaultOpen={sidebarDefaultOpen}>
+      <a
+        className="pointer-events-none fixed left-3 top-3 z-[60] max-w-[calc(100vw-1.5rem)] -translate-y-16 rounded-lg border border-transparent bg-background px-3 py-2 text-sm font-medium text-foreground opacity-0 shadow-lg outline-none transition-[transform,opacity] focus:pointer-events-auto focus:translate-y-0 focus:opacity-100 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none sm:left-4 sm:top-4"
+        href="#workspace-main-content"
+      >
+        Vai al contenuto principale
+      </a>
       <WorkspaceSidebarSurface>
         <nav aria-label="Navigazione workspace" className="contents">
           <SidebarHeader className="h-14 flex-row items-center justify-between border-b px-4 py-0 gap-2 group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:justify-center">
             <Link className="flex h-9 min-w-0 flex-1 items-center gap-2 overflow-hidden text-lg font-bold tracking-tight group-data-[collapsible=icon]:flex-initial group-data-[collapsible=icon]:justify-center" href={isWorkspace ? "/" : "/account/security"}>
-              <span className="truncate group-data-[collapsible=icon]:hidden font-accent text-lg font-bold tracking-tight">Qoovex</span>
+              <span className="truncate group-data-[collapsible=icon]:hidden font-sans text-lg font-bold tracking-tight">Qoovex</span>
               <span className="hidden group-data-[collapsible=icon]:inline-flex size-7 shrink-0 items-center justify-center">
                 <Image
                   alt="Qoovex"
@@ -83,11 +89,17 @@ export async function WorkspaceShell({ children }: { children: ReactNode }) {
         </nav>
         <WorkspaceSidebarResizeHandle />
       </WorkspaceSidebarSurface>
-      <SidebarInset className="h-dvh min-h-0 min-w-0 overflow-hidden">
+      <SidebarInset as="div" className="h-dvh min-h-0 min-w-0 overflow-hidden">
         <WorkspacePageIdentityProvider>
           <WorkspaceTopbar fallbackLabel={isWorkspace ? "Qoovex" : "Sicurezza account"} platformRole={isWorkspace ? state.context.platformRole : state.platformRole} devView={isWorkspace ? state.devView : null} navigation={isWorkspace ? state.navigation.primary : []} showNotifications={isWorkspace && canReadWorkspaceNotifications(state.context.permissions)} unreadNotificationCount={isWorkspace ? state.unreadNotificationCount : 0} />
           {isWorkspace && state.context.support ? <SupportSessionBanner support={state.context.support} /> : null}
-          <div className="min-h-0 min-w-0 flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">{isWorkspace ? children : <AccountSecurityFlow initialStatus={state.status} mode="gate" />}</div>
+          <main
+            className="min-h-0 min-w-0 flex-1 overflow-y-auto p-3 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring sm:p-4 md:p-6"
+            id="workspace-main-content"
+            tabIndex={-1}
+          >
+            {isWorkspace ? children : <AccountSecurityFlow initialStatus={state.status} mode="gate" />}
+          </main>
         </WorkspacePageIdentityProvider>
       </SidebarInset>
     </WorkspaceSidebarProvider>
