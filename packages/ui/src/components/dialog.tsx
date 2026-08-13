@@ -108,7 +108,7 @@ function DialogContent({
               />
             }
           >
-            <IconX />
+            <IconX aria-hidden="true" />
           </DialogPrimitive.Close>
         ) : null}
       </DialogPrimitive.Popup>

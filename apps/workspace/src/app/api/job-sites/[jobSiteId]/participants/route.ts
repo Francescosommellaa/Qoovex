@@ -1,0 +1,9 @@
+import { resolveCurrentOrganizationRouteParams } from "@shared/server/access-context-service";
+import { addExistingCollaboratorToJobSite, endCollaboratorJobSiteParticipation } from "@shared/server/organization-member-service";
+import { asJobSiteApiError } from "@shared/server/job-site-api-response";
+import { requireIdempotencyKey } from "@shared/server/job-site-api-response";
+import { changeJobSiteResponsible } from "@shared/server/job-site-collaboration-service";
+import { resolveOrganizationJobSiteActor } from "@shared/server/job-site-authorization-service";
+export async function POST(request: Request, { params }: { params: Promise<{ jobSiteId: string }> }) { try { const value = await resolveCurrentOrganizationRouteParams(params); return Response.json(await addExistingCollaboratorToJobSite(value.organizationId, value.jobSiteId, await request.json()), { status: 201 }); } catch (error) { return asJobSiteApiError(error); } }
+export async function DELETE(request: Request, { params }: { params: Promise<{ jobSiteId: string }> }) { try { const value = await resolveCurrentOrganizationRouteParams(params); const body = await request.json() as { participantId?: string; reason?: string }; return Response.json(await endCollaboratorJobSiteParticipation(value.organizationId, value.jobSiteId, String(body.participantId ?? ""), String(body.reason ?? ""))); } catch (error) { return asJobSiteApiError(error); } }
+export async function PATCH(request: Request, { params }: { params: Promise<{ jobSiteId: string }> }) { try { const value = await resolveCurrentOrganizationRouteParams(params); const actor = await resolveOrganizationJobSiteActor({ ...value, permission: "jobSite:participants:manage" }); return Response.json(await changeJobSiteResponsible({ actor, idempotencyKey: requireIdempotencyKey(request), body: await request.json() })); } catch (error) { return asJobSiteApiError(error); } }

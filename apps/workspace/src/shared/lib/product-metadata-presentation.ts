@@ -4,6 +4,11 @@ const fileSizeNumber = new Intl.NumberFormat("it-IT", {
   maximumFractionDigits: 1,
 });
 
+const dateTimeFormatter = new Intl.DateTimeFormat("it-IT", {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
+
 export function formatFileSize(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes < 0) return "Dimensione non disponibile";
   if (bytes === 0) return "0 KB";
@@ -19,9 +24,16 @@ export function formatFileSize(bytes: number): string {
   return `${fileSizeNumber.format(value)} ${fileSizeUnits[unitIndex]}`;
 }
 
+export function formatDateTime(value: Date | string | null | undefined): string {
+  if (!value) return "Data non disponibile";
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "Data non disponibile" : dateTimeFormatter.format(date);
+}
+
 export function presentProposalVersion(version: number | null | undefined): string {
   if (!Number.isInteger(version) || !version || version < 1) return "Proposta";
-  return version === 1 ? "Proposta iniziale" : `Proposta aggiornata · ${version}ª versione`;
+  return version === 1 ? "Proposta iniziale" : "Proposta aggiornata";
 }
 
 const dataInventoryCategories: Record<string, string> = {

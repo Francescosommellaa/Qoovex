@@ -139,9 +139,9 @@ export default function TextareaPage() {
                   />
                   <TextareaToolbar>
                     <div className="flex items-center gap-1">
-                      <Button variant="ghost" size="icon-xs"><IconBold /></Button>
-                      <Button variant="ghost" size="icon-xs"><IconItalic /></Button>
-                      <Button variant="ghost" size="icon-xs"><IconList /></Button>
+                      <Button aria-label="Grassetto" variant="ghost" size="icon-xs"><IconBold aria-hidden="true" /></Button>
+                      <Button aria-label="Corsivo" variant="ghost" size="icon-xs"><IconItalic aria-hidden="true" /></Button>
+                      <Button aria-label="Elenco" variant="ghost" size="icon-xs"><IconList aria-hidden="true" /></Button>
                     </div>
                     <span className="text-[0.6875rem] text-muted-foreground font-accent">Rich Text Enabled</span>
                   </TextareaToolbar>
@@ -219,8 +219,8 @@ export default function TextareaPage() {
                   />
                   <TextareaToolbar>
                     <div className="flex items-center gap-1">
-                      <Button variant="ghost" size="icon-xs"><IconPaperclip /></Button>
-                      <Button variant="ghost" size="icon-xs"><IconMoodSmile /></Button>
+                      <Button aria-label="Aggiungi allegato" variant="ghost" size="icon-xs"><IconPaperclip aria-hidden="true" /></Button>
+                      <Button aria-label="Aggiungi emoji" variant="ghost" size="icon-xs"><IconMoodSmile aria-hidden="true" /></Button>
                     </div>
                     <Button size="sm" className="gap-1.5 h-7 text-xs">
                       <span>Invia</span>
@@ -235,15 +235,16 @@ export default function TextareaPage() {
               <Field className="w-full">
                 <div className="flex items-center justify-between">
                   <FieldLabel>Feedback Intervento</FieldLabel>
-                  <div className="flex gap-1 text-warning-emphasis">
+                  <div aria-label="Valutazione del servizio" className="flex gap-1 text-warning-emphasis" role="group">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
                         key={star}
                         type="button"
                         onClick={() => setRating(star)}
+                        aria-label={`${star} ${star === 1 ? "stella" : "stelle"}${star === rating ? ", selezionata" : ""}`}
                         className="p-0.5 hover:scale-110 transition-transform"
                       >
-                        <IconStarFilled className={`size-4 ${star <= rating ? "text-warning-emphasis" : "text-muted-foreground/30"}`} />
+                        <IconStarFilled aria-hidden="true" className={`size-4 ${star <= rating ? "text-warning-emphasis" : "text-muted-foreground/30"}`} />
                       </button>
                     ))}
                   </div>

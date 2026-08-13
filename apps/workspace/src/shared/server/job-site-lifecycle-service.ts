@@ -5,7 +5,7 @@ import { db, Prisma } from "@qoovex/db";
 import { z } from "zod";
 import { AccessError } from "./access-errors";
 import { requireAccountRole } from "./account-role-service";
-import { requireClientJobSiteDetailContext, requireOrganizationContext } from "./access-context-service";
+import { requireClientJobSiteDetailContext, requireOrganizationContext, requirePrimaryIdentity } from "./access-context-service";
 import { fingerprintPayload, initialAgreementPayloadSchema } from "./job-site-contracts";
 import { enqueueJobSiteProcess } from "./job-site-process-service";
 import { runSerializableTransaction } from "./serializable-transaction";
@@ -122,7 +122,7 @@ export async function getOrganizationJobSiteDetail(organizationId: string, jobSi
       authorityGrants: { where: { status: "ACTIVE" }, orderBy: { createdAt: "desc" } },
       legalHolds: { orderBy: { placedAt: "desc" }, take: 20 },
       processes: { orderBy: { createdAt: "desc" }, take: 20, include: { steps: { orderBy: { ordinal: "asc" } } } },
-      attachments: { orderBy: { createdAt: "desc" }, take: 100, select: { id: true, category: true, originalFileName: true, mimeType: true, size: true, checksumSha256: true, createdAt: true, archivedAt: true } },
+      attachments: { orderBy: { createdAt: "desc" }, take: 100, select: { id: true, category: true, sourceId: true, originalFileName: true, size: true, createdAt: true, publications: { where: { withdrawnAt: null }, select: { audience: true } } } },
     },
   });
   if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
@@ -163,6 +163,75 @@ export async function acceptPrimaryClientInvitation(rawToken: string) {
     if (updated.count !== 1) throw new AccessError("Il cantiere e stato modificato. Riprova.", 409, "STALE_REVISION");
     return participant;
   });
+}
+
+export type ClientInvitationPageState =
+  | { kind: "READY"; organizationName: string; jobSiteName: string; jobSiteAddress: string | null }
+  | { kind: "EXPIRED" | "REVOKED" | "ALREADY_ACCEPTED" | "ACCEPTED_ACCESS_UNAVAILABLE" | "WRONG_ACCOUNT_EMAIL" | "ACCOUNT_ROLE_MISMATCH" | "EMAIL_VERIFICATION_REQUIRED" | "ACCOUNT_ALREADY_PARTICIPATES" | "SESSION_UNAVAILABLE" | "UNAVAILABLE" }
+  | { kind: "ALREADY_ACCEPTED_WITH_ACCESS"; jobSiteId: string };
+
+export async function getClientInvitationPageState(rawToken: string): Promise<ClientInvitationPageState> {
+  let identity: Awaited<ReturnType<typeof requirePrimaryIdentity>>;
+  try {
+    identity = await requirePrimaryIdentity();
+  } catch (error) {
+    if (error instanceof AccessError && error.status === 401) return { kind: "SESSION_UNAVAILABLE" };
+    throw error;
+  }
+
+  if (!rawToken) return { kind: "UNAVAILABLE" };
+
+  const invitation = await db.jobSiteClientInvitation.findUnique({
+    where: { tokenHash: createHash("sha256").update(rawToken).digest("hex") },
+    select: {
+      organizationId: true,
+      jobSiteId: true,
+      emailNormalized: true,
+      status: true,
+      expiresAt: true,
+      acceptedByParticipant: { select: { userId: true, jobSiteId: true, status: true } },
+      jobSite: {
+        select: {
+          organizationId: true,
+          status: true,
+          name: true,
+          address: true,
+          organization: { select: { name: true } },
+          participants: { where: { userId: identity.id }, select: { kind: true, status: true }, take: 1 },
+        },
+      },
+    },
+  });
+
+  if (!invitation || invitation.organizationId !== invitation.jobSite.organizationId) return { kind: "UNAVAILABLE" };
+  if (invitation.status === "REVOKED") return { kind: "REVOKED" };
+  if (invitation.status === "ACCEPTED") {
+    const acceptedParticipant = invitation.acceptedByParticipant;
+    if (acceptedParticipant?.userId === identity.id && (acceptedParticipant.status === "PENDING" || acceptedParticipant.status === "ACTIVE")) {
+      return { kind: "ALREADY_ACCEPTED_WITH_ACCESS", jobSiteId: acceptedParticipant.jobSiteId };
+    }
+    return { kind: acceptedParticipant?.userId === identity.id ? "ACCEPTED_ACCESS_UNAVAILABLE" : "ALREADY_ACCEPTED" };
+  }
+  if (invitation.expiresAt <= new Date()) return { kind: "EXPIRED" };
+  if (invitation.status !== "PENDING" || invitation.jobSite.status !== "WAITING_FOR_CLIENT") return { kind: "UNAVAILABLE" };
+  if (!identity.emailVerified) return { kind: "EMAIL_VERIFICATION_REQUIRED" };
+  if (identity.accountRole !== "CLIENT") return { kind: "ACCOUNT_ROLE_MISMATCH" };
+  if (identity.email.toLowerCase() !== invitation.emailNormalized) return { kind: "WRONG_ACCOUNT_EMAIL" };
+
+  const existingParticipant = invitation.jobSite.participants[0];
+  if (existingParticipant) {
+    if (existingParticipant.kind === "CLIENT" && (existingParticipant.status === "PENDING" || existingParticipant.status === "ACTIVE")) {
+      return { kind: "ALREADY_ACCEPTED_WITH_ACCESS", jobSiteId: invitation.jobSiteId };
+    }
+    return { kind: "ACCOUNT_ALREADY_PARTICIPATES" };
+  }
+
+  return {
+    kind: "READY",
+    organizationName: invitation.jobSite.organization.name,
+    jobSiteName: invitation.jobSite.name,
+    jobSiteAddress: invitation.jobSite.address,
+  };
 }
 
 export async function invitePrimaryClientIdempotent(input: { actor: JobSiteActor; idempotencyKey: string; rawInput: unknown }) {
@@ -283,7 +352,7 @@ export async function getClientJobSiteDetail(jobSiteId: string) {
       closures: { orderBy: { proposedAt: "desc" }, take: 10 },
       postClosureRequests: { orderBy: { createdAt: "desc" }, take: 20 },
       reopeningProposals: { orderBy: { proposedAt: "desc" }, take: 20, include: { consents: true } },
-      attachments: { where: { publications: { some: { audience: "SHARED", withdrawnAt: null } } }, select: { id: true, category: true, sourceId: true, originalFileName: true, mimeType: true, size: true, checksumSha256: true, createdAt: true } },
+      attachments: { where: { publications: { some: { audience: "SHARED", withdrawnAt: null } } }, select: { id: true, category: true, sourceId: true, originalFileName: true, size: true, createdAt: true } },
     },
   });
   if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);

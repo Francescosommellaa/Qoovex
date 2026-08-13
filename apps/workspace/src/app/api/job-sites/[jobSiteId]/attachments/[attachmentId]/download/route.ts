@@ -1,0 +1,4 @@
+import { resolveCurrentOrganizationRouteParams } from "@shared/server/access-context-service";
+import { downloadJobSiteAttachment, resolveOrganizationAttachmentActor } from "@shared/server/job-site-attachment-service";
+import { asJobSiteApiError } from "@shared/server/job-site-api-response";
+export async function GET(_: Request, { params }: { params: Promise<{ jobSiteId: string; attachmentId: string }> }) { try { const value = await resolveCurrentOrganizationRouteParams(params); const actor = await resolveOrganizationAttachmentActor(value.organizationId, value.jobSiteId); const file = await downloadJobSiteAttachment({ actor, attachmentId: value.attachmentId }); return new Response(file.stream, { headers: { "Content-Type": file.mimeType, "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(file.fileName)}`, "Cache-Control": "private, no-store" } }); } catch (error) { return asJobSiteApiError(error); } }

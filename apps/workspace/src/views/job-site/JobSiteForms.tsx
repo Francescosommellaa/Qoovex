@@ -4,10 +4,12 @@ import { createContext, useContext, useEffect, useId, useRef, useState, type Com
 import { useRouter } from "next/navigation";
 import { Button } from "@qoovex/ui/components/button";
 import { Checkbox } from "@qoovex/ui/components/checkbox";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@qoovex/ui/components/dialog";
 import { Field, FieldDescription, FieldError, FieldLabel, FieldLegend, FieldSet } from "@qoovex/ui/components/field";
 import { Input } from "@qoovex/ui/components/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
 import { Textarea } from "@qoovex/ui/components/textarea";
+import type { JobSiteStatus, JobSiteSummaryResponse } from "@qoovex/types";
 import { parseEuroInputToMinorUnits } from "@shared/lib/money";
 import { captureRefreshFocus, updateWithFocusGuard } from "@shared/lib/focus-management";
 
@@ -15,6 +17,8 @@ type ApiFailure = { error?: { message?: string; fieldErrors?: Record<string, str
 type FieldErrors = Record<string, string[]>;
 type MutationFailure = { message: string; fieldErrors?: FieldErrors };
 type MutationState = { pending: boolean; error: string | null; fieldErrors: FieldErrors; success: string | null };
+type MutationOptions<TResult> = { onSuccess?: (result: TResult) => void; mapError?: (message: string) => string };
+type CreatedJobSiteResponse = Pick<JobSiteSummaryResponse, "id">;
 
 const FIELD_NAME_ALIASES: Record<string, string> = {
   changeSummary: "summary",
@@ -68,7 +72,6 @@ const FIELD_ERROR_MESSAGES: Record<string, string> = {
   receiptAttachmentId: "Seleziona una ricevuta valida.",
   recipientName: "Controlla il nome.",
   reference: "Controlla il riferimento.",
-  relatedId: "Seleziona un elemento da documentare.",
   scheduleImpact: "Controlla l'impatto sui tempi.",
   summary: "Descrivi la modifica proposta.",
   title: "Inserisci un titolo valido.",
@@ -122,19 +125,20 @@ export function focusFormField(form: HTMLFormElement | null, name: string | null
   (visibleControl ?? formControl(form, name))?.focus?.();
 }
 
-async function requestJson(endpoint: string, body: unknown, options?: { method?: string; idempotent?: boolean; formData?: FormData }) {
+async function requestJson<TResult = Record<string, unknown>>(endpoint: string, body: unknown, options?: { method?: string; idempotent?: boolean; formData?: FormData }): Promise<TResult> {
   const headers = new Headers();
   if (options?.idempotent) headers.set("Idempotency-Key", crypto.randomUUID());
   if (!options?.formData) headers.set("Content-Type", "application/json");
   const response = await fetch(endpoint, { method: options?.method ?? "POST", headers, body: options?.formData ?? JSON.stringify(body) });
   const payload = await response.json().catch(() => ({})) as ApiFailure;
   if (!response.ok) throw Object.assign(new Error(payload.error?.message ?? "Operazione non disponibile."), { fieldErrors: payload.error?.fieldErrors });
-  return payload;
+  return payload as TResult;
 }
 
 function useMutation() {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const mutationInFlight = useRef(false);
   const [state, setState] = useState<MutationState>({ pending: false, error: null, fieldErrors: {}, success: null });
   const [focusFieldName, setFocusFieldName] = useState<string | null>(null);
   useEffect(() => {
@@ -142,8 +146,10 @@ function useMutation() {
     focusFormField(formRef.current, focusFieldName);
     setFocusFieldName(null);
   }, [focusFieldName, state.fieldErrors]);
-  async function run(operation: () => Promise<unknown>, success: string) {
-    if (state.pending) return;
+  async function run<TResult>(operation: () => Promise<TResult>, success: string, options: MutationOptions<TResult> = {}) {
+    if (mutationInFlight.current) return;
+    mutationInFlight.current = true;
+    let navigationStarted = false;
     const focusSnapshot = typeof document === "undefined"
       ? null
       : captureRefreshFocus(document, undefined, { allowOriginOnly: true });
@@ -151,12 +157,24 @@ function useMutation() {
       () => setState({ pending: true, error: null, fieldErrors: {}, success: null }),
       { snapshot: focusSnapshot },
     );
-    try { await operation(); setState({ pending: false, error: null, fieldErrors: {}, success }); router.refresh(); }
+    try {
+      const result = await operation();
+      if (options.onSuccess) {
+        setState({ pending: true, error: null, fieldErrors: {}, success });
+        options.onSuccess(result);
+        navigationStarted = true;
+        return;
+      }
+      setState({ pending: false, error: null, fieldErrors: {}, success });
+      router.refresh();
+    }
     catch (error) {
       const failure = error as Error & { fieldErrors?: Record<string, string[]> };
-      const resolved = resolveMutationFailure(formRef.current, failure);
+      const resolved = resolveMutationFailure(formRef.current, { ...failure, message: options.mapError ? options.mapError(failure.message) : failure.message });
       setState({ pending: false, error: resolved.error, fieldErrors: resolved.fieldErrors, success: null });
       setFocusFieldName(resolved.firstFieldName);
+    } finally {
+      if (!navigationStarted) mutationInFlight.current = false;
     }
   }
   return { formRef, state, run };
@@ -238,8 +256,13 @@ export function SelectField({ "aria-describedby": providedDescribedBy, className
   const errorId = errors.length ? `${id}-error` : undefined;
   const invalid = errors.length > 0;
   const uncontrolledDefault = defaultValue === undefined ? (placeholder ? null : options[0]?.value ?? null) : defaultValue;
-  const valueProps = value === undefined ? { defaultValue: uncontrolledDefault } : { value };
-  return <Field className={fieldClassName} data-invalid={invalid || undefined}><FieldLabel htmlFor={id}>{label}</FieldLabel><Select items={options} name={name} onValueChange={onValueChange} required={required} disabled={disabled} {...valueProps}><SelectTrigger aria-describedby={describedBy(providedDescribedBy, descriptionId, errorId)} aria-invalid={invalid || undefined} aria-required={required || undefined} className={className} data-field-name={name} disabled={disabled} id={id}><SelectValue placeholder={placeholder} /></SelectTrigger><SelectContent align="start"><SelectGroup>{options.map((option) => <SelectItem disabled={option.disabled} key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectGroup></SelectContent></Select>{description ? <FieldDescription id={descriptionId}>{description}</FieldDescription> : null}{errors.length ? <FieldError errors={errors.map((message) => ({ message }))} id={errorId} /> : null}</Field>;
+  const [internalValue, setInternalValue] = useState<string | null>(uncontrolledDefault);
+  useEffect(() => {
+    if (value !== undefined) return;
+    setInternalValue((current) => options.some((option) => option.value === current && !option.disabled) ? current : uncontrolledDefault);
+  }, [options, uncontrolledDefault, value]);
+  const selectedValue = value === undefined ? internalValue : value;
+  return <Field className={fieldClassName} data-invalid={invalid || undefined}><FieldLabel htmlFor={id}>{label}</FieldLabel><Select items={options} name={name} onValueChange={(nextValue) => { if (value === undefined) setInternalValue(nextValue ?? null); onValueChange?.(nextValue); }} required={required} disabled={disabled} value={selectedValue}><SelectTrigger aria-describedby={describedBy(providedDescribedBy, descriptionId, errorId)} aria-invalid={invalid || undefined} aria-required={required || undefined} className={className} data-field-name={name} disabled={disabled} id={id}><SelectValue placeholder={placeholder} /></SelectTrigger><SelectContent align="start"><SelectGroup>{options.map((option) => <SelectItem disabled={option.disabled} key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectGroup></SelectContent></Select>{description ? <FieldDescription id={descriptionId}>{description}</FieldDescription> : null}{errors.length ? <FieldError errors={errors.map((message) => ({ message }))} id={errorId} /> : null}</Field>;
 }
 
 type CheckboxFieldProps = LabeledControlProps & {
@@ -283,10 +306,22 @@ function euroFieldToMinorUnits(data: FormData, name: string, label: string, opti
   return result.ok ? result.minorUnits : null;
 }
 
-export function CreateJobSiteForm({ organizationId }: { organizationId: string }) {
+function createdJobSiteId(createdJobSite: CreatedJobSiteResponse): JobSiteSummaryResponse["id"] {
+  if (typeof createdJobSite.id !== "string" || !createdJobSite.id.trim()) {
+    throw new Error("Il cantiere è stato creato, ma non è stato possibile aprirlo. Aggiorna la pagina e selezionalo dall'elenco.");
+  }
+  return createdJobSite.id;
+}
+
+export function createdJobSiteDetailPath(createdJobSite: CreatedJobSiteResponse) {
+  return `/job-sites/${encodeURIComponent(createdJobSiteId(createdJobSite))}`;
+}
+
+export function CreateJobSiteForm() {
+  const router = useRouter();
   const mutation = useMutation();
-  return <form ref={mutation.formRef} onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); void mutation.run(() => requestJson(`/api/org/${organizationId}/job-sites`, { name: data.get("name"), address: data.get("address") || null, description: data.get("description") || null }, { idempotent: true }), "Cantiere creato."); }}>
-    <FormShell title="Nuovo cantiere" state={mutation.state}><div className="grid gap-3 sm:grid-cols-2"><InputField required label="Nome del cantiere" name="name" placeholder="es. Ristrutturazione via Roma" /><InputField label="Indirizzo (facoltativo)" name="address" /><TextareaField fieldClassName="sm:col-span-2" label="Descrizione (facoltativa)" name="description" /></div><Button disabled={mutation.state.pending} type="submit">{mutation.state.pending ? "Creazione…" : "Crea cantiere"}</Button></FormShell>
+  return <form aria-busy={mutation.state.pending} ref={mutation.formRef} onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); void mutation.run(() => requestJson<CreatedJobSiteResponse>("/api/job-sites", { name: data.get("name"), address: data.get("address") || null, description: data.get("description") || null }, { idempotent: true }), "Cantiere creato. Apertura del cantiere…", { onSuccess: (createdJobSite) => router.push(createdJobSiteDetailPath(createdJobSite)) }); }}>
+    <FormShell title="Nuovo cantiere" state={mutation.state}><div className="grid gap-3 sm:grid-cols-2"><InputField required label="Nome del cantiere" name="name" placeholder="es. Ristrutturazione via Roma" /><InputField label="Indirizzo (facoltativo)" name="address" /><TextareaField fieldClassName="sm:col-span-2" label="Descrizione (facoltativa)" name="description" /></div><Button disabled={mutation.state.pending} type="submit">{mutation.state.pending ? "Apertura del cantiere…" : "Crea cantiere"}</Button></FormShell>
   </form>;
 }
 
@@ -297,14 +332,26 @@ export function TimelineForm({ endpoint, revision, client = false }: { endpoint:
   </form>;
 }
 
-export function InviteClientForm({ endpoint, revision }: { endpoint: string; revision: number }) {
-  const mutation = useMutation();
-  return <form ref={mutation.formRef} onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); void mutation.run(() => requestJson(endpoint, { email: data.get("email"), expectedRevision: revision }, { idempotent: true }), "Invito inviato."); }}><FormShell title="Cliente principale" state={mutation.state}><InputField autoComplete="email" required label="Email del cliente" name="email" placeholder="cliente@example.com" type="email" /><Button disabled={mutation.state.pending} type="submit">Invita cliente</Button></FormShell></form>;
+type PendingClientInvitation = { id: string; emailNormalized: string; expiresAt: Date | string };
+
+function formatInvitationExpiry(value: Date | string) {
+  return new Intl.DateTimeFormat("it-IT", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 }
 
-export function AgreementForm({ endpoint, revision, name, address, description, participants }: { endpoint: string; revision: number; name: string; address: string | null; description: string | null; participants: Array<{ id: string; publicRoleLabel: string | null }> }) {
+export function InviteClientForm({ endpoint, id, jobSiteName = "questo cantiere", pendingInvitation = null, revision, status = "DRAFT" }: { endpoint: string; id?: string; jobSiteName?: string; pendingInvitation?: PendingClientInvitation | null; revision: number; status?: JobSiteStatus }) {
   const mutation = useMutation();
-  return <form ref={mutation.formRef} onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); void mutation.run(() => { const initialEstimateMinor = euroFieldToMinorUnits(data, "initialEstimateMinor", "Stima iniziale"); return requestJson(endpoint, { expectedRevision: revision, payload: { schemaVersion: 1, name, address, description, participantSummary: participants.map((value) => ({ participantId: value.id, publicRoleLabel: value.publicRoleLabel })), initialEstimateMinor, estimatedCompletionAt: null, sharedCommercialNotes: data.get("notes") || null } }, { idempotent: true }); }, "Riepilogo pubblicato."); }}><FormShell title="Riepilogo iniziale" state={mutation.state}><EuroInputField name="initialEstimateMinor" label="Stima iniziale" /><TextareaField description="Saranno visibili al cliente nel riepilogo iniziale." label="Note economiche condivise (facoltative)" name="notes" /><Button disabled={mutation.state.pending} type="submit">Pubblica per conferma</Button></FormShell></form>;
+  if (status === "WAITING_FOR_CLIENT") {
+    return <section aria-labelledby={`${id ?? "client-invitation"}-title`} id={id} className="space-y-3"><div><h3 className="font-medium" id={`${id ?? "client-invitation"}-title`}>Invito inviato</h3><p className="mt-1 text-sm text-muted-foreground">Stai condividendo <strong className="font-medium text-foreground">{jobSiteName}</strong>{pendingInvitation ? <> con <strong className="font-medium text-foreground">{pendingInvitation.emailNormalized}</strong></> : null}.</p></div><p className="text-sm">Ora il cliente deve accedere a Qoovex con la stessa email e accettare l&apos;invito. Dopo l&apos;accettazione, potrai pubblicare il riepilogo iniziale per la sua conferma.</p>{pendingInvitation ? <div className="flex flex-wrap items-end justify-between gap-3 border-t pt-3"><dl className="text-sm"><div><dt className="text-muted-foreground">Email invitata</dt><dd>{pendingInvitation.emailNormalized}</dd></div><div className="mt-2"><dt className="text-muted-foreground">Invito valido fino al</dt><dd>{formatInvitationExpiry(pendingInvitation.expiresAt)}</dd></div></dl><DeleteActionButton endpoint={endpoint} body={{ invitationId: pendingInvitation.id, expectedRevision: revision }} label="Revoca invito" success="Invito revocato." confirmMessage="Revocare l'invito inviato a questo cliente?" /></div> : null}</section>;
+  }
+  if (status !== "DRAFT") {
+    return <section aria-labelledby={`${id ?? "client-invitation"}-title`} id={id}><h3 className="font-medium" id={`${id ?? "client-invitation"}-title`}>Cliente principale</h3><p className="mt-1 text-sm text-muted-foreground">{status === "PENDING_INITIAL_CONFIRMATION" ? "Il cliente ha accettato l'invito. Pubblica ora il riepilogo iniziale per la sua conferma." : "Il cliente principale è già collegato a questo cantiere."}</p></section>;
+  }
+  return <form aria-busy={mutation.state.pending} id={id} ref={mutation.formRef} onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); void mutation.run(() => requestJson(endpoint, { email: data.get("email"), expectedRevision: revision }, { idempotent: true }), "Invito inviato. Ora il cliente deve accedere a Qoovex con questa stessa email e accettare l'invito."); }}><FormShell title={`Invita un cliente a ${jobSiteName}`} state={mutation.state}><p className="text-sm text-muted-foreground">Stai condividendo questo cantiere con il cliente che indicherai.</p><InputField autoComplete="email" description="L'invito sarà inviato a questo indirizzo. Il cliente dovrà accedere a Qoovex con la stessa email per accettarlo." required label="Email del cliente" name="email" placeholder="cliente@example.com" type="email" /><p className="text-sm text-muted-foreground">Dopo l&apos;invio, il cliente dovrà accettare l&apos;invito. Potrai quindi pubblicare il riepilogo iniziale per la sua conferma.</p><Button disabled={mutation.state.pending} type="submit">{mutation.state.pending ? "Invio in corso…" : "Invia invito"}</Button></FormShell></form>;
+}
+
+export function AgreementForm({ endpoint, id, revision, name, address, description, participants }: { endpoint: string; id?: string; revision: number; name: string; address: string | null; description: string | null; participants: Array<{ id: string; publicRoleLabel: string | null }> }) {
+  const mutation = useMutation();
+  return <form id={id} ref={mutation.formRef} onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); void mutation.run(() => { const initialEstimateMinor = euroFieldToMinorUnits(data, "initialEstimateMinor", "Stima iniziale"); return requestJson(endpoint, { expectedRevision: revision, payload: { schemaVersion: 1, name, address, description, participantSummary: participants.map((value) => ({ participantId: value.id, publicRoleLabel: value.publicRoleLabel })), initialEstimateMinor, estimatedCompletionAt: null, sharedCommercialNotes: data.get("notes") || null } }, { idempotent: true }); }, "Riepilogo pubblicato."); }}><FormShell title="Riepilogo iniziale" state={mutation.state}><EuroInputField name="initialEstimateMinor" label="Stima iniziale" /><TextareaField description="Saranno visibili al cliente nel riepilogo iniziale." label="Note economiche condivise (facoltative)" name="notes" /><Button disabled={mutation.state.pending} type="submit">Pubblica per conferma</Button></FormShell></form>;
 }
 
 export function StepForm({ endpoint, revision }: { endpoint: string; revision: number }) {
@@ -327,26 +374,181 @@ export function RequestForm({ endpoint, revision }: { endpoint: string; revision
   return <form aria-busy={mutation.state.pending} ref={mutation.formRef} onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); void mutation.run(() => requestJson(endpoint, { expectedRevision: revision, type: data.get("type"), title: data.get("title"), body: data.get("body"), blocking: data.get("blocking") === "on", stepId: null, proposalId: null, paymentRequestId: null, timelineEventId: null }, { idempotent: true }), "Richiesta registrata."); }}><FormShell title="Nuova richiesta" state={mutation.state}><SelectField className="h-9 w-full" disabled={mutation.state.pending} label="Tipo di richiesta" name="type" options={[{ label: "Chiarimento", value: "CLARIFICATION" }, { label: "Informazione", value: "INFORMATION" }, { label: "Aggiornamento", value: "WORK_UPDATE" }, { label: "Documento", value: "DOCUMENT" }, { label: "Problema", value: "ISSUE" }, { label: "Altro", value: "OTHER" }]} /><InputField required label="Titolo" name="title" /><TextareaField required label="Dettagli" name="body" /><CheckboxField description="Se selezionata, la chiusura resta sospesa finché questa richiesta è aperta." disabled={mutation.state.pending} label="Impedisci la chiusura finché la richiesta è aperta" name="blocking" /><Button disabled={mutation.state.pending} type="submit">{mutation.state.pending ? "Creazione…" : "Crea richiesta"}</Button></FormShell></form>;
 }
 
-export function ActionButton({ endpoint, body, label, success, confirmMessage, method }: { endpoint: string; body: Record<string, unknown>; label: string; success: string; confirmMessage?: string; method?: string }) {
+export function ActionButton<TResult = Record<string, unknown>>({ endpoint, body, label, success, confirmMessage, method, onSuccess, mapError }: { endpoint: string; body: Record<string, unknown>; label: string; success: string; confirmMessage?: string; method?: string; onSuccess?: (result: TResult) => void; mapError?: (message: string) => string }) {
   const mutation = useMutation();
-  return <div><Button disabled={mutation.state.pending} onClick={() => { if (confirmMessage && !window.confirm(confirmMessage)) return; void mutation.run(() => requestJson(endpoint, body, { idempotent: true, method }), success); }} type="button">{mutation.state.pending ? "Attendi…" : label}</Button>{mutation.state.error ? <p role="alert" className="mt-2 text-sm text-destructive">{mutation.state.error}</p> : null}{mutation.state.success ? <p role="status" className="mt-2 text-sm text-emerald-700 dark:text-emerald-300">{mutation.state.success}</p> : null}</div>;
+  return <div><Button disabled={mutation.state.pending} onClick={() => { if (confirmMessage && !window.confirm(confirmMessage)) return; void mutation.run(() => requestJson<TResult>(endpoint, body, { idempotent: true, method }), success, { onSuccess, mapError }); }} type="button">{mutation.state.pending ? "Attendi…" : label}</Button>{mutation.state.error ? <p role="alert" className="mt-2 text-sm text-destructive">{mutation.state.error}</p> : null}{mutation.state.success ? <p role="status" className="mt-2 text-sm text-emerald-700 dark:text-emerald-300">{mutation.state.success}</p> : null}</div>;
 }
 
-type ClientAttachmentCategory = "REQUEST" | "PROPOSAL" | "DISPUTE" | "PAYMENT_RECEIPT";
+type InitialAgreementDecision = "ACCEPTED" | "REJECTED";
 
-export interface ClientAttachmentTarget {
-  id: string;
-  category: ClientAttachmentCategory;
-  label: string;
+export function initialAgreementConfirmationAction(agreementVersionId: string, expectedRevision: number, decision: InitialAgreementDecision) {
+  return { action: "INITIAL_AGREEMENT_CONFIRM@1" as const, agreementVersionId, expectedRevision, decision };
 }
 
-export function AttachmentForm({ endpoint, revision, client = false, relatedTargets = [] }: { endpoint: string; revision: number; client?: boolean; relatedTargets?: ClientAttachmentTarget[] }) {
-  const mutation = useMutation();
-  const [category, setCategory] = useState<ClientAttachmentCategory>("REQUEST");
-  const [relatedId, setRelatedId] = useState("");
-  const availableTargets = relatedTargets.filter((target) => target.category === category);
+export function presentInitialAgreementActionError(message: string) {
+  if (/versione del riepilogo non disponibile|cantiere.*(?:modificato|non disponibile)|expectedRevision|\brevision\b/i.test(message)) return "Il riepilogo è cambiato o non è più in attesa di conferma. Aggiorna la pagina e controlla l'ultima versione.";
+  return "Non è stato possibile registrare la tua scelta. Riprova oppure chiedi all'Azienda di controllare il riepilogo.";
+}
 
-  return <form aria-busy={mutation.state.pending} ref={mutation.formRef} onSubmit={(event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const data = new FormData(event.currentTarget); data.set("expectedRevision", String(revision)); if (client) data.set("audience", "SHARED"); void mutation.run(() => requestJson(endpoint, null, { idempotent: true, formData: data }), "File caricato."); }}><FormShell title="Aggiungi file" state={mutation.state}><InputField accept=".pdf,.jpg,.jpeg,.png,.webp,.mp4,.webm,.mov" description="PDF, immagini JPG, PNG o WebP e video MP4, WebM o MOV, fino a 4 MB." disabled={mutation.state.pending} required label="File" name="file" type="file" />{client ? <><SelectField className="h-9 w-full" disabled={mutation.state.pending} label="Tipo di elemento" name="category" onValueChange={(value) => { if (!value) return; setCategory(value as ClientAttachmentCategory); setRelatedId(""); }} options={[{ label: "Richiesta", value: "REQUEST" }, { label: "Proposta", value: "PROPOSAL" }, { label: "Segnalazione", value: "DISPUTE" }, { label: "Pagamento dichiarato", value: "PAYMENT_RECEIPT" }]} value={category} /><SelectField className="h-9 w-full" description={!availableTargets.length ? "Non ci sono elementi di questo tipo a cui collegare il file." : undefined} disabled={mutation.state.pending || !availableTargets.length} label="Elemento da documentare" name="relatedId" onValueChange={(value) => setRelatedId(value ?? "")} options={availableTargets.map((target) => ({ label: target.label, value: target.id }))} placeholder={availableTargets.length ? "Seleziona l'elemento da documentare" : "Nessun elemento disponibile"} required value={relatedId || null} /></> : <><SelectField className="h-9 w-full" disabled={mutation.state.pending} label="Tipo di file" name="category" options={[{ label: "File generico", value: "GENERAL" }, { label: "Fotografia", value: "PHOTO" }, { label: "Video", value: "VIDEO" }, { label: "Prova documentale", value: "EVIDENCE" }, { label: "Ricevuta di spesa", value: "EXPENSE_RECEIPT" }, { label: "Documento", value: "DOCUMENT" }, { label: "Ricevuta di pagamento", value: "PAYMENT_RECEIPT" }]} /><SelectField className="h-9 w-full" description="I file condivisi saranno visibili anche al cliente." disabled={mutation.state.pending} label="Visibilità" name="audience" options={[{ label: "Solo Azienda", value: "INTERNAL" }, { label: "Condiviso con il cliente", value: "SHARED" }]} /></>}<Button disabled={mutation.state.pending || (client && !availableTargets.length)} type="submit">{mutation.state.pending ? "Caricamento…" : "Carica"}</Button></FormShell></form>;
+export function InitialAgreementActions({ agreementVersionId, endpoint, revision }: { agreementVersionId: string; endpoint: string; revision: number }) {
+  const router = useRouter();
+  const mutation = useMutation();
+  const [decision, setDecision] = useState<InitialAgreementDecision | null>(null);
+  const isConfirmation = decision === "ACCEPTED";
+  const submitLabel = isConfirmation ? "Conferma questa versione" : "Invia richiesta di correzioni";
+  const success = isConfirmation ? "Riepilogo iniziale confermato. Il cantiere è ora attivo." : "Richiesta di correzioni inviata. L'Azienda preparerà un nuovo riepilogo.";
+
+  function closeDialog(open: boolean) {
+    if (!open && !mutation.state.pending) setDecision(null);
+  }
+
+  function submit() {
+    if (!decision) return;
+    void mutation.run(
+      () => requestJson(endpoint, initialAgreementConfirmationAction(agreementVersionId, revision, decision), { idempotent: true }),
+      success,
+      { mapError: presentInitialAgreementActionError, onSuccess: () => { setDecision(null); router.refresh(); } },
+    );
+  }
+
+  return <div aria-busy={mutation.state.pending}>
+    <p className="text-sm text-muted-foreground">Confermi soltanto il riepilogo mostrato sopra. Se l'Azienda lo aggiorna prima della tua scelta, non potrai confermare una versione diversa senza rivederla.</p>
+    <Dialog onOpenChange={closeDialog} open={decision !== null}>
+      <div className="mt-4 flex flex-wrap gap-3">
+        <DialogTrigger render={<Button disabled={mutation.state.pending} onClick={() => setDecision("ACCEPTED")} type="button" />}>Conferma questa versione del riepilogo</DialogTrigger>
+        <DialogTrigger render={<Button disabled={mutation.state.pending} onClick={() => setDecision("REJECTED")} type="button" variant="outline" />}>Richiedi correzioni</DialogTrigger>
+      </div>
+      <DialogContent aria-busy={mutation.state.pending} size="sm">
+        <DialogHeader>
+          <DialogTitle>{isConfirmation ? "Conferma il riepilogo iniziale" : "Richiedi correzioni al riepilogo"}</DialogTitle>
+          <DialogDescription>{isConfirmation ? "Stai per confermare il riepilogo iniziale mostrato sopra. Dopo la conferma il cantiere sarà attivo e potrai usare le sezioni condivise." : "La tua richiesta impedirà la conferma di questo riepilogo. L'Azienda dovrà pubblicarne uno nuovo prima che tu possa confermare."}</DialogDescription>
+        </DialogHeader>
+        {mutation.state.error ? <p role="alert" className="text-sm text-destructive">{mutation.state.error}</p> : null}
+        {mutation.state.pending ? <p role="status" className="text-sm text-muted-foreground">Operazione in corso…</p> : null}
+        <DialogFooter>
+          <DialogClose render={<Button disabled={mutation.state.pending} type="button" variant="outline" />}>Annulla</DialogClose>
+          <Button disabled={mutation.state.pending} onClick={submit} type="button">{mutation.state.pending ? "Attendi…" : submitLabel}</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  </div>;
+}
+
+type ChangeProposalDecision = "ACCEPTED" | "REJECTED";
+
+export function changeProposalDecisionAction({ decision, proposalId, revision, versionId }: { decision: ChangeProposalDecision; proposalId: string; revision: number; versionId: string }) {
+  return { action: "CHANGE_PROPOSAL_APPLY@1" as const, decision, expectedRevision: revision, proposalId, versionId };
+}
+
+export function isStaleChangeProposalAction(message: string) {
+  return /proposta.*(?:non disponibile|obsolet)|cantiere.*modificat|STALE_(?:PROPOSAL|REVISION)|expectedRevision|\brevision\b/i.test(message);
+}
+
+export function presentChangeProposalActionError(message: string) {
+  if (isStaleChangeProposalAction(message)) return "La proposta è cambiata, è già stata gestita o non è più disponibile. Aggiorna la pagina e controlla lo stato attuale.";
+  return "Non è stato possibile registrare la tua scelta sulla proposta. Riprova dopo averne controllato i dettagli.";
+}
+
+export function ChangeProposalActions({ actionsEndpoint, counterEndpoint, proposalId, revision, versionId, versionNumber }: { actionsEndpoint: string; counterEndpoint: string; proposalId: string; revision: number; versionId: string; versionNumber: number }) {
+  const router = useRouter();
+  const mutation = useMutation();
+  const [dialog, setDialog] = useState<ChangeProposalDecision | "COUNTER" | null>(null);
+  const [stale, setStale] = useState(false);
+  const decision = dialog === "ACCEPTED" || dialog === "REJECTED" ? dialog : null;
+  const isAcceptance = decision === "ACCEPTED";
+
+  useEffect(() => setStale(false), [revision, versionId]);
+
+  function closeDialog(open: boolean) {
+    if (!open && !mutation.state.pending) setDialog(null);
+  }
+
+  function presentError(message: string) {
+    if (isStaleChangeProposalAction(message)) setStale(true);
+    return presentChangeProposalActionError(message);
+  }
+
+  function submitDecision() {
+    if (!decision || stale) return;
+    const success = decision === "ACCEPTED"
+      ? "Accettazione registrata. La proposta è stata applicata."
+      : "Rifiuto registrato. La proposta non verrà applicata.";
+    void mutation.run(
+      () => requestJson(actionsEndpoint, changeProposalDecisionAction({ decision, proposalId, revision, versionId }), { idempotent: true }),
+      success,
+      { mapError: presentError, onSuccess: () => { setDialog(null); router.refresh(); } },
+    );
+  }
+
+  const disabled = mutation.state.pending || stale;
+  const dialogTitle = dialog === "COUNTER" ? "Prepara una controproposta" : isAcceptance ? "Accetta la proposta" : "Rifiuta la proposta";
+  const dialogDescription = dialog === "COUNTER"
+    ? "Stai preparando una controproposta alla proposta mostrata sopra. Se questa proposta cambia prima dell'invio, Qoovex non registrerà una controproposta su contenuti non aggiornati."
+    : isAcceptance
+      ? "Stai per accettare la proposta mostrata sopra. La tua accettazione verrà registrata e saranno applicati gli effetti inclusi nella proposta."
+      : "Stai per rifiutare la proposta mostrata sopra. Il rifiuto verrà registrato e gli effetti inclusi nella proposta non saranno applicati.";
+
+  return <div aria-busy={mutation.state.pending} className="space-y-3">
+    <p className="text-sm text-muted-foreground">Le azioni riguardano soltanto la proposta mostrata sopra. Se cambia o viene già gestita, la scelta non verrà registrata su una proposta diversa.</p>
+    {stale ? <div className="flex flex-wrap items-center gap-3" role="alert"><p className="text-sm text-destructive">La proposta non è più aggiornabile da questa pagina.</p><Button onClick={() => router.refresh()} size="sm" type="button" variant="outline">Aggiorna proposta</Button></div> : null}
+    <Dialog onOpenChange={closeDialog} open={dialog !== null}>
+      <div className="flex flex-wrap gap-2">
+        <DialogTrigger render={<Button disabled={disabled} onClick={() => setDialog("ACCEPTED")} size="sm" type="button" />}>Accetta la proposta mostrata</DialogTrigger>
+        <DialogTrigger render={<Button disabled={disabled} onClick={() => setDialog("REJECTED")} size="sm" type="button" variant="outline" />}>Rifiuta questa proposta</DialogTrigger>
+        <DialogTrigger render={<Button disabled={disabled} onClick={() => setDialog("COUNTER")} size="sm" type="button" variant="outline" />}>Prepara controproposta</DialogTrigger>
+      </div>
+      <DialogContent aria-busy={mutation.state.pending} size="sm">
+        <DialogHeader>
+          <DialogTitle>{dialogTitle}</DialogTitle>
+          <DialogDescription>{dialogDescription}</DialogDescription>
+        </DialogHeader>
+        {stale ? <p role="alert" className="text-sm text-destructive">La proposta non è più aggiornata. Chiudi questa finestra e aggiorna la pagina prima di continuare.</p> : null}
+        {mutation.state.error && dialog !== "COUNTER" ? <p role="alert" className="text-sm text-destructive">{mutation.state.error}</p> : null}
+        {mutation.state.pending && dialog !== "COUNTER" ? <p role="status" className="text-sm text-muted-foreground">Registrazione in corso…</p> : null}
+        {dialog === "COUNTER" ? <ProposalCounterForm disabled={disabled} endpoint={counterEndpoint} onStale={() => setStale(true)} onSuccess={() => setDialog(null)} revision={revision} currentVersion={versionNumber} /> : <DialogFooter>
+          <DialogClose render={<Button disabled={mutation.state.pending} type="button" variant="outline" />}>Annulla</DialogClose>
+          <Button disabled={disabled} onClick={submitDecision} type="button" variant={isAcceptance ? "default" : "outline"}>{mutation.state.pending ? "Registrazione…" : isAcceptance ? "Conferma accettazione" : "Conferma rifiuto"}</Button>
+        </DialogFooter>}
+      </DialogContent>
+    </Dialog>
+  </div>;
+}
+
+type ContextualAttachmentCategory = "REQUEST" | "PROPOSAL" | "DISPUTE" | "PAYMENT_RECEIPT";
+
+export interface JobSiteAttachmentContext {
+  category: ContextualAttachmentCategory;
+  relatedId: string;
+  title: string;
+}
+
+export function contextualAttachmentFormData(data: FormData, context: JobSiteAttachmentContext, revision: number) {
+  data.set("expectedRevision", String(revision));
+  data.set("category", context.category);
+  data.set("relatedId", context.relatedId);
+  return data;
+}
+
+function ContextualAttachmentForm({ client, context, endpoint, revision }: { client: boolean; context: JobSiteAttachmentContext; endpoint: string; revision: number }) {
+  const mutation = useMutation();
+
+  return <form aria-busy={mutation.state.pending} ref={mutation.formRef} onSubmit={(event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const data = contextualAttachmentFormData(new FormData(event.currentTarget), context, revision); if (client) data.set("audience", "SHARED"); void mutation.run(() => requestJson(endpoint, null, { idempotent: true, formData: data }), "File caricato."); }}><FormShell title={context.title} state={mutation.state}><p className="text-sm text-muted-foreground">Il file sarà allegato all'elemento mostrato qui sopra.</p><InputField accept=".pdf,.jpg,.jpeg,.png,.webp" description="PDF e immagini JPG, PNG o WebP, fino a 4 MB." disabled={mutation.state.pending} required label="File" name="file" type="file" />{!client ? <SelectField className="h-9 w-full" description="Scegli se il file resta interno oppure viene condiviso con il cliente." disabled={mutation.state.pending} label="Visibilità" name="audience" options={[{ label: "Solo Azienda", value: "INTERNAL" }, { label: "Condiviso con il cliente", value: "SHARED" }]} /> : null}<Button disabled={mutation.state.pending} type="submit">{mutation.state.pending ? "Caricamento…" : "Carica file"}</Button></FormShell></form>;
+}
+
+type AttachmentFormProps =
+  | { client: true; context: JobSiteAttachmentContext; endpoint: string; revision: number }
+  | { client?: false; context?: JobSiteAttachmentContext; endpoint: string; revision: number };
+
+export function AttachmentForm(props: AttachmentFormProps) {
+  if (props.client) return <ContextualAttachmentForm client context={props.context} endpoint={props.endpoint} revision={props.revision} />;
+  if (props.context) return <ContextualAttachmentForm client={false} context={props.context} endpoint={props.endpoint} revision={props.revision} />;
+  return <OrganizationAttachmentForm endpoint={props.endpoint} revision={props.revision} />;
+}
+
+function OrganizationAttachmentForm({ endpoint, revision }: { endpoint: string; revision: number }) {
+  const mutation = useMutation();
+
+  return <form aria-busy={mutation.state.pending} ref={mutation.formRef} onSubmit={(event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const data = new FormData(event.currentTarget); data.set("expectedRevision", String(revision)); void mutation.run(() => requestJson(endpoint, null, { idempotent: true, formData: data }), "File caricato."); }}><FormShell title="Aggiungi file al cantiere" state={mutation.state}><p className="text-sm text-muted-foreground">Usa questo caricamento solo per file del cantiere che non appartengono a una richiesta, proposta, segnalazione o pagamento.</p><InputField accept=".pdf,.jpg,.jpeg,.png,.webp,.mp4,.webm,.mov" description="PDF, immagini JPG, PNG o WebP e video MP4, WebM o MOV, fino a 4 MB." disabled={mutation.state.pending} required label="File" name="file" type="file" /><SelectField className="h-9 w-full" disabled={mutation.state.pending} label="Tipo di file" name="category" options={[{ label: "File generico", value: "GENERAL" }, { label: "Fotografia", value: "PHOTO" }, { label: "Video", value: "VIDEO" }, { label: "Prova documentale", value: "EVIDENCE" }, { label: "Ricevuta di spesa", value: "EXPENSE_RECEIPT" }, { label: "Documento", value: "DOCUMENT" }]} /><SelectField className="h-9 w-full" description="Scegli se il file resta interno oppure viene condiviso con il cliente." disabled={mutation.state.pending} label="Visibilità" name="audience" options={[{ label: "Solo Azienda", value: "INTERNAL" }, { label: "Condiviso con il cliente", value: "SHARED" }]} /><Button disabled={mutation.state.pending} type="submit">{mutation.state.pending ? "Caricamento…" : "Carica file"}</Button></FormShell></form>;
 }
 
 export function PropertyForm() {
@@ -413,9 +615,10 @@ export function RecordTransitionForm({ endpoint, revision, actions }: { endpoint
   return <form aria-busy={mutation.state.pending} ref={mutation.formRef} className="mt-3 grid gap-2" onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); void mutation.run(() => requestJson(endpoint, { expectedRevision: revision, action: data.get("action"), message: data.get("message") }, { idempotent: true }), "Aggiornamento registrato."); }}><FormErrorProvider fieldErrors={mutation.state.fieldErrors}><SelectField className="h-9 w-full" disabled={mutation.state.pending} label="Azione" name="action" options={actions} /><TextareaField required label="Messaggio" name="message" /><Button disabled={mutation.state.pending} size="sm" type="submit">{mutation.state.pending ? "Registrazione…" : "Registra"}</Button>{mutation.state.error ? <p role="alert" className="text-sm text-destructive">{mutation.state.error}</p> : null}</FormErrorProvider></form>;
 }
 
-export function ProposalCounterForm({ endpoint, revision, currentVersion }: { endpoint: string; revision: number; currentVersion: number }) {
+export function ProposalCounterForm({ currentVersion, disabled = false, endpoint, onStale, onSuccess, revision }: { currentVersion: number; disabled?: boolean; endpoint: string; onStale?: () => void; onSuccess?: () => void; revision: number }) {
   const mutation = useMutation();
-  return <form ref={mutation.formRef} className="mt-3 grid gap-2" onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); void mutation.run(() => requestJson(endpoint, { expectedRevision: revision, expectedCurrentVersion: currentVersion, payload: { schemaVersion: 1, priceMode: "NO_PRICE_CHANGE", changeSummary: data.get("summary"), reason: data.get("reason"), affectedStepIds: [], previousPriceMinor: null, economicDeltaMinor: null, rangeMinimumMinor: null, rangeMaximumMinor: null, scheduleImpact: null, estimatedCompletionAt: null, collaboratorParticipantIds: [], conditions: null }, effects: [], expiresAt: null }, { idempotent: true }), "Controproposta registrata."); }}><FormErrorProvider fieldErrors={mutation.state.fieldErrors}><TextareaField required label="Nuova proposta" name="summary" /><TextareaField required label="Motivazione" name="reason" /><Button disabled={mutation.state.pending} size="sm" type="submit">Controproponi</Button>{mutation.state.error ? <p role="alert" className="text-sm text-destructive">{mutation.state.error}</p> : null}</FormErrorProvider></form>;
+  const router = useRouter();
+  return <form aria-busy={mutation.state.pending} ref={mutation.formRef} className="mt-3 grid gap-2" onSubmit={(event) => { event.preventDefault(); if (disabled) return; const data = new FormData(event.currentTarget); void mutation.run(() => requestJson(endpoint, { expectedRevision: revision, expectedCurrentVersion: currentVersion, payload: { schemaVersion: 1, priceMode: "NO_PRICE_CHANGE", changeSummary: data.get("summary"), reason: data.get("reason"), affectedStepIds: [], previousPriceMinor: null, economicDeltaMinor: null, rangeMinimumMinor: null, rangeMaximumMinor: null, scheduleImpact: null, estimatedCompletionAt: null, collaboratorParticipantIds: [], conditions: null }, effects: [], expiresAt: null }, { idempotent: true }), "Controproposta inviata. Ora l'altra parte deve valutarla.", { mapError: (message) => { if (isStaleChangeProposalAction(message)) onStale?.(); return presentChangeProposalActionError(message); }, onSuccess: () => { onSuccess?.(); router.refresh(); } }); }}><FormErrorProvider fieldErrors={mutation.state.fieldErrors}><TextareaField disabled={disabled || mutation.state.pending} required label="Nuova proposta" name="summary" /><TextareaField disabled={disabled || mutation.state.pending} required label="Motivazione" name="reason" /><Button disabled={disabled || mutation.state.pending} size="sm" type="submit">{mutation.state.pending ? "Invio…" : "Invia controproposta"}</Button>{mutation.state.error ? <p role="alert" className="text-sm text-destructive">{mutation.state.error}</p> : null}{mutation.state.pending ? <p role="status" className="text-sm text-muted-foreground">Invio della controproposta in corso…</p> : null}</FormErrorProvider></form>;
 }
 
 export function DeleteActionButton({ endpoint, body, label, success, confirmMessage }: { endpoint: string; body: Record<string, unknown>; label: string; success: string; confirmMessage: string }) {

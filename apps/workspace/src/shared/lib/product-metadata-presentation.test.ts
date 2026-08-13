@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  formatDateTime,
   formatFileSize,
   presentDataInventoryCategory,
   presentProposalVersion,
@@ -18,9 +19,14 @@ describe("product metadata presentation", () => {
     expect(formatFileSize(-1)).toBe("Dimensione non disponibile");
   });
 
+  it("formats file upload dates for people and safely falls back for invalid values", () => {
+    expect(formatDateTime("2026-08-13T09:30:00.000Z")).toMatch(/13 ago 2026/);
+    expect(formatDateTime("not-a-date")).toBe("Data non disponibile");
+  });
+
   it("gives proposal versions the context users need", () => {
     expect(presentProposalVersion(1)).toBe("Proposta iniziale");
-    expect(presentProposalVersion(3)).toBe("Proposta aggiornata · 3ª versione");
+    expect(presentProposalVersion(3)).toBe("Proposta aggiornata");
     expect(presentProposalVersion(null)).toBe("Proposta");
   });
 

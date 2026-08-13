@@ -1,5 +1,5 @@
 import { SignInPageView } from "@/views/auth/SignInPageView";
-import { sanitizeCallbackUrl } from "@/views/auth/auth-routing";
+import { isClientInvitationCallbackUrl, sanitizeCallbackUrl } from "@/views/auth/auth-routing";
 import { isDevAuthAllowed } from "@shared/server/dev-auth";
 
 interface SignInPageProps {
@@ -13,6 +13,7 @@ interface SignInPageProps {
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
   const [params, showDevAuth] = await Promise.all([searchParams, isDevAuthAllowed()]);
+  const callbackUrl = sanitizeCallbackUrl(params.callbackUrl);
   const statusMessage = params.passwordReset === "1"
     ? "Password aggiornata. Ora puoi accedere."
     : params.created === "1"
@@ -22,7 +23,8 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
         : null;
   return (
     <SignInPageView
-      callbackUrl={sanitizeCallbackUrl(params.callbackUrl)}
+      callbackUrl={callbackUrl}
+      clientInvitation={isClientInvitationCallbackUrl(callbackUrl)}
       showDevAuth={showDevAuth}
       statusMessage={statusMessage}
     />

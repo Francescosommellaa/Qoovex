@@ -50,7 +50,7 @@ export async function queueJobSiteNotifications(tx: Prisma.TransactionClient, in
   const category = classify(input.action);
   const preferences = await tx.notificationPreference.findMany({ where: { organizationId: input.actor.organizationId, userId: { in: recipients.map((value) => value.userId) }, type: category.type }, select: { userId: true, channel: true, frequency: true } });
   for (const recipient of recipients) {
-    const actionHref = recipient.kind === "CLIENT" ? `/client/job-sites/${input.actor.jobSiteId}` : `/org/${input.actor.organizationId}/job-sites/${input.actor.jobSiteId}`;
+    const actionHref = recipient.kind === "CLIENT" ? `/client/job-sites/${input.actor.jobSiteId}` : `/job-sites/${input.actor.jobSiteId}`;
     const inAppFrequency = preferences.find((value) => value.userId === recipient.userId && value.channel === "IN_APP")?.frequency ?? "IMMEDIATE";
     const emailFrequency = preferences.find((value) => value.userId === recipient.userId && value.channel === "EMAIL")?.frequency ?? "IMMEDIATE";
     const day = new Date().toISOString().slice(0, 10);

@@ -1,0 +1,5 @@
+import { getOrganizationPaymentProfile } from "@shared/server/job-site-payment-profile-service";
+import { WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
+import { PaymentProfileForm } from "@/views/job-site/JobSiteForms";
+import { requireCurrentOrganizationId } from "@shared/server/access-context-service";
+export default async function PaymentProfilePage() { const organizationId = await requireCurrentOrganizationId(); const profile = await getOrganizationPaymentProfile(organizationId); return <WorkspacePage><WorkspacePageHeader title="Profilo pagamento" description="L'IBAN è protetto. La modifica richiede una verifica MFA." /><WorkspacePanel title="Profilo corrente">{profile?.currentVersion ? <p className="text-sm">{profile.currentVersion.accountHolder} · IBAN •••• {profile.currentVersion.ibanLast4}</p> : <p className="text-sm text-muted-foreground">Nessun profilo configurato.</p>}</WorkspacePanel><WorkspacePanel><PaymentProfileForm endpoint="/api/payment-profile" revision={profile?.revision ?? null} /></WorkspacePanel></WorkspacePage>; }

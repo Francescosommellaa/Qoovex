@@ -91,12 +91,12 @@ export function WorkspaceNavigation({ account, authenticated, navigation, platfo
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const platformOnly = (platformRole === "SUPPORT_AGENT" || platformRole === "PLATFORM_ADMIN") && !support;
-  const organizationId = /^\/org\/([^/]+)/.exec(pathname)?.[1];
-  const contextItems = organizationId ? [
-    { label: "Panoramica Azienda", href: `/org/${organizationId}` },
-    { label: "Cantieri", href: `/org/${organizationId}/job-sites` },
-    { label: "Collaboratori", href: `/org/${organizationId}/people` },
-    { label: "Profilo pagamento", href: `/org/${organizationId}/payment-profile` },
+  const hasOrganizationContext = Boolean(account.organizationName) && !pathname.startsWith("/client");
+  const contextItems = hasOrganizationContext ? [
+    { label: "Panoramica Azienda", href: "/" },
+    { label: "Cantieri", href: "/job-sites" },
+    { label: "Collaboratori", href: "/people" },
+    { label: "Profilo pagamento", href: "/payment-profile" },
   ] : pathname.startsWith("/client") ? [
     { label: "I tuoi lavori", href: "/client" },
   ] : navigation.primary;
@@ -106,7 +106,7 @@ export function WorkspaceNavigation({ account, authenticated, navigation, platfo
     <>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>{platformOnly ? "Piattaforma" : organizationId ? "Azienda" : pathname.startsWith("/client") ? "Cliente" : "Qoovex"}</SidebarGroupLabel>
+          <SidebarGroupLabel>{platformOnly ? "Piattaforma" : hasOrganizationContext ? "Azienda" : pathname.startsWith("/client") ? "Cliente" : "Qoovex"}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {primary.map((item) => {

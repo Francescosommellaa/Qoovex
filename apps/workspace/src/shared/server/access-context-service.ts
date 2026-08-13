@@ -191,3 +191,12 @@ export function getContextOrganizationId(context: WorkspaceAccessContext) {
   if (!id) throw new AccessError("Azienda non configurata.", 403);
   return id;
 }
+
+export async function requireCurrentOrganizationId() {
+  return getContextOrganizationId(await getWorkspaceAccessContext());
+}
+
+export async function resolveCurrentOrganizationRouteParams<TParams extends object>(params: Promise<TParams>) {
+  const [value, organizationId] = await Promise.all([params, requireCurrentOrganizationId()]);
+  return { ...value, organizationId };
+}

@@ -4,7 +4,7 @@
 
 `apps/web` Ã¨ marketing, `apps/workspace` Ã¨ il prodotto autenticato, `apps/sirio` documenta la foundation visuale, `packages/ui` contiene primitive generiche, `packages/db` schema/client e `packages/types` contratti platform-neutral.
 
-Workspace usa route esplicite `/org/[organizationId]/...` e `/client/...`. I route handler fanno parsing, auth, risoluzione contesto, delega al servizio ed error mapping uniforme. La business logic e Prisma restano server-only.
+Workspace usa route Azienda dirette `/`, `/job-sites`, `/people` e `/payment-profile`, perché ogni account può avere una sola membership Azienda attiva. L'identificativo Azienda non compare negli URL e non esistono route di compatibilità. La proiezione cliente resta `/client/...`. Pagine e handler `/api/job-sites/...`, `/api/people` e `/api/payment-profile` derivano l'Azienda dalla sessione sul server, poi ricontrollano membership, scope, permission e ownership prima di delegare ai servizi. La business logic e Prisma restano server-only.
 
 ## Confini
 

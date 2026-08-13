@@ -31,6 +31,7 @@ export function ThemeToggle() {
   const triggerRef = React.useRef<HTMLButtonElement>(null);
 
   React.useEffect(() => setMounted(true), []);
+  const currentThemeLabel = !mounted ? "di sistema" : theme === "light" ? "chiaro" : theme === "dark" ? "scuro" : "di sistema";
 
   const setThemeWithTransition = React.useCallback(
     (nextTheme: ThemeChoice) => {
@@ -63,29 +64,29 @@ export function ThemeToggle() {
       <DropdownMenuTrigger
         render={
           <Button
-            aria-label="Cambia tema"
+            aria-label={`Cambia tema, attuale: ${currentThemeLabel}`}
             ref={triggerRef}
             size="icon"
             variant="ghost"
           />
         }
       >
-        <IconBrightness />
+        <IconBrightness aria-hidden="true" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-44">
         <DropdownMenuGroup>
           <DropdownMenuLabel>Tema</DropdownMenuLabel>
           <DropdownMenuItem onClick={() => setThemeWithTransition("light")}>
-            <IconSun /> Chiaro
-            {mounted && theme === "light" ? <IconCheck className="ml-auto" /> : null}
+            <IconSun aria-hidden="true" /> Chiaro
+            {mounted && theme === "light" ? <IconCheck aria-hidden="true" className="ml-auto" /> : null}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setThemeWithTransition("dark")}>
-            <IconMoon /> Scuro
-            {mounted && theme === "dark" ? <IconCheck className="ml-auto" /> : null}
+            <IconMoon aria-hidden="true" /> Scuro
+            {mounted && theme === "dark" ? <IconCheck aria-hidden="true" className="ml-auto" /> : null}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setThemeWithTransition("system")}>
-            <IconDeviceDesktop /> Sistema
-            {mounted && theme === "system" ? <IconCheck className="ml-auto" /> : null}
+            <IconDeviceDesktop aria-hidden="true" /> Sistema
+            {mounted && theme === "system" ? <IconCheck aria-hidden="true" className="ml-auto" /> : null}
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

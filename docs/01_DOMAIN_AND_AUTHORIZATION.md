@@ -9,10 +9,10 @@ I resolver server-side sono distinti:
 | Contesto | Fonte di autorizzazione | Confine |
 | --- | --- | --- |
 | `PLATFORM` | `PlatformRole` e support session | funzioni piattaforma |
-| `ORGANIZATION` | route, membership attiva, scope, permission, `accessVersion` | una Azienda |
+| `ORGANIZATION` | identity, membership attiva, scope, permission, `accessVersion`; contesto pagina derivato server-side | una Azienda |
 | `CLIENT` | identity e participant del JobSite | soli cantieri partecipati |
 
-La route è la fonte del contesto. Ogni mutation ricontrolla tenant, resource ownership, membership/participant, stato, revisione e permesso. Un participant sospeso, terminato o revocato non può mutare.
+Pagine e handler API Azienda non accettano una scelta di tenant nell'URL: derivano sul server l'unica membership attiva, quindi passano `organizationId` esplicito ai servizi tenant-scoped. Ogni mutation ricontrolla tenant, resource ownership, membership/participant, stato, revisione e permesso. Un participant sospeso, terminato o revocato non può mutare.
 
 ## Partecipanti
 

@@ -219,7 +219,7 @@ function NavigationResourceDropdown({
                 </span>
               ) : null}
             </span>
-            <IconChevronRight
+              <IconChevronRight
               aria-hidden="true"
               className="ml-auto size-4 text-muted-foreground"
             />
@@ -582,15 +582,15 @@ export function FloatingNavigation({
                 />
               }
             >
-              <IconMenu2 />
+              <IconMenu2 aria-hidden="true" />
             </DialogPrimitive.Trigger>
             <DialogPrimitive.Portal>
               <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0" />
               <DialogPrimitive.Popup className="fixed top-18 inset-x-3 z-50 max-h-[calc(100vh-5.5rem)] overflow-y-auto rounded-2xl border border-border/80 bg-popover/95 p-4 text-popover-foreground shadow-2xl backdrop-blur-xl transition-all duration-200 ease-out data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 space-y-4">
                 <div className="flex items-center justify-between border-b border-border/60 pb-3 px-1">
                   <span className="font-semibold text-sm font-accent">{brand(false)}</span>
-                  <DialogPrimitive.Close render={<Button size="icon-xs" variant="ghost" />}>
-                    <IconChevronLeft className="size-4" />
+                  <DialogPrimitive.Close render={<Button aria-label="Chiudi navigazione" size="icon-xs" variant="ghost" />}>
+                    <IconChevronLeft aria-hidden="true" className="size-4" />
                   </DialogPrimitive.Close>
                 </div>
 

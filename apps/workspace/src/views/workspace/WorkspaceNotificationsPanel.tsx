@@ -127,7 +127,7 @@ export function WorkspaceNotificationsPanel({ unreadNotificationCount }: { unrea
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogTrigger render={<Button aria-label={notificationLabel} className="relative" size="icon-sm" variant="ghost" />}>
-        <IconBell />
+        <IconBell aria-hidden="true" />
         {currentUnreadCount > 0 ? <span aria-hidden="true" className="absolute top-0 right-0 size-2 rounded-full bg-destructive ring-2 ring-background" /> : null}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">

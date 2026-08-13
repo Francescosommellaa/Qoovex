@@ -4,19 +4,19 @@
 
 ## Route
 
-- `/`: indirizza direttamente all'Azienda collegata, alla superficie Cliente, all'attesa invito Professionista o alla console Qoovex.
+- `/`: mostra la home dell'unica Azienda collegata oppure indirizza alla superficie Cliente, all'attesa invito Professionista o alla console Qoovex.
 - `/account/organization`: creazione dell'unica Azienda per un account `BUSINESS` senza membership attiva.
 - `/account/invitations`: attesa dell'invito Collaborator per un account `PROFESSIONAL`.
 - `/account/notifications`: preferenze personali di notifica.
-- `/org/[organizationId]`: home Azienda, cantieri, Collaborator e profilo pagamento.
-- `/org/[organizationId]/job-sites/[jobSiteId]`: riepilogo, timeline, step, richieste, modifiche, pagamenti, persone, file, chiusura e impostazioni.
+- `/job-sites` e `/job-sites/[jobSiteId]`: elenco e dettaglio cantieri dell'unica Azienda collegata, con riepilogo, timeline, step, richieste, modifiche, pagamenti, persone, file, chiusura e impostazioni.
+- `/people` e `/payment-profile`: Collaborator e profilo pagamento dell'unica Azienda collegata.
 - `/client`: immobili privati, cantieri e azioni cliente.
 - `/client/job-sites/[jobSiteId]`: sola proiezione condivisa e azioni participant-scoped.
 - `/exports/access/[token]`: scambio autenticato del link opaco con un grant breve.
 
 ## Sicurezza
 
-La route identifica lo scope; cookie e input client non sono fonti di autorizzazione. Ogni mutation ricontrolla identity, tenant, membership o participant, scope, permission, `accessVersion`, revisione e delega economica quando richiesta. `CLIENT` non è un `OrganizationRole`.
+Pagine e API Azienda derivano lo scope unico dalla sessione sul server; `organizationId` resta esplicito soltanto nel layer server e nei servizi tenant-scoped. URL, cookie e input client non concedono autorizzazione. Ogni mutation ricontrolla identity, tenant, membership o participant, scope, permission, `accessVersion`, revisione e delega economica quando richiesta. `CLIENT` non è un `OrganizationRole`.
 
 Le azioni critiche usano `Idempotency-Key`, fingerprint e receipt; gli aggiornamenti concorrenti usano revisione ottimistica e transazioni Serializable con retry. Blob resta privato. Upload e download sono mediati dal server, auditati e non espongono pathname. Il profilo IBAN richiede MFA e usa AES-256-GCM con key ring dedicato.
 

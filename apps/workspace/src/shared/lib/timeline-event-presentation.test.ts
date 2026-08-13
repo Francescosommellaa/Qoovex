@@ -74,7 +74,7 @@ describe("timeline event presentation", () => {
     }));
 
     expect(presentation.details).toEqual([
-      { label: "Proposta", value: "Proposta aggiornata · 3ª versione" },
+      { label: "Proposta", value: "Proposta aggiornata" },
     ]);
     expect(JSON.stringify(presentation)).not.toContain("internal-proposal-id");
   });

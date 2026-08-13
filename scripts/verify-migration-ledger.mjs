@@ -33,8 +33,18 @@ if (ledger.hashCanonicalization !== "utf8_lf") {
   throw new Error("Migration ledger must declare UTF-8/LF hash canonicalization.");
 }
 
-if (ledger.protectedProductionHead !== ledgerNames.at(-1)) {
-  throw new Error("Protected Production head must equal the final ledger migration.");
+const productionHeadIndex = ledgerNames.indexOf(ledger.protectedProductionHead);
+if (productionHeadIndex < 0) {
+  throw new Error("Protected Production head must exist in the migration ledger.");
 }
 
-console.log(`Migration ledger verified: ${ledgerNames.length} migrations, head ${ledger.protectedProductionHead}.`);
+for (const [index, entry] of ledger.migrations.entries()) {
+  if (index <= productionHeadIndex && entry.productionApplied !== true) {
+    throw new Error(`Migration at or before the protected Production head is not recorded as applied: ${entry.name}`);
+  }
+  if (index > productionHeadIndex && entry.productionApplied !== false) {
+    throw new Error(`Migration after the protected Production head must remain pending: ${entry.name}`);
+  }
+}
+
+console.log(`Migration ledger verified: ${ledgerNames.length} migrations, repository head ${ledgerNames.at(-1)}, Production head ${ledger.protectedProductionHead}.`);

@@ -1,6 +1,6 @@
 {
   "project": "Qoovex",
-  "updated_at": "2026-08-11",
+  "updated_at": "2026-08-13",
   "state_taxonomy": [
     "verified_current_state",
     "implemented_decision",
@@ -27,7 +27,8 @@
       "account_roles": ["BUSINESS", "PROFESSIONAL", "CLIENT"],
       "account_role_selection": "required once before tenant or participant context",
       "dev_workspace_views": ["BUSINESS", "PROFESSIONAL", "CLIENT", "SUPPORT_AGENT", "PLATFORM_ADMIN"],
-      "route_is_authorization_context": true
+      "organization_context": "derived server-side from the authenticated single active membership",
+      "job_site_route_is_resource_context": true
     },
     "job_site": {
       "states": ["DRAFT", "WAITING_FOR_CLIENT", "PENDING_INITIAL_CONFIRMATION", "ACTIVE", "CLOSURE_PROPOSED", "CLOSED", "ARCHIVED"],
@@ -38,7 +39,7 @@
       "physical_delete": false
     },
     "implemented_domains": [
-      "single active organization membership", "client participation and properties", "initial agreement",
+      "single active organization membership", "direct Workspace routes", "client participation and properties", "initial agreement",
       "append-only timeline", "contextual attachments", "optional steps", "requests", "versioned proposals",
       "economic authority", "documented payments", "disputes", "mutual closure and reopening",
       "authenticated exports", "notifications", "audit", "data-control"
@@ -54,14 +55,14 @@
       "icons": "Tabler"
     },
     "database_release": {
-      "canonical_migration_count": 8,
-      "migration_head": "20260809020000_single_active_organization_membership",
-      "local": "aligned_zero_drift",
-      "preview": "aligned_via_guarded_rehearsal",
-      "production_database": "aligned_zero_drift_via_cloud_build",
+      "canonical_migration_count": 9,
+      "migration_head": "20260813010000_direct_workspace_routes",
+      "local": "nine_migrations_aligned_zero_drift_fresh_and_upgrade_verified",
+      "preview": "previous_head_verified_new_head_pending_guarded_rehearsal",
+      "production_database": "previous_head_verified_new_head_pending_guarded_cloud_build",
       "public_alias": "promoted_only_by_manual_guarded_workflow"
     },
-    "known_blockers": []
+    "known_blockers": ["guarded Preview and Production rollout pending for 20260813010000_direct_workspace_routes"]
   },
   "approved_product_direction": {
     "product_promise": "A construction company and its client share the work history, updates, requests, changes, contextual files, decisions and closure of a job site.",

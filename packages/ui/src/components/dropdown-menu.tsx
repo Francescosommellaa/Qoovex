@@ -219,7 +219,7 @@ function DropdownMenuSubTrigger({
       {...props}
     >
       {children}
-      <IconChevronRight className="ml-auto text-muted-foreground" />
+      <IconChevronRight aria-hidden="true" className="ml-auto text-muted-foreground" />
     </MenuPrimitive.SubmenuTrigger>
   )
 }

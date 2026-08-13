@@ -39,7 +39,7 @@ function PasswordInput({
         type="button"
         variant="ghost"
       >
-        {revealed ? <IconEyeOff /> : <IconEye />}
+        {revealed ? <IconEyeOff aria-hidden="true" /> : <IconEye aria-hidden="true" />}
       </Button>
     </div>
   )

@@ -33,7 +33,7 @@ for (const value of ["prefers-reduced-motion", "@custom-variant dark", "data-lin
 for (const value of ["--info", "--success", "--warning", "--warning-emphasis", "--destructive", "--sidebar", "oklch("]) assert(tokens.includes(value), `tokens.css non contiene ${value}`);
 assert(tokens.includes("--font-sans: var(--ff-sans);") && tokens.includes("--font-accent: var(--ff-accent);"), "tokens.css deve esporre i token --font-sans e --font-accent.");
 
-const workspaceOrganization = read("apps/workspace/src/app/org/[organizationId]/job-sites/[jobSiteId]/page.tsx");
+const workspaceOrganization = read("apps/workspace/src/app/job-sites/[jobSiteId]/page.tsx");
 const workspaceClient = read("apps/workspace/src/app/client/job-sites/[jobSiteId]/page.tsx");
 const web = read("apps/web/src/app/page.tsx");
 const sirio = read("apps/sirio/src/app/page.tsx");
