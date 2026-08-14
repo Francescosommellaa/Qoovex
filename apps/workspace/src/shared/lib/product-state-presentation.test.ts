@@ -7,6 +7,8 @@ import {
   presentClosureStatus,
   presentJobSiteStatus,
   presentJobSiteStepStatus,
+  presentJobSiteRequestType,
+  presentDisputeStatus,
   presentMfaRecoveryStatus,
   presentParticipantKind,
   presentParticipantStatus,
@@ -36,7 +38,7 @@ describe("product state presentation", () => {
       tone: "warning",
     });
     expect(presentPaymentRequestStatus("TRANSFER_DECLARED")).toMatchObject({
-      label: "Trasferimento dichiarato",
+      label: "Invio dichiarato dal cliente",
       tone: "info",
     });
   });
@@ -47,6 +49,12 @@ describe("product state presentation", () => {
     expect(presentProcessStatus("COMPLETED").label).toBe("Processo completato");
     expect(presentChangeProposalStatus("DRAFT").label).toBe("Bozza di proposta");
     expect(presentClosureStatus("DRAFT").label).toBe("Bozza di chiusura");
+  });
+
+  it("distingue il problema operativo dalla segnalazione di un disaccordo", () => {
+    expect(presentJobSiteRequestType("ISSUE")).toEqual({ label: "Problema operativo", tone: "warning" });
+    expect(presentDisputeStatus("OPEN")).toEqual({ label: "Disaccordo aperto", tone: "danger" });
+    expect(presentDisputeStatus("RESOLVED_BY_AGREEMENT")).toEqual({ label: "Accordo registrato", tone: "good" });
   });
 
   it("presents participant kinds as people-facing roles", () => {

@@ -5,7 +5,7 @@ import { db, Prisma } from "@qoovex/db";
 import { z } from "zod";
 import { AccessError } from "./access-errors";
 import { requireAccountRole } from "./account-role-service";
-import { requireClientJobSiteDetailContext, requireOrganizationContext, requirePrimaryIdentity } from "./access-context-service";
+import { requireClientJobSiteContext, requireClientJobSiteDetailContext, requireOrganizationContext, requirePrimaryIdentity } from "./access-context-service";
 import { fingerprintPayload, initialAgreementPayloadSchema } from "./job-site-contracts";
 import { enqueueJobSiteProcess } from "./job-site-process-service";
 import { runSerializableTransaction } from "./serializable-transaction";
@@ -30,6 +30,14 @@ const propertySchema = z.object({ displayName: z.string().trim().min(1).max(160)
 function requireContextPermission(context: Awaited<ReturnType<typeof requireOrganizationContext>>, permission: (typeof context.permissions)[number]) {
   if (!context.permissions.includes(permission)) throw new AccessError("Risorsa non disponibile.", 404);
 }
+
+const closureOpenStepStatuses = new Set(["NOT_STARTED", "IN_PROGRESS", "WAITING", "WORK_COMPLETED", "CHANGES_REQUESTED"]);
+const closureOpenProposalStatuses = ["DRAFT", "PROPOSED", "COUNTERED"] as const;
+const closureOpenRequestStatuses = ["OPEN", "RESPONDED"] as const;
+const closureOpenPaymentStatuses = ["DRAFT", "REQUESTED", "TRANSFER_DECLARED", "UNDER_REVIEW", "DISPUTED"] as const;
+const closureOpenDisputeStatuses = ["OPEN", "IN_DISCUSSION"] as const;
+const closureActiveEconomicProcessDefinitions = ["CHANGE_NEGOTIATION@1", "PAYMENT_REQUEST@1"] as const;
+const closureActiveProcessStatuses = ["PENDING", "RUNNING", "WAITING"] as const;
 
 export async function listOrganizationJobSites(organizationId: string) {
   const context = await requireOrganizationContext(organizationId);
@@ -113,12 +121,19 @@ export async function getOrganizationJobSiteDetail(organizationId: string, jobSi
       timelineEvents: { orderBy: { sequence: "desc" }, take: 50 },
       requests: { where: { status: { in: ["OPEN", "RESPONDED"] } }, orderBy: { updatedAt: "desc" } },
       changeProposals: { orderBy: { updatedAt: "desc" }, take: 50, include: { currentVersion: true } },
-      paymentRequests: { orderBy: { updatedAt: "desc" }, take: 50 },
+      paymentRequests: {
+        orderBy: { updatedAt: "desc" },
+        take: 50,
+        select: {
+          id: true, status: true, amountMinor: true, reason: true, requestedAt: true, dueAt: true, confirmedAt: true, createdAt: true,
+          requestedByParticipant: { select: { publicRoleLabel: true, user: { select: { firstName: true, lastName: true } } } },
+        },
+      },
       disputes: { orderBy: { openedAt: "desc" }, take: 50 },
-      closures: { orderBy: { proposedAt: "desc" }, take: 10 },
+      closures: { orderBy: { proposedAt: "desc" }, take: 10, include: { consents: { select: { decision: true, participant: { select: { kind: true } } } } } },
       exports: { orderBy: { createdAt: "desc" }, take: 20 },
       postClosureRequests: { orderBy: { createdAt: "desc" }, take: 20 },
-      reopeningProposals: { orderBy: { proposedAt: "desc" }, take: 20, include: { consents: true } },
+      reopeningProposals: { orderBy: { proposedAt: "desc" }, take: 20, include: { consents: { select: { decision: true, participant: { select: { id: true, kind: true } } } } } },
       authorityGrants: { where: { status: "ACTIVE" }, orderBy: { createdAt: "desc" } },
       legalHolds: { orderBy: { placedAt: "desc" }, take: 20 },
       processes: { orderBy: { createdAt: "desc" }, take: 20, include: { steps: { orderBy: { ordinal: "asc" } } } },
@@ -128,6 +143,223 @@ export async function getOrganizationJobSiteDetail(organizationId: string, jobSi
   if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
   const availableMemberships = await db.organizationMembership.findMany({ where: { organizationId, revokedAt: null, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] }, select: { id: true, user: { select: { firstName: true, lastName: true, email: true } } }, orderBy: { createdAt: "asc" } });
   return { ...jobSite, processes: jobSite.processes.map((process) => ({ ...process, steps: process.steps.map((step) => ({ ...step, name: step.key })) })), availableMemberships };
+}
+
+export async function getOrganizationClosureReadiness(organizationId: string, jobSiteId: string) {
+  const context = await requireOrganizationContext(organizationId);
+  requireContextPermission(context, "jobSites:read");
+  const jobSite = await db.jobSite.findFirst({
+    where: { id: jobSiteId, organizationId, ...(context.role === "OWNER" || context.scopeMode === "FULL" ? {} : { participants: { some: { membershipId: context.membershipId, status: "ACTIVE" } } }) },
+    select: {
+      steps: { orderBy: { sortOrder: "asc" }, select: { id: true, status: true, title: true } },
+      changeProposals: { where: { status: { in: [...closureOpenProposalStatuses] } }, orderBy: { updatedAt: "desc" }, select: { id: true, status: true } },
+      requests: { where: { status: { in: [...closureOpenRequestStatuses] } }, orderBy: { updatedAt: "desc" }, select: { id: true, status: true, title: true } },
+      paymentRequests: { where: { status: { in: [...closureOpenPaymentStatuses] } }, orderBy: { updatedAt: "desc" }, select: { amountMinor: true, id: true, reason: true, status: true } },
+      disputes: { where: { status: { in: [...closureOpenDisputeStatuses] } }, orderBy: { updatedAt: "desc" }, select: { id: true, status: true, title: true } },
+      processes: { where: { definitionKey: { in: [...closureActiveEconomicProcessDefinitions] }, status: { in: [...closureActiveProcessStatuses] } }, orderBy: { createdAt: "desc" }, select: { definitionKey: true, id: true, status: true } },
+    },
+  });
+  if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
+  return {
+    steps: jobSite.steps,
+    openSteps: jobSite.steps.filter((step) => closureOpenStepStatuses.has(step.status)),
+    openProposals: jobSite.changeProposals,
+    openRequests: jobSite.requests,
+    openPayments: jobSite.paymentRequests,
+    openDisputes: jobSite.disputes,
+    openProcesses: jobSite.processes,
+  };
+}
+
+export async function getOrganizationPaymentReviewDetails(organizationId: string, jobSiteId: string) {
+  const context = await requireOrganizationContext(organizationId);
+  requireContextPermission(context, "jobSites:read");
+  const jobSite = await db.jobSite.findFirst({
+    where: { id: jobSiteId, organizationId },
+    select: {
+      paymentRequests: {
+        orderBy: { updatedAt: "desc" },
+        take: 50,
+        select: {
+          id: true,
+          transferDeclarations: {
+            select: {
+              amountMinor: true, transferredAt: true, method: true, reference: true, note: true, createdAt: true,
+              declaredByParticipant: { select: { publicRoleLabel: true, user: { select: { firstName: true, lastName: true } } } },
+              receiptAttachment: { select: { id: true, originalFileName: true } },
+            },
+          },
+          reviews: {
+            orderBy: { createdAt: "desc" },
+            take: 10,
+            select: {
+              outcome: true, note: true, createdAt: true,
+              reviewedByParticipant: { select: { publicRoleLabel: true, user: { select: { firstName: true, lastName: true } } } },
+            },
+          },
+        },
+      },
+    },
+  });
+  if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
+  return jobSite.paymentRequests;
+}
+
+type RequestInteractionAction = "RESPOND" | "RESOLVE" | "WITHDRAW";
+type RequestConversationViewer = { canRespond: boolean; participantId: string; side: "CLIENT" | "ORGANIZATION_MEMBER" };
+
+function requestInteractionsByRequestId(events: Array<{ actorParticipant: { publicRoleLabel: string | null; user: { firstName: string | null; lastName: string | null } } | null; createdAt: Date; payload: unknown }>) {
+  const interactions = new Map<string, Array<{ action: RequestInteractionAction; actor: NonNullable<typeof events[number]["actorParticipant"]>; createdAt: Date; message: string }>>();
+  for (const event of events) {
+    if (!event.actorParticipant || !event.payload || typeof event.payload !== "object" || Array.isArray(event.payload)) continue;
+    const payload = event.payload as Record<string, unknown>;
+    const requestId = payload.requestId;
+    const action = payload.action;
+    const message = payload.message;
+    if (typeof requestId !== "string" || !["RESPOND", "RESOLVE", "WITHDRAW"].includes(String(action)) || typeof message !== "string") continue;
+    const entries = interactions.get(requestId) ?? [];
+    entries.push({ action: action as RequestInteractionAction, actor: event.actorParticipant, createdAt: event.createdAt, message });
+    interactions.set(requestId, entries);
+  }
+  return interactions;
+}
+
+function presentRequestConversationActions(request: { assignedSide: "CLIENT" | "ORGANIZATION_MEMBER"; openedByParticipantId: string; status: "OPEN" | "RESPONDED" | "RESOLVED" | "WITHDRAWN" }, viewer: RequestConversationViewer) {
+  if (!["OPEN", "RESPONDED"].includes(request.status)) return [];
+  if (request.openedByParticipantId === viewer.participantId) return [{ value: "RESOLVE", label: "Segna come risolta" }, { value: "WITHDRAW", label: "Ritira la richiesta" }] as const;
+  return request.assignedSide === viewer.side && viewer.canRespond ? [{ value: "RESPOND", label: "Invia una risposta" }] as const : [];
+}
+
+function presentRequestConversations(requests: Array<{
+  assignedSide: "CLIENT" | "ORGANIZATION_MEMBER";
+  blocking: boolean;
+  body: string;
+  createdAt: Date;
+  id: string;
+  openedByParticipant: { publicRoleLabel: string | null; user: { firstName: string | null; lastName: string | null } };
+  openedByParticipantId: string;
+    resolvedAt: Date | null;
+    status: "OPEN" | "RESPONDED" | "RESOLVED" | "WITHDRAWN";
+    title: string;
+    type: "CLARIFICATION" | "INFORMATION" | "WORK_UPDATE" | "DOCUMENT" | "ISSUE" | "OTHER";
+}>, interactionsByRequest: ReturnType<typeof requestInteractionsByRequestId>, viewer: RequestConversationViewer) {
+  return requests.map((request) => ({ ...request, availableActions: presentRequestConversationActions(request, viewer), interactions: interactionsByRequest.get(request.id) ?? [] }));
+}
+
+const requestConversationSelect = {
+  id: true, assignedSide: true, blocking: true, body: true, createdAt: true, openedByParticipantId: true, resolvedAt: true, status: true, title: true, type: true,
+  openedByParticipant: { select: { publicRoleLabel: true, user: { select: { firstName: true, lastName: true } } } },
+} as const;
+
+const requestConversationEventSelect = {
+  actorParticipant: { select: { publicRoleLabel: true, user: { select: { firstName: true, lastName: true } } } },
+  createdAt: true,
+  payload: true,
+} as const;
+
+export async function getOrganizationRequestConversations(organizationId: string, jobSiteId: string) {
+  const context = await requireOrganizationContext(organizationId);
+  requireContextPermission(context, "jobSites:read");
+  const viewer = await db.jobSiteParticipant.findFirst({ where: { organizationId, jobSiteId, membershipId: context.membershipId, userId: context.userId, kind: "ORGANIZATION_MEMBER", status: "ACTIVE" }, select: { id: true } });
+  const jobSite = await db.jobSite.findFirst({
+    where: { id: jobSiteId, organizationId, ...(context.role === "OWNER" || context.scopeMode === "FULL" ? {} : { participants: { some: { membershipId: context.membershipId, status: "ACTIVE" } } }) },
+    select: {
+      requests: { orderBy: { updatedAt: "desc" }, take: 50, select: requestConversationSelect },
+      timelineEvents: { orderBy: { createdAt: "asc" }, take: 200, select: requestConversationEventSelect },
+    },
+  });
+  if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
+  const requestViewer = { canRespond: Boolean(viewer) && context.permissions.includes("jobSite:requests:respond"), participantId: viewer?.id ?? "", side: "ORGANIZATION_MEMBER" as const };
+  return presentRequestConversations(jobSite.requests, requestInteractionsByRequestId(jobSite.timelineEvents), requestViewer);
+}
+
+export async function getClientRequestConversations(jobSiteId: string) {
+  const viewer = await requireClientJobSiteContext(jobSiteId);
+  const jobSite = await db.jobSite.findFirst({
+    where: { id: jobSiteId, organizationId: viewer.organizationId },
+    select: {
+      requests: { orderBy: { updatedAt: "desc" }, take: 50, select: requestConversationSelect },
+      timelineEvents: { where: { audience: "SHARED" }, orderBy: { createdAt: "asc" }, take: 200, select: requestConversationEventSelect },
+    },
+  });
+  if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
+  return presentRequestConversations(jobSite.requests, requestInteractionsByRequestId(jobSite.timelineEvents), { canRespond: true, participantId: viewer.id, side: "CLIENT" });
+}
+
+type DisagreementInteractionAction = "RESPOND" | "AGREE" | "WITHDRAW" | "CLOSE_WITHOUT_AGREEMENT";
+
+function disagreementInteractionsByDisagreementId(events: Array<{ actorParticipant: { publicRoleLabel: string | null; user: { firstName: string | null; lastName: string | null } } | null; createdAt: Date; payload: unknown }>) {
+  const interactions = new Map<string, Array<{ action: DisagreementInteractionAction; actor: NonNullable<typeof events[number]["actorParticipant"]>; createdAt: Date; message: string }>>();
+  for (const event of events) {
+    if (!event.actorParticipant || !event.payload || typeof event.payload !== "object" || Array.isArray(event.payload)) continue;
+    const payload = event.payload as Record<string, unknown>;
+    const disagreementId = payload.disputeId;
+    const action = payload.action;
+    const message = payload.message;
+    if (typeof disagreementId !== "string" || !["RESPOND", "AGREE", "WITHDRAW", "CLOSE_WITHOUT_AGREEMENT"].includes(String(action)) || typeof message !== "string") continue;
+    const entries = interactions.get(disagreementId) ?? [];
+    entries.push({ action: action as DisagreementInteractionAction, actor: event.actorParticipant, createdAt: event.createdAt, message });
+    interactions.set(disagreementId, entries);
+  }
+  return interactions;
+}
+
+function presentDisagreementActions(disagreement: { openedByParticipantId: string; status: "OPEN" | "IN_DISCUSSION" | "RESOLVED_BY_AGREEMENT" | "WITHDRAWN" | "CLOSED_WITHOUT_AGREEMENT" }, viewer: RequestConversationViewer) {
+  if (!["OPEN", "IN_DISCUSSION"].includes(disagreement.status)) return [];
+  if (!viewer.canRespond) return [];
+  const actions = [
+    { value: "RESPOND", label: "Aggiungi la tua posizione" },
+    { value: "AGREE", label: "Registra accordo" },
+    { value: "CLOSE_WITHOUT_AGREEMENT", label: "Registra mancato accordo" },
+  ] as const;
+  return disagreement.openedByParticipantId === viewer.participantId
+    ? [...actions, { value: "WITHDRAW", label: "Ritira il disaccordo" }] as const
+    : actions;
+}
+
+function presentDisagreementConversations(disagreements: Array<{
+  description: string;
+  id: string;
+  openedAt: Date;
+  openedByParticipant: { publicRoleLabel: string | null; user: { firstName: string | null; lastName: string | null } };
+  openedByParticipantId: string;
+  status: "OPEN" | "IN_DISCUSSION" | "RESOLVED_BY_AGREEMENT" | "WITHDRAWN" | "CLOSED_WITHOUT_AGREEMENT";
+  title: string;
+}>, interactionsByDisagreement: ReturnType<typeof disagreementInteractionsByDisagreementId>, viewer: RequestConversationViewer) {
+  return disagreements.map((disagreement) => ({ ...disagreement, availableActions: presentDisagreementActions(disagreement, viewer), interactions: interactionsByDisagreement.get(disagreement.id) ?? [] }));
+}
+
+const disagreementConversationSelect = {
+  description: true, id: true, openedAt: true, openedByParticipantId: true, status: true, title: true,
+  openedByParticipant: { select: { publicRoleLabel: true, user: { select: { firstName: true, lastName: true } } } },
+} as const;
+
+export async function getOrganizationDisagreementConversations(organizationId: string, jobSiteId: string) {
+  const context = await requireOrganizationContext(organizationId);
+  requireContextPermission(context, "jobSites:read");
+  const viewer = await db.jobSiteParticipant.findFirst({ where: { organizationId, jobSiteId, membershipId: context.membershipId, userId: context.userId, kind: "ORGANIZATION_MEMBER", status: "ACTIVE" }, select: { id: true } });
+  const jobSite = await db.jobSite.findFirst({
+    where: { id: jobSiteId, organizationId, ...(context.role === "OWNER" || context.scopeMode === "FULL" ? {} : { participants: { some: { membershipId: context.membershipId, status: "ACTIVE" } } }) },
+    select: {
+      disputes: { orderBy: { updatedAt: "desc" }, take: 50, select: disagreementConversationSelect },
+      timelineEvents: { orderBy: { createdAt: "asc" }, take: 200, select: requestConversationEventSelect },
+    },
+  });
+  if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
+  return presentDisagreementConversations(jobSite.disputes, disagreementInteractionsByDisagreementId(jobSite.timelineEvents), { canRespond: Boolean(viewer) && context.permissions.includes("jobSite:disputes:respond"), participantId: viewer?.id ?? "", side: "ORGANIZATION_MEMBER" });
+}
+
+export async function getClientDisagreementConversations(jobSiteId: string) {
+  const viewer = await requireClientJobSiteContext(jobSiteId);
+  const jobSite = await db.jobSite.findFirst({
+    where: { id: jobSiteId, organizationId: viewer.organizationId },
+    select: {
+      disputes: { orderBy: { updatedAt: "desc" }, take: 50, select: disagreementConversationSelect },
+      timelineEvents: { where: { audience: "SHARED" }, orderBy: { createdAt: "asc" }, take: 200, select: requestConversationEventSelect },
+    },
+  });
+  if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
+  return presentDisagreementConversations(jobSite.disputes, disagreementInteractionsByDisagreementId(jobSite.timelineEvents), { canRespond: true, participantId: viewer.id, side: "CLIENT" });
 }
 
 export async function acceptPrimaryClientInvitation(rawToken: string) {
@@ -347,11 +579,18 @@ export async function getClientJobSiteDetail(jobSiteId: string) {
       requests: { where: { status: { in: ["OPEN", "RESPONDED"] } }, orderBy: { updatedAt: "desc" } },
       timelineEvents: { where: { audience: "SHARED" }, orderBy: { sequence: "desc" }, take: 50 },
       changeProposals: { where: { status: { not: "DRAFT" } }, orderBy: { updatedAt: "desc" }, include: { currentVersion: true } },
-      paymentRequests: { where: { status: { not: "DRAFT" } }, orderBy: { updatedAt: "desc" }, select: { id: true, status: true, amountMinor: true, reason: true, requestedAt: true, dueAt: true, confirmedAt: true } },
+      paymentRequests: {
+        where: { status: { not: "DRAFT" } },
+        orderBy: { updatedAt: "desc" },
+        select: {
+          id: true, status: true, amountMinor: true, reason: true, requestedAt: true, dueAt: true, confirmedAt: true, createdAt: true,
+          requestedByParticipant: { select: { publicRoleLabel: true, user: { select: { firstName: true, lastName: true } } } },
+        },
+      },
       disputes: { orderBy: { openedAt: "desc" } },
-      closures: { orderBy: { proposedAt: "desc" }, take: 10 },
+      closures: { orderBy: { proposedAt: "desc" }, take: 10, include: { consents: { select: { decision: true, participant: { select: { kind: true } } } } } },
       postClosureRequests: { orderBy: { createdAt: "desc" }, take: 20 },
-      reopeningProposals: { orderBy: { proposedAt: "desc" }, take: 20, include: { consents: true } },
+      reopeningProposals: { orderBy: { proposedAt: "desc" }, take: 20, include: { consents: { select: { decision: true, participant: { select: { id: true, kind: true } } } } } },
       attachments: { where: { publications: { some: { audience: "SHARED", withdrawnAt: null } } }, select: { id: true, category: true, sourceId: true, originalFileName: true, size: true, createdAt: true } },
     },
   });

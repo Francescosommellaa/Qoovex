@@ -10,7 +10,7 @@ const TYPE_OPTIONS = [
   { label: "Azioni richieste", value: "JOB_SITE_ACTION_REQUIRED" },
   { label: "Attività cantiere", value: "JOB_SITE_ACTIVITY" },
   { label: "Pagamenti", value: "PAYMENT_ACTIVITY" },
-  { label: "Segnalazioni", value: "DISPUTE_ACTIVITY" },
+  { label: "Disaccordi", value: "DISPUTE_ACTIVITY" },
   { label: "Archivi pronti", value: "EXPORT_READY" },
 ] as const;
 

@@ -24,7 +24,7 @@ const sourceLabels: Partial<Record<AttachmentCategory, string>> = {
   REQUEST: "Richiesta",
   PROPOSAL: "Proposta",
   PAYMENT_RECEIPT: "Pagamento",
-  DISPUTE: "Segnalazione",
+  DISPUTE: "Disaccordo",
 };
 
 export function presentAttachmentContext(
@@ -50,7 +50,7 @@ export function presentAttachmentContext(
 
   if (attachment.category === "DISPUTE") {
     const dispute = references.disputes.find((item) => item.id === attachment.sourceId);
-    return dispute ? `Segnalazione: ${dispute.title}` : "Collegato a una segnalazione";
+    return dispute ? `Disaccordo: ${dispute.title}` : "Collegato a un disaccordo";
   }
 
   return sourceLabels[attachment.category] ? `Collegato a ${sourceLabels[attachment.category]?.toLowerCase()}` : "Collegato a un elemento del cantiere";

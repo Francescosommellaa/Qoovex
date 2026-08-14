@@ -8,7 +8,7 @@ import type { JobSiteActor } from "./job-site-authorization-service";
 
 function classify(action: string): { type: NotificationType; sourceType: NotificationSourceType; title: string } {
   if (action.includes("PAYMENT")) return { type: "PAYMENT_ACTIVITY", sourceType: "PAYMENT_REQUEST", title: "Attività pagamento" };
-  if (action.includes("DISPUTE")) return { type: "DISPUTE_ACTIVITY", sourceType: "DISPUTE", title: "Segnalazione aggiornata" };
+  if (action.includes("DISPUTE")) return { type: "DISPUTE_ACTIVITY", sourceType: "DISPUTE", title: "Disaccordo aggiornato" };
   if (action.includes("EXPORT")) return { type: "EXPORT_READY", sourceType: "EXPORT", title: "Export aggiornato" };
   if (action.includes("PROPOSAL") || action.includes("CHANGE")) return { type: "JOB_SITE_ACTION_REQUIRED", sourceType: "CHANGE_PROPOSAL", title: "Modifica da controllare" };
   return { type: "JOB_SITE_ACTIVITY", sourceType: "JOB_SITE", title: "Cantiere aggiornato" };

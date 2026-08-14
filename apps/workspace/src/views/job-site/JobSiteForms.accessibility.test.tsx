@@ -56,7 +56,7 @@ function OperationalFormsFixture() {
     <CollaboratorInviteForm endpoint={endpoint} />
     <ParticipantForm endpoint={endpoint} memberships={[{ id: "membership-1", label: "Mario Rossi" }]} />
     <PaymentRequestForm endpoint={endpoint} paymentProfileId="profile-1" revision={1} />
-    <PaymentDeclarationForm amountMinor="10000" endpoint={endpoint} paymentRequestId="payment-1" receiptAttachments={[{ id: "attachment-1", label: "Ricevuta" }]} revision={1} />
+    <PaymentDeclarationForm amountMinor="10000" endpoint={endpoint} paymentRequestId="payment-1" reason="Acconto lavori" receiptAttachments={[{ id: "attachment-1", label: "Ricevuta" }]} revision={1} />
     <PaymentReviewForm endpoint={endpoint} paymentRequestId="payment-1" revision={1} />
     <AuthorityGrantForm endpoint={endpoint} participants={[{ id: "participant-1", label: "Mario Rossi" }]} revision={1} />
     <RecordTransitionForm actions={[{ label: "Conferma", value: "CONFIRM" }]} endpoint={endpoint} revision={1} />
@@ -204,12 +204,12 @@ describe("accessibilità dei form operativi del cantiere", () => {
     expect(organizationHtml).not.toContain('name="relatedId"');
     expect(organizationHtml).not.toContain("Tipo di file");
     expect(genericHtml).toContain("Aggiungi file al cantiere");
-    expect(genericHtml).toContain("Usa questo caricamento solo per file del cantiere che non appartengono a una richiesta, proposta, segnalazione o pagamento.");
+    expect(genericHtml).toContain("Usa questo caricamento solo per file del cantiere che non appartengono a una richiesta, proposta, disaccordo o pagamento.");
     expect(genericHtml).not.toContain("Ricevuta di pagamento");
   });
 
   it("invia l'associazione contestuale e mantiene l'errore del file locale", async () => {
-    const data = contextualAttachmentFormData(new FormData(), { category: "DISPUTE", relatedId: "dispute-1", title: "Allega file a questa segnalazione" }, 7);
+    const data = contextualAttachmentFormData(new FormData(), { category: "DISPUTE", relatedId: "dispute-1", title: "Allega file a questo disaccordo" }, 7);
     const jobSiteForms = await import("./JobSiteForms") as unknown as Record<string, unknown>;
     const resolveFailure = jobSiteForms.resolveMutationFailure as ((form: HTMLFormElement | null, failure: { message: string; fieldErrors?: Record<string, string[]> }) => { error: string | null; fieldErrors: Record<string, string[]>; firstFieldName: string | null }) | undefined;
 
@@ -264,6 +264,9 @@ describe("accessibilità dei form operativi del cantiere", () => {
 
     const generalFailure = resolveFailure(form, { message: "Operazione non disponibile." });
     expect(generalFailure).toEqual({ error: "Operazione non disponibile.", fieldErrors: {}, firstFieldName: null });
+
+    const disagreementFailure = resolveFailure(form, { message: "Disputa non disponibile." });
+    expect(disagreementFailure).toEqual({ error: "Disaccordo non disponibile.", fieldErrors: {}, firstFieldName: null });
     focus.mockClear();
     focusField(form, generalFailure.firstFieldName);
     expect(focus).not.toHaveBeenCalled();
